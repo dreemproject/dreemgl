@@ -91,7 +91,7 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						name:'theview', 
 						bgcolor:'transparent',
 						clearcolor: 'rgba(255,255,255,0)',
-						mode: '3D', 
+						viewport: '3D', 
 						camera: vec3(2,2,2),
 						blend:{
 							color:function(){
@@ -111,11 +111,11 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						,plane({pos:vec3(0,-2,0), size:vec3(500), rotate:vec3(PI/2,0,0)})
 						,sphere({pos:vec3(0,0,2), radius:0.5})
 						
-						,view({mode:'2D', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), pos:vec3(0,2,0), rotate:vec3(PI/2,0, 0)}
+						,view({viewport:'2D', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), pos:vec3(0,2,0), rotate:vec3(PI/2,0, 0)}
 							,mousedebug({width:100, height:100})
 						)
 						
-						,view({mode:'2D', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
+						,view({viewport:'2D', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
 							,button({text:"LKJQEW", click:function(){
 								
 								var cam = this.find("theview");
@@ -143,7 +143,7 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 							})		
 
 							)
-						,view({mode:'2D', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)}
+						,view({viewport:'2D', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)}
 							,button({text:"A", click:function(){								
 								var cam = this.find("theview");
 								cam.camera = vec3(0,2,-5);
