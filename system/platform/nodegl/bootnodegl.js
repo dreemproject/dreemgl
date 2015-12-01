@@ -10,6 +10,7 @@ define.class(function(require, exports){
 	this.atConstructor = function(args){
 		// allright lets fire up 
 		define.$platform = 'nodegl'
+		console.log(args['-nodegl'])
 		console.log('Downloading nodegl')
 		require.async(args['-nodegl']).then(function(composition){		
 			console.log('Booting nodegl')

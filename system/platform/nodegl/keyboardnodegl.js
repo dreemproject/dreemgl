@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Mouse class
 
-define.class('$system/base/keyboard', function (require, exports, self){
+define.class('$system/base/keyboard', function (require, exports){
 	
 	this.toKey = { // slap a usable name on keys
 		8:'backspace',9:'tab',13:'enter',340:'shift',344:'shift',341:'ctrl',345:'ctrl',342:'alt',346:'alt',
