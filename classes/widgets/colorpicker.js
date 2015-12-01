@@ -145,7 +145,7 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 
 			// hsv color for the right side
 			hsvto:{type:vec3, value: vec3(1,1,0.5)},
-			hsvhueadd:{float, value:0},
+			hsvhueadd:{type:float, value:0},
 			
 			basehue:{type:float, value: 0},
 			currentcolor: {type:vec4, value: vec4("red")},

@@ -7,11 +7,11 @@
 define.class(function($containers$, view, $controls$, label){
 	
 	define.class(this, 'slide', function($containers$, view){
-		this.cornerradius = vec4(10,10,10,10);
-		this.borderwidth = 0;
-		this.bordercolor = vec4("blue");
-		this.bgcolor ="white";
-		this.flex = 0;
+		this.cornerradius = vec4(10,10,10,10)
+		this.borderwidth = 0
+		this.bordercolor = vec4("blue")
+		this.bgcolor = "white"
+		this.flex = 0
 		this.viewport = '2D'
 		this.overflow = 'hidden'
 		this.padding = vec4(6);
