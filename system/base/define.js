@@ -1019,7 +1019,7 @@
 							return resolve({path:cache_path, type:res.headers['content-type']})
 						}
 						else reject({path:myurl.path,code:res.statusCode})
-
+						if(res.headers['content-type'] === 'text/json' && define.fileExt(cache_path) === '') cache_path += '.json'
 						// lets write it to disk
 						var str = fs.createWriteStream(cache_path)
 						res.pipe(str)
@@ -1068,7 +1068,7 @@
 			define.module[module.filename] = module
 			define.factory[module.filename] = factory
 
-			function loadModuleAsync(modurl){
+			function loadModuleAsync(modurl, includefrom){
 				modurl = modurl.replace(/\\/g , '/' );
 				var parsedmodurl = url.parse(modurl)
 				var base_path = define.filePath(modurl)
@@ -1093,14 +1093,12 @@
 							// alright we get a boot file
 							// set our root properly
 							define.$root = 'http://'+parsedmodurl.hostname+':'+parsedmodurl.port+'/'
-							define.system_classes = data.system_classes
-							// lets point all the system classes the right way
-							for(var key in data.system_classes){
-								data.system_classes[key] = define.expandVariables(data.system_classes[key])
+							define.paths = data.paths
+							for(var key in data.paths){
+								define['$'+key] = '$root/'+key
 							}
-							
 							// alright now, lets load up the root
-							loadModuleAsync(define.expandVariables(data.boot)).then(function(result){
+							loadModuleAsync(define.expandVariables(data.boot), modurl).then(function(result){
 								// ok so, 
 								resolve(result)
 							})
@@ -1142,7 +1140,7 @@
 								var ext = define.fileExt(dep_path)
 								if(!ext) dep_path += '.js'
 		
-								return loadModuleAsync(dep_path)
+								return loadModuleAsync(dep_path, modurl)
 
 							})).then(function(){
 								// lets finish up our factory
@@ -1157,7 +1155,7 @@
 						return resolve(result.path)
 	
 					}).catch(function(err){
-						console.log("Error",err,err.stack)
+						console.log("Error in "+modurl+" from "+includefrom,err,err.stack)
 					})
 				})
 			}
@@ -1234,9 +1232,10 @@
 			noderequirewrapper.module = module
 
 			noderequirewrapper.async = function(modname){
+				if(typeof modname !== 'string') throw new Error("module name in require.async not a string")
 				modname = define.expandVariables(modname)
 				return new Promise(function(resolve, reject){
-					loadModuleAsync(modname).then(function(path){
+					loadModuleAsync(modname, "root").then(function(path){
 						resolve(require(path))
 					}).catch(function(e){
 						console.log("ERROR", e.stack)

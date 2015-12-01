@@ -5,5 +5,5 @@
 
 
 define.class('../webgl/shaderwebgl', function(require, exports){
-	this.Texture = require('./texturenodegl')
+	exports.Texture = this.Texture = require('./texturenodegl')
 })

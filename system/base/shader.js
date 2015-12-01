@@ -684,7 +684,7 @@ define.class(function(require, exports){
 				}
 			}
 		}
-		else if(this !== self) this.compile()
+		else if(this !== exports.prototype) this.compile()
 
 	}
 })

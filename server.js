@@ -47,7 +47,7 @@ function main(){
 		arg = argv[i]
 		if(arg.charAt(0) == '-') lastkey = arg, args[lastkey] = true
 		else {
-			if(lastkey in args){
+			if(lastkey in args && args[lastkey] !== true){
 				if(!Array.isArray(args[lastkey])) args[lastkey] = [args[lastkey]]
 				args[lastkey].push(arg)
 			}

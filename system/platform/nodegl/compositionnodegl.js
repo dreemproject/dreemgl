@@ -4,9 +4,9 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // this class
 
-define.class('$base/composition_client', function(require, baseclass){
+define.class('$system/base/compositionclient', function(require, baseclass){
 
-	var Device = require('$system/draw/$platform/device$platform')
+	var Device = require('$system/platform/$platform/device$platform')
 	var BusClient = require('$system/rpc/busclient')
 	var NodeWebSocket = require('$system/server/nodewebsocket')
 
