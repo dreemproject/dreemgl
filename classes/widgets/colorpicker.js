@@ -6,7 +6,6 @@
 
 define.class(function(require, $containers$, view, $controls$, label, button, scrollbar){
 	
-	
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 		
 	this.attributes =  {
