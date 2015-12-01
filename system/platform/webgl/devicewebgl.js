@@ -35,6 +35,7 @@ define.class(function(require, exports){
 
 		this.animFrame = function(time){
 			if(this.doColor(time)){
+				this.anim_req = true
 				this.document.requestAnimationFrame(this.animFrame)
 			}
 			else this.anim_req = false
@@ -235,6 +236,10 @@ define.class(function(require, exports){
 		if(!this.first_time) this.first_time = time
 
 		var stime = (time - this.first_time) / 1000
+		//console.log(this.last_time - stime)
+
+		this.last_time = stime
+	
 		// lets layout shit that needs layouting.
 		var anim_redraw = this.anim_redraws
 		anim_redraw.length = 0

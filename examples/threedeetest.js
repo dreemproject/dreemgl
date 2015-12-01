@@ -80,8 +80,8 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 								cam.fov = 90;
 							}
 						}),
-						mousedebug({width:100, height:100}),
-						colorpicker({})
+						mousedebug({width:100, height:100})
+						//colorpicker({})
 					),
 					view({
 						init:function(){
@@ -103,7 +103,7 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						attributes:{
 							camera:{motion:'linear', duration:1},
 							fov:{motion:'easein', duration:1}
-					}}
+						}}
 						,cube({pos:vec3(0,1,0), size:vec3(0.5)})
 						,cube({pos:vec3(1,0,0), size:vec3(0.5)})
 						,cube({pos:vec3(0,0,0), size:vec3(0.5)})

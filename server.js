@@ -110,7 +110,7 @@ function main(){
 	if(args['-nodegl']){
 		// lets do an async require on our UI
 		define.$platform = 'nodegl'
-		var NodeGL = require('$system/platform/bootnodegl')
+		var NodeGL = require('$system/platform/nodegl/bootnodegl')
 		new NodeGL(args)
 	}
 	else if(args['-nomoni']){

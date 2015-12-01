@@ -58,6 +58,8 @@ define.class(function(require, baseclass){
 	}
 
 	this.allocDrawTarget = function(width, height, mode, drawtarget, passid){
+		width = floor(width)
+		height = floor(height)
 		var Texture = this.device.Texture
 		if(!this.drawtargets) this.drawtargets = []
 		if(this.drawtargets.indexOf(drawtarget) === -1) this.drawtargets.push(drawtarget)
@@ -183,6 +185,7 @@ define.class(function(require, baseclass){
 		else{
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
+			ratio = 1
 			var twidth = layout.width * ratio, theight = layout.height * ratio
 			this.allocDrawTarget(twidth, theight, this.view._viewport, 'pick_buffer', passid)
 		}

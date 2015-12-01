@@ -63,8 +63,6 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 								var bg = vec4(0.,0.,0.,0.05)
 
 								return mix(bg.rgba, fg.rgba, fg.a)
-								
-
 							}
 						}
 					})
