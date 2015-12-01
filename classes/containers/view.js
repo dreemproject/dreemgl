@@ -404,7 +404,7 @@ define.class('$system/base/node', function(require){
 	}
 	
 	// things that trigger a relayout
-	this.pos = 
+	this.pos =
 	this.corner =
 	this.size =
 	this.minsize =
