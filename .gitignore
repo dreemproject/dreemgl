@@ -1,0 +1,8 @@
+.idea
+**/.idea
+build/
+node_modules/
+cache/
+.DS_Store
+*.marks
+

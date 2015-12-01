@@ -1,0 +1,9 @@
+{
+  "name": "teem-guide",
+  "version": "0.0.1",
+  "description": "Dreem Device & Web Service Component Guide",
+  "dependencies": {
+    "request":"^2.65.0"
+  },
+  "engine": "node >= 0.10.0"
+}
