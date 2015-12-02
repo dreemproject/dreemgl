@@ -124,13 +124,11 @@ function main(){
 
 		    var composition = args['-dali'];
 		    if (composition === true)
-			composition = 'rendertest'
+			composition = 'examples/rendertest'
 
-		    define.$rendermode = 'dali'
 		    define.$platform = 'dali'
 		    define.$environment = 'dali' // Otherwise it is nodejs
 
-		    // Use a local daliserver as a first pass
 		    var BootDali = require('$system/platform/dali/bootdali')
 		    new BootDali(args, composition);
 		}

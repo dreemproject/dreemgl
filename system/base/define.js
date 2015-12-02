@@ -31,10 +31,6 @@
 	// turns on debug naming of classes (very useful)
 	define.debug = true
 
-	// Access to the builtin require (used for dali)
-        // This does not work in the browser
-	//define.require_builtin = require
-
 	// copy configuration onto define
 	if(typeof config_define == 'object') for(var key in config_define){
 		define[key] = config_define[key]

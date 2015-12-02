@@ -104,7 +104,7 @@ console.log('Loading bootdali', define.$environment);
 		//define.$drawmode = 'dali'
 
 		// lets see if our composition is a dir or a jsfile
-		var dir = '$root/examples/'
+		var dir = '$root/'
 		var jsname = dir + this.compname+'.js'
 		try{
 			if(fs.existsSync(define.expandVariables(jsname))){
