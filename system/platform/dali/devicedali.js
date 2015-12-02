@@ -12,7 +12,13 @@ define.class(function(require, exports){
 	,getAttribLocation: function() {}
 	,uniform4f: function() {}
 	,drawArrays: function() {}
+	,framebufferTexture2D: function() {}
+	,bindRenderbuffer: function() {}
+	,createRenderbuffer: function() { return {};}
+	,createFramebuffer: function() { return {};}
 	,bindFramebuffer: function() {}
+	,renderbufferStorage: function() {}
+	,framebufferRenderbuffer: function() {}	
 	,viewport: function() {}
 	,clearColor: function() {}
 	,clear: function() {}
@@ -20,10 +26,39 @@ define.class(function(require, exports){
 	,attachShader: function() {}
 	,shaderSource: function() {}
 	,compileShader: function() {}
+	,createTexture: function() { return {};}
+	,activeTexture: function() {}
+	,bindTexture: function() {}
 	,getShaderParameter: function() {}
 	,getShaderInfoLog: function() {return ''}
+	,useProgram: function() {}
+	,createBuffer: function() {return 0;}
+	,bindBuffer: function() {}
+	,bufferData: function() {}
+	,enable: function() {}		
+	,disable: function() {}		
+	,blendEquation: function() {}		
+	,blendFunc: function() {}		
+	,enableVertexAttribArray: function() {}
+	,vertexAttribPointer: function() {}
+	,uniform1f: function() {return 0;}
+	,uniform2f: function() {return 0;}
+	,uniform3f: function() {return 0;}
+	,uniform4f: function() {return 0;}
+	,uniform1i: function() {return 0;}
+	,uniformMatrix4fv: function() {return 0;}
+	,pixelStorei: function() {}
+	,texParameterf: function() {}
+	,texParameteri: function() {}
+	,depthFunc: function() {}
+	,texImage2D: function() {}
 	};
 
+	// DaliDreemgl is the interface between dreemgl and dali.
+	this.DaliDreemgl = require('./dalidreemgl')
+
+	// Dali application wrapper
+	var DaliWrapper = require('./daliwrapper')
 
 
 	this.Keyboard = require('./keyboarddali')
@@ -211,6 +246,10 @@ define.class(function(require, exports){
 	}
 
 	this.doColor = function(time){
+		if (!this.wrapper) {
+			//console.log('Create DaliWrapper', this.width, this.height, this.name);
+			this.wrapper = new DaliWrapper(this.width, this.height, this.name);			}
+
 		if(!this.first_time) this.first_time = time
 
 		var stime = (time - this.first_time) / 1000

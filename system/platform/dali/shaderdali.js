@@ -28,85 +28,97 @@ define.class('$system/base/shader', function(require, exports){
 
 		if(shader) return shader
 
-		var vtx_shader = gl.createShader(gl.VERTEX_SHADER)
-		gl.shaderSource(vtx_shader, vtx_code)
-		gl.compileShader(vtx_shader)
-		if (!gl.getShaderParameter(vtx_shader, gl.COMPILE_STATUS)){
-			var err = gl.getShaderInfoLog(vtx_shader)
-			console.error(err.toString(), this.annotateLines(vtx_code))
-			return
-			//throw new Error(err)
-		}
-		
-		// compile the shader
-		var pix_color_shader = gl.createShader(gl.FRAGMENT_SHADER)
-		gl.shaderSource(pix_color_shader, pix_color)
-		gl.compileShader(pix_color_shader)
-		if (!gl.getShaderParameter(pix_color_shader, gl.COMPILE_STATUS)){
-			var err = gl.getShaderInfoLog(pix_color_shader)
+	    //Dali workaround
+	    shader = {
+			debug: {}
+			,pick: {}
 
-			console.error(err.toString(), this.annotateLines(pix_color))
-			return
-			//throw new Error(err)
-		}
+			,uniset: {}
+			,unilocks: {}
+			,refattr: {}
+	    };
 
-		shader = gldevice.shadercache[cache_id] = gl.createProgram()
-		gl.attachShader(shader, vtx_shader)
-		gl.attachShader(shader, pix_color_shader)
-		gl.linkProgram(shader)
+		//Not used by Dali
+//		var vtx_shader = gl.createShader(gl.VERTEX_SHADER)
+//		gl.shaderSource(vtx_shader, vtx_code)
+//		gl.compileShader(vtx_shader)
+//		if (!gl.getShaderParameter(vtx_shader, gl.COMPILE_STATUS)){
+//			var err = gl.getShaderInfoLog(vtx_shader)
+//			console.error(err.toString(), this.annotateLines(vtx_code))
+//			return
+//			//throw new Error(err)
+//		}
+//		
+//		// compile the shader
+//		var pix_color_shader = gl.createShader(gl.FRAGMENT_SHADER)
+//		gl.shaderSource(pix_color_shader, pix_color)
+//		gl.compileShader(pix_color_shader)
+//		if (!gl.getShaderParameter(pix_color_shader, gl.COMPILE_STATUS)){
+//			var err = gl.getShaderInfoLog(pix_color_shader)
+//
+//			console.error(err.toString(), this.annotateLines(pix_color))
+//			return
+//			//throw new Error(err)
+//		}
+//
+//		shader = gldevice.shadercache[cache_id] = gl.createProgram()
+//		gl.attachShader(shader, vtx_shader)
+//		gl.attachShader(shader, pix_color_shader)
+//		gl.linkProgram(shader)
+
 		this.getLocations(gl, shader, vtx_state, pix_state)
 
 		if(this.compile_use) this.compileUse(shader)
 
-		if(pix_debug){
-			// compile the pick shader
-			var pix_debug_shader = gl.createShader(gl.FRAGMENT_SHADER)
-			gl.shaderSource(pix_debug_shader, pix_debug)
-			gl.compileShader(pix_debug_shader)
-			if (!gl.getShaderParameter(pix_debug_shader, gl.COMPILE_STATUS)){
-				var err = gl.getShaderInfoLog(pix_debug_shader)
-				console.log(err.toString(), this.annotateLines(pix_debug))
-				throw new Error(err)
-			}
-
-			shader.debug = gl.createProgram()
-			gl.attachShader(shader.debug, vtx_shader)
-			gl.attachShader(shader.debug, pix_debug_shader)
-			gl.linkProgram(shader.debug)
-			// add our pick uniform
-			this.getLocations(gl, shader.debug, vtx_state, pix_state)
-			if(this.compile_use) this.compileUse(shader.debug)
-		}
-
-		if(this.has_pick){
-			// compile the pick shader
-			var pix_pick_shader = gl.createShader(gl.FRAGMENT_SHADER)
-			gl.shaderSource(pix_pick_shader, pix_pick)
-			gl.compileShader(pix_pick_shader)
-			if (!gl.getShaderParameter(pix_pick_shader, gl.COMPILE_STATUS)){
-				var err = gl.getShaderInfoLog(pix_pick_shader)
-
-				console.log(err.toString(), this.annotateLines(pix))
-				throw new Error(err)
-			}
-
-			shader.pick = gl.createProgram()
-			gl.attachShader(shader.pick, vtx_shader)
-			gl.attachShader(shader.pick, pix_pick_shader)
-			gl.linkProgram(shader.pick)
-			// add our pick uniform
-			pix_state.uniforms['pickguid'] = vec3
-
-			this.getLocations(gl, shader.pick, vtx_state, pix_state)
-
-			if(this.compile_use) this.compileUse(shader.pick)
-		}
+		//Not supported by Dali (Yet)
+//		if(pix_debug){
+//			// compile the pick shader
+//			var pix_debug_shader = gl.createShader(gl.FRAGMENT_SHADER)
+//			gl.shaderSource(pix_debug_shader, pix_debug)
+//			gl.compileShader(pix_debug_shader)
+//			if (!gl.getShaderParameter(pix_debug_shader, gl.COMPILE_STATUS)){
+//				var err = gl.getShaderInfoLog(pix_debug_shader)
+//				console.log(err.toString(), this.annotateLines(pix_debug))
+//				throw new Error(err)
+//			}
+//
+//			shader.debug = gl.createProgram()
+//			gl.attachShader(shader.debug, vtx_shader)
+//			gl.attachShader(shader.debug, pix_debug_shader)
+//			gl.linkProgram(shader.debug)
+//			// add our pick uniform
+//			this.getLocations(gl, shader.debug, vtx_state, pix_state)
+//			if(this.compile_use) this.compileUse(shader.debug)
+//		}
+//
+//		if(this.has_pick){
+//			// compile the pick shader
+//			var pix_pick_shader = gl.createShader(gl.FRAGMENT_SHADER)
+//			gl.shaderSource(pix_pick_shader, pix_pick)
+//			gl.compileShader(pix_pick_shader)
+//			if (!gl.getShaderParameter(pix_pick_shader, gl.COMPILE_STATUS)){
+//				var err = gl.getShaderInfoLog(pix_pick_shader)
+//
+//				console.log(err.toString(), this.annotateLines(pix))
+//				throw new Error(err)
+//			}
+//
+//			shader.pick = gl.createProgram()
+//			gl.attachShader(shader.pick, vtx_shader)
+//			gl.attachShader(shader.pick, pix_pick_shader)
+//			gl.linkProgram(shader.pick)
+//			// add our pick uniform
+//			pix_state.uniforms['pickguid'] = vec3
+//
+//			this.getLocations(gl, shader.pick, vtx_state, pix_state)
+//
+//			if(this.compile_use) this.compileUse(shader.pick)
+//		}
 
 		return shader		
 	}
 
 	this.useShader = function(gl, shader){
-		if(!shader) return
 		if(shader.use) return shader.use(gl, shader, this)
 		// use the shader
 		gl.useProgram(shader)
@@ -236,6 +248,23 @@ define.class('$system/base/shader', function(require, exports){
 	}
 
 	this.compile_use = true
+
+
+	// Override from shader.js
+	this.mapUniforms = function(gl, shader, uniforms, uniset, unilocs){
+		// dali uses registerAnimatableProperty to set a uniform
+		for(var key in uniforms) if(!uniset[key]){
+			var type = gltypes.getType(uniforms[key])
+			//uniset[key] = gltypes.uniforms[type]
+			uniset[key] = gltypes.uniforms[type]
+			var loc = unilocs[key] = {
+				type: type,
+				loc: key  // Store the name, not the location
+			}
+			if(key.indexOf('_DOT_') !== -1) loc.split = key.split(/_DOT_/)
+		}
+	}
+
 
 	this.useShaderTemplate = function(gl, shader, root){
 		// use the shader
@@ -436,6 +465,7 @@ define.class('$system/base/shader', function(require, exports){
 		tpl = tpl.replace(/gl.[A-Z][A-Z0-9_]+/g, function(m){
 			return gltypes.gl[m.slice(3)]
 		})
+
 		shader.use = new Function('return ' + tpl)()
 	}
 
@@ -451,7 +481,6 @@ define.class('$system/base/shader', function(require, exports){
 	
 	// lets draw ourselves
 	this.drawArrays = function(devicewebgl, sub, start, end){
-console.log('Shader drawArrays');
 		//if(this.mydbg) debugger
 		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
 		var gl = devicewebgl.gl

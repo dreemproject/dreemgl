@@ -47,7 +47,8 @@ define.class(function(require, exports){
 		//TODO Use a fixed location to locate dali code
 
 		//TODO FIX absolute path and use of require_builtin
-		this.dali = define.require_builtin('/home/dali/teem/src/dreemgl/Release/dali')(this.options);
+		this.dali = define.require('/home/dali/teem/src/dreemgl/Release/dali')(this.options);
+
 
 	    // Application
 	    this.daliApp = {};

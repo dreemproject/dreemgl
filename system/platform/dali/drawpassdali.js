@@ -324,6 +324,12 @@ define.class(function(require, baseclass){
 					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
 
+					//DALI
+					var dali = this.device.wrapper.dali;
+					var dalidr = new this.device.DaliDreemgl(dali);
+					dalidr.compileShader(shader);
+					
+
 					shader.drawArrays(this.device)
 				}
 			}
