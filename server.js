@@ -131,8 +131,8 @@ function main(){
 		    define.$environment = 'dali' // Otherwise it is nodejs
 
 		    // Use a local daliserver as a first pass
-		    var DaliServer = require('$system/platform/dali/bootdali')
-		    new DaliServer(args, composition);
+		    var BootDali = require('$system/platform/dali/bootdali')
+		    new BootDali(args, composition);
 		}
 		else if(args['-test']){
 			require('$system/server/test.js')

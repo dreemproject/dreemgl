@@ -3,14 +3,13 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('../shader', function(require, exports, self){
-	//if(define.$environment === 'nodejs') return
 
-	var gltypes = require('../gltypes')
+define.class('$system/base/shader', function(require, exports){
 
-	var Texture = require('./texturedali')
+	var gltypes = require('$system/base/gltypes')
 
-	this.Texture = Texture
+	exports.Texture =
+	this.Texture =  require('./texturedali')
 
 	this.compileShader = function(gldevice){
 		var vtx_state = this.vtx_state
@@ -24,92 +23,79 @@ define.class('../shader', function(require, exports, self){
 
 		var gl = gldevice.gl
 		var cache_id = vtx_code + pix_color + this.has_pick
+
 		var shader = gldevice.shadercache[cache_id]
 
 		if(shader) return shader
 
-	    //HACK to simulator shader
-	    shader = {
-		debug: {}
-		,pick: {}
-
-		,uniset: {}
-		,unilocks: {}
-		,refattr: {}
-	    };
-
-	    //console.log('**** vtx_shader', vtx_code);
-	    //console.log('**** pix_shader', pix_color);
-
-	    //TODO
-		//var vtx_shader = gl.createShader(gl.VERTEX_SHADER)
-		//gl.shaderSource(vtx_shader, vtx_code)
-		//gl.compileShader(vtx_shader)
-		//if (!gl.getShaderParameter(vtx_shader, gl.COMPILE_STATUS)){
-		//	var err = gl.getShaderInfoLog(vtx_shader)
-		//	console.log(err.toString(), this.annotateLines(vtx_code))
-		//	throw new Error(err)
-		//}
+		var vtx_shader = gl.createShader(gl.VERTEX_SHADER)
+		gl.shaderSource(vtx_shader, vtx_code)
+		gl.compileShader(vtx_shader)
+		if (!gl.getShaderParameter(vtx_shader, gl.COMPILE_STATUS)){
+			var err = gl.getShaderInfoLog(vtx_shader)
+			console.error(err.toString(), this.annotateLines(vtx_code))
+			return
+			//throw new Error(err)
+		}
 		
 		// compile the shader
-		//var pix_color_shader = gl.createShader(gl.FRAGMENT_SHADER)
-		//gl.shaderSource(pix_color_shader, pix_color)
-		//gl.compileShader(pix_color_shader)
-		//if (!gl.getShaderParameter(pix_color_shader, gl.COMPILE_STATUS)){
-		//	var err = gl.getShaderInfoLog(pix_color_shader)
+		var pix_color_shader = gl.createShader(gl.FRAGMENT_SHADER)
+		gl.shaderSource(pix_color_shader, pix_color)
+		gl.compileShader(pix_color_shader)
+		if (!gl.getShaderParameter(pix_color_shader, gl.COMPILE_STATUS)){
+			var err = gl.getShaderInfoLog(pix_color_shader)
 
-		//	console.log(err.toString(), this.annotateLines(pix_color))
-		//	throw new Error(err)
-		//}
+			console.error(err.toString(), this.annotateLines(pix_color))
+			return
+			//throw new Error(err)
+		}
 
-		//shader = gldevice.shadercache[cache_id] = gl.createProgram()
-		//gl.attachShader(shader, vtx_shader)
-		//gl.attachShader(shader, pix_color_shader)
-		//gl.linkProgram(shader)
+		shader = gldevice.shadercache[cache_id] = gl.createProgram()
+		gl.attachShader(shader, vtx_shader)
+		gl.attachShader(shader, pix_color_shader)
+		gl.linkProgram(shader)
 		this.getLocations(gl, shader, vtx_state, pix_state)
 
 		if(this.compile_use) this.compileUse(shader)
 
 		if(pix_debug){
-		    //console.log('**** pix_debug shader', pix_debug);
 			// compile the pick shader
-			//var pix_debug_shader = gl.createShader(gl.FRAGMENT_SHADER)
-			//gl.shaderSource(pix_debug_shader, pix_debug)
-			//gl.compileShader(pix_debug_shader)
-			//if (!gl.getShaderParameter(pix_debug_shader, gl.COMPILE_STATUS)){
-			//	var err = gl.getShaderInfoLog(pix_debug_shader)
-			//	console.log(err.toString(), this.annotateLines(pix_debug))
-			//	throw new Error(err)
-			//}
+			var pix_debug_shader = gl.createShader(gl.FRAGMENT_SHADER)
+			gl.shaderSource(pix_debug_shader, pix_debug)
+			gl.compileShader(pix_debug_shader)
+			if (!gl.getShaderParameter(pix_debug_shader, gl.COMPILE_STATUS)){
+				var err = gl.getShaderInfoLog(pix_debug_shader)
+				console.log(err.toString(), this.annotateLines(pix_debug))
+				throw new Error(err)
+			}
 
-			//shader.debug = gl.createProgram()
-			//gl.attachShader(shader.debug, vtx_shader)
-			//gl.attachShader(shader.debug, pix_debug_shader)
-			//gl.linkProgram(shader.debug)
+			shader.debug = gl.createProgram()
+			gl.attachShader(shader.debug, vtx_shader)
+			gl.attachShader(shader.debug, pix_debug_shader)
+			gl.linkProgram(shader.debug)
 			// add our pick uniform
 			this.getLocations(gl, shader.debug, vtx_state, pix_state)
 			if(this.compile_use) this.compileUse(shader.debug)
 		}
 
 		if(this.has_pick){
-		    //console.log('**** pix_pick shader', pix_pick);
 			// compile the pick shader
-			//var pix_pick_shader = gl.createShader(gl.FRAGMENT_SHADER)
-			//gl.shaderSource(pix_pick_shader, pix_pick)
-			//gl.compileShader(pix_pick_shader)
-			//if (!gl.getShaderParameter(pix_pick_shader, gl.COMPILE_STATUS)){
-			//	var err = gl.getShaderInfoLog(pix_pick_shader)
+			var pix_pick_shader = gl.createShader(gl.FRAGMENT_SHADER)
+			gl.shaderSource(pix_pick_shader, pix_pick)
+			gl.compileShader(pix_pick_shader)
+			if (!gl.getShaderParameter(pix_pick_shader, gl.COMPILE_STATUS)){
+				var err = gl.getShaderInfoLog(pix_pick_shader)
 
-			//	console.log(err.toString(), this.annotateLines(pix))
-			//	throw new Error(err)
-			//}
+				console.log(err.toString(), this.annotateLines(pix))
+				throw new Error(err)
+			}
 
-			//shader.pick = gl.createProgram()
-			//gl.attachShader(shader.pick, vtx_shader)
-			//gl.attachShader(shader.pick, pix_pick_shader)
-			//gl.linkProgram(shader.pick)
+			shader.pick = gl.createProgram()
+			gl.attachShader(shader.pick, vtx_shader)
+			gl.attachShader(shader.pick, pix_pick_shader)
+			gl.linkProgram(shader.pick)
 			// add our pick uniform
-			pix_state.uniforms['pick'] = vec3
+			pix_state.uniforms['pickguid'] = vec3
 
 			this.getLocations(gl, shader.pick, vtx_state, pix_state)
 
@@ -120,10 +106,10 @@ define.class('../shader', function(require, exports, self){
 	}
 
 	this.useShader = function(gl, shader){
+		if(!shader) return
 		if(shader.use) return shader.use(gl, shader, this)
 		// use the shader
-	    //TODO
-		//gl.useProgram(shader)
+		gl.useProgram(shader)
 
 		// set uniforms
 		var uniset = shader.uniset
@@ -169,13 +155,13 @@ define.class('../shader', function(require, exports, self){
 				}
 			}
 			else{
-				//gl.activeTexture(gl.TEXTURE0 + texid)
-				//gl.bindTexture(gl.TEXTURE_2D, gltex)
+				gl.activeTexture(gl.TEXTURE0 + texid)
+				gl.bindTexture(gl.TEXTURE_2D, gltex)
 				if(texture.updateid !== gltex.updateid){
 					texture.updateGLTexture(gl, gltex)
 				}
 			}
-			//gl.uniform1i(texinfo.loc, texid)
+			gl.uniform1i(texinfo.loc, texid)
 			texid++
 		}
 
@@ -252,12 +238,93 @@ define.class('../shader', function(require, exports, self){
 	this.compile_use = true
 
 	this.useShaderTemplate = function(gl, shader, root){
-	    //TODO
+		// use the shader
+		gl.useProgram(shader)
+
+		// set uniforms
+		SET_UNIFORMS
+
+		// textures
+		TEXTURE_START
+		var texture = TEXTURE_VALUE
+		// lets fetch the sampler
+		var gltex = texture.TEXTURE_SAMPLER
+		// lets do the texture slots correct
+		if(!gltex){
+			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
+			if(!gltex) return 0
+		}
+		else{
+			gl.activeTexture(TEXTUREGL_ID) // gl.TEXTURE0 + TEXTURE_ID
+			gl.bindTexture(gl.TEXTURE_2D, gltex)
+			if(texture.updateid !== gltex.updateid){
+				texture.updateGLTexture(gl, gltex)
+			}
+		}
+		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
+		TEXTURE_END
+
+		// attributes
+		var len = 0 // pull the length out of the buffers
+		var lastbuf
+		ATTRLOC_START
+		var buf = ATTRLOC_BUF
+		if(lastbuf !== buf){
+			lastbuf = buf
+			if(!buf.glvb) buf.glvb = gl.createBuffer()
+			if(buf.length > len) len = buf.length
+			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
+			if(!buf.clean){
+				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
+				buf.clean = true
+			}
+		}
+		var loc = ATTRLOC_LOC
+		gl.enableVertexAttribArray(loc)
+		ATTRLOC_ATTRIBPTR
+		ATTRLOC_END
+
+		// set up blend mode
+		if(root.alpha_blend_eq.op){
+			var constant = root.constant
+			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
+			gl.enable(gl.BLEND)
+			gl.blendEquationSeparate(root.color_blend_eq.op, root.alpha_blend_eq.op)
+			gl.blendFuncSeparate(
+				root.color_blend_eq.src,
+				root.color_blend_eq.dst,
+				root.alpha_blend_eq.src,
+				root.alpha_blend_eq.dst
+			)
+		}
+		else if(root.color_blend_eq.op){
+			var constant = root.constant
+			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
+			gl.enable(gl.BLEND)
+			gl.blendEquation(root.color_blend_eq.op)
+			gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
+		}
+		else{
+			gl.disable(gl.BLEND)
+		}
+		
+		// set up depth test
+		if(root.depth_test_eq.func){
+			//console.log(root.depth_test_eq)
+			gl.enable(gl.DEPTH_TEST)
+			gl.depthFunc(root.depth_test_eq.func)
+		}
+		else{
+			gl.disable(gl.DEPTH_TEST)
+		}
+		
+		return len
 	}
 
 	this.compileUse = function(shader){
 		// alright lets compile our useShader from 
 		var tpl = this.useShaderTemplate.toString()
+		tpl = tpl.replace(/^function/, "function useshader_" + (this.view?this.view.constructor.name:'anonymous') + '_shader_' + this.constructor.name)
 		// ok lets replace shit.
 		// set uniforms
 		var out = 'var loc, uni\n'
@@ -356,7 +423,7 @@ define.class('../shader', function(require, exports, self){
 				}
 				else{
 					ATTRLOC_ATTRIBPTR = 
-						'gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
+						'if(buf.slots>4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
 				}
 				out += body		
 					.replace(/ATTRLOC_BUF/, ATTRLOC_BUF)
@@ -372,15 +439,24 @@ define.class('../shader', function(require, exports, self){
 		shader.use = new Function('return ' + tpl)()
 	}
 
-	//this.draw_type = 'TRIANGLES'//POINTS:0x0,LINES:0x1,LINE_LOOP:0x2,LINE_STRIP:0x3,TRIANGLES:0x4,TRIANGLE_STRIP:0x5,TRIANGLE_FAN:0x6
+	// all draw types
+	exports.TRIANGLES = this.TRIANGLES = 0x4
+	exports.LINES = this.LINES = 0x1
+	exports.LINE_LOOP = this.LINE_LOOP = 0x2
+	exports.LINE_STRIP = this.LINE_STRIP = 0x3
+	exports.TRIANGLE_STRIP = this.TRIANGLE_STRIP = 0x5
+	exports.TRIANGLE_FAN = this.TRIANGLE_FAN = 0x6
+
+	this.drawtype = this.TRIANGLES
 	
 	// lets draw ourselves
-	this.drawArrays = function(devicedali, sub, start, end){
+	this.drawArrays = function(devicewebgl, sub, start, end){
+console.log('Shader drawArrays');
 		//if(this.mydbg) debugger
-		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicedali)
-		var gl = devicedali.gl
+		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
+		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
-		gl.drawArrays(this._draw_type_gl, start || 0, end === undefined?len: end)
+		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)
 	}
 
 })
