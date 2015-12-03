@@ -851,7 +851,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.glyphy_sdf_draw_subpixel_aa = function(){
 		var pos = mesh.tex
 
-		var m = pixelscale*.6//0.005
+		var m = pixelscale*.5//0.005
 		// screenspace length
 		mesh.scaling = 500. * m 
 		
@@ -869,13 +869,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			v3+v4+v5
 		) * 0.001
 
-		/*
+		
 		dist = vec3(
 			glyphy_sdf_decode( mesh.typeface.texture.sample(pos - sub_delta)),
 			glyphy_sdf_decode( mesh.typeface.texture.sample(pos)),
 			glyphy_sdf_decode( mesh.typeface.texture.sample(pos + sub_delta))
 		)*0.003
-		*/
+		
 		//return 'red'
 		
 		var exit = paint(pos,m, pixelscale)
@@ -899,9 +899,10 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var alpha = glyphy_antialias(-dist)
 
 		alpha = pow(alpha, mesh.gamma_adjust)
-		var max_alpha = max(max(alpha.r,alpha.g),alpha.b) 
-		if(max_alpha >0.5) max_alpha = 1.
-		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), max_alpha)
+		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b) 
+		//if(max_alpha >0.5) max_alpha = 1.
+		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
+		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), 1.)//max_alpha)
 	}
 
 

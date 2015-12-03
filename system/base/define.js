@@ -377,8 +377,6 @@
 				Object.defineProperty(obj, 'constructor', {value:MyConstructor})
 			}
 
-			// instance all nested classes
-
 			var outer = MyConstructor.outer
 			// pass on the classroot property
 			if(outer !== undefined){

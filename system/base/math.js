@@ -86,6 +86,7 @@ define(function(require, exports){
 	exports.inversesqrt = typeFn(function(v){ return 1/Math.sqrt(v)})
 	exports.abs = typeFn(Math.abs)
 	exports.floor = typeFn(Math.floor)
+	exports.round = typeFn(Math.round)
 	exports.ceil = typeFn(Math.ceil)
 	exports.min = typeFn2(Math.min)
 	exports.max = typeFn2(Math.max)
@@ -713,7 +714,7 @@ define(function(require, exports){
 		o[0] = r;
 		o[1] = g;
 		o[2] = b;
-		o[3] = a?a:1.0
+		o[3] = a !== undefined?a: 1.0
 		
 		return o;
 	}
@@ -781,7 +782,7 @@ define(function(require, exports){
 		o[0] = r;
 		o[1] = g;
 		o[2] = b;
-		o[3] = a?a:1.0
+		o[3] = a !== undefined? a: 1.0
 		return o;
 		
 	}
@@ -2049,7 +2050,7 @@ define(function(require, exports){
 		o[12] = c[3] * r[0], o[13] = c[3] * r[1], o[14] = c[3] * r[2], o[15] = c[3] * r[3] 
 		return o
 	}
-	
+	/*
 	exports.rect = define.struct({
 		left:exports.float32, 
 		top:exports.float32,
@@ -2058,7 +2059,7 @@ define(function(require, exports){
 	}, 'rect')
 	
 	exports.rect.identity = function(o){
-		if(!o) o = exports.mat3()
+		if(!o) o = exports.rect()
 		o[0] = 0;
 		o[1] = 0;
 		o[2] = 0;
@@ -2067,7 +2068,7 @@ define(function(require, exports){
 	
 	exports.rect.intersects = function(a,b){
 		return (a[0]<= b[2] && b[0] <= a[2] && a[1] <= b[3] && b[1] <= a[3]);
-	}
+	}*/
 	
 	var ease = exports.ease = {}
 
@@ -2363,5 +2364,17 @@ define(function(require, exports){
 	// events are passthrough types
 	exports.Event = function Event(arg){
 		return arg
+	}
+
+	// marking values that go into setters
+	exports.Mark = function Mark(value, mark){
+		var obj = this
+		if(!(obj instanceof Mark)){
+			obj = Object.create(Mark.prototype)
+			Object.defineProperty(obj, 'constructor', {value:Mark})
+		}
+		obj.value = value
+		obj.mark = arguments.length>1? mark: true
+		return obj
 	}
 })

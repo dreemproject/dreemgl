@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $containers$view) {
+define.class(function(require, $containers$view, $widgets$, debugview) {
 	
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
@@ -522,6 +522,11 @@ define.class(function(require, $containers$view) {
 
 	}
 
+	this.atRender = function(){
+		// lets add a debugview
+		//this.children.push(debugview({}))
+	}
+
 	this.doAnimation = function(time, redrawlist){
 		for(var key in this.anims){
 			var anim = this.anims[key]
@@ -533,7 +538,7 @@ define.class(function(require, $containers$view) {
 				delete this.anims[key] 
 				//console.log(value.last_value)
 				anim.obj['_' + anim.key] = value.last_value
-				anim.obj.emit(anim.key, {type:'animation_end', key: anim.key, owner:anim.obj, value:value.last_value})
+				anim.obj.emit(anim.key, {animate:true, end:true, key: anim.key, owner:anim.obj, value:value.last_value})
 				anim.obj.redraw()
 				if(anim.promise) anim.promise.resolve()
 			}
@@ -542,9 +547,9 @@ define.class(function(require, $containers$view) {
 				anim.obj['_' + anim.key] = value
 				if(anim.config.storage){
 					anim.obj['_' + anim.config.storage][anim.config.index] = value
-					anim.obj.emit(anim.config.storage, {type:'animation', key: anim.key, owner:anim.obj, value:value.last_value})
+					anim.obj.emit(anim.config.storage, {type:'animation', key: anim.key, owner:anim.obj, value:value})
 				}
-				anim.obj.emit(anim.key, {type:'animation', key: anim.key, owner:anim.obj, value:value.last_value})
+				anim.obj.emit(anim.key, {animate:true, key: anim.key, owner:anim.obj, value:value})
 				redrawlist.push(anim.obj)
 			}
 		}

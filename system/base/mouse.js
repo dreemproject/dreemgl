@@ -3,9 +3,8 @@
 define.class(function(node){
 	this.atConstructor = function(){}
 	
-	this.events = ['move']
-
 	this.attributes = {
+		move:{type:Event},
 		x: {type:float},
 		y: {type:float},
 		isdown: {type:int},

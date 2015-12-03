@@ -517,18 +517,28 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-
 	// decide to inject scrollbars into our childarray
 	this.atRender = function(){
 		if(this._viewport === '2D' && (this._overflow === 'SCROLL'|| this._overflow === 'AUTO')){
-			if(this.vscrollbar) this.vscrollbar.offset = 0
-			if(this.hscrollbar) this.hscrollbar.offset = 0
+			if(this.vscrollbar) this.vscrollbar.value = 0
+			if(this.hscrollbar) this.hscrollbar.value = 0
+
+			this.scroll = function(event){
+				if(this.vscrollbar){
+					this.vscrollbar.value = Mark(event.value[1]) 
+				}
+				if(this.hscrollbar){
+					this.hscrollbar.value = Mark(event.value[0]) 
+				}
+			}
+
 			this.children.push(
 				this.vscrollbar = this.scrollbar({
 					position:'absolute',
 					vertical:true,
 					noscroll:true,
-					value:function(){
+					value:function(event){
+						if(event.mark) return
 						this.parent._scroll = vec2(this.parent._scroll[0],this._value)
 					},
 					layout:function(){
@@ -544,7 +554,8 @@ define.class('$system/base/node', function(require){
 					position:'absolute',
 					vertical:false,
 					noscroll:true,
-					value:function(){
+					value:function(event){
+						if(event.extra) return
 						this.parent._scroll = vec2(this._value,this.parent._scroll[1])
 					},
 					layout:function(){
