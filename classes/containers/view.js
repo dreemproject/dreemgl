@@ -540,7 +540,7 @@ define.class('$system/base/node', function(require){
 					noscroll:true,
 					value:function(event){
 						if(event.mark) return
-						this.parent._scroll = vec2(this.parent._scroll[0],this._value)
+						this.parent.scroll = Mark(vec2(this.parent._scroll[0],this._value))
 					},
 					layout:function(){
 						var parent_layout = this.parent.layout
@@ -552,14 +552,14 @@ define.class('$system/base/node', function(require){
 					}
 				}),
 				this.hscrollbar = this.scrollbar({
-					position:'absolute',
-					vertical:false,
-					noscroll:true,
-					value:function(event){
+					position: 'absolute',
+					vertical: false,
+					noscroll: true,
+					value: function(event){
 						if(event.mark) return
-						this.parent._scroll = vec2(this._value,this.parent._scroll[1])
+						this.parent.scroll = Mark(vec2(this._value,this.parent._scroll[1]))
 					},
-					layout:function(){
+					layout: function(){
 						var parent_layout = this.parent.layout
 						var this_layout = this.layout
 						this_layout.left = 0
