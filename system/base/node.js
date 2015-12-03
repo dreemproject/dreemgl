@@ -21,10 +21,10 @@ define.class(function(require, constructor){
 
 	this._atConstructor = function(){
 		// store the args for future reference
-		var args = this.constructor_args = Array.prototype.slice.call(arguments)
+		//var args = this.constructor_args = Array.prototype.slice.call(arguments)
 		this.children =
 		this.constructor_children = []
-		this.initFromConstructorArgs(args)
+		this.initFromConstructorArgs(arguments)
 	}
 
 	this.initFromConstructorArgs = function(args){
@@ -125,45 +125,6 @@ define.class(function(require, constructor){
 		return ret
 	}
 
-	// finds overload of property me on key
-	this.overloads = function(key, me){
-		var proto = this
-		var next
-		while(proto){
-			if(proto.hasOwnProperty(key)){
-				var val = proto[key]
-				if(next && val !== me) return val
-				if(val === me) next = 1
-			}
-			proto = Object.getPrototypeOf(proto)
-		}
-	}
-
-	// calls super (not super efficient)
-	this.super = function(args){
-		if(arguments.length == 0 || !args) throw new Error('Please pass the arguments object as first argument into call to super')
-		// fetch the function
-		var me = args.callee || args
-		var fnargs = args
-		// someone passed in replacement arguments
-		if( arguments.length > 1 ) fnargs = Array.prototype.slice.call( arguments, 1 )
-		// look up function name
-		var name = me.__supername__
-		if( name !== undefined ){ // we can find our overload directly
-			var fn = this.overloads(name, me)
-			if(fn && typeof fn == 'function') return fn.apply(this, fnargs)
-		} 
-		else { // we have to find our overload in the entire keyspace
-			for(var key in this) if(!this.__lookupGetter__(key)){
-				fn = this.overloads(key, me)
-				if(fn && typeof fn == 'function') {
-					me.__supername__ = key // store it for next time
-					return fn.apply( this, fnargs )
-				}
-			}
-		}
-	}
-	
 	// hide a property
 	this.hideProperty = function(){
 		for(var i = 0; i<arguments.length; i++){
@@ -190,7 +151,7 @@ define.class(function(require, constructor){
 		return this._attributes[key]
 	}
 
-	this.has_wires = function(key){
+	this.hasWires = function(key){
 		var wiredfn_key = '_wiredfn_' + key
 		return wiredfn_key in this
 	}
@@ -198,15 +159,6 @@ define.class(function(require, constructor){
 	this.wiredCall = function(key){
 		var wiredcl_key = '_wiredcl_' + key
 		return this[wiredcl_key]
-	}
-
-	// define an event
-	this.event = function(key){
-		this.attribute = {name:key, type:Object}
-	}
-
-	this.parse = function(key, value){
-
 	}
 	
 	this.emitRecursive = function(key, event, block){
@@ -218,6 +170,10 @@ define.class(function(require, constructor){
 			child.emitRecursive(key, event)
 		}
 	}
+
+	
+	
+	this.mark = 
 	
 	this.emit = function(key, event){
 		var on_key = 'on' + key
@@ -336,7 +292,9 @@ define.class(function(require, constructor){
 
 
 
+
 	// magical setters JSON API
+
 
 
 
@@ -555,6 +513,7 @@ define.class(function(require, constructor){
 			var storage_key = '_' + config.storage
 			
 			setter = function(value){
+				var mark
 				if(typeof value === 'string' && value.charAt(0) === '$') value = this.parseWiredString(value)
 				if(this[set_key] !== undefined) value = this[set_key](value)
 				if(typeof value === 'function' && (!value.prototype || Object.getPrototypeOf(value.prototype) === Object.prototype)){
@@ -562,7 +521,13 @@ define.class(function(require, constructor){
 					this[on_key] = value
 					return
 				}
-				if(typeof value === 'object' && value !== null && value.atAttributeAssign) value.atAttributeAssign(this, key)
+				if(typeof value === 'object' && value instanceof Mark){
+					mark = value.mark
+					value = value.value
+				}
+				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
+					value.atAttributeAssign(this, key)
+				}
 
 				var config = this._attributes[key]
 
@@ -585,21 +550,22 @@ define.class(function(require, constructor){
 				this[value_key] = store[config.index] = value
 
 				// emit storage
-				this.emit(config.storage, {type:'setter', via:key, key:config.storage, owner:this, value:this[storage_key]})
+				this.emit(config.storage, {setter:true, via:key, key:config.storage, owner:this, value:this[storage_key], mark:mark})
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this) this.emit(key,  {type:'setter', key:key, owner:this, value:value})
+				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, value:value, mark:mark})
 			}
 
 			this.addListener(config.storage, function(event){
 				var val = this[value_key] = event.value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {type:'setter', key:key, owner:this, value:val})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, mark:mark})
 			})
 			// initialize value
 			this[value_key] = this[storage_key][config.index]
 		}
 		else {
 			setter = function(value){
+				var mark
 				if(typeof value === 'string' && value.charAt(0) === '$') value = this.parseWiredString(value)
 				if(this[set_key] !== undefined) value = this[set_key](value)
 				if(typeof value === 'function' && (!value.prototype || Object.getPrototypeOf(value.prototype) === Object.prototype)){
@@ -607,8 +573,14 @@ define.class(function(require, constructor){
 					this[on_key] = value
 					return
 				}
-				if(typeof value === 'object' && value !== null && value.atAttributeAssign) value.atAttributeAssign(this, key)
-				
+				if(typeof value === 'object' && value instanceof Mark){
+					mark = value.mark
+					value = value.value
+				}
+				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
+					value.atAttributeAssign(this, key)
+				}
+
 				var config = this._attributes[key]
 			
 				var type = config.type
@@ -625,7 +597,7 @@ define.class(function(require, constructor){
 				this[value_key] = value
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this)  this.emit(key, {type:'setter', owner:this, key:key, value:value})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, value:value, mark:mark})
 			}
 		}
 		
@@ -680,7 +652,7 @@ define.class(function(require, constructor){
 
 					obj.addListener(part, bindcall)
 
-					if(obj.has_wires(part) && !obj.wiredCall(part)){
+					if(obj.hasWires(part) && !obj.wiredCall(part)){
 						obj.connectWiredAttribute(part)
 						if(!bindcall.deps) bindcall.deps = []
 						bindcall.deps.push(obj.wiredCall(part))

@@ -15,8 +15,8 @@ define.class(function(require, $controls$, label){
 		// wrap the text
 		wrap: {type:Boolean, value:false}
 	}
-
 	this.bgcolor = vec4(12/255,33/255,65/255,1)
+
 	this.bg = 1
 	this.fontsize = 14
 	this.subpixel = true

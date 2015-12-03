@@ -20,7 +20,7 @@ define.class(function(require, $containers$, view){
 		// Size of the font in pixels
 		fontsize: {type:float, value: 18},
 	
-		boldness: {type:float, value: 0.2},
+		boldness: {type:float, value: 0.},
 
 		// Name of the font
 		typeface: {type:Object, value: undefined},

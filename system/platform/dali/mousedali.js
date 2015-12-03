@@ -4,6 +4,6 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('../mouse', function(){
+define.class('$system/base/mouse', function(require, exports){
 	
 })

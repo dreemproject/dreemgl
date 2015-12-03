@@ -70,7 +70,6 @@ define.class(function(require,
 								source:render.toString(), 
 								padding:vec4(4), 
 								fontsize: 14,
-								bgcolor:"#000030", 
 								multiline: true
 							}),
 						0),
@@ -157,7 +156,6 @@ define.class(function(require,
 									}.toString(), 
 									padding:vec4(4), 
 									fontsize: 14, 
-									bgcolor:"#000030", 
 									multiline: true
 								}),
 								view({
@@ -187,7 +185,6 @@ define.class(function(require,
 								source:require('../rpcremote').module.factory.body.toString(), 
 								padding:vec4(4), 
 								fontsize: 14, 
-								bgcolor:"#000030",
 								multiline: true
 							})
 						),

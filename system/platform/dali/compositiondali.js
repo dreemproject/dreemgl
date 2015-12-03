@@ -1,110 +1,84 @@
-// Copyright 2015 Teem2 LLC - Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+// this class
 
-// Duplicated from composition_client.js
+define.class('$system/base/compositionclient', function(require, baseclass){
 
-// Added missing objects needed elsewhere
-Image = function() {
-};
-
-define.class('$system/base/compositionbase', function(require, baseclass){
-
-	var Device = require('./devicedali')
-	var Render = require('$system/base/render')
+	var Device = require('$system/platform/$platform/device$platform')
+	var WebRTC = require('$system/rpc/webrtc')
+	var BusClient = require('$system/rpc/busclient')
 
 	this.atConstructor = function(previous, parent){
-	    //HACK. I see different args than these
-	    previous = null;
-	    parent = null;
+		//TODO
+		previous = null
+		parent = null
 
-	    this.parent = parent
-
-	    this.device = new Device()
-
-		// how come this one doesnt get patched up?
-		baseclass.prototype.atConstructor.call(this)
-
-		this.screenname = location && location.search && location.search.slice(1)
-
-		// web environment
 		if(previous){
-			this.bus = previous.bus || {}
-			this.rpc = previous.rpc || {}
-			this.rpc.host = this
-			this.rendered = true
+			this.reload = (previous.reload || 0) + 1
+			this.device = previous.device// new Device(previous.device) //previous.device
+			this.device.reload = this.reload
+			console.log("Reload " + this.reload)
 		}
-		else {
-		    this.createBus()
-		}
-
-		this.renderComposition()
-
-	    // Use first screen name
-	    //TODO Check this
-	    var child = this.children[0];
-	    this.screenname = child.name || child.constructor.name
-
-		this.screen = this.names[this.screenname].screen
-		if(!this.screen){
-			this.screen = this.names.screens.constructor_children[0]			
-			this.screenname = this.screen.name || this.screen.constructor.name
+		else{
+			// lets spawn up a device
+			this.device = new Device()
 		}
 
-		if(previous || parent) this.doRender(previous, parent)
+		baseclass.prototype.atConstructor.call(this, previous, parent)
 
-	    //HACK
+		//TEST
+		//this.renderComposition();
+
+	    //TEST (this will render the display)
 	    this.doRender();
 
 	}
 
-	this.doRender = function(previous, parent){
-		var globals = {
-			composition:this,
-			rpc:this.rpc,
-			screen:this.screen,
-			device:this.device
-		}
-		globals.globals = globals
-	        //NO window in dali
-		//window.comp = this
-
-		// copy keyboard and mouse objects from previous
-
-		if(parent){
-			this.screen.device = parent.screen.device
-			this.screen.parent = parent
-		}
-		//this.screen.teem = this
-		Render.process(this.screen, previous && previous.screen, globals)
-		
-		if(this.screen.title !== undefined) document.title = this.screen.title 
-				
-		if(previous){
-			this.screen.setDirty(true)
-		}
-
-		this.rendered = true
-	}
-
-	this.callRpcMethod = function(msg){
-	    console.warn('warning: composition_dali.callRpcMethod not implemented', msg);
-	    return null;
-	}
-
-	this.setRpcAttribute = function(msg){
-	    console.warn('warning: composition_dali.setRpcAttribute not implemented', msg);
-	}
-
 	this.createBus = function(){
-	    console.warn('warning: composition_dali.createBus not implemented');
+		console.log('compositiondali.createBus is NOT implemented');
+		this.bus = {};
+	}
 
-	    this.bus = {};
-	    this.rpc = {};
-	}		
 
-	this.log = function(){
-	    console.warn('warning: composition_dali.log not implemented');
-		var args = Array.prototype.slice.apply(arguments)
-		console.log.apply(console, args)
+	this.doRender = function(previous, parent){
+		baseclass.prototype.doRender.call(this, previous, parent)
+
+/*
+		this.screen.addListener('locationhash', function(event){
+			var obj = event.value
+			var str = ''
+			for(var key in obj){
+				var value = obj[key]
+				if(str.length) str += '&'
+				if(value === true) str += key
+				else str += key + '=' + value
+			}
+			location.hash = '#' + str
+		})
+
+		this.decodeLocationHash = function(){
+			// lets split it on & into a=b pairs, 
+			var obj = {}
+			var parts = location.hash.slice(1).split(/\&/)
+			for(var i = 0; i < parts.length; i++){
+				var part = parts[i]
+				var kv = part.split(/=/)
+				if(kv.length === 1) obj[kv[0]] = true
+				else{
+					obj[kv[0]] = kv[1]
+				}
+			}
+			this.screen.locationhash = obj
+		}
+
+		window.onhashchange = function(){
+			this.decodeLocationHash()
+		}.bind(this)
+
+		this.decodeLocationHash()
+*/
 	}
 
 })

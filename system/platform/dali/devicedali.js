@@ -3,42 +3,130 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, exports, self){
 
-	//HACK to simulator gl
+define.class(function(require, exports){
+
+	//HACK to simulate gl (during dev)
 	gl = {
 	getUniformLocation: function() {}
 	,getAttribLocation: function() {}
 	,uniform4f: function() {}
 	,drawArrays: function() {}
+	,framebufferTexture2D: function() {}
+	,bindRenderbuffer: function() {}
+	,createRenderbuffer: function() { return {};}
+	,createFramebuffer: function() { return {};}
+	,bindFramebuffer: function() {}
+	,renderbufferStorage: function() {}
+	,framebufferRenderbuffer: function() {}	
+	,viewport: function() {}
+	,clearColor: function() {}
+	,clear: function() {}
+	,createShader: function() {}
+	,attachShader: function() {}
+	,shaderSource: function() {}
+	,compileShader: function() {}
+	,createTexture: function() { return {};}
+	,activeTexture: function() {}
+	,bindTexture: function() {}
+	,getShaderParameter: function() {}
+	,getShaderInfoLog: function() {return ''}
+	,useProgram: function() {}
+	,createBuffer: function() {return 0;}
+	,bindBuffer: function() {}
+	,bufferData: function() {}
+	,enable: function() {}		
+	,disable: function() {}		
+	,blendEquation: function() {}		
+	,blendFunc: function() {}		
+	,enableVertexAttribArray: function() {}
+	,vertexAttribPointer: function() {}
+	,uniform1f: function() {return 0;}
+	,uniform2f: function() {return 0;}
+	,uniform3f: function() {return 0;}
+	,uniform4f: function() {return 0;}
+	,uniform1i: function() {return 0;}
+	,uniformMatrix4fv: function() {return 0;}
+	,pixelStorei: function() {}
+	,texParameterf: function() {}
+	,texParameteri: function() {}
+	,depthFunc: function() {}
+	,texImage2D: function() {}
 	};
 
-
-
-	var Keyboard = require('./keyboarddali')
-	var Mouse = require('./mousedali')
-	var Touch = require('./touchdali')
-
-	// require embedded classes	
-	var Shader = this.Shader = require('./shaderdali')
-	var Texture = this.Texture = require('./texturedali')
-	var DrawPass = this.Layer = require('./drawpassdali')
+	// DaliDreemgl is the interface between dreemgl and dali.
+	this.DaliDreemgl = require('./dalidreemgl')
 
 	// Dali application wrapper
 	var DaliWrapper = require('./daliwrapper')
 
-	//var wrapper = require('./wrapper');
 
-	//wrapper = function() {};
+	this.Keyboard = require('./keyboarddali')
+	this.Mouse = require('./mousedali')
+	this.Touch = require('./touchdali')
 
-	this.frame = this.main_frame = this.Texture.fromType('rgb_depth_stencil')
-	
+	// require embedded classes	
+	this.Shader = require('./shaderdali')
+	this.Texture = require('./texturedali')
+	this.Texture.Image = function(){}
+	this.DrawPass = require('./drawpassdali')
+
 	this.preserveDrawingBuffer = true
+	this.premultipliedAlpha = false
 	this.antialias = false
 	this.debug_pick = false
 
+	this.document = null
+
 	this.atConstructor = function(previous){
 
+		this.extensions = previous && previous.extensions || {}
+		this.shadercache = previous &&  previous.shadercache || {}
+		this.drawpass_list = previous && previous.drawpass_list || []
+		this.layout_list = previous && previous.layout_list || []
+		this.pick_resolve = []	
+		this.anim_redraws = []
+		this.doPick = this.doPick.bind(this)
+
+		this.animFrame = function(time){
+			this.anim_req = false
+			this.doColor(time)
+			//if(this.pick_resolve.length) this.doPick()
+		}.bind(this)
+	
+		if(previous){
+			this.canvas = previous.canvas
+			this.gl = previous.gl
+			this.mouse = previous.mouse
+			this.keyboard = previous.keyboard
+			this.touch = previous.touch
+			this.parent = previous.parent
+			this.drawtarget_pools = previous.drawtarget_pools
+			this.frame = this.main_frame = previous.main_frame
+		}
+		else{
+			this.frame = 
+			this.main_frame = this.Texture.fromType('rgb_depth_stencil')
+
+			this.mouse = new this.Mouse(this)
+			this.keyboard = new this.Keyboard(this)
+			this.touch = new this.Touch(this)
+			this.drawtarget_pools = {}
+
+			this.createContext()
+		}
+
+		this.initResize()
+
+		//TODO Force an update
+		//this.doColor(0);
+	}
+
+	this.createContext = function(){
+		console.log('devicedali.createContext NOT implemented')
+	}
+
+	this.initResize = function(){
 		//TODO Set width, height, name
 		this.width = this.height = 600
 		this.name = 'dreemgl/dali'
@@ -51,41 +139,6 @@ define.class(function(require, exports, self){
 		this.size = vec2(this.width, this.height);
 		this.ratio = 1.0; // this.main_frame.ratio
 
-		this.extensions = previous && previous.extensions || {}
-		this.shadercache = previous &&	previous.shadercache || {}
-		this.drawpass_list = previous && previous.layer_list || []
-		this.layout_list = previous && previous.layout_list || []
-		this.pick_resolve = []
-		this.animFrame = function(time){
-			this.anim_req = false
-			this.doDraw(time)
-			//if(this.pick_resolve.length) this.doPick()
-		}.bind(this)
-	
-		if(previous){
-			this.canvas = previous.canvas
-			this.gl = previous.gl
-			this.mouse = previous.mouse
-			this.keyboard = previous.keyboard
-			this.touch = previous.touch
-			this.parent = previous.parent
-		}
-		else{
-			this.mouse = new Mouse()
-			this.keyboard = new Keyboard()
-			this.touch = new Touch()
-
-		    //TODO
-		    // Start the dali app defined in wrapper.js
-		    //new wrapper();
-		}
-
-		//canvas.webkitRequestFullscreen()
-		var resize = function(){
-		    console.error('devicedali.resize called');
-		    resize()
-		}
-
 	}
 
 	this.clear = function(r, g, b, a){
@@ -93,42 +146,38 @@ define.class(function(require, exports, self){
 			a = r.length === 4? r[3]: 1, b = r[2], g = r[1], r = r[0]
 		}
 		if(arguments.length === 3) a = 1
-	    //TODO
-		//this.gl.clearColor(r, g, b, a)
-		//this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT|this.gl.STENCIL_BUFFER_BIT)
+		this.gl.clearColor(r, g, b, a)
+		this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT|this.gl.STENCIL_BUFFER_BIT)
 	}
 
 	this.getExtension = function(name){
 		var ext = this.extensions[name]
 		if(ext) return ext
-	    //TODO
-		//return this.extensions[name] = this.gl.getExtension(name)
+		return this.extensions[name] = this.gl.getExtension(name)
 	}
 
 	this.redraw = function(){
 		if(this.anim_req) return
 		this.anim_req = true
-	    console.log('redraw!');
 
-	    //TODO
-	    this.animFrame();
-	    //window.requestAnimationFrame(this.animFrame)
+		//TODO
+		this.animFrame();
+		//this.document.requestAnimationFrame(this.animFrame)
 	}
 
 	this.bindFramebuffer = function(frame){
 		if(!frame) frame = this.main_frame
+	
 		this.frame = frame
 		this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
 
-	    //TODO
-		//this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.frame_buf)
-		//this.gl.viewport(0, 0, frame.size[0], frame.size[1])
+		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
+		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
 	}
 
 	this.readPixels = function(x, y, w, h){
 		var buf = new Uint8Array(w * h * 4)
-	    //TODO
-		//this.gl.readPixels(x , y , w , h, this.gl.RGBA, this.gl.UNSIGNED_BYTE, buf)
+		this.gl.readPixels(x , y , w , h, this.gl.RGBA, this.gl.UNSIGNED_BYTE, buf)
 		return buf
 	}
 
@@ -137,9 +186,23 @@ define.class(function(require, exports, self){
 		var x = this.pick_x, y = this.pick_y
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var last = i === len - 1 
+			var skip = false
+			var view = this.drawpass_list[i]
+
+			// little hack to dont use rtt if you only use a single view
+			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
+				skip = last = true
+			}
 			// lets set up glscissor on last
 			// and then read the goddamn pixel
-			this.drawpass_list[i].drawPick(last, i, x, y, this.debug_pick)
+			if(last || view.draw_dirty & 2){
+				view.draw_dirty &= 1
+				view.drawpass.drawPick(last, i, x, y, this.debug_pick)
+			}
+			if(skip){
+				this.screen.draw_dirty &= 1
+				break
+			}
 		}
 		// now lets read the pixel under the mouse
 		var pick_resolve = this.pick_resolve
@@ -155,12 +218,15 @@ define.class(function(require, exports, self){
 		// decode the pass and drawid
 		var passid = (data[0]*43)%256 - 1
 		var drawid = (((data[2]<<8) | data[1])*60777)%65536 - 1
-
 		// lets find the view.
-		var pass = this.drawpass_list[passid]
-		var view = pass && pass.draw_list[drawid]
-		// lets wait
-		//if(view)console.log(view.name)
+		var passview = this.drawpass_list[passid]
+		var drawpass = passview && passview.drawpass
+		var view = drawpass && drawpass.draw_list[drawid]
+
+		while(view && view.nopick){
+			view = view.parent
+		}
+
 		for(var i = 0; i < pick_resolve.length; i++){
 			pick_resolve[i](view)
 		}
@@ -173,64 +239,182 @@ define.class(function(require, exports, self){
 			this.pick_x = x
 			this.pick_y = y
 			if(!this.pick_timer){
-				this.pick_timer = setTimeout(this.doPick.bind(this), 0)
+				this.pick_timer = setTimeout(this.doPick, 0)
 			}
 			//this.doPick()
 		}.bind(this))
 	}
 
-	this.doDraw = function(time){
+	this.doColor = function(time){
 		if (!this.wrapper) {
+			//console.log('Create DaliWrapper', this.width, this.height, this.name);
 			this.wrapper = new DaliWrapper(this.width, this.height, this.name);			}
 
+		if(!this.first_time) this.first_time = time
+
+		var stime = (time - this.first_time) / 1000
+		//console.log(this.last_time - stime)
+
+		this.last_time = stime
+	
 		// lets layout shit that needs layouting.
-	    //if (this.layout_list.length == 0) return;
-		var screen = this.layout_list[this.layout_list.length - 1]
+		var anim_redraw = this.anim_redraws
+		anim_redraw.length = 0
+		this.screen.doAnimation(stime, anim_redraw)
 
-		screen._size = vec2(this.main_frame.size[0]/this.ratio, this.main_frame.size[1]/this.ratio)
-
+		// set the size externally of the main view
+		//var screen = this.layout_list[this.layout_list.length - 1]
+		this.screen._maxsize =
+		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
+		// do the dirty layouts
 		for(var i = 0; i < this.layout_list.length; i++){
 			// lets do a layout?
 			var view = this.layout_list[i]
-			view.doLayout()
+			if(view.layout_dirty){
+				view.doLayout()
+				view.layout_dirty = false
+			}
 		}
 
-		// lets draw all the passes
+		// lets draw draw all dirty passes.
+		var hastime
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
-			this.drawpass_list[i].drawColor(i === len - 1)
+			var view = this.drawpass_list[i]
+
+			var skip = false
+			var last = i === len - 1
+
+			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
+				skip = last = true							
+			}
+
+			if(view.draw_dirty & 1 || last){
+				var viewhastime = view.drawpass.drawColor(last, stime)
+				if(!viewhastime){
+					view.draw_dirty &= 2
+				}
+				else hastime = viewhastime
+			}
+
+			if(skip){
+				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
+				
+				
+				this.screen.draw_dirty &= 2
+				break
+			}
 		}
+
+		if(anim_redraw.length){
+			for(var i = 0; i < anim_redraw.length; i++){
+				anim_redraw[i].redraw()
+			}
+			return true
+		}
+		return hastime
 	}
 
 	this.atNewlyRendered = function(view){
-		// todo fix this
-		// if view is not a layer we have to find the layer
-		this.regenerateDrawPasses(view)
+		// if view is not a layer we have to find the layer, and regenerate that whole layer.
+		if(!view.parent) this.screen = view // its the screen
+		// alright lets do this.
+		var node = view
+		while(!node._viewport){
+			node = node.parent
+		}
+		
+		if(!node.parent){ // fast path to chuck the whole set
+			// lets put all the drawpasses in a pool for reuse
+			for(var i = 0; i < this.drawpass_list.length; i++) this.drawpass_list[i].drawpass.poolDrawTargets()
+			this.drawpass_list = []
+			this.layout_list = []
+			this.drawpass_idx = 0
+			this.layout_idx_first = 0
+			this.layout_idx = 0
+			this.addDrawPassRecursive(node)
+		}
+		else{ // else we remove drawpasses first then re-add them
+			this.removeDrawPasses(node)
+			this.layout_idx_first = this.layout_idx
+			this.addDrawPassRecursive(node)
+		}
+		node.relayout()
 	}
 
-	this.regenerateDrawPasses = function(view){
-		this.layer_list = []
-		this.layout_list = []
-		// lets walk over the root
-		this.addDrawPassRecursive(view)
-		this.redraw()
+	// remove drawpasses related to a view
+	this.removeDrawPasses = function(view){
+		// we have to remove all the nodes which have view as their parent layer
+		var drawpass_list = this.drawpass_list
+		this.drawpass_idx = Infinity
+		for(var i = 0; i < drawpass_list.length; i++){
+			var node = drawpass_list[i]
+			while(node.parent && node !== view){
+				node = node.parent
+			}
+			if(node === view){
+				if(i < this.drawpass_idx) this.drawpass_idx = i
+				node.drawpass.poolDrawTargets()
+				drawpass_list.splice(i, 1)
+				break
+			}
+		}
+		if(this.drawpass_idx === Infinity) this.drawpass_idx = 0
+		// now remove all layouts too
+		this.layout_idx = Infinity
+		var layout_list = this.layout_list
+		for(var i = 0; i < layout_list.length; i++){
+			var pass = layout_list[i]
+			var node = pass
+			while(node.parent && node !== view){
+				node = node.parent
+			}
+			if(node === view){
+				if(i < this.layout_idx) this.layout_idx = i
+				layout_list.splice(i, 1)
+			}
+		}
+		if(this.layout_idx === Infinity) this.layout_idx = 0
 	}
 
+	// add drawpasses and layouts recursively from a view
 	this.addDrawPassRecursive = function(view){
 		// lets first walk our children( depth first)
 		var children = view.children
-		for(var i = 0; i < children.length; i++){
+		if(children) for(var i = 0; i < children.length; i++){
 			this.addDrawPassRecursive(children[i])
 		}
-		// lets create a layer
+
+		// lets create a drawpass 
 		if(view._viewport){
-			this.drawpass_list.push(new DrawPass(this, view))
-			if(!view._flex){
-				this.layout_list.push(view)
+			var pass = new this.DrawPass(this, view)
+			this.drawpass_list.splice(this.drawpass_idx,0,view)
+			this.drawpass_idx++
+			// lets also add a layout pass
+			if(isNaN(view._flex)){ // if not flex, make sure layout runs before the rest
+				// we are self contained
+				this.layout_list.splice(this.layout_idx_first,0,view)
+			}
+			else{ // we are flex, make sure we layout after
+				this.layout_list.splice(this.layout_idx,0,view)
+			}
+			//this.layout_idx++
+		}
+
+	}
+
+	this.relayout = function(){
+		var layout_list = this.layout_list
+		for(var i = 0; i < layout_list.length; i++){
+			view = layout_list[i]
+			if(!isNaN(view._flex) || view == this.screen){
+				view.relayout()
 			}
 		}
 	}
 
 	this.atResize = function(){
+		// lets relayout the whole fucker
+		this.relayout()
 		this.redraw()
 		// do stuff
 	}

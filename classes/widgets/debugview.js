@@ -4,6 +4,19 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$system/base/keyboard', function(require, exports){
-	
+define.class(function(require, $containers$, view, $controls$){
+
+	this.attributes = {
+		// The code to display
+		source: {type:String, value:""},
+		// wrap the text
+		wrap: {type:Boolean, value:false}
+	}
+
+	this.bgcolor = vec4(12/255,33/255,65/255,1)
+	this.viewport = '2D'
+
+	this.render = function(){ return [
+		view({bgcolor:'red', position:'absolute', width:300, height:300})
+	]}
 })

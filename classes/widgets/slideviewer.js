@@ -54,8 +54,16 @@ define.class(function($containers$, view, $controls$, label){
 		page: {type:int, persist:true}
 	}
 
-	this.page = function(){
-		this.scroll = vec2(this.page * (this.slidewidth + this.slidemargin * 2), 0)
+	this.page = function(event){
+		if(event.mark) return
+		// set the scroll from the page
+		this.scroll = Mark(vec2(this.page * (this.slidewidth + this.slidemargin * 2), 0))
+	}
+
+	this.scroll = function(event){
+		if(event.mark || event.animate) return
+		// reverse compute the page from the scrol
+		this.page = Mark(ceil(event.value[0] / (this.slidewidth + this.slidemargin * 2)))
 	}
 
 	this.flexwrap = false
