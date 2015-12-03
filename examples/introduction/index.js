@@ -206,7 +206,6 @@ define.class(function(require,
 							text:'Left',
 							flex:1,
 							size: vec2(200, 200),
-							bgcolor: vec4('yellow'),
 							//is: draggable(),
 							click: function(){
 								this.screen.pager = -1
@@ -216,7 +215,6 @@ define.class(function(require,
 							text:'Right',
 							flex:1,
 							size: vec2(200, 200),
-							bgcolor: vec4('red'),
 							//is: draggable(),
 							click: function(){
 								this.screen.pager = 1

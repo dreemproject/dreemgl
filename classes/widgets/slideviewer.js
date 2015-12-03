@@ -55,15 +55,24 @@ define.class(function($containers$, view, $controls$, label){
 	}
 
 	this.page = function(event){
+		if(!this.children) return
 		if(event.mark) return
 		// set the scroll from the page
-		this.scroll = Mark(vec2(this.page * (this.slidewidth + this.slidemargin * 2), 0))
+		if(this._page < 0) this._page = 0
+		var len = this.constructor_children.length 
+		if(this._page > len - 1) this._page = len - 1
+
+		this.scroll = vec2(this.page * (this.slidewidth + this.slidemargin * 2), 0)
 	}
 
 	this.scroll = function(event){
-		if(event.mark || event.animate) return
-		// reverse compute the page from the scrol
-		this.page = Mark(ceil(event.value[0] / (this.slidewidth + this.slidemargin * 2)))
+		var page = ceil(event.value[0] / (this.slidewidth + this.slidemargin * 2))
+		if(event.mark || event.animate){
+			this._page = page
+		}
+		else{
+			this.page = Mark(page)
+		}
 	}
 
 	this.flexwrap = false

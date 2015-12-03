@@ -62,9 +62,23 @@ define.class(function(require, exports){
 			this.drawtarget_pools = {}
 
 			this.createContext()
+			this.createWakeupWatcher()
 		}
 
 		this.initResize()
+	}
+
+	this.createWakeupWatcher = function(){
+		var last = Date.now()
+		setInterval(function(){
+			var now = Date.now()
+			if(now - last > 1000 && this.screen){
+				this.doresize()
+ 				this.redraw()
+				this.screen.emit('wakeup')
+			}
+			last = now
+		}.bind(this), 200)
 	}
 
 	this.createContext = function(){
@@ -99,7 +113,8 @@ define.class(function(require, exports){
 
 	this.initResize = function(){
 		//canvas.webkitRequestFullscreen()
-		var resize = function(){
+
+		var resize = this.doresize = function(){
 			var pixelRatio = window.devicePixelRatio
 
 			var w = this.parent.offsetWidth

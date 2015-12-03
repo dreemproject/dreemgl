@@ -532,7 +532,7 @@ define.class(function(require, constructor){
 				var config = this._attributes[key]
 
 
-				if(config.motion){
+				if(!mark && config.motion){
 					// lets copy our value in our property
 					this[value_key] = this[storage_key][config.index]
 					this.startAnimation(key, value)
@@ -588,7 +588,7 @@ define.class(function(require, constructor){
 					if(type !== Object && type !== Array) value = type(value)
 				}
 
-				if(config.motion && this.startAnimation(key, value)){
+				if(!mark && config.motion && this.startAnimation(key, value)){
 
 					// store the end value
 					return

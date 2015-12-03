@@ -524,6 +524,7 @@ define.class('$system/base/node', function(require){
 			if(this.hscrollbar) this.hscrollbar.value = 0
 
 			this.scroll = function(event){
+				if(event.mark) return
 				if(this.vscrollbar){
 					this.vscrollbar.value = Mark(event.value[1]) 
 				}
@@ -555,7 +556,7 @@ define.class('$system/base/node', function(require){
 					vertical:false,
 					noscroll:true,
 					value:function(event){
-						if(event.extra) return
+						if(event.mark) return
 						this.parent._scroll = vec2(this._value,this.parent._scroll[1])
 					},
 					layout:function(){

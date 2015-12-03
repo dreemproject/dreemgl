@@ -85,7 +85,6 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 					),
 					view({
 						init:function(){
-							console.log(this._attributes)
 						},
 						flex:4,
 						name:'theview', 
@@ -101,8 +100,8 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						},
 						fov: 90,
 						attributes:{
-							camera:{motion:'linear', duration:1},
-							fov:{motion:'easein', duration:1}
+							camera:{motion:'linear', duration:1, persist:true},
+							fov:{motion:'easein', duration:1, persist:true}
 						}}
 						,cube({pos:vec3(0,1,0), size:vec3(0.5)})
 						,cube({pos:vec3(1,0,0), size:vec3(0.5)})

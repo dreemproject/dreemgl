@@ -3,28 +3,14 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
+// Stack container is a custom layout view where the number of children doesnt slow down
+// either the layout engine or the render engine
 
 define.class(function(require, $containers$, view, stackcontainer, $controls$){
 
 	this.bgcolor = 'gray'
-	this.viewport = '2D'
-	this.position = 'absolute'
-	this.overflow = 'scroll'
-	this.flex = 1
-	this.pullheight = 400
-
-	// manually do layout?.. that sucks
-	this.layout = function(){
-		var layout = this._layout
-		layout.width = this.parent.layout.width
-		layout.height = this.pullheight
-		layout.top = this.parent.layout.height - layout.height
-		layout.left = 0
-	}
 
 	this.render = function(){ return [
-		stackcontainer({
-			flex:1
-		})
+
 	]}
 })

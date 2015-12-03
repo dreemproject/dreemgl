@@ -10,7 +10,8 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 	var Animate = require('$system/base/animate')
 
 	this.attributes = {
-		locationhash: {type:Object, value:{}}
+		locationhash: {type:Object, value:{}},
+		wakeup: Event
 	}
 
 	this.bg = undefined
@@ -524,7 +525,7 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 
 	this.atRender = function(){
 		// lets add a debugview
-		//this.children.push(debugview({}))
+		this.children.push(debugview({}))
 	}
 
 	this.doAnimation = function(time, redrawlist){

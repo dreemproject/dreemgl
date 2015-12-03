@@ -18,10 +18,10 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 					}),*/
 					view({
 						attributes:{
-							mycolor:{value:vec4('orange'), motion:'linear', duration:1}
+							mycolor:{value:vec4('red'), motion:'linear', duration:1}
 						},
 						mouseleftdown:function(){
-							this.mycolor = 'blue'
+							this.mycolor = 'yellow'
 						},
 						mouseleftup:function(){
 							this.mycolor = 'red'
