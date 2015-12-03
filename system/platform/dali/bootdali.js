@@ -8,64 +8,70 @@
 
 define.class(function(require){
 
-console.trace('Loading daliserver', define.$environment);
-
-	// Dali/nodejs interface (nodejs package at top-level of dreemgl repository)
-    Dali = require('../../Release/dali');
+console.log('Loading bootdali', define.$environment);
 
 	// composition_client references WebSocket
-	WebSocket = require('$server/nodewebsocket')
+	//WebSocket = require('$server/nodewebsocket')
 
-	var Render = require('$base/render')
+	//var Render = require('$system/platform/render')
 
 	var path = require('path')
 	var fs = require('fs')
 
-	var ExternalApps = require('$server/externalapps')
-	var BusServer = require('$rpc/busserver')
-	var FileWatcher = require('$server/filewatcher')
-	var HTMLParser = require('$parse/htmlparser')
-	var ScriptError = require('$parse/scripterror')
+	var ExternalApps = require('$system/server/externalapps')
+	var FileWatcher = require('$system/server/filewatcher')
+
+	var BusServer = require('$system/rpc/busserver')
+	var HTMLParser = require('$system/parse/htmlparser')
+	var ScriptError = require('$system/parse/scripterror')
 	var legacy_support = 0
 
 	this.atConstructor = function(
 		args, //Object: Process arguments
-		name, //String: name of the composition
-		teemserver){ //TeemServer: teem server object
+		compname, //String: name of the composition
+		rootserver){ //TeemServer: teem server object
 
-		this.teemserver = teemserver
 		this.args = args
-		this.name = name
+		this.compname = compname
+		this.rootserver = rootserver
 
-		this.busserver = null;
-
-		this.watcher = new FileWatcher()
-
-	    this.readSystemClasses('$classes', this.system_classes = {})
-	    define.system_classes = this.system_classes;
-
-	        //var Device = require('$draw/dali/devicedali')
-	        //this.device = new Device();
-	    //console.log('**************device', this.device);
+		this.busserver = new BusServer()
+		//this.busserver = null;
 
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.watcher.atChange = function(){
+		this.slow_watcher = new FileWatcher(200)
+		this.fast_watcher = new FileWatcher(10)
+
+		this.fast_watcher.atChange = 
+		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
 		}.bind(this)
 
+	    //this.readSystemClasses('$classes', this.system_classes = {})
+	    //define.system_classes = this.system_classes;
+
 		this.components = {}
+
+		this.paths = ""
+		for(var key in define.paths){
+			if(this.paths) this.paths += ',\n\t\t'
+			this.paths += '$'+key+':"$root/'+key+'"'
+		}
+
+		this.fast_list = ['$examples']
+
 		// lets compile and run the dreem composition
 		define.atRequire = function(filename){
-			// ignore build output
-			if(filename.indexOf(define.expandVariables('$build')) == 0){
-				return
+			for(var i = 0; i < this.fast_list.length; i++){
+				var fast = this.fast_list[i]
+				if(filename.indexOf( define.expandVariables(fast) ) === 0){
+					return this.fast_watcher.watch(filename)
+				}
 			}
-			// lets output to the main watcher
-			// process.stderr.write('\x0F!'+filename+'\n', function(){})
-			this.watcher.watch(filename)
+			this.slow_watcher.watch(filename)
 		}.bind(this)
 		//
 		this.reload()
@@ -77,98 +83,59 @@ console.trace('Loading daliserver', define.$environment);
 
 	// Destroys all objects maintained by the composition
 	this.destroy = function(){
-		if(this.myteem && this.myteem.destroy) this.myteem.destroy()
-		this.myteem = undefined
+		if(this.mycomposition && this.mycomposition.destroy) this.mycomposition.destroy()
+		this.mycomposition = undefined
 	}
 
-	this.readSystemClasses = function(basedir, out){
-		var dir = fs.readdirSync(define.expandVariables(basedir))
-		for(var i = 0; i < dir.length; i++){
-			var subitem = basedir + '/' + dir[i]
-			var stat = fs.statSync(define.expandVariables(subitem))
-			if(stat.isDirectory()){
-				this.readSystemClasses(subitem, out)
-			}
-			else{
-				var clsname = dir[i].replace(/\.js$/, '')
-				if(clsname in out){
-					console.log("WARNING DUPLICATE CLASS: " + subitem + " ORIGINAL:" + out[clsname])
-				}
-				out[clsname] = subitem
-			}
-		}
+	this.loadComposition = function(){
+		console.log("Reloading composition "+this.filename)
+		require.clearCache()
+		var Composition = require(define.expandVariables(this.filename))
+		this.composition = new Composition(this.busserver, this.session)
 	}
 
 	this.reload = function(){
-		console.color("~bg~Reloading~~ composition\n")
 		this.destroy()
-
-		this.readSystemClasses('$classes', this.system_classes = {})
 
 		// lets fill 
 		require.clearCache()
 
-		// ok, we will need to compute the local classes thing
-		define.system_classes = this.system_classes
-		define.$drawmode = 'dali'
+		//TODO Remove?
+		//define.$drawmode = 'dali'
 
-		// lets figure out if we are a direct .js file or a 
-		// directory with an index.js 
-		var scan = [
-			{
-				mapped:'$compositions/' + this.name + '/index.js',
-				real:'$compositions/' + this.name + '/index.js'
-			},
-			{
-				mapped:'/_external_/' + this.name + '/index.js',
-				real:'$external/' + this.name + '/index.js'
-			},
-			{
-				mapped:'$compositions/' + this.name + '.js',
-				real:'$compositions/' + this.name + '.js'
-			},
-			{
-				mapped:'/_external_/' + this.name + '.js',
-				real:'$external/' + this.name + '.js'
-			},
-		]
-
-		for(var i = 0; i < scan.length;i++){
-			if(fs.existsSync(define.expandVariables(scan[i].real))){
-				this.index_mapped = scan[i].mapped
-				this.index_real = scan[i].real
-				break
+		// lets see if our composition is a dir or a jsfile
+		var dir = '$root/'
+		var jsname = dir + this.compname+'.js'
+		try{
+			if(fs.existsSync(define.expandVariables(jsname))){
+				this.filename = jsname
+console.log('FOUND FILE', this.filename);
+				return this.loadComposition()
+			}
+			else{
+				var jsname = dir + this.compname + '/index.js'
+				if(fs.existsSync(define.expandVariables(jsname))){
+					this.filename = jsname
+					return this.loadComposition()
+				}
 			}
 		}
-
-		// lets load up the teem nodejs part
-		try{
-  		    this.screenname = this.name;
-
-			// define global location, but can be undefined.
-		    //TODO Where do I get the screen name from; an arg?
-			location = undefined;
-
-			console.log('require', this.index_real);
-		    var Composition = require(this.index_real)
-		    //this.composition = new Composition(this.busserver, this.session)
-		    this.composition = new Composition()
-
-		    var CompositionClient = require(define.$base + '/composition_dali')
-		    this.compositionclient = new CompositionClient(this.composition);
+		finally{
+			//console.log(e.stack)
 		}
-		catch(e){
-		    console.trace("CAUGHT ERROR IN DALISERVER", e);
-		    console.log(e.stack)
-		}
-	}
+
+  		this.screenname = this.compname;
+		
+		// Reaching here indicates the path does not exist
+		console.log('bootdali.reload: Unable to load', jsname);
+}
 
 	this.loadHTML = function(title, boot){
 	    return '';
 	}
 
 	this.loadTemplate = function(title, boot){
-	    console.warn('warning: daliserver.loadTemplate not written');
+	    console.warn('warning: bootdali.loadTemplate not written');
 	    return '';
 	}
 
