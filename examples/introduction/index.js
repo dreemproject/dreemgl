@@ -36,7 +36,7 @@ define.class(function(require,
 						view({
 							bgcolor:"transparent", 
 							flex:1,
-							slidetitle:'DreemGL introduction'
+							slidetitle:'DreemGL'
 							},
 							ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"teapot1"})
 							,view({
@@ -117,7 +117,7 @@ define.class(function(require,
 												patterns: require('./shaderpatterns').prototype,
 												color:function(){
 													return vec4( patterns.wave(mesh.uv, i*.1 + 
-														view.value * 10., i*.1 + view.value * 10.) * 
+														view.value * 10., i*.1 + view.value * 10. ) * 
 														pal.pal1(i*.1).xyz, 1.)
 												//	return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
 												}

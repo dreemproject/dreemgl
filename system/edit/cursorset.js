@@ -17,9 +17,8 @@ define.class(function(require){
 		makeForward.call(this, key, Cursor.prototype[key])
 	}
 
-	this.atConstructor = function(editor, textbuf){
+	this.atConstructor = function(editor){
 		this.editor = editor
-		this.textbuf = textbuf
 		this.list = [this.newCursor()]
 		this.fusing = true
 	}
@@ -28,13 +27,13 @@ define.class(function(require){
 		var str = ''
 		for(var i = 0; i < this.list.length; i++){
 			var cursor = this.list[i]
-			str += this.textbuf.serializeText(cursor.lo, cursor.hi)
+			str += this.editor.textbuf.serializeText(cursor.lo, cursor.hi)
 		}
 		return str
 	}
 
 	this.newCursor = function(){
-		return new Cursor(this, this.editor, this.textbuf)
+		return new Cursor(this)
 	}
 
 	this.toArray = function(inp){
@@ -88,14 +87,14 @@ define.class(function(require){
 	this.markDelta = function(){
 		for(var i = 0; i < this.list.length; i++){
 			var cursor = this.list[i]
-			cursor.mark_start = this.textbuf.charCodeAt(cursor.start - 1)
-			cursor.mark_end = this.textbuf.charCodeAt(cursor.end - 1)
+			cursor.mark_start = this.editor.textbuf.charCodeAt(cursor.start - 1)
+			cursor.mark_end = this.editor.textbuf.charCodeAt(cursor.end - 1)
 		}
 	}
 
 	this.markSeek = function(pos, delta, mark){
 		pos += delta
-		var count = this.textbuf.char_count
+		var count = this.editor.textbuf.char_count
 		if(pos < 0) pos = 0
 		if(pos >= count) pos = count - 1
 		// ignore markers that are volatile
@@ -103,7 +102,7 @@ define.class(function(require){
 			pos++
 			var start = pos
 			var max = abs(delta)
-			while(pos > 0 && this.textbuf.charCodeAt(pos - 1) != mark){
+			while(pos > 0 && this.editor.textbuf.charCodeAt(pos - 1) != mark){
 				if(start - pos > max)break
 				pos--
 			}
@@ -126,28 +125,7 @@ define.class(function(require){
 	}
 
 	this.update = function(){
-		if(this.updating) return
-		this.updating = 1
-		if(this.editor.setDirty) this.editor.setDirty(true)
-	}
-
-	this.updateCursors = function(){
-		if(!this.updating) return
-		this.updating = 0
-		
-		// lets remove all cursors
-		this.editor.clearMarkers()
-		this.editor.clearCursors()
-		// fuse the cursor list
-		if(this.fusing) this.fuse()
-		// draw it into geometry buffers 
-		for(var i = 0; i < this.list.length; i++){
-			var cursor = this.list[i]
-			if(cursor.start != cursor.end){
-				this.editor.addMarkers(cursor.start, cursor.end)
-			}
-			this.editor.addCursor(cursor.end)
-		}
+		if(this.editor.cursorsChanged) this.editor.cursorsChanged()
 	}
 
 	this.rectSelect = function(x1, y1, x2, y2, clone){
@@ -157,13 +135,13 @@ define.class(function(require){
 			y2 = t
 		}
 		var new_list = Array.prototype.slice.apply(clone)
-		var height = this.textbuf.line_height
+		var height = this.editor.textbuf.line_height
 		var y = y1
 		while(1){
 			var cur = this.newCursor()
 			new_list.push(cur)
-			cur.start = this.textbuf.offsetFromPos(x1,y)
-			cur.end = this.textbuf.offsetFromPos(x2,y)
+			cur.start = this.editor.textbuf.offsetFromPos(x1,y)
+			cur.end = this.editor.textbuf.offsetFromPos(x2,y)
 			//console.log(cur.end, x2)
 			if(y >= y2) break
 			y += height

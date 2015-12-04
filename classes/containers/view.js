@@ -282,7 +282,7 @@ define.class('$system/base/node', function(require){
 
 		if(this._viewport){
 			// give it a blendshader
-			this.blendshader = new this.blend(this)
+			this.viewportblendshader = new this.viewportblend(this)
 		}
 
 		this.sortShaders()
@@ -298,9 +298,15 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.sortShaders = function(){
-		this.shader_list = this.shader_list.sort(function(a, b){
+		
+		this.shader_draw_list = this.shader_list.slice(0).sort(function(a, b){
 			return this.shader_order[a.shadername] > this.shader_order[b.shadername]
 		}.bind(this))
+
+		this.shader_update_list = this.shader_list.slice(0).sort(function(a, b){
+			return this[a.shadername+'shader'].updateorder > this[b.shadername+'shader'].updateorder
+		}.bind(this))
+
 		// re-denormalize the order property
 		for(var i = 0; i < this.shader_list.length;i++){
 			var shader = this.shader_list[i]
@@ -441,10 +447,9 @@ define.class('$system/base/node', function(require){
 		}
 
 
-		var shaders = this.shader_list
+		var shaders = this.shader_update_list
 		for(var i = 0; i < shaders.length; i ++){
 			var shader = shaders[i]
-
 			if(shader.update && shader.update_dirty){
 				shader.update_dirty = false				
 				shader.update()
@@ -743,11 +748,18 @@ define.class('$system/base/node', function(require){
 	}
 
 	// standard bg is undecided
-	define.class(this, 'bg', this.Shader, function(){})
+	define.class(this, 'bg', this.Shader, function(){
+		this.updateorder = 0
+	})
+
 	// standard border is undecided too
-	define.class(this, 'border', this.Shader, function(){})
+	define.class(this, 'border', this.Shader, function(){
+		this.updateorder = 0
+	})
 
 	define.class(this, 'hardrect', this.Shader, function(){
+		this.updateorder = 0
+
 		this.mesh = vec2.array()
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 		this.position = function(){
@@ -761,6 +773,8 @@ define.class('$system/base/node', function(require){
 	})
 	
 	define.class(this, 'hardborder', this.Shader, function(){
+		this.updateorder = 0
+
 		this.mesh = vec2.array();
 		
 		this.update = function(){
@@ -799,6 +813,8 @@ define.class('$system/base/node', function(require){
 	this.bg = this.hardrect
 
 	define.class(this, 'hardimage', this.hardrect, function(){
+		this.updateorder = 0
+
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
 			return this.texture.sample(mesh.xy)
@@ -808,6 +824,7 @@ define.class('$system/base/node', function(require){
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
+		this.updateorder = 0
 
 		this.vertexstruct = define.struct({
 			pos: vec2,
@@ -886,7 +903,8 @@ define.class('$system/base/node', function(require){
 	})
 
 	// the blending shader
-	define.class(this, 'blend', this.Shader, function(){
+	define.class(this, 'viewportblend', this.Shader, function(){
+		this.updateorder = 10
 		this.omit_from_shader_list = true
 		this.texture = Shader.prototype.Texture.fromType('rgba_depth_stencil')
 		this.mesh = vec2.array()
@@ -902,7 +920,7 @@ define.class('$system/base/node', function(require){
 			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.layermatrix * view.viewmatrix
 		}
 	})
-	this.blend = null
+	this.viewportblend = null
 	
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){
@@ -913,7 +931,7 @@ define.class('$system/base/node', function(require){
 			uv:vec2
 		})
 		this.mesh = this.vertexstruct.array()
-
+		this.updateorder = 1
 		this.drawtype = this.TRIANGLE_STRIP
 		
 		this.update = function(){

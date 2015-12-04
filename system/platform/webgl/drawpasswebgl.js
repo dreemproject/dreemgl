@@ -235,7 +235,7 @@ define.class(function(require, baseclass){
 			else{
 				//draw.updateShaders()
 				// alright lets iterate the shaders and call em
-				var shaders =  draw.shader_list
+				var shaders =  draw.shader_draw_list
 				for(var j = 0; j < shaders.length; j++){
 					var shader = shaders[j]
 
@@ -300,7 +300,7 @@ define.class(function(require, baseclass){
 			if(draw._viewport && draw.drawpass !== this && draw.drawpass.color_buffer){
 				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 				// lets render the view as a layer
-				var blendshader = draw.blendshader
+				var blendshader = draw.viewportblendshader
 				if (view._viewport === '3D'){
 					blendshader.depth_test = 'src_depth <= dst_depth'
 				}
@@ -315,7 +315,7 @@ define.class(function(require, baseclass){
 			else{
 				draw.updateShaders()
 				// alright lets iterate the shaders and call em
-				var shaders =  draw.shader_list
+				var shaders =  draw.shader_draw_list
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]

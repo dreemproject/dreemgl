@@ -28,8 +28,8 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						},
 						flex:1,
 						bg:{
+							dump:1,
 							color:function(){
-
 								//return vec4(0,1,0,1)
 								// gradient
 								//return mix('red','blue', mesh.y)

@@ -67,7 +67,10 @@ define.class(function($containers$, view, $controls$, label){
 
 	this.scroll = function(event){
 		var page = ceil(event.value[0] / (this.slidewidth + this.slidemargin * 2))
-		if(event.mark || event.animate){
+
+		if(event.animate){
+		}
+		else if(event.mark){
 			this._page = page
 		}
 		else{

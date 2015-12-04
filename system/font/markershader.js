@@ -3,14 +3,14 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
-define.class('$system/draw/$platform/shader$platform', function(require, exports, self){
-	this.matrix = mat4()
-	this.viewmatrix = mat4()
+define.class('$system/platform/$platform/shader$platform', function(require){
+	this.view = {totalmatrix:mat4(), viewmatrix:mat4(), cursorcolor:vec4()}
+
 	this.border_radius = 2.5
 	this.gloop = 8
 
 	this.position = function(){
-		return mesh.pos * matrix * viewmatrix
+		return mesh.pos * view.totalmatrix * view.viewmatrix
 	}
 
 	this.color = function(){
@@ -18,7 +18,7 @@ define.class('$system/draw/$platform/shader$platform', function(require, exports
 		var rect = mesh.rect
 		var rel = pos - rect.xy
 		// do pixel antialias calc
-		var edge = min(length(vec2(length(dFdx(rel)), length(dFdy(rel)))) * SQRT_1_2,1.)
+		var edge = 0.1//min(length(vec2(length(dFdx(rel)), length(dFdy(rel)))) * SQRT_1_2,1.)
 
 		var other = mesh.other
 		var px1 = other.x
@@ -95,6 +95,7 @@ define.class('$system/draw/$platform/shader$platform', function(require, exports
 		}
 
 		this.addMarker = function(prev, self, next, font_size, data){
+			console.log("HERE")
 			var px1 = 0,px2 = 0,nx1 = 0,nx2 = 0
 			if(prev) px1 = prev.x, px2 = prev.x2
 			if(next) nx1 = next.x, nx2 = next.x2

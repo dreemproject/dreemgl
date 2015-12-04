@@ -61,7 +61,8 @@ define.class('$system/base/keyboard', function (require, exports){
 				code: code,
 				name: keyname
 			}
-			msg[msg.name] = 1
+
+			this[msg.name] = 1
 			
 			this.emit('down', msg)
 			
@@ -92,7 +93,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				code: code,
 				name: keyname
 			}
-			msg[msg.name] = 1
+			this[msg.name] = 0
 			
 			if(special_key_hack){
 				special_key_hack = false

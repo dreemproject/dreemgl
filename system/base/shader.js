@@ -405,9 +405,9 @@ define.class(function(require, exports){
 	this.has_pick = true
 	this.update_dirty = true
 
-	this.reupdate = function(key){
+	this.reupdate = function(){
 		if(!this.update_dirty){
-			this.update_dirty = key
+			this.update_dirty = true
 			if(this.view && !this.view.update_dirty){
 				this.view.update_dirty = true
 				this.view.redraw()

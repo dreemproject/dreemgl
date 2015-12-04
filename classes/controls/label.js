@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $containers$, view){	
-	// Text label!
+
 	var Font = require('$system/font/fontshader')
 
 	var glfontParser = require('$system/font/fontparser')
@@ -36,12 +36,12 @@ define.class(function(require, $containers$, view){
 	}
 
 	define.class(this, 'fontnormal', Font, function(){
+		this.updateorder = 3
 		this.subpixel = false
 		this.update = function(){
 			var view = this.view
 			
 			var mesh = this.newText()
-
 			if(this.typeface) mesh.typeface = this.typeface
 
 			mesh.fontsize = view.fontsize
