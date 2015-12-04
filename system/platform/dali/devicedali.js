@@ -41,7 +41,7 @@ define.class(function(require, exports){
 	,blendFunc: function() {}		
 	,enableVertexAttribArray: function() {}
 	,vertexAttribPointer: function() {}
-	,uniform1f: function() {return 0;}
+	,uniform1f: function(l,v) {console.log('uniform1f', l,v);return 0;}
 	,uniform2f: function() {return 0;}
 	,uniform3f: function() {return 0;}
 	,uniform4f: function() {return 0;}
@@ -88,12 +88,20 @@ define.class(function(require, exports){
 		this.anim_redraws = []
 		this.doPick = this.doPick.bind(this)
 
+		//TODO Use setTimeout for animation until dali animation ready (DALI)
+		this.time = 0;
 		this.animFrame = function(time){
-			this.anim_req = false
-			this.doColor(time)
+			var t = this.doColor(time);
+			//console.log('animFrame', t, time);
+			if(t){
+				this.anim_req = true
+                setTimeout(function() {this.animFrame(this.time); this.time += 16}.bind(this), 16)
+			}
+			else this.anim_req = false
 			//if(this.pick_resolve.length) this.doPick()
 		}.bind(this)
-	
+
+
 		if(previous){
 			this.canvas = previous.canvas
 			this.gl = previous.gl
