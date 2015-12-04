@@ -4,6 +4,11 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
+// Dali modifications. See (DALI) references in the code
+// 
+// - Add a dali_obj (instance of DaliDreemgl) to each shader object.
+
+
 define.class(function(require, baseclass){
 	// drawing
 
@@ -238,7 +243,6 @@ define.class(function(require, baseclass){
 				var shaders =  draw.shader_list
 				for(var j = 0; j < shaders.length; j++){
 					var shader = shaders[j]
-
 					shader.pickguid = pickguid
 
 					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
@@ -316,6 +320,7 @@ define.class(function(require, baseclass){
 				draw.updateShaders()
 				// alright lets iterate the shaders and call em
 				var shaders =  draw.shader_list
+
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]
@@ -324,11 +329,15 @@ define.class(function(require, baseclass){
 					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
 
-					//DALI
-					var dali = this.device.wrapper.dali;
-					var dalidr = new this.device.DaliDreemgl(dali);
-					dalidr.compileShader(shader);
-					
+					// Create or reuse dalidreemgl object (DALI)
+					var dali_obj = shader.dali_obj;
+					if (!dali_obj) {
+						// Build the dalidreemgl object
+						var dali = this.device.wrapper.dali;
+						dali_obj = new this.device.DaliDreemgl(dali);
+						shader.dali_obj = dali_obj;
+					}
+					dali_obj.compileShader(shader);
 
 					shader.drawArrays(this.device)
 				}
