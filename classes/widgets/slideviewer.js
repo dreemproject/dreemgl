@@ -5,14 +5,32 @@
 
 
 define.class(function($containers$, view, $controls$, label){
-	
+
+	// slide viewer is an automatic slide viewer that turns child nodes into slides
+	// use attributes named 'slidetitle' on a child to set the slide title1
+	this.attributes = {
+		// the width of a slide
+		slidewidth: 1024,
+		// the height of a slide
+		slideheight: 1024,
+		// the margin between slides
+		slidemargin: 10,
+		// the current page
+		page: {type:int, persist:true, value:0},
+		// animate the scroll
+		scroll: {motion:'inoutsine',duration:0.5},
+		// persist the postiion
+		pos: {persist:true}
+	}
+
+	// the class for a nested slide, its automatically wrapped around children
 	define.class(this, 'slide', function($containers$, view){
 		this.cornerradius = vec4(10,10,10,10)
 		this.borderwidth = 0
 		this.bordercolor = vec4("blue")
 		this.bgcolor = "white"
 		this.flex = 0
-		this.viewport = '2D'
+		this.viewport = '2d'
 		this.overflow = 'hidden'
 		this.padding = vec4(6);
 		this.render = function(){
@@ -46,14 +64,6 @@ define.class(function($containers$, view, $controls$, label){
 		}
 	});
 
-	// lets put an animation on x
-
-	this.attributes = {
-		scroll: {motion:'inoutsine',duration:0.5},
-		pos: {persist:true},
-		page: {type:int, persist:true}
-	}
-
 	this.page = function(event){
 		if(!this.children) return
 		if(event.mark) return
@@ -78,13 +88,10 @@ define.class(function($containers$, view, $controls$, label){
 		}
 	}
 
-	this.flexwrap = false
+	this.flexwrap = "nowrap"
 	this.constructor.slide = this.slide
 	this.boundscheck = true
-	this.slidewidth = 1024
-	this.slidemargin = 10
-	this.slideheight = 1024
-	this.page = 0
+
 	this.keydown = function(key){
 		// alright we have a keydown!
 		if(key.name == 'leftarrow'){

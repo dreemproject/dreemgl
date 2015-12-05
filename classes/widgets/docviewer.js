@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $containers$, view, foldcontainer, $controls$, label, button, icon, $widgets$, markdown, codeviewer){
+define.class(function(require, $containers$, view, foldcontainer, $controls$, label, button, icon, $widgets$, markdown, jsviewer){
 	
 	var Parser = require("$system/parse/onejsparser")
 
@@ -12,14 +12,15 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 	this.padding = 20
 	this.flexdirection = "column"
 	this.alignitems = "stretch"
-	this.flexwrap = "none" 
-	this.mode = "2D"
+	this.flexwrap = "nowrap" 
+	this.viewport = "2d"
 	
 	this.attributes = {
 		// the class for which to create the documentation. If a string is assigned, the model will be interpreted as a markdown text document.
 		class:{type:Object}
 	}
 
+	// A doc item is an item with a heading, such as methods or attributes
 	define.class(this, 'ClassDocItem', function($containers$, view){
 		this.bg = 0
 		// the item to display. 
@@ -35,7 +36,7 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 		this.margin = 4;
 		this.padding = 4;
 		this.flexdirection = "column" ;
-		this.flexwrap = "none"
+		this.flexwrap = "nowrap"
 
 		this.render = function(){	
 			var res = [];
@@ -120,7 +121,7 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 					view({flexdirection:"row",  flex:1, padding: vec4(2)}
 							,view({flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0"}
 								,label({fgcolor:"black", text:"Code", margin:vec4(10)})
-								,codeviewer({margin:vec4(10), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 14, bgcolor:"#000030", multiline: true})
+								,jsviewer({margin:vec4(10), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 14, bgcolor:"#000030", multiline: true})
 							)
 							,view({flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "gray" } 
 								,label({fgcolor:"white",bgcolor:"transparent",  text:"Live demo", margin:vec4(10)})								
@@ -334,7 +335,7 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 		}
 
 		this.flexdirection = "column"
-		this.flexwrap = "none" 
+		this.flexwrap = "nowrap" 
 		
 		this.bg = 0
 

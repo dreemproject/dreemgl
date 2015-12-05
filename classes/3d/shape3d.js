@@ -5,27 +5,26 @@
 
 define.class(function(require, $containers$, view){
 
-
 	define.class(this, 'bg', this.Shader, function(){
 		
-		this.depth_test = 'src_depth < dst_depth';
+		this.depth_test = 'src_depth < dst_depth'
 		
 		this.vertexstruct = define.struct({
 			pos: vec3,
 			norm: vec3,
-			uv: vec2			
+			uv: vec2
 		})
 	
-		this.diffusecolor = vec4("#ffffff");
-		this.mesh = this.vertexstruct.array();
+		this.diffusecolor = vec4("#ffffff")
+		this.mesh = this.vertexstruct.array()
 		
-		this.position = function() {						
+		this.position = function() {				
 			
-			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix  );						
-			transnorm = temp.xyz;			
-			pos = vec4(mesh.pos, 1) * view.modelmatrix * view.viewmatrix;
+			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix)
+			transnorm = temp.xyz
+			pos = vec4(mesh.pos, 1) * view.modelmatrix * view.viewmatrix
 			//campos = vec4(cameraposition, 1.0) * lookatmatrix;
-			return pos ; // * matrix *viewmatrix
+			return pos // * matrix *viewmatrix
 		}
 				
 		this.color = function() {

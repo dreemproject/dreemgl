@@ -1,8 +1,7 @@
 // Copyright 2015 Teem2 LLC, MIT License (see LICENSE,
 
-define.class(function(node){
-	this.atConstructor = function(){}
-	
+define.class('$system/base/node', function(){
+	this.atConstructor = function(){}	
 	this.attributes = {
 		move:{type:Event},
 		x: {type:float},

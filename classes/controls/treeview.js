@@ -7,15 +7,15 @@ define.class(function($containers$, view, $, label, button, icon){
 
 	// the treeview control - classic treeview with expandable nodes.
 	this.attributes = {
-		// the dataset to use for tree expansion
+		// the dataset to use for tree expansion. It follows a {name:'test',children:[{name:'child'}]} format
 		dataset: Object,
-		// the current selected value	
+		// the current selected value
 		select: Event
 	}
 
 	this.bgcolor = 'white'
 	this.boundscheck = true
-	this.mode = '2D'
+	this.viewport = '2d'
 	this.overflow ='scroll'
 
 	// The fold button is a very very flat button. 
@@ -145,7 +145,7 @@ define.class(function($containers$, view, $, label, button, icon){
 			//this.collapsed;
 			//console.log("treeitem", this.item.name, this.item.children);
 			return [view({flexdirection:"row", bg:0}, [
-				view({bg:0, flexwrap:"none", flexdirection:"column" },
+				view({bg:0, flexwrap:"nowrap", flexdirection:"column" },
 					this.outer.newitemheading({
 						haschildren: this.item.children && this.item.children.length, 
 						folded: this.item.collapsed, 

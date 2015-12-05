@@ -845,12 +845,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			discard
 		}
 		
+		//return 'red'
+		return vec4(view.fgcolor.rgb, glyphy_antialias(-dist))
 		return vec4(view.fgcolor.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x)) 
 	}
 
 	this.glyphy_sdf_draw_subpixel_aa = function(){
 		var pos = mesh.tex
-
+		
 		var m = pixelscale*.5//0.005
 		// screenspace length
 		mesh.scaling = 500. * m 

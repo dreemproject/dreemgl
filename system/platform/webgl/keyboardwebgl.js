@@ -117,7 +117,7 @@ define.class('$system/base/keyboard', function (require, exports){
 			var msg = {
 				repeat: e.repeat,
 				value: String.fromCharCode(code),
-				char: code
+				code: code
 			}
 			this.emit('press', msg)
 			e.preventDefault()
@@ -134,7 +134,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		this.textarea.onpaste = function(e){
 			var text = e.clipboardData.getData('text/plain')
 			this._clipboard = text
-			this.emit('paste', text)
+			this.emit('paste', {text:text})
 		}.bind(this)
 
 		Object.defineProperty(this, 'clipboard', {

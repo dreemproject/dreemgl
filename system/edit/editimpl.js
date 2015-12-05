@@ -233,7 +233,8 @@ define.mixin(function(require){
 		this.onmousemove = function(){}
 	}
 
-	this.mouseleftdown = function(start){
+	this.mouseleftdown = function(event){
+		var start = event.local
 		var keyboard = this.screen.keyboard
 		var mouse = this.screen.mouse
 		//console.log(mouse.clicker)
@@ -264,7 +265,8 @@ define.mixin(function(require){
 
 			this.cursorset.update()
 
-			this.mousemove = function(pos){
+			this.mousemove = function(event){
+				var pos = event.local
 				// move
 				cursor.moveTo(pos[0], pos[1], true)
 				this.cursorset.update()
@@ -274,7 +276,7 @@ define.mixin(function(require){
 		else{
 			// in that case what we need to 
 			this.cursorset.fusing = true
-			console.log(start[0], start[1])
+
 			this.cursorset.moveTo(start[0], start[1])
 
 			if(mouse.clicker == 2) this.cursorset.selectWord()
@@ -283,7 +285,8 @@ define.mixin(function(require){
 				mouse.resetClicker()
 			}
 
-			this.mousemove = function(pos){
+			this.mousemove = function(event){
+				var pos = event.local
 				this.cursorset.moveTo(pos[0], pos[1], true)
 			}
 		}

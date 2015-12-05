@@ -1,9 +1,10 @@
 //Pure JS based composition
-define.class(function($server$, composition, screens, $containers$, screen, view, $controls$, textbox){
+define.class(function($server$, composition, role, $containers$, screen, view, $controls$, textbox, label){
 	this.render = function(){ return [
-		screens(
+		role(
 			screen({clearcolor:'#484230', flexdirection:'row'},
-				textbox({value:"HELLO", bgcolor:'red'})
+				textbox({value:"HELLO", bgcolor:'red'}),
+				label({fgcolor:'red', text:'HELLLLOOO'})
 			)
 		)
 	]}

@@ -96,7 +96,7 @@ define.class(function(require, baseclass){
 			}
 			// otherwise we create a new one
 			if(!dt){
-				dt = this[drawtarget] = Texture.createRenderTarget(mode === '2D'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+				dt = this[drawtarget] = Texture.createRenderTarget(mode === '2d'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
@@ -105,7 +105,7 @@ define.class(function(require, baseclass){
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
 			this[drawtarget].delete()
-			this[drawtarget] = Texture.createRenderTarget(mode === '2D'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+			this[drawtarget] = Texture.createRenderTarget(mode === '2d'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 		}
 	}
 	
@@ -114,7 +114,7 @@ define.class(function(require, baseclass){
 		var scroll = view._scroll
 		var layout = view.layout
 
-		if(view._viewport === '2D'){
+		if(view._viewport === '2d'){
 			if(isroot && mousex !== undefined){
 				var sizel = 0
 				var sizer = 1
@@ -133,7 +133,7 @@ define.class(function(require, baseclass){
 				}
 			}
 		}
-		else if(view._viewport === '3D'){
+		else if(view._viewport === '3d'){
 			storage.perspectivematrix = mat4.perspective(view._fov * PI * 2/360.0 , layout.width/layout.height, view._nearplane, view._farplane)			
 			storage.lookatmatrix = mat4.lookAt(view._camera, view._lookat, view._up)
 			storage.viewmatrix = mat4.mat4_mul_mat4(storage.lookatmatrix,storage.perspectivematrix);
@@ -203,7 +203,7 @@ define.class(function(require, baseclass){
 		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			var draw = dl[i]
 
-			if(draw._first_draw_pick && view._viewport === '2D' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 				continue
 			}
 			else draw._first_draw_pick = 1
@@ -219,8 +219,8 @@ define.class(function(require, baseclass){
 			if(draw._viewport && draw.drawpass !== this && draw.drawpass.pick_buffer){
 				// ok so the pick pass needs the alpha from the color buffer
 				// and then hard forward the color
-				var blendshader = draw.blendshader
-				if (view._viewport === '3D'){
+				var blendshader = draw.viewportblendshader
+				if (view._viewport === '3d'){
 					// dont do this!
 					blendshader.depth_test = 'src_depth <= dst_depth'
 				}
@@ -282,7 +282,7 @@ define.class(function(require, baseclass){
 		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			var draw = dl[i]
 
-			if(draw._first_draw_color && view._viewport === '2D' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 				continue
 			}
 			else draw._first_draw_color = 1
@@ -301,7 +301,8 @@ define.class(function(require, baseclass){
 				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 				// lets render the view as a layer
 				var blendshader = draw.viewportblendshader
-				if (view._viewport === '3D'){
+
+				if (view._viewport === '3d'){
 					blendshader.depth_test = 'src_depth <= dst_depth'
 				}
 				else{

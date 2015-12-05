@@ -21,8 +21,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			else { //getter
 				var parts = msg.rpcid.split('.');
 				var obj
-				if(parts[0] === 'screens'){
-					obj = this.rpc.screens[parts[1]]
+				if(parts[0] === 'role'){
+					obj = this.rpc.role[parts[1]]
 				}
 				else{
 					obj = this.names[parts[0]]
@@ -50,7 +50,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		// lets make a promise
 		return new Promise(function(resolve, reject){
 			var parts = msg.rpcid.split('.')
-			if(parts[0] === 'screens'){
+			//! TODO fix this up to be multi role capable
+			if(parts[0] === 'role'){
 				var scr = this.connected_screens[parts[1]]
 
 				var res = []
@@ -128,8 +129,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		
 		if (socket) {
 			//make sure we set it on the rpc object
-			if(parts[0] === 'screens'){
-				var obj = this.rpc.screens[parts[1]]
+			if(parts[0] === 'role'){
+				var obj = this.rpc.role[parts[1]]
 				var last_set = obj.atAttributeSet
 				obj.atAttributeSet = undefined
 				obj[msg.attribute] = msg.value

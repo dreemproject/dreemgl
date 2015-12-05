@@ -782,18 +782,18 @@
 					var script = document.createElement('script')
 					var base_path = define.filePath(url)
 						
-					define.script_tags[location.origin+url] = script
+					define.script_tags[location.origin + url] = script
 
 					script.type = 'text/javascript'
 					script.src = url
 					
 					//define.script_tags[url] = script
 					window.onerror = function(error, url, line){
-						define.script_tags[url].onerror(error, url, line)
+						var script = define.script_tags[url]
+						if(script) script.onerror(error, url, line)
 					}
 
 					function onLoad(){
-						reject = undefined
 						//for(var key in this)console.log(keys)
 						//console.log("ONLOAD!", Object.keys(this))
 						if(this.rejected) return
@@ -818,6 +818,7 @@
 							return loadResource(dep_path, url, true, module_deps)
 						})).then(function(){
 							resolve(factory)
+							reject = undefined
 						},
 						function(err){
 							reject(err)

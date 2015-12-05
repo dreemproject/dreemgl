@@ -8,23 +8,25 @@ define.class(function($containers$, view, $controls$, label, icon){
 
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.title = "folding thing"
-	this.position ="relative"
+	this.position = "relative"
 	this.borderwidth = 1;
 	this.borderradius = 1;
 	this.margin = 2
 	this.bg = 0;
-	this.alignitems ="stretch"
+	this.alignitems = "stretch"
 	this.bordercolor = vec4("#c0c0c0")
-	this.padding =0;
+	this.padding = 0;
 	this.flexdirection = "column"
+
 	this.attributes = {
-		// The current state of the foldcontainer. False = open, True = closed.
+		// The current state of the foldcontainer. false = open, Ttue = closed.
 		collapsed: false,
 		// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
 		icon: 'times',
 		// The main color from which the foldcontainer will build some gradients.
 		basecolor: {type: vec4, value: vec4("#8080c0")}
 	}
+
 	// Function to change the open/closed state. Used by the click handler of the clickablebar.
 	this.toggle = function(){
 		this.collapsed = !this.collapsed;		
@@ -84,7 +86,8 @@ define.class(function($containers$, view, $controls$, label, icon){
 		this.mouseleftdown = this.stateclick
 		this.mouseleftup = this.statedefault
 	})
-
+	
+	// the main container view
 	define.class(this, 'containerview', function(view){
 		this.bg = {
 			color:function(){
@@ -95,7 +98,6 @@ define.class(function($containers$, view, $controls$, label, icon){
 		this.position = "relative"
 	})
 	
-	// render the foldcontainer - using a clickablebar for the title nad a containerview for the children. 
 	this.render = function(){
 		
 		this.bar = this.clickablebar({

@@ -17,7 +17,7 @@ define.class(function (require, $containers$, view, $controls$, label) {
 
     this.render = function() {
         return [
-          view({width:this.width, bgcolor:'transparent', height:'${this.parent.height - this.parent.txt.height}', bgimage:'$compositions/extdemo/slides/' + this.deviceType + '.png'}),
+          view({width:this.width, bgcolor:'transparent', height:wire('this.parent.height - this.parent.txt.height'), bgimage:'$examples/extdemo/slides/' + this.deviceType + '.png'}),
           label({name:'txt', text:this.deviceId, fontsize:14, fgcolor:'#333', bgcolor:'transparent', align:'center', multiline: false})
         ]
     }

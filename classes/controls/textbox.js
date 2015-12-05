@@ -8,9 +8,12 @@ define.class(function(require, $controls$, label){
 	this.mixin(require('$system/edit/editimpl'))
 
 	this.attributes = {
-		cursorcolor: vec4("white")
+		// the color of the cursor
+		cursorcolor: vec4("white"),
+		// color of the marker
+		markercolor: vec4("ocean")
 	}
-
+	
 	define.class(this, 'cursors', require('$system/font/cursorshader.js'), function(){
 		this.updateorder = 5
 		this.update = function(){
@@ -38,7 +41,7 @@ define.class(function(require, $controls$, label){
 				var start = cursor.start, end = cursor.end
 				var markers = this.markergeom.getMarkersFromText(view.textbuf, start, end, 0)
 				// lets add all markers
-				for(var i = 0;i<markers.length;i++){
+				for(var i = 0; i < markers.length;i++){
 					this.mesh.addMarker(markers[i-1], markers[i], markers[i+1], view.textbuf.fontsize, 0)
 				}
 
@@ -46,7 +49,8 @@ define.class(function(require, $controls$, label){
 		}
 	})
 	this.markers = 3
-	
+
+
 	Object.defineProperty(this, 'textbuf', {
 		get:function(){
 			return this.fontshader.mesh
@@ -54,9 +58,7 @@ define.class(function(require, $controls$, label){
 	})
 
 	this.textChanged = function(){
-		console.log('hi')
 		this.relayout()
-
 	}
 
 	this.cursorsChanged = function(){

@@ -1,6 +1,6 @@
 //Pure JS based composition
 
-define.class(function($server$, composition, screens, $containers$, screen, view, splitcontainer, $controls$, label, button, $3d$, cube){
+define.class(function($server$, composition, role, $containers$, screen, view, splitcontainer, $controls$, label, button, $3d$, cube){
 	console.log("hmm");
 
 	var mousedebug = define.class(function mousedebug($containers$view){
@@ -51,7 +51,7 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 	})
 	
 	this.render = function(){ return [
-		screens(
+		role(
 			screen({clearcolor:vec4('red')}
 				,view({// size:[100,100],
 					name:'viewbg',

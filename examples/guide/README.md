@@ -114,7 +114,7 @@ in the next section.
 
 In addition to a `REAMDE.md` components often provide one or more example compositions.  Typically only the `index.js`
 is kept at the root for technical reasons (this may be changed soon to example.js), and all other compositions, 
-supporting screens and other views not intended to be used except as examples are typically kept in the 
+supporting user and other views not intended to be used except as examples are typically kept in the 
 `./example` or `./examples` directory.
 
 For this guide one simple screen (see `./compositons/guide/browser.js` for complete code) gathers user input 
@@ -149,14 +149,14 @@ and displays the list of movies (as `guide$movie` objects):
     
 And finally, the `index.js` wires all the components together:
 
-    define.class(function(composition, screens, guide$search, guide$browser) {
+    define.class(function(composition, user, guide$search, guide$browser) {
     
         this.render = function() { return [
             guide$search({
                 name:'omdb',
-                keyword:'${this.rpc.screens.main.term}'
+                keyword:'${this.rpc.user.main.term}'
             }),
-            screens(
+            user(
                 guide$browser({
                     name:'main',
                     movies:'${this.rpc.omdb.results}'
@@ -167,17 +167,17 @@ And finally, the `index.js` wires all the components together:
 
 ### Working with screen <-> server RPC
 
-All communication between the screens and the server must go though the RPC bus, availabel via `this.rpc`.  To make
+All communication between the user and the server must go though the RPC bus, availabel via `this.rpc`.  To make
 calls on the server, use `this.rpc.serverObjectName.attributeOrMethodName` for server objects 
-and `this.rpc.screens.screenName.attributeOrMethodName` for screen objects.    
+and `this.rpc.user.screenName.attributeOrMethodName` for screen objects.    
 
 #### Attributes
 
 Attributes can be get and set like so:
 
-    this.rpc.screens.browser.someAttribute = "value"
+    this.rpc.user.browser.someAttribute = "value"
     
-    console.log("My value is", this.rpc.screens.browser.someAttribute);
+    console.log("My value is", this.rpc.user.browser.someAttribute);
 
 #### Methods
 
@@ -219,8 +219,8 @@ The composition server will respond to HTTP POSTs requests sending JSON data in 
 
 The RPC ID refers to the object that the RPC method will be called on, and is simply the string that would otherwise 
 come after a call to `this.rpc` in Dreem code, except for the name of the attribute or method name itself.  For example, 
-the attribute you would have set in this code `this.rpc.screens.mobile.deviceID` would have an 
-RPC ID of `screens.mobile`.  Likewise, a method called with `this.rpc.localapi.register()` would have an RPC ID of `localapi`.
+the attribute you would have set in this code `this.rpc.user.mobile.deviceID` would have an 
+RPC ID of `user.mobile`.  Likewise, a method called with `this.rpc.localapi.register()` would have an RPC ID of `localapi`.
 
 #### Attributes
 
@@ -238,7 +238,7 @@ The JSON structure for a setting an attribute is as follows:
 
 An an example, to set the search term variable on the example above, you can use [curl](http://curl.haxx.se/) like so: 
 
-    curl -X POST -d '{"rpcid":"screens.main", "type":"attribute", "attribute":"term", "value":"Snow"}' http://localhost:2000/guide
+    curl -X POST -d '{"rpcid":"user.main", "type":"attribute", "attribute":"term", "value":"Snow"}' http://localhost:2000/guide
     
 Which will return:
     

@@ -26,11 +26,10 @@ define.class('$system/base/mouse', function(){
 		document.on('mousewheel', function(e){
 			if(device.keyboard.ctrl || device.keyboard.leftmeta || device.keyboard.rightmeta){
 				this.zoom = e.wheelDelta / 120
-				//console.log(e.wheelDelta)
 			}
 			else{
-				if(e.deltaX !== 0) this.wheelx = e.wheelDeltaX
-				if(e.deltaY !== 0) this.wheely = e.wheelDeltaY
+				if(e.deltaX !== 0) this.wheelx = -e.wheelDeltaX / 12
+				if(e.deltaY !== 0) this.wheely = -e.wheelDeltaY / 12
 			}
 			e.preventDefault()
 		}.bind(this))

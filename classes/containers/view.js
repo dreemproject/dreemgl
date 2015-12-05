@@ -11,135 +11,242 @@ define.class('$system/base/node', function(require){
 	var view = this.constructor
 
 	this.attributes = {
+		// a simple boolean to turn visibility of a node on or off
+		visible: {type:boolean, value: true},
+
+		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
 		pos: {type:vec3, value:vec3(0,0,0)},
-		x: {storage:'pos', index:0},
-		y: {storage:'pos', index:1},
-		z: {storage:'pos', index:2},
 
-		left: {storage:'pos', index:0},
-		top: {storage:'pos', index:1},
-		front: {storage:'pos', index:2},
+		// alias for the x component of pos
+		x: {alias:'pos', index:0},
+		// alias for the y component of pos
+		y: {alias:'pos', index:1},
+		// alias for the z component of pos
+		z: {alias:'pos', index:2},
 
+		// alias for the x component of pos
+		left: {alias:'pos', index:0},
+		// alias for the y component of pos
+		top: {alias:'pos', index:1},
+		// alias for the z component of pos
+		front: {alias:'pos', index:2},
+
+		// the bottom/right/rear corner 
 		corner: {type:vec3, value:vec3(NaN)},
-		right: {storage:'corner', index:0},
-		bottom: {storage:'corner',index:1},
-		rear: {storage:'corner', index:2},
+		// alias for the x component of corner
+		right: {alias:'corner', index:0},
+		// alias for  y component of corner
+		bottom: {alias:'corner',index:1},
+		// alias for z component of corner
+		rear: {alias:'corner', index:2},
 
+		// the background color of a view, referenced by various shaders
 		bgcolor: {type:vec4, value: vec4('white')},
+		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: {type:Object},
 
+		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: {type:vec4, value: vec4('transparent')},
+		
+		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
+		// this property is manipulated by the overflow:'SCROLL' scrollbars
 		scroll: {type:vec2, value:vec2(0, 0)},
+		// the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
 		zoom:{type:float, value:1},
+		// overflow control, shows scrollbars when the content is larger than the viewport. Only works on viewport:'2D'
+		// works the same way as the CSS property
+		overflow: {type: Enum('','hidden','scroll','auto'), value:''},
+
+		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
 		size: {type:vec3, value:vec3(NaN)},
 
-		overflow: {type: Enum('','HIDDEN','SCROLL','AUTO'), value:''},
+		// alias for the x component of size
+		w: {alias:'size', index:0},
+		// alias for the y component of size
+		h: {alias:'size', index:1},
+		// alias for the z component of size
+		d: {alias:'size', index:2},
+		
+		// alias for the x component of size
+		width: {alias:'size', index:0},
+		// alias for the y component of size
+		height: {alias:'size', index:1},
+		// alias for the z component of size
+		depth: {alias:'size', index:2},
+
+		// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
 		pixelratio: {type: float, value:NaN},
 
-		w: {storage:'size', index:0},
-		h: {storage:'size', index:1},
-		d: {storage:'size', index:2},
-		
-		width: {storage:'size', index:0},
-		height: {storage:'size', index:1},
-		depth: {storage:'size', index:2},
-
+		// the minimum size for the flexbox layout engine
 		minsize: {type: vec3, value:vec3(NaN)},
+		// the maximum size for the flexbox layout engine
 		maxsize: {type: vec3, value:vec3(NaN)},
 
-		minwidth: {storage:'minsize', index:0},
-		minheight: {storage:'minsize', index:1},
-		mindepth: {storage:'minsize', index:2},
+		// alias for the x component of minsize
+		minwidth: {alias:'minsize', index:0},
+		// alias for the y component of minsize
+		minheight: {alias:'minsize', index:1},
+		// alias for the z component of minsize
+		mindepth: {alias:'minsize', index:2},
 
-		maxwidth: {storage:'maxsize', index:0},
-		maxheight: {storage:'maxsize', index:1},
-		maxdepth: {storage:'maxsize', index:2},
+		// alias for the x component of maxsize
+		maxwidth: {alias:'maxsize', index:0},
+		// alias for the y component of maxsize
+		maxheight: {alias:'maxsize', index:1},
+		// alias for the z component of maxsize
+		maxdepth: {alias:'maxsize', index:2},
 
+		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
 		margin: {type: vec4, value: vec4(0,0,0,0)},
-		marginleft: {storage:'margin', index:0},
-		margintop: {storage:'margin', index:1},
-		marginright: {storage:'margin', index:2},
-		marginbottom: {storage:'margin', index:3},
+		// alias for the first component of margin
+		marginleft: {alias:'margin', index:0},
+		// alias for the second component of margin
+		margintop: {alias:'margin', index:1},
+		// alias for the third component of margin
+		marginright: {alias:'margin', index:2},
+		// alias for the fourth component of margin
+		marginbottom: {alias:'margin', index:3},
 
+		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
 		padding: {type: vec4, value: vec4(0,0,0,0)},
-		paddingleft: {storage:'padding', index:0},
-		paddingtop: {storage:'padding', index:1},
-		paddingright: {storage:'padding', index:2},
-		paddingbottom: {storage:'padding', index:3},
+		// alias for the first component of padding
+		paddingleft: {alias:'padding', index:0},
+		// alias for the second component of padding
+		paddingtop: {alias:'padding', index:1},
+		// alias for the third component of padding
+		paddingright: {alias:'padding', index:2},
+		// alias for the fourth component of padding
+		paddingbottom: {alias:'padding', index:3},
 
+		// Scale of an item, only useful for items belof a 3D viewport
 		scale: {type: vec3, value: vec3(1)},
-		anchor: {type: vec3, value: vec3(0)},
+		// The anchor point around which items scale and rotate, depending on anchor mode its either a factor of size or and absolute value
+		anchor: {type: vec3, value: vec3(0.)},
+		// the mode with which the anchor is computed. Factor uses the size of an item to find the point, defaulting to center
+		anchormode: {type:Enum('','factor','absolute'), value:'factor'},
+		// rotate the item around x, y or z in radians. If you want degrees type it like this: 90*DEG
 		rotate: {type: vec3, value: vec3(0)},
-		//translate: {type: vec3, value: vec3(0)},
 
+		// the color of the border of an item. 
 		bordercolor: {type: vec4, value: vec4(0,0,0,0)},
 
-		borderwidth: {type: vec4, value: vec4(0,0,0,0)},
+		// the radius of the corners of an item, individually settable left, top, right, bottom. Setting this value will switch to rounded corner shaders
 		borderradius: {type: vec4, value: vec4(0,0,0,0)},
-		borderleftwidth: {storage:'borderwidth', index:0},
-		bordertopwidth: {storage:'borderwidth', index:1},
-		borderrightwidth: {storage:'borderwidth', index:2},
-		borderbottomwidth: {storage:'borderwidth', index:3},
 
+		// the width of the border. Setting this value will automatically enable the border shaders
+		borderwidth: {type: vec4, value: vec4(0,0,0,0)},
+
+		// alias for the first component of borderwidth
+		borderleftwidth: {alias:'borderwidth', index:0},
+		// alias for the second component of borderwith
+		bordertopwidth: {alias:'borderwidth', index:1},
+		// alias for the third component of borderwith
+		borderrightwidth: {alias:'borderwidth', index:2},
+		// alias for the fourth component of borderwith
+		borderbottomwidth: {alias:'borderwidth', index:3},
+
+		// turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
+		// flexbox layout is a web standard and has many great tutorials online to learn how it works
 		flex: {type: float, value: NaN},
 
-		flexwrap: {type: String, value: "wrap"},	//'wrap', 'nowrap'
-		flexdirection: {type: String, value: "row"},	//'column', 'row'
-		justifycontent: {type: String, value: ""}, //	'flex-start', 'center', 'flex-end', 'space-between', 'space-around'
-		alignitems: {type: String, value:"stretch"},  // 	'flex-start', 'center', 'flex-end', 'stretch'
-		alignself: {type: String, value:"stretch"},  // 	'flex-start', 'center', 'flex-end', 'stretch'
-		position: {type: String, value: "relative" },	//'relative', 'absolute'
+		// wraps nodes around when the flexspace is full
+		flexwrap: {type: Enum('wrap','nowrap'), value: "wrap"},	
+		// which direction the flex layout is working,
+		flexdirection: {type: Enum('row','column'), value: "row"},
+		// pushes items eitehr to the start, center or end
+		justifycontent: {type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ""}, 
+		// align items to either start, center, end or stretch them
+		alignitems: {type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
+		// overrides the parents alignitems with our own preference
+		alignself: {type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
+		// item positioning, if absolute it steps 'outside' the normal flex layout 
+		position: {type:  Enum('relative','absolute'), value: "relative" },	
 
+		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only
 		layout: {type:Object, value:{}},
 
-		viewport: {type:Enum('','2D','3D'), value:''},
-		
-		visible: {type:boolean, value: true},
+		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
+		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
+		// need to be processed and a single texture can just be drawn by the parent
+		// the viewportblend shader can be used to render this texture it into its parent
+		viewport: {type:Enum('','2d','3d'), value:''},
+	
+
+		// the field of view of a 3D viewport. Only useful on a viewport:'3D'
 		fov: {type:float, value: 45},
+		// the nearplane of a 3D viewport, controls at which Z value near clipping start. Only useful on a viewport:'3D'
 		nearplane: {type:float, value: 0.001},
+		// the farplane of a 3D viewport, controls at which Z value far clipping start. Only useful on a viewport:'3D'
 		farplane: {type:float, value: 1000},
 		
+		// the position of the camera in 3D space. Only useful on a viewport:'3D'
 		camera: {type: vec3, value: vec3(-2,2,-2)},
+		// the point the camera is looking at in 3D space. Only useful on a viewport:'3D'
 		lookat: {type: vec3, value: vec3(0)},
+		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
 		up: {type: vec3, value: vec3(0,-1,0)},
 		
+		// the current time which can be used in shaders to create continous animations
 		time: 0,
 
+		// fired when the mouse doubleclicks
 		mousedblclick: Event,
+		// fires when the mouse moves 'out' of the view. The event argument is the mouse position as {local:vec2}
 		mouseout: Event,
+		// fires when the mouse moves over the view. The event argument is the mouse position as {local:vec2}
 		mouseover: Event,
+		// fires when the mouse moves. The event argument is the mouse position as {local:vec2}
 		mousemove: Event,
+		// fires when the left mouse button is down. The event argument is the mouse position as {local:vec2}
 		mouseleftdown: Event,
+		// fires when the left mouse button is up. The event argument is the mouse position as {local:vec2}
 		mouseleftup: Event,
+		// fires when the right mouse button is down. The event argument is the mouse position as {local:vec2}
 		mouserightdown: Event,
+		// fires when the right mouse button is up. The event argument is the mouse position as {local:vec2}
 		mouserightup: Event,
+		// fires when the mouse wheels x coordinate changes, also for 2 finger scroll on mac. The event argument is {wheel:float, local:vec2}
 		mousewheelx: Event,
+		// fires when the mouse wheels y coordinate changes, alsof or 2 finger scroll on mac. The event argument is {wheel:float, local:vec2}
 		mousewheely: Event,
+		// fires when pinchzoom is used in chrome, or when meta-mouse wheel is used (under review). The event argument is the mouse position as {zoom:float, local:vec2}
 		mousezoom: Event,
-		keyup: Event,
-		keydown: Event,
-		keypress: Event,
-		keypaste: Event,
 
+		// fires when a key goes to up. The event argument is {repeat:int, code:int, name:String}
+		keyup: Event,
+		// fires when a key goes to down. The event argument is {repeat:int, code:int, name:String}
+		keydown: Event,
+		// fires when a key gets pressed. The event argument is {repeat:int, value:string, char:int}
+		keypress: Event,
+		// fires when someone pastes data into the view. The event argument is {text:string}
+		keypaste: Event,
+		// fires when this view gets the focus
 		focusget: Event,
+		// fires when this view lost the focus
 		focuslost: Event	
 	}
 
 	this.camera = this.lookat = this.up = function(){this.redraw();};
-	
+
+	// the local matrix	
 	this.modelmatrix = mat4.identity()
+	// the concatenation of all parent model matrices
 	this.totalmatrix = mat4.identity()
+	// the last view matrix used
 	this.viewmatrix = mat4.identity()
-	this.layermatrix = mat4.identity()
+	// the viewport matrix used to render the viewportblend
+	this.viewportmatrix = mat4.identity()
+	// the normal matrix contains the transform without translate (for normals)
 	this.normalmatrix = mat4.identity()
 	
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 	this.device = {frame:{size:vec2()}}
 
+	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
 
-	// automatically switch to the rounded shader
+	// listen to switch the shaders when borderradius changes
 	this.borderradius = function(event){
 		var value = event.value
 		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
@@ -157,7 +264,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// turn on the border shader
+	// listen to switch shaders when border width changes
 	this.borderwidth = function(event){
 		var value = event.value
 		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
@@ -168,24 +275,28 @@ define.class('$system/base/node', function(require){
 		this.relayout()
 	}
 
-	this.mode = function(event){
-		if(event.value === '3D'){
+
+	// listen to the viewport to turn off our background and border shaders when 3D
+	this.viewport = function(event){
+		if(event.value === '3d'){
 			this.bg = null
 			this.border = null
 		}
 	}
 
+	// automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
 	this.overflow = function(){
 		if(this._overflow){
-			if(!this._viewport) this._viewport = '2D'
+			if(!this._viewport) this._viewport = '2d'
 		}
 	}
 
+	// returns the mouse in local coordinates
 	this.localMouse = function(){
 		return vec2(this.screen.remapMouse(this))
 	}
 
-	// make a style property you can assign a bunch of props to like a prop copier
+	// style property, to be determined
 	Object.defineProperty(this, 'style', {
 		get:function(){ // its really just a forward to this
 			return this
@@ -195,24 +306,28 @@ define.class('$system/base/node', function(require){
 			if(Array.isArray(obj)){
 				for(var i = 0; i < obj.length; i++){
 					var subobj = obj[i]
-					for(key in subobj) this[key] = subobj[key]
+					for(var key in subobj) this[key] = subobj[key]
 				}
 			}
 			else for(var key in obj) this[key] = obj[key]
 		}
 	})
 
+	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
 	this.draw_dirty = 3
+	// layout dirty causes a relayout to occur (only on viewports)
 	this.layout_dirty = true
+	// update dirty causes a redraw to occur (only on viewports)
 	this.update_dirty = true
 
+	// initialization of a view
 	this.init = function(prev){
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
 		this.modelmatrix = mat4()
 		this.totalmatrix = mat4.identity()
-		this.layermatrix = mat4()
+		this.viewportmatrix = mat4()
 
 		if(prev){
 			this._layout =
@@ -282,7 +397,12 @@ define.class('$system/base/node', function(require){
 
 		if(this._viewport){
 			// give it a blendshader
-			this.viewportblendshader = new this.viewportblend(this)
+			if(this._viewport === '2d'){
+				this.viewportblendshader = new this.viewportblendopaque(this)
+			}
+			else{
+				this.viewportblendshader = new this.viewportblendalpha(this)
+			}
 		}
 
 		this.sortShaders()
@@ -368,35 +488,35 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.relayout = function(shallow){
-		// so we need to have a list of child layers.
-		if(!this.layer || this.layer.layout_dirty) return
-		var child_layer_list = this.layer.child_layer_list
-		for(var i = 0; i < child_layer_list.length;i++){
-			var child = child_layer_list[i]
+		// so we need to have a list of child viewports
+		if(!this.parent_viewport || this.parent_viewport.layout_dirty) return
+		var child_viewport_list = this.parent_viewport.child_viewport_list
+		for(var i = 0; i < child_viewport_list.length;i++){
+			var child = child_viewport_list[i]
 			child.relayout(true)
 		}
 		var parent = this
 		while(parent){
-			var layer = parent.layer
-			if(!layer || layer.layout_dirty) break
-			layer.layout_dirty = true
-			parent = layer.parent 
+			var viewport = parent.parent_viewport
+			if(!viewport || viewport.layout_dirty) break
+			viewport.layout_dirty = true
+			parent = viewport.parent 
 			if(shallow) break
 		}
 		// layout happens in the drawloop
 		this.redraw()
 	}
 
-	// redraw our view and bubble up the layer dirtiness to the root
+	// redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
-		if(!this.layer || this.layer.draw_dirty === 3) return
+		if(!this.parent_viewport || this.parent_viewport.draw_dirty === 3) return
 		var parent = this
 		while(parent){
-			var layer = parent.layer
-			if(!layer) break
-			if(layer.draw_dirty === 3) return
-			layer.draw_dirty = 3
-			parent = layer.parent 
+			var viewport = parent.parent_viewport
+			if(!viewport) break
+			if(viewport.draw_dirty === 3) return
+			viewport.draw_dirty = 3
+			parent = viewport.parent 
 		}
 		if(this.device && this.device.redraw) this.device.redraw()
 	}
@@ -465,7 +585,7 @@ define.class('$system/base/node', function(require){
 	// called by doLayout
 	this.updateMatrices = function(parentmatrix, parentviewport, depth){
 			
-		if (parentviewport== '3D'){// && !this._mode ){	
+		if (parentviewport == '3d'){// && !this._mode ){	
 		
 			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
 			//mat4.debug(this.modelmatrix);
@@ -499,10 +619,10 @@ define.class('$system/base/node', function(require){
 
 		if(this._viewport){
 			if(parentmatrix) {
-				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.layermatrix)
+				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
 			}
 			else{
-				this.layermatrix = this.modelmatrix
+				this.viewportmatrix = this.modelmatrix
 			}
 			this.totalmatrix = mat4.identity();
 			this.modelmatrix = mat4.identity();	
@@ -524,7 +644,7 @@ define.class('$system/base/node', function(require){
 
 	// decide to inject scrollbars into our childarray
 	this.atRender = function(){
-		if(this._viewport === '2D' && (this._overflow === 'SCROLL'|| this._overflow === 'AUTO')){
+		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow === 'auto')){
 			if(this.vscrollbar) this.vscrollbar.value = 0
 			if(this.hscrollbar) this.hscrollbar.value = 0
 
@@ -574,19 +694,22 @@ define.class('$system/base/node', function(require){
 					}
 				})
 			)
-			this.mousewheelx = function(pos){
+			this.mousewheelx = function(event){
+				var wheel = event.wheel
 				if(this.hscrollbar._visible){
-					this.hscrollbar.value = clamp(this.hscrollbar._value + pos, 0, this.hscrollbar._total - this.hscrollbar._page)
+					this.hscrollbar.value = clamp(this.hscrollbar._value + wheel, 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
 
-			this.mousewheely = function(pos){
+			this.mousewheely = function(event){
+				var wheel = event.wheel
 				if(this.vscrollbar._visible){
-					this.vscrollbar.value = clamp(this.vscrollbar._value + pos, 0, this.vscrollbar._total - this.vscrollbar._page)
+					this.vscrollbar.value = clamp(this.vscrollbar._value + wheel, 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
 			}
 
-			this.mousezoom = function(zoom){
+			this.mousezoom = function(event){
+				var zoom = event.zoom
 				var lastzoom = this._zoom
 				var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
 				this.zoom = newzoom
@@ -812,6 +935,7 @@ define.class('$system/base/node', function(require){
 	// make rect the default bg shader
 	this.bg = this.hardrect
 
+	// hard edged bgimage shader
 	define.class(this, 'hardimage', this.hardrect, function(){
 		this.updateorder = 0
 
@@ -901,8 +1025,7 @@ define.class('$system/base/node', function(require){
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 	})
-
-	// the blending shader
+	
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.updateorder = 10
 		this.omit_from_shader_list = true
@@ -912,15 +1035,27 @@ define.class('$system/base/node', function(require){
 		this.width = 0
 		this.height = 0
 
-		this.color = function(){
-			return texture.sample(mesh.xy+vec2(0))
-		}
-
 		this.position = function(){
-			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.layermatrix * view.viewmatrix
+			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix
 		}
 	})
-	this.viewportblend = null
+	this.viewportblend = false
+
+	// the blending shader
+	define.class(this, 'viewportblendalpha', this.viewportblend, function(){
+		this.color = function(){
+			return texture.sample(mesh.xy)
+		}
+	})
+	this.viewportblendalpha = false
+
+	// the blending shader
+	define.class(this, 'viewportblendopaque', this.viewportblend, function(){
+		this.color = function(){
+			return vec4(texture.sample(mesh.xy).rgb,1)
+		}
+	})
+	this.viewportblendopaque = false
 	
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){

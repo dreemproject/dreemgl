@@ -1,7 +1,7 @@
 //Pure JS based composition
-define.class(function($server$, composition, screens, $containers$, screen, view){
+define.class(function($server$, composition, role, $containers$, screen, view){
 	this.render = function(){ return [
-		screens(
+		role(
 			screen({clearcolor:vec4('black')},
 				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
 					/*label({text:'Live shader coding', 

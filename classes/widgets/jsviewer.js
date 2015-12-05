@@ -6,7 +6,7 @@
 
 define.class(function(require, $controls$, label){
 
-	var CodeFormatter = require('$system/font/codeformatter')	
+	var JSFormatter = require('$system/font/jsformatter')	
 	var Parser = require('$system/parse/onejsparser')
 
 	this.attributes = {
@@ -23,8 +23,8 @@ define.class(function(require, $controls$, label){
 
 	// extend the font shader
 	this.font = function(){
-		for(var key in CodeFormatter.types){
-			this[key] = String(CodeFormatter.types[key])
+		for(var key in JSFormatter.types){
+			this[key] = String(JSFormatter.types[key])
 		}
 
 		this.paint = function(p, edge, pixelsize){
@@ -142,13 +142,13 @@ define.class(function(require, $controls$, label){
 			textbuf.clear()
 
 			if(view.wrap){
-				CodeFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
+				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
 					var indent = textbuf.typeface.glyphs[9].advance * textbuf.fontsize * (this.indent)
 					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
 			else{
-				CodeFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
+				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
 					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
@@ -156,11 +156,11 @@ define.class(function(require, $controls$, label){
 	}
 
 	// Basic usage
-	var codeviewer = this.constructor
+	var jsviewer = this.constructor
 
 	this.constructor.examples = {
 		Usage: function(){
-			return [codeviewer({bgcolor:"#000040", padding:vec4(14), source: "console.log(\"Hello world!\");"})]
+			return [jsviewer({bgcolor:"#000040", padding:vec4(14), source: "console.log(\"Hello world!\");"})]
 		}
 	}
 })

@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($containers$, view, $controls$, label, $widgets$, codeviewer) {
+define.class(function ($containers$, view, $controls$, label, $widgets$, jsviewer) {
 
     this.attributes = {
         syntaxCode: {type: String}
@@ -45,9 +45,9 @@ define.class(function ($containers$, view, $controls$, label, $widgets$, codevie
                 margintop:5,
                 marginleft:95
             }),
-            codeviewer({
+            jsviewer({
                 flex: 0,
-                mode:'2D',
+                mode:'2d',
                 overflow:'scroll',
                 alignself: 'center',
                 margin: vec4(10),

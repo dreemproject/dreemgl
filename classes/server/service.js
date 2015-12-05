@@ -5,6 +5,6 @@
 
 
 define.class('$system/base/node', function(){
-	// Empty stub used in the composition
+	// an empty server side service baseclass inherit from this to define server side components
 	this.environment = 'nodejs'
 })

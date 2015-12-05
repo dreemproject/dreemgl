@@ -3,8 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
-// composition base class
+// composition base class, inherit your compositions from this one
 define(function(require, node){
 	return require('$system/platform/$platform/composition$platform')
 })

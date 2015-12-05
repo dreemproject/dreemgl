@@ -54,7 +54,7 @@ define.class(function(require, exports){
 		}
 		else{
 			this.frame = 
-			this.main_frame = this.Texture.fromType('rgb_depth_stencil')
+			this.main_frame = this.Texture.fromType('rgb_depth')
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)

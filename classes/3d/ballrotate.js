@@ -5,28 +5,31 @@
 
 
 define.class(function(require, $containers$view){
+	//this widget controls 
 
-	// The perspective3d object to rotate.
-	this.attributes = {target:{type:string, value:""}}
+	this.attributes = {
+		// the target view to control with this
+		target:{type:string, value:""}
+	}
 	
-	this.mouseleftdown = function(a){
-		
+	this.mouseleftdown = function(event){
+
 		this.bgcolor = vec4("gray")
-		var t = this.find(this.target);
-		if (t) 
-		{
-			this.clickstart = a;
-			
-			this.mousemove = function(a){
-				
+
+		var t = this.find(this.target)
+		if (t){
+
+			this.clickstart = event.local	
+			this.mousemove = function(event){
+				var a = event.local
+
 				var t = this.find(this.target);
 		
 				var dx = a[0] - this.clickstart[0];
 				var dy = a[1] - this.clickstart[1];
 				
-				this.camerastart = vec3.sub(t._camera, t._lookat );
+				this.camera_start = vec3.sub(t._camera, t._lookat );
 				var M4 = mat4.invert(t.viewmatrix);
-				
 				// console.log(M4);
 				var screenup = vec3.normalize(vec3.vec3_mul_mat4(vec3(0,1,0), M4));				
 				// var M = mat4.R(0,-dy*0.01,-dx*0.01);					
@@ -35,21 +38,20 @@ define.class(function(require, $containers$view){
 				var M1 = mat4.identity();
 				var M2 = mat4.rotate(M1, dx*0.01, t._up)
 				
-				var axis = vec3.normalize(vec3.cross(this.camerastart, t._up));
+				var axis = vec3.normalize(vec3.cross(this.camera_start, t._up));
 				var M3 = mat4.rotate(M2, dy*0.01, axis)
 								
-				var Rot = vec3.vec3_mul_mat4(this.camerastart, M3);
+				var Rot = vec3.vec3_mul_mat4(this.camera_start, M3);
 				var Res = vec3.add(Rot, t._lookat);
 				
 				t._camera = Res;
+
 				t.redraw();
 				//this.target.updateLookAtMatrix();
 				//this.target.setDirty();
 				
 				this.clickstart = a;
-				this.camerastart = vec3.sub(t._camera, t._lookat );
-				
-			
+				this.camera_start = vec3.sub(t._camera, t._lookat );
 			}.bind(this);
 		}
 	}

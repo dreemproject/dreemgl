@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
 define.class('$system/platform/$platform/shader$platform', function(require){
-	this.view = {totalmatrix:mat4(), viewmatrix:mat4(), cursorcolor:vec4()}
+	this.view = {totalmatrix:mat4(), viewmatrix:mat4(), markercolor:vec4()}
 
 	this.border_radius = 2.5
 	this.gloop = 8
@@ -43,7 +43,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 
 		if(alpha < 0.001) discard;
 
-		return vec4(fgcolor.rgb, alpha)
+		return vec4(view.markercolor.rgb, alpha)
 	}
 
 	this.markergeom = define.struct({
@@ -95,7 +95,6 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		}
 
 		this.addMarker = function(prev, self, next, font_size, data){
-			console.log("HERE")
 			var px1 = 0,px2 = 0,nx1 = 0,nx2 = 0
 			if(prev) px1 = prev.x, px2 = prev.x2
 			if(next) nx1 = next.x, nx2 = next.x2

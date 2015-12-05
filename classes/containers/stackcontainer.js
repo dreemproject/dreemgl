@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 // Stack container is a custom layout view where the number of children doesnt slow down
-// either the layout engine or the render engine
+// either the layout engine or the render engine. To be completed
 
 define.class(function(require, $containers$, view, stackcontainer, $controls$){
 
