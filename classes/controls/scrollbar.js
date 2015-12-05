@@ -11,7 +11,6 @@ define.class(function($containers$, view){
 
 		// Color of the draggable part of the scrollbar
 		draggerradius: {type: float, value: 3},
-
 		
 		// Color when the mouse is hovering over the draggable part of the scrollbar
 		hovercolor: {type: vec4, value: vec4("#8080c0")},
@@ -30,7 +29,6 @@ define.class(function($containers$, view){
 
 		// total size. 
 		total: {type:float, value:0},
-
 
 		// set animation on bgcolor
 		bgcolor: {duration: 1.0}
@@ -90,7 +88,8 @@ define.class(function($containers$, view){
 	this.mouseout = function(){
 	}
 	
-	this.mouseleftdown = function(start){
+	this.mouseleftdown = function(event){
+		var start = event.local
 		// detect if we clicked not on the button
 		if(this.vertical){
 			var p = start[1] / this.layout.height
@@ -113,7 +112,8 @@ define.class(function($containers$, view){
 			}
 		}
 		var start_offset = offset//this.offset / this.total
-		this.mousemove = function(pos){
+		this.mousemove = function(event){
+			var pos = event.local
 			if(this.vertical){
 				var p = start_offset + (pos[1] - start[1]) / this.layout.height
 			}

@@ -4,14 +4,14 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $containers$, view){	
-	// Text label!
-	var Font = require('$system/font/fontshader')
 
+	var Font = require('$system/font/fontshader')
 	var glfontParser = require('$system/font/fontparser')
 
 	this.bgcolor = vec4("transparent")
 
 	this.attributes = {
+		// the text color
 		fgcolor: {type:vec4, value: vec4(1,1,1,1)},
 	
 		// The string to display.
@@ -20,28 +20,30 @@ define.class(function(require, $containers$, view){
 		// Size of the font in pixels
 		fontsize: {type:float, value: 18},
 	
+		// the boldness of the font (try values 0 - 1)
 		boldness: {type:float, value: 0.},
 
-		// Name of the font
+		// reference to the font typeface, require it with require('font:')
 		typeface: {type:Object, value: undefined},
 	
 		// Should the text wrap around when its width has been reached?
 		multiline: {type:Boolean, value: false },
 
-		// turn on subpixel aa
+		// turn on subpixel aa, this requieres a bgcolor to be present
 		subpixel: {type:Boolean, value: false},
 	
-		// Alignment of the bodytext. 
+		// Alignment of the bodytext.
 		align: {type: String,  value: "left"}
 	}
 
+	// the normal font 
 	define.class(this, 'fontnormal', Font, function(){
+		this.updateorder = 3
 		this.subpixel = false
 		this.update = function(){
 			var view = this.view
 			
 			var mesh = this.newText()
-
 			if(this.typeface) mesh.typeface = this.typeface
 
 			mesh.fontsize = view.fontsize
@@ -62,12 +64,14 @@ define.class(function(require, $containers$, view){
 	})
 	this.fontnormal = false
 
+	// the subpixel font used to render with subpixel antialiasing
 	define.class(this, 'fontsubpixelaa', this.fontnormal, function(){
 		this.subpixel = true
 		this.boldness = 0.6
 	})
 	this.fontsubpixelaa = false
 
+	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
 	define.class(this, 'font', this.fontnormal, function(){
 
 	})
@@ -91,7 +95,6 @@ define.class(function(require, $containers$, view){
 		if(this.typeface) this.typeface = glfontParser(this.typeface)
 	}
 	
-	//!TODO make this also run the listeners
 	this.measure = function(width){
 		if(this.fontshader.update_dirty){
 			this.fontshader.update()

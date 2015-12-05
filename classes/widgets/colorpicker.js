@@ -9,16 +9,24 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 		
 	this.attributes =  {
-		value: {type: vec4, value: "white"}
-		,fgcolor: {type: vec4, value: "white"}		
-		,fontsize:{type: int, value: 15}
-		,internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6)}
-		//,basehue: {type:float, value:0.5}
-		,basesat: {type:float, value:0.8}
-		,baseval: {type:float, value:0.5}
+		// the value of the colorpicker, a color
+		value: {type: vec4, value: "white"},
+		// the foreground color of the fonts
+		fgcolor: {type: vec4, value: "white"},
+		// the fontsize of the text
+		fontsize:{type: int, value: 15},
+		// internal border color
+		internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6)},
+		// read-only the hue value (HSV)
+		basehue: {type:float, value:0.5, readonly:true},
+		// read-only the saturation value (HSV)
+		basesat: {type:float, value:0.8, readonly:true},
+		// read-only, the value (HSV)
+		baseval: {type:float, value:0.5, readonly:true},
 	}
 
 	this.basehue = 0.5;
+
 	this.bgcolor = vec4(0.0,0.0,0.0,0.4)
 	this.flexdirection = "column";
 	this.padding = vec4(10)
@@ -238,7 +246,8 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 		this.mouseout = function(){
 		}
 		
-		this.mouseleftdown = function(start){
+		this.mouseleftdown = function(event){
+			var start = event.local
 			// detect if we clicked not on the button
 			if(this.vertical){
 				var p = start[1] / this.layout.height
@@ -261,7 +270,8 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 				}
 			}
 			var start_offset = offset//this.offset / this.total
-			this.mousemove = function(pos){
+			this.mousemove = function(event){
+				var pos = event.local
 				if(this.vertical){
 					var p = start_offset + (pos[1] - start[1]) / this.layout.height
 				}
@@ -310,12 +320,12 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 				this.outer.setHueBase(-angle/ 6.283+ 0.25);
 		}
 		
-		this.mouseleftdown = function(m){
+		this.mouseleftdown = function(event){
 			
-			this.updatehue(m);
+			this.updatehue(event.local);
 			
-			this.mousemove = function(m){
-				this.updatehue(m);
+			this.mousemove = function(event){
+				this.updatehue(event.local);
 			};
 		}
 		this.mouseleftup = function(){

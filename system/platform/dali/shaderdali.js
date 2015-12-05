@@ -28,7 +28,7 @@ define.class('$system/base/shader', function(require, exports){
 
 		if(shader) return shader
 
-	    //Dali workaround
+	    //Dali workaround. In webgl this is gl.createProgram() object (DALI)
 	    shader = {
 			debug: {}
 			,pick: {}
@@ -250,7 +250,7 @@ define.class('$system/base/shader', function(require, exports){
 	this.compile_use = true
 
 
-	// Override from shader.js
+	// Override from shader.js (DALI)
 	this.mapUniforms = function(gl, shader, uniforms, uniset, unilocs){
 		// dali uses registerAnimatableProperty to set a uniform
 		for(var key in uniforms) if(!uniset[key]){
@@ -388,6 +388,11 @@ define.class('$system/base/shader', function(require, exports){
 			//	out += '\t\tif(loc.value !== uni) loc.value = uni, '
 			//}
 
+			//Update uniform (DALI)
+			//TODO Optimize
+			out += 'shader.dali_obj.meshActor.registerAnimatableProperty(\'_' + key + '\', shader.dali_obj.getArrayValue(uni))\n'
+			//out += 'shader.dali_obj.meshActor._' + key + ' = shader.dali_obj.getArrayValue(uni)\n'
+/*
 			out += 'gl.' + gen.call + '(loc.loc'
 
 			if(gen.mat) out += ', false'
@@ -397,6 +402,7 @@ define.class('$system/base/shader', function(require, exports){
 			if(gen.args == 3) out += ',uni[0], uni[1], uni[2])\n'
 			if(gen.args == 4) out += ',uni[0], uni[1], uni[2], uni[3])\n'
 			if(gen.args === this.loguni) out += 'if(typeof uni === "number")console.log(uni)\n'
+*/
 		}
 		tpl = tpl.replace(/SET\_UNIFORMS/, out)
 
@@ -466,6 +472,7 @@ define.class('$system/base/shader', function(require, exports){
 			return gltypes.gl[m.slice(3)]
 		})
 
+		//console.log('FUNCTION', tpl);
 		shader.use = new Function('return ' + tpl)()
 	}
 
@@ -481,10 +488,14 @@ define.class('$system/base/shader', function(require, exports){
 	
 	// lets draw ourselves
 	this.drawArrays = function(devicewebgl, sub, start, end){
+		// console.log('PROG', this.vtx_state.code);
 		//if(this.mydbg) debugger
 		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
 		var gl = devicewebgl.gl
-		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
+        var shader = sub? this.shader[sub]: this.shader;
+		// Attach the dali_obj to the shader.shader object (DALI)
+		shader.dali_obj = this.dali_obj;
+		var len = this.useShader(gl, shader);
 		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)
 	}
 

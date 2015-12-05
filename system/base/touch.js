@@ -4,11 +4,15 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(node){
+define.class('$system/base/node', function(){
 	this.atConstructor = function(){}
 	
-	this.events = ['start', 'end', 'cancel', 'leave', 'move']
 	this.attributes = {
+		start:Event,
+		end:Event,
+		cancel:Event,
+		leave:Event,
+		move:Event,
 		x: {type:int},
 		y: {type:int},
 		x1: {type:int},

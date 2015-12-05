@@ -1,7 +1,7 @@
 //Pure JS based composition
-define.class(function($server$, composition, screens, $containers$, screen, view){
+define.class(function($server$, composition, role, $containers$, screen, view){
 	this.render = function(){ return [
-		screens(
+		role(
 			screen({clearcolor:vec4('black')},
 				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
 					/*label({text:'Live shader coding', 
@@ -18,18 +18,18 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 					}),*/
 					view({
 						attributes:{
-							mycolor:{value:vec4('orange'), motion:'linear', duration:1}
+							mycolor:{value:vec4('red'), motion:'linear', duration:1}
 						},
 						mouseleftdown:function(){
-							this.mycolor = 'blue'
+							this.mycolor = 'yellow'
 						},
 						mouseleftup:function(){
 							this.mycolor = 'red'
 						},
 						flex:1,
 						bg:{
+							dump:1,
 							color:function(){
-
 								//return vec4(0,1,0,1)
 								// gradient
 								//return mix('red','blue', mesh.y)

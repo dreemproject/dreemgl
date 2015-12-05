@@ -36,9 +36,9 @@ define.class('./compositionbase', function(require, baseclass){
 
 		this.renderComposition()
 
-		this.screen = this.names.screens[this.screenname]
+		this.screen = this.names.role[this.screenname]
 		if(!this.screen){
-			this.screen = this.names.screens.constructor_children[0]			
+			this.screen = this.names.role.constructor_children[0]			
 			this.screenname = this.screen.name || this.screen.constructor.name
 		}
 
@@ -158,7 +158,7 @@ define.class('./compositionbase', function(require, baseclass){
 				var split = msg.rpcid.split('.')
 				var obj
 				// see if its a set attribute on ourself
-				if(split[0] === 'screens' && split[1] === this.screenname){
+				if(split[0] === 'role' && split[1] === this.screenname){
 					obj = this.screen
 				}
 				else{

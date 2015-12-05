@@ -10,8 +10,11 @@ define.class(function(view, button, label){
 	this.attributes = {
 		// The currently active tab. 
 		activetab, {type: int, value: 0},
+		// the color of the tab
 		color: {type: vec4, value: vec4("#404050")},
+		// color of hover
 		hovercolor: {type: vec4, value: vec4("#5050a0")},
+		// color when active
 		activecolor: {type: vec4, value: vec4("#7070a0")}
 	}
 

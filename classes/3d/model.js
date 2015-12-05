@@ -8,6 +8,7 @@ define.class(function(require, shape3d){
 	var GLGeom = require('$system/geometry/basicgeometry')
 
 	this.attributes = {
+		// require a 3D model object on this propery
 		model:Object
 	}
 	

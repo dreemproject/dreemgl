@@ -28,7 +28,7 @@ define.class(function (require, $containers$, view, $controls$, label) {
                 text:'Otherwise, use the POST API to drive DreemGL externally from devices and services.',
                 fgcolor:'#333',
                 bgcolor:'transparent',
-                alignself:'right',
+                alignself:'flex-end',
                 fontsize:15,
                 margintop:0
             }),

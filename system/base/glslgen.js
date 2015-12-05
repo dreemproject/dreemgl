@@ -26,6 +26,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 			uniforms: uniforms || {},
 			structs: [],
 			scope: {},
+			scopeio: {},
 			fnorder: [],
 			functions: {},
 			astcache: {},
@@ -149,6 +150,13 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 		// lets check if we have a function
 		var inscope = state.scope[name]
 		if(inscope){
+			var io = state.scopeio[name] || 0
+			if(state.assignvarying){ // we have to assign an 'out' value to it
+				state.scopeio[name] = io|1
+			}
+			else{
+				state.scopeio[name] = io|2
+			}
 			node.infer = inscope
 			return name
 		}
@@ -410,6 +418,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 				fstate.source = type.source
 				fstate.callname = fn
 				fstate.scope = {}
+				fstate.scopeio = {}
 				// we need to switch context
 				fstate.context = type.context
 				fstate.basename = type.basename || state.basename
@@ -505,6 +514,19 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 			}
 			else if(left_t === 'vec4'){
 				node.infer = vec4
+			}
+		}
+		else if(left_t === 'mat2'){
+			if(right_t === 'vec2'){
+				node.infer = vec2
+			}
+			else if(right_t === 'mat2'){
+				node.infer = mat2
+			}
+		}
+		else if(right_t === 'mat2'){
+			if(left_t === 'vec2'){
+				node.infer = vec2
 			}
 		}
 		else if(left_t === 'float'){
@@ -613,18 +635,33 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 		var args = state.call.args
 		var params = node.params
 		if(args.length !== params.length) throw new Error('Calling function '+state.call.name+'with wrong argcount '+args.length+' instead of '+params.length+' in '+state.callname+'(...)\n'+state.source)
+
 		// lets generate function arguments
 		for(var i = 0; i < args.length; i++){
 			// lets fetch the type
+			var type = args[i].infer
+			var name = this.expand(params[i], node, state)
+			state.scope[name] = type // define scope variable
+		}
+
+		var body = this.expand(node.body, node, state)
+
+		for(var i = 0; i < args.length; i++){
 			var name = this.expand(params[i], node, state)
 			var type = args[i].infer
 			var glname = this.getType(type, state)
 			if(i) ret += ', '
+			// so how do we know if its an 'in'
+			var io = state.scopeio[name]
+			if(io&2) ret += 'in'
+			if(io&1) ret += 'out'
+			if(io) ret += ' '
 			ret += glname + ' '+ name
-			state.scope[name] = type // define scope variable
 		}
+
 		ret += ')'
-		ret += this.expand(node.body, node, state)
+		ret += body
+
 		// return type
 		var return_t = state.call.return_t
 

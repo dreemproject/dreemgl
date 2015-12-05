@@ -36,12 +36,32 @@ define.class(function(require, exports){
 		//TODO
 		this.meshActor.size = [300, 300, 0];
 
-		//TEMP
 		this.meshActor.parentOrigin = dali.TOP_LEFT;
 		this.meshActor.anchorPoint = dali.TOP_LEFT;
 	};
 
 	
+	/**
+	 * @method cleanup
+     * Cleanup dali resources.
+	 */
+	this.cleanup = function(){
+		if (this.meshActor) {
+			this.dali.stage.remove(this.meshActor);
+			this.meshActor = undefined;
+		}
+
+		// Remove other dali objects
+		var cleanup = ['renderer', 'geometry', 'material', 'shader', 'dali'];
+		for (var i in cleanup) {
+			var obj = this[cleanup[i]];
+			if (obj) {
+				console.log('cleanup', cleanup[i]);
+				obj = undefined;
+			}
+		}
+	}
+
 	/**
 	 * @method compileShader
      * Convert the dreemgl compiled data structure into a dali shader,
@@ -218,7 +238,7 @@ define.class(function(require, exports){
 	 * object, the name is split by '_DOT_', and looked up incrementally.
 	 * @param {Object} dreem_shader Compiled data structure (either
 	 * vtx_state or pix_state).
-	 * @param (String} name The name of the object to return. If the name
+	 * @param {String} name The name of the object to return. If the name
 	 * is not found, it is split using '_DOT_' to incrementally locate the
 	 * object in the structure.
 	 * @return {Object} Value, or undefined if the name was not found.
@@ -241,9 +261,25 @@ define.class(function(require, exports){
 			}
 		}
 
+        return this.getArrayValue(obj);
+	}
+
+
+	/**
+	 * @method getArrayValue
+	 * Given the name of a uniform object, retrieve the array of values.
+	 * @param {Object} obj Compiled object
+	 * @param {String} name The name of the object to return. If the name
+	 * is not found, it is split using '_DOT_' to incrementally locate the
+	 * object in the structure.
+	 * @return {Object} single value or array, or undefined if name not found.
+	 */
+	this.getArrayValue = function(obj) {
 		// Detect, and return array data, if found. Array data is
 		// found in struct.slots.
 		if (obj && obj.struct && obj.struct.slots) {
+			if (obj.struct.slots == 0)
+				return obj[i];
 			var array = [];
 			for (var i=0; i<obj.struct.slots; i++) 
 				array.push(obj[i]);

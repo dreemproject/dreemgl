@@ -10,11 +10,11 @@ define.class(function($containers$view, label, icon){
 	this.attributes = {
 		// The label for the button
 		text: {type: String, value: ""},
+
 		// The icon for the button, see FontAwesome for the available icon-names.
 		icon: {type: String, value: ""},
 
 		// Font size in device-pixels.
-		// Example: example1
 		fontsize: {type: float, value: 14},
 		
 		// Gradient color 1	
@@ -81,20 +81,21 @@ define.class(function($containers$view, label, icon){
 		this.bg = 0
 	})
 
-
+	// the hover state when someone hovers over the button
 	this.statehover = function(){
-
 		this.col1 = this.hovercolor1
 		this.col2 = this.hovercolor2
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 	}
 
+	// the normal button state
 	this.statenormal = function(){
 		this.col1 = this.buttoncolor1
 		this.col2 = this.buttoncolor2
 		if(this.iconres)this.iconres.fgcolor = this.textcolor
 	}
 
+	// clicked state
 	this.stateclick = function(){
 		//this.animate({col1:{0:vec4('red'),3:vec4('green')}})
 		this.col1 = this.pressedcolor1
@@ -106,11 +107,11 @@ define.class(function($containers$view, label, icon){
 	this.mouseover  = this.statehover
 	this.mouseout = this.statenormal
 	this.mouseleftdown = this.stateclick
-	this.mouseleftup = function(pos){
+	this.mouseleftup = function(event){
 		// lets check if its over the button
 		this.statenormal()
-		if(pos.flags && pos.flags.over){
-			this.emit('click',pos)
+		if(event.isover){
+			this.emit('click',event)
 		}
 	}
 

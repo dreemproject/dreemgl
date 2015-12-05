@@ -9,11 +9,17 @@ define.class(function($containers$, view, $controls$, label){
 	
 	// should the splitter bars be introduced horizontally or vertically? 
 	this.attributes = {
+		// wether the splitcontainer is vertical or not
 		vertical: {type: Boolean, value: true},
+		// set the width (or height) of the splitter bar
 		splitsize: {type: float, value: 8},
+		// the minimum size of a child controlled by the splitter
 		minimalchildsize: {type: float, value: 20},
+		// the color of the splitter bar
 		splittercolor: {type: vec4, value: vec4("#404050")},
+		// color of splitter bar on hover
 		hovercolor: {type: vec4, value: vec4("#5050a0")},
+		// color of the splitter bar when dragging it
 		activecolor: {type: vec4, value: vec4("#7070a0")}
 	}
 
@@ -53,8 +59,8 @@ define.class(function($containers$, view, $controls$, label){
 			//this.setDirty(true);
 		}
 
-		this.mouseleftdown = function(pos){
-
+		this.mouseleftdown = function(event){
+			var pos = event.local
 			var dragstart = this.parent.localMouse()
 
 			this.pressed++
@@ -71,7 +77,8 @@ define.class(function($containers$, view, $controls$, label){
 				rightheight: this.parent.children[this.firstnode+2].layout.height
 			}
 
-			this.mousemove = function(pos){
+			this.mousemove = function(event){
+				var pos = event.local
 				var dragnow = this.parent.localMouse()
 				var dx = dragnow[0] - dragstart[0]
 				var dy = dragnow[1] - dragstart[1]

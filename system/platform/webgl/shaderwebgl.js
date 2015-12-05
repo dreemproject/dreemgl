@@ -17,7 +17,6 @@ define.class('$system/base/shader', function(require, exports){
 		var vtx_code = vtx_state.code
 
 		var pix_color = pix_state.code_color
-
 		var pix_pick = pix_state.code_pick
 		var pix_debug = pix_state.code_debug
 

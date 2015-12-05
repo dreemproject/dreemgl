@@ -1,15 +1,15 @@
-define.class(function($server$, composition, screens, $, search, browser) {
+define.class(function($server$, composition, role, $, search, browser) {
 
     this.render = function() { return [
         search({
             name:'omdb',
-            keyword:'${this.rpc.screens.main.term}'
+            keyword: wire('this.rpc.role.main.term')
         }),
-        screens(
+        role(
             browser({
                 name:'main',
                 term:'Aliens',
-                movies:'${this.rpc.omdb.results}'
+                movies: wire('this.rpc.omdb.results')
             })
         )
     ] }

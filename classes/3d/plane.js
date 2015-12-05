@@ -8,6 +8,7 @@ define.class(function(require, shape3d){
 	var GLGeom = require('$system/geometry/basicgeometry')
 
 	this.attributes = {
+		// the subdivisions of the plane
 		detail: vec2(40,40)
 	}
 

@@ -407,7 +407,7 @@ define(function () {
 	function isDimDefined(node, axis) {
 		if(axis === 'row') return !isNaN(node.ref._size[0])
 		if(axis === 'column') return !isNaN(node.ref._size[1])
-		throw new Error('axis not defined')
+		throw new Error('axis not defined' + axis)
 	}
 
 	function isPosDefined(node, pos) {

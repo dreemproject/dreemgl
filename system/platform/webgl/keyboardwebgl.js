@@ -61,7 +61,8 @@ define.class('$system/base/keyboard', function (require, exports){
 				code: code,
 				name: keyname
 			}
-			msg[msg.name] = 1
+
+			this[msg.name] = 1
 			
 			this.emit('down', msg)
 			
@@ -92,7 +93,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				code: code,
 				name: keyname
 			}
-			msg[msg.name] = 1
+			this[msg.name] = 0
 			
 			if(special_key_hack){
 				special_key_hack = false
@@ -116,7 +117,7 @@ define.class('$system/base/keyboard', function (require, exports){
 			var msg = {
 				repeat: e.repeat,
 				value: String.fromCharCode(code),
-				char: code
+				code: code
 			}
 			this.emit('press', msg)
 			e.preventDefault()
@@ -133,7 +134,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		this.textarea.onpaste = function(e){
 			var text = e.clipboardData.getData('text/plain')
 			this._clipboard = text
-			this.emit('paste', text)
+			this.emit('paste', {text:text})
 		}.bind(this)
 
 		Object.defineProperty(this, 'clipboard', {

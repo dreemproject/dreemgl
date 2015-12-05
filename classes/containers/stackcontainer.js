@@ -3,20 +3,14 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
+// Stack container is a custom layout view where the number of children doesnt slow down
+// either the layout engine or the render engine. To be completed
 
-define.class(function(require, $containers$, view, $controls$){
+define.class(function(require, $containers$, view, stackcontainer, $controls$){
 
-	this.attributes = {
-		// The code to display
-		source: {type:String, value:""},
-		// wrap the text
-		wrap: {type:Boolean, value:false}
-	}
-
-	this.bgcolor = vec4(12/255,33/255,65/255,1)
-	this.viewport = '2D'
+	this.bgcolor = 'gray'
 
 	this.render = function(){ return [
-		view({bgcolor:'red', position:'absolute', width:300, height:300})
+
 	]}
 })

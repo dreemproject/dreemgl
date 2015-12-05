@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($containers$, view, $controls$, label, $widgets$, codeviewer, $, cells, device) {
+define.class(function ($containers$, view, $controls$, label, $widgets$, jsviewer, $, cells, device) {
 
     this.slidetitle = "Method Calls via POST API";
 
@@ -53,7 +53,7 @@ define.class(function ($containers$, view, $controls$, label, $widgets$, codevie
                 view(
                     {flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), clipping:true, bgcolor:'transparent'},
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', fontsize:14, flex: 0, alignself: 'stretch', text:'DreemGL Server (./compositions/extdemo/devices.js)'}),
-                    codeviewer({ flex: 1, alignself: 'stretch', source: this.apiCode, fontsize: 13, bgcolor: "#000030", multiline: true}),
+                    jsviewer({ flex: 1, overflow:'scroll', alignself: 'stretch', source: this.apiCode, fontsize: 13, bgcolor: "#000030", multiline: true}),
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, alignself: 'stretch', text:'Method call via API (Ruby Example)'}),
                     label({ flex: 1, alignself: 'stretch', text: this.clientCode, fontsize: 12, fgcolor:'yellow', bgcolor: "#000030", multiline: false})
                 ),

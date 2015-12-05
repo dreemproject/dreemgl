@@ -1,10 +1,10 @@
 define.class(function(require,
-	$server$, composition,  screens, 
+	$server$, composition,  role, 
 	$containers$, screen, view, 
 	$controls$, button, label, 
 	$behaviors$, draggable, 
 	$3d$, teapot, ballrotate, 
-	$widgets$, docviewer, codeviewer, slideviewer){
+	$widgets$, docviewer, jsviewer, slideviewer){
 	// Live coding presentation docs!
 	this.attributes = {
 		test:"ELLO!"
@@ -12,11 +12,12 @@ define.class(function(require,
 	
 	this.render = function render(){ 
 		return [
-			screens(
+			role(
 				screen({
 					name:'desktop',
 					init:function(){
-						this.rpc.screens.remote.pager = function(event){
+						this.rpc.role.remote.pager = function(event){
+							console.log("EVENT")
 							this.children[0].page += event.value
 						}.bind(this)
 					}},
@@ -26,7 +27,7 @@ define.class(function(require,
 							borderradius:20
 						},
 						flex:1,
-						viewport:'2D',
+						viewport:'2d',
 						overflow:'scroll',
 						slideheight:800,
 						bgcolor:'black',
@@ -36,14 +37,14 @@ define.class(function(require,
 						view({
 							bgcolor:"transparent", 
 							flex:1,
-							slidetitle:'DreemGL introduction'
+							slidetitle:'DreemGL'
 							},
 							ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"teapot1"})
 							,view({
 								flex:1,
 								name:"teapot1", 
 								clearcolor: 'rgba(255,255,255,0)',
-								viewport: '3D',
+								viewport: '3d',
 								bg:0,
 								camera: vec3(0,0,8)
 							},
@@ -62,8 +63,8 @@ define.class(function(require,
 							,flex:1
 							,flexdirection:"column"
 							}
-							,codeviewer({
-								viewport:'2D',
+							,jsviewer({
+								viewport:'2d',
 								overflow:'scroll',
 								flex:1,
 								margin:vec4(10),
@@ -93,7 +94,7 @@ define.class(function(require,
 							view({
 								flex:1,
 								clearcolor: 'rgba(255,255,255,0)',
-								viewport: '3D',
+								viewport: '3d',
 								attributes:{count:16},
 								bg:0,
 								camera: vec3(0,0,18),
@@ -117,7 +118,7 @@ define.class(function(require,
 												patterns: require('./shaderpatterns').prototype,
 												color:function(){
 													return vec4( patterns.wave(mesh.uv, i*.1 + 
-														view.value * 10., i*.1 + view.value * 10.) * 
+														view.value * 10., i*.1 + view.value * 10. ) * 
 														pal.pal1(i*.1).xyz, 1.)
 												//	return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
 												}
@@ -135,7 +136,7 @@ define.class(function(require,
 							slidetitle:'Rendering vs drawing',
 							},
 							view({flexdirection:'row', flex:1},
-								codeviewer({
+								jsviewer({
 									flex:1,
 									alignself:'stretch',
 									margin:vec4(10),
@@ -177,8 +178,8 @@ define.class(function(require,
 							visible:false,
 							slidetitle:'Compositions'
 							}
-							,codeviewer({
-								viewport:'2D',
+							,jsviewer({
+								viewport:'2d',
 								overflow:'scroll',
 								flex:1,
 								margin:vec4(10),
@@ -206,7 +207,6 @@ define.class(function(require,
 							text:'Left',
 							flex:1,
 							size: vec2(200, 200),
-							bgcolor: vec4('yellow'),
 							//is: draggable(),
 							click: function(){
 								this.screen.pager = -1
@@ -216,7 +216,6 @@ define.class(function(require,
 							text:'Right',
 							flex:1,
 							size: vec2(200, 200),
-							bgcolor: vec4('red'),
 							//is: draggable(),
 							click: function(){
 								this.screen.pager = 1

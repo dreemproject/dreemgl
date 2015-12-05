@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$, composition, screens, $containers$, screen, view, splitcontainer, $controls$, label, button, $3d$, cube, sphere, plane, $widgets$, colorpicker){
+define.class(function($server$, composition, role, $containers$, screen, view, splitcontainer, $controls$, label, button, $3d$, cube, sphere, plane, $widgets$, colorpicker){
 
 	var mousedebug = define.class(function mousedebug($containers$view){
 		
@@ -36,7 +36,8 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 			return [view({bgcolor: "red", fgcolor: "darkgray", text:"this is a small text that will contain the cursor after move", position:"absolute" ,width: 10})]
 		}
 		
-		this.mousemove = function(a){
+		this.mousemove = function(event){
+			var a = event.local
 		//	console.log("mousecoord coming in:", a);
 			this.bgshader.mousepos = vec2(a[0],a[1])
 			this.redraw()
@@ -51,7 +52,7 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 	
 	
 	this.render = function(){ return [
-		screens(
+		role(
 			screen({clearcolor:'#484230', flexdirection:'row'},
 				splitcontainer({ vertical: false, flexdirection: "row", bgcolor: "black", flex:1},
 					view({
@@ -85,13 +86,12 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 					),
 					view({
 						init:function(){
-							console.log(this._attributes)
 						},
 						flex:4,
 						name:'theview', 
 						bgcolor:'transparent',
 						clearcolor: 'rgba(255,255,255,0)',
-						viewport: '3D', 
+						viewport: '3d', 
 						camera: vec3(2,2,2),
 						blend:{
 							color:function(){
@@ -101,8 +101,8 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						},
 						fov: 90,
 						attributes:{
-							camera:{motion:'linear', duration:1},
-							fov:{motion:'easein', duration:1}
+							camera:{motion:'linear', duration:1, persist:true},
+							fov:{motion:'easein', duration:1, persist:true}
 						}}
 						,cube({pos:vec3(0,1,0), size:vec3(0.5)})
 						,cube({pos:vec3(1,0,0), size:vec3(0.5)})
@@ -111,11 +111,11 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 						,plane({pos:vec3(0,-2,0), size:vec3(500), rotate:vec3(PI/2,0,0)})
 						,sphere({pos:vec3(0,0,2), radius:0.5})
 						
-						,view({viewport:'2D', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), pos:vec3(0,2,0), rotate:vec3(PI/2,0, 0)}
+						,view({viewport:'2d', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), pos:vec3(0,2,0), rotate:vec3(PI/2,0, 0)}
 							,mousedebug({width:100, height:100})
 						)
 						
-						,view({viewport:'2D', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
+						,view({viewport:'2d', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
 							,button({text:"LKJQEW", click:function(){
 								
 								var cam = this.find("theview");
@@ -143,7 +143,7 @@ define.class(function($server$, composition, screens, $containers$, screen, view
 							})		
 
 							)
-						,view({viewport:'2D', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)}
+						,view({viewport:'2d', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)}
 							,button({text:"A", click:function(){								
 								var cam = this.find("theview");
 								cam.camera = vec3(0,2,-5);

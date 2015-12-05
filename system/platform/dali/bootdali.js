@@ -11,7 +11,7 @@ define.class(function(require){
 console.log('Loading bootdali', define.$environment);
 
 	// composition_client references WebSocket
-	//WebSocket = require('$server/nodewebsocket')
+	//WebSocket = require('$system/base/nodewebsocket')
 
 	//var Render = require('$system/platform/render')
 

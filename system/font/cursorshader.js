@@ -4,23 +4,24 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
 
-define.class('$system/draw/$platform/shader$platform', function(require, exports, self){
-	this.matrix = mat4()
-	this.viewmatrix = mat4()
+define.class('$system/platform/$platform/shader$platform', function(require){
+	this.view = {totalmatrix:mat4(), viewmatrix:mat4(), cursorcolor:vec4()}
+
 	this.position = function(){
-		return mesh.pos * matrix * viewmatrix
+		return mesh.pos * view.totalmatrix  * view.viewmatrix
 	}
 	
 	this.color = function(){
 		var rel = mesh.edge//cursor_pos
-		var dpdx = dFdx(rel)
-		var dpdy = dFdy(rel)
-		var edge = min(length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2, 1.)
-		if(edge > 0.04){
-			if(rel.x < dpdx.x) return vec4(fgcolor.rgb,1.)
-			return vec4(0.)
-		}
-		return vec4(fgcolor.rgb, smoothstep(edge, -edge, shape.box(rel, 0,0,0.05,1.)))
+		var edge = 0.1
+		//var dpdx = dFdx(rel)
+		//var dpdy = dFdy(rel)
+		//var edge = min(length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2, 1.)
+		//if(edge > 0.04){
+		//	if(rel.x < dpdx.x) return vec4(fgcolor.rgb,1.)
+		//	return vec4(0.)
+		//}
+		return vec4(view.cursorcolor.rgb, smoothstep(edge, -edge, shape.box(rel, 0,0,0.05,1.)))
 	}
 
 	this.cursorgeom = define.struct({
@@ -30,10 +31,9 @@ define.class('$system/draw/$platform/shader$platform', function(require, exports
 
 		this.addCursor = function(textbuf, start){
 			var pos = textbuf.cursorRect(start)
-			//pos.y = 0//this.textbuf.font_size - this.textbuf.font_size * this.textbuf.cursor_sink
-			pos.w = textbuf.font_size //+ 10;		
-			//console.log("Rik - please find out why cursorwidth is near invisible at small fontsizes ;-) ");
-			//this.cursor.mesh.length = 0
+
+			pos.w = textbuf.fontsize 
+
 			this.pushQuad(
 				pos.x, pos.y, 0, 0, 
 				pos.x + pos.w, pos.y, 1, 0,
@@ -45,5 +45,4 @@ define.class('$system/draw/$platform/shader$platform', function(require, exports
 	}) 
 
 	this.mesh = this.cursorgeom.array()
-	this.fgcolor = vec4("white");
 })

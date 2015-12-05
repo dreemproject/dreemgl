@@ -3,19 +3,22 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $containers$view, $widgets$, debugview) {
+define.class(function(require, $containers$view) {
 	
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Animate = require('$system/base/animate')
 
 	this.attributes = {
-		locationhash: {type:Object, value:{}}
+		// the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
+		locationhash: {type:Object, value:{}},
+		// when the browser comes out of standby it fires wakup event
+		wakeup: Event
 	}
 
 	this.bg = undefined
 	this.rpcproxy = false	
-	this.viewport = '2D'
+	this.viewport = '2d'
 	this.dirty = true
 	this.flex = NaN
 	this.flexdirection = "column"
@@ -63,17 +66,17 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		return vec3(out);
 	}
 
-	
-	this.remapMouse = function(node, flags){
+	// internal: remap the mouse to a view node	
+	this.remapMouse = function(node){
 
 		var parentlist = []
 		var ip = node.parent
 		
-		var sx =this.device.main_frame.size[0]  / this.device.ratio
-		var sy =this.device.main_frame.size[1]  / this.device.ratio
-		var mx =  this.mouse._x/(sx/2) - 1.0
+		var sx = this.device.main_frame.size[0]  / this.device.ratio
+		var sy = this.device.main_frame.size[1]  / this.device.ratio
+		var mx = this.mouse._x/(sx/2) - 1.0
 		var my = -1 * (this.mouse._y/(sy/2) - 1.0)
-		
+
 		while (ip){
 			if (ip._viewport || !ip.parent) parentlist.push(ip)
 			ip = ip.parent
@@ -100,21 +103,21 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		var transtemp2 = mat4.translatematrix([-1,-1,0])
 		
 		if (logging)  console.log(parentlist.length-1, raystart, "mousecoords in GL space")
-		var lastmode = "2D"
+		var lastmode = "2d"
 		
 		for(var i = parentlist.length - 1; i >= 0; i--) {
 			var P = parentlist[i]
 
-			var newmode = P.parent? P._viewport:"2D"
+			var newmode = P.parent? P._viewport:"2d"
 
 			if (P.parent) {
 
-				var MM = P._viewport? P.layermatrix: P.totalmatrix
+				var MM = P._viewport? P.viewportmatrix: P.totalmatrix
 				
-				if (!P.layermatrix) console.log("whaaa" )
-				mat4.invert(P.layermatrix, this.remapmatrix)
+				if (!P.viewportmatrix) console.log("whaaa" )
+				mat4.invert(P.viewportmatrix, this.remapmatrix)
 
-				if (lastmode == "3D") { // 3d to layer transition -> do a raypick.
+				if (lastmode == "3d") { // 3d to layer transition -> do a raypick.
 
 					if (logging) console.log(i, lastrayafteradjust, "performing raypick on previous clipspace coordinates" )
 					
@@ -124,12 +127,12 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 					camlocal = vec3.mul_mat4(camerapos, this.remapmatrix)
 					endlocal = vec3.mul_mat4(endv, this.remapmatrix)
 
-					var R =vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
+					var R = vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
 					if (!R)	{
 						raystart = vec3(0.5,0.5,0)
 					}
 					else {
-						R = vec3.mul_mat4(R, P.layermatrix)
+						R = vec3.mul_mat4(R, P.viewportmatrix)
 						if (logging) console.log(i, R, "intersectpoint")
 						raystart = R
 					}
@@ -137,7 +140,7 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 
 				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 			
-				// console.log(i, ressofar, "layermatrix");
+				// console.log(i, ressofar, "viewportmatrix");
 
 				mat4.scalematrix([P.layout.width/2,P.layout.height/2,1000/2], scaletemp)
 				mat4.invert(scaletemp, this.remapmatrix)
@@ -167,24 +170,22 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 			// console.log(i, raystart, "last");	
 		}
 
-		var MM = node._viewport?node.layermatrix: node.totalmatrix
+		var MM = node._viewport?node.viewportmatrix: node.totalmatrix
 		mat4.invert(MM, this.remapmatrix)
 		raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 		rayend = vec3.mul_mat4(rayend, this.remapmatrix)
 
-		if (lastmode == "3D"){
+		if (lastmode == "3d"){
 			if (logging)  console.log("last mode was 3d..")
 		}
 		if (logging)  console.log(" ", raystart, "final transform using own worldmodel")
 
 		// console.log("_", ressofar, "result");
 
-		var ret = vec2(raystart.x, raystart.y)
-		ret.flags = flags
-
-		return ret
+		return vec2(raystart.x, raystart.y)
 	}
 	
+	// pick a view at the mouse coordinate and console.log its structure
 	this.debugPick = function(){
 		this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 			if(this.last_debug_view === view) return
@@ -233,6 +234,7 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		}.bind(this))
 	}
 
+	// bind all keyboard/mouse/touch inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){
 			if(!this.focus_view) return
@@ -271,16 +273,16 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 			if(!this.mouse_capture){
 				this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 					if(this.mouse_view !== view){
-						if(this.mouse_view) this.mouse_view.emit('mouseout', this.remapMouse(this.mouse_view))
+						if(this.mouse_view) this.mouse_view.emit('mouseout', {local:this.remapMouse(this.mouse_view)})
 						this.mouse_view = view
-						if(view) this.mouse_view.emit('mouseover', this.remapMouse(this.mouse_view))
+						if(view) this.mouse_view.emit('mouseover', {local:this.remapMouse(this.mouse_view)})
 					}
-					if(view) view.emit('mousemove', this.remapMouse(view))
+					if(view) view.emit('mousemove', {local:this.remapMouse(view)})
 
 				}.bind(this))
 			}
 			else{
-				this.mouse_capture.emit('mousemove', this.remapMouse(this.mouse_capture))
+				this.mouse_capture.emit('mousemove', {local:this.remapMouse(this.mouse_capture)})
 			}
 		}.bind(this)
 
@@ -293,11 +295,11 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 			if (this.mouse_view){
 				if(this.inModalChain(this.mouse_view)){
 					this.setFocus(this.mouse_view)
-					this.mouse_view.emit('mouseleftdown', this.remapMouse(this.mouse_view))
+					this.mouse_view.emit('mouseleftdown', {local:this.remapMouse(this.mouse_view)})
 				}
 				else if(this.modal){
 					this.modal_miss = true
-					this.modal.emit('miss', this.remapMouse(this.mouse_view))
+					this.modal.emit('miss', {local:this.remapMouse(this.mouse_view)})
 				}
 			} 
 		}.bind(this)
@@ -306,38 +308,38 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 			// make sure we send the right mouse out/overs when losing capture
 			this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 				if(this.mouse_capture){
-					this.mouse_capture.emit('mouseleftup', this.remapMouse(this.mouse_capture, {over:this.mouse_capture === view}))
+					this.mouse_capture.emit('mouseleftup', {local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
 				}
 				if(this.mouse_capture !== view){
-					if(this.mouse_capture) this.mouse_capture.emit('mouseout', this.remapMouse(this.mouse_capture))
+					if(this.mouse_capture) this.mouse_capture.emit('mouseout', {local:this.remapMouse(this.mouse_capture)})
 					if(view){
 						var pos = this.remapMouse(view)
-						view.emit('mouseover', pos)
-						view.emit('mousemove', pos)
+						view.emit('mouseover', {local:pos})
+						view.emit('mousemove', {local:pos})
 					}
 				}
-				else if(this.mouse_capture) this.mouse_capture.emit('mouseover', this.remapMouse(view))
+				else if(this.mouse_capture) this.mouse_capture.emit('mouseover', {local:this.remapMouse(this.mouse_capture)})
 				this.mouse_view = view
 				this.mouse_capture = false
 			}.bind(this))
 		}.bind(this)
 
 		this.mouse.wheelx = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheelx', this.mouse.wheelx)
-			else if(this.inModalChain(this.mouse_view)) this.mouse_view.emitUpward('mousewheelx', this.mouse.wheelx)
+			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, local:this.remapMouse(this.mouse_capture)})
+			else if(this.inModalChain(this.mouse_view)) this.mouse_view.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, local:this.remapMouse(this.mouse_view)})
 		}.bind(this)
 
 		this.mouse.wheely = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheely', this.mouse.wheely)
+			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheely', {wheel:this.mouse.wheely, local:this.remapMouse(this.mouse_capture)})
 			else if(this.mouse_view && this.inModalChain(this.mouse_view) ){
-				this.mouse_view.emitUpward('mousewheely', this.mouse.wheely)
+				this.mouse_view.emitUpward('mousewheely', {wheel:this.mouse.wheely, local:this.remapMouse(this.mouse_view)})
 			}
 		}.bind(this)
 
 		this.mouse.zoom = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousezoom', this.mouse.zoom)
+			if (this.mouse_capture) this.mouse_capture.emitUpward('mousezoom', {zoom:this.mouse.zoom, local:this.remapMouse(this.mouse_capture)})
 			else if(this.mouse_view && this.inModalChain(this.mouse_view)){
-				this.mouse_view.emitUpward('mousezoom', this.mouse.zoom)
+				this.mouse_view.emitUpward('mousezoom', {zoom:this.mouse.zoom, local:this.remapMouse(this.mouse_view)})
 			}
 		}.bind(this)
 
@@ -375,9 +377,7 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 	}
 
 
-	// Focus handling
-
-
+	// set the focus to a view node
 	this.setFocus = function(view){
 		if(this.focus_view !== view){
 			var old = this.focus_view
@@ -387,47 +387,49 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		}
 	}
 
-	this.focusNext = function(obj){
+	// focus the next view from view
+	this.focusNext = function(view){
 		// continue the childwalk.
 		var screen = this, found 
 		function findnext(node, find){
 			for(var i = 0; i < node.children.length; i++){
-				var obj = node.children[i]
-				if(obj === find){
+				var view = node.children[i]
+				if(view === find){
 					found = true
 				}
-				else if(obj.tabstop && found){
-					screen.setFocus(obj)
+				else if(view.tabstop && found){
+					screen.setFocus(view)
 					return true
 				}
-				if(findnext(obj, find)) return true
+				if(findnext(view, find)) return true
 			}
 		}
 		
-		if(!findnext(this, obj)){
+		if(!findnext(this, view)){
 			found = true
 			findnext(this)
 		}
 	}
 
-	this.focusPrev = function(obj){
+	// focus the previous view from view
+	this.focusPrev = function(view){
 		var screen = this, last
 		function findprev(node, find){
 			for(var i = 0; i < node.children.length; i++){
-				var obj = node.children[i]
-				if(find && obj === find){
+				var view = node.children[i]
+				if(find && view === find){
 					if(last){
 						screen.setFocus(last)
 						return true
 					}
 				}
-				else if(obj.tabstop){
-					last = obj
+				else if(view.tabstop){
+					last = view
 				}
-				if(findprev(obj, find)) return true
+				if(findprev(view, find)) return true
 			}
 		}
-		if(!findprev(this, obj)){
+		if(!findprev(this, view)){
 			findprev(this)
 			if(last) screen.setFocus(last)
 		}
@@ -436,12 +438,13 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 
 	// Modal handling
 
-
-	this.inModalChain = function(node){
+	// check if a view is in the modal chain
+	this.inModalChain = function(view){
+		if(!view) return false
 		if(!this.modal_stack.length) return true
 		var last = this.modal_stack[this.modal_stack.length - 1]
 		// lets check if any parent of node hits last
-		var obj = node
+		var obj = view
 		while(obj){
 			if(obj === last) return true
 			obj = obj.parent
@@ -449,14 +452,19 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		return false
 	}
 	
+	// close the current modal window
 	this.closeModal = function(value){
 		if(this.modal && this.modal.resolve)
 			return this.modal.resolve(value)
 	}
 	
+
+	// open a modal window from object like so: this.openModal( view({size:[100,100]}))
 	this.openModal = function(object){
 		return new Promise(function(resolve, reject){
+
 			Render.process(object, undefined, this.globals)
+
 			object.parent = this
 			this.children.push(object)
 			this.modal_stack.push(object)
@@ -490,6 +498,8 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 
 	// animation
 
+
+	// internal, start an animation, delegated from view
 	this.startAnimationRoot = function(obj, key, value, track, promise){
 		// ok so. if we get a config passed in, we pass that in
 		var config = obj.getAttributeConfig(key)
@@ -504,6 +514,8 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		return true
 	}
 
+
+	// internal, stop an animation, delegated from view
 	this.stopAnimationRoot = function(obj, key){
 		var animkey = obj.pickguid + '_' + key
 		var anim = this.anims[animkey]
@@ -513,20 +525,13 @@ define.class(function(require, $containers$view, $widgets$, debugview) {
 		}
 	}
 
-	this.pauseAnimationRoot = function(obj, key){
-		// uh ok pausing an animation.
-
-	}
-
-	this.playAnimationRoot = function(obj, key){
-
-	}
-
+	// called when something renders
 	this.atRender = function(){
 		// lets add a debugview
 		//this.children.push(debugview({}))
 	}
 
+	// internal, called by the renderer to animate all items in our viewtree
 	this.doAnimation = function(time, redrawlist){
 		for(var key in this.anims){
 			var anim = this.anims[key]

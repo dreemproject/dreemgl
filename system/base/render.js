@@ -54,8 +54,7 @@ define.class(function(exports){
 		}
 
 		// then call render
-		function __atAttributeGet(){
-			//console.log('Rerendering',key)
+		function __atAttributeGet(key){
 			//debugger
 			// we need to call re-render on this
 			if(!initializing){
@@ -94,10 +93,10 @@ define.class(function(exports){
 
 		if(new_version._viewport){
 			// set up a new layer
-			new_version.layer = new_version
-			new_version.child_layer_list = []
-			if(!rerender && new_version.parent && new_version.parent.layer){
-				new_version.parent.layer.child_layer_list.push(new_version)
+			new_version.parent_viewport = new_version
+			new_version.child_viewport_list = []
+			if(!rerender && new_version.parent && new_version.parent.parent_viewport){
+				new_version.parent.parent_viewport.child_viewport_list.push(new_version)
 			}
 		}
  		// what we need to do, is 
@@ -121,7 +120,7 @@ define.class(function(exports){
 				old_child = old_children[i]
 			}
 			new_child.parent = new_version
-			new_child.layer = new_version.layer
+			new_child.parent_viewport = new_version.parent_viewport
 
 			new_child =  new_children[i] = render(new_child, old_child, globals, state)
 	

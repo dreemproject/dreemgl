@@ -2349,13 +2349,17 @@ define(function(require, exports){
 
 	exports.Enum = function Enum(){
 		var types = Array.prototype.slice.call(arguments)
-		for(var i = 0; i < types.length; i++) types[i] = types[i].toUpperCase()
+		for(var i = 0; i < types.length; i++) types[i] = types[i].toLowerCase()
 		return function Enum(value){
-			if(typeof value !== 'string')
-				throw new Error('Enum not string' + value, types.join('|'))
-			value = value.toUpperCase()
-			if(types.indexOf(value) === -1)
-				throw new Error('Invalid enum value' + value + "" + types.join('|'))
+			if(typeof value !== 'string'){
+				console.error('Enum not string' + value, types.join('|'))
+				return types[0]
+			}
+			value = value.toLowerCase()
+			if(types.indexOf(value) === -1){
+				console.error('Invalid enum value: "' + value + '" ' + types.join('|'))
+				return types[0]
+			}
 
 			return value
 		}
@@ -2366,7 +2370,7 @@ define(function(require, exports){
 		return arg
 	}
 
-	// marking values that go into setters
+	// mark is a class that holds a mark and a value, use it to mark values going into a setter
 	exports.Mark = function Mark(value, mark){
 		var obj = this
 		if(!(obj instanceof Mark)){
@@ -2376,5 +2380,13 @@ define(function(require, exports){
 		obj.value = value
 		obj.mark = arguments.length>1? mark: true
 		return obj
+	}
+
+	// parsing a wired function as string
+	exports.wire = function wire(string){
+		src = "return " + string
+		var fn = new Function(src)
+		fn.is_wired = true
+		return fn
 	}
 })

@@ -782,14 +782,15 @@
 					var script = document.createElement('script')
 					var base_path = define.filePath(url)
 						
-					define.script_tags[location.origin+url] = script
+					define.script_tags[location.origin + url] = script
 
 					script.type = 'text/javascript'
 					script.src = url
 					
 					//define.script_tags[url] = script
 					window.onerror = function(error, url, line){
-						define.script_tags[url].onerror(error, url, line)
+						var script = define.script_tags[url]
+						if(script) script.onerror(error, url, line)
 					}
 
 					function onLoad(){
@@ -817,6 +818,7 @@
 							return loadResource(dep_path, url, true, module_deps)
 						})).then(function(){
 							resolve(factory)
+							reject = undefined
 						},
 						function(err){
 							reject(err)
@@ -827,7 +829,10 @@
 						var error = "Error loading " + url + " from " + from_file
 						//console.error(err)
 						this.rejected = true
-						reject({error:error, exception:exception, path:path, line:line})
+						if(reject) reject({error:error, exception:exception, path:path, line:line})
+						else{
+							define.showException({error:error, exception:exception, path:path, line:line})
+						}
 					}
 					script.onload = onLoad
 					script.onreadystatechange = function(){
@@ -858,6 +863,7 @@
 		}
 
 		define.showException = function(exc){
+			if(Object.keys(exc).length === 0) exc = {error:exc.stack, exception:exc.toString(), path:"", line:""}
 			// lets append the div
 			var div = define.exception_div = document.createElement('div')
 			div.style.cssText ='position:absolute;left:10;top:10;padding:30px;background-color:white;border-radius:10px;border:2px dotted #ffc0c0;color:#202020;margin:20px;margin-left:20px;font-size:14pt;font-family:arial, helvetica;'
@@ -871,7 +877,6 @@
 			define.loadAsync(define.main, 'main').then(function(){
 				if(define.atMain) define.atMain(define.require, define.main)
 			}, function(exc){
-				console.error(exc)
 				if(define.atException) define.atException(exc)
 				else{
 					define.showException(exc)

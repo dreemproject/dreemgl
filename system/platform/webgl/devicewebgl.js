@@ -54,7 +54,7 @@ define.class(function(require, exports){
 		}
 		else{
 			this.frame = 
-			this.main_frame = this.Texture.fromType('rgb_depth_stencil')
+			this.main_frame = this.Texture.fromType('rgb_depth')
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
@@ -62,9 +62,23 @@ define.class(function(require, exports){
 			this.drawtarget_pools = {}
 
 			this.createContext()
+			this.createWakeupWatcher()
 		}
 
 		this.initResize()
+	}
+
+	this.createWakeupWatcher = function(){
+		var last = Date.now()
+		setInterval(function(){
+			var now = Date.now()
+			if(now - last > 1000 && this.screen){
+				this.doresize()
+ 				this.redraw()
+				this.screen.emit('wakeup')
+			}
+			last = now
+		}.bind(this), 200)
 	}
 
 	this.createContext = function(){
@@ -99,7 +113,8 @@ define.class(function(require, exports){
 
 	this.initResize = function(){
 		//canvas.webkitRequestFullscreen()
-		var resize = function(){
+
+		var resize = this.doresize = function(){
 			var pixelRatio = window.devicePixelRatio
 
 			var w = this.parent.offsetWidth
@@ -260,7 +275,6 @@ define.class(function(require, exports){
 		}
 
 		// lets draw draw all dirty passes.
-		var hastime
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
 
@@ -270,19 +284,17 @@ define.class(function(require, exports){
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
-
 			if(view.draw_dirty & 1 || last){
-				var viewhastime = view.drawpass.drawColor(last, stime)
-				if(!viewhastime){
-					view.draw_dirty &= 2
+				//console.log("DiRTY", view)
+				var hastime = view.drawpass.drawColor(last, stime)
+				view.draw_dirty &= 2
+				if(hastime){
+					anim_redraw.push(view)
 				}
-				else hastime = viewhastime
 			}
 
 			if(skip){
 				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-				
-				
 				this.screen.draw_dirty &= 2
 				break
 			}

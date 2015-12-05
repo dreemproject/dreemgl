@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$, composition, screens, service, $containers$, screen, view, $behaviors$, draggable){ this.render = function(){ return [
+define.class(function($server$, composition, role, service, $containers$, screen, view, $behaviors$, draggable){ this.render = function(){ return [
 
 	service({
 		attribute_test: {type:int, value:10},
@@ -11,10 +11,10 @@ define.class(function($server$, composition, screens, service, $containers$, scr
 
 			}
 			console.log("Setting attribute on screen")
-			this.rpc.screens.mobile.test1 = {my:'obj'}
+			this.rpc.role.mobile.test1 = {my:'obj'}
 		}
 	}),
-	screens(
+	role(
 		screen({
 			init: function(){
 				this.rpc.server.test = function(value){
@@ -42,7 +42,7 @@ define.class(function($server$, composition, screens, service, $containers$, scr
 		screen({name:'desktop'},
 			view({
 				size: vec2(200, 200),
-				pos: '${this.rpc.screens.mobile.mousepos}',
+				pos: '${this.rpc.user.mobile.mousepos}',
 				bgcolor: 'red',
 				init: function(){
 					console.log("screen2", this.rpc.server.test)

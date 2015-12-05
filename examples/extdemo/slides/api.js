@@ -69,7 +69,7 @@ define.class(function (require, $containers$, view, $controls$, label) {
             ),
             view(
                 {flexdirection: 'column', flex: 0, alignself: 'stretch', padding:10, bgcolor:'transparent'},
-                label({fontsize:28, bgcolor:'transparent', text:'${"The current value of search.keyword is: " + this.rpc.search.keyword}', alignself: 'center'}),
+                label({fontsize:28, bgcolor:'transparent', text: wire('"The current value of search.keyword is: " + this.rpc.search.keyword'), alignself: 'center'}),
                 label({fontsize:18, bgcolor:'transparent', text:'(Try using the post API to get and set this value!)', alignself: 'center'})
             )
         ];

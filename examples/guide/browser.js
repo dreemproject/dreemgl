@@ -23,7 +23,7 @@ define.class(function($containers$, screen, view, $controls$, button, label, $, 
         return [
 
         view(
-            {flexdirection:'column', flex:1, overflow:'SCROLL'},
+            {flexdirection:'column', flex:1, overflow:'scroll'},
             label({ name:'search', width:300, height:30, text:'Aliens', fgcolor:'black'}),
             button({text:'Search', width:90, click:function() {
                 // sets the term on our screen, this should fire the server thing
