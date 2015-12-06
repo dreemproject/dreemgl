@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function($containers$, view, $controls$, label){
+define.class(function($ui$, view, label){
 
 	// slide viewer is an automatic slide viewer that turns child nodes into slides
 	// use attributes named 'slidetitle' on a child to set the slide title1
@@ -24,7 +24,7 @@ define.class(function($containers$, view, $controls$, label){
 	}
 
 	// the class for a nested slide, its automatically wrapped around children
-	define.class(this, 'slide', function($containers$, view){
+	define.class(this, 'slide', function($ui$, view){
 		this.cornerradius = vec4(10,10,10,10)
 		this.borderwidth = 0
 		this.bordercolor = vec4("blue")

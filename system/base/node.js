@@ -520,7 +520,7 @@ define.class(function(require, constructor){
 
 			this.addListener(config.alias, function(event){
 				var val = this[value_key] = event.value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, mark:mark})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, mark:event.mark})
 			})
 			// initialize value
 			this[value_key] = this[alias_key][config.index]

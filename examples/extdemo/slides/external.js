@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($containers$, view, $controls$, label, $widgets$, jsviewer, $, cells, device) {
+define.class(function ($ui$, view, label, $widgets$, jsviewer, $, cells, device) {
 
     this.slidetitle = "Method Calls via POST API";
 

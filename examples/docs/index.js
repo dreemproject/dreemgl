@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function(require, $server$, composition, fileio, role, dataset, $containers$, screen, view, splitcontainer, $controls$,  treeview, label, $widgets$, docviewer, jsviewer){
+define.class(function(require, $server$, composition, fileio, role, dataset, $ui$, screen, view, splitcontainer, treeview, label, $widgets$, docviewer, jsviewer){
 
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')

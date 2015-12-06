@@ -87,8 +87,7 @@ function main(){
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
-		'containers':'$root/classes/containers',
-		'controls':'$root/classes/controls',
+		'ui':'$root/classes/ui',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
 	}

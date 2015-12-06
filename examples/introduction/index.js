@@ -1,7 +1,6 @@
 define.class(function(require,
 	$server$, composition,  role, 
-	$containers$, screen, view, 
-	$controls$, button, label, 
+	$ui$, screen, view, button, label, 
 	$behaviors$, draggable, 
 	$3d$, teapot, ballrotate, 
 	$widgets$, docviewer, jsviewer, slideviewer){

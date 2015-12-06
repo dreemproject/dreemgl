@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($containers$, view, $controls$, label, $examples$guide$movie, $, cells, $widgets$, jsviewer) {
+define.class(function ($ui$, view, label, $examples$guide$movie, $, cells, $widgets$, jsviewer) {
 
 	this.attributes = {
 		movies: {type: Array},

@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $containers$, screen, view, splitcontainer, $controls$, label, button, $widgets$, colorpicker){
+define.class(function($server$, composition, role, $ui$, screen, view, splitcontainer, label, button, $widgets$, colorpicker){
 	this.render = function(){ return [
 		role(
 			screen({clearcolor:'#484230', flexdirection:'row'},

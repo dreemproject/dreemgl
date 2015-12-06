@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $containers$, screen, view){
+define.class(function($server$, composition, role, $ui$, screen, view){
 	this.render = function(){ return [
 		role(
 			screen({clearcolor:vec4('black')},

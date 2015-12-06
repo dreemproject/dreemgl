@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$system/base/node', function(require, $controls$, label){	
+define.class('$system/base/node', function(require, $ui$, label){	
 	// The dataset class allows you to share a single "document" between various parts of your application. 
 	// The dataset provides undo/redo functionality by serializing its contents to a JSON string.
 	// To modify a dataset you need to use the "fork" method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.

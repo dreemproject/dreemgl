@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $containers$, view, $controls$, label, button, scrollbar){
+define.class(function(require, $ui$, view, label, button, scrollbar){
 	
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 		
@@ -143,7 +143,7 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 	}
 	
 	
-	define.class(this, "customslider", function($containers$view){
+	define.class(this, "customslider", function($ui$view){
 		this.height = 19;
 		
 		this.attributes = {
@@ -293,7 +293,7 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 	})
 
 	
-	define.class(this, 'colorcirclecontrol', function($containers$view){
+	define.class(this, 'colorcirclecontrol', function($ui$view){
 		this.width = 200;
 		this.height = 200;
 		this.attributes = {
@@ -446,7 +446,7 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 	
 	})
 	
-	define.class(this, 'triangleview', function($containers$view){
+	define.class(this, 'triangleview', function($ui$view){
 		this.width = 200;
 		this.height = 200;
 		
@@ -567,7 +567,7 @@ define.class(function(require, $containers$, view, $controls$, label, button, sc
 	this.colortriangle = 0;
 	
 	
-	define.class(this, 'colorarea', function($containers$view){
+	define.class(this, 'colorarea', function($ui$view){
 		this.bg ={
 			color:function(){
 					return vec4(mesh.x, mesh.y,0,1);

@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $containers$, view, foldcontainer, $controls$, label, button, icon, $widgets$, markdown, jsviewer){
+define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $widgets$, markdown, jsviewer){
 	
 	var Parser = require("$system/parse/onejsparser")
 
@@ -21,7 +21,7 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 	}
 
 	// A doc item is an item with a heading, such as methods or attributes
-	define.class(this, 'ClassDocItem', function($containers$, view){
+	define.class(this, 'ClassDocItem', function($ui$, view){
 		this.bg = 0
 		// the item to display. 
 		// An "attribute" item can have name, body_text, defvalue and type properties.
@@ -316,7 +316,7 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 	
 	// This class will recursively expand a class_doc sturcture to an on-screen view.
 	
-	define.class(this, 'dividerline', function($containers$, view){
+	define.class(this, 'dividerline', function($ui$, view){
 		this.height = 1;
 		this.borderwidth = 1;
 		this.bordercolor = vec4("#c0c0e0");
@@ -325,7 +325,7 @@ define.class(function(require, $containers$, view, foldcontainer, $controls$, la
 	})
 	
 	
-	define.class(this, 'ClassDocView', function($containers$, view){
+	define.class(this, 'ClassDocView', function($ui$, view){
 	
 		this.attributes = {
 			// If collapsible is true, the render function will build a foldcontainer around this class. This is used for recursion levels > 0 of the docviewer class.	

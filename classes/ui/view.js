@@ -398,12 +398,12 @@ define.class('$system/base/node', function(require){
 
 		if(this._viewport){
 			// give it a blendshader
-			if(this._viewport === '2d'){
-				this.viewportblendshader = new this.viewportblendopaque(this)
-			}
-			else{
+			//if(this._viewport === '2d'){
+			//	this.viewportblendshader = new this.viewportblendopaque(this)
+			//}
+			//else{
 				this.viewportblendshader = new this.viewportblendalpha(this)
-			}
+			//}
 		}
 
 		this.sortShaders()
