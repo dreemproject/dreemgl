@@ -14,9 +14,9 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 	
 	this.margin = vec4(4);
 	this.bgcolor = "white"
-	
-	this.borderwidth =  2;
-	this.borderradius = 0;
+	this.padding = 9
+	this.borderwidth =  0;
+	this.borderradius = 4;
 	this.bordercolor ="#202020" 
 	this.wrap = function(node){
 		return [
