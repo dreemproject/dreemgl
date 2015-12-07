@@ -10,7 +10,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		values:{type:Object, value:[]},
 		currentvalue:{type:String, value:""}
 	}
-	this.flexdirection = "column"
+	this.flexdirection = "row"
 	this.render = function(){
 		var res = [];
 		var radio = this;
@@ -19,7 +19,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			var v = this.values[i];
 			if (v == this.currentvalue){
 				
-				res.push(label({text:v, bg:0, fgcolor:"#303030"}))
+				res.push(label({text:v,margin:10, bg:0, fgcolor:"#303030"}))
 			}
 			else{
 				res.push(button({text:v, onclick:function(){radio.currentvalue = this.text;}}))
