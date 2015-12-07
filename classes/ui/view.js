@@ -324,7 +324,8 @@ define.class('$system/base/node', function(require){
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
 		this.modelmatrix = mat4()
-		this.totalmatrix = mat4.identity()
+		if(this._viewport) this.totalmatrix = mat4.identity()
+		else this.totalmatrix = mat4()
 		this.viewportmatrix = mat4()
 
 		if(prev){
@@ -343,11 +344,14 @@ define.class('$system/base/node', function(require){
 
 			var shader = this[key]
 			if(shader){
-				var prevshader = prev && prev[key+'shader']
+				var shname = key + 'shader'
+				var prevshader = prev && prev[shname]
 				var shobj
 				// ok so instead of comparing constructor, lets compare the computational result
+//				if(prevshader && prevshader.constructor !== shader) console.log(shader)
 				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype))){
 					shobj = prevshader
+					shobj.constructor = shader
 					shobj.view = this
 					shobj.outer = this
 					// ok now check if we need to dirty it
@@ -365,8 +369,8 @@ define.class('$system/base/node', function(require){
 				else{
 					shobj = new shader(this)
 				}
-				this[key + 'shader'] = shobj
-				shobj.shadername = key + 'shader'
+				this[shname] = shobj
+				shobj.shadername = shname
 				this.shader_list.push(shobj)
 			}
 		}

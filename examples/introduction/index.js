@@ -35,7 +35,7 @@ define.class(function(require,
 						view({
 							bgcolor:"transparent", 
 							flex:1,
-							slidetitle:'DreemGL'
+							slidetitle:'DreemGL Introduction'
 							},
 							ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"teapot1"})
 							,view({

@@ -60,6 +60,9 @@ define.class(function(require, $ui$, view){
 			else{
 				mesh.add(view.text,0 ,0 ,0)
 			}
+			if(view.measure_with_cursor){
+				mesh.computeBounds(true)
+			}
 			this.mesh = mesh
 		}
 	})
@@ -99,11 +102,8 @@ define.class(function(require, $ui$, view){
 		if(this.fontshader.update_dirty){
 			this.fontshader.update()
 			this.fontshader.update_dirty = true
-			if(this.measure_with_cursor){
-				this.fontshader.mesh.computeBounds(true)
-			}
 		}
-		return {width: this.measured_width =this.fontshader.mesh.bound_w, height: this.measured_height =this.fontshader.mesh.bound_h};
+		return {width: this.measured_width = this.fontshader.mesh.bound_w, height: this.measured_height =this.fontshader.mesh.bound_h};
 	}
 
 	var label = this.constructor

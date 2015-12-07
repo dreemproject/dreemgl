@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar){
+define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 	
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 		
@@ -63,7 +63,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar){
 	
 	this.updatelabel = function(name, val){
 		var c = this.find(name);
-		if (c) c.text = val;
+		if (c) c.value = val;
 	}
 	
 	this.updateallcontrols = function(){
@@ -461,6 +461,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar){
 		}
 		
 		define.class(this, 'fg', this.Shader, function(){
+			this.draworder = 5
+
 			this.vertexstruct = define.struct({		
 				p:vec2,			
 			})
@@ -508,10 +510,9 @@ define.class(function(require, $ui$, view, label, button, scrollbar){
 		
 		})
 		
-		this.fg = 2;
 		define.class(this, 'bg', this.Shader, function(){
-			
-			this.vertexstruct = define.struct({		
+			this.draworder = 1
+			this.vertexstruct = define.struct({
 				p:float,			
 				hsvoff: vec3,
 				center: float
@@ -563,9 +564,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar){
 	
 	})
 	
-	this.colorcircle = 0;
-	this.colortriangle = 0;
-	
 	
 	define.class(this, 'colorarea', function($ui$view){
 		this.bg ={
@@ -593,19 +591,19 @@ define.class(function(require, $ui$, view, label, button, scrollbar){
 					,this.customslider({name:"bslider",height: 18, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})
 					,view({bg:0}
 						,label({flex:1, text:"rgb", fontsize:18, bg:0, fgcolor: this.fgcolor})
-						,view({flex:1, bg:0},label({name:"textr",text:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},label({name:"textg",text:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},label({name:"textb",text:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"textr",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"textg",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"textb",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
 						
 					)
 					,this.customslider({name:"hsvider",height: 18, flex:1, hsvfrom:vec3(0.0,this.basesat,this.baseval), hsvto:vec3(1,this.basesat,this.baseval), offset:function(v){this.outer.setHueBase(v.value/255)}})
-					,this.customslider({name:"sslider",height: 18, flex:1, hsvhueadd: 1,  hsvfrom:vec3(0,0,this.baseval), hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}})
+					,this.customslider({name:"sslider",height: 18, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,0,this.baseval), hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}})
 					,this.customslider({name:"lslider",height: 18, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,this.basesat,0), hsvto:vec3(0,this.basesat,1), offset:function(v){this.outer.setLumBase(v.value/255)}})
 					,view({bg:0}
 						,label({flex:1, text:"hsv", fontsize:18, bg:0, fgcolor: this.fgcolor})
-						,view({flex:1, bg:0},label({name:"texth",text:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},label({name:"texts",text:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},label({name:"textv",text:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"texth",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"texts",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"textv",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
 						
 					)
 				)
@@ -613,10 +611,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar){
 			
 			,view({ bg:0,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"}
 				,view({ bg:0,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}
-					,label({bg:0, margin:vec4(10,5,0,0),text:"#", fgcolor:this.fgcolor, fontsize: this.fontsize})
-					,label({bg:0,  margin:vec4(0,5,0,0), text:"ff00ff",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
-					,label({bg:0, margin:vec4(10,5,0,0),text:"alpha ",  fgcolor:this.fgcolor, fontsize: this.fontsize})
-					,label({name:"texta", bg:0,  margin:vec4(0,5,0,0), text:"128",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
+					,textbox({bg:0, margin:vec4(10,5,0,0),value:"#", fgcolor:this.fgcolor, fontsize: this.fontsize})
+					,textbox({bg:0, margin:vec4(0,5,0,0), value:"ff00ff",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
+					,textbox({bg:0, margin:vec4(10,5,0,0),value:"alpha ",  fgcolor:this.fgcolor, fontsize: this.fontsize})
+					,textbox({name:"texta", bg:0,  margin:vec4(0,5,0,0), value:"128",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
 				)
 			)				
 		]
