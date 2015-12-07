@@ -13,15 +13,31 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 	this.flexdirection= "column";
 	this.margin = vec4(4);
 	this.bgcolor = vec4(1,1,1,0.83);
+	this.bordercolor = "gray"
+	this.borderradius = 4;
+	this.borderwidth = 3;
+	this.padding = 5
 	this.render = function(){
 		var c = this.find(this.target);
 		if (!c) return [];
 		
 			
 		var res = [];
+		var keys = [];
 		
 		for(key in c._attributes){
-			var attr = c._attributes[key];			
+			var attr = c._attributes[key];
+			var typename = attr.type? attr.type.name:"NONE";
+			if (typename != "NONE")
+			{
+			keys.push(key);
+			}
+		}
+		keys.sort();
+		for(var i = 0 ;i<keys.length;i++){
+			var key = keys[i];
+			var attr = c._attributes[key];	
+			//console.log(attr);			
 			res.push(propeditor({property:attr, propertyname: key}))
 		}
 		

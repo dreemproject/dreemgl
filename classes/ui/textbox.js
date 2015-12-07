@@ -9,10 +9,10 @@ define.class(function(require, $ui$, label){
 
 	this.attributes = {
 		// the color of the cursor
-		cursorcolor: vec4("white"),
+		cursorcolor: {type:vec4, value: vec4("white"), meta:"color"},
 		// color of the marker
-		markerfocus: vec4("ocean"),
-		markerunfocus: vec4("gray")
+		markerfocus: {type:vec4, value: vec4("ocean"), meta:"color"},
+		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"}
 	}
 
 	this.markercolor = this.markerunfocus

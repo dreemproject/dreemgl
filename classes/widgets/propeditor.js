@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$widgets$){
+define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$widgets$, colorpicker){
 	this.attributes = {
 		target:{type:String,value:""},
 		property:{type:Object},
@@ -13,17 +13,62 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 	}
 	
 	this.margin = vec4(4);
-	this.bgcolor = "blue"
-	this.bg = 0;
+	this.bgcolor = "white"
+	
+	this.borderwidth =  2;
+	this.borderradius = 0;
+	this.bordercolor ="#202020" 
+	this.wrap = function(node){
+		return [
+			label({margin:4, flex: 0.2, text:this.propertyname, bg:0, fgcolor:"#303030" })
+			,node
+		]	
+	}
 	this.render = function(){
 		
+		var typename = this.property.type?this.property.type.name:"";
 		
+		if (typename =="vec4"){
+		
+		if (this.property.meta=="color"){
+				return this.wrap(view({width:200, flexdirection:"column"},colorpicker()))
+			}
+			
+			return this.wrap(view({},
+					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					)
+				);
+		}
+		
+		if (typename =="vec3"){
+			return this.wrap(view({},
+				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+				)
+			);            			
+		}
+		
+		if (typename =="FloatLike"){
+			return this.wrap(textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}) )
+				
+		}
+		if (typename =="String"){
+			return this.wrap(view({},
+				textbox({flex:1, fgcolor:"#303030", value:"textvalue",padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
+		}
+		if (typename =="vec2"){
+			return this.wrap(view({},
+				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+				));            
+		}
 		if (!this.property) return [];
 		//console.log(this.property);
-		return [
-			label({text:this.propertyname, bg:0, fgcolor:"#303030" })
-			,label({text:this.property.type?this.property.type.name:"", bg:0, fgcolor:"#303030" })
-		]	
+		return this.wrap(label({margin:4,text:typename, bg:0, fgcolor:"#303030"}))
 	}
 	
 })
