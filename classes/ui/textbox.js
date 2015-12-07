@@ -33,7 +33,7 @@ define.class(function(require, $ui$, label){
 			}
 		}
 	})
-	this.cursors = 6
+	this.cursors = true
 	this.tabstop = true
 
 	define.class(this, 'markers', require('$system/font/markershader.js'), function(){
@@ -64,13 +64,13 @@ define.class(function(require, $ui$, label){
 	this.measure_with_cursor = true
 	
 	this.focusget = function(){
-		this.cursorsshader.visible = true
+		//this.cursorsshader.visible = true
 		this.markercolor = this.markerfocus
 		this.redraw()
 	}
 
 	this.focuslost = function(){
-		this.cursorsshader.visible = false
+		//this.cursorsshader.visible = false
 		this.markercolor = this.markerunfocus
 		this.redraw()
 	}
@@ -91,7 +91,7 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.init = function(){
-		this.cursorsshader.visible = false
+		//this.cursorsshader.visible = false
 		this.initEditImpl()
 		this.text = this.value
 	}
