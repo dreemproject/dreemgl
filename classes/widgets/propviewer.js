@@ -28,7 +28,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 		for(key in c._attributes){
 			var attr = c._attributes[key];
 			var typename = attr.type? attr.type.name:"NONE";
-			if (typename != "NONE")
+			if (typename != "NONE" && typename != "Event" )
 			{
 			keys.push(key);
 			}
