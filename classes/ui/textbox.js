@@ -9,7 +9,7 @@ define.class(function(require, $ui$, label){
 
 	this.attributes = {
 		// the color of the cursor
-		cursorcolor: {type:vec4, value: vec4("white"), meta:"color"},
+		cursorcolor: {type:vec4, value: vec4(NaN), meta:"color"},
 		// color of the marker
 		markerfocus: {type:vec4, value: vec4("ocean"), meta:"color"},
 		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"}
@@ -51,12 +51,14 @@ define.class(function(require, $ui$, label){
 				var cursor = list[i]
 				
 				var start = cursor.start, end = cursor.end
-				var markers = this.vertexstruct.getMarkersFromText(view.textbuf, start, end, 0)
-				// lets add all markers
-				for(var i = 0; i < markers.length;i++){
-					this.mesh.addMarker(markers[i-1], markers[i], markers[i+1], view.textbuf.fontsize, 0)
-				}
+				if(start !== end){
+					var markers = this.vertexstruct.getMarkersFromText(view.textbuf, start, end, 0)
 
+					// lets add all markers
+					for(var i = 0; i < markers.length;i++){
+						this.mesh.addMarker(markers[i-1], markers[i], markers[i+1], view.textbuf.fontsize, 0)
+					}
+				}
 			}
 		}
 	})
@@ -64,13 +66,13 @@ define.class(function(require, $ui$, label){
 	this.measure_with_cursor = true
 	
 	this.focusget = function(){
-		//this.cursorsshader.visible = true
+		this.cursorsshader.visible = true
 		this.markercolor = this.markerfocus
 		this.redraw()
 	}
 
 	this.focuslost = function(){
-		//this.cursorsshader.visible = false
+		this.cursorsshader.visible = false
 		this.markercolor = this.markerunfocus
 		this.redraw()
 	}
@@ -91,7 +93,8 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.init = function(){
-		//this.cursorsshader.visible = false
+		this.cursorsshader.visible = false
+		if(isNaN(this._cursorcolor[0])) this._cursorcolor = this.fgcolor
 		this.initEditImpl()
 		this.text = this.value
 	}

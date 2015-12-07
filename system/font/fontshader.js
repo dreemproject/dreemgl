@@ -216,7 +216,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var unicode = this.array[o + 5]
 				var info = this.typeface.glyphs[unicode]
 				var add_x = x1 - fontsize * info.min_x + (unicode === 10?0:info.advance * fontsize)
-				var add_y = y1 + fontsize * info.min_x + this.fontsize * this.line_spacing
+				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.line_spacing
 				if(add_x > text_w) text_w = add_x
 				if(add_y > text_h) text_h = add_y
 			}
