@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$widgets$, colorpicker){
+define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$widgets$, colorpicker, radiogroup){
 	this.attributes = {
 		target:{type:String,value:""},
 		property:{type:Object},
@@ -24,11 +24,12 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 			,node
 		]	
 	}
+	
 	this.render = function(){
 		
 		var typename = this.property.type?this.property.type.name:"";
 		if (typename =="Enum"){
-			console.log(this.property);
+			return this.wrap(radiogroup({values:this.property.type.values, currentvalue : this.property.value}));
 		}
 		if (typename =="vec4"){
 		
