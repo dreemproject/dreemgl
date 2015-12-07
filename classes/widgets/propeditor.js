@@ -27,7 +27,9 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 	this.render = function(){
 		
 		var typename = this.property.type?this.property.type.name:"";
-		
+		if (typename =="Enum"){
+			console.log(this.property);
+		}
 		if (typename =="vec4"){
 		
 		if (this.property.meta=="color"){
