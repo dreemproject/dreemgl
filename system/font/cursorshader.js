@@ -12,8 +12,9 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 	}
 	
 	this.color = function(){
-		var rel = mesh.edge//cursor_pos
-		var edge = 0.1
+		return view.cursorcolor
+		//var rel = mesh.edge//cursor_pos
+		//var edge = 0.1
 		//var dpdx = dFdx(rel)
 		//var dpdy = dFdy(rel)
 		//var edge = min(length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2, 1.)
@@ -21,7 +22,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		//	if(rel.x < dpdx.x) return vec4(fgcolor.rgb,1.)
 		//	return vec4(0.)
 		//}
-		return vec4(view.cursorcolor.rgb, smoothstep(edge, -edge, shape.box(rel, 0,0,0.05,1.)))
+		//return vec4(view.cursorcolor.rgb, smoothstep(edge, -edge, shape.box(rel, 0,0,0.15,1.)))
 	}
 
 	this.vertexstruct = define.struct({
@@ -32,7 +33,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		this.addCursor = function(textbuf, start){
 			var pos = textbuf.cursorRect(start)
 
-			pos.w = textbuf.fontsize 
+			pos.w = textbuf.fontsize*0.1 
 
 			this.pushQuad(
 				pos.x, pos.y, 0, 0, 
