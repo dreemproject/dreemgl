@@ -2350,7 +2350,7 @@ define(function(require, exports){
 	exports.Enum = function Enum(){
 		var types = Array.prototype.slice.call(arguments)
 		for(var i = 0; i < types.length; i++) types[i] = types[i].toLowerCase()
-		return function Enum(value){
+		function Enum(value){
 			if(typeof value !== 'string'){
 				console.error('Enum not string' + value, types.join('|'))
 				return types[0]
@@ -2363,6 +2363,8 @@ define(function(require, exports){
 
 			return value
 		}
+		Enum.values = types
+		return Enum
 	}
 
 	// events are passthrough types

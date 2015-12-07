@@ -33,7 +33,7 @@ define.class(function(require, $ui$, view){
 		subpixel: {type:Boolean, value: false},
 	
 		// Alignment of the bodytext.
-		align: {type: String,  value: "left"}
+		align: {type: Enum('left','right'),  value: "left"}
 	}
 
 	// the normal font 
