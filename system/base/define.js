@@ -303,19 +303,24 @@
 				callback(builtin, undefined, i)
 				continue
 			}
-			if(arg === '$'){
+			if(arg === '$$'){
 				path = './'
 			}
-			else if(arg === '$$'){
+			else if(arg === '$$$'){
 				// we have to rip something off path
 				path = define.filePath(path)
 			}
 			else if(arg.charAt(0) === '$'){
 				if(arg.charAt(arg.length - 1) === '$'){ // $blabla$
-					path = '$' + arg.slice(1).replace(/\$/g,'/')
+					path = '$' + arg.slice(1).replace(/\$/g, '/')
 				}
 				else{
-					callback(undefined, '$' + arg.slice(1).replace(/\$/g,'/'), i) // absolute path
+					if(arg.charAt(1) ==='$'){
+						callback(undefined, './' + arg.slice(2).replace(/\$/g,'/'), i) // local absolute path
+					}
+					else{
+						callback(undefined, '$' + arg.slice(1).replace(/\$/g,'/'), i) // absolute path
+					}
 				}
 
 			} // relative path processor
@@ -494,7 +499,7 @@
 
 		var matchrx = new RegExp(/define\.(?:render|class)\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*(?:[$_\w]+\s*,\s*){0,1}){0,1}function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
 		while((result = matchrx.exec(str)) !== null) {
-			output.push('$')
+			output.push('$$')
 			var map = result[1].split(/\s*,\s*/)
 			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i].toLowerCase())
 		}

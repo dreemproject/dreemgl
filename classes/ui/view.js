@@ -252,17 +252,14 @@ define.class('$system/base/node', function(require){
 		var value = event.value
 		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
 			// this switches the bg shader to the rounded one
-			this.border = false
-			this.border = this.roundedborder
-			if (this._borderwidth > 0) this.border = 2
 			this.bg = this.roundedrect
+			this.border = this.roundedborder
 		}
 		else {
-			this.border = false;
 			this.bg = this.hardrect
-			this.border = this.hardborder;
-			if (this._borderwidth > 0) this.border = 2
+			this.border = this.hardborder
 		}
+		if(this._borderwidth[0] === 0 && this._borderwidth[1] === 0 && this._borderwidth[2] === 0 && this._borderwidth[3] === 0) this.border = false
 	}
 
 	// listen to switch shaders when border width changes
@@ -270,7 +267,7 @@ define.class('$system/base/node', function(require){
 		var value = event.value
 		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
 			// turn it on by assigning an order number
-			this.border = 2
+			this.border = true
 		}
 		else this.border = false
 		this.relayout()
@@ -280,8 +277,8 @@ define.class('$system/base/node', function(require){
 	// listen to the viewport to turn off our background and border shaders when 3D
 	this.viewport = function(event){
 		if(event.value === '3d'){
-			this.bg = null
-			this.border = null
+			this.bg = false
+			this.border = false
 		}
 	}
 
@@ -339,11 +336,11 @@ define.class('$system/base/node', function(require){
 			// set the bg shader
 			this.bg = this.hardimage
 		}
-
 		// create shaders
-		for(var key in this.shader_order){
-			var order = this.shader_order[key]
-			if(!order) continue
+		for(var key in this.shader_enable){
+			var enable = this.shader_enable[key]
+			if(!enable) continue
+
 			var shader = this[key]
 			if(shader){
 				var prevshader = prev && prev[key+'shader']
@@ -369,8 +366,7 @@ define.class('$system/base/node', function(require){
 					shobj = new shader(this)
 				}
 				this[key + 'shader'] = shobj
-				shobj.shadername = key
-				shobj.order = order
+				shobj.shadername = key + 'shader'
 				this.shader_list.push(shobj)
 			}
 		}
@@ -392,18 +388,12 @@ define.class('$system/base/node', function(require){
 			}
 		}
 
-		if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
-			console.log(this.shader_order)
-		}
+		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
+		//	console.log(this.shader_order)
+		//}
 
 		if(this._viewport){
-			// give it a blendshader
-			//if(this._viewport === '2d'){
-			//	this.viewportblendshader = new this.viewportblendopaque(this)
-			//}
-			//else{
-				this.viewportblendshader = new this.viewportblendalpha(this)
-			//}
+			this.viewportblendshader = new this.viewportblend(this)
 		}
 
 		this.sortShaders()
@@ -424,58 +414,33 @@ define.class('$system/base/node', function(require){
 	this.sortShaders = function(){
 		
 		this.shader_draw_list = this.shader_list.slice(0).sort(function(a, b){
-			return this.shader_order[a.shadername] > this.shader_order[b.shadername]
+			return this[a.shadername].draworder > this[b.shadername].draworder
 		}.bind(this))
 
 		this.shader_update_list = this.shader_list.slice(0).sort(function(a, b){
-			return this[a.shadername+'shader'].updateorder > this[b.shadername+'shader'].updateorder
+			return this[a.shadername].updateorder > this[b.shadername].updateorder
 		}.bind(this))
-
-		// re-denormalize the order property
-		for(var i = 0; i < this.shader_list.length;i++){
-			var shader = this.shader_list[i]
-			shader.order = this.shader_order[shader.shadername]
-		}
+		//console.log(this.shader_draw_list)
 	}
 
-	// internal, sets a shader draw order
-	this.shaderOrder = function(key, value){
-		if(!this.hasOwnProperty('shader_order')) this.shader_order = Object.create(this.shader_order || {})
-		// the first time is always false
-
-		if(this.shader_order[key] === undefined){
-			this.shader_order[key] = false
-			return
-		}
-		this.shader_order[key] = value
-	}
 
 	// custom hook in the inner class assignment to handle nested shaders specifically
 	this.atInnerClassAssign = function(key, value){
 
+		if(!this.hasOwnProperty('shader_enable')) this.shader_enable = Object.create(this.shader_enable || {})
+
 		// set the shader order
-
 		if(!value || typeof value === 'number' || typeof value === 'boolean'){
-			// if we are at runtime, something else must happen
-			this.shaderOrder(key, value)
-			if(this.shader_list) this.sortShaders()
+			this.shader_enable[key] = value? true: false
 			return 
-		}
-
-		var order = this.shader_order && this.shader_order[key] || 1
-		// its a shader redirect
-		if(typeof value === 'string'){
-			this[key] = this[value]
-			var order = this.shader_order[key]
-			if(typeof order !== 'number') this.shaderOrder(key, order)
-			return
 		}
 
 		// its a class assignment
 		if(typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
 			this['_' + key] = value
+
 			if(value.prototype instanceof Shader){
-				this.shaderOrder(key, order)
+				this.shader_enable[key] = true
 			}
 			return
 		}
@@ -485,10 +450,7 @@ define.class('$system/base/node', function(require){
 
 		// check if we need to turn it on
 		if(cls.prototype instanceof Shader){
-			var order = this.shader_order[key]
-			if(order !== null && typeof order !== 'number'){
-				this.shaderOrder(key, 1)
-			}
+			this.shader_enable[key] = true
 		}
 	}
 
@@ -732,7 +694,7 @@ define.class('$system/base/node', function(require){
 				this.updateScrollbars()
 				this.redraw()
 			}
-			this.bg = -1
+			if(this.bgshader) this.bgshader.noscroll = true
 		}
 	}
 	
@@ -890,7 +852,7 @@ define.class('$system/base/node', function(require){
 
 	define.class(this, 'hardrect', this.Shader, function(){
 		this.updateorder = 0
-
+		this.draworder = 0
 		this.mesh = vec2.array()
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 		this.position = function(){
@@ -902,10 +864,11 @@ define.class('$system/base/node', function(require){
 			return view.bgcolor
 		}
 	})
-	
+	this.hardrect = false
+
 	define.class(this, 'hardborder', this.Shader, function(){
 		this.updateorder = 0
-
+		this.draworder = 1
 		this.mesh = vec2.array();
 		
 		this.update = function(){
@@ -939,14 +902,14 @@ define.class('$system/base/node', function(require){
 			return view.bordercolor;
 		}
 	})
-
+	this.hardborder = false
 	// make rect the default bg shader
 	this.bg = this.hardrect
 
 	// hard edged bgimage shader
 	define.class(this, 'hardimage', this.hardrect, function(){
 		this.updateorder = 0
-
+		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
 			return this.texture.sample(mesh.xy)
@@ -957,7 +920,7 @@ define.class('$system/base/node', function(require){
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
 		this.updateorder = 0
-
+		this.draworder = 0
 		this.vertexstruct = define.struct({
 			pos: vec2,
 			angle: float,
@@ -1033,8 +996,10 @@ define.class('$system/base/node', function(require){
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 	})
+	this.roundedrect = false
 	
 	define.class(this, 'viewportblend', this.Shader, function(){
+		this.draworder = 10
 		this.updateorder = 10
 		this.omit_from_shader_list = true
 		this.texture = Shader.prototype.Texture.fromType('rgba_depth_stencil')
@@ -1046,27 +1011,17 @@ define.class('$system/base/node', function(require){
 		this.position = function(){
 			return vec4( mesh.x * width, mesh.y * height, 0, 1) * view.viewportmatrix * view.viewmatrix
 		}
-	})
-	this.viewportblend = false
 
-	// the blending shader
-	define.class(this, 'viewportblendalpha', this.viewportblend, function(){
 		this.color = function(){
 			return texture.sample(mesh.xy)
 		}
 	})
-	this.viewportblendalpha = false
+	this.viewportblend = false
 
-	// the blending shader
-	define.class(this, 'viewportblendopaque', this.viewportblend, function(){
-		this.color = function(){
-			return vec4(texture.sample(mesh.xy).rgb,1)
-		}
-	})
-	this.viewportblendopaque = false
-	
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){
+		this.draworder = 1
+		this.updateorder = 1
 		this.vertexstruct = define.struct({
 			pos: vec2,
 			angle: float,
@@ -1074,7 +1029,6 @@ define.class('$system/base/node', function(require){
 			uv:vec2
 		})
 		this.mesh = this.vertexstruct.array()
-		this.updateorder = 1
 		this.drawtype = this.TRIANGLE_STRIP
 		
 		this.update = function(){
@@ -1151,10 +1105,12 @@ define.class('$system/base/node', function(require){
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 	})
-	this.border = false
+	this.roundedborder = false
 
 	// lets pull in the scrollbar on the view
 	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){
-		this.bg = -1
+		this.bg = {
+			noscroll:true
+		}
 	})
 })

@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function($ui$view, label, icon){
+define.class(function(view, label, icon){
 	// Simple button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {

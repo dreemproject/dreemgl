@@ -6,6 +6,7 @@
 define.class(function(require, $ui$, view){
 
 	define.class(this, 'bg', this.Shader, function(){
+		this.draworder = 0
 		
 		this.depth_test = 'src_depth < dst_depth'
 		

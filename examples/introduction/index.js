@@ -16,7 +16,6 @@ define.class(function(require,
 					name:'desktop',
 					init:function(){
 						this.rpc.role.remote.pager = function(event){
-							console.log("EVENT")
 							this.children[0].page += event.value
 						}.bind(this)
 					}},

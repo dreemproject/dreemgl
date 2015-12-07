@@ -39,6 +39,7 @@ define.class(function(require, $ui$, view){
 	// the normal font 
 	define.class(this, 'fontnormal', Font, function(){
 		this.updateorder = 3
+		this.draworder = 5
 		this.subpixel = false
 		this.update = function(){
 			var view = this.view
@@ -73,7 +74,6 @@ define.class(function(require, $ui$, view){
 
 	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
 	define.class(this, 'font', this.fontnormal, function(){
-
 	})
 
 	this.subpixel = function(event){

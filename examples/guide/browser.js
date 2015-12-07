@@ -1,4 +1,4 @@
-define.class(function($ui$, screen, view, button, label, $, movie) {
+define.class(function($ui$, screen, view, button, label, $$, movie) {
 
     this.attributes = {
         term: {type:String},

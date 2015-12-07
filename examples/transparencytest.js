@@ -4,9 +4,7 @@ define.class(function($server$, composition, role, $ui$, screen, view, label){
 		role(
 			screen({clearcolor:vec4('blue')},
 				view({flex:1, bgcolor:'blue'},
-					view({bgcolor:'white',  viewport:'2d', flex:1},
-						label({text:'HELLO', fgcolor:'red'})
-					)
+					view({bgcolor:'red', flex:1, borderradius:40, borderwidth:30, bordercolor:'orange'})
 				)
 			)
 		)

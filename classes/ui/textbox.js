@@ -16,6 +16,7 @@ define.class(function(require, $ui$, label){
 	
 	define.class(this, 'cursors', require('$system/font/cursorshader.js'), function(){
 		this.updateorder = 5
+		this.draworder = 6
 		this.update = function(){
 			var view = this.view
 			this.mesh.length = 0
@@ -30,6 +31,7 @@ define.class(function(require, $ui$, label){
 
 	define.class(this, 'markers', require('$system/font/markershader.js'), function(){
 		this.updateorder = 6
+		this.draworder = 4
 		this.update = function(){
 			var view = this.view
 			this.mesh.length = 0
