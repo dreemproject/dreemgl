@@ -392,6 +392,9 @@ define.class(function(require, constructor){
 		if(!this.hasOwnProperty('_attributes')){
 			this._attributes = this._attributes?Object.create(this._attributes):{}
 		}
+		
+		config.group = config.group?config.group:this.constructor.name;
+		
 		// lets create an attribute
 		var value_key = '_' + key
 		var on_key = 'on' + key

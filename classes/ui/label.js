@@ -12,7 +12,7 @@ define.class(function(require, $ui$, view){
 
 	this.attributes = {
 		// the text color
-		fgcolor: {type:vec4, value: vec4(1,1,1,1)},
+		fgcolor: {type:vec4, value: vec4(1,1,1,1), meta:"color" },
 	
 		// The string to display.
 		text: {type:String, value: "text" },

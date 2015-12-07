@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$widgets$, colorpicker, radiogroup){
+define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$, colorpicker, radiogroup){
 	this.attributes = {
 		target:{type:String,value:""},
 		property:{type:Object},
@@ -61,7 +61,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 		}
 		if (typename =="String"){
 			return this.wrap(view({},
-				textbox({flex:1, fgcolor:"#303030", value:"textvalue",padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
+				textbox({flex:1, fgcolor:"#308030", value:this.property.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
 		}
 		if (typename =="vec2"){
 			return this.wrap(view({},

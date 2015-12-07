@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$widgets$,propeditor){
+define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$,propeditor){
 	this.attributes = {
 		target:{type:String,value:""}
 		
@@ -13,9 +13,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 	this.flexdirection= "column";
 	this.margin = vec4(4);
 	this.bgcolor = vec4(1,1,1,0.83);
-	this.bordercolor = "gray"
 	this.borderradius = 4;
-	this.borderwidth = 3;
 	this.padding = 5
 	this.render = function(){
 		var c = this.find(this.target);
@@ -23,24 +21,31 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 		
 			
 		var res = [];
-		var keys = [];
+		var keysgroups = {};
 		
 		for(key in c._attributes){
 			var attr = c._attributes[key];
 			var typename = attr.type? attr.type.name:"NONE";
 			if (typename != "NONE" && typename != "Event" )
 			{
-			keys.push(key);
+				if (!keysgroups[attr.group]) keysgroups[attr.group] = [];
+				keysgroups[attr.group].push(key);
 			}
 		}
-		keys.sort();
-		for(var i = 0 ;i<keys.length;i++){
-			var key = keys[i];
-			var attr = c._attributes[key];	
-			//console.log(attr);			
-			res.push(propeditor({property:attr, propertyname: key}))
+		for(var group in keysgroups){
+			var groupcontent = [];
+			keys = keysgroups[group];
+			
+			keys.sort();			
+			
+			for(var i = 0 ;i<keys.length;i++){
+				var key = keys[i];
+				var attr = c._attributes[key];	
+				//console.log(attr);			
+				groupcontent.push(propeditor({property:attr, propertyname: key}))
+			}
+			res.push(foldcontainer({title: group}, view({flexdirection:"column" , flex:1},groupcontent)))
 		}
-		
 		return res;
 	}
 })
