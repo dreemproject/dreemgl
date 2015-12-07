@@ -16,7 +16,7 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.markercolor = this.markerunfocus
-
+	/*
 	define.class(this, 'cursors', require('$system/font/cursorshader.js'), function(){
 		this.updateorder = 5
 		this.draworder = 6
@@ -32,10 +32,10 @@ define.class(function(require, $ui$, label){
 				this.mesh.addCursor(view.textbuf, cursor.end)
 			}
 		}
-	})
-	this.cursors = true
-	this.tabstop = true
+	})*/
 
+	this.tabstop = true
+	/*
 	define.class(this, 'markers', require('$system/font/markershader.js'), function(){
 		this.updateorder = 6
 		this.draworder = 4
@@ -61,19 +61,18 @@ define.class(function(require, $ui$, label){
 				}
 			}
 		}
-	})
-	this.markers = 3
+	})*/
 	this.measure_with_cursor = true
 	
 	this.focusget = function(){
-		this.cursorsshader.visible = true
-		this.markercolor = this.markerfocus
+		//this.cursorsshader.visible = true
+		//this.markercolor = this.markerfocus
 		this.redraw()
 	}
 
 	this.focuslost = function(){
-		this.cursorsshader.visible = false
-		this.markercolor = this.markerunfocus
+		//this.cursorsshader.visible = false
+		//this.markercolor = this.markerunfocus
 		this.redraw()
 	}
 
@@ -88,12 +87,12 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.cursorsChanged = function(){
-		this.cursorsshader.reupdate()
-		this.markersshader.reupdate()
+		//this.cursorsshader.reupdate()
+		//this.markersshader.reupdate()
 	}
 
 	this.init = function(){
-		this.cursorsshader.visible = false
+		//this.cursorsshader.visible = false
 		if(isNaN(this._cursorcolor[0])) this._cursorcolor = this.fgcolor
 		this.initEditImpl()
 		this.text = this.value
