@@ -240,7 +240,7 @@ define.class(function(require, baseclass){
 					var shader = shaders[j]
 
 					shader.pickguid = pickguid
-
+					if(!shader.visible) continue
 					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
 
@@ -320,7 +320,7 @@ define.class(function(require, baseclass){
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]
-					if(shader.pick_only) continue // was pick only
+					if(shader.pick_only || !shader.visible) continue // was pick only
 					// we have to set our guid.
 					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix

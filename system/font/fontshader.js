@@ -204,6 +204,31 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			if(this.add_x > this.text_w) this.text_w = this.add_x
 		}
 
+		this.computeBounds = function(with_cursor){
+			var text_w = 0
+			var text_h = 0
+			var length = this.lengthQuad()
+			for(var i = 0; i < length; i++){
+				var o = i  * 6 * 9
+				var x1 = this.array[o]
+				var y1 = this.array[o + 1]
+				var fontsize = this.array[o + 2]
+				var unicode = this.array[o + 5]
+				var info = this.typeface.glyphs[unicode]
+				var add_x = x1 - fontsize * info.min_x + (unicode === 10?0:info.advance * fontsize)
+				var add_y = y1 + fontsize * info.min_x + this.fontsize * this.line_spacing
+				if(add_x > text_w) text_w = add_x
+				if(add_y > text_h) text_h = add_y
+			}
+			if(with_cursor){
+				var info = this.typeface.glyphs[32]
+				text_w += info.advance * this.fontsize
+				if(!text_h) text_h = this.fontsize * this.line_spacing
+			}
+			this.text_w = text_w
+			this.text_h = text_h
+		}
+
 		// lets add some strings
 		this.add = function(string, m1, m2, m3){
 			var length = string.length
@@ -237,6 +262,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				}
 			}			
 			var info = this.typeface.glyphs[this.charCodeAt(off)]
+			if(isNaN(off))debugger
 			var coords = {
 				x: this.array[off * 6 * 9 + 0] - this.fontsize * info.min_x,
 				y: this.array[off * 6 * 9 + 1] + this.fontsize * info.min_y,
@@ -348,6 +374,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			this.length = off * 6
 			this.add(text)
 			this.add(str)
+			this.computeBounds(true)
 			return text.length
 		}
 
@@ -358,6 +385,9 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			this.add_y = rect.y
 			this.length = off * 6
 			this.add(str)
+			// recompute the bounds
+			this.computeBounds(true)
+
 			return str.length
 		}
 	})

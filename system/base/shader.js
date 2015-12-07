@@ -34,6 +34,8 @@ define.class(function(require, exports){
 	this.SQRT_1_2 = '0.70710678118654757'
 	this.SQRT2 = '1.4142135623730951'
 
+	this.visible = true
+	
 	// we can use singletons of these stateless classes
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}

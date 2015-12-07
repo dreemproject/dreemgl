@@ -24,7 +24,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		return vec4(view.cursorcolor.rgb, smoothstep(edge, -edge, shape.box(rel, 0,0,0.05,1.)))
 	}
 
-	this.cursorgeom = define.struct({
+	this.vertexstruct = define.struct({
 		pos:vec2,
 		edge:vec2
 	}).extend(function(){
@@ -44,5 +44,5 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		}
 	}) 
 
-	this.mesh = this.cursorgeom.array()
+	this.mesh = this.vertexstruct.array()
 })

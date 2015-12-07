@@ -46,7 +46,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		return vec4(view.markercolor.rgb, alpha)
 	}
 
-	this.markergeom = define.struct({
+	this.vertexstruct = define.struct({
 		pos:vec2,
 		rect:vec4,
 		other:vec4,
@@ -107,6 +107,6 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		}
 	})
 	
-	this.mesh = this.markergeom.array()
+	this.mesh = this.vertexstruct.array()
 	this.fgcolor = vec4("ocea");
 })

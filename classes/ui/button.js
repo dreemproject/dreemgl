@@ -103,10 +103,13 @@ define.class(function(view, label, icon){
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 	}
 
-	this.init = this.statenormal
-	this.mouseover  = this.statehover
-	this.mouseout = this.statenormal
-	this.mouseleftdown = this.stateclick
+	this.init = function(){
+		this.statenormal()
+	}
+
+	this.mouseover = function(){this.statehover()}
+	this.mouseout = function(){this.statenormal()}
+	this.mouseleftdown = function(){this.stateclick()}
 	this.mouseleftup = function(event){
 		// lets check if its over the button
 		this.statenormal()

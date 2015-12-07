@@ -88,7 +88,7 @@ define.class(function(require, $ui$, view){
 
 	// enable it
 	this.font = 5
-
+	this.measure_with_cursor = false
 	this.bgcolor = vec4("white")
 
 	this.init = function(){
@@ -99,6 +99,9 @@ define.class(function(require, $ui$, view){
 		if(this.fontshader.update_dirty){
 			this.fontshader.update()
 			this.fontshader.update_dirty = true
+			if(this.measure_with_cursor){
+				this.fontshader.mesh.computeBounds(true)
+			}
 		}
 		return {width: this.measured_width =this.fontshader.mesh.bound_w, height: this.measured_height =this.fontshader.mesh.bound_h};
 	}

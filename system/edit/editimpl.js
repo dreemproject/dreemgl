@@ -139,15 +139,15 @@ define.mixin(function(require){
 		//this.cursorset.moveDown(0, 0)
 	}
 
-	this.keypaste = function(v){
+	this.keypaste = function(event){
 		this.undo_group++
-		this.cursorset.insert(v)
+		this.cursorset.insert(event.text)
 		//change = Change.clipboard
 	}
 
-	this.keypress = function(v){
+	this.keypress = function(event){
 		this.undo_group++
-		this.cursorset.insert(v.value)
+		this.cursorset.insert(event.value)
 		//change = Change.keyPress		
 	}
 
@@ -426,7 +426,6 @@ define.mixin(function(require){
 
 	this.keyRightarrowShift = 
 	this.keyRightarrow = function(){
-		console.log("HRE", this.screen.keyboard.shift)
 		this.cursorset.moveRight(this.screen.keyboard.shift)
 		this.doCursor()
 	}
