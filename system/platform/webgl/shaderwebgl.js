@@ -240,27 +240,6 @@ define.class('$system/base/shader', function(require, exports){
 		// use the shader
 		gl.useProgram(shader)
 
-		// attributes
-		var len = 0 // pull the length out of the buffers
-		var lastbuf
-		ATTRLOC_START
-		var buf = ATTRLOC_BUF
-		if(lastbuf !== buf){
-			lastbuf = buf
-			if(buf.length > len) len = buf.length
-			if(len === 0) return 0
-			if(!buf.glvb) buf.glvb = gl.createBuffer()
-			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
-			if(!buf.clean){
-				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
-				buf.clean = true
-			}
-		}
-		var loc = ATTRLOC_LOC
-		gl.enableVertexAttribArray(loc)
-		ATTRLOC_ATTRIBPTR
-		ATTRLOC_END
-
 		// set uniforms
 		SET_UNIFORMS
 
@@ -284,6 +263,26 @@ define.class('$system/base/shader', function(require, exports){
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
 		TEXTURE_END
 
+		// attributes
+		var len = 0 // pull the length out of the buffers
+		var lastbuf
+		ATTRLOC_START
+		var buf = ATTRLOC_BUF
+		if(lastbuf !== buf){
+			lastbuf = buf
+			if(buf.length > len) len = buf.length
+			//if(len === 0) return 0
+			if(!buf.glvb) buf.glvb = gl.createBuffer()
+			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
+			if(!buf.clean){
+				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
+				buf.clean = true
+			}
+		}
+		var loc = ATTRLOC_LOC
+		gl.enableVertexAttribArray(loc)
+		ATTRLOC_ATTRIBPTR
+		ATTRLOC_END
 
 		// set up blend mode
 		if(root.alpha_blend_eq.op){

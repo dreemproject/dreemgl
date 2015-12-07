@@ -2348,22 +2348,22 @@ define(function(require, exports){
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
 
 	exports.Enum = function Enum(){
-		var types = Array.prototype.slice.call(arguments)
-		for(var i = 0; i < types.length; i++) types[i] = types[i].toLowerCase()
+		var values = Array.prototype.slice.call(arguments)
+		for(var i = 0; i < values.length; i++) values[i] = values[i].toLowerCase()
 		function Enum(value){
 			if(typeof value !== 'string'){
 				console.error('Enum not string' + value, types.join('|'))
 				return types[0]
 			}
 			value = value.toLowerCase()
-			if(types.indexOf(value) === -1){
+			if(values.indexOf(value) === -1){
 				console.error('Invalid enum value: "' + value + '" ' + types.join('|'))
 				return types[0]
 			}
 
 			return value
 		}
-		Enum.values = types
+		Enum.values = values
 		return Enum
 	}
 
