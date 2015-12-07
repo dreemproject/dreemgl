@@ -29,12 +29,12 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox,$wi
 		
 		var typename = this.property.type?this.property.type.name:"";
 		if (typename =="Enum"){
-			return this.wrap(radiogroup({values:this.property.type.values, currentvalue : this.property.value}));
+			return this.wrap(radiogroup({values:this.property.type.values, currentvalue: this.property.value}));
 		}
 		if (typename =="vec4"){
 		
 		if (this.property.meta=="color"){
-				return this.wrap(view({width:200, flexdirection:"column"},colorpicker()))
+				return this.wrap(view({width:300, flexdirection:"column"},colorpicker({color:this.property.value})))
 			}
 			
 			return this.wrap(view({},
