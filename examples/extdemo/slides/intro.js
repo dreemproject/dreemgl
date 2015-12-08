@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label, $widgets$, jsviewer) {
+define.class(function ($ui$, view, label) {
 
     this.attributes = {
         syntaxCode: {type: String}
@@ -23,7 +23,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
                 margintop:50
             }),
             label({
-                text:'+ Navigate filesystem with "$" syntax',
+                text:'+ Navigate filesystem with "$" argument syntax',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,

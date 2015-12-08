@@ -30,7 +30,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
                 margintop:5
             }),
             label({
-                text:'+ "$" searches the directory of the current file, "$$" searches parent directory',
+                text:'+ "$$" searches the directory of the current file, "$$$" searches parent directory',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:20,
