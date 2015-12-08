@@ -12,7 +12,7 @@ define.class(function (require, $ui$, view, label) {
         'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
         '\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +
@@ -31,7 +31,7 @@ define.class(function (require, $ui$, view, label) {
         'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
         '\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +

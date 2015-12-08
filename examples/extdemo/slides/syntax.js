@@ -9,7 +9,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
         syntaxCode: {type: String}
     };
 
-    this.slidetitle = "Navigating With $";
+    this.slidetitle = "Navigating via $";
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
 
@@ -51,7 +51,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
             }),
             label({
                 text:'Note, the following are equivilent:',
-                fgcolor:'#666',
+                fgcolor:'#F06',
                 bgcolor:'transparent',
                 fontsize:12,
                 margintop:5,
@@ -59,7 +59,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
             }),
             label({
                 text:'$dir$subdir$class',
-                fgcolor:'#866',
+                fgcolor:'#FFF',
                 bgcolor:'transparent',
                 fontsize:14,
                 margintop:0,
@@ -67,7 +67,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
             }),
             label({
                 text:'$dir$subdir$, class',
-                fgcolor:'#866',
+                fgcolor:'#FFF',
                 bgcolor:'transparent',
                 fontsize:14,
                 margintop:0,
@@ -75,7 +75,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
             }),
             label({
                 text:'$dir$, subdir$class',
-                fgcolor:'#866',
+                fgcolor:'#FFF',
                 bgcolor:'transparent',
                 fontsize:14,
                 margintop:0,
@@ -83,7 +83,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
             }),
             label({
                 text:'$dir$, $subdir$, class',
-                fgcolor:'#866',
+                fgcolor:'#FFF',
                 bgcolor:'transparent',
                 fontsize:14,
                 margintop:0,

@@ -5,7 +5,7 @@
 
 define.class(function (require, $ui$, view, label) {
 
-    this.slidetitle = "Integration Paths - Proxy or POST";
+    this.slidetitle = "Integration Paths - Proxy vs POST";
 
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
@@ -13,7 +13,8 @@ define.class(function (require, $ui$, view, label) {
     this.render = function render() {
         return [
             label({
-                text:'+ Proxy through service when nodejs libraries are available (all in DreemGL!)',
+                text:'Proxy through service when nodejs libraries are available (all in DreemGL!)',
+                alignself:'center',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:20
@@ -24,7 +25,8 @@ define.class(function (require, $ui$, view, label) {
                 bgimage:require('./server.png')
             }),
             label({
-                text:'+ Use the POST API to drive DreemGL externally from IoT devices and web services.',
+                text:'Use the POST API to drive DreemGL externally from IoT devices and web services',
+                alignself:'center',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:20,

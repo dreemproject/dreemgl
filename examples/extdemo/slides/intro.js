@@ -9,33 +9,56 @@ define.class(function ($ui$, view, label) {
         syntaxCode: {type: String}
     };
 
-    this.slidetitle = "External Components in DreemGL";
+    this.slidetitle = "Adding Components to DreemGL";
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
 
     this.render = function render() {
         return [
             label({
-                text:'+ Plugins are directories or symlinks - No special work required!',
+                text:'+ Components are directories - No special work required!',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
                 margintop:50
             }),
             label({
-                text:'+ Navigate filesystem with "$" argument syntax',
+                text:'+ Navigate class filesystem with "$" argument syntax',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
                 margintop:50
             }),
             label({
-                text:'+ Integrate internally via nodejs or externally via POST API',
+                text:'+ Integrate internally via nodejs (write entirely in DreemGL!)',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
                 margintop:50
             }),
+            //label({
+            //    text:'(Web services, nodejs plugins)',
+            //    fgcolor:'#F33',
+            //    bgcolor:'transparent',
+            //    fontsize:15,
+            //    marginleft:25,
+            //    margintop:10
+            //}),
+            label({
+                text:'+ Integrate externally via POST API (write in any language!)',
+                fgcolor:'#333',
+                bgcolor:'transparent',
+                fontsize:25,
+                margintop:50
+            }),
+            //label({
+            //    text:'(Other services, IoT Devices)',
+            //    fgcolor:'#F33',
+            //    bgcolor:'transparent',
+            //    fontsize:15,
+            //    marginleft:25,
+            //    margintop:10
+            //}),
             label({
                 text:'+ See `./examples/guide/README.md` for implementation guide',
                 fgcolor:'#333',
