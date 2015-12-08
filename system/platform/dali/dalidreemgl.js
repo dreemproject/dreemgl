@@ -84,6 +84,8 @@ define.class(function(require, exports){
 		//console.log(shadercode);
 		//console.log('***FRAG');
 		//console.log(fragcode);
+		// TEXTURES
+		//console.log('***TEXTURE', dreem_shader.vtx_state.textures);
 
 
 		// Create the shader, material, and geometery

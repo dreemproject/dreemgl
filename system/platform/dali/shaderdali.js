@@ -16,8 +16,10 @@ define.class('$system/base/shader', function(require, exports){
 		var pix_state = this.pix_state
 		var vtx_code = vtx_state.code
 
-		var pix_color = pix_state.code_color
+		console.log('vtx_code', vtx_code);
+		console.log('pix_code', pix_state.code_color);
 
+		var pix_color = pix_state.code_color
 		var pix_pick = pix_state.code_pick
 		var pix_debug = pix_state.code_debug
 
@@ -30,12 +32,15 @@ define.class('$system/base/shader', function(require, exports){
 
 	    //Dali workaround. In webgl this is gl.createProgram() object (DALI)
 	    shader = {
-			debug: {}
+			gldevice: gldevice
+			,debug: {}
 			,pick: {}
 
 			,uniset: {}
 			,unilocks: {}
 			,refattr: {}
+
+			,texlocs: {}
 	    };
 
 		//Not used by Dali
@@ -66,6 +71,7 @@ define.class('$system/base/shader', function(require, exports){
 //		gl.attachShader(shader, pix_color_shader)
 //		gl.linkProgram(shader)
 
+        // Build information on uniforms, textures, and attributes
 		this.getLocations(gl, shader, vtx_state, pix_state)
 
 		if(this.compile_use) this.compileUse(shader)
@@ -281,6 +287,10 @@ define.class('$system/base/shader', function(require, exports){
 		// lets do the texture slots correct
 		if(!gltex){
 			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
+            if (texture.image) {
+				var index = shader.dali_obj.material.addTexture(texture.image, 'TEXTURE_ID');
+				gltex.texture_index = index;
+}
 			if(!gltex) return 0
 		}
 		else{
@@ -288,6 +298,14 @@ define.class('$system/base/shader', function(require, exports){
 			gl.bindTexture(gl.TEXTURE_2D, gltex)
 			if(texture.updateid !== gltex.updateid){
 				texture.updateGLTexture(gl, gltex)
+				if (gltex.texture_index) {
+					shader.dali_obj.material.removeTexture(gltex.texture_index);
+					gltex.texture_index = undefined;
+					if (texture.image) {
+						var index = shader.dali_obj.material.addTexture(texture.image, 'TEXTURE_ID');
+						gltex.texture_index = index;
+					}
+				}
 			}
 		}
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
@@ -361,6 +379,9 @@ define.class('$system/base/shader', function(require, exports){
 		var unilocs = shader.unilocs
 		var refattr = shader.refattr
 
+		if (Object.keys(shader.texlocs).length > 0)
+			console.log('***** texlocs', shader.texlocs);
+
 		for(var key in uniset){
 			var loc = unilocs[key]
 			var split = loc.split
@@ -388,10 +409,16 @@ define.class('$system/base/shader', function(require, exports){
 			//	out += '\t\tif(loc.value !== uni) loc.value = uni, '
 			//}
 
-			//Update uniform (DALI)
+			// Update uniform. Use registerAnimatableProperty only if 
+			// the value is not set yet. (DALI)
 			//TODO Optimize
-			out += 'shader.dali_obj.meshActor.registerAnimatableProperty(\'_' + key + '\', shader.dali_obj.getArrayValue(uni))\n'
-			//out += 'shader.dali_obj.meshActor._' + key + ' = shader.dali_obj.getArrayValue(uni)\n'
+			out += 'if (shader.dali_obj) {\n'
+            out += '\t\tvar val = shader.dali_obj.getArrayValue(uni)\n'
+            out += '\t\tvar v = shader.dali_obj.meshActor._' + key + '\n'
+			out += '\t\tif (v) {v = val} \n'
+            out += '\t\telse {shader.dali_obj.meshActor.registerAnimatableProperty(\'_' + key + '\', val)}\n'
+			out += '}\n'
+
 /*
 			out += 'gl.' + gen.call + '(loc.loc'
 
@@ -422,6 +449,13 @@ define.class('$system/base/shader', function(require, exports){
 				else{
 					TEXTURE_VALUE = 'root.' + texinfo.name
 				}
+
+//console.log('TEXTURE_VALUE', TEXTURE_VALUE);
+//console.log('TEXTURE_SAMPLER', texinfo.samplerid);
+//console.log('TEXTURE_ID', texid);
+//console.log('TEXTURE_LOC', 'shader.texlocs.' + key+ '.loc');
+//console.log('TEXTURE_INFO', 'shader.texlocs.' + key);
+//console.log('TEXTUREGL_ID', gltypes.gl.TEXTURE0 + texid);
 
 				out += body
 					.replace(/TEXTURE_VALUE/, TEXTURE_VALUE)
@@ -471,6 +505,9 @@ define.class('$system/base/shader', function(require, exports){
 		tpl = tpl.replace(/gl.[A-Z][A-Z0-9_]+/g, function(m){
 			return gltypes.gl[m.slice(3)]
 		})
+
+		if (shader.texlocs && shader.texlocs.length > 0)
+			console.log('FUNCTION', tpl);
 
 		//console.log('FUNCTION', tpl);
 		shader.use = new Function('return ' + tpl)()
