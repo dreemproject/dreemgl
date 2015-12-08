@@ -57,6 +57,9 @@ define.class(function(require, exports){
 	// DaliDreemgl is the interface between dreemgl and dali.
 	this.DaliDreemgl = require('./dalidreemgl')
 
+	// DaliApi is a static object to access the dali api
+	this.DaliApi = require('./daliapi')
+
 	// Dali application wrapper
 	var DaliWrapper = require('./daliwrapper')
 
@@ -95,7 +98,8 @@ define.class(function(require, exports){
 			//console.log('animFrame', t, time);
 			if(t){
 				this.anim_req = true
-                setTimeout(function() {this.animFrame(this.time); this.time += 16}.bind(this), 16)
+                this.time += 16
+                setTimeout(function() {this.animFrame(this.time);}.bind(this), 16)
 			}
 			else this.anim_req = false
 			//if(this.pick_resolve.length) this.doPick()
@@ -114,7 +118,7 @@ define.class(function(require, exports){
 		}
 		else{
 			this.frame = 
-			this.main_frame = this.Texture.fromType('rgb_depth_stencil')
+			this.main_frame = this.Texture.fromType('rgb_depth')
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
@@ -138,6 +142,9 @@ define.class(function(require, exports){
 		//TODO Set width, height, name
 		this.width = this.height = 600
 		this.name = 'dreemgl/dali'
+
+		// Initialize the dali api/window.
+		this.DaliApi.initialize(this.width, this.height, this.name);
 
 		//HACK to emulate gl (to avoid javascript errors)
 		this.gl = gl;
@@ -169,8 +176,8 @@ define.class(function(require, exports){
 		this.anim_req = true
 
 		//TODO
+		this.time = 0
 		this.animFrame();
-		//this.document.requestAnimationFrame(this.animFrame)
 	}
 
 	this.bindFramebuffer = function(frame){
@@ -254,10 +261,6 @@ define.class(function(require, exports){
 	}
 
 	this.doColor = function(time){
-		if (!this.wrapper) {
-			//console.log('Create DaliWrapper', this.width, this.height, this.name);
-			this.wrapper = new DaliWrapper(this.width, this.height, this.name);			}
-
 		if(!this.first_time) this.first_time = time
 
 		var stime = (time - this.first_time) / 1000
@@ -285,7 +288,6 @@ define.class(function(require, exports){
 		}
 
 		// lets draw draw all dirty passes.
-		var hastime
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
 
@@ -295,13 +297,13 @@ define.class(function(require, exports){
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
-
 			if(view.draw_dirty & 1 || last){
-				var viewhastime = view.drawpass.drawColor(last, stime)
-				if(!viewhastime){
-					view.draw_dirty &= 2
+				//console.log("DiRTY", view)
+				var hastime = view.drawpass.drawColor(last, stime)
+				view.draw_dirty &= 2
+				if(hastime){
+					anim_redraw.push(view)
 				}
-				else hastime = viewhastime
 			}
 
 			if(skip){

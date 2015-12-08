@@ -7,6 +7,8 @@
 define.class('$system/base/texture', function(exports){
 	var Texture = exports
 
+	DaliApi = require('./daliapi')
+
 	this.atConstructor = function(type, w, h, device){
 		this.device = device
 		this.type = type
@@ -20,8 +22,10 @@ define.class('$system/base/texture', function(exports){
 		return new Texture(type,0,0)
 	}
 
-	Texture.fromImage = function(img){
-		var tex = new Texture('rgba', img.width, img.height)
+	Texture.fromImage = function(imagedata, path){
+		var dali = DaliApi.dali;		
+		var img = new dali.ResourceImage({url: path});
+		var tex = new Texture('rgba', img.getWidth(), img.getHeight())
 		tex.image = img
 		return tex
 	}
@@ -135,6 +139,7 @@ define.class('$system/base/texture', function(exports){
 		}
 		gl.bindTexture(gl.TEXTURE_2D, null)
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+
 	}
 	
 	this.delete = function(){
@@ -163,6 +168,7 @@ define.class('$system/base/texture', function(exports){
 	
 	this.createGLTexture = function(gl, texid, texinfo){
 		var samplerid = texinfo.samplerid
+		console.log('**** createGLTexture', samplerid)
 
 		if(this.image && this.image[samplerid]){
 			this[samplerid] = this.image[samplerid]
@@ -174,6 +180,9 @@ define.class('$system/base/texture', function(exports){
 			gl.bindTexture(gl.TEXTURE_2D, gltex)
 			return gltex
 		}
+
+		// Add to material
+		//TODO
 
 		var samplerdef = texinfo.samplerdef
 		var gltex = gl.createTexture()
@@ -206,6 +215,7 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	this.updateGLTexture = function(gl, gltex){
+		console.log('+++++updateGLTexture');
 		if(this.array){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
 		}

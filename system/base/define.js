@@ -1242,6 +1242,19 @@
 			noderequirewrapper.async = function(modname){
 				if(typeof modname !== 'string') throw new Error("module name in require.async not a string")
 				modname = define.expandVariables(modname)
+
+				// Query if module is in local file system (DALI)
+				var fs = require("fs")
+				try {
+					stats = fs.lstatSync(modname)
+					var data = fs.readFileSync(modname);
+					return new Promise(function(resolve, reject){
+						resolve(data);
+					});
+				}
+				catch(e) {
+				}
+
 				return new Promise(function(resolve, reject){
 					loadModuleAsync(modname, "root").then(function(path){
 						resolve(require(path))
