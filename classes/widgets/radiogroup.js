@@ -19,10 +19,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			var v = this.values[i];
 			if (v == this.currentvalue){
 				
-				res.push(label({text:v,margin:10, bg:0, fgcolor:"#303030"}))
+				res.push(label({text:v,fontsize:14,margin:8, bg:0, fgcolor:"#303030"}))
 			}
 			else{
-				res.push(button({text:v, onclick:function(){radio.currentvalue = this.text;}}))
+				res.push(button({padding:2,text:v, onclick:function(){radio.currentvalue = this.text;}}))
 			}
 		}
 		return res;

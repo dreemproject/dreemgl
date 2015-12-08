@@ -11,7 +11,7 @@ define.class(function($ui$, view, label, icon){
 	this.position = "relative"
 	this.borderwidth = 1;
 	this.borderradius = 1;
-	this.margin = 2
+	this.margin = 0
 	this.bg = 0;
 	this.alignitems = "stretch"
 	this.bordercolor = vec4("#c0c0c0")
@@ -94,7 +94,8 @@ define.class(function($ui$, view, label, icon){
 				return mix(view.bgcolor*1.7, vec4("white"), (mesh.y/8))
 			}
 		},
-		this.padding = vec4(5,5,5,5),
+		this.padding = vec4(0,0,0,0),
+		this.margin = vec4(0,0,0,0),
 		this.position = "relative"
 	})
 	

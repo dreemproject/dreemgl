@@ -11,10 +11,12 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	}
 	
 	this.flexdirection= "column";
-	this.margin = vec4(4);
-	this.bgcolor = vec4(1,1,1,0.83);
-	this.borderradius = 4;
-	this.padding = 5
+	this.margin = 0;
+	this.clearcolor = vec4("white");
+	this.bgcolor = vec4("blue");
+	this.padding = 0
+	
+	
 	this.render = function(){
 		var c = this.find(this.target);
 		if (!c) return [];
@@ -32,8 +34,10 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				keysgroups[attr.group].push(key);
 			}
 		}
+		
 		for(var group in keysgroups){
 			var groupcontent = [];
+			
 			keys = keysgroups[group];
 			
 			keys.sort();			
@@ -44,7 +48,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				//console.log(attr);			
 				groupcontent.push(propeditor({property:attr, propertyname: key}))
 			}
-			res.push(foldcontainer({title: group}, view({flexdirection:"column" , flex:1},groupcontent)))
+			res.push(foldcontainer({collapsed: true,basecolor:"#c0f0f0",icon:"cube", title: group}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
 		}
 		return res;
 	}

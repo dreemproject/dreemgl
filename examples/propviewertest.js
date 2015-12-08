@@ -11,7 +11,7 @@ define.class(function($server$, composition, role, $ui$, screen, view, label, bu
 						}
 					}
 						,view({flexdirection:"column", flex:1, bg:0, margin:50}			
-							,label({name:"thelabel",bg:0, text:"this is a label with some example props"})
+							,label({margin:4,name:"thelabel", fontsize:14,bg:0, text:"this is a label with some example props"})
 							,propviewer({target:"thelabel", flex:1, overflow:"scroll"}))
 						,view({flexdirection:"column",flex:1, bg:0, margin:50}			
 							,button({name:"thebutton", text:"this is a button with some example props"})

@@ -11,16 +11,23 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		propertyname:{type:String,value:""}
 		
 	}
+	this.bg = {
+		color:function(){								
+								var col1 = vec3(0.95,0.95,0.95);
+								var col2= vec3(1,1,1);
+								return vec4(mix(col1, col2, 1.0-pow(abs(uv.y),4.0) ),1.0)
+							}
+	};
 	
-	this.margin = vec4(4);
+	this.margin = 0;
 	this.bgcolor = "white"
-	this.padding = 9
-	this.borderwidth =  0;
-	this.borderradius = 4;
-	this.bordercolor ="#202020" 
+	this.padding = 0;
+	this.border = 0;
+	
+	this.flexdirection = "row";
 	this.wrap = function(node){
 		return [
-			label({margin:4, flex: 0.2, text:this.propertyname, bg:0, fgcolor:"#303030" })
+			label({bg:0,margin:4, fontsize:14, flex: 0.2, text:this.propertyname, bg:0, fgcolor:"#303030" })
 			,node
 		]	
 	}
@@ -29,46 +36,51 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		
 		var typename = this.property.type?this.property.type.name:"";
 		if (typename =="Enum"){
-			return this.wrap(radiogroup({values:this.property.type.values, currentvalue: this.property.value}));
+			return this.wrap(radiogroup({bg:0,values:this.property.type.values, currentvalue: this.property.value}));
 		}
+		
 		if (typename =="vec4"){
 		
-		if (this.property.meta=="color"){
-				return this.wrap(view({width:300, flexdirection:"column"},colorpicker({color:this.property.value})))
+			if (this.property.meta=="color"){
+				return this.wrap(view({bg:0,width:300, flexdirection:"column"},colorpicker({color:this.property.value})))
 			}
 			
-			return this.wrap(view({},
-					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+			return this.wrap(view({bg:0},
+					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 					)
 				);
 		}
 		
 		if (typename =="vec3"){
-			return this.wrap(view({},
-				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+			return this.wrap(view({bg:0},
+				textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				)
 			);            			
 		}
 		
 		if (typename =="FloatLike"){
-			return this.wrap(textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}) )
+			return this.wrap(view({bg:0},textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}) ))
 				
 		}
+		
 		if (typename =="String"){
-			return this.wrap(view({},
+			return this.wrap(view({bg:0},
 				textbox({flex:1, fgcolor:"#308030", value:this.property.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
 		}
+		
 		if (typename =="vec2"){
-			return this.wrap(view({},
+			return this.wrap(view({bg:0},
 				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
 				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
-				));            
+				)
+			);            
 		}
+		
 		if (!this.property) return [];
 		//console.log(this.property);
 		return this.wrap(label({margin:4,text:typename, bg:0, fgcolor:"#303030"}))

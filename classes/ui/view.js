@@ -41,12 +41,12 @@ define.class('$system/base/node', function(require){
 		rear: {alias:'corner', index:2},
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: {type:vec4, value: vec4('white'), meta:"color"},
+		bgcolor: {group:"style", type:vec4, value: vec4('white'), meta:"color"},
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: {type:Object},
+		bgimage: {group:"style",type:Object},
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
-		clearcolor: {type:vec4, value: vec4('transparent'), meta:"color"},
+		clearcolor: {group:"style",type:vec4, value: vec4('transparent'), meta:"color"},
 		
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
@@ -128,13 +128,13 @@ define.class('$system/base/node', function(require){
 		rotate: {type: vec3, value: vec3(0)},
 
 		// the color of the border of an item. 
-		bordercolor: {type: vec4, value: vec4(0,0,0,0), meta:"color"},
+		bordercolor: {group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"},
 
 		// the radius of the corners of an item, individually settable left, top, right, bottom. Setting this value will switch to rounded corner shaders
-		borderradius: {type: vec4, value: vec4(0,0,0,0)},
+		borderradius: {group:"style",type: vec4, value: vec4(0,0,0,0)},
 
 		// the width of the border. Setting this value will automatically enable the border shaders
-		borderwidth: {type: vec4, value: vec4(0,0,0,0)},
+		borderwidth: {group:"style",type: vec4, value: vec4(0,0,0,0)},
 
 		// alias for the first component of borderwidth
 		borderleftwidth: {alias:'borderwidth', index:0},
@@ -147,20 +147,20 @@ define.class('$system/base/node', function(require){
 
 		// turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
 		// flexbox layout is a web standard and has many great tutorials online to learn how it works
-		flex: {type: float, value: NaN},
+		flex: {group:"layout", type: float, value: NaN},
 
 		// wraps nodes around when the flexspace is full
-		flexwrap: {type: Enum('wrap','nowrap'), value: "wrap"},	
+		flexwrap: {group:"layout", type: Enum('wrap','nowrap'), value: "wrap"},	
 		// which direction the flex layout is working,
-		flexdirection: {type: Enum('row','column'), value: "row"},
+		flexdirection: {group:"layout", type: Enum('row','column'), value: "row"},
 		// pushes items eitehr to the start, center or end
-		justifycontent: {type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ""}, 
+		justifycontent: {group:"layout", type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ""}, 
 		// align items to either start, center, end or stretch them
-		alignitems: {type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
+		alignitems: {group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
 		// overrides the parents alignitems with our own preference
-		alignself: {type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
+		alignself: {group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
 		// item positioning, if absolute it steps 'outside' the normal flex layout 
-		position: {type:  Enum('relative','absolute'), value: "relative" },	
+		position: {group:"layout", type:  Enum('relative','absolute'), value: "relative" },	
 
 		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
 		// Can be listened to to observe layout changes
@@ -170,22 +170,22 @@ define.class('$system/base/node', function(require){
 		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
 		// need to be processed and a single texture can just be drawn by the parent
 		// the viewportblend shader can be used to render this texture it into its parent
-		viewport: {type:Enum('','2d','3d'), value:''},
+		viewport: {group:"layout", type:Enum('','2d','3d'), value:''},
 	
 
 		// the field of view of a 3D viewport. Only useful on a viewport:'3D'
-		fov: {type:float, value: 45},
+		fov: {group:"3d", type:float, value: 45},
 		// the nearplane of a 3D viewport, controls at which Z value near clipping start. Only useful on a viewport:'3D'
-		nearplane: {type:float, value: 0.001},
+		nearplane: {group:"3d",type:float, value: 0.001},
 		// the farplane of a 3D viewport, controls at which Z value far clipping start. Only useful on a viewport:'3D'
-		farplane: {type:float, value: 1000},
+		farplane: {group:"3d",type:float, value: 1000},
 		
 		// the position of the camera in 3D space. Only useful on a viewport:'3D'
-		camera: {type: vec3, value: vec3(-2,2,-2)},
+		camera: {group:"3d",type: vec3, value: vec3(-2,2,-2)},
 		// the point the camera is looking at in 3D space. Only useful on a viewport:'3D'
-		lookat: {type: vec3, value: vec3(0)},
+		lookat: {group:"3d",type: vec3, value: vec3(0)},
 		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
-		up: {type: vec3, value: vec3(0,-1,0)},
+		up: {group:"3d",type: vec3, value: vec3(0,-1,0)},
 		
 		// the current time which can be used in shaders to create continous animations
 		time: 0,
