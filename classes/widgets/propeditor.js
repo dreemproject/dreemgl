@@ -42,7 +42,7 @@ define.class(function(require, $ui$, checkbox,foldcontainer, view, label, button
 		if (typename =="vec4"){
 		
 			if (this.property.meta=="color"){
-				return this.wrap(view({bg:0,width:300, flexdirection:"column"},colorpicker({color:this.property.value})))
+				return this.wrap(view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.property.value})))
 			}
 			
 			return this.wrap(view({bg:0},
