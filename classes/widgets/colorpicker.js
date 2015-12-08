@@ -64,6 +64,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 	this.updatelabel = function(name, val){
 		var c = this.find(name);
 		if (c) c.value = val;
+		//else console.log("not found", name);
 	}
 	
 	this.updateallcontrols = function(){
@@ -602,7 +603,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 					,view({bg:0}
 						,label({flex:1, text:"hsv", fontsize:18, bg:0, fgcolor: this.fgcolor})
 						,view({flex:1, bg:0},textbox({name:"texth",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},textbox({name:"texts",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,view({flex:1, bg:0},textbox({name:"texts",value:"300", fontsize:18, bg:0, fgcolor: this.fgcolor}))
 						,view({flex:1, bg:0},textbox({name:"textv",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
 						
 					)
@@ -611,9 +612,9 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			
 			,view({ bg:0,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"}
 				,view({ bg:0,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}
-					,textbox({bg:0, margin:vec4(10,5,0,0),value:"#", fgcolor:this.fgcolor, fontsize: this.fontsize})
-					,textbox({bg:0, margin:vec4(0,5,0,0), value:"ff00ff",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
-					,textbox({bg:0, margin:vec4(10,5,0,0),value:"alpha ",  fgcolor:this.fgcolor, fontsize: this.fontsize})
+					,label({bg:0, margin:vec4(10,5,0,0),value:"#", fgcolor:this.fgcolor, fontsize: this.fontsize})
+					,textbox({name:"hexcolor", bg:0, margin:vec4(0,5,0,0), value:"ff00ff",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
+					,label({bg:0, margin:vec4(10,5,0,0),value:"alpha ",  fgcolor:this.fgcolor, fontsize: this.fontsize})
 					,textbox({name:"texta", bg:0,  margin:vec4(0,5,0,0), value:"128",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
 				)
 			)				

@@ -12,7 +12,8 @@ define.class(function(require, $ui$, label){
 		cursorcolor: {type:vec4, value: vec4(NaN), meta:"color"},
 		// color of the marker
 		markerfocus: {type:vec4, value: vec4("ocean"), meta:"color"},
-		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"}
+		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"},
+		value:{type:String, value:""}
 	}
 
 	this.markercolor = this.markerunfocus
@@ -84,6 +85,12 @@ define.class(function(require, $ui$, label){
 
 	this.textChanged = function(){
 		this.relayout()
+	}
+	
+	this.value = function(){
+		this.text = this.value
+		this.relayout();
+		this.redraw();
 	}
 
 	this.cursorsChanged = function(){
