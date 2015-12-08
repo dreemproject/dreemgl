@@ -67,6 +67,19 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		//else console.log("not found", name);
 	}
 	
+	this.numberToHex = function(num){
+		if (num < 16){
+			return "0"+ (Math.round(num).toString(16));
+		}
+		return Math.round(num).toString(16);
+	}
+	
+	this.BuildHexNumber = function(vector){
+		return  "" + this.numberToHex(vector[0]*255) 
+			+ this.numberToHex(vector[1]*255) 
+			+ this.numberToHex(vector[2]*255);
+	}
+	
 	this.updateallcontrols = function(){
 		this.updatecontrol("hsvider", this.basehue);
 		this.updatecontrol("sslider", this.basesat);
@@ -84,6 +97,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.updatelabel("textg", Math.round(this.value[1] * 255));
 		this.updatelabel("textb", Math.round(this.value[2] * 255));
 		this.updatelabel("texta", Math.round(this.value[3] * 255));
+
+		var t = this.BuildHexNumber(this.value);
+		this.updatelabel("hexcolor", t);
+
 	}
 	
 	this.value = function(){

@@ -42,11 +42,8 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 							})
 						)
 					)
-								
-
 				)
 			)
 		)
 	]}
-	
 })
