@@ -20,14 +20,14 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 						view({bg:0, padding:4},
 						colorpicker({margin:4, flex:1, value:vec4("#342563"), bgcolor:vec4(0,0,0,0.4)}),
 						colorpicker({margin:4, flex:1, value:vec4("#D0F612"), bgcolor:vec4(0,0,0,0.4)}),
-						colorpicker({margin:4, flex:1, value:vec4("#102030"),bgcolor:vec4(0,0,0,0.4)})
+						colorpicker({margin:4, flex:1, value:vec4("#102030"), bgcolor:vec4(0,0,0,0.4)})
 						)
 						,view({flexdirection:"row", bgcolor:"transparent",padding:7 },
 							button({
 								text:"Set Vec4", 
 								click:function(){
 									var cp = this.find("colorpicker");	
-									cp.color = vec4("blue");
+									cp.value = vec4("blue");
 									console.log(cp.color);									
 								}
 							}),
@@ -36,8 +36,7 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 								text:"Set HSL", 
 								click:function(){
 									var cp = this.find("colorpicker");	
-									cp.color = vec4.fromHSL(Math.random(),Math.random(),Math.random());
-								//	cp.basehue = Math.random();
+									cp.value = vec4.fromHSL(Math.random(),Math.random(),Math.random());
 									console.log(cp.color);
 								}
 							})
