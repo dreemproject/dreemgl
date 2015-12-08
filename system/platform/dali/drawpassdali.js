@@ -62,7 +62,7 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.allocDrawTarget = function(width, height, mode, drawtarget, passid){
+	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
@@ -101,7 +101,7 @@ define.class(function(require, baseclass){
 			}
 			// otherwise we create a new one
 			if(!dt){
-				dt = this[drawtarget] = Texture.createRenderTarget(mode === '2D'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
@@ -110,7 +110,7 @@ define.class(function(require, baseclass){
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
 			this[drawtarget].delete()
-			this[drawtarget] = Texture.createRenderTarget(mode === '2D'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 		}
 	}
 	
@@ -119,7 +119,7 @@ define.class(function(require, baseclass){
 		var scroll = view._scroll
 		var layout = view.layout
 
-		if(view._viewport === '2D'){
+		if(view._viewport === '2d'){
 			if(isroot && mousex !== undefined){
 				var sizel = 0
 				var sizer = 1
@@ -138,7 +138,7 @@ define.class(function(require, baseclass){
 				}
 			}
 		}
-		else if(view._viewport === '3D'){
+		else if(view._viewport === '3d'){
 			storage.perspectivematrix = mat4.perspective(view._fov * PI * 2/360.0 , layout.width/layout.height, view._nearplane, view._farplane)			
 			storage.lookatmatrix = mat4.lookAt(view._camera, view._lookat, view._up)
 			storage.viewmatrix = mat4.mat4_mul_mat4(storage.lookatmatrix,storage.perspectivematrix);
@@ -185,14 +185,14 @@ define.class(function(require, baseclass){
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 
 		if(isroot){
-			if(!debug) this.allocDrawTarget(1, 1, this.view._viewport, 'pick_buffer', passid)
+			if(!debug) this.allocDrawTarget(1, 1, this.view, 'pick_buffer', passid)
 		}
 		else{
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			ratio = 1
 			var twidth = layout.width * ratio, theight = layout.height * ratio
-			this.allocDrawTarget(twidth, theight, this.view._viewport, 'pick_buffer', passid)
+			this.allocDrawTarget(twidth, theight, this.view, 'pick_buffer', passid)
 		}
 
 		device.bindFramebuffer(this.pick_buffer || null)
@@ -245,7 +245,8 @@ define.class(function(require, baseclass){
 					var shader = shaders[j]
 					shader.pickguid = pickguid
 
-					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
+					if (!shader.visible) continue
+					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
 
 					shader.drawArrays(this.device, 'pick')
@@ -263,11 +264,12 @@ define.class(function(require, baseclass){
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 	
 		// lets see if we need to allocate our framebuffer..
+
 		if(!isroot){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio	
-			this.allocDrawTarget(twidth, theight, this.view._viewport, 'color_buffer')
+			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
 		}
 
 		this.device.bindFramebuffer(this.color_buffer || null)
@@ -324,17 +326,17 @@ define.class(function(require, baseclass){
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]
-					if(isNaN(shader.order)) continue // was pick only
+					if (shader.pick_only || !shader.visible) continue // was pick only
 					// we have to set our guid.
-					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
+					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
 
 					// Create or reuse dalidreemgl object (DALI)
 					var dali_obj = shader.dali_obj;
 					if (!dali_obj) {
 						// Build the dalidreemgl object
-						var dali = this.device.wrapper.dali;
-						dali_obj = new this.device.DaliDreemgl(dali);
+						var dali = this.device.DaliApi.dali;
+                        dali_obj = new this.device.DaliDreemgl(dali);
 						shader.dali_obj = dali_obj;
 					}
 					dali_obj.compileShader(shader);

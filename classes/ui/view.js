@@ -378,7 +378,8 @@ define.class('$system/base/node', function(require){
 		if(this._bgimage){
 			if(typeof this._bgimage === 'string'){
 				require.async(this._bgimage).then(function(result){
-					var img = this.bgshader.texture = Shader.Texture.fromImage(result)
+					// Second argument for dali loading (DALI)
+					var img = this.bgshader.texture = Shader.Texture.fromImage(result, this._bgimage)
 					if(isNaN(this._size[0])){
 						this._size = img.size
 						this.relayout()
