@@ -18,7 +18,7 @@ define.class(function (require, $ui$, view, label) {
     this.render = function() {
         return [
           view({width:this.width, bgcolor:'transparent', height:wire('this.parent.height - this.parent.txt.height'), bgimage:'$examples/extdemo/slides/' + this.deviceType + '.png'}),
-          label({name:'txt', text:this.deviceId, fontsize:14, fgcolor:'#333', bgcolor:'transparent', align:'center', multiline: false})
+          label({name:'txt', text:this.deviceId, fontsize:11, fgcolor:'#333', bgcolor:'transparent', alignself:'center', multiline: false})
         ]
     }
 

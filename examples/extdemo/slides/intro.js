@@ -16,60 +16,32 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer) {
     this.render = function render() {
         return [
             label({
-                text:'+ Plugin components are directories - No special work required!',
+                text:'+ Plugins are directories or symlinks - No special work required!',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:5
+                margintop:50
             }),
             label({
-                text:'(note: define.$plugins defaults to $compositions directory for convenience, but can be changed for security)',
-                fgcolor:'#666',
-                bgcolor:'transparent',
-                fontsize:14,
-                margintop:5,
-                marginleft:25
-            }),
-            label({
-                text:'+ Compositions can auto load classes from plugin directories:',
+                text:'+ Navigate filesystem with "$" syntax',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:15
+                margintop:50
             }),
             label({
-                text:'Use the `componentname$classname` syntax:',
-                fgcolor:'#444',
-                bgcolor:'transparent',
-                fontsize:20,
-                margintop:5,
-                marginleft:95
-            }),
-            jsviewer({
-                flex: 0,
-                mode:'2d',
-                overflow:'scroll',
-                alignself: 'center',
-                margin: vec4(10),
-                source: this.syntaxCode,
-                padding: vec4(4),
-                fontsize: 14,
-                bgcolor: "#000030",
-                multiline: true}
-            ),
-            label({
-                text:'+ Example composition in `index.js`, no special mounting!',
+                text:'+ Integrate internally via nodejs or externally via POST API',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:10
+                margintop:50
             }),
             label({
-                text:'+ See `./examples/guide/README.md` for more full details.',
+                text:'+ See `./examples/guide/README.md` for implementation guide',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:20
+                margintop:50
             })
         ];
     };

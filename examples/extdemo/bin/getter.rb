@@ -8,7 +8,7 @@
 require "net/http"
 require "json"
 
-uri = URI.parse("http://127.0.0.1:2000/examples/extdemo")
+uri = URI.parse("http://localhost:2000/examples/extdemo")
 
 Net::HTTP.start(uri.hostname, uri.port) do |http|
 

@@ -5,7 +5,7 @@
 
 define.class(function (require, $ui$, view, label) {
 
-    this.slidetitle = "Server Proxy vs POST API";
+    this.slidetitle = "Integration Paths - Proxy or POST";
 
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
@@ -13,29 +13,27 @@ define.class(function (require, $ui$, view, label) {
     this.render = function render() {
         return [
             label({
-                text:'When nodejs libraries are available, write everying in DreemGL for convenience!',
+                text:'+ Proxy through service when nodejs libraries are available (all in DreemGL!)',
                 fgcolor:'#333',
                 bgcolor:'transparent',
-                fontsize:15,
-                margintop:0
+                fontsize:20
             }),
             view({
-                bgimage:require('./server.png'),
-                marginleft:100,
-                margintop:0
+                flex:1,
+                alignself:'center',
+                bgimage:require('./server.png')
             }),
             label({
-                text:'Otherwise, use the POST API to drive DreemGL externally from devices and services.',
+                text:'+ Use the POST API to drive DreemGL externally from IoT devices and web services.',
                 fgcolor:'#333',
                 bgcolor:'transparent',
-                alignself:'flex-end',
-                fontsize:15,
-                margintop:0
+                fontsize:20,
+                margintop:10
             }),
             view({
+                flex:1,
                 bgimage:require('./postapi.png'),
-                marginleft:400,
-                margintop:0
+                alignself:'center'
             })
         ];
     };

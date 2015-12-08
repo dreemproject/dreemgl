@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label, $examples$guide$movie, $$, cells, $widgets$, jsviewer) {
+define.class(function ($ui$, view, label, $examples$guide$, movie, $widgets$, jsviewer) {
 
 	this.attributes = {
 		movies: {type: Array},
@@ -11,21 +11,31 @@ define.class(function ($ui$, view, label, $examples$guide$movie, $$, cells, $wid
 		compositionCode: {type: String}
 	};
 
-	this.slidetitle = "Web Service via Server Proxy";
+	this.slidetitle = "Web Service via Service Proxy";
 	this.bgcolor = 'transparent';
-	this.flexdirection = 'column'
+	this.flexdirection = 'column';
 
 	this.render = function render() {
+		var cells = [];
+		if (this.movies) {
+			for (var i = 0; i < this.movies.length; i++) {
+				var data = this.movies[i];
+				data.width = 130;
+				data.height = 160;
+				cells.push(movie(data));
+			}
+		}
+
 		return [
-			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'Proxy through server when everything can be handeled entirely via nodejs!'}),
+			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'Proxy through service when everything can be handeled entirely via nodejs!'}),
 			view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
-				view({flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), clipping:true, bgcolor:'transparent'},
-					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./compositions/guide/search.js)'}),
-					jsviewer({flex: 1, overflow:'scroll', clipping:true, alignself: 'stretch', source: this.searchCode, fontsize: 14, bgcolor: "#000030", multiline: true}),
-					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./compositions/extdemo/index.js)'}),
+				view({flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), bgcolor:'transparent'},
+					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./examples/guide/search.js)'}),
+					jsviewer({flex: 1, overflow:'scroll', alignself: 'stretch', source: this.searchCode, fontsize: 14, bgcolor: "#000030", multiline: true}),
+					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./examples/extdemo/index.js)'}),
 					jsviewer({flex: 1,overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false})
 				),
-				cells({flex: 1, padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7", overflow:'scroll', data:this.movies, celltype:$examples$guide$movie})
+				view({flex: 1, flexdirection:'row', padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7"}, cells)
 			)
 		];
 	}

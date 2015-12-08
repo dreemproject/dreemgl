@@ -25,7 +25,7 @@ define.class(function ($ui$, view, label) {
                 margintop:0
             }),
             label({
-                text:'./compositions/guide/README.md',
+                text:'./examples/guide/README.md',
                 fgcolor:'darkyellow', bgcolor:'transparent',
                 alignself:'center',
                 fontsize:this.smallfont,

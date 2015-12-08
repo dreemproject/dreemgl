@@ -3,13 +3,13 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$view, $examples$guide$movie, $$, slides$device) {
+define.class(function ($ui$, view, $examples$guide$, movie, $, slides$device) {
 
-    // `guide$movie` is loading the view found in `./compositions/guide/movie.js`
+    // `$examples$guide$` followed by `movie` is loading the `movie` view found in `./examples/guide/movie.js`
 
-    // The `this` prefix refers to the current component, regardless of the directory name
-    // so `this$slides$device` maps to `./compositions/<this>/slides/device.js`
-    // (which in this case is, `./compositions/extdemo/slides/device.js`)
+    // The `$` prefix refers to the current directory, regardless of the current directory name
+    // so `$, slides$device` maps to `./examples/<this directory>/slides/device.js`
+    // (which in this case is, `./examples/extdemo/slides/device.js`)
 
     this.attributes = {
         movieData : {type:Object},
@@ -18,7 +18,7 @@ define.class(function ($ui$view, $examples$guide$movie, $$, slides$device) {
 
     this.render = function() {
         // Use the component classes just as you would any normal DreemGL class function.
-        return [ $examples$guide$movie(this.movieData), slides$device(this.deviceData) ]
+        return [ movie(this.movieData), slides$device(this.deviceData) ]
     }
 
 });

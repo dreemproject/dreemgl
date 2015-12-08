@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $server$, composition, role, $ui$, screen, $examples$guide$search, $widgets$, slideviewer, $$, devices, syntax, index, slides$intro, slides$diagram, slides$internal, slides$external, slides$api, slides$resources){
+define.class(function(require, $server$, composition, role, $ui$, screen, $examples$guide$search, $widgets$, slideviewer, $, devices, syntax, index, slides$intro, slides$syntax, slides$paths, slides$internal, slides$external, slides$api, slides$resources){
 
 	function getSource(obj) {
 		return obj.module.factory.body.toString();
@@ -12,7 +12,7 @@ define.class(function(require, $server$, composition, role, $ui$, screen, $examp
 	this.render = function render() {
 
 		return [
-			// `compositions/guide/search.js` is used here
+			// `examples/guide/search.js` is used here
 			$examples$guide$search({name:'search', keyword:"Aliens"}),
 			role(
 				screen({name:'desktop'},
@@ -34,7 +34,8 @@ define.class(function(require, $server$, composition, role, $ui$, screen, $examp
 							flex:1,
 							syntaxCode:getSource(syntax)
 						}),
-						slides$diagram({flex: 1}),
+						slides$syntax({flex: 1, syntaxCode:getSource(syntax)}),
+						slides$paths({flex: 1}),
 						slides$internal({
 							flex: 1,
 							movies:wire('this.rpc.search.results'),

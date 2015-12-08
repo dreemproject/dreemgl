@@ -21,7 +21,7 @@ define.class(function(require, $server$, service) {
                 }
             }).bind(this))
         } else if (!request) {
-            console.log('WARNING: please cd to "./compositions/guide/" and run "npm install"')
+            console.log('WARNING: please cd to "./examples/guide/" and run "npm install"')
         }
     };
 
