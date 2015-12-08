@@ -164,7 +164,7 @@ define.class('$system/base/node', function(require){
 
 		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
 		// Can be listened to to observe layout changes
-		layout: {type:Object, value:{}},
+		layout: {group:"undefined", type:Object, value:{}},
 
 		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
 		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures

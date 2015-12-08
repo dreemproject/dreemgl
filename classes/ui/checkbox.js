@@ -4,18 +4,16 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(view, label, icon){
+define.class(function(view,icon){
 	// Simple button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {
 		// The label for the button
 		text: {type: String, value: ""},
 
-		// The icon for the button, see FontAwesome for the available icon-names.
-		icon: {type: String, value: ""},
-
 		// Font size in device-pixels.
 		fontsize: {type: float, value: 14},
+		
 		
 		// Gradient color 1	
 		col1: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
@@ -44,9 +42,15 @@ define.class(function(view, label, icon){
 		pressedcolor2: {meta:"color", type: vec4, value: vec4("#d0d0f0")},
 
 		// fires when button is clicked
-		click:Event
+		click:Event,
+		value:{type:Boolean, value:false}
 	}
 
+	
+	this.click = function(){		
+		this.value  = this.value?false:true;
+	}
+	
 	var button = this.constructor
 
 	this.bgcolor = 'white'
@@ -85,14 +89,12 @@ define.class(function(view, label, icon){
 	this.statehover = function(){
 		this.col1 = this.hovercolor1
 		this.col2 = this.hovercolor2
-		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 	}
 
 	// the normal button state
 	this.statenormal = function(){
 		this.col1 = this.buttoncolor1
 		this.col2 = this.buttoncolor2
-		if(this.iconres)this.iconres.fgcolor = this.textcolor
 	}
 
 	// clicked state
@@ -100,7 +102,6 @@ define.class(function(view, label, icon){
 		//this.animate({col1:{0:vec4('red'),3:vec4('green')}})
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
-		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 	}
 
 	this.init = function(){
@@ -119,15 +120,10 @@ define.class(function(view, label, icon){
 	}
 
 	this.render = function(){
-		this.buttonres =  this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true, marginleft: 4,fontsize: this.fontsize, position: "relative", text: this.text})
-		if (!this.icon || this.icon.length == 0){
-			this.iconres = undefined
-			return [this.buttonres]
-		} 
-		else {
-			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
-			return [this.iconres, this.buttonres]
-		}
+		
+			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.value?this.fgcolor:vec4("transparent"), icon: "check"}); 
+			return [this.iconres]
+		
 	}
 
 	// Basic usage of the button.	

@@ -48,7 +48,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				//console.log(attr);			
 				groupcontent.push(propeditor({property:attr, propertyname: key}))
 			}
-			res.push(foldcontainer({collapsed: true,basecolor:"#c0f0f0",icon:"cube", title: group}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
+			res.push(foldcontainer({collapsed: true,basecolor:"#d9e0e0",icon:"cube", title: group}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
 		}
 		return res;
 	}
