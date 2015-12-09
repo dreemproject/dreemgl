@@ -27,6 +27,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		
 		for(key in c._attributes){
 			var attr = c._attributes[key];
+			
 			var typename = attr.type? attr.type.name:"NONE";
 			
 			var meta = (attr.type && attr.type.meta)? attr.type.meta:"";
@@ -49,9 +50,11 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			
 			for(var i = 0 ;i<keys.length;i++){
 				var key = keys[i];
+				var thevalue = c["_"+key];
+				console.log(thevalue);
 				var attr = c._attributes[key];	
 				//console.log(attr);			
-				groupcontent.push(propeditor({property:attr, propertyname: key}))
+				groupcontent.push(propeditor({value:thevalue, property:attr, propertyname: key}))
 			}
 			res.push(foldcontainer({collapsed: true,basecolor:"#d9e0e0",icon:"cube", title: group}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
 		}
