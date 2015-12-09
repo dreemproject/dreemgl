@@ -30,6 +30,8 @@ define.class(function(require,$ui$, view, textbox, button ){
 		if (this.maxval && newval > this.maxval) newval = this.maxval;
 		if (this.minval && newval < this.minval) newval = this.minval;		
 		this.value = newval;
+		nb = this.find("thenumber");
+		if (nb) nb.value = this.value.toString();
 	}
 	
 	
@@ -48,7 +50,7 @@ define.class(function(require,$ui$, view, textbox, button ){
 	
 	this.render = function(){
 		return [
-				textbox({value:this.value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
+				textbox({name:"thenumber", value:this.value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
 				,view({flexdirection:"column", bg:0}
 					,button({text:"+", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:this.upclick})
 					,button({text:"-", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:this.downclick})
