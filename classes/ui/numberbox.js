@@ -33,7 +33,7 @@ define.class(function(require,$ui$, view, textbox, button ){
 	}
 	
 	
-	this.bgcolor = "#e0e0e0";
+	this.bgcolor = "#f0f0f0";
 	this.padding =0;
 	this.borderwidth = 0;
 	this.bordercolor = "d0d0d0";
@@ -42,12 +42,14 @@ define.class(function(require,$ui$, view, textbox, button ){
 	this.justifycontent = "center";
 	this.alignitems = "center";
 	
+	this.borderwidth = 1;
+	this.padding = vec4(3,0,0,0);
 	
 	
 	this.render = function(){
 		return [
-			textbox({value:this.value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0}),
-				view({flexdirection:"column", bg:0}
+				textbox({value:this.value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
+				,view({flexdirection:"column", bg:0}
 					,button({text:"+", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:this.upclick})
 					,button({text:"-", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:this.downclick})
 				)
