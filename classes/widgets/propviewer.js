@@ -16,7 +16,6 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	this.bgcolor = vec4("blue");
 	this.padding = 0
 	
-	
 	this.render = function(){
 		var c = this.find(this.target);
 		if (!c) return [];

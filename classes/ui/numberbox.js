@@ -18,6 +18,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		fontsize: {type: float, value: 14},		
 	}
 	this.bg = 0;
+	this.fgcolor="#101010";
 	
 	this.checkandset = function(newval){
 		if (isNaN(newval)) newval = 0;		
@@ -35,9 +36,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.downclick = function(){
 		this.checkandset(this.value - this.stepvalue);
 	}
-	
-	
-	
+		
 	this.bgcolor = "#f0f0f0";
 	this.padding =0;
 	this.borderwidth = 0;
@@ -45,12 +44,10 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.borderradius = 0;			
 	this.alignself = "flex-end" 
 	this.justifycontent = "center";
-	this.alignitems = "center";
-	
+	this.alignitems = "center";	
 	this.borderwidth = 1;
 	this.padding = vec4(3,0,0,0);
-	
-	
+		
 	this.render = function(){
 		return [
 				label({name:"thenumber", align:"right", text:this.value.toString(), margin:5,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
