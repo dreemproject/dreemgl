@@ -10,13 +10,13 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		
 	this.attributes =  {
 		// the value of the colorpicker, a color
-		value: {type: vec4, value: "white"},
+		value: {type: vec4, value: "white", meta:"color"},
 		// the foreground color of the fonts
-		fgcolor: {type: vec4, value: "white"},
+		fgcolor: {type: vec4, value: "white", meta:"color"},
 		// the fontsize of the text
-		fontsize:{type: int, value: 15},
+		fontsize:{type: int, value: 15, meta:"fontsize"},
 		// internal border color
-		internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6)},
+		internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6), meta:"color"},
 		// read-only the hue value (HSV)
 		basehue: {type:float, value:0.5, readonly:true},
 		// read-only the saturation value (HSV)
@@ -26,7 +26,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 	}
 
 	this.basehue = 0.5;
-
 	this.bgcolor = vec4(0.0,0.0,0.0,0.4)
 	this.flexdirection = "column";
 	this.padding = vec4(10)
@@ -52,12 +51,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			newoff = val * (255);
 			if (newoff < 0) newoff += 256;
 			
-			//console.log(name, val, newoff);
-			
 			c._offset = newoff
-		}
-		else{
-//			console.log("control not found in colorpicker:", name);
 		}
 	}
 	
@@ -67,17 +61,17 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		//else console.log("not found", name);
 	}
 	
-	this.numberToHex = function(num){
+	this.numbertohex = function(num){
 		if (num < 16){
 			return "0"+ (Math.round(num).toString(16));
 		}
 		return Math.round(num).toString(16);
 	}
 	
-	this.BuildHexNumber = function(vector){
-		return  "" + this.numberToHex(vector[0]*255) 
-			+ this.numberToHex(vector[1]*255) 
-			+ this.numberToHex(vector[2]*255);
+	this.buildhexnumber = function(vector){
+		return  "" + this.numbertohex(vector[0]*255) 
+			+ this.numbertohex(vector[1]*255) 
+			+ this.numbertohex(vector[2]*255);
 	}
 	
 	this.updateallcontrols = function(){
@@ -87,7 +81,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.updatecontrol("rslider", this.value[0]);
 		this.updatecontrol("gslider", this.value[1]);
 		this.updatecontrol("bslider", this.value[2]);
-		this.updatecontrol("triangleview", this.basehue);		
+		this.updatecontrol("squareview", this.basehue);		
 		this.updatecontrol("colorcirclecontrol", this.basehue);		
 	
 		this.updatelabel("texth", Math.round(this.basehue * 360));
@@ -98,9 +92,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.updatelabel("textb", Math.round(this.value[2] * 255));
 		this.updatelabel("texta", Math.round(this.value[3] * 255));
 
-		var t = this.BuildHexNumber(this.value);
+		var t = this.buildhexnumber(this.value);
 		this.updatelabel("hexcolor", t);
-
 	}
 	
 	this.value = function(){
@@ -148,6 +141,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.createColorFromHSV(); 	
 		this.updateallcontrols();		
 	}
+	
 	this.setSatBase = function(s){
 		this.basesat = s;
 		this.createColorFromHSV(); 	
@@ -158,8 +152,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.baseval  = s;
 		this.createColorFromHSV(); 	
 		this.updateallcontrols();		
-	}
-	
+	}	
 	
 	define.class(this, "customslider", function($ui$view){
 		this.height = 19;
@@ -464,7 +457,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 	
 	})
 	
-	define.class(this, 'triangleview', function($ui$view){
+	define.class(this, 'squareview', function($ui$view){
 		this.width = 200;
 		this.height = 200;
 		
@@ -477,6 +470,34 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			draggersize: {type:float, value: 8},
 			hover:{type:float, motion:"linear", duration:0.1, value:1}
 		}
+				
+		this.updatecolorfrommouse =  function(p){
+			var p2 = vec2(p.local[0] - this.layout.width/2, p.local[1] - this.layout.height/2);
+			
+			var satpos = vec2(Math.sin(this.basehue * PI * 2 + PI/4), Math.cos(this.basehue* PI * 2  + PI/4));
+			var valpos = vec2(Math.sin(this.basehue * PI * 2 + PI/4 + PI/2), Math.cos(this.basehue* PI * 2  + PI/4  + PI/2));
+			var sidelen = Math.sqrt((140*140)/2);
+			var sat = (vec2.dot(satpos, p2) + sidelen/2)/sidelen;
+			var val = 1 - (vec2.dot(valpos, p2) + sidelen/2)/sidelen;
+			sat = Math.max(0, Math.min(1, sat));
+			val = Math.max(0, Math.min(1, val));
+			this.basesat = sat;
+			this.baseval = val;
+			this.outer.setSatBase(sat);			
+			this.outer.setLumBase(val);
+		}
+		
+		this.mouseleftdown = function(p){
+			this.updatecolorfrommouse(p);
+			
+			this.mousemove = function(p){
+				this.updatecolorfrommouse(p);		
+			}
+		}
+		
+		this.mouseleftup = function(){
+			this.mousemove = function(){}
+		}
 		
 		define.class(this, 'fg', this.Shader, function(){
 			this.draworder = 5
@@ -484,6 +505,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			this.vertexstruct = define.struct({		
 				p:vec2,			
 			})
+			
 			this.mesh = this.vertexstruct.array()
 			this.update = function(){
 				var view = this.view
@@ -601,7 +623,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 				,view({margin:10, bg:0, position:"relative", alignself:"center"}
 					,view({bg:0, width:200, height:200, padding:3})
 					,this.colorcirclecontrol({position:"absolute",width:200, height:200})
-					,this.triangleview({basehue:this.basehue, position:"absolute"})
+					,this.squareview({basehue:this.basehue, position:"absolute"})
 				)
 				,view({bg:0, flexdirection:"column"}
 					,this.customslider({name:"rslider",flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})

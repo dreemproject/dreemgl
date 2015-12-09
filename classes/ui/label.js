@@ -18,13 +18,13 @@ define.class(function(require, $ui$, view){
 		text: {type:String, value: "text" },
 	
 		// Size of the font in pixels
-		fontsize: {type:float, value: 18},
+		fontsize: {type:float, value: 18, meta:"fontsize"},
 	
 		// the boldness of the font (try values 0 - 1)
 		boldness: {type:float, value: 0.},
 
 		// reference to the font typeface, require it with require('font:')
-		typeface: {type:Object, value: undefined},
+		typeface: {type:Object, value: undefined, meta:"font"},
 	
 		// Should the text wrap around when its width has been reached?
 		multiline: {type:Boolean, value: false },
@@ -33,7 +33,7 @@ define.class(function(require, $ui$, view){
 		subpixel: {type:Boolean, value: false},
 	
 		// Alignment of the bodytext.
-		align: {type: Enum('left','right'),  value: "left"}
+		align: {type: Enum('left','right','center', 'justify'),  value: "left"}
 	}
 
 	// the normal font 

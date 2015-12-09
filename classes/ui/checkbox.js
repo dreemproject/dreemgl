@@ -13,8 +13,7 @@ define.class(function(view,icon){
 
 		// Font size in device-pixels.
 		fontsize: {type: float, value: 14},
-		
-		
+			
 		// Gradient color 1	
 		col1: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
 		// Gradient color 2

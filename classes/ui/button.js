@@ -12,10 +12,10 @@ define.class(function(view, label, icon){
 		text: {type: String, value: ""},
 
 		// The icon for the button, see FontAwesome for the available icon-names.
-		icon: {type: String, value: ""},
+		icon: {type: String, value: "", meta:"icon"},
 
 		// Font size in device-pixels.
-		fontsize: {type: float, value: 14},
+		fontsize: {type: float, value: 14, meta:"fontsize"},
 		
 		// Gradient color 1	
 		col1: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
