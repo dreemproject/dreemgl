@@ -19,20 +19,23 @@ define.class(function(require,$ui$, view, textbox, button ){
 	}
 	this.bg = 0;
 	
-	this.upclick = function(){
-		this.checkandset(this.value + this.stepvalue);
-	}
-	this.downclick = function(){
-		this.checkandset(this.value - this.stepvalue);
-	}
-	
 	this.checkandset = function(newval){
+		if (isNaN(newval)) newval = 0;		
 		if (this.maxval && newval > this.maxval) newval = this.maxval;
 		if (this.minval && newval < this.minval) newval = this.minval;		
 		this.value = newval;
 		nb = this.find("thenumber");
 		if (nb) nb.value = this.value.toString();
 	}
+
+	this.upclick = function(){
+		this.checkandset(this.value + this.stepvalue);
+	}
+	
+	this.downclick = function(){
+		this.checkandset(this.value - this.stepvalue);
+	}
+	
 	
 	
 	this.bgcolor = "#f0f0f0";
@@ -52,8 +55,8 @@ define.class(function(require,$ui$, view, textbox, button ){
 		return [
 				textbox({name:"thenumber", value:this.value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
 				,view({flexdirection:"column", bg:0}
-					,button({text:"+", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:this.upclick})
-					,button({text:"-", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:this.downclick})
+					,button({text:"+", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)})
+					,button({text:"-", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)})
 				)
 		]
 	}
