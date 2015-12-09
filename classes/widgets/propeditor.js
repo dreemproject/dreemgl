@@ -50,7 +50,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		
 			if (this.property.meta=="color"){
 				return this.wrap(				
-					foldcontainer({width:302, title:"colorpicker",  icon:"circle", collapsed:true, basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)},view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.value})))
+					foldcontainer({fontsize:this.fontsize, width:302, title:"colorpicker",  icon:"circle", collapsed:true, basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)},view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.value})))
 				)
 			}
 			
@@ -94,7 +94,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="String"){			
 			return this.wrap(
 				view({bg:0},
-					textbox({flex:1, fgcolor:"#308030", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#308030", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				) 
 			)
 		}

@@ -20,11 +20,12 @@ define.class(function($ui$, view, label, icon){
 
 	this.attributes = {
 		// The current state of the foldcontainer. false = open, Ttue = closed.
-		collapsed: false,
+	collapsed: {type:boolean, value: false, persist:true},
 		// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
 		icon: 'times',
 		// The main color from which the foldcontainer will build some gradients.
-		basecolor: {type: vec4, value: vec4("#8080c0")}
+		basecolor: {type: vec4, value: vec4("#8080c0")},
+		fontsize: {type:float, value:12}
 	}
 
 	// Function to change the open/closed state. Used by the click handler of the clickablebar.
@@ -59,9 +60,10 @@ define.class(function($ui$, view, label, icon){
 		}
 
 		this.padding = 6
+
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
-			return [icon({fontsize:16, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), label({marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: 16, text:this.title,  bg:0 })];
+			return [icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), label({marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 })];
 		}
 
 		this.statedefault = function(){

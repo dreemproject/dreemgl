@@ -4,12 +4,14 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(view,icon){
+define.class(function(require,$ui$, view, ){
 	// Simple button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {
 		// The label for the button
-		text: {type: String, value: ""},
+		value: {type: float, value: 0},
+		minvalue: {type: float, value: undefined},
+		maxvalue: {type: float, value: undefined},
 
 		// Font size in device-pixels.
 		fontsize: {type: float, value: 14},
@@ -21,8 +23,8 @@ define.class(function(view,icon){
 
 		// Color of the label text in neutral state	
 		textcolor: {meta:"color", type: vec4, value: vec4("#404040")},
-		
-		// Color of the label text in pressed-down state			
+
+		// Color of the label text in pressed-down state	
 		textactivecolor: {meta:"color", type: vec4, value: vec4("green")},
 		
 		// First gradient color for the button background in neutral state
