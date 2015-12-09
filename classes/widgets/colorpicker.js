@@ -268,6 +268,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			}
 			var offset = this.offset / this.total
 			var page = this.page / this.total
+			var start_offset  = 0;
 			if(p < offset){
 				var value = clamp(p - 0.5 * page, 0, 1.-page) * this.total
 				if(value != this.offset){
@@ -280,7 +281,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 					this.offset = value
 				}
 			}
-			var start_offset = offset//this.offset / this.total
+			 start_offset = offset//this.offset / this.total
 			this.mousemove = function(event){
 				var pos = event.local
 				if(this.vertical){
@@ -309,9 +310,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.height = 200;
 		this.attributes = {
 			ringwidth:{type:float, value: 0.3},
-			hover:{type:float, value: 0, motion:"linear", duration: 0.1},
-			
-			
+			hover:{type:float, value: 0, motion:"linear", duration: 0.2},
 			basehue: {type:float, value:0.7},
 			basesat: {type:float, value:0.7},
 			baseval: {type:float, value:0.7},

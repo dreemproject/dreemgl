@@ -14,19 +14,25 @@ define.class(function(view, label){
 	this.flexdirection = "column"
 	this.alignitem = "stretch"
 	this.alignself = "stretch"
+	this.attributes = {
+		minorsize:{type:float, value:25},
+		majorsize:{type:float, value:100},
+		majorline:{type:vec4, value: vec4("#b0b0e0"), meta:"color"},
+		minorline:{type:vec4, value: vec4("#e0f0ff"), meta:"color"}
+	}
+	
+	this.bgcolor = vec4("white")
 
-	this.bgcolor = vec4("#d0d0d0")
-	this.gridcolor = vec4("#ffffff")
-	// CADGrid shader - used various floored modulo functions to find out if either a major or minor gridline is being touched.
+	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
 	this.bg = {
 		grid: function(a){
-			if (floor(mod(a.x * view.layout.width,50. )) == 0. ||floor(mod(a.y * view.layout.height,50. )) == 0.)	{
-				return mix(view.gridcolor, vec4(0.9,0.9,1.0,1.0), 0.5);
+			if (floor(mod(a.x * view.layout.width,view.majorsize )) == 0. ||floor(mod(a.y * view.layout.height,view.majorsize )) == 0.)	{
+				return view.majorline;
 			}
-			if (floor(mod(a.x * view.layout.width,10. )) == 0. ||floor(mod(a.y * view.layout.height,10. )) == 0.)	{
-				return mix(view.gridcolor, vec4(0.9,0.9,1.0,1.0), 0.2);
+			if (floor(mod(a.x * view.layout.width,view.minorsize )) == 0. ||floor(mod(a.y * view.layout.height,view.minorsize )) == 0.)	{
+				return view.minorline;
 			}
-			return view.gridcolor;
+			return view.bgcolor;
 		},
 		color:function(){
 			return grid(mesh.xy)

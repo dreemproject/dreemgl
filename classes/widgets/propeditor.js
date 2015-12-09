@@ -27,7 +27,7 @@ define.class(function(require, $ui$, checkbox,foldcontainer, view, label, button
 	this.flexdirection = "row";
 	this.wrap = function(node){
 		return [
-			label({bg:0,margin:4, fontsize:14, flex: 0.2, text:this.propertyname, bg:0, fgcolor:"#303030" })
+			label({bg:0,margin:4, fontsize:this.fontsize, flex: 0.2, text:this.propertyname, bg:0, fgcolor:"#303030" })
 			,node
 		]	
 	}
@@ -35,6 +35,8 @@ define.class(function(require, $ui$, checkbox,foldcontainer, view, label, button
 	this.render = function(){
 		
 		var typename = this.property.type?this.property.type.name:"";
+		var meta = (this.property.meta)?this.property.meta:"";
+		
 		if (typename =="Enum"){
 			return this.wrap(radiogroup({bg:0,values:this.property.type.values, currentvalue: this.property.value}));
 		}
@@ -42,29 +44,39 @@ define.class(function(require, $ui$, checkbox,foldcontainer, view, label, button
 		if (typename =="vec4"){
 		
 			if (this.property.meta=="color"){
-				return this.wrap(view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.property.value})))
+				return this.wrap(
+				
+				foldcontainer({width:302, title:"colorpicker",  collapsed:true, basecolor:vec4(this.property.value[0],this.property.value[1],this.property.value[2],1.0)},view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.property.value}))))
 			}
 			
 			return this.wrap(view({bg:0},
-					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 					)
 				);
 		}
 		
 		if (typename =="vec3"){
 			return this.wrap(view({bg:0},
-				textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-				textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-				textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+				textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				)
 			);            			
 		}
 		
+		if (typename =="vec2"){
+			return this.wrap(view({bg:0},
+				textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
+				textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+				)
+			);            
+		}
+		
 		if (typename =="FloatLike"){
-			return this.wrap(view({bg:0},textbox({flex:1, fontsize:14, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}) ))
+			return this.wrap(view({bg:0},textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}) ))
 				
 		}
 		
@@ -78,17 +90,17 @@ define.class(function(require, $ui$, checkbox,foldcontainer, view, label, button
 				checkbox({flex:1, fgcolor:"#308030", value:this.property.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
 		}
 		
-		if (typename =="vec2"){
-			return this.wrap(view({bg:0},
-				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-				textbox({flex:1, fgcolor:"#303030", value:0,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
-				)
-			);            
+		if (typename == "Object" && meta == "font") {
+			return this.wrap(label({fontsize: this.fontsize, margin:4,text:"FONT PICKER!", bg:0, fgcolor:"#303030"}))			
+		}
+
+		if (typename == "Object" && meta == "texture") {
+			return this.wrap(label({fontsize: this.fontsize, margin:4,text:"IMAGE PICKER!", bg:0, fgcolor:"#303030"}))			
 		}
 		
 		if (!this.property) return [];
 		//console.log(this.property);
-		return this.wrap(label({margin:4,text:typename, bg:0, fgcolor:"#303030"}))
+		return this.wrap(label({margin:4,text:typename + " " + meta, bg:0, fgcolor:"#303030"}))
 	}
 	
 })

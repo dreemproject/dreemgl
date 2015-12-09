@@ -649,6 +649,23 @@ define(function(require, exports){
 		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	}
 	
+	exports.vec4.contrastcolor = function(incolor){
+		var hsl = vec4.toHSV(incolor);
+		var l = 0;
+		if (hsl[2] > 0.5) {
+			if (hsl[1] > 0.7) {
+				l = 1;
+			}
+			else {
+				l = 0;
+			}
+		}
+		else {
+			l = 1;
+		}
+		return	vec4.fromHSV(0,0,l,1);
+	}
+	
 	// converts standard vec4 color in to HSL space (not to be confused with HSV space!) 
 	exports.vec4.toHSL = function(inp){
 		var max = Math.max(inp[0], inp[1], inp[2]), min = Math.min(inp[0], inp[1], inp[2]);

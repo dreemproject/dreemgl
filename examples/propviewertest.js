@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $ui$, screen, view, label, button, $widgets$, propviewer){	
+define.class(function($server$, composition, role, $ui$, cadgrid, screen, view, label, button, $widgets$, propviewer){	
 	this.render = function(){ return [
 		role(
 			screen({clearcolor:vec4('blue'),flexwrap:"nowrap", flexdirection:"row",bg:{
@@ -10,13 +10,18 @@ define.class(function($server$, composition, role, $ui$, screen, view, label, bu
 							}
 						}
 					}
-						,view({flexdirection:"column", flex:1, bg:0, margin:50}			
+					,cadgrid({flexdirection:"row"},
+						view({flexdirection:"column", flex:1, bgcolor:"gray", margin:50, padding:4}	
+						,view({flexdirection:"column", flex:1, bg:0, margin:0}			
 							,label({margin:4,name:"thelabel", fontsize:14,bg:0, text:"this is a label with some example props"})
 							,propviewer({target:"thelabel", flex:1, overflow:"scroll"}))
-						,view({flexdirection:"column",flex:1, bg:0, margin:50}			
+							)
+						,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:50, padding:4}	
+						,view({flexdirection:"column",flex:1, bg:0, margin:0}			
 							,button({name:"thebutton", text:"this is a button with some example props"})
 							,propviewer({target:"thebutton", flex:1, overflow:"scroll"})
-	)			
+					)	)		
+			)
 				
 			)
 		)

@@ -45,11 +45,11 @@ define.class(function($ui$, view, label, icon){
 		
 		this.attributes = {
 			title: {type:String},
-			col1: {value:vec4("yellow")},
-			col2: {value:vec4("yellow")}
+			col1: {value:vec4("yellow"), meta:"color"},
+			col2: {value:vec4("yellow"), meta:"color"}
 		}
 
-		this.position = "relative"
+		this.position = "relative";
 
 		this.bg = {
 			color: function(){	
@@ -61,7 +61,7 @@ define.class(function($ui$, view, label, icon){
 		this.padding = 6
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
-			return [icon({fontsize:16, icon:this.icon, fgcolor: "#303030" }), label({marginleft:5,fgcolor:"#303030", fontsize: 16, text:this.title,  bgcolor: "transparent" })];
+			return [icon({fontsize:16, icon:this.icon, fgcolor: "#303030" }), label({marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: 16, text:this.title,  bg:0 })];
 		}
 
 		this.statedefault = function(){

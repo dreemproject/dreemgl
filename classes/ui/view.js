@@ -43,7 +43,7 @@ define.class('$system/base/node', function(require){
 		// the background color of a view, referenced by various shaders
 		bgcolor: {group:"style", type:vec4, value: vec4('white'), meta:"color"},
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: {group:"style",type:Object},
+		bgimage: {group:"style",type:Object, meta:"texture"},
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: {group:"style",type:vec4, value: vec4('transparent'), meta:"color"},
