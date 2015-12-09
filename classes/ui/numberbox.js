@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require,$ui$, view, textbox, button ){
+define.class(function(require,$ui$, view, textbox, label,button ){
 	// Simple button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {
@@ -21,8 +21,8 @@ define.class(function(require,$ui$, view, textbox, button ){
 	
 	this.checkandset = function(newval){
 		if (isNaN(newval)) newval = 0;		
-		if (this.maxval && newval > this.maxval) newval = this.maxval;
-		if (this.minval && newval < this.minval) newval = this.minval;		
+		if (this.maxvalue!=undefined && newval > this.maxvalue) newval = this.maxvalue;
+		if (this.minvalue!=undefined && newval < this.minvalue) newval = this.minvalue;		
 		this.value = newval;
 		nb = this.find("thenumber");
 		if (nb) nb.value = this.value.toString();
@@ -53,10 +53,10 @@ define.class(function(require,$ui$, view, textbox, button ){
 	
 	this.render = function(){
 		return [
-				textbox({name:"thenumber", value:this.value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
+				label({name:"thenumber", align:"right", text:this.value.toString(), margin:5,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
 				,view({flexdirection:"column", bg:0}
-					,button({text:"+", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)})
-					,button({text:"-", fontsize: this.fontsize/2, margin:0, padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)})
+					,button({text:"", icon:"plus", fontsize: this.fontsize*(2/3), margin:0, padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)})
+					,button({icon:"minus", text:"" , fontsize: this.fontsize*(2/3), margin:0, padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)})
 				)
 		]
 	}
