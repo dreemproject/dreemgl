@@ -73,7 +73,7 @@ define.class(function(require, $ui$, checkbox,foldcontainer, view, label, button
 				textbox({flex:1, fgcolor:"#308030", value:this.property.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
 		}
 		
-		if (typename =="Boolean"){
+		if (typename =="Boolean" || typename=="BoolLike"){
 			return this.wrap(view({bg:0},
 				checkbox({flex:1, fgcolor:"#308030", value:this.property.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})) )
 		}

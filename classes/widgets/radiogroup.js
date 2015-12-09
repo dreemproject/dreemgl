@@ -4,11 +4,13 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
+define.class(function(require, $ui$, view, label, button, scrollbar, textbox, icon){
 	
 	this.attributes ={
 		values:{type:Object, value:[]},
-		currentvalue:{type:String, value:""}
+		currentvalue:{type:String, value:""},
+		fgcolor: {type:vec4, value:vec4("#303030"), meta:"color"},
+		fontsize: {type: float, value: 12, meta:"fontsize"}
 	}
 	this.flexdirection = "row"
 	this.render = function(){
@@ -17,12 +19,12 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		for(var i =0 ;i<this.values.length;i++)
 		{
 			var v = this.values[i];
-			if (v == this.currentvalue){
+			if (v == this.currentvalue || (!v && !this.currentvalue)){
 				
-				res.push(label({text:v,fontsize:14,margin:8, bg:0, fgcolor:"#303030"}))
+				res.push(icon({icon:"check", bg:0, margin:vec4(8,8,0,8), fontsize:this.fontsize, fgcolor: this.fgcolor}),label({text:(v&&v.trim().length > 0)?v:"undefined",fontsize:14,margin:vec4(0,8,8,8), bg:0, fgcolor:this.fgcolor,fontsize:this.fontsize}))
 			}
 			else{
-				res.push(button({padding:2,text:v, onclick:function(){radio.currentvalue = this.text;}}))
+				res.push(button({padding:2,text:(v&&v.trim().length > 0)?v:"undefined", onclick:function(){radio.currentvalue = (this.text=="undefined") ? undefined:this.text;},fontsize:this.fontsize}))
 			}
 		}
 		return res;
