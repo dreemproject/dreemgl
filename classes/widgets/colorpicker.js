@@ -600,10 +600,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 				this.mesh.push(view.basehue + 3/4, vec3( 0, -1, 0),1);
 				
 			}				
-		})
-	
+		})	
 	})
-	
 	
 	define.class(this, 'colorarea', function($ui$view){
 		this.bg ={
@@ -614,12 +612,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.width = 100;
 		this.height = 100;		
 	})
-	
-	
+		
 	this.render = function(){
 		return [
-			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"}
-				
+			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"}				
 				,view({margin:10, bg:0, position:"relative", alignself:"center"}
 					,view({bg:0, width:200, height:200, padding:3})
 					,this.colorcirclecontrol({position:"absolute",width:200, height:200})
@@ -643,12 +639,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 						,label({flex:1, text:"hsv", fontsize:18, bg:0, fgcolor: this.fgcolor})
 						,view({flex:1, bg:0},textbox({name:"texth",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
 						,view({flex:1, bg:0},textbox({name:"texts",value:"300", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},textbox({name:"textv",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						
+						,view({flex:1, bg:0},textbox({name:"textv",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))						
 					)
 				)
-			)
-			
+			)			
 			
 			,view({ bg:0,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"}
 				,view({ bg:0,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}

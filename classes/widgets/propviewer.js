@@ -28,7 +28,10 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		for(key in c._attributes){
 			var attr = c._attributes[key];
 			var typename = attr.type? attr.type.name:"NONE";
-			if (typename != "NONE" && typename != "Event" )
+			
+			var meta = (attr.type && attr.type.meta)? attr.type.meta:"";
+			
+			if (typename != "NONE" && typename != "Event" && meta != "hidden" )
 			{
 				if (!keysgroups[attr.group]) keysgroups[attr.group] = [];
 				keysgroups[attr.group].push(key);

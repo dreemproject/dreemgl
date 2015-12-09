@@ -164,7 +164,7 @@ define.class('$system/base/node', function(require){
 
 		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
 		// Can be listened to to observe layout changes
-		layout: {group:"undefined", type:Object, value:{}},
+		layout: { type:Object, value:{}, meta:"hidden"},
 
 		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
 		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
@@ -188,7 +188,7 @@ define.class('$system/base/node', function(require){
 		up: {group:"3d",type: vec3, value: vec3(0,-1,0)},
 		
 		// the current time which can be used in shaders to create continous animations
-		time: 0,
+		time:{meta:"hidden"} ,
 
 		// fired when the mouse doubleclicks
 		mousedblclick: Event,
@@ -241,7 +241,7 @@ define.class('$system/base/node', function(require){
 	this.normalmatrix = mat4.identity()
 	
 	// forward references for shaders
-	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
+	this.layout = { width:0, height:0, left:0, top:0, right:0, bottom:0}
 	this.device = {frame:{size:vec2()}}
 
 	// turn off rpc proxy generation for this prototype level
