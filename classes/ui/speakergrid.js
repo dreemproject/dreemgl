@@ -16,8 +16,12 @@ define.class(function(view, label){
 	this.alignself = "stretch"
 	
 	this.attributes = {
-		holerad :{type:float, value: 0.8},
-		spacing : {type:float, value: 10}
+		holerad :{type:float, value: 10},
+		spacing : {type:float, value: 0.60},
+		ring : {type:float, value: 0.2},
+		holecolor: {type:vec4, value:vec4("#202020"), meta:"color"},
+		glowcolor: {type:vec4, value:vec4("#606050"), meta:"color"},
+		edgecolor: {type:vec4, value:vec4("#101010"), meta:"color"}
 	}
 	
 	this.bgcolor = vec4("white")
@@ -28,8 +32,38 @@ define.class(function(view, label){
 			
 			return view.bgcolor;
 		},
+		pixtohex:function(p){
+		
+			var b0 = 2.0 / 3.0;
+			var b1 = 0.0;
+			var b2 = (-1.0 / 3.0);
+			var b3 = sqrt(1.) / 3.0;
+			
+			var q = b0 * p.x + b1 * p.y;
+			var r = b2 * p.x + b3 * p.y;
+			return vec3(q, r, -q - r);
+		},
 		color:function(){
-			return grid(mesh.xy)
+			var hex = pixtohex(gl_FragCoord.xy*(10./view.holerad));
+			
+			var hexmod = vec3(mod(hex.x,10.0)/10,mod(hex.y,10.0)/10,mod(hex.z,10.)/10.);
+			
+			var dist = vec2(0.5,0.5) - hexmod.yz;
+			var l = length(dist);
+			if (l<view.spacing*0.5) 
+			{
+				if (l>(view.spacing*0.5)*(1.-view.ring))				
+				{
+					var angle = atan(dist.y, dist.x);
+					
+					return mix(view.glowcolor,view.edgecolor, abs(angle/PI));;
+				}
+				return vec4("black");
+			}
+			
+			var dist2 = vec2(0.5,0.5) - mesh.xy;
+			
+			return mix(view.glowcolor, view.edgecolor, length(dist2));
 		}
 	}
 
