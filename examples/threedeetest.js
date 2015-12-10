@@ -144,7 +144,7 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 
 							)
 						,view({viewport:'2d', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)}
-							,button({text:"A", click:function(){								
+							,button({text:"this is really fast!", click:function(){								
 								var cam = this.find("theview");
 								cam.camera = vec3(0,2,-5);
 								cam.fov = 30;
