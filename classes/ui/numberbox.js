@@ -68,6 +68,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.padding = vec4(3,0,0,0);
 		
 	this.render = function(){
+		console.log(" ." );
 		return [
 				label({name:"thenumber", align:"right", text:this.value.toString(), margin:5,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
 				,view({flexdirection:"column", bg:0}
