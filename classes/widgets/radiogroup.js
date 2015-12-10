@@ -13,18 +13,24 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 		fontsize: {type: float, value: 12, meta:"fontsize"}
 	}
 	this.flexdirection = "row"
+	
 	this.render = function(){
 		var res = [];
+		
 		var radio = this;
 		for(var i =0 ;i<this.values.length;i++)
 		{
-			var v = this.values[i];
-			if (v == this.currentvalue || (!v && !this.currentvalue)){
+			var v = (this.values[i])?this.values[i].toString():"undefined";
+			if (v == this.currentvalue || ((v==undefined || v=="undefined") && !this.currentvalue)){
 				
 				res.push(icon({icon:"check", bg:0, margin:vec4(8,8,0,8), fontsize:this.fontsize, fgcolor: this.fgcolor}),label({text:(v&&v.trim().length > 0)?v:"undefined",fontsize:14,margin:vec4(0,8,8,8), bg:0, fgcolor:this.fgcolor,fontsize:this.fontsize}))
 			}
 			else{
-				res.push(button({padding:2,text:(v&&v.trim().length > 0)?v:"undefined", onclick:function(){radio.currentvalue = (this.text=="undefined") ? undefined:this.text;},fontsize:this.fontsize}))
+				res.push(button({
+						padding:2,text:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), onclick:function(){
+							radio.currentvalue = (this.text=="undefined" ||this.text=="unD") ? undefined:this.text;
+						},fontsize:this.fontsize
+					}))
 			}
 		}
 		return res;

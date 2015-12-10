@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $ui$, speakergrid, screen, view, label, numberbox, textbox, button, $widgets$, propviewer, colorpicker){	
+define.class(function($server$, composition, role, $ui$, speakergrid, screen, view, label, numberbox, textbox, button, $widgets$, propviewer, colorpicker, radiogroup){	
 	this.render = function(){ return [
 		role(
 			screen({clearcolor:vec4('blue'),flexwrap:"nowrap", flexdirection:"row",bg:
@@ -12,12 +12,15 @@ define.class(function($server$, composition, role, $ui$, speakergrid, screen, vi
 					}
 				}
 				,speakergrid({flexdirection:"column", bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040" }
-					,view({flexdirection:"row", flex: 1, bg:0}
+					,view({flexdirection:"column", flex: 1, bg:0}
 						,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:20, padding:4, bg:0}	
 							,numberbox({fontsize: 10, value:10})
 						)
 						,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:20, padding:4, bg:0}	
 							,numberbox({fontsize: 20, value:10})
+						)
+						,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:20, padding:4, bg:0}	
+							,radiogroup({fontsize: 20, values:["undefined" , "a","b","c", undefined]})
 						)
 					)
 					,view({flexdirection:"row", flex: 1, bg:0}
