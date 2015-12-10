@@ -15,6 +15,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		stepvalue: {type: float, value: 1},
 		bordercolor: {motion:"easeout", duration:0.2, value: "gray" },
 		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
+		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
 	// Font size in device-pixels.
 		fontsize: {type: float, value: 14},		
 	}
@@ -30,6 +31,16 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 //			tn.redraw();
 		}
 	}
+	
+	this.focus = function(newfocus){
+		if (newfocus){
+			this.bordercolor = this.focusbordercolor;
+		}
+		else{
+			this.bordercolor = this.neutralbordercolor;
+		}
+	}
+	
 	this.checkandset = function(newval){
 		if (isNaN(newval)) newval = 0;		
 		if (this.maxvalue!=undefined && newval > this.maxvalue) newval = this.maxvalue;
@@ -65,8 +76,12 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.mouseleftup = function(p){
-		this.bordercolor = this.neutralbordercolor
-		
+		if (this.focus) {
+			this.bordercolor = this.focusbordercolor
+		}
+		else{
+			this.bordercolor = this.neutralbordercolor
+		}
 		this.mousemove = function(){}
 	}
 	this.bgcolor = "#f0f0f0";
