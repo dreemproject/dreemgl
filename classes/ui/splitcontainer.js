@@ -18,7 +18,7 @@ define.class(function($ui$, view, label){
 		// the color of the splitter bar
 		splittercolor: {type: vec4, value: vec4("#404050")},
 		// color of splitter bar on hover
-		hovercolor: {type: vec4, value: vec4("#5050a0")},
+		hovercolor: {type: vec4, value: vec4("#80b0b0")},
 		// color of the splitter bar when dragging it
 		activecolor: {type: vec4, value: vec4("#7070a0")}
 	}
@@ -46,17 +46,19 @@ define.class(function($ui$, view, label){
 			vertical: {type: Boolean, value: false},
 			splitsize: {type: float, value: 10},
 			splittercolor: {type: vec4, value: vec4("#404050")},
-			hovercolor: {type: vec4, value: vec4("#5050a0")},
+			hovercolor: {type: vec4, value: vec4("#f050a0")},
+			bgcolor:{duration:0.1, motion:"linear"},
 			activecolor: {type: vec4, value: vec4("#7070a0")}
 		}
 		this.flex = 0
-
+		this.neutralcolor = this.bgcolor;
 		this.mouseover  = function(){
-			//this.setDirty(true);
+			this.bgcolor = this.hovercolor;
 		}
 
 		this.mouseout  = function(){
 			//this.setDirty(true);
+			this.bgcolor = this.neutralcolor;
 		}
 
 		this.mouseleftdown = function(event){
