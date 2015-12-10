@@ -460,25 +460,31 @@ define.class('$system/base/node', function(require){
 	}
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
-	// usually this is handled automatically so shouldnt need to call this manually
+
+	this.relayoutRecur = function(){
+		this.layout_dirty = true
+		for(var i = 0;i < this.child_viewport_list.length;i++){
+			this.child_viewport_list[i].relayoutRecur()
+		}
+	}
+
 	this.relayout = function(shallow){
-		// so we need to have a list of child viewports
-		if(!this.parent_viewport || this.parent_viewport.layout_dirty) return
-		var child_viewport_list = this.parent_viewport.child_viewport_list
-		for(var i = 0; i < child_viewport_list.length;i++){
-			var child = child_viewport_list[i]
-			child.relayout(true)
-		}
-		var parent = this
+		if(this.screen)this.screen.relayoutRecur()
+		return
+		var parent = this.parent_viewport
+		// ok we haz parent viewport, they we have to check if we are _overflow is something
 		while(parent){
-			var viewport = parent.parent_viewport
-			if(!viewport || viewport.layout_dirty) break
-			viewport.layout_dirty = true
-			parent = viewport.parent 
-			if(shallow) break
+			parent.redraw()
+			parent.layout_dirty = true
+
+			if(parent === parent.parent_viewport){
+				parent = parent.parent && parent.parent.parent_viewport
+			}
+			else{
+				parent = parent.parent_viewport
+				if(parent._overflow) break
+			}
 		}
-		// layout happens in the drawloop
-		this.redraw()
 	}
 
 	// redraw our view and bubble up the viewport dirtiness to the root
@@ -490,7 +496,7 @@ define.class('$system/base/node', function(require){
 			if(!viewport) break
 			if(viewport.draw_dirty === 3) return
 			viewport.draw_dirty = 3
-			parent = viewport.parent 
+			parent = viewport.parent
 		}
 		if(this.device && this.device.redraw) this.device.redraw()
 	}
@@ -592,6 +598,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._viewport){
+
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
 			}
@@ -668,6 +675,7 @@ define.class('$system/base/node', function(require){
 					}
 				})
 			)
+	
 			this.mousewheelx = function(event){
 				var wheel = event.wheel
 				if(this.hscrollbar._visible){
@@ -763,7 +771,7 @@ define.class('$system/base/node', function(require){
 
 		if(!nochild){
 			var children = node.children
-			for(var i = 0; i < children.length;i++){
+			for(var i = 0; i < children.length; i++){
 				var child = children[i]
 				var clayout = child.layout
 				clayout.absx = layout.absx + clayout.left 
@@ -778,7 +786,7 @@ define.class('$system/base/node', function(require){
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)) {
 			// call setter
 			// lets reset the scroll position
-			ref.emit('layout', {type:'setter',owner:ref,key:'layout', value:layout})
+			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
 	}

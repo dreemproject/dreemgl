@@ -53,7 +53,7 @@ define.class(function(require, baseclass){
 			var dt = this.drawtargets[i]
 			if(!pools[dt]) pools[dt] = []
 			pools[dt].push(this[dt])
-			this[dt] = undefined
+			this[dt] = null
 		}
 	}
 
@@ -282,6 +282,7 @@ define.class(function(require, baseclass){
 		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			var draw = dl[i]
 
+
 			if(draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 				continue
 			}
@@ -296,12 +297,14 @@ define.class(function(require, baseclass){
 			if(!draw._visible) continue
 
 			if(draw.atDraw) draw.atDraw(this)
-
-			if(draw._viewport && draw.drawpass !== this && draw.drawpass.color_buffer){
+			if(draw._viewport && draw.drawpass !== this ){
+				if(!draw.drawpass.color_buffer){
+					console.log("WE HAVE A NULL COLOR_BUFFER")
+					continue
+				}
 				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 				// lets render the view as a layer
 				var blendshader = draw.viewportblendshader
-
 				if (view._viewport === '3d'){
 					blendshader.depth_test = 'src_depth <= dst_depth'
 				}
@@ -312,6 +315,7 @@ define.class(function(require, baseclass){
 				blendshader.width = draw.layout.width
 				blendshader.height = draw.layout.height
 				blendshader.drawArrays(this.device)
+
 			}
 			else{
 				draw.updateShaders()
@@ -320,6 +324,7 @@ define.class(function(require, baseclass){
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]
+					if(shader.view !== draw) debugger
 					if(shader.pick_only || !shader.visible) continue // was pick only
 					// we have to set our guid.
 					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix

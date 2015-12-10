@@ -318,9 +318,14 @@ define.class(function(require, exports){
 			node = node.parent
 		}
 		
-		if(!node.parent){ // fast path to chuck the whole set
+		if(!node.parent){ // fast path to chuck the whole setc
 			// lets put all the drawpasses in a pool for reuse
-			for(var i = 0; i < this.drawpass_list.length; i++) this.drawpass_list[i].drawpass.poolDrawTargets()
+			for(var i = 0; i < this.drawpass_list.length; i++){
+				var draw = this.drawpass_list[i]
+				draw.drawpass.poolDrawTargets()
+				draw.layout_dirty = true
+				draw.draw_dirty = 3
+			}
 			this.drawpass_list = []
 			this.layout_list = []
 			this.drawpass_idx = 0

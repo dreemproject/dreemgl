@@ -29,7 +29,9 @@ define.class(function($server$, composition, role, $ui$, cadgrid, screen, view, 
 							,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:50, padding:4}	
 								,view({flexdirection:"column", flex:1, bg:0, margin:0}			
 									,cadgrid({margin:4,name:"thecadgrid",height:10, fontsize:14,text:"this is a label with some example props"})
-									,propviewer({target:"thecadgrid", flex:1, overflow:"scroll"})
+									,propviewer({target:"thecadgrid",
+										flex:1, overflow:"scroll"
+									})
 								)
 							)
 							,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:50, padding:4}	
@@ -37,7 +39,7 @@ define.class(function($server$, composition, role, $ui$, cadgrid, screen, view, 
 									,colorpicker({name:"thepicker", text:"this is a button with some example props"})
 									,propviewer({target:"thepicker", flex:1, overflow:"scroll"})
 								)
-							)		
+							)	
 						)
 					)
 				

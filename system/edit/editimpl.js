@@ -54,7 +54,7 @@ define.mixin(function(require){
 		// aight. lets process em undos
 		if(!stack1.length) return
 		var last_group = stack1[stack1.length - 1].group
-		for(var i = stack1.length - 1;i>=0;i--){
+		for(var i = stack1.length - 1; i >= 0; i--){
 			var item = stack1[i]
 			var last_cursor
 			if(item.group != last_group) break
@@ -338,7 +338,6 @@ define.mixin(function(require){
 
 	// move selection down one line
 	this.keyUparrowAlt = function(){
-
 	}
 
 	this.keyTab = function(){

@@ -59,7 +59,7 @@ define.class(function(exports){
 			// we need to call re-render on this
 			if(!initializing){
 				render(this, undefined, globals, undefined, true)
-				this.redraw()
+				this.relayout()
 			}
 			//this.setDirty(true)
 			//if(this.reLayout) this.reLayout()

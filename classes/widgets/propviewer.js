@@ -54,7 +54,15 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var attr = c._attributes[key];	
 				groupcontent.push(propeditor({value:thevalue, property:attr, propertyname: key}))
 			}
-			res.push(foldcontainer({collapsed: true,basecolor:"#d9e0e0",icon:"cube", title: group}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
+			res.push(foldcontainer({
+				collapsed: true,
+				basecolor:"#d9e0e0",
+				icon:"cube", 
+				title: group
+			}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
+			res[res.length-1].collapsed = function(){
+				window.mydbg = 1
+			}
 		}
 		return res;
 	}
