@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
+define.class(function(require, $ui$, view, label, button, scrollbar, textbox, numberbox){
 	
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 		
@@ -12,9 +12,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		// the value of the colorpicker, a color
 		value: {type: vec4, value: "white", meta:"color"},
 		// the foreground color of the fonts
-		fgcolor: {type: vec4, value: "white", meta:"color"},
-		// the fontsize of the text
-		fontsize:{type: int, value: 15, meta:"fontsize"},
+		fontsize:{type: int, value: 14, meta:"fontsize"},
 		// internal border color
 		internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6), meta:"color"},
 		// read-only the hue value (HSV)
@@ -23,6 +21,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		basesat: {type:float, value:0.8, readonly:true},
 		// read-only, the value (HSV)
 		baseval: {type:float, value:0.5, readonly:true},
+		sliderheight: {type: float, value:15}
 	}
 
 	this.basehue = 0.5;
@@ -98,9 +97,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 	
 	this.value = function(){
 		this.createHSVFromColor();		
-		this.contrastcolor = vec4.fromHSV(0, 0, 1 - this.baseval * (1 - this.basesat*0.5),0.8)
+		this.contrastcolor = vec4.fromHSV(0, 0, 1 - this.baseval * (1 - this.basesat*0.5),1)
 		this.updateallcontrols();
 	}
+	
+	
 	
 	this.layout = function(){
 		this.value = this.value;
@@ -154,8 +155,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 		this.updateallcontrols();		
 	}	
 	
-	define.class(this, "customslider", function($ui$view){
-		this.height = 19;
+	define.class(this, "customslider", function($ui$,view){
+		
 		
 		this.attributes = {
 				
@@ -621,24 +622,24 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 					,this.squareview({basehue:this.basehue, position:"absolute"})
 				)
 				,view({bg:0, flexdirection:"column"}
-					,this.customslider({name:"rslider",flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})
-					,this.customslider({name:"gslider", flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5), offset:function(v){this.outer.setGreen(v.value/255)}})
-					,this.customslider({name:"bslider",height: 18, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})
+					,this.customslider({name:"rslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})
+					,this.customslider({name:"gslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5), offset:function(v){this.outer.setGreen(v.value/255)}})
+					,this.customslider({name:"bslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})
 					,view({bg:0}
-						,label({flex:1, text:"rgb", fontsize:18, bg:0, fgcolor: this.fgcolor})
-						,view({flex:1, bg:0},textbox({name:"textr",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},textbox({name:"textg",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},textbox({name:"textb",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
+						,label({flex:0.5, text:"rgb", fontsize:this.fontsize, bg:0, fgcolor: this.contrastcolor})
+						,view({flex:1, bg:0},numberbox({flex:1, minvalue:0, maxvalue:255, name:"textr",value:"100", fontsize:this.fontsize,bg:0, fgcolor: this.contrastcolor}))
+						,view({flex:1, bg:0},numberbox({flex:1, minvalue:0, maxvalue:255, name:"textg",value:"100", fontsize:this.fontsize,bg:0, fgcolor: this.contrastcolor}))
+						,view({flex:1, bg:0},numberbox({flex:1, minvalue:0, maxvalue:255, name:"textb",value:"100", fontsize:this.fontsize,bg:0, fgcolor: this.contrastcolor}))
 						
 					)
-					,this.customslider({name:"hsvider",height: 18, flex:1, hsvfrom:vec3(0.0,this.basesat,this.baseval), hsvto:vec3(1,this.basesat,this.baseval), offset:function(v){this.outer.setHueBase(v.value/255)}})
-					,this.customslider({name:"sslider",height: 18, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,0,this.baseval), hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}})
-					,this.customslider({name:"lslider",height: 18, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,this.basesat,0), hsvto:vec3(0,this.basesat,1), offset:function(v){this.outer.setLumBase(v.value/255)}})
+					,this.customslider({name:"hsvider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.0,this.basesat,this.baseval), hsvto:vec3(1,this.basesat,this.baseval), offset:function(v){this.outer.setHueBase(v.value/255)}})
+					,this.customslider({name:"sslider",height: this.sliderheight, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,0,this.baseval), hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}})
+					,this.customslider({name:"lslider",height: this.sliderheight, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,this.basesat,0), hsvto:vec3(0,this.basesat,1), offset:function(v){this.outer.setLumBase(v.value/255)}})
 					,view({bg:0}
-						,label({flex:1, text:"hsv", fontsize:18, bg:0, fgcolor: this.fgcolor})
-						,view({flex:1, bg:0},textbox({name:"texth",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},textbox({name:"texts",value:"300", fontsize:18, bg:0, fgcolor: this.fgcolor}))
-						,view({flex:1, bg:0},textbox({name:"textv",value:"100", fontsize:18, bg:0, fgcolor: this.fgcolor}))						
+						,label({flex:0.5, text:"hsv", fontsize:this.fontsize, bg:0, fgcolor: this.contrastcolor})
+						,view({flex:1, bg:0},numberbox({flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texth",value:"100", bg:0, fgcolor: this.contrastcolor}))
+						,view({flex:1, bg:0},numberbox({flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texts",value:"300", bg:0, fgcolor: this.contrastcolor}))
+						,view({flex:1, bg:0},numberbox({flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"textv",value:"100", bg:0, fgcolor: this.contrastcolor}))						
 					)
 				)
 			)			
@@ -646,12 +647,12 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox){
 			,view({ bg:0,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"}
 				,view({ bg:0,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}
 					,view({flex:1, bg:0,alignitems:"flex-end",justifycontent:"flex-end"}
-						,label({bg:0, margin:vec4(10,5,0,0),text:"#", fgcolor:this.fgcolor, fontsize: this.fontsize})
-						,textbox({name:"hexcolor", bg:0, margin:vec4(0,5,0,0), value:"ff00ff",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
+						,label({bg:0,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"#", fgcolor:this.contrastcolor, fontsize: this.fontsize})
+						,textbox({name:"hexcolor", bg:0, margin:vec4(0,5,0,0), value:"ff00ff",  fgcolor:this.contrastcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
 					)
 					,view({flex:1, bg:0,alignitems:"flex-end",justifycontent:"flex-end"}
-						,label({bg:0, margin:vec4(10,5,0,0),text:"alpha",  fgcolor:this.fgcolor, fontsize: this.fontsize})
-						,textbox({name:"texta", bg:0,  margin:vec4(0,5,0,0), value:"128",  fgcolor:this.fgcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
+						,label({bg:0,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"alpha",  fgcolor:this.contrastcolor, fontsize: this.fontsize})
+						,textbox({name:"texta", bg:0,  margin:vec4(0,5,0,0), value:"128",  fgcolor:this.contrastcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
 					)
 				)
 			)				

@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, button, scrollbar, textbox,$widgets$, colorpicker, radiogroup){
+define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, button, scrollbar,textbox, numberbox,$widgets$, colorpicker, radiogroup){
 	this.attributes = {
 		target:{type:String,value:""},
 		property:{type:Object},
@@ -12,6 +12,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		propertyname:{type:String,value:""},
 		fontsize: {type:float, value: 13}
 	}
+	
 	this.bg = {
 		color:function(){								
 			var col1 = vec3(0.95,0.95,0.95);
@@ -50,16 +51,16 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		
 			if (this.property.meta=="color"){
 				return this.wrap(				
-					foldcontainer({width:302, title:"colorpicker",  icon:"circle", collapsed:true, basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)},view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.value})))
+					foldcontainer({fontsize:this.fontsize, width:302, title:"colorpicker",  icon:"circle", collapsed:true, basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)},view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.value})))
 				)
 			}
 			
 			return this.wrap(
 				view({bg:0},
-					textbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[0],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[1],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[2],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[3],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					numberbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[0],margin:2}), 
+					numberbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[1],margin:2}), 
+					numberbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[2],margin:2}), 
+					numberbox({flex:1, align:"right", fontsize:this.fontsize, fgcolor:"#303030", value:this.value[3],margin:2})
 				)
 			);
 		}
@@ -67,9 +68,9 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="vec3"){
 			return this.wrap(
 				view({bg:0},
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[0],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[1],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[2],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[0], margin:2}), 
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[1], margin:2}), 
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[2], margin:2})
 				)
 			);
 		}
@@ -77,8 +78,8 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="vec2"){
 			return this.wrap(
 				view({bg:0},
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[0],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}), 
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[1],padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[0],margin:2}), 
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value[1],margin:2})
 				)
 			);            
 		}
@@ -86,7 +87,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="FloatLike"){
 			return this.wrap(
 				view({bg:0},
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2}) 
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value, margin:2}) 
 				)
 			)
 		}
@@ -94,7 +95,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="String"){			
 			return this.wrap(
 				view({bg:0},
-					textbox({flex:1, fgcolor:"#308030", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#308030", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				) 
 			)
 		}

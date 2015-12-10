@@ -50,7 +50,7 @@ define.class('$system/base/node', function(require){
 		
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
-		scroll: {type:vec2, value:vec2(0, 0)},
+		scroll: {type:vec2, value:vec2(0, 0), persist: true},
 		// the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
 		zoom:{type:float, value:1},
 		// overflow control, shows scrollbars when the content is larger than the viewport. Only works on viewport:'2D'
@@ -675,7 +675,10 @@ define.class('$system/base/node', function(require){
 					}
 				})
 			)
-	
+			
+			if(this.hscrollbar) this.hscrollbar.value = Mark(this._scroll[0])
+			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
+
 			this.mousewheelx = function(event){
 				var wheel = event.wheel
 				if(this.hscrollbar._visible){

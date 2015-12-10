@@ -75,9 +75,6 @@ define.class(function(view, label, icon){
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
 	define.class(this, 'labelclass', function(label){
 		this.subpixel = false
-		this.fontsubpixelaa =  {
-			boldness:0.9
-		}
 		this.bg = 0
 	})
 
@@ -119,15 +116,20 @@ define.class(function(view, label, icon){
 	}
 
 	this.render = function(){
-		this.buttonres =  this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true, marginleft: 4,fontsize: this.fontsize, position: "relative", text: this.text})
-		if (!this.icon || this.icon.length == 0){
-			this.iconres = undefined
-			return [this.buttonres]
-		} 
+		
+		var res = [];
+		this.buttonres = undefined;
+		this.iconres = undefined
+		if (this.text && this.text.length > 0){
+			this.buttonres = this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true, marginleft: 4,fontsize: this.fontsize, position: "relative", text: this.text})
+			res.push(this.buttonres);
+		}
 		else {
 			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
-			return [this.iconres, this.buttonres]
+			res.push(this.iconres);
 		}
+		return res
+
 	}
 
 	// Basic usage of the button.	

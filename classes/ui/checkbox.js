@@ -21,8 +21,8 @@ define.class(function(view,icon){
 
 		// Color of the label text in neutral state	
 		textcolor: {meta:"color", type: vec4, value: vec4("#404040")},
-
-		// Color of the label text in pressed-down state	
+		
+		// Color of the label text in pressed-down state			
 		textactivecolor: {meta:"color", type: vec4, value: vec4("green")},
 		
 		// First gradient color for the button background in neutral state
