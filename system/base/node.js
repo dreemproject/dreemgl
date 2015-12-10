@@ -504,26 +504,28 @@ define.class(function(require, constructor){
 					return
 				}
 
+				var store
 				if(!this.hasOwnProperty(alias_key)){
-					var store = this[alias_key]
+					store = this[alias_key]
 					store = this[alias_key] = store.struct(store)
 				}
 				else{
 					store = this[alias_key]
 				}
-
+				var old = this[value_key]
 				this[value_key] = store[config.index] = value
 
 				// emit alias
 				this.emit(config.alias, {setter:true, via:key, key:config.alias, owner:this, value:this[alias_key], mark:mark})
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, value:value, mark:mark})
+				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
 			}
 
 			this.addListener(config.alias, function(event){
+				var old = this[value_key]
 				var val = this[value_key] = event.value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, mark:event.mark})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old, mark:event.mark})
 			})
 			// initialize value
 			this[value_key] = this[alias_key][config.index]
@@ -557,11 +559,11 @@ define.class(function(require, constructor){
 					// store the end value
 					return
 				}
-
+				var old = this[value_key]
 				this[value_key] = value
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, value:value, mark:mark})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
 			}
 		}
 		

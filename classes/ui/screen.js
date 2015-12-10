@@ -389,6 +389,7 @@ define.class(function(require, $ui$view) {
 
 	// focus the next view from view
 	this.focusNext = function(view){
+		console.log('focusnext')
 		// continue the childwalk.
 		var screen = this, found 
 		function findnext(node, find){
@@ -397,7 +398,7 @@ define.class(function(require, $ui$view) {
 				if(view === find){
 					found = true
 				}
-				else if(view.tabstop && found){
+				else if(!isNaN(view.tabstop) && found){
 					screen.setFocus(view)
 					return true
 				}
@@ -423,7 +424,7 @@ define.class(function(require, $ui$view) {
 						return true
 					}
 				}
-				else if(view.tabstop){
+				else if(!isNaN(view.tabstop)){
 					last = view
 				}
 				if(findprev(view, find)) return true

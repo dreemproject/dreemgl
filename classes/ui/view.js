@@ -222,7 +222,9 @@ define.class('$system/base/node', function(require){
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Event,
 		// wether this view has focus
-		focus: boolean
+		focus: false,
+		// tabstop, sorted by number
+		tabstop: NaN
 	}
 
 	this.camera = this.lookat = this.up = function(){this.redraw();};
@@ -284,6 +286,17 @@ define.class('$system/base/node', function(require){
 	this.overflow = function(){
 		if(this._overflow){
 			if(!this._viewport) this._viewport = '2d'
+		}
+	}
+
+	// put a tablistener
+	this.tabstop = function(event){
+		if(isNaN(event.old) && !isNaN(event.value)){
+			this.addListener('keydown', function(value){
+				if(value.name === 'tab'){
+					this.screen.focusNext(this)
+				}
+			})
 		}
 	}
 

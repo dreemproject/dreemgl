@@ -35,7 +35,7 @@ define.class(function(require, $ui$, label){
 		}
 	})
 
-	this.tabstop = true
+	this.tabstop = 0
 	
 	define.class(this, 'markers', require('$system/font/markershader.js'), function(){
 		this.updateorder = 6

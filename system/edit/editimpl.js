@@ -340,14 +340,6 @@ define.mixin(function(require){
 	this.keyUparrowAlt = function(){
 	}
 
-	this.keyTab = function(){
-		this.screen.focusNext(this)
-	}
-
-	this.keyTabShift = function(){
-		this.screen.focusPrev(this)
-	}
-
 	this.keyDelete = function(){
 		this.cursorset.delete()
 		this.doCursor()
