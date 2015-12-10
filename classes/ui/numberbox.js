@@ -9,17 +9,26 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	
 	this.attributes = {
 		// The label for the button
-		value: {type: float, value: 0, persist: true},
+		value: {type: float, value: 0},
 		minvalue: {type: float, value: undefined},
 		maxvalue: {type: float, value: undefined},
 		stepvalue: {type: float, value: 1},
-		
-		// Font size in device-pixels.
+		bordercolor: {motion:"easeout", duration:0.2, value: "gray" },
+		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
+	// Font size in device-pixels.
 		fontsize: {type: float, value: 14},		
 	}
+	this.neutralbordercolor = this.bordercolor;
+	
 	this.bg = 0;
 	this.fgcolor="#101010";
-	
+	this.value = function(){
+		var tn = this.find("thenumber");
+		if (tn) {
+			tn.text = this._value.toString();
+//			tn.redraw();
+		}
+	}
 	this.checkandset = function(newval){
 		if (isNaN(newval)) newval = 0;		
 		if (this.maxvalue!=undefined && newval > this.maxvalue) newval = this.maxvalue;
@@ -43,6 +52,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.mouseleftdown = function(p){
+		this.bordercolor = this.draggingbordercolor
 		this.lasty = p.local[1];
 		
 		this.checkandset(this.value);
@@ -54,6 +64,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.mouseleftup = function(p){
+		this.bordercolor = this.neutralbordercolor
+		
 		this.mousemove = function(){}
 	}
 	this.bgcolor = "#f0f0f0";
@@ -68,9 +80,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.padding = vec4(3,0,0,0);
 		
 	this.render = function(){
-		console.log(" ." );
 		return [
-				label({name:"thenumber", align:"right", text:this.value.toString(), margin:5,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
+				label({name:"thenumber", align:"right", text:this._value.toString(), margin:5,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
 				,view({flexdirection:"column", bg:0}
 					,button({text:"", icon:"plus", fontsize: this.fontsize*(2/3), margin:0, padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)})
 					,button({icon:"minus", text:"" , fontsize: this.fontsize*(2/3), margin:0, padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)})
