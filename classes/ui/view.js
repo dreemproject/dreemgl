@@ -294,7 +294,8 @@ define.class('$system/base/node', function(require){
 		if(isNaN(event.old) && !isNaN(event.value)){
 			this.addListener('keydown', function(value){
 				if(value.name === 'tab'){
-					this.screen.focusNext(this)
+					if(value.shift) this.screen.focusPrev(this)
+					else this.screen.focusNext(this)
 				}
 			})
 		}

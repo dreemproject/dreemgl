@@ -55,15 +55,18 @@ define.class('$system/base/keyboard', function (require, exports){
 				return e.preventDefault()
 			}
 			var keyname = this.toKey[ code ]
-			if( keyname ) this.emit(keyname, 1)
+			if( keyname ) this[keyname] = 1
+
 			var msg = { 
 				repeat: e.repeat,
 				code: code,
-				name: keyname
+				name: keyname,
+				shift:this._shift,
+				meta: this._leftmeta || this._rightmeta,
+				ctrl: this.ctrl,
+				alt: this.alt				
 			}
 
-			this[msg.name] = 1
-			
 			this.emit('down', msg)
 			
 			if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
@@ -74,7 +77,7 @@ define.class('$system/base/keyboard', function (require, exports){
 					repeat: e.repeat,
 					name: 'tab',
 					value: '\t',
-					char: 9
+					char: 9,
 				}
 				e.preventDefault()
 			}
@@ -87,14 +90,18 @@ define.class('$system/base/keyboard', function (require, exports){
 			var code = fireFoxTable[e.keyCode] || e.keyCode
 			var keyname = this.toKey[ code ]
 
-			if( keyname ) this.emit(keyname, 0)
+			if( keyname ) this[keyname] = 0
+
 			var msg = {
 				repeat: e.repeat,
 				code: code,
-				name: keyname
+				name: keyname,
+				shift:this._shift,
+				meta: this._leftmeta || this._rightmeta,
+				ctrl: this.ctrl,
+				alt: this.alt
 			}
-			this[msg.name] = 0
-			
+
 			if(special_key_hack){
 				special_key_hack = false
 				this.emit('down', msg)

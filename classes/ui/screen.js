@@ -389,7 +389,6 @@ define.class(function(require, $ui$view) {
 
 	// focus the next view from view
 	this.focusNext = function(view){
-		console.log('focusnext')
 		// continue the childwalk.
 		var screen = this, found 
 		function findnext(node, find){
