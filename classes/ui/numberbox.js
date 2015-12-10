@@ -20,6 +20,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		fontsize: {type: float, value: 14},		
 	}
 	this.neutralbordercolor = this.bordercolor;
+	this.tabstop = true;
 	
 	this.bg = 0;
 	this.fgcolor="#101010";
@@ -33,7 +34,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.focus = function(newfocus){
-		if (newfocus){
+		if (this._focus){
 			this.bordercolor = this.focusbordercolor;
 		}
 		else{
@@ -76,7 +77,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.mouseleftup = function(p){
-		if (this.focus) {
+		if (this._focus) {
 			this.bordercolor = this.focusbordercolor
 		}
 		else{
