@@ -20,7 +20,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		fontsize: {type: float, value: 14},		
 	}
 	this.neutralbordercolor = this.bordercolor;
-	this.tabstop = true;
+	this.tabstop = 0;
 	
 	this.bg = 0;
 	this.fgcolor="#101010";

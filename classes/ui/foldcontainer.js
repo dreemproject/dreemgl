@@ -46,10 +46,9 @@ define.class(function($ui$, view, label, icon){
 		
 		this.attributes = {
 			title: {type:String},
-			col1: {value:vec4("yellow"), meta:"color"},
-			col2: {value:vec4("yellow"), meta:"color"}
+			col1: {value:vec4("yellow"),persist:true, meta:"color", motion:"linear", duration:0.1},
+			col2: {value:vec4("yellow"),persist:true, meta:"color", motion:"linear", duration:0.2}
 		}
-
 		this.position = "relative";
 
 		this.bg = {
@@ -67,6 +66,7 @@ define.class(function($ui$, view, label, icon){
 		}
 
 		this.statedefault = function(){
+			console.log("statedefault");
 			this.col1 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
 			this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2)
 		}			
@@ -82,7 +82,7 @@ define.class(function($ui$, view, label, icon){
 			this.outer.toggle()
 		}
 		
-		this.init = this.statedefault
+		this.layout  = function(){this.statedefault();};
 		this.mouseover = this.stateover
 		this.mouseout = this.statedefault
 		this.mouseleftdown = this.stateclick
