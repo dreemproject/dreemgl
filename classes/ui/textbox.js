@@ -65,15 +65,15 @@ define.class(function(require, $ui$, label){
 	})
 	this.measure_with_cursor = true
 	
-	this.focusget = function(){
-		this.cursorsshader.visible = true
-		this.markercolor = this.markerfocus
-		this.redraw()
-	}
-
-	this.focuslost = function(){
-		this.cursorsshader.visible = false
-		this.markercolor = this.markerunfocus
+	this.focus = function(){
+		if(this._focus){
+			this.cursorsshader.visible = true
+			this.markercolor = this.markerfocus
+		}
+		else{
+			this.cursorsshader.visible = false
+			this.markercolor = this.markerunfocus
+		}
 		this.redraw()
 	}
 

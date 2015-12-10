@@ -221,10 +221,8 @@ define.class('$system/base/node', function(require){
 		keypress: Event,
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Event,
-		// fires when this view gets the focus
-		focusget: Event,
-		// fires when this view lost the focus
-		focuslost: Event	
+		// wether this view has focus
+		focus: boolean
 	}
 
 	this.camera = this.lookat = this.up = function(){this.redraw();};

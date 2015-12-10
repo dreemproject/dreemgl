@@ -382,8 +382,8 @@ define.class(function(require, $ui$view) {
 		if(this.focus_view !== view){
 			var old = this.focus_view
 			this.focus_view = view
-			if(old) old.emit('focuslost')
-			view.emit('focusget')
+			if(old) old.focus = false
+			view.focus = true
 		}
 	}
 
