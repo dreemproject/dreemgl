@@ -26,6 +26,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		var tn = this.find("thenumber");
 		if (tn) {
 			tn.text = this._value.toString();
+			this.relayout();
 //			tn.redraw();
 		}
 	}
