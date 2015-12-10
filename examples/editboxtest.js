@@ -12,7 +12,7 @@ define.class(function($server$, composition, role, $ui$, speakergrid, screen, vi
 					}
 				}
 				,speakergrid({flexdirection:"column", bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040" }
-					,view({flexdirection:"column", flex: 1, margin:40, borderradius:30}
+					,view({flexdirection:"column", flex: 1, bgcolor:vec4(1,1,1,0.83),margin:40, borderradius:30}
 						,view({flexdirection:"column", flex:1, bgcolor:"gray", margin:20, padding:4, bg:0}	
 							,numberbox({fontsize: 10, value:10})
 						)

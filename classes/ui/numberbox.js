@@ -37,6 +37,25 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		this.checkandset(this.value - this.stepvalue);
 	}
 		
+	this.updatevalue = function(p){
+		var l = p.local;
+		this.checkandset(this.basevalue + Math.floor((this.lasty - l[1] )/10)*this.stepvalue);	
+	}
+	
+	this.mouseleftdown = function(p){
+		this.lasty = p.local[1];
+		
+		this.checkandset(this.value);
+		this.basevalue = this.value;
+		this.mousemove = function(p){			
+			this.updatevalue(p);
+		}.bind(this);
+	
+	}
+	
+	this.mouseleftup = function(p){
+		this.mousemove = function(){}
+	}
 	this.bgcolor = "#f0f0f0";
 	this.padding =0;
 	this.borderwidth = 0;
