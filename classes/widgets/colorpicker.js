@@ -320,7 +320,9 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			draggersize: {type:float, value: 8},
 			
 		}
+		
 		this.overcount = 0;
+		
 		this.updatehue = function(mousepos){
 				var dx = mousepos[0] - this.layout.width/2;
 				var dy = mousepos[1] - this.layout.height/2;
@@ -339,9 +341,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				this.updatehue(event.local);
 			};
 		}
+		
 		this.mouseleftup = function(){
 			this.mousemove = function(){};
 		}
+		
 		this.mouseout = function(){
 			this.overcount--;
 			if (this.overcount < 0) this.overcount = 0;

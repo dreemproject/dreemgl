@@ -33,7 +33,6 @@ define.class(function($server$,composition, role, $ui$,treeview,  cadgrid, split
 		
 		
 		this.mouseleftdown = function(p){
-			console.log("click!");
 			var props = this.find("mainproperties");
 			if (props) props.target = this.name;
 			this.startposition = p.global;
@@ -41,24 +40,36 @@ define.class(function($server$,composition, role, $ui$,treeview,  cadgrid, split
 			this.starty = this.pos[1];
 			
 			this.mousemove = function(p){
-				console.log(p);
-				//console.log(p.local[0] - this.startposition[0] );
 				
-				this.pos[0] += p.global[0] - this.startposition[0] ;
-				this.pos[1] += p.global[1] - this.startposition[1] ;
-				this.startposition = p.global;
-			console.log(this.pos);
+				var dx = p.global[0] - this.startposition[0];
+				var dy = p.global[1] - this.startposition[1];
+				
+				
+				var x = Math.floor((this.startx+dx)/25)*25;
+				var y = Math.floor((this.starty+dy)/25)*25;
+
+				
+			
+				this.pos = vec2(x,y);
 				this.redraw();
 				this.relayout();
 			}.bind(this);
 		}
+		
 		this.mouseleftup = function(p){
+			var x = Math.floor(this.pos[0]/25)*25;
+			var y = Math.floor(this.pos[1]/25)*25;
+			this.pos = vec2(x,y);
+				this.redraw();
+				this.relayout();
+			
 			this.mousemove = function(){};
 		}
 		
 		this.render = function(){
-			return [label({text:this.title, bg:0})]
-			
+			return [
+				label({text:this.title, bg:0})
+			]
 		}
 	})
 	
@@ -76,8 +87,8 @@ define.class(function($server$,composition, role, $ui$,treeview,  cadgrid, split
 					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040"}
 						,this.block({name:"phone", title:"Phone", x:200, y:20})
 						,this.block({name:"tv", title:"Television", x:50, y:200})
-						,this.block({name:"tablet", title:"Tablet"})						
-						,this.block({name:"thing", title:"Thing"})						
+						,this.block({name:"tablet", title:"Tablet",x:200, y:20})						
+						,this.block({name:"thing", title:"Thing",x:200, y:20})						
 					) 
 					,splitcontainer({flex:0.3,direction:"horizontal"}
 						,this.dockpanel({title:"Library"}
