@@ -538,6 +538,19 @@ define.class('$system/base/node', function(require){
 	this.position =
 	this.relayout
 
+	this.getViewGuid = function(){
+		if(this.viewguid) return this.viewguid
+		if(this.pickguid){
+			return this.viewguid = '' + this.pickguid[0] + this.pickguid[1] + this.pickguid[2]
+		}
+		var node = this, id = ''
+		while(node){
+			if(node.parent) id += node.parent.children.indexOf(node)
+			node = node.parent
+		}
+		return this.viewguid = id
+	}
+
 	// this gets called by the render engine
 	this.updateShaders = function(){
 		if(!this.update_dirty) return
@@ -852,7 +865,8 @@ define.class('$system/base/node', function(require){
 	this.startAnimation = function(key, value, track, resolve){
 		if(this.screen) return this.screen.startAnimationRoot(this, key, value, track, resolve)
 		else{
-			this['_' + key] = value
+			return false
+	//		this['_' + key] = value
 		}
 	}
 

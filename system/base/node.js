@@ -555,7 +555,6 @@ define.class(function(require, constructor){
 				}
 
 				if(!mark && config.motion && this.startAnimation(key, value)){
-
 					// store the end value
 					return
 				}

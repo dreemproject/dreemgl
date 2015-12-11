@@ -514,9 +514,8 @@ define.class(function(require, $ui$view) {
 		var first = obj['_' + key]
 
 		var anim = new Animate(config, obj, key, track, first, value)
-
 		anim.promise = promise
-		var animkey = obj.pickguid + '_' + key
+		var animkey = obj.getViewGuid() + '_' + key
 		this.anims[animkey] = anim
 		obj.redraw()
 		return true
@@ -525,7 +524,7 @@ define.class(function(require, $ui$view) {
 
 	// internal, stop an animation, delegated from view
 	this.stopAnimationRoot = function(obj, key){
-		var animkey = obj.pickguid + '_' + key
+		var animkey = obj.getViewGuid() + '_' + key
 		var anim = this.anims[animkey]
 		if(anim){
 			delete this.anims[animkey]			
@@ -546,7 +545,7 @@ define.class(function(require, $ui$view) {
 			if(anim.start_time === undefined) anim.start_time = time
 			var mytime = time - anim.start_time
 			var value = anim.compute(mytime)
-
+			//console.log(anim.key, value)
 			if(value instanceof anim.End){
 				delete this.anims[key] 
 				//console.log(value.last_value)

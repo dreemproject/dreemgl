@@ -65,10 +65,10 @@ define.class(function($ui$, view, label, icon){
 			return [icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), label({marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 })];
 		}
 
-		this.statedefault = function(){
-			console.log("statedefault");
-			this.col1 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
-			this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2)
+		this.statedefault = function(first){
+			//console.log(this.parent.basecolor)
+			this.col1 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0), first)
+			this.col2 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2), first)
 		}			
 		
 		this.stateover = function(){
@@ -83,6 +83,9 @@ define.class(function($ui$, view, label, icon){
 		}
 		
 		this.layout  = function(){this.statedefault();};
+		this.init = function(){
+			this.statedefault(true)
+		}
 		this.mouseover = this.stateover
 		this.mouseout = this.statedefault
 		this.mouseleftdown = this.stateclick
