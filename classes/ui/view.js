@@ -410,6 +410,8 @@ define.class('$system/base/node', function(require){
 		//}
 
 		if(this._viewport){
+			if(this.bgshader) this.bgshader.noscroll = true
+			if(this.bordershader) this.bordershader.noscroll = true
 			this.viewportblendshader = new this.viewportblend(this)
 		}
 
