@@ -70,10 +70,10 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		
 		this.checkandset(this.value);
 		this.basevalue = this.value;
+
 		this.mousemove = function(p){			
 			this.updatevalue(p);
 		}.bind(this);
-	
 	}
 	
 	this.mouseleftup = function(p){
@@ -85,6 +85,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		}
 		this.mousemove = function(){}
 	}
+	
 	this.bgcolor = "#f0f0f0";
 	this.padding =0;
 	this.borderwidth = 0;
@@ -94,15 +95,13 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.justifycontent = "center";
 	this.alignitems = "center";	
 	this.borderwidth = 1;
-	this.padding = vec4(3,0,0,0);
 		
 	this.render = function(){
 		return [
-				label({name:"thenumber", align:"right", text:this._value.toString(), margin:5,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
-				,view({flexdirection:"column", bg:0}
-					,button({text:"", icon:"plus", fontsize: this.fontsize*(2/3), margin:0, padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)})
-					,button({icon:"minus", text:"" , fontsize: this.fontsize*(2/3), margin:0, padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)})
-				)
+				button({icon:"minus", text:"" , fontsize: this.fontsize*(2/3), margin:1, padding:2, borderradius:0, click:function(){this.downclick()}.bind(this)})
+				,label({name:"thenumber", align:"right", text:this._value.toString(), margin:2,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
+				,button({text:"", icon:"plus", fontsize: this.fontsize*(2/3), margin:1, padding:2, borderradius:0, click:function(){this.upclick()}.bind(this)})
+				
 		]
 	}
 })
