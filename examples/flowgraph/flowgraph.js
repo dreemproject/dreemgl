@@ -249,38 +249,47 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 	{
 		return [
 			this.menubar({})
-				
-				
-				,splitcontainer({}
-					,splitcontainer({flex:0.3}
-						,this.dockpanel({title:"Composition"}
-							,treeview({flex:1})
-						)
-					)
-					,this.dockpanel({title:"Patch"}
-						,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040"}
-							,view({name:"connectionlayer", bg:0}
-								,this.connection({from:"phone", to:"tv"})
-								,this.connection({from:"tablet", to:"thing"})
-							)
-							,view({name:"blocklayer", bg:0, layout:function(){console.log("layout")}}
-								,this.block({name:"phone", title:"Phone", x:200, y:20})
-								,this.block({name:"tv", title:"Television", x:50, y:200})
-								,this.block({name:"tablet", title:"Tablet",x:200, y:20})						
-								,this.block({name:"thing", title:"Thing",x:200, y:20})						
-							)
-						)
-					) 
-					,splitcontainer({flex:0.5,direction:"horizontal"}
-						,this.dockpanel({title:"Library"}
-							,propviewer({flex:1,name:"mainpropviewer", target:"thebutton", flex:1, overflow:"scroll"})
-						)
-						,this.dockpanel({title:"Properties"}
-							,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
-						)	
+			
+			,splitcontainer({}
+				,splitcontainer({flex:0.3}
+					,this.dockpanel({title:"Composition"}
+						,treeview({flex:1})
 					)
 				)
-				];
+				,this.dockpanel({title:"Patch"}
+					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040"}
+						,view({name:"connectionlayer", bg:0}
+							,this.connection({from:"phone", to:"tv"})
+							,this.connection({from:"tablet", to:"thing"})
+							,this.connection({from:"a", to:"b"})
+							,this.connection({from:"b", to:"c"})
+							,this.connection({from:"c", to:"d"})
+							,this.connection({from:"a", to:"c"})
+						)
+						,view({name:"blocklayer", bg:0, layout:function(){console.log("layout")}}
+							,this.block({name:"phone", title:"Phone", x:200, y:20})
+							,this.block({name:"tv", title:"Television", x:50, y:200})
+							,this.block({name:"tablet", title:"Tablet",x:200, y:20})						
+							,this.block({name:"thing", title:"Thing",x:200, y:20})						
+							,this.block({name:"a", title:"block A", x:50, y:200})
+							,this.block({name:"b", title:"block B", x:50, y:200})
+							,this.block({name:"c", title:"block C", x:50, y:200})
+							,this.block({name:"d", title:"block D", x:50, y:200})
+							,this.block({name:"e", title:"block E", x:50, y:200})
+							,this.block({name:"f", title:"block F", x:50, y:200})
+						)
+					)
+				) 
+				,splitcontainer({flex:0.5,direction:"horizontal"}
+					,this.dockpanel({title:"Library", viewport:"2D" }
+						,propviewer({flex:1,name:"mainpropviewer", target:"thebutton", flex:1, overflow:"scroll"})
+					)
+					,this.dockpanel({title:"Properties", viewport:"2D"}
+						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
+					)	
+				)
+			)
+		];
 	}
 });
 	
