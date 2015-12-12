@@ -8,7 +8,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	var glfontParser = require('$system/font/fontparser')
 
 	// the font
-	this.typeface = glfontParser(require('$resources/fonts/code_font2_ascii.glf'))
+	this.typeface = glfontParser(require('$resources/fonts/code_font1_ascii.glf'))
 
 	// initial pixel and vertex shaders
 	this.position = "glyphy_mesh()"

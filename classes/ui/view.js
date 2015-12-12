@@ -543,7 +543,7 @@ define.class('$system/base/node', function(require){
 	this.getViewGuid = function(){
 		if(this.viewguid) return this.viewguid
 		if(this.pickguid){
-			return this.viewguid = '' + this.pickguid[0] + this.pickguid[1] + this.pickguid[2]
+			this.viewguid = '' +this.pickguid
 		}
 		var node = this, id = ''
 		while(node){
@@ -737,7 +737,6 @@ define.class('$system/base/node', function(require){
 				this.updateScrollbars()
 				this.redraw()
 			}
-			if(this.bgshader) this.bgshader.noscroll = true
 		}
 	}
 	
@@ -1150,6 +1149,7 @@ define.class('$system/base/node', function(require){
 		}
 	})
 	this.roundedborder = false
+
 
 	// lets pull in the scrollbar on the view
 	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){

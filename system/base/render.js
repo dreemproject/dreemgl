@@ -16,6 +16,7 @@ define.class(function(exports){
 			state = {wires:[], render_block: []}
 			is_root = true
 		}
+		if(!new_version) debugger
 		/*
  		if(new_version.preRender && !rerender){
  			if(state.render_block.indexOf(new_version) == -1){
@@ -27,7 +28,7 @@ define.class(function(exports){
 	 		}
  		}*/
 
-		for(var key in globals){
+		if(new_version) for(var key in globals){
 			new_version[key] = globals[key]
 		}
 		
