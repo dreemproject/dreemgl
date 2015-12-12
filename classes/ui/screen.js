@@ -545,7 +545,6 @@ define.class(function(require, $ui$view) {
 			if(anim.start_time === undefined) anim.start_time = time
 			var mytime = time - anim.start_time
 			var value = anim.compute(mytime)
-			//console.log(anim.key, value)
 			if(value instanceof anim.End){
 				delete this.anims[key] 
 				//console.log(value.last_value)

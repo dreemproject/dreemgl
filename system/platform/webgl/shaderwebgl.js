@@ -453,6 +453,7 @@ define.class('$system/base/shader', function(require, exports){
 	this.drawArrays = function(devicewebgl, sub, start, end){
 		//if(this.mydbg) debugger
 		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
+		if(!this.shader) return
 		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
 		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)

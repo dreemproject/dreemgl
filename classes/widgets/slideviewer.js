@@ -25,10 +25,11 @@ define.class(function($ui$, view, label){
 
 	// the class for a nested slide, its automatically wrapped around children
 	define.class(this, 'slide', function($ui$, view){
-		this.cornerradius = vec4(10,10,10,10)
+		this.borderradius = vec4(10)
 		this.borderwidth = 0
 		this.bordercolor = vec4("blue")
 		this.bgcolor = "white"
+
 		this.flex = 0
 		this.viewport = '2d'
 		this.overflow = 'hidden'
