@@ -804,7 +804,7 @@ define.class('$system/base/node', function(require){
 				var child = children[i]
 				var clayout = child.layout
 				clayout.absx = layout.absx + clayout.left 
-				clayout.absy = layout.absx + clayout.top
+				clayout.absy = layout.absy + clayout.top
 
 				emitPostLayoutAndComputeBounds(child, boundsobj, child._viewport)
 			}
