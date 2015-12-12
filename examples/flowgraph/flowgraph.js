@@ -189,14 +189,14 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		this.mouseleftdown = function(p){
 			var props = this.find("mainproperties");
 			if (props) props.target = this.name;
-			this.startposition = p.global;
+			this.startposition = this.parent.localMouse();
 			this.startx = this.pos[0];
 			this.starty = this.pos[1];
 			
-			this.mousemove = function(p){
-				
-				var dx = p.global[0] - this.startposition[0];
-				var dy = p.global[1] - this.startposition[1];
+			this.mousemove = function(evt){
+				p = this.parent.localMouse()
+				var dx = p[0] - this.startposition[0];
+				var dy = p[1] - this.startposition[1];
 				var x = Math.floor((this.startx+dx)/this.snap)*this.snap;
 				var y = Math.floor((this.starty+dy)/this.snap)*this.snap;	
 
