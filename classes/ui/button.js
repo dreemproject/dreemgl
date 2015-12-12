@@ -19,7 +19,6 @@ define.class(function(view, label, icon){
 		
 		// Gradient color 1	
 		col1: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
-		
 		// Gradient color 2
 		col2: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
 
@@ -31,19 +30,16 @@ define.class(function(view, label, icon){
 		
 		// First gradient color for the button background in neutral state
 		buttoncolor1: {meta:"color", type: vec4, value: vec4("#fffff0")},
-		
 		// Second gradient color for the button background in neutral state	
 		buttoncolor2: {meta:"color", type: vec4, value: vec4("#ffffff")},
 		
 		// First gradient color for the button background in hovered state
 		hovercolor1: {meta:"color", type: vec4, value: vec4("#f0f0f0")},
-		
 		// Second gradient color for the button background in hovered state
 		hovercolor2: {meta:"color", type: vec4, value: vec4("#f8f8f8")},
 		
 		// First gradient color for the button background in pressed state
 		pressedcolor1: {meta:"color", type: vec4, value: vec4("#d0d0f0")},
-		
 		// Second gradient color for the button background in pressed state
 		pressedcolor2: {meta:"color", type: vec4, value: vec4("#d0d0f0")},
 
@@ -124,13 +120,11 @@ define.class(function(view, label, icon){
 		var res = [];
 		this.buttonres = undefined;
 		this.iconres = undefined
-		
 		if (this.text && this.text.length > 0){
 			this.buttonres = this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true, marginleft: 4,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
-		
-		if (this.icon && this.icon.length > 0){
+		else {
 			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}

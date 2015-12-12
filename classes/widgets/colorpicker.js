@@ -351,8 +351,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			if (this.overcount < 0) this.overcount = 0;
 			if (this.overcount == 0) this.hover = 0;
 			if (this.overcount == 0) this.redraw();
+			
 		}
-		
 		this.mouseover = function(){
 			if (this.overcount == 0) this.hover = 1;
 			this.overcount++;
