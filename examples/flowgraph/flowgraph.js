@@ -258,7 +258,7 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 					)
 				)
 				,this.dockpanel({title:"Patch"}
-					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040"}
+					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#303030",minorsize:50,majorsize:150,  majorline:"#505040", minorline:"#404040"}
 						,view({name:"connectionlayer", bg:0}
 							,this.connection({from:"phone", to:"tv"})
 							,this.connection({from:"tablet", to:"thing"})

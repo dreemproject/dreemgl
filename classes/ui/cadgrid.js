@@ -30,21 +30,34 @@ define.class(function(view, label){
 	this.bg = {
 		position:function(){
 			// do something here with view.scrollmatrix
-			uv = mesh.xy
+			
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
+			
+			majthres = 2.0/view.majorsize * view.zoom
+			minthres = 2.0/view.minorsize * view.zoom
+			uv = mesh.xy * view.zoom;
+			uv += vec2(view.scroll.x/view.layout.width,view.scroll.y/view.layout.height);
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			
 		},
 		grid: function(a){
-			if (floor(mod(a.x * view.layout.width,view.majorsize )) == 0. ||floor(mod(a.y * view.layout.height,view.majorsize )) == 0.)	{
-				return view.majorline;
-			}
-			if (floor(mod(a.x * view.layout.width,view.minorsize )) == 0. ||floor(mod(a.y * view.layout.height,view.minorsize )) == 0.)	{
-				return view.minorline;
-			}
+			
+			var horizmaj = mod(a.x ,view.majorsize)/view.majorsize;
+			var vertmaj =  mod(a.y , view.majorsize)/view.majorsize;
+			
+			var horizmin = mod(a.x ,view.minorsize)/view.minorsize;
+			var vertmin = mod(a.y ,view.minorsize)/view.minorsize;
+			
+			var major = min(horizmaj , vertmaj);
+			var minor = min( horizmin , vertmin);
+			
+			if (major < majthres ) return view.majorline;
+			if (minor < minthres ) return view.minorline;
+			
 			return view.bgcolor;
 		},
 		color:function(){
-			return grid(mesh.xy)
+			return grid(vec2(uv.x * view.layout.width, uv.y * view.layout.height))
 		}
 	}
 
