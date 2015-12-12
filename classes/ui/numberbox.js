@@ -8,17 +8,18 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	// Simple button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {
-		// The label for the button
 		value: {type: float, value: 0},
 		minvalue: {type: float, value: undefined},
 		maxvalue: {type: float, value: undefined},
 		stepvalue: {type: float, value: 1},
-		bordercolor: {motion:"easeout", duration:0.2, value: "gray" },
+		bordercolor: {motion:"easeout", duration:0.2, value: "gray", meta:"color" },
 		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
 		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
-	// Font size in device-pixels.
-		fontsize: {type: float, value: 14},		
+	
+		// Font size in device-pixels.
+		fontsize: {type: float, value: 14, meta:"fontsize" },		
 	}
+	
 	this.neutralbordercolor = this.bordercolor;
 	this.tabstop = 0;
 	
@@ -29,7 +30,6 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		if (tn) {
 			tn.text = this._value.toString();
 			this.relayout();
-//			tn.redraw();
 		}
 	}
 	
