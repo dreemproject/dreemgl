@@ -239,7 +239,9 @@ define.class('$system/base/node', function(require){
 	this.viewportmatrix = mat4.identity()
 	// the normal matrix contains the transform without translate (for normals)
 	this.normalmatrix = mat4.identity()
-	
+	// the scrolled matrix (useful for backgrounds with computed views)
+	this.scrollmatrix = mat4.identity()
+
 	// forward references for shaders
 	this.layout = { width:0, height:0, left:0, top:0, right:0, bottom:0}
 	this.device = {frame:{size:vec2()}}

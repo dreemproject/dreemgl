@@ -328,7 +328,7 @@ define.class(function(require, baseclass){
 					// we have to set our guid.
 					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
-
+					draw.scrollmatrix = matrices.viewmatrix
 					shader.drawArrays(this.device)
 				}
 			}

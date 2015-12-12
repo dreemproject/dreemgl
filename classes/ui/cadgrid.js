@@ -25,6 +25,12 @@ define.class(function(view, label){
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
 	this.bg = {
+		position:function(){
+			// do something here with view.scrollmatrix
+			uv = mesh.xy
+			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
+			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+		},
 		grid: function(a){
 			if (floor(mod(a.x * view.layout.width,view.majorsize )) == 0. ||floor(mod(a.y * view.layout.height,view.majorsize )) == 0.)	{
 				return view.majorline;
