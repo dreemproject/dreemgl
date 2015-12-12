@@ -477,6 +477,7 @@ define.class('$system/base/node', function(require){
 
 	this.relayoutRecur = function(){
 		this.layout_dirty = true
+		this.redraw_dirty = 3
 		for(var i = 0;i < this.child_viewport_list.length;i++){
 			this.child_viewport_list[i].relayoutRecur()
 		}
