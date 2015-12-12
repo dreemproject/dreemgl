@@ -19,6 +19,7 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 		this.flex = 1;
 		this.flexdirection ="column" 
 		this.bg = 0;
+		
 		this.render = function(){
 			return [
 				view({bgcolor:"#202220", margin:vec4(0,0,0,0), padding:vec4(0)},
@@ -35,39 +36,101 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 		this.attributes = {
 			from:{type:String, value:""},
 			to:{type:String, value:""},
-			frompos:{type:vec2, value:vec2(0,0)},
-			topos:{type:vec2, value:vec2(100,100)},
-			linewidth:{type:float, value:14}
+			linewidth:{type:float, value:10, duration:0.5, motion:"bounce"},
+			focussedcolor:{type:vec4, value:vec4("white")},
+			focussedwidth:{type:float, value:20},
+			bgcolor:{motion:"linear", duration: 0.1}
 		}
 		
-		this.bgcolor = "blue" 
+		this.init = function(){
+			this.neutralcolor = this.bgcolor;
+			this.neutrallinewidth = this.linewidth;
+		}
+		
+		this.focus =function(){
+			console.log(this.focus);
+			if (this.focus) {
+				this.bgcolor = this.focussedcolor;
+				this.linewidth = this.focussedwidth;
+			}
+			else{
+				this.bgcolor = this.neutralcolor;
+				this.linewidth = this.neutrallinewidth;
+			}
+		}
+		this.frompos= vec2(0,0);
+		this.topos= vec2(0,100);
+		
+		this.bgcolor = "#8090a0" 
 		
 		define.class(this, "connectionshader", this.Shader,function($ui$, view){	
-			this.updateorder = 0
-			this.draworder = 0
 			this.mesh = vec2.array()
 			
 			for(var i = 0;i<100;i++){
-				this.mesh.push([i/100,-0.5])
-				this.mesh.push([i/100, 0.5])
+				this.mesh.push([i/100.0,-0.5])
+				this.mesh.push([i/100.0, 0.5])
+			}
+						
+			this.drawtype = this.TRIANGLE_STRIP
+			
+			this.B1 = function (t) { return t * t * t; }
+			this.B2 = function (t) { return 3 * t * t * (1 - t); }
+			this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
+			this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
+
+			 this.bezier = function(percent,C1,C2,C3,C4) {		
+				
+				var b1 = B1(percent);
+				var b2 = B2(percent);
+				var b3 = B3(percent);
+				var b4 = B4(percent);
+				
+				return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;
+				
 			}
 			
-			
+	
 			this.position = function(){
-				uv = mesh.xy
 				var a = mesh.x;
-				var b = mesh.y * view.linewidth/2;
-				pos = view.frompos * a + view.topos * (1-a);
+				var a2 = mesh.x+0.001;
+				var b = mesh.y * view.linewidth;
+				
+				posA = this.bezier(a, view.frompos, view.frompos + vec2(100,0), view.topos - vec2(100,0), view.topos);
+				posB = this.bezier(a2, view.frompos, view.frompos + vec2(100,0), view.topos - vec2(100,0), view.topos);
+				
+				var dp = normalize(posB - posA);
+				
+				var rev = vec2(-dp.y, dp.x);
+				posA += rev * b;
 				//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+				return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
 			
 			this.color = function(){
-				return view.bgcolor
+				var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+				return vec4(view.bgcolor.xyz,a);
 			}	
 		}) 
+
+		this.bg = this.connectionshader;
+		this.calculateposition = function(){
+			
+			var F = this.find(this.from);
+			var T = this.find(this.to);
+			if (F && T){
+
+				this.frompos = vec2(F.pos[0]+ F.layout.width-3,F.pos[1]+20);
+				this.topos = vec2(T.pos[0],T.pos[1]+20);
+			}
 		
-		this.bg = this.connectionshader();
+		}
+		this.calculateposition();
+		this.layout = function(){
+			this.calculateposition();
+		}
+		this.render = function(){
+			return [];
+		}
 	})
 	
 	define.class(this, "block", function($ui$, view, label){
@@ -76,8 +139,10 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 		this.position = "absolute" ;
 		this.bgcolor = vec4("#708090" )
 		this.padding = 2;
-		this.borderradius = vec4(10,10,0,0);
-		this.borderwidth = 0;
+		this.borderradius = vec4(10,10,1,1);
+		this.borderwidth = 2;
+		
+		this.bordercolor = vec4("#607080")
 		
 		this.attributes = {
 			pos:{persist: true},
@@ -103,6 +168,7 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 				
 				this.redraw();
 				this.relayout();
+				this.outer.updateconnections();
 				
 			}.bind(this);
 		}
@@ -131,7 +197,24 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 		}
 	})
 	
-	this.render = function(){ return [
+	this.updateconnections = function(){
+		var cl = this.find("connectionlayer");
+		for(a in cl.children)
+		{
+			cl.children[a].layout =1 ;
+		}
+	}
+	
+	this.layout = function(){
+		console.log("hmm");
+		this.updateconnections();
+	}
+	
+	
+	this.render = function(){ 
+		console.log("hmm!!");
+
+		return [
 		role(
 			screen({bg:0,clearcolor:vec4('black'),flexwrap:"nowrap", flexdirection:"row"}
 				,this.menubar({})
@@ -146,9 +229,10 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 					,this.dockpanel({title:"Patch"}
 						,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#505040", minorline:"#404040"}
 							,view({name:"connectionlayer", bg:0}
-								,this.connection({from:"phone", to:"tv", bgcolor:"blue" })
+								,this.connection({from:"phone", to:"tv"})
+								,this.connection({from:"tablet", to:"thing"})
 							)
-							,view({name:"blocklayer", bg:0}
+							,view({name:"blocklayer", bg:0, layout:function(){console.log("layout")}}
 								,this.block({name:"phone", title:"Phone", x:200, y:20})
 								,this.block({name:"tv", title:"Television", x:50, y:200})
 								,this.block({name:"tablet", title:"Tablet",x:200, y:20})						
