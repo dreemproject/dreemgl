@@ -112,8 +112,11 @@
 
 	define.lookupFileType = function(type){
 		type = type.toLowerCase()
+		
 		if(type === 'json')	return 'json'
+
 		if(type === 'txt' || type === 'obj' || type === 'text' || type === 'md') return 'text'
+		
 		return 'arraybuffer'
 	}
 
@@ -1247,10 +1250,10 @@
 				var fs = require("fs")
 				try {
 					stats = fs.lstatSync(modname)
-					var data = fs.readFileSync(modname);
+					var data = fs.readFileSync(modname)
 					return new Promise(function(resolve, reject){
-						resolve(data);
-					});
+						resolve(data)
+					})
 				}
 				catch(e) {
 				}
