@@ -182,7 +182,8 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 			inputattributes:{type:Object, value:["color"]},
 			outputattributes:{type:Object, value:["clicked","something"]},
 			title:{type:String, value:"Untitled"},
-			snap:{type:int, value:1}	
+			snap:{type:int, value:1},
+			fontsize:{type:float, value:10}
 		}
 			
 		this.mouseleftdown = function(p){
@@ -223,10 +224,10 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 
 		this.render = function(){
 			return [
-				label({text:this.title, bg:0, margin:4, fontsize: 12})
+				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
 				,view({flexdirection:"row", alignitems:"stretch", bg:0 }
-					,button({icon:"flask", text:"button" })
-					,button({icon:"flask"})
+					,button({icon:"plus", fontsize: this.fontsize})
+					,button({icon:"plus", fontsize: this.fontsize})
 				)
 			]
 		}
