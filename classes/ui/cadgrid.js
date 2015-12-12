@@ -14,11 +14,14 @@ define.class(function(view, label){
 	this.flexdirection = "column"
 	this.alignitem = "stretch"
 	this.alignself = "stretch"
+	
 	this.attributes = {
+	
 		minorsize:{type:float, value:25},
+		minorline:{type:vec4, value: vec4("#e0f0ff"), meta:"color"},
+
 		majorsize:{type:float, value:100},
-		majorline:{type:vec4, value: vec4("#b0b0e0"), meta:"color"},
-		minorline:{type:vec4, value: vec4("#e0f0ff"), meta:"color"}
+		majorline:{type:vec4, value: vec4("#b0b0e0"), meta:"color"}
 	}
 	
 	this.bgcolor = vec4("white")

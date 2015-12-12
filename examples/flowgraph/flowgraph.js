@@ -168,11 +168,10 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 	})
 	
 	define.class(this, "block", function($ui$, view, label){
-		
-		
+				
 		this.position = "absolute" ;
 		this.bgcolor = vec4("#708090" )
-		this.padding = 2;
+		this.padding = 0;
 		this.borderradius = vec4(10,10,1,1);
 		this.borderwidth = 2;
 		
@@ -180,7 +179,8 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		
 		this.attributes = {
 			pos:{persist: true},
-			attributelist:{type:Object, value:[]},
+			inputattributes:{type:Object, value:["color"]},
+			outputattributes:{type:Object, value:["clicked","something"]},
 			title:{type:String, value:"Untitled"},
 			snap:{type:int, value:1}	
 		}
