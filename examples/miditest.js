@@ -4,13 +4,13 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 	var arpeggiator = define.class(function($ui$, view, label){
 
 		this.fwd = true
-		this.inid = 4
-		this.outid = 0
+		this.inid = 0
+		this.outid = 1
 		this.bpm = 120
 		this.last_note = -1
 		this.delta = 0
 		this.shift = 0
-
+		this.volume = 127;
 		this.attributes = {
 			msg:Event,
 			off:Event,
@@ -24,7 +24,7 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 		this.msg = function(event){
 			if(this.fwd) this.out.msg = event.value
 		}
-
+		
 		this.on = function(event){
 			var msg = event.value
 			this.start = Date.now()
@@ -159,7 +159,7 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 					arp1:function(l, m, n, o, p){
 						p.c5
 						p.c6
-						n.c7
+						n.c5
 						this.loop
 					}
 				})
