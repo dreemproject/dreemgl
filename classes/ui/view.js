@@ -44,6 +44,8 @@ define.class('$system/base/node', function(require){
 		bgcolor: {group:"style", type:vec4, value: vec4('white'), meta:"color"},
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: {group:"style",type:Object, meta:"texture"},
+		// the opacity of the image
+		opacity: {group:"style", value: 1.0, type:float},
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: {group:"style",type:vec4, value: vec4('transparent'), meta:"color"},
@@ -905,7 +907,7 @@ define.class('$system/base/node', function(require){
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			return view.bgcolor
+			return vec4(view.bgcolor.rgb, view.bgcolor.a * view.opacity)
 		}
 	})
 	this.hardrect = false
@@ -943,7 +945,7 @@ define.class('$system/base/node', function(require){
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			return view.bordercolor;
+			return vec4(view.bordercolor.rgb, view.bordercolor.a * view.opacity);
 		}
 	})
 	this.hardborder = false
@@ -956,7 +958,8 @@ define.class('$system/base/node', function(require){
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			return this.texture.sample(mesh.xy)
+			var col = this.texture.sample(mesh.xy)
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
 	this.hardimage = false
@@ -1022,7 +1025,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.color = function(){
-			return view.bgcolor
+			return vec4(view.bgcolor.rgb, view.bgcolor.a * view.opacity)
 		}
 
 		this.position = function(){
@@ -1057,7 +1060,8 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.color = function(){
-			return texture.sample(mesh.xy)
+			var col = texture.sample(mesh.xy)
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
 	this.viewportblend = false
@@ -1127,7 +1131,7 @@ define.class('$system/base/node', function(require){
 		}
 		
 		this.color = function(){
-			return view.bordercolor
+			return vec4(view.bordercolor.rgb, view.opacity * view.bordercolor.a)
 		}
 		
 		this.position = function(){
