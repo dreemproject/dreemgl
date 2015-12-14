@@ -44,6 +44,8 @@ define.class('$system/base/node', function(require){
 		bgcolor: {group:"style", type:vec4, value: vec4('white'), meta:"color"},
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: {group:"style",type:Object, meta:"texture"},
+		// the opacity of the image
+		opacity: {group:"style", value: 1.0, type:float},
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: {group:"style",type:vec4, value: vec4('transparent'), meta:"color"},

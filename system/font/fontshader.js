@@ -17,7 +17,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.fgcolor = vec4("blue")
 	
 	// forward ref of things we need on view
-	this.view = {_totalmatrix:mat4(), _viewmatrix:mat4(), _fgcolor:vec4(), _bgcolor:vec4(), device:{frame:{size:vec2()}}}
+	this.view = {_totalmatrix:mat4(), _viewmatrix:mat4(), _fgcolor:vec4(), _bgcolor:vec4(), _opacity:1.0, device:{frame:{size:vec2()}}}
 
 	// lets define a custom struct and subclass the array
 	this.textgeom = define.struct({
@@ -934,7 +934,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b) 
 		//if(max_alpha >0.5) max_alpha = 1.
 		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
-		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), 1.)//max_alpha)
+		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
 	}
 
 
@@ -994,7 +994,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
 		}
 		
-		return vec4(view.fgcolor.rgb, alpha * view.fgcolor.a)
+		return vec4(view.fgcolor.rgb, alpha * view.fgcolor.a * view.opacity)
 	}
 
 	this.decideFontType = function(){
