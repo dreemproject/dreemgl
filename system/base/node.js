@@ -718,7 +718,7 @@ define.class(function(require, constructor){
 	this.attributes = {
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
 		init:Event, 
-		// deinit event, called on all the objects that get dropped by the renderer on a re-render
-		deinit:Event
+		// destroy event, called on all the objects that get dropped by the renderer on a re-render
+		destroy:Event
 	}
 })

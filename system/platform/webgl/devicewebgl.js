@@ -9,6 +9,7 @@ define.class(function(require, exports){
 	this.Keyboard = require('./keyboardwebgl')
 	this.Mouse = require('./mousewebgl')
 	this.Touch = require('./touchwebgl')
+	this.Midi = require('./midiwebgl')
 
 	// require embedded classes	
 	this.Shader = require('./shaderwebgl')
@@ -48,6 +49,7 @@ define.class(function(require, exports){
 			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
 			this.touch = previous.touch
+			this.midi = previous.midi
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
 			this.frame = this.main_frame = previous.main_frame
@@ -59,6 +61,7 @@ define.class(function(require, exports){
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
 			this.touch = new this.Touch(this)
+			this.midi = new this.Midi(this)
 			this.drawtarget_pools = {}
 
 			this.createContext()

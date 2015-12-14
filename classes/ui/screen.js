@@ -35,6 +35,7 @@ define.class(function(require, $ui$view) {
 		this.keyboard = this.device.keyboard
 		this.mouse = this.device.mouse 
 		this.touch = this.device.touch
+		this.midi = this.device.midi
 		this.bindInputs()
 	}
 

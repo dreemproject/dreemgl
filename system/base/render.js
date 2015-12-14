@@ -131,10 +131,10 @@ define.class(function(exports){
 		}
 
 		if(old_children) for(;i < old_children.length;i++){
-			old_children[i].emitRecursive('deinit')
+			old_children[i].emitRecursive('destroy')
 		}
 
-		if(old_version) old_version.emit('deinit')
+		if(old_version) old_version.emit('destroy')
 
 		if(is_root){
 			initializing = true
