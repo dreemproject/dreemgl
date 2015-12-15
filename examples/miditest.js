@@ -12,7 +12,8 @@ define.class(function(require, $server$, composition, role, $ui$, screen, view){
 		this.last_note = -1
 		this.delta = 0
 		this.shift = 0
-
+		this.volume = 127;
+	
 		this.message = function(msg){
 			console.log(msg)
 			if(this.fwd) this.out.message = msg

@@ -26,7 +26,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.bg = 0;
 	this.fgcolor="#101010";
 	this.value = function(){
-		var tn = this.find("thenumber");
+		var tn = this.findChild("thenumber");
 		if (tn) {
 			tn.text = this._value.toString();
 			this.relayout();
@@ -47,7 +47,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		if (this.maxvalue!=undefined && newval > this.maxvalue) newval = this.maxvalue;
 		if (this.minvalue!=undefined && newval < this.minvalue) newval = this.minvalue;		
 		this.value = newval;
-		nb = this.find("thenumber");
+		nb = this.findChild("thenumber");
 		if (nb) nb.value = this.value.toString();
 	}
 
