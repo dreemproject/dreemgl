@@ -308,7 +308,7 @@ define.class(function(require, $ui$view) {
 				}
 				else if(this.modal){
 					this.modal_miss = true
-					this.modal.emit('miss', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+					this.modal.emitUpward('miss', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 			} 
 		}.bind(this)
@@ -317,7 +317,7 @@ define.class(function(require, $ui$view) {
 			// make sure we send the right mouse out/overs when losing capture
 			this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 				if(this.mouse_capture){
-					this.mouse_capture.emit('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
+					this.mouse_capture.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
 				}
 				if(this.mouse_capture !== view){
 					if(this.mouse_capture) this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
