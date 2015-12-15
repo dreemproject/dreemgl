@@ -16,18 +16,16 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		bordercolor: {motion:"easeout", duration:0.2, value: "gray", meta:"color" },
 		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
 		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
-	
 	}
 
-	this.width = 120;
-	this.height = 120;
+	this.width = 120
+	this.height = 120
 	
-
 	define.class(this, "dial", function($ui$, view){
 		
 		this.init = function(){
-		this.width = this.parent.width;
-		this.height = this.parent.height;
+			this.width = this.parent.width;
+			this.height = this.parent.height;
 		}
 		
 		this.attributes = {
@@ -65,8 +63,6 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 				var aaedge = pow(f,0.2);
 				
 				var color = colorlib.hsva(vec4(off, 1, 1, 1));
-				
-				
 				
 				var edgecolor = vec4(1,1,1,1);
 				var mixed = mix(color, edgecolor, edge);
@@ -119,6 +115,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.mouseleftdown = function(p){
+		console.log("HERE!")
 		this.bordercolor = this.draggingbordercolor
 		this.lasty = p.local[1];
 		this.lastx = p.local[0];
@@ -135,7 +132,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		if (this._focus) {
 			this.bordercolor = this.focusbordercolor
 		}
-		else{
+		else {
 			this.bordercolor = this.neutralbordercolor
 		}
 		this.mousemove = function(){}
@@ -153,7 +150,6 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.borderwidth = 1;
 		
 	this.render = function(){
-		
 		return [
 			this.dial({name:"thedialbg", position:"absolute", start: PI/4, end: 2*PI-PI/4 ,bgcolor:"#304050"})
 			,this.dial({name:"thedial", position:"absolute", start: PI/4, end: 2*PI-PI/4 , bgcolor:"#a0b0c0",outerradius:72, innerradius:38})

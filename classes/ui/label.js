@@ -5,6 +5,8 @@
 
 define.class(function(require, $ui$, view){	
 
+//	require("$fonts/arial_bold.glf")
+
 	var Font = require('$system/font/fontshader')
 	var glfontParser = require('$system/font/fontparser')
 

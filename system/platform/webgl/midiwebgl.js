@@ -5,27 +5,32 @@
 
 define.class('$system/base/midi', function (require, exports){
 
+	exports.midiAttributes = {
+		message:Event,
+		noteoff:Event,
+		noteon:Event,
+		polypressure:Event,
+		controlchange:Event,
+		programchange:Event,
+		aftertouch:Event,
+		pitchbend:Event
+	}
+
 	this.Input = define.class(function midiInput($system$base$node){
 		
 		this.atMidiData = function(data){
-			var ch = data[0]&16
-			var hi = data[0]>>4
-			if(hi === 0b1000) return this.off = this.msg = {ch:ch, type:'off', key:data[1], value:data[2]}
-			if(hi === 0b1001)return this.on = this.msg = {ch:ch, type:'on', key:data[1], value:data[2]}
-			if(hi === 0b1010)return this.poly = this.msg = {ch:ch, type:'poly', key:data[1], value:data[2]}
-			if(hi === 0b1011)return this.cc = this.msg = {ch:ch, type:'cc', ctrl:data[1], value:data[2]}
-			if(hi === 0b1101)return this.single = this.msg = {ch:ch, type:'single', value:data[1]}
-			if(hi === 0b1110) return this.bend = this.msg = {ch:ch, type:'bend', value:(data[2]<<7) + data[1]}
+			var ch = data[0] & 16
+			var hi = data[0] >> 4
+			if(hi === 0b1000) return this.noteoff = this.message = {ch:ch, type:'noteoff', key:data[1], value:data[2]}
+			if(hi === 0b1001) return this.noteon = this.message = {ch:ch, type:'noteon', key:data[1], value:data[2]}
+			if(hi === 0b1010) return this.polypressure = this.message = {ch:ch, type:'polypressure', key:data[1], value:data[2]}
+			if(hi === 0b1011) return this.controlchange = this.message = {ch:ch, type:'controlchange', ctrl:data[1], value:data[2]}
+			if(hi === 0b1100) return this.programchange = this.message = {ch:ch, type:'programchange', value:data[1]}
+			if(hi === 0b1101) return this.aftertouch = this.message = {ch:ch, type:'aftertouch', value:data[1]}
+			if(hi === 0b1110) return this.pitchbend = this.message = {ch:ch, type:'pitchbend', value:(data[2]<<7) + data[1]}
 		}
-		this.attributes = {
-			msg:Event,
-			off:Event,
-			on:Event,
-			poly:Event,
-			cc:Event,
-			single:Event,
-			bend:Event
-		}
+
+		this.attributes = exports.midiAttributes
 	})
 
 	this.Output = define.class(function midiOutput($system$base$node){
@@ -33,26 +38,7 @@ define.class('$system/base/midi', function (require, exports){
 			this.send = send
 		}
 
-		this.attributes = {
-			msg:Event,
-			off:Event,
-			on:Event,
-			poly:Event,
-			cc:Event,
-			single:Event,
-			bend:Event
-		}
-
-		this.msg = function(event){
-			var m = event.value
-			var ch = m.ch || 0
-			if(m.type === 'off')return this.send([0b1001<<4|ch, m.key, m.value])
-			if(m.type === 'on')return this.send([0b1001<<4|ch, m.key, m.value])
-			if(m.type === 'poly')return this.send([0b1010<<4|ch, m.key, m.value])
-			if(m.type === 'cc')return this.send([0b1011<<4|ch, m.ctrl, m.value])
-			if(m.type === 'single')return this.send([0b1101<<4|ch, m.value])
-			if(m.type === 'bend')return this.send([0b1110<<4|ch, m.value&127, m.value>>7])
-		}
+		this.attributes = exports.midiAttributes
 
 		this.alloff = function(ch){
 			if(!ch) ch = 0
@@ -60,11 +46,25 @@ define.class('$system/base/midi', function (require, exports){
 			this.send([0b1011<<4|ch, 120, 0])
 		}
 
-		this.on = function(event){
-			var ev = event.value
-			ev.type = 'on'
-			this.msg = ev
+		for(var key in exports.midiAttributes){
+			this[key] = function(event){
+				var ev = event.value
+				ev.type = event.key
+				this.message = ev
+			}
 		}
+
+		this.message = function(event){
+			var m = event.value
+			var ch = m.ch || 0
+			if(m.type === 'noteoff')return this.send([0b1001<<4|ch, m.key, m.value])
+			if(m.type === 'noteon')return this.send([0b1001<<4|ch, m.key, m.value])
+			if(m.type === 'polypressure')return this.send([0b1010<<4|ch, m.key, m.value])
+			if(m.type === 'controlchange')return this.send([0b1011<<4|ch, m.ctrl, m.value])
+			if(m.type === 'programchange')return this.send([0b1100<<4|ch, m.value])
+			if(m.type === 'aftertouch') return this.send([0b1101<<4|ch, m.value])
+			if(m.type === 'pitchbend')return this.send([0b1110<<4|ch, m.value&127, m.value>>7])
+		}		
 	})
 
 	function iterIO(slot, id, cb){

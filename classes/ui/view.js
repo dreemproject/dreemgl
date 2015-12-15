@@ -275,7 +275,6 @@ define.class('$system/base/node', function(require){
 		this.relayout()
 	}
 
-
 	// listen to the viewport to turn off our background and border shaders when 3D
 	this.viewport = function(event){
 		if(event.value === '3d'){

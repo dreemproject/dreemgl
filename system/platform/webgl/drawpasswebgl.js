@@ -26,7 +26,6 @@ define.class(function(require, baseclass){
 			noscrollmatrix: mat4.identity()
 		}
 	}
-
 	
 	this.atDestroy = function(){
 		this.releaseTexture()
@@ -299,7 +298,7 @@ define.class(function(require, baseclass){
 			if(draw.atDraw) draw.atDraw(this)
 			if(draw._viewport && draw.drawpass !== this ){
 				if(!draw.drawpass.color_buffer){
-					console.log("WE HAVE A NULL COLOR_BUFFER")
+					console.error("Null color_buffer detected")
 					continue
 				}
 				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
