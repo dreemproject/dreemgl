@@ -3,9 +3,5 @@
 define.class(function(node){
 	this.atConstructor = function(){}
 	
-	this.attributes = {
-		in:Event,
-		out:Event
-	}
 
 })
