@@ -18,7 +18,7 @@ define.class(function($ui$, view, label){
 		// the current page
 		page: {type:int, persist:true, value:0},
 		// animate the scroll
-		scroll: {motion:'inoutsine',duration:0.5},
+		scroll: {motion:'inoutsine', duration:0.5},
 		// persist the postiion
 		pos: {persist:true}
 	}

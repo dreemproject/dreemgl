@@ -282,16 +282,16 @@ define.class(function(require, $ui$view) {
 			if(!this.mouse_capture){
 				this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 					if(this.mouse_view !== view){
-						if(this.mouse_view) this.mouse_view.emit('mouseout', {local:this.remapMouse(this.mouse_view)})
+						if(this.mouse_view) this.mouse_view.emitUpward('mouseout', {local:this.remapMouse(this.mouse_view)})
 						this.mouse_view = view
-						if(view) this.mouse_view.emit('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+						if(view) this.mouse_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 					}
-					if(view) view.emit('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
+					if(view) view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
 
 				}.bind(this))
 			}
 			else{
-				this.mouse_capture.emit('mousemove', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
+				this.mouse_capture.emitUpward('mousemove', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 			}
 		}.bind(this)
 
@@ -304,11 +304,11 @@ define.class(function(require, $ui$view) {
 			if (this.mouse_view){
 				if(this.inModalChain(this.mouse_view)){
 					this.setFocus(this.mouse_view)
-					this.mouse_view.emit('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+					this.mouse_view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 				else if(this.modal){
 					this.modal_miss = true
-					this.modal.emit('miss', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+					this.modal.emitUpward('miss', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 			} 
 		}.bind(this)
@@ -317,17 +317,17 @@ define.class(function(require, $ui$view) {
 			// make sure we send the right mouse out/overs when losing capture
 			this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 				if(this.mouse_capture){
-					this.mouse_capture.emit('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
+					this.mouse_capture.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
 				}
 				if(this.mouse_capture !== view){
-					if(this.mouse_capture) this.mouse_capture.emit('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
+					if(this.mouse_capture) this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 					if(view){
 						var pos = this.remapMouse(view)
-						view.emit('mouseover', {local:pos})
-						view.emit('mousemove', {local:pos})
+						view.emitUpward('mouseover', {local:pos})
+						view.emitUpward('mousemove', {local:pos})
 					}
 				}
-				else if(this.mouse_capture) this.mouse_capture.emit('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
+				else if(this.mouse_capture) this.mouse_capture.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 				this.mouse_view = view
 				this.mouse_capture = false
 			}.bind(this))

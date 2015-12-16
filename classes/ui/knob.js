@@ -16,28 +16,45 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		bordercolor: {motion:"easeout", duration:0.2, value: vec4(1,1,1,0), meta:"color" },
 		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
 		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
+
 		outerradius:{type:float, value: 70},
 		innerradius:{type:float, value: 30},
 		offset:{type:float, value:8}
 	}
-		this.minwidth = 50;
-		this.minheight = 50;
+	this.minwidth = 50;
+	this.minheight = 50;
+		
+	this.layout = function(){
+		//console.log(" l!", this.layout);
+		this.findChild("thedial").width = this.layout.width;
+		this.findChild("thedial").height = this.layout.width;
+		this.findChild("thedial").relayout();
+		this.findChild("thedial").redraw();
+		this.findChild("thedialbg").width = this.layout.width;
+		this.findChild("thedialbg").height = this.layout.width;
+		//	this.findChild("thedialbg").relayout();
+			//this.findChild("thedialbg").redraw();
+			
+			
+	}
 	define.class(this, "dial", function($ui$, view){
 		
 		this.innerradius = 20;
 		this.outerradius = 26;
 
-		this.init = function(){
-			this.width = this.parent.layout.width;
-			this.height = this.parent.layout.height;
-		}
-			
-		
+	
 		this.attributes = {
 			start:{type:float, value:0},
 			end:{type:float, value: PI*1.5},
 		}
+		this.init = function(){
+			this.width = this.parent.layout.width;
+			this.height = this.parent.layout.height;
+		}
 		
+		this.width = function(){
+			console.log(this._width);
+		}
 		this.bg = function(){
 			this.mesh = vec2.array();
 			
@@ -55,7 +72,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 				uv = vec2(sin(p), cos(p))*(view.innerradius + (view.outerradius-view.innerradius )*mesh.y);
 				off = mesh.x / 6.283
 				var rad = min(1.,1.)/2.;
-				pos = vec2(view.layout.width/2 + rad * uv.x, view.layout.height/2 + rad * uv.y)
+				pos = vec2(view.width/2 + rad * uv.x, view.height/2 + rad * uv.y)
 				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
 			
@@ -67,8 +84,6 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 				var aaedge = pow(f,0.30);
 				
 				var color = view.bgcolor;
-				
-				
 				
 				var edgecolor = vec4(color.xyz,0);
 				var mixed = mix(color, edgecolor, edge);
@@ -141,7 +156,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		if (this._focus) {
 			this.bordercolor = this.focusbordercolor
 		}
-		else{
+		else {
 			this.bordercolor = this.neutralbordercolor
 		}
 		this.mousemove = function(){}
@@ -157,10 +172,9 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.alignitems = "center";	
 	this.borderwidth = 2;
 	this.render = function(){
-		
 		return [
 		view({minwidth: this.outerradius,minheight: this.outerradius, bg:0},
-			this.dial({name:"thedialbg", position:"absolute", start: PI/4, end: 2*PI-PI/4 ,bgcolor:"#304050", outerradius:this.outerradius, innerradius:this.innerradius })
+			this.dial({name:"thedialbg", position:"absolute",x:this.width/2, y:this.height/2, start: PI/4, end: 2*PI-PI/4 ,bgcolor:"#304050", outerradius:this.outerradius, innerradius:this.innerradius })
 			,this.dial({name:"thedial", position:"absolute", start: PI/4, end: 2*PI-PI/4 , bgcolor:"#a0b0c0",outerradius:this.outerradius - this.offset, innerradius:this.innerradius + this.offset})
 		)]
 	}

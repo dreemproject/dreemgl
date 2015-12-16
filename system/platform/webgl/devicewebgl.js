@@ -10,13 +10,13 @@ define.class(function(require, exports){
 	this.Mouse = require('./mousewebgl')
 	this.Touch = require('./touchwebgl')
 	this.Midi = require('./midiwebgl')
-
+	
 	// require embedded classes	
 	this.Shader = require('./shaderwebgl')
 	this.Texture = require('./texturewebgl')
 	this.Texture.Image = typeof Image !== 'undefined' && Image
 	this.DrawPass = require('./drawpasswebgl')
-
+	
 	this.preserveDrawingBuffer = true
 	this.premultipliedAlpha = false
 	this.antialias = false

@@ -1,44 +1,40 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $ui$, screen, view){
+define.class(function(require, $server$, composition, role, $ui$, screen, view){
 
 	var arpeggiator = define.class(function($ui$, view, label){
+		
+		var midiAttributes = require('$system/platform/$platform/midi$platform').midiAttributes
 
 		this.fwd = true
-		this.inid = 0
-		this.outid = 1
+		this.inid = 1
+		this.outid = 0
 		this.bpm = 120
 		this.last_note = -1
 		this.delta = 0
 		this.shift = 0
 		this.volume = 127;
-		this.attributes = {
-			msg:Event,
-			off:Event,
-			on:Event,
-			poly:Event,
-			cc:Event,
-			single:Event,
-			bend:Event
+	
+		this.message = function(msg){
+			console.log(msg)
+			if(this.fwd) this.out.message = msg
 		}
 
-		this.msg = function(event){
-			if(this.fwd) this.out.msg = event.value
-		}
-		
-		this.on = function(event){
-			var msg = event.value
+		this.noteon = function(msg){
 			this.start = Date.now()
 			this.delta = msg.key - 60
 			this.last_note = -1
 		}
+		
+		this.controlchange = function(msg){
+			this.slide = msg.value
+		}
 
-		this.bend = function(event){
-			var msg = event.value
+		this.pitchbend = function(msg){
 			this.shift = (msg.value-8129)/4096
 		}
 
-		this.single = function(event){
-			this.volume = event.value.value
+		this.aftertouch = function(msg){
+			this.volume = msg.value
 		}
 
 		this.tick = function(){
@@ -59,6 +55,7 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 				}
 				else if(tag < 0){
 					if(tag == -1){
+						//todo we have to compute a time delta so our loop can terminate.
 						i = 0
 					}
 				}
@@ -68,7 +65,7 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 					if(time > beats){
 						if(i !== this.last_note){
 							this.last_note = i
-	 						this.out.on = {ch:0, key:key + this.delta, value:this.volume}
+							this.out.noteon = {ch:0, key:key + this.delta, value:this.volume}
 	 					}
  						break
 					}
@@ -92,32 +89,40 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 		}
 
 		this.init = function(prev){
+			if(prev){
+				this.last_note = prev.last_note
+				this.delta = prev.delta
+				this.start = prev.start
+			}
 			this.arpdata = []
 			var midi = this.screen.midi
 
 			midi.getIO().then(function(result){
 				console.log("Midi Inputs:")
-				for(var i = 0; i < result.inputs.length; i ++) console.log("\t"+i+": "+result.inputs[i])
+				for(var i = 0; i < result.inputs.length; i++) console.log("\t"+i+": "+result.inputs[i])
 				console.log("Midi Outputs:")
-				for(var i = 0; i < result.outputs.length; i ++) console.log("\t"+i+": "+result.outputs[i])
+				for(var i = 0; i < result.outputs.length; i++) console.log("\t"+i+": "+result.outputs[i])
 			})
 
-			this.timer = setInterval(this.tick.bind(this),5)
+			this.timer = setInterval(this.tick.bind(this), 5)
 
 			midi.openInput(this.inid).then(function(inp){
+
 				this.inp = inp
-				inp.msg = this.emitForward('msg')
-				inp.off = this.emitForward('off')
-				inp.on = this.emitForward('on')
-				inp.poly = this.emitForward('poly')
-				inp.cc = this.emitForward('cc')
-				inp.single = this.emitForward('single')
-				inp.bend = this.emitForward('bend')
+				// slap the midi event api onto us
+				var obj = this
+				for(var key in midiAttributes){
+					inp[key] = (function(key){
+						return function(event){
+							if(obj[key])obj[key](event.value)
+						}
+					})(key)
+				}
 			}.bind(this))
 
 			midi.openOutput(this.outid).then(function(out){
 				this.out = out
-				out.alloff(0)
+			//	out.alloff(0)
 			}.bind(this))
 
 			// lets construct l,m,n,o,p
@@ -154,14 +159,30 @@ define.class(function($server$, composition, role, $ui$, screen, view){
 
 	this.render = function(){ return [
 		role(
-			screen({clearcolor:vec4('black')},
+			screen({clearcolor:vec4('black'), init:function(){
+				console.log('here')	
+			}},
 				arpeggiator({
 					arp1:function(l, m, n, o, p){
-						p.c5
-						p.c6
-						n.c5
+						for(var i = 4; i < 7; i++){
+							p['c'+i]
+							//o[this.slide]
+							if(this.volume>60) o['e'+i]
+							else o['ds'+i]
+
+							o['g'+i]
+						}
+						this.loop
+					},
+					arpnice:function(l, m, n, o, p){
+						for(var i = 4; i < 7; i++){
+							p['c'+i]
+							o[this.slide]
+							o['g'+i]
+						}
 						this.loop
 					}
+
 				})
 			)
 		)
