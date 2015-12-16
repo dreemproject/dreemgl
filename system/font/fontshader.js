@@ -5,10 +5,8 @@
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
 define.class('$system/platform/$platform/shader$platform', function(require, exports, baseclass){
 
-	var glfontParser = require('$system/font/fontparser')
-
 	// the font
-	this.typeface = glfontParser(require('$resources/fonts/code_font2_ascii.glf'))
+	this.typeface = require('$resources/fonts/ubuntu_medium_ascii.glf')
 
 	// initial pixel and vertex shaders
 	this.position = "glyphy_mesh()"

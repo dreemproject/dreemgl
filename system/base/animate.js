@@ -14,7 +14,7 @@ define.class(function(require, exports){
 	this.repeat = 1
 	this.bounce = false
 	this.type = float32
-	this.motion = ease.linear
+	this.motion = float.ease.linear
 	this.speed = 1
 	this.interpolator = mix
 
@@ -27,7 +27,7 @@ define.class(function(require, exports){
 		else this.track = config
 		if(config.motion) this.motion = config.motion
 
-		if(typeof this.motion === 'string') this.motion = ease[this.motion] || ease.linear
+		if(typeof this.motion === 'string') this.motion = float.ease[this.motion] || float.ease.linear
 		if(!config) debugger
 		if(config.type) this.type = config.type
 		this.first_value = first_value
@@ -49,7 +49,7 @@ define.class(function(require, exports){
 					//check if we have a descriptor object in the key
 					if(value && typeof value == 'object' && value.value !== undefined){
 						desc.value = this.type(value.value)	// parse it
-						if(value.motion) desc.motion = (typeof value.motion === 'string'? ease[value.motion]: value.motion) || this.motion
+						if(value.motion) desc.motion = (typeof value.motion === 'string'? float.ease[value.motion]: value.motion) || this.motion
 					}
 					else{
 						desc.value = this.type(value)

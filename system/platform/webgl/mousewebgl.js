@@ -27,7 +27,7 @@ define.class('$system/base/mouse', function (require, exports){
 		}.bind(this))
 
 		document.addEventListener('blur', function(e){
-			this.blurred =1;
+			this.blurred = 1
 		}.bind(this))
 
 		document.addEventListener('dblclick', function(e){

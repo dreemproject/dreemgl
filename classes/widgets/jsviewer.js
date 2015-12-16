@@ -15,11 +15,14 @@ define.class(function(require, $ui$, label){
 		// wrap the text
 		wrap: {type:Boolean, value:false}
 	}
-	this.bgcolor = vec4(12/255,33/255,65/255,1)
+
+	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
 
 	this.bg = 1
 	this.fontsize = 14
 	this.subpixel = true
+
+	this.typeface = require('$resources/fonts/ubuntu_monospace_ascii.glf')
 
 	// extend the font shader
 	this.font = function(){
@@ -55,7 +58,7 @@ define.class(function(require, $ui$, label){
 				//if(pixelsize < 0.5){//edge > 0.1){ // pixel drawing
 					//if(mod(gl_FragCoord.x, 24*6.) < 1.) return '#445'
 					var s = pixelsize * 130.
-					if(p.x > s && p.x < 3 * s && mod(p.y, 3.*s) > s) return '#443'
+					if(p.x > s && p.x < 1.5 * s && mod(p.y, 1.5*s) > s) return '#443'
 					//if(p.x > dpdx.x && p.x <= 3*dpdx.x && mod(p.y, 2.*dpdy.y) > dpdy.y) return '#445'
 				//}
 				//else { // switch to vector drawing
@@ -111,10 +114,12 @@ define.class(function(require, $ui$, label){
 				}
 			}
 			else if(type == _Value){
-				if(sub == _String)
+				if(sub == _String){
 					view.fgcolor = "#0f0"
-				else
+				}
+				else{
 					view.fgcolor = "aero"
+				}
 			}
 			else if(type == _Comment){
 				view.fgcolor = "#777"
@@ -131,6 +136,8 @@ define.class(function(require, $ui$, label){
 			var view = this.view
 			var maxwidth = view.layout.width
 			var textbuf = this.mesh = this.newText()
+
+			textbuf.typeface = view.typeface
 			var ast = Parser.parse(view.source)
 
 			textbuf.fontsize = view.fontsize

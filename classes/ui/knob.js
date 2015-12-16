@@ -123,15 +123,15 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	
 	this.mouseleftdown = function(p){
 		this.bordercolor = this.draggingbordercolor
-		this.lasty = p.local[1];
-		this.lastx = p.local[0];
+		this.lasty = p.local[1]
+		this.lastx = p.local[0]
 		
-		this.checkandset(this.value);
-		this.basevalue = this.value;
+		this.checkandset(this.value)
+		this.basevalue = this.value
 
-		this.mousemove = function(p){			
-			this.updatevalue(p);
-		}.bind(this);
+		this.mousemove = function(p){
+			this.updatevalue(p)
+		}.bind(this)
 	}
 	
 	this.mouseleftup = function(p){

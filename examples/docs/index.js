@@ -76,7 +76,7 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 					}.bind(this))
 					
 				}},
-				splitcontainer({  bgcolor: "black", flex:1}
+				splitcontainer({bgcolor: "black", flex:1}
 					,view({flexdirection:"column", padding: 0,flex: 0.2}
 						,view({alignitems:"center", bgcolor:"#e0e0e0", flexdirection:"row" ,padding: 14},
 							label({text:"DreemGL", fgcolor:"black", bgcolor:"#e0e0e0", fontsize: 35 })
@@ -88,17 +88,16 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 								var dataset = this.find('screen').model
 								if(dataset) this.dataset = dataset
 							},
-
-							name:'filetree', 
-							flex:1, 
-							select:function(sel){
-								if(sel.type === 'setter')debugger
+							name: 'filetree', 
+							flex: 1, 
+							select: function(sel){
+								if(sel.type === 'setter') debugger
 								// we have to grab the last path set and concatenate a path
 								var path = ''
 								for(var i = sel.path.length - 1; i >= 1; i--){
-									path = sel.path[i].name + (path!==''?'/' + path:'')
+									path = sel.path[i].name + (path !== ''? '/' + path: '')
 								}
-								this.find('screen').locationhash = {path : '$root/'+path};
+								this.find('screen').locationhash = {path:'$root/' + path};
 							}
 						})
 					)
