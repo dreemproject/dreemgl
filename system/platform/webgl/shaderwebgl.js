@@ -250,6 +250,7 @@ define.class('$system/base/shader', function(require, exports){
 		var gltex = texture.TEXTURE_SAMPLER
 		// lets do the texture slots correct
 		if(!gltex){
+			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture)
 			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
 			if(!gltex) return 0
 		}

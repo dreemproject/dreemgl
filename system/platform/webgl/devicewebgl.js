@@ -136,8 +136,10 @@ define.class(function(require, exports){
 
 			this.main_frame.ratio = pixelRatio
 			this.main_frame.size = vec2(sw, sh) // actual size
+			
 			this.size = vec2(w, h)
 			this.ratio = this.main_frame.ratio
+
 		}.bind(this)
 
 		window.onresize = function(){
@@ -174,7 +176,7 @@ define.class(function(require, exports){
 		if(!frame) frame = this.main_frame
 	
 		this.frame = frame
-		this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
+		//this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
 
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])

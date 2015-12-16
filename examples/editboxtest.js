@@ -2,11 +2,10 @@
 define.class(function($server$, composition, role, $ui$, knob, speakergrid, screen, view, label, numberbox, textbox, button, $widgets$, propviewer, colorpicker, radiogroup){	
 	this.render = function(){ return [
 		role(
-			screen({clearcolor:vec4('blue'),flexwrap:"nowrap", flexdirection:"row",bg:
-					{
+			screen({clearcolor:vec4('blue'),flexwrap:"nowrap", flexdirection:"row",bg:{
 						color:function(){	
 							var col1 = vec3(0.1,0.1,0.1);
-							var col2= vec3(0.2,0.25,0.5);
+							var col2 = vec3(0.2,0.25,0.5);
 							return vec4(mix(col1, col2, 1-uv.y  + noise.noise2d(uv.xy*403.6)*0.02),1.0)
 						}
 					}

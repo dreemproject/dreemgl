@@ -60,7 +60,7 @@ define.class(function(require,
 						0),
 						
 						view({
-							slidetitle:'LIVE EDIT EVerYTHING'
+							slidetitle:'This composition'
 							,flex:1
 							,flexdirection:"column"
 							}
@@ -106,7 +106,7 @@ define.class(function(require,
 											detail:6,
 											position:'absolute',
 											attributes:{
-												value:{type:float, value:0, duration:0.5, motion:ease.bounce}
+												value:{type:float, value:0, duration:0.5, motion:float.ease.bounce}
 											},
 											mouseover:function(){
 												this.value = 1

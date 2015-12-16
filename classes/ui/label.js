@@ -8,7 +8,6 @@ define.class(function(require, $ui$, view){
 //	require("$fonts/arial_bold.glf")
 
 	var Font = require('$system/font/fontshader')
-	var glfontParser = require('$system/font/fontparser')
 
 	this.bgcolor = vec4("transparent")
 
@@ -47,7 +46,7 @@ define.class(function(require, $ui$, view){
 			var view = this.view
 			
 			var mesh = this.newText()
-			if(this.typeface) mesh.typeface = this.typeface
+			if(view.typeface) mesh.typeface = view.typeface
 
 			mesh.fontsize = view.fontsize
 			mesh.boldness = view.boldness
@@ -97,7 +96,6 @@ define.class(function(require, $ui$, view){
 	this.bgcolor = vec4("white")
 
 	this.init = function(){
-		if(this.typeface) this.typeface = glfontParser(this.typeface)
 	}
 	
 	this.measure = function(width){
