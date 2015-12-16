@@ -13,14 +13,15 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		maxvalue: {type: float, value: 1},
 		stepvalue: {type: float, value: 0.01},
 		
-		bordercolor: {motion:"easeout", duration:0.2, value: "gray", meta:"color" },
+		bordercolor: {motion:"easeout", duration:0.2, value: vec4(1,1,1,0), meta:"color" },
 		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
 		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
 		outerradius:{type:float, value: 70},
 		innerradius:{type:float, value: 30},
 		offset:{type:float, value:8}
 	}
-		
+		this.minwidth = 50;
+		this.minheight = 50;
 	define.class(this, "dial", function($ui$, view){
 		
 		this.innerradius = 20;
@@ -30,8 +31,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 			this.width = this.parent.layout.width;
 			this.height = this.parent.layout.height;
 		}
-		
-		
+			
 		
 		this.attributes = {
 			start:{type:float, value:0},
@@ -150,13 +150,12 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	//this.bgcolor = "#f0f0f0";
 	this.bg = 0;
 	this.padding =0;
-	this.borderwidth = 0;
-	this.bordercolor = "d0d0d0";
+	this.bordercolor = vec4(1,1,1,0);
 	this.borderradius = 0;			
 	this.alignself = "flex-end" 
 	this.justifycontent = "center";
 	this.alignitems = "center";	
-	this.borderwidth = 1;
+	this.borderwidth = 2;
 	this.render = function(){
 		
 		return [
