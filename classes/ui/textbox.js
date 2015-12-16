@@ -79,7 +79,7 @@ define.class(function(require, $ui$, label){
 
 	Object.defineProperty(this, 'textbuf', {
 		get:function(){
-			return this.fontshader.mesh
+			return this.typefaceshader.mesh
 		}
 	})
 
