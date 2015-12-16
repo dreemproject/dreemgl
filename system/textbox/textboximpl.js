@@ -219,6 +219,7 @@ define.mixin(function(require){
 				console.log('2 step unicode not implemented')
 			}
 			else if(trans !== undefined){
+				if(this.readonly) return
 				this.cursorset.insert(trans)
 				change = Change.keyPress
 			}
@@ -295,6 +296,7 @@ define.mixin(function(require){
 	// alright so. undo. 
 	this.keyZCtrl =
 	this.keyZCmd = function(){
+		if(this.readonly) return
 		this.undoRedo(this.undo_stack, this.redo_stack)
 		//change = Change.undoRedo
 		//doCursor()
@@ -302,6 +304,7 @@ define.mixin(function(require){
 
 	this.keyYCtrl =
 	this.keyYCmd = function(){
+		if(this.readonly) return
 		this.undoRedo(this.redo_stack, this.undo_stack)
 		//change = Change.undoRedo
 		//doCursor()
@@ -316,11 +319,13 @@ define.mixin(function(require){
 
 	this.keyXCtrl = 
 	this.keyXCmd = function(){
+		if(this.readonly) return
 		// cut the crap
 		this.cursorset.delete()
 	}
 
 	this.keyBackspace = function(){
+		if(this.readonly) return
 		this.cursorset.backspace()
 		//change = Change.delete
 		this.doCursor()
@@ -341,28 +346,33 @@ define.mixin(function(require){
 	}
 
 	this.keyDelete = function(){
+		if(this.readonly) return
 		this.cursorset.delete()
 		this.doCursor()
 	}
 
 	this.keyDeleteCtrl =
 	this.keyDeleteAlt = function(){
+		if(this.readonly) return
 		this.cursorset.deleteWord()
 		this.doCursor()
 	}
 
 	this.keyBackspaceCtrl = 
 	this.keyBackspaceAlt = function(){
+		if(this.readonly) return
 		this.cursorset.backspaceWord()
 		this.doCursor()
 	}
 
 	this.keyBackspaceCmd = function(){
+		if(this.readonly) return
 		this.cursorset.backspaceLine()
 		this.doCursor()
 	}
 
 	this.keyDeleteCmd = function(){
+		if(this.readonly) return
 		this.cursorset.deleteLine()
 		this.doCursor()
 	}

@@ -5,7 +5,7 @@
 
 define.class(function(require, $ui$, label){	
 
-	this.mixin(require('$system/edit/editimpl'))
+	this.mixin(require('$system/textbox/textboximpl'))
 
 	this.attributes = {
 		// the color of the cursor
@@ -13,7 +13,8 @@ define.class(function(require, $ui$, label){
 		// color of the marker
 		markerfocus: {type:vec4, value: vec4("ocean"), meta:"color"},
 		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"},
-		value:{type:String, value:""}
+		value:{type:String, value:""},
+		readonly:false
 	}
 
 	this.markercolor = this.markerunfocus
@@ -67,11 +68,11 @@ define.class(function(require, $ui$, label){
 	
 	this.focus = function(){
 		if(this._focus){
-			this.cursorsshader.visible = true
+			this.cursorsshader.visible = this.readonly?false:true
 			this.markercolor = this.markerfocus
 		}
 		else{
-			this.cursorsshader.visible = false
+			this.cursorsshader.visible = this.readonly?false:true
 			this.markercolor = this.markerunfocus
 		}
 		this.redraw()

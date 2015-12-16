@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, label){
+define.class(function(require, $ui$, textbox){
 
 	var JSFormatter = require('$system/typeface/jsformatter')	
 	var Parser = require('$system/parse/onejsparser')
@@ -17,6 +17,8 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
+
+	this.readonly = true
 
 	this.bg = 1
 	this.fontsize = 14
