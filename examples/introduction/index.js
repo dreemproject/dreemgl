@@ -19,13 +19,11 @@ define.class(function(require,
 					name:'desktop',
 					init:function(){
 						this.rpc.role.remote.pager = function(event){
-							//console.log(event)	
 							this.children[0].page += event.value
 						}.bind(this)
 					}},
 					slideviewer({
 						slide:{
-
 						},
 						flex:1,
 						viewport:'2d',

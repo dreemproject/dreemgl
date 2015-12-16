@@ -390,7 +390,7 @@ define.class('$system/base/shader', function(require, exports){
 				}
 
 				out += body
-					.replace(/TEXTURE_VALUE/, TEXTURE_VALUE)
+					.replace(/TEXTURE_VALUE/g, TEXTURE_VALUE)
 					.replace(/TEXTURE_SAMPLER/, texinfo.samplerid)
 					.replace(/TEXTURE_ID/g, texid)
 					.replace(/TEXTURE_LOC/, 'shader.texlocs.' + key+ '.loc')

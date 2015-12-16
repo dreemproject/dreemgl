@@ -18,7 +18,7 @@ define.class(function(require, $ui$, label){
 
 	this.markercolor = this.markerunfocus
 	
-	define.class(this, 'cursors', require('$system/font/cursorshader.js'), function(){
+	define.class(this, 'cursors', require('$system/typeface/cursorshader.js'), function(){
 		this.updateorder = 5
 		this.draworder = 6
 		this.atConstructor = function(){
@@ -37,7 +37,7 @@ define.class(function(require, $ui$, label){
 
 	this.tabstop = 0
 	
-	define.class(this, 'markers', require('$system/font/markershader.js'), function(){
+	define.class(this, 'markers', require('$system/typeface/markershader.js'), function(){
 		this.updateorder = 6
 		this.draworder = 4
 		this.atConstructor = function(){

@@ -23,8 +23,8 @@ define.class( function(require, label){
 	
 	this.bg = undefined
 
-	this.font = {
-		typeface: require('$resources/fonts/fontawesome.glf')
+	this.typeface = {
+		font: require('$resources/fonts/fontawesome.glf')
 	}
 
 	// the font awesome 

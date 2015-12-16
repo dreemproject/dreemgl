@@ -78,7 +78,7 @@ define.class(function(view,icon){
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
 	define.class(this, 'labelclass', function(label){
 		this.subpixel = false
-		this.fontsubpixelaa =  {
+		this.typefacesubpixelaa =  {
 			boldness:0.9
 		}
 		this.bg = 0

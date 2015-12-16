@@ -6,7 +6,7 @@
 
 define.class(function(require, $ui$, label){
 
-	var JSFormatter = require('$system/font/jsformatter')	
+	var JSFormatter = require('$system/typeface/jsformatter')	
 	var Parser = require('$system/parse/onejsparser')
 
 	this.attributes = {
@@ -22,10 +22,10 @@ define.class(function(require, $ui$, label){
 	this.fontsize = 14
 	this.subpixel = true
 
-	this.typeface = require('$resources/fonts/ubuntu_monospace_ascii.glf')
+	this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
 
 	// extend the font shader
-	this.font = function(){
+	this.typeface = function(){
 		for(var key in JSFormatter.types){
 			this[key] = String(JSFormatter.types[key])
 		}
@@ -137,7 +137,7 @@ define.class(function(require, $ui$, label){
 			var maxwidth = view.layout.width
 			var textbuf = this.mesh = this.newText()
 
-			textbuf.typeface = view.typeface
+			textbuf.font = view.font
 			var ast = Parser.parse(view.source)
 
 			textbuf.fontsize = view.fontsize
@@ -150,7 +150,7 @@ define.class(function(require, $ui$, label){
 
 			if(view.wrap){
 				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
-					var indent = textbuf.typeface.glyphs[9].advance * textbuf.fontsize * (this.indent)
+					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * (this.indent)
 					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
