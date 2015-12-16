@@ -390,16 +390,14 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 												
 						,view({name:"popllayer", bg:0},
 
-							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:this.activeconnectioncolor,position:"absolute"},
+							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 								label({text:"connection", bg:0, margin:4})
 								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
-							
 							)
-							,view({name:"blockui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:this.activeconnectioncolor,position:"absolute"},
+							,view({name:"blockui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"block", bg:0, margin:4})
 								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
-							
 							)
 						)
 				
