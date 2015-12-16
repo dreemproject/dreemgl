@@ -87,10 +87,20 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="FloatLike"){
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value, margin:2}) 
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value, stepvalue:0.1, margin:2}) 
 				)
 			)
 		}
+		
+		if (typename =="IntLike"){
+			return this.wrap(
+				view({bg:0},
+					numberbox({flex:1, fontsize:this.fontsize, fgcolor:"#303030", value:this.value, stepvalue:1, margin:2}) 
+				)
+			)
+		}
+		
+
 		
 		if (typename =="String"){			
 			return this.wrap(

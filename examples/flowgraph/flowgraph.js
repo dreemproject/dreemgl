@@ -3,13 +3,12 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
-define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, label, button, scrollbar, textbox, numberbox, $widgets$, propviewer){	
+define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, $widgets$, propviewer, $server$, dataset){	
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
-
-		
+	this.attributes = {
+		activeconnectioncolor:{type:vec4, value:"#f0f090", meta:"color"}
+	}
 	define.class(this, "menubar", function($ui$, view){
-		
 	})
 	
 	define.class(this, "dockpanel", function($ui$, view, label){
@@ -36,12 +35,64 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		}
 	})
 	
+	define.class(this, "classlibclass", function($ui$, view, icon){
+		this.attributes = {
+			classdesc:{type:Object, value: undefined},
+			col1: {value:vec4("#c0d0e0"),persist:true, meta:"color", motion:"linear", duration:0.1},
+			col2: {value:vec4("#f0f0f0"),persist:true, meta:"color", motion:"linear", duration:0.2}
+		}
+		
+		this.bg = {
+			color: function(){	
+				var fill = mix(view.col1, view.col2,  (mesh.y)/0.8)
+				return fill;
+			}			
+		}
+		
+		
+		this.justifycontent= "flex-start";
+		this.alignitems = "center"
+		///this.aligncontent = "center"
+		this.render = function(){
+			return [
+			view({width:40, height:40, borderwidth:1, borderradius:2, bordercolor:"#303030", margin:4}
+				,icon({icon:"flask", fgcolor:this.fgcolor})
+			)
+			,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0, fontsize:this.fontsize})
+			]
+		}
+	})
+	
+	define.class(this, "library", function($ui$, view){
+		this.flex = 1;
+		this.attributes = {
+				dataset:{type:dataset},
+				fontsize:{type:float, meta:"fontsize", value: 15}
+		}
+		this.flexdirection = "column" 
+		this.fgcolor = "#303030"
+		this.render =function(){
+			
+			if (!this.dataset) return [];
+			
+			var res = [];
+			//console.log(this.dataset);
+			for(var a  in this.dataset.children[0].children){
+				var ds = this.dataset.children[0].children[a];
+				console.log(ds);
+				res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
+			}
+			
+			return res;
+		}
+	})
+	
 	define.class(this, "connection",function($ui$, view){	
 		this.attributes = {
 			from:{type:String, value:""},
 			to:{type:String, value:""},
 			linewidth:{type:float, value:10, duration:0.5, motion:"bounce"},
-			focussedcolor:{type:vec4, value:vec4("#90b0c0"), meta:"color" },
+			focussedcolor:{type:vec4, value:vec4("#f0f090"), meta:"color" },
 			hoveredcolor:{type:vec4, value:vec4("#c0d0e0"), meta:"color" },
 			focussedwidth:{type:float, value:15},
 			hoveredwidth:{type:float, value:25},
@@ -55,8 +106,7 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		
 		this.over = false;
 		
-		this.updatecolor = function(){
-			
+		this.updatecolor = function(){	
 			if (this.focus) {
 				this.bgcolor = this.focussedcolor;
 				this.linewidth = this.focussedwidth;
@@ -75,6 +125,12 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		
 		this.focus =function(){
 			this.updatecolor();
+			if (this.focus){
+				this.find("flowgraph").setActiveConnection(this);
+			}
+			else{
+				this.find("flowgraph").setActiveConnection(undefined);
+			}
 		}
 		
 		
@@ -116,11 +172,9 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 				var b3 = B3(percent);
 				var b4 = B4(percent);
 				
-				return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;
-				
+				return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
 			}
-			
-	
+				
 			this.position = function(){
 				var a = mesh.x;
 				var a2 = mesh.x+0.001;
@@ -183,7 +237,23 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 			outputattributes:{type:Object, value:["clicked","something"]},
 			title:{type:String, value:"Untitled"},
 			snap:{type:int, value:1},
-			fontsize:{type:float, value:10}
+			bordercolor:{motion:"linear", duration: 0.1},
+			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#f0f0c0"},
+			fontsize:{type:float, value:12}
+		}
+			
+		this.init = function(){
+				this.neutralbordercolor = this.bordercolor;
+		}
+		this.focus = function(){
+				if (this.focus){
+					this.bordercolor = this.focusbordercolor;
+					this.find("flowgraph").setActiveBlock(this);
+				}
+				else{
+					this.bordercolor = this.neutralbordercolor;
+					this.find("flowgraph").setActiveBlock(undefined);
+				}
 		}
 			
 		this.mouseleftdown = function(p){
@@ -201,7 +271,8 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 				var y = Math.floor((this.starty+dy)/this.snap)*this.snap;	
 
 				this.pos = vec2(x,y);
-				
+				this.find("flowgraph").setActiveBlock(this);
+
 				this.redraw();
 				this.relayout();
 				this.outer.updateconnections();
@@ -221,7 +292,6 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		
 		this.flexdirection = "column"
 		
-
 		this.render = function(){
 			return [
 				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
@@ -233,31 +303,68 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 		}
 	})
 	
+	this.setActiveBlock = function(block){
+		var bg = this.findChild("blockui");
+		if (bg){				
+			if (block){
+				bg.x = block.pos[0];
+				bg.y = block.pos[1]-bg.layout.height;
+			}
+			else{
+				bg.x = -bg.layout.width;
+				bg.y = -bg.layout.height;
+			}
+		}
+		
+	}
+	this.setActiveConnection = function(conn){
+		var cg = this.findChild("connectionui");
+		if (cg){				
+			if (conn){
+				cg.x = (conn.frompos[0] + conn.topos[0])/2
+				cg.y = (conn.frompos[1] + conn.topos[1])/2
+			}
+			else{
+				cg.x = -cg.layout.width;
+				cg.y = -cg.layout.height;
+			}
+		}
+		
+	}
+	
 	this.updateconnections = function(){
 		var cl = this.find("connectionlayer");
-		for(a in cl.children)
-		{
+		for(a in cl.children){
 			cl.children[a].layout =1 ;
 		}
 	}
 	
+	this.init = function(){
+		
+		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
+		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
+	}
+	
 	this.layout = function(){
-		console.log("hmm");
+		console.log("layout on flowgraph - attempting to arrange the connections");
 		this.updateconnections();
 	}
 	
 	this.render = function()
 	{
 		return [
-			this.menubar({})
-			
+			this.menubar({})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3}
 					,this.dockpanel({title:"Composition"}
-						,treeview({flex:1})
+						,treeview({flex:1, dataset: this.model})
 					)
 				)
 				,this.dockpanel({title:"Patch"}
+					,view({bg:0}
+						,button({text:"add"   , margin:1, padding:3, borderradius:0, click:function(){console.log("add");    }})
+						,button({text:"remove", margin:1, padding:3, borderradius:0, click:function(){console.log("remove"); }})
+					)
 					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#101020",gridsize:5,majorevery:5,  majorline:"#202040", minorline:"#151530"}
 						,view({name:"connectionlayer", bg:0}
 							,this.connection({from:"phone", to:"tv"})
@@ -267,23 +374,40 @@ define.class(function(require, $ui$, splitcontainer, treeview, cadgrid,  view, l
 							,this.connection({from:"c", to:"d"})
 							,this.connection({from:"a", to:"c"})
 						)
+						
 						,view({name:"blocklayer", bg:0, layout:function(){console.log("layout")}}
 							,this.block({name:"phone", title:"Phone", x:200, y:20})
 							,this.block({name:"tv", title:"Television", x:50, y:200})
-							,this.block({name:"tablet", title:"Tablet",x:200, y:20})						
-							,this.block({name:"thing", title:"Thing",x:200, y:20})						
-							,this.block({name:"a", title:"block A", x:50, y:200})
-							,this.block({name:"b", title:"block B", x:50, y:200})
-							,this.block({name:"c", title:"block C", x:50, y:200})
-							,this.block({name:"d", title:"block D", x:50, y:200})
-							,this.block({name:"e", title:"block E", x:50, y:200})
-							,this.block({name:"f", title:"block F", x:50, y:200})
+							,this.block({name:"tablet", title:"Tablet",x:300, y:120})						
+							,this.block({name:"thing", title:"Thing",x:500, y:120})						
+							,this.block({name:"a", title:"block A", x:50, y:300})
+							,this.block({name:"b", title:"block B", x:150, y:500})
+							,this.block({name:"c", title:"block C", x:250, y:400})
+							,this.block({name:"d", title:"block D", x:350, y:500})
+							,this.block({name:"e", title:"block E", x:450, y:600})
+							,this.block({name:"f", title:"block F", x:550, y:700})
 						)
+												
+						,view({name:"popllayer", bg:0},
+
+							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:this.activeconnectioncolor,position:"absolute"},
+								label({text:"connection", bg:0, margin:4})
+								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
+							
+							)
+							,view({name:"blockui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:this.activeconnectioncolor,position:"absolute"},
+							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
+								label({text:"block", bg:0, margin:4})
+								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
+							
+							)
+						)
+				
 					)
 				) 
 				,splitcontainer({flex:0.5,direction:"horizontal"}
 					,this.dockpanel({title:"Library", viewport:"2D" }
-						,propviewer({flex:1,name:"mainpropviewer", target:"thebutton", flex:1, overflow:"scroll"})
+						,this.library({dataset:this.librarydata})
 					)
 					,this.dockpanel({title:"Properties", viewport:"2D"}
 						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
