@@ -8,7 +8,6 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	this.attributes = {
 		activeconnectioncolor:{type:vec4, value:"#f0f090", meta:"color"}
 	}
-
 	define.class(this, "menubar", function($ui$, view){
 	})
 	
@@ -350,6 +349,21 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.screen.locationhash = function(event){
 			console.log(event.value);
 		}
+		console.log(" hmm  " );
+		
+		// lets load the entire directory structure
+		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
+			var filetree = this.find('filetree')
+				var tree = result.value
+				tree.collapsed = false
+				// lets make a dataset
+				console.log(tree);
+				
+		}.bind(this))
+	
+			
+		
+				
 	}
 	
 	this.layout = function(){
