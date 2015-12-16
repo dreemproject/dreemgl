@@ -79,7 +79,6 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			//console.log(this.dataset);
 			for(var a  in this.dataset.children[0].children){
 				var ds = this.dataset.children[0].children[a];
-				console.log(ds);
 				res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
 			}
 			

@@ -478,14 +478,17 @@ define.class('$system/base/node', function(require){
 
 	this.relayoutRecur = function(){
 		this.layout_dirty = true
-		this.redraw_dirty = 3
+		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
 		for(var i = 0;i < this.child_viewport_list.length;i++){
 			this.child_viewport_list[i].relayoutRecur()
 		}
 	}
 
 	this.relayout = function(shallow){
-		if(this.screen)this.screen.relayoutRecur()
+		if(this.screen){
+			this.screen.redraw()
+			this.screen.relayoutRecur()
+		}
 		return
 		var parent = this.parent_viewport
 		// ok we haz parent viewport, they we have to check if we are _overflow is something

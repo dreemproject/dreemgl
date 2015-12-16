@@ -285,12 +285,11 @@ define.class(function(require, exports){
 
 			var skip = false
 			var last = i === len - 1
-
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
+
 			if(view.draw_dirty & 1 || last){
-				//console.log("DiRTY", view)
 				var hastime = view.drawpass.drawColor(last, stime)
 				view.draw_dirty &= 2
 				if(hastime){
