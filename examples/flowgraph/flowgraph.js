@@ -8,8 +8,10 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	this.attributes = {
 		activeconnectioncolor:{type:vec4, value:"#f0f090", meta:"color"}
 	}
+
 	define.class(this, "menubar", function($ui$, view){
 	})
+	
 	
 	define.class(this, "dockpanel", function($ui$, view, label){
 		this.attributes = {
@@ -55,8 +57,8 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		///this.aligncontent = "center"
 		this.render = function(){
 			return [
-			view({width:40, height:40, borderwidth:1, borderradius:2, bordercolor:"#303030", margin:4}
-				,icon({icon:"flask", fgcolor:this.fgcolor})
+			view({width:40, height:40, borderwidth:1, borderradius:2, bordercolor:"#303030", margin:5}
+				,icon({icon:"flask", margin:4, fgcolor:this.fgcolor})
 			)
 			,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0, fontsize:this.fontsize})
 			]
@@ -87,6 +89,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	})
 	
 	define.class(this, "connection",function($ui$, view){	
+		
 		this.attributes = {
 			from:{type:String, value:""},
 			to:{type:String, value:""},
@@ -338,15 +341,24 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		}
 	}
 	
+	
 	this.init = function(){
 		
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
+		
+		this.screen.locationhash = function(event){
+			console.log(event.value);
+		}
 	}
 	
 	this.layout = function(){
 		console.log("layout on flowgraph - attempting to arrange the connections");
 		this.updateconnections();
+	}	
+	
+	this.updateZoom = function(z){
+		
 	}
 	
 	this.render = function()
@@ -359,12 +371,12 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 						,treeview({flex:1, dataset: this.model})
 					)
 				)
-				,this.dockpanel({title:"Patch"}
+				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}}
 					,view({bg:0}
 						,button({text:"add"   , margin:1, padding:3, borderradius:0, click:function(){console.log("add");    }})
 						,button({text:"remove", margin:1, padding:3, borderradius:0, click:function(){console.log("remove"); }})
 					)
-					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#101020",gridsize:5,majorevery:5,  majorline:"#202040", minorline:"#151530"}
+					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#101020",gridsize:5,majorevery:5,  majorline:"#202040", minorline:"#151530", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"connectionlayer", bg:0}
 							,this.connection({from:"phone", to:"tv"})
 							,this.connection({from:"tablet", to:"thing"})
@@ -393,10 +405,10 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 								label({text:"connection", bg:0, margin:4})
 								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
 							)
-							,view({name:"blockui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
+							,view({name:"blockui",x:-200, bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"block", bg:0, margin:4})
-								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
+								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20})
 							)
 						)
 				

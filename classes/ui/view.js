@@ -342,8 +342,8 @@ define.class('$system/base/node', function(require){
 		this.viewportmatrix = mat4()
 
 		if(prev){
-			this._layout =
-			this.oldlayout = prev._layout
+//			this._layout =
+	//		this.oldlayout = prev._layout
 		}
 
 		if(this._bgimage){
