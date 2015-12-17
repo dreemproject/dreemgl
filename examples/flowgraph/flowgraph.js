@@ -140,13 +140,21 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.focus =function(){
 			this.updatecolor();
 			if (this.focus){
-				this.find("flowgraph").setActiveConnection(this);
 			}
 			else{
 				this.find("flowgraph").setActiveConnection(undefined);
 			}
 		}
 		
+		
+		this.mouseleftdown = function(){
+			var fg = this.find("flowgraph");
+			var performactivation = true;
+			if (fg && this.screen.keyboard.shift) performactivation = fg.addToSelection(this);
+			if (performactivation){
+				this.find("flowgraph").setActiveConnection(this);
+			}
+		}
 		
 		this.mouseover = function(){
 			this.over = true;
@@ -292,7 +300,6 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.focus = function(){
 				if (this.focus){
 					this.bordercolor = this.focusbordercolor;
-					this.find("flowgraph").setActiveBlock(this);
 				}
 				else{
 					this.bordercolor = this.neutralbordercolor;
@@ -303,6 +310,17 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.mouseleftdown = function(p){
 			var props = this.find("mainproperties");
 			if (props) props.target = this.name;
+			
+			var	fg = this.find("flowgraph");
+			var performactivation = true;
+			
+			if (fg && this.screen.keyboard.shift) performactivation = fg.addToSelection(this);
+			
+			if (performactivation){	
+			this.find("flowgraph").setActiveBlock(this);
+
+			}
+			
 			this.startposition = this.parent.localMouse();
 			this.startx = this.pos[0];
 			this.starty = this.pos[1];
@@ -347,6 +365,16 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		}
 	})
 	
+	this.addToSelection = function(obj)
+	{
+		var f = this.currentselection.indexOf(obj);
+		if (f!=-1) this.currentselection.push(obj);
+		
+		console.log(this.currentselection);
+		
+		if (this.currentselection.length > 1) return false;
+		return true;
+	}
 	
 	this.removeFromSelection = function(obj){
 		console.log("before:", this.currentselection);
