@@ -38,6 +38,26 @@ define.class(function(require, $ui$view) {
 		this.midi = this.device.midi
 		this.bindInputs()
 	}
+	
+	this.defaultKeyboardHandler = function(target, v){
+		
+		var keyboard = this.screen.keyboard
+		keyboard.textarea.focus()
+		var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
+		this.undo_group++
+
+		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
+		if(keyboard.ctrl) name += 'Ctrl'
+		if(keyboard.alt) name += 'Alt'
+		if(keyboard.shift) name += 'Shift'
+				
+		if(target[name]) {
+			target[name](v)
+		}
+		else{
+			if (target.keydownHandler) target.keydownHandler(name);
+		}
+	}
 
 	this.remapmatrix = mat4();
 	this.invertedmousecoords = vec2();

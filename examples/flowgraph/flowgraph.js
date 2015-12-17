@@ -105,6 +105,19 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			this.neutrallinewidth = this.linewidth;
 		}
 		
+		this.keydownDelete = function(){
+			this.find("flowgraph").removeConnection(this);
+		}
+		
+		this.keydownHandler = function(name){
+			console.log("connection handles key:", name);
+		}
+		
+		this.keydown = function(v){			
+			this.screen.defaultKeyboardHandler(this, v);
+		}
+
+		
 		this.over = false;
 		
 		this.updatecolor = function(){	
@@ -266,20 +279,9 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			var fg = this.find("flowgraph")
 			fg.removeBlock(this);
 		}
-		this.keydown = function(v){
-			var keyboard = this.screen.keyboard
-			keyboard.textarea.focus()
-			var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
-			this.undo_group++
-
-			if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
-			if(keyboard.ctrl) name += 'Ctrl'
-			if(keyboard.alt) name += 'Alt'
-			if(keyboard.shift) name += 'Shift'
-
-			
-			
-			if(this[name]) this[name](v)
+		
+		this.keydown = function(v){			
+			this.screen.defaultKeyboardHandler(this, v);
 		}
 		
 		
@@ -344,6 +346,16 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			]
 		}
 	})
+	
+	
+	this.removeFromSelection = function(obj){
+		console.log("before:", this.currentselection);
+		var f = this.currentselection.indexOf(obj);
+		if (f>-1) this.currentselection.splice(f,1);
+		console.log("after:" , this.currentselection);
+		
+	}
+	
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock;
 		if (block){
@@ -367,6 +379,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		var bg = this.findChild("blockui");
 		if (bg){				
 			if (block){
+				this.currentselection =[block];
 				bg.x = block.pos[0];
 				bg.y = block.pos[1]-bg.layout.height;
 			}
@@ -382,6 +395,8 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		var cg = this.findChild("connectionui");
 		if (cg){				
 			if (conn){
+				this.currentselection =[conn];
+				
 				cg.x = (conn.frompos[0] + conn.topos[0])/2
 				cg.y = (conn.frompos[1] + conn.topos[1])/2
 			}
