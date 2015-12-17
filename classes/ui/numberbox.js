@@ -15,7 +15,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		bordercolor: {motion:"easeout", duration:0.2, value: "gray", meta:"color" },
 		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
 		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
-	
+		decimals: {type:int, value:0}, 
 		// Font size in device-pixels.
 		fontsize: {type: float, value: 14, meta:"fontsize" },		
 	}
@@ -25,6 +25,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	
 	this.bg = 0;
 	this.fgcolor="#101010";
+
 	this.value = function(){
 		var tn = this.findChild("thenumber");
 		if (tn) {
@@ -32,6 +33,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 			this.relayout();
 		}
 	}
+	
 	
 	this.focus = function(newfocus){
 		if (this._focus){
@@ -43,10 +45,13 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.checkandset = function(newval){
+		
 		if (isNaN(newval)) newval = 0;		
+		
 		if (this.maxvalue!=undefined && newval > this.maxvalue) newval = this.maxvalue;
 		if (this.minvalue!=undefined && newval < this.minvalue) newval = this.minvalue;		
-		this.value = newval;
+		var expo = Math.pow(10, this.decimals);
+		this.value = Math.round(newval * expo) / expo;
 		nb = this.findChild("thenumber");
 		if (nb) nb.value = this.value.toString();
 	}

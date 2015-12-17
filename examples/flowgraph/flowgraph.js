@@ -260,7 +260,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			title:{type:String, value:"Untitled"},
 			snap:{type:int, value:1},
 			bordercolor:{motion:"linear", duration: 0.1},
-			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#f0f0c0"},
+			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#f0f0c0", meta:"color"},
 			fontsize:{type:float, value:12}
 		}
 
@@ -268,6 +268,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		{
 			var nx = this.pos[0] + x;
 			var ny = this.pos[1] + y;
+			console.log(nx,ny);
 			if (nx<0) nx = 0;
 			if (ny<0) ny = 0;
 			this.pos = vec2(Math.round(nx),Math.round(ny));
@@ -275,6 +276,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			fg.setActiveBlock(this);
 			fg.updateconnections();
 		}
+		
 		this.keydownUparrow = function(){this.move(0,-1);}
 		this.keydownDownarrow = function(){this.move(0,1);}
 		this.keydownLeftarrow = function(){this.move(-1,0);}
@@ -283,12 +285,14 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.keydownDownarrowShift = function(){this.move(0,10);}
 		this.keydownLeftarrowShift = function(){this.move(-10,0);}
 		this.keydownRightarrowShift = function(){this.move(10,0);}
+		
 		this.keydownDelete = function(){
 			var fg = this.find("flowgraph")
 			fg.removeBlock(this);
 		}
 		
 		this.keydown = function(v){			
+		console.log(v);
 			this.screen.defaultKeyboardHandler(this, v);
 		}
 		
