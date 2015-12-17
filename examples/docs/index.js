@@ -85,7 +85,7 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 							postLayout:function(){
 							},
 							init:function(){
-								var dataset = this.find('screen').model
+								var dataset = this.screen.model
 								if(dataset) this.dataset = dataset
 							},
 							name: 'filetree', 
@@ -97,7 +97,7 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 								for(var i = sel.path.length - 1; i >= 1; i--){
 									path = sel.path[i].name + (path !== ''? '/' + path: '')
 								}
-								this.find('screen').locationhash = {path:'$root/' + path};
+								this.screen.locationhash = {path:'$root/' + path};
 							}
 						})
 					)

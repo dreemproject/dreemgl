@@ -18,7 +18,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		72:'h',73:'i',74:'j',75:'k',76:'l',77:'m',78:'n',
 		79:'o',80:'p',81:'q',82:'r',83:'s',84:'t',85:'u',
 		86:'v',87:'w',88:'x',89:'y',90:'z',
-		91:'leftmeta',92:'rightmeta',
+		'meta':93,
 		96:'pad0',97:'pad1',98:'pad2',99:'pad3',100:'pad4',101:'pad5',
 		102:'pad6',103:'pad7',104:'pad8',105:'pad9',
 		106:'multiply',107:'add',109:'subtract',110:'decimal',111:'divide',
@@ -36,8 +36,8 @@ define.class('$system/base/keyboard', function (require, exports){
 	}
 
 	var fireFoxTable = {
-		93:91, // left mete
-		224:92, // right meta
+		91:93,92:93,
+		224:93, // right meta
 		61:187, // equals
 		173:189, // minus
 		59:186 // semicolon
@@ -46,6 +46,13 @@ define.class('$system/base/keyboard', function (require, exports){
 	this.atConstructor = function(){
 
 		var special_key_hack = false
+
+		this.checkSpecialKeys = function(e){
+			if(e.shiftKey !== this._shift?true:false) this.shift = e.shiftKey?1:0
+			if(e.altKey !== this._alt?true:false) this.alt = e.altKey?1:0
+			if(e.ctrlKey !== this._ctrl?true:false) this.ctrl = e.ctrlKey?1:0
+			if(e.metaKey !== this._meta?true:false) this.meta = e.metaKey?1:0
+		}
 
 		window.addEventListener('keydown', function(e){
 			var code = fireFoxTable[e.keyCode] || e.keyCode
@@ -56,15 +63,17 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 			var keyname = this.toKey[ code ]
 			if( keyname ) this[keyname] = 1
+			
+			this.checkSpecialKeys(e)
 
-			var msg = { 
+			var msg = {
 				repeat: e.repeat,
 				code: code,
 				name: keyname,
 				shift:this._shift,
-				meta: this._leftmeta || this._rightmeta,
-				ctrl: this.ctrl,
-				alt: this.alt				
+				meta: this._meta,
+				ctrl: this._ctrl,
+				alt: this._alt				
 			}
 
 			this.emit('down', msg)
@@ -92,14 +101,16 @@ define.class('$system/base/keyboard', function (require, exports){
 
 			if( keyname ) this[keyname] = 0
 
+			this.checkSpecialKeys(e)
+
 			var msg = {
 				repeat: e.repeat,
 				code: code,
 				name: keyname,
 				shift:this._shift,
-				meta: this._leftmeta || this._rightmeta,
-				ctrl: this.ctrl,
-				alt: this.alt
+				meta: this._meta,
+				ctrl: this._ctrl,
+				alt: this._alt
 			}
 
 			if(special_key_hack){

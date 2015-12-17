@@ -3,10 +3,15 @@
 define.class('$system/base/node', function(){
 	this.atConstructor = function(){}	
 	this.attributes = {
+		// event api
 		move:{type:Event},
+		down: {type:Event},
+		up: {type:Event},
+
+		// single value API
 		x: {type:float},
 		y: {type:float},
-		isdown: {type:int},
+
 		left: {type:int},
 		middle: {type:int},
 		right: {type:int},

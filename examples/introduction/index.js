@@ -9,7 +9,6 @@ define.class(function(require,
 		test:vec4('red')
 	}
 	
-	// AWESOME
 	this.mymethod = function(){}
 
 	this.render = function render(){ 
@@ -104,7 +103,12 @@ define.class(function(require,
 											detail:6,
 											position:'absolute',
 											attributes:{
-												value:{type:float, value:0, duration:0.5, motion:float.ease.bounce}
+												value:{
+													type:float, 
+													value:0, 
+													duration:0.5, 
+													motion:float.ease.bounce
+												}
 											},
 											mouseover:function(){
 												this.value = 1

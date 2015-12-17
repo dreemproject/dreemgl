@@ -38,7 +38,8 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 			return [view({bgcolor: "red", fgcolor: "darkgray", text:"this is a small text that will contain the cursor after move", position:"absolute" ,width: 10})]
 		}
 		
-		this.mousemove = function(a){
+		this.mousemove = function(event){
+			var a = event.local
 			this.bgshader.mousepos = vec2(a[0],a[1])
 			this.redraw()
 			//this.screen.addDirtyNode(this);

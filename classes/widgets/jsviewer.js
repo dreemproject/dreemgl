@@ -6,7 +6,7 @@
 
 define.class(function(require, $ui$, textbox){
 
-	var JSFormatter = require('$system/typeface/jsformatter')	
+	var JSFormatter = require('$system/parse/jsformatter')	
 	var Parser = require('$system/parse/onejsparser')
 
 	this.attributes = {
