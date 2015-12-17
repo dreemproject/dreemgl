@@ -3,15 +3,20 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, $widgets$, propviewer, $server$, dataset){	
-	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
+define.class('$ui/view', function(require, 
+		$ui$, view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, splitcontainer,
+		$widgets$, propviewer,
+		$server$, sourceset, dataset){
+
 	this.attributes = {
 		activeconnectioncolor:{type:vec4, value:"#f0f090", meta:"color"}
 	}
+
+	this.flex = 1
+
 	define.class(this, "menubar", function($ui$, view){
 	})
-	
-	
+		
 	define.class(this, "dockpanel", function($ui$, view, label){
 		this.attributes = {
 			title:{type:String, value:"Untitled"}
@@ -296,11 +301,10 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			this.screen.defaultKeyboardHandler(this, v);
 		}
 		
-		
-		
 		this.init = function(){
 				this.neutralbordercolor = this.bordercolor;
 		}
+
 		this.focus = function(){
 				if (this.focus){
 					this.bordercolor = this.focusbordercolor;
@@ -361,7 +365,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.render = function(){
 			return [
 				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
-				,view({flexdirection:"row", alignitems:"stretch", bg:0 }
+				,view({flexdirection:"row", alignitems:"stretch", bg:0}
 					,button({icon:"plus", fontsize: this.fontsize})
 					,button({icon:"plus", fontsize: this.fontsize})
 				)
@@ -407,17 +411,17 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	}
 	
 	this.setActiveBlock = function(block){
-		this.currentblock = block;
-		var bg = this.findChild("blockui");
-		if (bg){				
+		this.currentblock = block
+		var bg = this.findChild("blockui")
+		if (bg){
 			if (block){
-				this.currentselection =[block];
-				bg.x = block.pos[0];
-				bg.y = block.pos[1]-bg.layout.height;
+				this.currentselection = [block]
+				bg.x = block.pos[0]
+				bg.y = block.pos[1] - bg.layout.height
 			}
 			else{
-				bg.x = -bg.layout.width;
-				bg.y = -bg.layout.height;
+				bg.x = - bg.layout.width
+				bg.y = - bg.layout.height
 			}
 		}
 		
@@ -433,8 +437,8 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 				cg.y = (conn.frompos[1] + conn.topos[1])/2
 			}
 			else{
-				cg.x = -cg.layout.width;
-				cg.y = -cg.layout.height;
+				cg.x = -cg.layout.width
+				cg.y = -cg.layout.height
 			}
 		}
 		
@@ -442,26 +446,27 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	
 	this.updateconnections = function(){
 		var cl = this.find("connectionlayer");
-		for(a in cl.children){
-			cl.children[a].layout =1 ;
+		for(var a in cl.children){
+			cl.children[a].layout = 1
 		}
 	}
 	
 	
 	this.init = function(){
 		
-		this.currentselection = [];
-		this.currentblock = undefined;
-		this.currentconnection = undefined;
+		this.currentselection = []
+		this.currentblock = undefined
+		this.currentconnection = undefined
 
-	
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
-		
+
+		this.sourceset = sourceset(require('./index.js').module.factory.body.toString())
+
 		this.screen.locationhash = function(event){
-			console.log(event.value);
+			//console.log(event.value);
 		}
-		console.log(" hmm  " );
+		//console.log(" hmm  ");
 		
 		// lets load the entire directory structure
 		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
@@ -469,26 +474,20 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 				var tree = result.value
 				tree.collapsed = false
 				// lets make a dataset
-				console.log(tree);
+				//console.log(tree);
 				
 		}.bind(this))
-	
-			
-		
-				
 	}
 	
 	this.layout = function(){
-		console.log("layout on flowgraph - attempting to arrange the connections");
+		//console.log("layout on flowgraph - attempting to arrange the connections");
 		this.updateconnections();
 	}	
 	
-	this.updateZoom = function(z){
-		
+	this.updateZoom = function(z){	
 	}
 	
-	this.render = function()
-	{
+	this.render = function(){
 		return [
 			this.menubar({})		
 			,splitcontainer({}
@@ -512,7 +511,9 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 							,this.connection({from:"a", to:"c"})
 						)
 						
-						,view({name:"blocklayer", bg:0, layout:function(){console.log("layout")}}
+						,view({name:"blocklayer", bg:0, layout:function(){
+							//console.log("layout")
+							}}
 							,this.block({name:"phone", title:"Phone", x:200, y:20})
 							,this.block({name:"tv", title:"Television", x:50, y:200})
 							,this.block({name:"tablet", title:"Tablet",x:300, y:120})						

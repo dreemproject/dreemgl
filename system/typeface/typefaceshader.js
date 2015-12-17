@@ -6,7 +6,7 @@
 define.class('$system/platform/$platform/shader$platform', function(require, exports, baseclass){
 
 	// the font
-	this.font = require('$resources/fonts/ubuntu_medium_ascii.glf')
+	this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 
 	// initial pixel and vertex shaders
 	this.position = "glyphy_mesh()"
@@ -851,7 +851,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// screenspace length
 		mesh.scaling = 500. * m 
 		
-		var dist = glyphy_sdf_decode( mesh.font.texture.sample(pos)) * 0.003
+		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
 		
 		var exit = paint(pos,m, pixelscale)
 		if(exit.a >= 0.){
@@ -887,11 +887,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		
 		var sub_delta = vec2((pixelscale / mesh.subpixel_distance)*0.1,0)
 
-		var v1 = glyphy_sdf_decode(mesh.font.texture.sample(pos - sub_delta*2.))
-		var v2 = glyphy_sdf_decode(mesh.font.texture.sample(pos - sub_delta))
-		var v3 = glyphy_sdf_decode(mesh.font.texture.sample(pos))
-		var v4 = glyphy_sdf_decode(mesh.font.texture.sample(pos + sub_delta))
-		var v5 = glyphy_sdf_decode(mesh.font.texture.sample(pos + sub_delta*2.))
+		var v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*2.))
+		var v2 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta))
+		var v3 = glyphy_sdf_decode(glyphy_sdf_lookup(pos))
+		var v4 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta))
+		var v5 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta*2.))
 
 		var dist = vec3(
 			v1+v2+v3,
@@ -899,13 +899,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			v3+v4+v5
 		) * 0.001
 
-		
-		dist = vec3(
-			glyphy_sdf_decode( mesh.font.texture.sample(pos - sub_delta)),
-			glyphy_sdf_decode( mesh.font.texture.sample(pos)),
-			glyphy_sdf_decode( mesh.font.texture.sample(pos + sub_delta))
-		)*0.003
-		
 		//return 'red'
 		
 		var exit = paint(pos,m, pixelscale)
@@ -935,6 +928,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
 	}
 
+	this.glyphy_sdf_lookup = function(pos){
+		return texture2D(mesh.font.texture, pos, {
+			MIN_FILTER: 'LINEAR',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
 
 	this.glyphy_atlas_lookup = function(offset, _atlas_pos){
 		var pos = (vec2(_atlas_pos.xy * mesh.font.item_geom +
