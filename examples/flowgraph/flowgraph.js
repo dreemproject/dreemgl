@@ -250,7 +250,6 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.padding = 0;
 		this.borderradius = vec4(10,10,1,1);
 		this.borderwidth = 2;
-		
 		this.bordercolor = vec4("#607080")
 		
 		this.attributes = {
@@ -261,9 +260,16 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			snap:{type:int, value:1},
 			bordercolor:{motion:"linear", duration: 0.1},
 			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#f0f0c0", meta:"color"},
-			fontsize:{type:float, value:12}
+			fontsize:{type:float, value:12},
+			inselection :{type:boolean, value:false}
+		
 		}
-
+		this.inselection = function(){
+			if (this._inselection) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;
+			
+			this.redraw();
+		}
+		
 		this.move = function(x,y)
 		{
 			var nx = this.pos[0] + x;
@@ -292,22 +298,31 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		}
 		
 		this.keydown = function(v){			
-		console.log(v);
 			this.screen.defaultKeyboardHandler(this, v);
 		}
 		
 		
 		
 		this.init = function(){
-				this.neutralbordercolor = this.bordercolor;
+			this.neutralbordercolor = this.bordercolor;
+			this.find("flowgraph").allblocks.push(this);	
 		}
+		
+		this.destroy = function(){
+			fg = this.find("flowgraph");
+			if (fg){
+				var index = fg.allblocks.indexOf(this);
+				if (index > -1) fg.allblocks.splice(index, 1);
+			}
+		}
+		
 		this.focus = function(){
 				if (this.focus){
-					this.bordercolor = this.focusbordercolor;
+//					this.bordercolor = this.focusbordercolor;
 				}
 				else{
-					this.bordercolor = this.neutralbordercolor;
-					this.find("flowgraph").setActiveBlock(undefined);
+	//				this.bordercolor = this.neutralbordercolor;
+	//				this.find("flowgraph").setActiveBlock(undefined);
 				}
 		}
 			
@@ -318,11 +333,15 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			var	fg = this.find("flowgraph");
 			var performactivation = true;
 			
-			if (fg && this.screen.keyboard.shift) performactivation = fg.addToSelection(this);
+			if (this.screen.keyboard.shift){
+				performactivation = fg.addToSelection(this);
+			}
+			else{
+				fg.clearSelection();
+			}
 			
 			if (performactivation){	
-			this.find("flowgraph").setActiveBlock(this);
-
+				fg.setActiveBlock(this);
 			}
 			
 			this.startposition = this.parent.localMouse();
@@ -371,11 +390,12 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	
 	this.addToSelection = function(obj)
 	{
+		
 		var f = this.currentselection.indexOf(obj);
-		if (f!=-1) this.currentselection.push(obj);
+		if (f!=-1) this.currentselection.push(obj);else return;
 		
 		console.log(this.currentselection);
-		
+		this.updateSelectedItems();
 		if (this.currentselection.length > 1) return false;
 		return true;
 	}
@@ -384,10 +404,31 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		console.log("before:", this.currentselection);
 		var f = this.currentselection.indexOf(obj);
 		if (f>-1) this.currentselection.splice(f,1);
+		
+		
 		console.log("after:" , this.currentselection);
+		this.updateSelectedItems();
 		
 	}
 	
+	this.updateSelectedItems = function(){
+		for(var a in this.allblocks){
+			var obj = this.allblocks[a];
+			var f = this.currentselection.indexOf(obj);
+			var newval = 0;
+			if (f > -1) newval = 1;
+			if (obj._inselection != newval) obj.inselection = newval;
+		
+		}
+	}
+	
+	this.clearSelection = function(update){
+		console.log("clearing selection");
+		this.currentselection = [];
+		if (update) this.updateSelectedItems();
+	}
+
+		
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock;
 		if (block){
@@ -411,7 +452,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		var bg = this.findChild("blockui");
 		if (bg){				
 			if (block){
-				this.currentselection =[block];
+				this.addToSelection(block);
 				bg.x = block.pos[0];
 				bg.y = block.pos[1]-bg.layout.height;
 			}
@@ -427,8 +468,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		var cg = this.findChild("connectionui");
 		if (cg){				
 			if (conn){
-				this.currentselection =[conn];
-				
+				this.addToSelection(conn);								
 				cg.x = (conn.frompos[0] + conn.topos[0])/2
 				cg.y = (conn.frompos[1] + conn.topos[1])/2
 			}
@@ -437,7 +477,6 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 				cg.y = -cg.layout.height;
 			}
 		}
-		
 	}
 	
 	this.updateconnections = function(){
@@ -452,8 +491,8 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		
 		this.currentselection = [];
 		this.currentblock = undefined;
-		this.currentconnection = undefined;
-
+		this.currentconnection = undefined;		
+		this.allblocks = [];
 	
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});

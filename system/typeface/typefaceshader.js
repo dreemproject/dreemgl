@@ -6,7 +6,7 @@
 define.class('$system/platform/$platform/shader$platform', function(require, exports, baseclass){
 
 	// the font
-	this.font = require('$resources/fonts/ubuntu_medium_ascii.glf')
+	this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 
 	// initial pixel and vertex shaders
 	this.position = "glyphy_mesh()"

@@ -35,6 +35,24 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	
+	this.keydownUparrow = function(){this.checkandset(this.value + this.stepvalue);}
+	this.keydownDownarrow =function(){this.checkandset(this.value - this.stepvalue);}
+	this.keydownRightarrow = function(){this.checkandset(this.value + this.stepvalue*100);}
+	this.keydownLeftarrow = function(){this.checkandset(this.value - this.stepvalue*100);}
+
+	this.keydownUparrowShift = function(){this.checkandset(this.value + this.stepvalue*10);}
+	this.keydownDownarrowShift =function(){this.checkandset(this.value - this.stepvalue*10);}
+	this.keydownRightarrowShift =function(){this.checkandset(this.value + this.stepvalue*1000);}
+	this.keydownLeftarrowShift =function(){this.checkandset(this.value - this.stepvalue*1000);}
+
+
+
+	
+	this.keydown = function(v){			
+		console.log(v);
+			this.screen.defaultKeyboardHandler(this, v);
+	}
+	
 	this.focus = function(newfocus){
 		if (this._focus){
 			this.bordercolor = this.focusbordercolor;
