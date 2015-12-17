@@ -242,7 +242,48 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#f0f0c0"},
 			fontsize:{type:float, value:12}
 		}
+
+		this.move = function(x,y)
+		{
+			var nx = this.pos[0] + x;
+			var ny = this.pos[1] + y;
+			if (nx<0) nx = 0;
+			if (ny<0) ny = 0;
+			this.pos = vec2(Math.round(nx),Math.round(ny));
+			var fg = this.find("flowgraph")
+			fg.setActiveBlock(this);
+			fg.updateconnections();
+		}
+		this.keydownUparrow = function(){this.move(0,-1);}
+		this.keydownDownarrow = function(){this.move(0,1);}
+		this.keydownLeftarrow = function(){this.move(-1,0);}
+		this.keydownRightarrow = function(){this.move(1,0);}
+		this.keydownUparrowShift = function(){this.move(0,-10);}
+		this.keydownDownarrowShift = function(){this.move(0,10);}
+		this.keydownLeftarrowShift = function(){this.move(-10,0);}
+		this.keydownRightarrowShift = function(){this.move(10,0);}
+		this.keydownDelete = function(){
+			var fg = this.find("flowgraph")
+			fg.removeBlock(this);
+		}
+		this.keydown = function(v){
+			var keyboard = this.screen.keyboard
+			keyboard.textarea.focus()
+			var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
+			this.undo_group++
+
+			if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
+			if(keyboard.ctrl) name += 'Ctrl'
+			if(keyboard.alt) name += 'Alt'
+			if(keyboard.shift) name += 'Shift'
+
 			
+			
+			if(this[name]) this[name](v)
+		}
+		
+		
+		
 		this.init = function(){
 				this.neutralbordercolor = this.bordercolor;
 		}
@@ -303,8 +344,26 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			]
 		}
 	})
+	this.removeBlock = function (block){
+		if (block == undefined) block = this.currentblock;
+		if (block){
+			console.log("TODO: removing block!", block);
+			this.removeFromSelection(block);
+			this.setActiveBlock(undefined);
+		}
+	}
+	
+	this.removeConnection = function (conn){
+		if (conn == undefined) conn = this.currentconnection;
+		if (conn){
+			console.log("TODO: removing connection!", conn);
+			this.removeFromSelection(conn);
+			this.setActiveConnection(undefined);
+		}
+	}
 	
 	this.setActiveBlock = function(block){
+		this.currentblock = block;
 		var bg = this.findChild("blockui");
 		if (bg){				
 			if (block){
@@ -319,6 +378,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		
 	}
 	this.setActiveConnection = function(conn){
+		this.currentconnection = conn;
 		var cg = this.findChild("connectionui");
 		if (cg){				
 			if (conn){
@@ -343,6 +403,11 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	
 	this.init = function(){
 		
+		this.currentselection = [];
+		this.currentblock = undefined;
+		this.currentconnection = undefined;
+
+	
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
 		
@@ -417,12 +482,12 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 
 							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 								label({text:"connection", bg:0, margin:4})
-								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
+								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)},  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
 							)
 							,view({name:"blockui",x:-200, bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"block", bg:0, margin:4})
-								,icon({icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)},fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20})
 							)
 						)
 				
