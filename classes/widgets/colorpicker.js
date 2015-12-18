@@ -101,13 +101,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.updateallcontrols();
 	}
 	
-	
-	
-	this.layout = function(){
-		this.value = this.value;
-		this.layout = function(){}
-	}
-
 	this.createColorFromHSV = function(){
 		this._value = vec4.fromHSV(this.basehue, this.basesat, this.baseval);		
 	}
