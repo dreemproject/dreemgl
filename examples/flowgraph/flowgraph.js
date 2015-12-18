@@ -114,10 +114,20 @@ define.class('$ui/view', function(require,
 		}
 
 		
+		this.destroy = function(){
+			fg = this.find("flowgraph");
+			if (fg){
+				var index = fg.allconnections.indexOf(this);
+				if (index > -1) fg.allconnections.splice(index, 1);
+			}
+		}
+		
+		
 		
 		this.init = function(){
 			this.neutralcolor = this.bgcolor;
 			this.neutrallinewidth = this.linewidth;
+			this.find("flowgraph").allconnections.push(this);	
 		}
 		
 		this.keydownDelete = function(){
@@ -164,11 +174,19 @@ define.class('$ui/view', function(require,
 		
 		this.mouseleftdown = function(){
 			var fg = this.find("flowgraph");
-			var performactivation = true;
-			if (fg && this.screen.keyboard.shift) performactivation = fg.addToSelection(this);
-			if (performactivation){
-				this.find("flowgraph").setActiveConnection(this);
+			
+			
+			if (!this.screen.keyboard.shift && !fg.inSelection(this)){
+				fg.clearSelection();
 			}
+			if (this.screen.keyboard.shift && fg.inSelection(this)){
+				fg.removeFromSelection(this);
+				fg.updateSelectedItems();
+		
+				return;
+			}
+			fg.setActiveConnection(this);
+			fg.updateSelectedItems();
 		}
 		
 		this.mouseover = function(){
@@ -367,7 +385,6 @@ define.class('$ui/view', function(require,
 			if (props) props.target = this.name;
 			
 			var	fg = this.find("flowgraph");
-			var performactivation = true;
 			
 			if (!this.screen.keyboard.shift && !fg.inSelection(this)){
 				fg.clearSelection();
@@ -381,7 +398,6 @@ define.class('$ui/view', function(require,
 			fg.setActiveBlock(this);
 			fg.updateSelectedItems();
 			
-			console.log("currentselection", fg.currentselection);
 			
 			this.startposition = this.parent.localMouse();
 			fg.setupSelectionMove();
@@ -450,6 +466,14 @@ define.class('$ui/view', function(require,
 	this.updateSelectedItems = function(){
 		for(var a in this.allblocks){
 			var obj = this.allblocks[a];
+			var f = this.currentselection.indexOf(obj);
+			var newval = 0;
+			if (f > -1) newval = 1;
+			if (obj._inselection != newval) obj.inselection = newval;
+		
+		}
+		for(var a in this.allconnections){
+			var obj = this.allconnections[a];
 			var f = this.currentselection.indexOf(obj);
 			var newval = 0;
 			if (f > -1) newval = 1;
@@ -534,13 +558,16 @@ define.class('$ui/view', function(require,
 	this.setActiveBlock = function(block){
 		this.currentblock = block
 		if ( block){
+			this.currentconnection = undefined;
 				this.addToSelection(block);
 		}
 		this.updatepopupuiposition();
 	}
 	this.setActiveConnection = function(conn){
 		this.currentconnection = conn;
+		
 		if (conn){
+			this.currentblock = undefined;
 			this.addToSelection(conn);								
 		}
 	
@@ -561,6 +588,7 @@ define.class('$ui/view', function(require,
 		this.currentblock = undefined;
 		this.currentconnection = undefined;		
 		this.allblocks = [];
+		this.allconnections = [];
 	
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
