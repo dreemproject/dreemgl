@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(view, label, icon){
+define.class(function( $ui$, view, label, icon, $$, require){
 	// Simple button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {
@@ -18,34 +18,34 @@ define.class(function(view, label, icon){
 		fontsize: {type: float, value: 14, meta:"fontsize"},
 		
 		// Gradient color 1	
-		col1: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
+		col1: {meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"},
 		
 		// Gradient color 2
-		col2: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
+		col2: {meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"},
 
 		// Color of the label text in neutral state	
-		textcolor: {meta:"color", type: vec4, value: vec4("#404040")},
+		textcolor: {meta:"color", type: vec4, value: vec4("white")},
 
 		// Color of the label text in pressed-down state	
-		textactivecolor: {meta:"color", type: vec4, value: vec4("green")},
+		textactivecolor: {meta:"color", type: vec4, value: vec4("white")},
 		
 		// First gradient color for the button background in neutral state
-		buttoncolor1: {meta:"color", type: vec4, value: vec4("#fffff0")},
+		buttoncolor1: {meta:"color", type: vec4, value: vec4("#272727")},
 		
 		// Second gradient color for the button background in neutral state	
-		buttoncolor2: {meta:"color", type: vec4, value: vec4("#ffffff")},
+		buttoncolor2: {meta:"color", type: vec4, value: vec4("#272727")},
 		
 		// First gradient color for the button background in hovered state
-		hovercolor1: {meta:"color", type: vec4, value: vec4("#f0f0f0")},
+		hovercolor1: {meta:"color", type: vec4, value: vec4("#505050")},
 		
 		// Second gradient color for the button background in hovered state
-		hovercolor2: {meta:"color", type: vec4, value: vec4("#f8f8f8")},
+		hovercolor2: {meta:"color", type: vec4, value: vec4("#505050")},
 		
 		// First gradient color for the button background in pressed state
-		pressedcolor1: {meta:"color", type: vec4, value: vec4("#d0d0f0")},
+		pressedcolor1: {meta:"color", type: vec4, value: vec4("#707070")},
 		
 		// Second gradient color for the button background in pressed state
-		pressedcolor2: {meta:"color", type: vec4, value: vec4("#d0d0f0")},
+		pressedcolor2: {meta:"color", type: vec4, value: vec4("#707070")},
 
 		// Second gradient color for the button background in pressed state
 		internalmargin: {meta:"tlbr", type: vec4, value: vec4(0,0,0,0)},
@@ -55,15 +55,15 @@ define.class(function(view, label, icon){
 	}
 
 	var button = this.constructor
-
-	this.bgcolor = 'white'
-	this.fgcolor = 'black'
+								
+	this.bgcolor = '#272727'
+	this.fgcolor = 'white'
 	this.buttonres = {};
 	this.padding = 2
 	this.borderradius = 3
 	this.borderwidth  = 2
 	this.margin = 0
-	this.bordercolor = vec4("lightgray")
+	this.bordercolor = vec4("#272727")
 	this.alignItems = "center"
 
 	this.bg = {
@@ -129,7 +129,8 @@ define.class(function(view, label, icon){
 		this.iconres = undefined
 		
 		if (this.text && this.text.length > 0){
-			this.buttonres = this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			
+			this.buttonres = this.labelclass({font: require('$resources/fonts/opensans_bold_ascii.glf'), bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		

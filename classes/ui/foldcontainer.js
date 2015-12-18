@@ -25,7 +25,8 @@ define.class(function($ui$, view, label, icon){
 		icon: 'times',
 		// The main color from which the foldcontainer will build some gradients.
 		basecolor: {type:vec4, value: vec4("#8080c0")},
-		fontsize: {type:float, value: 12}
+		fontsize: {type:float, value: 12},
+		autogradient: {type:boolean, value: false}
 	}
 
 	// Function to change the open/closed state. Used by the click handler of the clickablebar.
@@ -46,8 +47,8 @@ define.class(function($ui$, view, label, icon){
 		
 		this.attributes = {
 			title: {type:String},
-			col1: {value:vec4("yellow"),persist:true, meta:"color", motion:"linear", duration:0.1},
-			col2: {value:vec4("yellow"),persist:true, meta:"color", motion:"linear", duration:0.2}
+			col1: {value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.1},
+			col2: {value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14}
 		}
 		this.position = "relative";
 
@@ -68,17 +69,33 @@ define.class(function($ui$, view, label, icon){
 		this.statedefault = function(first){
 			//console.log(this.parent.basecolor)
 			this.col1 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0), first)
-			this.col2 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2), first)
+			if (this.autogradient) {
+				this.col2 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2), first)
+			}
+			else{
+				this.col2 = this.col1;
+			}
 		}			
 		
 		this.stateover = function(){
-			this.col2 = vec4.vec4_mul_float32_rgb(vec4(this.parent.basecolor), 1.1)
-			this.col1 = this.parent.basecolor
+			this.col1 = Mark(vec4.vec4_mul_float32_rgb(vec4(this.parent.basecolor), 1.2))
+			if (this._autogradient){
+				this.col2 = vec4.vec4_mul_float32_rgb(vec4(this.parent.basecolor), 1.1)
+			}
+			else{
+				this.col2 = this.col1;
+			}
 		}
 
 		this.stateclick = function(){
 			this.col1 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.3)
-			this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
+			if (this._autogradient){
+
+				this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
+			}
+			else{
+				this.col2 = this.col1;
+			}
 			this.outer.toggle()
 		}
 		

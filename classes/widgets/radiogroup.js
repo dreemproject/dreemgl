@@ -12,13 +12,14 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 		fgcolor: {type:vec4, value:vec4("#222222"), meta:"color"},
 		fontsize: {type: float, value: 12, meta:"fontsize"}
 	}
+	
 	this.flexdirection = "row"
 	this.bgcolor = "#222222";
 	this.fgcolor ="#f0f0f0"
 	this.borderradius = 5;
+	
 	this.render = function(){
 		var res = [];
-		
 		
 		if (this.title && this.title.length > 0){
 			res.push(
@@ -27,7 +28,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 				)
 			)
 		}
-		
 		
 		var radio = this;
 		for(var i =0 ;i<this.values.length;i++)
@@ -42,7 +42,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 						padding:2,
 					
 						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(0),						
-						margin:(i == this.values.length -1)?vec4(4,2,2,2):vec4(2,2,0,2)
+						margin:(i == this.values.length -1)?vec4(2,2,2,2):vec4(2,2,0,2)
 						
 						},
 						label({

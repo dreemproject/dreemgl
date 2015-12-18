@@ -54,10 +54,11 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			}
 			res.push(foldcontainer({
 				collapsed: true,
-				basecolor:"#383838",
+				basecolor:"#4f4f4f",
+				autogradient: false,
 				icon:"cube", 
 				title: group,
-				bordercolor:"#383838"
+				bordercolor:"#4f4f4f"
 				
 			}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
 			res[res.length-1].collapsed = function(){

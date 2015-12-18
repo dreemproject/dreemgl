@@ -8,9 +8,7 @@ define.class('$ui/view', function(require,
 		$widgets$, propviewer,
 		$server$, sourceset, dataset){
 
-	this.attributes = {
-		activeconnectioncolor:{type:vec4, value:"#f0f090", meta:"color"}
-	}
+	
 
 	this.flex = 1
 
@@ -31,8 +29,8 @@ define.class('$ui/view', function(require,
 		
 		this.render = function(){
 			return [
-				view({bgcolor:"#202220", margin:vec4(0,0,0,0), padding:vec4(0)},
-					view({margin:vec4(1,1,2,0),bgcolor:"#8080a0", borderwidth:0,borderradius:vec4(4,4,0,0),padding:vec4(10,2,10,2)},
+				view({bgcolor:"#454545", margin:vec4(0,0,0,0), padding:vec4(0)},
+					view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(4,4,0,0),padding:vec4(10,2,10,2)},
 						label({text:this.title, margin:1, bg:0, fontsize:12, fgcolor: "white" })
 					)
 				)
@@ -96,11 +94,11 @@ define.class('$ui/view', function(require,
 		this.attributes = {
 			from:{type:String, value:""},
 			to:{type:String, value:""},
-			linewidth:{type:float, value:10, duration:0.5, motion:"bounce"},
-			focussedcolor:{type:vec4, value:vec4("#f0f090"), meta:"color" },
-			hoveredcolor:{type:vec4, value:vec4("#c0d0e0"), meta:"color" },
-			focussedwidth:{type:float, value:15},
-			hoveredwidth:{type:float, value:25},
+			linewidth:{type:float, value:8, duration:0.5, motion:"bounce"},
+			focussedcolor:{type:vec4, value:vec4("#d0d0d0"), meta:"color" },
+			hoveredcolor:{type:vec4, value:vec4("#f0f0f0"), meta:"color" },
+			focussedwidth:{type:float, value:12},
+			hoveredwidth:{type:float, value:12},
 			bgcolor:{motion:"linear", duration: 0.1},
 			inselection :{type:boolean, value:false}
 		
@@ -202,7 +200,7 @@ define.class('$ui/view', function(require,
 		this.frompos= vec2(0,0);
 		this.topos= vec2(0,100);
 		
-		this.bgcolor = "#8090a0" 
+		this.bgcolor = "#666666" 
 		
 		define.class(this, "connectionshader", this.Shader,function($ui$, view){	
 			this.mesh = vec2.array()
@@ -278,11 +276,11 @@ define.class('$ui/view', function(require,
 	define.class(this, "block", function($ui$, view, label){
 				
 		this.position = "absolute" ;
-		this.bgcolor = vec4("#708090" )
+		this.bgcolor = vec4("#5c5c5c" )
 		this.padding = 0;
 		this.borderradius = vec4(10,10,1,1);
 		this.borderwidth = 2;
-		this.bordercolor = vec4("#607080")
+		this.bordercolor = vec4("#5c5c5c")
 		
 		this.attributes = {
 			pos:{persist: true},
@@ -291,7 +289,7 @@ define.class('$ui/view', function(require,
 			title:{type:String, value:"Untitled"},
 			snap:{type:int, value:1},
 			bordercolor:{motion:"linear", duration: 0.1},
-			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#f0f0c0", meta:"color"},
+			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"},
 			fontsize:{type:float, value:12},
 			inselection :{type:boolean, value:false}
 		
@@ -421,6 +419,7 @@ define.class('$ui/view', function(require,
 		this.render = function(){
 			return [
 				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
+				,view({bgcolor:"black", height: 40,width:140, flex: 1})
 				,view({flexdirection:"row", alignitems:"stretch", bg:0}
 					,button({icon:"plus", fontsize: this.fontsize})
 					,button({icon:"plus", fontsize: this.fontsize})
@@ -625,10 +624,10 @@ define.class('$ui/view', function(require,
 				)
 				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0}
 					,view({bg:1, bgcolor:"black", clearcolor:"black"  }
-						,button({text:"add"   , margin:1, padding:3, borderradius:0, click:function(){console.log("add");    }})
-						,button({text:"remove", margin:1, padding:3, borderradius:0, click:function(){console.log("remove"); }})
+						,button({text:"add"   , click:function(){console.log("add");    }})
+						,button({text:"remove", click:function(){console.log("remove"); }})
 					)
-					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(){this.clearSelection(true);}.bind(this),overflow:"scroll" ,bgcolor: "#101020",gridsize:5,majorevery:5,  majorline:"#202040", minorline:"#151530", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(){this.clearSelection(true);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"connectionlayer", bg:0}
 							,this.connection({from:"phone", to:"tv"})
 							,this.connection({from:"tablet", to:"thing"})
