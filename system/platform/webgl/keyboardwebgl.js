@@ -32,7 +32,7 @@ define.class('$system/base/keyboard', function (require, exports){
 	for(var k in this.toKey){
 		var key = this.toKey[ k ]
 		this.toCode[key] = k
-		this.defineAttribute(key, {type:int})
+		this.defineAttribute(key, {type:int, value:0})
 	}
 
 	var fireFoxTable = {
@@ -76,7 +76,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				ctrl: this._ctrl,
 				alt: this._alt				
 			}
-			console.log(msg)
+
 			this.emit('down', msg)
 			
 			if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
