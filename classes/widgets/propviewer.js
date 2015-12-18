@@ -12,7 +12,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	
 	this.flexdirection= "column";
 	this.margin = 0;
-	this.clearcolor = vec4("white");
+	this.clearcolor = vec4("#303030");
 	this.bgcolor = vec4("blue");
 	this.padding = 0
 	
@@ -33,8 +33,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			if (key == "layout"){
 				meta = "hidden";
 			}
-			if (typename != "NONE" && typename != "Event" && meta != "hidden" )
-			{
+			if (typename != "NONE" && typename != "Event" && meta != "hidden" ){
 				if (!keysgroups[attr.group]) keysgroups[attr.group] = [];
 				keysgroups[attr.group].push(key);
 			}
@@ -55,9 +54,11 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			}
 			res.push(foldcontainer({
 				collapsed: true,
-				basecolor:"#d9e0e0",
+				basecolor:"#383838",
 				icon:"cube", 
-				title: group
+				title: group,
+				bordercolor:"#383838"
+				
 			}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
 			res[res.length-1].collapsed = function(){
 				window.mydbg = 1

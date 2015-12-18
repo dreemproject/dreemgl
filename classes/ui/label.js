@@ -46,7 +46,7 @@ define.class(function(require, $ui$, view){
 			var view = this.view
 			
 			var mesh = this.newText()
-			if(view.typeface) mesh.typeface = view.typeface
+			if(view.font) mesh.font = view.font
 
 			mesh.fontsize = view.fontsize
 			mesh.boldness = view.boldness

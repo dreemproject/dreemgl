@@ -12,20 +12,34 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		minvalue: {type: float, value: undefined},
 		maxvalue: {type: float, value: undefined},
 		stepvalue: {type: float, value: 1},
-		bordercolor: {motion:"easeout", duration:0.2, value: "gray", meta:"color" },
-		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
-		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
+		bordercolor: {motion:"easeout", duration:0.1, value: "#383838", meta:"color" },
+		draggingbordercolor: {type:vec4, value:vec4("#707070"), meta:"color"},
+		focusbordercolor: {type:vec4, value:vec4("#606060"), meta:"color"},
 		decimals: {type:int, value:0}, 
 		// Font size in device-pixels.
 		fontsize: {type: float, value: 14, meta:"fontsize" },		
+		title: {type:String, value:""}
 	}
+	
+	
 	
 	this.neutralbordercolor = this.bordercolor;
 	this.tabstop = 0;
 	
-	this.bg = 0;
-	this.fgcolor="#101010";
+	
+	this.bordercolor = "#383838" ;
+	this.borderradius = 10;
+	this.borderwidth = 2;
+	this.fgcolor="#f0f0f0";
+	
+	this.bgcolor = "#4D4D4D" 
 
+	this.alignself = "flex-end" 
+	this.justifycontent = "center";
+	this.alignitems = "center";	
+	
+	
+	
 	this.value = function(){
 		var tn = this.findChild("thenumber");
 		if (tn) {
@@ -110,22 +124,24 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		this.mousemove = function(){}
 	}
 	
-	this.bgcolor = "#f0f0f0";
-	this.padding =0;
-	this.borderwidth = 0;
-	this.bordercolor = "d0d0d0";
-	this.borderradius = 0;			
-	this.alignself = "flex-end" 
-	this.justifycontent = "center";
-	this.alignitems = "center";	
-	this.borderwidth = 1;
 		
 	this.render = function(){
-		return [
-				button({icon:"minus", text:"" , fontsize: this.fontsize*(2/3), margin:1, padding:2, borderradius:0, click:function(){this.downclick()}.bind(this)})
-				,label({name:"thenumber", align:"right", text:this._value.toString(), margin:2,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0})
-				,button({text:"", icon:"plus", fontsize: this.fontsize*(2/3), margin:1, padding:2, borderradius:0, click:function(){this.upclick()}.bind(this)})
-				
-		]
+		
+		var res = [];
+
+		if (this.title && this.title.length > 0){
+			res.push(
+			view({bgcolor:this.bordercolor, margin:0,borderradius:vec4(4,1,1,4), padding:4},
+				label({name:"thetitle", align:"right",  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
+				)
+			)
+		}
+		
+		res.push(button({bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left", text:"" , fontsize: this.fontsize*(2/3), margin:0, padding:2, borderradius:0, click:function(){this.downclick()}.bind(this)}));
+		res.push(label({name:"thenumber", align:"right", text:this._value.toString(), margin:0,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0}))
+		res.push(button({bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", fontsize: this.fontsize*(2/3), margin:0, padding:2, borderradius:0, click:function(){this.upclick()}.bind(this)}))
+	
+		return res;	
+		
 	}
 })

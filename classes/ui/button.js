@@ -47,6 +47,9 @@ define.class(function(view, label, icon){
 		// Second gradient color for the button background in pressed state
 		pressedcolor2: {meta:"color", type: vec4, value: vec4("#d0d0f0")},
 
+		// Second gradient color for the button background in pressed state
+		internalmargin: {meta:"tlbr", type: vec4, value: vec4(0,0,0,0)},
+
 		// fires when button is clicked
 		click:Event
 	}
@@ -56,10 +59,10 @@ define.class(function(view, label, icon){
 	this.bgcolor = 'white'
 	this.fgcolor = 'black'
 	this.buttonres = {};
-	this.padding = 8
+	this.padding = 2
 	this.borderradius = 3
 	this.borderwidth  = 2
-	this.margin = 4
+	this.margin = 0
 	this.bordercolor = vec4("lightgray")
 	this.alignItems = "center"
 
@@ -126,7 +129,7 @@ define.class(function(view, label, icon){
 		this.iconres = undefined
 		
 		if (this.text && this.text.length > 0){
-			this.buttonres = this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true, marginleft: 4,fontsize: this.fontsize, position: "relative", text: this.text})
+			this.buttonres = this.labelclass({bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		

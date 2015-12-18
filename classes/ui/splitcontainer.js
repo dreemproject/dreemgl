@@ -16,9 +16,9 @@ define.class(function($ui$, view, label){
 		// the minimum size of a child controlled by the splitter
 		minimalchildsize: {type: float, value: 20},
 		// the color of the splitter bar
-		splittercolor: {type: vec4, value: vec4("#404050")},
+		splittercolor: {type: vec4, value: vec4("#484848")},
 		// color of splitter bar on hover
-		hovercolor: {type: vec4, value: vec4("#80b0b0")},
+		hovercolor: {type: vec4, value: vec4("#707070")},
 		// color of the splitter bar when dragging it
 		activecolor: {type: vec4, value: vec4("#7070a0")}
 	}
