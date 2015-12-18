@@ -82,7 +82,6 @@ define.class('$ui/view', function(require,
 			if (!this.dataset) return [];
 			
 			var res = [];
-			//console.log(this.dataset);
 			for(var a  in this.dataset.children[0].children){
 				var ds = this.dataset.children[0].children[a];
 				res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
@@ -163,12 +162,6 @@ define.class('$ui/view', function(require,
 		}
 		
 		this.focus =function(){
-			this.updatecolor();
-			if (this.focus){
-			}
-			else{
-				this.find("flowgraph").setActiveConnection(undefined);
-			}
 		}
 		
 		
@@ -522,6 +515,8 @@ define.class('$ui/view', function(require,
 			console.log("TODO: removing block!", block);
 			this.removeFromSelection(block);
 			this.setActiveBlock(undefined);
+			 this.updateSelectedItems();
+			 this.updatepopupuiposition();
 		}
 	}
 	
@@ -531,6 +526,8 @@ define.class('$ui/view', function(require,
 			console.log("TODO: removing connection!", conn);
 			this.removeFromSelection(conn);
 			this.setActiveConnection(undefined);
+			 this.updateSelectedItems();
+			 this.updatepopupuiposition();
 		}
 	}
 	this.updatepopupuiposition = function(){
@@ -606,13 +603,11 @@ define.class('$ui/view', function(require,
 				var tree = result.value
 				tree.collapsed = false
 				// lets make a dataset
-				//console.log(tree);
 				
 		}.bind(this))
 	}
 	
 	this.layout = function(){
-		//console.log("layout on flowgraph - attempting to arrange the connections");
 		this.updateconnections();
 	}	
 	
@@ -643,9 +638,7 @@ define.class('$ui/view', function(require,
 							,this.connection({from:"a", to:"c"})
 						)
 						
-						,view({name:"blocklayer", bg:0, layout:function(){
-							//console.log("layout")
-							}}
+						,view({name:"blocklayer", bg:0}
 							,this.block({name:"phone", title:"Phone", x:200, y:20})
 							,this.block({name:"tv", title:"Television", x:50, y:200})
 							,this.block({name:"tablet", title:"Tablet",x:300, y:120})						
@@ -662,12 +655,12 @@ define.class('$ui/view', function(require,
 
 							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 								label({text:"connection", bg:0, margin:4})
-								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)},  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
+								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
 							)
 							,view({name:"blockui",x:-200, bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"block", bg:0, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)},fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20})
 							)
 						)
 				
