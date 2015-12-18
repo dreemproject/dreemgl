@@ -11,7 +11,7 @@ define.class(function(require,
 	
 	this.mymethod = function(){}
 
-	this.render = function render(){ 
+	this.render = function render(){
 		return [
 			role(
 				screen({
@@ -116,17 +116,17 @@ define.class(function(require,
 											mouseout:function(){
 												this.value = 0
 											},
-											bg:{
-												i:i,
-												patterns: require('./shaderpatterns').prototype,
-												color:function(){
-												//	return 'red'
-													return vec4( patterns.wave(mesh.uv, i*.1 + 
-														view.value * 10., i*.1 + view.value * 10. ) * 
-														pal.pal1(i*.1).xyz, 1.)
-												//
-												//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
-												}
+bg:{
+	i:i,
+	patterns: require('./shaderpatterns').prototype,
+	color:function(){
+	//	return 'red'
+		return vec4( patterns.wave(mesh.uv, i*.1 + 
+			view.value * 10., i*.1 + view.value * 10. ) * 
+			pal.pal1(i*.1).xyz, 1.)
+	//
+	//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
+}
 											},
 											rotate:[-.6*PI,PI,0], 
 											pos:[floor(i/4)*6-10,(i%4)*6-10,-10]

@@ -40,7 +40,7 @@ define.class(function(require, $ui$view) {
 	}
 	
 	this.defaultKeyboardHandler = function(target, v){
-		
+		if(!v.name) return console.log("OH NOES",v)		
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
 		var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)

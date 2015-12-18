@@ -9,23 +9,23 @@ define.class(function($ui$, view, label, icon){
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.title = "folding thing"
 	this.position = "relative"
-	this.borderwidth = 1;
-	this.borderradius = 1;
+	this.borderwidth = 1
+	this.borderradius = 1
 	this.margin = 0
-	this.bg = 0;
+	this.bg = 0
 	this.alignitems = "stretch"
 	this.bordercolor = vec4("#c0c0c0")
-	this.padding = 0;
+	this.padding = 0
 	this.flexdirection = "column"
 
 	this.attributes = {
 		// The current state of the foldcontainer. false = open, Ttue = closed.
-	collapsed: {type:boolean, value: false, persist:true},
+		collapsed: {type:boolean, value: false, persist:true},
 		// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
 		icon: 'times',
 		// The main color from which the foldcontainer will build some gradients.
-		basecolor: {type: vec4, value: vec4("#8080c0")},
-		fontsize: {type:float, value:12}
+		basecolor: {type:vec4, value: vec4("#8080c0")},
+		fontsize: {type:float, value: 12}
 	}
 
 	// Function to change the open/closed state. Used by the click handler of the clickablebar.

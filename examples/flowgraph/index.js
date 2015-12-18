@@ -66,7 +66,9 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 			this.fileio()
 			,role(
 				screen({bg:0,clearcolor:vec4('black'),flexwrap:"nowrap", flexdirection:"row"}
-					,flowgraph()
+					,flowgraph({
+						
+					})
 				)
 			)
 		]		

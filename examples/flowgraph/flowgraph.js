@@ -3,15 +3,20 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, $widgets$, propviewer, $server$, dataset){	
-	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
+define.class('$ui/view', function(require, 
+		$ui$, view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, splitcontainer,
+		$widgets$, propviewer,
+		$server$, sourceset, dataset){
+
 	this.attributes = {
 		activeconnectioncolor:{type:vec4, value:"#f0f090", meta:"color"}
 	}
+
+	this.flex = 1
+
 	define.class(this, "menubar", function($ui$, view){
 	})
-	
-	
+		
 	define.class(this, "dockpanel", function($ui$, view, label){
 		this.attributes = {
 			title:{type:String, value:"Untitled"}
@@ -97,8 +102,18 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			hoveredcolor:{type:vec4, value:vec4("#c0d0e0"), meta:"color" },
 			focussedwidth:{type:float, value:15},
 			hoveredwidth:{type:float, value:25},
-			bgcolor:{motion:"linear", duration: 0.1}
+			bgcolor:{motion:"linear", duration: 0.1},
+			inselection :{type:boolean, value:false}
+		
 		}
+		
+		this.inselection = function(){	
+			if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
+			this.redraw();
+			this.updatecolor ();
+		}
+
+		
 		
 		this.init = function(){
 			this.neutralcolor = this.bgcolor;
@@ -121,7 +136,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.over = false;
 		
 		this.updatecolor = function(){	
-			if (this.focus) {
+			if (this._inselection) {
 				this.bgcolor = this.focussedcolor;
 				this.linewidth = this.focussedwidth;
 			}
@@ -159,6 +174,12 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.mouseover = function(){
 			this.over = true;
 			this.updatecolor();
+			
+		}
+		this.updateMove = function(){
+			
+		}
+		this.setupMove = function(){
 			
 		}
 		
@@ -264,9 +285,9 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			inselection :{type:boolean, value:false}
 		
 		}
-		this.inselection = function(){
-			if (this._inselection) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;
-			
+		
+		this.inselection = function(){	
+			if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
 			this.redraw();
 		}
 		
@@ -301,8 +322,6 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			this.screen.defaultKeyboardHandler(this, v);
 		}
 		
-		
-		
 		this.init = function(){
 			this.neutralbordercolor = this.bordercolor;
 			this.find("flowgraph").allblocks.push(this);	
@@ -326,6 +345,23 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 				}
 		}
 			
+			
+		this.setupMove = function(){
+			this.startx = this.pos[0];
+			this.starty = this.pos[1];
+			
+		}
+		
+		
+
+		this.updateMove = function(dx, dy, snap){
+			var x = Math.floor((this.startx+dx)/snap)*this.snap;
+			var y = Math.floor((this.starty+dy)/snap)*this.snap;	
+
+			this.pos = vec2(x,y);
+			
+		}
+		
 		this.mouseleftdown = function(p){
 			var props = this.find("mainproperties");
 			if (props) props.target = this.name;
@@ -333,34 +369,30 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			var	fg = this.find("flowgraph");
 			var performactivation = true;
 			
-			if (this.screen.keyboard.shift){
-				performactivation = fg.addToSelection(this);
-			}
-			else{
+			if (!this.screen.keyboard.shift && !fg.inSelection(this)){
 				fg.clearSelection();
 			}
-			
-			if (performactivation){	
-				fg.setActiveBlock(this);
+			if (this.screen.keyboard.shift && fg.inSelection(this)){
+				fg.removeFromSelection(this);
+				fg.updateSelectedItems();
+		
+				return;
 			}
+			fg.setActiveBlock(this);
+			fg.updateSelectedItems();
+			
+			console.log("currentselection", fg.currentselection);
 			
 			this.startposition = this.parent.localMouse();
-			this.startx = this.pos[0];
-			this.starty = this.pos[1];
-			
+			fg.setupSelectionMove();
 			this.mousemove = function(evt){
 				p = this.parent.localMouse()
 				var dx = p[0] - this.startposition[0];
 				var dy = p[1] - this.startposition[1];
-				var x = Math.floor((this.startx+dx)/this.snap)*this.snap;
-				var y = Math.floor((this.starty+dy)/this.snap)*this.snap;	
-
-				this.pos = vec2(x,y);
-				this.find("flowgraph").setActiveBlock(this);
-
-				this.redraw();
-				this.relayout();
-				this.outer.updateconnections();
+		
+				var	fg = this.find("flowgraph");
+				fg.moveSelected(dx,dy);
+				
 				
 			}.bind(this);
 		}
@@ -380,7 +412,7 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 		this.render = function(){
 			return [
 				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
-				,view({flexdirection:"row", alignitems:"stretch", bg:0 }
+				,view({flexdirection:"row", alignitems:"stretch", bg:0}
 					,button({icon:"plus", fontsize: this.fontsize})
 					,button({icon:"plus", fontsize: this.fontsize})
 				)
@@ -389,10 +421,9 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	})
 	
 	this.addToSelection = function(obj)
-	{
-		
+	{		
 		var f = this.currentselection.indexOf(obj);
-		if (f!=-1) this.currentselection.push(obj);else return;
+		if (f==-1) this.currentselection.push(obj);else return;
 		
 		console.log(this.currentselection);
 		this.updateSelectedItems();
@@ -401,6 +432,11 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	}
 	
 	this.removeFromSelection = function(obj){
+		if (this.currentblock == obj) 
+		{
+			this.currentblock = undefined;
+			this.updatepopupuiposition();
+		}
 		console.log("before:", this.currentselection);
 		var f = this.currentselection.indexOf(obj);
 		if (f>-1) this.currentselection.splice(f,1);
@@ -420,10 +456,37 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			if (obj._inselection != newval) obj.inselection = newval;
 		
 		}
+		this.updatepopupuiposition();
+	}
+	
+	this.inSelection = function(obj){
+		var f = this.currentselection.indexOf(obj);
+		if (f > -1) return true;
+		return false;		
+	}
+	
+	this.setupSelectionMove = function(){
+		for(var a in this.currentselection){
+			var obj = this.currentselection[a];
+			obj.setupMove();
+		}		
+	}
+
+	this.moveSelected = function(dx, dy, snap){
+		if (!snap) snap = 1;
+		for(var a in this.currentselection){
+			var obj = this.currentselection[a];
+			obj.updateMove(dx,dy,snap);
+		}
+		this.updateconnections();
+		this.updatepopupuiposition();
+
 	}
 	
 	this.clearSelection = function(update){
 		console.log("clearing selection");
+		this.currentblock = undefined;
+		this.currentconnection = undefined;
 		this.currentselection = [];
 		if (update) this.updateSelectedItems();
 	}
@@ -446,43 +509,48 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 			this.setActiveConnection(undefined);
 		}
 	}
-	
-	this.setActiveBlock = function(block){
-		this.currentblock = block;
-		var bg = this.findChild("blockui");
-		if (bg){				
-			if (block){
-				this.addToSelection(block);
-				bg.x = block.pos[0];
-				bg.y = block.pos[1]-bg.layout.height;
-			}
-			else{
-				bg.x = -bg.layout.width;
-				bg.y = -bg.layout.height;
-			}
+	this.updatepopupuiposition = function(){
+		var bg = this.findChild("blockui")
+		var cg = this.findChild("connectionui")
+		
+		if (this.currentblock){
+			bg.x = this.currentblock.pos[0];
+			bg.y = this.currentblock.pos[1]-bg.layout.height;
+		}
+		else{
+			bg.x = - bg.layout.width
+			bg.y = - bg.layout.height
 		}
 		
+		if (this.currentconnection){
+			cg.x = (this.currentconnection.frompos[0] + this.currentconnection.topos[0])/2
+			cg.y = (this.currentconnection.frompos[1] + this.currentconnection.topos[1])/2
+		}else{
+			cg.x = -cg.layout.width
+			cg.y = -cg.layout.height	
+		}
+	}
+	
+	this.setActiveBlock = function(block){
+		this.currentblock = block
+		if ( block){
+				this.addToSelection(block);
+		}
+		this.updatepopupuiposition();
 	}
 	this.setActiveConnection = function(conn){
 		this.currentconnection = conn;
-		var cg = this.findChild("connectionui");
-		if (cg){				
-			if (conn){
-				this.addToSelection(conn);								
-				cg.x = (conn.frompos[0] + conn.topos[0])/2
-				cg.y = (conn.frompos[1] + conn.topos[1])/2
-			}
-			else{
-				cg.x = -cg.layout.width;
-				cg.y = -cg.layout.height;
-			}
+		if (conn){
+			this.addToSelection(conn);								
 		}
+	
+		this.updatepopupuiposition();
 	}
 	
 	this.updateconnections = function(){
 		var cl = this.find("connectionlayer");
-		for(a in cl.children){
-			cl.children[a].layout =1 ;
+		for(var a in cl.children){
+			cl.children[a].layout = 1
 		}
 	}
 	
@@ -496,11 +564,13 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 	
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
-		
+
+		this.sourceset = sourceset(require('./index.js').module.factory.body.toString())
+
 		this.screen.locationhash = function(event){
-			console.log(event.value);
+			//console.log(event.value);
 		}
-		console.log(" hmm  " );
+		//console.log(" hmm  ");
 		
 		// lets load the entire directory structure
 		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
@@ -508,26 +578,20 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 				var tree = result.value
 				tree.collapsed = false
 				// lets make a dataset
-				console.log(tree);
+				//console.log(tree);
 				
 		}.bind(this))
-	
-			
-		
-				
 	}
 	
 	this.layout = function(){
-		console.log("layout on flowgraph - attempting to arrange the connections");
+		//console.log("layout on flowgraph - attempting to arrange the connections");
 		this.updateconnections();
 	}	
 	
-	this.updateZoom = function(z){
-		
+	this.updateZoom = function(z){	
 	}
 	
-	this.render = function()
-	{
+	this.render = function(){
 		return [
 			this.menubar({})		
 			,splitcontainer({}
@@ -536,12 +600,12 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 						,treeview({flex:1, dataset: this.model})
 					)
 				)
-				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}}
-					,view({bg:0}
+				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0}
+					,view({bg:1, bgcolor:"black", clearcolor:"black"  }
 						,button({text:"add"   , margin:1, padding:3, borderradius:0, click:function(){console.log("add");    }})
 						,button({text:"remove", margin:1, padding:3, borderradius:0, click:function(){console.log("remove"); }})
 					)
-					,cadgrid({name:"centralconstructiongrid", overflow:"scroll" ,bgcolor: "#101020",gridsize:5,majorevery:5,  majorline:"#202040", minorline:"#151530", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(){this.clearSelection(true);}.bind(this),overflow:"scroll" ,bgcolor: "#101020",gridsize:5,majorevery:5,  majorline:"#202040", minorline:"#151530", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"connectionlayer", bg:0}
 							,this.connection({from:"phone", to:"tv"})
 							,this.connection({from:"tablet", to:"thing"})
@@ -551,7 +615,9 @@ define.class(function(require, $ui$, splitcontainer,view, icon, treeview, cadgri
 							,this.connection({from:"a", to:"c"})
 						)
 						
-						,view({name:"blocklayer", bg:0, layout:function(){console.log("layout")}}
+						,view({name:"blocklayer", bg:0, layout:function(){
+							//console.log("layout")
+							}}
 							,this.block({name:"phone", title:"Phone", x:200, y:20})
 							,this.block({name:"tv", title:"Television", x:50, y:200})
 							,this.block({name:"tablet", title:"Tablet",x:300, y:120})						

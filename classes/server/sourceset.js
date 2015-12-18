@@ -4,22 +4,24 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, dataset){
+define.class(function(require, $server$, dataset){
 	// Sourceset is a dataset-api on source
-	var jsparser = 
+	var jsparser = require('$system/parse/onejsparser')
 
-	this.atConstructor = function(){
+	this.atConstructor = function(source){
 		dataset.prototype.atConstructor.call(this)
+		this.parse(source)
 	}
 	
-	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice. 
+	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
 	this.parse = function(source){
 		// lets create an AST
-		
+		var ast = jsparser.parse(source)
+		console.log(ast)
 	}
-	
+
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
 	this.stringify = function(data /*Object*/) /*String*/ {
-		
+
 	}
 })

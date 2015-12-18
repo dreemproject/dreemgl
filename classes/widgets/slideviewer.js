@@ -34,6 +34,16 @@ define.class(function($ui$, view, label){
 		this.viewport = '2d'
 		this.overflow = 'hidden'
 		this.padding = vec4(6);
+
+		this.viewportblend = function(){
+			this.color = function(){
+				//return 'red'
+
+				var col = texture.sample(mesh.xy)
+				return vec4(col.rgb, col.a * view.opacity)
+			}
+		}
+
 		this.render = function(){
 			return view({
 					bg:{
