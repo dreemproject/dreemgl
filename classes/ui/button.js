@@ -137,7 +137,7 @@ define.class(function(view, label, icon){
 			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}
-		return res
+		return view({bg:0, padding:0, margin:this.internalmargin},res);
 
 	}
 

@@ -9,11 +9,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 	this.attributes ={
 		values:{type:Object, value:[]},
 		currentvalue:{type:String, value:""},
-		fgcolor: {type:vec4, value:vec4("#303030"), meta:"color"},
+		fgcolor: {type:vec4, value:vec4("#222222"), meta:"color"},
 		fontsize: {type: float, value: 12, meta:"fontsize"}
 	}
 	this.flexdirection = "row"
-	this.bgcolor = "#383838";
+	this.bgcolor = "#222222";
 	this.fgcolor ="#f0f0f0"
 	this.borderradius = 5;
 	this.render = function(){
@@ -23,7 +23,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 		if (this.title && this.title.length > 0){
 			res.push(
 			view({bgcolor:this.bordercolor, margin:0,borderradius:vec4(4,1,1,4), padding:4},
-				label({name:"thetitle", align:"right",  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
+				label({name:"thetitle", margin:vec4(5,0,5,0),align:"right",  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
 				)
 			)
 		}
@@ -38,17 +38,18 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 				res.push(
 					view({
 						alignItems:"center",
-						bgcolor:"#505050",
+						bgcolor:"#3b3b3b",
 						padding:2,
 					
 						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(0),						
-						margin:(i == this.values.length -1)?vec4(2,2,2,2):vec4(2,2,0,2)
+						margin:(i == this.values.length -1)?vec4(4,2,2,2):vec4(2,2,0,2)
 						
 						},
 						label({
 								font: require('$resources/fonts/opensans_bold_ascii.glf'),
 								text:(v&&v.trim().length > 0)?v:"undefined", 
 								bg:0, 
+								margin: vec4(5,0,5,0),
 								fgcolor:this.fgcolor,
 								fontsize:this.fontsize
 							}
@@ -58,10 +59,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 			}
 			else{
 				res.push(button({
-						bgcolor:"#505050",
+						bgcolor:"#3b3b3b",
 						borderwidth:0,
 						padding:2,
-						
+						internalmargin: vec4(5,0,5,0),
 						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(0),						
 						margin:(i == this.values.length -1)?vec4(2,2,2,2):vec4(2,2,0,2),
 						fgcolor:"#909090",

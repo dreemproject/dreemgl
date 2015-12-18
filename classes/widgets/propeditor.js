@@ -15,8 +15,8 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 	
 	this.bg = {
 		color:function(){								
-			var col1 = vec3("#505050");
-			var col2=vec3("#505050");
+			var col1 = vec3("#3b3b3b");
+			var col2=vec3("#3b3b3b");
 			return vec4(mix(col1, col2, 1.0-pow(abs(uv.y),4.0) ),1.0)
 		}
 	};
