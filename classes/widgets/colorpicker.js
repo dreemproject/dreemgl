@@ -10,17 +10,17 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		
 	this.attributes =  {
 		// the value of the colorpicker, a color
-		value: {type: vec4, value: "white", meta:"color"},
+		value: {type: vec4, value: "white", meta:"color", rerender:false},
 		// the foreground color of the fonts
 		fontsize:{type: int, value: 14, meta:"fontsize"},
 		// internal border color
 		internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6), meta:"color"},
 		// read-only the hue value (HSV)
-		basehue: {type:float, value:0.5, readonly:true},
+		basehue: {type:float, value:0.5, readonly:true, rerender:false},
 		// read-only the saturation value (HSV)
-		basesat: {type:float, value:0.8, readonly:true},
+		basesat: {type:float, value:0.8, readonly:true, rerender:false},
 		// read-only, the value (HSV)
-		baseval: {type:float, value:0.5, readonly:true},
+		baseval: {type:float, value:0.5, readonly:true, rerender:false},
 		sliderheight: {type: float, value:15}
 	}
 
@@ -609,7 +609,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.width = 100;
 		this.height = 100;		
 	})
-		
+	
+	this.layout = function(){
+		this.value = this.value
+	}
+
 	this.render = function(){
 		return [
 			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"}				

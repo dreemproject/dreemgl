@@ -69,7 +69,7 @@ define.class(function(exports){
 		// store the attribute dependencies
 		new_version.atAttributeGet = function(key){
 			// lets find out if we already have a listener on it
-			if(!this.hasListenerName(key, '__atAttributeGet')){
+			if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerName(key, '__atAttributeGet')){
 				this.addListener(key, __atAttributeGet)
 			}
 		}
