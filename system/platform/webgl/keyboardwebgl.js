@@ -18,7 +18,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		72:'h',73:'i',74:'j',75:'k',76:'l',77:'m',78:'n',
 		79:'o',80:'p',81:'q',82:'r',83:'s',84:'t',85:'u',
 		86:'v',87:'w',88:'x',89:'y',90:'z',
-		'meta':93,
+		93:'meta',
 		96:'pad0',97:'pad1',98:'pad2',99:'pad3',100:'pad4',101:'pad5',
 		102:'pad6',103:'pad7',104:'pad8',105:'pad9',
 		106:'multiply',107:'add',109:'subtract',110:'decimal',111:'divide',
@@ -36,7 +36,8 @@ define.class('$system/base/keyboard', function (require, exports){
 	}
 
 	var fireFoxTable = {
-		91:93,92:93,
+		91:93,
+		92:93,
 		224:93, // right meta
 		61:187, // equals
 		173:189, // minus
@@ -75,7 +76,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				ctrl: this._ctrl,
 				alt: this._alt				
 			}
-
+			console.log(msg)
 			this.emit('down', msg)
 			
 			if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
