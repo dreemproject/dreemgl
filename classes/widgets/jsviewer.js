@@ -24,10 +24,12 @@ define.class(function(require, $ui$, textbox){
 	this.fontsize = 14
 	this.subpixel = true
 
-	this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
+	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
 
 	// extend the font shader
 	this.typeface = function(){
+		this.font = font
+
 		for(var key in JSFormatter.types){
 			this[key] = String(JSFormatter.types[key])
 		}

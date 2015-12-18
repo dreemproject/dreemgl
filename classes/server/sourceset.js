@@ -16,8 +16,33 @@ define.class(function(require, $server$, dataset){
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
 	this.parse = function(source){
 		// lets create an AST
-		var ast = jsparser.parse(source)
-		console.log(ast)
+		this.ast = jsparser.parse(source)
+		// we need to find the render function in the composition root
+		// so how shall we do that.
+		// well.. 
+		// lets write the code
+		function findRenderFunction(ast){
+			var steps = ast.steps[0].body.steps
+			for(var i = 0; i < steps.length; i++){
+				var step = steps[i]
+				if(step.type === 'Assign' && step.left.type === 'Key' &&
+					step.left.key.name === 'render'){
+					return step.right
+				}
+			}
+		}
+		
+		function findReturnArray(body){
+			var steps = body.steps
+			//for(var i = 0; i ,)
+
+		}
+
+		var render = findRenderFunction(this.ast)
+		// lets find the return array
+		var ret = findReturnArray(render.body)
+
+
 	}
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
