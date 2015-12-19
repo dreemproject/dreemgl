@@ -333,7 +333,12 @@ console.log('animFrame', time);
 		
 		if(!node.parent){ // fast path to chuck the whole set
 			// lets put all the drawpasses in a pool for reuse
-			for(var i = 0; i < this.drawpass_list.length; i++) this.drawpass_list[i].drawpass.poolDrawTargets()
+			for(var i = 0; i < this.drawpass_list.length; i++) {
+				var draw = this.drawpass_list[i]
+				draw.drawpass.poolDrawTargets()
+				draw.layout_dirty = true
+				draw.draw_dirth = 3
+			}
 			this.drawpass_list = []
 			this.layout_list = []
 			this.drawpass_idx = 0

@@ -58,7 +58,7 @@ define.class(function(require, baseclass){
 			var dt = this.drawtargets[i]
 			if(!pools[dt]) pools[dt] = []
 			pools[dt].push(this[dt])
-			this[dt] = undefined
+			this[dt] = null
 		}
 	}
 
@@ -305,8 +305,11 @@ define.class(function(require, baseclass){
 			if(!draw._visible) continue
 
 			if(draw.atDraw) draw.atDraw(this)
-
-			if(draw._viewport && draw.drawpass !== this && draw.drawpass.color_buffer){
+			if(draw._viewport && draw.drawpass !== this){
+				if(!draw.drawpass.color_buffer){
+					console.error("Null color_buffer detected")
+					continue
+				}
 				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 				// lets render the view as a layer
 				var blendshader = draw.viewportblendshader

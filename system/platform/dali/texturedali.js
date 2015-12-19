@@ -22,6 +22,13 @@ define.class('$system/base/texture', function(exports){
 	this.ratio = 1
 	this.frame_buf = null
 
+	Texture.fromStub = function(stub){
+		var tex = new Texture(stub.type || 'rgba', stub.size[0], stub.size[1])
+		tex.array = stub.array
+		tex.image = stub.image
+		return tex
+	}
+
 	Texture.fromType = function(type){
 		console.log('********** fromType', type);
 		return new Texture(type,0,0)
