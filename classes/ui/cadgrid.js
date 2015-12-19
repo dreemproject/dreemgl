@@ -17,8 +17,8 @@ define.class(function(view, label){
 	
 	this.attributes = {
 	
-		majorevery:{type:int, value:5},
-		gridsize:{type:int, value:5},
+		majorevery:{type:int,minvalue:1, value:5},
+		gridsize:{type:int, minvalue:1,value:5},
 		minorline:{type:vec4, value: vec4("#e0f0ff"), meta:"color"},
 		majorline:{type:vec4, value: vec4("#b0b0e0"), meta:"color"}
 	}

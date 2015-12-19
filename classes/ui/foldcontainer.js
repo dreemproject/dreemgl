@@ -132,7 +132,8 @@ define.class(function($ui$, view, label, icon, $$, require){
 			borderwidth: this.borderwidth, 
 			bordercolor: this.bordercolor,
 			icon: this.icon, 
-			title: this.title
+			title: this.title,
+			fontsize: this.fontsize
 		});
 		
 		this.bar.click = this.toggle.bind(this);

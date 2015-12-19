@@ -7,7 +7,7 @@
 define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$,propeditor){
 	
 	this.attributes = {
-		target:{type:String,value:""}	
+		target:{type:String,value:""},
 	}
 	
 	this.borderwidth = 0;
@@ -54,7 +54,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var key = keys[i];
 				var thevalue = c["_"+key];
 				var attr = c._attributes[key];	
-				groupcontent.push(propeditor({value:thevalue, property:attr, propertyname: key}))
+				groupcontent.push(propeditor({value:thevalue, property:attr, propertyname: key, fontsize:this.fontsize}))
 			}
 			
 			res.push(
@@ -64,7 +64,8 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 						autogradient: false,
 						icon:"cube", 
 						title: this.uppercaseFirst(group),
-						bordercolor:"#4f4f4f"					
+						bordercolor:"#4f4f4f"	,
+						fontsize:this.fontsize						
 					}, 
 					view({
 							flexdirection:"column", 

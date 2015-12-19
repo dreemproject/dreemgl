@@ -11,13 +11,17 @@ define.class('$ui/view', function(require,
 	
 
 	this.flex = 1
-
+	this.attributes = {
+			fontsize:{type:float, value: 10, meta:"fontsize"}
+	}
+	
 	define.class(this, "menubar", function($ui$, view){
 	})
 		
 	define.class(this, "dockpanel", function($ui$, view, label){
 		this.attributes = {
-			title:{type:String, value:"Untitled"}
+			title:{type:String, value:"Untitled"},
+			fontsize:{type:float, value:12, meta:"fontsize"}
 		}
 		
 		this.padding = 0;
@@ -31,7 +35,7 @@ define.class('$ui/view', function(require,
 			return [
 				view({bgcolor:"#454545", margin:vec4(0,0,0,0), padding:vec4(0)},
 					view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(0),padding:vec4(10,2,10,2)},
-						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:12, fgcolor: "white" })
+						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
 					)
 				)
 				,this.constructor_children
@@ -280,7 +284,7 @@ define.class('$ui/view', function(require,
 		this.position = "absolute" ;
 		this.bgcolor = vec4("#5c5c5c" )
 		this.padding = 0;
-		this.borderradius = vec4(10,10,1,1);
+		this.borderradius = vec4(5,5,1,1);
 		this.borderwidth = 2;
 		this.bordercolor = vec4("#5c5c5c")
 		
@@ -420,7 +424,7 @@ define.class('$ui/view', function(require,
 		
 		this.render = function(){
 			return [
-				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
+				label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
 				,view({bgcolor:"#404040", height: 40,width:140, flex: 1})
 				,view({flexdirection:"row", alignitems:"stretch", bg:0}
 					,button({icon:"plus", fontsize: this.fontsize})
@@ -620,14 +624,14 @@ define.class('$ui/view', function(require,
 			this.menubar({})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3}
-					,this.dockpanel({title:"Composition"}
-						,treeview({flex:1, dataset: this.model})
+					,this.dockpanel({title:"Composition", fontsize:this.fontsize}
+						,treeview({flex:1, dataset: this.model, fontsize:this.fontsize})
 					)
 				)
-				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0}
+				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0, fontsize:this.fontsize}
 					,view({bg:1, bgcolor:"black", clearcolor:"black"  }
-						,button({text:"add"   , click:function(){console.log("add");    }})
-						,button({text:"remove", click:function(){console.log("remove"); }})
+						,button({text:"add"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
+						,button({text:"remove", click:function(){console.log("remove"); }, fontsize:this.fontsize})
 					)
 					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(){this.clearSelection(true);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"connectionlayer", bg:0}
@@ -640,39 +644,39 @@ define.class('$ui/view', function(require,
 						)
 						
 						,view({name:"blocklayer", bg:0}
-							,this.block({name:"phone", title:"Phone", x:200, y:20})
-							,this.block({name:"tv", title:"Television", x:50, y:200})
-							,this.block({name:"tablet", title:"Tablet",x:300, y:120})						
-							,this.block({name:"thing", title:"Thing",x:500, y:120})						
-							,this.block({name:"a", title:"block A", x:50, y:300})
-							,this.block({name:"b", title:"block B", x:150, y:500})
-							,this.block({name:"c", title:"block C", x:250, y:400})
-							,this.block({name:"d", title:"block D", x:350, y:500})
-							,this.block({name:"e", title:"block E", x:450, y:600})
-							,this.block({name:"f", title:"block F", x:550, y:700})
+							,this.block({name:"phone", title:"Phone", x:200, y:20, fontsize:this.fontsize})
+							,this.block({name:"tv", title:"Television", x:50, y:200, fontsize:this.fontsize})
+							,this.block({name:"tablet", title:"Tablet",x:300, y:120, fontsize:this.fontsize})						
+							,this.block({name:"thing", title:"Thing",x:500, y:120, fontsize:this.fontsize})						
+							,this.block({name:"a", title:"block A", x:50, y:300, fontsize:this.fontsize})
+							,this.block({name:"b", title:"block B", x:150, y:500, fontsize:this.fontsize})
+							,this.block({name:"c", title:"block C", x:250, y:400, fontsize:this.fontsize})
+							,this.block({name:"d", title:"block D", x:350, y:500, fontsize:this.fontsize})
+							,this.block({name:"e", title:"block E", x:450, y:600, fontsize:this.fontsize})
+							,this.block({name:"f", title:"block F", x:550, y:700, fontsize:this.fontsize})
 						)
 												
 						,view({name:"popllayer", bg:0},
 
 							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
-								label({text:"connection", bg:0, margin:4})
-								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20 })
+								label({text:"connection", bg:0, margin:4, fontsize:this.fontsize})
+								,button({padding:0, borderwidth:0, fontsize:this.fontsize, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize })
 							)
 							,view({name:"blockui",x:-200, bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-								label({text:"block", bg:0, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:20})
+								label({text:"block", bg:0, margin:4, fontsize:this.fontsize})
+								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
 							)
 						)
 				
 					)
 				) 
 				,splitcontainer({flex:0.5,direction:"horizontal"}
-					,this.dockpanel({title:"Library", viewport:"2D" }
-						,this.library({dataset:this.librarydata})
+					,this.dockpanel({title:"Library", viewport:"2D", fontsize:this.fontsize }
+						,this.library({dataset:this.librarydata, fontsize:this.fontsize})
 					)
-					,this.dockpanel({title:"Properties", viewport:"2D"}
-						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
+					,this.dockpanel({title:"Properties", viewport:"2D", fontsize:this.fontsize}
+						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll", fontsize:this.fontsize})		
 					)	
 				)
 			)

@@ -1004,7 +1004,7 @@ define.class('$system/base/node', function(require){
 			}
 			else{
 				
-				var divbase = 0.15;
+				var divbase = 0.45;
 				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
 				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
 				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
@@ -1099,7 +1099,7 @@ define.class('$system/base/node', function(require){
 			
 			var pidiv = 20
 			
-			var divbase = 0.15
+			var divbase = 0.45
 			var pidiv1 = Math.floor(Math.max(2, divbase* PI * borderradius[0]))
 			var pidiv2 = Math.floor(Math.max(2, divbase* PI * borderradius[1]))
 			var pidiv3 = Math.floor(Math.max(2, divbase* PI * borderradius[2]))
