@@ -8,7 +8,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	
 	var Parser = require("$system/parse/onejsparser")
 
-	this.bgcolor = vec4("white")
+	this.bgcolor = vec4("#343434")
 	this.padding = 20
 	this.flexdirection = "column"
 	this.alignitems = "stretch"
@@ -23,6 +23,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	// A doc item is an item with a heading, such as methods or attributes
 	define.class(this, 'ClassDocItem', function($ui$, view){
 		this.bg = 0
+		this.bgcolor = "red" ;
 		// the item to display. 
 		// An "attribute" item can have name, body_text, defvalue and type properties.
 		// A "function" item can have name, params and body_text properties.
@@ -31,7 +32,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			// the type of this display block. Accepted values: "function", "attribute"
 			blocktype: {type:String, value:"function"}
 		}
-
+		this.flex =1 ;
 		//this.bgcolor = vec4("#ffffff");
 		this.margin = 4;
 		this.padding = 4;
@@ -45,13 +46,13 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				if (this.item.params && this.item.params.length > 0) { 
 					functionsig = "(" + this.item.params.map(function(a){return a.name}).join(", ") + ")";
 				}
-				res.push(label({margin:vec4(2),text: this.item.name + functionsig , fontsize: 20, fgcolor: "black"}));
+				res.push(label({bg:0,margin:vec4(2),text: this.item.name + functionsig , fontsize: 20, fgcolor: "black"}));
 			}
 			else{
 				var sub = [];
 				
 				if (this.item.type){
-					sub.push(label({margin:vec4(2),text: "type: "+ this.item.type, fontsize: 15, fgcolor: "#404040"}));
+					sub.push(label({bg:0,margin:vec4(2),text: "type: "+ this.item.type, fontsize: 15, fgcolor: "white"}));
 				}
 				
 				if (this.item.defvalue !== undefined){	
@@ -69,61 +70,61 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 						if (witdiff > zwartdiff) color = "white";
 						
 						sub.push(
-							view({},
+							view({bg:0},
 								[
-									label({margin:vec4(2),text: "default:", fontsize: 15, fgcolor: "#404040"}),
-									view({bordercolor: "#808080", borderwidth: 1, cornerradius:4, bgcolor: this.item.defvalue, padding: vec4(8,3,8,3)},
-										label({fgcolor: color , fontsize: 15, bgcolor:"transparent" , text:labeltext})
+									label({margin:vec4(2),text: "default:", bg:0, fontsize: 15, fgcolor: "white"}),
+									view({bg:0,bordercolor: "#808080", borderwidth: 1, cornerradius:4, bgcolor: this.item.defvalue, padding: vec4(8,3,8,3)},
+										label({bg:0,fgcolor: color , fontsize: 15, bgcolor:"transparent" , text:labeltext})
 									)
 								]
 							));
 					}
 					else{
 						if (this.item.type === "String"){
-							sub.push(label({margin:vec4(2),text: "default: \""+ this.item.defvalue.toString() + "\"" , fontsize: 15, fgcolor: "#404040"}))
+							sub.push(label({bg:0,margin:vec4(2),text: "default: \""+ this.item.defvalue.toString() + "\"" , fontsize: 15, fgcolor: "#404040"}))
 						}else{
-							sub.push(label({margin:vec4(2),text: "default: "+ this.item.defvalue.toString(), fontsize: 15, fgcolor: "#404040"}))
+							sub.push(label({bg:0,margin:vec4(2),text: "default: "+ this.item.defvalue.toString(), fontsize: 15, fgcolor: "#404040"}))
 						}
 					}
 				}
 				
-				var title = label({margin:vec4(2),text: this.item.name, fontsize: 20, fgcolor: "black"})
+				var title = label({bg:0,margin:vec4(2),text: this.item.name, fontsize: 20, fgcolor: "white"})
 				
-				res.push(view({flex: 1},[title,view({flex: 1, flexdirection:"column", alignitems:"flex-end" },sub)]));
+				res.push(view({bg:0,flex: 1,alignitems:"flex-start",justifycontent:"space-between"},[title,view({bg:0,alignself:"flex-start",alignitems:"flex-end",  flexdirection:"column", alignitems:"flex-end" },sub)]));
 			}
 			
 			if (this.item.body_text){
 				for(var t in this.item.body_text){
-					res.push(label({text: this.item.body_text[t], fgcolor: "gray", fontsize: 14, margin: vec4(10,0,10,5)}));
+					res.push(label({bg:0,text: this.item.body_text[t], fgcolor: "white", fontsize: 14, margin: vec4(10,0,10,5)}));
 				}
 			}
 			
 			if (this.item.params && this.item.params.length > 0){
-				res.push(label({ fgcolor:"#5050dd", margin:vec4(2,0,4,4), text:"parameters:" }));
+				res.push(label({ bg:0,fgcolor:"#808080", margin:vec4(2,0,4,4), text:"parameters:" }));
 				for (var a in this.item.params){	
 					var parm = this.item.params[a];
-					var left = label({ fgcolor:"black", margin:vec4(10,0,4,4), text:parm.name});
+					var left = label({bg:0, fgcolor:"white", margin:vec4(10,0,4,4), text:parm.name});
 					var right;
 					
 					if (parm.body_text && parm.body_text.length > 0){
-						right= view({flex: 0.8},parm.body_text.map(function(a){return label({fgcolor:"gray", text:a})}))
+						right= view({flex: 0.8},parm.body_text.map(function(a){return label({fgcolor:"#f0f0f0", text:a})}))
 					} else {
 						right = view({flex: 1.0});
 					}
-					res.push(view({height:1, borderwidth: 1, bordercolor:"#e0e0e0", padding: 0}));
-					res.push(view({ flexdirection:"row"},[left, right]));
+					res.push(view({bg:0,height:1, borderwidth: 1, bordercolor:"#e0e0e0", padding: 0}));
+					res.push(view({bg:0,flexdirection:"row"},[left, right]));
 				}
-				res.push(view({height:1, borderwidth: 1, bordercolor:"#e0e0e0", padding: 0}));
+				res.push(view({bg:0,height:1, borderwidth: 1, bordercolor:"#e0e0e0", padding: 0}));
 			}
 			
 			if (this.blocktype === "example"){
 				res.push(				
-					view({flexdirection:"row",  flex:1, padding: vec4(2)}
-							,view({flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0"}
-								,label({fgcolor:"black", text:"Code", margin:vec4(10)})
-								,jsviewer({margin:vec4(10), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 14, bgcolor:"#000030", multiline: true})
+					view({flexdirection:"row", flex:1, padding: vec4(2), bgcolor: "#f0f0f0"}
+							,view({bg:0,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0"}
+								,label({fgcolor:"white", bg:0,text:"Code", margin:vec4(10)})
+								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 14, bgcolor:"#000030", multiline: true})
 							)
-							,view({flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "gray" } 
+							,view({bg:0,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0" } 
 								,label({fgcolor:"white",bgcolor:"transparent",  text:"Live demo", margin:vec4(10)})								
 								,this.item.examplefunc()
 							)
@@ -319,7 +320,8 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	define.class(this, 'dividerline', function($ui$, view){
 		this.height = 1;
 		this.borderwidth = 1;
-		this.bordercolor = vec4("#c0c0e0");
+		this.bgcolor = vec4("#202020");
+		this.bordercolor = vec4("#202020");
 		this.padding = 0;
 		this.margin = vec4(0,10,0,0);
 	})
@@ -349,10 +351,12 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			}
 			
 			return foldcontainer(
-					{collapsed:true, 
+					{
+						collapsed:true, bordercolor:"#202020",bg:0,
 						attributes:{collapsed:{persist:true}},
 						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" }, 
-						view({flexdirection: "column", flex: 1}, subs)
+						view({flexdirection: "column", flex: 1, bg:0
+					}, subs)
 				);
 		}
 		
@@ -363,23 +367,23 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			if (!this.class_doc) return [];
 			
 			if (!this.collapsible ){
-				body.push(view({},[icon({fontsize: 38, icon:"cube", fgcolor: "black" }),label({text:class_doc.class_name,fontsize: 30,margin: vec4(10,10,0,20), fgcolor: "black" })]));
+				body.push(view({bg:0},[icon({bg:0,fontsize: 38, icon:"cube", fgcolor: "black" }),label({bg:0,text:class_doc.class_name,fontsize: 30,margin: vec4(10,10,0,20), fgcolor: "black" })]));
 			}
 
 			if (class_doc.base_class_chain.length> 0){
-				body.push(view({}, class_doc.base_class_chain.map(function(r){
+				body.push(view({bg:0}, class_doc.base_class_chain.map(function(r){
 					return [
-						icon({icon:"arrow-right", fgcolor:"gray", fontsize:15, margin:vec4(2)})
+						icon({bg:0,icon:"arrow-right", fgcolor:"#f0f0f0", fontsize:15, margin:vec4(2)})
 						,button({margin: vec4(2),padding:vec4(3), text:r.name, fontsize:12, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
 					]
 				}.bind(this))));
 			}
 		
 			if (class_doc.body_text.length > 0) {
-				body.push(markdown({body:class_doc.body_text,fontsize: 14, margin: vec4(10,0,10,10), fgcolor: "#303030" }));
+				body.push(markdown({bg:0,body:class_doc.body_text,fontsize: 14, margin: vec4(10,0,10,10), fgcolor: "white" }));
 			}
 
-			res.push(view({flexdirection:"column", margin: vec4(10,0,0,20)}, body));
+			res.push(view({bg:0,flexdirection:"column", margin: vec4(10,0,0,20)}, body));
 		
 			if(class_doc.examples.length >0) res.push(this.BuildGroup(class_doc.examples, "Examples", "flask", "#e0e0e0", "example"));
 			if(class_doc.attributes.length >0) res.push(this.BuildGroup(class_doc.attributes, "Attributes", "gears", "#f0f0c0"));
@@ -391,7 +395,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				for (var a in class_doc.inner_classes){
 					classes.push(this.outer.ClassDocView({collapsible:true, class_doc: class_doc.inner_classes[a]}))				
 				}
-				res.push(foldcontainer({collapsed:true,  basecolor:"#c0f0c0", icon:"cubes", title:"Inner classes" , fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" }, view({flexdirection: "column", flex: 1}, classes)));
+				res.push(foldcontainer({bg:0,bordercolor:"#202020",collapsed:true,  basecolor:"#c0f0c0", icon:"cubes", title:"Inner classes" , fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" }, view({flexdirection: "column", flex: 1}, classes)));
 			}
 		
 			if(class_doc.methods.length >0) res.push(this.BuildGroup(class_doc.methods, "Methods", "paw", "#c0c0f0", "function"));
@@ -399,7 +403,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			
 			if (this.collapsible){
 				
-				return foldcontainer({basecolor:"#c0f0c0",collapsed:true,icon:"cube", title:class_doc.class_name},view({flexdirection:"column", flex:1},res));
+				return foldcontainer({bg:0,bordercolor:"#202020",basecolor:"#c0f0c0",collapsed:true,icon:"cube", title:class_doc.class_name},view({bg:0, flexdirection:"column", flex:1},res));
 			}
 			
 			return res;	
@@ -411,7 +415,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		var res = [];
 		var R = this.class// 	require("$classes/dataset")
 		if(typeof(R) === "string") {
-			return [markdown({body: " " + R.toString()})]
+			return [markdown({bg:0, body: " " + R.toString()})]
 		} 
 		else if(typeof(R) === 'function'){
 			var class_doc = parseDoc(R)		

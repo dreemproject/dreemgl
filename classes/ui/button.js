@@ -128,16 +128,16 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.buttonres = undefined;
 		this.iconres = undefined
 		
-		if (this.text && this.text.length > 0){
-			
-			this.buttonres = this.labelclass({font: require('$resources/fonts/opensans_bold_ascii.glf'), bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
-			res.push(this.buttonres);
-		}
-		
 		if (this.icon && this.icon.length > 0){
 			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}
+
+		if (this.text && this.text.length > 0){			
+			this.buttonres = this.labelclass({font: require('$resources/fonts/opensans_bold_ascii.glf'), bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			res.push(this.buttonres);
+		}
+		
 		return view({bg:0, padding:0, margin:this.internalmargin},res);
 
 	}

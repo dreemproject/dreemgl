@@ -78,8 +78,8 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 				}},
 				splitcontainer({bgcolor: "black", flex:1}
 					,view({flexdirection:"column", padding: 0,flex: 0.2}
-						,view({alignitems:"center", bgcolor:"#e0e0e0", flexdirection:"row" ,padding: 14},
-							label({text:"DreemGL", fgcolor:"black", bgcolor:"#e0e0e0", fontsize: 35 })
+						,view({alignitems:"center", bgcolor:"#343434", flexdirection:"row" ,padding: 14},
+							label({text:"DreemGL", fgcolor:"white", bg:0, fontsize: 35 })
 						)
 						,treeview({
 							postLayout:function(){

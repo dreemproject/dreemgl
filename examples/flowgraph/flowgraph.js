@@ -22,7 +22,7 @@ define.class('$ui/view', function(require,
 		
 		this.padding = 0;
 		this.margin = 0;
-		this.bgcolor = vec4("#506050");
+		this.bgcolor = vec4("#505050");
 		this.flex = 1;
 		this.flexdirection ="column" 
 		this.bg = 0;
@@ -42,8 +42,8 @@ define.class('$ui/view', function(require,
 	define.class(this, "classlibclass", function($ui$, view, icon){
 		this.attributes = {
 			classdesc:{type:Object, value: undefined},
-			col1: {value:vec4("#c0d0e0"),persist:true, meta:"color", motion:"linear", duration:0.1},
-			col2: {value:vec4("#f0f0f0"),persist:true, meta:"color", motion:"linear", duration:0.2}
+			col1: {value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.1},
+			col2: {value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.2}
 		}
 		
 		this.bg = {
@@ -53,13 +53,14 @@ define.class('$ui/view', function(require,
 			}			
 		}
 		
-		
+		this.bg = 1; 
+		this.margin = vec4(2,2,2,0);
 		this.justifycontent= "flex-start";
 		this.alignitems = "center"
 		///this.aligncontent = "center"
 		this.render = function(){
 			return [
-			view({width:40, height:40, borderwidth:1, borderradius:2, bordercolor:"#303030", margin:5}
+				view({bgcolor:"#3b3b3b", width:40, height:40, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:5}
 				,icon({icon:"flask", margin:4, fgcolor:this.fgcolor})
 			)
 			,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0, fontsize:this.fontsize})
@@ -74,7 +75,8 @@ define.class('$ui/view', function(require,
 				fontsize:{type:float, meta:"fontsize", value: 15}
 		}
 		this.flexdirection = "column" 
-		this.fgcolor = "#303030"
+		this.fgcolor = "#f0f0f0"
+		this.bgcolor = "#3a3a3a";
 		this.render =function(){
 			
 			if (!this.dataset) return [];

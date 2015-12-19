@@ -118,7 +118,8 @@ define.class(function($ui$, view, label, icon, $$, require){
 			color:function(){
 				return mix(view.bgcolor*1.7, vec4("white"), (mesh.y/8))
 			}
-		},
+		};
+		this.bg = 0;
 		this.padding = vec4(0,0,0,0),
 		this.margin = vec4(0,0,0,0),
 		this.position = "relative"
@@ -139,7 +140,7 @@ define.class(function($ui$, view, label, icon, $$, require){
 
 		if (this.collapsed == false) {
 			this.container = this.containerview({
-			bgcolor: this.basecolor, 
+				bgcolor: this.basecolor, 
 				borderwidth: this.borderwidth, 
 				bordercolor:this.bordercolor,  
 
