@@ -12,8 +12,9 @@ define.class(function($ui$, view, label, button, icon){
 		// the current selected value
 		select: Event
 	}
+	
 
-	this.bgcolor = 'white'
+	this.bgcolor = '#454545'
 	this.boundscheck = true
 	this.viewport = '2d'
 	this.overflow ='scroll'
@@ -21,9 +22,10 @@ define.class(function($ui$, view, label, button, icon){
 	// The fold button is a very very flat button. 
 	define.class(this, 'foldbutton', function(button){
 		this.borderwidth = 0
+		this.borderradius = 0;
 		this.padding =  0
 		this.labelactivecolor = vec4("#303000")
-		this.bordercolor= "transparent"
+		
 		this.buttoncolor1 =  vec4(1,1,1,0.0)
 		this.buttoncolor2 =  vec4(1,1,1,0.0)
 		this.pressedcolor1 = vec4(0,0,0,0.14)
@@ -32,13 +34,13 @@ define.class(function($ui$, view, label, button, icon){
 		this.hovercolor2 =   vec4(0,0,0,0.1)
 		this.borderradius = 0
 		this.borderwidth = 0
-		this.fgcolor = "black"
+		this.fgcolor = "#d0d0d0"
 		this.labelclass = {
 			bg:1,
 			subpixel:true
 		}
 		this.margin = 0
-		this.bg = NaN 
+		this.bg = 1 
 		
 		//this.alignself = "flex-start" 	
 	})
@@ -201,11 +203,8 @@ define.class(function($ui$, view, label, button, icon){
 		}
 	})
 	
-	this.bordercolor = vec4("gray")
-	this.cornerradius = 0
 	this.clipping = true
-	this.bgcolor = vec4("white")
-
+	
 	this.flexdirection = "row"
 //	this.flex = 1
 
