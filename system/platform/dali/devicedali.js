@@ -54,15 +54,8 @@ define.class(function(require, exports){
 	,texImage2D: function() {}
 	};
 
-	// DaliDreemgl is the interface between dreemgl and dali.
-	this.DaliDreemgl = require('./dalidreemgl')
-
 	// DaliApi is a static object to access the dali api
-	this.DaliApi = require('./daliapi')
-
-	// Dali application wrapper
-	var DaliWrapper = require('./daliwrapper')
-
+	this.DaliApi = require('./dali_api')
 
 	this.Keyboard = require('./keyboarddali')
 	this.Mouse = require('./mousedali')
@@ -94,12 +87,14 @@ define.class(function(require, exports){
 		//TODO Use setTimeout for animation until dali animation ready (DALI)
 		this.time = 0;
 		this.animFrame = function(time){
+console.log('animFrame', time);
+			var interval = 16; // 500;
 			var t = this.doColor(time);
 			//console.log('animFrame', t, time);
 			if(t){
 				this.anim_req = true
-                this.time += 16
-                setTimeout(function() {this.animFrame(this.time);}.bind(this), 16)
+                this.time += interval;
+                setTimeout(function() {this.animFrame(this.time);}.bind(this), interval)
 			}
 			else this.anim_req = false
 			//if(this.pick_resolve.length) this.doPick()
@@ -139,21 +134,22 @@ define.class(function(require, exports){
 	}
 
 	this.initResize = function(){
-		//TODO Set width, height, name
-		this.width = this.height = 600
-		this.name = 'dreemgl/dali'
+		// Get size of stage
+		var size = this.DaliApi.dali.stage.getSize();
+		var dpi = this.DaliApi.dali.stage.getDpi();
 
-		// Initialize the dali api/window.
-		this.DaliApi.initialize(this.width, this.height, this.name);
+		this.width = size.x;
+		this.height = size.y;
+		this.ratio = dpi.x / dpi.y;
+
+		console.log('initResize size ', size, dpi);
 
 		//HACK to emulate gl (to avoid javascript errors)
 		this.gl = gl;
 
 		//TODO Use real values
-		this.main_frame = {ratio: 1.0, size: vec2(this.width, this.height)}
+		this.main_frame = {ratio: this.ratio, size: vec2(this.width, this.height)}
 		this.size = vec2(this.width, this.height);
-		this.ratio = 1.0; // this.main_frame.ratio
-
 	}
 
 	this.clear = function(r, g, b, a){
@@ -161,6 +157,9 @@ define.class(function(require, exports){
 			a = r.length === 4? r[3]: 1, b = r[2], g = r[1], r = r[0]
 		}
 		if(arguments.length === 3) a = 1
+
+		DaliApi.setBackgroundColor([r,g,b,a]);
+
 		this.gl.clearColor(r, g, b, a)
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT|this.gl.STENCIL_BUFFER_BIT)
 	}
@@ -177,7 +176,7 @@ define.class(function(require, exports){
 
 		//TODO
 		this.time = 0
-		this.animFrame();
+        setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
 	}
 
 	this.bindFramebuffer = function(frame){
@@ -290,7 +289,6 @@ define.class(function(require, exports){
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
-
 			var skip = false
 			var last = i === len - 1
 

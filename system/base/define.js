@@ -1240,6 +1240,11 @@
 			noderequirewrapper.module = module
 
 			noderequirewrapper.async = function(modname){
+				// For dali (and probably nodejs) relative paths must be made
+				// absolute to where the example is located.
+				if (define.$platform == 'dali' && modname.indexOf('./') == 0)
+					modname = '$root' + '/' + define.$example + '/' + modname;
+
 				if(typeof modname !== 'string') throw new Error("module name in require.async not a string")
 				modname = define.expandVariables(modname)
 

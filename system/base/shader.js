@@ -99,9 +99,11 @@ define.class(function(require, exports){
 			var gltype = attr[key]
 			// ok so if key is not in pixattr, its a normal one
 			if(!pixattr || !(key in pixattr)){
+
 				ret += gltype + ' ' + key  + ';\n'
 			}
 			else{
+
 				ret += 'varying ' + gltype + ' ' + key  + ';\n'
 			}
 		}
@@ -123,6 +125,7 @@ define.class(function(require, exports){
 		var ret = ''
 		for(var key in varyings){
 			var gltype = gltypes.getType(varyings[key])
+
 			ret += 'varying ' + gltype + ' ' + key + ';\n'
 		}
 		if(ret) ret = '//------------------- '+name+' -------------------\n'+ret+'\n'
@@ -143,6 +146,7 @@ define.class(function(require, exports){
 	this.compileUniformRename = function(uniforms){
 		var ret = ''
 		for(var key in uniforms){
+
 			ret += '\t' + key + ' = _' + key + ';\n'
 		}
 		return ret
@@ -156,6 +160,7 @@ define.class(function(require, exports){
 		mask[call.name] = 1
 		// output dependencies first
 		for(var key in call.deps){
+
 			var dep = call.deps[key]
 			ret += this.compileFunctions(dep, mask)
 		}
@@ -495,7 +500,6 @@ define.class(function(require, exports){
 
 	// compile the shader
 	this.compile = function(gldevice){
-
 		if(gldevice && this.dirty === false){
 			// lets walk up the prototype chain till we hit dirty === false
 

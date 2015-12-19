@@ -128,6 +128,19 @@ function main(){
 		    define.$platform = 'dali'
 		    define.$environment = 'dali' // Otherwise it is nodejs
 
+			//TODO
+			// Store the path from the root to the specified directory.
+			// There is a mismatch between dali and dreem server.
+			var index = composition.lastIndexOf('/');
+			define.$example = (index >= 0) ? composition.substring(0,index+1) : './'
+			try {
+				// The images are relative to ths specified directory
+				if (fs.statSync(composition).isDirectory())
+					define.$example = './' + composition + '/'
+			}
+			catch (e) {
+			}
+
 		    var BootDali = require('$system/platform/dali/bootdali')
 		    new BootDali(args, composition);
 		}

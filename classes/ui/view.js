@@ -10,7 +10,12 @@ define.class('$system/base/node', function(require){
 	
 	var view = this.constructor
 
+	var View = exports
+	View.GlobalId = 0
+
 	this.attributes = {
+		// Global id of this view
+		id: {type:int, value: 0},
 		// a simple boolean to turn visibility of a node on or off
 		visible: {type:boolean, value: true},
 
@@ -320,6 +325,9 @@ define.class('$system/base/node', function(require){
 
 	// initialization of a view
 	this.init = function(prev){
+		this.id = ++View.GlobalId;
+		this.object_type = 'View ' + this.id
+	console.log('+_+_+_+_+ View.id', this.id, View.GlobalId);
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
@@ -522,6 +530,7 @@ define.class('$system/base/node', function(require){
 
 	// this gets called by the render engine
 	this.updateShaders = function(){
+console.log('view.updateShaders', this.update_dirty);
 		if(!this.update_dirty) return
 		this.update_dirty = false
 
@@ -847,15 +856,18 @@ define.class('$system/base/node', function(require){
 
 	// standard bg is undecided
 	define.class(this, 'bg', this.Shader, function(){
+        this.object_type = 'bg'
 		this.updateorder = 0
 	})
 
 	// standard border is undecided too
 	define.class(this, 'border', this.Shader, function(){
+        this.object_type = 'border'
 		this.updateorder = 0
 	})
 
 	define.class(this, 'hardrect', this.Shader, function(){
+        this.object_type = 'hardrect'
 		this.updateorder = 0
 		this.draworder = 0
 		this.mesh = vec2.array()
@@ -872,6 +884,7 @@ define.class('$system/base/node', function(require){
 	this.hardrect = false
 
 	define.class(this, 'hardborder', this.Shader, function(){
+        this.object_type = 'hardborder'
 		this.updateorder = 0
 		this.draworder = 1
 		this.mesh = vec2.array();
@@ -913,6 +926,7 @@ define.class('$system/base/node', function(require){
 
 	// hard edged bgimage shader
 	define.class(this, 'hardimage', this.hardrect, function(){
+        this.object_type = 'hardimage'
 		this.updateorder = 0
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
@@ -924,6 +938,7 @@ define.class('$system/base/node', function(require){
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
+        this.object_type = 'roundedrect'
 		this.updateorder = 0
 		this.draworder = 0
 		this.vertexstruct = define.struct({
@@ -1004,6 +1019,7 @@ define.class('$system/base/node', function(require){
 	this.roundedrect = false
 	
 	define.class(this, 'viewportblend', this.Shader, function(){
+        this.object_type = 'viewportblend'
 		this.draworder = 10
 		this.updateorder = 10
 		this.omit_from_shader_list = true
@@ -1025,6 +1041,7 @@ define.class('$system/base/node', function(require){
 
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){
+        this.object_type = 'roundedborder'
 		this.draworder = 1
 		this.updateorder = 1
 		this.vertexstruct = define.struct({
@@ -1114,6 +1131,7 @@ define.class('$system/base/node', function(require){
 
 	// lets pull in the scrollbar on the view
 	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){
+        this.object_type = 'scrollbar'
 		this.bg = {
 			noscroll:true
 		}
