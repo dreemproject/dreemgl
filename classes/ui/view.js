@@ -10,17 +10,12 @@ define.class('$system/base/node', function(require){
 	
 	var view = this.constructor
 
-	var View = exports
-	View.GlobalId = 0
-
 	this.attributes = {
-		// Global id of this view
-		id: {type:int, value: 0},
 		// a simple boolean to turn visibility of a node on or off
 		visible: {type:boolean, value: true},
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
-		pos: {type:vec3, value:vec3(0,0,0)},
+		pos: {type:vec3, value:vec3(0,0,0),meta:"xyz"},
 
 		// alias for the x component of pos
 		x: {alias:'pos', index:0},
@@ -48,14 +43,16 @@ define.class('$system/base/node', function(require){
 		// the background color of a view, referenced by various shaders
 		bgcolor: {group:"style", type:vec4, value: vec4('white'), meta:"color"},
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: {group:"style",type:Object},
+		bgimage: {group:"style",type:Object, meta:"texture"},
+		// the opacity of the image
+		opacity: {group:"style", value: 1.0, type:float},
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: {group:"style",type:vec4, value: vec4('transparent'), meta:"color"},
 		
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
-		scroll: {type:vec2, value:vec2(0, 0)},
+		scroll: {type:vec2, value:vec2(0, 0), persist: true},
 		// the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
 		zoom:{type:float, value:1},
 		// overflow control, shows scrollbars when the content is larger than the viewport. Only works on viewport:'2D'
@@ -63,7 +60,7 @@ define.class('$system/base/node', function(require){
 		overflow: {type: Enum('','hidden','scroll','auto'), value:''},
 
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
-		size: {type:vec3, value:vec3(NaN)},
+		size: {type:vec3, value:vec3(NaN), meta:"xyz"},
 
 		// alias for the x component of size
 		w: {alias:'size', index:0},
@@ -83,9 +80,9 @@ define.class('$system/base/node', function(require){
 		pixelratio: {type: float, value:NaN},
 
 		// the minimum size for the flexbox layout engine
-		minsize: {type: vec3, value:vec3(NaN)},
+		minsize: {type: vec3, value:vec3(NaN), meta:"xyz"},
 		// the maximum size for the flexbox layout engine
-		maxsize: {type: vec3, value:vec3(NaN)},
+		maxsize: {type: vec3, value:vec3(NaN), meta:"xyz"},
 
 		// alias for the x component of minsize
 		minwidth: {alias:'minsize', index:0},
@@ -102,7 +99,7 @@ define.class('$system/base/node', function(require){
 		maxdepth: {alias:'maxsize', index:2},
 
 		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
-		margin: {type: vec4, value: vec4(0,0,0,0)},
+		margin: {type: vec4, value: vec4(0,0,0,0), meta: "ltrb"},
 		// alias for the first component of margin
 		marginleft: {alias:'margin', index:0},
 		// alias for the second component of margin
@@ -113,7 +110,7 @@ define.class('$system/base/node', function(require){
 		marginbottom: {alias:'margin', index:3},
 
 		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
-		padding: {type: vec4, value: vec4(0,0,0,0)},
+		padding: {type: vec4, value: vec4(0,0,0,0), meta: "ltrb"},
 		// alias for the first component of padding
 		paddingleft: {alias:'padding', index:0},
 		// alias for the second component of padding
@@ -124,13 +121,13 @@ define.class('$system/base/node', function(require){
 		paddingbottom: {alias:'padding', index:3},
 
 		// Scale of an item, only useful for items belof a 3D viewport
-		scale: {type: vec3, value: vec3(1)},
+		scale: {type: vec3, value: vec3(1), meta:"xyz"},
 		// The anchor point around which items scale and rotate, depending on anchor mode its either a factor of size or and absolute value
 		anchor: {type: vec3, value: vec3(0.)},
 		// the mode with which the anchor is computed. Factor uses the size of an item to find the point, defaulting to center
 		anchormode: {type:Enum('','factor','absolute'), value:'factor'},
 		// rotate the item around x, y or z in radians. If you want degrees type it like this: 90*DEG
-		rotate: {type: vec3, value: vec3(0)},
+		rotate: {type: vec3, value: vec3(0), meta:"xyz"},
 
 		// the color of the border of an item. 
 		bordercolor: {group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"},
@@ -169,7 +166,7 @@ define.class('$system/base/node', function(require){
 
 		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
 		// Can be listened to to observe layout changes
-		layout: {group:"undefined", type:Object, value:{}},
+		layout: { type:Object, value:{}, meta:"hidden"},
 
 		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
 		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
@@ -193,7 +190,7 @@ define.class('$system/base/node', function(require){
 		up: {group:"3d",type: vec3, value: vec3(0,-1,0)},
 		
 		// the current time which can be used in shaders to create continous animations
-		time: 0,
+		time:{meta:"hidden"} ,
 
 		// fired when the mouse doubleclicks
 		mousedblclick: Event,
@@ -226,10 +223,10 @@ define.class('$system/base/node', function(require){
 		keypress: Event,
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Event,
-		// fires when this view gets the focus
-		focusget: Event,
-		// fires when this view lost the focus
-		focuslost: Event	
+		// wether this view has focus
+		focus: false,
+		// tabstop, sorted by number
+		tabstop: NaN
 	}
 
 	this.camera = this.lookat = this.up = function(){this.redraw();};
@@ -244,9 +241,9 @@ define.class('$system/base/node', function(require){
 	this.viewportmatrix = mat4.identity()
 	// the normal matrix contains the transform without translate (for normals)
 	this.normalmatrix = mat4.identity()
-	
+
 	// forward references for shaders
-	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
+	this.layout = { width:0, height:0, left:0, top:0, right:0, bottom:0}
 	this.device = {frame:{size:vec2()}}
 
 	// turn off rpc proxy generation for this prototype level
@@ -278,7 +275,6 @@ define.class('$system/base/node', function(require){
 		this.relayout()
 	}
 
-
 	// listen to the viewport to turn off our background and border shaders when 3D
 	this.viewport = function(event){
 		if(event.value === '3d'){
@@ -291,6 +287,18 @@ define.class('$system/base/node', function(require){
 	this.overflow = function(){
 		if(this._overflow){
 			if(!this._viewport) this._viewport = '2d'
+		}
+	}
+
+	// put a tablistener
+	this.tabstop = function(event){
+		if(isNaN(event.old) && !isNaN(event.value)){
+			this.addListener('keydown', function(value){
+				if(value.name === 'tab'){
+					if(value.shift) this.screen.focusPrev(this)
+					else this.screen.focusNext(this)
+				}
+			})
 		}
 	}
 
@@ -325,9 +333,6 @@ define.class('$system/base/node', function(require){
 
 	// initialization of a view
 	this.init = function(prev){
-		this.id = ++View.GlobalId;
-		this.object_type = 'View ' + this.id
-	console.log('+_+_+_+_+ View.id', this.id, View.GlobalId);
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
@@ -337,8 +342,8 @@ define.class('$system/base/node', function(require){
 		this.viewportmatrix = mat4()
 
 		if(prev){
-			this._layout =
-			this.oldlayout = prev._layout
+//			this._layout =
+	//		this.oldlayout = prev._layout
 		}
 
 		if(this._bgimage){
@@ -406,6 +411,8 @@ define.class('$system/base/node', function(require){
 		//}
 
 		if(this._viewport){
+			if(this.bgshader) this.bgshader.noscroll = true
+			if(this.bordershader) this.bordershader.noscroll = true
 			this.viewportblendshader = new this.viewportblend(this)
 		}
 
@@ -468,25 +475,51 @@ define.class('$system/base/node', function(require){
 	}
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
-	// usually this is handled automatically so shouldnt need to call this manually
+
+	this.relayoutRecur = function(source){
+		this.layout_dirty = true
+		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
+		for(var i = 0;i < this.child_viewport_list.length;i++){
+			var child = this.child_viewport_list[i]
+			//if(child._overflow) continue
+			if(child !== source){
+				child.relayoutRecur()
+			}
+		}
+		if(this.parent_viewport !== this){
+			if(this.parent_viewport._overflow) return
+			this.parent_viewport.relayoutRecur(this)
+		}
+	}
+
+	// ok so. what we need to do is
+	// scan up towards overflow something
+	// scan down and skip overflow something.
+
 	this.relayout = function(shallow){
-		// so we need to have a list of child viewports
-		if(!this.parent_viewport || this.parent_viewport.layout_dirty) return
-		var child_viewport_list = this.parent_viewport.child_viewport_list
-		for(var i = 0; i < child_viewport_list.length;i++){
-			var child = child_viewport_list[i]
-			child.relayout(true)
+
+		if(this.screen) this.screen.redraw()
+		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
+		/*
+		if(this.screen){
+			this.screen.redraw()
+			this.screen.relayoutRecur()
 		}
-		var parent = this
+		return
+		var parent = this.parent_viewport
+		// ok we haz parent viewport, they we have to check if we are _overflow is something
 		while(parent){
-			var viewport = parent.parent_viewport
-			if(!viewport || viewport.layout_dirty) break
-			viewport.layout_dirty = true
-			parent = viewport.parent 
-			if(shallow) break
-		}
-		// layout happens in the drawloop
-		this.redraw()
+			parent.redraw()
+			parent.layout_dirty = true
+
+			if(parent === parent.parent_viewport){
+				parent = parent.parent && parent.parent.parent_viewport
+			}
+			else{
+				parent = parent.parent_viewport
+				if(parent._overflow) break
+			}
+		}*/
 	}
 
 	// redraw our view and bubble up the viewport dirtiness to the root
@@ -498,7 +531,7 @@ define.class('$system/base/node', function(require){
 			if(!viewport) break
 			if(viewport.draw_dirty === 3) return
 			viewport.draw_dirty = 3
-			parent = viewport.parent 
+			parent = viewport.parent
 		}
 		if(this.device && this.device.redraw) this.device.redraw()
 	}
@@ -528,9 +561,21 @@ define.class('$system/base/node', function(require){
 	this.position =
 	this.relayout
 
+	this.getViewGuid = function(){
+		if(this.viewguid) return this.viewguid
+		if(this.pickguid){
+			this.viewguid = '' +this.pickguid
+		}
+		var node = this, id = ''
+		while(node){
+			if(node.parent) id += node.parent.children.indexOf(node)
+			node = node.parent
+		}
+		return this.viewguid = id
+	}
+
 	// this gets called by the render engine
 	this.updateShaders = function(){
-console.log('view.updateShaders', this.update_dirty);
 		if(!this.update_dirty) return
 		this.update_dirty = false
 
@@ -601,6 +646,7 @@ console.log('view.updateShaders', this.update_dirty);
 		}
 
 		if(this._viewport){
+
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
 			}
@@ -677,6 +723,10 @@ console.log('view.updateShaders', this.update_dirty);
 					}
 				})
 			)
+			
+			if(this.hscrollbar) this.hscrollbar.value = Mark(this._scroll[0])
+			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
+
 			this.mousewheelx = function(event){
 				var wheel = event.wheel
 				if(this.hscrollbar._visible){
@@ -708,7 +758,6 @@ console.log('view.updateShaders', this.update_dirty);
 				this.updateScrollbars()
 				this.redraw()
 			}
-			if(this.bgshader) this.bgshader.noscroll = true
 		}
 	}
 	
@@ -772,11 +821,11 @@ console.log('view.updateShaders', this.update_dirty);
 
 		if(!nochild){
 			var children = node.children
-			for(var i = 0; i < children.length;i++){
+			for(var i = 0; i < children.length; i++){
 				var child = children[i]
 				var clayout = child.layout
 				clayout.absx = layout.absx + clayout.left 
-				clayout.absy = layout.absx + clayout.top
+				clayout.absy = layout.absy + clayout.top
 
 				emitPostLayoutAndComputeBounds(child, boundsobj, child._viewport)
 			}
@@ -787,7 +836,7 @@ console.log('view.updateShaders', this.update_dirty);
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)) {
 			// call setter
 			// lets reset the scroll position
-			ref.emit('layout', {type:'setter',owner:ref,key:'layout', value:layout})
+			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
 	}
@@ -838,7 +887,8 @@ console.log('view.updateShaders', this.update_dirty);
 	this.startAnimation = function(key, value, track, resolve){
 		if(this.screen) return this.screen.startAnimationRoot(this, key, value, track, resolve)
 		else{
-			this['_' + key] = value
+			return false
+	//		this['_' + key] = value
 		}
 	}
 
@@ -856,18 +906,15 @@ console.log('view.updateShaders', this.update_dirty);
 
 	// standard bg is undecided
 	define.class(this, 'bg', this.Shader, function(){
-        this.object_type = 'bg'
 		this.updateorder = 0
 	})
 
 	// standard border is undecided too
 	define.class(this, 'border', this.Shader, function(){
-        this.object_type = 'border'
 		this.updateorder = 0
 	})
 
 	define.class(this, 'hardrect', this.Shader, function(){
-        this.object_type = 'hardrect'
 		this.updateorder = 0
 		this.draworder = 0
 		this.mesh = vec2.array()
@@ -878,13 +925,12 @@ console.log('view.updateShaders', this.update_dirty);
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			return view.bgcolor
+			return vec4(view.bgcolor.rgb, view.bgcolor.a * view.opacity)
 		}
 	})
 	this.hardrect = false
 
 	define.class(this, 'hardborder', this.Shader, function(){
-        this.object_type = 'hardborder'
 		this.updateorder = 0
 		this.draworder = 1
 		this.mesh = vec2.array();
@@ -917,7 +963,7 @@ console.log('view.updateShaders', this.update_dirty);
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			return view.bordercolor;
+			return vec4(view.bordercolor.rgb, view.bordercolor.a * view.opacity);
 		}
 	})
 	this.hardborder = false
@@ -926,19 +972,18 @@ console.log('view.updateShaders', this.update_dirty);
 
 	// hard edged bgimage shader
 	define.class(this, 'hardimage', this.hardrect, function(){
-        this.object_type = 'hardimage'
 		this.updateorder = 0
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			return this.texture.sample(mesh.xy)
+			var col = this.texture.sample(mesh.xy)
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
 	this.hardimage = false
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
-        this.object_type = 'roundedrect'
 		this.updateorder = 0
 		this.draworder = 0
 		this.vertexstruct = define.struct({
@@ -975,7 +1020,7 @@ console.log('view.updateShaders', this.update_dirty);
 			}
 			else{
 				
-				var divbase = 0.15;
+				var divbase = 0.45;
 				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
 				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
 				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
@@ -998,7 +1043,7 @@ console.log('view.updateShaders', this.update_dirty);
 		}
 
 		this.color = function(){
-			return view.bgcolor
+			return vec4(view.bgcolor.rgb, view.bgcolor.a * view.opacity)
 		}
 
 		this.position = function(){
@@ -1019,7 +1064,6 @@ console.log('view.updateShaders', this.update_dirty);
 	this.roundedrect = false
 	
 	define.class(this, 'viewportblend', this.Shader, function(){
-        this.object_type = 'viewportblend'
 		this.draworder = 10
 		this.updateorder = 10
 		this.omit_from_shader_list = true
@@ -1034,14 +1078,14 @@ console.log('view.updateShaders', this.update_dirty);
 		}
 
 		this.color = function(){
-			return texture.sample(mesh.xy)
+			var col = texture.sample(mesh.xy)
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
 	this.viewportblend = false
 
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){
-        this.object_type = 'roundedborder'
 		this.draworder = 1
 		this.updateorder = 1
 		this.vertexstruct = define.struct({
@@ -1071,7 +1115,7 @@ console.log('view.updateShaders', this.update_dirty);
 			
 			var pidiv = 20
 			
-			var divbase = 0.15
+			var divbase = 0.45
 			var pidiv1 = Math.floor(Math.max(2, divbase* PI * borderradius[0]))
 			var pidiv2 = Math.floor(Math.max(2, divbase* PI * borderradius[1]))
 			var pidiv3 = Math.floor(Math.max(2, divbase* PI * borderradius[2]))
@@ -1105,7 +1149,7 @@ console.log('view.updateShaders', this.update_dirty);
 		}
 		
 		this.color = function(){
-			return view.bordercolor
+			return vec4(view.bordercolor.rgb, view.opacity * view.bordercolor.a)
 		}
 		
 		this.position = function(){
@@ -1129,9 +1173,9 @@ console.log('view.updateShaders', this.update_dirty);
 	})
 	this.roundedborder = false
 
+
 	// lets pull in the scrollbar on the view
 	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){
-        this.object_type = 'scrollbar'
 		this.bg = {
 			noscroll:true
 		}

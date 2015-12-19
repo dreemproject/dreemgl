@@ -13,8 +13,6 @@ define.class( function(require, label){
 		icon: {type:String, value:'wrench'}
 	}
 
-	var fontParser = require('$system/font/fontparser')
-
 	this.init = function(){
 		this.text = table[this.icon]
 	}
@@ -25,8 +23,8 @@ define.class( function(require, label){
 	
 	this.bg = undefined
 
-	this.font = {
-		typeface: fontParser(require('$resources/fonts/fontawesome.glf'))
+	this.typeface = {
+		font: require('$resources/fonts/fontawesome.glf')
 	}
 
 	// the font awesome 

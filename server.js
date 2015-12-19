@@ -120,7 +120,7 @@ function main(){
 		}
 		else if(args['-dali']){
             // Place the dali/nodejs package at the root of dreemgl
-
+            
 		    var composition = args['-dali'];
 		    if (composition === true)
 			composition = 'examples/rendertest'

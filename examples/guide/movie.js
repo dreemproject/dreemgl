@@ -27,6 +27,5 @@ define.class(function ($ui$, view, label) {
             bgcolor:vec4(0,0,0,0.5),
             multiline: true
         })
-    ] }
-
+    ]}
 });

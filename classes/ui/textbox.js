@@ -5,7 +5,7 @@
 
 define.class(function(require, $ui$, label){	
 
-	this.mixin(require('$system/edit/editimpl'))
+	this.mixin(require('$system/textbox/textboximpl'))
 
 	this.attributes = {
 		// the color of the cursor
@@ -13,12 +13,13 @@ define.class(function(require, $ui$, label){
 		// color of the marker
 		markerfocus: {type:vec4, value: vec4("ocean"), meta:"color"},
 		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"},
-		value:{type:String, value:""}
+		value:{type:String, value:""},
+		readonly:false
 	}
 
 	this.markercolor = this.markerunfocus
-	/*
-	define.class(this, 'cursors', require('$system/font/cursorshader.js'), function(){
+	
+	define.class(this, 'cursors', require('$system/typeface/cursorshader.js'), function(){
 		this.updateorder = 5
 		this.draworder = 6
 		this.atConstructor = function(){
@@ -33,11 +34,11 @@ define.class(function(require, $ui$, label){
 				this.mesh.addCursor(view.textbuf, cursor.end)
 			}
 		}
-	})*/
+	})
 
-	this.tabstop = true
-	/*
-	define.class(this, 'markers', require('$system/font/markershader.js'), function(){
+	this.tabstop = 0
+	
+	define.class(this, 'markers', require('$system/typeface/markershader.js'), function(){
 		this.updateorder = 6
 		this.draworder = 4
 		this.atConstructor = function(){
@@ -62,24 +63,24 @@ define.class(function(require, $ui$, label){
 				}
 			}
 		}
-	})*/
+	})
 	this.measure_with_cursor = true
 	
-	this.focusget = function(){
-		//this.cursorsshader.visible = true
-		//this.markercolor = this.markerfocus
-		this.redraw()
-	}
-
-	this.focuslost = function(){
-		//this.cursorsshader.visible = false
-		//this.markercolor = this.markerunfocus
+	this.focus = function(){
+		if(this._focus){
+			this.cursorsshader.visible = this.readonly?false:true
+			this.markercolor = this.markerfocus
+		}
+		else{
+			this.cursorsshader.visible = this.readonly?false:true
+			this.markercolor = this.markerunfocus
+		}
 		this.redraw()
 	}
 
 	Object.defineProperty(this, 'textbuf', {
 		get:function(){
-			return this.fontshader.mesh
+			return this.typefaceshader.mesh
 		}
 	})
 
@@ -94,12 +95,12 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.cursorsChanged = function(){
-		//this.cursorsshader.reupdate()
-		//this.markersshader.reupdate()
+		this.cursorsshader.reupdate()
+		this.markersshader.reupdate()
 	}
 
 	this.init = function(){
-		//this.cursorsshader.visible = false
+		this.cursorsshader.visible = false
 		if(isNaN(this._cursorcolor[0])) this._cursorcolor = this.fgcolor
 		this.initEditImpl()
 		this.text = this.value

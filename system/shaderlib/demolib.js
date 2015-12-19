@@ -7,7 +7,7 @@ define(function(require, exports){
 	exports.noise = require('./noiselib')
 	exports.pal = require('./palettelib')
 	exports.math = require('./mathlib')
-
+	
 	exports.kali2d = function(pos, steps, space){
 
 		var v = pos

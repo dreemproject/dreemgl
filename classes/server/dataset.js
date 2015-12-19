@@ -28,7 +28,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 	// Fork starts a new modification on a dataset;
 	// <callback> the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
 	this.fork = function(callback){
-		this.undo_stack.push(JSON.stringify(this.data))
+		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
 		callback(this.data)
 		this.notifyAssignedAttributes();
@@ -37,7 +37,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 	// Silent operates much the same as <fork>, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
 	// <callback> the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!	
 	this.silent = function(callback /*function*/){
-		this.undo_stack.push(JSON.stringify(this.data))
+		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
 		callback(this.data)		
 		if (this.atChange) this.atChange();
@@ -58,30 +58,30 @@ define.class('$system/base/node', function(require, $ui$, label){
 	
 	
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice. 
-	this.JSONParse = function(stringdata){
+	this.parse = function(stringdata){
 		var data = JSON.parse(stringdata)
 		data = define.structFromJSON(data);
 		return data;
 	}
 	
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
-	this.JSONStringify = function(data /*Object*/) /*String*/ {
+	this.stringify = function(data /*Object*/) /*String*/ {
 		return JSON.stringify(data);
 	}
 	
 	// Go back to the previous state. All classes that have this dataset bound will get their assignment updated
 	this.undo = function(){
 		if(!this.undo_stack.length) return
-		this.redo_stack.push( this.JSONStringify(this.data))
-		this.data = this.JSONParse(this.undo_stack.pop());
+		this.redo_stack.push( this.stringify(this.data))
+		this.data = this.parse(this.undo_stack.pop());
 		this.notifyAssignedAttributes();
 	}
 
 	// Go back to the previous state. All classes that have this dataset bound will get their assignment updated
 	this.redo = function(){
 		if(!this.redo_stack.length) return
-		this.undo_stack.push(JSON.stringify(this.data))
-		this.data = this.JSONParse(this.redo_stack.pop())
+		this.undo_stack.push(this.stringify(this.data))
+		this.data = this.parse(this.redo_stack.pop())
 		this.notifyAssignedAttributes();
 	}
 	

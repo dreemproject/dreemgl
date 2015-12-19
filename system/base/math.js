@@ -1,200 +1,14 @@
 define(function(require, exports){
+	
+	// provide all the apis on our math types
 
 	var vectorParser = require('$system/parse/vectorparser')
-//	exports.$$ = console.log.bind(console)
-	// constants
-	exports.RAD = 1
-	exports.DEG = 0.017453292519943295
-	exports.PI = 3.141592653589793
-	exports.PI2 = 6.283185307179586
-	exports.E = 2.718281828459045
-	exports.LN2 = 0.6931471805599453
-	exports.LN10 = 2.302585092994046
-	exports.LOG2E = 1.4426950408889634
-	exports.LOG10E = 0.4342944819032518
-	exports.SQRT_1_2 = 0.70710678118654757
-	exports.SQRT2 = 1.4142135623730951
-
-	// primitive types
-	exports.string = String
-	exports.boolean = 
-	exports.bool = define.struct({prim:true, type:'bool', bytes:4, array:Int32Array},'bool')
-	exports.float =
-	exports.float32 = define.struct({prim:true, type:'float32',bytes:4, array:Float32Array},'float32')
-	exports.double =
-	exports.float64 = define.struct({prim:true, type:'float64', bytes:8, array:Float64Array},'float64')
-	exports.int8 = define.struct({prim:true, type:'int8', bytes:1, array:Int8Array},'int8')
-	exports.uint8 = define.struct({prim:true, type:'uint8', bytes:1, array:Uint8Array},'uint8')
-	exports.half = define.struct({prim:true, type:'half', bytes:2, array:Int16Array},'half')
-	exports.short =
-	exports.int16 = define.struct({prim:true, type:'int16', bytes:2, array:Int16Array},'int16')
-	exports.uint16 = define.struct({prim:true, type:'uint16', bytes:1, array:Uint16Array},'uint16')
-	exports.long =
-	exports.int =
-	exports.int32 = define.struct({prim:true, type:'int32', bytes:4, array:Int32Array},'int32')
-	exports.uint32 = define.struct({prim:true, type:'uint32', bytes:4, array:Uint32Array},'uint32')
-
-	exports.flow = function(value){
-		console.log(value)
-		return value
-	}
-
-	// basic math API
-	function typeFn(fn){
-		return function(v){
-			if(typeof v == 'number') return fn(v)
-			var out = v.struct()
-			for(var i = 0; i < v.length; i++) out[i] = fn(v[i])
-			return out
-		}
-	}
-	function typeFn2(fn){
-		return function(v, w){
-			if(typeof v == 'number') return fn(v, w)
-			var out = v.struct()
-			for(var i = 0; i < v.length; i++) out[i] = fn(v[i], w[i])
-			return out
-		}
-	}
-	function typeFn3(fn){
-		return function(v, w, x){
-			if(typeof v == 'number') return fn(v, w, x)
-			var out = v.struct()
-			if(typeof w == 'number'){
-				for(var i = 0; i < v.length; i++) out[i] = fn(v[i], w, x)
-			}
-			else{
-				for(var i = 0; i < v.length; i++) out[i] = fn(v[i], w[i], x[i])
-			}
-			return out
-		}
-	}
-
-	exports.sin = typeFn(Math.sin)
-	exports.cos = typeFn(Math.cos)
-	exports.tan = typeFn(Math.tan)
-	exports.asin = typeFn(Math.asin)
-	exports.acos = typeFn(Math.acos)
-	exports.atan = typeFn(Math.atan)
-	exports.atan2 = typeFn2(Math.atan2)
-	exports.pow = typeFn2(Math.pow)
-	exports.exp = typeFn(Math.exp)
-	exports.log = typeFn(Math.log)
-	exports.exp2 = typeFn(function(v){return Math.pow(2, v)})
-	exports.log2 = typeFn(Math.log2)
-	exports.sqrt = typeFn(Math.sqrt)
-	exports.inversesqrt = typeFn(function(v){ return 1/Math.sqrt(v)})
-	exports.abs = typeFn(Math.abs)
-	exports.floor = typeFn(Math.floor)
-	exports.round = typeFn(Math.round)
-	exports.ceil = typeFn(Math.ceil)
-	exports.min = typeFn2(Math.min)
-	exports.max = typeFn2(Math.max)
-	exports.mod = typeFn2(Math.mod)
-	exports.random = Math.random
-
-	
-	
-	exports.sign = typeFn(function(v){
-		if(v === 0) return 0
-		if(v < 0 ) return -1
-		return 1
-	})
-
-	exports.fract = typeFn(function(v){
-		return v - Math.floor(v)
-	})
-
-	exports.clamp = typeFn3(function(v, mi, ma){
-		if(v < mi) return mi
-		if(v > ma) return ma
-		return v
-	})
-
-	exports.mix = function(a, b, f, o){
-		if(typeof a === 'number'){
-			return a + f * (b - a)
-		}
-		o = o || a.struct()
-		for(var i = 0; i < a.length; i++){
-			o[i] = a[i] + f * (b[i] - a[i])
-		}
-		return o
-	}
-
-	exports.smoothstep = function(e0, e1, v){
-
-	}
-
-	exports.length = function(){
-	}
-
-	exports.distance = function(a, b){
-	}
-
-	exports.dot = function(a, b){
-	}
-
-	exports.cross = function(a, b){
-	}
-
-	exports.normalize = function(){
-	}
-
-	// Int vectors
-	exports.ivec2 = define.struct({
-		r:'x',g:'y',
-		s:'x',t:'y',
-		x:exports.int32,
-		y:exports.int32
-	}, 'ivec2')
-
-	exports.ivec3 = define.struct({
-		r:'x',g:'y',b:'z',
-		s:'x',t:'y',p:'z',
-		x:exports.int32,
-		y:exports.int32,
-		z:exports.int32
-	}, 'ivec3')
-
-	exports.ivec4 = define.struct({
-		r:'x',g:'y',b:'z',a:'w',
-		s:'x',t:'y',p:'z',q:'w',
-		x:exports.int32,
-		y:exports.int32,
-		z:exports.int32,
-		w:exports.int32,
-	}, 'ivec4')
-
-	// Bool vectors
-	exports.bvec2 = define.struct({
-		x:exports.boolean,
-		y:exports.boolean
-	}, 'bvec2')
-
-	exports.bvec3 = define.struct({
-		x:exports.boolean,
-		y:exports.boolean,
-		z:exports.boolean
-	}, 'bvec3')
-
-	exports.bvec4 = define.struct({
-		x:exports.boolean,
-		y:exports.boolean,
-		z:exports.boolean,
-		w:exports.boolean,
-	}, 'bvec4')
-
-	function baseApi(exports){
-	}
 
 	function matApi(exports){
-		baseApi(exports)
 	}
 
 	// shared vector api
 	function vecApi(exports){
-		baseApi(exports)
 		function vecFn(fn){
 			return function(a, o){
 				if(!o) o = exports()
@@ -290,149 +104,142 @@ define(function(require, exports){
 		}
 	}
 
-	// vec2 type
-	exports.vec2 = define.struct({
-		r:'x',g:'y',
-		s:'x',t:'y',		
-		x:exports.float32,
-		y:exports.float32
-	}, 'vec2')
-	vecApi(exports.vec2)
+	vecApi(vec2)
 
-	exports.vec2.fromString = function(color){
+	vec2.fromString = function(color){
 		var o = this
-		if(this === exports.vec2) o = exports.vec2()
+		if(this === vec2) o = vec2()
 		return vectorParser.parseVec2(color, o)
 	}
 
-	exports.vec2.random = function( scale, o){
+	vec2.random = function( scale, o){
 		if(scale === undefined) scale = 1
-		if(!o) o = exports.vec2()
+		if(!o) o = vec2()
 		var r = exports.PI2 * Math.random()
 		o[0] = cos(r) * scale
 		o[1] = sin(r) * scale
 		return o
 	}
 
-	exports.vec2.mul = 
-	exports.vec2.vec2_mul_vec2 = function(a, b, o){
-		if(!o) o = exports.vec2()
+	vec2.mul = 
+	vec2.vec2_mul_vec2 = function(a, b, o){
+		if(!o) o = vec2()
 		o[0] = a[0] * b[0]
 		o[1] = a[1] * b[1]
 		return o
 	}
 
-	exports.vec2.add = 
-	exports.vec2.vec2_add_vec2 = function(a, b, o){
-		if(!o) o = exports.vec2()
+	vec2.add = 
+	vec2.vec2_add_vec2 = function(a, b, o){
+		if(!o) o = vec2()
 		o[0] = a[0] + b[0]
 		o[1] = a[1] + b[1]
 		return o;
 	}
 
-	exports.vec2.sub =
-	exports.vec2.vec2_sub_vec2 = function(a, b, o){
-		if(!o) o = exports.vec2()
+	vec2.sub =
+	vec2.vec2_sub_vec2 = function(a, b, o){
+		if(!o) o = vec2()
 		o[0] = a[0] - b[0]
 		o[1] = a[1] - b[1]
 		return o
 	}
 
-	exports.vec2.div = 
-	exports.vec2.vec2_div_vec2 = function(a, b, o){
-		if(!o) o = exports.vec2()
+	vec2.div = 
+	vec2.vec2_div_vec2 = function(a, b, o){
+		if(!o) o = vec2()
 		o[0] = a[0] / b[0]
 		o[1] = a[1] / b[1]
 		return o
 	}
 
-	exports.vec2.mul_mat2 = 
-	exports.vec2.vec2_mul_mat2 = function(v, m, o){
-		if(!o) o = exports.vec2()
+	vec2.mul_mat2 = 
+	vec2.vec2_mul_mat2 = function(v, m, o){
+		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[2] * v[1]
 		o[1] = m[1] * v[0] + m[3] * v[1]
 		return o
 	}
 
-	exports.vec2.mul_mat3 = 
-	exports.vec2.vec2_mul_mat3 = function(v, m, o){
-		if(!o) o = exports.vec2()
+	vec2.mul_mat3 = 
+	vec2.vec2_mul_mat3 = function(v, m, o){
+		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[2] * v[1] + m[4]
 		o[1] = m[1] * v[0] + m[3] * v[1] + m[5]
 		return o
 	}
 
-	exports.vec2.mul_mat4 = 
-	exports.vec2.vec2_mul_mat4 = function(v, m, o){
-		if(!o) o = exports.vec2()
+	vec2.mul_mat4 = 
+	vec2.vec2_mul_mat4 = function(v, m, o){
+		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[4] * v[1] + m[12]
 		o[1] = m[1] * v[0] + m[5] * v[1] + m[13]
 		return o
 	}
-	exports.vec2.mul_mat4_t = 
-	exports.vec2.vec2_mul_mat4_t = function(v, m, o){
-		if(!o) o = exports.vec2()
+	vec2.mul_mat4_t = 
+	vec2.vec2_mul_mat4_t = function(v, m, o){
+		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[1] * v[1] + m[3]
 		o[1] = m[4] * v[0] + m[5] * v[1] + m[7]
 		return o
 	}
 	
-	exports.vec2.mul_float32 = 
-	exports.vec2.vec2_mul_float32 = function(v, f, o){
-		if(!o) o = exports.vec2()
+	vec2.mul_float32 = 
+	vec2.vec2_mul_float32 = function(v, f, o){
+		if(!o) o = vec2()
 		o[0] = v[0] * f
 		o[1] = v[1] * f
 		return o
 	}
 
-	exports.vec2.lessThan = function(a, b, o){
+	vec2.lessThan = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] < b[0]
 		o[1] = a[1] < b[1]
 		return o
 	}
 	
-	exports.vec2.lessThanEqual = function(a, b, o){
+	vec2.lessThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] <= b[0]
 		o[1] = a[1] <= b[1]
 		return o
 	}
 	
-	exports.vec2.greaterThan = function(a, b, o){
+	vec2.greaterThan = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] > b[0]
 		o[1] = a[1] > b[1]
 		return o
 	}
 
-	exports.vec2.greaterThanEqual = function(a, b, o){
+	vec2.greaterThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] >= b[0]
 		o[1] = a[1] >= b[1]
 		return o
 	}
 
-	exports.vec2.equal = function(a, b, o){
+	vec2.equal = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] == b[0]
 		o[1] = a[1] == b[1]
 		return o
 	}
 
-	exports.vec2.equals = function(a, b){
+	vec2.equals = function(a, b){
 		return a[0] === b[0] && a[1] === b[1]
 	}
 
-	exports.vec2.notEqual = function(a, b, o){
+	vec2.notEqual = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] != b[0]
 		o[1] = a[1] != b[1]
 		return o
 	}
 
-	exports.vec2.ortho = function(a, o){
-		if(!o) o = exports.vec2()
+	vec2.ortho = function(a, o){
+		if(!o) o = vec2()
 		var x = -a[1];
 		var y = a[0];
 		o[0] = x;
@@ -440,15 +247,9 @@ define(function(require, exports){
 		return o;	
 	}
 	
-	// vec3 API
-	exports.vec3 = define.struct({
-		r:'x',g:'y',b:'z',
-		s:'x',t:'y',p:'z',
-		x:exports.float32, y:exports.float32, z:exports.float32
-	}, 'vec3')
-	vecApi(exports.vec3)	
+	vecApi(vec3)	
 	
-	exports.vec3.intersectplane = function(origin, direction, normal, dist) {
+	vec3.intersectplane = function(origin, direction, normal, dist) {
 		var denom = vec3.dot(direction, normal)
 		if (denom !== 0) {
 			var t = -(vec3.dot(origin, normal) + dist) / denom
@@ -471,23 +272,23 @@ define(function(require, exports){
 		}
 	}
 
-	exports.vec2.dot = function(a,b){
+	vec2.dot = function(a,b){
 		return a[0] * b[0] + a[1] * b[1] ;
 	}
-	exports.vec3.dot = function(a,b){
+	vec3.dot = function(a,b){
 	//	console.log(a,b);
 		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 	}
 	
-	exports.vec3.fromString = function(color){
+	vec3.fromString = function(color){
 		var o = this
-		if(this === exports.vec3) o = exports.vec3()
+		if(this === vec3) o = vec3()
 		return vectorParser.parseVec3(color, o)
 	}
 
-	exports.vec3.random = function(scale, o){
+	vec3.random = function(scale, o){
 		if(scale === undefined) scale = 1
-		if(!o) o = exports.vec3()
+		if(!o) o = vec3()
 		var r = 2*exports.PI * Math.random()
 		var zr = (Math.random() * 2.0) - 1.0
 		o[0] = cos(r) * zr
@@ -496,63 +297,63 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec3.mul = 
-	exports.vec3.vec3_mul_vec3 = function(a, b, o){
-		if(!o) o = exports.vec3()
+	vec3.mul = 
+	vec3.vec3_mul_vec3 = function(a, b, o){
+		if(!o) o = vec3()
 		o[0] = a[0] * b[0]
 		o[1] = a[1] * b[1]
 		o[2] = a[2] * b[2]
 		return o
 	}
 
-	exports.vec3.mulfloat = 
-	exports.vec3.vec3_mul_float = function(a, b, o){
-		if(!o) o = exports.vec3()
+	vec3.mulfloat = 
+	vec3.vec3_mul_float = function(a, b, o){
+		if(!o) o = vec3()
 		o[0] = a[0] * b
 		o[1] = a[1] * b
 		o[2] = a[2] * b
 		return o
 	}
 
-	exports.vec3.add = 
-	exports.vec3.vec3_add_vec3 = function(a, b, o){
-		if(!o) o = exports.vec3()
+	vec3.add = 
+	vec3.vec3_add_vec3 = function(a, b, o){
+		if(!o) o = vec3()
 		o[0] = a[0] + b[0]
 		o[1] = a[1] + b[1]
 		o[2] = a[2] + b[2]
 		return o
 	}
 
-	exports.vec3.sub =
-	exports.vec3.vec3_sub_vec3 = function(a, b, o){
-		if(!o) o = exports.vec3()
+	vec3.sub =
+	vec3.vec3_sub_vec3 = function(a, b, o){
+		if(!o) o = vec3()
 		o[0] = a[0] - b[0]
 		o[1] = a[1] - b[1]
 		o[2] = a[2] - b[2]
 		return o
 	}
 
-	exports.vec3.div = 
-	exports.vec3.vec3_div_vec3 = function(a, b, o){
-		if(!o) o = exports.vec3()
+	vec3.div = 
+	vec3.vec3_div_vec3 = function(a, b, o){
+		if(!o) o = vec3()
 		o[0] = a[0] / b[0]
 		o[1] = a[1] / b[1]
 		o[2] = a[2] / b[2]
 		return o
 	}
 
-	exports.vec3.mul_mat3 = 
-	exports.vec3.vec3_mul_mat3 = function(v, m, o){
-		if(!o) o = exports.vec3()
+	vec3.mul_mat3 = 
+	vec3.vec3_mul_mat3 = function(v, m, o){
+		if(!o) o = vec3()
 		o[0] = v[0] * m[0] + v[1] * m[1] + v[2] * m[2]
 		o[1] = v[0] * m[3] + v[1] * m[4] + v[2] * m[5]
 		o[2] = v[0] * m[6] + v[1] * m[7] + v[2] * m[8]
 		return o
 	}
 
-	exports.vec3.mul_mat4 = 
-	exports.vec3.vec3_mul_mat4 = function(v, m, o){
-		if(!o) o = exports.vec3()
+	vec3.mul_mat4 = 
+	vec3.vec3_mul_mat4 = function(v, m, o){
+		if(!o) o = vec3()
 		var vx = v[0], vy = v[1], vz = v[2], vw = 
 			m[12] * vx + m[13] * vy + m[14] * vz + m[15]
 		vw = vw || 1.0
@@ -563,9 +364,9 @@ define(function(require, exports){
 	}
 
 	
-	exports.vec3.mul_mat4_minor = 
-	exports.vec3.vec3_mul_mat4_minor = function(v, m, o){
-		if(!o) o = exports.vec3()
+	vec3.mul_mat4_minor = 
+	vec3.vec3_mul_mat4_minor = function(v, m, o){
+		if(!o) o = vec3()
 		var vx = v[0], vy = v[1], vz = v[2]
 		o[0] = vx * m[0] + vy * m[1] + vz * m[2]
 		o[1] = vx * m[4] + vy * m[5] + vz * m[6]
@@ -573,9 +374,9 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec3.cross = 
-	exports.vec3.vec3_cross_vec3 = function(a, b, o){
-		if(!o) o = exports.vec3()
+	vec3.cross = 
+	vec3.vec3_cross_vec3 = function(a, b, o){
+		if(!o) o = vec3()
 		var ax = a[0], ay = a[1], az = a[2] 
 		var bx = b[0], by = b[1], bz = b[2]
 		o[0] = ay * bz - az * by
@@ -584,7 +385,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec3.lessThan = function(a, b, o){
+	vec3.lessThan = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] < b[0]
 		o[1] = a[1] < b[1]
@@ -592,7 +393,7 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.vec3.lessThanEqual = function(a, b, o){
+	vec3.lessThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] <= b[0]
 		o[1] = a[1] <= b[1]
@@ -600,7 +401,7 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.vec3.greaterThan = function(a, b, o){
+	vec3.greaterThan = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] > b[0]
 		o[1] = a[1] > b[1]
@@ -608,7 +409,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec3.greaterThanEqual = function(a, b, o){
+	vec3.greaterThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] >= b[0]
 		o[1] = a[1] >= b[1]
@@ -616,7 +417,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec3.equal = function(a, b, o){
+	vec3.equal = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] == b[0]
 		o[1] = a[1] == b[1]
@@ -624,11 +425,11 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec3.equals = function(a, b){
+	vec3.equals = function(a, b){
 		return a[0] === b[0] && a[1] === b[1] && a[2] === b[2]
 	}
 
-	exports.vec3.notEqual = function(a, b, o){
+	vec3.notEqual = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] != b[0]
 		o[1] = a[1] != b[1]
@@ -636,21 +437,31 @@ define(function(require, exports){
 		return o
 	}
 
-	// vec4 API
-	exports.vec4 = define.struct({
-		r:'x',g:'y',b:'z',a:'w',
-		s:'x',t:'y',p:'z',q:'w',
-		x:exports.float32, y:exports.float32, z:exports.float32, w:exports.float32
-	}, 'vec4')
-	
-	vecApi(exports.vec4)
+	vecApi(vec4)
 
-	exports.vec4.dot = function(a,b){
+	vec4.dot = function(a,b){
 		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	}
 	
+	vec4.contrastcolor = function(incolor){
+		var hsl = vec4.toHSV(incolor);
+		var l = 0;
+		if (hsl[2] > 0.5) {
+			if (hsl[1] > 0.7) {
+				l = 1;
+			}
+			else {
+				l = 0;
+			}
+		}
+		else {
+			l = 1;
+		}
+		return	vec4.fromHSV(0,0,l,1);
+	}
+	
 	// converts standard vec4 color in to HSL space (not to be confused with HSV space!) 
-	exports.vec4.toHSL = function(inp){
+	vec4.toHSL = function(inp){
 		var max = Math.max(inp[0], inp[1], inp[2]), min = Math.min(inp[0], inp[1], inp[2]);
 		var h, s, l = (max + min) / 2;
 		var r = inp[0];
@@ -681,8 +492,8 @@ define(function(require, exports){
 
 	// calculate an RGBA color from an HSLA color
 	// h/s/l/a = [0..1] range.
-	exports.vec4.fromHSL = function(h,s,l,a,o){
-		if(!o) o = exports.vec4()
+	vec4.fromHSL = function(h,s,l,a,o){
+		if(!o) o = vec4()
 			
 		var r, g, b;
 
@@ -720,7 +531,7 @@ define(function(require, exports){
 	}
 	
 	// converts standard vec4 color in to HSL space (not to be confused with HSV space!) 
-	exports.vec4.toHSV = function(inp){
+	vec4.toHSV = function(inp){
 	
 	
     var r = inp[0];
@@ -754,8 +565,8 @@ define(function(require, exports){
 
 	// calculate an RGBA color from an HSVA color
 	// h/s/l/a = [0..1] range.
-	exports.vec4.fromHSV = function(h,s,v,a,o){
-		if(!o) o = exports.vec4()
+	vec4.fromHSV = function(h,s,v,a,o){
+		if(!o) o = vec4()
 			
 		h *= 360;
 		if (h < 0) h+=360;
@@ -788,7 +599,7 @@ define(function(require, exports){
 	}
 
 	
-	exports.vec4.equals = function(a,b)
+	vec4.equals = function(a,b)
 	{
 		if (a[0] != b[0]) return false;
 		if (a[1] != b[1]) return false;
@@ -796,27 +607,27 @@ define(function(require, exports){
 		if (a[3] != b[3]) return false;
 		return true;
 	}
-	exports.vec4.fromString = function(color, alpha){
+	vec4.fromString = function(color, alpha){
 		var o = this
-		if(this === exports.vec4) o = exports.vec4()
+		if(this === vec4) o = vec4()
 		return vectorParser.parseVec4(color, o)
 	}
 
 	// TODO wrong
-	exports.vec4.random = function(scale, o){
+	vec4.random = function(scale, o){
 		if(scale === undefined) scale = 1
-		if(!o) o = exports.vec3()
+		if(!o) o = vec3()
 		o[0] = Math.random()
 		o[1] = Math.random()
 		o[2] = Math.random()
 		o[3] = Math.random()
-		exports.vec4.normalize(o, o)
+		vec4.normalize(o, o)
 		return o
 	}
 
-	exports.vec4.mul = 
-	exports.vec4.vec4_mul_vec4 = function(a, b, o){
-		if(!o) o = exports.vec4()
+	vec4.mul = 
+	vec4.vec4_mul_vec4 = function(a, b, o){
+		if(!o) o = vec4()
 		o[0] = a[0] * b[0]
 		o[1] = a[1] * b[1]
 		o[2] = a[2] * b[2]
@@ -824,9 +635,9 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.mul_float32 = 
-	exports.vec4.vec4_mul_float32 = function(a, b, o){
-		if(!o) o = exports.vec4()
+	vec4.mul_float32 = 
+	vec4.vec4_mul_float32 = function(a, b, o){
+		if(!o) o = vec4()
 		o[0] = a[0] * b
 		o[1] = a[1] * b
 		o[2] = a[2] * b
@@ -834,8 +645,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.vec4_mul_float32_rgb = function(a, b, o){
-		if(!o) o = exports.vec4()
+	vec4.vec4_mul_float32_rgb = function(a, b, o){
+		if(!o) o = vec4()
 		o[0] = a[0] * b
 		o[1] = a[1] * b
 		o[2] = a[2] * b
@@ -843,9 +654,9 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.add = 
-	exports.vec4.vec4_add_vec4 = function(a, b, o){
-		if(!o) o = exports.vec4()
+	vec4.add = 
+	vec4.vec4_add_vec4 = function(a, b, o){
+		if(!o) o = vec4()
 		o[0] = a[0] + b[0]
 		o[1] = a[1] + b[1]
 		o[2] = a[2] + b[2]
@@ -853,9 +664,9 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.sub =
-	exports.vec4.vec4_sub_vec4 = function(a, b, o){
-		if(!o) o = exports.vec4()
+	vec4.sub =
+	vec4.vec4_sub_vec4 = function(a, b, o){
+		if(!o) o = vec4()
 		o[0] = a[0] - b[0]
 		o[1] = a[1] - b[1]
 		o[2] = a[2] - b[2]
@@ -863,9 +674,9 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.div = 
-	exports.vec4.vec4_div_vec4 = function(a, b, o){
-		if(!o) o = exports.vec4()
+	vec4.div = 
+	vec4.vec4_div_vec4 = function(a, b, o){
+		if(!o) o = vec4()
 		o[0] = a[0] / b[0]
 		o[1] = a[1] / b[1]
 		o[2] = a[2] / b[2]
@@ -873,9 +684,9 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.mul_mat4 = 
-	exports.vec4.vec4_mul_mat4 = function(v, m, o){
-		if(!o) o = exports.vec4()
+	vec4.mul_mat4 = 
+	vec4.vec4_mul_mat4 = function(v, m, o){
+		if(!o) o = vec4()
 		var vx = v[0], vy = v[1], vz = v[2], vw = v[3]
 		o[0] = m[0] * vx + m[1] * vy + m[2] * vz + m[3] * vw
 		o[1] = m[4] * vx + m[5] * vy + m[6] * vz + m[7] * vw
@@ -885,9 +696,9 @@ define(function(require, exports){
 	}
 
 	
-	exports.vec4.mul_quat = 
-	exports.vec4.vec4_mul_quat = function(v, q, o){
-		if(!o) o = exports.vec4()
+	vec4.mul_quat = 
+	vec4.vec4_mul_quat = function(v, q, o){
+		if(!o) o = vec4()
 		var vx = v[0], vy = v[1], vz = v[2],
 			qx = q[0], qy = q[1], qz = q[2], qw = q[3],
 			// calculate quat * vec
@@ -903,7 +714,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.lessThan = function(a, b, o){
+	vec4.lessThan = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] < b[0]
 		o[1] = a[1] < b[1]
@@ -912,7 +723,7 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.vec4.lessThanEqual = function(a, b, o){
+	vec4.lessThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] <= b[0]
 		o[1] = a[1] <= b[1]
@@ -921,7 +732,7 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.vec4.greaterThan = function(a, b, o){
+	vec4.greaterThan = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] > b[0]
 		o[1] = a[1] > b[1]
@@ -930,7 +741,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.greaterThanEqual = function(a, b, o){
+	vec4.greaterThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] >= b[0]
 		o[1] = a[1] >= b[1]
@@ -939,7 +750,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.equal = function(a, b, o){
+	vec4.equal = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] == b[0]
 		o[1] = a[1] == b[1]
@@ -948,7 +759,7 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.vec4.notEqual = function(a, b, o){
+	vec4.notEqual = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] != b[0]
 		o[1] = a[1] != b[1]
@@ -957,23 +768,17 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.quat = define.struct({
-		x:exports.float32,
-		y:exports.float32,
-		z:exports.float32,
-		w:exports.float32
-	}, 'quat')
-	vecApi(exports.quat)
+	vecApi(quat)
 
-	exports.quat.identity = function(o){
-		if(!o) o = exports.quat()
+	quat.identity = function(o){
+		if(!o) o = quat()
 		o[0] = o[1] = o[2] = 0, o[3] = 1
 		return o
 	}
 
-	exports.quat.mul =
-	exports.quat.quat_mul_quat = function(a, b, o){
-		if(!o) o = exports.quat()
+	quat.mul =
+	quat.quat_mul_quat = function(a, b, o){
+		if(!o) o = quat()
 		var ax = a[0], ay = a[1], az = a[2], aw = a[3],
 			bx = b[0], by = b[1], bz = b[2], bw = b[3]
 		o[0] = ax * bw + aw * bx + ay * bz - az * by
@@ -983,8 +788,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.quat.rotateX = function(q, angle, o){
-		if(!o) o = exports.quat()
+	quat.rotateX = function(q, angle, o){
+		if(!o) o = quat()
 		angle *= 0.5
 		var ax = q[0], ay = q[1], az = q[2], aw = q[3],
 		    bx = sin(angle), bw = cos(angle)
@@ -997,8 +802,8 @@ define(function(require, exports){
 	}
 
 	// rotate quaternion Q with angle A around y axis
-	exports.quat.rotateY = function(q, angle, o){
-		if(!o) o = exports.quat()
+	quat.rotateY = function(q, angle, o){
+		if(!o) o = quat()
 		angle *= 0.5
 		var ax = q[0], ay = q[1], az = q[2], aw = q[3],
 			by = sin(angle), bw = cos(angle)
@@ -1011,8 +816,8 @@ define(function(require, exports){
 	}
 
 	// rotate quaternion Q with angle A around z axis
-	exports.quat.rotateZ = function(q, angle, o){
-		if(!o) o = exports.quat()
+	quat.rotateZ = function(q, angle, o){
+		if(!o) o = quat()
 		angle *= 0.5
 		var ax = q.x, ay = q.y, az = q.z, aw = q.w,
 			bz = sin(angle), bw = cos(angle)
@@ -1025,8 +830,8 @@ define(function(require, exports){
 	}
 
 	// Calculate w from xyz
-	exports.quat.calculateW = function(q, o){
-		if(!o) o = exports.quat()
+	quat.calculateW = function(q, o){
+		if(!o) o = quat()
 		o[0] = q[0]
 		o[1] = q[1]
 		o[2] = q[2]
@@ -1035,8 +840,8 @@ define(function(require, exports){
 	}
 
 	// spherelical linear interpolation between quat A and B with f (0-1)
-	exports.quat.slerp = function(a, b, f, o){
-		if(!o) o = exports.quat()
+	quat.slerp = function(a, b, f, o){
+		if(!o) o = quat()
 		var ax = a[0], ay = a[1], az = a[2], aw = a[3],
 			bx = b[0], by = b[1], bz = b[2], bw = b[3]
 
@@ -1070,8 +875,8 @@ define(function(require, exports){
 	}
 
 	// invert Q
-	exports.quat.invert = function(q, o){
-		if(!o) o = exports.quat()
+	quat.invert = function(q, o){
+		if(!o) o = quat()
 		var a0 = q[0], a1 = q[1], a2 = q[2], a3 = q[3],
 			d = a0*a0 + a1*a1 + a2*a2 + a3*a3,
 			i = d ? 1.0/d : 0
@@ -1080,14 +885,14 @@ define(function(require, exports){
 
 	// Calculates the conjugate of quat Q
 	// If the quaternion is normalized, this function is faster than quat.inverse and produces the same result.
-	exports.quat.conjugate = function(q, o){
-		if(!o) o = exports.quat()
+	quat.conjugate = function(q, o){
+		if(!o) o = quat()
 		o[0] = -q[0], o[1] = -q[1], o[2] = -q[2], o[3] = q[3]
 		return o
 	}
 
-	exports.quat.fromMat3 = function(m, o){
-		if(!o) o = exports.quat()
+	quat.fromMat3 = function(m, o){
+		if(!o) o = quat()
 		// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
 		// article "Quaternion Calculus and Fast Animation".
 		var t = m[0] + m[4] + m[8], r
@@ -1116,20 +921,17 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat2 = define.struct({
-		a:exports.float32, b:exports.float32, c:exports.float32, d:exports.float32
-	}, 'mat2')
-	matApi(exports.mat2)
+	matApi(mat2)
 
-	exports.mat2.identity = function(o){
-		if(!o) o = exports.mat2()
+	mat2.identity = function(o){
+		if(!o) o = mat2()
 		o[0] = 1, o[1] = 0
 		o[2] = 0, o[2] = 1
 	}
 
-	exports.mat2.mul =
-	exports.mat2.mat2_mul_mat2 = function(a, b, o){
-		if(!o) o = exports.mat2()
+	mat2.mul =
+	mat2.mat2_mul_mat2 = function(a, b, o){
+		if(!o) o = mat2()
 		var a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3]
 		var b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3]
 		o[0] = a0 * b0 + a2 * b1
@@ -1139,8 +941,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat2.rotate = function(a, angle, o){
-		if(!o) o = exports.mat2()
+	mat2.rotate = function(a, angle, o){
+		if(!o) o = mat2()
 		var a00 = a[0], a01 = a[1], 
 		    a10 = a[2], a11 = a[3],
 		    s = sin(angle), c = cos(angle)
@@ -1151,8 +953,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat2.scale = function(a, scale, o){
-		if(!o) o = exports.mat2()
+	mat2.scale = function(a, scale, o){
+		if(!o) o = mat2()
 		var s0 = s[0], s1 = s[1]
 		o[0] = a[0] * s0
 		o[1] = a[1] * s0
@@ -1161,8 +963,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat2.transpose = function(a, o){
-		if(!o) o = exports.mat2()
+	mat2.transpose = function(a, o){
+		if(!o) o = mat2()
 		var a01 = a[1]
 		o[1] = a[2]
 		o[2] = a01
@@ -1171,8 +973,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat2.outerProduct = function(c, r){
-		if(!o) o = exports.mat2()
+	mat2.outerProduct = function(c, r){
+		if(!o) o = mat2()
 		o[0] = c[0] * r[0]
 		o[1] = c[0] * r[1] 
 		o[2] = c[1] * r[0] 
@@ -1180,23 +982,18 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.mat3 = define.struct({
-		a:exports.float32, b:exports.float32, c:exports.float32, 
-		d:exports.float32, e:exports.float32, f:exports.float32,
-		g:exports.float32, h:exports.float32, i:exports.float32
-	}, 'mat3')
-	matApi(exports.mat3)
+	matApi(mat3)
 
-	exports.mat3.identity = function(o){
-		if(!o) o = exports.mat3()
+	mat3.identity = function(o){
+		if(!o) o = mat3()
 		o[0] = 1, o[1] = 0, o[2] = 0
 		o[3] = 0, o[4] = 1, o[5] = 0
 		o[6] = 0, o[7] = 0, o[8] = 1
 		return o
 	}
 
-	exports.mat3.transpose = function(a, o){
-		if(!o) o = exports.mat3()
+	mat3.transpose = function(a, o){
+		if(!o) o = mat3()
 		if (o === a) {
 			var a01 = a[1], a02 = a[2], a12 = a[5]
 			o[1] = a[3], o[2] = a[6], o[3] = a01
@@ -1209,8 +1006,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.invert = function(a, o){
-		if(!o) o = exports.mat3()
+	mat3.invert = function(a, o){
+		if(!o) o = mat3()
 		var a00 = a[0], a01 = a[1], a02 = a[2],
 			a10 = a[3], a11 = a[4], a12 = a[5],
 			a20 = a[6], a21 = a[7], a22 = a[8],
@@ -1235,8 +1032,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.adjoint = function(a, o){
-		if(!o) o = exports.mat3()
+	mat3.adjoint = function(a, o){
+		if(!o) o = mat3()
 		var a00 = a[0], a01 = a[1], a02 = a[2],
 			a10 = a[3], a11 = a[4], a12 = a[5],
 			a20 = a[6], a21 = a[7], a22 = a[8]
@@ -1253,15 +1050,15 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.determinant = function(a){
+	mat3.determinant = function(a){
 		return a[0] * (a[8] * a[4] - a[5] * a[7]) + 
 			a[1] * (-a[8] * a[3] + a[5] * a[6]) + 
 			a[2] * (a[7] * a[3] - a[4] * a[6])
 	}
 
-	exports.mat3.mul = 
-	exports.mat3.mat3_mul_mat3 = function(a, b, o){
-		if(!o) o = exports.mat3()
+	mat3.mul = 
+	mat3.mat3_mul_mat3 = function(a, b, o){
+		if(!o) o = mat3()
 		var a00 = a[0], a01 = a[1], a02 = a[2],
 			a10 = a[3], a11 = a[4], a12 = a[5],
 			a20 = a[6], a21 = a[7], a22 = a[8],
@@ -1284,8 +1081,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.translate = function(a, b, o){
-		if(!o) o = exports.mat3()
+	mat3.translate = function(a, b, o){
+		if(!o) o = mat3()
 		var a00 = a[0], a01 = a[1], a02 = a[2],
 			a10 = a[3], a11 = a[4], a12 = a[5],
 			a20 = a[6], a21 = a[7], a22 = a[8],
@@ -1299,8 +1096,8 @@ define(function(require, exports){
 		return o
 	}	
 
-	exports.mat3.rotate = function(a, angle, o){
-		if(!o) o = exports.mat3()
+	mat3.rotate = function(a, angle, o){
+		if(!o) o = mat3()
 
 		var a00 = a[0], a01 = a[1], a02 = a[2],
 			a10 = a[3], a11 = a[4], a12 = a[5],
@@ -1313,8 +1110,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.scale = function(a, v, o){
-		if(!o) o = exports.mat3()
+	mat3.scale = function(a, v, o){
+		if(!o) o = mat3()
 		var x = v[0], y = v[1]
 		o[0] = x * a[0], o[1] = x * a[1], o[2] = x * a[2]
 		o[3] = y * a[3], o[4] = y * a[4], o[5] = y * a[5]
@@ -1322,8 +1119,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.fromQuat = function(q, o){
-		if(!o) o = exports.mat3()
+	mat3.fromQuat = function(q, o){
+		if(!o) o = mat3()
 		var x = q[0], y = q[1], z = q[2], w = q[3],
 			x2 = x + x,  y2 = y + y,  z2 = z + z,
 			xx = x * x2, yx = y * x2, yy = y * y2,
@@ -1336,8 +1133,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat3.normalFromMat4 = function(a, o){
-		if(!o) o = exports.mat3()
+	mat3.normalFromMat4 = function(a, o){
+		if(!o) o = mat3()
 
 		var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
@@ -1367,25 +1164,18 @@ define(function(require, exports){
 		o[8] = (a30 * b04 - a31 * b02 + a33 * b00) * det
 		return o
 	}
-
 	
-	exports.mat3.outerProduct = function(c, r){
-		if(!o) o = exports.mat3()
+	mat3.outerProduct = function(c, r){
+		if(!o) o = mat3()
 		o[0] = c[0] * r[0], m01 = c[0] * r[1], m02 = c[0] * r[2] 
 		o[1] = c[1] * r[0], m11 = c[1] * r[1], m12 = c[1] * r[2]
 		o[2] = c[2] * r[0], m21 = c[2] * r[1], m22 = c[2] * r[2]
 		return o
 	}
 
-	exports.mat4 = define.struct({
-		a:exports.float32, b:exports.float32, c:exports.float32, d:exports.float32,
-		e:exports.float32, f:exports.float32, g:exports.float32, h:exports.float32,
-		i:exports.float32, j:exports.float32, k:exports.float32, l:exports.float32,
-		m:exports.float32, n:exports.float32, o:exports.float32, p:exports.float32
-	}, 'mat4')
-	matApi(exports.mat4)
+	matApi(mat4)
 
-	exports.mat4.debug = function(d, inline){
+	mat4.debug = function(d, inline){
 		var r = "";
 		for(var i =0 ;i<16;i+=4){
 			r += (Array(6).join(' ') + Math.round(d[i]*1000)/1000).slice(-6) + ", ";
@@ -1399,8 +1189,8 @@ define(function(require, exports){
 		if (inline) console.log(r);
 	}
 	
-	exports.mat4.identity = function(o){
-		if(!o) o = exports.mat4()
+	mat4.identity = function(o){
+		if(!o) o = mat4()
 		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = 0,
 		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = 0,
 		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= 0,
@@ -1408,8 +1198,8 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.mat4.normalFromMat4 = function(a, o){
-		if(!o) o = exports.mat4()
+	mat4.normalFromMat4 = function(a, o){
+		if(!o) o = mat4()
 
 		var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
@@ -1441,8 +1231,8 @@ define(function(require, exports){
 		return o
 	}
 	
-	exports.mat4.T2 = function(t, o){
-		if(!o) o = exports.mat4()
+	mat4.T2 = function(t, o){
+		if(!o) o = mat4()
 		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = t[0],
 		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = t[1],
 		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= t[2],
@@ -1450,8 +1240,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.T = function(tx, ty, tz, o){
-		if(!o) o = exports.mat4()
+	mat4.T = function(tx, ty, tz, o){
+		if(!o) o = mat4()
 		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = tx,
 		o[4] = 0, o[5] = 1, o[6] = 0, o[7] = ty,
 		o[8] = 0, o[9] = 0, o[10]= 1, o[11]= tz,
@@ -1459,8 +1249,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.S2 = function(s, o){
-		if(!o) o = exports.mat4()
+	mat4.S2 = function(s, o){
+		if(!o) o = mat4()
 		o[0] = s[0], o[1] = 0,   o[2] = 0,   o[3] = 0,
 		o[4] = 0,   o[5] = s[1], o[6] = 0,   o[7] = 0,
 		o[8] = 0,   o[9] = 0,   o[10]= s[2], o[11]= 0,
@@ -1468,8 +1258,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.S = function(sx, sy, sz, o){
-		if(!o) o = exports.mat4()
+	mat4.S = function(sx, sy, sz, o){
+		if(!o) o = mat4()
 		o[0] = sx,  o[1] = 0,   o[2] = 0,   o[3] = 0,
 		o[4] = 0,   o[5] = sy,  o[6] = 0,   o[7] = 0,
 		o[8] = 0,   o[9] = 0,   o[10]= sz,  o[11]= 0,
@@ -1477,8 +1267,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.ST2 = function(s, t, o){
-		if(!o) o = exports.mat4()
+	mat4.ST2 = function(s, t, o){
+		if(!o) o = mat4()
 		o[0] = s[0], o[1] = 0,    o[2] = 0,    o[3] = t[0],
 		o[4] = 0,    o[5] = s[1], o[6] = 0,    o[7] = t[1],
 		o[8] = 0,    o[9] = 0,    o[10]= s[2], o[11]= t[2],
@@ -1486,8 +1276,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.ST = function(sx, sy, sz, tx, ty, tz, o){
-		if(!o) o = exports.mat4()
+	mat4.ST = function(sx, sy, sz, tx, ty, tz, o){
+		if(!o) o = mat4()
 		o[0] = sx, o[1] = 0,   o[2] = 0,   o[3] = tx,
 		o[4] = 0,  o[5] = sy,  o[6] = 0,   o[7] = ty,
 		o[8] = 0,  o[9] = 0,   o[10]= sz,  o[11]= tz,
@@ -1495,8 +1285,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.TS2 = function(t, s, o){
-		if(!o) o = exports.mat4()
+	mat4.TS2 = function(t, s, o){
+		if(!o) o = mat4()
 		o[0] = s[0], o[1] = 0,    o[2] = 0,    o[3] = t[0]*s[0],
 		o[4] = 0,    o[5] = s[1], o[6] = 0,    o[7] = t[1]*s[1],
 		o[8] = 0,    o[9] = 0,    o[10]= s[2], o[11]= t[2]*s[2],
@@ -1504,8 +1294,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.TS = function(tx, ty, tz, sx, sy, sz, o){
-		if(!o) o = exports.mat4()
+	mat4.TS = function(tx, ty, tz, sx, sy, sz, o){
+		if(!o) o = mat4()
 		o[0] = sx,  o[1] = 0,   o[2] = 0,   o[3] = tx*sx,
 		o[4] = 0,   o[5] = sy,  o[6] = 0,   o[7] = ty*sy,
 		o[8] = 0,   o[9] = 0,   o[10]= sz,  o[11]= tz*sz,
@@ -1513,8 +1303,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.R2 = function(r, o){
-		if(!o) o = exports.mat4()
+	mat4.R2 = function(r, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(r[0]), cy = Math.cos(r[1]), cz = Math.cos(r[2])
 		var sx = Math.sin(r[0]), sy = Math.sin(r[1]), sz = Math.sin(r[2])
 		o[0] = cy * cz + sx * sy * sz,  o[1] = -sz*cy+cz*sx*sy,  o[2] = sy*cx,     o[3] = 0
@@ -1524,8 +1314,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.R = function(rz, rx, ry, o){
-		if(!o) o = exports.mat4()
+	mat4.R = function(rz, rx, ry, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(rx), cy = Math.cos(ry), cz = Math.cos(rz)
 		var sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
 		o[0] = cy * cz + sx * sy * sz,  o[1] = -sz*cy+cz*sx*sy,  o[2] = sy*cx,     o[3] = 0
@@ -1536,8 +1326,8 @@ define(function(require, exports){
 	}
 
 	
-	exports.mat4.RT2 = function(r, t, o){
-		if(!o) o = exports.mat4()
+	mat4.RT2 = function(r, t, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(r[0]), cy = Math.cos(r[1]), cz = Math.cos(r[2])
 		var sx = Math.sin(r[0]), sy = Math.sin(r[1]), sz = Math.sin(r[2])
 
@@ -1548,8 +1338,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.RT = function(rx, ry, rz, tx, ty, tz, o){
-		if(!o) o = exports.mat4()
+	mat4.RT = function(rx, ry, rz, tx, ty, tz, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(rx), cy = Math.cos(ry), cz = Math.cos(rz)
 		var sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
 		o[0] = cy * cz + sx * sy * sz,  o[1] = -sz*cy+cz*sx*sy,  o[2] = sy*cx,     o[3] = tx
@@ -1559,8 +1349,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.RT2 = function(r, t, o){
-		if(!o) o = exports.mat4()
+	mat4.RT2 = function(r, t, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(r[0]), cy = Math.cos(r[1]), cz = Math.cos(r[2])
 		var sx = Math.sin(r[0]), sy = Math.sin(r[1]), sz = Math.sin(r[2])
 
@@ -1570,8 +1360,8 @@ define(function(require, exports){
 		o[13] = 0,                       o[13] = 0,                o[14] = 0,         o[15] = 1
 	}
 
-	exports.mat4.TRT = function(t1x, t1y, t1z, rx, ry, rz, t2x, t2y, t2z, o){
-		if(!o) o = exports.mat4()
+	mat4.TRT = function(t1x, t1y, t1z, rx, ry, rz, t2x, t2y, t2z, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(rx), cy = Math.cos(ry), cz = Math.cos(rz)
 		var sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
 		o[0] = cy * cz + sx * sy * sz,  o[1] = -sz*cy+cz*sx*sy,  o[2] = sy*cx,     o[3] = t2x + o[0]*t1x + o[1]*t1y + o[2]*t1z
@@ -1581,8 +1371,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.TRT2 = function(t1, r, t2, o){
-		if(!o) o = exports.mat4()
+	mat4.TRT2 = function(t1, r, t2, o){
+		if(!o) o = mat4()
 		var rx = r[0], ry = r[1], rz = r[2]
 		var t1x = t1[0], t1y = t1[1], t1z = t[2]
 		var t2x = t2[0], t2y = t2[1], t2z = t[2]
@@ -1596,8 +1386,8 @@ define(function(require, exports){
 	}
 
 
-	exports.mat4.TSRT = function(t1x, t1y, t1z, mx, my, mz, rx, ry, rz, t2x, t2y, t2z, o){
-		if(!o) o = exports.mat4()
+	mat4.TSRT = function(t1x, t1y, t1z, mx, my, mz, rx, ry, rz, t2x, t2y, t2z, o){
+		if(!o) o = mat4()
 		var cx = Math.cos(rx), cy = Math.cos(ry), cz = Math.cos(rz)
 		var sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
 		o[0] = mx*(cy * cz + sx * sy * sz),  o[1] = my*(-sz*cy+cz*sx*sy),  o[2] = mz*(sy*cx),     o[3] = t2x + (o[0]*t1x + o[1]*t1y + o[2]*t1z)
@@ -1607,8 +1397,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.TSRT2 = function(t1, m, r, t2, o){
-		if(!o) o = exports.mat4()
+	mat4.TSRT2 = function(t1, m, r, t2, o){
+		if(!o) o = mat4()
 		var rx = r[0], ry = r[1], rz = r[2]
 		var mx = m[0], my = m[1], mz = m[2]
 		var t1x = t1[0], t1y = t1[1], t1z = t1[2]
@@ -1622,8 +1412,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.transpose = function(a, o){
-		if(!o) o = exports.mat4()
+	mat4.transpose = function(a, o){
+		if(!o) o = mat4()
 		if (a === o) {
 			var a01 = a[1], a02 = a[2], a03 = a[3], a12 = a[6], a13 = a[7], a23 = a[11]
 			o[1] = a[4], o[2] = a[8], o[3] = a[12],o[4] = a01
@@ -1640,8 +1430,8 @@ define(function(require, exports){
 	}
 
 	// Invert matrix a
-	exports.mat4.invert = function(a, o){
-		if(!o) o = exports.mat4()
+	mat4.invert = function(a, o){
+		if(!o) o = mat4()
 		var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
 			a20 = a[8], a21 = a[9], a22 = a[10],a23 = a[11],
@@ -1656,7 +1446,7 @@ define(function(require, exports){
 
 			d = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-		if (!d) return exports.mat4.identity() 
+		if (!d) return mat4.identity() 
 		d = 1.0 / d
 
 		o[0]  = (a11 * b11 - a12 * b10 + a13 * b09) * d
@@ -1678,8 +1468,8 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.adjoint = function(a, o) {
-		if(!o) o = exports.mat4()
+	mat4.adjoint = function(a, o) {
+		if(!o) o = mat4()
 		var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
 			a20 = a[8], a21 = a[9], a22 = a[10],a23 = a[11],
@@ -1705,9 +1495,9 @@ define(function(require, exports){
 	}
 
 	// multiply matrix a with vector or matrix V
-	exports.mat4.mul = 
-	exports.mat4.mat4_mul_mat4 = function(a, b, o){
-		if(!o) o = exports.mat4()
+	mat4.mul = 
+	mat4.mat4_mul_mat4 = function(a, b, o){
+		if(!o) o = mat4()
 		var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
 			a20 = a[8], a21 = a[9], a22 = a[10],a23 = a[11],
@@ -1740,7 +1530,7 @@ define(function(require, exports){
 	}
 
 	// compute determinant of matrix a
-	exports.mat4.determinant = function(a){
+	mat4.determinant = function(a){
 		var b00 = a[0] * a[5] - a[1] * a[4], b01 = a[0] * a[6] - a[2] * a[4],
 			b02 = a[0] * a[7] - a[3] * a[4], b03 = a[1] * a[6] - a[2] * a[5],
 			b04 = a[1] * a[7] - a[3] * a[5], b05 = a[2] * a[7] - a[3] * a[6],
@@ -1753,8 +1543,8 @@ define(function(require, exports){
 	}
 
 	// translate matrix a with vector V
-	exports.mat4.translate = function(a, v, o){
-		if(!o) o = exports.mat4()
+	mat4.translate = function(a, v, o){
+		if(!o) o = mat4()
 		var x = v[0], y = v[1], z = v[2],
 			a00, a01, a02, a03,
 			a10, a11, a12, a13,
@@ -1783,10 +1573,10 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.scalematrix = function(v, o)
+	mat4.scalematrix = function(v, o)
 	{
 		if(!o) {
-			o = exports.mat4.identity()
+			o = mat4.identity()
 		}
 		else{
 			for (var i =0 ;i<16;i++) o[i] = 0;
@@ -1799,10 +1589,10 @@ define(function(require, exports){
 		
 	}
 	
-	exports.mat4.translatematrix = function(v, o)
+	mat4.translatematrix = function(v, o)
 	{
 		if(!o) {
-			o = exports.mat4.identity()
+			o = mat4.identity()
 		}
 		else{
 			for (var i =0 ;i<16;i++) o[i] = 0;
@@ -1817,8 +1607,8 @@ define(function(require, exports){
 
 
 	// scale matrix a with vector V
-	exports.mat4.scale = function(a, v, o){
-		if(!o) o = exports.mat4()
+	mat4.scale = function(a, v, o){
+		if(!o) o = mat4()
 		var x = v[0], y = v[1], z = v[2]
 
 		o[0] = a[0] * x, o[1] = a[1] * x, o[2] = a[2] * x, o[3] = a[3] * x
@@ -1829,8 +1619,8 @@ define(function(require, exports){
 	}
 
 	// rotate matrix a by angle A in radians around axis v
-	exports.mat4.rotate = function(a, angle, v, o){
-		if(!o) o = exports.mat4()
+	mat4.rotate = function(a, angle, v, o){
+		if(!o) o = mat4()
 		var x = v[0], y = v[1], z = v[2],
 			len = Math.sqrt(x * x + y * y + z * z),
 			s = Math.sin(angle), 
@@ -1875,8 +1665,8 @@ define(function(require, exports){
 	}
 
 	// Rotate matrix a by angle A around x-axis
-	exports.mat4.rotateX = function(a, angle, o){
-		if(!o) o = exports.mat4()
+	mat4.rotateX = function(a, angle, o){
+		if(!o) o = mat4()
 		var s = Math.sin(angle), c = Math.cos(angle),
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7],
 			a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11]
@@ -1895,8 +1685,8 @@ define(function(require, exports){
 	}
 
 	// rotate matrix a with angle R around y-axis
-	exports.mat4.rotateY = function(a, angle, o){
-		if(!o) o = exports.mat4()
+	mat4.rotateY = function(a, angle, o){
+		if(!o) o = mat4()
 		var s = Math.sin(angle), c = Math.cos(angle),
 			a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11]
@@ -1915,8 +1705,8 @@ define(function(require, exports){
 	}
 
 	// rotate matrix a with angle R around z-axis
-	exports.mat4.rotateZ = function(a, angle, o){
-		if(!o) o = exports.mat4()
+	mat4.rotateZ = function(a, angle, o){
+		if(!o) o = mat4()
 		var s = Math.sin(angle), c = Math.cos(angle),
 			a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7]
@@ -1934,8 +1724,8 @@ define(function(require, exports){
 	}
 
 	// Create matrix from quaternion Q and translation V
-	exports.mat4.fromQuatTrans = function(q, v, o){
-		if(!o) o = exports.mat4()
+	mat4.fromQuatTrans = function(q, v, o){
+		if(!o) o = mat4()
 		// Quaternion math
 		var x = q[0], y = q[1], z = q[2], w = q[3],
 			x2 = x + x,  y2 = y + y,  z2 = z + z,
@@ -1951,8 +1741,8 @@ define(function(require, exports){
 	}
 
 	// Create matrix from quaternion Q
-	exports.mat4.fromQuat = function(q, o){
-		if(!o) o = exports.mat4()
+	mat4.fromQuat = function(q, o){
+		if(!o) o = mat4()
 		var x = q[0], y = q[1], z = q[2], w = q[3],
 			x2 = x + x,  y2 = y + y,  z2 = z + z,
 			xx = x * x2, yx = y * x2, yy = y * y2,
@@ -1967,8 +1757,8 @@ define(function(require, exports){
 	}
 	
 	// Create matrix from left/right/bottom/top/near/far
-	exports.mat4.fustrum = function(L, R, T, B, N, F, o){
-		if(!o) o = exports.mat4()
+	mat4.fustrum = function(L, R, T, B, N, F, o){
+		if(!o) o = mat4()
 		var rl = 1 / (R - L), tb = 1 / (T - B), nf = 1 / (N - F)
 		o[0] = (N * 2) * rl, o[1] = 0,            o[2] = 0,                o[3] = 0
 		o[4] = 0,            o[5] = (N * 2) * tb, o[6] = 0,                o[7] = 0
@@ -1978,8 +1768,8 @@ define(function(require, exports){
 	}
 
 	// Create perspective matrix FovY, Aspect, Near, Far
-	exports.mat4.perspective = function(FY, A, N, F, o){
-		if(!o) o = exports.mat4()
+	mat4.perspective = function(FY, A, N, F, o){
+		if(!o) o = mat4()
 		var f = 1.0 / Math.tan(FY / 2), nf = 1 / (N - F)
 		
 		o[0] = f / A, o[4] = 0,  o[8] = 0,                 o[12] = 0
@@ -1990,8 +1780,8 @@ define(function(require, exports){
 	}
  
 	// Create orthogonal proj matrix with Left/Right/Bottom/Top/Near/Far
-	exports.mat4.ortho = function(L, R, T, B, N, F, o){
-		if(!o) o = exports.mat4()
+	mat4.ortho = function(L, R, T, B, N, F, o){
+		if(!o) o = mat4()
 		var lr = 1 / (L - R), bt = 1 / (B - T), nf = 1 / (N - F)
 		o[0] = -2 * lr,      o[4] = 0,            o[8] = 0,            o[12] = 0 
 		o[1] = 0,            o[5] = -2 * bt,      o[9] = 0,            o[13] = 0 
@@ -2001,8 +1791,8 @@ define(function(require, exports){
 	}
 
 	// Create look at matrix with Eye, LookAt, and Up vectors 
-	exports.mat4.lookAt = function(eye, look, up, o){
-		if(!o) o = exports.mat4()
+	mat4.lookAt = function(eye, look, up, o){
+		if(!o) o = mat4()
 		var x0, x1, x2, y0, y1, y2, z0, z1, z2, len,
 			ex = eye[0], ux = up[0], lx = look[0], 
 			ey = eye[1], uy = up[1], ly = look[1],
@@ -2011,7 +1801,7 @@ define(function(require, exports){
 		if (Math.abs(ex - lx) < 0.000001 &&
 			Math.abs(ey - ly) < 0.000001 &&
 			Math.abs(ez - lz) < 0.000001) {
-			return exports.mat4.identity(o)
+			return mat4.identity(o)
 		}
 
 		z0 = ex - lx, z1 = ey - ly, z2 = ez - lz
@@ -2042,65 +1832,46 @@ define(function(require, exports){
 		return o
 	}
 
-	exports.mat4.outerProduct = function(c, r, o){
-		if(!o) o = exports.mat4()
+	mat4.outerProduct = function(c, r, o){
+		if(!o) o = mat4()
 		o[0] = c[0] * r[0], o[1] = c[0] * r[1], o[2] = c[0] * r[2], o[3] = c[0] * r[3] 
 		o[4] = c[1] * r[0], o[5] = c[1] * r[1], o[6] = c[1] * r[2], o[7] = c[1] * r[3]
 		o[8] = c[2] * r[0], o[9] = c[2] * r[1], o[10] = c[2] * r[2], o[11] = c[2] * r[3]
 		o[12] = c[3] * r[0], o[13] = c[3] * r[1], o[14] = c[3] * r[2], o[15] = c[3] * r[3] 
 		return o
 	}
-	/*
-	exports.rect = define.struct({
-		left:exports.float32, 
-		top:exports.float32,
-		right:exports.float32,
-		bottom:exports.float32
-	}, 'rect')
-	
-	exports.rect.identity = function(o){
-		if(!o) o = exports.rect()
-		o[0] = 0;
-		o[1] = 0;
-		o[2] = 0;
-		o[3] = 0;
-	}
-	
-	exports.rect.intersects = function(a,b){
-		return (a[0]<= b[2] && b[0] <= a[2] && a[1] <= b[3] && b[1] <= a[3]);
-	}*/
-	
-	var ease = exports.ease = {}
 
-	exports.ease.linear = function(t){ return t }
-	exports.ease.inquad = function(t){ return t*t }
-	exports.ease.outquad = function(t){ return -t*(t-2.) }
-	exports.ease.inoutquad = function(t){ return (t/=0.5) < 1. ? 0.5*t*t : -0.5 * ((--t)*(t-2.) - 1.) }
-	exports.ease.incubic = function(t){ return t*t*t }
-	exports.ease.outcubic = function(t){ return ((t=t-1)*t*t + 1) }
-	exports.ease.inoutcubic = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t : 1. /2.*((t-=2.)*t*t + 2.) }
-	exports.ease.inquart = function(t){ return t*t*t*t }
-	exports.ease.outquart = function(t){ return -((t=t-1.)*t*t*t - 1.) }
-	exports.ease.inoutquart = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t : -0.5 * ((t-=2.)*t*t*t - 2.) }
-	exports.ease.inquint = function(t){ return t*t*t*t*t }
-	exports.ease.outquint = function(t){ return ((t=t-1.)*t*t*t*t + 1.) }
-	exports.ease.inoutquint = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t*t : 0.5*((t-=2.)*t*t*t*t + 2.) }	
-	exports.ease.insine = function(t){ return -cos(t * (PI/2.)) + 1. }
-	exports.ease.outsine = function(t){ return sin(t * (PI/2.)) }
-	exports.ease.inoutsine = function(t){ return -0.5 * (cos(PI*t) - 1.) }
-	exports.ease.inexpo = function(t){ return (t==0.)? 0.: pow(2., 10. * (t - 1.)) }
-	exports.ease.outexpo = function(t){ return (t==1.)? 1.: (-pow(2., -10. * t) + 1.) }
-	exports.ease.incirc = function(t){ return - (sqrt(1. - t*t) - 1.) }
-	exports.ease.outcirc = function(t){ return sqrt(1. - (t=t-1.)*t) }
-	exports.ease.inoutcirc = function(t){ return (t/=0.5) < 1.? -0.5 * (sqrt(1. - t*t) - 1.): 0.5 * (sqrt(1. - (t-=2.)*t) + 1.) }
-	exports.ease.inoutexpo = function(t){
+	var ease = {}
+	// easing functions on float
+	ease.linear = function(t){ return t }
+	ease.inquad = function(t){ return t*t }
+	ease.outquad = function(t){ return -t*(t-2.) }
+	ease.inoutquad = function(t){ return (t/=0.5) < 1. ? 0.5*t*t : -0.5 * ((--t)*(t-2.) - 1.) }
+	ease.incubic = function(t){ return t*t*t }
+	ease.outcubic = function(t){ return ((t=t-1)*t*t + 1) }
+	ease.inoutcubic = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t : 1. /2.*((t-=2.)*t*t + 2.) }
+	ease.inquart = function(t){ return t*t*t*t }
+	ease.outquart = function(t){ return -((t=t-1.)*t*t*t - 1.) }
+	ease.inoutquart = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t : -0.5 * ((t-=2.)*t*t*t - 2.) }
+	ease.inquint = function(t){ return t*t*t*t*t }
+	ease.outquint = function(t){ return ((t=t-1.)*t*t*t*t + 1.) }
+	ease.inoutquint = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t*t : 0.5*((t-=2.)*t*t*t*t + 2.) }	
+	ease.insine = function(t){ return -cos(t * (PI/2.)) + 1. }
+	ease.outsine = function(t){ return sin(t * (PI/2.)) }
+	ease.inoutsine = function(t){ return -0.5 * (cos(PI*t) - 1.) }
+	ease.inexpo = function(t){ return (t==0.)? 0.: pow(2., 10. * (t - 1.)) }
+	ease.outexpo = function(t){ return (t==1.)? 1.: (-pow(2., -10. * t) + 1.) }
+	ease.incirc = function(t){ return - (sqrt(1. - t*t) - 1.) }
+	ease.outcirc = function(t){ return sqrt(1. - (t=t-1.)*t) }
+	ease.inoutcirc = function(t){ return (t/=0.5) < 1.? -0.5 * (sqrt(1. - t*t) - 1.): 0.5 * (sqrt(1. - (t-=2.)*t) + 1.) }
+	ease.inoutexpo = function(t){
 		if (t==0.) return 0.
 		if (t==1.) return 1.
 		if ((t/=0.5) < 1.) return 0.5 * pow(2., 10. * (t - 1.)) 
 		return 0.5 * (-pow(2., -10. * --t) + 2.) 
 	}
 
-	exports.ease.inelastic = function(t){
+	ease.inelastic = function(t){
 		var s=1.70158, p=0., a=1.;
 		if (t==0.) return 0.
 		if (t==1.) return 1.
@@ -2110,7 +1881,7 @@ define(function(require, exports){
 		return -(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p )) 
 	}
 
-	exports.ease.outelastic = function(t){
+	ease.outelastic = function(t){
 		var s=1.70158, p=0., a=1.
 		if (t==0.) return 0.
 		if (t==1.) return 1.
@@ -2120,7 +1891,7 @@ define(function(require, exports){
 		return a*pow(2.,-10.*t) * sin( (t*1.-s)*(2.*PI)/p ) + 1. 
 	}
 
-	exports.ease.inoutelastic = function(t){
+	ease.inoutelastic = function(t){
 		var s=1.70158, p=0., a=1.
 		if (t==0.) return 0.
 		if ((t/=0.5)==2.) return 1.
@@ -2131,42 +1902,42 @@ define(function(require, exports){
 		return a*pow(2.,-10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p )*0.5 + 1.
 	}
 
-	exports.ease.inback = function(t){ var s = 1.70158; return (t/=1.)*t*((s+1.)*t - s) }
-	exports.ease.outback = function(t){ var s = 1.70158; return ((t=t/1-1)*t*((s+1)*t + s) + 1) }
-	exports.ease.inoutback = function(t){
+	ease.inback = function(t){ var s = 1.70158; return (t/=1.)*t*((s+1.)*t - s) }
+	ease.outback = function(t){ var s = 1.70158; return ((t=t/1-1)*t*((s+1)*t + s) + 1) }
+	ease.inoutback = function(t){
 		var s = 1.70158
 		if ((t/=0.5) < 1.) return 0.5*(t*t*(((s*=(1.525))+1.)*t - s)) 
 		return 0.5*((t-=2.)*t*(((s*=(1.525))+1.)*t + s) + 2.) 
 	}
 
-	exports.ease.inbounce = function(t){
-		return 1. - exports.ease.outbounce(1.-t) 
+	ease.inbounce = function(t){
+		return 1. - ease.outbounce(1.-t) 
 	}
 
-	exports.ease.outbounce = function(t){
+	ease.outbounce = function(t){
 		if (t < (1./2.75)) return (7.5625*t*t) 
 		else if (t < (2./2.75)) return (7.5625*(t-=(1.5/2.75))*t + 0.75) 
 		else if (t < (2.5/2.75)) return (7.5625*(t-=(2.25/2.75))*t + 0.9375) 
 		return (7.5625*(t-=(2.625/2.75))*t + .984375) 
 	}
 
-	exports.ease.inoutbounce = function(t){
+	ease.inoutbounce = function(t){
 		if (t < 0.5) return ease.inbounce (t*2.) * 0.5 
 		return ease.outbounce (t*2.-1.) * 0.5 + 0.5 
 	}
 
-	exports.ease.quad = function(t){ return ease.outquad(t)}
-	exports.ease.cubic = function(t){ return ease.inoutcubic(t) }
-	exports.ease.quart = function(t){ return ease.outquart(t) }
-	exports.ease.quint = function(t){ return ease.outquint(t) }
-	exports.ease.sine = function(t){ return ease.outsine(t) }
-	exports.ease.expo = function(t){ return ease.outexpo(t) }
-	exports.ease.elastic = function(t){return ease.outelastic(t) }
-	exports.ease.circ = function(t){ return ease.outcirc(t) }
-	exports.ease.back = function(t){ return ease.inoutback(t) }
-	exports.ease.bounce = function(t){ return ease.outbounce(t) }
+	ease.quad = function(t){ return ease.outquad(t)}
+	ease.cubic = function(t){ return ease.inoutcubic(t) }
+	ease.quart = function(t){ return ease.outquart(t) }
+	ease.quint = function(t){ return ease.outquint(t) }
+	ease.sine = function(t){ return ease.outsine(t) }
+	ease.expo = function(t){ return ease.outexpo(t) }
+	ease.elastic = function(t){return ease.outelastic(t) }
+	ease.circ = function(t){ return ease.outcirc(t) }
+	ease.back = function(t){ return ease.inoutback(t) }
+	ease.bounce = function(t){ return ease.outbounce(t) }
 
-	exports.ease.bezier = function(control){
+	ease.bezier = function(control){
 		var b = {}
 		b.epsilon = 1.0/(200.0*time)
 		b.points = control
@@ -2221,7 +1992,7 @@ define(function(require, exports){
 		}
 	}
 
-	exports.ease.bret = function(control){ // get the curve
+	ease.bret = function(control){ // get the curve
 		// pick a d that seems to make sense
 		//return t
 		var di = 0.01
@@ -2252,143 +2023,6 @@ define(function(require, exports){
 		}
 	}
 
-	// make a more flexible lut
-	for(var key in exports.ease){
-		exports.ease[key.toLowerCase()] = exports.ease[key]
-	}
+	float.ease = ease
 
-	// store the types on define
-	define.typeToString = function(type){
-		if(type === String) return 'String'
-		if(type === Object) return 'Object'
-		return type.id
-	}
-
-	define.stringToType = function(str){
-		if(str === 'String') return String
-		if(str === 'Object') return Object
-		return define.typemap.types[str]
-	}
-
-	define.typemap = {
-		types:{
-			int:exports.int,
-			int32:exports.int32,
-			uint32:exports.uint32,
-			float:exports.float,
-			float32:exports.float32,
-			float64:exports.float64,
-			vec2:exports.vec2,
-			vec3:exports.vec3,
-			vec4:exports.vec4,
-			ivec2:exports.ivec2,
-			ivec3:exports.ivec3,
-			ivec4:exports.ivec4,
-			bvec2:exports.bvec2,
-			bvec3:exports.bvec3,
-			bvec4:exports.bvec4,
-			mat2:exports.mat2,
-			mat3:exports.mat3,
-			mat4:exports.mat4
-		},
-		swizzle:{
-			bool:{2:exports.bvec2, 3:exports.bvec3, 4:exports.bvec4},
-			int32:{2:exports.ivec2, 3:exports.ivec3, 4:exports.ivec4},
-			float32:{2:exports.vec2, 3:exports.vec3, 4:exports.vec4},
-		}
-	}
-
-	function defineComponent(proto, name, index){
-		Object.defineProperty(proto, name, {get:function(){ return this[index] },set:function(v){ 
-			this[index] = v 
-			if(this.atChange) this.atChange(index)
-		}})
-	}
-
-	function defineSwiz2(proto, name, i0, i1, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1]) },set:function(v){ 
-			this[i0] = v[0], this[i1] = v[1] 
-			if(this.atChange) this.atChange(-1)
-		}})
-	}
-
-	function defineSwiz3(proto, name, i0, i1, i2, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2]) },set:function(v){ 
-			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2] 
-			if(this.atChange) this.atChange(-1)
-		}})
-	}
-
-	function defineSwiz4(proto, name, i0, i1, i2, i3, vec){
-		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2], this[i3]) },set:function(v){ 
-			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2], this[i3] = v[3] 
-			if(this.atChange) this.atChange(-1)
-		}})
-	}
-
-	function defineArrayProp(proto, propset, vectypes){
-		for(var prop in propset){
-			defineComponent(proto, prop, propset[prop])
-		}
-		// create swizzles
-		for(var key1 in propset) for(var key2 in propset){
-			defineSwiz2(proto, key1+key2, propset[key1], propset[key2], vectypes[0])
-		}
-		for(var key1 in propset) for(var key2 in propset) for(var key3 in propset){
-			defineSwiz3(proto, key1+key2+key3, propset[key1], propset[key2], propset[key3], vectypes[1])
-		}
-		for(var key1 in propset) for(var key2 in propset) for(var key3 in propset) for(var key4 in propset){
-			defineSwiz4(proto, key1+key2+key3+key4, propset[key1], propset[key2], propset[key3], propset[key4], vectypes[2])
-		}
-	}
-
-	defineArrayProp(Float32Array.prototype, {x:0, y:1, z:2, w:3}, [exports.vec2, exports.vec3, exports.vec4])
-	//defineArrayProp(Float32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.vec2, exports.vec3, exports.vec4])
-	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
-	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
-
-	exports.Enum = function Enum(){
-		var values = Array.prototype.slice.call(arguments)
-		for(var i = 0; i < values.length; i++) values[i] = values[i].toLowerCase()
-		function Enum(value){
-			if(typeof value !== 'string'){
-				console.error('Enum not string' + value, types.join('|'))
-				return types[0]
-			}
-			value = value.toLowerCase()
-			if(values.indexOf(value) === -1){
-				console.error('Invalid enum value: "' + value + '" ' + types.join('|'))
-				return types[0]
-			}
-
-			return value
-		}
-		Enum.values = values
-		return Enum
-	}
-
-	// events are passthrough types
-	exports.Event = function Event(arg){
-		return arg
-	}
-
-	// mark is a class that holds a mark and a value, use it to mark values going into a setter
-	exports.Mark = function Mark(value, mark){
-		var obj = this
-		if(!(obj instanceof Mark)){
-			obj = Object.create(Mark.prototype)
-			Object.defineProperty(obj, 'constructor', {value:Mark})
-		}
-		obj.value = value
-		obj.mark = arguments.length>1? mark: true
-		return obj
-	}
-
-	// parsing a wired function as string
-	exports.wire = function wire(string){
-		src = "return " + string
-		var fn = new Function(src)
-		fn.is_wired = true
-		return fn
-	}
 })

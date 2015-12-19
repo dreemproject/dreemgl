@@ -35,7 +35,28 @@ define.class(function(require, $ui$view) {
 		this.keyboard = this.device.keyboard
 		this.mouse = this.device.mouse 
 		this.touch = this.device.touch
+		this.midi = this.device.midi
 		this.bindInputs()
+	}
+	
+	this.defaultKeyboardHandler = function(target, v){
+		if(!v.name) return console.log("OH NOES",v)		
+		var keyboard = this.screen.keyboard
+		keyboard.textarea.focus()
+		var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
+		this.undo_group++
+
+		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
+		if(keyboard.ctrl) name += 'Ctrl'
+		if(keyboard.alt) name += 'Alt'
+		if(keyboard.shift) name += 'Shift'
+				
+		if(target[name]) {
+			target[name](v)
+		}
+		else{
+			if (target.keydownHandler) target.keydownHandler(name);
+		}
 	}
 
 	this.remapmatrix = mat4();
@@ -66,6 +87,15 @@ define.class(function(require, $ui$view) {
 		return vec3(out);
 	}
 
+	this.globalMouse = function(node){
+		var sx = this.device.main_frame.size[0]  / this.device.ratio
+		var sy = this.device.main_frame.size[1]  / this.device.ratio
+		var mx = this.mouse._x/(sx/2) - 1.0
+		var my = -1 * (this.mouse._y/(sy/2) - 1.0)
+
+		return vec2(this.mouse._x, this.mouse._y);
+	}
+	
 	// internal: remap the mouse to a view node	
 	this.remapMouse = function(node){
 
@@ -234,6 +264,10 @@ define.class(function(require, $ui$view) {
 		}.bind(this))
 	}
 
+	
+	this.releaseCapture = function(){
+		this.mouse_capture = undefined;
+	}
 	// bind all keyboard/mouse/touch inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){
@@ -268,21 +302,20 @@ define.class(function(require, $ui$view) {
 				return this.debugPick()
 			} else this.last_debug_view = undefined
 
-
 			// ok so. lets query the renderer for the view thats under the mouse
 			if(!this.mouse_capture){
 				this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 					if(this.mouse_view !== view){
-						if(this.mouse_view) this.mouse_view.emit('mouseout', {local:this.remapMouse(this.mouse_view)})
+						if(this.mouse_view) this.mouse_view.emitUpward('mouseout', {local:this.remapMouse(this.mouse_view)})
 						this.mouse_view = view
-						if(view) this.mouse_view.emit('mouseover', {local:this.remapMouse(this.mouse_view)})
+						if(view) this.mouse_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 					}
-					if(view) view.emit('mousemove', {local:this.remapMouse(view)})
+					if(view) view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
 
 				}.bind(this))
 			}
 			else{
-				this.mouse_capture.emit('mousemove', {local:this.remapMouse(this.mouse_capture)})
+				this.mouse_capture.emitUpward('mousemove', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 			}
 		}.bind(this)
 
@@ -295,11 +328,11 @@ define.class(function(require, $ui$view) {
 			if (this.mouse_view){
 				if(this.inModalChain(this.mouse_view)){
 					this.setFocus(this.mouse_view)
-					this.mouse_view.emit('mouseleftdown', {local:this.remapMouse(this.mouse_view)})
+					this.mouse_view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 				else if(this.modal){
 					this.modal_miss = true
-					this.modal.emit('miss', {local:this.remapMouse(this.mouse_view)})
+					this.modal.emitUpward('miss', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 			} 
 		}.bind(this)
@@ -308,38 +341,38 @@ define.class(function(require, $ui$view) {
 			// make sure we send the right mouse out/overs when losing capture
 			this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 				if(this.mouse_capture){
-					this.mouse_capture.emit('mouseleftup', {local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
+					this.mouse_capture.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
 				}
 				if(this.mouse_capture !== view){
-					if(this.mouse_capture) this.mouse_capture.emit('mouseout', {local:this.remapMouse(this.mouse_capture)})
+					if(this.mouse_capture) this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 					if(view){
 						var pos = this.remapMouse(view)
-						view.emit('mouseover', {local:pos})
-						view.emit('mousemove', {local:pos})
+						view.emitUpward('mouseover', {local:pos})
+						view.emitUpward('mousemove', {local:pos})
 					}
 				}
-				else if(this.mouse_capture) this.mouse_capture.emit('mouseover', {local:this.remapMouse(this.mouse_capture)})
+				else if(this.mouse_capture) this.mouse_capture.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 				this.mouse_view = view
 				this.mouse_capture = false
 			}.bind(this))
 		}.bind(this)
 
 		this.mouse.wheelx = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, local:this.remapMouse(this.mouse_capture)})
-			else if(this.inModalChain(this.mouse_view)) this.mouse_view.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, local:this.remapMouse(this.mouse_view)})
+			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheelx', {wheel:this.mouse.wheelx,global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
+			else if(this.inModalChain(this.mouse_view)) this.mouse_view.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 		}.bind(this)
 
 		this.mouse.wheely = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheely', {wheel:this.mouse.wheely, local:this.remapMouse(this.mouse_capture)})
+			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheely', {wheel:this.mouse.wheely,global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
 			else if(this.mouse_view && this.inModalChain(this.mouse_view) ){
-				this.mouse_view.emitUpward('mousewheely', {wheel:this.mouse.wheely, local:this.remapMouse(this.mouse_view)})
+				this.mouse_view.emitUpward('mousewheely', {wheel:this.mouse.wheely, global:this.globalMouse(this), local:this.remapMouse(this.mouse_view)})
 			}
 		}.bind(this)
 
 		this.mouse.zoom = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousezoom', {zoom:this.mouse.zoom, local:this.remapMouse(this.mouse_capture)})
+			if (this.mouse_capture) this.mouse_capture.emitUpward('mousezoom', {zoom:this.mouse.zoom, global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
 			else if(this.mouse_view && this.inModalChain(this.mouse_view)){
-				this.mouse_view.emitUpward('mousezoom', {zoom:this.mouse.zoom, local:this.remapMouse(this.mouse_view)})
+				this.mouse_view.emitUpward('mousezoom', {zoom:this.mouse.zoom, global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 			}
 		}.bind(this)
 
@@ -382,8 +415,8 @@ define.class(function(require, $ui$view) {
 		if(this.focus_view !== view){
 			var old = this.focus_view
 			this.focus_view = view
-			if(old) old.emit('focuslost')
-			view.emit('focusget')
+			if(old) old.focus = false
+			view.focus = true
 		}
 	}
 
@@ -397,7 +430,7 @@ define.class(function(require, $ui$view) {
 				if(view === find){
 					found = true
 				}
-				else if(view.tabstop && found){
+				else if(!isNaN(view.tabstop) && found){
 					screen.setFocus(view)
 					return true
 				}
@@ -423,7 +456,7 @@ define.class(function(require, $ui$view) {
 						return true
 					}
 				}
-				else if(view.tabstop){
+				else if(!isNaN(view.tabstop)){
 					last = view
 				}
 				if(findprev(view, find)) return true
@@ -506,9 +539,8 @@ define.class(function(require, $ui$view) {
 		var first = obj['_' + key]
 
 		var anim = new Animate(config, obj, key, track, first, value)
-
 		anim.promise = promise
-		var animkey = obj.pickguid + '_' + key
+		var animkey = obj.getViewGuid() + '_' + key
 		this.anims[animkey] = anim
 		obj.redraw()
 		return true
@@ -517,7 +549,7 @@ define.class(function(require, $ui$view) {
 
 	// internal, stop an animation, delegated from view
 	this.stopAnimationRoot = function(obj, key){
-		var animkey = obj.pickguid + '_' + key
+		var animkey = obj.getViewGuid() + '_' + key
 		var anim = this.anims[animkey]
 		if(anim){
 			delete this.anims[animkey]			
@@ -538,7 +570,6 @@ define.class(function(require, $ui$view) {
 			if(anim.start_time === undefined) anim.start_time = time
 			var mytime = time - anim.start_time
 			var value = anim.compute(mytime)
-
 			if(value instanceof anim.End){
 				delete this.anims[key] 
 				//console.log(value.last_value)

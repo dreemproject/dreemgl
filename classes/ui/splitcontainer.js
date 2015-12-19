@@ -10,27 +10,27 @@ define.class(function($ui$, view, label){
 	// should the splitter bars be introduced horizontally or vertically? 
 	this.attributes = {
 		// wether the splitcontainer is vertical or not
-		vertical: {type: Boolean, value: true},
+		direction: {type: Enum("horizontal", "vertical"), value:"vertical"},
 		// set the width (or height) of the splitter bar
-		splitsize: {type: float, value: 8},
+		splitsize: {type: float, value: 6},
 		// the minimum size of a child controlled by the splitter
 		minimalchildsize: {type: float, value: 20},
 		// the color of the splitter bar
-		splittercolor: {type: vec4, value: vec4("#404050")},
+		splittercolor: {type: vec4, value: vec4("#484848")},
 		// color of splitter bar on hover
-		hovercolor: {type: vec4, value: vec4("#5050a0")},
+		hovercolor: {type: vec4, value: vec4("#707070")},
 		// color of the splitter bar when dragging it
 		activecolor: {type: vec4, value: vec4("#7070a0")}
 	}
-
+	this.bg = 0;
 	this.flex = 1.0
-	this.flexdirection = this.vertical?"column":"row"
+	this.flexdirection = "row";
 	this.position = "relative" 
 	this.borderwidth = 0
 	this.bordercolor = vec4("#303060")
 	
-	this.vertical = function(){
-		this.flexdirection = this.vertical?"column":"row" ;
+	this.direction = function(){
+		this.flexdirection = this.direction=="horizontal"?"column":"row" ;
 	}
 	
 	// the visual class that defines the draggable bar between the resizable children
@@ -40,23 +40,25 @@ define.class(function($ui$, view, label){
 			firstnode: {type: int, value: 0}
 		}
 	
-		this.bgcolor = vec4("gray");
+		this.bgcolor = vec4("#3b3b3b");
 		this.alignitem = "stretch";
 		this.attributes = {
 			vertical: {type: Boolean, value: false},
-			splitsize: {type: float, value: 10},
+			splitsize: {type: float, value: 6},
 			splittercolor: {type: vec4, value: vec4("#404050")},
-			hovercolor: {type: vec4, value: vec4("#5050a0")},
+			hovercolor: {type: vec4, value: vec4("#f050a0")},
+			bgcolor:{duration:0.1, motion:"linear"},
 			activecolor: {type: vec4, value: vec4("#7070a0")}
 		}
 		this.flex = 0
-
+		this.neutralcolor = this.bgcolor;
 		this.mouseover  = function(){
-			//this.setDirty(true);
+			this.bgcolor = this.hovercolor;
 		}
 
 		this.mouseout  = function(){
 			//this.setDirty(true);
+			this.bgcolor = this.neutralcolor;
 		}
 
 		this.mouseleftdown = function(event){
@@ -149,7 +151,20 @@ define.class(function($ui$, view, label){
 			}
 		}
 		*/
-		this.render = function(){
+		this.bg = {
+			color: function(){
+				if (view.vertical )
+				{
+					var yy = mesh.y*view.layout.height;
+					var ymix = yy<1.0? 1.: ((yy>view.layout.height-1.0)?1.:0.0)
+					return mix(view.bgcolor, "black", ymix);
+				}
+				var xx = mesh.x*view.layout.width;
+				var xmix = xx<1.0? 1.: ((xx>view.layout.width-1.0)?1.:0.0)
+				return mix(view.bgcolor, "black",xmix);
+			}
+		}
+		this.vertical = function(){
 			if (this.vertical){
 				this.height = this.splitsize
 				this.width = NaN
@@ -158,18 +173,18 @@ define.class(function($ui$, view, label){
 				this.width = this.splitsize
 				this.height = NaN
 			}
-		}	
+		}
 	})
 	
 	this.render = function(){
 		if (this.constructor_children.length > 1){
 			var children = []
-			children.push(view({clipping: true, flex: this.constructor_children[0].flex},this.constructor_children[0]));
+			children.push(view({bg:0,clipping: true, flex: this.constructor_children[0].flex},this.constructor_children[0]));
 
 			for (var i = 1; i < this.constructor_children.length; i++){
 
 				children.push( this.splitter({
-					vertical: this.vertical,
+					vertical: this.direction=="horizontal",
 					firstnode: (i-1)*2, 
 					splitsize: this.splitsize, 
 					splittercolor: this.splittercolor, 
@@ -178,6 +193,7 @@ define.class(function($ui$, view, label){
 				}))
 
 				children.push(view({
+					bg:0,
 					clipping: true, 
 					flex: this.constructor_children[i].flex 
 				},this.constructor_children[i]))				

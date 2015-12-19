@@ -76,29 +76,28 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 					}.bind(this))
 					
 				}},
-				splitcontainer({vertical: false,  bgcolor: "black", flex:1}
+				splitcontainer({bgcolor: "black", flex:1}
 					,view({flexdirection:"column", padding: 0,flex: 0.2}
-						,view({alignitems:"center", bgcolor:"#e0e0e0", flexdirection:"row" ,padding: 14},
-							label({text:"DreemGL", fgcolor:"black", bgcolor:"#e0e0e0", fontsize: 35 })
+						,view({alignitems:"center", bgcolor:"#343434", flexdirection:"row" ,padding: 14},
+							label({text:"DreemGL", fgcolor:"white", bg:0, fontsize: 35 })
 						)
 						,treeview({
 							postLayout:function(){
 							},
 							init:function(){
-								var dataset = this.find('screen').model
+								var dataset = this.screen.model
 								if(dataset) this.dataset = dataset
 							},
-
-							name:'filetree', 
-							flex:1, 
-							select:function(sel){
-								if(sel.type === 'setter')debugger
+							name: 'filetree', 
+							flex: 1, 
+							select: function(sel){
+								if(sel.type === 'setter') debugger
 								// we have to grab the last path set and concatenate a path
 								var path = ''
 								for(var i = sel.path.length - 1; i >= 1; i--){
-									path = sel.path[i].name + (path!==''?'/' + path:'')
+									path = sel.path[i].name + (path !== ''? '/' + path: '')
 								}
-								this.find('screen').locationhash = {path : '$root/'+path};
+								this.screen.locationhash = {path:'$root/' + path};
 							}
 						})
 					)

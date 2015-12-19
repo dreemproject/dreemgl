@@ -18,21 +18,32 @@ define.class(function($ui$, view, label){
 		// the current page
 		page: {type:int, persist:true, value:0},
 		// animate the scroll
-		scroll: {motion:'inoutsine',duration:0.5},
+		scroll: {motion:'inoutsine', duration:0.5},
 		// persist the postiion
 		pos: {persist:true}
 	}
 
 	// the class for a nested slide, its automatically wrapped around children
 	define.class(this, 'slide', function($ui$, view){
-		this.cornerradius = vec4(10,10,10,10)
+		this.borderradius = vec4(10)
 		this.borderwidth = 0
 		this.bordercolor = vec4("blue")
 		this.bgcolor = "white"
+
 		this.flex = 0
 		this.viewport = '2d'
 		this.overflow = 'hidden'
 		this.padding = vec4(6);
+
+		this.viewportblend = function(){
+			this.color = function(){
+				//return 'red'
+
+				var col = texture.sample(mesh.xy)
+				return vec4(col.rgb, col.a * view.opacity)
+			}
+		}
+
 		this.render = function(){
 			return view({
 					bg:{

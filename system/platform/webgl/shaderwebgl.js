@@ -250,6 +250,7 @@ define.class('$system/base/shader', function(require, exports){
 		var gltex = texture.TEXTURE_SAMPLER
 		// lets do the texture slots correct
 		if(!gltex){
+			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture)
 			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
 			if(!gltex) return 0
 		}
@@ -389,7 +390,7 @@ define.class('$system/base/shader', function(require, exports){
 				}
 
 				out += body
-					.replace(/TEXTURE_VALUE/, TEXTURE_VALUE)
+					.replace(/TEXTURE_VALUE/g, TEXTURE_VALUE)
 					.replace(/TEXTURE_SAMPLER/, texinfo.samplerid)
 					.replace(/TEXTURE_ID/g, texid)
 					.replace(/TEXTURE_LOC/, 'shader.texlocs.' + key+ '.loc')
@@ -453,6 +454,7 @@ define.class('$system/base/shader', function(require, exports){
 	this.drawArrays = function(devicewebgl, sub, start, end){
 		//if(this.mydbg) debugger
 		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
+		if(!this.shader) return
 		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
 		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)

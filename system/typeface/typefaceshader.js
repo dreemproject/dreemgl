@@ -5,10 +5,8 @@
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
 define.class('$system/platform/$platform/shader$platform', function(require, exports, baseclass){
 
-	var glfontParser = require('$system/font/fontparser')
-
 	// the font
-	this.typeface = glfontParser(require('$resources/fonts/code_font1_ascii_baked.glf'))
+	this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 
 	// initial pixel and vertex shaders
 	this.position = "glyphy_mesh()"
@@ -17,7 +15,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.fgcolor = vec4("blue")
 	
 	// forward ref of things we need on view
-	this.view = {_totalmatrix:mat4(), _viewmatrix:mat4(), _fgcolor:vec4(), _bgcolor:vec4(), device:{frame:{size:vec2()}}}
+	this.view = {_totalmatrix:mat4(), _viewmatrix:mat4(), _fgcolor:vec4(), _bgcolor:vec4(), _opacity:1.0, device:{frame:{size:vec2()}}}
 
 	// lets define a custom struct and subclass the array
 	this.textgeom = define.struct({
@@ -95,8 +93,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			// alright lets convert some text babeh!
 			for(var i = 0; i < length; i++){
 				var unicode = string.struct? string.array[i * 4]: string.charCodeAt(i)
-				var info = this.typeface.glyphs[unicode]
-				if(!info) info = this.typeface.glyphs[32]
+				var info = this.font.glyphs[unicode]
+				if(!info) info = this.font.glyphs[32]
 				res.w += info.advance * this.fontsize
 			}
 			
@@ -180,7 +178,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var y2 = this.add_y - fontsize * info.max_y
 			var italic = this.italic_ness * info.height * fontsize
 
-			if(this.typeface.baked){
+			if(this.font.baked){
 				this.pushQuad(
 					x1, y1, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
 					x2, y1, fontsize, info.tmax_x, info.tmin_y, unicode, m1, m2, m3,
@@ -214,14 +212,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var y1 = this.array[o + 1]
 				var fontsize = this.array[o + 2]
 				var unicode = this.array[o + 5]
-				var info = this.typeface.glyphs[unicode]
+				var info = this.font .glyphs[unicode]
 				var add_x = x1 - fontsize * info.min_x + (unicode === 10?0:info.advance * fontsize)
 				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.line_spacing
 				if(add_x > text_w) text_w = add_x
 				if(add_y > text_h) text_h = add_y
 			}
 			if(with_cursor){
-				var info = this.typeface.glyphs[32]
+				var info = this.font.glyphs[32]
 				text_w += info.advance * this.fontsize
 				if(!text_h) text_h = this.fontsize * this.line_spacing
 			}
@@ -235,8 +233,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			// alright lets convert some text babeh!
 			for(var i = 0; i < length; i++){
 				var unicode = string.struct? string.array[i * 4]: string.charCodeAt(i)
-				var info = this.typeface.glyphs[unicode]
-				if(!info) info = this.typeface.glyphs[32]
+				var info = this.font.glyphs[unicode]
+				if(!info) info = this.font.glyphs[32]
 				// lets add some vertices
 				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
@@ -261,7 +259,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					h:this.line_height
 				}
 			}			
-			var info = this.typeface.glyphs[this.charCodeAt(off)]
+			var info = this.font.glyphs[this.charCodeAt(off)]
 			if(isNaN(off))debugger
 			var coords = {
 				x: this.array[off * 6 * 9 + 0] - this.fontsize * info.min_x,
@@ -288,7 +286,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			for(var len = this.lengthQuad(), o = len - 1; o >= 0; o--){
 
 				var char_code = this.charCodeAt(o)
-				var info = this.typeface.glyphs[char_code]
+				var info = this.font.glyphs[char_code]
 
 				var y2 = this.array[o * 6 * 9 + 1] + this.fontsize * info.min_y + this.fontsize * this.cursor_sink
 				var y1 = y2 - this.line_height
@@ -398,7 +396,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	// this thing makes a new text array buffer
 	this.newText = function(){
 		var buf = this.textgeom.array() 
-		buf.typeface = this.typeface
+		buf.font = this.font
 		buf.clear()
 		return buf
 	}
@@ -853,7 +851,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// screenspace length
 		mesh.scaling = 500. * m 
 		
-		var dist = glyphy_sdf_decode( mesh.typeface.texture.sample(pos)) * 0.003
+		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
 		
 		var exit = paint(pos,m, pixelscale)
 		if(exit.a >= 0.){
@@ -889,11 +887,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		
 		var sub_delta = vec2((pixelscale / mesh.subpixel_distance)*0.1,0)
 
-		var v1 = glyphy_sdf_decode(mesh.typeface.texture.sample(pos - sub_delta*2.))
-		var v2 = glyphy_sdf_decode(mesh.typeface.texture.sample(pos - sub_delta))
-		var v3 = glyphy_sdf_decode(mesh.typeface.texture.sample(pos))
-		var v4 = glyphy_sdf_decode(mesh.typeface.texture.sample(pos + sub_delta))
-		var v5 = glyphy_sdf_decode(mesh.typeface.texture.sample(pos + sub_delta*2.))
+		var v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*2.))
+		var v2 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta))
+		var v3 = glyphy_sdf_decode(glyphy_sdf_lookup(pos))
+		var v4 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta))
+		var v5 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta*2.))
 
 		var dist = vec3(
 			v1+v2+v3,
@@ -901,13 +899,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			v3+v4+v5
 		) * 0.001
 
-		
-		dist = vec3(
-			glyphy_sdf_decode( mesh.typeface.texture.sample(pos - sub_delta)),
-			glyphy_sdf_decode( mesh.typeface.texture.sample(pos)),
-			glyphy_sdf_decode( mesh.typeface.texture.sample(pos + sub_delta))
-		)*0.003
-		
 		//return 'red'
 		
 		var exit = paint(pos,m, pixelscale)
@@ -934,16 +925,24 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b) 
 		//if(max_alpha >0.5) max_alpha = 1.
 		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
-		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), 1.)//max_alpha)
+		return vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
 	}
 
+	this.glyphy_sdf_lookup = function(pos){
+		return texture2D(mesh.font.texture, pos, {
+			MIN_FILTER: 'LINEAR',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
 
 	this.glyphy_atlas_lookup = function(offset, _atlas_pos){
-		var pos = (vec2(_atlas_pos.xy * mesh.typeface.item_geom +
-			ivec2(mod(float(offset), mesh.typeface.item_geom_f.x), offset / mesh.typeface.item_geom.x)) +
-			vec2(.5, .5)) / mesh.typeface.tex_geom_f
+		var pos = (vec2(_atlas_pos.xy * mesh.font.item_geom +
+			ivec2(mod(float(offset), mesh.font.item_geom_f.x), offset / mesh.font.item_geom.x)) +
+			vec2(.5, .5)) / mesh.font.tex_geom_f
 
-		return texture2D(mesh.typeface.texture, pos, {
+		return texture2D(mesh.font.texture, pos, {
 			MIN_FILTER: 'NEAREST',
 			MAG_FILTER: 'NEAREST',
 			WRAP_S: 'CLAMP_TO_EDGE',
@@ -994,12 +993,12 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
 		}
 		
-		return vec4(view.fgcolor.rgb, alpha * view.fgcolor.a)
+		return vec4(view.fgcolor.rgb, alpha * view.fgcolor.a * view.opacity)
 	}
 
 	this.decideFontType = function(){
-		this.mesh.typeface = this.typeface
-		if(this.typeface && this.typeface.baked){
+		this.mesh.font = this.font
+		if(this.font && this.font.baked){
 			if(this.subpixel){
 				if(this.glyphy_pixel !== this.glyphy_sdf_draw_subpixel_aa){
 					this.glyphy_mesh = this.glyphy_mesh_sdf

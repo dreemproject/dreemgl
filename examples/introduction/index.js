@@ -6,10 +6,12 @@ define.class(function(require,
 	$widgets$, docviewer, jsviewer, slideviewer){
 	// Live coding presentation docs!
 	this.attributes = {
-		test:"ELLO!"
+		test:vec4('red')
 	}
 	
-	this.render = function render(){ 
+	this.mymethod = function(){}
+
+	this.render = function render(){
 		return [
 			role(
 				screen({
@@ -21,8 +23,6 @@ define.class(function(require,
 					}},
 					slideviewer({
 						slide:{
-							padding:15,
-							borderradius:20
 						},
 						flex:1,
 						viewport:'2d',
@@ -47,7 +47,7 @@ define.class(function(require,
 								camera: vec3(0,0,8)
 							},
 							teapot({
-								detail:10,
+								detail:6,
 								pos:[0,0,-0.5], 
 								rotate:[-.6*PI,PI,0], 
 								radius:0.8, 
@@ -57,7 +57,7 @@ define.class(function(require,
 						0),
 						
 						view({
-							slidetitle:'This thing'
+							slidetitle:'This composition'
 							,flex:1
 							,flexdirection:"column"
 							}
@@ -103,7 +103,12 @@ define.class(function(require,
 											detail:6,
 											position:'absolute',
 											attributes:{
-												value:{type:float, value:0, duration:0.5, motion:ease.bounce}
+												value:{
+													type:float, 
+													value:0, 
+													duration:0.5, 
+													motion:float.ease.bounce
+												}
 											},
 											mouseover:function(){
 												this.value = 1
@@ -111,15 +116,17 @@ define.class(function(require,
 											mouseout:function(){
 												this.value = 0
 											},
-											bg:{
-												i:i,
-												patterns: require('./shaderpatterns').prototype,
-												color:function(){
-													return vec4( patterns.wave(mesh.uv, i*.1 + 
-														view.value * 10., i*.1 + view.value * 10. ) * 
-														pal.pal1(i*.1).xyz, 1.)
-												//	return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
-												}
+bg:{
+	i:i,
+	patterns: require('./shaderpatterns').prototype,
+	color:function(){
+	//	return 'red'
+		return vec4( patterns.wave(mesh.uv, i*.1 + 
+			view.value * 10., i*.1 + view.value * 10. ) * 
+			pal.pal1(i*.1).xyz, 1.)
+	//
+	//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
+}
 											},
 											rotate:[-.6*PI,PI,0], 
 											pos:[floor(i/4)*6-10,(i%4)*6-10,-10]
@@ -199,6 +206,9 @@ define.class(function(require,
 				screen({
 						attributes:{pager:0},
 						name:'remote',
+						myfn:function(){
+
+						}
 					}
 					,view({flex:1, bgcolor:'black'}
 						,button({

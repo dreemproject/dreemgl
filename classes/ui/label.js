@@ -5,8 +5,9 @@
 
 define.class(function(require, $ui$, view){	
 
-	var Font = require('$system/font/fontshader')
-	var glfontParser = require('$system/font/fontparser')
+//	require("$fonts/arial_bold.glf")
+
+	var TypeFace = require('$system/typeface/typefaceshader')
 
 	this.bgcolor = vec4("transparent")
 
@@ -18,13 +19,13 @@ define.class(function(require, $ui$, view){
 		text: {type:String, value: "text" },
 	
 		// Size of the font in pixels
-		fontsize: {type:float, value: 18},
+		fontsize: {type:float, value: 18, meta:"fontsize"},
 	
 		// the boldness of the font (try values 0 - 1)
 		boldness: {type:float, value: 0.},
 
 		// reference to the font typeface, require it with require('font:')
-		typeface: {type:Object, value: undefined},
+		font: {type:Object, value: undefined, meta:"font"},
 	
 		// Should the text wrap around when its width has been reached?
 		multiline: {type:Boolean, value: false },
@@ -33,11 +34,11 @@ define.class(function(require, $ui$, view){
 		subpixel: {type:Boolean, value: false},
 	
 		// Alignment of the bodytext.
-		align: {type: Enum('left','right'),  value: "left"}
+		align: {type: Enum('left','right','center', 'justify'),  value: "left"}
 	}
 
 	// the normal font 
-	define.class(this, 'fontnormal', Font, function(){
+	define.class(this, 'typefacenormal', TypeFace, function(){
 		this.updateorder = 3
 		this.draworder = 5
 		this.subpixel = false
@@ -45,7 +46,7 @@ define.class(function(require, $ui$, view){
 			var view = this.view
 			
 			var mesh = this.newText()
-			if(this.typeface) mesh.typeface = this.typeface
+			if(view.font) mesh.font = view.font
 
 			mesh.fontsize = view.fontsize
 			mesh.boldness = view.boldness
@@ -66,44 +67,41 @@ define.class(function(require, $ui$, view){
 			this.mesh = mesh
 		}
 	})
-	this.fontnormal = false
+	this.typefacenormal = false
 
 	// the subpixel font used to render with subpixel antialiasing
-	define.class(this, 'fontsubpixelaa', this.fontnormal, function(){
+	define.class(this, 'typefacesubpixelaa', this.typefacenormal, function(){
 		this.subpixel = true
 		this.boldness = 0.6
 	})
-	this.fontsubpixelaa = false
+	this.typefacesubpixelaa = false
 
 	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
-	define.class(this, 'font', this.fontnormal, function(){
+	define.class(this, 'typeface', this.typefacenormal, function(){
 	})
 
 	this.subpixel = function(event){
 		if(this._subpixel){
 
-			this.font = this.fontsubpixelaa
+			this.typeface = this.typefacesubpixelaa
 		}
 		else{
-			this.font = this.fontnormal
+			this.typeface = this.typefacenormal
 		}
 	}
 
-	// enable it
-	this.font = 5
 	this.measure_with_cursor = false
 	this.bgcolor = vec4("white")
 
 	this.init = function(){
-		if(this.typeface) this.typeface = glfontParser(this.typeface)
 	}
 	
 	this.measure = function(width){
-		if(this.fontshader.update_dirty){
-			this.fontshader.update()
-			this.fontshader.update_dirty = true
+		if(this.typefaceshader.update_dirty){
+			this.typefaceshader.update()
+			this.typefaceshader.update_dirty = true
 		}
-		return {width: this.measured_width = this.fontshader.mesh.bound_w, height: this.measured_height =this.fontshader.mesh.bound_h};
+		return {width: this.measured_width = this.typefaceshader.mesh.bound_w, height: this.measured_height =this.typefaceshader.mesh.bound_h};
 	}
 
 	var label = this.constructor

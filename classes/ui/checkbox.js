@@ -13,8 +13,7 @@ define.class(function(view,icon){
 
 		// Font size in device-pixels.
 		fontsize: {type: float, value: 14},
-		
-		
+			
 		// Gradient color 1	
 		col1: {meta:"color", type: vec4, value: vec4("#404040"), duration: 1.0},
 		// Gradient color 2
@@ -22,8 +21,8 @@ define.class(function(view,icon){
 
 		// Color of the label text in neutral state	
 		textcolor: {meta:"color", type: vec4, value: vec4("#404040")},
-
-		// Color of the label text in pressed-down state	
+		
+		// Color of the label text in pressed-down state			
 		textactivecolor: {meta:"color", type: vec4, value: vec4("green")},
 		
 		// First gradient color for the button background in neutral state
@@ -53,8 +52,8 @@ define.class(function(view,icon){
 	
 	var button = this.constructor
 
-	this.bgcolor = 'white'
-	this.fgcolor = 'black'
+	this.bgcolor = '#202020'
+	this.fgcolor = 'white'
 	this.buttonres = {};
 	this.padding = 8
 	this.borderradius = 3
@@ -79,7 +78,7 @@ define.class(function(view,icon){
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
 	define.class(this, 'labelclass', function(label){
 		this.subpixel = false
-		this.fontsubpixelaa =  {
+		this.typefacesubpixelaa =  {
 			boldness:0.9
 		}
 		this.bg = 0

@@ -9,13 +9,14 @@ define.class(function(require, exports){
 	this.Keyboard = require('./keyboardwebgl')
 	this.Mouse = require('./mousewebgl')
 	this.Touch = require('./touchwebgl')
-
+	this.Midi = require('./midiwebgl')
+	
 	// require embedded classes	
 	this.Shader = require('./shaderwebgl')
 	this.Texture = require('./texturewebgl')
 	this.Texture.Image = typeof Image !== 'undefined' && Image
 	this.DrawPass = require('./drawpasswebgl')
-
+	
 	this.preserveDrawingBuffer = true
 	this.premultipliedAlpha = false
 	this.antialias = false
@@ -48,6 +49,7 @@ define.class(function(require, exports){
 			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
 			this.touch = previous.touch
+			this.midi = previous.midi
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
 			this.frame = this.main_frame = previous.main_frame
@@ -59,6 +61,7 @@ define.class(function(require, exports){
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
 			this.touch = new this.Touch(this)
+			this.midi = new this.Midi(this)
 			this.drawtarget_pools = {}
 
 			this.createContext()
@@ -133,8 +136,10 @@ define.class(function(require, exports){
 
 			this.main_frame.ratio = pixelRatio
 			this.main_frame.size = vec2(sw, sh) // actual size
+			
 			this.size = vec2(w, h)
 			this.ratio = this.main_frame.ratio
+
 		}.bind(this)
 
 		window.onresize = function(){
@@ -171,7 +176,7 @@ define.class(function(require, exports){
 		if(!frame) frame = this.main_frame
 	
 		this.frame = frame
-		this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
+		//this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
 
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
@@ -280,12 +285,11 @@ define.class(function(require, exports){
 
 			var skip = false
 			var last = i === len - 1
-
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
+
 			if(view.draw_dirty & 1 || last){
-				//console.log("DiRTY", view)
 				var hastime = view.drawpass.drawColor(last, stime)
 				view.draw_dirty &= 2
 				if(hastime){
@@ -318,9 +322,14 @@ define.class(function(require, exports){
 			node = node.parent
 		}
 		
-		if(!node.parent){ // fast path to chuck the whole set
+		if(!node.parent){ // fast path to chuck the whole setc
 			// lets put all the drawpasses in a pool for reuse
-			for(var i = 0; i < this.drawpass_list.length; i++) this.drawpass_list[i].drawpass.poolDrawTargets()
+			for(var i = 0; i < this.drawpass_list.length; i++){
+				var draw = this.drawpass_list[i]
+				draw.drawpass.poolDrawTargets()
+				draw.layout_dirty = true
+				draw.draw_dirty = 3
+			}
 			this.drawpass_list = []
 			this.layout_list = []
 			this.drawpass_idx = 0

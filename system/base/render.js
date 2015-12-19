@@ -16,6 +16,7 @@ define.class(function(exports){
 			state = {wires:[], render_block: []}
 			is_root = true
 		}
+		if(!new_version) debugger
 		/*
  		if(new_version.preRender && !rerender){
  			if(state.render_block.indexOf(new_version) == -1){
@@ -27,7 +28,7 @@ define.class(function(exports){
 	 		}
  		}*/
 
-		for(var key in globals){
+		if(new_version) for(var key in globals){
 			new_version[key] = globals[key]
 		}
 		
@@ -59,7 +60,7 @@ define.class(function(exports){
 			// we need to call re-render on this
 			if(!initializing){
 				render(this, undefined, globals, undefined, true)
-				this.redraw()
+				this.relayout()
 			}
 			//this.setDirty(true)
 			//if(this.reLayout) this.reLayout()
@@ -68,7 +69,7 @@ define.class(function(exports){
 		// store the attribute dependencies
 		new_version.atAttributeGet = function(key){
 			// lets find out if we already have a listener on it
-			if(!this.hasListenerName(key, '__atAttributeGet')){
+			if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerName(key, '__atAttributeGet')){
 				this.addListener(key, __atAttributeGet)
 			}
 		}
@@ -130,10 +131,10 @@ define.class(function(exports){
 		}
 
 		if(old_children) for(;i < old_children.length;i++){
-			old_children[i].emitRecursive('deinit')
+			old_children[i].emitRecursive('destroy')
 		}
 
-		if(old_version) old_version.emit('deinit')
+		if(old_version) old_version.emit('destroy')
 
 		if(is_root){
 			initializing = true

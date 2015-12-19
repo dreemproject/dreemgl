@@ -4,27 +4,29 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class(function($ui$, view, label, icon){
+define.class(function($ui$, view, label, icon, $$, require){
 
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.title = "folding thing"
 	this.position = "relative"
-	this.borderwidth = 1;
-	this.borderradius = 1;
+	this.borderwidth = 1
+	this.borderradius = 1
 	this.margin = 0
-	this.bg = 0;
+	this.bg = 0
 	this.alignitems = "stretch"
 	this.bordercolor = vec4("#c0c0c0")
-	this.padding = 0;
+	this.padding = 0
 	this.flexdirection = "column"
 
 	this.attributes = {
 		// The current state of the foldcontainer. false = open, Ttue = closed.
-		collapsed: false,
+		collapsed: {type:boolean, value: false, persist:true},
 		// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
 		icon: 'times',
 		// The main color from which the foldcontainer will build some gradients.
-		basecolor: {type: vec4, value: vec4("#8080c0")}
+		basecolor: {type:vec4, value: vec4("#8080c0")},
+		fontsize: {type:float, value: 12},
+		autogradient: {type:boolean, value: false}
 	}
 
 	// Function to change the open/closed state. Used by the click handler of the clickablebar.
@@ -45,11 +47,10 @@ define.class(function($ui$, view, label, icon){
 		
 		this.attributes = {
 			title: {type:String},
-			col1: {value:vec4("yellow")},
-			col2: {value:vec4("yellow")}
+			col1: {value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.1},
+			col2: {value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14}
 		}
-
-		this.position = "relative"
+		this.position = "relative";
 
 		this.bg = {
 			color: function(){	
@@ -59,28 +60,52 @@ define.class(function($ui$, view, label, icon){
 		}
 
 		this.padding = 6
+
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
-			return [icon({fontsize:16, icon:this.icon, fgcolor: "#303030" }), label({marginleft:5,fgcolor:"#303030", fontsize: 16, text:this.title,  bgcolor: "transparent" })];
+			return [
+				icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), 
+				label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 })
+			];
 		}
 
-		this.statedefault = function(){
-			this.col1 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
-			this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2)
+		this.statedefault = function(first){
+			//console.log(this.parent.basecolor)
+			this.col1 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0), first)
+			if (this.autogradient) {
+				this.col2 = Mark(vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.2), first)
+			}
+			else{
+				this.col2 = this.col1;
+			}
 		}			
 		
 		this.stateover = function(){
-			this.col2 = vec4.vec4_mul_float32_rgb(vec4(this.parent.basecolor), 1.1)
-			this.col1 = this.parent.basecolor
+			this.col1 = Mark(vec4.vec4_mul_float32_rgb(vec4(this.parent.basecolor), 1.2))
+			if (this._autogradient){
+				this.col2 = vec4.vec4_mul_float32_rgb(vec4(this.parent.basecolor), 1.1)
+			}
+			else{
+				this.col2 = this.col1;
+			}
 		}
 
 		this.stateclick = function(){
 			this.col1 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.3)
-			this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
+			if (this._autogradient){
+
+				this.col2 = vec4.vec4_mul_float32(vec4(this.parent.basecolor), 1.0)
+			}
+			else{
+				this.col2 = this.col1;
+			}
 			this.outer.toggle()
 		}
 		
-		this.init = this.statedefault
+		this.layout  = function(){this.statedefault();};
+		this.init = function(){
+			this.statedefault(true)
+		}
 		this.mouseover = this.stateover
 		this.mouseout = this.statedefault
 		this.mouseleftdown = this.stateclick
@@ -93,7 +118,8 @@ define.class(function($ui$, view, label, icon){
 			color:function(){
 				return mix(view.bgcolor*1.7, vec4("white"), (mesh.y/8))
 			}
-		},
+		};
+		this.bg = 0;
 		this.padding = vec4(0,0,0,0),
 		this.margin = vec4(0,0,0,0),
 		this.position = "relative"
@@ -106,7 +132,8 @@ define.class(function($ui$, view, label, icon){
 			borderwidth: this.borderwidth, 
 			bordercolor: this.bordercolor,
 			icon: this.icon, 
-			title: this.title
+			title: this.title,
+			fontsize: this.fontsize
 		});
 		
 		this.bar.click = this.toggle.bind(this);
@@ -114,7 +141,7 @@ define.class(function($ui$, view, label, icon){
 
 		if (this.collapsed == false) {
 			this.container = this.containerview({
-			bgcolor: this.basecolor, 
+				bgcolor: this.basecolor, 
 				borderwidth: this.borderwidth, 
 				bordercolor:this.bordercolor,  
 
