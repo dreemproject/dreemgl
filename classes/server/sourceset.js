@@ -34,15 +34,48 @@ define.class(function(require, $server$, dataset){
 		
 		function findReturnArray(body){
 			var steps = body.steps
-			//for(var i = 0; i ,)
-
+			for(var i = 0; i < steps.length; i++){
+				var step = steps[i]
+				if(step.type === 'Return'){
+					return step.arg
+				}
+			}
 		}
 
 		var render = findRenderFunction(this.ast)
 		// lets find the return array
 		var ret = findReturnArray(render.body)
+			
+		this.data = {name:'root', node:ret.elems, children:[]}
+		// now we need to walk this fucker.
+		function walkTree(array, output){
+			for(var i = 0; i < array.length; i++){
+				var item = array[i]
 
-
+				if(item.type === 'Object'){
+					// lets put some props on there
+					continue
+				}
+				if(item.type !== 'Call') continue
+				var name 
+				if(item.fn.type === 'Key'){
+					name = 'this.'+item.fn.key.name
+				}
+				else{
+					name = item.fn.name
+				}
+				var child = {
+					name: name,
+					node: item,
+					children:[]
+				}
+				output.children.push(child)
+				walkTree(item.args, child)
+			}
+		}
+		walkTree(ret.elems, this.data)
+		//	Call->args->object
+		//console.log(this.calltree)
 	}
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.

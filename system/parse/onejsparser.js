@@ -1354,10 +1354,9 @@ define.class(function(require, exports){
 		this.lastNodes.length = 0
 	}
 
-	this.startNode = function() {
+	this.startNode = function(type) {
 
 		var node = {
-			_ast_:1,
 			type:null,
 			start: this.tokStart,
 			end: this.tokStart
@@ -1379,7 +1378,6 @@ define.class(function(require, exports){
 	this.startNodeFrom = function(other) {
 
 		var node = {
-			_ast_:1,
 			type:null,
 			end:null,
 			start:other.start
@@ -1387,12 +1385,82 @@ define.class(function(require, exports){
 
 		return node
 	}
-
+	/*
 	// Finish an AST node, adding `type` and `end` properties.
+	this.nodetypes = {
+		Program: function Program(){},
+		Empty: function Empty(){},
+		Id: function Id(){},
+		Value: function Value(){},
+		This: function This(){},
+		Array: function Array(){},
+		Object: function Object(){},
+		Index: function Index(){},
+		Key: function Key(){},
+		ThisCall: function ThisCall(){},
+		Block: function Block(){},
+		List: function List(){},
+		Comprehension: function Comprehension(){},
+		Template: function Template(){},
+		Break: function Break(){},
+		Continue: function Continue(){},
+		Label: function Label(){},
+
+		If: function If(){},
+		Switch: function Switch(){},
+		Case: function Case(){},
+
+		Throw: function Throw(){},
+		Try: function Try(){},
+
+		While: function While(){},
+		DoWhile: function DoWhile(){},
+		For: function For(){},
+		ForIn: function ForIn(){},
+		ForOf: function ForOf(){},
+		ForFrom: function ForFrom(){},
+		ForTo: function ForTo(){},
+
+		Var: function Var(){},
+		TypeVar: function TypeVar(){},
+		Struct: function Struct(){},
+		Define: function Define(){},
+		Enum: function Enum(){},
+
+		Def: function Def(){},
+
+		Function: function Function(){},
+		Return: function Return(){},
+		Yield: function Yield(){},
+		Await: function Await(){},
+
+		Unary: function Unary(){},
+		Binary: function Binary(){},
+		Logic: function Logic(){},
+		Assign: function Assign(){},
+		Update: function Update(){},
+		Condition: function Condition(){},
+
+		New: function New(){},
+		Call: function Call(){},
+		Nest: function Nest(){},
+
+		Class: function Class(){},
+
+		Signal: function Signal(){},
+		Quote: function Quote(){},
+		AssignQuote: function AssignQuote(){},
+		Rest: function Rest(){},
+		Then: function Then(){},
+
+		Debugger: function Debugger(){},
+		With: function With(){}	
+	}*/
 
 	this.finishNode = function(node, type) {
 		node.type = type
 		node.end = this.lastEnd
+		//node.constructor = this.nodetypes[type]
 		if(this.storeComments) this.lastNodes.push( node )
 		return node
 	}

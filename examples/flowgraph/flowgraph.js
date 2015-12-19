@@ -12,7 +12,7 @@ define.class('$ui/view', function(require,
 
 	this.flex = 1
 	this.attributes = {
-			fontsize:{type:float, value: 10, meta:"fontsize"}
+			fontsize:{type:float, value: 12, meta:"fontsize"}
 	}
 	
 	define.class(this, "menubar", function($ui$, view){
@@ -597,6 +597,8 @@ define.class('$ui/view', function(require,
 
 		this.sourceset = sourceset(require('./index.js').module.factory.body.toString())
 
+		console.log(this.sourceset.calltree)
+
 		this.screen.locationhash = function(event){
 			//console.log(event.value);
 		}
@@ -624,8 +626,8 @@ define.class('$ui/view', function(require,
 			this.menubar({})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3}
-					,this.dockpanel({title:"Composition", fontsize:this.fontsize}
-						,treeview({flex:1, dataset: this.model, fontsize:this.fontsize})
+					,this.dockpanel({title:"Composition" , fontsize:this.fontsize}
+						,treeview({flex:1, dataset: this.sourceset, fontsize:this.fontsize})
 					)
 				)
 				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0, fontsize:this.fontsize}

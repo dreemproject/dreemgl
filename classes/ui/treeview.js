@@ -214,6 +214,7 @@ define.class(function($ui$, view, label, button, icon){
 	this.render = function(){
 		//var data;
 		if(!this.dataset) return
+
 		if (this.atBuildTree) this.data = this.atBuildTree(this.dataset.data)
 		else{
 			this.data = this.dataset.data
