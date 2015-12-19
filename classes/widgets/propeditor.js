@@ -44,7 +44,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		var meta = (this.property.meta)?this.property.meta:"";
 		
 		if (typename =="Enum"){
-			return this.wrap(radiogroup({title:this.propertyname,values:this.property.type.values, currentvalue: this.value}), true);
+			return this.wrap(radiogroup({margin:vec4(2,0,2,5),title:this.propertyname,values:this.property.type.values, currentvalue: this.value}), true);
 		}
 		
 		if (typename =="vec4"){
@@ -55,22 +55,52 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 				)
 			}
 			
+			
+			var t1 = "";
+			var t2 = "";
+			var t3 = "";
+			var t4 = "";
+			if (this.property.meta =="tlbr")
+			{
+				t1 = "top"
+				t2 = "left";
+				t3 = "bottom";
+				t4 = "right" 
+			}else
+			if (this.property.meta =="ltrb")
+			{
+				t1 = "left";
+				t2 = "top"
+				t3 = "right" 
+				t4 = "bottom";
+			}
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[0],margin:2}), 
-					numberbox({flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[1],margin:2}), 
-					numberbox({flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[2],margin:2}), 
-					numberbox({flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[3],margin:2})
+					numberbox({title:t1, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[0],margin:2}), 
+					numberbox({title:t2, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[1],margin:2}), 
+					numberbox({title:t3, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[2],margin:2}), 
+					numberbox({title:t4, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[3],margin:2})
 				)
 			);
 		}
 		
 		if (typename =="vec3"){
+			
+			var t1 = "";
+			var t2 = "";
+			var t3 = "";
+			if (this.property.meta =="xyz"){
+				t1 = "X"
+				t2 = "Y";
+				t3 = "Z";
+				
+			}
+				
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[0], margin:2}), 
-					numberbox({flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[1], margin:2}), 
-					numberbox({flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[2], margin:2})
+					numberbox({title:t1, flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[0], margin:2}), 
+					numberbox({title:t2, flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[1], margin:2}), 
+					numberbox({title:t3, flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[2], margin:2})
 				)
 			);
 		}
@@ -87,7 +117,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="FloatLike"){
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value, stepvalue:0.1, margin:2}) 
+					numberbox({flex:1, minvalue: this.property.minvalue, maxvalue: this.property.maxvalue, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value, stepvalue:0.1, margin:2}) 
 				)
 			)
 		}
@@ -95,7 +125,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="IntLike"){
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, fontsize:this.fontsize, value:this.value, stepvalue:1, margin:2}) 
+					numberbox({flex:1, minvalue: this.property.minvalue, maxvalue: this.property.maxvalue, fontsize:this.fontsize, value:this.value, stepvalue:1, margin:2}) 
 				)
 			)
 		}
@@ -111,7 +141,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="Boolean" || typename=="BoolLike"){
 			return this.wrap(
 				view({bg:0},
-					checkbox({flex:1, fgcolor:"#308030", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					checkbox({flex:1, fgcolor:"white", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				) 
 			)
 		}

@@ -15,7 +15,7 @@ define.class('$system/base/node', function(require){
 		visible: {type:boolean, value: true},
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
-		pos: {type:vec3, value:vec3(0,0,0)},
+		pos: {type:vec3, value:vec3(0,0,0),meta:"xyz"},
 
 		// alias for the x component of pos
 		x: {alias:'pos', index:0},
@@ -60,7 +60,7 @@ define.class('$system/base/node', function(require){
 		overflow: {type: Enum('','hidden','scroll','auto'), value:''},
 
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
-		size: {type:vec3, value:vec3(NaN)},
+		size: {type:vec3, value:vec3(NaN), meta:"xyz"},
 
 		// alias for the x component of size
 		w: {alias:'size', index:0},
@@ -80,9 +80,9 @@ define.class('$system/base/node', function(require){
 		pixelratio: {type: float, value:NaN},
 
 		// the minimum size for the flexbox layout engine
-		minsize: {type: vec3, value:vec3(NaN)},
+		minsize: {type: vec3, value:vec3(NaN), meta:"xyz"},
 		// the maximum size for the flexbox layout engine
-		maxsize: {type: vec3, value:vec3(NaN)},
+		maxsize: {type: vec3, value:vec3(NaN), meta:"xyz"},
 
 		// alias for the x component of minsize
 		minwidth: {alias:'minsize', index:0},
@@ -99,7 +99,7 @@ define.class('$system/base/node', function(require){
 		maxdepth: {alias:'maxsize', index:2},
 
 		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
-		margin: {type: vec4, value: vec4(0,0,0,0)},
+		margin: {type: vec4, value: vec4(0,0,0,0), meta: "ltrb"},
 		// alias for the first component of margin
 		marginleft: {alias:'margin', index:0},
 		// alias for the second component of margin
@@ -110,7 +110,7 @@ define.class('$system/base/node', function(require){
 		marginbottom: {alias:'margin', index:3},
 
 		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
-		padding: {type: vec4, value: vec4(0,0,0,0)},
+		padding: {type: vec4, value: vec4(0,0,0,0), meta: "ltrb"},
 		// alias for the first component of padding
 		paddingleft: {alias:'padding', index:0},
 		// alias for the second component of padding
@@ -121,13 +121,13 @@ define.class('$system/base/node', function(require){
 		paddingbottom: {alias:'padding', index:3},
 
 		// Scale of an item, only useful for items belof a 3D viewport
-		scale: {type: vec3, value: vec3(1)},
+		scale: {type: vec3, value: vec3(1), meta:"xyz"},
 		// The anchor point around which items scale and rotate, depending on anchor mode its either a factor of size or and absolute value
 		anchor: {type: vec3, value: vec3(0.)},
 		// the mode with which the anchor is computed. Factor uses the size of an item to find the point, defaulting to center
 		anchormode: {type:Enum('','factor','absolute'), value:'factor'},
 		// rotate the item around x, y or z in radians. If you want degrees type it like this: 90*DEG
-		rotate: {type: vec3, value: vec3(0)},
+		rotate: {type: vec3, value: vec3(0), meta:"xyz"},
 
 		// the color of the border of an item. 
 		bordercolor: {group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"},

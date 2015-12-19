@@ -52,8 +52,8 @@ define.class(function(view,icon){
 	
 	var button = this.constructor
 
-	this.bgcolor = 'white'
-	this.fgcolor = 'black'
+	this.bgcolor = '#202020'
+	this.fgcolor = 'white'
 	this.buttonres = {};
 	this.padding = 8
 	this.borderradius = 3

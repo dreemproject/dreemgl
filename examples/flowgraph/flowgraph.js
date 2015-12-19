@@ -425,7 +425,7 @@ define.class('$ui/view', function(require,
 		this.render = function(){
 			return [
 				label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
-				,view({bgcolor:"#404040", height: 40,width:140, flex: 1})
+				,view({bgcolor:"#343434", height: 40,width:140, flex: 1})
 				,view({flexdirection:"row", alignitems:"stretch", bg:0}
 					,button({icon:"plus", fontsize: this.fontsize})
 					,button({icon:"plus", fontsize: this.fontsize})

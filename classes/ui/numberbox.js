@@ -12,7 +12,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		minvalue: {type: float, value: undefined},
 		maxvalue: {type: float, value: undefined},
 		stepvalue: {type: float, value: 1},
-		bordercolor: {motion:"easeout", duration:0.1, value: "#262626", meta:"color" },
+		bordercolor: {motion:"easeout", duration:0.1, value: "#202020", meta:"color" },
 		draggingbordercolor: {type:vec4, value:vec4("#707070"), meta:"color"},
 		focusbordercolor: {type:vec4, value:vec4("#606060"), meta:"color"},
 		decimals: {type:int, value:0}, 
@@ -26,8 +26,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.tabstop = 0;
 	
 	
-	this.bordercolor = "#262626" ;
-	this.borderradius = 10;
+	this.bordercolor = "#202020" ;
+	this.borderradius = 4;
 	this.borderwidth = 2;
 	this.fgcolor="#f0f0f0";
 	
@@ -127,6 +127,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		this.mousemove = function(){}
 	}
 	
+	this.justifycontent = "space-around"
 		
 	this.render = function(){
 		
@@ -134,16 +135,15 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 
 		if (this.title && this.title.length > 0){
 			res.push(
-			view({bgcolor:this.bordercolor,bordercolor:this.bordercolor , margin:0,borderradius:vec4(4,1,1,4),borderwidth:2,  padding:4},
-				label({name:"thetitle", align:"right",  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
+			view({bgcolor:this.bordercolor,bordercolor:this.bordercolor , margin:0,borderradius:vec4(1,1,1,1),borderwidth:1,  padding:0},
+				label({name:"thetitle", align:"right", margin:vec4(5,0,5,0),  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
 				)
 			)
 		}
 		
-		res.push(button({margin:vec4(4,0,4,0),bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left", text:"" , fontsize: this.fontsize*(2/3),  padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)}));
-		res.push(label({margin:vec4(4,0,4,0), padding:0,  name:"thenumber", align:"right", text:this._value.toString(),flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0}))
-		res.push(button({margin:vec4(4,0,4,0),bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", fontsize: this.fontsize*(2/3),  padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)}))
-	
+		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left", text:"" , fontsize: this.fontsize*(2/3),  padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)}));
+		res.push(label({margin:vec4(4,0,4,0),alignself:"center", padding:0,  name:"thenumber", align:"right", text:this._value.toString(),flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0}))
+		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", fontsize: this.fontsize*(2/3),  padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)}))
 		return res;	
 		
 	}

@@ -49,12 +49,24 @@ define.class(function( $ui$, view, label, icon, $$, require){
 
 		// Second gradient color for the button background in pressed state
 		internalmargin: {meta:"tlbr", type: vec4, value: vec4(0,0,0,0)},
-
+		bold:{type:boolean, value: true},
 		// fires when button is clicked
 		click:Event
 	}
 
 	var button = this.constructor
+
+	this.font =require('$resources/fonts/opensans_bold_ascii.glf')
+	
+	this.bold = function(){
+		if (this.bold) {
+			this.font =require('$resources/fonts/opensans_bold_ascii.glf')
+		}
+		else{
+			this.font =require('$resources/fonts/opensans_regular_ascii.glf')
+			
+		}
+	}
 								
 	this.bgcolor = '#272727'
 	this.fgcolor = 'white'
@@ -134,7 +146,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		}
 
 		if (this.text && this.text.length > 0){			
-			this.buttonres = this.labelclass({font: require('$resources/fonts/opensans_bold_ascii.glf'), bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			this.buttonres = this.labelclass({font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		

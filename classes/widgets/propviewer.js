@@ -16,7 +16,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	this.clearcolor = vec4("#303030");
 	this.bgcolor = vec4("blue");
 	this.padding = 0
-	
+	this.bg = 0;
 	this.uppercaseFirst = function (inp) {
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
 	}
@@ -71,7 +71,8 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 							flexdirection:"column", 
 							flex:1, 
 							margin:0, 
-							padding:0
+							padding:0,
+							bg:0
 						},
 						groupcontent
 					)

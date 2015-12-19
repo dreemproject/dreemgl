@@ -41,8 +41,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 						bgcolor:"#3b3b3b",
 						padding:2,
 					
-						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(0),						
-						margin:(i == this.values.length -1)?vec4(2,2,2,2):vec4(2,2,0,2)
+						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(1),						
+						margin:(i == this.values.length -1)?vec4(2,2,2,0):vec4(2,2,0,2)
 						
 						},
 						label({
@@ -63,11 +63,12 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 						borderwidth:0,
 						padding:2,
 						internalmargin: vec4(5,0,5,0),
-						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(0),						
+						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(1),						
 						margin:(i == this.values.length -1)?vec4(2,2,2,2):vec4(2,2,0,2),
 						fgcolor:"#909090",
+						bold: false,
 						
-						padding:2,text:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), onclick:function(){
+						padding:2,text:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), mouseleftdown:function(){
 							radio.currentvalue = (this.text=="undefined" ||this.text=="unD") ? undefined:this.text;
 						},fontsize:this.fontsize
 					}))
