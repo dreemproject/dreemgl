@@ -9,13 +9,13 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 	this.attributes ={
 		values:{type:Object, value:[]},
 		currentvalue:{type:String, value:""},
-		fgcolor: {type:vec4, value:vec4("#222222"), meta:"color"},
+		fgcolor: {type:vec4, value:vec4("white"), meta:"color"},
 		fontsize: {type: float, value: 12, meta:"fontsize"}
 	}
 	
 	this.flexdirection = "row"
 	this.bgcolor = "#222222";
-	this.fgcolor ="#f0f0f0"
+	
 	this.borderradius = 5;
 	
 	this.render = function(){

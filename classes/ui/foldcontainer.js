@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class(function($ui$, view, label, icon){
+define.class(function($ui$, view, label, icon, $$, require){
 
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.title = "folding thing"
@@ -63,7 +63,10 @@ define.class(function($ui$, view, label, icon){
 
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
-			return [icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), label({marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 })];
+			return [
+				icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), 
+				label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 })
+			];
 		}
 
 		this.statedefault = function(first){

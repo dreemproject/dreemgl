@@ -30,8 +30,8 @@ define.class('$ui/view', function(require,
 		this.render = function(){
 			return [
 				view({bgcolor:"#454545", margin:vec4(0,0,0,0), padding:vec4(0)},
-					view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(4,4,0,0),padding:vec4(10,2,10,2)},
-						label({text:this.title, margin:1, bg:0, fontsize:12, fgcolor: "white" })
+					view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(0),padding:vec4(10,2,10,2)},
+						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:12, fgcolor: "white" })
 					)
 				)
 				,this.constructor_children
@@ -419,7 +419,7 @@ define.class('$ui/view', function(require,
 		this.render = function(){
 			return [
 				label({text:this.title, bg:0, margin:4, fontsize: this.fontsize})
-				,view({bgcolor:"black", height: 40,width:140, flex: 1})
+				,view({bgcolor:"#404040", height: 40,width:140, flex: 1})
 				,view({flexdirection:"row", alignitems:"stretch", bg:0}
 					,button({icon:"plus", fontsize: this.fontsize})
 					,button({icon:"plus", fontsize: this.fontsize})

@@ -40,7 +40,7 @@ define.class(function($ui$, view, label){
 			firstnode: {type: int, value: 0}
 		}
 	
-		this.bgcolor = vec4("gray");
+		this.bgcolor = vec4("#3b3b3b");
 		this.alignitem = "stretch";
 		this.attributes = {
 			vertical: {type: Boolean, value: false},
@@ -151,7 +151,20 @@ define.class(function($ui$, view, label){
 			}
 		}
 		*/
-		this.render = function(){
+		this.bg = {
+			color: function(){
+				if (view.vertical )
+				{
+					var yy = mesh.y*view.layout.height;
+					var ymix = yy<1.0? 1.: ((yy>view.layout.height-1.0)?1.:0.0)
+					return mix(view.bgcolor, "black", ymix);
+				}
+				var xx = mesh.x*view.layout.width;
+				var xmix = xx<1.0? 1.: ((xx>view.layout.width-1.0)?1.:0.0)
+				return mix(view.bgcolor, "black",xmix);
+			}
+		}
+		this.vertical = function(){
 			if (this.vertical){
 				this.height = this.splitsize
 				this.width = NaN
@@ -160,7 +173,7 @@ define.class(function($ui$, view, label){
 				this.width = this.splitsize
 				this.height = NaN
 			}
-		}	
+		}
 	})
 	
 	this.render = function(){

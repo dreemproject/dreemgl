@@ -5,22 +5,26 @@
 
 
 define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$,propeditor){
+	
 	this.attributes = {
-		target:{type:String,value:""}
-		
+		target:{type:String,value:""}	
 	}
 	
+	this.borderwidth = 0;
 	this.flexdirection= "column";
 	this.margin = 0;
 	this.clearcolor = vec4("#303030");
 	this.bgcolor = vec4("blue");
 	this.padding = 0
 	
+	this.uppercaseFirst = function (inp) {
+		return inp.charAt(0).toUpperCase() + inp.slice(1);
+	}
+	
 	this.render = function(){
 		var c = this.find(this.target);
 		if (!c) return [];
-		
-			
+
 		var res = [];
 		var keysgroups = {};
 		
@@ -52,15 +56,27 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var attr = c._attributes[key];	
 				groupcontent.push(propeditor({value:thevalue, property:attr, propertyname: key}))
 			}
-			res.push(foldcontainer({
-				collapsed: true,
-				basecolor:"#4f4f4f",
-				autogradient: false,
-				icon:"cube", 
-				title: group,
-				bordercolor:"#4f4f4f"
-				
-			}, view({flexdirection:"column" , flex:1, margin:0, padding:0},groupcontent)))
+			
+			res.push(
+				foldcontainer({
+						collapsed: true,
+						basecolor:"#4f4f4f",
+						autogradient: false,
+						icon:"cube", 
+						title: this.uppercaseFirst(group),
+						bordercolor:"#4f4f4f"					
+					}, 
+					view({
+							flexdirection:"column", 
+							flex:1, 
+							margin:0, 
+							padding:0
+						},
+						groupcontent
+					)
+				)
+			)
+			
 			res[res.length-1].collapsed = function(){
 				window.mydbg = 1
 			}
