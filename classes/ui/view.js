@@ -476,15 +476,31 @@ define.class('$system/base/node', function(require){
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
 
-	this.relayoutRecur = function(){
+	this.relayoutRecur = function(source){
 		this.layout_dirty = true
 		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
 		for(var i = 0;i < this.child_viewport_list.length;i++){
-			this.child_viewport_list[i].relayoutRecur()
+			var child = this.child_viewport_list[i]
+			if(child._overflow) continue
+			if(child !== source){
+				child.relayoutRecur()
+			}
+		}
+		if(this.parent_viewport !== this){
+			if(this.parent_viewport._overflow) return
+			this.parent_viewport.relayoutRecur(this)
 		}
 	}
 
+	// ok so. what we need to do is
+	// scan up towards overflow something
+	// scan down and skip overflow something.
+
 	this.relayout = function(shallow){
+
+		if(this.screen) this.screen.redraw()
+		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
+		/*
 		if(this.screen){
 			this.screen.redraw()
 			this.screen.relayoutRecur()
@@ -503,7 +519,7 @@ define.class('$system/base/node', function(require){
 				parent = parent.parent_viewport
 				if(parent._overflow) break
 			}
-		}
+		}*/
 	}
 
 	// redraw our view and bubble up the viewport dirtiness to the root
