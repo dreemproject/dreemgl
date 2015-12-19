@@ -481,7 +481,7 @@ define.class('$system/base/node', function(require){
 		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
 		for(var i = 0;i < this.child_viewport_list.length;i++){
 			var child = this.child_viewport_list[i]
-			if(child._overflow) continue
+			//if(child._overflow) continue
 			if(child !== source){
 				child.relayoutRecur()
 			}
