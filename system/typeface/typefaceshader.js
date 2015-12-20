@@ -40,7 +40,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.cursor_spacing = 1.3
 		this.cursor_sink = 0.32
 		
-		this.scaling = 1
+		this.scaling = 0
 		this.distance = 0
 
 		this.boldness = 0
