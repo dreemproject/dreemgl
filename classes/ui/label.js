@@ -37,11 +37,18 @@ define.class(function(require, $ui$, view){
 		align: {type: Enum('left','right','center', 'justify'),  value: "left"}
 	}
 
+	this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
+
 	// the normal font 
 	define.class(this, 'typefacenormal', TypeFace, function(){
 		this.updateorder = 3
 		this.draworder = 5
 		this.subpixel = false
+
+		// set the right shaders
+		this.glyphy_mesh = this.glyphy_mesh_sdf
+		this.glyphy_pixel = this.glyphy_sdf_draw
+
 		this.update = function(){
 			var view = this.view
 			
@@ -71,23 +78,43 @@ define.class(function(require, $ui$, view){
 
 	// the subpixel font used to render with subpixel antialiasing
 	define.class(this, 'typefacesubpixelaa', this.typefacenormal, function(){
+		this.glyphy_mesh = this.glyphy_mesh_sdf
+		this.glyphy_pixel = this.glyphy_sdf_draw_subpixel_aa
 		this.subpixel = true
 		this.boldness = 0.6
 	})
 	this.typefacesubpixelaa = false
 
+	define.class(this, 'typefaceglyphy', this.typefacenormal, function(){
+		this.glyphy_pixel = this.glyphy_atlas_draw
+		this.glyphy_mesh = this.glyphy_mesh_atlas
+	})
+	this.typefaceglyphy = false
+
 	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
 	define.class(this, 'typeface', this.typefacenormal, function(){
 	})
 
-	this.subpixel = function(event){
-		if(this._subpixel){
-
-			this.typeface = this.typefacesubpixelaa
+	this.selectShader = function(){
+		if(this._font && this._font.baked){
+			if(this._subpixel){
+				this.typeface = this.typefacesubpixelaa
+			}
+			else{
+				this.typeface = this.typefacenormal
+			}
 		}
 		else{
-			this.typeface = this.typefacenormal
+			this.typeface = this.typefaceglyphy
 		}
+	}
+
+	this.font = function(event){
+		this.selectShader()
+	}
+
+	this.subpixel = function(event){
+		this.selectShader()
 	}
 
 	this.measure_with_cursor = false

@@ -23,9 +23,7 @@ define.class( function(require, label){
 	
 	this.bg = undefined
 
-	this.typeface = {
-		font: require('$resources/fonts/fontawesome.glf')
-	}
+	this.font = require('$resources/fonts/fontawesome.glf')
 
 	// the font awesome 
 	var table = {

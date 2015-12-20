@@ -498,7 +498,7 @@ define.class('$system/base/node', function(require){
 
 	this.relayout = function(shallow){
 
-		if(this.screen) this.screen.redraw()
+		this.redraw()
 		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
 		/*
 		if(this.screen){
