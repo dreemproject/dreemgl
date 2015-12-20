@@ -23,10 +23,7 @@ define.class('$system/base/texture', function(exports){
 	this.frame_buf = null
 
 	Texture.fromStub = function(stub){
-		var tex = new Texture(stub.type || 'rgba', stub.size[0], stub.size[1])
-		tex.array = stub.array
-		tex.image = stub.image
-		return tex
+		return Texture.buildDaliTexture(stub.array, stub.size[0], stub.size[1]);
 	}
 
 	Texture.fromType = function(type){
@@ -56,6 +53,7 @@ define.class('$system/base/texture', function(exports){
 		// with webgl, the references are relative to the location of the
 		// composition.
 		var fullpath = define.$example + path;
+console.log('** * fromImage', path, fullpath);
 		var img = new dali.ResourceImage({url: fullpath});
 
 		var tex = new Texture('rgba', img.getWidth(), img.getHeight())
@@ -70,6 +68,12 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	Texture.fromArray = function(array, w, h){
+		return Texture.buildDaliTexture(array, w, h);
+	}
+
+
+	// Construct a texture from a ArrayBuffer, with a width/height (DALI)
+	Texture.buildDaliTexture = function(array, w, h){
 		var dali = DaliApi.dali;		
 		var tex = new Texture('rgba', w, h)
 		tex.array = array
@@ -110,6 +114,7 @@ define.class('$system/base/texture', function(exports){
 
 		return tex
 	}
+
 
 	Texture.createRenderTarget = function(type, width, height, device){
 		var tex = new Texture(type, width, height, device)
