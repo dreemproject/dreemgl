@@ -129,7 +129,12 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 				return outname
 			}
 			// otherwise we recur on the ast in place
-			return this.expand(ast, node, state)
+			//!TODO add proper error reporting inside this thing
+			var fstate = Object.create(state)
+			fstate.functionref = functionref
+			fstate.source = obj
+			fstate.callname = name
+			return this.expand(ast, node, fstate)
 		}
 	}
 
@@ -413,8 +418,8 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 				// set argument types on scope
 				var fstate = Object.create(state)
 				// mark it 
-				fstate.functionref = type.functionref
 				fstate.depth = ''
+				fstate.functionref = type.functionref
 				fstate.source = type.source
 				fstate.callname = fn
 				fstate.scope = {}
