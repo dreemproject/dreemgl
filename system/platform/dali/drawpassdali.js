@@ -4,17 +4,17 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-// Dali modifications. See (DALI) references in the code
-// 
-// - Add a dali_obj (instance of DaliDreemgl) to each shader object.
-
-
 define.class(function(require, baseclass){
 	// drawing
 
+	/**
+	 * @method DrawPass constructor
+	 * @param {Object} gldevice Instance of DeviceDali
+	 * @param {Object} view Instance of View
+	 */
 	this.atConstructor = function(gldevice, view){
-		this.device = gldevice
-		this.view = view
+		this.device = gldevice  // Instance of devicedali
+		this.view = view // Instance of view
 		view.drawpass = this
 		// lets do the flatten
 		this.draw_list = []
@@ -58,7 +58,7 @@ define.class(function(require, baseclass){
 			var dt = this.drawtargets[i]
 			if(!pools[dt]) pools[dt] = []
 			pools[dt].push(this[dt])
-			this[dt] = undefined
+			this[dt] = null
 		}
 	}
 
@@ -224,7 +224,7 @@ define.class(function(require, baseclass){
 			if(draw._viewport && draw.drawpass !== this && draw.drawpass.pick_buffer){
 				// ok so the pick pass needs the alpha from the color buffer
 				// and then hard forward the color
-				var blendshader = draw.blendshader
+				var blendshader = draw.viewportblendshader
 				if (view._viewport === '3D'){
 					// dont do this!
 					blendshader.depth_test = 'src_depth <= dst_depth'
@@ -257,12 +257,11 @@ define.class(function(require, baseclass){
 
 	
 	this.drawColor = function(isroot, time){
+		//console.trace('drawColor', isroot,time);
 		var view = this.view
 		var device = this.device
 		var layout = view.layout
 
-		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
-	
 		// lets see if we need to allocate our framebuffer..
 
 		if(!isroot){
@@ -271,6 +270,8 @@ define.class(function(require, baseclass){
 			var twidth = layout.width * ratio, theight = layout.height * ratio	
 			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
 		}
+
+		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 
 		this.device.bindFramebuffer(this.color_buffer || null)
 
@@ -286,6 +287,8 @@ define.class(function(require, baseclass){
 
 		// each view has a reference to its layer
 		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
+			//console.log('- - - - - Drawing drawpass', i, 'of', dl.length);
+
 			var draw = dl[i]
 
 			if(draw._first_draw_color && view._viewport === '2D' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
@@ -302,11 +305,14 @@ define.class(function(require, baseclass){
 			if(!draw._visible) continue
 
 			if(draw.atDraw) draw.atDraw(this)
-
-			if(draw._viewport && draw.drawpass !== this && draw.drawpass.color_buffer){
+			if(draw._viewport && draw.drawpass !== this){
+				if(!draw.drawpass.color_buffer){
+					console.error("Null color_buffer detected")
+					continue
+				}
 				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
 				// lets render the view as a layer
-				var blendshader = draw.blendshader
+				var blendshader = draw.viewportblendshader
 				if (view._viewport === '3D'){
 					blendshader.depth_test = 'src_depth <= dst_depth'
 				}
@@ -326,21 +332,11 @@ define.class(function(require, baseclass){
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]
+console.log('*^*^*^*^*^* drawing shader', j, 'of', shaders.length, shader.view.id);
 					if (shader.pick_only || !shader.visible) continue // was pick only
 					// we have to set our guid.
 					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 					else draw.viewmatrix = matrices.viewmatrix
-
-					// Create or reuse dalidreemgl object (DALI)
-					var dali_obj = shader.dali_obj;
-					if (!dali_obj) {
-						// Build the dalidreemgl object
-						var dali = this.device.DaliApi.dali;
-                        dali_obj = new this.device.DaliDreemgl(dali);
-						shader.dali_obj = dali_obj;
-					}
-					dali_obj.compileShader(shader);
-
 					shader.drawArrays(this.device)
 				}
 			}
