@@ -402,8 +402,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	}
 
 	this.subpixel = false
-	this.glyphy_mesh = this.glyphy_mesh_atlas
-	this.glyphy_pixel = this.glyphy_atlas_draw
 
 	this.glyphy_mesh_sdf = function(){
 		return glyphy_compute_position()
@@ -424,7 +422,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		return pos1
 	}
 
-	this.glyphy_mesh = 
 	this.glyphy_mesh_atlas = function(){
 		glyph = glyph_vertex_transcode(mesh.tex)
 		return glyphy_compute_position()
@@ -996,33 +993,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		return vec4(view.fgcolor.rgb, alpha * view.fgcolor.a * view.opacity)
 	}
 
-	this.decideFontType = function(){
-		this.mesh.font = this.font
-		if(this.font && this.font.baked){
-			if(this.subpixel){
-				if(this.glyphy_pixel !== this.glyphy_sdf_draw_subpixel_aa){
-					this.glyphy_mesh = this.glyphy_mesh_sdf
-					this.glyphy_pixel = this.glyphy_sdf_draw_subpixel_aa
-				}
-			}
-			else if(this.glyphy_pixel !== this.glyphy_sdf_draw){
-				this.glyphy_mesh = this.glyphy_mesh_sdf
-				this.glyphy_pixel = this.glyphy_sdf_draw
-			}
-		}
-		else{
-			if(this.glyphy_pixel !== this.glyphy_atlas_draw){
-				this.glyphy_pixel = this.glyphy_atlas_draw
-				this.glyphy_mesh = this.glyphy_mesh_atlas
-			}
-		}
-	}
-
 	this.atExtend = function(){
-		this.decideFontType()
+		this.mesh.font = this.font
 		baseclass.prototype.atExtend.call(this)
 	}
 
-	this.decideFontType()
+	this.glyphy_mesh = this.glyphy_mesh_sdf
+	this.glyphy_pixel = this.glyphy_sdf_draw
+
 
 })
