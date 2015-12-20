@@ -2142,22 +2142,30 @@
 		
 
 		exports.Enum = function Enum(){
-			var values = Array.prototype.slice.call(arguments)
-			for(var i = 0; i < values.length; i++) values[i] = values[i].toLowerCase()
+			var matchset = Array.prototype.slice.call(arguments)
+			var origset = Array.prototype.slice.call(arguments)
+
+			function enumCanon(v){
+				if(v.indexOf('-') !== -1) v = v.replace(/\-/g,'')
+				return v.toLowerCase()
+			}
+
+			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
+				
 			function Enum(value){
 				if(typeof value !== 'string'){
-					console.error('Enum not string' + value, types.join('|'))
+					console.error('Enum not string' + value, origset.join('|'))
 					return types[0]
 				}
-				value = value.toLowerCase()
-				if(values.indexOf(value) === -1){
-					console.error('Invalid enum value: "' + value + '" ' + types.join('|'))
-					return types[0]
-				}
+				var index = matchset.indexOf(enumCanon(value))
 
-				return value
+				if(index === -1){
+					console.error('Invalid enum value: "' + value + '" ' + origset.join('|'))
+					return types[0]
+				}
+				return origset[index]
 			}
-			Enum.values = values
+			Enum.values = origset
 			return Enum
 		}
 

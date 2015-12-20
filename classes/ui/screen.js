@@ -22,7 +22,8 @@ define.class(function(require, $ui$view) {
 	this.dirty = true
 	this.flex = NaN
 	this.flexdirection = "column"
-	
+	this.cursor = 'arrow'
+
 	this.atConstructor = function(){
 	}
 
@@ -310,7 +311,10 @@ define.class(function(require, $ui$view) {
 						this.mouse_view = view
 						if(view) this.mouse_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 					}
-					if(view) view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
+					if(view){
+						view.computeCursor()
+						view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
+					}
 
 				}.bind(this))
 			}

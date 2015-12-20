@@ -185,6 +185,7 @@ define.class(function($ui$, view, label){
 
 				children.push( this.splitter({
 					vertical: this.direction=="horizontal",
+					cursor: this.direction=="horizontal"?'ns-resize':'ew-resize',
 					firstnode: (i-1)*2, 
 					splitsize: this.splitsize, 
 					splittercolor: this.splittercolor, 

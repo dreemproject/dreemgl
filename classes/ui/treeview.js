@@ -37,7 +37,7 @@ define.class(function($ui$, view, label, button, icon){
 		this.fgcolor = "#d0d0d0"
 		this.labelclass = {
 			bg:1,
-			subpixel:true
+		//	subpixel:true
 		}
 		this.margin = 0
 		this.bg = 1 

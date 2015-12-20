@@ -226,7 +226,19 @@ define.class('$system/base/node', function(require){
 		// wether this view has focus
 		focus: false,
 		// tabstop, sorted by number
-		tabstop: NaN
+		tabstop: NaN,
+
+		cursor: {type:Enum(
+			'', 'arrow', 'none','wait','text','pointer',
+			'zoom-in','zoom-out','grab','grabbing',
+			'ns-resize','ew-resize','nwse-resize','nesw-resize',
+			'w-resize','e-resize','n-resize','s-resize',
+			'nw-resize','ne-resize','sw-resize','se-resize',
+			'help','crosshair','move',
+			'col-resize','row-resize',
+			'vertical-text','context-menu','no-drop','not-allowed',
+			'alias','cell','copy'
+		), value:''}
 	}
 
 	this.camera = this.lookat = this.up = function(){this.redraw();};
@@ -423,6 +435,17 @@ define.class('$system/base/node', function(require){
 	this.emitUpward = function(key, msg){
 		if(this['_listen_'+key] || this['on'+key]) return this.emit(key, msg)
 		if(this.parent) this.parent.emitUpward(key, msg)
+	}
+
+	this.computeCursor = function(){
+		var node = this
+		while(node){
+			if(node._cursor !== ''){
+				this.screen.mouse.cursor = node._cursor
+				return
+			}
+			node = node.parent
+		}
 	}
 
 	// called at every frame draw

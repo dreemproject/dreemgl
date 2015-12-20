@@ -12,6 +12,19 @@ define.class('$system/base/mouse', function (require, exports){
 		
 	this.clickspeed = 350
 
+	this._cursor = 'arrow'
+
+	Object.defineProperty(this, 'cursor', {
+		get:function(){
+			return this._cursor
+		},
+		set:function(value){
+			this._cursor = value
+			if(value === 'arrow') value = ''
+			document.body.style.cursor = value
+		}
+	})
+
 	this.atConstructor = function(device){
 		//this.x = 0
 		//this.y = 0
