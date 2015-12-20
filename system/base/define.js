@@ -1258,7 +1258,7 @@
 						for (var i = 0; i < buffer.length; ++i) {
 						    view[i] = buffer[i]
 						}
-						return define.processFileType(ab, ext)
+						return define.processFileType(ext, ab)
 						//console.log(full_name)
 					}
 					return undefined
