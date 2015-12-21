@@ -190,7 +190,7 @@ define.class('$system/base/node', function(require){
 		up: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
 		
 		// the current time which can be used in shaders to create continous animations
-		time:Config({meta:"hidden"}),
+		time:Config({meta:"hidden", value:0}),
 
 		// fired when the mouse doubleclicks
 		mousedblclick: Config({type:Event}),
@@ -241,7 +241,7 @@ define.class('$system/base/node', function(require){
 		), value:''})
 	}
 
-	this.camera = this.lookat = this.up = function(){this.redraw();};
+	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
 
 	// the local matrix	
 	this.modelmatrix = mat4.identity()

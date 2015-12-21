@@ -15,7 +15,22 @@ define.class('$ui/view', function(require,
 	
 	define.class(this, "menubar", function($ui$, view){
 	})
+	
+	define.class(this, "selectorrect", function ($ui$, view){
 		
+		this.bordercolorfn = function(pos){
+			var check = (int(mod(0.20*( gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)?1.0:0.0;
+			return vec4(check * vec3(0.8),1);
+		}
+		
+		this.bordercolor = vec4(1,1,1,0.4);
+		this.borderwidth = 2;
+		this.bgcolor = vec4(1,1,1,0.07)
+		this.borderradius = 2;
+		this.position = "absolute";
+		this.visible =false;		
+	})
+	
 	define.class(this, "classlibclass", function($ui$, view, icon){
 		this.attributes = {
 			classdesc: Config({type:Object, value: undefined}),
@@ -172,21 +187,41 @@ define.class('$ui/view', function(require,
 		var bg = this.findChild("blockui")
 		var cg = this.findChild("connectionui")
 		
-		if (this.currentblock){
-			bg.x = this.currentblock.pos[0];
-			bg.y = this.currentblock.pos[1]-bg.layout.height;
+		if (this.currentselection.length == 1)
+		{
+			this.currentblock = undefined;			
+			this.currentconnection = undefined;
+			
+			var b= this.currentselection[0];
+			
+			if (b.constructor.name == "block") this.currentblock = b;
+			if (b.constructor.name == "connection") this.currentconnection  = b;
+			
+			if (this.currentblock){
+				bg.x = this.currentblock.pos[0];
+				bg.y = this.currentblock.pos[1]-bg.layout.height;
+				bg.visible = true;
+			}
+			else{
+				bg.visible = false;					
+			}
+			
+			if (this.currentconnection){
+				cg.x = (this.currentconnection.frompos[0] + this.currentconnection.topos[0])/2
+				cg.y = (this.currentconnection.frompos[1] + this.currentconnection.topos[1])/2
+				cg.visible = true;
+			}else{
+				cg.visible = false;
+			}
+		
 		}
 		else{
-			bg.x = - bg.layout.width
-			bg.y = - bg.layout.height
-		}
-		
-		if (this.currentconnection){
-			cg.x = (this.currentconnection.frompos[0] + this.currentconnection.topos[0])/2
-			cg.y = (this.currentconnection.frompos[1] + this.currentconnection.topos[1])/2
-		}else{
-			cg.x = -cg.layout.width
-			cg.y = -cg.layout.height	
+			cg.visible = false;
+			bg.visible = false;
+			if (this.currentselection.length > 1)
+			{
+				// show group UI in center of group? 
+			}
 		}
 	}
 	
@@ -367,6 +402,7 @@ define.class('$ui/view', function(require,
 			var bl = this.dragselectset[i];
 			this.addToSelection(bl);
 		}
+		this.updatepopupuiposition();
 		
 	}
 	
@@ -416,7 +452,9 @@ define.class('$ui/view', function(require,
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"block", bg:0, margin:4, fontsize:this.fontsize})
 								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
-							),view({name:"selectorrect", bordercolor:vec4(1,1,1,0.4),borderwidth:2,bgcolor:vec4(1,1,1,0.07) ,borderradius:2, position:"absolute" , width:10,height:10,x:-21,y:-21})
+							)
+							,this.selectorrect()
+							
 						)
 					)
 				) 
