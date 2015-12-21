@@ -375,7 +375,7 @@ define.class('$system/base/node', function(require){
 				var shobj
 				// ok so instead of comparing constructor, lets compare the computational result
 //				if(prevshader && prevshader.constructor !== shader) console.log(shader)
-				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype))){
+				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
 					shobj = prevshader
 					shobj.constructor = shader
 					shobj.view = this

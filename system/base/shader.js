@@ -433,7 +433,16 @@ define.class(function(require, exports){
 		pickguid:1
 	}
 
-	this.isShaderEqual = function(prevshader){
+	this.isShaderEqual = function(prevshader, view, prev){
+		// lets compare the prevshader.view vs my view
+		var array = prevshader.view_functions
+		if(array) for(var i = 0; i < array.length; i++){
+			var key = array[i]
+			var vfn = view[key], pfn = prev[key]
+			if(!vfn || !pfn || vfn.toString() !== pfn.toString()){
+				return false
+			}
+		}
 		for(var key in this){
 			if(key in ignore_compare) continue
 			if(this.__lookupSetter__(key)) continue
@@ -696,13 +705,16 @@ define.class(function(require, exports){
 				//!TODO also do the assigns
 			}
 
+			this.view_functions = []
 			for(var key in this.vtx_state.functions){
 				var parts = key.split('_DOT_')
 				if(parts.length === 2 && parts[0] === 'view'){
 					var left = parts[1].split('_T_')[0]
 					// ok lets hook this thing to invalidate our shader
-					if(!this.view.hasListenerName(left, '__recompile_shader_'))
-					this.view.addListener(left, __recompile_shader_)
+					if(!this.view.hasListenerName(left, '__recompile_shader_')){
+						this.view_functions.push(left)
+						this.view.addListener(left, __recompile_shader_)
+					}
 				}
 			}
 
@@ -711,8 +723,10 @@ define.class(function(require, exports){
 				if(parts.length === 2 && parts[0] === 'view'){
 					var left = parts[1].split('_T_')[0]
 					// ok lets hook this thing to invalidate our shader
-					if(!this.view.hasListenerName(left, '__recompile_shader_'))
-					this.view.addListener(left, __recompile_shader_)
+					if(!this.view.hasListenerName(left, '__recompile_shader_')){
+						this.view_functions.push(left)
+						this.view.addListener(left, __recompile_shader_)
+					}
 				}
 			}
 			// lets put other listeners on our referenced function of view
