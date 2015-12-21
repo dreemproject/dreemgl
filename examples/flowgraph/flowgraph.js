@@ -6,7 +6,7 @@
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, splitcontainer,
 		$widgets$, propviewer,
-		$server$, sourceset, dataset){
+		$server$, sourceset, dataset, $$, dockpanel, block, connection){
 
 	
 
@@ -18,30 +18,7 @@ define.class('$ui/view', function(require,
 	define.class(this, "menubar", function($ui$, view){
 	})
 		
-	define.class(this, "dockpanel", function($ui$, view, label){
-		this.attributes = {
-			title:{type:String, value:"Untitled"},
-			fontsize:{type:float, value:12, meta:"fontsize"}
-		}
-		
-		this.padding = 0;
-		this.margin = 0;
-		this.bgcolor = vec4("#505050");
-		this.flex = 1;
-		this.flexdirection ="column" 
-		this.bg = 0;
-		
-		this.render = function(){
-			return [
-				view({bgcolor:"#454545", margin:vec4(0,0,0,0), padding:vec4(0)},
-					view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(0),padding:vec4(10,2,10,2)},
-						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
-					)
-				)
-				,this.constructor_children
-			];
-		}
-	})
+	
 	
 	define.class(this, "classlibclass", function($ui$, view, icon){
 		this.attributes = {
@@ -95,344 +72,6 @@ define.class('$ui/view', function(require,
 		}
 	})
 	
-	define.class(this, "connection",function($ui$, view){	
-		
-		this.attributes = {
-			from:{type:String, value:""},
-			to:{type:String, value:""},
-			linewidth:{type:float, value:8, duration:0.5, motion:"bounce"},
-			focussedcolor:{type:vec4, value:vec4("#d0d0d0"), meta:"color" },
-			hoveredcolor:{type:vec4, value:vec4("#f0f0f0"), meta:"color" },
-			focussedwidth:{type:float, value:12},
-			hoveredwidth:{type:float, value:12},
-			bgcolor:{motion:"linear", duration: 0.1},
-			inselection :{type:boolean, value:false}
-		
-		}
-		
-		this.inselection = function(){	
-			if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
-			this.redraw();
-			this.updatecolor ();
-		}
-
-		
-		this.destroy = function(){
-			fg = this.find("flowgraph");
-			if (fg){
-				var index = fg.allconnections.indexOf(this);
-				if (index > -1) fg.allconnections.splice(index, 1);
-			}
-		}
-		
-		
-		
-		this.init = function(){
-			this.neutralcolor = this.bgcolor;
-			this.neutrallinewidth = this.linewidth;
-			this.find("flowgraph").allconnections.push(this);	
-		}
-		
-		this.keydownDelete = function(){
-			this.find("flowgraph").removeConnection(this);
-		}
-		
-		this.keydownHandler = function(name){
-			console.log("connection handles key:", name);
-		}
-		
-		this.keydown = function(v){			
-			this.screen.defaultKeyboardHandler(this, v);
-		}
-
-		
-		this.over = false;
-		
-		this.updatecolor = function(){	
-			if (this._inselection) {
-				this.bgcolor = this.focussedcolor;
-				this.linewidth = this.focussedwidth;
-			}
-			else{
-				if (this.over){
-					this.bgcolor = this.hoveredcolor;
-					this.linewidth = this.hoveredwidth;
-				}
-				else{
-					this.bgcolor = this.neutralcolor;
-					this.linewidth = this.neutrallinewidth;
-				}
-			}
-		}
-		
-		this.focus =function(){
-		}
-		
-		
-		this.mouseleftdown = function(){
-			var fg = this.find("flowgraph");
-			
-			
-			if (!this.screen.keyboard.shift && !fg.inSelection(this)){
-				fg.clearSelection();
-			}
-			if (this.screen.keyboard.shift && fg.inSelection(this)){
-				fg.removeFromSelection(this);
-				fg.updateSelectedItems();
-		
-				return;
-			}
-			fg.setActiveConnection(this);
-			fg.updateSelectedItems();
-		}
-		
-		this.mouseover = function(){
-			this.over = true;
-			this.updatecolor();
-			
-		}
-		this.updateMove = function(){
-			
-		}
-		this.setupMove = function(){
-			
-		}
-		
-		this.mouseout = function(){
-			this.over = false;
-			this.updatecolor();
-		}
-		
-		this.frompos= vec2(0,0);
-		this.topos= vec2(0,100);
-		
-		this.bgcolor = "#666666" 
-		
-		define.class(this, "connectionshader", this.Shader,function($ui$, view){	
-			this.mesh = vec2.array()
-			
-			for(var i = 0;i<100;i++){
-				this.mesh.push([i/100.0,-0.5])
-				this.mesh.push([i/100.0, 0.5])
-			}
-						
-			this.drawtype = this.TRIANGLE_STRIP
-			
-			this.B1 = function (t) { return t * t * t; }
-			this.B2 = function (t) { return 3 * t * t * (1 - t); }
-			this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
-			this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
-
-			 this.bezier = function(percent,C1,C2,C3,C4) {		
-				
-				var b1 = B1(percent);
-				var b2 = B2(percent);
-				var b3 = B3(percent);
-				var b4 = B4(percent);
-				
-				return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
-			}
-				
-			this.position = function(){
-				var a = mesh.x;
-				var a2 = mesh.x+0.001;
-				var b = mesh.y * view.linewidth;
-				
-				var ddp = view.topos - view.frompos;
-				
-				var curve = min(100.,length(ddp)/2);
-				posA = this.bezier(a, view.frompos, view.frompos + vec2(curve,0), view.topos - vec2(curve,0), view.topos);
-				posB = this.bezier(a2, view.frompos, view.frompos + vec2(curve,0), view.topos - vec2(curve,0), view.topos);
-				
-				var dp = normalize(posB - posA);
-				
-				var rev = vec2(-dp.y, dp.x);
-				posA += rev * b;
-				//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-				return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
-			}
-			
-			this.color = function(){
-				var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
-				return vec4(view.bgcolor.xyz,a);
-			}	
-		}) 
-
-		this.bg = this.connectionshader;
-		this.calculateposition = function(){
-			
-			var F = this.find(this.from);
-			var T = this.find(this.to);
-			if (F && T){
-
-				this.frompos = vec2(F.pos[0]+ F.layout.width-3,F.pos[1]+20);
-				this.topos = vec2(T.pos[0],T.pos[1]+20);
-			}
-		
-		}
-		this.calculateposition();
-		this.layout = function(){
-			this.calculateposition();
-		}
-		this.render = function(){
-			return [];
-		}
-	})
-	
-	define.class(this, "block", function($ui$, view, label){
-				
-		this.position = "absolute" ;
-		this.bgcolor = vec4("#5c5c5c" )
-		this.padding = 0;
-		this.borderradius = vec4(5,5,1,1);
-		this.borderwidth = 2;
-		this.bordercolor = vec4("#5c5c5c")
-		
-		this.attributes = {
-			pos:{persist: true},
-			inputattributes:{type:Object, value:["color"]},
-			outputattributes:{type:Object, value:["clicked","something"]},
-			title:{type:String, value:"Untitled"},
-			snap:{type:int, value:1},
-			bordercolor:{motion:"linear", duration: 0.1},
-			focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"},
-			fontsize:{type:float, value:12},
-			inselection :{type:boolean, value:false}
-		
-		}
-		
-		this.inselection = function(){	
-			if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
-			this.redraw();
-		}
-		
-		this.move = function(x,y)
-		{
-			var nx = this.pos[0] + x;
-			var ny = this.pos[1] + y;
-			console.log(nx,ny);
-			if (nx<0) nx = 0;
-			if (ny<0) ny = 0;
-			this.pos = vec2(Math.round(nx),Math.round(ny));
-			var fg = this.find("flowgraph")
-			fg.setActiveBlock(this);
-			fg.updateconnections();
-		}
-		
-		this.keydownUparrow = function(){this.move(0,-1);}
-		this.keydownDownarrow = function(){this.move(0,1);}
-		this.keydownLeftarrow = function(){this.move(-1,0);}
-		this.keydownRightarrow = function(){this.move(1,0);}
-		this.keydownUparrowShift = function(){this.move(0,-10);}
-		this.keydownDownarrowShift = function(){this.move(0,10);}
-		this.keydownLeftarrowShift = function(){this.move(-10,0);}
-		this.keydownRightarrowShift = function(){this.move(10,0);}
-		
-		this.keydownDelete = function(){
-			var fg = this.find("flowgraph")
-			fg.removeBlock(this);
-		}
-		
-		this.keydown = function(v){			
-			this.screen.defaultKeyboardHandler(this, v);
-		}
-		
-		this.init = function(){
-			this.neutralbordercolor = this.bordercolor;
-			this.find("flowgraph").allblocks.push(this);	
-		}
-		
-		this.destroy = function(){
-			fg = this.find("flowgraph");
-			if (fg){
-				var index = fg.allblocks.indexOf(this);
-				if (index > -1) fg.allblocks.splice(index, 1);
-			}
-		}
-		
-		this.focus = function(){
-				if (this.focus){
-//					this.bordercolor = this.focusbordercolor;
-				}
-				else{
-	//				this.bordercolor = this.neutralbordercolor;
-	//				this.find("flowgraph").setActiveBlock(undefined);
-				}
-		}
-			
-			
-		this.setupMove = function(){
-			this.startx = this.pos[0];
-			this.starty = this.pos[1];
-			
-		}
-		
-		
-
-		this.updateMove = function(dx, dy, snap){
-			var x = Math.floor((this.startx+dx)/snap)*this.snap;
-			var y = Math.floor((this.starty+dy)/snap)*this.snap;	
-
-			this.pos = vec2(x,y);
-			
-		}
-		
-		this.mouseleftdown = function(p){
-			var props = this.find("mainproperties");
-			if (props) props.target = this.name;
-			
-			var	fg = this.find("flowgraph");
-			
-			if (!this.screen.keyboard.shift && !fg.inSelection(this)){
-				fg.clearSelection();
-			}
-			if (this.screen.keyboard.shift && fg.inSelection(this)){
-				fg.removeFromSelection(this);
-				fg.updateSelectedItems();
-		
-				return;
-			}
-			fg.setActiveBlock(this);
-			fg.updateSelectedItems();
-			
-			
-			this.startposition = this.parent.localMouse();
-			fg.setupSelectionMove();
-			this.mousemove = function(evt){
-				p = this.parent.localMouse()
-				var dx = p[0] - this.startposition[0];
-				var dy = p[1] - this.startposition[1];
-		
-				var	fg = this.find("flowgraph");
-				fg.moveSelected(dx,dy);
-				
-				
-			}.bind(this);
-		}
-		
-		this.mouseleftup = function(p){
-			var x = Math.floor(this.pos[0]/this.snap)*this.snap;
-			var y = Math.floor(this.pos[1]/this.snap)*this.snap;
-			this.pos = vec2(x,y);
-			this.redraw();
-			this.relayout();
-			
-			this.mousemove = function(){};
-		}
-		
-		this.flexdirection = "column"
-		
-		this.render = function(){
-			return [
-				label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
-				,view({bgcolor:"#343434", height: 40,width:140, flex: 1})
-				,view({flexdirection:"row", alignitems:"stretch", bg:0}
-					,button({icon:"plus", fontsize: this.fontsize})
-					,button({icon:"plus", fontsize: this.fontsize})
-				)
-			]
-		}
-	})
 	
 	this.addToSelection = function(obj)
 	{		
@@ -626,36 +265,36 @@ define.class('$ui/view', function(require,
 			this.menubar({})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3}
-					,this.dockpanel({title:"Composition" , fontsize:this.fontsize}
+					,dockpanel({title:"Composition" , fontsize:this.fontsize}
 						,treeview({flex:1, dataset: this.sourceset, fontsize:this.fontsize})
 					)
 				)
-				,this.dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0, fontsize:this.fontsize}
+				,dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0, fontsize:this.fontsize}
 					,view({bg:1, bgcolor:"black", clearcolor:"black"  }
 						,button({text:"add"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
 						,button({text:"remove", click:function(){console.log("remove"); }, fontsize:this.fontsize})
 					)
 					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(){this.clearSelection(true);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"connectionlayer", bg:0}
-							,this.connection({from:"phone", to:"tv"})
-							,this.connection({from:"tablet", to:"thing"})
-							,this.connection({from:"a", to:"b"})
-							,this.connection({from:"b", to:"c"})
-							,this.connection({from:"c", to:"d"})
-							,this.connection({from:"a", to:"c"})
+							,connection({from:"phone", to:"tv"})
+							,connection({from:"tablet", to:"thing"})
+							,connection({from:"a", to:"b"})
+							,connection({from:"b", to:"c"})
+							,connection({from:"c", to:"d"})
+							,connection({from:"a", to:"c"})
 						)
 						
 						,view({name:"blocklayer", bg:0}
-							,this.block({name:"phone", title:"Phone", x:200, y:20, fontsize:this.fontsize})
-							,this.block({name:"tv", title:"Television", x:50, y:200, fontsize:this.fontsize})
-							,this.block({name:"tablet", title:"Tablet",x:300, y:120, fontsize:this.fontsize})						
-							,this.block({name:"thing", title:"Thing",x:500, y:120, fontsize:this.fontsize})						
-							,this.block({name:"a", title:"block A", x:50, y:300, fontsize:this.fontsize})
-							,this.block({name:"b", title:"block B", x:150, y:500, fontsize:this.fontsize})
-							,this.block({name:"c", title:"block C", x:250, y:400, fontsize:this.fontsize})
-							,this.block({name:"d", title:"block D", x:350, y:500, fontsize:this.fontsize})
-							,this.block({name:"e", title:"block E", x:450, y:600, fontsize:this.fontsize})
-							,this.block({name:"f", title:"block F", x:550, y:700, fontsize:this.fontsize})
+							,block({name:"phone", title:"Phone", x:200, y:20, fontsize:this.fontsize})
+							,block({name:"tv", title:"Television", x:50, y:200, fontsize:this.fontsize})
+							,block({name:"tablet", title:"Tablet",x:300, y:120, fontsize:this.fontsize})						
+							,block({name:"thing", title:"Thing",x:500, y:120, fontsize:this.fontsize})						
+							,block({name:"a", title:"block A", x:50, y:300, fontsize:this.fontsize})
+							,block({name:"b", title:"block B", x:150, y:500, fontsize:this.fontsize})
+							,block({name:"c", title:"block C", x:250, y:400, fontsize:this.fontsize})
+							,block({name:"d", title:"block D", x:350, y:500, fontsize:this.fontsize})
+							,block({name:"e", title:"block E", x:450, y:600, fontsize:this.fontsize})
+							,block({name:"f", title:"block F", x:550, y:700, fontsize:this.fontsize})
 						)
 												
 						,view({name:"popllayer", bg:0},
@@ -670,14 +309,13 @@ define.class('$ui/view', function(require,
 								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
 							)
 						)
-				
 					)
 				) 
 				,splitcontainer({flex:0.5,direction:"horizontal"}
-					,this.dockpanel({title:"Library", viewport:"2D", fontsize:this.fontsize }
+					,dockpanel({title:"Library", viewport:"2D", fontsize:this.fontsize }
 						,this.library({dataset:this.librarydata, fontsize:this.fontsize})
 					)
-					,this.dockpanel({title:"Properties", viewport:"2D", fontsize:this.fontsize}
+					,dockpanel({title:"Properties", viewport:"2D", fontsize:this.fontsize}
 						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll", fontsize:this.fontsize})		
 					)	
 				)

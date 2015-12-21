@@ -22,6 +22,7 @@ define.class(function($ui$, view, label){
 		// color of the splitter bar when dragging it
 		activecolor: {type: vec4, value: vec4("#7070a0")}
 	}
+	
 	this.bg = 0;
 	this.flex = 1.0
 	this.flexdirection = "row";
@@ -31,7 +32,8 @@ define.class(function($ui$, view, label){
 	
 	this.direction = function(){
 		this.flexdirection = this.direction=="horizontal"?"column":"row" ;
-	}
+
+		}
 	
 	// the visual class that defines the draggable bar between the resizable children
 	define.class(this, 'splitter', function(view){

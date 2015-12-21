@@ -7,16 +7,16 @@ define.class(function($ui$, view){
 	
 	this.attributes = {
 		// Color of the draggable part of the scrollbar
-		draggercolor: {type: vec4, value: vec4("#9090b0")},
+		draggercolor: {type: vec4, value: vec4("#808080")},
 
 		// Color of the draggable part of the scrollbar
 		draggerradius: {type: float, value: 3},
 		
 		// Color when the mouse is hovering over the draggable part of the scrollbar
-		hovercolor: {type: vec4, value: vec4("#8080c0")},
+		hovercolor: {type: vec4, value: vec4("#707070")},
 		
 		// Color of the draggable part of the scrollbar while actively scrolling
-		activecolor: {type: vec4, value: vec4("#8080c0")},
+		activecolor: {type: vec4, value: vec4("#808080")},
 		
 		// Is this a horizontal or a vertical scrollbar? 
 		vertical: {type: Boolean, value: true},
@@ -77,11 +77,21 @@ define.class(function($ui$, view){
 
 	this.borderwidth = 0
 	this.margin = 1
-	this.bordercolor = vec4("#303060")
+	this.bordercolor = vec4("#303030")
 	
 	this.pressed = 0
 	this.hovered = 0
 		
+		
+	this.vertical = function(){
+		if (this.vertical){
+			this.cursor = "ns-resize";
+		}else{
+			this.cursor = "ew-resize";
+			
+		}
+	}
+	
 	this.mouseover  = function(){
 	}
 	
@@ -90,6 +100,7 @@ define.class(function($ui$, view){
 	
 	this.mouseleftdown = function(event){
 		var start = event.local
+		
 		// detect if we clicked not on the button
 		if(this.vertical){
 			var p = start[1] / this.layout.height
@@ -97,8 +108,11 @@ define.class(function($ui$, view){
 		else{
 			var p = start[0] / this.layout.width
 		}
+		
 		var offset = this.value / this.total
+		
 		var page = this.page / this.total
+		
 		if(p < offset){
 			var value = clamp(p - 0.5 * page, 0, 1.-page) * this.total
 			if(value != this.value){
