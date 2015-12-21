@@ -8,36 +8,29 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	// Simple numberbox: a number with a plus and a minus button
 	
 	this.attributes = {
-		value: {type: float, value: 0},
-		minvalue: {type: float, value: undefined},
-		maxvalue: {type: float, value: undefined},
-		stepvalue: {type: float, value: 1},
-		bordercolor: {motion:"easeout", duration:0.1, value: "#202020", meta:"color" },
-		draggingbordercolor: {type:vec4, value:vec4("#707070"), meta:"color"},
-		focusbordercolor: {type:vec4, value:vec4("#606060"), meta:"color"},
-		decimals: {type:int, value:0}, 
+		value: Config({type: float, value: 0}),
+		minvalue: Config({type: float, value: undefined}),
+		maxvalue: Config({type: float, value: undefined}),
+		stepvalue: Config({type: float, value: 1}),
+		bordercolor: Config({motion:"easeout", duration:0.1, value: "#202020", meta:"color" }),
+		draggingbordercolor: Config({type:vec4, value:vec4("#707070"), meta:"color"}),
+		focusbordercolor: Config({type:vec4, value:vec4("#606060"), meta:"color"}),
+		decimals: Config({type:int, value:0}), 
 		// Font size in device-pixels.
-		fontsize: {type: float, value: 14, meta:"fontsize" },		
-		title: {type:String, value:""}
+		fontsize: Config({type: float, value: 14, meta:"fontsize" }),		
+		title: Config({type:String, value:""})
 	}
 	
-	
-	
 	this.tabstop = 0;
-	
-	
 	this.bordercolor = "#202020" ;
 	this.borderradius = 4;
 	this.borderwidth = 2;
 	this.fgcolor="#f0f0f0";
-	
 	this.bgcolor = "#3b3b3b" 
 
 	this.alignself = "flex-end" 
 	this.justifycontent = "center";
 	this.alignitems = "center";	
-	
-	
 	
 	this.value = function(){
 		var tn = this.findChild("thenumber");
@@ -46,7 +39,6 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 			this.relayout();
 		}
 	}
-	
 	
 	this.keydownUparrow = function(){this.checkandset(this.value + this.stepvalue);}
 	this.keydownDownarrow =function(){this.checkandset(this.value - this.stepvalue);}
@@ -58,11 +50,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.keydownRightarrowShift =function(){this.checkandset(this.value + this.stepvalue*1000);}
 	this.keydownLeftarrowShift =function(){this.checkandset(this.value - this.stepvalue*1000);}
 
-
-
 	this.init = function(){
 		this.neutralbordercolor = this.bordercolor;
-	
 	}
 	
 	this.keydown = function(v){			

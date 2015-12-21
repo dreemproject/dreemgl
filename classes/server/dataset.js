@@ -9,11 +9,11 @@ define.class('$system/base/node', function(require, $ui$, label){
 	// The dataset provides undo/redo functionality by serializing its contents to a JSON string.
 	// To modify a dataset you need to use the "fork" method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.
 
-	this.atConstructor = function(){
+	this._atConstructor = function(data){
 		this.undo_stack = []
 		this.redo_stack = []
 		this.connected_objects = []
-		this.data = this.constructor_props
+		this.data = data
 	}
 
 	// Handles the binding of this dataset to the attribute of something else.

@@ -12,223 +12,223 @@ define.class('$system/base/node', function(require){
 
 	this.attributes = {
 		// a simple boolean to turn visibility of a node on or off
-		visible: {type:boolean, value: true},
+		visible: Config({type:boolean, value: true}),
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
-		pos: {type:vec3, value:vec3(0,0,0),meta:"xyz"},
+		pos: Config({type:vec3, value:vec3(0,0,0),meta:"xyz"}),
 
 		// alias for the x component of pos
-		x: {alias:'pos', index:0},
+		x: Config({alias:'pos', index:0}),
 		// alias for the y component of pos
-		y: {alias:'pos', index:1},
+		y: Config({alias:'pos', index:1}),
 		// alias for the z component of pos
-		z: {alias:'pos', index:2},
+		z: Config({alias:'pos', index:2}),
 
 		// alias for the x component of pos
-		left: {alias:'pos', index:0},
+		left: Config({alias:'pos', index:0}),
 		// alias for the y component of pos
-		top: {alias:'pos', index:1},
+		top: Config({alias:'pos', index:1}),
 		// alias for the z component of pos
-		front: {alias:'pos', index:2},
+		front: Config({alias:'pos', index:2}),
 
 		// the bottom/right/rear corner 
-		corner: {type:vec3, value:vec3(NaN)},
+		corner: Config({type:vec3, value:vec3(NaN)}),
 		// alias for the x component of corner
-		right: {alias:'corner', index:0},
+		right: Config({alias:'corner', index:0}),
 		// alias for  y component of corner
-		bottom: {alias:'corner',index:1},
+		bottom: Config({alias:'corner',index:1}),
 		// alias for z component of corner
-		rear: {alias:'corner', index:2},
+		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: {group:"style", type:vec4, value: vec4('white'), meta:"color"},
+		bgcolor: Config({group:"style", type:vec4, value: vec4('white'), meta:"color"}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
-		bgimage: {group:"style",type:Object, meta:"texture"},
+		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
-		opacity: {group:"style", value: 1.0, type:float},
+		opacity: Config({group:"style", value: 1.0, type:float}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
-		clearcolor: {group:"style",type:vec4, value: vec4('transparent'), meta:"color"},
+		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
 		
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
-		scroll: {type:vec2, value:vec2(0, 0), persist: true},
+		scroll: Config({type:vec2, value:vec2(0, 0), persist: true}),
 		// the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
-		zoom:{type:float, value:1},
+		zoom: Config({type:float, value:1}),
 		// overflow control, shows scrollbars when the content is larger than the viewport. Only works on viewport:'2D'
 		// works the same way as the CSS property
-		overflow: {type: Enum('','hidden','scroll','auto'), value:''},
+		overflow: Config({type: Enum('','hidden','scroll','auto'), value:''}),
 
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
-		size: {type:vec3, value:vec3(NaN), meta:"xyz"},
+		size: Config({type:vec3, value:vec3(NaN), meta:"xyz"}),
 
 		// alias for the x component of size
-		w: {alias:'size', index:0},
+		w: Config({alias:'size', index:0}),
 		// alias for the y component of size
-		h: {alias:'size', index:1},
+		h: Config({alias:'size', index:1}),
 		// alias for the z component of size
-		d: {alias:'size', index:2},
+		d: Config({alias:'size', index:2}),
 		
 		// alias for the x component of size
-		width: {alias:'size', index:0},
+		width: Config({alias:'size', index:0}),
 		// alias for the y component of size
-		height: {alias:'size', index:1},
+		height: Config({alias:'size', index:1}),
 		// alias for the z component of size
-		depth: {alias:'size', index:2},
+		depth: Config({alias:'size', index:2}),
 
 		// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
-		pixelratio: {type: float, value:NaN},
+		pixelratio: Config({type: float, value:NaN}),
 
 		// the minimum size for the flexbox layout engine
-		minsize: {type: vec3, value:vec3(NaN), meta:"xyz"},
+		minsize: Config({type: vec3, value:vec3(NaN), meta:"xyz"}),
 		// the maximum size for the flexbox layout engine
-		maxsize: {type: vec3, value:vec3(NaN), meta:"xyz"},
+		maxsize: Config({type: vec3, value:vec3(NaN), meta:"xyz"}),
 
 		// alias for the x component of minsize
-		minwidth: {alias:'minsize', index:0},
+		minwidth: Config({alias:'minsize', index:0}),
 		// alias for the y component of minsize
-		minheight: {alias:'minsize', index:1},
+		minheight: Config({alias:'minsize', index:1}),
 		// alias for the z component of minsize
-		mindepth: {alias:'minsize', index:2},
+		mindepth: Config({alias:'minsize', index:2}),
 
 		// alias for the x component of maxsize
-		maxwidth: {alias:'maxsize', index:0},
+		maxwidth: Config({alias:'maxsize', index:0}),
 		// alias for the y component of maxsize
-		maxheight: {alias:'maxsize', index:1},
+		maxheight: Config({alias:'maxsize', index:1}),
 		// alias for the z component of maxsize
-		maxdepth: {alias:'maxsize', index:2},
+		maxdepth: Config({alias:'maxsize', index:2}),
 
 		// the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
-		margin: {type: vec4, value: vec4(0,0,0,0), meta: "ltrb"},
+		margin: Config({type: vec4, value: vec4(0,0,0,0), meta: "ltrb"}),
 		// alias for the first component of margin
-		marginleft: {alias:'margin', index:0},
+		marginleft: Config({alias:'margin', index:0}),
 		// alias for the second component of margin
-		margintop: {alias:'margin', index:1},
+		margintop: Config({alias:'margin', index:1}),
 		// alias for the third component of margin
-		marginright: {alias:'margin', index:2},
+		marginright: Config({alias:'margin', index:2}),
 		// alias for the fourth component of margin
-		marginbottom: {alias:'margin', index:3},
+		marginbottom: Config({alias:'margin', index:3}),
 
 		// the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
-		padding: {type: vec4, value: vec4(0,0,0,0), meta: "ltrb"},
+		padding: Config({type: vec4, value: vec4(0,0,0,0), meta: "ltrb"}),
 		// alias for the first component of padding
-		paddingleft: {alias:'padding', index:0},
+		paddingleft: Config({alias:'padding', index:0}),
 		// alias for the second component of padding
-		paddingtop: {alias:'padding', index:1},
+		paddingtop: Config({alias:'padding', index:1}),
 		// alias for the third component of padding
-		paddingright: {alias:'padding', index:2},
+		paddingright: Config({alias:'padding', index:2}),
 		// alias for the fourth component of padding
-		paddingbottom: {alias:'padding', index:3},
+		paddingbottom: Config({alias:'padding', index:3}),
 
 		// Scale of an item, only useful for items belof a 3D viewport
-		scale: {type: vec3, value: vec3(1), meta:"xyz"},
+		scale: Config({type: vec3, value: vec3(1), meta:"xyz"}),
 		// The anchor point around which items scale and rotate, depending on anchor mode its either a factor of size or and absolute value
-		anchor: {type: vec3, value: vec3(0.)},
+		anchor: Config({type: vec3, value: vec3(0.)}),
 		// the mode with which the anchor is computed. Factor uses the size of an item to find the point, defaulting to center
-		anchormode: {type:Enum('','factor','absolute'), value:'factor'},
+		anchormode: Config({type:Enum('','factor','absolute'), value:'factor'}),
 		// rotate the item around x, y or z in radians. If you want degrees type it like this: 90*DEG
-		rotate: {type: vec3, value: vec3(0), meta:"xyz"},
+		rotate: Config({type: vec3, value: vec3(0), meta:"xyz"}),
 
 		// the color of the border of an item. 
-		bordercolor: {group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"},
+		bordercolor: Config({group:"style",type: vec4, value: vec4(0,0,0,0), meta:"color"}),
 
 		// the radius of the corners of an item, individually settable left, top, right, bottom. Setting this value will switch to rounded corner shaders
-		borderradius: {group:"style",type: vec4, value: vec4(0,0,0,0)},
+		borderradius: Config({group:"style",type: vec4, value: vec4(0,0,0,0)}),
 
 		// the width of the border. Setting this value will automatically enable the border shaders
-		borderwidth: {group:"style",type: vec4, value: vec4(0,0,0,0)},
+		borderwidth: Config({group:"style",type: vec4, value: vec4(0,0,0,0)}),
 
 		// alias for the first component of borderwidth
-		borderleftwidth: {alias:'borderwidth', index:0},
+		borderleftwidth: Config({alias:'borderwidth', index:0}),
 		// alias for the second component of borderwith
-		bordertopwidth: {alias:'borderwidth', index:1},
+		bordertopwidth: Config({alias:'borderwidth', index:1}),
 		// alias for the third component of borderwith
-		borderrightwidth: {alias:'borderwidth', index:2},
+		borderrightwidth: Config({alias:'borderwidth', index:2}),
 		// alias for the fourth component of borderwith
-		borderbottomwidth: {alias:'borderwidth', index:3},
+		borderbottomwidth: Config({alias:'borderwidth', index:3}),
 
 		// turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
 		// flexbox layout is a web standard and has many great tutorials online to learn how it works
-		flex: {group:"layout", type: float, value: NaN},
+		flex: Config({group:"layout", type: float, value: NaN}),
 
 		// wraps nodes around when the flexspace is full
-		flexwrap: {group:"layout", type: Enum('wrap','nowrap'), value: "wrap"},	
+		flexwrap: Config({group:"layout", type: Enum('wrap','nowrap'), value: "wrap"}),	
 		// which direction the flex layout is working,
-		flexdirection: {group:"layout", type: Enum('row','column'), value: "row"},
+		flexdirection: Config({group:"layout", type: Enum('row','column'), value: "row"}),
 		// pushes items eitehr to the start, center or end
-		justifycontent: {group:"layout", type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ""}, 
+		justifycontent: Config({group:"layout", type: Enum('','flex-start','center','flex-end','space-between','space-around'), value: ""}), 
 		// align items to either start, center, end or stretch them
-		alignitems: {group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
+		alignitems: Config({group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"}),  
 		// overrides the parents alignitems with our own preference
-		alignself: {group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"},  
+		alignself: Config({group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"}),  
 		// item positioning, if absolute it steps 'outside' the normal flex layout 
-		position: {group:"layout", type:  Enum('relative','absolute'), value: "relative" },	
+		position: Config({group:"layout", type:  Enum('relative','absolute'), value: "relative" }),	
 
 		// the layout object, contains width/height/top/left after computing. Its a read-only property and should be used in shaders only.
 		// Can be listened to to observe layout changes
-		layout: { type:Object, value:{}, meta:"hidden"},
+		layout: Config({ type:Object, value:{}, meta:"hidden"}),
 
 		// When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
 		// using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
 		// need to be processed and a single texture can just be drawn by the parent
 		// the viewportblend shader can be used to render this texture it into its parent
-		viewport: {group:"layout", type:Enum('','2d','3d'), value:''},
+		viewport: Config({group:"layout", type:Enum('','2d','3d'), value:''}),
 	
 
 		// the field of view of a 3D viewport. Only useful on a viewport:'3D'
-		fov: {group:"3d", type:float, value: 45},
+		fov: Config({group:"3d", type:float, value: 45}),
 		// the nearplane of a 3D viewport, controls at which Z value near clipping start. Only useful on a viewport:'3D'
-		nearplane: {group:"3d",type:float, value: 0.001},
+		nearplane: Config({group:"3d",type:float, value: 0.001}),
 		// the farplane of a 3D viewport, controls at which Z value far clipping start. Only useful on a viewport:'3D'
-		farplane: {group:"3d",type:float, value: 1000},
+		farplane: Config({group:"3d",type:float, value: 1000}),
 		
 		// the position of the camera in 3D space. Only useful on a viewport:'3D'
-		camera: {group:"3d",type: vec3, value: vec3(-2,2,-2)},
+		camera: Config({group:"3d",type: vec3, value: vec3(-2,2,-2)}),
 		// the point the camera is looking at in 3D space. Only useful on a viewport:'3D'
-		lookat: {group:"3d",type: vec3, value: vec3(0)},
+		lookat: Config({group:"3d",type: vec3, value: vec3(0)}),
 		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
-		up: {group:"3d",type: vec3, value: vec3(0,-1,0)},
+		up: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
 		
 		// the current time which can be used in shaders to create continous animations
-		time:{meta:"hidden"} ,
+		time:Config({meta:"hidden"}),
 
 		// fired when the mouse doubleclicks
-		mousedblclick: Event,
+		mousedblclick: Config({type:Event}),
 		// fires when the mouse moves 'out' of the view. The event argument is the mouse position as {local:vec2}
-		mouseout: Event,
+		mouseout: Config({type:Event}),
 		// fires when the mouse moves over the view. The event argument is the mouse position as {local:vec2}
-		mouseover: Event,
+		mouseover: Config({type:Event}),
 		// fires when the mouse moves. The event argument is the mouse position as {local:vec2}
-		mousemove: Event,
+		mousemove: Config({type:Event}),
 		// fires when the left mouse button is down. The event argument is the mouse position as {local:vec2}
-		mouseleftdown: Event,
+		mouseleftdown: Config({type:Event}),
 		// fires when the left mouse button is up. The event argument is the mouse position as {local:vec2}
-		mouseleftup: Event,
+		mouseleftup: Config({type:Event}),
 		// fires when the right mouse button is down. The event argument is the mouse position as {local:vec2}
-		mouserightdown: Event,
+		mouserightdown: Config({type:Event}),
 		// fires when the right mouse button is up. The event argument is the mouse position as {local:vec2}
-		mouserightup: Event,
+		mouserightup: Config({type:Event}),
 		// fires when the mouse wheels x coordinate changes, also for 2 finger scroll on mac. The event argument is {wheel:float, local:vec2}
-		mousewheelx: Event,
+		mousewheelx: Config({type:Event}),
 		// fires when the mouse wheels y coordinate changes, alsof or 2 finger scroll on mac. The event argument is {wheel:float, local:vec2}
-		mousewheely: Event,
+		mousewheely: Config({type:Event}),
 		// fires when pinchzoom is used in chrome, or when meta-mouse wheel is used (under review). The event argument is the mouse position as {zoom:float, local:vec2}
-		mousezoom: Event,
+		mousezoom: Config({type:Event}),
 
 		// fires when a key goes to up. The event argument is {repeat:int, code:int, name:String}
-		keyup: Event,
+		keyup: Config({type:Event}),
 		// fires when a key goes to down. The event argument is {repeat:int, code:int, name:String}
-		keydown: Event,
+		keydown: Config({type:Event}),
 		// fires when a key gets pressed. The event argument is {repeat:int, value:string, char:int}
-		keypress: Event,
+		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
-		keypaste: Event,
+		keypaste: Config({type:Event}),
 		// wether this view has focus
 		focus: false,
 		// tabstop, sorted by number
 		tabstop: NaN,
 
-		cursor: {type:Enum(
+		cursor: Config({type:Enum(
 			'', 'arrow', 'none','wait','text','pointer',
 			'zoom-in','zoom-out','grab','grabbing',
 			'ns-resize','ew-resize','nwse-resize','nesw-resize',
@@ -238,7 +238,7 @@ define.class('$system/base/node', function(require){
 			'col-resize','row-resize',
 			'vertical-text','context-menu','no-drop','not-allowed',
 			'alias','cell','copy'
-		), value:''}
+		), value:''})
 	}
 
 	this.camera = this.lookat = this.up = function(){this.redraw();};
@@ -345,6 +345,7 @@ define.class('$system/base/node', function(require){
 
 	// initialization of a view
 	this.init = function(prev){
+
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
@@ -363,10 +364,10 @@ define.class('$system/base/node', function(require){
 			this.bg = this.hardimage
 		}
 		// create shaders
+	
 		for(var key in this.shader_enable){
 			var enable = this.shader_enable[key]
 			if(!enable) continue
-
 			var shader = this[key]
 			if(shader){
 				var shname = key + 'shader'

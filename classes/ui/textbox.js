@@ -9,11 +9,11 @@ define.class(function(require, $ui$, label){
 
 	this.attributes = {
 		// the color of the cursor
-		cursorcolor: {type:vec4, value: vec4(NaN), meta:"color"},
+		cursorcolor: Config({type:vec4, value: vec4(NaN), meta:"color"}),
 		// color of the marker
-		markerfocus: {type:vec4, value: vec4("ocean"), meta:"color"},
-		markerunfocus: {type:vec4, value: vec4("gray"), meta:"color"},
-		value:{type:String, value:""},
+		markerfocus: Config({type:vec4, value: vec4("ocean"), meta:"color"}),
+		markerunfocus: Config({type:vec4, value: vec4("gray"), meta:"color"}),
+		value: Config({type:String, value:""}),
 		readonly:false
 	}
 

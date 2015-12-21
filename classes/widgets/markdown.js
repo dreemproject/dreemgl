@@ -13,13 +13,13 @@ define.class(function($ui$, view, label){
 		
 		// alignment of the bodytext. 
 		// accepted values are "left", "right", "justify" and "center" 
-		align: {type: String,  value: "left"},
+		align: Config({type: String,  value: "left"}),
 
 		// Base fontsize - heading sizes will be multiples of this value.
-		fontsize: {type:Number, value: 13},
+		fontsize: Config({type:Number, value: 13}),
 		
 		// The color to use as the default color for this textblock.
-		fontcolor: {type:vec4, value: vec4("#202020")}
+		fontcolor: Config({type:vec4, value: vec4("#202020")})
 	}
 
 	this.flexdirection = "column"

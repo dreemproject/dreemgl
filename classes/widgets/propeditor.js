@@ -6,11 +6,11 @@
 
 define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, button, scrollbar,textbox, numberbox,$widgets$, colorpicker, radiogroup){
 	this.attributes = {
-		target:{type:String,value:""},
-		property:{type:Object},
-		value:{type:Object},
-		propertyname:{type:String,value:""},
-		fontsize: {type:float, value: 13}
+		target:Config({type:String,value:""}),
+		property:Config({type:Object}),
+		value:Config({type:Object}),
+		propertyname:Config({type:String,value:""}),
+		fontsize: Config({type:float, value: 13})
 	}
 	
 	this.bg = {

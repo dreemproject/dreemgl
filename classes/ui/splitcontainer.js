@@ -10,17 +10,17 @@ define.class(function($ui$, view, label){
 	// should the splitter bars be introduced horizontally or vertically? 
 	this.attributes = {
 		// wether the splitcontainer is vertical or not
-		direction: {type: Enum("horizontal", "vertical"), value:"vertical"},
+		direction: Config({type: Enum("horizontal", "vertical"), value:"vertical"}),
 		// set the width (or height) of the splitter bar
-		splitsize: {type: float, value: 6},
+		splitsize: Config({type: float, value: 6}),
 		// the minimum size of a child controlled by the splitter
-		minimalchildsize: {type: float, value: 20},
+		minimalchildsize: Config({type: float, value: 20}),
 		// the color of the splitter bar
-		splittercolor: {type: vec4, value: vec4("#484848")},
+		splittercolor: Config({type: vec4, value: vec4("#484848")}),
 		// color of splitter bar on hover
-		hovercolor: {type: vec4, value: vec4("#707070")},
+		hovercolor: Config({type: vec4, value: vec4("#707070")}),
 		// color of the splitter bar when dragging it
-		activecolor: {type: vec4, value: vec4("#7070a0")}
+		activecolor: Config({type: vec4, value: vec4("#7070a0")})
 	}
 	
 	this.bg = 0;
@@ -39,18 +39,18 @@ define.class(function($ui$, view, label){
 	define.class(this, 'splitter', function(view){
 		
 		this.attributes = {
-			firstnode: {type: int, value: 0}
+			firstnode: Config({type: int, value: 0})
 		}
 	
 		this.bgcolor = vec4("#3b3b3b");
 		this.alignitem = "stretch";
 		this.attributes = {
-			vertical: {type: Boolean, value: false},
-			splitsize: {type: float, value: 6},
-			splittercolor: {type: vec4, value: vec4("#404050")},
-			hovercolor: {type: vec4, value: vec4("#f050a0")},
-			bgcolor:{duration:0.1, motion:"linear"},
-			activecolor: {type: vec4, value: vec4("#7070a0")}
+			vertical: Config({type: Boolean, value: false}),
+			splitsize: Config({type: float, value: 6}),
+			splittercolor: Config({type: vec4, value: vec4("#404050")}),
+			hovercolor: Config({type: vec4, value: vec4("#f050a0")}),
+			bgcolor: Config({duration:0.1, motion:"linear"}),
+			activecolor: Config({type: vec4, value: vec4("#7070a0")})
 		}
 		this.flex = 0
 		this.neutralcolor = this.bgcolor;

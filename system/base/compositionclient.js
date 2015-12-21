@@ -41,12 +41,11 @@ define.class('./compositionbase', function(require, baseclass){
 			this.screen = this.names.role.constructor_children[0]			
 			this.screenname = this.screen.name || this.screen.constructor.name
 		}
-
+	
 		if(previous || parent) this.doRender(previous, parent)
 	}
 
 	this.doRender = function(previous, parent){
-		
 		var globals = {
 			composition:this,
 			rpc:this.rpc,

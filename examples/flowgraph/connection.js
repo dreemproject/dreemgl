@@ -7,15 +7,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 				
 		this.attributes = {
-			from:{type:String, value:""},
-			to:{type:String, value:""},
-			linewidth:{type:float, value:8, duration:0.5, motion:"bounce"},
-			focussedcolor:{type:vec4, value:vec4("#d0d0d0"), meta:"color" },
-			hoveredcolor:{type:vec4, value:vec4("#f0f0f0"), meta:"color" },
-			focussedwidth:{type:float, value:12},
-			hoveredwidth:{type:float, value:12},
-			bgcolor:{motion:"linear", duration: 0.1},
-			inselection :{type:boolean, value:false}
+			from: Config({type:String, value:""}),
+			to: Config({type:String, value:""}),
+			linewidth: Config({type:float, value:8, duration:0.5, motion:"bounce"}),
+			focussedcolor: Config({type:vec4, value:vec4("#d0d0d0"), meta:"color" }),
+			hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
+			focussedwidth: Config({type:float, value:12}),
+			hoveredwidth: Config({type:float, value:12}),
+			bgcolor: Config({motion:"linear", duration: 0.1}),
+			inselection : Config({type:boolean, value:false})
 		
 		}
 		

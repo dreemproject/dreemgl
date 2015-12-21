@@ -10,7 +10,7 @@ define.class( function(require, label){
 	
 	this.attributes = {
 		// The icon to be used. Look at the FontAwesome cheat sheet to see the available options. Icons do not need to specify their 'fa-' prefix -> use 'gears' instead of 'fa-gears'.
-		icon: {type:String, value:'wrench'}
+		icon: Config({type:String, value:'wrench'})
 	}
 
 	this.init = function(){

@@ -7,31 +7,31 @@ define.class(function($ui$, view){
 	
 	this.attributes = {
 		// Color of the draggable part of the scrollbar
-		draggercolor: {type: vec4, value: vec4("#808080")},
+		draggercolor: Config({type: vec4, value: vec4("#808080")}),
 
 		// Color of the draggable part of the scrollbar
-		draggerradius: {type: float, value: 3},
+		draggerradius: Config({type: float, value: 3}),
 		
 		// Color when the mouse is hovering over the draggable part of the scrollbar
-		hovercolor: {type: vec4, value: vec4("#707070")},
+		hovercolor: Config({type: vec4, value: vec4("#707070")}),
 		
 		// Color of the draggable part of the scrollbar while actively scrolling
-		activecolor: {type: vec4, value: vec4("#808080")},
+		activecolor: Config({type: vec4, value: vec4("#808080")}),
 		
 		// Is this a horizontal or a vertical scrollbar? 
-		vertical: {type: Boolean, value: true},
+		vertical: Config({type: Boolean, value: true}),
 		
 		// Current value of the scrollbar. Ranges from 0 to total - page
-		value: {type:float, value:0},
+		value: Config({type:float, value:0}),
 		
 		// Page size, in total
-		page: {type:float, value:0},
+		page: Config({type:float, value:0}),
 
 		// total size. 
-		total: {type:float, value:0},
+		total: Config({type:float, value:0}),
 
 		// set animation on bgcolor
-		bgcolor: {duration: 1.0}
+		bgcolor: Config({duration: 1.0})
 	}
 
 	var scrollbar = this.constructor;

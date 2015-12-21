@@ -8,18 +8,18 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	// Simple knob: a dial with a value
 	
 	this.attributes = {
-		value: {type: float, value: 0},
-		minvalue: {type: float, value: 0},
-		maxvalue: {type: float, value: 1},
-		stepvalue: {type: float, value: 0.01},
+		value: Config({type: float, value: 0}),
+		minvalue: Config({type: float, value: 0}),
+		maxvalue: Config({type: float, value: 1}),
+		stepvalue: Config({type: float, value: 0.01}),
 		
-		bordercolor: {motion:"easeout", duration:0.2, value: vec4(1,1,1,0), meta:"color" },
-		draggingbordercolor: {type:vec4, value:vec4("yellow"), meta:"color"},
-		focusbordercolor: {type:vec4, value:vec4("green"), meta:"color"},
+		bordercolor: Config({motion:"easeout", duration:0.2, value: vec4(1,1,1,0), meta:"color" }),
+		draggingbordercolor: Config({type:vec4, value:vec4("yellow"), meta:"color"}),
+		focusbordercolor: Config({type:vec4, value:vec4("green"), meta:"color"}),
 
-		outerradius:{type:float, value: 70},
-		innerradius:{type:float, value: 30},
-		offset:{type:float, value:8}
+		outerradius: Config({type:float, value: 70}),
+		innerradius: Config({type:float, value: 30}),
+		offset: Config({type:float, value:8})
 	}
 	this.minwidth = 50;
 	this.minheight = 50;

@@ -7,10 +7,10 @@
 define.class(function(require, $ui$, view, label, button, scrollbar, textbox, icon){
 	
 	this.attributes ={
-		values:{type:Object, value:[]},
-		currentvalue:{type:String, value:""},
-		fgcolor: {type:vec4, value:vec4("white"), meta:"color"},
-		fontsize: {type: float, value: 12, meta:"fontsize"}
+		values: Config({type:Object, value:[]}),
+		currentvalue: Config({type:String, value:""}),
+		fgcolor: Config({type:vec4, value:vec4("white"), meta:"color"}),
+		fontsize: Config({type: float, value: 12, meta:"fontsize"})
 	}
 	
 	this.flexdirection = "row"

@@ -15,16 +15,16 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.bordercolor = vec4("#5c5c5c")
 	
 	this.attributes = {
-		pos:{persist: true},
-		inputattributes:{type:Object, value:["color"]},
-		outputattributes:{type:Object, value:["clicked","something"]},
-		title:{type:String, value:"Untitled"},
-		snap:{type:int, value:1},
-		bordercolor:{motion:"linear", duration: 0.1},
-		focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"},
-		hoverbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"},
-		fontsize:{type:float, value:12},
-		inselection :{type:boolean, value:false}
+		pos: Config({persist: true}),
+		inputattributes: Config({type:Object, value:["color"]}),
+		outputattributes: Config({type:Object, value:["clicked","something"]}),
+		title: Config({type:String, value:"Untitled"}),
+		snap: Config({type:int, value:1}),
+		bordercolor: Config({motion:"linear", duration: 0.1}),
+		focusbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"}),
+		hoverbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"}),
+		fontsize: Config({type:float, value:12}),
+		inselection : Config({type:boolean, value:false})
 	}
 	
 	this.inselection = function(){	

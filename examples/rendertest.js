@@ -6,8 +6,8 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 	var mousedebug = define.class(function mousedebug($ui$view){
 		
 		this.attributes = {
-			buttoncolor1: {type: vec4, value: vec4("#9090b0")},
-			buttoncolor2: {type: vec4, value: vec4("#8080c0")}
+			buttoncolor1: Config({type: vec4, value: vec4("#9090b0")}),
+			buttoncolor2: Config({type: vec4, value: vec4("#8080c0")})
 		}
 
 		this.bg  = {

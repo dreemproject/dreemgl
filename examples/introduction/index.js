@@ -30,7 +30,7 @@ define.class(function(require,
 						slideheight:800,
 						bgcolor:'black',
 						bg:0,
-						attributes:{scroll:{persist:true}}
+						scroll: Config({persist:true}),
 						},
 						view({
 							bgcolor:"transparent", 
@@ -93,7 +93,7 @@ define.class(function(require,
 								flex:1,
 								clearcolor: 'rgba(255,255,255,0)',
 								viewport: '3d',
-								attributes:{count:16},
+								count:16,
 								bg:0,
 								camera: vec3(0,0,18),
 								render: function(){
@@ -102,14 +102,12 @@ define.class(function(require,
 										teapot({
 											detail:6,
 											position:'absolute',
-											attributes:{
-												value:{
-													type:float, 
-													value:0, 
-													duration:0.5, 
-													motion:float.ease.bounce
-												}
-											},
+											value: Config({
+												type:float, 
+												value:0, 
+												duration:0.5, 
+												motion:float.ease.bounce
+											}),
 											mouseover:function(){
 												this.value = 1
 											},

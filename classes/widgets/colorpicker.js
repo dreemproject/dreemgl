@@ -10,18 +10,18 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		
 	this.attributes =  {
 		// the value of the colorpicker, a color
-		value: {type: vec4, value: "white", meta:"color", rerender:false},
+		value: Config({type: vec4, value: "white", meta:"color", rerender:false}),
 		// the foreground color of the fonts
-		fontsize:{type: int, value: 14, meta:"fontsize"},
+		fontsize: Config({type: int, value: 14, meta:"fontsize"}),
 		// internal border color
-		internalbordercolor: {type:vec4, value:vec4(1,1,1,0.6), meta:"color"},
+		internalbordercolor: Config({type:vec4, value:vec4(1,1,1,0.6), meta:"color"}),
 		// read-only the hue value (HSV)
-		basehue: {type:float, value:0.5, readonly:true, rerender:false},
+		basehue: Config({type:float, value:0.5, readonly:true, rerender:false}),
 		// read-only the saturation value (HSV)
-		basesat: {type:float, value:0.8, readonly:true, rerender:false},
+		basesat: Config({type:float, value:0.8, readonly:true, rerender:false}),
 		// read-only, the value (HSV)
-		baseval: {type:float, value:0.5, readonly:true, rerender:false},
-		sliderheight: {type: float, value:15}
+		baseval: Config({type:float, value:0.5, readonly:true, rerender:false}),
+		sliderheight: Config({type: float, value:15})
 	}
 
 	this.basehue = 0.5;
@@ -154,43 +154,43 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.attributes = {
 				
 			// hsv color for the left side
-			hsvfrom:{type:vec3, value: vec3(0,1,0.5)},
+			hsvfrom:Config({type:vec3, value: vec3(0,1,0.5)}),
 
 			// hsv color for the right side
-			hsvto:{type:vec3, value: vec3(1,1,0.5)},
-			hsvhueadd:{type:float, value:0},
+			hsvto:Config({type:vec3, value: vec3(1,1,0.5)}),
+			hsvhueadd:Config({type:float, value:0}),
 			
-			basehue:{type:float, value: 0},
-			currentcolor: {type:vec4, value: vec4("red")},
-			contrastcolor: {type:vec4, value: vec4("white")},
+			basehue:Config({type:float, value: 0}),
+			currentcolor: Config({type:vec4, value: vec4("red")}),
+			contrastcolor: Config({type:vec4, value: vec4("white")}),
 			
 			// Color of the draggable part of the scrollbar
-			draggercolor: {type: vec4, value: vec4(1,1,1,0.8)},
+			draggercolor: Config({type: vec4, value: vec4(1,1,1,0.8)}),
 
 			// Color of the draggable part of the scrollbar
-			draggerradius: {type: float, value: 3},
+			draggerradius: Config({type: float, value: 3}),
 			
 			// Color when the mouse is hovering over the draggable part of the scrollbar
-			hovercolor: {type: vec4, value: vec4("#8080c0")},
+			hovercolor: Config({type: vec4, value: vec4("#8080c0")}),
 			
 			// Color of the draggable part of the scrollbar while actively scrolling
-			activecolor: {type: vec4, value: vec4("#8080c0")},
+			activecolor: Config({type: vec4, value: vec4("#8080c0")}),
 			
 			// Is this a horizontal or a vertical scrollbar? 
-			vertical: {type: Boolean, value: false},
+			vertical: Config({type: Boolean, value: false}),
 			
 			// Current start offset of the scrollbar. Ranges from 0 to total - page
-			offset: {type:float, value:0},
+			offset: Config({type:float, value:0}),
 			
 			// Page size, in total
-			page: {type:float, value:25},
+			page: Config({type:float, value:25}),
 
 			// total size. 
-			total: {type:float, value:255+25},
+			total: Config({type:float, value:255+25}),
 
 
 			// set animation on bgcolor
-			bgcolor: {duration: 1.0}
+			bgcolor: Config({duration: 1.0})
 		}
 
 		var scrollbar = this.constructor;
@@ -303,14 +303,14 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.width = 200;
 		this.height = 200;
 		this.attributes = {
-			ringwidth:{type:float, value: 0.3},
-			hover:{type:float, value: 0, motion:"linear", duration: 0.2},
-			basehue: {type:float, value:0.7},
-			basesat: {type:float, value:0.7},
-			baseval: {type:float, value:0.7},
-			currentcolor: {type:vec4, value:"white"},
-			contrastcolor: {type:vec4, value: vec4("white")},
-			draggersize: {type:float, value: 8},
+			ringwidth: Config({type:float, value: 0.3}),
+			hover: Config({type:float, value: 0, motion:"linear", duration: 0.2}),
+			basehue: Config({type:float, value:0.7}),
+			basesat: Config({type:float, value:0.7}),
+			baseval: Config({type:float, value:0.7}),
+			currentcolor: Config({type:vec4, value:"white"}),
+			contrastcolor: Config({type:vec4, value: vec4("white")}),
+			draggersize: Config({type:float, value: 8}),
 			
 		}
 		
@@ -459,13 +459,13 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.height = 200;
 		
 		this.attributes = {
-			basehue: {type:float, value:0.7},
-			basesat: {type:float, value:0.7},
-			baseval: {type:float, value:0.7},
-			currentcolor: {type:vec4, value:"white"},
-			contrastcolor: {type:vec4, value: vec4("white")},
-			draggersize: {type:float, value: 8},
-			hover:{type:float, motion:"linear", duration:0.1, value:1}
+			basehue: Config({type:float, value:0.7}),
+			basesat: Config({type:float, value:0.7}),
+			baseval: Config({type:float, value:0.7}),
+			currentcolor: Config({type:vec4, value:"white"}),
+			contrastcolor: Config({type:vec4, value: vec4("white")}),
+			draggersize: Config({type:float, value: 8}),
+			hover: Config({type:float, motion:"linear", duration:0.1, value:1})
 		}
 				
 		this.updatecolorfrommouse =  function(p){

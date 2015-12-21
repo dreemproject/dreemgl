@@ -9,7 +9,6 @@ define.class(function(require, $server$, dataset){
 	var jsparser = require('$system/parse/onejsparser')
 
 	this.atConstructor = function(source){
-		dataset.prototype.atConstructor.call(this)
 		this.parse(source)
 	}
 	

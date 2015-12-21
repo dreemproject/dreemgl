@@ -16,7 +16,7 @@ define.class('$system/base/node',function(require){
 		this._intervals = []
 	}
 
-	this.destroy = function(){
+	this.ondestroy = function(){
 		for(var key in this.hub){
 			prop = this.hub[key]
 			if(typeof prop == 'object'){

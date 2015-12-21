@@ -8,12 +8,11 @@ define.class(function($ui$, view, label, button, icon){
 	// the treeview control - classic treeview with expandable nodes.
 	this.attributes = {
 		// the dataset to use for tree expansion. It follows a {name:'test',children:[{name:'child'}]} format
-		dataset: Object,
+		dataset: {},
 		// the current selected value
-		select: Event
+		select: Config({type:Event})
 	}
 	
-
 	this.bgcolor = '#454545'
 	this.boundscheck = true
 	this.viewport = '2d'
@@ -50,8 +49,10 @@ define.class(function($ui$, view, label, button, icon){
 		this.borderwidth = 0;
 		this.attributes = {
 			folded: false,
-			select: Event
+			select: Config({type:Event}),
+			toggleclick: Config({type:Function})
 		}
+
 		this.padding =  0
 		this.labelactivecolor = vec4("#303000")
 		this.bordercolor= "transparent"
@@ -90,7 +91,7 @@ define.class(function($ui$, view, label, button, icon){
 
 		this.attributes = {
 			text: "",
-			item: Object,
+			item: {},
 		}
 
 		//this.flex = 1.0
@@ -214,7 +215,6 @@ define.class(function($ui$, view, label, button, icon){
 	this.render = function(){
 		//var data;
 		if(!this.dataset) return
-
 		if (this.atBuildTree) this.data = this.atBuildTree(this.dataset.data)
 		else{
 			this.data = this.dataset.data

@@ -12,7 +12,7 @@ define.class('$ui/view', function(require,
 
 	this.flex = 1
 	this.attributes = {
-			fontsize:{type:float, value: 12, meta:"fontsize"}
+			fontsize: Config({type:float, value: 12, meta:"fontsize"})
 	}
 	
 	define.class(this, "menubar", function($ui$, view){
@@ -22,9 +22,9 @@ define.class('$ui/view', function(require,
 	
 	define.class(this, "classlibclass", function($ui$, view, icon){
 		this.attributes = {
-			classdesc:{type:Object, value: undefined},
-			col1: {value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.1},
-			col2: {value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.2}
+			classdesc:Config({type:Object, value: undefined}),
+			col1: Config({value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.1}),
+			col2: Config({value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.2})
 		}
 		
 		this.bg = {
@@ -52,19 +52,19 @@ define.class('$ui/view', function(require,
 	define.class(this, "library", function($ui$, view){
 		this.flex = 1;
 		this.attributes = {
-				dataset:{type:dataset},
-				fontsize:{type:float, meta:"fontsize", value: 15}
+				dataset:Config({type:Object}),
+				fontsize:Config({type:float, meta:"fontsize", value: 15})
 		}
 		this.flexdirection = "column" 
 		this.fgcolor = "#f0f0f0"
 		this.bgcolor = "#3a3a3a";
 		this.render =function(){
-			
+			var data = this.dataset.data
 			if (!this.dataset) return [];
 			
 			var res = [];
-			for(var a  in this.dataset.children[0].children){
-				var ds = this.dataset.children[0].children[a];
+			for(var a  in data.children){
+				var ds = data.children[a];
 				res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
 			}
 			
@@ -235,8 +235,6 @@ define.class('$ui/view', function(require,
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
 
 		this.sourceset = sourceset(require('./index.js').module.factory.body.toString())
-
-		console.log(this.sourceset.calltree)
 
 		this.screen.locationhash = function(event){
 			//console.log(event.value);

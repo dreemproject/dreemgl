@@ -5,8 +5,8 @@
 
 define.class('$ui/view', function(require, $ui$, view, icon, label, button, scrollbar){
 	this.attributes = {
-		title:{type:String, value:"Untitled"},
-		fontsize:{type:float, value:12, meta:"fontsize"}
+		title: Config({type:String, value:"Untitled"}),
+		fontsize: Config({type:float, value:12, meta:"fontsize"})
 	}
 	
 	this.padding = 0;

@@ -11,9 +11,9 @@ define.class(function(require, $ui$view) {
 
 	this.attributes = {
 		// the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
-		locationhash: {type:Object, value:{}},
+		locationhash: Config({type:Object, value:{}}),
 		// when the browser comes out of standby it fires wakup event
-		wakeup: Event
+		wakeup: Config({type:Event})
 	}
 
 	this.bg = undefined

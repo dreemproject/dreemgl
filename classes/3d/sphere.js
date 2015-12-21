@@ -8,7 +8,7 @@ define.class(function(require, shape3d){
 	var GLGeom = require('$system/geometry/basicgeometry')
 
 	this.attributes = {
-		radius: {type:float, value:0.5},
+		radius: Config({type:float, value:0.5}),
 		detail: vec2(40,40),
 	}
 

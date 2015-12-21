@@ -102,12 +102,12 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $ui
 						})
 					)
 					,docviewer({flex:1,
-						attributes:{class:{persist:true}},
+						class:Config({persist:true}),
 						init:function(){
-							//console.log("INITIALIZIN")
 							this.screen.locationhash = function(event){
 							//	debugger
 								if(event.value.path) require.async(event.value.path).then(function(module){
+									console.log(module)
 									this.class = module
 								}.bind(this))
 							}.bind(this)

@@ -11,9 +11,9 @@ define.class(function(require, $ui$, textbox){
 
 	this.attributes = {
 		// The code to display
-		source: {type:String, value:""},
+		source: Config({type:String, value:""}),
 		// wrap the text
-		wrap: {type:Boolean, value:false}
+		wrap: Config({type:Boolean, value:false})
 	}
 
 	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)

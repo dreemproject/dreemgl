@@ -12,8 +12,8 @@ define.class(function ($ui$, view, $examples$guide$, movie, $$, slides$device) {
     // (which in this case is, `./examples/extdemo/slides/device.js`)
 
     this.attributes = {
-        movieData : {type:Object},
-        deviceData: {type:Object, value:{ deviceId:'TK-429', deviceType:'syntax' }}
+        movieData : Config({type:Object}),
+        deviceData: Config({type:Object, value:{ deviceId:'TK-429', deviceType:'syntax' }})
     };
 
     this.render = function() {

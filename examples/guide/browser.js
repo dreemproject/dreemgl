@@ -1,8 +1,8 @@
 define.class(function($ui$, screen, view, button, label, $$, movie) {
 
     this.attributes = {
-        term: {type:String},
-        movies: {type:Array}
+        term: Config({type:String}),
+        movies: Config({type:Array})
     };
 
     this.bgcolor = 'red'

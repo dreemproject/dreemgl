@@ -7,7 +7,7 @@
 define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$,propeditor){
 	
 	this.attributes = {
-		target:{type:String,value:""},
+		target:Config({type:String,value:""}),
 	}
 	
 	this.borderwidth = 0;

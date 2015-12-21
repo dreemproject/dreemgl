@@ -9,7 +9,7 @@ define.class(function(require, $ui$view){
 
 	this.attributes = {
 		// the target view to control with this
-		target:{type:string, value:""}
+		target: Config({type:string, value:""})
 	}
 	
 	this.mouseleftdown = function(event){

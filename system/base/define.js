@@ -1448,7 +1448,7 @@
 						for(var i = 0; i < mysize; i++) out[i] = data[i]
 						return out
 					}
-					console.log("TODO implement object constructing for types" + typeof arg0)
+					throw new Error("TODO implement object constructing for types" + typeof arg0)
 					return out
 				}
 				if(len === mysize){
@@ -2298,6 +2298,13 @@
 			var fn = new Function(src)
 			fn.is_wired = true
 			return fn
+		}
+
+		exports.Config = function Config(object){
+			var obj = Object.create(Config.prototype)
+			obj.constructor = Config
+			obj.config = object
+			return obj
 		}
 	}
 	defineGlobals(typeof process !== 'undefined'? global: window)

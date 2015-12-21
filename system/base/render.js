@@ -31,7 +31,7 @@ define.class(function(exports){
 		if(new_version) for(var key in globals){
 			new_version[key] = globals[key]
 		}
-		
+
 		// call connect wires before
 		if(!rerender) new_version.connectWires(state.wires)
 

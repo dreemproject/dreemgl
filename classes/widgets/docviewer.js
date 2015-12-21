@@ -17,7 +17,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	
 	this.attributes = {
 		// the class for which to create the documentation. If a string is assigned, the model will be interpreted as a markdown text document.
-		class:{type:Object}
+		class: Config({type:Function})
 	}
 
 	// A doc item is an item with a heading, such as methods or attributes
@@ -28,9 +28,9 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		// An "attribute" item can have name, body_text, defvalue and type properties.
 		// A "function" item can have name, params and body_text properties.
 		this.attributes = {
-			item: {type: Object},
+			item: Config({type: Object}),
 			// the type of this display block. Accepted values: "function", "attribute"
-			blocktype: {type:String, value:"function"}
+			blocktype: Config({type:String, value:"function"})
 		}
 		this.flex =1 ;
 		//this.bgcolor = vec4("#ffffff");
@@ -331,9 +331,9 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	
 		this.attributes = {
 			// If collapsible is true, the render function will build a foldcontainer around this class. This is used for recursion levels > 0 of the docviewer class.	
-			collapsible: {type: Boolean, value:false},
+			collapsible: Config({type: Boolean, value:false}),
 			// the class_doc structure to display. 
-			class_doc: {type: Object}
+			class_doc: Config({type: Object})
 		}
 
 		this.flexdirection = "column"

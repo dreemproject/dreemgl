@@ -7,11 +7,11 @@ define.class(function ($ui$, view, label) {
     this.bordercolor = vec4(0.3,0.3,0.3,0.3)
 
     this.attributes = {
-        Title: {type:String},
-        Year: {type:String},
-        imdbID: {type:String},
-        Type: {type:String},
-        Poster: {type:String}
+        Title: "",
+        Year: "",
+        imdbID: "",
+        Type: "",
+        Poster: ""
     };
 
     this.onPoster = function (event) {

@@ -16,12 +16,12 @@ define.class(function(view, label){
 	this.alignself = "stretch"
 	
 	this.attributes = {
-		holerad :{type:float, value: 8},
-		spacing : {type:float, value: 0.60},
-		ring : {type:float, value: 0.2},
-		holecolor: {type:vec4, value:vec4("#202020"), meta:"color"},
-		glowcolor: {type:vec4, value:vec4("#505050"), meta:"color"},
-		edgecolor: {type:vec4, value:vec4("#101010"), meta:"color"}
+		holerad : Config({type:float, value: 8}),
+		spacing : Config({type:float, value: 0.60}),
+		ring : Config({type:float, value: 0.2}),
+		holecolor: Config({type:vec4, value:vec4("#202020"), meta:"color"}),
+		glowcolor: Config({type:vec4, value:vec4("#505050"), meta:"color"}),
+		edgecolor: Config({type:vec4, value:vec4("#101010"), meta:"color"})
 	}
 	
 	this.bgcolor = vec4("white")

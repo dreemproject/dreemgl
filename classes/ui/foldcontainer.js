@@ -7,7 +7,6 @@
 define.class(function($ui$, view, label, icon, $$, require){
 
 	// the foldcontainer shows/hides all its children when the top bar is clicked
-	this.title = "folding thing"
 	this.position = "relative"
 	this.borderwidth = 1
 	this.borderradius = 1
@@ -20,13 +19,14 @@ define.class(function($ui$, view, label, icon, $$, require){
 
 	this.attributes = {
 		// The current state of the foldcontainer. false = open, Ttue = closed.
-		collapsed: {type:boolean, value: false, persist:true},
+		collapsed: Config({type:boolean, value: false, persist:true}),
 		// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
 		icon: 'times',
+		title: 'folding thing',
 		// The main color from which the foldcontainer will build some gradients.
-		basecolor: {type:vec4, value: vec4("#8080c0")},
-		fontsize: {type:float, value: 12},
-		autogradient: {type:boolean, value: false}
+		basecolor: Config({type:vec4, value: vec4("#8080c0")}),
+		fontsize: Config({type:float, value: 12}),
+		autogradient: Config({type:boolean, value: false})
 	}
 
 	// Function to change the open/closed state. Used by the click handler of the clickablebar.
@@ -46,9 +46,9 @@ define.class(function($ui$, view, label, icon, $$, require){
 		this.toggle = function(){console.log("nothing happens")}
 		
 		this.attributes = {
-			title: {type:String},
-			col1: {value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.1},
-			col2: {value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14}
+			title: Config({type:String}),
+			col1: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.1}),
+			col2: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14})
 		}
 		this.position = "relative";
 

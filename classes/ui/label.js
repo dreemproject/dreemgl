@@ -13,28 +13,28 @@ define.class(function(require, $ui$, view){
 
 	this.attributes = {
 		// the text color
-		fgcolor: {type:vec4, value: vec4(1,1,1,1), meta:"color" },
+		fgcolor: Config({type:vec4, value: vec4(1,1,1,1), meta:"color" }),
 	
 		// The string to display.
-		text: {type:String, value: "text" },
+		text: Config({type:String, value: "text" }),
 	
 		// Size of the font in pixels
-		fontsize: {type:float, value: 18, meta:"fontsize"},
+		fontsize: Config({type:float, value: 18, meta:"fontsize"}),
 	
 		// the boldness of the font (try values 0 - 1)
-		boldness: {type:float, value: 0.},
+		boldness: Config({type:float, value: 0.}),
 
 		// reference to the font typeface, require it with require('font:')
-		font: {type:Object, value: undefined, meta:"font"},
+		font: Config({type:Object, value: undefined, meta:"font"}),
 	
 		// Should the text wrap around when its width has been reached?
-		multiline: {type:Boolean, value: false },
+		multiline: Config({type:Boolean, value: false }),
 
 		// turn on subpixel aa, this requieres a bgcolor to be present
-		subpixel: {type:Boolean, value: false},
+		subpixel: Config({type:Boolean, value: false}),
 	
 		// Alignment of the bodytext.
-		align: {type: Enum('left','right','center', 'justify'),  value: "left"}
+		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"})
 	}
 
 	this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')

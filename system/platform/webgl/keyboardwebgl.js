@@ -32,7 +32,7 @@ define.class('$system/base/keyboard', function (require, exports){
 	for(var k in this.toKey){
 		var key = this.toKey[ k ]
 		this.toCode[key] = k
-		this.defineAttribute(key, {type:int, value:0})
+		this.defineAttribute(key, Config({type:int, value:0}))
 	}
 
 	var fireFoxTable = {

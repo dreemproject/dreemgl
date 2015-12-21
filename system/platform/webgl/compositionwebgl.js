@@ -30,7 +30,6 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 		this.bus = new BusClient((location.href.indexOf('https') === 0?'wss://':'ws://')+location.host+location.pathname)
 	}
 
-
 	this.doRender = function(previous, parent){
 		baseclass.prototype.doRender.call(this, previous, parent)
 

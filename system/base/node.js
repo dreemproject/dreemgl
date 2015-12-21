@@ -35,12 +35,14 @@ define.class(function(require, constructor){
 		for(var i = 0; i < args.length; i++){
 			var arg = args[i]
 			if(typeof arg === 'object' && Object.getPrototypeOf(arg) === Object.prototype){
-				this.initFromConstructorProps(arg)
+				this.attributes = arg
+				//this.initFromConstructorProps(arg)
 				continue
 			}
 			if(typeof arg === 'function'){
 				var prop = {}; prop[arg.name] = arg
-				this.initFromConstructorProps(prop)
+				this.attributes = prop
+				//this.initFromConstructorProps(prop)
 				continue
 			}
 			if(typeof arg === 'string' && i === 0){
@@ -59,7 +61,7 @@ define.class(function(require, constructor){
 			}
 		}		
 	}
-
+/*
 	// internal, called by the constructor
 	this.initFromConstructorProps = function(obj){
 
@@ -79,7 +81,7 @@ define.class(function(require, constructor){
 
 			tgt[key] = prop
 		}
-	}
+	}*/
 
 	// the default render function, returns this.constructor_children
 	this.render = function(){
@@ -389,76 +391,84 @@ define.class(function(require, constructor){
 
 	// internal, define an attribute, use the attributes =  api
 	this.defineAttribute = function(key, config){
+		// lets create an attribute
+		var is_config =  config instanceof Config
+		var is_attribute = key in this
+
+		// use normal value assign
+		if(is_attribute && !is_config){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+			this[key] = config
+			return
+		}
+
+		// autoprocess the config
+		if(is_config){
+			config = config.config
+		}
+		else{ // its a value
+			config = {value: config}
+		}
+
+		// figure out the type
+		if(!config.type){
+			var value = config.value
+
+			if(typeof value === 'object'){
+				if(value && typeof value.struct === 'function') config.type = value.struct
+				else if(Array.isArray(value)) config.type = Array
+				else config.type = Object
+			}
+			else if(typeof value === 'number'){
+				config.type = float
+			}
+			else if(typeof value === 'boolean'){
+				config.type = boolean
+			}
+			else if(typeof value === 'function' && !value.is_wired){
+				config.type = Function
+			}
+		}
+		if(config.persist){
+			if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
+			this.definePersist(key)
+		}
+
 		if(!this.hasOwnProperty('_attributes')){
 			this._attributes = this._attributes?Object.create(this._attributes):{}
 		}
-		
-		config.group = config.group?config.group:this.constructor.name;
-		
-		// lets create an attribute
+
+		if(is_attribute){ // extend the config
+			if('type' in config) throw new Error('Cannot redefine type of attribute '+key)
+			var newconfig = Object.create(this._attributes[key])
+			for(var prop in config){
+				newconfig[prop] = config[prop]
+			}
+			this._attributes[key] = newconfig
+			if('value' in config) this[key] = config.value
+			return
+		}
+
 		var value_key = '_' + key
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var wiredfn_key = '_wiredfn_' + key
-		//var config_key = '_cfg_' + key 
+		//var config_key = '_config_' + key 
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
 
-		if(this.isAttribute(key)){ // extend the config
-			if('type' in config) throw new Error('Cannot redefine attribute '+key)
-			var obj = Object.create(this._attributes[key])
-			for(var prop in config){
-				obj[prop] = config[prop]
-			}
-			this._attributes[key] = obj
-			if(config.persist){
-				if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
-				this.definePersist(key)
-			}
-			return
-		}
-		else{
-			// autoprocess the config
-			if(!(typeof config === 'object' && config && !Array.isArray(config) && !config.struct)){
-				config = {value:config}
-			}
-			else if(!config.type) config = Object.create(config)
-
-			if(!config.type){
-				var value = config.value
-
-				if(typeof value === 'object'){
-					if(value && value.struct) config.type = value.struct
-					else if(Array.isArray(value)) config.type = Array
-					else config.type = Object
-				}
-				else if(typeof value === 'number'){
-					config.type = float
-				}
-				else if(typeof value === 'boolean'){
-					config.type = boolean
-				}
-				else if(typeof value === 'function'){
-					config.type = value
-					config.value = undefined
-				}
-			}
-			if(config.persist){
-				if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
-				this.definePersist(key)
-			}
-		}
+		if(!config.group) config.group  = this.constructor.name
 
 		var init_value = key in this? this[key]:config.value
-		if(init_value !== undefined && init_value !== null){
-			if(typeof init_value === 'string' && init_value.charAt(0) === '$') init_value = this.parseWiredString(init_value)
+
+		if(init_value !== undefined){
+			var type = config.type
 			if(typeof init_value === 'function'){
 				if(init_value.is_wired) this.setWiredAttribute(key, init_value)
-				else this[on_key] = init_value
+				else if(type !== Function) this[on_key] = init_value
+				else this[value_key] = init_value
 			}
 			else{
-				var type = config.type
-				if(type && type !== Object && type !== Array){
+				if(type && type !== Object && type !== Array && type !== Function){
 					this[value_key] = type(init_value)
 				}
 				else{
@@ -468,10 +478,7 @@ define.class(function(require, constructor){
 		}
 		this._attributes[key] = config
 		
-		if(config.wired) this[wiredfn_key] = config.wired
-
 		var setter
-		var getter
 		// define attribute gettersetters
 
 		// block attribute emission on objects with an environment thats (stub it)
@@ -480,22 +487,30 @@ define.class(function(require, constructor){
 			
 			setter = function(value){
 				var mark
+
+				var config = this._attributes[key]
+
 				if(this[set_key] !== undefined) value = this[set_key](value)
-				if(typeof value === 'function' && (!value.prototype || Object.getPrototypeOf(value.prototype) === Object.prototype)){
-					if(value.is_wired) this.setWiredAttribute(key, value)
-					this[on_key] = value
-					return
+				if(typeof value === 'function'){
+					if(value.is_wired) return this.setWiredAttribute(key, value)
+					if(config.type !== Function){
+						this[on_key] = value
+						return
+					}
 				}
-				if(typeof value === 'object' && value instanceof Mark){
-					mark = value.mark
-					value = value.value
+				if(typeof value === 'object'){
+					if(value instanceof Mark){
+						mark = value.mark
+						value = value.value
+					}
+					else if(value instanceof Config){
+						this.defineAttribute(key, value)
+						return
+					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
 				}
-
-				var config = this._attributes[key]
-
 
 				if(!mark && config.motion){
 					// lets copy our value in our property
@@ -533,25 +548,34 @@ define.class(function(require, constructor){
 		else {
 			setter = function(value){
 				var mark
+
+				var config = this._attributes[key]
+
 				if(this[set_key] !== undefined) value = this[set_key](value)
-				if(typeof value === 'function' && (!value.prototype || Object.getPrototypeOf(value.prototype) === Object.prototype)){
-					if(value.is_wired) this.setWiredAttribute(key, value)
-					this[on_key] = value
-					return
+				if(typeof value === 'function'){
+					if(value.is_wired) return this.setWiredAttribute(key, value)
+					if(config.type !== Function){
+						this[on_key] = value
+						return
+					}
 				}
-				if(typeof value === 'object' && value instanceof Mark){
-					mark = value.mark
-					value = value.value
+				if(typeof value === 'object'){
+					if(value instanceof Mark){
+						mark = value.mark
+						value = value.value
+					}
+					else if(value instanceof Config){
+						this.defineAttribute(key, value)
+						return
+					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
 				}
-
-				var config = this._attributes[key]
 			
 				var type = config.type
 				if(type){
-					if(type !== Object && type !== Array) value = type(value)
+					if(type !== Object && type !== Array && type !== Function) value = type(value)
 				}
 
 				if(!mark && config.motion && this.startAnimation(key, value)){
@@ -717,8 +741,8 @@ define.class(function(require, constructor){
 	// always define an init and deinit
 	this.attributes = {
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
-		init:Event, 
+		init:Config({type:Event}), 
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
-		destroy:Event
+		destroy:Config({type:Event})
 	}
 })

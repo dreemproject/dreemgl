@@ -4,28 +4,28 @@ define.class('$system/base/node', function(){
 	this.atConstructor = function(){}	
 	this.attributes = {
 		// event api
-		move:{type:Event},
-		down: {type:Event},
-		up: {type:Event},
+		move:Config({type:Event}),
+		down:Config({type:Event}),
+		up: Config({type:Event}),
 
 		// single value API
-		x: {type:float},
-		y: {type:float},
+		x: Config({type:float}),
+		y: Config({type:float}),
 
-		left: {type:int},
-		middle: {type:int},
-		right: {type:int},
-		click: {type:int},
-		blurred: {type:int},
-		dblclick: {type:int},
-		clicker: {type:int},
-		leftdown: {type:int},
-		leftup: {type:int},
-		rightdown: {type:int},
-		rightup: {type:int},
-		wheelx: {type:int},
-		wheely: {type:int},
-		zoom: {type:int}
+		left: Config({type:int}),
+		middle: Config({type:int}),
+		right: Config({type:int}),
+		click: Config({type:int}),
+		blurred: Config({type:int}),
+		dblclick: Config({type:int}),
+		clicker: Config({type:int}),
+		leftdown: Config({type:int}),
+		leftup: Config({type:int}),
+		rightdown: Config({type:int}),
+		rightup: Config({type:int}),
+		wheelx: Config({type:int}),
+		wheely: Config({type:int}),
+		zoom: Config({type:int})
 	}
 
 })

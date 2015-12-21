@@ -9,54 +9,54 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	
 	this.attributes = {
 		// The label for the button
-		text: {type: String, value: ""},
+		text: Config({type: String, value: ""}),
 
 		// The icon for the button, see FontAwesome for the available icon-names.
-		icon: {type: String, value: "", meta:"icon"},
+		icon: Config({type: String, value: "", meta:"icon"}),
 
 		// Font size in device-pixels.
-		fontsize: {type: float, value: 14, meta:"fontsize"},
+		fontsize: Config({type: float, value: 14, meta:"fontsize"}),
 		
 		// Gradient color 1	
-		col1: {meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"},
+		col1: Config({meta:"color", value: vec4("#272727"), duration: 0.1, motion:"linear"}),
 		
 		// Gradient color 2
-		col2: {meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"},
+		col2: Config({meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
 
 		// Color of the label text in neutral state	
-		textcolor: {meta:"color", type: vec4, value: vec4("white")},
+		textcolor: Config({meta:"color", type: vec4, value: vec4("white")}),
 
 		// Color of the label text in pressed-down state	
-		textactivecolor: {meta:"color", type: vec4, value: vec4("white")},
+		textactivecolor: Config({meta:"color", type: vec4, value: vec4("white")}),
 		
 		// First gradient color for the button background in neutral state
-		buttoncolor1: {meta:"color", type: vec4, value: vec4("#272727")},
+		buttoncolor1: Config({meta:"color", type: vec4, value: vec4("#272727")}),
 		
 		// Second gradient color for the button background in neutral state	
-		buttoncolor2: {meta:"color", type: vec4, value: vec4("#272727")},
+		buttoncolor2: Config({meta:"color", type: vec4, value: vec4("#272727")}),
 		
 		// First gradient color for the button background in hovered state
-		hovercolor1: {meta:"color", type: vec4, value: vec4("#505050")},
+		hovercolor1: Config({meta:"color", type: vec4, value: vec4("#505050")}),
 		
 		// Second gradient color for the button background in hovered state
-		hovercolor2: {meta:"color", type: vec4, value: vec4("#505050")},
+		hovercolor2: Config({meta:"color", type: vec4, value: vec4("#505050")}),
 		
 		// First gradient color for the button background in pressed state
-		pressedcolor1: {meta:"color", type: vec4, value: vec4("#707070")},
+		pressedcolor1: Config({meta:"color", type: vec4, value: vec4("#707070")}),
 		
 		// Second gradient color for the button background in pressed state
-		pressedcolor2: {meta:"color", type: vec4, value: vec4("#707070")},
+		pressedcolor2: Config({meta:"color", type: vec4, value: vec4("#707070")}),
 
 		// Second gradient color for the button background in pressed state
-		internalmargin: {meta:"tlbr", type: vec4, value: vec4(0,0,0,0)},
-		bold:{type:boolean, value: true},
+		internalmargin: Config({meta:"tlbr", type: vec4, value: vec4(0,0,0,0)}),
+
 		// fires when button is clicked
-		click:Event
+		click: Config({type:Event})
 	}
 
 	var button = this.constructor
 
-	this.font =require('$resources/fonts/opensans_bold_ascii.glf')
+	this.font = require('$resources/fonts/opensans_bold_ascii.glf')
 	
 	this.bold = function(){
 		if (this.bold) {
@@ -86,9 +86,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
 	define.class(this, 'iconclass', function(icon){
-		this.attributes = {
-			fgcolor:{motion:'linear', duration:0.1}
-		}
+		this.fgcolor = Config({motion:'linear', duration:0.1})
 	})
 
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.

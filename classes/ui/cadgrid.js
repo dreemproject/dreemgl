@@ -16,28 +16,31 @@ define.class(function(view, label){
 	this.alignself = "stretch"
 	
 	this.attributes = {
-	
-		majorevery:{type:int,minvalue:1, value:5},
-		gridsize:{type:int, minvalue:1,value:5},
-		minorline:{type:vec4, value: vec4("#e0f0ff"), meta:"color"},
-		majorline:{type:vec4, value: vec4("#b0b0e0"), meta:"color"}
+		majorevery: Config({type:int,minvalue:1, value:5}),
+		gridsize: Config({type:int, minvalue:1,value:5}),
+		minorline: Config({type:vec4, value: vec4("#e0f0ff"), meta:"color"}),
+		majorline: Config({type:vec4, value: vec4("#b0b0e0"), meta:"color"})
 	}
 	
 	this.minorsize = 10;
 	this.majorsize = 100;
+	
 	this.gridsize = function(){}
+	
 	this.calcsizes = function(){
-				this.minorsize =this.gridsize  *this.majorevery* Math.pow(this.majorevery , Math.ceil(Math.log(this.zoom )/Math.log(this.majorevery )));
+		this.minorsize =this.gridsize  *this.majorevery* Math.pow(this.majorevery , Math.ceil(Math.log(this.zoom )/Math.log(this.majorevery )));
 		this.majorsize = this.minorsize * this.majorevery;
 
 	}
-	this.init = function(){
-		this.calcsizes();
-		
+
+	this.oninit = function(){
+		this.calcsizes();		
 	}
-	this.zoom = function(){
+
+	this.onzoom = function(){
 		this.calcsizes();
 	}
+
 	this.bgcolor = vec4("white")
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
