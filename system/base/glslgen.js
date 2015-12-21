@@ -47,7 +47,8 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 	this.resolveContext = function(node, context, name, basename, state){
 		// compute output name
 		var outname
-		if(basename) outname = basename + "_DOT_" + name
+
+		if(basename || state.basename) outname = basename + state.basename + "_DOT_" + name
 		else outname = name
 
 		// uniform
@@ -399,10 +400,14 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 
 			var undecorated = fn
 			// lets annotate the function name by arg type
-			if(node.args) for(var i = 0; i<node.args.length; i++){
-				var infer = node.args[i].infer
-				if(!infer)throw new Error('Argument type cannot be inferred ' + fn + ' ' +  i)
-				fn += '_' + this.getType(infer, state)
+
+			if(node.args){
+				fn += '_T'
+				for(var i = 0; i<node.args.length; i++){
+					var infer = node.args[i].infer
+					if(!infer)throw new Error('Argument type cannot be inferred ' + fn + ' ' +  i)
+					fn += '_' + this.getType(infer, state)
+				}
 			}
 			// lets 
 			// check if we already compiled it

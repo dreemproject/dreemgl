@@ -671,6 +671,7 @@ define.class(function(require, exports){
 	}		
 
 	this.atExtend = function(){
+		var shader = this
 		if(define.$platform === 'nodejs') return
 		// forward the view reference
 		if(this.constructor.outer){
@@ -685,6 +686,35 @@ define.class(function(require, exports){
 					}
 				}
 			}
+			
+			function __recompile_shader_(){
+				var name = shader.constructor.name
+				this[name] = {dirty:true}
+				//!TODO also do the assigns
+			}
+
+			for(var key in this.vtx_state.functions){
+				var parts = key.split('_DOT_')
+				if(parts.length === 2 && parts[0] === 'view'){
+					var left = parts[1].split('_T_')[0]
+					// ok lets hook this thing to invalidate our shader
+					if(!this.view.hasListenerName(left, '__recompile_shader_'))
+					this.view.addListener(left, __recompile_shader_)
+				}
+			}
+
+			for(var key in this.pix_state.functions){
+				var parts = key.split('_DOT_')
+				if(parts.length === 2 && parts[0] === 'view'){
+					var left = parts[1].split('_T_')[0]
+					// ok lets hook this thing to invalidate our shader
+					if(!this.view.hasListenerName(left, '__recompile_shader_'))
+					this.view.addListener(left, __recompile_shader_)
+				}
+			}
+			// lets put other listeners on our referenced function of view
+			// and if they fire, we need to inherit in place and set dirty=true
+			//console.log(this.pix_state.code_color)
 		}
 		else if(this !== exports.prototype) this.compile()
 

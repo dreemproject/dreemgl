@@ -20,11 +20,13 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 
 	// The fold button is a very very flat button. 
 	define.class(this, 'foldbutton', button, function(){
+
 		this.borderwidth = 0
 		this.borderradius = 0;
 		this.padding =  0
+
 		this.labelactivecolor = vec4("#303000")
-		
+
 		this.buttoncolor1 =  vec4(1,1,1,0.0)
 		this.buttoncolor2 =  vec4(1,1,1,0.0)
 		this.pressedcolor1 = vec4(0,0,0,0.14)
@@ -39,8 +41,6 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		//	subpixel:true
 		}
 		this.margin = 0
-		this.bg = 1 
-		
 		//this.alignself = "flex-start" 	
 	})
 

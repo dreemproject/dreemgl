@@ -928,6 +928,10 @@ define.class('$system/base/node', function(require){
 		if(this.screen) this.screen.pauseAnimationRoot(this, key)
 	}
 
+	this.bgcolorfn = function(pos){
+		return bgcolor
+	}
+
 	// standard bg is undecided
 	define.class(this, 'bg', this.Shader, function(){
 		this.updateorder = 0
@@ -949,10 +953,15 @@ define.class('$system/base/node', function(require){
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			return vec4(view.bgcolor.rgb, view.bgcolor.a * view.opacity)
+			var col = view.bgcolorfn(mesh.xy)
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
 	this.hardrect = false
+
+	this.bordercolorfn = function(pos){
+		return bordercolor
+	}
 
 	define.class(this, 'hardborder', this.Shader, function(){
 		this.updateorder = 0
@@ -987,7 +996,8 @@ define.class('$system/base/node', function(require){
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			return vec4(view.bordercolor.rgb, view.bordercolor.a * view.opacity);
+			var col = view.bordercolorfn(uv.xy)
+			return vec4(col.rgb, col.a * view.opacity);
 		}
 	})
 	this.hardborder = false
@@ -1067,7 +1077,8 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.color = function(){
-			return vec4(view.bgcolor.rgb, view.bgcolor.a * view.opacity)
+			var col = view.bgcolorfn(pos.xy)
+			return vec4(col.rgb, col.a * view.opacity)
 		}
 
 		this.position = function(){
@@ -1189,7 +1200,8 @@ define.class('$system/base/node', function(require){
 		}
 		
 		this.color = function(){
-			return vec4(view.bordercolor.rgb, view.opacity * view.bordercolor.a)
+			var col = view.bordercolorfn(pos.xy)
+			return vec4(col.rgb, view.opacity * col.a)
 		}
 		
 		this.position = function(){
@@ -1212,7 +1224,6 @@ define.class('$system/base/node', function(require){
 		}
 	})
 	this.roundedborder = false
-
 
 	// lets pull in the scrollbar on the view
 	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){

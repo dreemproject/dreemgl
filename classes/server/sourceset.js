@@ -52,6 +52,15 @@ define.class(function(require, $server$, dataset){
 
 				if(item.type === 'Object'){
 					// lets put some props on there
+					// whats the name of this thing?
+					var keys = item.keys
+					for(var j = 0; j < keys.length; j++){
+						var key = keys[j]
+						var name = key.key.name
+						var value = key.value
+						// alright so..
+						//console.log(name)
+					}
 					continue
 				}
 				if(item.type !== 'Call') continue
@@ -72,6 +81,7 @@ define.class(function(require, $server$, dataset){
 			}
 		}
 		walkTree(ret.elems, this.data)
+		// lets generate the connection view
 
 		//	Call->args->object
 		//console.log(this.calltree)

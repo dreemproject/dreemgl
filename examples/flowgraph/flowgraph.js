@@ -232,7 +232,6 @@ define.class('$ui/view', function(require,
 
 
 		this.screen.locationhash = function(event){
-			console.log(event.value)
 			require.async(event.value.composition).then(function(result){
 				//this.sourceset.parse(result.module)
 				this.sourceset.parse(result.module.factory.body.toString())

@@ -213,6 +213,11 @@ define.class(function(require, constructor){
 
 	// add a listener to an attribute
 	this.addListener = function(key, cb){
+		// if something isnt an attribute, make it one
+		if(!this.__lookupSetter__(key)){
+			this.defineAttribute(key, this[key], true)
+		}
+
 		var listen_key = '_listen_' + key
 		var array 
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
@@ -242,6 +247,7 @@ define.class(function(require, constructor){
 	// check if an attribute has a listener with a .name property set to fnname
 	this.hasListenerName = function(key, fnname){
 		var listen_key = '_listen_' + key
+		if(!this.hasOwnProperty(listen_key)) return false
 		var listeners = this[listen_key]
 		if(!listeners) return false
 		for(var i = 0; i < listeners.length; i++){
@@ -309,7 +315,7 @@ define.class(function(require, constructor){
 			}
 		}
 	})
-
+/*
 	// define listeners {attrname:function(){}}
 	Object.defineProperty(this, 'listeners', {
 		get:function(){
@@ -353,7 +359,7 @@ define.class(function(require, constructor){
 		set:function(arg){
 			this.animateAttribute(arg)
 		}
-	})
+	})*/
 
 	// internal, animate an attribute with an animation object see animate
 	this.animateAttribute = function(arg){
@@ -390,10 +396,10 @@ define.class(function(require, constructor){
 	}
 
 	// internal, define an attribute, use the attributes =  api
-	this.defineAttribute = function(key, config){
+	this.defineAttribute = function(key, config, always_define){
 		// lets create an attribute
 		var is_config =  config instanceof Config
-		var is_attribute = key in this
+		var is_attribute = !always_define && key in this 
 
 		// use normal value assign
 		if(is_attribute && !is_config){//|| !is_attribute && typeof config === 'function' && !config.is_wired){

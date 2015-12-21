@@ -78,10 +78,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	this.bordercolor = vec4("#272727")
 	this.alignItems = "center"
 
-	this.bg = {
-		color: function(){
-			return mix(view.col1, view.col2, (uv.y)/0.8)
-		}
+	this.bgcolorfn = function(pos){
+		return mix(col1, col2, pos.y/0.8)
 	}
 
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
