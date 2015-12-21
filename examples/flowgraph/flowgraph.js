@@ -84,12 +84,12 @@ define.class('$ui/view', function(require,
 			this.currentblock = undefined;
 			this.updatepopupuiposition();
 		}
-		console.log("before:", this.currentselection);
+		
 		var f = this.currentselection.indexOf(obj);
 		if (f>-1) this.currentselection.splice(f,1);
 		
 		
-		console.log("after:" , this.currentselection);
+		
 		this.updateSelectedItems();
 		
 	}
@@ -253,12 +253,9 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.gridclick = function(p, origin){
-		if(this.screen.keyboard.shift){
-		}
-		else{
-			this.clearSelection(true);
 		
 			origin.startselectposition = origin.localMouse();
+			this.startdragselect();
 			
 			origin.mousemove = function(){				
 				var np = this.localMouse();
@@ -275,6 +272,7 @@ define.class('$ui/view', function(require,
 				
 					sq.pos = vec2(sx,sy);
 					sq.size = vec3(ex-sx, ey-sy, 1);
+					fg.dragselectset = [];
 					for(var a in fg.allblocks){
 						var bl = fg.allblocks[a];
 						
@@ -283,24 +281,83 @@ define.class('$ui/view', function(require,
 						
 						if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
 							bl.inselection = 1;
+							fg.dragselectset.push(bl);
 						}	
 						else{
-							bl.inselection = 0;
-						}
+							if (fg.originalselection.indexOf(bl) >-1)
+							{
+								bl.inselection = 1;
+							}
+							else{
+								bl.inselection = 0;
+							}
+						}					
+					}					
+					for(var a in fg.allconnections){
+						var con = fg.allconnections[a];
 						
-					}
-					
-				} 
+						
+						ax = con.frompos[0];
+						ay = con.frompos[1];
+						
+						bx = con.topos[0];
+						by = con.topos[1];
+						
+						
+						cx = (ax+bx)/2;
+						cy = (ay+by)/2;
+						
+						if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
+								||
+							(bx >= sx && bx <= ex && by >= sy && by <=ey)
+							|| 
+							(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
+							)
+						 {
+							con.inselection = 1;
+							fg.dragselectset.push(con);
+						}	
+						else{
+							if (fg.originalselection.indexOf(con) >-1)
+							{
+								con.inselection = 1;
+							}
+							else{
+								con.inselection = 0;
+							}
+						}					
+					}					
+				} 					
 			}
 			
 			origin.mouseleftup = function(){
 				sq.visible = false;
 				sq.redraw();
+				fg = this.find("flowgraph");
+				fg.commitdragselect();
 				this.mousemove = function(){};
-			}
-			
-			
+			}	
+		
+	}
+	
+	this.startdragselect = function(){
+		this.dragselectset = [];
+		if (!this.screen.keyboard.shift){
+			this.clearSelection(true);
 		}
+		this.originalselection =[];
+		for(var i in this.currentselection){
+			this.originalselection.push(this.currentselection[i]);
+		}
+	}
+	
+	this.commitdragselect = function(){
+		console.log("committing dragselect");
+		for(var i in this.dragselectset){
+			var bl = this.dragselectset[i];
+			this.addToSelection(bl);
+		}
+		
 	}
 	
 	this.render = function(){
