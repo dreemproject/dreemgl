@@ -249,7 +249,7 @@ define.class(function(require, baseclass){
 				}
 			}
 
-			var next = (draw === view || !draw._viewport) && draw.children[0], next_index = 0
+			var next = (draw === view || (!draw._viewport && draw.visible)) && draw.children[0], next_index = 0
 			while(!next){ // skip to parent next
 				if(draw === view) break
 				next_index = draw.draw_index + 1
@@ -344,7 +344,7 @@ define.class(function(require, baseclass){
 				}
 			}
 
-			var next = (draw === view || !draw._viewport) && draw.children[0], next_index = 0
+			var next = (draw === view || (!draw._viewport && draw.visible))  && draw.children[0], next_index = 0
 			while(!next){ // skip to parent next
 				if(draw === view) break
 				next_index = draw.draw_index + 1
