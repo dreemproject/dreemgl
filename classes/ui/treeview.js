@@ -13,7 +13,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		select: Config({type:Event})
 	}
 	
-	this.bgcolor = '#454545'
+	this.bgcolor = '#3b3b3b'
 	this.boundscheck = true
 	this.viewport = '2d'
 	this.overflow ='scroll'
@@ -22,7 +22,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 	define.class(this, 'foldbutton', button, function(){
 
 		this.borderwidth = 0
-		this.borderradius = 0;
+	//	this.borderradius = 0;
 		this.padding =  0
 
 		this.labelactivecolor = vec4("#303000")
@@ -36,10 +36,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.borderradius = 0
 		this.borderwidth = 0
 		this.fgcolor = "#d0d0d0"
-		this.labelclass = {
-			bg:1,
-		//	subpixel:true
-		}
+		this.bgcolor = "white";
 		this.margin = 0
 		//this.alignself = "flex-start" 	
 	})
@@ -52,19 +49,19 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			select: Config({type:Event}),
 			toggleclick: Config({type:Function})
 		}
-
+		this.flexwrap = "nowrap" ;
 		this.padding =  0
 		this.labelactivecolor = vec4("#303000")
 		this.bordercolor= "transparent"
-		this.buttoncolor1 = vec4(1,1,1,0.0)
-		this.buttoncolor2 = vec4(1,1,1,0.0)
-		this.pressedcolor1 = vec4(0,0,0,0.14)
-		this.pressedcolor2 = vec4(0,0,0,0.05)
-		this.hovercolor1 = vec4(0,0,0,0.1)
-		this.hovercolor2 = vec4(0,0,0,0.1)
+		this.buttoncolor1 = "#3b3b3b"
+		this.buttoncolor2 = "#3b3b3b"
+		this.pressedcolor1 = "#707070"
+		this.pressedcolor2 = "#707070"
+		this.hovercolor1 = "#505050"
+		this.hovercolor2 = "#505050"
 		this.cornerradius = 0
-		this.fgcolor = "black"
-		this.margin = 0
+		this.fgcolor = "#f0f0f0"
+		this.margin = 2
 		this.bgcolor = "transparent"
 		//this.alignself = "flex-start"
 		
@@ -95,9 +92,9 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		}
 
 		//this.flex = 1.0
-		this.padding = vec4(3)
+		this.padding = vec4(0)
 		this.fgcolor = vec4("black")
-		this.bg = 0
+		this.bgcolor = "#3b3b3b";
 		this.flexdirection = "row"
 	
 		// Open/close this node
@@ -142,37 +139,56 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		}
 		
 		this.count = 0;
+		
+		this.flexdirection = "column";
+		//this.width = 1;
+	
 		this.render = function(){
 			//debugger;
-			if (!this.item) return [label({text:"empty"})];
+			if (!this.item) return [label({text:""})];
 			//this.collapsed;
-			//console.log("treeitem", this.item.name, this.item.children);
-			return [view({flexdirection:"row", bg:0}, [
-				view({bg:0, flexwrap:"nowrap", flexdirection:"column" },
-					this.outer.newitemheading({
+			var res = [
+				this.outer.newitemheading({
 						haschildren: this.item.children && this.item.children.length, 
 						folded: this.item.collapsed, 
 						toggleclick: this.toggle.bind(this), 
 						select: this.processSelect.bind(this),
 						text:this.item.name,
 						id:this.item.id
-					}),
-					this.item.collapsed == false?
-						view({bg:0, flexdirection:"row" },
-							view({bg:0, flexdirection:"column" ,  padding: 0 },
-								this.item.children?
-								this.item.children.map(function(m, i, array){return [
-									view({bg:0,flexdirection:"row" , padding: 0},
-										this.outer.treeline({alignself:"stretch", height:32, width:20,last:i === array.length - 1?1:0}), 
+					})
+			];
+					
+					
+			if (this.item.collapsed == false)
+			{
+				if (this.item.children)
+				{
+					
+					var childrenarray = this.item.children.map(function(m, i, thearray){return [
+									this.outer.treeline({last:(i == thearray.length-1)?1:0, flexwrap:"nowrap",abg:{
+											color:function(){
+													return "yellow";
+												}
+											}, 
+											padding:0, 
+											flexdirection:"row" },
+											view({bgcolor:"blue", width:14, alignself:"stretch",init:function(){console.log(this.size)} , layout:function(){console.log(this.layout)}}),
 										this.outer.treeitem({item: m})										
 									)
-									]}.bind(this))
-								:[]
+									]}.bind(this));
+									
+					res.push(view({
+								bg:0, 
+								flexdirection:"column" , 
+								flexwrap:"nowrap"
+							},
+							childrenarray
 							)
-						)
-					:[]
-				)
-			])]
+					);
+				}
+			}
+			return res;
+			
 		}
 	})
 	
@@ -181,13 +197,22 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		//this.bgcolor = vec4("red");
 		//this.flex = 1
 		this.last = 0
-		this.fgcolor = vec4(0.5, 0.5, 0.5, 1.)
-		this.bgcolor = "#c0c0c0" 
+		
+		this.render = function(){
+			console.log("last:",this.last);
+			return this.constructor_children;
+		}
+		this.alignself = "stretch";
+		
+		this.fgcolor = vec4("#808080")
+		
+		this.bgcolor = "#3b3b3b" 
 		this.bg = {
 			color: function(){
+				
 				var pos = mesh.xy * vec2(view.layout.width, view.layout.height)
-				var center = 18
-				var left = 11
+				var center = 16
+				var left = 7
 				var field = shape.union(
 					shape.box(pos, left, 0., 1., view.layout.height * (1. - view.last) + center * view.last),
 					shape.box(pos, left, center, view.layout.width, 1.)
@@ -195,9 +220,10 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 				var edge = .4
 
 				//if(mod(floor(gl_FragCoord.x) + floor(gl_FragCoord.y), 2.) > 0.){
-					return vec4(view.fgcolor.rgb, smoothstep(edge, -edge, field))
+					return mix(view.bgcolor,view.fgcolor, smoothstep(edge, -edge, field))
 				//}
-				return vec4(view.fgcolor.rgb, 0)
+				return "red";
+				return vec4(view.bgcolor)
 			}
 		}
 	})
