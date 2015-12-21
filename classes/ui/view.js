@@ -1087,6 +1087,22 @@ define.class('$system/base/node', function(require){
 	})
 	this.roundedrect = false
 	
+	this.moveToFront = function(){
+		if(!this.parent) return
+		var idx = this.parent.children.indexOf(this)
+		this.parent.children.splice(idx, 1)
+		this.parent.children.push(this)
+		this.parent.redraw()
+	}
+
+	this.moveToBack = function(){
+		if(!this.parent) return
+		var idx = this.parent.children.indexOf(this)
+		this.parent.children.splice(idx, 1)
+		this.parent.children.unshift(this)
+		this.parent.redraw()
+	}
+
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10

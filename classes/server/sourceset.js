@@ -58,7 +58,7 @@ define.class(function(require, $server$, dataset){
 				if(item.type !== 'Call') continue
 				var name 
 				if(item.fn.type === 'Key'){
-					name = 'this.'+item.fn.key.name
+					name = 'this.' + item.fn.key.name
 				}
 				else{
 					name = item.fn.name
