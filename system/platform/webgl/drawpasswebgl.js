@@ -199,53 +199,66 @@ define.class(function(require, baseclass){
 		pickguid[0] = (((passid+1)*131)%256)/255
 
 		// modulo inverse: http://www.wolframalpha.com/input/?i=multiplicative+inverse+of+31+mod+256
-		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
-			var draw = dl[i]
-
-			if(draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
-				continue
-			}
-			else draw._first_draw_pick = 1
-
-			var id = ((i+1)*29401)%65536
-			pickguid[1] = (id&255)/255
-			pickguid[2] = (id>>8)/255
-
-			draw.pickguid = pickguid[0]*255<<16 | pickguid[1]*255 << 8 | pickguid[2]*255
-			draw.viewmatrix = matrices.viewmatrix
-
-			if(!draw._visible) continue
-			if(draw._viewport && draw.drawpass !== this && draw.drawpass.pick_buffer){
-				// ok so the pick pass needs the alpha from the color buffer
-				// and then hard forward the color
-				var blendshader = draw.viewportblendshader
-				if (view._viewport === '3d'){
-					// dont do this!
-					blendshader.depth_test = 'src_depth <= dst_depth'
-				}
-				else{
-					blendshader.depth_test = ''
-				}
-				blendshader.texture = draw.drawpass.pick_buffer
-				blendshader._width = draw.layout.width
-				blendshader._height = draw.layout.height
-				blendshader.drawArrays(this.device)
+		var i = 0
+		var draw = view
+		while(draw){
+			i++
+			if(!draw.visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
-				//draw.updateShaders()
-				// alright lets iterate the shaders and call em
-				var shaders =  draw.shader_draw_list
-				for(var j = 0; j < shaders.length; j++){
-					var shader = shaders[j]
+				draw._first_draw_pick = 1
 
-					shader.pickguid = pickguid
-					if(!shader.visible) continue
-					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
-					else draw.viewmatrix = matrices.viewmatrix
+				var id = (i*29401)%65536
+				pickguid[1] = (id&255)/255
+				pickguid[2] = (id>>8)/255
 
-					shader.drawArrays(this.device, 'pick')
+				draw.pickguid = pickguid[0]*255<<16 | pickguid[1]*255 << 8 | pickguid[2]*255
+				draw.viewmatrix = matrices.viewmatrix
+
+				if(!draw._visible) continue
+				if(draw._viewport && draw.drawpass !== this && draw.drawpass.pick_buffer){
+					// ok so the pick pass needs the alpha from the color buffer
+					// and then hard forward the color
+					var blendshader = draw.viewportblendshader
+					if (view._viewport === '3d'){
+						// dont do this!
+						blendshader.depth_test = 'src_depth <= dst_depth'
+					}
+					else{
+						blendshader.depth_test = ''
+					}
+					blendshader.texture = draw.drawpass.pick_buffer
+					blendshader._width = draw.layout.width
+					blendshader._height = draw.layout.height
+					blendshader.drawArrays(this.device)
+				}
+				else{
+					//draw.updateShaders()
+					// alright lets iterate the shaders and call em
+					var shaders =  draw.shader_draw_list
+					for(var j = 0; j < shaders.length; j++){
+						var shader = shaders[j]
+
+						shader.pickguid = pickguid
+						if(!shader.visible) continue
+						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
+						else draw.viewmatrix = matrices.viewmatrix
+
+						shader.drawArrays(this.device, 'pick')
+					}
 				}
 			}
+
+			var next = (draw === view || !draw._viewport) && draw.children[0], next_index = 0
+			while(!next){ // skip to parent next
+				if(draw === view) break
+				next_index = draw.draw_index + 1
+				draw = draw.parent
+				next = draw.children[next_index]
+			}
+			draw = next
+			if(draw === view) break
+			if(draw) draw.draw_index = next_index
 		}
 	}
 
@@ -277,60 +290,70 @@ define.class(function(require, baseclass){
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
 
-		// each view has a reference to its layer
-		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
-			var draw = dl[i]
-
-
-			if(draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
-				continue
-			}
-			else draw._first_draw_color = 1
-
-			//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
-			draw._time = time
-			if(draw._listen_time || draw.ontime) hastime = true
-				
-			draw.viewmatrix = matrices.viewmatrix
-
-			if(!draw._visible) continue
-
-			if(draw.atDraw) draw.atDraw(this)
-			if(draw._viewport && draw.drawpass !== this ){
-				if(!draw.drawpass.color_buffer){
-					console.error("Null color_buffer detected")
-					continue
-				}
-				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
-				// lets render the view as a layer
-				var blendshader = draw.viewportblendshader
-				if (view._viewport === '3d'){
-					blendshader.depth_test = 'src_depth <= dst_depth'
-				}
-				else{
-					blendshader.depth_test = ''
-				}
-				blendshader.texture = draw.drawpass.color_buffer
-				blendshader.width = draw.layout.width
-				blendshader.height = draw.layout.height
-				blendshader.drawArrays(this.device)
-
+		var draw = view
+		while(draw){
+			//}
+			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
+			//	var draw = dl[i]
+			if(!draw.visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
-				draw.updateShaders()
-				// alright lets iterate the shaders and call em
-				var shaders =  draw.shader_draw_list
-				for(var j = 0; j < shaders.length; j++){
-					// lets draw em
-					var shader = shaders[j]
-					if(shader.pick_only || !shader.visible) continue // was pick only
-					// we have to set our guid.
-					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
-					else draw.viewmatrix = matrices.viewmatrix
+				draw._first_draw_color = 1
 
-					shader.drawArrays(this.device)
+				//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
+				draw._time = time
+				if(draw._listen_time || draw.ontime) hastime = true
+					
+				draw.viewmatrix = matrices.viewmatrix
+
+				if(draw.atDraw) draw.atDraw(this)
+				if(draw._viewport && draw.drawpass !== this ){
+					if(!draw.drawpass.color_buffer){
+						console.error("Null color_buffer detected")
+						continue
+					}
+					// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
+					// lets render the view as a layer
+					var blendshader = draw.viewportblendshader
+					if (view._viewport === '3d'){
+						blendshader.depth_test = 'src_depth <= dst_depth'
+					}
+					else{
+						blendshader.depth_test = ''
+					}
+					blendshader.texture = draw.drawpass.color_buffer
+					blendshader.width = draw.layout.width
+					blendshader.height = draw.layout.height
+					blendshader.drawArrays(this.device)
+
+				}
+				else{
+					draw.updateShaders()
+					// alright lets iterate the shaders and call em
+					var shaders =  draw.shader_draw_list
+					for(var j = 0; j < shaders.length; j++){
+						// lets draw em
+						var shader = shaders[j]
+						if(shader.pick_only || !shader.visible) continue // was pick only
+						// we have to set our guid.
+						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
+						else draw.viewmatrix = matrices.viewmatrix
+
+						shader.drawArrays(this.device)
+					}
 				}
 			}
+
+			var next = (draw === view || !draw._viewport) && draw.children[0], next_index = 0
+			while(!next){ // skip to parent next
+				if(draw === view) break
+				next_index = draw.draw_index + 1
+				draw = draw.parent
+				next = draw.children[next_index]
+			}
+			draw = next
+			if(draw === view) break
+			if(draw) draw.draw_index = next_index
 		}
 
 		return hastime
