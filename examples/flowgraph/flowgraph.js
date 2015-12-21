@@ -260,6 +260,57 @@ define.class('$ui/view', function(require,
 	this.updateZoom = function(z){	
 	}
 	
+	this.gridclick = function(p, origin){
+		if(this.screen.keyboard.shift){
+		}
+		else{
+			this.clearSelection(true);
+		
+			origin.startselectposition = origin.localMouse();
+			
+			origin.mousemove = function(){				
+				var np = this.localMouse();
+				fg = this.find("flowgraph");
+				sq = this.findChild("selectorrect");
+				if(sq){
+					var sx = Math.min(this.startselectposition[0], np[0]);
+					var sy = Math.min(this.startselectposition[1], np[1]);
+					var ex = Math.max(this.startselectposition[0], np[0]);
+					var ey = Math.max(this.startselectposition[1], np[1]);
+					
+					sq.visible = true;
+					sq.redraw();
+				
+					sq.pos = vec2(sx,sy);
+					sq.size = vec3(ex-sx, ey-sy, 1);
+					for(var a in fg.allblocks){
+						var bl = fg.allblocks[a];
+						
+						cx = bl.pos[0] + bl.layout.width/2; 
+						cy = bl.pos[1] + bl.layout.height/2;
+						
+						if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
+							bl.inselection = 1;
+						}	
+						else{
+							bl.inselection = 0;
+						}
+						
+					}
+					
+				} 
+			}
+			
+			origin.mouseleftup = function(){
+				sq.visible = false;
+				sq.redraw();
+				this.mousemove = function(){};
+			}
+			
+			
+		}
+	}
+	
 	this.render = function(){
 		return [
 			this.menubar({})		
@@ -274,7 +325,7 @@ define.class('$ui/view', function(require,
 						,button({text:"add"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
 						,button({text:"remove", click:function(){console.log("remove"); }, fontsize:this.fontsize})
 					)
-					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(){this.clearSelection(true);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"connectionlayer", bg:0}
 							,connection({from:"phone", to:"tv"})
 							,connection({from:"tablet", to:"thing"})
@@ -297,8 +348,7 @@ define.class('$ui/view', function(require,
 							,block({name:"f", title:"block F", x:550, y:700, fontsize:this.fontsize})
 						)
 												
-						,view({name:"popllayer", bg:0},
-
+						,view({name:"popuplayer", bg:0},
 							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
 								label({text:"connection", bg:0, margin:4, fontsize:this.fontsize})
 								,button({padding:0, borderwidth:0, fontsize:this.fontsize, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize })
@@ -307,7 +357,7 @@ define.class('$ui/view', function(require,
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"block", bg:0, margin:4, fontsize:this.fontsize})
 								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
-							)
+							),view({name:"selectorrect", bordercolor:vec4(1,1,1,0.4),borderwidth:2,bgcolor:vec4(1,1,1,0.07) ,borderradius:2, position:"absolute" , width:10,height:10,x:-21,y:-21})
 						)
 					)
 				) 

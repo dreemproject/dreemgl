@@ -22,15 +22,30 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		snap:{type:int, value:1},
 		bordercolor:{motion:"linear", duration: 0.1},
 		focusbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"},
+		hoverbordercolor:{motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"},
 		fontsize:{type:float, value:12},
 		inselection :{type:boolean, value:false}
 	}
 	
 	this.inselection = function(){	
-		if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
-		this.redraw();
+		this.updatecolor();
 	}
 	
+	this.updatecolor = function(){	
+			if (this._inselection) {
+				this.bordercolor = this.focusbordercolor;
+			}
+			else{
+				if (this.over){
+					this.bordercolor = this.hoverbordercolor;
+				}
+				else{
+					this.bordercolor = this.neutralbordercolor;
+				}
+			}
+		}
+		
+		
 	this.move = function(x,y) {
 		var nx = this.pos[0] + x;
 		var ny = this.pos[1] + y;
@@ -129,6 +144,19 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.mousemove = function(){};
 	}
 	
+	this.over = false;
+	
+	this.mouseover = function(){
+		this.over = true;
+		this.updatecolor();
+	}
+		
+	this.mouseout = function(){
+		this.over = false;
+		this.updatecolor();
+	}
+
+		
 	this.flexdirection = "column"
 	
 	this.render = function(){

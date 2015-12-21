@@ -118,19 +118,19 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.mouseover = function(){
 			this.over = true;
 			this.updatecolor();
-			
-		}
-		this.updateMove = function(){
-			
-		}
-		this.setupMove = function(){
-			
 		}
 		
 		this.mouseout = function(){
 			this.over = false;
 			this.updatecolor();
 		}
+		
+		this.updateMove = function(){			
+		}
+		
+		this.setupMove = function(){		
+		}
+		
 		
 		this.frompos= vec2(0,0);
 		this.topos= vec2(0,100);
