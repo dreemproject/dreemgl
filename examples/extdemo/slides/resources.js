@@ -11,9 +11,9 @@ define.class(function ($ui$, view, label) {
     this.bgcolor = 'transparent';
 
     this.attributes = {
-        smallfont: {type:int, value:30},
-        largefont: {type:int, value:40},
-        space: {type:int, value:20}
+        smallfont: Config({type:int, value:30}),
+        largefont: Config({type:int, value:40}),
+        space: Config({type:int, value:20})
     };
 
     this.render = function render() {

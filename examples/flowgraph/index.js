@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function($server$,composition, role,require, $ui$,treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
+define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
 	
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')
@@ -63,13 +63,11 @@ define.class(function($server$,composition, role,require, $ui$,treeview,  cadgri
 	
 	this.render = function(){		
 		return [
-			this.fileio()
-			,role(
-				screen({bg:0,clearcolor:vec4('black'),flexwrap:"nowrap", flexdirection:"row"}
-					,flowgraph({
-						
-					})
-				)
+			this.fileio(),
+			screen({bg:0,clearcolor:vec4('black'),flexwrap:"nowrap", flexdirection:"row"},
+				flowgraph({
+					
+				})
 			)
 		]		
 	}

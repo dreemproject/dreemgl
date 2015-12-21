@@ -6,9 +6,9 @@
 define.class(function ($ui$, view, label, $examples$guide$, movie, $widgets$, jsviewer) {
 
 	this.attributes = {
-		movies: {type: Array},
-		searchCode: {type: String},
-		compositionCode: {type: String}
+		movies: Config({type: Array}),
+		searchCode: Config({type: String}),
+		compositionCode: Config({type: String})
 	};
 
 	this.slidetitle = "Web Service via Service Proxy";

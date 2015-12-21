@@ -6,7 +6,7 @@
 define.class(function ($ui$, view, label) {
 
     this.attributes = {
-        syntaxCode: {type: String}
+        syntaxCode: Config({type: String})
     };
 
     this.slidetitle = "Adding Components to DreemGL";

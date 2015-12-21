@@ -11,8 +11,8 @@ define.class(function (require, $ui$, view, label) {
     this.margin = 10;
 
     this.attributes = {
-        deviceId:  {type:String},
-        deviceType: {type:String}
+        deviceId:  Config({type:String}),
+        deviceType: Config({type:String})
     };
 
     this.render = function() {

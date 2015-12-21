@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function(require, $server$, composition, role, $ui$, screen, view){
+define.class('$server/composition', function(require, $ui$, screen, view){
 
 	var arpeggiator = define.class(function($ui$, view, label){
 		
@@ -158,33 +158,31 @@ define.class(function(require, $server$, composition, role, $ui$, screen, view){
 	})
 
 	this.render = function(){ return [
-		role(
-			screen({clearcolor:vec4('black'), init:function(){
-				console.log('here')	
-			}},
-				arpeggiator({
-					arp1:function(l, m, n, o, p){
-						for(var i = 4; i < 7; i++){
-							p['c'+i]
-							//o[this.slide]
-							if(this.volume>60) o['e'+i]
-							else o['ds'+i]
+		screen({clearcolor:vec4('black'), init:function(){
+			console.log('here')	
+		}},
+			arpeggiator({
+				arp1:function(l, m, n, o, p){
+					for(var i = 4; i < 7; i++){
+						p['c'+i]
+						//o[this.slide]
+						if(this.volume>60) o['e'+i]
+						else o['ds'+i]
 
-							o['g'+i]
-						}
-						this.loop
-					},
-					arpnice:function(l, m, n, o, p){
-						for(var i = 4; i < 7; i++){
-							p['c'+i]
-							o[this.slide]
-							o['g'+i]
-						}
-						this.loop
+						o['g'+i]
 					}
+					this.loop
+				},
+				arpnice:function(l, m, n, o, p){
+					for(var i = 4; i < 7; i++){
+						p['c'+i]
+						o[this.slide]
+						o['g'+i]
+					}
+					this.loop
+				}
 
-				})
-			)
+			})
 		)
 	]}
 })

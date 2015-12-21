@@ -11,10 +11,10 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
     this.flexdirection = "column";
 
     this.attributes = {
-        deviceList: {type: Array},
-        devices: {type: Object},
-        apiCode: {type: String},
-        clientCode: {type: String, value:
+        deviceList: Config({type: Array}),
+        devices: Config({type: Object}),
+        apiCode: Config({type: String}),
+        clientCode: Config({type: String, value:
         'require "net/htttp";\n' +
         'require "json";\n' +
         '\n' +
@@ -31,7 +31,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
         '  puts "sending JSON: #{req.body}"\n' +
         '  http.request(req)\n' +
         '\n' +
-        'end'}
+        'end'})
     };
 
     this.ondevices = function (e) {

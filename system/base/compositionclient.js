@@ -8,7 +8,7 @@ define.class('./compositionbase', function(require, baseclass){
 
 	var RpcProxy = require('$system/rpc/rpcproxy')
 	var RpcHub = require('$system/rpc/rpchub')
-
+	var screen = require('$ui/screen')
 	var Render = require('./render')
 
 	this.atConstructor = function(previous, parent){
@@ -36,12 +36,19 @@ define.class('./compositionbase', function(require, baseclass){
 
 		this.renderComposition()
 
-		this.screen = this.names.role[this.screenname]
+		this.screen = this.names[this.screenname]
 		if(!this.screen){
-			this.screen = this.names.role.constructor_children[0]			
+			// find the first screen
+			for(var key in this.names){
+				if(this.names[key] instanceof screen){
+					break
+				}
+			}
+			if(!key) throw new Error('No screen found')
+			this.screen = this.names[key]
 			this.screenname = this.screen.name || this.screen.constructor.name
 		}
-	
+
 		if(previous || parent) this.doRender(previous, parent)
 	}
 
@@ -157,7 +164,7 @@ define.class('./compositionbase', function(require, baseclass){
 				var split = msg.rpcid.split('.')
 				var obj
 				// see if its a set attribute on ourself
-				if(split[0] === 'role' && split[1] === this.screenname){
+				if(split[0] === this.screenname){
 					obj = this.screen
 				}
 				else{

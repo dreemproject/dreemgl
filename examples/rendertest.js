@@ -1,6 +1,6 @@
 //Pure JS based composition
 
-define.class(function($server$, composition, role, $ui$, screen, view, splitcontainer, label, button, $3d$, cube){
+define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, button, $3d$, cube){
 	console.log("hmm");
 
 	var mousedebug = define.class(function mousedebug($ui$view){
@@ -52,40 +52,38 @@ define.class(function($server$, composition, role, $ui$, screen, view, splitcont
 	})
 	
 	this.render = function(){ return [
-		role(
-			screen({clearcolor:vec4('red')}
-				,view({// size:[100,100],
-					name:'viewbg',
-					flexdirection:'column',
-					margin:4,
-					flex:1,
-					borderradius:30,
-					bgcolor:'#CBD6D9'
-					}
-					,button({text:'I BUTTON!', flex:1})
-					,view({clearcolor:"lightblue", mode:'3D', flex:1, margin:2, bgcolor:'lightblue', name:'3dview', borderwidth:0, bordercolor:"black", borderradius:1, camera:vec3(2.1,2,2)}
-						,cube({dimension:vec3(1)})
-						,cube({dimension:vec3(1), translate:vec3(1.5,0,-1.5)})
-						,cube({dimension:vec3(1), translate:vec3(-1.5,0,1.5)})
-					
-					)
-					,mousedebug({flex:1,mode:'2D',margin:20})
-					,view({
-						flex:1, 
-						borderradius:0,//borderradius:vec4(10,20,30,40), 
-						name:'view2',
-						margin:20,
-						mode:'2D',
-						blend:{
-							acolor:function(){
-								return texture.sample(mesh.xy+0.1*sin(8*mesh.x))
-								//return 'red'
-							}
-						},
-						bgcolor:'#A39565', bordercolor:"#484230", borderwidth: 20
+		screen({clearcolor:vec4('red')}
+			,view({// size:[100,100],
+				name:'viewbg',
+				flexdirection:'column',
+				margin:4,
+				flex:1,
+				borderradius:30,
+				bgcolor:'#CBD6D9'
+				}
+				,button({text:'I BUTTON!', flex:1})
+				,view({clearcolor:"lightblue", mode:'3D', flex:1, margin:2, bgcolor:'lightblue', name:'3dview', borderwidth:0, bordercolor:"black", borderradius:1, camera:vec3(2.1,2,2)}
+					,cube({dimension:vec3(1)})
+					,cube({dimension:vec3(1), translate:vec3(1.5,0,-1.5)})
+					,cube({dimension:vec3(1), translate:vec3(-1.5,0,1.5)})
+				
+				)
+				,mousedebug({flex:1,mode:'2D',margin:20})
+				,view({
+					flex:1, 
+					borderradius:0,//borderradius:vec4(10,20,30,40), 
+					name:'view2',
+					margin:20,
+					mode:'2D',
+					blend:{
+						acolor:function(){
+							return texture.sample(mesh.xy+0.1*sin(8*mesh.x))
+							//return 'red'
 						}
-						,mousedebug({flex:1,height:100, width:100, margin:20})
-					)
+					},
+					bgcolor:'#A39565', bordercolor:"#484230", borderwidth: 20
+					}
+					,mousedebug({flex:1,height:100, width:100, margin:20})
 				)
 			)
 		)

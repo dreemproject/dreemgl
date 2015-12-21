@@ -9,7 +9,9 @@ define.class('$system/base/node', function(require){
 	// later on the role class allows multiple roles to be defined and have different screen setups
 
 	var RpcProxy = require('$system/rpc/rpcproxy')
-
+	this.atConstructor = function(){
+		throw new Error('role is depricated, please remove it from your composition and place the screens in the composition root')
+	}
 	this.createRpcProxy = function(parent){
 		return RpcProxy.createChildSet(this, parent)
 	}

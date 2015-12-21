@@ -8,7 +8,7 @@ define.class(function (require, $ui$, view, label) {
     this.slidetitle = "Attributes via POST API";
 
     this.attributes = {
-        setterCode: {type: String, value:
+        setterCode: Config({type: String, value:
         'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
@@ -26,8 +26,8 @@ define.class(function (require, $ui$, view, label) {
         '  puts "sending JSON: #{req.body}"\n' +
         '  http.request(req)\n' +
         '\n' +
-        'end'},
-        getterCode: {type: String, value:
+        'end'}),
+        getterCode: Config({type: String, value:
         'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
@@ -46,7 +46,7 @@ define.class(function (require, $ui$, view, label) {
         '  res = http.request(req)\n' +
         '  puts "response JSON: #{res.body}"\n' +
         '\n' +
-        'end'}
+        'end'})
     };
 
     this.flexdirection = 'column';
