@@ -21,12 +21,19 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		title: Config({type:String, value:"Untitled"}),
 		snap: Config({type:int, value:1}),
 		bordercolor: Config({motion:"linear", duration: 0.1}),
+		borderselected: Config({type:float, value:0, motion:"linear", duration: 0.1}),
 		focusbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"}),
 		hoverbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"}),
 		fontsize: Config({type:float, value:12}),
 		inselection : Config({type:boolean, value:false})
 	}
-	
+		
+	this.bordercolorfn = function(pos){
+		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0:0.0;		
+		return mix(bordercolor, mix(vec4(0.1,0.1,0.1,1), focusbordercolor, check), borderselected);
+		return vec4(check);
+	}
+		
 	this.inselection = function(){	
 		this.updatecolor();
 	}
@@ -34,8 +41,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.updatecolor = function(){	
 			if (this._inselection) {
 				this.bordercolor = this.focusbordercolor;
+				this.borderselected = 1;
 			}
 			else{
+				this.borderselected = 0;
 				if (this.over){
 					this.bordercolor = this.hoverbordercolor;
 				}
