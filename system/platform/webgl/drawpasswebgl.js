@@ -12,10 +12,6 @@ define.class(function(require, baseclass){
 		this.view = view
 		view.drawpass = this
 		// lets do the flatten
-		this.draw_list = []
-
-		this.addToDrawList(this.view, true)
-
 		this.pickmatrices = {
 			viewmatrix: mat4.identity(),
 			noscrollmatrix: mat4.identity()
@@ -31,20 +27,6 @@ define.class(function(require, baseclass){
 		this.releaseTexture()
 	}
 		
-	this.addToDrawList = function(view, isroot){
-		//matrix = matrix? matrix: mat4.identity()
-		//view.draw_matrix = mat4.mul_mat4(view.layout_matrix, matrix)
-		this.draw_list.push(view)
-
-		if(this.draw_list.length > 65535) throw new Error("Too many items in a drawpass, ID space out of range, you get a piece of pie.")
-		if(isroot || !view._viewport){
-			var children = view.children
-			if(children) for(var i = 0; i < children.length; i++){
-				this.addToDrawList(children[i])
-			}
-		}
-	}
-
 	this.poolDrawTargets = function(){
 		var pools = this.device.drawtarget_pools
 		if(!this.drawtargets) return
@@ -196,19 +178,19 @@ define.class(function(require, baseclass){
 		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
 
 		var pickguid = vec3()
-		pickguid[0] = (((passid+1)*131)%256)/255
+		pickguid[0] = (((passid)*131)%256)/255
 
 		// modulo inverse: http://www.wolframalpha.com/input/?i=multiplicative+inverse+of+31+mod+256
-		var i = 0
+		var pick_id = 0
 		var draw = view
 		while(draw){
-			i++
+			pick_id++
 			if(!draw.visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_pick = 1
 
-				var id = (i*29401)%65536
+				var id = (pick_id*29401)%65536
 				pickguid[1] = (id&255)/255
 				pickguid[2] = (id>>8)/255
 
@@ -250,6 +232,29 @@ define.class(function(require, baseclass){
 			}
 
 			var next = (draw === view || (!draw._viewport && draw.visible)) && draw.children[0], next_index = 0
+			while(!next){ // skip to parent next
+				if(draw === view) break
+				next_index = draw.draw_index + 1
+				draw = draw.parent
+				next = draw.children[next_index]
+			}
+			draw = next
+			if(draw === view) break
+			if(draw) draw.draw_index = next_index
+		}
+	}
+
+	this.getDrawID = function(id){
+		var view = this.view
+		var draw = view
+		var pick_id = 0
+		while(draw){
+			pick_id++
+
+			if(id === pick_id) return draw
+
+			var next = (draw === view || (!draw._viewport && draw.visible)) && draw.children[0], next_index = 0
+
 			while(!next){ // skip to parent next
 				if(draw === view) break
 				next_index = draw.draw_index + 1

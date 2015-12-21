@@ -204,7 +204,7 @@ define.class(function(require, exports){
 			// and then read the goddamn pixel
 			if(last || view.draw_dirty & 2){
 				view.draw_dirty &= 1
-				view.drawpass.drawPick(last, i, x, y, this.debug_pick)
+				view.drawpass.drawPick(last, i + 1, x, y, this.debug_pick)
 			}
 			if(skip){
 				this.screen.draw_dirty &= 1
@@ -223,12 +223,12 @@ define.class(function(require, exports){
 		}
 		
 		// decode the pass and drawid
-		var passid = (data[0]*43)%256 - 1
-		var drawid = (((data[2]<<8) | data[1])*60777)%65536 - 1
+		var passid = (data[0]*43)%256
+		var drawid = (((data[2]<<8) | data[1])*60777)%65536
 		// lets find the view.
-		var passview = this.drawpass_list[passid]
+		var passview = this.drawpass_list[passid - 1]
 		var drawpass = passview && passview.drawpass
-		var view = drawpass && drawpass.draw_list[drawid]
+		var view = drawpass && drawpass.getDrawID(drawid)
 
 		while(view && view.nopick){
 			view = view.parent
