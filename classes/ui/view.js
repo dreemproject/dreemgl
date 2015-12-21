@@ -434,8 +434,18 @@ define.class('$system/base/node', function(require){
 
 	// emit an event upward (to all parents) untill a listener is hit
 	this.emitUpward = function(key, msg){
-		if(this['_listen_'+key] || this['on'+key]) return this.emit(key, msg)
-		if(this.parent) this.parent.emitUpward(key, msg)
+		if(this['_listen_'+key] || this['on'+key]){
+			this.emit(key, msg)
+			return this
+		}
+		if(this.parent) return this.parent.emitUpward(key, msg)
+	}
+	
+	this.findEmitUpward = function(key){
+		if(this['_listen_'+key] || this['on'+key]){
+			return this
+		}
+		if(this.parent) return this.parent.findEmitUpward(key)
 	}
 
 	this.computeCursor = function(){

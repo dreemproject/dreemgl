@@ -95,6 +95,7 @@ define.class('$system/base/shader', function(require, exports){
 			gl.linkProgram(shader.pick)
 			// add our pick uniform
 			pix_state.uniforms['pickguid'] = vec3
+			pix_state.uniforms['pickalpha'] = float
 
 			this.getLocations(gl, shader.pick, vtx_state, pix_state)
 

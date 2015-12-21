@@ -223,6 +223,7 @@ define.class(function(require, baseclass){
 
 						shader.pickguid = pickguid
 						if(!shader.visible) continue
+						if(draw.pickalpha !== undefined)shader.pickalpha = draw.pickalpha
 						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 						else draw.viewmatrix = matrices.viewmatrix
 

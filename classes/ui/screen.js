@@ -306,10 +306,13 @@ define.class(function(require, $ui$view) {
 			// ok so. lets query the renderer for the view thats under the mouse
 			if(!this.mouse_capture){
 				this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
-					if(this.mouse_view !== view){
-						if(this.mouse_view) this.mouse_view.emitUpward('mouseout', {local:this.remapMouse(this.mouse_view)})
-						this.mouse_view = view
-						if(view) this.mouse_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+					// lets find the mouseover or mousemove view
+					var mo_view = view.findEmitUpward('mouseover')
+					this.mouse_view = view
+					if(this.mouse_over !== mo_view){
+						if(this.mouse_over) this.mouse_over.emitUpward('mouseout', {local:this.remapMouse(this.mouse_view)})
+						this.mouse_over = mo_view
+						if(mo_view) this.mouse_over.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 					}
 					if(view){
 						view.computeCursor()

@@ -24,7 +24,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.borderwidth = 0
 	//	this.borderradius = 0;
 		this.padding =  0
-
+		this.pickalpha = -1
 		this.labelactivecolor = vec4("#303000")
 
 		this.buttoncolor1 =  "#3b3b3b"
