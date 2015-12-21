@@ -261,11 +261,15 @@ define.class('$ui/view', function(require,
 	
 	this.gridclick = function(p, origin){
 		
-			origin.startselectposition = origin.localMouse();
+		
+			var cg= this.find("centralconstructiongrid");
+		
+			origin.startselectposition = cg.localMouse();
 			this.startdragselect();
 			
 			origin.mousemove = function(){				
-				var np = this.localMouse();
+				var cg= this.find("centralconstructiongrid");
+				var np = cg.localMouse();
 				fg = this.find("flowgraph");
 				sq = this.findChild("selectorrect");
 				if(sq){

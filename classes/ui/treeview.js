@@ -13,7 +13,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		select: Config({type:Event})
 	}
 	
-	this.bgcolor = '#454545'
+	this.bgcolor = '#3b3b3b'
 	this.boundscheck = true
 	this.viewport = '2d'
 	this.overflow ='scroll'
