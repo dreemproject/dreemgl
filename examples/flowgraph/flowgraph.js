@@ -228,11 +228,18 @@ define.class('$ui/view', function(require,
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
 
-		this.sourceset = sourceset(require('./index.js').module.factory.body.toString())
+		this.sourceset = sourceset()
+
 
 		this.screen.locationhash = function(event){
+			console.log(event.value)
+			require.async(event.value.composition).then(function(result){
+				//this.sourceset.parse(result.module)
+				this.sourceset.parse(result.module.factory.body.toString())
+			}.bind(this))
+			// lets load up 
 			//console.log(event.value);
-		}
+		}.bind(this)
 		//console.log(" hmm  ");
 		
 		// lets load the entire directory structure

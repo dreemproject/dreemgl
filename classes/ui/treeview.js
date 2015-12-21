@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function($ui$, view, label, button, icon){
+define.class('$ui/view', function($ui$, view, label, button, icon){
 
 	// the treeview control - classic treeview with expandable nodes.
 	this.attributes = {
@@ -19,7 +19,7 @@ define.class(function($ui$, view, label, button, icon){
 	this.overflow ='scroll'
 
 	// The fold button is a very very flat button. 
-	define.class(this, 'foldbutton', function(button){
+	define.class(this, 'foldbutton', button, function(){
 		this.borderwidth = 0
 		this.borderradius = 0;
 		this.padding =  0
@@ -45,7 +45,7 @@ define.class(function($ui$, view, label, button, icon){
 	})
 
 	// newitemheading combines a few foldbuttons in to a full "item" in the tree
-	define.class(this, 'newitemheading', function($ui$, view){
+	define.class(this, 'newitemheading', view, function(){
 		this.borderwidth = 0;
 		this.attributes = {
 			folded: false,
@@ -87,7 +87,7 @@ define.class(function($ui$, view, label, button, icon){
 	});
 	
 	// the treeitem subclass contains 3 controls: a newitemheading, a set of treelines and an optional set of children treeitems in case the current node is expanded
-	define.class(this, 'treeitem', function($ui$, view){
+	define.class(this, 'treeitem', view, function(){
 
 		this.attributes = {
 			text: "",
@@ -157,7 +157,7 @@ define.class(function($ui$, view, label, button, icon){
 						text:this.item.name,
 						id:this.item.id
 					}),
-					this.item.collapsed==false?
+					this.item.collapsed == false?
 						view({bg:0, flexdirection:"row" },
 							view({bg:0, flexdirection:"column" ,  padding: 0 },
 								this.item.children?
@@ -177,15 +177,13 @@ define.class(function($ui$, view, label, button, icon){
 	})
 	
 	// subclass to render the gridlines of the tree
-	define.class(this, 'treeline', function($ui$, view){
+	define.class(this, 'treeline', view, function(){
 		//this.bgcolor = vec4("red");
 		//this.flex = 1
 		this.last = 0
-	//	this.alignself = "stretch"
 		this.fgcolor = vec4(0.5, 0.5, 0.5, 1.)
 		this.bgcolor = "#c0c0c0" 
 		this.bg = {
-			last: 0,
 			color: function(){
 				var pos = mesh.xy * vec2(view.layout.width, view.layout.height)
 				var center = 18
