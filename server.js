@@ -91,17 +91,19 @@ function main(){
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
 	}
-	var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
-
-	for(var i = 0; i < paths.length; i++){
-		if(!paths[i]) continue
-		var parts = paths[i].split(':')
-		var mypath =  parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
-		paths[parts[0]] = mypath
-	}
-	// put them on the define
-	for(var key in define.paths){
-		define['$'+key] = define.paths[key]
+	if(args['-nomoni']){
+		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
+		for(var i = 0; i < paths.length; i++){
+			if(!paths[i]) continue
+			var parts = paths[i].split(':')
+			var mypath =  parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
+			console.log('Mapping '+parts[0]+' to ' + mypath)	
+			define.paths[parts[0]] = mypath
+		}
+		// put them on the define
+		for(var key in define.paths){
+			define['$'+key] = define.paths[key]
+		}
 	}
 
 	define.$platform = 'headless'
