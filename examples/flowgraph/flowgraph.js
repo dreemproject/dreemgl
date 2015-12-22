@@ -403,8 +403,8 @@ define.class('$ui/view', function(require,
 			origin.mousemove = function(){				
 				var cg= this.find("centralconstructiongrid");
 				var np = cg.localMouse();
-				fg = this.find("flowgraph");
-				sq = this.findChild("selectorrect");
+				var fg = this.find("flowgraph");
+				var sq = this.findChild("selectorrect");
 				if(sq){
 					var sx = Math.min(this.startselectposition[0], np[0]);
 					var sy = Math.min(this.startselectposition[1], np[1]);
@@ -475,8 +475,11 @@ define.class('$ui/view', function(require,
 			}
 			
 			origin.mouseleftup = function(){
-				sq.visible = false;
-				sq.redraw();
+				var sq = this.findChild("selectorrect");
+				if (sq){
+					sq.visible = false;
+					sq.redraw();
+				}
 				fg = this.find("flowgraph");
 				fg.commitdragselect();
 				this.mousemove = function(){};
