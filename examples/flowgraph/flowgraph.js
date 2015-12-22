@@ -88,8 +88,8 @@ define.class('$ui/view', function(require,
 		if (f == -1) this.currentselection.push(obj)
 		else return
 		
-		console.log(this.currentselection)
 		this.updateSelectedItems()
+
 		if (this.currentselection.length > 1) return false;
 		return true;
 	}
@@ -180,9 +180,13 @@ define.class('$ui/view', function(require,
 	this.updatepopupuiposition = function(){
 		var bg = this.findChild("blockui")
 		var cg = this.findChild("connectionui")
+		var gg = this.findChild("groupui")
+		var gbg = this.findChild("groupbg")
 		
 		if (this.currentselection.length == 1)
 		{
+			gg.visible = false;
+			gbg.visible = false;
 			this.currentblock = undefined;			
 			this.currentconnection = undefined;
 			
@@ -193,7 +197,7 @@ define.class('$ui/view', function(require,
 			
 			if (this.currentblock){
 				bg.x = this.currentblock.pos[0];
-				bg.y = this.currentblock.pos[1]-bg.layout.height;
+				bg.y = this.currentblock.pos[1]-bg.layout.height - 3;
 				bg.visible = true;
 			}
 			else{
@@ -214,7 +218,63 @@ define.class('$ui/view', function(require,
 			bg.visible = false;
 			if (this.currentselection.length > 1)
 			{
-				// show group UI in center of group? 
+				gg.visible = true;
+				gbg.visible = true;
+				var minx = 10000;
+				var maxx = -10000;
+				var miny = 10000;
+				var maxy = -10000;
+				var cx = 0;
+				var cy = 0;
+				var n = 0;
+				for(a in this.currentselection){
+					var bl = this.currentselection[a];
+					if (bl.constructor.name == "block"){
+						n++;
+						if (bl.pos[0] < minx) minx = bl.pos[0];else if (bl.pos[0]>maxx) maxx = bl.pos[0];
+						if (bl.pos[1] < miny) miny = bl.pos[1];else if (bl.pos[1]>maxy) maxy = bl.pos[1];
+						
+						var x2 = bl.pos[0] + bl.layout.width;
+						var y2 = bl.pos[1] + bl.layout.height;
+						if (x2 < minx) minx = x2;else if (x2>maxx) maxx = x2;
+						if (y2 < miny) miny = y2;else if (y2>maxy) maxy = y2;
+
+
+						cx += bl.pos[0] + bl.layout.width/2; 
+						cy += bl.pos[1] + bl.layout.height/2;	
+					}
+					else{
+						if (bl.constructor.name == "connection"){
+							var ax = bl.frompos[0];
+							var ay = bl.frompos[1];
+						             
+							var bx = bl.topos[0];
+							var by = bl.topos[1];
+						
+							if (ax > maxx) maxx = ax;else if (ax<minx) minx = ax;
+							if (bx > maxx) maxx = bx;else if (bx<minx) minx = bx;
+							if (ay > maxy) maxy = ay;else if (ay<miny) miny = ay;
+							if (by > maxy) maxy = by;else if (by<miny) miny = by;
+						
+							cx += (ax+bx)/2;
+							cy += (ay+by)/2;
+							n++;
+						}
+					}
+				}
+				cx /= n;
+				cy /= n;
+				
+				gg.pos = vec2(cx - cg.layout.width/2, cy - cg.layout.height/2)
+				
+				gbg.pos = vec2(minx-20,miny-20);
+				gbg.size = vec2(maxx-minx + 40, maxy-miny+ 40);
+				
+			}
+			else{
+				gg.visible = false;
+				gbg.visible = false;
+			
 			}
 		}
 	}
@@ -415,6 +475,10 @@ define.class('$ui/view', function(require,
 						,button({text:"remove", click:function(){console.log("remove"); }, fontsize:this.fontsize})
 					)
 					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+						,view({name:"underlayer", bg:0}
+							,view({name:"groupbg",visible:false, bgcolor: vec4(0,0,1,0.2) , borderradius:8, borderwidth:1, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
+							
+						)
 						,view({name:"connectionlayer", bg:0}
 							,connection({from:"phone", to:"tv"})
 							,connection({from:"tablet", to:"thing"})
@@ -438,17 +502,21 @@ define.class('$ui/view', function(require,
 						)
 												
 						,view({name:"popuplayer", bg:0},
-							view({name:"connectionui",x:-200,bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
-								label({text:"connection", bg:0, margin:4, fontsize:this.fontsize})
-								,button({padding:0, borderwidth:0, fontsize:this.fontsize, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize })
+							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
+								label({text:"Connection", bg:0, margin:4, fontsize:this.fontsize})
+								,button({padding:0, borderwidth:0, fontsize:this.fontsize, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize })
 							)
-							,view({name:"blockui",x:-200, bgcolor:vec4(0,0,0,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute"},
+							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-								label({text:"block", bg:0, margin:4, fontsize:this.fontsize})
-								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
+								label({text:"Block", bg:0, margin:4, fontsize:this.fontsize})
+								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
 							)
-							,this.selectorrect()
-							
+							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
+							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
+								label({text:"Group", bg:0, margin:4, fontsize:this.fontsize})
+								,button({padding:0,borderwidth:0, fontsize:this.fontsize, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize})
+							)
+							,this.selectorrect()							
 						)
 					)
 				) 

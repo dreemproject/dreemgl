@@ -30,7 +30,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	this.bordercolorfn = function(pos){
 		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0:0.0;		
-		return mix(bordercolor, mix(vec4(0.1,0.1,0.1,1), focusbordercolor, check), borderselected);
+		return mix(bordercolor, mix(vec4(focusbordercolor.xyz*.8,1.0), focusbordercolor, check), borderselected);
 		return vec4(check);
 	}
 		
