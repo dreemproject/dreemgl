@@ -172,16 +172,12 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 											}, 
 											padding:0, 
 											flexdirection:"row" },
-<<<<<<< HEAD
 											view({bgcolor:"blue", width:14, alignself:"stretch",init:function(){
 											//	console.log(this.size)
 											} , 
 											layout:function(){
 												//console.log(this.layout)
 											}}),
-=======
-											view({bgcolor:"blue", width:14, alignself:"stretch" }),
->>>>>>> origin/dev
 										this.outer.treeitem({item: m})										
 									)
 									]}.bind(this));
@@ -208,10 +204,6 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.last = 0
 		
 		this.render = function(){
-<<<<<<< HEAD
-			//console.log("last:",this.last);
-=======
->>>>>>> origin/dev
 			return this.constructor_children;
 		}
 		this.alignself = "stretch";
