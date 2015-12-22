@@ -444,7 +444,7 @@ define.class(function(require, constructor){
 		}
 
 		if(is_attribute){ // extend the config
-			if('type' in config) throw new Error('Cannot redefine type of attribute '+key)
+			//if('type' in config) throw new Error('Cannot redefine type of attribute '+key)
 			var newconfig = Object.create(this._attributes[key])
 			for(var prop in config){
 				newconfig[prop] = config[prop]

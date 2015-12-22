@@ -19,35 +19,35 @@ define.class('$ui/view', function(require,
 	define.class(this, "selectorrect", function ($ui$, view){
 		
 		this.bordercolorfn = function(pos){
-			var check = (int(mod(0.20*( gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)?1.0:0.0;
-			return vec4(check * vec3(0.8),1);
+			var check = (int(mod(0.20*(gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)? 1.0: 0.0
+			return vec4(check * vec3(0.8), 1)
 		}
 		
-		this.bordercolor = vec4(1,1,1,0.4);
-		this.borderwidth = 2;
-		this.bgcolor = vec4(1,1,1,0.07)
-		this.borderradius = 2;
-		this.position = "absolute";
-		this.visible =false;		
+		this.bordercolor = vec4(1, 1, 1, 0.4)
+		this.borderwidth = 2
+		this.bgcolor = vec4(1, 1, 1, 0.07)
+		this.borderradius = 2
+		this.position = "absolute"
+		this.visible = false	
 	})
 	
 	define.class(this, "classlibclass", function($ui$, view, icon){
 		this.attributes = {
 			classdesc: Config({type:Object, value: undefined}),
-			col1: Config({value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.1}),
-			col2: Config({value:vec4("#454545"),persist:true, meta:"color", motion:"linear", duration:0.2})
+			col1: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.1}),
+			col2: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.2})
 		}
 		
 		this.bg = {
-			color: function(){	
+			color: function(){
 				var fill = mix(view.col1, view.col2,  (mesh.y)/0.8)
 				return fill;
 			}			
 		}
 		
-		this.bg = 1; 
-		this.margin = vec4(2,2,2,0);
-		this.justifycontent= "flex-start";
+		this.bg = 1
+		this.margin = vec4(2,2,2,0)
+		this.justifycontent = "flex-start"
 		this.alignitems = "center"
 		///this.aligncontent = "center"
 		this.render = function(){
@@ -68,7 +68,7 @@ define.class('$ui/view', function(require,
 		}
 		this.flexdirection = "column" 
 		this.fgcolor = "#f0f0f0"
-		this.bgcolor = "#3a3a3a";
+		this.bgcolor = "#3a3a3a"
 		this.render =function(){
 			var data = this.dataset.data
 			if (!this.dataset) return [];
@@ -84,103 +84,97 @@ define.class('$ui/view', function(require,
 	})
 	
 	this.addToSelection = function(obj){		
-		var f = this.currentselection.indexOf(obj);
-		if (f==-1) this.currentselection.push(obj);else return;
+		var f = this.currentselection.indexOf(obj)
+		if (f == -1) this.currentselection.push(obj)
+		else return
 		
-		console.log(this.currentselection);
-		this.updateSelectedItems();
+		console.log(this.currentselection)
+		this.updateSelectedItems()
 		if (this.currentselection.length > 1) return false;
 		return true;
 	}
 	
 	this.removeFromSelection = function(obj){
-		if (this.currentblock == obj) 
-		{
-			this.currentblock = undefined;
-			this.updatepopupuiposition();
+		if (this.currentblock == obj){
+			this.currentblock = undefined
+			this.updatepopupuiposition()
 		}
 		
-		var f = this.currentselection.indexOf(obj);
-		if (f>-1) this.currentselection.splice(f,1);
-		
-		
-		
-		this.updateSelectedItems();
-		
+		var f = this.currentselection.indexOf(obj)
+		if (f>-1) this.currentselection.splice(f,1)
+				
+		this.updateSelectedItems()
 	}
 	
 	this.updateSelectedItems = function(){
 		for(var a in this.allblocks){
-			var obj = this.allblocks[a];
-			var f = this.currentselection.indexOf(obj);
-			var newval = 0;
-			if (f > -1) newval = 1;
-			if (obj._inselection != newval) obj.inselection = newval;
-		
+			var obj = this.allblocks[a]
+			var f = this.currentselection.indexOf(obj)
+			var newval = 0
+			if (f > -1) newval = 1
+			if (obj._inselection != newval) obj.inselection = newval
 		}
 		for(var a in this.allconnections){
-			var obj = this.allconnections[a];
-			var f = this.currentselection.indexOf(obj);
-			var newval = 0;
-			if (f > -1) newval = 1;
-			if (obj._inselection != newval) obj.inselection = newval;
-		
+			var obj = this.allconnections[a]
+			var f = this.currentselection.indexOf(obj)
+			var newval = 0
+			if (f > -1) newval = 1
+			if (obj._inselection != newval) obj.inselection = newval
 		}
-		this.updatepopupuiposition();
+		this.updatepopupuiposition()
 	}
 	
 	this.inSelection = function(obj){
-		var f = this.currentselection.indexOf(obj);
-		if (f > -1) return true;
-		return false;		
+		var f = this.currentselection.indexOf(obj)
+		if (f > -1) return true
+		return false
 	}
 	
 	this.setupSelectionMove = function(){
 		for(var a in this.currentselection){
-			var obj = this.currentselection[a];
-			obj.setupMove();
+			var obj = this.currentselection[a]
+			obj.setupMove()
 		}		
 	}
 
 	this.moveSelected = function(dx, dy, snap){
-		if (!snap) snap = 1;
+		if (!snap) snap = 1
 		for(var a in this.currentselection){
-			var obj = this.currentselection[a];
-			obj.updateMove(dx,dy,snap);
+			var obj = this.currentselection[a]
+			obj.updateMove(dx, dy, snap)
 		}
-		this.updateconnections();
-		this.updatepopupuiposition();
-
+		this.updateconnections()
+		this.updatepopupuiposition()
 	}
 	
 	this.clearSelection = function(update){
 		console.log("clearing selection");
-		this.currentblock = undefined;
-		this.currentconnection = undefined;
-		this.currentselection = [];
-		if (update) this.updateSelectedItems();
+		this.currentblock = undefined
+		this.currentconnection = undefined
+		this.currentselection = []
+		if (update) this.updateSelectedItems()
 	}
 
 		
 	this.removeBlock = function (block){
-		if (block == undefined) block = this.currentblock;
+		if (block == undefined) block = this.currentblock
 		if (block){
-			console.log("TODO: removing block!", block);
-			this.removeFromSelection(block);
-			this.setActiveBlock(undefined);
-			 this.updateSelectedItems();
-			 this.updatepopupuiposition();
+			console.log("TODO: removing block!", block)
+			this.removeFromSelection(block)
+			this.setActiveBlock(undefined)
+			this.updateSelectedItems()
+			this.updatepopupuiposition()
 		}
 	}
 	
 	this.removeConnection = function (conn){
-		if (conn == undefined) conn = this.currentconnection;
+		if (conn == undefined) conn = this.currentconnection
 		if (conn){
-			console.log("TODO: removing connection!", conn);
-			this.removeFromSelection(conn);
-			this.setActiveConnection(undefined);
-			 this.updateSelectedItems();
-			 this.updatepopupuiposition();
+			console.log("TODO: removing connection!", conn)
+			this.removeFromSelection(conn)
+			this.setActiveConnection(undefined)
+			this.updateSelectedItems()
+			this.updatepopupuiposition()
 		}
 	}
 	this.updatepopupuiposition = function(){

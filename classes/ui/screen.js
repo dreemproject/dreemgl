@@ -16,7 +16,8 @@ define.class(function(require, $ui$view) {
 		wakeup: Config({type:Event})
 	}
 
-	this.bg = undefined
+	this.bg = false
+
 	this.rpcproxy = false	
 	this.viewport = '2d'
 	this.dirty = true

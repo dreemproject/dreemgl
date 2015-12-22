@@ -876,8 +876,10 @@ define.class('$system/base/node', function(require){
 	}
 
 	// called by the render engine
-	this.doLayout = function(width, height){
-		if(!isNaN(this._flex)){ // means our layout has been externally defined
+	this.doLayout = function(){
+
+		if(this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
+	
 			var layout = this._layout
 			var flex = this._flex
 			var size = this._size
@@ -1000,6 +1002,7 @@ define.class('$system/base/node', function(require){
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
+
 		this.position = function(){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)

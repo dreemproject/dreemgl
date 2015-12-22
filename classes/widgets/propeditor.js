@@ -21,13 +21,26 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		}
 	};
 	
-	this.margin = 0;
-	this.padding = 0;
-	this.border = 0;
-	this.flexdirection = "row";
-	this.flex = 1;
-	this.bordercolor = "gray";
-	this.fgcolor = "#c0c0c0" 
+	this.margin = 0
+	this.padding = 0
+	this.border = 0
+	this.flexdirection = "row"
+	this.flex = 1
+	this.bordercolor = "gray"
+	this.fgcolor = "#c0c0c0"
+
+	// lets have the style parameterized by self and self props
+	// these things are memo-ized on our class
+	this.style = function(context){
+		return {
+			label:{
+				bg: 0,
+				margin: 4,
+				fontsize: this.fontsize,
+			},
+		}
+	}
+
 	this.wrap = function(node, hasownlabel){
 		if (hasownlabel === undefined) hasownlabel = false		
 		if (hasownlabel) return [node];

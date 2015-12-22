@@ -44,8 +44,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 
 	
 		this.attributes = {
-			start:{type:float, value:0},
-			end:{type:float, value: PI*1.5},
+			start:Config({type:float, value:0}),
+			end:Config({type:float, value: PI*1.5}),
 		}
 		this.init = function(){
 			this.width = this.parent.layout.width;
