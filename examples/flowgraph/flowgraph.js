@@ -54,17 +54,46 @@ define.class('$ui/view', function(require,
 		this.render = function(){
 			return [
 				view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
-					,icon({icon:"folder", fgcolor:"#3b3b3b",margin:0,alignself:"center", fontsize:20})
+					,icon({icon:"cube", fgcolor:this.fgcolor,margin:0,alignself:"center", fontsize:20})
 				)
 				,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0, fontsize:this.fontsize})
 			]
 		}
 	})
 	
+	define.class(this, "libraryfolder", function($ui$, view, foldcontainer){
+		
+		this.attributes = {
+			dataset:Config({type:Object}),
+			fontsize:Config({type:float, meta:"fontsize", value: 15})
+		}
+		this.flexwrap  = "nowrap" 
+		
+		this.flexdirection = "column" 
+		this.fgcolor = "#f0f0f0"
+		this.bgcolor = "#3a3a3a"
+		this.render =function(){
+			var data = this.dataset
+			console.log(data.children);
+			if (!this.dataset) return [];
+					
+			var res = [];
+			for(var a  in data.children){
+				var ds = data.children[a];
+				if (!ds.children || ds.children.length == 0){
+					res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
+				}
+			}
+			
+			return foldcontainer({title:data.name, basecolor:vec4("#3b3b3b"),bordercolor:vec4("#3b3b3b"),icon:"folder"},view({bg:0, flex:1,flexdirection:"column"},res));
+		}
+	})
+	
+	
 	define.class(this, "library", function($ui$, view){
 		this.flex = 1;
 		this.attributes = {
-			dataset:Config({type:Object}),
+			dataset:{},
 			fontsize:Config({type:float, meta:"fontsize", value: 15})
 		}
 		this.overflow = "scroll" 
@@ -78,8 +107,11 @@ define.class('$ui/view', function(require,
 			var res = [];
 			for(var a  in data.children){
 				var ds = data.children[a];
-				res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
-			}
+				if (ds.children && ds.children.length > 0){
+			
+				res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
+					}
+				}
 			
 			return res;
 		}
@@ -150,7 +182,6 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.clearSelection = function(update){
-		console.log("clearing selection");
 		this.currentblock = undefined
 		this.currentconnection = undefined
 		this.currentselection = []
@@ -479,13 +510,14 @@ define.class('$ui/view', function(require,
 
 		console.log(this.sourceset);
 		for(var a in this.sourceset.data.children){
-			res.push(block())
+			var topnode = this.sourceset.data.children[a];
+			console.log(topnode);
+			res.push(block({title:topnode.name}))
 		}
 		return res;
 	}
 	
 	this.commitdragselect = function(){
-		console.log("committing dragselect");
 		for(var i in this.dragselectset){
 			var bl = this.dragselectset[i];
 			this.addToSelection(bl);
