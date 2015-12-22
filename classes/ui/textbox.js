@@ -72,7 +72,7 @@ define.class(function(require, $ui$, label){
 			this.markercolor = this.markerfocus
 		}
 		else{
-			this.cursorsshader.visible = this.readonly?false:true
+			this.cursorsshader.visible = this.readonly?true:false
 			this.markercolor = this.markerunfocus
 		}
 		this.redraw()

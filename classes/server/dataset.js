@@ -3,7 +3,6 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
 define.class('$system/base/node', function(require, $ui$, label){	
 	// The dataset class allows you to share a single "document" between various parts of your application. 
 	// The dataset provides undo/redo functionality by serializing its contents to a JSON string.
@@ -31,7 +30,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
 		callback(this.data)
-		this.notifyAssignedAttributes();
+		this.notifyAssignedAttributes()
 	}
 
 	// Silent operates much the same as <fork>, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
@@ -39,8 +38,8 @@ define.class('$system/base/node', function(require, $ui$, label){
 	this.silent = function(callback /*function*/){
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
-		callback(this.data)		
-		if (this.atChange) this.atChange();
+		callback(this.data)
+		if (this.atChange) this.atChange()
 	}
 
 	// Cause objects that have us assigned to reload
@@ -49,8 +48,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 			var o = this.connected_objects[i]
 			o.obj[o.key] = this
 		}
-		
-		if (this.atChange) this.atChange();
+		if (this.atChange) this.atChange()
 	}
 	
 	// Convert all javascript binary arrays in to their correct objects.
@@ -82,9 +80,8 @@ define.class('$system/base/node', function(require, $ui$, label){
 		if(!this.redo_stack.length) return
 		this.undo_stack.push(this.stringify(this.data))
 		this.data = this.parse(this.redo_stack.pop())
-		this.notifyAssignedAttributes();
+		this.notifyAssignedAttributes()
 	}
-	
 	
 	// Basic dataset modification example:
 	var dataset = this.constructor

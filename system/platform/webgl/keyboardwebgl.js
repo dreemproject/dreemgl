@@ -54,8 +54,9 @@ define.class('$system/base/keyboard', function (require, exports){
 			if(e.ctrlKey !== this._ctrl?true:false) this.ctrl = e.ctrlKey?1:0
 			if(e.metaKey !== this._meta?true:false) this.meta = e.metaKey?1:0
 		}
-
-		window.addEventListener('keydown', function(e){
+		var is_keyboard_cut = false
+		var is_keyboard_all = false
+		var keydown = function(e){
 			var code = fireFoxTable[e.keyCode] || e.keyCode
 			// we go into special mode
 			if(e.keyCode == 229){
@@ -63,8 +64,13 @@ define.class('$system/base/keyboard', function (require, exports){
 				return e.preventDefault()
 			}
 			var keyname = this.toKey[ code ]
+
+			// if we press ctrl/meta + x we flag cut.
+			is_keyboard_cut = keyname === 'x' && (this._meta || this._ctrl)
+			is_keyboard_all = keyname === 'a' && (this._meta || this._ctrl)
+
 			if( keyname ) this[keyname] = 1
-			
+
 			this.checkSpecialKeys(e)
 
 			var msg = {
@@ -94,9 +100,12 @@ define.class('$system/base/keyboard', function (require, exports){
 			else if(code == this.toCode.backspace){
 				e.preventDefault()
 			}
-		}.bind(this))
 
-		window.addEventListener('keyup', function(e){
+			 is_keyboard_cut = false
+			 is_keyboard_all = false
+		}.bind(this)
+
+		var keyup = function(e){
 			var code = fireFoxTable[e.keyCode] || e.keyCode
 			var keyname = this.toKey[ code ]
 
@@ -125,9 +134,10 @@ define.class('$system/base/keyboard', function (require, exports){
 				e.preventDefault()
 			}
 
-		}.bind(this))
-
-		window.addEventListener('keypress', function(e){
+		}.bind(this)
+		//window.addEventListener('keyup', 
+		//window.addEventListener('keypress',
+		var keypress = function(e){
 			if(e.metaKey || e.altKey || e.ctrlKey) return
 
 			var code = e.charCode
@@ -140,15 +150,89 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 			this.emit('press', msg)
 			e.preventDefault()
-		}.bind(this))
-
+		}.bind(this)
+		// lets output a css
+		
+		this.mouseMove = function(x, y){
+			this.textarea.focus()
+			this.textarea.style.left = x - parseFloat(this.textarea.style.width) * 0.5
+			this.textarea.style.top = y - parseFloat(this.textarea.style.height) * 0.5
+		}
 
 		this.textarea = document.createElement('textarea')
-		this.textarea.style.width = '0px'
-		this.textarea.style.height = '0px'
+		this.textarea.style.width = '1'
+		this.textarea.style.height = '1'
 		this.textarea.style.position = 'absolute'
-		this.textarea.style.zIndex = -10000000
+		//this.textarea.style.background = 'red'
+		this.textarea.setAttribute('autocomplete',"off")
+		this.textarea.setAttribute('autocorrect',"off") 
+		this.textarea.setAttribute('autocapitalize',"off")
+		this.textarea.setAttribute('spellcheck',"false")
+
+		this.textarea.addEventListener('keyup', keyup)
+		this.textarea.addEventListener('keypress', keypress)
+		this.textarea.addEventListener('keydown', keydown)
+		this.textarea.focus()
+		this.textarea.style.zIndex = 10000000
+
+		var style = document.createElement('style');
+    	style.innerHTML = "\n\
+    	::selection { background:transparent; color:transparent; }\n\
+    	textarea{\n\
+    	  	opacity: 0;\n\
+		    background: transparent;\n\
+		    -moz-appearance: none;\n\
+		    appearance: none;\n\
+		    border: none;\n\
+		    resize: none;\n\
+		    outline: none;\n\
+		    overflow: hidden;\n\
+		    font: inherit;\n\
+		    padding: 0 1px;\n\
+		    margin: 0 -1px;\n\
+		    text-indent: 1em;\n\
+		    -ms-user-select: text;\n\
+		    -moz-user-select: text;\n\
+		    -webkit-user-select: text;\n\
+		    user-select: text;\n\
+		    white-space: pre!important;\n\
+    		\n\
+    	}\n\
+    	textarea:focus{\n\
+    		outline:0px !important;\n\
+    		-webkit-appearance:none;\n\
+    	}"
+    	document.body.appendChild(style);
+
 		document.body.appendChild(this.textarea)
+
+		// put together a fake keypress on cut
+		this.textarea.oncut = function(e){
+			if(!is_keyboard_cut){
+				// lets send a keyboard cut event
+				keydown({
+					keyCode: 88,
+					metaKey: true,
+				})
+				keyup({
+					keyCode: 88,
+					metaKey: true,
+				})
+			}
+		}
+
+		this.textarea.addEventListener('select',function(e){
+			if(!is_keyboard_all && this.textarea.selectionEnd === this.textarea.value.length){
+				keydown({
+					keyCode: 65,
+					metaKey: true,
+				})
+				keyup({
+					keyCode: 65,
+					metaKey: true,
+				})
+			}
+		}.bind(this))
 
 		this.textarea.onpaste = function(e){
 			var text = e.clipboardData.getData('text/plain')
@@ -162,8 +246,9 @@ define.class('$system/base/keyboard', function (require, exports){
 			},
 			set:function(value){
 				this._clipboard = value
-				this.textarea.value = value
-				this.textarea.select()
+				this.textarea.value = value + ' '
+				this.textarea.selectionStart = 0
+		        this.textarea.selectionEnd = value.length - 1
 				this.textarea.focus()
 			}
 		})

@@ -363,7 +363,14 @@ define(function(require, exports){
 		return o
 	}
 
-	
+	vec2.mul_mat4 = 
+	vec2.vec2_mul_mat4 = function(v, m, o){
+		if(!o) o = vec2()
+		o[0] = m[0] * v[0] + m[1] * v[1] + m[3]
+		o[1] = m[4] * v[0] + m[5] * v[1] + m[7]
+		return o
+	}
+
 	vec3.mul_mat4_minor = 
 	vec3.vec3_mul_mat4_minor = function(v, m, o){
 		if(!o) o = vec3()

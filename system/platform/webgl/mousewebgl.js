@@ -20,12 +20,14 @@ define.class('$system/base/mouse', function (require, exports){
 		},
 		set:function(value){
 			this._cursor = value
-			if(value === 'arrow') value = ''
+			if(value === 'arrow') value = 'default'
+			this.device.keyboard.textarea.style.cursor = 
 			document.body.style.cursor = value
 		}
 	})
 
 	this.atConstructor = function(device){
+		this.device = device
 		//this.x = 0
 		//this.y = 0
 		if(this.ratio == 0) this.ratio = window.devicePixelRatio
@@ -65,6 +67,7 @@ define.class('$system/base/mouse', function (require, exports){
 		}
 		
 		this.mousedown = function(e){
+			this.device.keyboard.mouseMove(e.pageX, e.pageY)
 			var now = Date.now()
 			if (this.activedown == 0){
 				//document.body.setCapture();
@@ -104,6 +107,7 @@ define.class('$system/base/mouse', function (require, exports){
 		window.addEventListener('mousedown', this.mousedown.bind(this))
 
 		this.mouseup = function(e){
+			this.device.keyboard.mouseMove(e.pageX, e.pageY)
 			this.activedown--;
 			if (this.activedown == 0){
 				//document.body.releaseCapture();
@@ -135,6 +139,8 @@ define.class('$system/base/mouse', function (require, exports){
 		window.addEventListener('mouseup', this.mouseup.bind(this))
 		
 		this.mousemove = function(e){
+			// lets move our textarea
+			this.device.keyboard.mouseMove(e.pageX, e.pageY)
 			//last_click = undefined
 			//if(layer) hit = layer.hitTest2D(e.pageX * ratio, e.pageY * ratio)
 			this.x = e.pageX// / this.ratio//* window.devicePixelRatio
@@ -163,9 +169,9 @@ define.class('$system/base/mouse', function (require, exports){
 			overlay.style.width = '100%'
 			overlay.style.height = '100%'
 
-			overlay.addEventListener('mousedown', this.mousedown.bind(this.mouse))
-			overlay.addEventListener('mouseup', this.mouseup.bind(this.mouse))
-			overlay.addEventListener('mousemove', this.mousemove.bind(this.mouse))
+			overlay.addEventListener('mousedown', this.mousedown.bind(this))
+			overlay.addEventListener('mouseup', this.mouseup.bind(this))
+			overlay.addEventListener('mousemove', this.mousemove.bind(this))
 		}
 
 

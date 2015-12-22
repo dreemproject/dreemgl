@@ -4,6 +4,16 @@ define.mixin(function(require){
 	var Cursor = require('./singlecursor')
 	var parse = new (require('$system/parse/onejsparser'))()
 
+	this.doCursor = function(){
+		var cursor0 = this.cursorset.list[0]
+		if(this.cursorset.list.length === 1 && cursor0.start === cursor0.end){
+			this.screen.keyboard.clipboard = ''
+		}
+		var coord = this.textbuf.charCoords(max(cursor0.start - 1,0))
+		var v2 = vec2.mul_mat4(vec2(coord.x - 0.5*coord.w, coord.y - 0.5 *coord.h), this.totalmatrix)
+		this.screen.keyboard.mouseMove(floor(v2[0]), floor(v2[1]))
+	}
+
 	this.addUndoInsert = function(start, end, stack){
 		if(!stack) stack = this.undo_stack
 		// merge undo groups if it merges
@@ -142,12 +152,14 @@ define.mixin(function(require){
 	this.keypaste = function(event){
 		this.undo_group++
 		this.cursorset.insert(event.text)
+		this.doCursor()
 		//change = Change.clipboard
 	}
 
 	this.keypress = function(event){
 		this.undo_group++
 		this.cursorset.insert(event.value)
+		this.doCursor()
 		//change = Change.keyPress		
 	}
 
@@ -205,7 +217,7 @@ define.mixin(function(require){
 		var name = 'key' + v.name[0].toUpperCase() + v.name.slice(1)
 		this.undo_group++
 
-		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
+		if(keyboard.meta) name += 'Cmd'
 		if(keyboard.ctrl) name += 'Ctrl'
 		if(keyboard.alt) name += 'Alt'
 		if(keyboard.shift) name += 'Shift'
@@ -230,6 +242,7 @@ define.mixin(function(require){
 		this.cursorset.fusing = true
 		this.cursorset.update()
 		// we are done. serialize to clipboard
+		this.doCursor()
 		this.selectionToClipboard()	
 		this.onmousemove = function(){}
 	}
@@ -246,10 +259,11 @@ define.mixin(function(require){
 
 			this.cursorset.rectSelect(start[0], start[1], start[0], start[1], clone)
 			this.cursorset.fusing = false
-
+			this.doCursor()
 			this.mousemove = function(pos){
 				this.cursorset.rectSelect(start[0], start[1], pos[0], pos[1], clone)
-			}			
+				this.doCursor()
+			}
 		}
 		else if(keyboard.leftmeta || keyboard.rightmeta){
 			var cursor = this.cursorset.addCursor()
@@ -265,12 +279,14 @@ define.mixin(function(require){
 			}
 
 			this.cursorset.update()
+			this.doCursor()
 
 			this.mousemove = function(event){
 				var pos = event.local
 				// move
 				cursor.moveTo(pos[0], pos[1], true)
 				this.cursorset.update()
+				this.doCursor()
 			}
 		}
 		// normal selection
@@ -285,10 +301,11 @@ define.mixin(function(require){
 				this.cursorset.selectLine()
 				mouse.resetClicker()
 			}
-
+			this.doCursor()
 			this.mousemove = function(event){
 				var pos = event.local
 				this.cursorset.moveTo(pos[0], pos[1], true)
+				this.doCursor()
 			}
 		}
 	}
@@ -328,12 +345,8 @@ define.mixin(function(require){
 		if(this.readonly) return
 		this.cursorset.backspace()
 		//change = Change.delete
+		this.selectionToClipboard()	
 		this.doCursor()
-	}
-
-	this.doCursor = function(){
-		//cursor = 1
-		this.selectionToClipboard()
 	}
 	
 	// move selection up one line
@@ -348,6 +361,7 @@ define.mixin(function(require){
 	this.keyDelete = function(){
 		if(this.readonly) return
 		this.cursorset.delete()
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
@@ -355,6 +369,7 @@ define.mixin(function(require){
 	this.keyDeleteAlt = function(){
 		if(this.readonly) return
 		this.cursorset.deleteWord()
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
@@ -362,18 +377,21 @@ define.mixin(function(require){
 	this.keyBackspaceAlt = function(){
 		if(this.readonly) return
 		this.cursorset.backspaceWord()
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyBackspaceCmd = function(){
 		if(this.readonly) return
 		this.cursorset.backspaceLine()
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyDeleteCmd = function(){
 		if(this.readonly) return
 		this.cursorset.deleteLine()
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
@@ -382,6 +400,7 @@ define.mixin(function(require){
 	this.keyLeftArrowCtrl = 
 	this.keyLeftarrowAlt = function(){
 		this.cursorset.moveLeftWord(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 	
@@ -390,18 +409,21 @@ define.mixin(function(require){
 	this.keyRightArrowCtrl = 
 	this.keyRightarrowAlt = function(){
 		this.cursorset.moveRightWord(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyLeftarrowCmdShift = 
 	this.keyLeftarrowCmd = function(){
 		this.cursorset.moveLeftLine(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyRightarrowCmdShift = 
 	this.keyRightarrowCmd = function(){
 		this.cursorset.moveRightLine(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
  
@@ -409,6 +431,7 @@ define.mixin(function(require){
 	this.keyUparrowCmdShift = 
 	this.keyUparrowCmd = function(){
 		this.cursorset.moveTop(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
@@ -416,30 +439,35 @@ define.mixin(function(require){
 	this.keyDownarrowCmdShift = 
 	this.keyDownarrowCmd = function(){
 		this.cursorset.moveBottom(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyLeftarrowShift = 
 	this.keyLeftarrow = function(){ 
 		this.cursorset.moveLeft(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyRightarrowShift = 
 	this.keyRightarrow = function(){
 		this.cursorset.moveRight(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyUparrowShift = 
 	this.keyUparrow = function(){
 		this.cursorset.moveUp(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 
 	this.keyDownarrowShift = 
 	this.keyDownarrow = function(){
 		this.cursorset.moveDown(this.screen.keyboard.shift)
+		this.selectionToClipboard()	
 		this.doCursor()
 	}
 })
