@@ -87,7 +87,6 @@ define.class('$ui/view', function(require,
 		var f = this.currentselection.indexOf(obj);
 		if (f==-1) this.currentselection.push(obj);else return;
 		
-		console.log(this.currentselection);
 		this.updateSelectedItems();
 		if (this.currentselection.length > 1) return false;
 		return true;
