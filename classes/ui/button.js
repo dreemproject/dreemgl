@@ -101,9 +101,9 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	}
 
 	// the normal button state
-	this.statenormal = function(){
-		this.col1 = this.buttoncolor1
-		this.col2 = this.buttoncolor2
+	this.statenormal = function(first){
+		this.col1 = Mark(this.buttoncolor1, first)
+		this.col2 = Mark(this.buttoncolor2, first)
 		if(this.iconres)this.iconres.fgcolor = this.textcolor
 	}
 
@@ -116,7 +116,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	}
 
 	this.init = function(){
-		this.statenormal()
+		this.statenormal(true)
 	}
 
 	this.mouseover = function(){this.statehover()}
@@ -130,8 +130,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		}
 	}
 
-	this.render = function(){
-		
+	this.render = function(){		
 		var res = [];
 		this.buttonres = undefined;
 		this.iconres = undefined
@@ -144,10 +143,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		if (this.text && this.text.length > 0){			
 			this.buttonres = this.labelclass({font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
-		}
-		
+		}		
 		return view({bg:0, padding:0, margin:this.internalmargin},res);
-
 	}
 
 	// Basic usage of the button.	
