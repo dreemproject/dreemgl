@@ -10,7 +10,8 @@ define.class('$ui/view', function(require,
 
 	this.flex = 1
 	this.attributes = {
-		fontsize: Config({type:float, value: 12, meta:"fontsize"})
+		fontsize: Config({type:float, value: 12, meta:"fontsize"}),
+		sourceset: {}
 	}
 	
 	define.class(this, "menubar", function($ui$, view){
@@ -52,10 +53,10 @@ define.class('$ui/view', function(require,
 		///this.aligncontent = "center"
 		this.render = function(){
 			return [
-				view({bgcolor:"#3b3b3b", width:40, height:40, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:5}
-				,icon({icon:"flask", margin:4, fgcolor:this.fgcolor})
-			)
-			,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0, fontsize:this.fontsize})
+				view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
+					,icon({icon:"folder", fgcolor:"#3b3b3b",margin:0,alignself:"center", fontsize:20})
+				)
+				,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0, fontsize:this.fontsize})
 			]
 		}
 	})
@@ -66,6 +67,7 @@ define.class('$ui/view', function(require,
 			dataset:Config({type:Object}),
 			fontsize:Config({type:float, meta:"fontsize", value: 15})
 		}
+		this.overflow = "scroll" 
 		this.flexdirection = "column" 
 		this.fgcolor = "#f0f0f0"
 		this.bgcolor = "#3a3a3a"
@@ -315,10 +317,22 @@ define.class('$ui/view', function(require,
 		this.allconnections = [];
 	
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
-		this.librarydata = dataset({children:[{name:"button" }, {name:"label"}, {name:"checkbox"}]});
+		this.librarydata = dataset({children:[]});
 
 		this.sourceset = sourceset()
 
+		
+		
+		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
+			var lib = this.find('thelibrary');
+			var tree = result.value
+			tree.name = 'Library'
+			tree.collapsed = false
+			lib.dataset = this.librarydata  = dataset(tree)
+			
+			console.log(tree);
+		}.bind(this))
+				
 
 		this.screen.locationhash = function(event){
 			require.async(event.value.composition).then(function(result){
@@ -449,6 +463,26 @@ define.class('$ui/view', function(require,
 			this.originalselection.push(this.currentselection[i]);
 		}
 	}
+	this.renderConnections = function(){
+		if (!this.sourceset) return;
+		if (!this.sourceset.data) return;
+		console.log(this.sourceset);
+		var res = [];
+		
+		return res;
+	}
+	
+	this.renderBlocks = function(){
+		var res = [];
+		if (!this.sourceset) return;
+		if (!this.sourceset.data) return;
+
+		console.log(this.sourceset);
+		for(var a in this.sourceset.data.children){
+			res.push(block())
+		}
+		return res;
+	}
 	
 	this.commitdragselect = function(){
 		console.log("committing dragselect");
@@ -479,7 +513,9 @@ define.class('$ui/view', function(require,
 							,view({name:"groupbg",visible:false, bgcolor: vec4(0,0,1,0.2) , borderradius:8, borderwidth:1, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 							
 						)
-						,view({name:"connectionlayer", bg:0}
+						,view({name:"connectionlayer", bg:0, dataset: this.sourceset, render:function(){
+							return this.renderConnections();
+						}.bind(this)}
 							,connection({from:"phone", to:"tv"})
 							,connection({from:"tablet", to:"thing"})
 							,connection({from:"a", to:"b"})
@@ -488,7 +524,9 @@ define.class('$ui/view', function(require,
 							,connection({from:"a", to:"c"})
 						)
 						
-						,view({name:"blocklayer", bg:0}
+						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
+							return this.renderBlocks();
+						}.bind(this)}
 							,block({name:"phone", title:"Phone", x:200, y:20, fontsize:this.fontsize})
 							,block({name:"tv", title:"Television", x:50, y:200, fontsize:this.fontsize})
 							,block({name:"tablet", title:"Tablet",x:300, y:120, fontsize:this.fontsize})						
@@ -522,7 +560,7 @@ define.class('$ui/view', function(require,
 				) 
 				,splitcontainer({flex:0.5,direction:"horizontal"}
 					,dockpanel({title:"Library", viewport:"2D", fontsize:this.fontsize }
-						,this.library({dataset:this.librarydata, fontsize:this.fontsize})
+						,this.library({name:"thelibrary", dataset:this.librarydata, fontsize:this.fontsize})
 					)
 					,dockpanel({title:"Properties", viewport:"2D", fontsize:this.fontsize}
 						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll", fontsize:this.fontsize})		

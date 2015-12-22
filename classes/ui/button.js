@@ -143,7 +143,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		if (this.text && this.text.length > 0){			
 			this.buttonres = this.labelclass({font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
-		}		
+		}
+		
 		return view({bg:0, padding:0, margin:this.internalmargin},res);
 	}
 
