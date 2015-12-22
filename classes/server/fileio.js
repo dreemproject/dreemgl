@@ -27,7 +27,7 @@ define.class(function(require, service){
 	// <name> The file to read. File paths can use $-shortcuts to refer to various folders
 	this.readfile = function(name){
 		try{
-			return fs.readFileSync(path.join(define.expandVariables(define.$root), name)).toString()
+			return fs.readFileSync(define.expandVariables(name)).toString()
 		}
 		catch(e){
 			return null
@@ -38,8 +38,9 @@ define.class(function(require, service){
 	// <name> The file to read. File paths can use $-shortcuts to refer to various folders
 	// <data> The data to write
 	this.writefile = function(name, data){
+		
 		try{
-			return fs.writeFileSync(path.join(define.expandVariables(define.$root), name), data)
+			return fs.writeFileSync(define.expandVariables( name), data)
 		}
 		catch(e){
 			return null

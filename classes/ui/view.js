@@ -256,7 +256,7 @@ define.class('$system/base/node', function(require){
 
 	// forward references for shaders
 	this.layout = { width:0, height:0, left:0, top:0, right:0, bottom:0}
-	this.device = {frame:{size:vec2()}}
+	this.device = {size:vec2(),  frame:{size:vec2()}}
 
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false

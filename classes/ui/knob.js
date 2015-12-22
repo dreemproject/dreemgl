@@ -97,9 +97,9 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.neutralbordercolor = this.bordercolor;
 	this.tabstop = 0;
 	
-	//this.bg = 0;
+	this.bg = false;//{pick_only:true};
 	this.fgcolor="#101010";
-	
+	this.bgcolor = "red"
 	this.value = function(){	
 		var td = this.findChild("thedial");		
 		if (td) {
@@ -118,7 +118,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.calcstart = function(){
-		return ((this.value-this.minvalue)/(this.maxvalue -this.minvalue))* (2*PI-PI/2) +  PI/4;
+		return ((this.maxvalue-this.value-this.minvalue)/(this.maxvalue -this.minvalue))* (2*PI-PI/2) +  PI/4;
 	}
 
 	this.checkandset = function(newval){
@@ -136,7 +136,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	
 	this.updatevalue = function(p){
 		var l = p.local;
-		this.checkandset(this.basevalue - (Math.floor((this.lasty - l[1] )/10) -  Math.floor((this.lastx - l[0] )/2))*this.stepvalue);	
+		this.checkandset(this.basevalue + (Math.floor((this.lasty - l[1] )/10) -  Math.floor((this.lastx - l[0] )/2))*this.stepvalue);	
 	}
 	
 	this.mouseleftdown = function(p){
@@ -163,7 +163,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	//this.bgcolor = "#f0f0f0";
-	this.bg = 0;
+	//this.bg = 0;
 	this.padding =0;
 	this.bordercolor = vec4(1,1,1,0);
 	this.borderradius = 0;			
@@ -171,6 +171,9 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.justifycontent = "center";
 	this.alignitems = "center";	
 	this.borderwidth = 2;
+	
+	this.bg = {pick_only:true};
+	
 	this.render = function(){
 		return [
 		view({minwidth: this.outerradius,minheight: this.outerradius, bg:0},
