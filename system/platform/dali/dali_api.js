@@ -35,6 +35,26 @@ define.class(function(exports){
 	// Set emitcode to true to emit dali code
 	DaliApi.emitcode = true;
 
+	// Create all actors on a layer to ignore depth test.
+	// (From Nick: When using this mode any ordering would be with respect to
+	// depthIndex property of Renderers.)
+	DaliApi.layer = undefined;
+
+	/**
+	 * @method addActor
+	 * Static method to add an actor to the stage.
+	 * In our usage, it will add the actor to the layer added to the stage.
+	 * @param {object} actor DaliActor object
+	 */
+	DaliApi.addActor = function(actor) {
+		DaliApi.layer.add(actor.daliactor);
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: stagelayer.add(' + actor.name() + ');');
+		}
+	}
+
+
 	/**
 	 * @method initialize
 	 * Static method to initialize and create the dali stage
@@ -67,6 +87,7 @@ define.class(function(exports){
 		if (!dalilib)
 			dalilib = '/home/dali/teem/src/dreemgl/Release/dali';
 
+
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var window= {x:0, y:0, width:' + width + ', height:' + height + ', transparent: false, name: \'' + name + '\'};');
 
@@ -78,6 +99,19 @@ define.class(function(exports){
 
 		try {
 			DaliApi.dali = define.require(dalilib)(options);
+
+			// Create a top-level 2D layer to the stage
+			var dali = DaliApi.dali;
+			DaliApi.layer = new dali.Layer();
+			DaliApi.layer.behavior = "Dali::Layer::LAYER_2D";
+			dali.stage.add(DaliApi.layer);
+
+			if (DaliApi.emitcode) {
+				console.log('DALICODE: var stagelayer = new dali.Layer();');
+				console.log('DALICODE: stagelayer.behavior = "Dali::Layer::LAYER_2D";');
+				console.log('DALICODE: dali.stage.add(stagelayer);');
+			}
+
 		}
 		catch (e) {
 			console.error('Failed to load dalilib', dalilib);
@@ -234,33 +268,42 @@ define.class(function(exports){
 	 * array can be specified.
 	 * @param {Object} Format hash, suitable for dali.PropertyBuffer.
 	 * The hash looks like {name : type}.
-	 * @param {Number} type The dali property type.
-	 * @return {Object} dali buffer.
+	 * @param {Number} nrecs The number of records, in the buffer.
+	 * @return {Object} [dali.PropertyBuffer, id].
 	 */
 	DaliApi.BufferId = 0
-	DaliApi.daliBuffer = function(vals, format, type) {
+	DaliApi.BufferCache = {}; // hash -> [Dali.PropertyBuffer, id]
+	DaliApi.daliBuffer = function(vals, format, nrecs) {
+		//console.log('daliBuffer format', format, 'nrecs', nrecs, 'vals', vals.length);
 		var dali = DaliApi.dali;
 
 		// Accept either an array or a single value
 		var data = vals.length ? vals : [vals];
 
-		var numberItems = data.length / DaliApi.getDaliPropertySize(dali, type);
-		// console.trace('daliBuffer with', numberItems, 'items', 'length = ', data.length);
+		// console.trace('daliBuffer with', nrecs, 'items', 'length = ', data.length);
+
+		// Reuse an existing propertybuffer
+		var hash = DaliApi.getHash(vals);
+		if (DaliApi.BufferCache[hash]) {
+			return DaliApi.BufferCache[hash];
+		}
 
 		// Create the dali.PropertyBuffer
-		var buffer = new dali.PropertyBuffer(format, numberItems);
+		var buffer = new dali.PropertyBuffer(format, nrecs);
 
 		DaliApi.BufferId += 1;
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var buffer' + DaliApi.BufferId + ' = new dali.PropertyBuffer(' + JSON.stringify(format) + ', ' + numberItems + ')');			
+			console.log('DALICODE: var buffer' + DaliApi.BufferId + ' = new dali.PropertyBuffer(' + JSON.stringify(format) + ', ' + nrecs + ')');			
 		}
 
 		// Write data to the buffer
-		//console.log('numberItems', numberItems, data.length);
+		//console.log('numberItems', nrecs, data.length);
 		DaliApi.writeDaliBuffer(buffer, DaliApi.BufferId, data);
 
-		return buffer;
+		var ret = [buffer, DaliApi.BufferId];
+		DaliApi.BufferCache[hash] = ret;
+		return ret;
 	}
 
 

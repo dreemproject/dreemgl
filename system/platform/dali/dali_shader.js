@@ -36,11 +36,16 @@ define.class(function(require, exports){
 	 */
 	this.atConstructor = function(vertexShader, fragmentShader) {
 		this.object_type = 'DaliShader'
+
+		// Simplify the shader by removing comments and empty lines
+        var vs = this.trimShader(vertexShader);
+        var fs = this.trimShader(fragmentShader);
+
 		var shaderOptions = {
-            vertexShader : vertexShader,
-            fragmentShader: fragmentShader
+            vertexShader : vs,
+            fragmentShader: fs
         };
-		
+
 		var dali = DaliApi.dali;
 		this.id = ++DaliShader.GlobalId;
 		this.dalishader = new dali.Shader(shaderOptions);
@@ -48,8 +53,11 @@ define.class(function(require, exports){
 		this.fragmentShader = fragmentShader;
 
 		if (DaliApi.emitcode) {
-			var vs = vertexShader.replace(/\n/g, "\\n");
-			var fs = fragmentShader.replace(/\n/g, "\\n");
+			// Each line needs a separate DALICODE statement
+			vs = vs.replace(/\n/g, "\nDALICODE: ");
+			fs = fs.replace(/\n/g, "\nDALICODE: ");
+
+			//var fs = fragmentShader.replace(/\n/g, "\\n");
 			console.log('DALICODE: var vertexShader' + this.id + ' = "' + vs + '"');
 			console.log('DALICODE: var fragmentShader' + this.id + ' = "' + fs + '"');
 			console.log('DALICODE: var shaderOptions' + this.id + ' = {vertexShader : vertexShader' + this.id + ', fragmentShader: fragmentShader' + this.id + ' };');
@@ -57,6 +65,32 @@ define.class(function(require, exports){
 		}
 
 	}
+
+    // Internal method to remove comments and empty lines from a shader. This
+    // is to prevent issues when the dalicode is replayed.
+    this.trimShader = function(code) {
+		var str = code;
+
+        // Remove blank lines
+        str = str.replace(/\n\n/g, "\\n");
+
+		// Remove comments
+		//var str = code.replace(//*.+?*/|//.*(?=[nr])/g, '');
+		str = str.replace(/\/\/.*\n/g, '');
+
+		// Remove trailing new line
+		if (str[str.length-1] == "\n")
+			str = str.substring(0, str.length-1);
+
+        // Remove new lines
+		str = str.replace(/\n/g, "\\n");
+
+		// Create a multi-line string
+		str = str.replace(/\\n/g, "\\\n");
+
+        return str;
+}
+
 
 	this.name = function() {
 		return 'dalishader' + this.id;
