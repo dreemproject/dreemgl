@@ -73,16 +73,16 @@ define.class(function(require, exports){
 
 		this.daliactor.addRenderer(this.dalirenderer.dalirenderer);
 
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.addRenderer(' + this.dalirenderer.name() + ');');
+		}		
+
 		// Add the actor to the stage
 		if (!this.onstage) {
-			dali.stage.add(this.daliactor);
+			DaliApi.addActor(this);
 			this.onstage = true;
 		}
 
-		if (DaliApi.emitcode) {
-			console.log('DALICODE: ' + this.name() + '.addRenderer(' + this.dalirenderer.name() + ');');
-			console.log('DALICODE: dali.stage.add(' + this.name() + ');');
-		}		
 
 	}	
 
@@ -104,7 +104,7 @@ define.class(function(require, exports){
 		if (value == ivalue)
 			return ivalue;
 
-		return value.toPrecision(3);
+		return value; // .toPrecision(3);
 	}
 
 	// Internal method to format a value for display

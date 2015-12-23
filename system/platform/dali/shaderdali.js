@@ -233,7 +233,7 @@ console.log('*******************************************************************
 			DaliApi.createDaliActor(root, shader);
 		}
 
-		console.log('-- useShader', root.view ? root.view.id : 'screen', 'shader', shader.object_type, 'root', root.object_type)
+		console.log('useShader', root.view ? root.view.id : 'screen', 'shader', shader.object_type, 'root', root.object_type)
 
 		// use the shader
 		gl.useProgram(shader)
@@ -381,7 +381,6 @@ console.log('*******************************************************************
 			gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
 
 
-			console.log('*** single blend');
 			dalimaterial.setBlendMode(dali.BLENDING_ON);
 			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
 
@@ -392,9 +391,6 @@ console.log('*******************************************************************
 			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_SRC_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 
 			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_CONSTANT_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA);
-
-
-			console.log('^^^^ blendFunc', root.color_blend_eq.src, root.color_blend_eq.dst);
 
 			
 		}
@@ -568,13 +564,13 @@ console.log('************************************************************');
 					ATTRLOC_ATTRIBPTR = 
 						'gl.vertexAttribPointer(loc, '+attrloc.slots+', gl.FLOAT, false, buf.stride, '+attrloc.offset+')'
 
-				ATTRLOC_ATTRIBPTR = 'console.log(\'buf type 1\', \'' + key + '\',' + attrloc.slots + ', buf.stride, buf.length,' + attrloc.offset + ');daligeometry.addVertices(\'' + key + '\', buf.array, ' + attrloc.slots + ', buf.stride, ' + attrloc.offset + ')'
+				//ATTRLOC_ATTRIBPTR = 'console.log(\'buf type 1\', \'' + key + '\',' + attrloc.slots + ', buf.stride, buf.length,' + attrloc.offset + ');daligeometry.addVertices(\'' + key + '\', buf.array, ' + attrloc.slots + ', buf.stride, ' + attrloc.offset + ')'
 				}
 				else{
 					ATTRLOC_ATTRIBPTR = 
 						'if(buf.slots>4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
 
-				ATTRLOC_ATTRIBPTR = 'console.log(\'buf type 2\', \'' + key + '\',buf.slots, buf.stride, buf.length);daligeometry.addVertices(\'' + key + '\', buf.array, buf.slots, buf.stride, 0)'
+				//ATTRLOC_ATTRIBPTR = 'console.log(\'buf type 2\', \'' + key + '\',buf.slots, buf.stride, buf.length);daligeometry.addVertices(\'' + key + '\', buf.array, buf.slots, buf.stride, 0)'
 				}
 
 				//HACK. Setting this for text causes problems with image display

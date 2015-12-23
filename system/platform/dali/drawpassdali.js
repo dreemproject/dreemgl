@@ -332,7 +332,6 @@ define.class(function(require, baseclass){
 				for(var j = 0; j < shaders.length; j++){
 					// lets draw em
 					var shader = shaders[j]
-console.log('*^*^*^*^*^* drawing shader', j, 'of', shaders.length, shader.view.id);
 					if (shader.pick_only || !shader.visible) continue // was pick only
 					// we have to set our guid.
 					if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix

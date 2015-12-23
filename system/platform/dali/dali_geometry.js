@@ -87,6 +87,7 @@ define.class(function(require, exports){
 			// For each attribute, convert the data into an array
 			var obj = dreem_attributes[name];
 			var type = DaliApi.getDaliPropertyType(obj.bytes);
+			var nslots = DaliApi.getDaliPropertySize(type);
 
 			// dali format is a hash of {name: type}
 			var format = {};
@@ -95,13 +96,17 @@ define.class(function(require, exports){
 			var data = [];
 			var arr = dreem_shader[name];
 			if (arr && arr.array) {
-				data = [];
-				for (var i in arr.array) 
-					data.push(arr.array[i]);
+				// Do not take all the (allocated) array. Take only length
+				var entries = nslots * arr.length;
+				for (var i=0; i<entries; i++) {
+					var val = parseFloat(arr.array[i]);
+					data.push(val);
+				}
 			}
 
 			// Add or update a vertex buffer
-			this.updateVertexBuffer(storedname, data, format, type);
+			//console.log('updating', format, nslots);
+			this.updateVertexBuffer(storedname, data, format, nslots);
 		}
 	}
 
@@ -126,6 +131,8 @@ define.class(function(require, exports){
 		for(var key in attrlocs) {
 			var attrloc = attrlocs[key]
 			name = attrloc.name
+
+			console.log('**** **** attrloc.name', name, key, attrloc.slots);
 
 			var storedname = '_' + key;
 			var type = dali.PROPERTY_FLOAT;
@@ -154,6 +161,7 @@ define.class(function(require, exports){
 				break;
 			}
 
+
 			format[storedname] = type;
 			nslots += attrloc.slots;
 		}
@@ -166,16 +174,26 @@ define.class(function(require, exports){
 
 		var arr = shader_dali[name];
 		//console.trace('**** addAttributeGeometry', name, arr.array.length);
+		console.trace('ARRAY', arr);
 		
-		var data = []; // default
+		var data = [];
 
 		if (arr && arr.array) {
-			data = [];
-			for (var i in arr.array) 
-				data.push(arr.array[i]);
+			// Do not take all the (allocated) array. Take only length elements.
+			// There can be gaps in the stored array, so only the first nslots
+			// are used.
+			var offset = 0;
+			for (var i=0; i<arr.length; i++) {
+				for (var j=0; j<nslots; j++) {
+					var val = parseFloat(arr.array[offset++]);
+					data.push(val);
+				}
+				offset += (arr.slots - nslots);
+			}
 		}
 
 		// Add or update a vertex buffer
+		//console.log('updating 2', format, nslots, data.length);
 		this.updateVertexBuffer('attribgeom', data, format, nslots);
 	}
 
@@ -186,9 +204,9 @@ define.class(function(require, exports){
 	 * @param {string} name Cached name
 	 * @param {Object} data Object containing data to write
 	 * @param {Object} format Hash of format information to write.
-	 * @param {Number} type data type (from DaliApi.getDaliPropertyType)
+	 * @param {Number} nitems Number of items per record
 	 */
-	this.updateVertexBuffer = function(name, data, format, type) {
+	this.updateVertexBuffer = function(name, data, format, nitems) {
 		var format_hash = DaliApi.getHash(format);
 		var data_hash = DaliApi.getHash(data);
 
@@ -224,8 +242,9 @@ define.class(function(require, exports){
 		
 		// Generate the buffer
 		if (!buffer) {
-			buffer = DaliApi.daliBuffer(data, format, type);
-			bufferindex = DaliApi.BufferId;
+			var ret = DaliApi.daliBuffer(data, format, data.length / nitems);
+			var buffer = ret[0];
+			bufferindex = ret[1];
 			index = this.daligeometry.addVertexBuffer(buffer);
 
 			if (DaliApi.emitcode) {
@@ -257,69 +276,7 @@ define.class(function(require, exports){
 	 * @return {Object} Index of vertex buffer
 	 */
 	this.addVertices = function(name, array, slots, stride, offset) {
-		var dali = DaliApi.dali;
-
-		//console.log('*** --- *** --- addVertices name=', name, 'slots=',slots, 'stride=',stride, 'offset=',offset);
-
-		var storedname = '_' + name;
-
-		
-		type = dali.PROPERTY_FLOAT;
-
-		// Convert byte count to a dali property type
-        //TODO
-        var type = dali.PROPERTY_VECTOR2;		
-
-		// dali format is a hash of {name: type}
-		var format = {};
-		format[storedname] = type;
-
-		// Construct a buffer for the dali data
-		var data = [];
-/*
-		var arr = array;
-		if (arr && arr.array) {
-			for (var i in arr.array) 
-				data.push(arr.array[i]);
-		}
-*/
-
-/*
-		if (array) {
-			for (var i in array) 
-				data.push(array[i]);
-		}
-*/
-
-
-		var offr = offset / 4;
-		var perrecord = stride / 4;
-		var nrecords = array.length / perrecord;
-		var ptr = 0;
-		var off = 0;
-		for (var i=0; i<nrecords; i++) {
-			ptr = off + offr;
-			for (var j=0; j<slots; j++) {
-				data.push(array[ptr]);
-				ptr += 1;
-			}
-			off += perrecord;
-		}
-
-		//console.log('perrecord',perrecord, 'nrecords', nrecords, 'data.length', data.length);
-
-		//console.log('daliBuffer', data.length, format, type);
-		var buffer = DaliApi.daliBuffer(data, format, type);
-
-		// Add the data to a vertex buffer (of triangles)
-		//TODO Detect error adding vertex
-		var index = this.daligeometry.addVertexBuffer(buffer);
-
-		if (DaliApi.emitcode) {
-			console.log('DALICODE: ' + this.name() + '.addVertexBuffer(buffer)');
-		}		
-
-		return index;
+		console.log('addVertices IS NOT IMPLEMENTED');
 	}
 
 
