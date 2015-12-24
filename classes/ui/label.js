@@ -92,6 +92,7 @@ define.class(function(require, $ui$, view){
 	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
 	define.class(this, 'typeface', this.typefacenormal, function(){
 	})
+	this.typeface = true
 
 	this.selectShader = function(){
 		if(this._font && this._font.baked){

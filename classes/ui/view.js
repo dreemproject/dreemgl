@@ -498,20 +498,11 @@ define.class('$system/base/node', function(require){
 		// its a class assignment
 		if(typeof value === 'function' && Object.getPrototypeOf(value.prototype) !== Object.prototype){
 			this['_' + key] = value
-
-			if(value.prototype instanceof Shader){
-				this.shader_enable[key] = true
-			}
 			return
 		}
 		// its inheritance
 		var cls = this['_' + key]
 		this['_' + key] = cls.extend(value, this)
-
-		// check if we need to turn it on
-		if(cls.prototype instanceof Shader){
-			this.shader_enable[key] = true
-		}
 	}
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
@@ -954,11 +945,13 @@ define.class('$system/base/node', function(require){
 	define.class(this, 'bg', this.Shader, function(){
 		this.updateorder = 0
 	})
+	this.bg = true
 
 	// standard border is undecided too
 	define.class(this, 'border', this.Shader, function(){
 		this.updateorder = 0
 	})
+	this.border = false
 
 	define.class(this, 'hardrect', this.Shader, function(){
 		this.updateorder = 0

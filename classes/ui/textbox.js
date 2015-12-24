@@ -14,7 +14,8 @@ define.class(function(require, $ui$, label){
 		markerfocus: Config({type:vec4, value: vec4("ocean"), meta:"color"}),
 		markerunfocus: Config({type:vec4, value: vec4("gray"), meta:"color"}),
 		value: Config({type:String, value:""}),
-		readonly:false
+		readonly:false,
+		focusselect:true,
 	}
 
 	this.markercolor = this.markerunfocus
@@ -35,7 +36,7 @@ define.class(function(require, $ui$, label){
 			}
 		}
 	})
-
+	this.cursors = true
 	this.tabstop = 0
 	
 	define.class(this, 'markers', require('$system/typeface/markershader.js'), function(){
@@ -64,6 +65,7 @@ define.class(function(require, $ui$, label){
 			}
 		}
 	})
+	this.markers = true
 	this.measure_with_cursor = true
 	
 	this.focus = function(){
