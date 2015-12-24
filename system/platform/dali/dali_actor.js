@@ -45,15 +45,16 @@ define.class(function(require, exports){
 		this.daliactor = new dali.Actor();
 		this.onstage = false;
 		
-		//TODO
-		this.daliactor.size = [50, 50, 0];
+		var width = view.view.width || 100;
+		var height = view.view.height || 100;
+		this.daliactor.size = [width, height, 0];
 
 		this.daliactor.parentOrigin = dali.TOP_LEFT;
 		this.daliactor.anchorPoint = dali.TOP_LEFT;
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Actor();');
-			console.log('DALICODE: ' + this.name() + '.size = [300, 300, 0];');
+			console.log('DALICODE: ' + this.name() + '.size = [' + width + ', ' + height + ', 0];');
 			console.log('DALICODE: ' + this.name() + '.parentOrigin = dali.TOP_LEFT;');
 			console.log('DALICODE: ' + this.name() + '.anchorPoint = dali.TOP_LEFT;');
 		}		
@@ -122,12 +123,12 @@ define.class(function(require, exports){
 
 	/**
 	 * @method setUniformValue
-	 * Sets a uniform value. It is assumed that every property has been
-	 * registered so the value is set directly.
+	 * Sets a uniform value. If a value exists in the cache, the property
+	 * is set directory. Otherwise, registerAnimatableProperty is called.
 	 * @param {string} Name of uniform to set
 	 * @param {Object} Compiled uniform structure
 	 */
-	this.addUniformValue = function(name, uni) {
+	this.setUniformValue = function(name, uni) {
 		var val = DaliApi.getArrayValue(uni);
 		var key = '_' + name;
 
@@ -137,35 +138,31 @@ define.class(function(require, exports){
 		if (lasthash && (lasthash == hash))
 			return;
 
-		//Note: I originally thought I could either set the object directly
-		//      and only use registerAnimatableProperty the first time.
-		//      I found that the changes do not update when I do this. I'm
-		//      keeping my original code as a comment.
-
-		//var obj = this.daliactor[key];
-		//if (obj) {
-		//	obj = val;
-		//	console.log('+++ set uniform', this.id, key, this.formatValue(val));
-		//	this.daliactor.registerAnimatableProperty(key, val);
-		//}
-		//else {
-		//	// Create the uniform using registerAnimatableProperty
-		//	console.log('+++ register uniform', this.id, key, this.formatValue(val));
-		//	this.daliactor.registerAnimatableProperty(key, val);
-		//}
-
 		var fval = this.formatValue(val);
-		console.log('+++ set uniform', this.id, key, fval);
+		//console.log('+++ set uniform', this.id, key, fval);
 
-		this.daliactor.registerAnimatableProperty(key, val);
+		if (lasthash) {
+			// Existing value. Set the property directly
+			this.daliactor[key] = val;
+		}
+		else {
+			// New property. Register it
+			this.daliactor.registerAnimatableProperty(key, val);
+		}
+
 		this.property_cache[name] = hash;
 
-
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: ' + this.name() + '.registerAnimatableProperty(\'' + key + '\', ' + JSON.stringify(val) + ');');
+			if (lasthash) {
+				console.log('DALICODE: ' + this.name() + '[\'' + key + '\'] = ' + JSON.stringify(val) + ';');
+			}
+			else {
+				console.log('DALICODE: ' + this.name() + '.registerAnimatableProperty(\'' + key + '\', ' + JSON.stringify(val) + ');');
+			}
 		}		
 
 	}
+
 
 	this.name = function() {
 		return 'daliactor' + this.id;

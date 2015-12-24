@@ -229,6 +229,7 @@ console.log('*******************************************************************
 	//                        dalimaterial, dalirenderer, daliactor.
 	this.useShaderTemplate = function(gl, shader, root){
 
+		// Create dali objects when first used
 		if (root && !root.daliactor) {
 			DaliApi.createDaliActor(root, shader);
 		}
@@ -418,7 +419,6 @@ console.log('*******************************************************************
 	//                 (see getLocations call above)
 	// The 'this' pointer is a view
 	this.compileUse = function(shader){
-
 		// Make sure the object has dali
 		//DaliApi.createDaliObjects(this.shader);
 
@@ -429,13 +429,13 @@ console.log('*****compileUse', shader.object_type, this.object_type);
 		// ok lets replace shit.
 		// set uniforms
 
-		var out = 'var loc, uni\n'
 		var uniset = shader.uniset
 		var unilocs = shader.unilocs
 		var refattr = shader.refattr
 
-		//if (Object.keys(shader.texlocs).length > 0)
-		//	console.log('***** texlocs', shader.texlocs);
+		var out = 'var loc, uni\n'
+		out += 'var actor = root.daliactor\n'
+		out += 'if (shader && actor) {\n'
 
 		for(var key in uniset){
 			var loc = unilocs[key]
@@ -468,9 +468,7 @@ console.log('*****compileUse', shader.object_type, this.object_type);
 			// the value is not set yet. (DALI)
 			//TODO Optimize
             //out += 'console.log(\'------ROOT\', root.view.id, root.daliactor.object_type)\n'
-            out += 'var actor = root.daliactor\n'
-			out += 'if (shader && actor) {\n'
-            out += '\t\tvar val = actor.addUniformValue(\'' + key + '\',uni)\n'
+            out += '\t\tvar val = actor.setUniformValue(\'' + key + '\',uni)\n'
 
 // Use addUniformValue instead of this code
 /*
@@ -480,7 +478,6 @@ console.log('*****compileUse', shader.object_type, this.object_type);
 			out += '\t\tif (v) {v = val} \n'
             out += '\t\telse {shader.meshActor.registerAnimatableProperty(\'_' + key + '\', val)}\n'
 */
-			out += '}\n'
 
 
 /*
@@ -495,6 +492,7 @@ console.log('*****compileUse', shader.object_type, this.object_type);
 			if(gen.args === this.loguni) out += 'if(typeof uni === "number")console.log(uni)\n'
 */
 		}
+		out += '}\n'
 
 		tpl = tpl.replace(/SET\_UNIFORMS/, out)
 
