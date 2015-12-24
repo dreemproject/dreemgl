@@ -24,6 +24,8 @@ define.class(function(require, $ui$view) {
 	this.flex = NaN
 	this.flexdirection = "column"
 	this.cursor = 'arrow'
+	
+	this.tooltip = 'Application'
 
 	this.atConstructor = function(){
 	}
