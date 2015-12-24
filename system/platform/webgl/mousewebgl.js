@@ -13,6 +13,7 @@ define.class('$system/base/mouse', function (require, exports){
 	this.clickspeed = 350
 
 	this._cursor = 'arrow'
+	this._tooltip = 'Application'
 
 	Object.defineProperty(this, 'cursor', {
 		get:function(){
@@ -23,6 +24,18 @@ define.class('$system/base/mouse', function (require, exports){
 			if(value === 'arrow') value = 'default'
 			this.device.keyboard.textarea.style.cursor = 
 			document.body.style.cursor = value
+		}
+	})
+
+	Object.defineProperty(this, 'tooltip', {
+		get:function(){
+			return this._tooltip
+		},
+		set:function(value){
+			this._tooltip = value
+
+			this.device.keyboard.textarea.title = 
+			document.body.title = value
 		}
 	})
 
@@ -148,7 +161,7 @@ define.class('$system/base/mouse', function (require, exports){
 			this.move = {
 				x: e.pageX,
 				y: e.pageY,
-				button: e.button === 0?1:e.button === 1?3:2,
+				button: e.button === 0? 1:e.button === 1? 3:2,
 				shift: e.shiftKey,
 				alt: e.altKey,
 				ctrl: e.ctrlKey,

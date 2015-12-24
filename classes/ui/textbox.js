@@ -85,13 +85,16 @@ define.class(function(require, $ui$, label){
 	})
 
 	this.textChanged = function(){
+		var string = this.textbuf.serializeText(0, this.textbuf.lengthQuad())
+		this.value = Mark(string)
 		this.relayout()
 	}
 	
-	this.value = function(){
+	this.value = function(event){
+		if(event.mark) return
 		this.text = this.value
-		this.relayout();
-		this.redraw();
+		this.relayout()
+		this.redraw()
 	}
 
 	this.cursorsChanged = function(){

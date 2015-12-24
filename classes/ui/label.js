@@ -37,8 +37,6 @@ define.class(function(require, $ui$, view){
 		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"})
 	}
 
-	this.font = require('$resources/fonts/opensans_regular_ascii.glf')
-
 	// the normal font 
 	define.class(this, 'typefacenormal', TypeFace, function(){
 		this.updateorder = 3
@@ -130,6 +128,8 @@ define.class(function(require, $ui$, view){
 		}
 		return {width: this.measured_width = this.typefaceshader.mesh.bound_w, height: this.measured_height =this.typefaceshader.mesh.bound_h};
 	}
+
+	this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 
 	var label = this.constructor
 	// A label.

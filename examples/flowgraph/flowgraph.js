@@ -25,10 +25,9 @@ define.class('$ui/view', function(require,
 					,button({text:"Help", click:function(){console.log("remove"); }, fontsize:this.fontsize})
 			];
 		}
-
 	})
 	
-	define.class(this, "selectorrect", function ($ui$, view){
+	define.class(this, "selectorrect", view, function(){
 		
 		this.bordercolorfn = function(pos){
 			var check = (int(mod(0.20*(gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)? 1.0: 0.0
@@ -43,7 +42,7 @@ define.class('$ui/view', function(require,
 		this.visible = false	
 	})
 	
-	define.class(this, "classlibclass", function($ui$, view, icon){
+	define.class(this, "classlibclass", view, function($ui$, view, label, icon){
 		this.attributes = {
 			classdesc: Config({type:Object, value: undefined}),
 			col1: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.1}),
@@ -72,7 +71,7 @@ define.class('$ui/view', function(require,
 		}
 	})
 	
-	define.class(this, "libraryfolder", function($ui$, view, foldcontainer){
+	define.class(this, "libraryfolder", view, function($ui$, view, foldcontainer){
 		
 		this.attributes = {
 			dataset:Config({type:Object}),
@@ -83,9 +82,10 @@ define.class('$ui/view', function(require,
 		this.flexdirection = "column" 
 		this.fgcolor = "#f0f0f0"
 		this.bgcolor = "#3a3a3a"
+
 		this.render =function(){
 			var data = this.dataset
-			console.log(data.children);
+
 			if (!this.dataset) return [];
 					
 			var res = [];
@@ -368,7 +368,6 @@ define.class('$ui/view', function(require,
 			tree.collapsed = false
 			lib.dataset = this.librarydata  = dataset(tree)
 			
-			console.log(tree);
 		}.bind(this))
 				
 
@@ -502,7 +501,6 @@ define.class('$ui/view', function(require,
 	this.renderConnections = function(){
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-		console.log(this.sourceset);
 		var res = [];
 		
 		return res;
@@ -513,10 +511,8 @@ define.class('$ui/view', function(require,
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
 
-		console.log(this.sourceset);
 		for(var a in this.sourceset.data.children){
 			var topnode = this.sourceset.data.children[a];
-			console.log(topnode);
 			res.push(block({title:topnode.name}))
 		}
 		return res;

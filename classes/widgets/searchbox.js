@@ -10,8 +10,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 		fontsize: 12,
 		value:""
 	}
-	this.margin = 4;
+	
+	this.margin = 4
 	this.bgcolor="#3b3b3b"
+
 	this.flexdirection = "row";
 	this.bordercolor = "#505050" ;
 	this.borderwidth = 2;
@@ -24,7 +26,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 				this.find("thelabel").visible = false;
 			}
 			else{
-				if (this.value.trim() ==""){
+				if (this.value.trim() == ""){
 					this.find("thelabel").visible = true;
 				}
 				else{
@@ -36,7 +38,19 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 	this.justifycontent= "center"
 	this.render = function(){
 		return [
-			textbox({borderradius:15, name:"thetext",value:function(){this.parent.value = this.value}, flex:1, bgcolor:"#3b3b3b", fgcolor: "white", focus: function(){this.dofocus()}.bind(this)}),
+			textbox({
+				borderradius:15, 
+				name:"thetext",
+				value:function(){
+					this.parent.value = this.value
+				}, 
+				flex:1, 
+				bgcolor:"#3b3b3b", 
+				fgcolor: "white", 
+				focus: function(){
+					this.dofocus()
+				}.bind(this)
+			}),
 			label({name:"thelabel",position:"absolute",margin:7, text:this.searchtextlabel,fontsize:this.fontsize, bg:false, fgcolor:"#707070"}),
 			icon({icon:"search", margin:6, fgcolor:"#707070", alignself:"center"})]
 	}

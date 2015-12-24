@@ -65,7 +65,6 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 			var keyname = this.toKey[ code ]
 
-			// if we press ctrl/meta + x we flag cut.
 			is_keyboard_cut = keyname === 'x' && (this._meta || this._ctrl)
 			is_keyboard_all = keyname === 'a' && (this._meta || this._ctrl)
 
@@ -84,28 +83,15 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 
 			this.emit('down', msg)
-			if((this._meta || this._ctrl) && keyname === 'r' || 
-			    keyname === 'f12' || keyname ==="f5"){
 
-			}
-			else{
+			if( (this._ctrl  || this._meta) && this._y || 
+				this._tab || 
+				this._leftarrow ||
+				this._rightarrow ||
+				this._uparrow || 
+				this._downarrow){
 				if(e.preventDefault) e.preventDefault()
-			}
-			//if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
-			//	e.preventDefault()
-			//}
-			//if(code == this.toCode.tab){
-			//	var msg = {
-			//		repeat: e.repeat,
-			//		name: 'tab',
-			//		value: '\t',
-			//		char: 9,
-			//	}
-			//e.preventDefault()
-			//}
-			//else if(code == this.toCode.backspace){
-			//}
-			
+			}			
 
 			is_keyboard_cut = false
 			is_keyboard_all = false
@@ -136,10 +122,6 @@ define.class('$system/base/keyboard', function (require, exports){
 
 			this.emit('up', msg)
 
-			//if(code == this.toCode.tab || code == this.toCode.backspace){
-			//	e.preventDefault()
-			//}
-			if(e.preventDefault) e.preventDefault()
 		}.bind(this)
 		//window.addEventListener('keyup', 
 		//window.addEventListener('keypress',

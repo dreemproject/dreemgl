@@ -449,9 +449,17 @@ define.class('$system/base/node', function(require){
 	this.computeCursor = function(){
 		var node = this
 		while(node){
-			if(node._cursor !== ''){
-				this.screen.mouse.cursor = node._cursor
-				return
+			if(node._tooltip !== ''){
+				this.screen.mouse.tooltip = node._tooltip
+				break
+			}
+			node = node.parent
+		}
+		var node = this
+		while(node){
+			if(node._tooltip !== ''){
+				this.screen.mouse.tooltip = node._tooltip
+				break
 			}
 			node = node.parent
 		}
