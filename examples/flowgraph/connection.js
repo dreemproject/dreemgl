@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button){
+define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 
 				
 		this.attributes = {
@@ -135,7 +135,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.frompos= vec2(0,0);
 		this.topos= vec2(0,100);
 		
-		this.bgcolor = "#666666" 
+		this.bgcolor = "#00ffff" 
 		
 		define.class(this, "connectionshader", this.Shader,function($ui$, view){	
 			this.mesh = vec2.array()
@@ -197,6 +197,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.frompos = vec2(F.pos[0]+ F.layout.width-3,F.pos[1]+20);
 				this.topos = vec2(T.pos[0],T.pos[1]+20);
 			}
+			var H = this.find("handle");
+			if (H){
+				H.pos = vec2((this.frompos[0] + this.topos[0])*0.5 - 12,(this.frompos[1] + this.topos[1])*0.5 - 12);
+				
+			}
 		
 		}
 		this.calculateposition();
@@ -204,6 +209,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.calculateposition();
 		}
 		this.render = function(){
-			return [];
+			return [ballbutton({name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#3b3b3b", bordercolor:this.bgcolor})];
 		}
 	})

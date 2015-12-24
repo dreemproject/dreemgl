@@ -3,16 +3,16 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button){
+define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 
 			
 	this.cursor = "move";
 	this.position = "absolute" ;
-	this.bgcolor = vec4("#5c5c5c" )
+	this.bgcolor = vec4("#6c6c6c" )
 	this.padding = 0;
 	this.borderradius = 10;
 	this.borderwidth = 2;
-	this.bordercolor = vec4("#5c5c5c")
+	this.bordercolor = vec4("#6c6c6c")
 	
 	this.attributes = {
 		pos: Config({persist: true}),
@@ -30,14 +30,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	this.tooltip = 'issablock'
 
-	define.class(this, "connectionbutton", function($ui$, button){
-		this.borderradius = 10;
-		this.borderwidth = 2;
-		this.bordercolor = "#505050"
-		this.width = 20;
-		this.height = 20;
-		
-	})
 		
 	this.bordercolorfn = function(pos){
 		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0:0.0;		
@@ -192,15 +184,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
 			,view({bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1})
 			,view({bg:false, width:140, flex: 1, justifycontent:"space-between"}
-			,view({bg:false, alignself:"flex-start", flexdirection:"column"}
-			,this.connectionbutton()
-			,this.connectionbutton()
-			,this.connectionbutton()
+			,view({bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"}
+			,ballbutton({bgcolor:"#ff00ff"})
+			,ballbutton()
+			,ballbutton({bgcolor:"#ffff00"})
 			)
-			,view({bg:false, alignself:"flex-end", flexdirection:"column"}
-			,this.connectionbutton()
-			,this.connectionbutton()
-			,this.connectionbutton()
+			,view({bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"}
+			,ballbutton()
+		
+			,ballbutton({bgcolor:"#ff8000"})
 			)
 			)
 			,view({name:"addbuttons",flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
