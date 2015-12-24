@@ -257,7 +257,7 @@ define.class('$system/base/node', function(require){
 
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
-	this.device = {size:vec2(),  frame:{size:vec2()}}
+	this.device = {size:vec2(), frame:{size:vec2()}}
 
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
@@ -300,6 +300,13 @@ define.class('$system/base/node', function(require){
 	this.overflow = function(){
 		if(this._overflow){
 			if(!this._viewport) this._viewport = '2d'
+		}
+	}
+
+	// setting focus to true
+	this.focus = function(event){
+		if(!event.mark){ // someone set it to true that wasnt us
+			this.screen.setFocus(this)
 		}
 	}
 
@@ -493,6 +500,7 @@ define.class('$system/base/node', function(require){
 			this['_' + key] = value
 			return
 		}
+
 		// its inheritance
 		var cls = this['_' + key]
 		this['_' + key] = cls.extend(value, this)
@@ -1227,6 +1235,11 @@ define.class('$system/base/node', function(require){
 			sized = vec2(pos.x, pos.y)
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
+
+	//	this.atExtend = function(){
+	//		console.log("EXTENDING", this.constructor.outer.bordercolorfn)
+			//Object.getPrototypeOf(this).atExtend.call(this)
+	//	}
 	})
 	this.roundedborder = false
 

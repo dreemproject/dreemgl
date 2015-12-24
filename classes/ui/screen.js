@@ -357,6 +357,7 @@ define.class(function(require, $ui$view) {
 					if(this.mouse_capture) this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
 					if(view){
 						var pos = this.remapMouse(view)
+						view.computeCursor()
 						view.emitUpward('mouseover', {local:pos})
 						view.emitUpward('mousemove', {local:pos})
 					}
@@ -419,14 +420,13 @@ define.class(function(require, $ui$view) {
 		*/
 	}
 
-
 	// set the focus to a view node
 	this.setFocus = function(view){
 		if(this.focus_view !== view){
 			var old = this.focus_view
 			this.focus_view = view
-			if(old) old.focus = false
-			view.focus = true
+			if(old) old.focus = Mark(false)
+			view.focus = Mark(true)
 		}
 	}
 

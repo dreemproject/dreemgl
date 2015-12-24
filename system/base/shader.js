@@ -699,11 +699,12 @@ define.class(function(require, exports){
 				}
 			}
 			
-			function __recompile_shader_(){
-				var name = shader.constructor.name
+			var name = shader.constructor.name
+			function recompile_shader(){
 				this[name] = {dirty:true}
 				//!TODO also do the assigns
 			}
+			recompile_shader.shader = name
 
 			this.view_functions = []
 			for(var key in this.vtx_state.functions){
@@ -711,9 +712,9 @@ define.class(function(require, exports){
 				if(parts.length === 2 && parts[0] === 'view'){
 					var left = parts[1].split('_T_')[0]
 					// ok lets hook this thing to invalidate our shader
-					if(!this.view.hasListenerName(left, '__recompile_shader_')){
+					if(!this.view.hasListenerProp(left, 'shader', name)){
 						this.view_functions.push(left)
-						this.view.addListener(left, __recompile_shader_)
+						this.view.addListener(left, recompile_shader)
 					}
 				}
 			}
@@ -723,9 +724,9 @@ define.class(function(require, exports){
 				if(parts.length === 2 && parts[0] === 'view'){
 					var left = parts[1].split('_T_')[0]
 					// ok lets hook this thing to invalidate our shader
-					if(!this.view.hasListenerName(left, '__recompile_shader_')){
+					if(!this.view.hasListenerProp(left, 'shader', name)){
 						this.view_functions.push(left)
-						this.view.addListener(left, __recompile_shader_)
+						this.view.addListener(left, recompile_shader)
 					}
 				}
 			}

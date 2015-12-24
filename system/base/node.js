@@ -245,13 +245,13 @@ define.class(function(require, constructor){
 	}
 
 	// check if an attribute has a listener with a .name property set to fnname
-	this.hasListenerName = function(key, fnname){
+	this.hasListenerProp = function(key, prop, value){
 		var listen_key = '_listen_' + key
 		if(!this.hasOwnProperty(listen_key)) return false
 		var listeners = this[listen_key]
 		if(!listeners) return false
 		for(var i = 0; i < listeners.length; i++){
-			if(listeners[i].name === fnname) return true
+			if(listeners[i][prop] === value) return true
 		}
 		return false
 	}

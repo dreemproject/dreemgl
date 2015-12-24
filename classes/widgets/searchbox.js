@@ -36,9 +36,16 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 		}
 	}
 	this.justifycontent= "center"
+
+	// forward the focus
+	this.focus = function(){
+		if(this._focus) this.find("thetext").focus = true
+	}
+
 	this.render = function(){
 		return [
 			textbox({
+				multiline:false,
 				borderradius:15, 
 				name:"thetext",
 				value:function(){

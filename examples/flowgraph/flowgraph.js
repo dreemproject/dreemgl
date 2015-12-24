@@ -28,18 +28,21 @@ define.class('$ui/view', function(require,
 	})
 	
 	define.class(this, "selectorrect", view, function(){
-		
+		//debugger
 		this.bordercolorfn = function(pos){
 			var check = (int(mod(0.20*(gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)? 1.0: 0.0
 			return vec4(check * vec3(0.8), 1)
 		}
-		
 		this.bordercolor = vec4(1, 1, 1, 0.4)
 		this.borderwidth = 2
 		this.bgcolor = vec4(1, 1, 1, 0.07)
 		this.borderradius = 2
 		this.position = "absolute"
 		this.visible = false	
+
+		console.log(this.roundedborder.prototype.pix_state.code_color)
+		//console.log(this.roundborder.prototype.pix_state.code_color)
+
 	})
 	
 	define.class(this, "classlibclass", view, function($ui$, view, label, icon){
@@ -372,6 +375,7 @@ define.class('$ui/view', function(require,
 				
 
 		this.screen.locationhash = function(event){
+			if(event.value.composition)
 			require.async(event.value.composition).then(function(result){
 				this.sourceset.parse(result.module.factory.body.toString())
 			}.bind(this))
