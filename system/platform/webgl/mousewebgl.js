@@ -27,18 +27,6 @@ define.class('$system/base/mouse', function (require, exports){
 		}
 	})
 
-	Object.defineProperty(this, 'tooltip', {
-		get:function(){
-			return this._tooltip
-		},
-		set:function(value){
-			this._tooltip = value
-
-			this.device.keyboard.textarea.title = 
-			document.body.title = value
-		}
-	})
-
 	this.atConstructor = function(device){
 		this.device = device
 		//this.x = 0
@@ -152,8 +140,12 @@ define.class('$system/base/mouse', function (require, exports){
 		window.addEventListener('mouseup', this.mouseup.bind(this))
 		
 		this.mousemove = function(e){
-			// lets move our textarea
-			this.device.keyboard.mouseMove(e.pageX, e.pageY)
+			this._pagex = e.pageX
+			this._pagey = e.pageY
+			// lets move our textarea only if right mouse is down
+			if(e.buttons){
+				this.device.keyboard.mouseMove(e.pageX, e.pageY)
+			}
 			//last_click = undefined
 			//if(layer) hit = layer.hitTest2D(e.pageX * ratio, e.pageY * ratio)
 			this.x = e.pageX// / this.ratio//* window.devicePixelRatio

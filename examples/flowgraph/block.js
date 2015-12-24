@@ -28,6 +28,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		inselection : Config({type:boolean, value:false})
 	}
 		
+	this.tooltip = 'issablock'
+
 	define.class(this, "connectionbutton", function($ui$, button){
 		this.borderradius = 10;
 		this.borderwidth = 2;

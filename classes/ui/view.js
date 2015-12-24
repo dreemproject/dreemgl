@@ -238,7 +238,8 @@ define.class('$system/base/node', function(require){
 			'col-resize','row-resize',
 			'vertical-text','context-menu','no-drop','not-allowed',
 			'alias','cell','copy'
-		), value:''})
+		), value:''}),
+
 	}
 
 	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
@@ -451,14 +452,6 @@ define.class('$system/base/node', function(require){
 		while(node){
 			if(node._cursor !== ''){
 				this.screen.mouse.cursor = node._cursor
-				break
-			}
-			node = node.parent
-		}
-		var node = this
-		while(node){
-			if(node._tooltip !== ''){
-				this.screen.mouse.tooltip = node._tooltip
 				break
 			}
 			node = node.parent
