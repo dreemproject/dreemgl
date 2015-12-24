@@ -63,10 +63,10 @@ define.class(function($ui$, view, label, icon, $$, require){
 
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
-			return [
-				icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }), 
-				label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 })
-			];
+			var res = [];
+			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
+			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));
+			return res;
 		}
 
 		this.statedefault = function(first){

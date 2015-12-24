@@ -62,7 +62,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 						collapsed: true,
 						basecolor:"#4f4f4f",
 						autogradient: false,
-						icon:"cube", 
+						icon:undefined, 
 						title: this.uppercaseFirst(group),
 						bordercolor:"#4f4f4f"	,
 						fontsize:this.fontsize						

@@ -9,8 +9,8 @@ define.class('$ui/view', function(require,
 		$server$, sourceset, dataset, $$, dockpanel, block, connection){
 
 	this.flex = 1
-	this.clearcolor = "#3b3b3b" 
-	this.bgcolor = "#202020" 
+	this.clearcolor = "#565656" 
+	this.bgcolor = "#565656" 
 	this.flexdirection = "column";
 	this.attributes = {
 		fontsize: Config({type:float, value: 12, meta:"fontsize"}),
@@ -539,9 +539,9 @@ define.class('$ui/view', function(require,
 					)
 				)
 				,dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0, fontsize:this.fontsize}
-					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
-							,view({name:"groupbg",visible:false, bgcolor: vec4(0,0,1,0.2) , borderradius:8, borderwidth:1, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
+							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 							
 						)
 						,view({name:"connectionlayer", bg:0, dataset: this.sourceset, arender:function(){
@@ -570,7 +570,7 @@ define.class('$ui/view', function(require,
 							,block({name:"f", title:"block F", x:550, y:700, fontsize:this.fontsize})
 						)
 												
-						,view({name:"popuplayer", bg:0},
+						,view({name:"popuplayer", bg:false},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
 								label({text:"Connection", bg:0, margin:4, fontsize:this.fontsize})
 								,button({padding:0, borderwidth:0, fontsize:this.fontsize, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0, fontsize:this.fontsize })

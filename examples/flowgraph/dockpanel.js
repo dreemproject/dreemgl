@@ -10,15 +10,16 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	}
 	
 	this.padding = 0;
-	this.margin = 0;
+	this.margin = 2;
+	this.borderradius =  vec4(10,10,1,1);
 	this.bgcolor = vec4("#3b3b3b");
 	this.flex = 1;
 	this.flexdirection ="column" 
 	
 	this.render = function(){
 		return [
-			view({bgcolor:"#454545", margin:vec4(0,0,0,0), padding:vec4(0)},
-				view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(0),padding:vec4(10,2,10,2)},
+			view({bgcolor:"#454545",borderradius:vec4(10,10,1,1), borderwidth:0, margin:vec4(0,0,0,0), padding:vec4(0)},
+				view({margin:vec4(1,1,2,0),bgcolor:"#3a3a3a", borderwidth:0,borderradius:vec4(10,.1,.1,.1),padding:vec4(10,2,10,2)},
 					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
 				)
 			)

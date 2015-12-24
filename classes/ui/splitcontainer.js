@@ -23,7 +23,7 @@ define.class(function($ui$, view, label){
 		activecolor: Config({type: vec4, value: vec4("#7070a0")})
 	}
 	
-	this.bg = 0;
+	this.bg = false;
 	this.flex = 1.0
 	this.flexdirection = "row";
 	this.position = "relative" 
@@ -42,7 +42,7 @@ define.class(function($ui$, view, label){
 			firstnode: Config({type: int, value: 0})
 		}
 	
-		this.bgcolor = vec4("#3b3b3b");
+		this.bgcolor = vec4("#565656");
 		this.alignitem = "stretch";
 		this.attributes = {
 			vertical: Config({type: Boolean, value: false}),
@@ -154,7 +154,8 @@ define.class(function($ui$, view, label){
 		}
 		*/
 		this.bg = {
-			color: function(){
+			acolor: function(){
+				
 				if (view.vertical )
 				{
 					var yy = mesh.y*view.layout.height;
@@ -196,7 +197,7 @@ define.class(function($ui$, view, label){
 				}))
 
 				children.push(view({
-					bg:0,
+					bg:false,
 					clipping: true, 
 					flex: this.constructor_children[i].flex 
 				},this.constructor_children[i]))				
