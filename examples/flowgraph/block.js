@@ -9,10 +9,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.cursor = "move";
 	this.position = "absolute" ;
 	this.bgcolor = vec4("#5c5c5c" )
-	this.padding = 0;
-	this.borderradius = vec4(5,5,1,1);
+	this.padding = 10;
+	this.borderradius = 10;
 	this.borderwidth = 2;
-	this.bordercolor = vec4("#5c5c5c")
+	this.bordercolor = vec4("#fc5c5c")
 	
 	this.attributes = {
 		pos: Config({persist: true}),
@@ -176,10 +176,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.flexdirection = "column"
 	
 	this.render = function(){
+		
+		
 		return [
 			label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
 			,view({bgcolor:"#343434", height: 40,width:140, flex: 1})
-			,view({flexdirection:"row", alignitems:"stretch", bg:0}
+			,view({flexdirection:"row", position:"absolute", y:62,alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
 				,button({icon:"plus", fontsize: this.fontsize})
 				,button({icon:"plus", fontsize: this.fontsize})
 			)

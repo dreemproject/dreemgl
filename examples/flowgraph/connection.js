@@ -9,11 +9,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.attributes = {
 			from: Config({type:String, value:""}),
 			to: Config({type:String, value:""}),
-			linewidth: Config({type:float, value:8, duration:0.5, motion:"bounce"}),
+			linewidth: Config({type:float, value:3, duration:0.5, motion:"bounce"}),
 			focussedcolor: Config({type:vec4, value:vec4("#d0d0d0"), meta:"color" }),
 			hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
-			focussedwidth: Config({type:float, value:12}),
-			hoveredwidth: Config({type:float, value:12}),
+			focussedwidth: Config({type:float, value:3}),
+			hoveredwidth: Config({type:float, value:3}),
 			bgcolor: Config({motion:"linear", duration: 0.1}),
 			inselection : Config({type:boolean, value:false})
 		

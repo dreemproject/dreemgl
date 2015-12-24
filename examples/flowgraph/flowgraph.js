@@ -9,12 +9,23 @@ define.class('$ui/view', function(require,
 		$server$, sourceset, dataset, $$, dockpanel, block, connection){
 
 	this.flex = 1
+	this.clearcolor = "#3b3b3b" 
+	this.bgcolor = "#202020" 
+	this.flexdirection = "column";
 	this.attributes = {
 		fontsize: Config({type:float, value: 12, meta:"fontsize"}),
 		sourceset: {}
 	}
 	
-	define.class(this, "menubar", function($ui$, view){
+	define.class(this, "menubar", function($ui$, view, button){
+		this.bg = false;
+		this.render = function(){
+			return [button({text:"File"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
+					,button({text:"View", click:function(){console.log("remove"); }, fontsize:this.fontsize})
+					,button({text:"Help", click:function(){console.log("remove"); }, fontsize:this.fontsize})
+			];
+		}
+
 	})
 	
 	define.class(this, "selectorrect", function ($ui$, view){
@@ -522,7 +533,7 @@ define.class('$ui/view', function(require,
 	
 	this.render = function(){
 		return [
-			this.menubar({})		
+			this.menubar({fontsize:this.fontsize})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3}
 					,dockpanel({title:"Composition" , fontsize:this.fontsize}
@@ -532,16 +543,12 @@ define.class('$ui/view', function(require,
 					)
 				)
 				,dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0, fontsize:this.fontsize}
-					,view({bg:1, bgcolor:"black", clearcolor:"black"  }
-						,button({text:"add"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
-						,button({text:"remove", click:function(){console.log("remove"); }, fontsize:this.fontsize})
-					)
 					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#373737", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(0,0,1,0.2) , borderradius:8, borderwidth:1, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 							
 						)
-						,view({name:"connectionlayer", bg:0, dataset: this.sourceset, render:function(){
+						,view({name:"connectionlayer", bg:0, dataset: this.sourceset, arender:function(){
 							return this.renderConnections();
 						}.bind(this)}
 							,connection({from:"phone", to:"tv"})
@@ -552,7 +559,7 @@ define.class('$ui/view', function(require,
 							,connection({from:"a", to:"c"})
 						)
 						
-						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
+						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
 							return this.renderBlocks();
 						}.bind(this)}
 							,block({name:"phone", title:"Phone", x:200, y:20, fontsize:this.fontsize})
