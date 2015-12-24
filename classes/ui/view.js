@@ -255,7 +255,7 @@ define.class('$system/base/node', function(require){
 	this.normalmatrix = mat4.identity()
 
 	// forward references for shaders
-	this.layout = { width:0, height:0, left:0, top:0, right:0, bottom:0}
+	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 	this.device = {size:vec2(),  frame:{size:vec2()}}
 
 	// turn off rpc proxy generation for this prototype level
@@ -449,8 +449,8 @@ define.class('$system/base/node', function(require){
 	this.computeCursor = function(){
 		var node = this
 		while(node){
-			if(node._tooltip !== ''){
-				this.screen.mouse.tooltip = node._tooltip
+			if(node._cursor !== ''){
+				this.screen.mouse.cursor = node._cursor
 				break
 			}
 			node = node.parent
