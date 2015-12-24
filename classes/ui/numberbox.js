@@ -12,7 +12,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		minvalue: Config({type: float, value: undefined}),
 		maxvalue: Config({type: float, value: undefined}),
 		stepvalue: Config({type: float, value: 1}),
-		bordercolor: Config({motion:"easeout", duration:0.1, value: "#202020", meta:"color" }),
+		bordercolor: Config({motion:"easeout", duration:0.1, value: "#262626", meta:"color" }),
 		draggingbordercolor: Config({type:vec4, value:vec4("#707070"), meta:"color"}),
 		focusbordercolor: Config({type:vec4, value:vec4("#606060"), meta:"color"}),
 		decimals: Config({type:int, value:0}), 
@@ -22,7 +22,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 	
 	this.tabstop = 0;
-	this.bordercolor = "#202020" ;
+	this.bordercolor = "#262626" ;
 	this.borderradius = 4;
 	this.borderwidth = 2;
 	this.fgcolor="#f0f0f0";
@@ -124,8 +124,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 
 		if (this.title && this.title.length > 0){
 			res.push(
-			view({bgcolor:this.bordercolor,bordercolor:this.bordercolor , margin:0,borderradius:vec4(1,1,1,1),borderwidth:1,  padding:0},
-				label({name:"thetitle", align:"right", margin:vec4(5,0,5,0),  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
+			view({alignitems:"center", justifycontent:"center", bgcolor:this.bordercolor,bordercolor:this.bordercolor , margin:0,borderradius:vec4(1,1,1,1),borderwidth:1,  padding:0},
+				label({name:"thetitle", align:"right", alignself:"center", margin:vec4(5,0,5,0),  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
 				)
 			)
 		}

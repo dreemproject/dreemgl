@@ -76,8 +76,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	this.borderwidth  = 2
 	this.margin = 0
 	this.bordercolor = vec4("#272727")
-	this.alignItems = "center"
-
+	this.alignitems = "flex-start"
+	this.justifycontent ="flex-start" 
 	this.bgcolorfn = function(pos){
 		return mix(col1, col2, pos.y/0.8)
 	}
@@ -136,16 +136,16 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.iconres = undefined
 		
 		if (this.icon && this.icon.length > 0){
-			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
+			this.iconres = this.iconclass({alignself:"center", fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}
 
 		if (this.text && this.text.length > 0){			
-			this.buttonres = this.labelclass({font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			this.buttonres = this.labelclass({alignself:"center", font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		
-		return view({bg:0, padding:0, margin:this.internalmargin},res);
+		return view({bg:false,margin:this.internalmargin, alignitems:"center", flexdirection:"row",justifycontent:"center"},res);
 	}
 
 	// Basic usage of the button.	

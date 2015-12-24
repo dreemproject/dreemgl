@@ -178,15 +178,32 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		
 	this.flexdirection = "column"
-	
+	this.layout = function(){
+		
+		var ab = this.findChild("addbuttons");
+		if (ab){
+			ab.y = this.layout.height + 2;
+		}
+	}
 	this.render = function(){
 		
 		
 		return [
 			label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
-			,view({bgcolor:"#343434", height: 40,width:140, flex: 1})
-			,view({bg:false, height: 10,width:140, flex: 1})
-			,view({flexdirection:"row", position:"absolute", y:62,alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+			,view({bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1})
+			,view({bg:false, width:140, flex: 1, justifycontent:"space-between"}
+			,view({bg:false, alignself:"flex-start", flexdirection:"column"}
+			,this.connectionbutton()
+			,this.connectionbutton()
+			,this.connectionbutton()
+			)
+			,view({bg:false, alignself:"flex-end", flexdirection:"column"}
+			,this.connectionbutton()
+			,this.connectionbutton()
+			,this.connectionbutton()
+			)
+			)
+			,view({name:"addbuttons",flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
 				,button({icon:"plus", fontsize: this.fontsize})
 				,button({icon:"plus", fontsize: this.fontsize})
 			)
