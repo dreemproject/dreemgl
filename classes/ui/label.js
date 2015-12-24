@@ -10,7 +10,7 @@ define.class(function(require, $ui$, view){
 	var TypeFace = require('$system/typeface/typefaceshader')
 
 	this.bgcolor = vec4("transparent")
-
+	
 	this.attributes = {
 		// the text color
 		fgcolor: Config({type:vec4, value: vec4(1,1,1,1), meta:"color" }),
@@ -36,8 +36,6 @@ define.class(function(require, $ui$, view){
 		// Alignment of the bodytext.
 		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"})
 	}
-
-	this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 
 	// the normal font 
 	define.class(this, 'typefacenormal', TypeFace, function(){
@@ -130,6 +128,8 @@ define.class(function(require, $ui$, view){
 		}
 		return {width: this.measured_width = this.typefaceshader.mesh.bound_w, height: this.measured_height =this.typefaceshader.mesh.bound_h};
 	}
+
+	this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 
 	var label = this.constructor
 	// A label.

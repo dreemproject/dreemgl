@@ -65,7 +65,6 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 			var keyname = this.toKey[ code ]
 
-			// if we press ctrl/meta + x we flag cut.
 			is_keyboard_cut = keyname === 'x' && (this._meta || this._ctrl)
 			is_keyboard_all = keyname === 'a' && (this._meta || this._ctrl)
 

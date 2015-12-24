@@ -13,12 +13,13 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 	
 	this.margin = 4
 	this.bgcolor="#3b3b3b"
-	this.flexdirection = "row"
-	this.bordercolor = "#505050"
-	this.borderwidth = 2
-	this.borderradius = 15
 
+	this.flexdirection = "row";
+	this.bordercolor = "#505050" ;
+	this.borderwidth = 2;
+	this.borderradius = 5;
 	this.dofocus = function(){
+		
 		var tb = this.findChild("thetext");
 		if (tb){
 			if (tb.focus){
@@ -34,7 +35,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 			}
 		}
 	}
-	
+	this.justifycontent= "center"
 	this.render = function(){
 		return [
 			textbox({
@@ -51,6 +52,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 				}.bind(this)
 			}),
 			label({name:"thelabel",position:"absolute",margin:7, text:this.searchtextlabel,fontsize:this.fontsize, bg:false, fgcolor:"#707070"}),
-			icon({icon:"search", margin:4, fgcolor:"#707070"})]
+			icon({icon:"search", margin:6, fgcolor:"#707070", alignself:"center"})]
 	}
 })
