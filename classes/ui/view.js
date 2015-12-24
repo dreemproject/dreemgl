@@ -402,21 +402,19 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._bgimage){
+			// Assume image was loaded via require (a Texture.Image object)
+			var image = this._bgimage;
 			if(typeof this._bgimage === 'string'){
-				require.async(this._bgimage).then(function(result){
-					// Second argument for dali loading (DALI)
-					var img = this.bgshader.texture = Shader.Texture.fromImage(result, this._bgimage)
-					if(isNaN(this._size[0])){
-						this._size = img.size
-						this.relayout()
-					}
-					else this.redraw()
-				}.bind(this))
+				// Path to image was specified
+				image = new Shader.Texture.Image(this._bgimage);
 			}
-			else{
-				var img = this.bgshader.texture = Shader.Texture.fromImage(this._bgimage)
-				if(isNaN(this._size[0])) this._size = img.size
+
+			var img = this.bgshader.texture = Shader.Texture.fromImage(image);
+			if(isNaN(this._size[0])){
+				this._size = img.size
+				this.relayout()
 			}
+			else this.redraw()
 		}
 
 		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){

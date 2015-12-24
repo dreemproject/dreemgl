@@ -4,10 +4,19 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
+// "Image"-like class for Dali. Dali expects to load the images so retain a
+// path to the file. Texture.Image is another name for this class.
+function DaliImage(path) 
+{
+	this.path = path;
+}
+
+
 define.class('$system/base/texture', function(exports){
 	var Texture = exports
-	Texture.GlobalId = 0
 
+	Texture.GlobalId = 0
+	Texture.Image = DaliImage;
 
 	DaliApi = require('./dali_api')
 	fs = require('fs');
@@ -31,29 +40,15 @@ define.class('$system/base/texture', function(exports){
 		return new Texture(type,0,0)
 	}
 
-	Texture.fromImage = function(imagedata, path){
+	// imagedata is an instance of DaliImage
+	Texture.fromImage = function(imagedata){
 		var dali = DaliApi.dali;		
 
-		//HACK
-/*
-		console.log('TRYING TO SAVE FILE DATA');
-		fs.writeFile('test.png', imagedata, 'binary', function(err) {
-			if (err) {
-				console.log('ERROR', err);
-				throw err;
-			}
-			console.log('File Saved');
-		});
-*/
+		// With dali, the references should either be absolute, or relative
+		// to the path where dali runs.
+		var fullpath = imagedata.path;
+		if (imagedata.path[0] !== '/') fullpath = define.$example + fullpath;
 
-		//console.log('TEXTURE', define.$example);
-
-		//TODO
-		// With dali, the references are relative to the top-level, where-as
-		// with webgl, the references are relative to the location of the
-		// composition.
-		var fullpath = define.$example + path;
-console.log('** * fromImage', path, fullpath);
 		var img = new dali.ResourceImage({url: fullpath});
 
 		var tex = new Texture('rgba', img.getWidth(), img.getHeight())
@@ -61,7 +56,7 @@ console.log('** * fromImage', path, fullpath);
 		tex.image = img
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + path + '\'});');
+			console.log('DALICODE: var texture' + tex.id + ' = new dali.ResourceImage({url: \'' + fullpath + '\'});');
 		}		
 
 		return tex

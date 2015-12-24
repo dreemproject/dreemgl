@@ -1216,7 +1216,6 @@
 
 
 			function noderequirewrapper(iname) {
-				
 				var name = iname
 				if(arguments.length != 1) throw new Error("Unsupported require style")
 				try{
@@ -1247,8 +1246,11 @@
 				// we cant require non js files
 				var ext = define.fileExt(full_name)
 				if(ext !== '' && ext !== 'js'){
-					if(ext === 'png' || ext === 'jpg' || ext === 'jpeg'){
-						return undefined
+					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){		
+						// Construct a Texture.Image object given its path
+						var tex = define.expandVariables('$system/platform/$platform/texture$platform')
+						var Texture = define.require(tex);
+						return new Texture.Image(full_name)
 					}
 					else{
 						// read it as an arraybuffer
