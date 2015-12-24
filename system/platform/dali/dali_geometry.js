@@ -132,14 +132,14 @@ define.class(function(require, exports){
 			var attrloc = attrlocs[key]
 			name = attrloc.name
 
-			console.log('**** **** attrloc.name', name, key, attrloc.slots);
-
 			var storedname = '_' + key;
 			var type = dali.PROPERTY_FLOAT;
 
 			// Skip invalid entries
 			if (typeof attrloc.slots === 'undefined')
 				continue;
+
+			console.log('**** **** attrloc.name', name, key, attrloc.slots);
 
 			switch (attrloc.slots) {
 			case 1:
@@ -174,7 +174,6 @@ define.class(function(require, exports){
 
 		var arr = shader_dali[name];
 		//console.trace('**** addAttributeGeometry', name, arr.array.length);
-		console.trace('ARRAY', arr);
 		
 		var data = [];
 
@@ -194,7 +193,8 @@ define.class(function(require, exports){
 
 		// Add or update a vertex buffer
 		//console.log('updating 2', format, nslots, data.length);
-		this.updateVertexBuffer('attribgeom', data, format, nslots);
+		if (data.length > 0)
+			this.updateVertexBuffer('attribgeom', data, format, nslots);
 	}
 
 
