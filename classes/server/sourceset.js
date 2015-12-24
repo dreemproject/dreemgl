@@ -46,11 +46,12 @@ define.class(function(require, $server$, dataset){
 			
 		this.data = {name:'root', node:ret.elems, children:[]}
 		// now we need to walk this fucker.
-		function walkTree(array, output){
+		function walkComposition(array, output){
 			for(var i = 0; i < array.length; i++){
 				var item = array[i]
 
 				if(item.type === 'Object'){
+					output.propobj = item
 					// lets put some props on there
 					// whats the name of this thing?
 					var keys = item.keys
@@ -58,18 +59,22 @@ define.class(function(require, $server$, dataset){
 						var key = keys[j]
 						var name = key.key.name
 						var value = key.value
-						// alright so..
-						//console.log(name)
+						if(name === 'flowdata'){
+							output.flowdata = key.value
+						}
 					}
 					continue
 				}
 				if(item.type !== 'Call') continue
 				var name 
-				if(item.fn.type === 'Key'){
+				if(item.fn.type === 'Key' && item.fn.object.type === 'This'){
 					name = 'this.' + item.fn.key.name
 				}
-				else{
+				else if(item.fn.type === 'Id'){
 					name = item.fn.name
+				}
+				else{
+					console.error(name = "Please implement in sourceset.js")
 				}
 				var child = {
 					name: name,
@@ -77,10 +82,10 @@ define.class(function(require, $server$, dataset){
 					children:[]
 				}
 				output.children.push(child)
-				walkTree(item.args, child)
+				//walkTree(item.args, child)
 			}
 		}
-		walkTree(ret.elems, this.data)
+		walkComposition(ret.elems, this.data)
 		// lets generate the connection view
 
 		//	Call->args->object
