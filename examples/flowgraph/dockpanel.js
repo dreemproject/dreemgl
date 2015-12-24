@@ -11,10 +11,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	
 	this.padding = 0;
 	this.margin = 0;
-	this.bgcolor = vec4("#505050");
+	this.bgcolor = vec4("#3b3b3b");
 	this.flex = 1;
 	this.flexdirection ="column" 
-	this.bg = 0;
 	
 	this.render = function(){
 		return [

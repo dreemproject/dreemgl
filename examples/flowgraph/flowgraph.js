@@ -5,7 +5,7 @@
 
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, splitcontainer,
-		$widgets$, propviewer,
+		$widgets$, propviewer,searchbox,
 		$server$, sourceset, dataset, $$, dockpanel, block, connection){
 
 	this.flex = 1
@@ -320,14 +320,14 @@ define.class('$ui/view', function(require,
 		}
 		this.updatepopupuiposition();
 	}
+	
 	this.setActiveConnection = function(conn){
 		this.currentconnection = conn;
 		
 		if (conn){
 			this.currentblock = undefined;
 			this.addToSelection(conn);								
-		}
-	
+		}	
 		this.updatepopupuiposition();
 	}
 	
@@ -337,10 +337,8 @@ define.class('$ui/view', function(require,
 			cl.children[a].layout = 1
 		}
 	}
-	
-	
-	this.init = function(){
 		
+	this.init = function(){		
 		this.currentselection = [];
 		this.currentblock = undefined;
 		this.currentconnection = undefined;		
@@ -351,8 +349,6 @@ define.class('$ui/view', function(require,
 		this.librarydata = dataset({children:[]});
 
 		this.sourceset = sourceset()
-
-		
 		
 		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
 			var lib = this.find('thelibrary');
@@ -367,15 +363,10 @@ define.class('$ui/view', function(require,
 
 		this.screen.locationhash = function(event){
 			require.async(event.value.composition).then(function(result){
-				//this.sourceset.parse(result.module)
 				this.sourceset.parse(result.module.factory.body.toString())
 			}.bind(this))
-			// lets load up 
-			//console.log(event.value);
 		}.bind(this)
-		//console.log(" hmm  ");
-		
-		// lets load the entire directory structure
+
 		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
 			var filetree = this.find('filetree')
 				var tree = result.value
@@ -535,6 +526,8 @@ define.class('$ui/view', function(require,
 			,splitcontainer({}
 				,splitcontainer({flex:0.3}
 					,dockpanel({title:"Composition" , fontsize:this.fontsize}
+						,searchbox()
+						
 						,treeview({flex:1, dataset: this.sourceset, fontsize:this.fontsize})
 					)
 				)
@@ -595,6 +588,7 @@ define.class('$ui/view', function(require,
 				) 
 				,splitcontainer({flex:0.5,direction:"horizontal"}
 					,dockpanel({title:"Library", viewport:"2D", fontsize:this.fontsize }
+						,searchbox()
 						,this.library({name:"thelibrary", dataset:this.librarydata, fontsize:this.fontsize})
 					)
 					,dockpanel({title:"Properties", viewport:"2D", fontsize:this.fontsize}
