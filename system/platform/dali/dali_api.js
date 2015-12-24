@@ -144,7 +144,7 @@ define.class(function(exports){
 		// Create a daligeometry object, and this will be reused as much as
 		// possible.
 		if (typeof obj.daligeometry === 'undefined') {
-			DaliGeometry = require('./dali_geometry')
+			//DaliGeometry = require('./dali_geometry')
 
 			//obj.daligeometry = new DaliGeometry();
 			//obj.daligeometry.addGeometry(shader);

@@ -123,6 +123,93 @@ define.class(function(require, exports){
 		if (Object.keys(attrlocs) == 0)
 			return;
 
+		// Write each value separately, in order to test the dali API.
+		// The original version (see below) writes a composite
+		// dali.PropertyBuffer.
+		var format = {};
+
+		var name;
+        var nslots = 0;
+		for(var key in attrlocs) {
+			var attrloc = attrlocs[key]
+			name = attrloc.name
+
+			var storedname = '_' + key;
+			var type = dali.PROPERTY_FLOAT;
+
+			// Skip invalid entries
+			if (typeof attrloc.slots === 'undefined')
+				continue;
+
+			console.log('**** **** attrloc.name', name, key, attrloc.slots);
+
+			switch (attrloc.slots) {
+			case 1:
+				type = dali.PROPERTY_FLOAT;
+				break;
+			case 2:
+				type = dali.PROPERTY_VECTOR2;
+				break;
+			case 3:
+				type = dali.PROPERTY_VECTOR3;
+				break;
+			case 4:
+				type = dali.PROPERTY_VECTOR4;
+				break;
+			default:
+				console.log('addAttributeGeometry. Unknown type', attrloc.slots);
+				//TODO This happens, do I ignore it?
+				//return;
+				break;
+			}
+
+
+			format[storedname] = type;
+
+			if (attrloc.slots == 0)
+				continue;
+
+			// Extract the data from the array
+			var arr = shader_dali[name];
+			//console.trace('**** addAttributeGeometry', name, arr.array.length);
+		
+			var data = [];
+			if (arr && arr.array) {
+				// Find the offset and length of the data to extract
+				var record_offset = arr.slots;
+				var data_offset = attrloc.offset / 4; // attrloc.offset is bytes
+
+				var offset = 0;
+				for (var i=0; i<arr.length; i++) {
+					var off = offset + data_offset;
+					for (var j=0; j<attrloc.slots; j++) {
+						var val = parseFloat(arr.array[off++]);
+						data.push(val);
+					}
+
+					offset += record_offset;
+				}
+
+				if (data.length > 0) {
+					this.updateVertexBuffer(key, data, format, attrloc.slots);
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * @method addAttributeGeometry
+	 * Add other attribute geometries to a dali Actor.
+	 * @param {Object} shader_dali Compiled data structure
+	 * @param {Object} attrlocs Compiled data structure
+	 */
+	this.addAttributeGeometryOrig = function(shader_dali, attrlocs) {
+		var dali = DaliApi.dali;
+
+		if (Object.keys(attrlocs) == 0)
+			return;
+
 		//TODO Support multiple names in the keys, like webgl
 		var format = {};
 
