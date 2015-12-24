@@ -130,9 +130,9 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 			)
 		}
 		
-		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left", text:"" , fontsize: this.fontsize*(2/3),  padding:0, borderradius:0, click:function(){this.downclick()}.bind(this)}));
+		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left",  buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",text:"" , fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.downclick()}.bind(this)}));
 		res.push(label({margin:vec4(4,0,4,0),alignself:"center", padding:0,  name:"thenumber", align:"right", text:this._value.toString(),flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0}))
-		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", fontsize: this.fontsize*(2/3),  padding:0, borderradius:0, click:function(){this.upclick()}.bind(this)}))
+		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}))
 		return res;	
 		
 	}
