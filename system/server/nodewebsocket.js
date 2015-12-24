@@ -148,7 +148,6 @@ define.class(function(require){
 		this.close()
 	}
 
-
 	this.send = function(data){
 		if(this.first_queue){
 			// put a tiny gap between a server connect and first data send
