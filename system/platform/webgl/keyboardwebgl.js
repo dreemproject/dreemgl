@@ -84,25 +84,30 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 
 			this.emit('down', msg)
-			
-			if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
-				e.preventDefault()
-			}
-			if(code == this.toCode.tab){
-				var msg = {
-					repeat: e.repeat,
-					name: 'tab',
-					value: '\t',
-					char: 9,
-				}
-				e.preventDefault()
-			}
-			else if(code == this.toCode.backspace){
-				e.preventDefault()
-			}
+			if(this._meta || this._ctrl && keyname === 'r'){
 
-			 is_keyboard_cut = false
-			 is_keyboard_all = false
+			}
+			else{
+				if(e.preventDefault) e.preventDefault()
+			}
+			//if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
+			//	e.preventDefault()
+			//}
+			//if(code == this.toCode.tab){
+			//	var msg = {
+			//		repeat: e.repeat,
+			//		name: 'tab',
+			//		value: '\t',
+			//		char: 9,
+			//	}
+			//e.preventDefault()
+			//}
+			//else if(code == this.toCode.backspace){
+			//}
+			
+
+			is_keyboard_cut = false
+			is_keyboard_all = false
 		}.bind(this)
 
 		var keyup = function(e){
@@ -130,10 +135,10 @@ define.class('$system/base/keyboard', function (require, exports){
 
 			this.emit('up', msg)
 
-			if(code == this.toCode.tab || code == this.toCode.backspace){
-				e.preventDefault()
-			}
-
+			//if(code == this.toCode.tab || code == this.toCode.backspace){
+			//	e.preventDefault()
+			//}
+			if(e.preventDefault) e.preventDefault()
 		}.bind(this)
 		//window.addEventListener('keyup', 
 		//window.addEventListener('keypress',
