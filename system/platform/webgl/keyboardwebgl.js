@@ -84,7 +84,8 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 
 			this.emit('down', msg)
-			if(this._meta || this._ctrl && keyname === 'r'){
+			if((this._meta || this._ctrl) && keyname === 'r' || 
+			    keyname === 'f12' || keyname ==="f5"){
 
 			}
 			else{
