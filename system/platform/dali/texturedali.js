@@ -18,6 +18,9 @@ define.class('$system/base/texture', function(exports){
 	Texture.GlobalId = 0
 	Texture.Image = DaliImage;
 
+	// Map hash of texture to an existing texture
+	Texture.Cache = {};
+
 	DaliApi = require('./dali_api')
 	fs = require('fs');
 
@@ -70,7 +73,13 @@ define.class('$system/base/texture', function(exports){
 	// Construct a texture from a ArrayBuffer, with a width/height (DALI)
 	Texture.buildDaliTexture = function(array, w, h){
 		var dali = DaliApi.dali;		
-		var tex = new Texture('rgba', w, h)
+
+		var texture_key = DaliApi.getHash(array);
+		var tex = Texture.Cache[texture_key];
+		if (tex)
+			return tex;
+
+		tex = new Texture('rgba', w, h)
 		tex.array = array
 
 		// Dali wants a byte array
@@ -85,6 +94,8 @@ define.class('$system/base/texture', function(exports){
 
 		var img = new dali.BufferImage(uint8, image_options);
 		tex.image = img;
+
+		Texture.Cache[texture_key] = tex;
 
 		if (DaliApi.emitcode) {
 			// Write font_<INDEX>.bin

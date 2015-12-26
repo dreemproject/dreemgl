@@ -31,8 +31,10 @@ define.class(function(require, exports){
 	 * @method constructor
 	 * Create a dali.Geometry object, using triangles
 	 * You can access the dali.Geometry object as this.daligeometry
+	 * @param {number} drawtype Line drawing type. dali uses the same values
+	 *                 as webgl.
 	 */
-	this.atConstructor = function() {
+	this.atConstructor = function(drawtype) {
 		this.object_type = 'DaliGeometry'
 
 		var dali = DaliApi.dali;
@@ -44,11 +46,12 @@ define.class(function(require, exports){
 		this.id = ++DaliGeometry.GlobalId;
 		this.daligeometry = new dali.Geometry();
 
-		this.daligeometry.setGeometryType(dali.GEOMETRY_TRIANGLES);
+		drawtype = drawtype || dali.GEOMETRY_TRIANGLES;
+		this.daligeometry.setGeometryType(drawtype);
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Geometry();');
-			console.log('DALICODE: ' + this.name() + '.setGeometryType(dali.GEOMETRY_TRIANGLES);');
+			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + drawtype + ');');
 		}		
 	}
 
@@ -126,11 +129,11 @@ define.class(function(require, exports){
 		// Write each value separately, in order to test the dali API.
 		// The original version (see below) writes a composite
 		// dali.PropertyBuffer.
-		var format = {};
 
 		var name;
         var nslots = 0;
 		for(var key in attrlocs) {
+			var format = {};
 			var attrloc = attrlocs[key]
 			name = attrloc.name
 

@@ -193,9 +193,8 @@ define.class(function(exports){
 		// Re-use the geometry, unless we have a texture
 		
 
-		obj.daligeometry = new DaliGeometry();
+		obj.daligeometry = new DaliGeometry(obj.drawtype);
 		obj.daligeometry.addGeometry(shader.dreem_obj);
-		//obj.daligeometry.addGeometry(shader);
 
 		//console.log('Calling DaliMaterial with shader = ', shader.object_type);
 		obj.dalimaterial = new DaliMaterial(shader.dalishader)

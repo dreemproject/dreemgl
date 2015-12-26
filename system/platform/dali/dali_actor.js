@@ -87,6 +87,22 @@ define.class(function(require, exports){
 
 	}	
 
+
+	/**
+	 * @method setColor
+	 * Specify the color of the actor
+	 * @param {object} color 4 element array of [r,g,b,a]
+	 */
+	DaliApi.setColor = function(color) {
+		//TODO Is it faster if I cache the last value
+		this.daliactor.color = color;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.color = ' + JSON.stringify(color) + ';');
+		}
+	}
+
+
 	// Internal method to format a single value
 	this.formatSingle = function(value) {
 		if (typeof value === 'undefined')
