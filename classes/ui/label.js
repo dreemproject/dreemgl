@@ -130,7 +130,11 @@ define.class(function(require, $ui$, view){
 		return {width: this.measured_width = this.typefaceshader.mesh.bound_w, height: this.measured_height =this.typefaceshader.mesh.bound_h};
 	}
 
-	this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+	if (define.$platform === 'dali')
+		this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
+	else
+		this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+
 
 	var label = this.constructor
 	// A label.
