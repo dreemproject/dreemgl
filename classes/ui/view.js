@@ -348,9 +348,8 @@ define.class('$system/base/node', function(require){
 	this.draw_dirty = 3
 	// layout dirty causes a relayout to occur (only on viewports)
 	this.layout_dirty = true
-	// update dirty causes a redraw to occur (only on viewports)
+	// update dirty causes a shader update to occur
 	this.update_dirty = true
-
 	// initialization of a view
 	this.init = function(prev){
 
@@ -506,54 +505,6 @@ define.class('$system/base/node', function(require){
 		this['_' + key] = cls.extend(value, this)
 	}
 
-	// cause this node, all childnodes and relevant parent nodes to relayout
-
-	this.relayoutRecur = function(source){
-		this.layout_dirty = true
-		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
-		for(var i = 0;i < this.child_viewport_list.length;i++){
-			var child = this.child_viewport_list[i]
-			//if(child._overflow) continue
-			if(child !== source){
-				child.relayoutRecur()
-			}
-		}
-		if(this.parent_viewport !== this){
-			if(this.parent_viewport._overflow) return
-			this.parent_viewport.relayoutRecur(this)
-		}
-	}
-
-	// ok so. what we need to do is
-	// scan up towards overflow something
-	// scan down and skip overflow something.
-
-	this.relayout = function(shallow){
-
-		this.redraw()
-		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
-		/*
-		if(this.screen){
-			this.screen.redraw()
-			this.screen.relayoutRecur()
-		}
-		return
-		var parent = this.parent_viewport
-		// ok we haz parent viewport, they we have to check if we are _overflow is something
-		while(parent){
-			parent.redraw()
-			parent.layout_dirty = true
-
-			if(parent === parent.parent_viewport){
-				parent = parent.parent && parent.parent.parent_viewport
-			}
-			else{
-				parent = parent.parent_viewport
-				if(parent._overflow) break
-			}
-		}*/
-	}
-
 	// redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
 		if(!this.parent_viewport || this.parent_viewport.draw_dirty === 3) return
@@ -575,23 +526,6 @@ define.class('$system/base/node', function(require){
 			shaders[i].reupdate()
 		}
 	}
-	
-	// things that trigger a relayout
-	this.pos =
-	this.corner =
-	this.size =
-	this.minsize =
-	this.maxsize = 
-	this.margin =
-	this.padding =
-	this.flex =
-	this.flexwrap =
-	this.flexdirection =
-	this.justifycontent =
-	this.alignitems =
-	this.alignself =
-	this.position =
-	this.relayout
 
 	this.getViewGuid = function(){
 		if(this.viewguid) return this.viewguid
@@ -642,66 +576,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// called by doLayout, to update the matrices to layout and parent matrix
-	this.updateMatrices = function(parentmatrix, parentviewport, depth){
-			
-		if (parentviewport == '3d'){// && !this._mode ){	
-		
-			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
-			//mat4.debug(this.modelmatrix);
-		}
-		else {
-		//	console.log("2d" ,this.constructor.name, this.translate, );
-			
-			// compute TSRT matrix
-			if(this.layout){
-				var s = this._scale
-				var r = this._rotate
-				var t0 = this.layout.left, t1 = this.layout.top, t2 = 0
-
-				//if (this._position === "absolute"){ // layout engine does this
-				//	t0 = this._pos[0]
-				//	t1 = this._pos[1]
-				//}
-				var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
-				var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
-				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
-			}
-			else {
-				var s = this._scale
-				var r = this._rotate
-				var t = this._translate
-				var hw = this._size[0] / 2
-				var hh = this._size[1] / 2
-				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t[0] + hw * s[0], t[1] + hh * s[1], t[2], this.modelmatrix);
-			}
-		}
-
-		if(this._viewport){
-
-			if(parentmatrix) {
-				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
-			}
-			else{
-				this.viewportmatrix = this.modelmatrix
-			}
-			this.totalmatrix = mat4.identity();
-			this.modelmatrix = mat4.identity();	
-			parentmode = this._viewport;
-			parentmatrix = mat4.identity();
-		}
-		else{
-			if(parentmatrix) mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.totalmatrix)
-		}
-		
-
-		var children = this.children
-		if(children) for(var i = 0; i < children.length; i++){
-			var child = children[i]
-			if(child._viewport) continue // it will get its own pass
-			child.updateMatrices(this.totalmatrix, parentmode, depth)
-		}
-	}
 
 	// decide to inject scrollbars into our childarray
 	this.atRender = function(){
@@ -831,12 +705,78 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
+	// called by doLayout, to update the matrices to layout and parent matrix
+	this.updateMatrices = function(parentmatrix, parentviewport, depth, parent_changed){
+		var matrix_changed = parent_changed
+		if (parentviewport == '3d'){// && !this._mode ){	
+			matrix_changed = true
+			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
+			//mat4.debug(this.modelmatrix);
+		}
+		else {
+		//	console.log("2d" ,this.constructor.name, this.translate, );
+			
+			// compute TSRT matrix
+			var layout = this.layout
+			if(layout){
+				//console.log(this.matrix_dirty)
+				var ml = this.matrix_layout
+				if(!ml || ml.left != layout.left || ml.top !== layout.top || 
+					ml.width !== layout.width || ml.height !== layout.height){
+					this.matrix_layout = layout
+					matrix_changed = true
+					var s = this._scale
+					var r = this._rotate
+					var t0 = layout.left, t1 = layout.top, t2 = 0
+					//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
+					//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
+					var hw = layout.width / 2
+					var hh = layout.height / 2
+					mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
+				}
+			}
+			else {
+				matrix_changed = true
+				var s = this._scale
+				var r = this._rotate
+				var t = this._translate
+				var hw = this._size[0] / 2
+				var hh = this._size[1] / 2
+				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], 0, 0, r[2], t[0] + hw * s[0], t[1] + hh * s[1], t[2], this.modelmatrix);
+			}
+		}
+
+		if(this._viewport){
+
+			if(parentmatrix) {
+				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
+			}
+			else{
+				this.viewportmatrix = this.modelmatrix
+			}
+			this.totalmatrix = mat4.identity();
+			parentmode = this._viewport;
+			parentmatrix = mat4.identity();
+		}
+		else{
+			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.totalmatrix)
+		}
+		
+		var children = this.children
+		if(children) for(var i = 0; i < children.length; i++){
+			var child = children[i]
+			if(child._viewport) continue // it will get its own pass
+			child.updateMatrices(this.totalmatrix, parentmode, depth, matrix_changed)
+		}
+	}
+
 	// internal, used to compute bounding rects and emit layout event
+	// TODO fix up early bail on this one.
 	function emitPostLayoutAndComputeBounds(node, boundsobj, nochild){
 		var ref = node.ref
 		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout 
-
+		
 		// lets also emit the layout 
 		if(boundsobj){
 			if(ref.measured_width !== undefined || ref.measured_height !== undefined){
@@ -850,6 +790,9 @@ define.class('$system/base/node', function(require){
 			if(width > boundsobj.boundw) boundsobj.boundw = width
 			if(height > boundsobj.boundh) boundsobj.boundh = height
 		}
+		
+		// TODO FIX THIS
+		//if(!ref.layout_dirty) return
 
 		if(!nochild){
 			var children = node.children
@@ -859,19 +802,89 @@ define.class('$system/base/node', function(require){
 				clayout.absx = layout.absx + clayout.left 
 				clayout.absy = layout.absy + clayout.top
 
-				emitPostLayoutAndComputeBounds(child, boundsobj, child._viewport)
+				emitPostLayoutAndComputeBounds(child, boundsobj, child.ref._viewport)
 			}
+			ref.layout_dirty = false
 		}
 
-		if((node.ref._listen_layout || node.ref.onlayout) && 
-			(layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
-			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)) {
+		if((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
+			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
 			// call setter
 			// lets reset the scroll position
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
 	}
+
+	// cause this node, all childnodes and relevant parent nodes to relayout
+
+	this.relayoutRecur = function(source){
+		this.layout_dirty = true
+		this.draw_dirty = 3 // bitmask, 2 = pick, 1= color
+		for(var i = 0;i < this.child_viewport_list.length;i++){
+			var child = this.child_viewport_list[i]
+			//if(child._overflow) continue
+			if(child !== source){
+				child.relayoutRecur()
+			}
+		}
+		if(this.parent_viewport !== this){
+			if(this.parent_viewport._overflow) return
+			this.parent_viewport.relayoutRecur(this)
+		}
+	}
+
+	// ok so. what we need to do is
+	// scan up towards overflow something
+	// scan down and skip overflow something.
+
+	this.relayout = function(shallow){
+		this.layout_dirty = true
+		this.redraw()
+		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
+		// omhoog tot viewport layout_dirty = true
+		//var node = this
+		//while(node !== this.parent_viewport){
+		//	node.layout_dirty = true
+		//}
+		/*
+		if(this.screen){
+			this.screen.redraw()
+			this.screen.relayoutRecur()
+		}
+		return
+		var parent = this.parent_viewport
+		// ok we haz parent viewport, they we have to check if we are _overflow is something
+		while(parent){
+			parent.redraw()
+			parent.layout_dirty = true
+
+			if(parent === parent.parent_viewport){
+				parent = parent.parent && parent.parent.parent_viewport
+			}
+			else{
+				parent = parent.parent_viewport
+				if(parent._overflow) break
+			}
+		}*/
+	}
+
+	// things that trigger a relayout
+	this.pos =
+	this.corner =
+	this.size =
+	this.minsize =
+	this.maxsize = 
+	this.margin =
+	this.padding =
+	this.flex =
+	this.flexwrap =
+	this.flexdirection =
+	this.justifycontent =
+	this.alignitems =
+	this.alignself =
+	this.position =
+	this.relayout
 
 	// called by the render engine
 	this.doLayout = function(){
@@ -970,6 +983,7 @@ define.class('$system/base/node', function(require){
 		}
 	})
 	this.hardrect = false
+
 
 	this.bordercolorfn = function(pos){
 		return bordercolor

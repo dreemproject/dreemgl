@@ -506,10 +506,12 @@ define.class(function(require, $ui$view) {
 	this.openModal = function(object){
 		return new Promise(function(resolve, reject){
 
+			object.parent = this
+
 			Render.process(object, undefined, this.globals)
 
-			object.parent = this
 			this.children.push(object)
+			
 			this.modal_stack.push(object)
 			this.modal = object
 
@@ -534,8 +536,6 @@ define.class(function(require, $ui$view) {
 				this.resolve(value, true)
 			}
 
-			object.reLayout()
-			object.setDirty(true)
 		}.bind(this))
 	}
 

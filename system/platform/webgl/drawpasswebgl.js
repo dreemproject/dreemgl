@@ -6,6 +6,7 @@
 
 define.class(function(require, baseclass){
 	// drawing
+	var Shader = require('./shaderwebgl')
 
 	this.atConstructor = function(gldevice, view){
 		this.device = gldevice
@@ -21,6 +22,8 @@ define.class(function(require, baseclass){
 			viewmatrix: mat4.identity(),
 			noscrollmatrix: mat4.identity()
 		}
+
+		this.debugrect = new DebugRect()
 	}
 	
 	this.atDestroy = function(){
@@ -135,6 +138,7 @@ define.class(function(require, baseclass){
 			drawlayout.absx = drawlayout.left
 			drawlayout.absy = drawlayout.top
 		}
+
 		if(draw === view && view.sublayout){
 			width = view.sublayout.width
 			height = view.sublayout.height
@@ -316,27 +320,27 @@ define.class(function(require, baseclass){
 				if(draw._viewport && draw.drawpass !== this ){
 					if(!draw.drawpass.color_buffer){
 						console.error("Null color_buffer detected")
-						continue
 					}
-					// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
-					// lets render the view as a layer
-					var blendshader = draw.viewportblendshader
-					if (view._viewport === '3d'){
-						blendshader.depth_test = 'src_depth <= dst_depth'
+					else {
+						// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
+						// lets render the view as a layer
+						var blendshader = draw.viewportblendshader
+						if (view._viewport === '3d'){
+							blendshader.depth_test = 'src_depth <= dst_depth'
+						}
+						else{
+							blendshader.depth_test = ''
+						}
+						blendshader.texture = draw.drawpass.color_buffer
+						blendshader.width = draw.layout.width
+						blendshader.height = draw.layout.height
+						blendshader.drawArrays(this.device)
 					}
-					else{
-						blendshader.depth_test = ''
-					}
-					blendshader.texture = draw.drawpass.color_buffer
-					blendshader.width = draw.layout.width
-					blendshader.height = draw.layout.height
-					blendshader.drawArrays(this.device)
-
 				}
 				else{
 					draw.updateShaders()
 					// alright lets iterate the shaders and call em
-					var shaders =  draw.shader_draw_list
+					var shaders = draw.shader_draw_list
 					for(var j = 0; j < shaders.length; j++){
 						// lets draw em
 						var shader = shaders[j]
@@ -347,6 +351,11 @@ define.class(function(require, baseclass){
 
 						shader.drawArrays(this.device)
 					}
+				}
+
+				if(draw.debug_view){
+					this.debugrect.view = draw
+					this.debugrect.drawArrays(this.device)
 				}
 			}
 
@@ -365,17 +374,18 @@ define.class(function(require, baseclass){
 		return hastime
 	}
 
-	/*
-	var MyShader = define.class(this.Shader, function(){
+	var DebugRect = define.class(Shader, function(){
+		this.view = {totalmatrix:mat4(), viewmatrix:mat4(), layout:{width:0, height:0}}
+
 		this.mesh = vec2.array()
-		this.mesh.pushQuad(-1,-1,1,-1,-1,1,1,1)
+		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
+
 		this.position = function(){
-			return vec4(mesh.xy,0,1) 
+			return vec4(vec2(mesh.x * view.layout.width, mesh.y * view.layout.height), 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			if(mesh.x<-0.9)return 'red'
-			if(mesh.x>0.9)return 'red'
-			return 'black'
+			return vec4(1,0,0,0.5)
 		}
-	})*/
+	})
+
 })

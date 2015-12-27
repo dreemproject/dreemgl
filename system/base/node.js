@@ -107,29 +107,40 @@ define.class(function(require, constructor){
 	}
 
 	// internal, used by find
-	this.findChild = function(name, ignore){
+	this.findChild = function(name, ignore, nocache){
+		if(!nocache){
+			if(!this.find_cache) this.find_cache = {}
+			var child = this.find_cache[name]
+			if(child && !child.destroyed) return child
+		}
+
 		// ok so first we go down all children
 		if(this === ignore) return
 		if(this.name === name || this.name === undefined && this.constructor.name === name){
+			if(!nocache) this.find_cache[name] = this
 			return this
 		}
 		if(this.children) for(var i = 0; i < this.children.length; i ++){
 			var child = this.children[i]
 			if(child === ignore) continue
-			var ret = child.findChild(name)
-			if(ret !== undefined) return ret
+			var ret = child.findChild(name, undefined, true)
+			if(ret !== undefined){
+				if(!nocache) this.find_cache[name] = ret
+				return ret
+			}
 		}
 	}
 
 	// find node by name, they look up the .name property or the name of the constructor (class name) by default
 	this.find = function(name, ignore){
-		var ret = this.findChild(name)
+		child = this.findChild(name)
 		var node = this
-		while(ret === undefined && node.parent){
-			ret = node.parent.findChild(name, node)
+		while(child === undefined && node.parent){
+			child = node.parent.findChild(name, node, true)
 			node = node.parent
 		}
-		return ret
+		this.find_cache[name] = child
+		return child
 	}
 
 	// hide a property, pass in any set of strings
@@ -750,5 +761,9 @@ define.class(function(require, constructor){
 		init:Config({type:Event}), 
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
 		destroy:Config({type:Event})
+	}
+
+	this.destroy = function(){
+		this.destroyed = true
 	}
 })

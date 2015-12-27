@@ -38,11 +38,7 @@ define.class('$ui/view', function(require,
 		this.bgcolor = vec4(1, 1, 1, 0.07)
 		this.borderradius = 2
 		this.position = "absolute"
-		this.visible = false	
-
-		console.log(this.roundedborder.prototype.pix_state.code_color)
-		//console.log(this.roundborder.prototype.pix_state.code_color)
-
+		this.visible = false
 	})
 	
 	define.class(this, "classlibclass", view, function($ui$, view, label, icon){

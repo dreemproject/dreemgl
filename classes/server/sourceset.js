@@ -6,6 +6,7 @@
 define.class(function(require, $server$, dataset){
 	// Sourceset is a dataset-api on source
 	var jsparser = require('$system/parse/onejsparser')
+	var jsformatter = require('$system/parse/jsformatter')
 
 	this.atConstructor = function(source){
 		if(source) this.parse(source)

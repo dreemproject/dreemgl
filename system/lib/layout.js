@@ -10,7 +10,133 @@
 
 define(function () {
 
+	function fillNodes(node, nochildren) {
+		var newnode = {
+			children:[], 
+			ref:node, 
+			dirty: node.layout_dirty,
+			layout:{
+				width:undefined, 
+				height:undefined, 
+				absx:0, 
+				absy:0, 
+				top:0, 
+				left:0, 
+				right:0, 
+				bottom:0,
+			}
+		}
 
+		//Object.defineProperty(newnode.layout, 'left', {get:function(){
+		//	return this._left
+		//},set:function(v){
+		//	if(this.debug) console.error("ASSIGN",v)
+	//		this._left = v
+	//	}})
+	//	newnode.layout.left = 0
+
+		// store old layout
+		node.oldlayout = node._layout
+		
+		var layout = node._layout = newnode.layout
+		
+		// alright so. what we need to do is bubble down layout_dirty
+		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
+			var child = node.children[i]
+			if(child._viewport){ // its using a different layout pass
+				// if we are flex, we have to compute the layout of this child
+				if(!isNaN(child._flex)){
+					var newchild = fillNodes(child, true)
+					if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+					newnode.children.push(newchild)
+				}
+				else{
+					// otherwise this child has an already computed layout
+					// so how do we know if this is dirty?
+					newnode.children.push({
+						flex:undefined,
+						ref:child,
+						layout:child.layout,
+						children:[]
+					})
+				}
+			}
+			else{
+				var newchild = fillNodes(child)
+				if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+				newnode.children.push(newchild)
+			}
+		}
+
+		return newnode
+	}
+
+	function putBackOldLayout(node, nest){
+		var ref = node.ref
+
+		var layout = ref._layout, oldlayout = ref.oldlayout
+		layout.absx = 0 
+		layout.absy = 0
+		layout.width = oldlayout.width
+		layout.height = oldlayout.height
+		if(nest){
+			layout.left = oldlayout.left
+			layout.top = oldlayout.top
+		}
+		else{
+			layout.left = oldlayout.last_left
+			layout.top = oldlayout.last_top
+		}
+		layout.last_left = oldlayout.last_left
+		layout.last_top = oldlayout.last_top
+		layout.right = oldlayout.right
+		layout.bottom = oldlayout.bottom
+		layout.last_size0 = oldlayout.last_size0
+		layout.last_size1 = oldlayout.last_size1
+		layout.last_pos0 = oldlayout.last_pos0
+		layout.last_pos1 = oldlayout.last_pos1
+		layout.parentMaxWidth = oldlayout.parentMaxWidth
+		layout.parentDirection = oldlayout.parentDirection
+
+		var children = node.children
+		for(var i = 0; i < children.length; i++){
+			var child = children[i]
+			putBackOldLayout(child, true)
+		}
+	}
+
+	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
+		
+		var total = 1;
+				
+		var ref = node.ref
+		var ol = ref.oldlayout
+
+		if(!node.dirty && 
+			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) && 
+			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) && 
+			(isNaN(ol.last_pos0) && isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) && 
+			(isNaN(ol.last_pos1) && isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) && 
+			ol.parentMaxWidth === parentMaxWidth && ol.parentDirection === parentDirection){
+			putBackOldLayout(node)
+			//ref.debug_view = true
+			return 1
+		}
+		//else ref.debug_view = false
+
+		total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
+
+		ref._layout.last_left = ref._layout.left
+		ref._layout.last_top = ref._layout.top
+		ref._layout.last_pos0 = ref._pos[0]
+		ref._layout.last_pos1 = ref._pos[1]
+		ref._layout.last_size0 = ref._size[0]
+		ref._layout.last_size1 = ref._size[1]
+		ref._layout.parentMaxWidth = parentMaxWidth
+		ref._layout.parentDirection = parentDirection
+		
+		return total;
+	}
 	var CSS_UNDEFINED;
 
 	var CSS_DIRECTION_INHERIT = 'inherit';
@@ -83,67 +209,6 @@ define(function () {
 		return 0;
 	}*/
 
-	function fillNodes(node, nochildren) {
-		var newnode = {children:[], ref:node, layout:{width:undefined, height:undefined, absx:0, absy:0, top:0, left:0, right:0, bottom:0}}
-		node.oldlayout = node.layout
-		var layout = node._layout = newnode.layout
-
-		/*
-		var style = newnode.style
-
-		if(node._pos){
-			if(!isNaN(node._pos[0])) style.left = node._pos[0];
-			if(!isNaN(node._pos[1])) style.top = node._pos[1];
-		}
-		if (node._alignitems) style.alignItems = node._alignitems;
-		if (node._aligncontent) style.alignContent = node._aligncontent;
-		if (node._justifycontent) style.justifyContent = node._justifycontent;
-		if (node._alignself) style.alignSelf = node._alignself;
-		if (node._flexwrap) style.flexWrap = node._flexwrap;
-		if (node.measure) style.measure = node.measure.bind(node);
-		if (node._flexdirection) style.flexDirection = node._flexdirection;
-		
-		if (node._margin[0] == node._margin[1] == node._margin[2] == node._margin[3]) style.margin = node._margin[0];
-		style.marginLeft = node._margin[0];
-		style.marginRight = node._margin[2];
-		style.marginTop = node._margin[1];
-		style.marginBottom = node._margin[3];
-
-		if (node._padding[0] == node._padding[1] == node._padding[2] == node._padding[3]) style.padding = node._padding[0];
-		style.paddingLeft = node._padding[0];
-		style.paddingRight = node._padding[2];
-		style.paddingTop = node._padding[1];
-		style.paddingBottom = node._padding[3];
-
-		if (node._size){
-			if (!isNaN(node._size[0]))	style.width = node._size[0];
-			if (!isNaN(node._size[1]))	style.height = node._size[1];
-		}
-		if (node._position) style.position = node._position;
-		if (node._flex) style.flex = node._flex;
-		*/
-		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
-			var child = node.children[i]
-			if(child._viewport){ // its using a different layout pass
-				// if we are flex, we have to compute the layout of this child
-				if(!isNaN(child._flex)){
-					newnode.children.push(fillNodes(child, true))
-				}
-				else{
-					// otherwise this child has an already computed layout
-					newnode.children.push({
-						flex:undefined,
-						ref:child,
-						layout:child.layout,
-						children:[]
-					})
-				}
-			}
-			else newnode.children.push( fillNodes(child) )
-		}
-
-		return newnode
-	}
 
 	function extractNodes(node) {
 		var layout = node.layout;
@@ -1192,38 +1257,6 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 	}
 	
 	
-	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
-		
-		var total = 1;
-		
-		//layoutNodeImpl(node, parentMaxWidth, parentDirection);
-		//return;
-		//var direction = node.style.direction;
-		var layout = node.layout;
-
-		//node.layout.should_update = true;
-	
-
-		//layout.last_requested_width = node.style.width;
-		//layout.last_requested_height = node.style.height;
-		//layout.last_parent_max_width = parentMaxWidth;
-		//layout.last_direction = direction;
-
-		total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
-		//node.getBoundingRect(true);//boundingRectCache = undefined;
-		
-		//layout.last_width = layout.width;
-		//layout.last_height = layout.height;
-		//layout.last_top = layout.top;
-		//layout.last_left = layout.left;
-		//layout.last_bottom = layout.bottom;
-		//layout.last_right = layout.right;
-		//node.laststyle = node.style;
-		//if(node.ref._listen_postLayout || node.ref.onpostLayout) node.ref.emit('postLayout')
-		//node.boundingRectCache = undefined;
-		
-		return total;
-	}
 
 	return {
 		computeLayout: layoutNode,
