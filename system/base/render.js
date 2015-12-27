@@ -120,10 +120,12 @@ define.class(function(exports){
 			if(old_children){
 				old_child = old_children[i]
 			}
+			var childreuse = false
+			if(new_child.parent) childreuse = true
+
 			new_child.parent = new_version
 			new_child.parent_viewport = new_version.parent_viewport
-
-			new_child =  new_children[i] = render(new_child, old_child, globals, state)
+			new_child =  new_children[i] = render(new_child, old_child, globals, state, childreuse)
 	
 			// set the childs name
 			var name = new_child.name || new_child.constructor.name

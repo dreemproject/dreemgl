@@ -356,6 +356,7 @@ define.class('$system/base/node', function(require){
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
+		this.was_initialized = true
 		this.modelmatrix = mat4()
 		if(this._viewport) this.totalmatrix = mat4.identity()
 		else this.totalmatrix = mat4()
@@ -706,7 +707,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	// called by doLayout, to update the matrices to layout and parent matrix
-	this.updateMatrices = function(parentmatrix, parentviewport, depth, parent_changed){
+	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed){
 		var matrix_changed = parent_changed
 		if (parentviewport == '3d'){// && !this._mode ){	
 			matrix_changed = true
@@ -724,6 +725,7 @@ define.class('$system/base/node', function(require){
 				if(!ml || ml.left != layout.left || ml.top !== layout.top || 
 					ml.width !== layout.width || ml.height !== layout.height){
 					this.matrix_layout = layout
+					//console.log("UPDATE MATRICES", this.constructor.name)
 					matrix_changed = true
 					var s = this._scale
 					var r = this._rotate
@@ -766,7 +768,7 @@ define.class('$system/base/node', function(require){
 		if(children) for(var i = 0; i < children.length; i++){
 			var child = children[i]
 			if(child._viewport) continue // it will get its own pass
-			child.updateMatrices(this.totalmatrix, parentmode, depth, matrix_changed)
+			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed)
 		}
 	}
 
