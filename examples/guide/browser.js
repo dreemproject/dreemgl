@@ -5,8 +5,6 @@ define.class(function($ui$, screen, view, button, label, $$, movie) {
         movies: Config({type:Array})
     };
 
-    this.bgcolor = 'red'
-
     this.renderMovies = function() {
         var mviews = [];
         if (this.movies) {
