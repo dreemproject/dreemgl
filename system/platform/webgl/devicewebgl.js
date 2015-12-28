@@ -17,7 +17,7 @@ define.class(function(require, exports){
 	this.Texture.Image = typeof Image !== 'undefined' && Image
 	this.DrawPass = require('./drawpasswebgl')
 	
-	this.preserveDrawingBuffer = true
+	this.preserveDrawingBuffer = false
 	this.premultipliedAlpha = false
 	this.antialias = false
 	this.debug_pick = false

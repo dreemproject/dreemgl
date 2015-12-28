@@ -510,7 +510,6 @@ define.class(function(require, $ui$view) {
 			Render.process(object, undefined, this.globals)
 
 			this.children.push(object)
-			
 			this.modal_stack.push(object)
 			this.modal = object
 
