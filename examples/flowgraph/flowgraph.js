@@ -397,7 +397,7 @@ define.class('$ui/view', function(require,
 	
 	this.gridclick = function(p, origin){
 		
-		
+		this.cancelconnection();
 			var cg= this.find("centralconstructiongrid");
 		
 			origin.startselectposition = cg.localMouse();
@@ -490,29 +490,70 @@ define.class('$ui/view', function(require,
 		
 	}
 	this.makenewconnection = function(){
-		this.newconnectionsourceblock = undefined;
-		this.newconnectiontargetblock = undefined;
-		this.newconnectionsourceoutput = undefined;
-		this.newconnectiontargetinput = undefined;
-//		openconnector.v
-		var connectingconnection = this.find("openconnector");
-		if (connectingconnection) 
-		{
-			connectingconnection.visible = false;
-			connectingconnection.calculateposition();
-		}
+		
+		// DO CONNECTION HERE!
+		console.log("making connection...");
+		this.cancelconnection();
 	}	
 	
+	this.cancelconnection = function(){
+		
+		console.log("cancelling exiting connection setup...");
+
+		this.newconnectionsourceblock = undefined;
+		this.newconnectionsourceoutput = undefined;
+		
+		this.newconnectiontargetblock = undefined;
+		this.newconnectiontargetinput = undefined;				
+		
+		var connectingconnection = this.find("openconnector");
+		if (connectingconnection && connectingconnection.visible) 
+		{
+			this.mousemove = function(){};
+			connectingconnection.from = undefined;
+			connectingconnection.fromoutput  = undefined;
+			connectingconnection.to = undefined;
+			connectingconnection.toinput = undefined;
+			connectingconnection.visible = false;
+			connectingconnection.calculateposition();
+			connectingconnection.redraw();
+		}
+	}
+	
 	this.setupconnectionmousemove = function(){
+		console.log("setting up new connection drag...");
+
 		var connectingconnection = this.find("openconnector");
 		if (connectingconnection)
 		{
 			connectingconnection.visible = true;
 			connectingconnection.from = this.newconnectionsourceblock;
+			connectingconnection.fromoutput = this.newconnectionsourceoutput;
 			connectingconnection.to = this.newconnectiontargetblock;
+			connectingconnection.toinput = this.newconnectiontargetinput;
+			
+			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length>0){
+				console.log("setting to??", connectingconnection.to);
+				var b = this.find(connectingconnection.to);
+				if (b){
+					var ball = b.findChild(connectingconnection.toinput);				
+					connectingconnection.bgcolor = ball.bgcolor;
+				}
+			}
+			else{
+				if(connectingconnection.from && connectingconnection.from !== "undefined"&& connectingconnection.from.length>0){
+					console.log(connectingconnection.from);
+					var b = this.find(connectingconnection.from);
+					if(b){
+						var ball = b.findChild(connectingconnection.fromoutput);				
+						connectingconnection.bgcolor = ball.bgcolor;
+					}
+				}				
+			}
 			connectingconnection.calculateposition();
 			this.mousemove = function(){
 				connectingconnection.calculateposition();	
+				connectingconnection.redraw();
 			}
 		}
 	}
@@ -520,7 +561,7 @@ define.class('$ui/view', function(require,
 	this.setconnectionstartpoint = function(sourceblockname, outputname){		
 		this.newconnectionsourceblock = sourceblockname;
 		this.newconnectionsourceoutput = outputname;
-		if (this.newconnectiontargetblock){
+		if (this.newconnectiontargetblock && this.newconnectiontargetblock !== "undefined" ){
 			this.makenewconnection();
 		}
 		else{
@@ -531,7 +572,7 @@ define.class('$ui/view', function(require,
 	this.setconnectionendpoint = function(targetblockname, inputname){		
 		this.newconnectiontargetblock = targetblockname;
 		this.newconnectiontargetinput = inputname;
-		if (this.newconnectionsourceblock){
+		if (this.newconnectionsourceblock && this.newconnectionsourceblock !== "undefined" ){
 			this.makenewconnection();
 		}
 		else{

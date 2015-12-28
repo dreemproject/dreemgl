@@ -8,6 +8,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.attributes = {
 		from: Config({type:String, value:""}),
 		to: Config({type:String, value:""}),
+		fromoutput: Config({type:String, value:""}),
+		toinput: Config({type:String, value:""}),
 		linewidth: Config({type:float, value:3, duration:0.5, motion:"bounce"}),
 		focussedcolor: Config({type:vec4, value:vec4("#d0d0d0"), meta:"color" }),
 		hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
@@ -195,7 +197,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	
 		if (F){
-			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+20)
+			var out = F.findChild(this._fromoutput);
+			var yoff = 0;
+			if (out) {
+				yoff += out.layout.top;
+				yoff += out.parent.layout.top;
+				yoff += out.parent.parent.layout.top + 10;
+			}
+			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+yoff)
 		}
 		else{
 			//console.log(" no F:", this._from);
@@ -204,7 +213,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 		
 		if (T){
-			this.topos = vec2(T._pos[0],T._pos[1]+20)
+			var inp = T.findChild(this._toinput);
+			var yoff = 0;
+			if (inp) {
+				yoff += inp.layout.top;
+				yoff += inp.parent.layout.top;
+				yoff += inp.parent.parent.layout.top + 10;
+			}
+			
+			this.topos = vec2(T._pos[0],T._pos[1]+yoff)
 		}
 		else{
 		//	console.log(" no T", this._to);
