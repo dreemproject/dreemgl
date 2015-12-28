@@ -266,6 +266,43 @@ define.class(function(require, baseclass){
 		}
 	}
 
+	this.drawBlend = function(draw){
+		if(!draw.drawpass.color_buffer){
+			console.error("Null color_buffer detected")
+		}
+		else {
+			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
+			// lets render the view as a layer
+			var blendshader = draw.viewportblendshader
+			if (this.view._viewport === '3d'){
+				blendshader.depth_test = 'src_depth <= dst_depth'
+			}
+			else{
+				blendshader.depth_test = ''
+			}
+			blendshader.texture = draw.drawpass.color_buffer
+			blendshader.width = draw._layout.width
+			blendshader.height = draw._layout.height
+			blendshader.drawArrays(this.device)
+		}				
+	}
+
+	this.drawNormal = function(draw, matrices){
+		draw.updateShaders()
+		// alright lets iterate the shaders and call em
+		var shaders = draw.shader_draw_list
+		for(var j = 0; j < shaders.length; j++){
+			// lets draw em
+			var shader = shaders[j]
+			if(shader.pick_only || !shader.visible) continue // was pick only
+			// we have to set our guid.
+			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
+			else draw.viewmatrix = matrices.viewmatrix
+
+			shader.drawArrays(this.device)
+		}
+	}
+
 	this.drawColor = function(isroot, time){
 
 		var view = this.view
@@ -312,39 +349,10 @@ define.class(function(require, baseclass){
 
 				if(draw.atDraw) draw.atDraw(this)
 				if(draw._viewport && draw.drawpass !== this){
-					if(!draw.drawpass.color_buffer){
-						console.error("Null color_buffer detected")
-					}
-					else {
-						// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
-						// lets render the view as a layer
-						var blendshader = draw.viewportblendshader
-						if (view._viewport === '3d'){
-							blendshader.depth_test = 'src_depth <= dst_depth'
-						}
-						else{
-							blendshader.depth_test = ''
-						}
-						blendshader.texture = draw.drawpass.color_buffer
-						blendshader.width = draw._layout.width
-						blendshader.height = draw._layout.height
-						blendshader.drawArrays(device)
-					}		
+					this.drawBlend(draw)
 				}
 				else{
-					draw.updateShaders()
-					// alright lets iterate the shaders and call em
-					var shaders = draw.shader_draw_list
-					for(var j = 0; j < shaders.length; j++){
-						// lets draw em
-						var shader = shaders[j]
-						if(shader.pick_only || !shader.visible) continue // was pick only
-						// we have to set our guid.
-						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
-						else draw.viewmatrix = matrices.viewmatrix
-
-						shader.drawArrays(device)
-					}
+					this.drawNormal(draw, matrices)
 				}
 
 				if(draw.debug_view){

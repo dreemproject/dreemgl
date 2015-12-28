@@ -243,7 +243,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
-	this.boundscheck = false
+	this.boundscheck = true
 	// the local matrix	
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
