@@ -332,6 +332,7 @@ define.class(function(require, baseclass){
 		gl.disable(gl.SCISSOR_TEST)
 
 		if(isroot){
+			/*
 			if(clipview){
 				var ratio = this.device.frame.ratio
 				var xs = this.device.frame.size[0] / ratio
@@ -343,6 +344,7 @@ define.class(function(require, baseclass){
 				gl.enable(gl.SCISSOR_TEST)
 				gl.scissor((x1)*ratio, (ys - y2 - y1)*ratio, x2 * ratio, (y2)*ratio)//x1*2, y1*2, x2*2, y2*2)
 			}
+			*/
 		}
 
 		device.clear(view._clearcolor)
