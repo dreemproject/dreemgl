@@ -1256,8 +1256,6 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 		}
 	}
 	
-	
-
 	return {
 		computeLayout: layoutNode,
 		fillNodes: fillNodes,

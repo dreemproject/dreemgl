@@ -243,7 +243,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
-	this.boundscheck = true
+	this.boundscheck = false
 	// the local matrix	
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
@@ -872,7 +872,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	// things that trigger a relayout
-	this.pos =
+	this.pos = 
 	this.corner =
 	this.size =
 	this.minsize =
