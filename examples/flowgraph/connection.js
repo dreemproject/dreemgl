@@ -190,12 +190,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.bg = this.connectionshader;
 		this.calculateposition = function(){
 			
-			var F = this.find(this.from);
-			var T = this.find(this.to);
+			var F = this.find(this._from);
+			var T = this.find(this._to);
 			if (F && T){
 
-				this.frompos = vec2(F.pos[0]+ F.layout.width-3,F.pos[1]+20);
-				this.topos = vec2(T.pos[0],T.pos[1]+20);
+				this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+20);
+				this.topos = vec2(T._pos[0],T._pos[1]+20);
 			}
 			var H = this.find("handle");
 			if (H){

@@ -243,7 +243,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
-
+	this.boundscheck = false
 	// the local matrix	
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
@@ -718,7 +718,7 @@ define.class('$system/base/node', function(require){
 		//	console.log("2d" ,this.constructor.name, this.translate, );
 			
 			// compute TSRT matrix
-			var layout = this.layout
+			var layout = this._layout
 			if(layout){
 				//console.log(this.matrix_dirty)
 				var ml = this.matrix_layout
@@ -915,12 +915,12 @@ define.class('$system/base/node', function(require){
 			this._layout = layout
 	
 			// this also computes the inner bounding box
-			this.layout.absx = 0
-			this.layout.absy = 0
-			this.layout.boundw = 0
-			this.layout.boundh = 0
+			layout.absx = 0
+			layout.absy = 0
+			layout.boundw = 0
+			layout.boundh = 0
 
-			emitPostLayoutAndComputeBounds(copynodes, this.layout)
+			emitPostLayoutAndComputeBounds(copynodes, layout)
 
 			this.updateScrollbars()
 		}

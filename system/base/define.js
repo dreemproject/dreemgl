@@ -1461,7 +1461,13 @@
 					MyStruct.fromString.apply(out, arguments)
 					return out
 				}
-				define.arraySplat(out, 0, arguments, 0, 0)
+				
+				var outoff = 0
+				for(var i = 0; i < len; i++){
+					var item = arguments[i]
+					if(typeof item == 'number') out[outoff++] = item
+					else outoff = define.arraySplat(out, outoff, item, 0, 1)
+				}
 				return out
 			}
 			if(define.debug && id){ // give the thing a name we can read
@@ -1639,7 +1645,8 @@
 		return Struct
 	}
 
-	define.arraySplat = function(out, outoff, inp, inpoff, depth){
+	define.arraySplat = function(out, ioutoff, inp, inpoff, depth){
+		var outoff = ioutoff
 		for(var i = inpoff, len = inp.length; i < len; i++){
 			var item = inp[i]
 			if(typeof item == 'number') out[outoff++] = item

@@ -342,8 +342,9 @@ define.class('$system/base/shader', function(require, exports){
 				var name = ''
 				for(var i = 0; i < split.length; i++){
 					if(i) name += '.'
-					if(isattr && i === split.length - 1) name += '_'
-					name += split[i]
+					var part = split[i]
+					if(part === 'layout' || isattr && i === split.length - 1) name += '_'
+					name += part
 				}
 				out += '\t\tuni = root.' + name + '\n'
 			}

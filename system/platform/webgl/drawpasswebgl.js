@@ -96,7 +96,7 @@ define.class(function(require, baseclass){
 	this.calculateDrawMatrices = function(isroot, storage, mousex, mousey){
 		var view = this.view
 		var scroll = view._scroll
-		var layout = view.layout
+		var layout = view._layout
 
 		if(view._viewport === '2d'){
 			if(isroot && mousex !== undefined){
@@ -128,7 +128,7 @@ define.class(function(require, baseclass){
 
 		var height = view._layout.height
 		var width = view._layout.width
-		var drawlayout = draw.layout
+		var drawlayout = draw._layout
 
 		if(draw.parent && draw.parent !== view){
 			drawlayout.absx = draw.parent.layout.absx + drawlayout.left
@@ -157,10 +157,24 @@ define.class(function(require, baseclass){
 		return true
 	}
 
+	this.nextItem = function(draw){
+		var view = this.view
+		var next = (draw === view || (!draw._viewport && draw._visible))  && draw.children[0], next_index = 0
+		while(!next){ // skip to parent next
+			if(draw === view) break
+			next_index = draw.draw_index + 1
+			draw = draw.parent
+			next = draw.children[next_index]
+		}
+		if(next === view) return undefined
+		if(next) next.draw_index = next_index		
+		return next
+	}
+	
 	this.drawPick = function(isroot, passid, mousex, mousey, debug){
 		var view = this.view
 		var device = this.device
-		var layout = view.layout
+		var layout = view._layout
 
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 
@@ -189,7 +203,7 @@ define.class(function(require, baseclass){
 		var draw = view
 		while(draw){
 			pick_id++
-			if(!draw.visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_pick = 1
@@ -235,17 +249,7 @@ define.class(function(require, baseclass){
 					}
 				}
 			}
-
-			var next = (draw === view || (!draw._viewport && draw.visible)) && draw.children[0], next_index = 0
-			while(!next){ // skip to parent next
-				if(draw === view) break
-				next_index = draw.draw_index + 1
-				draw = draw.parent
-				next = draw.children[next_index]
-			}
-			draw = next
-			if(draw === view) break
-			if(draw) draw.draw_index = next_index
+			draw = this.nextItem(draw)
 		}
 	}
 
@@ -258,25 +262,15 @@ define.class(function(require, baseclass){
 
 			if(id === pick_id) return draw
 
-			var next = (draw === view || (!draw._viewport && draw.visible)) && draw.children[0], next_index = 0
-
-			while(!next){ // skip to parent next
-				if(draw === view) break
-				next_index = draw.draw_index + 1
-				draw = draw.parent
-				next = draw.children[next_index]
-			}
-			draw = next
-			if(draw === view) break
-			if(draw) draw.draw_index = next_index
+			draw = this.nextItem(draw)
 		}
 	}
 
-	
 	this.drawColor = function(isroot, time){
+
 		var view = this.view
 		var device = this.device
-		var layout = view.layout
+		var layout = view._layout
 
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 	
@@ -290,7 +284,7 @@ define.class(function(require, baseclass){
 
 		this.device.bindFramebuffer(this.color_buffer || null)
 
-		if(layout.width === 0 || layout.height === 0) return
+		if(layout.width === 0 || layout.height === 0) return false
 	
 		device.clear(view._clearcolor)
 		
@@ -305,7 +299,7 @@ define.class(function(require, baseclass){
 			//}
 			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			//	var draw = dl[i]
-			if(!draw.visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_color = 1
@@ -317,7 +311,7 @@ define.class(function(require, baseclass){
 				draw.viewmatrix = matrices.viewmatrix
 
 				if(draw.atDraw) draw.atDraw(this)
-				if(draw._viewport && draw.drawpass !== this ){
+				if(draw._viewport && draw.drawpass !== this){
 					if(!draw.drawpass.color_buffer){
 						console.error("Null color_buffer detected")
 					}
@@ -332,10 +326,10 @@ define.class(function(require, baseclass){
 							blendshader.depth_test = ''
 						}
 						blendshader.texture = draw.drawpass.color_buffer
-						blendshader.width = draw.layout.width
-						blendshader.height = draw.layout.height
-						blendshader.drawArrays(this.device)
-					}
+						blendshader.width = draw._layout.width
+						blendshader.height = draw._layout.height
+						blendshader.drawArrays(device)
+					}		
 				}
 				else{
 					draw.updateShaders()
@@ -349,7 +343,7 @@ define.class(function(require, baseclass){
 						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 						else draw.viewmatrix = matrices.viewmatrix
 
-						shader.drawArrays(this.device)
+						shader.drawArrays(device)
 					}
 				}
 
@@ -358,17 +352,7 @@ define.class(function(require, baseclass){
 					this.debugrect.drawArrays(this.device)
 				}
 			}
-
-			var next = (draw === view || (!draw._viewport && draw.visible))  && draw.children[0], next_index = 0
-			while(!next){ // skip to parent next
-				if(draw === view) break
-				next_index = draw.draw_index + 1
-				draw = draw.parent
-				next = draw.children[next_index]
-			}
-			draw = next
-			if(draw === view) break
-			if(draw) draw.draw_index = next_index
+			draw = this.nextItem(draw)
 		}
 
 		return hastime
