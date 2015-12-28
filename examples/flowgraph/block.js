@@ -176,7 +176,54 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			ab.y = this._layout.height + 2;
 		}
 	}
+	
+	define.class(this, "inputbutton", function($ui$, view, label){
+		this.bg = false;
+		this.attributes = {
+			name:"thing",
+			fontsize: 12
+		}
+		
+		this.clicked = function(){
+			console.log("clicked");
+			var	bl = this.parent;
+			var	fg = this.find("flowgraph");
+			fg.setconnectionendpoint(bl.name, this.name);
+		
+		}	
 
+		this.render =function(){
+			return [
+				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
+				label({text:this.name, bg:false, alignself:"center", fontsize:this.fontsize})
+			]
+		}
+	})
+	
+	define.class(this, "outputbutton", function($ui$, view, label){
+		this.bg = false;
+		this.attributes = {
+			name:"thing",
+			fontsize: 12
+		}
+		
+		this.clicked = function(){
+					
+			var	bl = this.parent;
+			var	fg = this.find("flowgraph");
+
+			fg.setconnectionendpoint(bl.name, this.name);			
+		}
+		
+		this.render =function(){
+			return [
+				label({text:this.name, bg:false, alignself:"center", fontsize:this.fontsize}),
+				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})
+				
+			]
+		}
+	})
+	
 	this.render = function(){
 		
 		
@@ -185,14 +232,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			,view({bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1})
 			,view({bg:false, width:140, flex: 1, justifycontent:"space-between"}
 			,view({bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"}
-			,ballbutton({bgcolor:"#ff00ff"})
-			,ballbutton()
-			,ballbutton({bgcolor:"#ffff00"})
+			,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
+			,this.inputbutton({name:"input 2", bgcolor:"#800000"})
+			,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
 			)
 			,view({bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"}
-			,ballbutton()
+			,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
 		
-			,ballbutton({bgcolor:"#ff8000"})
+			,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
 			)
 			)
 			,view({name:"addbuttons",flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}

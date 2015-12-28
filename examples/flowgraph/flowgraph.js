@@ -490,6 +490,16 @@ define.class('$ui/view', function(require,
 		
 	}
 	
+	
+	
+	this.setconnectionstartpoint = function(sourceblockname, outputname){
+	
+	}
+	
+	this.setconnectionendpoint = function(targetblockname, inputname){
+			
+	}
+	
 	this.startdragselect = function(){
 		this.dragselectset = [];
 		if (!this.screen.keyboard.shift){
