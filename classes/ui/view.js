@@ -548,7 +548,6 @@ define.class('$system/base/node', function(require){
 	this.updateShaders = function(){
 		if(!this.update_dirty) return
 		this.update_dirty = false
-
 		// we can wire up the shader 
 		if(!this._shaderswired){
 			this.atAttributeGet = function(attrname){

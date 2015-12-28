@@ -131,8 +131,8 @@ define.class(function(require, baseclass){
 		var drawlayout = draw._layout
 
 		if(draw.parent && draw.parent !== view){
-			drawlayout.absx = draw.parent.layout.absx + drawlayout.left
-			drawlayout.absy = draw.parent.layout.absy + drawlayout.top
+			drawlayout.absx = draw.parent._layout.absx + drawlayout.left
+			drawlayout.absy = draw.parent._layout.absy + drawlayout.top
 		}
 		else{
 			drawlayout.absx = drawlayout.left
