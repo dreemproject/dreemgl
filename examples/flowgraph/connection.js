@@ -14,7 +14,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		focussedwidth: Config({type:float, value:3}),
 		hoveredwidth: Config({type:float, value:3}),
 		bgcolor: Config({motion:"linear", duration: 0.1}),
-		inselection : Config({type:boolean, value:false})
+		inselection : Config({type:boolean, value:false}),
+		hasball: true
 	
 	}
 
@@ -191,17 +192,34 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.calculateposition = function(){
 		var F = this.find(this._from);
 		var T = this.find(this._to);
-		if (F && T){
+		
+	
+		if (F){
 			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+20)
+		}
+		else{
+			//console.log(" no F:", this._from);
+			//this.frompos = vec2(200,100);
+			this.frompos = this.localMouse();;
+		}
+		
+		if (T){
 			this.topos = vec2(T._pos[0],T._pos[1]+20)
 		}
-		var H = this.find("handle");
+		else{
+		//	console.log(" no T", this._to);
+			this.topos = this.localMouse();;
+		}
+		
+		var H = this.findChild("handle");
+		
 		if (H){
 			H.pos = vec2((this.frompos[0] + this.topos[0])*0.5 - 12,(this.frompos[1] + this.topos[1])*0.5 - 12);
 		}
 	}
 
 	this.render = function(){
-		return [ballbutton({name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#3b3b3b", bordercolor:wire("this.parent.bgcolor")})];
+		if (this.hasball) return [ballbutton({name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#3b3b3b", bordercolor:wire("this.parent.bgcolor")})];
+		return [];
 	}
 })

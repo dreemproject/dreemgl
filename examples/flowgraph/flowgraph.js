@@ -489,15 +489,54 @@ define.class('$ui/view', function(require,
 			}	
 		
 	}
+	this.makenewconnection = function(){
+		this.newconnectionsourceblock = undefined;
+		this.newconnectiontargetblock = undefined;
+		this.newconnectionsourceoutput = undefined;
+		this.newconnectiontargetinput = undefined;
+//		openconnector.v
+		var connectingconnection = this.find("openconnector");
+		if (connectingconnection) 
+		{
+			connectingconnection.visible = false;
+			connectingconnection.calculateposition();
+		}
+	}	
 	
-	
-	
-	this.setconnectionstartpoint = function(sourceblockname, outputname){
-	
+	this.setupconnectionmousemove = function(){
+		var connectingconnection = this.find("openconnector");
+		if (connectingconnection)
+		{
+			connectingconnection.visible = true;
+			connectingconnection.from = this.newconnectionsourceblock;
+			connectingconnection.to = this.newconnectiontargetblock;
+			connectingconnection.calculateposition();
+			this.mousemove = function(){
+				connectingconnection.calculateposition();	
+			}
+		}
 	}
 	
-	this.setconnectionendpoint = function(targetblockname, inputname){
-			
+	this.setconnectionstartpoint = function(sourceblockname, outputname){		
+		this.newconnectionsourceblock = sourceblockname;
+		this.newconnectionsourceoutput = outputname;
+		if (this.newconnectiontargetblock){
+			this.makenewconnection();
+		}
+		else{
+			this.setupconnectionmousemove();
+		}
+	}
+	
+	this.setconnectionendpoint = function(targetblockname, inputname){		
+		this.newconnectiontargetblock = targetblockname;
+		this.newconnectiontargetinput = inputname;
+		if (this.newconnectionsourceblock){
+			this.makenewconnection();
+		}
+		else{
+			this.setupconnectionmousemove();
+		}			
 	}
 	
 	this.startdragselect = function(){
@@ -510,11 +549,11 @@ define.class('$ui/view', function(require,
 			this.originalselection.push(this.currentselection[i]);
 		}
 	}
+	
 	this.renderConnections = function(){
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-		var res = [];
-		
+		var res = [];		
 		return res;
 	}
 	
@@ -555,17 +594,17 @@ define.class('$ui/view', function(require,
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 						)
-						,view({name:"connectionlayer", bg:0, dataset: this.sourceset, arender:function(){
+						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, arender:function(){
 							return this.renderConnections();
 						}.bind(this)}
 							,connection({from:"phone", to:"tv"})
 							,connection({from:"tablet", to:"thing"})
-							,connection({from:"a", to:"b"})
+							,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
 							,connection({from:"b", to:"c"})
 							,connection({from:"c", to:"d"})
 							,connection({from:"a", to:"c"})
 						)
-						
+						,view({bg:false}, connection({name:"openconnector", hasball: false}))
 						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
 							return this.renderBlocks();
 						}.bind(this)}

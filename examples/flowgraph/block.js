@@ -185,8 +185,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 		
 		this.clicked = function(){
-			console.log("clicked");
-			var	bl = this.parent;
+			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
 			fg.setconnectionendpoint(bl.name, this.name);
 		
@@ -207,19 +206,16 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			fontsize: 12
 		}
 		
-		this.clicked = function(){
-					
-			var	bl = this.parent;
+		this.clicked = function(){					
+			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
-
-			fg.setconnectionendpoint(bl.name, this.name);			
+			fg.setconnectionstartpoint(bl.name, this.name);			
 		}
 		
 		this.render =function(){
 			return [
 				label({text:this.name, bg:false, alignself:"center", fontsize:this.fontsize}),
-				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})
-				
+				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}
 	})
