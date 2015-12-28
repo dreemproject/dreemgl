@@ -285,6 +285,16 @@ console.log('animFrame', time);
 			}
 		}
 
+		// do the dirty matrix regen
+		for(var i = 0; i < this.layout_list.length; i++){
+			// lets do a layout?
+			var view = this.layout_list[i]
+			if(view.matrix_dirty){
+				view.updateMatrices(view.parent? view.parent.totalmatrix: undefined, view._viewport)
+			}
+		}
+
+
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
