@@ -170,13 +170,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		
 	this.flexdirection = "column"
+
 	this.layout = function(){
-		
 		var ab = this.findChild("addbuttons");
 		if (ab){
-			ab.y = this.layout.height + 2;
+			ab.y = this._layout.height + 2;
 		}
 	}
+
 	this.render = function(){
 		
 		

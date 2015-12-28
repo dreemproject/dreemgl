@@ -350,6 +350,9 @@ define.class('$system/base/node', function(require){
 	this.layout_dirty = true
 	// update dirty causes a shader update to occur
 	this.update_dirty = true
+	// update matrix stack
+	this.matrix_dirty = true
+
 	// initialization of a view
 	this.init = function(prev){
 
@@ -708,6 +711,7 @@ define.class('$system/base/node', function(require){
 
 	// called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed){
+		if(this.atMatrix) this.atMatrix()
 		var matrix_changed = parent_changed
 		if (parentviewport == '3d'){// && !this._mode ){	
 			matrix_changed = true
@@ -721,21 +725,22 @@ define.class('$system/base/node', function(require){
 			var layout = this._layout
 			if(layout){
 				//console.log(this.matrix_dirty)
-				var ml = this.matrix_layout
-				if(!ml || ml.left != layout.left || ml.top !== layout.top || 
-					ml.width !== layout.width || ml.height !== layout.height){
-					this.matrix_layout = layout
+				//var ml = this.matrix_layout
+				//if(!ml || ml.left != layout.left || ml.top !== layout.top || 
+				//	ml.width !== layout.width || ml.height !== layout.height){
+				//	this.matrix_layout = layout
 					//console.log("UPDATE MATRICES", this.constructor.name)
-					matrix_changed = true
-					var s = this._scale
-					var r = this._rotate
-					var t0 = layout.left, t1 = layout.top, t2 = 0
-					//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
-					//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
-					var hw = layout.width / 2
-					var hh = layout.height / 2
-					mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
-				}
+				matrix_changed = true
+				var s = this._scale
+				var r = this._rotate
+				var t0 = layout.left, t1 = layout.top, t2 = 0
+				//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
+				//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
+				//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
+				var hw = layout.width / 2
+				var hh = layout.height / 2
+				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
+				//}
 			}
 			else {
 				matrix_changed = true
@@ -770,6 +775,8 @@ define.class('$system/base/node', function(require){
 			if(child._viewport) continue // it will get its own pass
 			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed)
 		}
+
+		this.matrix_dirty = false
 	}
 
 	// internal, used to compute bounding rects and emit layout event
@@ -816,6 +823,7 @@ define.class('$system/base/node', function(require){
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
+		ref.matrix_dirty = true
 	}
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
@@ -871,8 +879,26 @@ define.class('$system/base/node', function(require){
 		}*/
 	}
 
+	this.rematrix = function(){
+		this.matrix_dirty = true
+		if(this.parent_viewport){
+			this.parent_viewport.matrix_dirty = true
+			this.redraw()
+		}
+	}
+
 	// things that trigger a relayout
-	this.pos = 
+	this.pos = function(){
+		if(this._position === 'absolute'){
+			this._layout.left = this._pos[0]
+			this._layout.top = this._pos[1]
+			this.rematrix()
+		}
+		else{
+			this.relayout()
+		}
+	}
+
 	this.corner =
 	this.size =
 	this.minsize =
@@ -929,8 +955,6 @@ define.class('$system/base/node', function(require){
 			FlexLayout.computeLayout(copynodes)
 			emitPostLayoutAndComputeBounds(copynodes)
 		}
-
-		this.updateMatrices(this.parent?this.parent.totalmatrix:undefined, this._viewport)
 	}
 
 	this.startAnimation = function(key, value, track, resolve){

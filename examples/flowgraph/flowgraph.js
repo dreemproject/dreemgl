@@ -344,7 +344,8 @@ define.class('$ui/view', function(require,
 	this.updateconnections = function(){
 		var cl = this.find("connectionlayer");
 		for(var a in cl.children){
-			cl.children[a].layout = 1
+			cl.children[a].calculateposition()
+			//cl.children[a].layout = 1
 		}
 	}
 		
@@ -385,8 +386,9 @@ define.class('$ui/view', function(require,
 				
 		}.bind(this))
 	}
-	
-	this.layout = function(){
+
+	// right before the recalculateMatrix call
+	this.atMatrix = function(){
 		this.updateconnections();
 	}	
 	

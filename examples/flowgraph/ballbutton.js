@@ -25,6 +25,7 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 		this.cursor = "pointer" 
 		this.alignitems = "center";
 		this.justifycontent = "center" ;
+
 		this.render =function(){
 			if (this.icon && this.icon.length > 0)
 			return [icon({icon:this.icon, alignself:"center", fgcolor:this.bordercolor })];
