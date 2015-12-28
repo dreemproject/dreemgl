@@ -62,7 +62,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 						bgcolor:"#3b3b3b",
 						borderwidth:0,
 						padding:2,
-						buttoncolor1: "#fb3b3b",
+						buttoncolor1: "#3b3b3b",
 						buttoncolor2: "#3b3b3b",
 						internalmargin: vec4(5,0,5,0),
 						borderradius:  (i == this.values.length -1)?vec4(1,4,4,1):vec4(1),						

@@ -67,13 +67,13 @@ define.class(function(view, label){
 		}
 	}
 
-	var cadgrid = this.constructor
+	var speakergrid = this.constructor
 	
 	// The CADGrid does not do anything to its children - plain passthrough
 	this.render = function(){return this.constructor_children;}
 	
 	// Minimal usage example:
 	this.constructor.examples = {
-		Usage:function(){return cadgrid({width:200,height:200})}
+		Usage:function(){return speakergrid({width:200,height:200})}
 	}
 })
