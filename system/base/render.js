@@ -146,7 +146,7 @@ define.class(function(exports){
 			initializing = false
 
 			// signal to our device we have a newly rendered node
-			if(globals.device && new_version._viewport){
+			if(globals.device){
 				globals.device.atNewlyRendered(new_version)
 			}
 		}

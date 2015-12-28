@@ -158,7 +158,6 @@ define.mixin(function(require){
 
 	this.keypress = function(event){
 		this.undo_group++
-		console.log(event.value);
 		this.cursorset.insert(event.value)
 		this.doCursor()
 		//change = Change.keyPress		
@@ -213,7 +212,6 @@ define.mixin(function(require){
 	}
 
 	this.keydown = function(v){
-		console.log(v);
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
 		var name = 'key' + v.name[0].toUpperCase() + v.name.slice(1)

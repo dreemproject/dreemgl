@@ -678,11 +678,11 @@ define.class(function(require, exports){
 			return
 		}
 		this.shader = this.compileShader(gldevice)
-
 		this.connectWires()
 	}		
 
 	this.atExtend = function(){
+
 		var shader = this
 		if(define.$platform === 'nodejs') return
 		// forward the view reference
@@ -694,7 +694,9 @@ define.class(function(require, exports){
 				var parts = key.split('_DOT_')
 				if(parts.length === 2 && parts[0] === 'view'){
 					if('_' + parts[1] in this.view){
-						this.view.addListener(parts[1], this.view.redraw)
+						this.view.addListener(parts[1], function(){
+							this.redraw()
+						})
 					}
 				}
 			}

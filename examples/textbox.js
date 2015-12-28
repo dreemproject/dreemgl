@@ -17,7 +17,7 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
 						},
 						pos:[0,0],
 						size:[300,300],position:'absolute',text:'I IZ HERE'
-					}, button({text:'test'}))
+					}, button({text:'blurp'}))
 				).then(function(result){
 					console.log(result)
 				})

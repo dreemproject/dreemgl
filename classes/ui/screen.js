@@ -309,6 +309,10 @@ define.class(function(require, $ui$view) {
 			// ok so. lets query the renderer for the view thats under the mouse
 			if(!this.mouse_capture){
 				this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
+					if(!this.inModalChain(view)){
+						this.mouse_view = view
+						return
+					}
 					// lets find the mouseover or mousemove view
 					var mo_view = view && view.findEmitUpward('mouseover')
 					this.mouse_view = view
@@ -487,7 +491,6 @@ define.class(function(require, $ui$view) {
 		if(!this.modal_stack.length) return true
 
 		var last = this.modal_stack[this.modal_stack.length - 1]
-
 		// lets check if any parent of node hits last
 		var obj = view
 		while(obj){
@@ -510,6 +513,7 @@ define.class(function(require, $ui$view) {
 		return new Promise(function(resolve, reject){
 
 			object.parent = this
+			object.parent_viewport = this
 
 			Render.process(object, undefined, this.globals)
 

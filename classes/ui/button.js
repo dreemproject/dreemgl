@@ -60,11 +60,10 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	
 	this.bold = function(){
 		if (this.bold) {
-			this.font =require('$resources/fonts/opensans_bold_ascii.glf')
+			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
 		}
 		else{
-			this.font =require('$resources/fonts/opensans_regular_ascii.glf')
-			
+			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 		}
 	}
 
@@ -121,7 +120,9 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.statenormal(true)
 	}
 
-	this.mouseover = function(){this.statehover()}
+	this.mouseover = function(){
+		this.statehover()
+	}
 	this.mouseout = function(){this.statenormal()}
 	this.mouseleftdown = function(){this.stateclick()}
 	this.mouseleftup = function(event){
