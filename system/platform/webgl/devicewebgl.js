@@ -288,7 +288,7 @@ define.class(function(require, exports){
 			}
 		}
 
-
+		var clipview = undefined
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
@@ -300,7 +300,12 @@ define.class(function(require, exports){
 			}
 
 			if(view.draw_dirty & 1 || last){
-				var hastime = view.drawpass.drawColor(last, stime)
+			
+				if(!last){
+					if(clipview === undefined) clipview = view
+					else clipview = null
+				}
+				var hastime = view.drawpass.drawColor(last, stime, clipview)
 				view.draw_dirty &= 2
 				if(hastime){
 					anim_redraw.push(view)

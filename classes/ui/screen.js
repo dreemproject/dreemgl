@@ -501,7 +501,6 @@ define.class(function(require, $ui$view) {
 			return this.modal.resolve(value)
 	}
 	
-
 	// open a modal window from object like so: this.openModal( view({size:[100,100]}))
 	this.openModal = function(object){
 		return new Promise(function(resolve, reject){
@@ -536,6 +535,7 @@ define.class(function(require, $ui$view) {
 				this.resolve(value, true)
 			}
 
+			this.redraw()
 		}.bind(this))
 	}
 

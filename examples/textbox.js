@@ -7,7 +7,7 @@ define.class('$server/composition',function($ui$, screen, view, textbox, label){
 			label({fgcolor:'red', mouseleftdown:function(){
 				// lets open a modal dialog
 				this.screen.openModal(
-					label({text:'hello'})
+					label({size:[300,300],text:'hello'})
 				).then(function(result){
 					console.log(result)
 				})
