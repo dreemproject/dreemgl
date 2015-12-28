@@ -335,16 +335,16 @@ define.class(function(require, $ui$view) {
 				this.mouse_capture = this.mouse_view
 			} 
 			// lets give this thing focus
-			if (this.mouse_view){
+			//if (this.mouse_view){
 				if(this.inModalChain(this.mouse_view)){
 					this.setFocus(this.mouse_view)
 					this.mouse_view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 				else if(this.modal){
 					this.modal_miss = true
-					this.modal.emitUpward('miss', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+					this.modal.emitUpward('miss', {global:this.globalMouse(this)})
 				}
-			} 
+			//} 
 		}.bind(this)
 
 		this.mouse.leftup = function(){
@@ -485,11 +485,15 @@ define.class(function(require, $ui$view) {
 	this.inModalChain = function(view){
 		if(!view) return false
 		if(!this.modal_stack.length) return true
+
 		var last = this.modal_stack[this.modal_stack.length - 1]
+
 		// lets check if any parent of node hits last
 		var obj = view
 		while(obj){
-			if(obj === last) return true
+			if(obj === last){
+				return true
+			}
 			obj = obj.parent
 		}
 		return false
@@ -513,28 +517,24 @@ define.class(function(require, $ui$view) {
 			this.modal_stack.push(object)
 			this.modal = object
 
-			object.resolve = function(value, rej){
+			object.resolve = function(value){
+
 				// lets close the modal window
 				var id = this.screen.children.indexOf(this)
 				this.screen.children.splice(id, 1)
-
-				if(rej) reject(value)
-				else resolve(value)
 
 				var modal_stack = this.screen.modal_stack
 				modal_stack.pop()
 				this.screen.modal = modal_stack[modal_stack.length - 1]
 				
-				this.setDirty()
 				this.emitRecursive("destroy")
-				this.screen.setDirty(true)
-			}
 
-			object.reject = function(value){
-				this.resolve(value, true)
+				this.screen.redraw()
+	
+				resolve(value)
 			}
-
-			this.redraw()
+			// lets cause a relayout
+			this.relayout()
 		}.bind(this))
 	}
 

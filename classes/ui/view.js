@@ -223,6 +223,8 @@ define.class('$system/base/node', function(require){
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
 		// wether this view has focus
+		miss: Config({type:Event}),
+
 		focus: false,
 		// tabstop, sorted by number
 		tabstop: NaN,
@@ -714,10 +716,8 @@ define.class('$system/base/node', function(require){
 		if (parentviewport == '3d'){// && !this._mode ){	
 			matrix_changed = true
 			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
-			//mat4.debug(this.modelmatrix);
 		}
 		else {
-		//	console.log("2d" ,this.constructor.name, this.translate, );
 			
 			// compute TSRT matrix
 			var layout = this._layout

@@ -67,7 +67,11 @@ define.class(function( $ui$, view, label, icon, $$, require){
 			
 		}
 	}
-								
+
+	this.bgcolorfn = function(pos){
+		return mix(col1, col2, pos.y/0.8)
+	}
+
 	this.bgcolor = '#272727'
 	this.fgcolor = 'white'
 	this.buttonres = {};
@@ -78,9 +82,6 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	this.bordercolor = vec4("#272727")
 	this.alignitems = "flex-start"
 	this.justifycontent ="flex-start" 
-	this.bgcolorfn = function(pos){
-		return mix(col1, col2, pos.y/0.8)
-	}
 
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
 	define.class(this, 'iconclass', function(icon){
@@ -109,6 +110,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 
 	// clicked state
 	this.stateclick = function(){
+
 		//this.animate({col1:{0:vec4('red'),3:vec4('green')}})
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2

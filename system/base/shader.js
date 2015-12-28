@@ -702,7 +702,6 @@ define.class(function(require, exports){
 			var name = shader.constructor.name
 			function recompile_shader(){
 				this[name] = {dirty:true}
-				//!TODO also do the assigns
 			}
 			recompile_shader.shader = name
 
