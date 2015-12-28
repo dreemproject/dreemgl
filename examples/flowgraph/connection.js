@@ -197,7 +197,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+20);
 				this.topos = vec2(T._pos[0],T._pos[1]+20);
 			}
-			var H = this.find("handle");
+			var H = this.findChild("handle");
 			if (H){
 				H.pos = vec2((this.frompos[0] + this.topos[0])*0.5 - 12,(this.frompos[1] + this.topos[1])*0.5 - 12);
 				
