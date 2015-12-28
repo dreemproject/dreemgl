@@ -173,8 +173,7 @@ define.class('$system/base/node', function(require){
 		// need to be processed and a single texture can just be drawn by the parent
 		// the viewportblend shader can be used to render this texture it into its parent
 		viewport: Config({group:"layout", type:Enum('','2d','3d'), value:''}),
-	
-
+		
 		// the field of view of a 3D viewport. Only useful on a viewport:'3D'
 		fov: Config({group:"3d", type:float, value: 45}),
 		// the nearplane of a 3D viewport, controls at which Z value near clipping start. Only useful on a viewport:'3D'
@@ -239,11 +238,10 @@ define.class('$system/base/node', function(require){
 			'vertical-text','context-menu','no-drop','not-allowed',
 			'alias','cell','copy'
 		), value:''}),
-
 	}
 
 	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
-	this.boundscheck = false
+	this.boundscheck = true
 	// the local matrix	
 	this.modelmatrix = mat4.identity()
 	// the concatenation of all parent model matrices
@@ -676,8 +674,7 @@ define.class('$system/base/node', function(require){
 		if(this.vscrollbar){
 			var scroll = this.vscrollbar
 			var totalsize = Math.floor(this.layout.boundh), viewsize = Math.floor(this.layout.height * this.zoom)
-
-			if(totalsize > viewsize){
+			if(totalsize > viewsize+1){
 				scroll._visible = true
 				scroll._total = totalsize
 				scroll._page = viewsize
@@ -694,7 +691,7 @@ define.class('$system/base/node', function(require){
 		if(this.hscrollbar){
 			var scroll = this.hscrollbar
 			var totalsize = Math.floor(this.layout.boundw), viewsize = Math.floor(this.layout.width* this.zoom)
-			if(totalsize > viewsize){
+			if(totalsize > viewsize + 1){
 				scroll._visible = true
 				scroll._total = totalsize
 				scroll._page = viewsize
@@ -710,7 +707,9 @@ define.class('$system/base/node', function(require){
 
 	// called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed){
+		// allow pre-matrix gen hooking
 		if(this.atMatrix) this.atMatrix()
+
 		var matrix_changed = parent_changed
 		if (parentviewport == '3d'){// && !this._mode ){	
 			matrix_changed = true
@@ -724,22 +723,27 @@ define.class('$system/base/node', function(require){
 			var layout = this._layout
 			if(layout){
 				//console.log(this.matrix_dirty)
-				//var ml = this.matrix_layout
-				//if(!ml || ml.left != layout.left || ml.top !== layout.top || 
-				//	ml.width !== layout.width || ml.height !== layout.height){
-				//	this.matrix_layout = layout
-					//console.log("UPDATE MATRICES", this.constructor.name)
-				matrix_changed = true
-				var s = this._scale
-				var r = this._rotate
-				var t0 = layout.left, t1 = layout.top, t2 = 0
-				//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
-				//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
-				//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
-				var hw = layout.width / 2
-				var hh = layout.height / 2
-				mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
-				//}
+				var ml = this.matrix_layout
+				if(!ml || ml.left != layout.left || ml.top !== layout.top || 
+					ml.width !== layout.width || ml.height !== layout.height){
+					this.matrix_layout = {
+						left:layout.left,
+						top:layout.top,
+						width:layout.width,
+						height:layout.height
+					}
+
+					matrix_changed = true
+					var s = this._scale
+					var r = this._rotate
+					var t0 = layout.left, t1 = layout.top, t2 = 0
+					//if(this.name === 'handle') console.log(this.constructor.name, layout.top)
+					//var hw = (  this.layout.width !== undefined ? this.layout.width: this._size[0] ) / 2
+					//var hh = ( this.layout.height !== undefined ? this.layout.height: this._size[1]) / 2
+					var hw = layout.width / 2
+					var hh = layout.height / 2
+					mat4.TSRT(-hw, -hh, 0, s[0], s[1], s[2], r[0], r[1], r[2], t0 + hw * s[0], t1 + hh * s[1], t2, this.modelmatrix);
+				}
 			}
 			else {
 				matrix_changed = true
@@ -799,9 +803,6 @@ define.class('$system/base/node', function(require){
 			if(height > boundsobj.boundh) boundsobj.boundh = height
 		}
 		
-		// TODO FIX THIS
-		//if(!ref.layout_dirty) return
-
 		if(!nochild){
 			var children = node.children
 			for(var i = 0; i < children.length; i++){
@@ -851,31 +852,6 @@ define.class('$system/base/node', function(require){
 		this.layout_dirty = true
 		this.redraw()
 		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
-		// omhoog tot viewport layout_dirty = true
-		//var node = this
-		//while(node !== this.parent_viewport){
-		//	node.layout_dirty = true
-		//}
-		/*
-		if(this.screen){
-			this.screen.redraw()
-			this.screen.relayoutRecur()
-		}
-		return
-		var parent = this.parent_viewport
-		// ok we haz parent viewport, they we have to check if we are _overflow is something
-		while(parent){
-			parent.redraw()
-			parent.layout_dirty = true
-
-			if(parent === parent.parent_viewport){
-				parent = parent.parent && parent.parent.parent_viewport
-			}
-			else{
-				parent = parent.parent_viewport
-				if(parent._overflow) break
-			}
-		}*/
 	}
 
 	this.rematrix = function(){
@@ -886,7 +862,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// things that trigger a relayout
+	// moving a position in absolute should only trigger a matrix reload
 	this.pos = function(){
 		if(this._position === 'absolute'){
 			this._layout.left = this._pos[0]

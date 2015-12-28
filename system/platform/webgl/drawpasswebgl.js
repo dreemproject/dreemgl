@@ -125,7 +125,7 @@ define.class(function(require, baseclass){
 	}
 
 	function isInBounds2D(view, draw){
-
+		if(draw.noboundscheck) return true
 		var height = view._layout.height
 		var width = view._layout.width
 		var drawlayout = draw._layout

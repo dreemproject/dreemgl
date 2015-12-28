@@ -61,7 +61,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.move = function(x,y) {
 		var nx = this.pos[0] + x;
 		var ny = this.pos[1] + y;
-		console.log(nx,ny);
 		if (nx<0) nx = 0;
 		if (ny<0) ny = 0;
 		this.pos = vec2(Math.round(nx),Math.round(ny));
@@ -103,8 +102,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	this.setupMove = function(){
 		this.startx = this.pos[0];
-		this.starty = this.pos[1];
-		
+		this.starty = this.pos[1];	
 	}
 	
 	this.updateMove = function(dx, dy, snap){
@@ -114,6 +112,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	this.mouseleftdown = function(p){
+		this.moveToFront()
 		var props = this.find("mainproperties");
 		if (props) props.target = this.name;
 		
