@@ -18,16 +18,9 @@ define.class('$ui/view', function(require,
 		sourceset: {}
 	}
 	
-	
 	this.style = {
-		"*": {fontsize:12},
-		"ablock":{style:{"*":{fontsize:12}
-				//inputbutton:{fontsize:20}
-				//,outputbutton:{fontsize:10}
-			}}
+		
 	}
-	
-
 	
 	
 	define.class(this, "selectorrect", view, function(){
