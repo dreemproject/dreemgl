@@ -40,6 +40,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	}
 
 	this.updatecontrol = function(name, val){
+		console.log(name)
 		var c = this.find(name);
 		if (c){
 			c.currentcolor = this.value;
@@ -300,6 +301,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 
 	
 	define.class(this, 'colorcirclecontrol', function($ui$view){
+		this.name = 'colorcirclecontrol'
 		this.width = 200;
 		this.height = 200;
 		this.attributes = {
@@ -455,6 +457,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	})
 	
 	define.class(this, 'squareview', function($ui$view){
+		this.name = 'squareview'
 		this.width = 200;
 		this.height = 200;
 		
@@ -546,6 +549,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			}
 		
 		})
+		this.fg = true
 		
 		define.class(this, 'bg', this.Shader, function(){
 			this.draworder = 1

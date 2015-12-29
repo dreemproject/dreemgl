@@ -901,8 +901,6 @@ define.class('$system/base/node', function(require){
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
 			
-			// lets compute a bounding box of all our children
-
 			//this.sublayout = this.layout
 			this._flex = flex
 			this._size = size
