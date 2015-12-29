@@ -374,7 +374,10 @@ define.class(function(require, constructor){
 		// find the base class
 		var base = original
 		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj)
-		else if(this.composition) base = this.composition.atStyleConstructor(original, propobj)
+		else if(this !== this.composition && this !== this.screen && this.screen){
+			base = this.screen.atStyleConstructor(original, propobj)
+		}
+		else if(this.composition !== this && this.composition) base = this.composition.atStyleConstructor(original, propobj)
 
 		// 'quick' out
 		var found = style && style._base && style._base[name] === base && style._class && style._class[name]

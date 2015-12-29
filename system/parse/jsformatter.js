@@ -1,4 +1,3 @@
-
 define.class(function(require, exports){
 	
 	var Parser = require('$system/parse/onejsparser')

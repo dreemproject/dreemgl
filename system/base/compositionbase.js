@@ -14,6 +14,7 @@ define.class('$system/base/node',function(require){
 	}
 
 	this.atConstructor = function(){
+		this.composition = this
 		this._intervals = []
 	}
 

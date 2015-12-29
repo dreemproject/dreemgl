@@ -62,7 +62,16 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 	this.render = function(){		
 		return [
 			this.fileio(),
-			screen({bg:0,clearcolor:vec4('black'),flexwrap:"nowrap", flexdirection:"row"},
+			screen({
+				bg:0,
+				clearcolor:vec4('black'),
+				flexwrap:"nowrap", 
+				flexdirection:"row",
+				style:{
+					"*":{
+						fontsize:10
+					}
+				}},
 				flowgraph({
 					
 				})
