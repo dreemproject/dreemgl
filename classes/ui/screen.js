@@ -537,14 +537,7 @@ define.class(function(require, $ui$view) {
 			object.parent = this
 			object.parent_viewport = this
 
-			Render.process(object, undefined, this.globals)
-
-			this.children.push(object)
-			this.modal_stack.push(object)
-			this.modal = object
-
-			object.resolve = function(value){
-
+			var closeModal = function(value){
 				// lets close the modal window
 				var id = this.screen.children.indexOf(this)
 				this.screen.children.splice(id, 1)
@@ -558,7 +551,17 @@ define.class(function(require, $ui$view) {
 				this.screen.redraw()
 	
 				resolve(value)
-			}
+			}.bind(object)
+			var globals = Object.create(this.globals)
+			
+			globals.closeModal = closeModal
+
+			Render.process(object, undefined, globals)
+
+			this.children.push(object)
+			this.modal_stack.push(object)
+			this.modal = object
+
 			// lets cause a relayout
 			this.relayout()
 		}.bind(this))
