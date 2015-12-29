@@ -74,7 +74,7 @@ define.class(function(require, $server$, dataset){
 				else if(item.fn.type === 'Id'){
 					name = item.fn.name
 				}
-				else{
+				else {
 					console.error(name = "Please implement in sourceset.js")
 				}
 				var child = {
@@ -96,7 +96,9 @@ define.class(function(require, $server$, dataset){
 	}
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
-	this.stringify = function(data /*Object*/) /*String*/ {
+	this.stringify = function(){
+		
+		//jsformatter.
 
 	}
 })
