@@ -415,7 +415,7 @@
 
 	define.EnvironmentStub = function(dep){ this.dep = dep }
 
-	define.makeClass = function(baseclass, body, require, module, nested_module, outer_this){
+	define.makeClass = function(baseclass, body, require, module, nested_module, outer_this, in_name){
 
 		function MyConstructor(){
 			// if called without new, just do a new
@@ -444,7 +444,10 @@
 		
 		if(define.debug){
 			var fnname
-			if(body && (body.classname || body.name)){
+			if(in_name){
+				fnname = in_name
+			}
+			else if(body && (body.classname || body.name)){
 				fnname = (body.classname || body.name)
 			}
 			else if(module){
@@ -473,9 +476,9 @@
 			Object.defineProperty(Constructor.prototype, 'constructor', {value:Constructor})
 		}
 
-		Object.defineProperty(Constructor, 'extend', {value:function(body, outer_this){
+		Object.defineProperty(Constructor, 'extend', {value:function(body, outer_this, in_name){
 			//if(this.prototype.constructor === define.StubbedClass) return define.StubbedClass
-			return define.makeClass(this, body, require, undefined, this.nested_module, outer_this)
+			return define.makeClass(this, body, require, undefined, this.nested_module, outer_this, in_name)
 		}})
 
 		Object.defineProperty(Constructor, 'overlay', {value:function(body){

@@ -22,7 +22,6 @@ define.class('$ui/view', function(require,
 		
 	}
 	
-	
 	define.class(this, "selectorrect", view, function(){
 		//debugger
 		this.bordercolorfn = function(pos){
@@ -220,8 +219,8 @@ define.class('$ui/view', function(require,
 		var gg = this.findChild("groupui")
 		var gbg = this.findChild("groupbg")
 		
-		if (this.currentselection.length == 1)
-		{
+		if (this.currentselection.length == 1){
+
 			gg.visible = false;
 			gbg.visible = false;
 			this.currentblock = undefined;			
@@ -229,8 +228,8 @@ define.class('$ui/view', function(require,
 			
 			var b= this.currentselection[0];
 			
-			if (b.constructor.name == "block") this.currentblock = b;
-			if (b.constructor.name == "connection") this.currentconnection  = b;
+			if (b instanceof block) this.currentblock = b;
+			if (b instanceof connection) this.currentconnection  = b;
 			
 			if (this.currentblock){
 				bg.x = this.currentblock.pos[0];
@@ -248,7 +247,7 @@ define.class('$ui/view', function(require,
 			}else{
 				cg.visible = false;
 			}
-		
+
 		}
 		else{
 			cg.visible = false;
@@ -266,7 +265,7 @@ define.class('$ui/view', function(require,
 				var n = 0;
 				for(a in this.currentselection){
 					var bl = this.currentselection[a];
-					if (bl.constructor.name == "block"){
+					if (bl instanceof block){
 						n++;
 						if (bl.pos[0] < minx) minx = bl.pos[0];else if (bl.pos[0]>maxx) maxx = bl.pos[0];
 						if (bl.pos[1] < miny) miny = bl.pos[1];else if (bl.pos[1]>maxy) maxy = bl.pos[1];
@@ -281,7 +280,7 @@ define.class('$ui/view', function(require,
 						cy += bl.pos[1] + bl.layout.height/2;	
 					}
 					else{
-						if (bl.constructor.name == "connection"){
+						if (bl instanceof connection){
 							var ax = bl.frompos[0];
 							var ay = bl.frompos[1];
 						             

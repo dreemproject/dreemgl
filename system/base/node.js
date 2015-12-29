@@ -56,8 +56,8 @@ define.class(function(require, constructor){
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
 				this.constructor_children.push(arg)
-				var name = arg.id || arg.name || arg.constructor && arg.constructor.name
-				if(name !== undefined && !(name in this)) this[name] = arg
+				//var name = arg.name
+				//if(name !== undefined && !(name in this)) this[name] = arg
 			}
 		}		
 	}
@@ -116,7 +116,7 @@ define.class(function(require, constructor){
 
 		// ok so first we go down all children
 		if(this === ignore) return
-		if(this.id === name || this.name === name || this.id === undefined && this.name === undefined && this.constructor.name === name){
+		if(this.name === name){
 			if(!nocache) this.find_cache[name] = this
 			return this
 		}
@@ -343,6 +343,8 @@ define.class(function(require, constructor){
 						}
 					}
 					Object.defineProperty(style, '_composed', {value:1})
+					Object.defineProperty(style, '_match', {value:match})
+
 					// lets store it back
 					this[match] = style
 					return style
@@ -363,7 +365,7 @@ define.class(function(require, constructor){
 
 	this._style = new Style()
 
-	this.atStyleConstructor = function(original, props){
+	this.atStyleConstructor = function(original, props, where){
  		// lets see if we have it in _styles
 		var name = original.name
 		
@@ -373,11 +375,11 @@ define.class(function(require, constructor){
 
 		// find the base class
 		var base = original
-		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj)
+		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj,'outer')
 		else if(this !== this.composition && this !== this.screen && this.screen){
-			base = this.screen.atStyleConstructor(original, propobj)
+			base = this.screen.atStyleConstructor(original, propobj, 'screen')
 		}
-		else if(this.composition !== this && this.composition) base = this.composition.atStyleConstructor(original, propobj)
+		else if(this.composition !== this && this.composition) base = this.composition.atStyleConstructor(original, propobj, 'composition')
 
 		// 'quick' out
 		var found = style && style._base && style._base[name] === base && style._class && style._class[name]
@@ -392,7 +394,7 @@ define.class(function(require, constructor){
 
 		// define the class		
 		if(style._base[name] !== base || !style._class[name]){
-			var cls = style._class[name] = base.extend(style, original.outer)			
+			var cls = style._class[name] = base.extend(style, original.outer, original.name + '_' +(where+'_'||'')+ (style._match||'star'))			
 		 	style._base[name] = base
 		 	return cls
 		}
