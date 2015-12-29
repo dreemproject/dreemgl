@@ -315,7 +315,20 @@ define.class(function(require, constructor){
 			if(!this.hasOwnProperty('_style')) this._style = Object.create(this._style)
 			if(typeof v === 'object'){
 				for(var key in v){
-					this._style[key] = v[key]
+					var value = v[key]
+					if(typeof value === 'object'){
+						var base = this._style[key]
+						if(!base) this._style[key] = value
+						else{
+							var obj = this._style[key] = Object.create(base)
+							for(var subkey in value){
+								obj[subkey] = value[subkey]
+							}
+						}
+					}
+					else{
+						this._style[key] = v[key]
+					}
 				}
 			}
 			else if(typeof v === 'function'){
@@ -366,7 +379,7 @@ define.class(function(require, constructor){
 	this._style = new Style()
 
 	this.atStyleConstructor = function(original, props, where){
- 		// lets see if we have it in _styles
+		// lets see if we have it in _styles
 		var name = original.name
 		
 		var propobj = props && Object.getPrototypeOf(props) === Object.prototype? props: {}

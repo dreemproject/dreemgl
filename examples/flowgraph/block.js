@@ -216,23 +216,33 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 	})
 	
+	// the style classes 
+	this.style = {
+		label_head:{bg:0, margin:vec4(6,0,4,0)},
+		view_main:{bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1},
+		view_between1:{bg:false, width:140, flex: 1, justifycontent:"space-between"},
+		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
+		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
+		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+	}
+
 	this.render = function(){
 		return [
-			label({text:this.title, bg:0, margin:vec4(6,0,4,0)})
-			,view({bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1})
-			,view({bg:false, width:140, flex: 1, justifycontent:"space-between"}
-			,view({bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"}
-			,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
-			,this.inputbutton({name:"input 2", bgcolor:"#800000"})
-			,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
+			label({text:this.title,class:'head'})
+			,view({class:'main'})
+			,view({class:'between1'}
+				,view({class:'head'}
+				,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
+				,this.inputbutton({name:"input 2", bgcolor:"#800000"})
+				,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
 			)
-			,view({bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"}
+			,view({class:'between2'}
 			,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
 		
 			,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
 			)
 			)
-			,view({name:"addbuttons",flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+			,view({name:"addbuttons"}
 				,button({icon:"plus"})
 				,button({icon:"plus"})
 			)
