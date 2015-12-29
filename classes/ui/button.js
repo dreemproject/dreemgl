@@ -82,6 +82,16 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	this.alignitems = "flex-start"
 	this.justifycontent ="flex-start" 
 
+	this.style = {
+		icon:{
+			fgcolor:  Config({motion:'linear', duration:0.1})
+		},
+		label:{
+			subpixel:false,
+			bg: 0
+		}
+	}
+	/*
 	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
 	define.class(this, 'iconclass', function(icon){
 		this.fgcolor = Config({motion:'linear', duration:0.1})
@@ -92,7 +102,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.subpixel = false
 		this.bg = 0
 	})
-
+	*/
 	// the hover state when someone hovers over the button
 	this.statehover = function(){
 		this.col1 = this.hovercolor1
@@ -139,12 +149,12 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.iconres = undefined
 		
 		if (this.icon && this.icon.length > 0){
-			this.iconres = this.iconclass({alignself:"center", fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
+			this.iconres = icon({alignself:"center", fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}
 
 		if (this.text && this.text.length > 0){			
-			this.buttonres = this.labelclass({alignself:"center", font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			this.buttonres = label({alignself:"center", font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		

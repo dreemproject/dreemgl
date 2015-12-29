@@ -308,12 +308,58 @@ define.class(function(require, constructor){
 		this._persists[arg] = 1
 	}
 
+	Object.defineProperty(this, 'style', {
+		get:function(){
+			return this._style
+		},
+		set:function(v){
+			if(!this.hasOwnProperty('_style')) this._style = Object.create(this._style)
+			if(typeof v === 'object'){
+				for(var key in v){
+					this._style[key] = v[key]
+				}
+			}
+			else if(typeof v === 'function'){
+				v.call(this._style)
+			}
+		}
+	})
 
+	this._style = {}
 
+	this.atStyleConstructor = function(original, props, level){
+ 			// lets see if we have it in _styles
+		var name = original.name
+		var style
 
-	// magical setters JSON API
+		if(props && Object.getPrototypeOf(props) === Object.prototype && props.class){
+			style = this._style[name + '_' + props.class]
+		}
+		if(!style) style = this._style[name]
 
+		if(!style){
+			if(level || !this.composition) return original
+			if(this.constructor.outer) return this.constructor.outer.atStyleConstructor(original, props, 1)
+			return this.composition.atStyleConstructor(original, props, 1)
+		}
 
+		// ok so, if our style doesnt haz own property _class
+		var base_style = this.composition? this.composition._style: undefined
+		if(!style.hasOwnProperty('_class') || style._base !== base_style){
+			var base 
+
+			if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, props, 1)
+			else if(this.composition) base =  this.composition.atStyleConstructor(original, props, 1)
+			else base = original
+
+		 	Object.defineProperty(style, '_class', {value: base.extend(style, original.outer), configurable:true})
+		 	Object.defineProperty(style, '_base', {value: base_style, configurable:true})
+		}
+		// lets see if we have it in classes.
+		style._class.outer = original.outer
+		return style._class
+
+	}
 
 	// pass an object such as {attrname:{type:vec2, value:0}, attrname:vec2(0,1)} to define attributes on an object
 	Object.defineProperty(this, 'attributes', {

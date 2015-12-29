@@ -703,7 +703,15 @@ define.class(function(require, exports){
 			
 			var name = shader.constructor.name
 			function recompile_shader(){
+				var oldcls = this[name]
 				this[name] = {dirty:true}
+				var newcls = this[name]
+				for(var key in this.shader_enable){
+					if(key !== name && this[key] === oldcls){
+						// overwrite references
+						this[key] = newcls
+					}
+				}
 			}
 			recompile_shader.shader = name
 

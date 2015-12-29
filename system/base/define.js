@@ -422,8 +422,9 @@
 			var obj = this
 
 			if(!(obj instanceof MyConstructor)){
-				obj = Object.create(MyConstructor.prototype)
-				Object.defineProperty(obj, 'constructor', {value:MyConstructor})
+				var constructor = define.atConstructor? define.atConstructor(MyConstructor, arguments[0]): MyConstructor
+				obj = Object.create(constructor.prototype)
+				Object.defineProperty(obj, 'constructor', {value:constructor})
 			}
 
 			var outer = MyConstructor.outer
@@ -435,8 +436,7 @@
 			if(obj._atConstructor) obj._atConstructor.apply(obj, arguments)
 
 			if(obj.atConstructor){
-				var res = obj.atConstructor.apply(obj, arguments)
-				if(res !== undefined) return res
+				obj.atConstructor.apply(obj, arguments)
 			}
 
 			return obj

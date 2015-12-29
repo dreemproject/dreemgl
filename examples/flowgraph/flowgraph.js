@@ -8,6 +8,7 @@ define.class('$ui/view', function(require,
 		$widgets$, propviewer,searchbox,
 		$server$, sourceset, dataset, $$, dockpanel, block, connection){
 
+	this.name = 'flowgraph'
 	this.flex = 1
 	this.clearcolor = "#565656" 
 	this.bgcolor = "#565656" 
@@ -17,8 +18,10 @@ define.class('$ui/view', function(require,
 		sourceset: {}
 	}
 	
+
 	define.class(this, "menubar", function($ui$, view, button){
 		this.bg = false;
+		//this.style = this.constructor.outer.style
 		this.render = function(){
 			return [button({text:"File"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
 					,button({text:"View", click:function(){console.log("remove"); }, fontsize:this.fontsize})

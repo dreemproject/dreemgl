@@ -327,23 +327,6 @@ define.class('$system/base/node', function(require){
 		return vec2(this.screen.remapMouse(this))
 	}
 
-	// style property, to be determined
-	Object.defineProperty(this, 'style', {
-		get:function(){ // its really just a forward to this
-			return this
-		},
-		set:function(obj){
-			// TODO add failure when someone does 
-			if(Array.isArray(obj)){
-				for(var i = 0; i < obj.length; i++){
-					var subobj = obj[i]
-					for(var key in subobj) this[key] = subobj[key]
-				}
-			}
-			else for(var key in obj) this[key] = obj[key]
-		}
-	})
-
 	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
 	this.draw_dirty = 3
 	// layout dirty causes a relayout to occur (only on viewports)

@@ -7,6 +7,7 @@
 define.class('$system/base/node',function(require){
 
 	var RpcHub = require('$system/rpc/rpchub')
+	var Render = require('./render')
 
 	this._atConstructor = function(){
 		
@@ -55,7 +56,9 @@ define.class('$system/base/node',function(require){
 
 	this.renderComposition = function(){
 		// we have to render the RPC bus
-		this.children = this.render()
+		Render.process(this, undefined, {}, undefined, false, true)
+
+		//this.children = this.render()
 
 		this.names = {}
 		// now lets rpc proxify them

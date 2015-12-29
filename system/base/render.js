@@ -9,7 +9,7 @@ define.class(function(exports){
 
 	var initializing = false
 
-	exports.process = function render(inew_version, old_version, globals, state, rerender){
+	exports.process = function render(inew_version, old_version, globals, state, rerender, nochild){
 		var new_version = inew_version
 		var is_root = false
 		if(!state){
@@ -82,7 +82,12 @@ define.class(function(exports){
 			//console.log(object)
  		}
 
+ 		define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
+ 		
  		new_version.children = new_version.render()
+
+ 		define.atConstructor = undefined
+
 		new_version.atAttributeGet = undefined
 
 		if(!Array.isArray(new_version.children)){
@@ -104,7 +109,7 @@ define.class(function(exports){
 
 		var new_children = new_version.children
 
-		if(new_children) for(var i = 0; i < new_children.length; i++){
+		if(!nochild && new_children) for(var i = 0; i < new_children.length; i++){
 			var new_child = new_children[i]
 
 			if(Array.isArray(new_child)){ // splice in the children
