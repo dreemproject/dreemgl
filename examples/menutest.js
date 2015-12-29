@@ -31,15 +31,15 @@ define.class('$server/composition', function($ui$, screen, view, button,label, s
 			for(var m in this.menus){
 				var res = [];
 				var menu = this.menus[m];
-				console.log("menu:" , menu);
+				//console.log("menu:" , menu);
 				mres.push(button({ text:menu.name, menucommands: menu.commands, click: function()
-				{
+				{	
 					// lets open a modal dialog
 					var res = [];
-					console.log("full menucommands array", this.menucommands);
+					//console.log("full menucommands array", this.menucommands);
 					for(var a in this.menucommands){
 						var c = this.menucommands[a];
-						console.log("menucommand: ", c);
+						//console.log("menucommand: ", c);
 						res.push(button({text:c.name,buttoncolor1:"#505050",borderwidth:0,hovercolor1:"#606060",hovercolor2:"#606060", buttoncolor2:"#505050",   clickaction: c.action, click:function(){if(this.clickaction) this.clickaction(); this.closeModal(true);}, margin:1}))
 					}
 					
