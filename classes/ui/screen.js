@@ -536,39 +536,50 @@ define.class(function(require, $ui$view) {
 		}
 	}
 
+
 	// open a modal window from object like so: this.openModal( view({size:[100,100]}))
-	this.openModal = function(object){
+	this.closeModal = function(value){
+// lets close the modal window
+		var modal_stack = this.modal_stack
+
+		var mymodal = modal_stack.pop()
+		if(!mymodal) return
+
+		var id = this.screen.children.indexOf(mymodal)
+		this.screen.children.splice(id, 1)
+
+		this.modal = modal_stack[modal_stack.length - 1]
+
+		mymodal.emitRecursive("destroy")
+
+		this.redraw()
+
+		mymodal.resolve(value)
+	}
+
+	this.openModal = function(render){
 		return new Promise(function(resolve, reject){
 			
 			this.releaseCapture()
 
-			object.parent = this
-			object.parent_viewport = this
+			// wrap our render function in a temporary view
+			var vroot = $ui$view()
+			// set up stuff
+			vroot.render = render
+			vroot.parent = this
+			vroot.screen = this
+			vroot.composition = this.composition
+			vroot.parent_viewport = this
+			// render it
+			Render.process(vroot, undefined, this.globals, undefined, true)
 
-			var closeModal = function(value){
-				// lets close the modal window
-				var id = this.screen.children.indexOf(this)
-				this.screen.children.splice(id, 1)
-
-				var modal_stack = this.screen.modal_stack
-				modal_stack.pop()
-				this.screen.modal = modal_stack[modal_stack.length - 1]
-				
-				this.emitRecursive("destroy")
-
-				this.screen.redraw()
-	
-				resolve(value)
-			}.bind(object)
-			var globals = Object.create(this.globals)
-			
-			globals.closeModal = closeModal
-
-			Render.process(object, undefined, globals)
-
-			this.children.push(object)
-			this.modal_stack.push(object)
-			this.modal = object
+			var mychild = vroot.children[0]
+			//console.log(mychild)
+			this.children.push(mychild)
+			mychild.parent = this
+			mychild.resolve = resolve
+			this.modal_stack.push(mychild)
+			this.modal = mychild
 
 			// lets cause a relayout
 			this.relayout()

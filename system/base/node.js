@@ -375,7 +375,7 @@ define.class(function(require, constructor){
 
 		// find the base class
 		var base = original
-		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj,'outer')
+		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj, 'outer')
 		else if(this !== this.composition && this !== this.screen && this.screen){
 			base = this.screen.atStyleConstructor(original, propobj, 'screen')
 		}
@@ -392,9 +392,10 @@ define.class(function(require, constructor){
 			Object.defineProperty(style, '_base', {value:{}, configurable:true})
 		}
 
-		// define the class		
+		// (re)define the class		
 		if(style._base[name] !== base || !style._class[name]){
-			var cls = style._class[name] = base.extend(style, original.outer, original.name + '_' +(where+'_'||'')+ (style._match||'star'))			
+			var clsname = base.name + '_' +(where+'_'||'')+ (style._match||'star')
+			var cls = style._class[name] = base.extend(style, original.outer, clsname)			
 		 	style._base[name] = base
 		 	return cls
 		}
