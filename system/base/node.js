@@ -56,7 +56,7 @@ define.class(function(require, constructor){
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
 				this.constructor_children.push(arg)
-				var name = arg.name || arg.constructor && arg.constructor.name
+				var name = arg.id || arg.name || arg.constructor && arg.constructor.name
 				if(name !== undefined && !(name in this)) this[name] = arg
 			}
 		}		
@@ -116,7 +116,7 @@ define.class(function(require, constructor){
 
 		// ok so first we go down all children
 		if(this === ignore) return
-		if(this.name === name || this.name === undefined && this.constructor.name === name){
+		if(this.id === name || this.name === name || this.id === undefined && this.name === undefined && this.constructor.name === name){
 			if(!nocache) this.find_cache[name] = this
 			return this
 		}
@@ -293,7 +293,6 @@ define.class(function(require, constructor){
 		this['_wiredfn_'+key] = value
 	}
 
-
 	// mark an attribute as persistent accross live reload / renders
 	this.definePersist = function(arg){
 		if (!this.hasOwnProperty("_persists")){
@@ -325,44 +324,77 @@ define.class(function(require, constructor){
 		}
 	})
 
-	this._style = {}
+	var Style = define.class(function(){
+		
+		this.composeStyle = function(){
+			// lets find the highest matching level
+			for(var i = arguments.length - 1; i >= 0; i--){
+				var match = arguments[i]
+				var style = this[match]
+				if(style){
+					if(i === 0) return style
+					if(style._composed) return style
+					style = {}
+					// lets compose a style from the match stack
+					for(var j = 0; j <= i; j++){
+						var level = this[arguments[j]]
+						if(level){
+							for(var key in level) style[key] = level[key]
+						}
+					}
+					Object.defineProperty(style, '_composed', {value:1})
+					// lets store it back
+					this[match] = style
+					return style
+				}
+			}
+		}
 
-	this.atStyleConstructor = function(original, props, level){
- 			// lets see if we have it in _styles
+		this.lookup = function(name, props){
+			// lets return a matching style
+			return this.composeStyle(
+				'*',
+				name, 
+				name + '_' + props.class, 
+				name + '_' + (props.id || props.name)
+			)
+		}
+	})
+
+	this._style = new Style()
+
+	this.atStyleConstructor = function(original, props){
+ 		// lets see if we have it in _styles
 		var name = original.name
-		var style
+		
+		var propobj = props && Object.getPrototypeOf(props) === Object.prototype? props: {}
 
-		if(props && Object.getPrototypeOf(props) === Object.prototype && props.class){
-			style = this._style[name + '_' + props.class]
+		var style = this._style.lookup(name, propobj)
+
+		// find the base class
+		var base = original
+		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj)
+		else if(this.composition) base = this.composition.atStyleConstructor(original, propobj)
+
+		// 'quick' out
+		var found = style && style._base && style._base[name] === base && style._class && style._class[name]
+		if(found) return found
+
+		if(!style) return base
+
+		if(!style._class){
+			Object.defineProperty(style, '_class', {value:{}, configurable:true})
+			Object.defineProperty(style, '_base', {value:{}, configurable:true})
 		}
-		if(!style) style = this._style[name]
 
-		if(!style){
-			if(level) return original
-			if(this.constructor.outer) return this.constructor.outer.atStyleConstructor(original, props, 0)
-			else if(this.composition) return this.composition.atStyleConstructor(original, props, 1)
-			return original
+		// define the class		
+		if(style._base[name] !== base || !style._class[name]){
+			var cls = style._class[name] = base.extend(style, original.outer)			
+		 	style._base[name] = base
+		 	return cls
 		}
 
-		// ok so, if our style doesnt haz own property _class
-		var base_style
-		if(this.constructor.outer) base_style = this.constructor.outer._style
-		else if(this.composition) base_style = this.composition._style
-
-		if(!style.hasOwnProperty('_class') || style._base !== base_style){
-			var base 
-
-			if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, props, 0)
-			else if(this.composition) base =  this.composition.atStyleConstructor(original, props, 1)
-			else base = original
-
-		 	Object.defineProperty(style, '_class', {value: base.extend(style, original.outer), configurable:true})
-		 	Object.defineProperty(style, '_base', {value: base_style, configurable:true})
-		}
-		// lets see if we have it in classes.
-		style._class.outer = original.outer
-		return style._class
-
+		return original
 	}
 
 	// pass an object such as {attrname:{type:vec2, value:0}, attrname:vec2(0,1)} to define attributes on an object

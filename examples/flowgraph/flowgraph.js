@@ -18,7 +18,6 @@ define.class('$ui/view', function(require,
 		sourceset: {}
 	}
 	
-
 	define.class(this, "menubar", function($ui$, view, button){
 		this.bg = false;
 		//this.style = this.constructor.outer.style
@@ -101,7 +100,6 @@ define.class('$ui/view', function(require,
 			return foldcontainer({title:data.name, basecolor:vec4("#3b3b3b"),bordercolor:vec4("#3b3b3b"),icon:"folder"},view({bg:0, flex:1,flexdirection:"column"},res));
 		}
 	})
-	
 	
 	define.class(this, "library", function($ui$, view){
 		this.flex = 1;
