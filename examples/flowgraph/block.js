@@ -221,8 +221,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	})
 	
 	this.render = function(){
-		
-		
 		return [
 			label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
 			,view({bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1})

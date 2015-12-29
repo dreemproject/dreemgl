@@ -18,14 +18,19 @@ define.class('$ui/view', function(require,
 		sourceset: {}
 	}
 	
+	
+	this.style = {
+		"*": {fontsize:12, style:{block:{fontsize:30}}}
+	}
+	
 
 	define.class(this, "menubar", function($ui$, view, button){
 		this.bg = false;
 		//this.style = this.constructor.outer.style
 		this.render = function(){
-			return [button({text:"File"   , click:function(){console.log("add");    }, fontsize:this.fontsize})
-					,button({text:"View", click:function(){console.log("remove"); }, fontsize:this.fontsize})
-					,button({text:"Help", click:function(){console.log("remove"); }, fontsize:this.fontsize})
+			return [button({text:"File"   , click:function(){console.log("add"); }})
+					,button({text:"View", click:function(){console.log("remove");}})
+					,button({text:"Help", click:function(){console.log("remove");}})
 			];
 		}
 	})
@@ -120,9 +125,8 @@ define.class('$ui/view', function(require,
 			var res = [];
 			for(var a  in data.children){
 				var ds = data.children[a];
-				if (ds.children && ds.children.length > 0){
-			
-				res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
+				if (ds.children && ds.children.length > 0){			
+						res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor, fontsize: this.fontsize}));
 					}
 				}
 			
@@ -534,6 +538,8 @@ define.class('$ui/view', function(require,
 			connectingconnection.fromoutput = this.newconnectionsourceoutput;
 			connectingconnection.to = this.newconnectiontargetblock;
 			connectingconnection.toinput = this.newconnectiontargetinput;
+
+			console.log(this.newconnectionsourceblock,this.newconnectionsourceoutput,this.newconnectiontargetblock,this.newconnectiontargetinput);
 			
 			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length>0){
 				console.log("setting to??", connectingconnection.to);
@@ -641,14 +647,14 @@ define.class('$ui/view', function(require,
 						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, arender:function(){
 							return this.renderConnections();
 						}.bind(this)}
-							,connection({from:"phone", to:"tv"})
-							,connection({from:"tablet", to:"thing"})
+							,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
+							,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
 							,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
-							,connection({from:"b", to:"c"})
-							,connection({from:"c", to:"d"})
-							,connection({from:"a", to:"c"})
+							,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
+							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
+							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
 						)
-						,view({bg:false}, connection({name:"openconnector", hasball: false}))
+						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
 							return this.renderBlocks();
 						}.bind(this)}

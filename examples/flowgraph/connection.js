@@ -203,6 +203,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
+				this.neutralcolor = this.bgcolor = out.bgcolor;
 			}
 			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+yoff)
 		}
