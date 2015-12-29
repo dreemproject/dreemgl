@@ -338,17 +338,21 @@ define.class(function(require, constructor){
 		if(!style) style = this._style[name]
 
 		if(!style){
-			if(level || !this.composition) return original
-			if(this.constructor.outer) return this.constructor.outer.atStyleConstructor(original, props, 1)
-			return this.composition.atStyleConstructor(original, props, 1)
+			if(level) return original
+			if(this.constructor.outer) return this.constructor.outer.atStyleConstructor(original, props, 0)
+			else if(this.composition) return this.composition.atStyleConstructor(original, props, 1)
+			return original
 		}
 
 		// ok so, if our style doesnt haz own property _class
-		var base_style = this.composition? this.composition._style: undefined
+		var base_style
+		if(this.constructor.outer) base_style = this.constructor.outer._style
+		else if(this.composition) base_style = this.composition._style
+
 		if(!style.hasOwnProperty('_class') || style._base !== base_style){
 			var base 
 
-			if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, props, 1)
+			if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, props, 0)
 			else if(this.composition) base =  this.composition.atStyleConstructor(original, props, 1)
 			else base = original
 

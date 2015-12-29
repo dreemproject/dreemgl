@@ -16,7 +16,6 @@ define.class(function(exports){
 			state = {wires:[], render_block: []}
 			is_root = true
 		}
-		if(!new_version) debugger
 		/*
  		if(new_version.preRender && !rerender){
  			if(state.render_block.indexOf(new_version) == -1){
@@ -83,7 +82,7 @@ define.class(function(exports){
  		}
 
  		define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
- 		
+
  		new_version.children = new_version.render()
 
  		define.atConstructor = undefined
