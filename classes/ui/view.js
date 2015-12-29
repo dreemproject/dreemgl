@@ -691,9 +691,32 @@ define.class('$system/base/node', function(require){
 	}
 
 	// called by doLayout, to update the matrices to layout and parent matrix
-	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed){
+	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput){
 		// allow pre-matrix gen hooking
 		if(this.atMatrix) this.atMatrix()
+
+		var boundsobj = boundsinput
+		if(!boundsinput){
+			boundsobj = this._layout
+			boundsobj.absx = 0
+			boundsobj.absy = 0
+			boundsobj.boundw = 0
+			boundsobj.boundh = 0
+		}
+
+		var layout = this._layout
+
+		if(this.measured_width !== undefined || this.measured_height !== undefined){
+			var width = layout.absx + max(layout.width ,this.measured_width)
+			var height = layout.absy + max(layout.height, this.measured_height)
+		}
+		else{
+			var width = layout.absx + layout.width
+			var height = layout.absy + layout.height
+		}
+		if(width > boundsobj.boundw) boundsobj.boundw = width
+		if(height > boundsobj.boundh) boundsobj.boundh = height
+	
 
 		var matrix_changed = parent_changed
 		if (parentviewport == '3d'){// && !this._mode ){	
@@ -703,7 +726,6 @@ define.class('$system/base/node', function(require){
 		else {
 			
 			// compute TSRT matrix
-			var layout = this._layout
 			if(layout){
 				//console.log(this.matrix_dirty)
 				var ml = this.matrix_layout
@@ -759,50 +781,39 @@ define.class('$system/base/node', function(require){
 		if(children) for(var i = 0; i < children.length; i++){
 			var child = children[i]
 			if(child._viewport) continue // it will get its own pass
-			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed)
+			
+			var clayout = child.layout
+			clayout.absx = layout.absx + clayout.left 
+			clayout.absy = layout.absy + clayout.top
+
+			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj)
+		}
+		
+		if(!boundsinput){
+			this.updateScrollbars()
 		}
 
 		this.matrix_dirty = false
 	}
 
-	// internal, used to compute bounding rects and emit layout event
-	// TODO fix up early bail on this one.
-	function emitPostLayoutAndComputeBounds(node, boundsobj, nochild){
+	// emit post layout
+	function emitPostLayout(node, nochild){
 		var ref = node.ref
 		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout 
-		
-		// lets also emit the layout 
-		if(boundsobj){
-			if(ref.measured_width !== undefined || ref.measured_height !== undefined){
-				var width = layout.absx + max(layout.width,ref.measured_width)
-				var height = layout.absy + max(layout.height, ref.measured_height)
-			}
-			else{
-				var width = layout.absx + layout.width
-				var height = layout.absy + layout.height
-			}
-			if(width > boundsobj.boundw) boundsobj.boundw = width
-			if(height > boundsobj.boundh) boundsobj.boundh = height
-		}
 		
 		if(!nochild){
 			var children = node.children
 			for(var i = 0; i < children.length; i++){
 				var child = children[i]
-				var clayout = child.layout
-				clayout.absx = layout.absx + clayout.left 
-				clayout.absy = layout.absy + clayout.top
-
-				emitPostLayoutAndComputeBounds(child, boundsobj, child.ref._viewport)
+				emitPostLayout(child, child.ref._viewport)
 			}
 			ref.layout_dirty = false
 		}
 
+		var oldlayout = ref.oldlayout || {}
 		if((ref._listen_layout || ref.onlayout) && (layout.left !== oldlayout.left || layout.top !== oldlayout.top ||
 			 layout.width !== oldlayout.width || layout.height !== oldlayout.height)){
-			// call setter
-			// lets reset the scroll position
 			ref.emit('layout', {type:'setter', owner:ref, key:'layout', value:layout})
 		}
 		ref.oldlayout = layout
@@ -897,21 +908,12 @@ define.class('$system/base/node', function(require){
 			this._size = size
 			this._flexwrap = flexwrap
 			this._layout = layout
-	
-			// this also computes the inner bounding box
-			layout.absx = 0
-			layout.absy = 0
-			layout.boundw = 0
-			layout.boundh = 0
-
-			emitPostLayoutAndComputeBounds(copynodes, layout)
-
-			this.updateScrollbars()
+			emitPostLayout(copynodes)
 		}
 		else{
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
-			emitPostLayoutAndComputeBounds(copynodes)
+			emitPostLayout(copynodes)
 		}
 	}
 
