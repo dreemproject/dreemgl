@@ -556,7 +556,7 @@ define.class(function(require, $ui$view) {
 			
 			globals.closeModal = closeModal
 
-			Render.process(object, undefined, this.globals)
+			Render.process(object, undefined, globals)
 
 			this.children.push(object)
 			this.modal_stack.push(object)
