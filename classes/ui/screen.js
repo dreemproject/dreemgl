@@ -364,7 +364,6 @@ define.class(function(require, $ui$view) {
 					this.mouse_view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 				}
 				else if(this.modal){
-					this.modal_miss = true
 					this.modal.emitUpward('miss', {global:this.globalMouse(this)})
 				}
 			//} 
@@ -529,10 +528,19 @@ define.class(function(require, $ui$view) {
 		if(this.modal && this.modal.resolve)
 			return this.modal.resolve(value)
 	}
-	
+		
+	this.releaseCapture = function(){
+		if(this.mouse_capture){
+			this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
+			this.mouse_capture = undefined				
+		}
+	}
+
 	// open a modal window from object like so: this.openModal( view({size:[100,100]}))
 	this.openModal = function(object){
 		return new Promise(function(resolve, reject){
+			
+			this.releaseCapture()
 
 			object.parent = this
 			object.parent_viewport = this
