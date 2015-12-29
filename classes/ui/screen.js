@@ -13,7 +13,20 @@ define.class(function(require, $ui$view) {
 		// the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
 		locationhash: Config({type:Object, value:{}}),
 		// when the browser comes out of standby it fires wakup event
-		wakeup: Config({type:Event})
+		wakeup: Config({type:Event}),
+
+		// globally hookable input events
+		globalkeyup: Config({type:Event}),
+		globalkeydown: Config({type:Event}),
+		globalkeypress: Config({type:Event}),
+		globalkeypaste: Config({type:Event}),
+		globalmousemove: Config({type:Event}),
+		globalmouseleftdown: Config({type:Event}),
+		globalmouseleftup: Config({type:Event}),
+		globalmouserightdown: Config({type:Event}),
+		globalmouserightup: Config({type:Event}),
+		globalmousewheelx: Config({type:Event}),
+		globalmousewheely: Config({type:Event}),
 	}
 
 	this.bg = false
@@ -275,18 +288,21 @@ define.class(function(require, $ui$view) {
 	// bind all keyboard/mouse/touch inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){
+			this.emit('globalkeydown', v)
 			if(!this.focus_view) return
 			if(!this.inModalChain(this.focus_view)) return
 			this.focus_view.emitUpward('keydown', v)
 		}.bind(this)
 
 		this.keyboard.up = function(v){
+			this.emit('globalkeyup', v)
 			if(!this.focus_view) return
 			if(!this.inModalChain(this.focus_view)) return
 			this.focus_view.emitUpward('keyup', v)
 		}.bind(this)
 
 		this.keyboard.press = function(v){
+			this.emit('globalkeypress', v)
 			// lets reroute it to the element that has focus
 			if(!this.focus_view) return
 			if(!this.inModalChain(this.focus_view)) return
@@ -294,6 +310,7 @@ define.class(function(require, $ui$view) {
 		}.bind(this)
 
 		this.keyboard.paste = function(v){
+			this.emit('globalkeypaste', v)
 			// lets reroute it to the element that has focus
 			if(!this.focus_view) return
 			if(!this.inModalChain(this.focus_view)) return
@@ -301,6 +318,7 @@ define.class(function(require, $ui$view) {
 		}.bind(this)
 
 		this.mouse.move = function(){
+			this.emit('globalmousemove', {global:this.globalMouse(this)})
 			// lets check the debug click
 			if(this.keyboard.alt && this.keyboard.shift){
 				return this.debugPick()
@@ -334,6 +352,7 @@ define.class(function(require, $ui$view) {
 		}.bind(this)
 
 		this.mouse.leftdown = function(){
+			this.emit('globalmouseleftdown', {global:this.globalMouse(this)})
 
 			if (!this.mouse_capture) {
 				this.mouse_capture = this.mouse_view
@@ -352,6 +371,7 @@ define.class(function(require, $ui$view) {
 		}.bind(this)
 
 		this.mouse.leftup = function(){
+			this.emit('globalmouseleftup', {global:this.globalMouse(this)})
 			// make sure we send the right mouse out/overs when losing capture
 			this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
 				if(this.mouse_capture){
@@ -373,11 +393,13 @@ define.class(function(require, $ui$view) {
 		}.bind(this)
 
 		this.mouse.wheelx = function(){
+			this.emit('globalmousewheelx', {wheel:this.mouse.wheelx, global:this.globalMouse(this)})
 			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheelx', {wheel:this.mouse.wheelx,global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
 			else if(this.inModalChain(this.mouse_view)) this.mouse_view.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
 		}.bind(this)
 
 		this.mouse.wheely = function(){
+			this.emit('globalmousewheely', {wheel:this.mouse.wheely, global:this.globalMouse(this)})
 			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheely', {wheel:this.mouse.wheely,global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
 			else if(this.mouse_view && this.inModalChain(this.mouse_view) ){
 				this.mouse_view.emitUpward('mousewheely', {wheel:this.mouse.wheely, global:this.globalMouse(this), local:this.remapMouse(this.mouse_view)})

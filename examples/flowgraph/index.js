@@ -1,6 +1,6 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
-	
+
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')
 		var fs = require('fs')

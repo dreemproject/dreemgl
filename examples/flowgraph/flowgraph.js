@@ -107,7 +107,6 @@ define.class('$ui/view', function(require,
 		}
 	})
 	
-	
 	define.class(this, "library", function($ui$, view){
 		this.flex = 1;
 		this.attributes = {
