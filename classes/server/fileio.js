@@ -2,6 +2,8 @@ define.class(function(require, service){
 	// The fileio class provides an easy RPC mechanism to load/create/save/enumerate files and directories. The fileio instance should live on the server part of the composition.
 	// do not ever put this in a web-facing composition as it has no security features
 	
+	this.name = "fileio"
+
 	var nodehttp = require('$system/server/nodehttp')
 	var fs = require('fs')
 	var path = require('path')

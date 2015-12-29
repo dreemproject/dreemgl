@@ -69,7 +69,7 @@ define.class('$system/base/node',function(require){
 
 			if(!child.createRpcProxy) continue
 			// add the proxy to the rpc object
-			var name = child.name || child.constructor.name
+			var name = child.name// || child.constructor.name
 			this.rpc[name] = child.createRpcProxy(this.rpc)
 			this.names[name] = child
 		}

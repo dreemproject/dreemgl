@@ -46,7 +46,7 @@ define.class('./compositionbase', function(require, baseclass){
 			}
 			if(!key) throw new Error('No screen found')
 			this.screen = this.names[key]
-			this.screenname = this.screen.name || this.screen.constructor.name
+			this.screenname = this.screen.name// || this.screen.constructor.name
 		}
 
 		if(previous || parent) this.doRender(previous, parent)
