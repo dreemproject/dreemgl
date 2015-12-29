@@ -7,15 +7,17 @@ define.class('$server/composition', function($ui$, screen, view, button,label, s
 		this.attributes = {
 				menus:[
 					{name:"File", commands:[				
-							{name:"New project with a long name", action:function(){console.log("new project with a long name") ;}},
+							{name:"New project", action:function(){console.log("new project with a long name") ;}},
 							{name:"Open", action:function(){console.log("Open") ;}},
 							{name:"Save", action:function(){console.log("Save") ;}}
 						]
 					}
 					,{name:"Edit", commands:[				
-							{name:"New project with a long name", action:function(){console.log("new project with a long name") ;}},
-							{name:"Open", action:function(){console.log("Open") ;}},
-							{name:"Save", action:function(){console.log("Save") ;}}
+							{name:"Undo", action:function(){console.log("Undo") ;}},
+							{name:"Redo", action:function(){console.log("Redo") ;}},
+							{name:"Cut", action:function(){console.log("Cut") ;}},
+							{name:"Copy", action:function(){console.log("Copy") ;}},
+							{name:"Paste", action:function(){console.log("Paste") ;}}
 						]
 					}
 			]}
@@ -38,19 +40,19 @@ define.class('$server/composition', function($ui$, screen, view, button,label, s
 					for(var a in this.menucommands){
 						var c = this.menucommands[a];
 						console.log("menucommand: ", c);
-						res.push(button({text:c.name,clickaction: c.action, click:function(){if(this.clickaction) this.clickaction(); this.closeModal(true);}, margin:1}))
+						res.push(button({text:c.name,buttoncolor1:"#505050",borderwidth:0,hovercolor1:"#606060",hovercolor2:"#606060", buttoncolor2:"#505050",   clickaction: c.action, click:function(){if(this.clickaction) this.clickaction(); this.closeModal(true);}, margin:1}))
 					}
 					
 					this.screen.openModal(
-						view({bg:false,flexdirection:"column",
+						view({bgcolor:"#505050",flexdirection:"column",
 							miss:function(){
 								this.closeModal(false)
 							},
 							init:function(){
 								console.log('here')
 							},
-							pos:[0,0],
-							size:[300,300],position:'absolute'
+							pos:[this.layout.absx,this.layout.absy + this.layout.height+2],
+							size:[300,NaN],position:'absolute'
 						}, res)
 					).then(function(result){
 						console.log(result)
