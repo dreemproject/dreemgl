@@ -516,7 +516,7 @@ define.class('$ui/view', function(require,
 		var connectingconnection = this.find("openconnector");
 		if (connectingconnection && connectingconnection.visible) 
 		{
-			this.mousemove = function(){};
+			this.screen.globalmousemove = function(){};
 			connectingconnection.from = undefined;
 			connectingconnection.fromoutput  = undefined;
 			connectingconnection.to = undefined;
@@ -560,7 +560,7 @@ define.class('$ui/view', function(require,
 				}				
 			}
 			connectingconnection.calculateposition();
-			this.mousemove = function(){
+			this.screen.globalmousemove = function(){
 				connectingconnection.calculateposition();	
 				connectingconnection.redraw();
 			}
