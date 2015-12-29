@@ -51,7 +51,9 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		internalmargin: Config({meta:"tlbr", type: vec4, value: vec4(0,0,0,0)}),
 
 		// fires when button is clicked
-		click: Config({type:Event})
+		click: Config({type:Event}), 
+		
+		bold: true
 	}
 
 	var button = this.constructor

@@ -225,6 +225,18 @@ define.class('$system/base/node', function(require){
 		// wether this view has focus
 		miss: Config({type:Event}),
 
+		
+		// drop shadow size
+		dropshadowradius:Config({type:float, value:20}),
+		// drop shadow movement
+		dropshadowoffset:Config({type:vec2, value:vec2(0,0)}),
+		// drop shadow hardness
+		dropshadowhardness:Config({type:float, value:0.5, minvalue: 0, maxvalue:1}),
+		// drop shadow opacity
+		dropshadowopacity:Config({type:float, value:0, minvalue: 0, maxvalue:1}),
+		// drop shadow color
+		dropshadowcolor:Config({type:vec4,meta:"color", value:vec4("black")}),
+
 		focus: false,
 		// tabstop, sorted by number
 		tabstop: NaN,
@@ -261,6 +273,15 @@ define.class('$system/base/node', function(require){
 
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
+
+	
+	this.dropshadowradius= function(event){
+		if (this.dropshadowopacity > 0){
+			this.shadowrect = true;
+		}else{
+			this.shadowrect = false;
+		}
+	}
 
 	// listen to switch the shaders when borderradius changes
 	this.borderradius = function(event){
@@ -1108,6 +1129,129 @@ define.class('$system/base/node', function(require){
 		}
 	})
 	this.roundedrect = false
+	
+	
+	
+	// rounded rect shader class
+	define.class(this, 'shadowrect', this.Shader, function(){
+		this.updateorder = 0
+		this.draworder = 0
+		this.vertexstruct = define.struct({
+			pos: vec2,
+			angle: float,
+			radmult: vec4,
+			uv:vec2,
+			shadowradius: vec4
+		})
+
+		this.mesh = this.vertexstruct.array()
+	
+		this.depth_test = ""
+		this.draworder = -1;
+
+		// matrix and viewmatrix should be referenced on view
+		this.opacity = 0.0
+		this.drawtype = this.TRIANGLE_STRIP
+		this.color_blend = 'src_alpha * src_color + (1 - src_alpha) * dst_color'
+		this.update = function(){
+			var view = this.view
+			
+			var width = (view.layout?view.layout.width:view.width) 
+			//console.log(view.dropshadowradius, width);
+			var height = (view.layout?view.layout.height:view.height)
+			
+			var radius = vec4(Math.max(1, view.borderradius[0] + view.dropshadowradius),Math.max(1, view.borderradius[1]+ view.dropshadowradius),Math.max(1, view.borderradius[2]+ view.dropshadowradius),Math.max(1, view.borderradius[3]+ view.dropshadowradius));
+			console.log(radius)
+			var mesh = this.mesh = this.vertexstruct.array()
+
+			if (vec4.equals(radius, vec4(0,0,0,0))) {
+				mesh.push([width/2,height/2], 0, [1,0,0,0], 0.5,0.5)
+				mesh.push([0,0], 0, [1,0,0,0], 0,0)
+				mesh.push([width,0], 0, [1,0,0,0], 1,0)
+				mesh.push([width,height], 0, [1,0,0,0], 1,1)
+				mesh.push([0,height], 0, [1,0,0,0], 0,1)
+				mesh.push([0,0], 0, [1,0,0,0], 0,0)
+			}
+			else{
+				
+				var divbase = 0.45;
+				var pidiv1 = Math.floor(Math.max(2, divbase* PI * radius[0]))
+				var pidiv2 = Math.floor(Math.max(2, divbase* PI * radius[1]))
+				var pidiv3 = Math.floor(Math.max(2, divbase* PI * radius[2]))
+				var pidiv4 = Math.floor(Math.max(2, divbase* PI * radius[3]))
+				
+				var pimul1 = (PI*0.5)/(pidiv1-1)
+				var pimul2 = (PI*0.5)/(pidiv2-1)
+				var pimul3 = (PI*0.5)/(pidiv3-1)
+				var pimul4 = (PI*0.5)/(pidiv4-1)
+
+				
+				for(var p = 0;p<pidiv1;p++){
+					this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), p*pimul1, vec4(0,0,0,0), 0,0,radius)	
+					this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), p*pimul1, vec4(1,0,0,0), 1,0,radius)	
+				}
+				for(var p = 0;p<pidiv2;p++)
+				{
+					this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,0,0,0), 0,0,radius)
+					this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,1,0,0), 1,0,radius)
+				}
+				for(var p = 0;p<pidiv3;p++) {
+					this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,0,0), 0,0,radius)
+					this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,1,0), 1,0,radius)
+				}
+				for(var p = 0;p<pidiv4;p++){
+					this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,0,radius)
+					this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,1), 1,0,radius)
+				}
+				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(0,0,0,0), 0,0,radius)	
+				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(1,0,0,0), 1,0,radius)	
+				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(0,0,0,0), 1,0,radius)	
+				this.mesh.push(vec2(radius[0] - view.dropshadowradius,radius[0]- view.dropshadowradius), 0, vec4(0,0,0,0), 0,0,radius)	
+				this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), p*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,0,radius)
+				this.mesh.push(vec2(width - radius[1]-1 + view.dropshadowradius, radius[1]- view.dropshadowradius), p*pimul2 + PI/2, vec4(0,0,0,0), 0,0,radius)
+				this.mesh.push(vec2(width - radius[2]-1 + view.dropshadowradius, height - radius[2]-1+ view.dropshadowradius), p*pimul3+ PI, vec4(0,0,0,0), 0,0,radius)
+			//this.mesh.push(vec2(radius[3]- view.dropshadowradius, height - radius[3]-1+ view.dropshadowradius), 0*pimul4 + PI + PI/2, vec4(0,0,0,0), 0,1,radius)
+				
+//				this.mesh.push(vec2( radius[0]- view.dropshadowradius ,radius[0]- view.dropshadowradius), 0, vec4(1,0,0,0), 0,0, radius)
+			}	
+		}
+
+		this.color = function(){
+			var col = view.dropshadowcolor;
+			col.a *= view.dropshadowopacity;
+			col.a *= 1.0- pow(mesh.uv.x,1. + view.dropshadowhardness*10.);
+			
+			return vec4(col.rgb, col.a * view.opacity)
+		}
+
+		this.position = function(){
+			pos = mesh.pos.xy
+			var ca = cos(mesh.angle + PI)
+			var sa = sin(mesh.angle + PI)
+			
+			var rad  = (mesh.radmult.x * mesh.shadowradius.x + mesh.radmult.y * mesh.shadowradius.y + mesh.radmult.z * mesh.shadowradius.z + mesh.radmult.w * mesh.shadowradius.w)
+			pos.x += ca * rad
+			pos.y += sa * rad
+			
+			uv = vec2(pos.x/view.layout.width,  pos.y/view.layout.height)
+			
+			sized = vec2(pos.x, pos.y)
+			sized += view.dropshadowoffset;
+			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
+		}
+	})
+	
+	this.shadowrect = false
+	
+	this.dropshadowopacity = function(){
+		if (this.dropshadowopacity> 0){
+			this.shadowrect = true;
+		}
+		else{
+			this.shadowrect =false;
+		}
+	}
+	
 	
 	this.moveToFront = function(){
 		if(!this.parent) return

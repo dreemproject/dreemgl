@@ -8,7 +8,10 @@ define.class( function(require, $ui$, view, label, button){
 
 	this.bgcolor = "#585858" 
 	this.flexdirection = "row" 
-
+	this.dropshadowradius = 20;
+	this.dropshadowopacity = 0.3;
+	this.dropshadowhardness = 0;
+	
 	this.attributes = {
 		menus:[
 			{name:"File", commands:[				
@@ -37,10 +40,12 @@ define.class( function(require, $ui$, view, label, button){
 
 			mres.push(
 				button({
-					buttoncolor1:"#737373",
-					buttoncolor2:"#737373",
+					buttoncolor1:"#585858",
+					buttoncolor2:"#585858",
 					hovercolor1:"#3b3b3b",
 					hovercolor2:"#3b3b3b",
+					bold:false,
+	
 					borderwidth:0, 
 					borderradius:4,
 					margin:vec4(4,0,0,0),
@@ -60,6 +65,7 @@ define.class( function(require, $ui$, view, label, button){
 									button({
 										padding:5,
 										margin:1,
+										bold:false,
 										text:c.name,
 										buttoncolor1:"#505050",
 										borderwidth:0,
@@ -76,6 +82,12 @@ define.class( function(require, $ui$, view, label, button){
 							}
 
 							return view({bgcolor:"#505050",flexdirection:"column",
+								dropshadowopacity: 0.2,
+								
+								dropshadowhardness:0,
+								dropshadowradius: 60,
+								dropshadowoffset:vec2(0,0), 
+	
 								miss:function(){
 									this.screen.closeModal(false)
 								},
