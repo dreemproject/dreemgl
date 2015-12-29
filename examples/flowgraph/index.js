@@ -1,16 +1,6 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
 
-	// so how do we apply a styleset to 'eeeverything'
-	this.style = {
-		"*":{ // all underlays all of our current nodes in the style copy
-			margin:0
-		},
-		label:{
-			margin:0
-		}
-	}
-
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')
 		var fs = require('fs')
