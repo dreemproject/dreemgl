@@ -213,8 +213,10 @@ define.class('$ui/view', function(require,
 			this.updatepopupuiposition()
 		}
 	}
+	
 	this.updatepopupuiposition = function(){
 		var bg = this.findChild("blockui")
+		if (!bg) console.log(" no blockui??");else console.log(" BLOCK!");
 		var cg = this.findChild("connectionui")
 		var gg = this.findChild("groupui")
 		var gbg = this.findChild("groupbg")
@@ -671,7 +673,7 @@ define.class('$ui/view', function(require,
 								label({text:"Group", bg:0, margin:4})
 								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
 							)
-							,this.selectorrect()							
+							,this.selectorrect({name:"selectorrect"})							
 						)
 					)
 				) 
