@@ -220,6 +220,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;
 				yoff += inp.parent.parent.layout.top + 10;
+				if (!F) this.neutralcolor = this.bgcolor = inp.bgcolor;
+		
 			}
 			
 			this.topos = vec2(T._pos[0],T._pos[1]+yoff)

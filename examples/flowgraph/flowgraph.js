@@ -20,8 +20,8 @@ define.class('$ui/view', function(require,
 	
 	
 	this.style = {
-		"*": {fontsize:20},
-		"ablock":{style:{"*":{fontsize:50}
+		"*": {fontsize:12},
+		"ablock":{style:{"*":{fontsize:12}
 				//inputbutton:{fontsize:20}
 				//,outputbutton:{fontsize:10}
 			}}
