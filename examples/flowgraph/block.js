@@ -24,7 +24,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		borderselected: Config({type:float, value:0, motion:"linear", duration: 0.1}),
 		focusbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"}),
 		hoverbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"}),
-		fontsize: Config({type:float, value:12}),
 		inselection : Config({type:boolean, value:false})
 	}
 		
@@ -180,8 +179,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	define.class(this, "inputbutton", function($ui$, view, label){
 		this.bg = false;
 		this.attributes = {
-			name:"thing",
-			fontsize: 12
+			name:"thing"
 		}
 		
 		this.clicked = function(){
@@ -194,7 +192,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.render =function(){
 			return [
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
-				label({text:this.name, bg:false, alignself:"center", fontsize:this.fontsize})
+				label({text:this.name, bg:false, alignself:"center"})
 			]
 		}
 	})
@@ -202,9 +200,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	define.class(this, "outputbutton", function($ui$, view, label){
 		this.bg = false;
 		this.attributes = {
-			name:"thing",
-			fontsize: 12
-		}
+			name:"thing"		}
 		
 		this.clicked = function(){					
 			var	bl = this.parent.parent.parent;
@@ -214,7 +210,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 		this.render =function(){
 			return [
-				label({text:this.name, bg:false, alignself:"center", fontsize:this.fontsize}),
+				label({text:this.name, bg:false, alignself:"center"}),
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}
@@ -222,7 +218,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.render = function(){
 		return [
-			label({text:this.title, bg:0, margin:vec4(6,0,4,0), fontsize: this.fontsize})
+			label({text:this.title, bg:0, margin:vec4(6,0,4,0)})
 			,view({bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1})
 			,view({bg:false, width:140, flex: 1, justifycontent:"space-between"}
 			,view({bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"}
@@ -237,8 +233,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			)
 			)
 			,view({name:"addbuttons",flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
-				,button({icon:"plus", fontsize: this.fontsize})
-				,button({icon:"plus", fontsize: this.fontsize})
+				,button({icon:"plus"})
+				,button({icon:"plus"})
 			)
 		]
 	}
