@@ -58,7 +58,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 			return root
 		}
 	})
-	
+
 	this.render = function(){		
 		return [
 			this.fileio(),

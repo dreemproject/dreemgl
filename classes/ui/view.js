@@ -364,14 +364,16 @@ define.class('$system/base/node', function(require){
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
 		this.was_initialized = true
-		this.modelmatrix = mat4()
-		if(this._viewport) this.totalmatrix = mat4.identity()
-		else this.totalmatrix = mat4()
-		this.viewportmatrix = mat4()
-
 		if(prev){
-//			this._layout =
-	//		this.oldlayout = prev._layout
+			this.modelmatrix = prev.modelmatrix
+			this.totalmatrix = prev.totalmatrix
+			this.viewportmatrix = prev.viewportmatrix
+		}
+		else{
+			this.modelmatrix = mat4()
+			if(this._viewport) this.totalmatrix = prev? prev.totalmatrix: mat4.identity()
+			else this.totalmatrix = prev? prev.totalmatrix: mat4()
+			this.viewportmatrix = prev? prev.viewportmatrix: mat4()
 		}
 
 		if(this._bgimage){
@@ -822,7 +824,7 @@ define.class('$system/base/node', function(require){
 		var ref = node.ref
 		var oldlayout = ref.oldlayout || {}
 		var layout = ref._layout 
-		
+
 		if(!nochild){
 			var children = node.children
 			for(var i = 0; i < children.length; i++){

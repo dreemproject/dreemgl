@@ -97,14 +97,16 @@ define.class(function(require, $server$, dataset){
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
 	this.stringify = function(){
-		var out = ''		
+		var out = ''
 		var buf = {
 			charCodeAt: function(i){
 				return out.charCodeAt(i)
-			}
+			},
+			length:0
 		}
 
 		jsformatter.walk(this.ast, buf, function(str){
+			buf.length += str.lngth
 			out += str
 		})
 

@@ -370,6 +370,8 @@ define.class('$ui/view', function(require,
 			if(event.value.composition)
 			require.async(event.value.composition).then(function(result){
 				this.sourceset.parse(result.module.factory.body.toString())
+			
+				this.sourceset.stringify()
 			}.bind(this))
 		}.bind(this)
 
@@ -615,7 +617,7 @@ define.class('$ui/view', function(require,
 		this.updatepopupuiposition();
 		
 	}
-	
+		
 	this.render = function(){
 		return [
 			menubar({})		

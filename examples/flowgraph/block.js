@@ -232,15 +232,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			,view({class:'main'})
 			,view({class:'between1'}
 				,view({class:'head'}
-				,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
-				,this.inputbutton({name:"input 2", bgcolor:"#800000"})
-				,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
-			)
-			,view({class:'between2'}
-			,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
-		
-			,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
-			)
+					,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
+					,this.inputbutton({name:"input 2", bgcolor:"#800000"})
+					,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
+				)
+				,view({class:'between2'}
+					,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
+					,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
+				)
 			)
 			,view({name:"addbuttons"}
 				,button({icon:"plus"})
