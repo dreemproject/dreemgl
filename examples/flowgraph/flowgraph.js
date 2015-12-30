@@ -632,7 +632,6 @@ define.class('$ui/view', function(require,
 					)
 
 				)
-				,dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0}
 					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
@@ -681,7 +680,7 @@ define.class('$ui/view', function(require,
 							,this.selectorrect({name:"selectorrect"})							
 						)
 					)
-				) 
+				
 				,splitcontainer({flex:0.5,direction:"horizontal"}
 					,dockpanel({title:"Properties", viewport:"2D"}
 						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
