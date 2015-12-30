@@ -111,8 +111,8 @@ define(function () {
 				
 		var ref = node.ref
 		var ol = ref.oldlayout
-
-		if(!node.dirty && 
+		
+		if(!node.dirty && ol &&
 			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) && 
 			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) && 
 			(isNaN(ol.last_pos0) && isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) && 
