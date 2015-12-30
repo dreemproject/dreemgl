@@ -42,12 +42,12 @@ define.class( function(require, $ui$, view, label, button){
 				button({
 					buttoncolor1:"#585858",
 					buttoncolor2:"#585858",
-					hovercolor1:"#3b3b3b",
-					hovercolor2:"#3b3b3b",
+					hovercolor1:"#737373",
+					hovercolor2:"#737373",
 					bold:false,
 	
 					borderwidth:0, 
-					borderradius:4,
+					borderradius:8,
 					margin:vec4(4,0,0,0),
 					padding:5,  
 					text:menu.name, 
@@ -63,15 +63,19 @@ define.class( function(require, $ui$, view, label, button){
 								//console.log("menucommand: ", c);
 								res.push(
 									button({
-										padding:5,
-										margin:1,
+										padding:vec4(5 ,0,5,4),
+										margin:0,
+										borderradius: 6,
 										bold:false,
 										text:c.name,
-										buttoncolor1:"#505050",
+										
+										buttoncolor1:"#a3a3a3",
 										borderwidth:0,
-										hovercolor1:"#3b3b3b",
-										hovercolor2:"#3b3b3b", 
-										buttoncolor2:"#505050",
+										hovercolor1:"#737373",
+										hovercolor2:"#737373", 
+										buttoncolor2:"#a3a3a3",
+										textcolor:"#3b3b3b",
+										textactivecolor:"white",
 										clickaction: c.action,
 										click:function(){
 											if(this.clickaction) this.clickaction()
@@ -81,13 +85,13 @@ define.class( function(require, $ui$, view, label, button){
 								)
 							}
 
-							return view({bgcolor:"#505050",flexdirection:"column",
-								dropshadowopacity: 0.2,
-								
+							return view({bgcolor:"#a3a3a3",flexdirection:"column",
+								dropshadowopacity: 0.4,
+								padding:4,
 								dropshadowhardness:0,
-								dropshadowradius: 60,
-								dropshadowoffset:vec2(0,0), 
-	
+								dropshadowradius: 20,
+								dropshadowoffset:vec2(9,9), 
+								borderradius:7,
 								miss:function(){
 									this.screen.closeModal(false)
 								},

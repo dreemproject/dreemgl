@@ -4,7 +4,9 @@ define.class('$server/composition', function($ui$, screen, view, menubar, button
 	
 	this.justifycontent = "center" ;
 	this.alignitems = "center" 
-	
+	this.style = {
+		"*":{fontsize:12}
+	}
 	this.render = function(){ return [
 		screen({clearcolor:vec4('black'), title:"Small menu bar test frame"},
 			view({flex:1, bg:'false'},

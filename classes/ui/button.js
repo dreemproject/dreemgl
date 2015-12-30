@@ -110,6 +110,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.col1 = this.hovercolor1
 		this.col2 = this.hovercolor2
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
+		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
+
 	}
 
 	// the normal button state
@@ -117,6 +119,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.col1 = Mark(this.buttoncolor1, first)
 		this.col2 = Mark(this.buttoncolor2, first)
 		if(this.iconres)this.iconres.fgcolor = this.textcolor
+		if(this.buttonres) this.buttonres.fgcolor = this.textcolor;
 	}
 
 	// clicked state
@@ -126,6 +129,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
+		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
 	}
 
 	this.init = function(){
@@ -151,12 +155,12 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.iconres = undefined
 		
 		if (this.icon && this.icon.length > 0){
-			this.iconres = icon({alignself:"center", fontsize: this.fontsize, nopick:true, fgcolor:this.fgcolor, icon: this.icon}); 
+			this.iconres = icon({alignself:"center", fontsize: this.fontsize, nopick:true, fgcolor:this.textcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}
 
 		if (this.text && this.text.length > 0){			
-			this.buttonres = label({alignself:"center", font: this.font, bgcolor:this.bgcolor, fgcolor:this.fgcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			this.buttonres = label({alignself:"center", font: this.font, bgcolor:this.bgcolor, fgcolor:this.textcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		
