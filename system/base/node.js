@@ -512,13 +512,13 @@ define.class(function(require, constructor){
 		// lets create an attribute
 		var is_config =  config instanceof Config
 		var is_attribute = !always_define && key in this 
-
 		// use normal value assign
 		if(is_attribute && !is_config){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
 
+		console.error(key)
 		// autoprocess the config
 		if(is_config){
 			config = config.config

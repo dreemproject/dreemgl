@@ -51,23 +51,51 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		]	
 	}
 	
+	this.style = {
+		radiogroup:{
+			margin:vec4(2,0,2,5)
+		},
+		foldconainer_color:{
+			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"circle", collapsed:true
+		},
+		view_colorview:{
+			bg:0,width:300, flexdirection:"column"			
+		},
+		numberbox_vec4:{
+			flex:1,decimals:3, stepvalue:0.01, margin:2
+		},
+		numberbox_vec3:{
+			flex:1, decimals:3, stepvalue:0.01, margin:2
+		},
+		numberbox_vec2:{
+			 flex:1, decimals:3, stepvalue:0.01,
+		},
+		numberbox_floatlike:{
+			decimals:3, stepvalue:0.01, margin:2, flex:1, 
+		}
+	}
+
 	this.render = function(){
 		
 		var typename = this.property.type?this.property.type.name:"";
 		var meta = (this.property.meta)?this.property.meta:"";
 		
 		if (typename =="Enum"){
-			return this.wrap(radiogroup({margin:vec4(2,0,2,5),title:this.propertyname,values:this.property.type.values, currentvalue: this.value}), true);
+			return this.wrap(radiogroup({
+				title:this.propertyname,values:this.property.type.values, currentvalue: this.value}), true);
 		}
 		
 		if (typename =="vec4"){
 		
 			if (this.property.meta=="color"){
 				return this.wrap(				
-					foldcontainer({fontsize:this.fontsize, width:302, title:"colorpicker",  bordercolor:"#383838", icon:"circle", collapsed:true, basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)},view({bg:0,width:300, flexdirection:"column"},colorpicker({value:this.value})))
+					foldcontainer({class:'color', basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)},
+						view({class:'color_view'},
+							colorpicker({value:this.value})
+						)
+					)
 				)
 			}
-			
 			
 			var t1 = "";
 			var t2 = "";
@@ -89,10 +117,10 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 			}
 			return this.wrap(
 				view({bg:0},
-					numberbox({title:t1, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[0],margin:2}), 
-					numberbox({title:t2, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[1],margin:2}), 
-					numberbox({title:t3, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[2],margin:2}), 
-					numberbox({title:t4, flex:1, align:"right",decimals:3, stepvalue:0.01, fontsize:this.fontsize, value:this.value[3],margin:2})
+					numberbox({title:t1, class:'vec4', value:this.value[0]}), 
+					numberbox({title:t2, class:'vec4', value:this.value[1]}), 
+					numberbox({title:t3, class:'vec4', value:this.value[2]}), 
+					numberbox({title:t4, class:'vec4', value:this.value[3]})
 				)
 			);
 		}
@@ -111,9 +139,9 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 				
 			return this.wrap(
 				view({bg:0},
-					numberbox({title:t1, flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[0], margin:2}), 
-					numberbox({title:t2, flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[1], margin:2}), 
-					numberbox({title:t3, flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[2], margin:2})
+					numberbox({title:t1, class:'vec3', value:this.value[0]}), 
+					numberbox({title:t2, class:'vec3', value:this.value[1]}), 
+					numberbox({title:t3, class:'vec3', value:this.value[2]})
 				)
 			);
 		}
@@ -121,8 +149,8 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="vec2"){
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[0],margin:2}), 
-					numberbox({flex:1, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value[1],margin:2})
+					numberbox({class:'vec2', value:this.value[0],margin:2}), 
+					numberbox({class:'vec2', value:this.value[1],margin:2})
 				)
 			);            
 		}
@@ -130,7 +158,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="FloatLike"){
 			return this.wrap(
 				view({bg:0},
-					numberbox({flex:1, minvalue: this.property.minvalue, maxvalue: this.property.maxvalue, fontsize:this.fontsize,decimals:3, stepvalue:0.01, value:this.value, stepvalue:0.1, margin:2}) 
+					numberbox({class:'floatlike', minvalue: this.property.minvalue, maxvalue: this.property.maxvalue,  value:this.value}) 
 				)
 			)
 		}

@@ -254,6 +254,9 @@ define.class('$system/base/node', function(require){
 		), value:''}),
 	}
 
+	this.name = ""
+	this.class = ""
+
 	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
 	this.boundscheck = true
 	// the local matrix	
@@ -368,6 +371,7 @@ define.class('$system/base/node', function(require){
 			this.modelmatrix = prev.modelmatrix
 			this.totalmatrix = prev.totalmatrix
 			this.viewportmatrix = prev.viewportmatrix
+			this.layout = prev.layout
 		}
 		else{
 			this.modelmatrix = mat4()

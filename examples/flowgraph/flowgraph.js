@@ -49,7 +49,7 @@ define.class('$ui/view', function(require,
 				return fill;
 			}			
 		}
-		
+		console.log(this.name)
 		this.bg = 1
 		this.margin = vec4(2,2,2,0)
 		this.justifycontent = "flex-start"

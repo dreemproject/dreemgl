@@ -120,7 +120,7 @@ define.class(function(view,icon){
 
 	this.render = function(){
 		
-			this.iconres = this.iconclass({fontsize: this.fontsize, nopick:true, fgcolor:this.value?this.fgcolor:vec4("transparent"), icon: "check"}); 
+			this.iconres = this.iconclass({fontsize: this.fontsize, fgcolor:this.value?this.fgcolor:vec4("transparent"), icon: "check"}); 
 			return [this.iconres]
 		
 	}
