@@ -353,8 +353,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			return foldcontainer(
 					{
 						collapsed:true, bordercolor:"#202020",bg:0,
-						attributes:{collapsed:{persist:true}},
-						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" }, 
+						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" },
 						view({flexdirection: "column", flex: 1, bg:0
 					}, subs)
 				);

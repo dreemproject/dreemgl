@@ -200,7 +200,7 @@ color:function(){
 				0),
 			0),
 			screen({
-					attributes:{pager:0},
+					pager:0,
 					name:'remote',
 					myfn:function(){
 

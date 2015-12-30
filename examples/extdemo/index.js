@@ -26,8 +26,8 @@ define.class('$server/composition',function(require, $ui$, screen, $examples$gui
 					  x: 0,
 					  bgcolor: 'black',
 					  viewport:'2d',
-//					  overflow:'scroll',
-//					  attributes:{scroll:{persist:true}}
+					  overflow:'scroll',
+					  scroll:Config({persist:true})
 					},
 					slides$intro({
 						flex:1,
