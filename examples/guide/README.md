@@ -149,19 +149,17 @@ and displays the list of movies (as `guide$movie` objects):
     
 And finally, the `index.js` wires all the components together:
 
-    define.class(function($server$, composition, role, $examples$, guide$search, guide$browser) {
+    define.class(function($server$, composition, $examples$, guide$search, guide$browser) {
     
         this.render = function() { return [
             guide$search({
                 name:'omdb',
                 keyword:'${this.rpc.user.main.term}'
             }),
-            role(
-                guide$browser({
-                    name:'main',
-                    movies:'${this.rpc.omdb.results}'
-                })
-            )
+            guide$browser({
+                name:'main',
+                movies:'${this.rpc.omdb.results}'
+            })
         ] }    
     });
 
@@ -169,15 +167,15 @@ And finally, the `index.js` wires all the components together:
 
 All communication between the user and the server must go though the RPC bus, availabel via `this.rpc`.  To make
 calls on the server, use `this.rpc.serverObjectName.attributeOrMethodName` for server objects 
-and `this.rpc.role.screenName.attributeOrMethodName` for screen objects.    
+and `this.rpc.screenName.attributeOrMethodName` for screen objects.    
 
 #### Attributes
 
 Attributes can be get and set like so:
 
-    this.rpc.role.browser.someAttribute = "value"
+    this.rpc.browser.someAttribute = "value"
     
-    console.log("My value is", this.rpc.role.browser.someAttribute);
+    console.log("My value is", this.rpc.browser.someAttribute);
 
 #### Methods
 
@@ -219,8 +217,8 @@ The composition server will respond to HTTP POSTs requests sending JSON data in 
 
 The RPC ID refers to the object that the RPC method will be called on, and is simply the string that would otherwise 
 come after a call to `this.rpc` in Dreem code, except for the name of the attribute or method name itself.  For example, 
-the attribute you would have set in this code `this.rpc.role.mobile.deviceID` would have an 
-RPC ID of `role.mobile`.  Likewise, a method called with `this.rpc.localapi.register()` would have an RPC ID of `localapi`.
+the attribute you would have set in this code `this.rpc.mobile.deviceID` would have an 
+RPC ID of `mobile`.  Likewise, a method called with `this.rpc.localapi.register()` would have an RPC ID of `localapi`.
 
 #### Attributes
 
@@ -238,7 +236,7 @@ The JSON structure for a setting an attribute is as follows:
 
 An an example, to set the search term variable on the example above, you can use [curl](http://curl.haxx.se/) like so: 
 
-    curl -X POST -d '{"rpcid":"role.main", "type":"attribute", "attribute":"term", "value":"Snow"}' http://localhost:2000/guide
+    curl -X POST -d '{"rpcid":"main", "type":"attribute", "attribute":"term", "value":"Snow"}' http://localhost:2000/guide
     
 Which will return:
     
