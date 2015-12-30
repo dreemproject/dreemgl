@@ -16,9 +16,8 @@ define.class(function($server$, composition, $ui$, screen, view){
 						fontsize: 138, marginbottom:20, fgcolor:'black'
 					}),*/
 					view({
-						attributes:{
-							mycolor:Config({value:vec4('red'), motion:'linear', duration:1})
-						},
+						mycolor:Config({value:vec4('red'), motion:'linear', duration:1})
+						,
 						mouseleftdown:function(){
 							this.mycolor = 'yellow'
 						},

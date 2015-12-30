@@ -99,10 +99,9 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 						}
 					},
 					fov: 90,
-					attributes:{
-						camera:Config({motion:'linear', duration:1, persist:true}),
-						fov:Config({motion:'easein', duration:1, persist:true})
-					}}
+					camera:Config({motion:'linear', duration:1, persist:true}),
+					fov:Config({motion:'easein', duration:1, persist:true})
+					}
 					,cube({pos:vec3(0,1,0), size:vec3(0.5)})
 					,cube({pos:vec3(1,0,0), size:vec3(0.5)})
 					,cube({pos:vec3(0,0,0), size:vec3(0.5)})
