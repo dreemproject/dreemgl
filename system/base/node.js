@@ -518,7 +518,6 @@ define.class(function(require, constructor){
 			return
 		}
 
-		console.error(key)
 		// autoprocess the config
 		if(is_config){
 			config = config.config
