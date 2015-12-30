@@ -37,7 +37,7 @@ loop do
   selected = devices.to_a.sample
   action = %w(join part).sample
 
-  uri = URI.parse("http://localhost:2000/extdemo")
+  uri = URI.parse("http://localhost:2000/examples/extdemo")
   Net::HTTP.start(uri.hostname, uri.port) do |http|
     (req = Net::HTTP::Post.new(uri)).body = {
         rpcid: "devbus",

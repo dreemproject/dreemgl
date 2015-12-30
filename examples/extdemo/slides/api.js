@@ -3,16 +3,16 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function (require, $containers$, view, $controls$, label) {
+define.class(function (require, $ui$, view, label) {
 
     this.slidetitle = "Attributes via POST API";
 
     this.attributes = {
-        setterCode: {type: String, value:
+        setterCode: Config({type: String, value:
         'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
         '\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +
@@ -26,12 +26,12 @@ define.class(function (require, $containers$, view, $controls$, label) {
         '  puts "sending JSON: #{req.body}"\n' +
         '  http.request(req)\n' +
         '\n' +
-        'end'},
-        getterCode: {type: String, value:
+        'end'}),
+        getterCode: Config({type: String, value:
         'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
         '\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +
@@ -46,7 +46,7 @@ define.class(function (require, $containers$, view, $controls$, label) {
         '  res = http.request(req)\n' +
         '  puts "response JSON: #{res.body}"\n' +
         '\n' +
-        'end'}
+        'end'})
     };
 
     this.flexdirection = 'column';
@@ -70,7 +70,7 @@ define.class(function (require, $containers$, view, $controls$, label) {
             view(
                 {flexdirection: 'column', flex: 0, alignself: 'stretch', padding:10, bgcolor:'transparent'},
                 label({fontsize:28, bgcolor:'transparent', text: wire('"The current value of search.keyword is: " + this.rpc.search.keyword'), alignself: 'center'}),
-                label({fontsize:18, bgcolor:'transparent', text:'(Try using the post API to get and set this value!)', alignself: 'center'})
+                label({fontsize:18, bgcolor:'transparent', text:'(Try using the POST API scripts in ./examples/extdemo/bin/ to get and set this value!)', alignself: 'center'})
             )
         ];
     }

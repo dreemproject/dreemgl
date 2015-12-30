@@ -9,14 +9,15 @@ define.class(function(require, exports){
 	this.Keyboard = require('./keyboardwebgl')
 	this.Mouse = require('./mousewebgl')
 	this.Touch = require('./touchwebgl')
-
+	this.Midi = require('./midiwebgl')
+	
 	// require embedded classes	
 	this.Shader = require('./shaderwebgl')
 	this.Texture = require('./texturewebgl')
 	this.Texture.Image = typeof Image !== 'undefined' && Image
 	this.DrawPass = require('./drawpasswebgl')
-
-	this.preserveDrawingBuffer = true
+	
+	this.preserveDrawingBuffer = false
 	this.premultipliedAlpha = false
 	this.antialias = false
 	this.debug_pick = false
@@ -48,6 +49,7 @@ define.class(function(require, exports){
 			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
 			this.touch = previous.touch
+			this.midi = previous.midi
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
 			this.frame = this.main_frame = previous.main_frame
@@ -59,6 +61,7 @@ define.class(function(require, exports){
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
 			this.touch = new this.Touch(this)
+			this.midi = new this.Midi(this)
 			this.drawtarget_pools = {}
 
 			this.createContext()
@@ -133,8 +136,10 @@ define.class(function(require, exports){
 
 			this.main_frame.ratio = pixelRatio
 			this.main_frame.size = vec2(sw, sh) // actual size
+			
 			this.size = vec2(w, h)
 			this.ratio = this.main_frame.ratio
+
 		}.bind(this)
 
 		window.onresize = function(){
@@ -171,7 +176,7 @@ define.class(function(require, exports){
 		if(!frame) frame = this.main_frame
 	
 		this.frame = frame
-		this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
+		//this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
 
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
@@ -199,7 +204,7 @@ define.class(function(require, exports){
 			// and then read the goddamn pixel
 			if(last || view.draw_dirty & 2){
 				view.draw_dirty &= 1
-				view.drawpass.drawPick(last, i, x, y, this.debug_pick)
+				view.drawpass.drawPick(last, i + 1, x, y, this.debug_pick)
 			}
 			if(skip){
 				this.screen.draw_dirty &= 1
@@ -218,12 +223,12 @@ define.class(function(require, exports){
 		}
 		
 		// decode the pass and drawid
-		var passid = (data[0]*43)%256 - 1
-		var drawid = (((data[2]<<8) | data[1])*60777)%65536 - 1
+		var passid = (data[0]*43)%256
+		var drawid = (((data[2]<<8) | data[1])*60777)%65536
 		// lets find the view.
-		var passview = this.drawpass_list[passid]
+		var passview = this.drawpass_list[passid - 1]
 		var drawpass = passview && passview.drawpass
-		var view = drawpass && drawpass.draw_list[drawid]
+		var view = drawpass && drawpass.getDrawID(drawid)
 
 		while(view && view.nopick){
 			view = view.parent
@@ -274,19 +279,33 @@ define.class(function(require, exports){
 			}
 		}
 
+		// do the dirty matrix regen
+		for(var i = 0; i < this.layout_list.length; i++){
+			// lets do a layout?
+			var view = this.layout_list[i]
+			if(view.matrix_dirty){
+				view.updateMatrices(view.parent? view.parent.totalmatrix: undefined, view._viewport)
+			}
+		}
+
+		var clipview = undefined
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
 
 			var skip = false
 			var last = i === len - 1
-
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
+
 			if(view.draw_dirty & 1 || last){
-				//console.log("DiRTY", view)
-				var hastime = view.drawpass.drawColor(last, stime)
+			
+				if(!last){
+					if(clipview === undefined) clipview = view
+					else clipview = null
+				}
+				var hastime = view.drawpass.drawColor(last, stime, clipview)
 				view.draw_dirty &= 2
 				if(hastime){
 					anim_redraw.push(view)
@@ -318,9 +337,14 @@ define.class(function(require, exports){
 			node = node.parent
 		}
 		
-		if(!node.parent){ // fast path to chuck the whole set
+		if(!node.parent){ // fast path to chuck the whole setc
 			// lets put all the drawpasses in a pool for reuse
-			for(var i = 0; i < this.drawpass_list.length; i++) this.drawpass_list[i].drawpass.poolDrawTargets()
+			for(var i = 0; i < this.drawpass_list.length; i++){
+				var draw = this.drawpass_list[i]
+				draw.drawpass.poolDrawTargets()
+				draw.layout_dirty = true
+				draw.draw_dirty = 3
+			}
 			this.drawpass_list = []
 			this.layout_list = []
 			this.drawpass_idx = 0

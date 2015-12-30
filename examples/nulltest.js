@@ -1,14 +1,12 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $containers$, screen, view){
+define.class('$server/composition', function($ui$, screen, view){
 
 	this.render = function(){ return [
-		role(
-			screen({clearcolor:'#484230'},
-			       view({
-				   size: vec2(100,100),
-				   bgcolor: vec4('green'),
-				})
-			)
+		screen({clearcolor:'#484230'},
+		       view({
+			   size: vec2(100,100),
+			   bgcolor: vec4('green'),
+			})
 		)
 	]}
 	

@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function (require, $containers$, view, $controls$, label) {
+define.class(function (require, $ui$, view, label) {
 
     this.bgcolor = 'transparent';
     this.flexdirection = 'row';
@@ -11,14 +11,14 @@ define.class(function (require, $containers$, view, $controls$, label) {
     this.margin = 10;
 
     this.attributes = {
-        deviceId:  {type:String},
-        deviceType: {type:String}
+        deviceId:  Config({type:String}),
+        deviceType: Config({type:String})
     };
 
     this.render = function() {
         return [
           view({width:this.width, bgcolor:'transparent', height:wire('this.parent.height - this.parent.txt.height'), bgimage:'$examples/extdemo/slides/' + this.deviceType + '.png'}),
-          label({name:'txt', text:this.deviceId, fontsize:14, fgcolor:'#333', bgcolor:'transparent', align:'center', multiline: false})
+          label({name:'txt', text:this.deviceId, fontsize:11, fgcolor:'#333', bgcolor:'transparent', alignself:'center', multiline: false})
         ]
     }
 

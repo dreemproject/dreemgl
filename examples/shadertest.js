@@ -1,7 +1,6 @@
 //Pure JS based composition
-define.class(function($server$, composition, role, $containers$, screen, view){
+define.class(function($server$, composition, $ui$, screen, view){
 	this.render = function(){ return [
-		role(
 			screen({clearcolor:vec4('black')},
 				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
 					/*label({text:'Live shader coding', 
@@ -17,9 +16,8 @@ define.class(function($server$, composition, role, $containers$, screen, view){
 						fontsize: 138, marginbottom:20, fgcolor:'black'
 					}),*/
 					view({
-						attributes:{
-							mycolor:{value:vec4('red'), motion:'linear', duration:1}
-						},
+						mycolor:Config({value:vec4('red'), motion:'linear', duration:1})
+						,
 						mouseleftdown:function(){
 							this.mycolor = 'yellow'
 						},
@@ -68,6 +66,5 @@ define.class(function($server$, composition, role, $containers$, screen, view){
 					})
 				)
 			)
-		)
 	]}
 })

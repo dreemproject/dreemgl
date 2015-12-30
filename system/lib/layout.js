@@ -10,7 +10,133 @@
 
 define(function () {
 
+	function fillNodes(node, nochildren) {
+		var newnode = {
+			children:[], 
+			ref:node, 
+			dirty: node.layout_dirty,
+			layout:{
+				width:undefined, 
+				height:undefined, 
+				absx:0, 
+				absy:0, 
+				top:0, 
+				left:0, 
+				right:0, 
+				bottom:0,
+			}
+		}
 
+		//Object.defineProperty(newnode.layout, 'left', {get:function(){
+		//	return this._left
+		//},set:function(v){
+		//	if(this.debug) console.error("ASSIGN",v)
+	//		this._left = v
+	//	}})
+	//	newnode.layout.left = 0
+
+		// store old layout
+		node.oldlayout = node._layout
+		
+		var layout = node._layout = newnode.layout
+		
+		// alright so. what we need to do is bubble down layout_dirty
+		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
+			var child = node.children[i]
+			if(child._viewport){ // its using a different layout pass
+				// if we are flex, we have to compute the layout of this child
+				if(!isNaN(child._flex)){
+					var newchild = fillNodes(child, true)
+					if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+					newnode.children.push(newchild)
+				}
+				else{
+					// otherwise this child has an already computed layout
+					// so how do we know if this is dirty?
+					newnode.children.push({
+						flex:undefined,
+						ref:child,
+						layout:child.layout,
+						children:[]
+					})
+				}
+			}
+			else{
+				var newchild = fillNodes(child)
+				if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
+				newnode.children.push(newchild)
+			}
+		}
+
+		return newnode
+	}
+
+	function putBackOldLayout(node, nest){
+		var ref = node.ref
+
+		var layout = ref._layout, oldlayout = ref.oldlayout
+		layout.absx = 0 
+		layout.absy = 0
+		layout.width = oldlayout.width
+		layout.height = oldlayout.height
+		if(nest){
+			layout.left = oldlayout.left
+			layout.top = oldlayout.top
+		}
+		else{
+			layout.left = oldlayout.last_left
+			layout.top = oldlayout.last_top
+		}
+		layout.last_left = oldlayout.last_left
+		layout.last_top = oldlayout.last_top
+		layout.right = oldlayout.right
+		layout.bottom = oldlayout.bottom
+		layout.last_size0 = oldlayout.last_size0
+		layout.last_size1 = oldlayout.last_size1
+		layout.last_pos0 = oldlayout.last_pos0
+		layout.last_pos1 = oldlayout.last_pos1
+		layout.parentMaxWidth = oldlayout.parentMaxWidth
+		layout.parentDirection = oldlayout.parentDirection
+
+		var children = node.children
+		for(var i = 0; i < children.length; i++){
+			var child = children[i]
+			putBackOldLayout(child, true)
+		}
+	}
+
+	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
+		
+		var total = 1;
+				
+		var ref = node.ref
+		var ol = ref.oldlayout
+		
+		if(!node.dirty && ol &&
+			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) && 
+			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) && 
+			(isNaN(ol.last_pos0) && isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) && 
+			(isNaN(ol.last_pos1) && isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) && 
+			ol.parentMaxWidth === parentMaxWidth && ol.parentDirection === parentDirection){
+			putBackOldLayout(node)
+			//ref.debug_view = true
+			return 1
+		}
+		//else ref.debug_view = false
+
+		total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
+
+		ref._layout.last_left = ref._layout.left
+		ref._layout.last_top = ref._layout.top
+		ref._layout.last_pos0 = ref._pos[0]
+		ref._layout.last_pos1 = ref._pos[1]
+		ref._layout.last_size0 = ref._size[0]
+		ref._layout.last_size1 = ref._size[1]
+		ref._layout.parentMaxWidth = parentMaxWidth
+		ref._layout.parentDirection = parentDirection
+		
+		return total;
+	}
 	var CSS_UNDEFINED;
 
 	var CSS_DIRECTION_INHERIT = 'inherit';
@@ -83,67 +209,6 @@ define(function () {
 		return 0;
 	}*/
 
-	function fillNodes(node, nochildren) {
-		var newnode = {children:[], ref:node, layout:{width:undefined, height:undefined, absx:0, absy:0, top:0, left:0, right:0, bottom:0}}
-		node.oldlayout = node.layout
-		var layout = node._layout = newnode.layout
-
-		/*
-		var style = newnode.style
-
-		if(node._pos){
-			if(!isNaN(node._pos[0])) style.left = node._pos[0];
-			if(!isNaN(node._pos[1])) style.top = node._pos[1];
-		}
-		if (node._alignitems) style.alignItems = node._alignitems;
-		if (node._aligncontent) style.alignContent = node._aligncontent;
-		if (node._justifycontent) style.justifyContent = node._justifycontent;
-		if (node._alignself) style.alignSelf = node._alignself;
-		if (node._flexwrap) style.flexWrap = node._flexwrap;
-		if (node.measure) style.measure = node.measure.bind(node);
-		if (node._flexdirection) style.flexDirection = node._flexdirection;
-		
-		if (node._margin[0] == node._margin[1] == node._margin[2] == node._margin[3]) style.margin = node._margin[0];
-		style.marginLeft = node._margin[0];
-		style.marginRight = node._margin[2];
-		style.marginTop = node._margin[1];
-		style.marginBottom = node._margin[3];
-
-		if (node._padding[0] == node._padding[1] == node._padding[2] == node._padding[3]) style.padding = node._padding[0];
-		style.paddingLeft = node._padding[0];
-		style.paddingRight = node._padding[2];
-		style.paddingTop = node._padding[1];
-		style.paddingBottom = node._padding[3];
-
-		if (node._size){
-			if (!isNaN(node._size[0]))	style.width = node._size[0];
-			if (!isNaN(node._size[1]))	style.height = node._size[1];
-		}
-		if (node._position) style.position = node._position;
-		if (node._flex) style.flex = node._flex;
-		*/
-		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
-			var child = node.children[i]
-			if(child._viewport){ // its using a different layout pass
-				// if we are flex, we have to compute the layout of this child
-				if(!isNaN(child._flex)){
-					newnode.children.push(fillNodes(child, true))
-				}
-				else{
-					// otherwise this child has an already computed layout
-					newnode.children.push({
-						flex:undefined,
-						ref:child,
-						layout:child.layout,
-						children:[]
-					})
-				}
-			}
-			else newnode.children.push( fillNodes(child) )
-		}
-
-		return newnode
-	}
 
 	function extractNodes(node) {
 		var layout = node.layout;
@@ -459,6 +524,8 @@ define(function () {
 		return b;
 	}
 
+	var round = Math.round
+
 	// When the user specifically sets a value for width or height
 	function setDimensionFromStyle(node, axis) {
 		// The parent already computed us a width or height. We just skip it
@@ -476,14 +543,12 @@ define(function () {
 		else if(axis === 'column') bound = node.ref._size[1]
 		else throw new Error('axis not found')
 
-		node.layout[dim[axis]] = fmaxf(
+		node.layout[dim[axis]] = round(fmaxf(
 			boundAxis(node, axis, bound),
 			getPaddingAndBorderAxis(node, axis)
-		);
+		));
 	}
 	
-	var round = Math.round
-
 	function setTrailingPosition(node, child, axis) {
 		child.layout[trailing[axis]] = round(node.layout[dim[axis]] -
 				child.layout[dim[axis]] - child.layout[pos[axis]]);
@@ -512,19 +577,20 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 		setDimensionFromStyle(node, mainAxis);
 		setDimensionFromStyle(node, crossAxis);
 
+		var layout = node.layout
 		// Set the resolved resolution in the node's layout
-		node.layout.direction = direction;
+		layout.direction = direction;
 
 		// The position is set by the parent, but we need to complete it with a
 		// delta composed of the margin and left/top/right/bottom
-		node.layout[leading[mainAxis]] += getLeadingMargin(node, mainAxis) +
-			getRelativePosition(node, mainAxis);
-		node.layout[trailing[mainAxis]] += getTrailingMargin(node, mainAxis) +
-			getRelativePosition(node, mainAxis);
-		node.layout[leading[crossAxis]] += getLeadingMargin(node, crossAxis) +
-			getRelativePosition(node, crossAxis);
-		node.layout[trailing[crossAxis]] += getTrailingMargin(node, crossAxis) +
-			getRelativePosition(node, crossAxis);
+		layout[leading[mainAxis]] = round(layout[leading[mainAxis]] + getLeadingMargin(node, mainAxis) +
+			getRelativePosition(node, mainAxis));
+		layout[trailing[mainAxis]] = round(layout[trailing[mainAxis]] + getTrailingMargin(node, mainAxis) +
+			getRelativePosition(node, mainAxis));
+		layout[leading[crossAxis]] = round(layout[leading[crossAxis]] + getLeadingMargin(node, crossAxis) +
+			getRelativePosition(node, crossAxis));
+		layout[trailing[crossAxis]] = round(layout[trailing[crossAxis]] + getTrailingMargin(node, crossAxis) +
+			getRelativePosition(node, crossAxis));
 
 		// Inline immutable values from the target node to avoid excessive method
 		// invocations during the layout calculation.
@@ -532,13 +598,13 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 		var/*float*/ paddingAndBorderAxisResolvedRow = getPaddingAndBorderAxis(node, resolvedRowAxis);
 
 		if (isMeasureDefined(node)) {
-			var/*bool*/ isResolvedRowDimDefined = !isUndefined(node.layout[dim[resolvedRowAxis]]);
+			var/*bool*/ isResolvedRowDimDefined = !isUndefined(layout[dim[resolvedRowAxis]]);
 
 			var/*float*/ width = CSS_UNDEFINED;
 			if (isDimDefined(node, resolvedRowAxis)) {
 				width = node.ref._size[0];
 			} else if (isResolvedRowDimDefined) {
-				width = node.layout[dim[resolvedRowAxis]];
+				width = layout[dim[resolvedRowAxis]];
 			} else {
 				width = parentMaxWidth -
 					getMarginAxis(node, resolvedRowAxis);
@@ -550,7 +616,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 			// the element is flexible.
 			var/*bool*/ isRowUndefined = !isDimDefined(node, resolvedRowAxis) && !isResolvedRowDimDefined;
 			var/*bool*/ isColumnUndefined = !isDimDefined(node, CSS_FLEX_DIRECTION_COLUMN) &&
-				isUndefined(node.layout[dim[CSS_FLEX_DIRECTION_COLUMN]]);
+				isUndefined(layout[dim[CSS_FLEX_DIRECTION_COLUMN]]);
 
 			// Let's not measure the text if we already know both dimensions
 			if (isRowUndefined || isColumnUndefined) {
@@ -560,12 +626,12 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					width
 				);
 				if (isRowUndefined) {
-					node.layout.width = measureDim.width +
-						paddingAndBorderAxisResolvedRow;
+					layout.width = round(measureDim.width +
+						paddingAndBorderAxisResolvedRow);
 				}
 				if (isColumnUndefined) {
-					node.layout.height = measureDim.height +
-						getPaddingAndBorderAxis(node, CSS_FLEX_DIRECTION_COLUMN);
+					layout.height = round(measureDim.height +
+						getPaddingAndBorderAxis(node, CSS_FLEX_DIRECTION_COLUMN));
 				}
 			}
 			if (childCount === 0) {
@@ -661,12 +727,12 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 						getPositionType(child) === CSS_POSITION_RELATIVE &&
 						isCrossDimDefined &&
 						!isDimDefined(child, crossAxis)) {
-					child.layout[dim[crossAxis]] = fmaxf(
-						boundAxis(child, crossAxis, node.layout[dim[crossAxis]] -
+					child.layout[dim[crossAxis]] = round(fmaxf(
+						boundAxis(child, crossAxis, layout[dim[crossAxis]] -
 							paddingAndBorderAxisCross - getMarginAxis(child, crossAxis)),
 						// You never want to go smaller than padding
 						getPaddingAndBorderAxis(child, crossAxis)
-					);
+					));
 				} else if (getPositionType(child) === CSS_POSITION_ABSOLUTE) {
 					// Store a private linked list of absolutely positioned children
 					// so that we can efficiently traverse them later.
@@ -682,11 +748,11 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					// left and right or top and bottom).
 					for (ii = 0; ii < 2; ii++) {
 						axis = (ii !== 0) ? CSS_FLEX_DIRECTION_ROW : CSS_FLEX_DIRECTION_COLUMN;
-						if (!isUndefined(node.layout[dim[axis]]) &&
+						if (!isUndefined(layout[dim[axis]]) &&
 								!isDimDefined(child, axis) &&
 								isPosDefined(child, leading[axis]) &&
 								isPosDefined(child, trailing[axis])) {
-							child.layout[dim[axis]] = fmaxf(
+							child.layout[dim[axis]] = round(fmaxf(
 								boundAxis(child, axis, node.layout[dim[axis]] -
 									getPaddingAndBorderAxis(node, axis) -
 									getMarginAxis(child, axis) -
@@ -694,7 +760,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 									getPosition(child, trailing[axis])),
 								// You never want to go smaller than padding
 								getPaddingAndBorderAxis(child, axis)
-							);
+							));
 						}
 					}
 				}
@@ -784,7 +850,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				}
 
 				if (isSimpleStackMain) {
-					child.layout[pos[mainAxis]] += mainDim;
+					child.layout[pos[mainAxis]] = round(child.layout[pos[mainAxis]] + mainDim);
 					if (isMainDimDefined) {
 						setTrailingPosition(node, child, mainAxis);
 					}
@@ -794,7 +860,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				}
 
 				if (isSimpleStackCross) {
-					child.layout[pos[crossAxis]] += linesCrossDim + leadingPaddingAndBorderCross;
+					child.layout[pos[crossAxis]] = round(child.layout[pos[crossAxis]] + linesCrossDim + leadingPaddingAndBorderCross);
 					if (isCrossDimDefined) {
 						setTrailingPosition(node, child, crossAxis);
 					}
@@ -855,10 +921,10 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				while (currentFlexChild !== null) {
 					// At this point we know the final size of the element in the main
 					// dimension
-					currentFlexChild.layout[dim[mainAxis]] = boundAxis(currentFlexChild, mainAxis,
+					currentFlexChild.layout[dim[mainAxis]] = round(boundAxis(currentFlexChild, mainAxis,
 						flexibleMainDim * currentFlexChild.ref._flex +
 								getPaddingAndBorderAxis(currentFlexChild, mainAxis)
-					);
+					));
 
 					maxWidth = CSS_UNDEFINED;
 					if (isDimDefined(node, resolvedRowAxis)) {
@@ -917,13 +983,13 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					// In case the child is position absolute and has left/top being
 					// defined, we override the position to whatever the user said
 					// (and margin/border).
-					child.layout[pos[mainAxis]] = getPosition(child, leading[mainAxis]) +
+					child.layout[pos[mainAxis]] = round(getPosition(child, leading[mainAxis]) +
 						getLeadingBorder(node, mainAxis) +
-						getLeadingMargin(child, mainAxis);
+						getLeadingMargin(child, mainAxis));
 				} else {
 					// If the child is position absolute (without top/left) or relative,
 					// we put it at the current accumulated offset.
-					child.layout[pos[mainAxis]] += mainDim;
+					child.layout[pos[mainAxis]] = round( child.layout[pos[mainAxis]] + mainDim);
 
 					// Define the trailing position accordingly.
 					if (isMainDimDefined) {
@@ -964,9 +1030,9 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					// In case the child is absolutely positionned and has a
 					// top/left/bottom/right being set, we override all the previously
 					// computed positions to set it correctly.
-					child.layout[pos[crossAxis]] = getPosition(child, leading[crossAxis]) +
+					child.layout[pos[crossAxis]] = round(getPosition(child, leading[crossAxis]) +
 						getLeadingBorder(node, crossAxis) +
-						getLeadingMargin(child, crossAxis);
+						getLeadingMargin(child, crossAxis));
 
 				} else {
 					var/*float*/ leadingCrossDim = leadingPaddingAndBorderCross;
@@ -982,12 +1048,12 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 							// You can only stretch if the dimension has not already been set
 							// previously.
 							if (isUndefined(child.layout[dim[crossAxis]])) {
-								child.layout[dim[crossAxis]] = fmaxf(
+								child.layout[dim[crossAxis]] = round(fmaxf(
 									boundAxis(child, crossAxis, containerCrossAxis -
 										paddingAndBorderAxisCross - getMarginAxis(child, crossAxis)),
 									// You never want to go smaller than padding
 									getPaddingAndBorderAxis(child, crossAxis)
-								);
+								));
 							}
 						} else if (alignItem !== CSS_ALIGN_FLEX_START) {
 							// The remaining space between the parent dimensions+padding and child
@@ -1004,7 +1070,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					}
 
 					// And we apply the position
-					child.layout[pos[crossAxis]] += linesCrossDim + leadingCrossDim;
+					child.layout[pos[crossAxis]] = round(child.layout[pos[crossAxis]] + linesCrossDim + leadingCrossDim);
 
 					// Define the trailing position accordingly.
 					if (isCrossDimDefined) {
@@ -1083,14 +1149,14 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 
 					var/*css_align_t*/ alignContentAlignItem = getAlignItem(node, child);
 					if (alignContentAlignItem === CSS_ALIGN_FLEX_START) {
-						child.layout[pos[crossAxis]] = currentLead + getLeadingMargin(child, crossAxis);
+						child.layout[pos[crossAxis]] = round(currentLead + getLeadingMargin(child, crossAxis));
 					} else if (alignContentAlignItem === CSS_ALIGN_FLEX_END) {
-						child.layout[pos[crossAxis]] = currentLead + lineHeight - getTrailingMargin(child, crossAxis) - child.layout[dim[crossAxis]];
+						child.layout[pos[crossAxis]] = round(currentLead + lineHeight - getTrailingMargin(child, crossAxis) - child.layout[dim[crossAxis]]);
 					} else if (alignContentAlignItem === CSS_ALIGN_CENTER) {
 						var/*float*/ childHeight = child.layout[dim[crossAxis]];
-						child.layout[pos[crossAxis]] = currentLead + (lineHeight - childHeight) / 2;
+						child.layout[pos[crossAxis]] = round(currentLead + (lineHeight - childHeight) / 2);
 					} else if (alignContentAlignItem === CSS_ALIGN_STRETCH) {
-						child.layout[pos[crossAxis]] = currentLead + getLeadingMargin(child, crossAxis);
+						child.layout[pos[crossAxis]] = round(currentLead + getLeadingMargin(child, crossAxis));
 						// TODO(prenaux): Correctly set the height of items with undefined
 						//                (auto) crossAxis dimension.
 					}
@@ -1106,13 +1172,13 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 		// If the user didn't specify a width or height, and it has not been set
 		// by the container, then we set it via the children.
 		if (!isMainDimDefined) {
-			node.layout[dim[mainAxis]] = fmaxf(
+			node.layout[dim[mainAxis]] = round(fmaxf(
 				// We're missing the last padding at this point to get the final
 				// dimension
 				boundAxis(node, mainAxis, linesMainDim + getTrailingPaddingAndBorder(node, mainAxis)),
 				// We can never assign a width smaller than the padding and borders
 				paddingAndBorderAxisMain
-			);
+			));
 
 			if (mainAxis === CSS_FLEX_DIRECTION_ROW_REVERSE ||
 					mainAxis === CSS_FLEX_DIRECTION_COLUMN_REVERSE) {
@@ -1121,13 +1187,13 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 		}
 
 		if (!isCrossDimDefined) {
-			node.layout[dim[crossAxis]] = fmaxf(
+			node.layout[dim[crossAxis]] = round(fmaxf(
 				// For the cross dim, we add both sides at the end because the value
 				// is aggregate via a max function. Intermediate negative values
 				// can mess this computation otherwise
 				boundAxis(node, crossAxis, linesCrossDim + paddingAndBorderAxisCross),
 				paddingAndBorderAxisCross
-			);
+			));
 
 			if (crossAxis === CSS_FLEX_DIRECTION_ROW_REVERSE ||
 					crossAxis === CSS_FLEX_DIRECTION_COLUMN_REVERSE) {
@@ -1162,7 +1228,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 						!isDimDefined(currentAbsoluteChild, axis) &&
 						isPosDefined(currentAbsoluteChild, leading[axis]) &&
 						isPosDefined(currentAbsoluteChild, trailing[axis])) {
-					currentAbsoluteChild.layout[dim[axis]] = fmaxf(
+					currentAbsoluteChild.layout[dim[axis]] = round(fmaxf(
 						boundAxis(currentAbsoluteChild, axis, node.layout[dim[axis]] -
 							getBorderAxis(node, axis) -
 							getMarginAxis(currentAbsoluteChild, axis) -
@@ -1171,15 +1237,16 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 						),
 						// You never want to go smaller than padding
 						getPaddingAndBorderAxis(currentAbsoluteChild, axis)
-					);
+					));
 				}
 
 				if (isPosDefined(currentAbsoluteChild, trailing[axis]) &&
 						!isPosDefined(currentAbsoluteChild, leading[axis])) {
-					currentAbsoluteChild.layout[leading[axis]] =
+					currentAbsoluteChild.layout[leading[axis]] = round(
 						node.layout[dim[axis]] -
 						currentAbsoluteChild.layout[dim[axis]] -
-						getPosition(currentAbsoluteChild, trailing[axis]);
+						getPosition(currentAbsoluteChild, trailing[axis])
+					)
 				}
 			}
 
@@ -1189,40 +1256,6 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 		}
 	}
 	
-	
-	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
-		
-		var total = 1;
-		
-		//layoutNodeImpl(node, parentMaxWidth, parentDirection);
-		//return;
-		//var direction = node.style.direction;
-		var layout = node.layout;
-
-		//node.layout.should_update = true;
-	
-
-		//layout.last_requested_width = node.style.width;
-		//layout.last_requested_height = node.style.height;
-		//layout.last_parent_max_width = parentMaxWidth;
-		//layout.last_direction = direction;
-
-		total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
-		//node.getBoundingRect(true);//boundingRectCache = undefined;
-		
-		//layout.last_width = layout.width;
-		//layout.last_height = layout.height;
-		//layout.last_top = layout.top;
-		//layout.last_left = layout.left;
-		//layout.last_bottom = layout.bottom;
-		//layout.last_right = layout.right;
-		//node.laststyle = node.style;
-		//if(node.ref._listen_postLayout || node.ref.onpostLayout) node.ref.emit('postLayout')
-		//node.boundingRectCache = undefined;
-		
-		return total;
-	}
-
 	return {
 		computeLayout: layoutNode,
 		fillNodes: fillNodes,

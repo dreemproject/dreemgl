@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($containers$, view, $controls$, label) {
+define.class(function ($ui$, view, label) {
 
     this.slidetitle = "Resources";
 
@@ -11,9 +11,9 @@ define.class(function ($containers$, view, $controls$, label) {
     this.bgcolor = 'transparent';
 
     this.attributes = {
-        smallfont: {type:int, value:30},
-        largefont: {type:int, value:40},
-        space: {type:int, value:20}
+        smallfont: Config({type:int, value:30}),
+        largefont: Config({type:int, value:40}),
+        space: Config({type:int, value:20})
     };
 
     this.render = function render() {
@@ -25,7 +25,7 @@ define.class(function ($containers$, view, $controls$, label) {
                 margintop:0
             }),
             label({
-                text:'./compositions/guide/README.md',
+                text:'./examples/guide/README.md',
                 fgcolor:'darkyellow', bgcolor:'transparent',
                 alignself:'center',
                 fontsize:this.smallfont,

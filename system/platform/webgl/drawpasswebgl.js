@@ -6,16 +6,13 @@
 
 define.class(function(require, baseclass){
 	// drawing
+	var Shader = require('./shaderwebgl')
 
 	this.atConstructor = function(gldevice, view){
 		this.device = gldevice
 		this.view = view
 		view.drawpass = this
 		// lets do the flatten
-		this.draw_list = []
-
-		this.addToDrawList(this.view, true)
-
 		this.pickmatrices = {
 			viewmatrix: mat4.identity(),
 			noscrollmatrix: mat4.identity()
@@ -25,27 +22,14 @@ define.class(function(require, baseclass){
 			viewmatrix: mat4.identity(),
 			noscrollmatrix: mat4.identity()
 		}
-	}
 
+		this.debugrect = new DebugRect()
+	}
 	
 	this.atDestroy = function(){
 		this.releaseTexture()
 	}
 		
-	this.addToDrawList = function(view, isroot){
-		//matrix = matrix? matrix: mat4.identity()
-		//view.draw_matrix = mat4.mul_mat4(view.layout_matrix, matrix)
-		this.draw_list.push(view)
-
-		if(this.draw_list.length > 65535) throw new Error("Too many items in a drawpass, ID space out of range, you get a piece of pie.")
-		if(isroot || !view._viewport){
-			var children = view.children
-			if(children) for(var i = 0; i < children.length; i++){
-				this.addToDrawList(children[i])
-			}
-		}
-	}
-
 	this.poolDrawTargets = function(){
 		var pools = this.device.drawtarget_pools
 		if(!this.drawtargets) return
@@ -53,11 +37,11 @@ define.class(function(require, baseclass){
 			var dt = this.drawtargets[i]
 			if(!pools[dt]) pools[dt] = []
 			pools[dt].push(this[dt])
-			this[dt] = undefined
+			this[dt] = null
 		}
 	}
 
-	this.allocDrawTarget = function(width, height, mode, drawtarget, passid){
+	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
@@ -96,7 +80,7 @@ define.class(function(require, baseclass){
 			}
 			// otherwise we create a new one
 			if(!dt){
-				dt = this[drawtarget] = Texture.createRenderTarget(mode === '2d'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+				dt = this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
@@ -105,14 +89,14 @@ define.class(function(require, baseclass){
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
 			this[drawtarget].delete()
-			this[drawtarget] = Texture.createRenderTarget(mode === '2d'?Texture.RGBA:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
+			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 		}
 	}
 	
 	this.calculateDrawMatrices = function(isroot, storage, mousex, mousey){
 		var view = this.view
 		var scroll = view._scroll
-		var layout = view.layout
+		var layout = view._layout
 
 		if(view._viewport === '2d'){
 			if(isroot && mousex !== undefined){
@@ -141,19 +125,20 @@ define.class(function(require, baseclass){
 	}
 
 	function isInBounds2D(view, draw){
-
+		if(draw.noboundscheck) return true
 		var height = view._layout.height
 		var width = view._layout.width
-		var drawlayout = draw.layout
+		var drawlayout = draw._layout
 
 		if(draw.parent && draw.parent !== view){
-			drawlayout.absx = draw.parent.layout.absx + drawlayout.left
-			drawlayout.absy = draw.parent.layout.absy + drawlayout.top
+			drawlayout.absx = draw.parent._layout.absx + drawlayout.left
+			drawlayout.absy = draw.parent._layout.absy + drawlayout.top
 		}
 		else{
 			drawlayout.absx = drawlayout.left
 			drawlayout.absy = drawlayout.top
 		}
+
 		if(draw === view && view.sublayout){
 			width = view.sublayout.width
 			height = view.sublayout.height
@@ -172,24 +157,38 @@ define.class(function(require, baseclass){
 		return true
 	}
 
+	this.nextItem = function(draw){
+		var view = this.view
+		var next = (draw === view || (!draw._viewport && draw._visible))  && draw.children[0], next_index = 0
+		while(!next){ // skip to parent next
+			if(draw === view) break
+			next_index = draw.draw_index + 1
+			draw = draw.parent
+			next = draw.children[next_index]
+		}
+		if(next === view) return undefined
+		if(next) next.draw_index = next_index		
+		return next
+	}
+	
 	this.drawPick = function(isroot, passid, mousex, mousey, debug){
 		var view = this.view
 		var device = this.device
-		var layout = view.layout
-
+		var layout = view._layout
+		var gl = device.gl
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 
 		if(isroot){
-			if(!debug) this.allocDrawTarget(1, 1, this.view._viewport, 'pick_buffer', passid)
+			if(!debug) this.allocDrawTarget(1, 1, this.view, 'pick_buffer', passid)
 		}
 		else{
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			ratio = 1
 			var twidth = layout.width * ratio, theight = layout.height * ratio
-			this.allocDrawTarget(twidth, theight, this.view._viewport, 'pick_buffer', passid)
+			this.allocDrawTarget(twidth, theight, this.view, 'pick_buffer', passid)
 		}
-
+		gl.disable(gl.SCISSOR_TEST)
 		device.bindFramebuffer(this.pick_buffer || null)
 		device.clear(0,0,0,0)
 		
@@ -197,64 +196,118 @@ define.class(function(require, baseclass){
 		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
 
 		var pickguid = vec3()
-		pickguid[0] = (((passid+1)*131)%256)/255
+		pickguid[0] = (((passid)*131)%256)/255
 
 		// modulo inverse: http://www.wolframalpha.com/input/?i=multiplicative+inverse+of+31+mod+256
-		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
-			var draw = dl[i]
-
-			if(draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
-				continue
-			}
-			else draw._first_draw_pick = 1
-
-			var id = ((i+1)*29401)%65536
-			pickguid[1] = (id&255)/255
-			pickguid[2] = (id>>8)/255
-
-			draw.pickguid = pickguid[0]*255<<16 | pickguid[1]*255 << 8 | pickguid[2]*255
-			draw.viewmatrix = matrices.viewmatrix
-
-			if(!draw._visible) continue
-			if(draw._viewport && draw.drawpass !== this && draw.drawpass.pick_buffer){
-				// ok so the pick pass needs the alpha from the color buffer
-				// and then hard forward the color
-				var blendshader = draw.viewportblendshader
-				if (view._viewport === '3d'){
-					// dont do this!
-					blendshader.depth_test = 'src_depth <= dst_depth'
-				}
-				else{
-					blendshader.depth_test = ''
-				}
-				blendshader.texture = draw.drawpass.pick_buffer
-				blendshader._width = draw.layout.width
-				blendshader._height = draw.layout.height
-				blendshader.drawArrays(this.device)
+		var pick_id = 0
+		var draw = view
+		while(draw){
+			pick_id++
+			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
-				//draw.updateShaders()
-				// alright lets iterate the shaders and call em
-				var shaders =  draw.shader_draw_list
-				for(var j = 0; j < shaders.length; j++){
-					var shader = shaders[j]
+				draw._first_draw_pick = 1
 
-					shader.pickguid = pickguid
+				var id = (pick_id*29401)%65536
+				pickguid[1] = (id&255)/255
+				pickguid[2] = (id>>8)/255
 
-					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
-					else draw.viewmatrix = matrices.viewmatrix
+				draw.pickguid = pickguid[0]*255<<16 | pickguid[1]*255 << 8 | pickguid[2]*255
+				draw.viewmatrix = matrices.viewmatrix
 
-					shader.drawArrays(this.device, 'pick')
+				if(!draw._visible) continue
+				if(draw._viewport && draw.drawpass !== this && draw.drawpass.pick_buffer){
+					// ok so the pick pass needs the alpha from the color buffer
+					// and then hard forward the color
+					var blendshader = draw.viewportblendshader
+					if (view._viewport === '3d'){
+						// dont do this!
+						blendshader.depth_test = 'src_depth <= dst_depth'
+					}
+					else{
+						blendshader.depth_test = ''
+					}
+					blendshader.texture = draw.drawpass.pick_buffer
+					blendshader._width = draw.layout.width
+					blendshader._height = draw.layout.height
+					blendshader.drawArrays(this.device)
+				}
+				else{
+					//draw.updateShaders()
+					// alright lets iterate the shaders and call em
+					var shaders =  draw.shader_draw_list
+					for(var j = 0; j < shaders.length; j++){
+						var shader = shaders[j]
+
+						shader.pickguid = pickguid
+						if(!shader.visible) continue
+						if(draw.pickalpha !== undefined)shader.pickalpha = draw.pickalpha
+						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
+						else draw.viewmatrix = matrices.viewmatrix
+
+						shader.drawArrays(this.device, 'pick')
+					}
 				}
 			}
+			draw = this.nextItem(draw)
 		}
 	}
 
-	
-	this.drawColor = function(isroot, time){
+	this.getDrawID = function(id){
+		var view = this.view
+		var draw = view
+		var pick_id = 0
+		while(draw){
+			pick_id++
+
+			if(id === pick_id) return draw
+
+			draw = this.nextItem(draw)
+		}
+	}
+
+	this.drawBlend = function(draw){
+		if(!draw.drawpass.color_buffer){
+			console.error("Null color_buffer detected")
+		}
+		else {
+			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
+			// lets render the view as a layer
+			var blendshader = draw.viewportblendshader
+			if (this.view._viewport === '3d'){
+				blendshader.depth_test = 'src_depth <= dst_depth'
+			}
+			else{
+				blendshader.depth_test = ''
+			}
+			blendshader.texture = draw.drawpass.color_buffer
+			blendshader.width = draw._layout.width
+			blendshader.height = draw._layout.height
+			blendshader.drawArrays(this.device)
+		}				
+	}
+
+	this.drawNormal = function(draw, matrices){
+		draw.updateShaders()
+		// alright lets iterate the shaders and call em
+		var shaders = draw.shader_draw_list
+		for(var j = 0; j < shaders.length; j++){
+			// lets draw em
+			var shader = shaders[j]
+			if(shader.pick_only || !shader.visible) continue // was pick only
+			// we have to set our guid.
+			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
+			else draw.viewmatrix = matrices.viewmatrix
+
+			shader.drawArrays(this.device)
+		}
+	}
+
+	this.drawColor = function(isroot, time, clipview){
 		var view = this.view
 		var device = this.device
-		var layout = view.layout
+		var layout = view._layout
+		var gl = device.gl
 
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 	
@@ -263,87 +316,86 @@ define.class(function(require, baseclass){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
 			var twidth = layout.width * ratio, theight = layout.height * ratio	
-			this.allocDrawTarget(twidth, theight, this.view._viewport, 'color_buffer')
+			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
 		}
 
 		this.device.bindFramebuffer(this.color_buffer || null)
 
-		if(layout.width === 0 || layout.height === 0) return
-	
-		device.clear(view._clearcolor)
-		
+		if(layout.width === 0 || layout.height === 0) return false
+			
 		var hastime = false
 		var zoom = view._zoom
 
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
 
-		// each view has a reference to its layer
-		for(var dl = this.draw_list, i = 0; i < dl.length; i++){
-			var draw = dl[i]
+		gl.disable(gl.SCISSOR_TEST)
 
-			if(draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
-				continue
+		if(isroot){
+			/*
+			if(clipview){
+				var ratio = this.device.frame.ratio
+				var xs = this.device.frame.size[0] / ratio
+				var ys = this.device.frame.size[1] / ratio
+				var clayout = clipview._layout
+				var c1 = vec2.mul_mat4(vec2(0, 0),clipview.viewportmatrix)
+				var c2 = vec2.mul_mat4(vec2(clayout.width, clayout.height),clipview.viewportmatrix)
+				var x1 = c1[0], y1 = c1[1], x2 = c2[0] - x1, y2 = c2[1] - y1
+				gl.enable(gl.SCISSOR_TEST)
+				gl.scissor((x1)*ratio, (ys - y2 - y1)*ratio, x2 * ratio, (y2)*ratio)//x1*2, y1*2, x2*2, y2*2)
 			}
-			else draw._first_draw_color = 1
+			*/
+		}
 
-			//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
-			draw._time = time
-			if(draw._listen_time || draw.ontime) hastime = true
-				
-			draw.viewmatrix = matrices.viewmatrix
+		device.clear(view._clearcolor)
 
-			if(!draw._visible) continue
-
-			if(draw.atDraw) draw.atDraw(this)
-
-			if(draw._viewport && draw.drawpass !== this && draw.drawpass.color_buffer){
-				// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
-				// lets render the view as a layer
-				var blendshader = draw.viewportblendshader
-
-				if (view._viewport === '3d'){
-					blendshader.depth_test = 'src_depth <= dst_depth'
-				}
-				else{
-					blendshader.depth_test = ''
-				}
-				blendshader.texture = draw.drawpass.color_buffer
-				blendshader.width = draw.layout.width
-				blendshader.height = draw.layout.height
-				blendshader.drawArrays(this.device)
+		var draw = view
+		while(draw){
+			//}
+			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
+			//	var draw = dl[i]
+			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
-				draw.updateShaders()
-				// alright lets iterate the shaders and call em
-				var shaders =  draw.shader_draw_list
-				for(var j = 0; j < shaders.length; j++){
-					// lets draw em
-					var shader = shaders[j]
-					if(isNaN(shader.order)) continue // was pick only
-					// we have to set our guid.
-					if(shader.order < 0) draw.viewmatrix = matrices.noscrollmatrix
-					else draw.viewmatrix = matrices.viewmatrix
+				draw._first_draw_color = 1
 
-					shader.drawArrays(this.device)
+				//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
+				draw._time = time
+				if(draw._listen_time || draw.ontime) hastime = true
+					
+				draw.viewmatrix = matrices.viewmatrix
+
+				if(draw.atDraw) draw.atDraw(this)
+				if(draw._viewport && draw.drawpass !== this){
+					this.drawBlend(draw)
+				}
+				else{
+					this.drawNormal(draw, matrices)
+				}
+
+				if(draw.debug_view){
+					this.debugrect.view = draw
+					this.debugrect.drawArrays(this.device)
 				}
 			}
+			draw = this.nextItem(draw)
 		}
 
 		return hastime
 	}
 
-	/*
-	var MyShader = define.class(this.Shader, function(){
+	var DebugRect = define.class(Shader, function(){
+		this.view = {totalmatrix:mat4(), viewmatrix:mat4(), layout:{width:0, height:0}}
+
 		this.mesh = vec2.array()
-		this.mesh.pushQuad(-1,-1,1,-1,-1,1,1,1)
+		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
+
 		this.position = function(){
-			return vec4(mesh.xy,0,1) 
+			return vec4(vec2(mesh.x * view.layout.width, mesh.y * view.layout.height), 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
-			if(mesh.x<-0.9)return 'red'
-			if(mesh.x>0.9)return 'red'
-			return 'black'
+			return vec4(1,0,0,0.5)
 		}
-	})*/
+	})
+
 })

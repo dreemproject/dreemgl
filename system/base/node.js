@@ -35,12 +35,14 @@ define.class(function(require, constructor){
 		for(var i = 0; i < args.length; i++){
 			var arg = args[i]
 			if(typeof arg === 'object' && Object.getPrototypeOf(arg) === Object.prototype){
-				this.initFromConstructorProps(arg)
+				this.attributes = arg
+				//this.initFromConstructorProps(arg)
 				continue
 			}
 			if(typeof arg === 'function'){
 				var prop = {}; prop[arg.name] = arg
-				this.initFromConstructorProps(prop)
+				this.attributes = prop
+				//this.initFromConstructorProps(prop)
 				continue
 			}
 			if(typeof arg === 'string' && i === 0){
@@ -54,12 +56,12 @@ define.class(function(require, constructor){
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
 				this.constructor_children.push(arg)
-				var name = arg.name || arg.constructor && arg.constructor.name
-				if(name !== undefined && !(name in this)) this[name] = arg
+				//var name = arg.name
+				//if(name !== undefined && !(name in this)) this[name] = arg
 			}
 		}		
 	}
-
+/*
 	// internal, called by the constructor
 	this.initFromConstructorProps = function(obj){
 
@@ -79,7 +81,7 @@ define.class(function(require, constructor){
 
 			tgt[key] = prop
 		}
-	}
+	}*/
 
 	// the default render function, returns this.constructor_children
 	this.render = function(){
@@ -105,29 +107,40 @@ define.class(function(require, constructor){
 	}
 
 	// internal, used by find
-	this.findChild = function(name, ignore){
+	this.findChild = function(name, ignore, nocache){
+		if(!nocache){
+			if(!this.find_cache) this.find_cache = {}
+			var child = this.find_cache[name]
+			if(child && !child.destroyed) return child
+		}
+
 		// ok so first we go down all children
 		if(this === ignore) return
-		if(this.name === name || this.name === undefined && this.constructor.name === name){
+		if(this.name === name){
+			if(!nocache) this.find_cache[name] = this
 			return this
 		}
 		if(this.children) for(var i = 0; i < this.children.length; i ++){
 			var child = this.children[i]
 			if(child === ignore) continue
-			var ret = child.findChild(name)
-			if(ret !== undefined) return ret
+			var ret = child.findChild(name, undefined, true)
+			if(ret !== undefined){
+				if(!nocache) this.find_cache[name] = ret
+				return ret
+			}
 		}
 	}
 
 	// find node by name, they look up the .name property or the name of the constructor (class name) by default
 	this.find = function(name, ignore){
-		var ret = this.findChild(name)
+		child = this.findChild(name)
 		var node = this
-		while(ret === undefined && node.parent){
-			ret = node.parent.findChild(name, node)
+		while(child === undefined && node.parent){
+			child = node.parent.findChild(name, node, true)
 			node = node.parent
 		}
-		return ret
+		this.find_cache[name] = child
+		return child
 	}
 
 	// hide a property, pass in any set of strings
@@ -211,6 +224,11 @@ define.class(function(require, constructor){
 
 	// add a listener to an attribute
 	this.addListener = function(key, cb){
+		// if something isnt an attribute, make it one
+		if(!this.__lookupSetter__(key)){
+			this.defineAttribute(key, this[key], true)
+		}
+
 		var listen_key = '_listen_' + key
 		var array 
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
@@ -238,12 +256,13 @@ define.class(function(require, constructor){
 	}
 
 	// check if an attribute has a listener with a .name property set to fnname
-	this.hasListenerName = function(key, fnname){
+	this.hasListenerProp = function(key, prop, value){
 		var listen_key = '_listen_' + key
+		if(!this.hasOwnProperty(listen_key)) return false
 		var listeners = this[listen_key]
 		if(!listeners) return false
 		for(var i = 0; i < listeners.length; i++){
-			if(listeners[i].name === fnname) return true
+			if(listeners[i][prop] === value) return true
 		}
 		return false
 	}
@@ -274,7 +293,6 @@ define.class(function(require, constructor){
 		this['_wiredfn_'+key] = value
 	}
 
-
 	// mark an attribute as persistent accross live reload / renders
 	this.definePersist = function(arg){
 		if (!this.hasOwnProperty("_persists")){
@@ -289,12 +307,114 @@ define.class(function(require, constructor){
 		this._persists[arg] = 1
 	}
 
+	Object.defineProperty(this, 'style', {
+		get:function(){
+			return this._style
+		},
+		set:function(v){
+			if(!this.hasOwnProperty('_style')) this._style = Object.create(this._style)
+			if(typeof v === 'object'){
+				for(var key in v){
+					var value = v[key]
+					if(typeof value === 'object'){
+						var base = this._style[key]
+						if(!base) this._style[key] = value
+						else{
+							var obj = this._style[key] = Object.create(base)
+							for(var subkey in value){
+								obj[subkey] = value[subkey]
+							}
+						}
+					}
+					else{
+						this._style[key] = v[key]
+					}
+				}
+			}
+			else if(typeof v === 'function'){
+				v.call(this._style)
+			}
+		}
+	})
 
+	var Style = define.class(function(){
+		
+		this.composeStyle = function(){
+			// lets find the highest matching level
+			for(var i = arguments.length - 1; i >= 0; i--){
+				var match = arguments[i]
+				var style = this[match]
+				if(style){
+					if(i === 0) return style
+					if(style._composed) return style
+					style = {}
+					// lets compose a style from the match stack
+					for(var j = 0; j <= i; j++){
+						var level = this[arguments[j]]
+						if(level){
+							for(var key in level) style[key] = level[key]
+						}
+					}
+					Object.defineProperty(style, '_composed', {value:1})
+					Object.defineProperty(style, '_match', {value:match})
 
+					// lets store it back
+					this[match] = style
+					return style
+				}
+			}
+		}
 
-	// magical setters JSON API
+		this.lookup = function(name, props){
+			// lets return a matching style
+			return this.composeStyle(
+				'*',
+				name, 
+				name + '_' + props.class, 
+				name + '_' + (props.id || props.name)
+			)
+		}
+	})
 
+	this._style = new Style()
 
+	this.atStyleConstructor = function(original, props, where){
+		// lets see if we have it in _styles
+		var name = original.name
+		
+		var propobj = props && Object.getPrototypeOf(props) === Object.prototype? props: {}
+
+		var style = this._style.lookup(name, propobj)
+
+		// find the base class
+		var base = original
+		if(this.constructor.outer) base = this.constructor.outer.atStyleConstructor(original, propobj, 'outer')
+		else if(this !== this.composition && this !== this.screen && this.screen){
+			base = this.screen.atStyleConstructor(original, propobj, 'screen')
+		}
+		else if(this.composition !== this && this.composition) base = this.composition.atStyleConstructor(original, propobj, 'composition')
+
+		// 'quick' out
+		var found = style && style._base && style._base[name] === base && style._class && style._class[name]
+		if(found) return found
+
+		if(!style) return base
+
+		if(!style._class){
+			Object.defineProperty(style, '_class', {value:{}, configurable:true})
+			Object.defineProperty(style, '_base', {value:{}, configurable:true})
+		}
+
+		// (re)define the class		
+		if(style._base[name] !== base || !style._class[name]){
+			var clsname = base.name + '_' +(where+'_'||'')+ (style._match||'star')
+			var cls = style._class[name] = base.extend(style, original.outer, clsname)			
+		 	style._base[name] = base
+		 	return cls
+		}
+
+		return original
+	}
 
 	// pass an object such as {attrname:{type:vec2, value:0}, attrname:vec2(0,1)} to define attributes on an object
 	Object.defineProperty(this, 'attributes', {
@@ -307,7 +427,7 @@ define.class(function(require, constructor){
 			}
 		}
 	})
-
+/*
 	// define listeners {attrname:function(){}}
 	Object.defineProperty(this, 'listeners', {
 		get:function(){
@@ -351,7 +471,7 @@ define.class(function(require, constructor){
 		set:function(arg){
 			this.animateAttribute(arg)
 		}
-	})
+	})*/
 
 	// internal, animate an attribute with an animation object see animate
 	this.animateAttribute = function(arg){
@@ -388,74 +508,85 @@ define.class(function(require, constructor){
 	}
 
 	// internal, define an attribute, use the attributes =  api
-	this.defineAttribute = function(key, config){
+	this.defineAttribute = function(key, config, always_define){
+		// lets create an attribute
+		var is_config =  config instanceof Config
+		var is_attribute = !always_define && key in this 
+
+		// use normal value assign
+		if(is_attribute && !is_config){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+			this[key] = config
+			return
+		}
+
+		// autoprocess the config
+		if(is_config){
+			config = config.config
+		}
+		else{ // its a value
+			config = {value: config}
+		}
+
+		// figure out the type
+		if(!config.type){
+			var value = config.value
+
+			if(typeof value === 'object'){
+				if(value && typeof value.struct === 'function') config.type = value.struct
+				else if(Array.isArray(value)) config.type = Array
+				else config.type = Object
+			}
+			else if(typeof value === 'number'){
+				config.type = float
+			}
+			else if(typeof value === 'boolean'){
+				config.type = boolean
+			}
+			else if(typeof value === 'function' && !value.is_wired){
+				config.type = Function
+			}
+		}
+		if(config.persist){
+			if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
+			this.definePersist(key)
+		}
+
 		if(!this.hasOwnProperty('_attributes')){
 			this._attributes = this._attributes?Object.create(this._attributes):{}
 		}
-		// lets create an attribute
+
+		if(is_attribute){ // extend the config
+			//if('type' in config) throw new Error('Cannot redefine type of attribute '+key)
+			var newconfig = Object.create(this._attributes[key])
+			for(var prop in config){
+				newconfig[prop] = config[prop]
+			}
+			this._attributes[key] = newconfig
+			if('value' in config) this[key] = config.value
+			return
+		}
+
 		var value_key = '_' + key
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var wiredfn_key = '_wiredfn_' + key
-		//var config_key = '_cfg_' + key 
+		//var config_key = '_config_' + key 
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
 
-		if(this.isAttribute(key)){ // extend the config
-			if('type' in config) throw new Error('Cannot redefine attribute '+key)
-			var obj = Object.create(this._attributes[key])
-			for(var prop in config){
-				obj[prop] = config[prop]
-			}
-			this._attributes[key] = obj
-			if(config.persist){
-				if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
-				this.definePersist(key)
-			}
-			return
-		}
-		else{
-			// autoprocess the config
-			if(!(typeof config === 'object' && config && !Array.isArray(config) && !config.struct)){
-				config = {value:config}
-			}
-			else if(!config.type) config = Object.create(config)
-
-			if(!config.type){
-				var value = config.value
-
-				if(typeof value === 'object'){
-					if(value && value.struct) config.type = value.struct
-					else if(Array.isArray(value)) config.type = Array
-					else config.type = Object
-				}
-				else if(typeof value === 'number'){
-					config.type = float
-				}
-				else if(typeof value === 'boolean'){
-					config.type = boolean
-				}
-				else if(typeof value === 'function'){
-					config.type = value
-					config.value = undefined
-				}
-			}
-			if(config.persist){
-				if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
-				this.definePersist(key)
-			}
-		}
+		if(!config.group) config.group  = this.constructor.name
 
 		var init_value = key in this? this[key]:config.value
-		if(init_value !== undefined && init_value !== null){
-			if(typeof init_value === 'string' && init_value.charAt(0) === '$') init_value = this.parseWiredString(init_value)
+
+		if(init_value !== undefined){
+			var type = config.type
 			if(typeof init_value === 'function'){
 				if(init_value.is_wired) this.setWiredAttribute(key, init_value)
-				else this[on_key] = init_value
+				else if(type !== Function) this[on_key] = init_value
+				else this[value_key] = init_value
 			}
 			else{
-				var type = config.type
-				if(type && type !== Object && type !== Array){
+				if(type && type !== Object && type !== Array && type !== Function){
 					this[value_key] = type(init_value)
 				}
 				else{
@@ -465,10 +596,7 @@ define.class(function(require, constructor){
 		}
 		this._attributes[key] = config
 		
-		if(config.wired) this[wiredfn_key] = config.wired
-
 		var setter
-		var getter
 		// define attribute gettersetters
 
 		// block attribute emission on objects with an environment thats (stub it)
@@ -477,22 +605,30 @@ define.class(function(require, constructor){
 			
 			setter = function(value){
 				var mark
+
+				var config = this._attributes[key]
+
 				if(this[set_key] !== undefined) value = this[set_key](value)
-				if(typeof value === 'function' && (!value.prototype || Object.getPrototypeOf(value.prototype) === Object.prototype)){
-					if(value.is_wired) this.setWiredAttribute(key, value)
-					this[on_key] = value
-					return
+				if(typeof value === 'function'){
+					if(value.is_wired) return this.setWiredAttribute(key, value)
+					if(config.type !== Function){
+						this[on_key] = value
+						return
+					}
 				}
-				if(typeof value === 'object' && value instanceof Mark){
-					mark = value.mark
-					value = value.value
+				if(typeof value === 'object'){
+					if(value instanceof Mark){
+						mark = value.mark
+						value = value.value
+					}
+					else if(value instanceof Config){
+						this.defineAttribute(key, value)
+						return
+					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
 				}
-
-				var config = this._attributes[key]
-
 
 				if(!mark && config.motion){
 					// lets copy our value in our property
@@ -501,26 +637,28 @@ define.class(function(require, constructor){
 					return
 				}
 
+				var store
 				if(!this.hasOwnProperty(alias_key)){
-					var store = this[alias_key]
+					store = this[alias_key]
 					store = this[alias_key] = store.struct(store)
 				}
 				else{
 					store = this[alias_key]
 				}
-
+				var old = this[value_key]
 				this[value_key] = store[config.index] = value
 
 				// emit alias
 				this.emit(config.alias, {setter:true, via:key, key:config.alias, owner:this, value:this[alias_key], mark:mark})
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, value:value, mark:mark})
+				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
 			}
 
 			this.addListener(config.alias, function(event){
+				var old = this[value_key]
 				var val = this[value_key] = event.value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, mark:mark})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old, mark:event.mark})
 			})
 			// initialize value
 			this[value_key] = this[alias_key][config.index]
@@ -528,37 +666,45 @@ define.class(function(require, constructor){
 		else {
 			setter = function(value){
 				var mark
+
+				var config = this._attributes[key]
+
 				if(this[set_key] !== undefined) value = this[set_key](value)
-				if(typeof value === 'function' && (!value.prototype || Object.getPrototypeOf(value.prototype) === Object.prototype)){
-					if(value.is_wired) this.setWiredAttribute(key, value)
-					this[on_key] = value
-					return
+				if(typeof value === 'function'){
+					if(value.is_wired) return this.setWiredAttribute(key, value)
+					if(config.type !== Function){
+						this[on_key] = value
+						return
+					}
 				}
-				if(typeof value === 'object' && value instanceof Mark){
-					mark = value.mark
-					value = value.value
+				if(typeof value === 'object'){
+					if(value instanceof Mark){
+						mark = value.mark
+						value = value.value
+					}
+					else if(value instanceof Config){
+						this.defineAttribute(key, value)
+						return
+					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
 				}
-
-				var config = this._attributes[key]
 			
 				var type = config.type
 				if(type){
-					if(type !== Object && type !== Array) value = type(value)
+					if(type !== Object && type !== Array && type !== Function) value = type(value)
 				}
 
 				if(!mark && config.motion && this.startAnimation(key, value)){
-
 					// store the end value
 					return
 				}
-
+				var old = this[value_key]
 				this[value_key] = value
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, value:value, mark:mark})
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
 			}
 		}
 		
@@ -713,8 +859,12 @@ define.class(function(require, constructor){
 	// always define an init and deinit
 	this.attributes = {
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
-		init:Event, 
-		// deinit event, called on all the objects that get dropped by the renderer on a re-render
-		deinit:Event
+		init:Config({type:Event}), 
+		// destroy event, called on all the objects that get dropped by the renderer on a re-render
+		destroy:Config({type:Event})
+	}
+
+	this.destroy = function(){
+		this.destroyed = true
 	}
 })

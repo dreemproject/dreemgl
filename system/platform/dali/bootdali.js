@@ -31,6 +31,12 @@ console.log('Loading bootdali', define.$environment);
 		compname, //String: name of the composition
 		rootserver){ //TeemServer: teem server object
 
+		// Dali stage settings (from command-line), or defaults
+		this.width = parseInt(args['-width']) || 1920;
+		this.height = parseInt(args['-height']) || 1080;
+		this.name = args['-name'] || 'dreemgl';
+		this.dalilib = args['-dalilib'] || '/home/dali/teem/src/dreemgl/Release/dali';
+
 		this.args = args
 		this.compname = compname
 		this.rootserver = rootserver
@@ -49,6 +55,7 @@ console.log('Loading bootdali', define.$environment);
 			// lets reload this app
 			this.reload()
 		}.bind(this)
+
 
 	    //this.readSystemClasses('$classes', this.system_classes = {})
 	    //define.system_classes = this.system_classes;
@@ -90,6 +97,11 @@ console.log('Loading bootdali', define.$environment);
 	this.loadComposition = function(){
 		console.log("Reloading composition "+this.filename)
 		require.clearCache()
+
+		this.DaliApi = require('./dali_api');
+		this.DaliApi.initialize(this.width, this.height, this.name, this.dalilib);
+
+
 		var Composition = require(define.expandVariables(this.filename))
 		this.composition = new Composition(this.busserver, this.session)
 	}
@@ -109,7 +121,6 @@ console.log('Loading bootdali', define.$environment);
 		try{
 			if(fs.existsSync(define.expandVariables(jsname))){
 				this.filename = jsname
-console.log('FOUND FILE', this.filename);
 				return this.loadComposition()
 			}
 			else{

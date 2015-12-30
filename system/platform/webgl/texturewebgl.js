@@ -6,7 +6,7 @@
 
 define.class('$system/base/texture', function(exports){
 	var Texture = exports
-
+	Texture.Image = window.Image
 	this.atConstructor = function(type, w, h, device){
 		this.device = device
 		this.type = type
@@ -15,6 +15,13 @@ define.class('$system/base/texture', function(exports){
 
 	this.ratio = 1
 	this.frame_buf = null
+
+	Texture.fromStub = function(stub){
+		var tex = new Texture(stub.type || 'rgba', stub.size[0], stub.size[1])
+		tex.array = stub.array
+		tex.image = stub.image
+		return tex
+	}
 
 	Texture.fromType = function(type){
 		return new Texture(type,0,0)

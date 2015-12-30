@@ -7,9 +7,9 @@
 define.class('$system/base/node', function(){
 	this.atConstructor = function(){}
 	this.attributes = {
-		up:Event,
-		down:Event,
-		press:Event,
-		paste:Event
+		up:Config({type:Event}),
+		down:Config({type:Event}),
+		press:Config({type:Event}),
+		paste:Config({type:Event})
 	}
 })

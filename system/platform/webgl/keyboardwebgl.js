@@ -18,7 +18,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		72:'h',73:'i',74:'j',75:'k',76:'l',77:'m',78:'n',
 		79:'o',80:'p',81:'q',82:'r',83:'s',84:'t',85:'u',
 		86:'v',87:'w',88:'x',89:'y',90:'z',
-		91:'leftmeta',92:'rightmeta',
+		93:'meta',
 		96:'pad0',97:'pad1',98:'pad2',99:'pad3',100:'pad4',101:'pad5',
 		102:'pad6',103:'pad7',104:'pad8',105:'pad9',
 		106:'multiply',107:'add',109:'subtract',110:'decimal',111:'divide',
@@ -32,12 +32,13 @@ define.class('$system/base/keyboard', function (require, exports){
 	for(var k in this.toKey){
 		var key = this.toKey[ k ]
 		this.toCode[key] = k
-		this.defineAttribute(key, {type:int})
+		this.defineAttribute(key, Config({type:int, value:0}))
 	}
 
 	var fireFoxTable = {
-		93:91, // left mete
-		224:92, // right meta
+		91:93,
+		92:93,
+		224:93, // right meta
 		61:187, // equals
 		173:189, // minus
 		59:186 // semicolon
@@ -47,7 +48,15 @@ define.class('$system/base/keyboard', function (require, exports){
 
 		var special_key_hack = false
 
-		window.addEventListener('keydown', function(e){
+		this.checkSpecialKeys = function(e){
+			if(e.shiftKey !== this._shift?true:false) this.shift = e.shiftKey?1:0
+			if(e.altKey !== this._alt?true:false) this.alt = e.altKey?1:0
+			if(e.ctrlKey !== this._ctrl?true:false) this.ctrl = e.ctrlKey?1:0
+			if(e.metaKey !== this._meta?true:false) this.meta = e.metaKey?1:0
+		}
+		var is_keyboard_cut = false
+		var is_keyboard_all = false
+		var keydown = function(e){
 			var code = fireFoxTable[e.keyCode] || e.keyCode
 			// we go into special mode
 			if(e.keyCode == 229){
@@ -55,46 +64,57 @@ define.class('$system/base/keyboard', function (require, exports){
 				return e.preventDefault()
 			}
 			var keyname = this.toKey[ code ]
-			if( keyname ) this.emit(keyname, 1)
-			var msg = { 
-				repeat: e.repeat,
-				code: code,
-				name: keyname
-			}
 
-			this[msg.name] = 1
-			
-			this.emit('down', msg)
-			
-			if((e.ctrlKey || e.metaKey) && code == this.toCode.y){
-				e.preventDefault()
-			}
-			if(code == this.toCode.tab){
-				var msg = {
-					repeat: e.repeat,
-					name: 'tab',
-					value: '\t',
-					char: 9
-				}
-				e.preventDefault()
-			}
-			else if(code == this.toCode.backspace){
-				e.preventDefault()
-			}
-		}.bind(this))
+			is_keyboard_cut = keyname === 'x' && (this._meta || this._ctrl)
+			is_keyboard_all = keyname === 'a' && (this._meta || this._ctrl)
 
-		window.addEventListener('keyup', function(e){
-			var code = fireFoxTable[e.keyCode] || e.keyCode
-			var keyname = this.toKey[ code ]
+			if( keyname ) this[keyname] = 1
 
-			if( keyname ) this.emit(keyname, 0)
+			this.checkSpecialKeys(e)
+
 			var msg = {
 				repeat: e.repeat,
 				code: code,
-				name: keyname
+				name: keyname,
+				shift:this._shift,
+				meta: this._meta,
+				ctrl: this._ctrl,
+				alt: this._alt				
 			}
-			this[msg.name] = 0
-			
+
+			this.emit('down', msg)
+
+			if( (this._ctrl  || this._meta) && this._y || 
+				this._tab || 
+				this._leftarrow ||
+				this._rightarrow ||
+				this._uparrow || 
+				this._downarrow){
+				if(e.preventDefault) e.preventDefault()
+			}			
+
+			is_keyboard_cut = false
+			is_keyboard_all = false
+		}.bind(this)
+
+		var keyup = function(e){
+			var code = fireFoxTable[e.keyCode] || e.keyCode
+			var keyname = this.toKey[ code ]
+
+			if( keyname ) this[keyname] = 0
+
+			this.checkSpecialKeys(e)
+
+			var msg = {
+				repeat: e.repeat,
+				code: code,
+				name: keyname,
+				shift:this._shift,
+				meta: this._meta,
+				ctrl: this._ctrl,
+				alt: this._alt
+			}
+
 			if(special_key_hack){
 				special_key_hack = false
 				this.emit('down', msg)
@@ -102,13 +122,10 @@ define.class('$system/base/keyboard', function (require, exports){
 
 			this.emit('up', msg)
 
-			if(code == this.toCode.tab || code == this.toCode.backspace){
-				e.preventDefault()
-			}
-
-		}.bind(this))
-
-		window.addEventListener('keypress', function(e){
+		}.bind(this)
+		//window.addEventListener('keyup', 
+		//window.addEventListener('keypress',
+		var keypress = function(e){
 			if(e.metaKey || e.altKey || e.ctrlKey) return
 
 			var code = e.charCode
@@ -121,15 +138,89 @@ define.class('$system/base/keyboard', function (require, exports){
 			}
 			this.emit('press', msg)
 			e.preventDefault()
-		}.bind(this))
-
+		}.bind(this)
+		// lets output a css
+		
+		this.mouseMove = function(x, y){
+			this.textarea.focus()
+			this.textarea.style.left = x - parseFloat(this.textarea.style.width) * 0.5
+			this.textarea.style.top = y - parseFloat(this.textarea.style.height) * 0.5
+		}
 
 		this.textarea = document.createElement('textarea')
-		this.textarea.style.width = '0px'
-		this.textarea.style.height = '0px'
+		this.textarea.style.width = '1'
+		this.textarea.style.height = '1'
 		this.textarea.style.position = 'absolute'
-		this.textarea.style.zIndex = -10000000
+		//this.textarea.style.background = 'red'
+		this.textarea.setAttribute('autocomplete',"off")
+		this.textarea.setAttribute('autocorrect',"off") 
+		this.textarea.setAttribute('autocapitalize',"off")
+		this.textarea.setAttribute('spellcheck',"false")
+
+		this.textarea.addEventListener('keyup', keyup)
+		this.textarea.addEventListener('keypress', keypress)
+		this.textarea.addEventListener('keydown', keydown)
+		this.textarea.focus()
+		this.textarea.style.zIndex = 10000000
+
+		var style = document.createElement('style');
+    	style.innerHTML = "\n\
+    	::selection { background:transparent; color:transparent; }\n\
+    	textarea{\n\
+    	  	opacity: 0;\n\
+		    background: transparent;\n\
+		    -moz-appearance: none;\n\
+		    appearance: none;\n\
+		    border: none;\n\
+		    resize: none;\n\
+		    outline: none;\n\
+		    overflow: hidden;\n\
+		    font: inherit;\n\
+		    padding: 0 1px;\n\
+		    margin: 0 -1px;\n\
+		    text-indent: 1em;\n\
+		    -ms-user-select: text;\n\
+		    -moz-user-select: text;\n\
+		    -webkit-user-select: text;\n\
+		    user-select: text;\n\
+		    white-space: pre!important;\n\
+    		\n\
+    	}\n\
+    	textarea:focus{\n\
+    		outline:0px !important;\n\
+    		-webkit-appearance:none;\n\
+    	}"
+    	document.body.appendChild(style);
+
 		document.body.appendChild(this.textarea)
+
+		// put together a fake keypress on cut
+		this.textarea.oncut = function(e){
+			if(!is_keyboard_cut){
+				// lets send a keyboard cut event
+				keydown({
+					keyCode: 88,
+					metaKey: true,
+				})
+				keyup({
+					keyCode: 88,
+					metaKey: true,
+				})
+			}
+		}
+
+		this.textarea.addEventListener('select',function(e){
+			if(!is_keyboard_all && this.textarea.selectionEnd === this.textarea.value.length){
+				keydown({
+					keyCode: 65,
+					metaKey: true,
+				})
+				keyup({
+					keyCode: 65,
+					metaKey: true,
+				})
+			}
+		}.bind(this))
 
 		this.textarea.onpaste = function(e){
 			var text = e.clipboardData.getData('text/plain')
@@ -143,8 +234,9 @@ define.class('$system/base/keyboard', function (require, exports){
 			},
 			set:function(value){
 				this._clipboard = value
-				this.textarea.value = value
-				this.textarea.select()
+				this.textarea.value = value + ' '
+				this.textarea.selectionStart = 0
+		        this.textarea.selectionEnd = value.length - 1
 				this.textarea.focus()
 			}
 		})

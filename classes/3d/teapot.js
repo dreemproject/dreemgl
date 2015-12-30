@@ -8,9 +8,9 @@ define.class(function(require, shape3d){
 
 	this.attributes = {
 		// Size of the teapot
-		radius: {type:float, value:1},
+		radius: Config({type:float, value:1}),
 		// Level of detail. 1 = cubic teapot, 10+ = very very smooth teapot.
-		detail: {type:float, value:10}
+		detail: Config({type:float, value:10})
 	}
 
 	this.bg = {
@@ -25,3 +25,5 @@ define.class(function(require, shape3d){
 		}
 	}
 })
+
+

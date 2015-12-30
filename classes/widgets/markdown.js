@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function($containers$, view, $controls$, label){
+define.class(function($ui$, view, label){
 	// Markdown display class - this element can display a small subset of the "markdown" syntax. See the SUPPORTED_MARKDOWN.md file in the docviewer for supported elements.
 	
 	this.attributes = {
@@ -13,13 +13,13 @@ define.class(function($containers$, view, $controls$, label){
 		
 		// alignment of the bodytext. 
 		// accepted values are "left", "right", "justify" and "center" 
-		align: {type: String,  value: "left"},
+		align: Config({type: String,  value: "left"}),
 
 		// Base fontsize - heading sizes will be multiples of this value.
-		fontsize: {type:Number, value: 13},
+		fontsize: Config({type:Number, value: 13}),
 		
 		// The color to use as the default color for this textblock.
-		fontcolor: {type:vec4, value: vec4("#202020")}
+		fontcolor: Config({type:vec4, value: vec4("#202020")})
 	}
 
 	this.flexdirection = "column"

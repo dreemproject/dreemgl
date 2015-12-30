@@ -38,7 +38,9 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 
 	this.createBus = function(){
 		console.log('compositiondali.createBus is NOT implemented');
-		this.bus = {};
+		this.bus = {
+			send: function() {}
+		};
 	}
 
 

@@ -54,12 +54,8 @@ define.class(function(require, exports){
 	,texImage2D: function() {}
 	};
 
-	// DaliDreemgl is the interface between dreemgl and dali.
-	this.DaliDreemgl = require('./dalidreemgl')
-
-	// Dali application wrapper
-	var DaliWrapper = require('./daliwrapper')
-
+	// DaliApi is a static object to access the dali api
+	this.DaliApi = require('./dali_api')
 
 	this.Keyboard = require('./keyboarddali')
 	this.Mouse = require('./mousedali')
@@ -68,7 +64,6 @@ define.class(function(require, exports){
 	// require embedded classes	
 	this.Shader = require('./shaderdali')
 	this.Texture = require('./texturedali')
-	this.Texture.Image = function(){}
 	this.DrawPass = require('./drawpassdali')
 
 	this.preserveDrawingBuffer = true
@@ -91,11 +86,14 @@ define.class(function(require, exports){
 		//TODO Use setTimeout for animation until dali animation ready (DALI)
 		this.time = 0;
 		this.animFrame = function(time){
+console.log('animFrame', time);
+			var interval = 16; // 500;
 			var t = this.doColor(time);
 			//console.log('animFrame', t, time);
 			if(t){
 				this.anim_req = true
-                setTimeout(function() {this.animFrame(this.time); this.time += 16}.bind(this), 16)
+                this.time += interval;
+                setTimeout(function() {this.animFrame(this.time);}.bind(this), interval)
 			}
 			else this.anim_req = false
 			//if(this.pick_resolve.length) this.doPick()
@@ -114,7 +112,7 @@ define.class(function(require, exports){
 		}
 		else{
 			this.frame = 
-			this.main_frame = this.Texture.fromType('rgb_depth_stencil')
+			this.main_frame = this.Texture.fromType('rgb_depth')
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
@@ -135,18 +133,22 @@ define.class(function(require, exports){
 	}
 
 	this.initResize = function(){
-		//TODO Set width, height, name
-		this.width = this.height = 600
-		this.name = 'dreemgl/dali'
+		// Get size of stage
+		var size = this.DaliApi.dali.stage.getSize();
+		var dpi = this.DaliApi.dali.stage.getDpi();
+
+		this.width = size.x;
+		this.height = size.y;
+		this.ratio = dpi.x / dpi.y;
+
+		console.log('initResize size ', size, dpi);
 
 		//HACK to emulate gl (to avoid javascript errors)
 		this.gl = gl;
 
 		//TODO Use real values
-		this.main_frame = {ratio: 1.0, size: vec2(this.width, this.height)}
+		this.main_frame = {ratio: this.ratio, size: vec2(this.width, this.height)}
 		this.size = vec2(this.width, this.height);
-		this.ratio = 1.0; // this.main_frame.ratio
-
 	}
 
 	this.clear = function(r, g, b, a){
@@ -154,6 +156,9 @@ define.class(function(require, exports){
 			a = r.length === 4? r[3]: 1, b = r[2], g = r[1], r = r[0]
 		}
 		if(arguments.length === 3) a = 1
+
+		DaliApi.setBackgroundColor([r,g,b,a]);
+
 		this.gl.clearColor(r, g, b, a)
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT|this.gl.DEPTH_BUFFER_BIT|this.gl.STENCIL_BUFFER_BIT)
 	}
@@ -169,8 +174,8 @@ define.class(function(require, exports){
 		this.anim_req = true
 
 		//TODO
-		this.animFrame();
-		//this.document.requestAnimationFrame(this.animFrame)
+		this.time = 0
+        setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
 	}
 
 	this.bindFramebuffer = function(frame){
@@ -205,7 +210,7 @@ define.class(function(require, exports){
 			// and then read the goddamn pixel
 			if(last || view.draw_dirty & 2){
 				view.draw_dirty &= 1
-				view.drawpass.drawPick(last, i, x, y, this.debug_pick)
+				view.drawpass.drawPick(last, i + 1, x, y, this.debug_pick)
 			}
 			if(skip){
 				this.screen.draw_dirty &= 1
@@ -254,10 +259,6 @@ define.class(function(require, exports){
 	}
 
 	this.doColor = function(time){
-		if (!this.wrapper) {
-			//console.log('Create DaliWrapper', this.width, this.height, this.name);
-			this.wrapper = new DaliWrapper(this.width, this.height, this.name);			}
-
 		if(!this.first_time) this.first_time = time
 
 		var stime = (time - this.first_time) / 1000
@@ -284,24 +285,32 @@ define.class(function(require, exports){
 			}
 		}
 
+		// do the dirty matrix regen
+		for(var i = 0; i < this.layout_list.length; i++){
+			// lets do a layout?
+			var view = this.layout_list[i]
+			if(view.matrix_dirty){
+				view.updateMatrices(view.parent? view.parent.totalmatrix: undefined, view._viewport)
+			}
+		}
+
+
 		// lets draw draw all dirty passes.
-		var hastime
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var view = this.drawpass_list[i]
-
 			var skip = false
 			var last = i === len - 1
 
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
-
 			if(view.draw_dirty & 1 || last){
-				var viewhastime = view.drawpass.drawColor(last, stime)
-				if(!viewhastime){
-					view.draw_dirty &= 2
+				//console.log("DiRTY", view)
+				var hastime = view.drawpass.drawColor(last, stime)
+				view.draw_dirty &= 2
+				if(hastime){
+					anim_redraw.push(view)
 				}
-				else hastime = viewhastime
 			}
 
 			if(skip){
@@ -333,7 +342,12 @@ define.class(function(require, exports){
 		
 		if(!node.parent){ // fast path to chuck the whole set
 			// lets put all the drawpasses in a pool for reuse
-			for(var i = 0; i < this.drawpass_list.length; i++) this.drawpass_list[i].drawpass.poolDrawTargets()
+			for(var i = 0; i < this.drawpass_list.length; i++) {
+				var draw = this.drawpass_list[i]
+				draw.drawpass.poolDrawTargets()
+				draw.layout_dirty = true
+				draw.draw_dirth = 3
+			}
 			this.drawpass_list = []
 			this.layout_list = []
 			this.drawpass_idx = 0

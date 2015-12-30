@@ -8,21 +8,21 @@ define.class('$system/base/node', function(){
 	this.atConstructor = function(){}
 	
 	this.attributes = {
-		start:Event,
-		end:Event,
-		cancel:Event,
-		leave:Event,
-		move:Event,
-		x: {type:int},
-		y: {type:int},
-		x1: {type:int},
-		y1: {type:int},
-		x2: {type:int},
-		y2: {type:int},
-		x3: {type:int},
-		y3: {type:int},
-		x4: {type:int},
-		y4: {type:int},
-		fingers: {type:int}
+		start:Config({type:Event}),
+		end:Config({type:Event}),
+		cancel:Config({type:Event}),
+		leave:Config({type:Event}),
+		move:Config({type:Event}),
+		x: Config({type:int}),
+		y: Config({type:int}),
+		x1: Config({type:int}),
+		y1: Config({type:int}),
+		x2: Config({type:int}),
+		y2: Config({type:int}),
+		x3: Config({type:int}),
+		y3: Config({type:int}),
+		x4: Config({type:int}),
+		y4: Config({type:int}),
+		fingers: Config({type:int})
 	}
 })

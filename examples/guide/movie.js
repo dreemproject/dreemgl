@@ -1,17 +1,17 @@
-define.class(function ($containers$, view, $controls$, label) {
+define.class(function (require, $ui$, view, label) {
 
     this.flexdirection = 'column';
     this.padding = 10;
     this.margin = 10;
     this.borderwidth = 2;
-    this.bordercolor = vec4(0.3,0.3,0.3,0.3)
+    this.bordercolor = vec4(0.3,0.3,0.3,0.3);
 
     this.attributes = {
-        Title: {type:String},
-        Year: {type:String},
-        imdbID: {type:String},
-        Type: {type:String},
-        Poster: {type:String}
+        Title:  Config({type: String, value: ""}),
+        Year:   Config({type: String, value: ""}),
+        imdbID: Config({type: String, value: ""}),
+        Type:   Config({type: String, value: ""}),
+        Poster: Config({type: String, value: ""})
     };
 
     this.onPoster = function (event) {
@@ -27,6 +27,5 @@ define.class(function ($containers$, view, $controls$, label) {
             bgcolor:vec4(0,0,0,0.5),
             multiline: true
         })
-    ] }
-
+    ]}
 });

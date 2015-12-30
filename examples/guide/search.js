@@ -5,9 +5,9 @@ define.class(function(require, $server$, service) {
 
     this.attributes = {
         // The string to search for in the OMDB database
-        keyword: {type:String},
+        keyword: Config({type: String, value: ""}),
         // List of movie objects returned from server
-        results: {type:Array}
+        results: Config({type: Array, value: []})
     };
 
     this.onkeyword = function (event) {
@@ -21,7 +21,7 @@ define.class(function(require, $server$, service) {
                 }
             }).bind(this))
         } else if (!request) {
-            console.log('WARNING: please cd to "./compositions/guide/" and run "npm install"')
+            console.log('WARNING: if "request" is missing, please cd to "./examples/guide/" and run "npm install"')
         }
     };
 

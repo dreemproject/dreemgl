@@ -10,6 +10,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	var RpcHub = require('$system/rpc/rpchub')
 
 	var Render = require('$system/base/render')
+	var screen = require('$ui/screen')
 
 	// ok now what. well we need to build our RPC interface
 	this.postAPI = function(msg, response){
@@ -21,12 +22,8 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			else { //getter
 				var parts = msg.rpcid.split('.');
 				var obj
-				if(parts[0] === 'role'){
-					obj = this.rpc.role[parts[1]]
-				}
-				else{
-					obj = this.names[parts[0]]
-				}
+				obj = this.names[parts[0]]
+
 				if(!obj){
 					response.send({type:'error', message:"Cannot find object"})
 				}
@@ -51,8 +48,9 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		return new Promise(function(resolve, reject){
 			var parts = msg.rpcid.split('.')
 			//! TODO fix this up to be multi role capable
-			if(parts[0] === 'role'){
-				var scr = this.connected_screens[parts[1]]
+			var obj = this.names[parts[0]]
+			if(obj instanceof screen){
+				var scr = this.connected_screens[parts[0]]
 
 				var res = []
 				var uid = msg.uid
@@ -129,8 +127,9 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		
 		if (socket) {
 			//make sure we set it on the rpc object
-			if(parts[0] === 'role'){
-				var obj = this.rpc.role[parts[1]]
+			var cls = this.names[parts[0]]
+			if(cls instanceof screen){
+				var obj = this.rpc[parts[0]]
 				var last_set = obj.atAttributeSet
 				obj.atAttributeSet = undefined
 				obj[msg.attribute] = msg.value
@@ -215,6 +214,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			// create child name shortcut
 			var child = this.children[i]
 			child.rpc = this.rpc
+			if(child instanceof screen) continue		
 			if(!child.environment || child.environment === define.$environment){
 				var init = []
 				child.connectWires(init)

@@ -9,7 +9,7 @@ define.class(function(exports){
 
 	var initializing = false
 
-	exports.process = function render(inew_version, old_version, globals, state, rerender){
+	exports.process = function render(inew_version, old_version, globals, state, rerender, nochild){
 		var new_version = inew_version
 		var is_root = false
 		if(!state){
@@ -27,10 +27,10 @@ define.class(function(exports){
 	 		}
  		}*/
 
-		for(var key in globals){
+		if(new_version) for(var key in globals){
 			new_version[key] = globals[key]
 		}
-		
+
 		// call connect wires before
 		if(!rerender) new_version.connectWires(state.wires)
 
@@ -59,7 +59,7 @@ define.class(function(exports){
 			// we need to call re-render on this
 			if(!initializing){
 				render(this, undefined, globals, undefined, true)
-				this.redraw()
+				this.relayout()
 			}
 			//this.setDirty(true)
 			//if(this.reLayout) this.reLayout()
@@ -68,7 +68,7 @@ define.class(function(exports){
 		// store the attribute dependencies
 		new_version.atAttributeGet = function(key){
 			// lets find out if we already have a listener on it
-			if(!this.hasListenerName(key, '__atAttributeGet')){
+			if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGet')){
 				this.addListener(key, __atAttributeGet)
 			}
 		}
@@ -81,7 +81,12 @@ define.class(function(exports){
 			//console.log(object)
  		}
 
+ 		define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
+
  		new_version.children = new_version.render()
+
+ 		define.atConstructor = undefined
+
 		new_version.atAttributeGet = undefined
 
 		if(!Array.isArray(new_version.children)){
@@ -103,7 +108,7 @@ define.class(function(exports){
 
 		var new_children = new_version.children
 
-		if(new_children) for(var i = 0; i < new_children.length; i++){
+		if(!nochild && new_children) for(var i = 0; i < new_children.length; i++){
 			var new_child = new_children[i]
 
 			if(Array.isArray(new_child)){ // splice in the children
@@ -119,21 +124,23 @@ define.class(function(exports){
 			if(old_children){
 				old_child = old_children[i]
 			}
+			var childreuse = false
+			if(new_child.parent) childreuse = true
+
 			new_child.parent = new_version
 			new_child.parent_viewport = new_version.parent_viewport
-
-			new_child =  new_children[i] = render(new_child, old_child, globals, state)
+			new_child =  new_children[i] = render(new_child, old_child, globals, state, childreuse)
 	
-			// set the childs name
-			var name = new_child.name || new_child.constructor.name
-			if(name !== undefined && !(name in new_version)) new_version[name] = new_child
+			// lets not do this
+			//var name = new_child.name || new_child.constructor.name
+			//if(name !== undefined && !(name in new_version)) new_version[name] = new_child
 		}
 
 		if(old_children) for(;i < old_children.length;i++){
-			old_children[i].emitRecursive('deinit')
+			old_children[i].emitRecursive('destroy')
 		}
 
-		if(old_version) old_version.emit('deinit')
+		if(old_version) old_version.emit('destroy')
 
 		if(is_root){
 			initializing = true

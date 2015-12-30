@@ -7,16 +7,18 @@
 define.class('$system/base/node',function(require){
 
 	var RpcHub = require('$system/rpc/rpchub')
+	var Render = require('./render')
 
 	this._atConstructor = function(){
 		
 	}
 
 	this.atConstructor = function(){
+		this.composition = this
 		this._intervals = []
 	}
 
-	this.destroy = function(){
+	this.ondestroy = function(){
 		for(var key in this.hub){
 			prop = this.hub[key]
 			if(typeof prop == 'object'){
@@ -55,7 +57,9 @@ define.class('$system/base/node',function(require){
 
 	this.renderComposition = function(){
 		// we have to render the RPC bus
-		this.children = this.render()
+		Render.process(this, undefined, {}, undefined, false, true)
+
+		//this.children = this.render()
 
 		this.names = {}
 		// now lets rpc proxify them
@@ -65,7 +69,7 @@ define.class('$system/base/node',function(require){
 
 			if(!child.createRpcProxy) continue
 			// add the proxy to the rpc object
-			var name = child.name || child.constructor.name
+			var name = child.name// || child.constructor.name
 			this.rpc[name] = child.createRpcProxy(this.rpc)
 			this.names[name] = child
 		}

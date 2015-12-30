@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function($containers$, view, $controls$, label){
+define.class(function($ui$, view, label){
 
 	// slide viewer is an automatic slide viewer that turns child nodes into slides
 	// use attributes named 'slidetitle' on a child to set the slide title1
@@ -16,23 +16,34 @@ define.class(function($containers$, view, $controls$, label){
 		// the margin between slides
 		slidemargin: 10,
 		// the current page
-		page: {type:int, persist:true, value:0},
+		page: Config({type:int, persist:true, value:0}),
 		// animate the scroll
-		scroll: {motion:'inoutsine',duration:0.5},
+		scroll: Config({motion:'inoutsine', duration:0.5}),
 		// persist the postiion
-		pos: {persist:true}
+		pos: Config({persist:true})
 	}
 
 	// the class for a nested slide, its automatically wrapped around children
-	define.class(this, 'slide', function($containers$, view){
-		this.cornerradius = vec4(10,10,10,10)
+	define.class(this, 'slide', function($ui$, view){
+		this.borderradius = vec4(10)
 		this.borderwidth = 0
 		this.bordercolor = vec4("blue")
 		this.bgcolor = "white"
+
 		this.flex = 0
 		this.viewport = '2d'
 		this.overflow = 'hidden'
 		this.padding = vec4(6);
+
+		this.viewportblend = function(){
+			this.color = function(){
+				//return 'red'
+
+				var col = texture.sample(mesh.xy)
+				return vec4(col.rgb, col.a * view.opacity)
+			}
+		}
+
 		this.render = function(){
 			return view({
 					bg:{

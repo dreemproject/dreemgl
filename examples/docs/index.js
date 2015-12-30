@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class(function(require, $server$, composition, fileio, role, dataset, $containers$, screen, view, splitcontainer, $controls$,  treeview, label, $widgets$, docviewer, jsviewer){
+define.class('$server/composition', function(require, $server$, fileio, dataset, $ui$, screen, view, splitcontainer, treeview, label, $widgets$, docviewer, jsviewer){
 
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')
@@ -62,63 +62,60 @@ define.class(function(require, $server$, composition, fileio, role, dataset, $co
 	this.render = function(){
 		return [
 		this.fileio(),
-		role(
-			screen({
-				init:function(){
-					// lets load the entire directory structure
-					this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
-						var filetree = this.find('filetree')
-						var tree = result.value
-						tree.name = 'Documentation'
-						tree.collapsed = false
-						// lets make a dataset
-						this.model = filetree.dataset = dataset(tree)
-					}.bind(this))
-					
-				}},
-				splitcontainer({vertical: false,  bgcolor: "black", flex:1}
-					,view({flexdirection:"column", padding: 0,flex: 0.2}
-						,view({alignitems:"center", bgcolor:"#e0e0e0", flexdirection:"row" ,padding: 14},
-							label({text:"DreemGL", fgcolor:"black", bgcolor:"#e0e0e0", fontsize: 35 })
-						)
-						,treeview({
-							postLayout:function(){
-							},
-							init:function(){
-								var dataset = this.find('screen').model
-								if(dataset) this.dataset = dataset
-							},
-
-							name:'filetree', 
-							flex:1, 
-							select:function(sel){
-								if(sel.type === 'setter')debugger
-								// we have to grab the last path set and concatenate a path
-								var path = ''
-								for(var i = sel.path.length - 1; i >= 1; i--){
-									path = sel.path[i].name + (path!==''?'/' + path:'')
-								}
-								this.find('screen').locationhash = {path : '$root/'+path};
-							}
-						})
+		screen({
+			init:function(){
+				// lets load the entire directory structure
+				this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
+					var filetree = this.find('filetree')
+					var tree = result.value
+					tree.name = 'Documentation'
+					tree.collapsed = false
+					// lets make a dataset
+					this.model = filetree.dataset = dataset(tree)
+				}.bind(this))
+				
+			}},
+			splitcontainer({bgcolor: "black", flex:1}
+				,view({flexdirection:"column", padding: 0,flex: 0.2}
+					,view({alignitems:"center", bgcolor:"#343434", flexdirection:"row" ,padding: 14},
+						label({text:"DreemGL", fgcolor:"white", bg:0, fontsize: 35 })
 					)
-					,docviewer({flex:1,
-						attributes:{class:{persist:true}},
-						init:function(){
-							//console.log("INITIALIZIN")
-							this.screen.locationhash = function(event){
-							//	debugger
-								if(event.value.path) require.async(event.value.path).then(function(module){
-									this.class = module
-								}.bind(this))
-							}.bind(this)
-							//this.screen.locationhash = this.screen.locationhash
+					,treeview({
+						postLayout:function(){
 						},
-						minsize:vec2(400,400),
-						overflow:'scroll'
-					//	overflow:'scroll'
+						init:function(){
+							var dataset = this.screen.model
+							if(dataset) this.dataset = dataset
+						},
+						name: 'filetree', 
+						flex: 1, 
+						select: function(sel){
+							if(sel.type === 'setter') debugger
+							// we have to grab the last path set and concatenate a path
+							var path = ''
+							for(var i = sel.path.length - 1; i >= 1; i--){
+								path = sel.path[i].name + (path !== ''? '/' + path: '')
+							}
+							this.screen.locationhash = {path:'$root/' + path};
+						}
 					})
 				)
+				,docviewer({flex:1,
+					class:Config({persist:true}),
+					init:function(){
+						this.screen.locationhash = function(event){
+						//	debugger
+							if(event.value.path) require.async(event.value.path).then(function(module){
+								console.log(module)
+								this.class = module
+							}.bind(this))
+						}.bind(this)
+						//this.screen.locationhash = this.screen.locationhash
+					},
+					minsize:vec2(400,400),
+					overflow:'scroll'
+				//	overflow:'scroll'
+				})
 			)
 		)
 	]}

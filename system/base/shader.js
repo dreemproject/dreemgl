@@ -34,6 +34,10 @@ define.class(function(require, exports){
 	this.SQRT_1_2 = '0.70710678118654757'
 	this.SQRT2 = '1.4142135623730951'
 
+	this.visible = true
+
+	this.pickalpha = 0.5
+	
 	// we can use singletons of these stateless classes
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}
@@ -429,7 +433,16 @@ define.class(function(require, exports){
 		pickguid:1
 	}
 
-	this.isShaderEqual = function(prevshader){
+	this.isShaderEqual = function(prevshader, view, prev){
+		// lets compare the prevshader.view vs my view
+		var array = prevshader.view_functions
+		if(array) for(var i = 0; i < array.length; i++){
+			var key = array[i]
+			var vfn = view[key], pfn = prev[key]
+			if(!vfn || !pfn || vfn.toString() !== pfn.toString()){
+				return false
+			}
+		}
 		for(var key in this){
 			if(key in ignore_compare) continue
 			if(this.__lookupSetter__(key)) continue
@@ -624,11 +637,12 @@ define.class(function(require, exports){
 
 		pix_pick += pix_base
 		pix_pick += 'uniform vec3 _pickguid;\n'
+		pix_pick += 'uniform float _pickalpha;\n'
 		pix_pick += '//------------------- Pick Pixel shader main -------------------\nvoid main(){\n'
 		pix_pick += this.compileUniformRename(pix_state.uniforms)
 		pix_pick += '\tvec4 col = ' + this.toVec4(pix_code, pix_ast, alpha_code, alpha_ast) + ';\n'
 		pix_pick += ''
-		pix_pick += '\tgl_FragColor = vec4(_pickguid.xyz, col.a>0.5?1.:0.);\n'
+		pix_pick += '\tgl_FragColor = vec4(_pickguid.xyz, col.a>_pickalpha?1.:0.);\n'
 		pix_pick += '}\n'
 
 		if(this.dump){
@@ -664,11 +678,12 @@ define.class(function(require, exports){
 			return
 		}
 		this.shader = this.compileShader(gldevice)
-
 		this.connectWires()
 	}		
 
 	this.atExtend = function(){
+
+		var shader = this
 		if(define.$platform === 'nodejs') return
 		// forward the view reference
 		if(this.constructor.outer){
@@ -679,10 +694,54 @@ define.class(function(require, exports){
 				var parts = key.split('_DOT_')
 				if(parts.length === 2 && parts[0] === 'view'){
 					if('_' + parts[1] in this.view){
-						this.view.addListener(parts[1], this.view.redraw)
+						this.view.addListener(parts[1], function(){
+							this.redraw()
+						})
 					}
 				}
 			}
+			
+			var name = shader.constructor.name
+			function recompile_shader(){
+				var oldcls = this[name]
+				this[name] = {dirty:true}
+				var newcls = this[name]
+				for(var key in this.shader_enable){
+					if(key !== name && this[key] === oldcls){
+						// overwrite references
+						this[key] = newcls
+					}
+				}
+			}
+			recompile_shader.shader = name
+
+			this.view_functions = []
+			for(var key in this.vtx_state.functions){
+				var parts = key.split('_DOT_')
+				if(parts.length === 2 && parts[0] === 'view'){
+					var left = parts[1].split('_T_')[0]
+					// ok lets hook this thing to invalidate our shader
+					if(!this.view.hasListenerProp(left, 'shader', name)){
+						this.view_functions.push(left)
+						this.view.addListener(left, recompile_shader)
+					}
+				}
+			}
+
+			for(var key in this.pix_state.functions){
+				var parts = key.split('_DOT_')
+				if(parts.length === 2 && parts[0] === 'view'){
+					var left = parts[1].split('_T_')[0]
+					// ok lets hook this thing to invalidate our shader
+					if(!this.view.hasListenerProp(left, 'shader', name)){
+						this.view_functions.push(left)
+						this.view.addListener(left, recompile_shader)
+					}
+				}
+			}
+			// lets put other listeners on our referenced function of view
+			// and if they fire, we need to inherit in place and set dirty=true
+			//console.log(this.pix_state.code_color)
 		}
 		else if(this !== exports.prototype) this.compile()
 

@@ -11,32 +11,69 @@ define.class('$system/base/shader', function(require, exports){
 	exports.Texture =
 	this.Texture =  require('./texturedali')
 
+	util = require('util');
+
+	// DaliApi is a static object to access the dali api
+	DaliApi = require('./dali_api')
+
+	// DaliDreemgl is the interface between dreemgl and dali.
+	DaliShader = require('./dali_shader')
+	DaliActor = require('./dali_actor')
+
+	/**
+	 * @method compileShader
+	 * Compiles the shader, or use the cached version.
+	 * Construct a mesh actor if necessary and attach to the view
+	 * The 'this' pointer is an object like border or hardrect
+	 * @param {Object} gldevice Instance of DeviceDali
+	 * @return {Object} shader Object containing compiled shader information.
+	 *                  In webgl this is an object returned by gl.createProgram
+	 *                  In dali, this is a hash containing a dali_shader object
+	 */
 	this.compileShader = function(gldevice){
+		console.log('*#*#*#*# compileShader', this.view ? this.view.id : '<SCREEN>');
 		var vtx_state = this.vtx_state
 		var pix_state = this.pix_state
 		var vtx_code = vtx_state.code
 
-		var pix_color = pix_state.code_color
+		//console.log('vtx_code', vtx_code);
+		//console.log('pix_code', pix_state.code_color);
+		//console.log('====== vtx_state call', vtx_state.call);
 
+		var pix_color = pix_state.code_color
 		var pix_pick = pix_state.code_pick
 		var pix_debug = pix_state.code_debug
 
 		var gl = gldevice.gl
 		var cache_id = vtx_code + pix_color + this.has_pick
 
-		var shader = gldevice.shadercache[cache_id]
+		// Get the DaliShader object from a cache, or build one
+		shader = gldevice.shadercache[cache_id]
+		//if(shader) return this.dalishader
 
-		if(shader) return shader
+		if (!shader) {
+			// shader is a hash of compiled information and dali objects
+			shader = {
+				object_type: '(compiled_shader_data)'
 
-	    //Dali workaround. In webgl this is gl.createProgram() object (DALI)
-	    shader = {
-			debug: {}
-			,pick: {}
+				,debug: {}
+				,pick: {}
+				
+				,uniset: {}
+				,unilocks: {}
+				,refattr: {}
+				
+				,texlocs: {}
+			};
 
-			,uniset: {}
-			,unilocks: {}
-			,refattr: {}
-	    };
+			// Build a DaliShader object and attach to shader
+			var shadercode = vtx_state.code;
+			var fragcode = pix_state.code_color;
+			shader.dalishader = new DaliShader(shadercode, fragcode);
+
+		//DEV
+		// Compile the dali objects
+		//shader.compileShader(this, dalishader);
 
 		//Not used by Dali
 //		var vtx_shader = gl.createShader(gl.VERTEX_SHADER)
@@ -66,9 +103,20 @@ define.class('$system/base/shader', function(require, exports){
 //		gl.attachShader(shader, pix_color_shader)
 //		gl.linkProgram(shader)
 
-		this.getLocations(gl, shader, vtx_state, pix_state)
+        // Build information on uniforms, textures, and attributes
+			this.getLocations(gl, shader, vtx_state, pix_state)
 
-		if(this.compile_use) this.compileUse(shader)
+			//console.log('*** COMPILED ***');
+			//console.log('unilocks', shader.unilocks);
+			//console.log('uniset', shader.uniset);
+			//console.log('refattr', shader.refattr);
+			//console.log('texlocs', shader.texlocs);
+			
+			//TODO. Remove?
+			this.compile_use = true
+
+			if(this.compile_use) this.compileUse(shader)
+			gldevice.shadercache[cache_id] = shader
 
 		//Not supported by Dali (Yet)
 //		if(pix_debug){
@@ -115,136 +163,30 @@ define.class('$system/base/shader', function(require, exports){
 //			if(this.compile_use) this.compileUse(shader.pick)
 //		}
 
+		}  // if (!this.dalishader) {
+
+
+		// Build missing dali objects (if they don't exist)
+		//console.log('shader', shader.object_type, shader);
+
+		//console.trace('CALLING createDaliObjects');
+		DaliApi.createDaliObjects(shader, this); //  shader);
+
+		//console.log('shader has', Object.keys(shader));
+
+		//DaliApi.createDaliActor(this, shader);
+
+
+		//console.log('---- ---- ---- ADDING TEXTURE INFO');
+		//shader.addAttributeGeometry(this, shader.attrlocs);
+
 		return shader		
 	}
 
 	this.useShader = function(gl, shader){
 		if(shader.use) return shader.use(gl, shader, this)
-		// use the shader
-		gl.useProgram(shader)
 
-		// set uniforms
-		var uniset = shader.uniset
-		var unilocs = shader.unilocs
-		for(var key in uniset){
-			var loc = unilocs[key]
-			var split = loc.split
-			if(split){
-				for(var i = 0, prop = this; i < split.length; i ++) prop = prop[split[i]]
-				if(loc.last !== prop){
-					loc.last = prop
-					uniset[key](gl, loc.loc, prop)
-				}
-			}
-			else{
-				var prop = this['_' + key]
-				//if(this.dbg) console.log(key, prop)
-				if(loc.last !== prop){
-					loc.last = prop
-					uniset[key](gl, loc.loc, prop)
-				}
-			}
-		}
-		// textures
-		var texlocs = shader.texlocs
-		var texid = 0
-		for(var key in texlocs){
-			var texinfo = texlocs[key]
-			var split = texinfo.split
-			if(split){
-				for(var texture = this, i = 0; i < split.length; i ++) texture = texture[split[i]]
-			}
-			else{
-				var texture = this['_' + texinfo.name] || this[texinfo.name]
-			}
-			// lets fetch the sampler
-			var gltex = texture[texinfo.samplerid]
-			// lets do the texture slots correct
-			if(!gltex){
-				gltex = texture.createGLTexture(gl, texid, texinfo)
-				if(!gltex){
-					gltex = this.default_texture.createGLTexture(gl, texid, texinfo)
-				}
-			}
-			else{
-				gl.activeTexture(gl.TEXTURE0 + texid)
-				gl.bindTexture(gl.TEXTURE_2D, gltex)
-				if(texture.updateid !== gltex.updateid){
-					texture.updateGLTexture(gl, gltex)
-				}
-			}
-			gl.uniform1i(texinfo.loc, texid)
-			texid++
-		}
-
-		// set attributes
-		var attrlocs = shader.attrlocs
-		var len = 0 // pull the length out of the buffers
-		var lastbuf
-		for(var key in attrlocs){
-			var attrloc = attrlocs[key]
-
-			if(attrloc.name){
-				var buf = this['_' + attrloc.name]
-			}
-			else{
-				var buf = this['_' + key]
-			}
-
-			if(lastbuf !== buf){
-				lastbuf = buf
-				if(!buf.glvb) buf.glvb = gl.createBuffer()
-				if(buf.length > len) len = buf.length
-				gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
-				if(!buf.clean){
-					gl.bufferData(gl.ARRAY_BUFFER, buf.array.buffer, gl.STATIC_DRAW)
-					buf.clean = true
-				}
-			}
-			var loc = attrloc.loc
-			gl.enableVertexAttribArray(loc)
-
-			if(attrloc.name){ // ok so. lets set the vertexAttribPointer
-				gl.vertexAttribPointer(loc, attrloc.slots, gl.FLOAT, false, buf.stride, attrloc.offset)
-			}
-			else{
-				gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)
-			}
-		}
-
-		// set up blend mode
-		if(this.alpha_blend_eq.op){
-			var constant = this.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3?constant[3]:1)
-			gl.enable(gl.BLEND)
-			gl.blendEquationSeparate(this.color_blend_eq.op, this.alpha_blend_eq.op)
-			gl.blendFuncSeparate(
-				this.color_blend_eq.src,
-				this.color_blend_eq.dst,
-				this.alpha_blend_eq.src,
-				this.alpha_blend_eq.dst
-			)
-		}
-		else if(this.color_blend_eq.op){
-			var constant = this.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3?constant[3]:1)
-			gl.enable(gl.BLEND)
-			gl.blendEquation(this.color_blend_eq.op)
-			gl.blendFunc(this.color_blend_eq.src, this.color_blend_eq.dst)
-		}
-		else{
-			gl.disable(gl.BLEND)
-		}
-		// set up depth test
-		if(this.depth_test_eq.func){
-			gl.enable(gl.DEPTH_TEST)
-			gl.depthFunc(this.depth_test_eq.func)
-		}
-		else{
-			gl.disable(gl.DEPTH_TEST)
-		}
-		
-		return len
+console.log('***************************************************************************************************OLD CODE RUNNING');
 	}
 
 	this.compile_use = true
@@ -265,12 +207,46 @@ define.class('$system/base/shader', function(require, exports){
 		}
 	}
 
+	this.mapTextures = function(gl, shader, textures, texlocs){
+		for(var key in textures){
+			var tex = textures[key]
+			var loc = texlocs[key] = {
+				loc: key, // Store the name, not the location
+				samplerdef: tex.samplerdef,
+				samplerid: tex.samplerid,
+				name: tex.name
+			}
+			if(tex.name.indexOf('_DOT_') !== -1) loc.split = tex.name.split(/_DOT_/)
+		}		
+	}
 
+
+	// Template for generated code
+	//   {object} gl stubbed out gl object
+	//   {object} shader compiled shader object, containing dalishader
+	//                   and daligeometry. (see compileShader in this file)
+	//   {object} root display object (ex. border, hardrect), containing
+	//                        dalimaterial, dalirenderer, daliactor.
 	this.useShaderTemplate = function(gl, shader, root){
+
+		// Create dali objects when first used
+		if (root && !root.daliactor) {
+			DaliApi.createDaliActor(root, shader);
+		}
+
+		console.log('useShader', root.view ? root.view.id : 'screen', 'shader', shader.object_type, 'root', root.object_type)
+
 		// use the shader
 		gl.useProgram(shader)
+		var dali = DaliApi.dali
+        var daliactor = root ? root.daliactor : undefined;
+		var dalimaterial = root ? root.dalimaterial : undefined;
+        var daligeometry = root.daligeometry;
+
+		console.log('daliactor', daliactor.id, 'shader', shader.dalishader.id, 'geometry', daligeometry.id);
 
 		// set uniforms
+		//shader.addUniforms(shader.dreem_shader);
 		SET_UNIFORMS
 
 		// textures
@@ -280,7 +256,30 @@ define.class('$system/base/shader', function(require, exports){
 		var gltex = texture.TEXTURE_SAMPLER
 		// lets do the texture slots correct
 		if(!gltex){
+			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture)
 			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
+            if (texture.image) {
+                var ti = TEXTURE_INFO
+
+				//TODO Get current values for sampler
+				var sampler = new dali.Sampler();
+				sampler.setFilterMode(dali.FILTER_MODE_LINEAR, dali.FILTER_MODE_LINEAR);
+				sampler.setWrapMode(dali.WRAP_MODE_CLAMP_TO_EDGE, dali.WRAP_MODE_CLAMP_TO_EDGE);
+				
+				if (DaliApi.emitcode) {
+					console.log('DALICODE: var sampler' + dalimaterial.id + ' = new dali.Sampler();');
+					console.log('DALICODE: sampler' + dalimaterial.id + '.setFilterMode(dali.FILTER_MODE_LINEAR, dali.FILTER_MODE_LINEAR);');
+					console.log('DALICODE: sampler' + dalimaterial.id + '.setWrapMode(dali.WRAP_MODE_CLAMP_TO_EDGE, dali.WRAP_MODE_CLAMP_TO_EDGE);');
+				}		
+
+
+				//FIX
+				if (dalimaterial) {
+  					var index = dalimaterial.addTexture(texture, ti.loc, sampler);
+					gltex.texture_index = index;
+					console.log('**** **** **** dali.addTexture', ti.loc, texture.image.getWidth(), texture.image.getHeight(), 'return index', index);
+				}
+}
 			if(!gltex) return 0
 		}
 		else{
@@ -288,12 +287,40 @@ define.class('$system/base/shader', function(require, exports){
 			gl.bindTexture(gl.TEXTURE_2D, gltex)
 			if(texture.updateid !== gltex.updateid){
 				texture.updateGLTexture(gl, gltex)
+				if (gltex.texture_index) {
+                    var dalimaterial = root.dalimaterial;
+					dalimaterial.removeTexture(gltex.texture_index);
+					gltex.texture_index = undefined;
+					if (texture.image) {
+						var ti = TEXTURE_INFO
+
+						//TODO Get current values for sampler
+						var sampler = new dali.Sampler();
+						sampler.setFilterMode(dali.FILTER_MODE_LINEAR, dali.FILTER_MODE_LINEAR);
+						sampler.setWrapMode(dali.WRAP_MODE_CLAMP_TO_EDGE, dali.WRAP_MODE_CLAMP_TO_EDGE);
+
+						if (DaliApi.emitcode) {
+							console.log('DALICODE: var sampler = new dali.Sampler();');
+							console.log('DALICODE: sampler.setFilterMode(dali.FILTER_MODE_LINEAR, dali.FILTER_MODE_LINEAR);');
+							console.log('DALICODE: sampler.setWrapMode(dali.WRAP_MODE_CLAMP_TO_EDGE, dali.WRAP_MODE_CLAMP_TO_EDGE);');
+						}		
+
+						var index = dalimaterial.addTexture(texture.image, ti.loc, sampler);
+						gltex.texture_index = index;
+					}
+				}
 			}
 		}
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
 		TEXTURE_END
 
 		// attributes
+		//shader.compileShader(this);
+		//console.log('---- ---- ---- addAttributeGeometry');
+		//shader.daligeometry.addAttributeGeometry(shader, shader.attrlocs);
+
+
+
 		var len = 0 // pull the length out of the buffers
 		var lastbuf
 		ATTRLOC_START
@@ -313,10 +340,20 @@ define.class('$system/base/shader', function(require, exports){
 		ATTRLOC_ATTRIBPTR
 		ATTRLOC_END
 
+		//DALI
+		//FIX
+		//console.log('root.view', root.view);
+		
+		var dalimaterial = root.dalimaterial;
+
 		// set up blend mode
 		if(root.alpha_blend_eq.op){
+			console.log('==== alpha_blend_eq.op');
 			var constant = root.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
+			if(constant) {
+				console.log('CONSTANT', constant[0], constant[1], constant[2], constant[3], 'Not implemented');
+				gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
+			}
 			gl.enable(gl.BLEND)
 			gl.blendEquationSeparate(root.color_blend_eq.op, root.alpha_blend_eq.op)
 			gl.blendFuncSeparate(
@@ -325,21 +362,49 @@ define.class('$system/base/shader', function(require, exports){
 				root.alpha_blend_eq.src,
 				root.alpha_blend_eq.dst
 			)
+
+			// DALI
+			console.log('*** full blend');
+			dalimaterial.setBlendMode(dali.BLENDING_ON);
+			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
+
 		}
 		else if(root.color_blend_eq.op){
+			//console.log('BLEND', root.color_blend_eq);
 			var constant = root.constant
-			if(constant) gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
+			if (constant) {
+				console.log('CONSTANT 2', constant[0], constant[1], constant[2], constant[3], 'Not implemented');
+				gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
+			}
 			gl.enable(gl.BLEND)
 			gl.blendEquation(root.color_blend_eq.op)
 			gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
+
+
+			dalimaterial.setBlendMode(dali.BLENDING_ON);
+			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+
+			//TODO Check this. What are the last two args?
+			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
+			//dalimaterial.setBlendFunc(dali.BLEND_FACTOR_SRC_COLOR, dali.BLEND_FACTOR_DST_COLOR, root.color_blend_eq.src, root.color_blend_eq.dst);
+			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_ONE, dali.BLEND_FACTOR_ZERO);
+			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_SRC_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+
+			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_CONSTANT_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA);
+
+			
 		}
 		else{
+			console.log('==== blend disabled');
 			gl.disable(gl.BLEND)
+			//DALI
+			dalimaterial.setBlendMode(dali.BLENDING_OFF);
 		}
 		
 		// set up depth test
 		if(root.depth_test_eq.func){
-			//console.log(root.depth_test_eq)
+			console.log('***Depth test enabled. NOT IMPLEMENTED');
 			gl.enable(gl.DEPTH_TEST)
 			gl.depthFunc(root.depth_test_eq.func)
 		}
@@ -350,16 +415,27 @@ define.class('$system/base/shader', function(require, exports){
 		return len
 	}
 
+	// {object} shader DaliShader object, amended with location information
+	//                 (see getLocations call above)
+	// The 'this' pointer is a view
 	this.compileUse = function(shader){
+		// Make sure the object has dali
+		//DaliApi.createDaliObjects(this.shader);
+
+console.log('*****compileUse', shader.object_type, this.object_type);
 		// alright lets compile our useShader from 
 		var tpl = this.useShaderTemplate.toString()
 		tpl = tpl.replace(/^function/, "function useshader_" + (this.view?this.view.constructor.name:'anonymous') + '_shader_' + this.constructor.name)
 		// ok lets replace shit.
 		// set uniforms
-		var out = 'var loc, uni\n'
+
 		var uniset = shader.uniset
 		var unilocs = shader.unilocs
 		var refattr = shader.refattr
+
+		var out = 'var loc, uni\n'
+		out += 'var actor = root.daliactor\n'
+		out += 'if (shader && actor) {\n'
 
 		for(var key in uniset){
 			var loc = unilocs[key]
@@ -369,8 +445,9 @@ define.class('$system/base/shader', function(require, exports){
 				var name = ''
 				for(var i = 0; i < split.length; i++){
 					if(i) name += '.'
-					if(isattr && i === split.length - 1) name += '_'
-					name += split[i]
+					var part = split[i]
+					if(part === 'layout' || isattr && i === split.length - 1) name += '_'
+					name += part
 				}
 				out += '\t\tuni = root.' + name + '\n'
 			}
@@ -388,10 +465,22 @@ define.class('$system/base/shader', function(require, exports){
 			//	out += '\t\tif(loc.value !== uni) loc.value = uni, '
 			//}
 
-			//Update uniform (DALI)
+			// Update uniform. Use registerAnimatableProperty only if 
+			// the value is not set yet. (DALI)
 			//TODO Optimize
-			out += 'shader.dali_obj.meshActor.registerAnimatableProperty(\'_' + key + '\', shader.dali_obj.getArrayValue(uni))\n'
-			//out += 'shader.dali_obj.meshActor._' + key + ' = shader.dali_obj.getArrayValue(uni)\n'
+            //out += 'console.log(\'------ROOT\', root.view.id, root.daliactor.object_type)\n'
+            out += '\t\tvar val = actor.setUniformValue(\'' + key + '\',uni)\n'
+
+// Use addUniformValue instead of this code
+/*
+            out += '\t\tvar val = shader.getArrayValue(uni)\n'
+            out += '\t\tvar v = shader.meshActor._' + key + '\n'
+            out += '\tconsole.log(\'key\',\'' + key + '\',\'value\', val)\n'
+			out += '\t\tif (v) {v = val} \n'
+            out += '\t\telse {shader.meshActor.registerAnimatableProperty(\'_' + key + '\', val)}\n'
+*/
+
+
 /*
 			out += 'gl.' + gen.call + '(loc.loc'
 
@@ -404,6 +493,8 @@ define.class('$system/base/shader', function(require, exports){
 			if(gen.args === this.loguni) out += 'if(typeof uni === "number")console.log(uni)\n'
 */
 		}
+		out += '}\n'
+
 		tpl = tpl.replace(/SET\_UNIFORMS/, out)
 
 		tpl = tpl.replace(/TEXTURE\_START([\S\s]*)TEXTURE\_END/, function(m){
@@ -412,6 +503,7 @@ define.class('$system/base/shader', function(require, exports){
 			var texlocs = shader.texlocs
 			var texid = 0
 			for(var key in texlocs){
+console.log('******************************** key', key);
 				var texinfo = texlocs[key]
 				var split = texinfo.split
 
@@ -422,15 +514,23 @@ define.class('$system/base/shader', function(require, exports){
 				else{
 					TEXTURE_VALUE = 'root.' + texinfo.name
 				}
+//console.log('key', key);
+//console.log('TEXTURE_VALUE', TEXTURE_VALUE);
+//console.log('TEXTURE_SAMPLER', texinfo.samplerid);
+//console.log('TEXTURE_ID', texid);
+//console.log('TEXTURE_LOC', 'shader.texlocs.' + key+ '.loc');
+//console.log('TEXTURE_INFO', 'shader.texlocs.' + key);
+//console.log('TEXTUREGL_ID', gltypes.gl.TEXTURE0 + texid);
 
 				out += body
-					.replace(/TEXTURE_VALUE/, TEXTURE_VALUE)
-					.replace(/TEXTURE_SAMPLER/, texinfo.samplerid)
+					.replace(/TEXTURE_VALUE/g, TEXTURE_VALUE)
+					.replace(/TEXTURE_SAMPLER/g, texinfo.samplerid)
 					.replace(/TEXTURE_ID/g, texid)
-					.replace(/TEXTURE_LOC/, 'shader.texlocs.' + key+ '.loc')
-					.replace(/TEXTURE_INFO/, 'shader.texlocs.' + key)
-					.replace(/TEXTUREGL_ID/, gltypes.gl.TEXTURE0 + texid)
+					.replace(/TEXTURE_LOC/g, 'shader.texlocs.' + key+ '.loc')
+					.replace(/TEXTURE_INFO/g, 'shader.texlocs.' + key)
+					.replace(/TEXTUREGL_ID/g, gltypes.gl.TEXTURE0 + texid)
 			}
+//console.log('=-=-=-=-=- texlocs', out);
 			return out
 		})
 
@@ -440,6 +540,13 @@ define.class('$system/base/shader', function(require, exports){
 			var attrlocs = shader.attrlocs
 			var len = 0 // pull the length out of the buffers
 			var lastbuf
+			if (Object.keys(attrlocs).length > 0) {
+console.log('*************************** attrlocs ***********************');
+console.log(attrlocs);
+console.log('************************************************************');
+				out += 'root.daligeometry.addAttributeGeometry(root, shader.attrlocs)\n'
+			}
+
 			for(var key in attrlocs){
 				var attrloc = attrlocs[key]
 				var ATTRLOC_BUF
@@ -455,11 +562,19 @@ define.class('$system/base/shader', function(require, exports){
 				if(attrloc.name){
 					ATTRLOC_ATTRIBPTR = 
 						'gl.vertexAttribPointer(loc, '+attrloc.slots+', gl.FLOAT, false, buf.stride, '+attrloc.offset+')'
+
+				//ATTRLOC_ATTRIBPTR = 'console.log(\'buf type 1\', \'' + key + '\',' + attrloc.slots + ', buf.stride, buf.length,' + attrloc.offset + ');daligeometry.addVertices(\'' + key + '\', buf.array, ' + attrloc.slots + ', buf.stride, ' + attrloc.offset + ')'
 				}
 				else{
 					ATTRLOC_ATTRIBPTR = 
 						'if(buf.slots>4)debugger;gl.vertexAttribPointer(loc, buf.slots, gl.FLOAT, false, buf.stride, 0)'
+
+				//ATTRLOC_ATTRIBPTR = 'console.log(\'buf type 2\', \'' + key + '\',buf.slots, buf.stride, buf.length);daligeometry.addVertices(\'' + key + '\', buf.array, buf.slots, buf.stride, 0)'
 				}
+
+				//HACK. Setting this for text causes problems with image display
+				ATTRLOC_ATTRIBPTR = ''
+
 				out += body		
 					.replace(/ATTRLOC_BUF/, ATTRLOC_BUF)
 					.replace(/ATTRLOC_LOC/, ATTRLOC_LOC)
@@ -472,8 +587,12 @@ define.class('$system/base/shader', function(require, exports){
 			return gltypes.gl[m.slice(3)]
 		})
 
+		//if (shader.texlocs && shader.texlocs.length > 0)
+		//console.log('FUNCTION', this.view.id, tpl);
+
 		//console.log('FUNCTION', tpl);
-		shader.use = new Function('return ' + tpl)()
+		//shader.use = new Function('return ' + tpl)().bind(this);
+		shader.use = new Function('return ' + tpl)();
 	}
 
 	// all draw types
@@ -486,15 +605,17 @@ define.class('$system/base/shader', function(require, exports){
 
 	this.drawtype = this.TRIANGLES
 	
-	// lets draw ourselves
-	this.drawArrays = function(devicewebgl, sub, start, end){
+	// lets draw ourselves.
+	// A view (the this pointer) makes one call to drawArrays for each shader.
+	// A typical number is two (one for border and one for hardimage
+	this.drawArrays = function(devicegl, sub, start, end){
+//console.trace('*****drawArrays', (this.view? this.view.id : '<screen>'));
 		// console.log('PROG', this.vtx_state.code);
 		//if(this.mydbg) debugger
-		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
-		var gl = devicewebgl.gl
+		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicegl)
+		var gl = devicegl.gl
         var shader = sub? this.shader[sub]: this.shader;
 		// Attach the dali_obj to the shader.shader object (DALI)
-		shader.dali_obj = this.dali_obj;
 		var len = this.useShader(gl, shader);
 		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)
 	}

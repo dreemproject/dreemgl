@@ -3,73 +3,68 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($containers$, view, $controls$, label, $widgets$, jsviewer) {
+define.class(function ($ui$, view, label) {
 
     this.attributes = {
-        syntaxCode: {type: String}
+        syntaxCode: Config({type: String})
     };
 
-    this.slidetitle = "External Components in DreemGL";
+    this.slidetitle = "Adding Components to DreemGL";
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
 
     this.render = function render() {
         return [
             label({
-                text:'+ Plugin components are directories - No special work required!',
+                text:'+ Components are directories - No special work required!',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:5
+                margintop:50
             }),
             label({
-                text:'(note: define.$plugins defaults to $compositions directory for convenience, but can be changed for security)',
-                fgcolor:'#666',
-                bgcolor:'transparent',
-                fontsize:14,
-                margintop:5,
-                marginleft:25
-            }),
-            label({
-                text:'+ Compositions can auto load classes from plugin directories:',
+                text:'+ Navigate class filesystem with "$" argument syntax',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:15
+                margintop:50
             }),
             label({
-                text:'Use the `componentname$classname` syntax:',
-                fgcolor:'#444',
-                bgcolor:'transparent',
-                fontsize:20,
-                margintop:5,
-                marginleft:95
-            }),
-            jsviewer({
-                flex: 0,
-                mode:'2d',
-                overflow:'scroll',
-                alignself: 'center',
-                margin: vec4(10),
-                source: this.syntaxCode,
-                padding: vec4(4),
-                fontsize: 14,
-                bgcolor: "#000030",
-                multiline: true}
-            ),
-            label({
-                text:'+ Example composition in `index.js`, no special mounting!',
+                text:'+ Integrate internally via nodejs (write entirely in DreemGL!)',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:10
+                margintop:50
             }),
+            //label({
+            //    text:'(Web services, nodejs plugins)',
+            //    fgcolor:'#F33',
+            //    bgcolor:'transparent',
+            //    fontsize:15,
+            //    marginleft:25,
+            //    margintop:10
+            //}),
             label({
-                text:'+ See `./examples/guide/README.md` for more full details.',
+                text:'+ Integrate externally via POST API (write in any language!)',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
-                margintop:20
+                margintop:50
+            }),
+            //label({
+            //    text:'(Other services, IoT Devices)',
+            //    fgcolor:'#F33',
+            //    bgcolor:'transparent',
+            //    fontsize:15,
+            //    marginleft:25,
+            //    margintop:10
+            //}),
+            label({
+                text:'+ See `./examples/guide/README.md` for implementation guide',
+                fgcolor:'#333',
+                bgcolor:'transparent',
+                fontsize:25,
+                margintop:50
             })
         ];
     };

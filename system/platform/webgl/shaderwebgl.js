@@ -95,6 +95,7 @@ define.class('$system/base/shader', function(require, exports){
 			gl.linkProgram(shader.pick)
 			// add our pick uniform
 			pix_state.uniforms['pickguid'] = vec3
+			pix_state.uniforms['pickalpha'] = float
 
 			this.getLocations(gl, shader.pick, vtx_state, pix_state)
 
@@ -250,6 +251,7 @@ define.class('$system/base/shader', function(require, exports){
 		var gltex = texture.TEXTURE_SAMPLER
 		// lets do the texture slots correct
 		if(!gltex){
+			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture)
 			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
 			if(!gltex) return 0
 		}
@@ -270,8 +272,9 @@ define.class('$system/base/shader', function(require, exports){
 		var buf = ATTRLOC_BUF
 		if(lastbuf !== buf){
 			lastbuf = buf
-			if(!buf.glvb) buf.glvb = gl.createBuffer()
 			if(buf.length > len) len = buf.length
+			//if(len === 0) return 0
+			if(!buf.glvb) buf.glvb = gl.createBuffer()
 			gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
 			if(!buf.clean){
 				gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
@@ -339,8 +342,9 @@ define.class('$system/base/shader', function(require, exports){
 				var name = ''
 				for(var i = 0; i < split.length; i++){
 					if(i) name += '.'
-					if(isattr && i === split.length - 1) name += '_'
-					name += split[i]
+					var part = split[i]
+					if(part === 'layout' || isattr && i === split.length - 1) name += '_'
+					name += part
 				}
 				out += '\t\tuni = root.' + name + '\n'
 			}
@@ -388,7 +392,7 @@ define.class('$system/base/shader', function(require, exports){
 				}
 
 				out += body
-					.replace(/TEXTURE_VALUE/, TEXTURE_VALUE)
+					.replace(/TEXTURE_VALUE/g, TEXTURE_VALUE)
 					.replace(/TEXTURE_SAMPLER/, texinfo.samplerid)
 					.replace(/TEXTURE_ID/g, texid)
 					.replace(/TEXTURE_LOC/, 'shader.texlocs.' + key+ '.loc')
@@ -452,6 +456,7 @@ define.class('$system/base/shader', function(require, exports){
 	this.drawArrays = function(devicewebgl, sub, start, end){
 		//if(this.mydbg) debugger
 		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicewebgl)
+		if(!this.shader) return
 		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
 		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)

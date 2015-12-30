@@ -4,25 +4,32 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $controls$, label){
+define.class(function(require, $ui$, textbox){
 
-	var JSFormatter = require('$system/font/jsformatter')	
+	var JSFormatter = require('$system/parse/jsformatter')	
 	var Parser = require('$system/parse/onejsparser')
 
 	this.attributes = {
 		// The code to display
-		source: {type:String, value:""},
+		source: Config({type:String, value:""}),
 		// wrap the text
-		wrap: {type:Boolean, value:false}
+		wrap: Config({type:Boolean, value:false})
 	}
-	this.bgcolor = vec4(12/255,33/255,65/255,1)
+
+	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
+
+	this.readonly = true
 
 	this.bg = 1
 	this.fontsize = 14
 	this.subpixel = true
 
+	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
+
 	// extend the font shader
-	this.font = function(){
+	this.typeface = function(){
+		this.font = font
+
 		for(var key in JSFormatter.types){
 			this[key] = String(JSFormatter.types[key])
 		}
@@ -55,7 +62,7 @@ define.class(function(require, $controls$, label){
 				//if(pixelsize < 0.5){//edge > 0.1){ // pixel drawing
 					//if(mod(gl_FragCoord.x, 24*6.) < 1.) return '#445'
 					var s = pixelsize * 130.
-					if(p.x > s && p.x < 3 * s && mod(p.y, 3.*s) > s) return '#443'
+					if(p.x > s && p.x < 1.5 * s && mod(p.y, 1.5*s) > s) return '#443'
 					//if(p.x > dpdx.x && p.x <= 3*dpdx.x && mod(p.y, 2.*dpdy.y) > dpdy.y) return '#445'
 				//}
 				//else { // switch to vector drawing
@@ -111,10 +118,12 @@ define.class(function(require, $controls$, label){
 				}
 			}
 			else if(type == _Value){
-				if(sub == _String)
+				if(sub == _String){
 					view.fgcolor = "#0f0"
-				else
+				}
+				else{
 					view.fgcolor = "aero"
+				}
 			}
 			else if(type == _Comment){
 				view.fgcolor = "#777"
@@ -131,6 +140,8 @@ define.class(function(require, $controls$, label){
 			var view = this.view
 			var maxwidth = view.layout.width
 			var textbuf = this.mesh = this.newText()
+
+			textbuf.font = view.font
 			var ast = Parser.parse(view.source)
 
 			textbuf.fontsize = view.fontsize
@@ -143,7 +154,7 @@ define.class(function(require, $controls$, label){
 
 			if(view.wrap){
 				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
-					var indent = textbuf.typeface.glyphs[9].advance * textbuf.fontsize * (this.indent)
+					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * (this.indent)
 					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}

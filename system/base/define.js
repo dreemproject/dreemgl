@@ -2,7 +2,43 @@
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 // Micro AMD module loader for browser and node.js and basic system homogenisation library
+
+// READ FIRST
+// The nodejs server is CLIENT-SIDE-MIDDELWARE for prototyping and development
+// not a web-facing backend.
+// dreemGL is not optimized to be a neat NPM module, fit into browserify or express or otherwise
+// be a grab-and-use JS thing that respects the constraints that this would require.
+// Also any nodejs code is NOT deploy-safe because of the automatic RPC system and should 
+// NOT be put webfacing as is.
+// And since it keeps websocket connections to all clients for live reloading
+// and RPC, it will rapidly stop working if faced with any large number of connections.
+// The RPC is by default broadcast and does NOT have cross client security considerations
+// A packaging solution for deploying any dreemGL to a webpage is on the todo list
+
+// Notes on the design and edgeconditions of dreemGL:
+// dreemGL has a decent amount of global types and values. yes. globals.
+// dreemGL is a prototyping toolkit, and aimed at quickly being able to do certain things
+// having globals helps there and most have been carefully chosen to be global.
+// Also all the math things are global, in math.js to be more GLSL-like in JS.
+// The prototypes of Float32Array are modified to add the GLSL swizzle (.xyxy) apis.	
+// The nodeJS Module loader is hooked to allow for loading the custom AMD extension
+// you see in dreemGL, which fuses classes with modules. And this may have some 
+// compatibility repercussions for some modules that assume 'define' works a certain way 
+// If you need to require nodejs modules using the require provided by define,
+// use require('module') dont use './' or '/' these are interpreted as define.js modules
+// The browser require will ignore require('module') so if you stick to a clean
+// classdef it can safely load up 'nodejs' classes to inspect their interfaces for RPC
+// All these choices are to support the design goals of dreemGL some of which are:
+// - be a low cognitive overhead prototyping toolkit
+// - symmetrical loading of the entire 'app' in both nodejs and browser for automatic
+//   rpc interface handling 
+// - low jank, all rendering in JS (the timeline is super important here)
+// - do not transcompile anything and run in browser and node with same files
+// - optimized live editability and reloading of all class hierarchy parts (thats the reason
+//   the modulesystem + classes are fused)
+
 (function define_module(config_define){
 
 	// the main define function
@@ -112,9 +148,17 @@
 
 	define.lookupFileType = function(type){
 		type = type.toLowerCase()
+		
 		if(type === 'json')	return 'json'
+
 		if(type === 'txt' || type === 'obj' || type === 'text' || type === 'md') return 'text'
+		
 		return 'arraybuffer'
+	}
+
+	define.processFileType = function(type, blob){
+		if(type === 'glf') return define.parseGLF(blob)
+		return blob
 	}
 
 	define.global = function(object){
@@ -303,19 +347,24 @@
 				callback(builtin, undefined, i)
 				continue
 			}
-			if(arg === '$'){
+			if(arg === '$$'){
 				path = './'
 			}
-			else if(arg === '$$'){
+			else if(arg === '$$$'){
 				// we have to rip something off path
 				path = define.filePath(path)
 			}
 			else if(arg.charAt(0) === '$'){
 				if(arg.charAt(arg.length - 1) === '$'){ // $blabla$
-					path = '$' + arg.slice(1).replace(/\$/g,'/')
+					path = '$' + arg.slice(1).replace(/\$/g, '/')
 				}
 				else{
-					callback(undefined, '$' + arg.slice(1).replace(/\$/g,'/'), i) // absolute path
+					if(arg.charAt(1) ==='$'){
+						callback(undefined, './' + arg.slice(2).replace(/\$/g,'/'), i) // local absolute path
+					}
+					else{
+						callback(undefined, '$' + arg.slice(1).replace(/\$/g,'/'), i) // absolute path
+					}
 				}
 
 			} // relative path processor
@@ -366,15 +415,16 @@
 
 	define.EnvironmentStub = function(dep){ this.dep = dep }
 
-	define.makeClass = function(baseclass, body, require, module, nested_module, outer_this){
+	define.makeClass = function(baseclass, body, require, module, nested_module, outer_this, in_name){
 
 		function MyConstructor(){
 			// if called without new, just do a new
 			var obj = this
 
 			if(!(obj instanceof MyConstructor)){
-				obj = Object.create(MyConstructor.prototype)
-				Object.defineProperty(obj, 'constructor', {value:MyConstructor})
+				var constructor = define.atConstructor? define.atConstructor(MyConstructor, arguments[0]): MyConstructor
+				obj = Object.create(constructor.prototype)
+				Object.defineProperty(obj, 'constructor', {value:constructor})
 			}
 
 			var outer = MyConstructor.outer
@@ -386,8 +436,7 @@
 			if(obj._atConstructor) obj._atConstructor.apply(obj, arguments)
 
 			if(obj.atConstructor){
-				var res = obj.atConstructor.apply(obj, arguments)
-				if(res !== undefined) return res
+				obj.atConstructor.apply(obj, arguments)
 			}
 
 			return obj
@@ -395,7 +444,10 @@
 		
 		if(define.debug){
 			var fnname
-			if(body && (body.classname || body.name)){
+			if(in_name){
+				fnname = in_name
+			}
+			else if(body && (body.classname || body.name)){
 				fnname = (body.classname || body.name)
 			}
 			else if(module){
@@ -424,9 +476,9 @@
 			Object.defineProperty(Constructor.prototype, 'constructor', {value:Constructor})
 		}
 
-		Object.defineProperty(Constructor, 'extend', {value:function(body, outer_this){
+		Object.defineProperty(Constructor, 'extend', {value:function(body, outer_this, in_name){
 			//if(this.prototype.constructor === define.StubbedClass) return define.StubbedClass
-			return define.makeClass(this, body, require, undefined, this.nested_module, outer_this)
+			return define.makeClass(this, body, require, undefined, this.nested_module, outer_this, in_name)
 		}})
 
 		Object.defineProperty(Constructor, 'overlay', {value:function(body){
@@ -494,7 +546,7 @@
 
 		var matchrx = new RegExp(/define\.(?:render|class)\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*(?:[$_\w]+\s*,\s*){0,1}){0,1}function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
 		while((result = matchrx.exec(str)) !== null) {
-			output.push('$')
+			output.push('$$')
 			var map = result[1].split(/\s*,\s*/)
 			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i].toLowerCase())
 		}
@@ -766,9 +818,11 @@
 								console.error(err)
 								return reject(err)
 							}
-							define.factory[facurl] = req.response
+							var blob = define.processFileType(type, req.response)
+							define.factory[facurl] = blob
 							
-							resolve(req.response)
+							// do a post process on the file type
+							resolve(blob)
 						}
 					}
 					req.send()
@@ -827,7 +881,7 @@
 
 					script.onerror = function(exception, path, line){ 
 						var error = "Error loading " + url + " from " + from_file
-						//console.error(err)
+						console.error(error)
 						this.rejected = true
 						if(reject) reject({error:error, exception:exception, path:path, line:line})
 						else{
@@ -1165,7 +1219,6 @@
 
 
 			function noderequirewrapper(iname) {
-				
 				var name = iname
 				if(arguments.length != 1) throw new Error("Unsupported require style")
 				try{
@@ -1196,8 +1249,11 @@
 				// we cant require non js files
 				var ext = define.fileExt(full_name)
 				if(ext !== '' && ext !== 'js'){
-					if(ext === 'png' || ext === 'jpg' || ext === 'jpeg'){
-						return undefined
+					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){		
+						// Construct a Texture.Image object given its path
+						var tex = define.expandVariables('$system/platform/$platform/texture$platform')
+						var Texture = define.require(tex);
+						return new Texture.Image(full_name)
 					}
 					else{
 						// read it as an arraybuffer
@@ -1207,7 +1263,7 @@
 						for (var i = 0; i < buffer.length; ++i) {
 						    view[i] = buffer[i]
 						}
-						return ab
+						return define.processFileType(ext, ab)
 						//console.log(full_name)
 					}
 					return undefined
@@ -1235,8 +1291,26 @@
 			noderequirewrapper.module = module
 
 			noderequirewrapper.async = function(modname){
+				// For dali (and probably nodejs) relative paths must be made
+				// absolute to where the example is located.
+				if (define.$platform == 'dali' && modname.indexOf('./') == 0)
+					modname = '$root' + '/' + define.$example + '/' + modname;
+
 				if(typeof modname !== 'string') throw new Error("module name in require.async not a string")
 				modname = define.expandVariables(modname)
+
+				// Query if module is in local file system (DALI)
+				var fs = require("fs")
+				try {
+					stats = fs.lstatSync(modname)
+					var data = fs.readFileSync(modname)
+					return new Promise(function(resolve, reject){
+						resolve(data)
+					})
+				}
+				catch(e) {
+				}
+
 				return new Promise(function(resolve, reject){
 					loadModuleAsync(modname, "root").then(function(path){
 						resolve(require(path))
@@ -1379,7 +1453,7 @@
 						for(var i = 0; i < mysize; i++) out[i] = data[i]
 						return out
 					}
-					console.log("TODO implement object constructing for types" + typeof arg0)
+					throw new Error("TODO implement object constructing for type: " + typeof arg0)
 					return out
 				}
 				if(len === mysize){
@@ -1390,7 +1464,13 @@
 					MyStruct.fromString.apply(out, arguments)
 					return out
 				}
-				define.arraySplat(out, 0, arguments, 0, 0)
+				
+				var outoff = 0
+				for(var i = 0; i < len; i++){
+					var item = arguments[i]
+					if(typeof item == 'number') out[outoff++] = item
+					else outoff = define.arraySplat(out, outoff, item, 0, 1)
+				}
 				return out
 			}
 			if(define.debug && id){ // give the thing a name we can read
@@ -1568,7 +1648,8 @@
 		return Struct
 	}
 
-	define.arraySplat = function(out, outoff, inp, inpoff, depth){
+	define.arraySplat = function(out, ioutoff, inp, inpoff, depth){
+		var outoff = ioutoff
 		for(var i = inpoff, len = inp.length; i < len; i++){
 			var item = inp[i]
 			if(typeof item == 'number') out[outoff++] = item
@@ -1783,6 +1864,553 @@
 
 
 
+
+
+
+
+
+
+
+	// Font loader. Yes i know this file is getting too large, but otherwise i get need loader-loaders.
+
+
+
+
+
+
+
+	
+	define.parseGLF = function(blob){
+		// arg. we need to forward ref vec2 and ivec2
+		// how do we do this.
+
+		if(!blob) return
+		if(blob._parsedFont) return blob._parsedFont
+
+		// lets parse the font
+		var vuint16 = new Uint16Array(blob)
+		var vuint32 = new Uint32Array(blob)
+		var vfloat32 = new Float32Array(blob)
+		var vuint8 = new Uint8Array(blob)
+
+		var font = {}
+
+		if(vuint32[0] == 0x02F01175){ // baked format
+			font.baked = true
+			// lets parse the glyph set
+			font.tex_geom = ivec2(vuint16[2], vuint16[3])
+			font.tex_geom_f = vec2(font.tex_geom[0], font.tex_geom[1])
+			var length = font.count = vuint32[2]
+
+			if(length>10000) throw new Error('Font seems incorrect')
+			var off = 3
+
+			var glyphs = font.glyphs = {}
+			for(var i = 0; i < length; i++){
+				var unicode = vuint32[off++]
+				var glyph = {
+					min_x: vfloat32[off++],
+					min_y: vfloat32[off++],
+					max_x: vfloat32[off++],
+					max_y: vfloat32[off++],
+					advance: vfloat32[off++],
+					tmin_x: vfloat32[off++],
+					tmin_y: vfloat32[off++],
+					tmax_x: vfloat32[off++],
+					tmax_y: vfloat32[off++]
+				}				
+				glyphs[unicode] = glyph
+				glyph.width = glyph.max_x - glyph.min_x 
+				glyph.height = glyph.max_y - glyph.min_y
+			}
+			font.tex_array = blob.slice(off * 4)
+		}
+		else if(vuint32[0] == 0x01F01175){ // glyphy format
+			// lets parse the glyph set
+			font.tex_geom = ivec2(vuint16[2], vuint16[3])
+			font.item_geom = ivec2(vuint16[4], vuint16[5])
+			font.tex_geom_f = vec2(font.tex_geom[0], font.tex_geom[1])
+			font.item_geom_f = vec2(font.item_geom[0], font.item_geom[1])
+
+			var length = font.count = vuint32[3] / (7*4)
+
+			if(length>10000) throw new Error('Font seems incorrect')
+			var off = 4
+
+			var glyphs = font.glyphs = Object.create(null)
+			for(var i = 0;i < length; i++){
+				var unicode = vuint32[off++]
+				var glyph = glyphs[unicode] = {
+					min_x: vfloat32[off++],
+					min_y: vfloat32[off++],
+					max_x: vfloat32[off++],
+					max_y: vfloat32[off++],
+					advance: vfloat32[off++],
+					nominal_w: vuint8[off*4],
+					nominal_h: vuint8[off*4+1],
+					atlas_x: vuint8[off*4+2],
+					atlas_y: vuint8[off*4+3]
+				}
+				off++
+				glyph.width = glyph.max_x - glyph.min_x 
+				glyph.height = glyph.max_y - glyph.min_y
+			}
+			font.tex_array = blob.slice(off * 4)
+		}
+		else throw new Error('Error in font file')
+		
+		if(!(32 in font.glyphs)) font.count++
+		font.glyphs[32] = { // space
+			min_x: 0,
+			min_y: -0.3,
+			max_x: 0.5,
+			max_y: 1.,
+			tmin_x: 0,
+			tmin_y: 0,
+			tmax_x: 24,
+			tmax_y: 24,
+			nominal_w:24,
+			nominal_h:24,
+			advance: 0.5,
+			width: 0,
+			height: 0,
+		}
+		if(!(10 in font.glyphs)) font.count++
+		font.glyphs[10] = { // newline
+			min_x: 0,
+			min_y: 0,
+			max_x: 0.5,
+			max_y: 0,
+			tmin_x:0,
+			tmin_y:0,
+			tmax_x:24,
+			tmax_y:24,
+			nominal_w:24,
+			nominal_h:24,
+			advance:0.5,
+			width: 0,
+			height: 0
+		}
+		if(!(9 in font.glyphs)) font.count++
+		font.glyphs[9] = { // tab
+			min_x: 0,
+			min_y: -0.3,
+			max_x: 2,
+			max_y: 1.,
+			tmin_x:0,
+			tmin_y:0,
+			tmax_x:24*4,
+			tmax_y:24,
+			nominal_w:24 * 4,
+			nominal_h:24,
+			advance:2,
+			width: 2,
+			height: 1
+		}
+
+		font.texture = {array:font.tex_array, size:font.tex_geom}
+
+		return font
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function defineGlobals(exports){
+		exports.RAD = 1
+		exports.DEG = 0.017453292519943295
+		exports.PI = 3.141592653589793
+		exports.PI2 = 6.283185307179586
+		exports.E = 2.718281828459045
+		exports.LN2 = 0.6931471805599453
+		exports.LN10 = 2.302585092994046
+		exports.LOG2E = 1.4426950408889634
+		exports.LOG10E = 0.4342944819032518
+		exports.SQRT_1_2 = 0.70710678118654757
+		exports.SQRT2 = 1.4142135623730951
+
+		// primitive types
+		exports.string = String
+		exports.boolean = 
+		exports.bool = define.struct({prim:true, type:'bool', bytes:4, array:Int32Array},'bool')
+		exports.float =
+		exports.float32 = define.struct({prim:true, type:'float32',bytes:4, array:Float32Array},'float32')
+		exports.double =
+		exports.float64 = define.struct({prim:true, type:'float64', bytes:8, array:Float64Array},'float64')
+		exports.int8 = define.struct({prim:true, type:'int8', bytes:1, array:Int8Array},'int8')
+		exports.uint8 = define.struct({prim:true, type:'uint8', bytes:1, array:Uint8Array},'uint8')
+		exports.half = define.struct({prim:true, type:'half', bytes:2, array:Int16Array},'half')
+		exports.short =
+		exports.int16 = define.struct({prim:true, type:'int16', bytes:2, array:Int16Array},'int16')
+		exports.uint16 = define.struct({prim:true, type:'uint16', bytes:1, array:Uint16Array},'uint16')
+		exports.long =
+		exports.int =
+		exports.int32 = define.struct({prim:true, type:'int32', bytes:4, array:Int32Array},'int32')
+		exports.uint32 = define.struct({prim:true, type:'uint32', bytes:4, array:Uint32Array},'uint32')
+
+		// Int vectors
+		exports.ivec2 = define.struct({
+			r:'x',g:'y',
+			s:'x',t:'y',
+			x:exports.int32,
+			y:exports.int32
+		}, 'ivec2')
+
+		exports.ivec3 = define.struct({
+			r:'x',g:'y',b:'z',
+			s:'x',t:'y',p:'z',
+			x:exports.int32,
+			y:exports.int32,
+			z:exports.int32
+		}, 'ivec3')
+
+		exports.ivec4 = define.struct({
+			r:'x',g:'y',b:'z',a:'w',
+			s:'x',t:'y',p:'z',q:'w',
+			x:exports.int32,
+			y:exports.int32,
+			z:exports.int32,
+			w:exports.int32,
+		}, 'ivec4')
+
+		// Bool vectors
+		exports.bvec2 = define.struct({
+			x:exports.boolean,
+			y:exports.boolean
+		}, 'bvec2')
+
+		exports.bvec3 = define.struct({
+			x:exports.boolean,
+			y:exports.boolean,
+			z:exports.boolean
+		}, 'bvec3')
+
+		exports.bvec4 = define.struct({
+			x:exports.boolean,
+			y:exports.boolean,
+			z:exports.boolean,
+			w:exports.boolean,
+		}, 'bvec4')
+
+		// vec2 type
+		exports.vec2 = define.struct({
+			r:'x',g:'y',
+			s:'x',t:'y',		
+			x:exports.float32,
+			y:exports.float32
+		}, 'vec2')
+
+		// vec3 API
+		exports.vec3 = define.struct({
+			r:'x',g:'y',b:'z',
+			s:'x',t:'y',p:'z',
+			x:exports.float32, y:exports.float32, z:exports.float32
+		}, 'vec3')
+
+		// vec4 API
+		exports.vec4 = define.struct({
+			r:'x',g:'y',b:'z',a:'w',
+			s:'x',t:'y',p:'z',q:'w',
+			x:exports.float32, y:exports.float32, z:exports.float32, w:exports.float32
+		}, 'vec4')
+
+		exports.mat2 = define.struct({
+			a:exports.float32, b:exports.float32, c:exports.float32, d:exports.float32
+		}, 'mat2')
+
+		// mat3
+		exports.mat3 = define.struct({
+			a:exports.float32, b:exports.float32, c:exports.float32, 
+			d:exports.float32, e:exports.float32, f:exports.float32,
+			g:exports.float32, h:exports.float32, i:exports.float32
+		}, 'mat3')
+
+		// mat4
+		exports.mat4 = define.struct({
+			a:exports.float32, b:exports.float32, c:exports.float32, d:exports.float32,
+			e:exports.float32, f:exports.float32, g:exports.float32, h:exports.float32,
+			i:exports.float32, j:exports.float32, k:exports.float32, l:exports.float32,
+			m:exports.float32, n:exports.float32, o:exports.float32, p:exports.float32
+		}, 'mat4')
+
+
+		exports.quat = define.struct({
+			x:exports.float32,
+			y:exports.float32,
+			z:exports.float32,
+			w:exports.float32
+		}, 'quat')
+		
+
+		exports.Enum = function Enum(){
+			var matchset = Array.prototype.slice.call(arguments)
+			var origset = Array.prototype.slice.call(arguments)
+
+			function enumCanon(v){
+				if(v.indexOf('-') !== -1) v = v.replace(/\-/g,'')
+				return v.toLowerCase()
+			}
+
+			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
+				
+			function Enum(value){
+				if(typeof value !== 'string'){
+					console.error('Enum not string' + value, origset.join('|'))
+					return types[0]
+				}
+				var index = matchset.indexOf(enumCanon(value))
+
+				if(index === -1){
+					console.error('Invalid enum value: "' + value + '" ' + origset.join('|'))
+					return types[0]
+				}
+				return origset[index]
+			}
+			Enum.values = origset
+			return Enum
+		}
+
+		// global functions
+		exports.flow = function(value){
+			console.log(value)
+			return value
+		}
+
+		// basic math API
+		function typeFn(fn){
+			return function(v){
+				if(typeof v == 'number') return fn(v)
+				var out = v.struct()
+				for(var i = 0; i < v.length; i++) out[i] = fn(v[i])
+				return out
+			}
+		}
+		function typeFn2(fn){
+			return function(v, w){
+				if(typeof v == 'number') return fn(v, w)
+				var out = v.struct()
+				for(var i = 0; i < v.length; i++) out[i] = fn(v[i], w[i])
+				return out
+			}
+		}
+		function typeFn3(fn){
+			return function(v, w, x){
+				if(typeof v == 'number') return fn(v, w, x)
+				var out = v.struct()
+				if(typeof w == 'number'){
+					for(var i = 0; i < v.length; i++) out[i] = fn(v[i], w, x)
+				}
+				else{
+					for(var i = 0; i < v.length; i++) out[i] = fn(v[i], w[i], x[i])
+				}
+				return out
+			}
+		}
+
+		exports.sin = typeFn(Math.sin)
+		exports.cos = typeFn(Math.cos)
+		exports.tan = typeFn(Math.tan)
+		exports.asin = typeFn(Math.asin)
+		exports.acos = typeFn(Math.acos)
+		exports.atan = typeFn(Math.atan)
+		exports.atan2 = typeFn2(Math.atan2)
+		exports.pow = typeFn2(Math.pow)
+		exports.exp = typeFn(Math.exp)
+		exports.log = typeFn(Math.log)
+		exports.exp2 = typeFn(function(v){return Math.pow(2, v)})
+		exports.log2 = typeFn(Math.log2)
+		exports.sqrt = typeFn(Math.sqrt)
+		exports.inversesqrt = typeFn(function(v){ return 1/Math.sqrt(v)})
+		exports.abs = typeFn(Math.abs)
+		exports.floor = typeFn(Math.floor)
+		exports.round = typeFn(Math.round)
+		exports.ceil = typeFn(Math.ceil)
+		exports.min = typeFn2(Math.min)
+		exports.max = typeFn2(Math.max)
+		exports.mod = typeFn2(Math.mod)
+		exports.random = Math.random
+
+		exports.sign = typeFn(function(v){
+			if(v === 0) return 0
+			if(v < 0 ) return -1
+			return 1
+		})
+
+		exports.fract = typeFn(function(v){
+			return v - Math.floor(v)
+		})
+
+		exports.clamp = typeFn3(function(v, mi, ma){
+			if(v < mi) return mi
+			if(v > ma) return ma
+			return v
+		})
+
+		exports.mix = function(a, b, f, o){
+			if(typeof a === 'number'){
+				return a + f * (b - a)
+			}
+			o = o || a.struct()
+			for(var i = 0; i < a.length; i++){
+				o[i] = a[i] + f * (b[i] - a[i])
+			}
+			return o
+		}
+
+		exports.smoothstep = function(e0, e1, v){
+
+		}
+
+		exports.length = function(){
+		}
+
+		exports.distance = function(a, b){
+		}
+
+		exports.dot = function(a, b){
+		}
+
+		exports.cross = function(a, b){
+		}
+
+		exports.normalize = function(){
+		}
+
+		// events are passthrough types
+		exports.Event = function Event(arg){
+			return arg
+		}
+
+		// mark is a class that holds a mark and a value, use it to mark values going into a setter
+		exports.Mark = function Mark(value, mark){
+			var obj = this
+			if(!(obj instanceof Mark)){
+				obj = Object.create(Mark.prototype)
+				Object.defineProperty(obj, 'constructor', {value:Mark})
+			}
+			obj.value = value
+			obj.mark = arguments.length>1? mark: true
+			return obj
+		}
+
+		// parsing a wired function as string
+		exports.wire = function wire(string){
+			src = "return " + string
+			var fn = new Function(src)
+			fn.is_wired = true
+			return fn
+		}
+
+		exports.Config = function Config(object){
+			var obj = Object.create(Config.prototype)
+			obj.constructor = Config
+			obj.config = object
+			return obj
+		}
+	}
+	defineGlobals(typeof process !== 'undefined'? global: window)
+
+
+	// store the types on define
+	define.typeToString = function(type){
+		if(type === String) return 'String'
+		if(type === Object) return 'Object'
+		return type.id
+	}
+
+	define.stringToType = function(str){
+		if(str === 'String') return String
+		if(str === 'Object') return Object
+		return define.typemap.types[str]
+	}
+
+	define.typemap = {
+		types:{
+			int:int,
+			int32:int32,
+			uint32:uint32,
+			float:float,
+			float32:float32,
+			float64:float64,
+			vec2:vec2,
+			vec3:vec3,
+			vec4:vec4,
+			ivec2:ivec2,
+			ivec3:ivec3,
+			ivec4:ivec4,
+			bvec2:bvec2,
+			bvec3:bvec3,
+			bvec4:bvec4,
+			mat2:mat2,
+			mat3:mat3,
+			mat4:mat4
+		},
+		swizzle:{
+			bool:{2:bvec2, 3:bvec3, 4:bvec4},
+			int32:{2:ivec2, 3:ivec3, 4:ivec4},
+			float32:{2:vec2, 3:vec3, 4:vec4},
+		}
+	}
+
+	function defineComponent(proto, name, index){
+		Object.defineProperty(proto, name, {get:function(){ return this[index] },set:function(v){ 
+			this[index] = v 
+			if(this.atChange) this.atChange(index)
+		}})
+	}
+
+	function defineSwiz2(proto, name, i0, i1, vec){
+		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1]) },set:function(v){ 
+			this[i0] = v[0], this[i1] = v[1] 
+			if(this.atChange) this.atChange(-1)
+		}})
+	}
+
+	function defineSwiz3(proto, name, i0, i1, i2, vec){
+		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2]) },set:function(v){ 
+			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2] 
+			if(this.atChange) this.atChange(-1)
+		}})
+	}
+
+	function defineSwiz4(proto, name, i0, i1, i2, i3, vec){
+		Object.defineProperty(proto, name, {get:function(){ return vec(this[i0], this[i1], this[i2], this[i3]) },set:function(v){ 
+			this[i0] = v[0], this[i1] = v[1], this[i2] = v[2], this[i3] = v[3] 
+			if(this.atChange) this.atChange(-1)
+		}})
+	}
+
+	function defineArrayProp(proto, propset, vectypes){
+		for(var prop in propset){
+			defineComponent(proto, prop, propset[prop])
+		}
+		// create swizzles
+		for(var key1 in propset) for(var key2 in propset){
+			defineSwiz2(proto, key1+key2, propset[key1], propset[key2], vectypes[0])
+		}
+		for(var key1 in propset) for(var key2 in propset) for(var key3 in propset){
+			defineSwiz3(proto, key1+key2+key3, propset[key1], propset[key2], propset[key3], vectypes[1])
+		}
+		for(var key1 in propset) for(var key2 in propset) for(var key3 in propset) for(var key4 in propset){
+			defineSwiz4(proto, key1+key2+key3+key4, propset[key1], propset[key2], propset[key3], propset[key4], vectypes[2])
+		}
+	}
+
+	defineArrayProp(Float32Array.prototype, {x:0, y:1, z:2, w:3}, [vec2, vec3, vec4])
+	//defineArrayProp(Float32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.vec2, exports.vec3, exports.vec4])
+	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
+	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
 
 
 

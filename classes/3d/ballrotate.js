@@ -4,12 +4,12 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $containers$view){
+define.class(function(require, $ui$view){
 	//this widget controls 
 
 	this.attributes = {
 		// the target view to control with this
-		target:{type:string, value:""}
+		target: Config({type:string, value:""})
 	}
 	
 	this.mouseleftdown = function(event){

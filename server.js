@@ -87,22 +87,23 @@ function main(){
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
-		'containers':'$root/classes/containers',
-		'controls':'$root/classes/controls',
+		'ui':'$root/classes/ui',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
 	}
-	var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
-
-	for(var i = 0; i < paths.length; i++){
-		if(!paths[i]) continue
-		var parts = paths[i].split(':')
-		var mypath =  parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
-		paths[parts[0]] = mypath
-	}
-	// put them on the define
-	for(var key in define.paths){
-		define['$'+key] = define.paths[key]
+	if(args['-nomoni']){
+		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
+		for(var i = 0; i < paths.length; i++){
+			if(!paths[i]) continue
+			var parts = paths[i].split(':')
+			var mypath =  parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
+			console.log('Mapping '+parts[0]+' to ' + mypath)	
+			define.paths[parts[0]] = mypath
+		}
+		// put them on the define
+		for(var key in define.paths){
+			define['$'+key] = define.paths[key]
+		}
 	}
 
 	define.$platform = 'headless'
@@ -121,13 +122,26 @@ function main(){
 		}
 		else if(args['-dali']){
             // Place the dali/nodejs package at the root of dreemgl
-
+            
 		    var composition = args['-dali'];
 		    if (composition === true)
 			composition = 'examples/rendertest'
 
 		    define.$platform = 'dali'
 		    define.$environment = 'dali' // Otherwise it is nodejs
+
+			//TODO
+			// Store the path from the root to the specified directory.
+			// There is a mismatch between dali and dreem server.
+			var index = composition.lastIndexOf('/');
+			define.$example = (index >= 0) ? composition.substring(0,index+1) : './'
+			try {
+				// The images are relative to ths specified directory
+				if (fs.statSync(composition).isDirectory())
+					define.$example = './' + composition + '/'
+			}
+			catch (e) {
+			}
 
 		    var BootDali = require('$system/platform/dali/bootdali')
 		    new BootDali(args, composition);
