@@ -1453,7 +1453,7 @@
 						for(var i = 0; i < mysize; i++) out[i] = data[i]
 						return out
 					}
-					throw new Error("TODO implement object constructing for types" + typeof arg0)
+					throw new Error("TODO implement object constructing for type: " + typeof arg0)
 					return out
 				}
 				if(len === mysize){

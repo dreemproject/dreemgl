@@ -1,4 +1,4 @@
-define.class(function($ui$, screen, view, button, textbox, label, $$, movie) {
+define.class(function($ui$, screen, view, button, textbox, $$, movie) {
 
     this.attributes = {
         term: Config({type:String}),
