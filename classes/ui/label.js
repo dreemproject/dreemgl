@@ -34,9 +34,21 @@ define.class(function(require, $ui$, view){
 		subpixel: Config({type:Boolean, value: false}),
 	
 		// Alignment of the bodytext.
-		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"})
+		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"}),
+		bold: false
 	}
 
+	this.font = require('$resources/fonts/opensans_bold_ascii.glf')
+	
+	this.bold = function(){
+		if (this.bold) {
+			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
+		}
+		else{
+			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+		}
+	}
+	
 	// the normal font 
 	define.class(this, 'typefacenormal', TypeFace, function(){
 		this.updateorder = 3

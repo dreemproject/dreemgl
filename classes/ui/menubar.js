@@ -8,11 +8,14 @@ define.class( function(require, $ui$, view, label, button){
 
 	this.bgcolor = "#585858" 
 	this.flexdirection = "row" 
-	this.dropshadowradius = 20;
-	this.dropshadowopacity = 0.3;
-	this.dropshadowhardness = 0;
+	//this.dropshadowradius = 20;
+	//this.dropshadowopacity = 0.3;
+	//this.dropshadowhardness = 0;
 	
 	this.attributes = {
+		errortext:"no error",
+		infotext: "no info",
+		statusbar: "no status",
 		menus:[
 			{name:"File", commands:[				
 				{name:"New project", action:function(){console.log("new project with a long name") ;}},
@@ -107,7 +110,21 @@ define.class( function(require, $ui$, view, label, button){
 					}
 			}))
 		}
-		return mres;
+	
+
+	var labelres = []
+	if (this.errortext && this.errortext.length > 0 && this.errortext !== "undefined"){
+		labelres.push(label({margin:vec4(13,0,0,0), text:"ERROR", bold:true, fgcolor: "#e05f21", alignself:"center", bg:false}));
+		labelres.push(label({margin:vec4(3,0,3,0), text:this.errortext, fgcolor: "#e05f21", alignself:"center", bg:false}));
+	}
+	if (this.infotext && this.infotext.length > 0 && this.infotext !== "undefined"){
+		labelres.push(label({margin:vec4(13,0,0,0), text:"INFO",  bold:true, fgcolor: "white", alignself:"center", bg:false}));
+		labelres.push(label({margin:vec4(3,0,3,0),text:this.infotext, fgcolor: "white", alignself:"center", bg:false}));
+	}
+	if (this.statusbar && this.statusbar.length > 0 && this.statusbar !== "undefined"){
+		labelres.push(label({margin:vec4(13,0,0,0),text:this.statusbar, fgcolor: "#a8a8a8", alignself:"center", bg:false}));
+	}
+		return view({bg:false, flex:1, justifycontent:"space-between" }, view({bg:false,alignself:"center"},mres), view({bg:false,alignself:"center"},labelres));
 	}
 	
 })

@@ -57,10 +57,11 @@ define.class('$ui/view', function(require,
 		///this.aligncontent = "center"
 		this.render = function(){
 			return [
-				view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
-					,icon({icon:"cube", fgcolor:this.fgcolor,margin:0,alignself:"center", fontsize:20})
-				)
-				,label({text:this.classdesc.name, margin:8,fgcolor:this.fgcolor, bg:0})
+				//view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
+				//	,icon({icon:"cube", fgcolor:this.fgcolor,margin:0,alignself:"center", fontsize:20})
+				//)
+				//,
+				label({text:this.classdesc.name, margin:3,fgcolor:this.fgcolor, bg:0})
 			]
 		}
 	})
@@ -90,7 +91,7 @@ define.class('$ui/view', function(require,
 				}
 			}
 			
-			return foldcontainer({title:data.name, basecolor:vec4("#3b3b3b"),bordercolor:vec4("#3b3b3b"),icon:"folder"},view({bg:0, flex:1,flexdirection:"column"},res));
+			return foldcontainer({title:data.name, basecolor:vec4("#303030"),padding:0,bordercolor:vec4("#3b3b3b"),icon:undefined},view({bg:0, flex:1,flexdirection:"column"},res));
 		}
 	})
 	
@@ -619,12 +620,17 @@ define.class('$ui/view', function(require,
 		return [
 			menubar({})		
 			,splitcontainer({}
-				,splitcontainer({flex:0.3}
+				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" }
 						,searchbox()
 						
 						,treeview({flex:1, dataset: this.sourceset})
 					)
+					,dockpanel({title:"Library", viewport:"2D" }
+						,searchbox()
+						,this.library({name:"thelibrary", dataset:this.librarydata})
+					)
+
 				)
 				,dockpanel({title:"Patch", flowmeta:{x:0,y:0}, bg:0}
 					,thegrid = cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, thegrid);}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
@@ -677,10 +683,6 @@ define.class('$ui/view', function(require,
 					)
 				) 
 				,splitcontainer({flex:0.5,direction:"horizontal"}
-					,dockpanel({title:"Library", viewport:"2D" }
-						,searchbox()
-						,this.library({name:"thelibrary", dataset:this.librarydata})
-					)
 					,dockpanel({title:"Properties", viewport:"2D"}
 						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
 					)	
