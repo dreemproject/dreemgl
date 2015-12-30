@@ -648,7 +648,6 @@ define.class('$ui/view', function(require,
 							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
 							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
 						)
-						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
 							return this.renderBlocks();
 						}.bind(this)}
@@ -681,6 +680,8 @@ define.class('$ui/view', function(require,
 							)
 							,this.selectorrect({name:"selectorrect"})							
 						)
+						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
+						
 					)
 				
 				,splitcontainer({flex:0.5,direction:"horizontal"}
