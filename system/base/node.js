@@ -83,10 +83,6 @@ define.class(function(require, constructor){
 		}
 	}*/
 
-	// the default render function, returns this.constructor_children
-	this.render = function(){
-		return this.constructor_children
-	}
 
 	// Mixes in another class or object, just pass in any number of object or class references. They are copied on key by key
 	this.mixin = function(){
@@ -383,6 +379,13 @@ define.class(function(require, constructor){
 		var name = original.name
 		
 		var propobj = props && Object.getPrototypeOf(props) === Object.prototype? props: {}
+		
+		// we need to flush this cache on livereload
+		//var cacheid = name + '_' + propobj.class + '_' + propobj.name
+		//var cache = this._style._cache || (this._style._cache = {})
+
+		//var found = cache[cacheid]
+		//if(found) return found
 
 		var style = this._style.lookup(name, propobj)
 
@@ -396,9 +399,11 @@ define.class(function(require, constructor){
 
 		// 'quick' out
 		var found = style && style._base && style._base[name] === base && style._class && style._class[name]
-		if(found) return found
+		if(found){
+			return /*cache[cacheid] =*/ found
+		}
 
-		if(!style) return base
+		if(!style) return /*cache[cacheid] =*/  base
 
 		if(!style._class){
 			Object.defineProperty(style, '_class', {value:{}, configurable:true})
@@ -410,10 +415,10 @@ define.class(function(require, constructor){
 			var clsname = base.name + '_' +(where+'_'||'')+ (style._match||'star')
 			var cls = style._class[name] = base.extend(style, original.outer, clsname)			
 		 	style._base[name] = base
-		 	return cls
+		 	return /*cache[cacheid] =*/ cls
 		}
 
-		return original
+		return /*cache[cacheid] =*/ original
 	}
 
 	// pass an object such as {attrname:{type:vec2, value:0}, attrname:vec2(0,1)} to define attributes on an object
@@ -511,9 +516,9 @@ define.class(function(require, constructor){
 	this.defineAttribute = function(key, config, always_define){
 		// lets create an attribute
 		var is_config =  config instanceof Config
-		var is_attribute = !always_define && key in this 
+		var is_attribute = !always_define && key in this
 		// use normal value assign
-		if(is_attribute && !is_config){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+		if(is_attribute && !is_config || key[0] === 'o' && key[1] === 'n'){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -863,7 +868,4 @@ define.class(function(require, constructor){
 		destroy:Config({type:Event})
 	}
 
-	this.destroy = function(){
-		this.destroyed = true
-	}
 })
