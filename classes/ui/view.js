@@ -1167,7 +1167,7 @@ define.class('$system/base/node', function(require){
 			var height = (view.layout?view.layout.height:view.height)
 			
 			var radius = vec4(Math.max(1, view.borderradius[0] + view.dropshadowradius),Math.max(1, view.borderradius[1]+ view.dropshadowradius),Math.max(1, view.borderradius[2]+ view.dropshadowradius),Math.max(1, view.borderradius[3]+ view.dropshadowradius));
-			console.log(radius)
+			//console.log(radius)
 			var mesh = this.mesh = this.vertexstruct.array()
 
 			if (vec4.equals(radius, vec4(0,0,0,0))) {

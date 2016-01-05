@@ -667,6 +667,19 @@ define.class('$ui/view', function(require,
 						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 							label({text:"Block", bg:0, margin:4})
 							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
+							return this.renderBlocks();
+						}.bind(this)}
+							,block({name:"phone", title:"Phone", x:200, y:20})
+							,block({name:"tv", title:"Television", x:50, y:200})
+							,block({name:"tablet", title:"Tablet",x:300, y:120})						
+							,block({name:"thing", title:"Thing",x:500, y:120})						
+							,block({name:"a", title:"block A", x:50, y:300})
+							,block({name:"b", title:"block B", x:150, y:500})
+							,block({name:"c", title:"block C", x:250, y:400})
+							,block({name:"d", title:"block D", x:350, y:500})
+							,block({name:"e", title:"block E", x:450, y:600})
+							,block({name:"f", title:"block F", x:550, y:700})
 						)
 						,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
@@ -674,6 +687,7 @@ define.class('$ui/view', function(require,
 							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
 						)
 						,this.selectorrect({name:"selectorrect"})							
+						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 					)
 				)
 				,splitcontainer({flex:0.5,direction:"horizontal"}

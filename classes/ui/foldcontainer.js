@@ -60,7 +60,7 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 			}			
 		}
 
-		this.padding = 6
+		this.padding = 3
 
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
