@@ -6,13 +6,14 @@
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, propviewer,searchbox,
-		$server$, sourceset, dataset, $$, dockpanel, block, connection){
+		$server$, sourceset, dataset, $$, library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
 	this.clearcolor = "#565656" 
 	this.bgcolor = "#565656" 
 	this.flexdirection = "column";
+	
 	this.attributes = {
 		sourceset: {}
 	}
@@ -31,90 +32,9 @@ define.class('$ui/view', function(require,
 		this.visible = false
 	})
 	
-	define.class(this, "classlibclass", view, function($ui$, view, label, icon){
-		this.attributes = {
-			classdesc: Config({type:Object, value: undefined}),
-			col1: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.1}),
-			col2: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.2})
-		}
-		
-		this.bg = {
-			color: function(){
-				var fill = mix(view.col1, view.col2,  (mesh.y)/0.8)
-				return fill;
-			}			
-		}
-		console.log(this.name)
-		this.bg = 1
-		this.margin = vec4(2,2,2,0)
-		this.justifycontent = "flex-start"
-		this.alignitems = "center"
-		///this.aligncontent = "center"
-		this.render = function(){
-			return [
-				//view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
-				//	,icon({icon:"cube", fgcolor:this.fgcolor,margin:0,alignself:"center", fontsize:20})
-				//)
-				//,
-				label({text:this.classdesc.name, margin:3,fgcolor:this.fgcolor, bg:0})
-			]
-		}
-	})
 	
-	define.class(this, "libraryfolder", view, function($ui$, view, foldcontainer){
-		
-		this.attributes = {
-			dataset:Config({type:Object}),
-			//fontsize:Config({type:float, meta:"fontsize", value: 15})
-		}
-		this.flexwrap  = "nowrap" 
-		
-		this.flexdirection = "column" 
-		this.fgcolor = "#f0f0f0"
-		this.bgcolor = "#3a3a3a"
-
-		this.render =function(){
-			var data = this.dataset
-
-			if (!this.dataset) return [];
-					
-			var res = [];
-			for(var a  in data.children){
-				var ds = data.children[a];
-				if (!ds.children || ds.children.length == 0){
-					res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor}));
-				}
-			}
-			
-			return foldcontainer({title:data.name, basecolor:vec4("#303030"),padding:0,bordercolor:vec4("#3b3b3b"),icon:undefined},view({bg:0, flex:1,flexdirection:"column"},res));
-		}
-	})
 	
-	define.class(this, "library", function($ui$, view){
-		this.flex = 1;
-		this.attributes = {
-			dataset:{},
-//			fontsize:Config({type:float, meta:"fontsize", value: 15})
-		}
-		this.overflow = "scroll" 
-		this.flexdirection = "column" 
-		this.fgcolor = "#f0f0f0"
-		this.bgcolor = "#3a3a3a"
-		this.render =function(){
-			var data = this.dataset.data
-			if (!this.dataset) return [];
-			
-			var res = [];
-			for(var a  in data.children){
-				var ds = data.children[a];
-				if (ds.children && ds.children.length > 0){			
-						res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor}));
-					}
-				}
-			
-			return res;
-		}
-	})
+	
 	
 	this.addToSelection = function(obj){		
 		var f = this.currentselection.indexOf(obj)
@@ -187,7 +107,6 @@ define.class('$ui/view', function(require,
 		if (update) this.updateSelectedItems()
 	}
 
-		
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock
 		if (block){
@@ -215,6 +134,12 @@ define.class('$ui/view', function(require,
 		var cg = this.findChild("connectionui")
 		var gg = this.findChild("groupui")
 		var gbg = this.findChild("groupbg")
+		
+		gbg.visible =false;
+		gg.visible = false;
+		bg.visible = false;
+		
+		return;
 		
 		if (this.currentselection.length == 1){
 
@@ -631,7 +556,7 @@ define.class('$ui/view', function(require,
 					)
 					,dockpanel({title:"Library", viewport:"2D" }
 						,searchbox()
-						,this.library({name:"thelibrary", dataset:this.librarydata})
+						,library({name:"thelibrary", dataset:this.librarydata})
 					)
 				)
 				,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
@@ -674,20 +599,7 @@ define.class('$ui/view', function(require,
 							label({text:"Block", bg:0, margin:4})
 							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
 						)
-						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
-							return this.renderBlocks();
-						}.bind(this)}
-							,block({name:"phone", title:"Phone", x:200, y:20})
-							,block({name:"tv", title:"Television", x:50, y:200})
-							,block({name:"tablet", title:"Tablet",x:300, y:120})						
-							,block({name:"thing", title:"Thing",x:500, y:120})						
-							,block({name:"a", title:"block A", x:50, y:300})
-							,block({name:"b", title:"block B", x:150, y:500})
-							,block({name:"c", title:"block C", x:250, y:400})
-							,block({name:"d", title:"block D", x:350, y:500})
-							,block({name:"e", title:"block E", x:450, y:600})
-							,block({name:"f", title:"block F", x:550, y:700})
-						)
+						
 						,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 							label({text:"Group", bg:0, margin:4})
