@@ -142,6 +142,7 @@ define.class(function(require, $ui$, textbox){
 			var textbuf = this.mesh = this.newText()
 
 			textbuf.font = view.font
+
 			var ast = Parser.parse(view.source)
 
 			textbuf.fontsize = view.fontsize
@@ -163,6 +164,10 @@ define.class(function(require, $ui$, textbox){
 					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
+
+			//if(view.blarp){
+				console.log(textbuf)
+			//}
 		}
 	}
 

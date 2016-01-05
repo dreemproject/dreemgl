@@ -112,17 +112,17 @@ define.class('$server/composition', function(require,
 										mouseout:function(){
 											this.value = 0
 										},
-bg:{
-i:i,
-patterns: require('./shaderpatterns').prototype,
-color:function(){
-//	return 'red'
-	return vec4( patterns.wave(mesh.uv, i*.1 + 
-		view.value * 10., i*.1 + view.value * 10. ) * 
-		pal.pal1(i*.1).xyz, 1.)
-//
-//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
-}
+										bg:{
+											i:i,
+											patterns: require('./shaderpatterns').prototype,
+											color:function(){
+											//	return 'red'
+												return vec4( patterns.wave(mesh.uv, i*.1 + 
+													view.value * 10., i*.1 + view.value * 10. ) * 
+													pal.pal1(i*.1).xyz, 1.)
+											//
+											//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
+											}
 										},
 										rotate:[-.6*PI,PI,0], 
 										pos:[floor(i/4)*6-10,(i%4)*6-10,-10]
@@ -176,15 +176,15 @@ color:function(){
 					0),
 					view({
 						flex:1,
-						visible:false,
 						slidetitle:'Compositions'
 						}
 						,jsviewer({
+							blarp:1,
 							viewport:'2d',
 							overflow:'scroll',
 							flex:1,
 							margin:vec4(10),
-							source:require('../rpcremote').module.factory.body.toString(), 
+							source: require('../rpcremote').module.factory.body.toString(), 
 							padding:vec4(4), 
 							fontsize: 14, 
 							multiline: true
@@ -195,7 +195,7 @@ color:function(){
 						flex:1,
 						slidetitle:'Live documentation'
 						},
-						docviewer({flex:1, class:this.constructor}),
+						docviewer({flex:1, classconstr:this.constructor}),
 					0),
 				0),
 			0),
@@ -203,7 +203,6 @@ color:function(){
 					pager:0,
 					name:'remote',
 					myfn:function(){
-
 					}
 				}
 				,view({flex:1, bgcolor:'black'}

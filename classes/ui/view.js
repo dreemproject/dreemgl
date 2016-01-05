@@ -824,10 +824,6 @@ define.class('$system/base/node', function(require){
 			this.updateScrollbars()
 		}
 
-		if(this.constructor.name === 'slideviewer'){
-			console.log("UPDATING",this,boundsinput, this._layout.boundw)
-		}
-
 		this.matrix_dirty = false
 	}
 
