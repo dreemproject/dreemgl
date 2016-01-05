@@ -339,6 +339,7 @@ define.class(function(require, constructor){
 			// lets find the highest matching level
 			for(var i = arguments.length - 1; i >= 0; i--){
 				var match = arguments[i]
+				if(!match) continue
 				var style = this[match]
 				if(style){
 					if(i === 0) return style
@@ -365,9 +366,10 @@ define.class(function(require, constructor){
 			// lets return a matching style
 			return this.composeStyle(
 				'*',
-				name, 
+				'*_' + props.class, 
+				name,
 				name + '_' + props.class, 
-				name + '_' + (props.id || props.name)
+				name + '_' + props.name
 			)
 		}
 	})

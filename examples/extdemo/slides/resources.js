@@ -61,10 +61,9 @@ define.class(function ($ui$, view, label) {
 			}),
 			label({
 				text:'Find me on slack or email mason@teem.nu!',
-				fgcolor:'darkpink', bgcolor:'transparent',
+				fgcolor:'darkpink',
 				class:'small'
 			})
-
 		];
 	};
 });
