@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$view) {
+define.class(function(require, $ui$view, $ui$, button, view) {
 	
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
@@ -78,6 +78,63 @@ define.class(function(require, $ui$view) {
 
 	this.remapmatrix = mat4();
 	this.invertedmousecoords = vec2();
+	
+	// display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.
+	this.contextMenu = function(menucommands, x,y){
+		
+		if (!y) y = this.mouse._y;
+		if (!x) x = this.mouse._x;
+		
+		this.openModal(function(){
+			var res = [];
+			for(var a in menucommands){
+				var c = menucommands[a];
+				//console.log("menucommand: ", c);
+				res.push(
+					button({
+						padding:vec4(5 ,0,5,4),
+						margin:0,
+						borderradius: 6,
+						bold:false,
+						text:c.name,
+						
+						buttoncolor1:"#a3a3a3",
+						borderwidth:0,
+						hovercolor1:"#737373",
+						hovercolor2:"#737373", 
+						buttoncolor2:"#a3a3a3",
+						textcolor:"#3b3b3b",
+						textactivecolor:"white",
+						clickaction: c.action,
+						click:function(){
+							if(this.clickaction) this.clickaction()
+							this.screen.closeModal(true);
+						}
+					})
+				)
+			}
+
+			return view({bgcolor:"#a3a3a3",flexdirection:"column",
+				dropshadowopacity: 0.4,
+				padding:4,
+				dropshadowhardness:0,
+				dropshadowradius: 20,
+				dropshadowoffset:vec2(9,9), 
+				borderradius:7,
+				miss:function(){
+					this.screen.closeModal(false)
+				},
+				init:function(){									
+				},
+				pos:[x,y],
+				size:[300,NaN],position:'absolute'
+			}, res)
+		}.bind(this)).then(function(result){
+			console.log(result)
+		})
+
+				
+	};
 	
 	function UnProject(glx, gly, glz, modelview, projection){
 		var inv = vec4();
@@ -568,10 +625,9 @@ define.class(function(require, $ui$view) {
 			vroot.render = render
 			vroot.parent = this
 			vroot.screen = this
-			vroot.composition = this.composition
 			vroot.parent_viewport = this
 			// render it
-			Render.process(vroot, undefined, this.globals, undefined, true)
+			Render.process(vroot, undefined, undefined, true)
 
 			var mychild = vroot.children[0]
 			//console.log(mychild)

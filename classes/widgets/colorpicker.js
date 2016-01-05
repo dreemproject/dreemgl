@@ -40,7 +40,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	}
 
 	this.updatecontrol = function(name, val){
-		console.log(name)
 		var c = this.find(name);
 		if (c){
 			c.currentcolor = this.value;

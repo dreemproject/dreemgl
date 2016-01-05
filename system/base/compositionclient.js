@@ -53,14 +53,11 @@ define.class('./compositionbase', function(require, baseclass){
 	}
 
 	this.doRender = function(previous, parent){
-		var globals = {
-			composition:this,
-			rpc:this.rpc,
-			screen:this.screen,
-			device:this.device
-		}
-		globals.globals = globals
-		// copy keyboard and mouse objects from previous
+
+ 		this.screen.screen = this.screen
+		this.screen.device = this.device
+		this.screen.rpc = this.rpc
+		this.screen.composition = this.composition
 
 		if(parent){
 			this.screen.device = parent.screen.device
@@ -68,11 +65,11 @@ define.class('./compositionbase', function(require, baseclass){
 		}
 		//this.screen.teem = this
 
-		Render.process(this.screen, previous && previous.screen, globals)
+		Render.process(this.screen, previous && previous.screen)
 		
 		if(typeof document !== 'undefined' && this.screen.title !== undefined) document.title = this.screen.title 
 			
-		globals.device.redraw()
+		this.screen.device.redraw()
 
 		this.rendered = true
 	}
@@ -93,7 +90,7 @@ define.class('./compositionbase', function(require, baseclass){
 			if(msg.type == 'sessionCheck'){
 				if(this.session != msg.session){
 					if(this.session) location.href = location.href
-					else{
+					else {
 						this.session = msg.session
 						this.bus.send({type:'connectScreen', name:this.screenname})
 					}

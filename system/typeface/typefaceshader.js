@@ -15,7 +15,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.fgcolor = vec4("blue")
 	
 	// forward ref of things we need on view
-	this.view = {_totalmatrix:mat4(), _viewmatrix:mat4(), _fgcolor:vec4(), _bgcolor:vec4(), _opacity:1.0, device:{frame:{size:vec2()}}}
+	this.view = {_totalmatrix:mat4(), _viewmatrix:mat4(), _fgcolor:vec4(), _bgcolor:vec4(), _opacity:1.0, screen:{device:{frame:{size:vec2()}}}}
 
 	// lets define a custom struct and subclass the array
 	this.textgeom = define.struct({
@@ -416,7 +416,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.z), 0, 1) * matrix
 		
 		// compute the pixelscaling used in the pixelshader AA
-		var pixsize = view.device.frame.size
+		var pixsize = view.screen.device.frame.size
 		pixelscale = 1 / length(vec2(abs(pos2.x - pos1.x), abs(pos2.y - pos1.y)) * pixsize)
 
 		return pos1

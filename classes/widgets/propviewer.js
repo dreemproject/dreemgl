@@ -60,7 +60,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			res.push(
 				foldcontainer({
 						collapsed: true,
-						basecolor:"#4f4f4f",
+						basecolor:"#303030",
 						autogradient: false,
 						icon:undefined, 
 						title: this.uppercaseFirst(group),

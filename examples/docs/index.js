@@ -101,13 +101,13 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 					})
 				)
 				,docviewer({flex:1,
-					class:Config({persist:true}),
+					classconstr: Config({persist:true}),
 					init:function(){
 						this.screen.locationhash = function(event){
 						//	debugger
 							if(event.value.path) require.async(event.value.path).then(function(module){
 								console.log(module)
-								this.class = module
+								this.classconstr = module
 							}.bind(this))
 						}.bind(this)
 						//this.screen.locationhash = this.screen.locationhash

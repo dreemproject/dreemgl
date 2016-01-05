@@ -15,7 +15,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 	
 	this.flexdirection = "row"
 	this.bgcolor = "#262626";
-	
+	this.title = ""
 	this.borderradius = 5;
 	
 	this.render = function(){
@@ -37,7 +37,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 				
 				res.push(
 					view({
-						alignItems:"center",
+						alignitems:"center",
 						bgcolor:"#3b3b3b",
 						padding:2,
 					

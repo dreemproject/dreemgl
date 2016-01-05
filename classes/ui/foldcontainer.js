@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class(function($ui$, view, label, icon, $$, require){
+define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.position = "relative"
@@ -35,7 +35,7 @@ define.class(function($ui$, view, label, icon, $$, require){
 	}
 
 	// subclass to lay out the clickable portion of the folding container 
-	define.class(this, 'clickablebar', function(view){
+	define.class(this, 'clickablebar', view, function(){
 		
 		this.bggradient = function(a,b){	
 			var fill = mix(col1, col2,  (a.y)/0.8);
@@ -47,6 +47,7 @@ define.class(function($ui$, view, label, icon, $$, require){
 		
 		this.attributes = {
 			title: Config({type:String}),
+			icon: Config({type:String, value:""}),
 			col1: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.1}),
 			col2: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14})
 		}
@@ -59,11 +60,12 @@ define.class(function($ui$, view, label, icon, $$, require){
 			}			
 		}
 
-		this.padding = 6
+		this.padding = 3
 
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
 			var res = [];
+
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
 			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));
 			return res;
@@ -131,7 +133,7 @@ define.class(function($ui$, view, label, icon, $$, require){
 			bgcolor:"red",
 			borderwidth: this.borderwidth, 
 			bordercolor: this.bordercolor,
-			icon: this.icon, 
+			icon: this.icon?this.icon:"", 
 			title: this.title,
 			fontsize: this.fontsize
 		});

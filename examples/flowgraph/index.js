@@ -69,7 +69,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 				flexdirection:"row",
 				style:{
 					"*":{
-						fontsize:10
+						fontsize:12
 					}
 				}},
 				flowgraph({

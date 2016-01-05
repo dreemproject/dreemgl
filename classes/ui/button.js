@@ -155,12 +155,12 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.iconres = undefined
 		
 		if (this.icon && this.icon.length > 0){
-			this.iconres = icon({alignself:"center", fontsize: this.fontsize, nopick:true, fgcolor:this.textcolor, icon: this.icon}); 
+			this.iconres = icon({alignself:"center", fgcolor:this.textcolor, icon: this.icon}); 
 			res.push(this.iconres);
 		}
 
 		if (this.text && this.text.length > 0){			
-			this.buttonres = label({alignself:"center", font: this.font, bgcolor:this.bgcolor, fgcolor:this.textcolor, nopick:true,fontsize: this.fontsize, position: "relative", text: this.text})
+			this.buttonres = label({alignself:"center", bgcolor:this.bgcolor, fgcolor:this.textcolor,  position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		
