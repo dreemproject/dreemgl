@@ -667,6 +667,7 @@ define.class('$ui/view', function(require,
 						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 							label({text:"Block", bg:0, margin:4})
 							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+						)
 						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
 							return this.renderBlocks();
 						}.bind(this)}
