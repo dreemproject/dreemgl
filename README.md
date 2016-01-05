@@ -77,6 +77,7 @@ Styles are supported using the 'style' property that can live on 4 levels:
 - screen
 - class
 - nestedclass
+
 These levels are also inherited in that order. 
 Styles allow subclassing of classes used in the render function of the class on which the properties are set. The subclassing is done using a matching syntax
 There are no limitations what you can put in a style since its an actual subclass.
