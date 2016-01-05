@@ -68,7 +68,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 				flexwrap:"nowrap", 
 				flexdirection:"row",
 				style:{
-					"*":{
+					$:{
 						fontsize:12
 					}
 				}},

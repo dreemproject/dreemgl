@@ -365,8 +365,8 @@ define.class(function(require, constructor){
 		this.lookup = function(name, props){
 			// lets return a matching style
 			return this.composeStyle(
-				'*',
-				'*_' + props.class, 
+				'$',
+				'$_' + props.class, 
 				name,
 				name + '_' + props.class, 
 				name + '_' + props.name
