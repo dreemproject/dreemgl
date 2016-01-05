@@ -23,6 +23,7 @@ Path symbols
 
 The server.js has a set of 'default path symbols' which are referencable using the $symbol syntax in require strings: '$widgets/myfile',
 The default path symbols are:
+```
 	'system':'$root/system',
 	'resources':'$root/resources',
 	'examples':'$root/examples',
@@ -32,15 +33,16 @@ The default path symbols are:
 	'ui':'$root/classes/ui',
 	'testing':'$root/classes/testing',
 	'widgets':'$root/classes/widgets',
+```
 
 Adding a path is done using the commandline
 node server.js -path mylib:../mydir
 
 Dreemclasses are defined in a single file, using the following syntax:
-
+```
 define.class('$ui/view', function($ui$, label){
 })
-
+```
 Please note the 'require' syntax to specify the baseclass, and the $ui$ to switch directory in the dependency-class list.
 Other syntax: $$ - current directory, $$$ - parent directory, relative$dir$
 
@@ -49,17 +51,19 @@ Attributes are properties that can be wired to other properties, and have a type
 
 The way to create them in a class is to assign an object to this.attributes. The setter of 'attributes' will handle creating all the attributes on the class for you. Types of attributes are automatically inferred if assigned with a plain value, but can also be configured using a Config({meta:'hello'}) object. Assigning a Config object to any existing attribute also refines its settings.
 Options for the config attribute are:
+```
 	type:vec2,float,String
 	value:0.4,vec2(3),"hello"
 	meta:'metadataforeditor'
 	persist:true // make sure the attribute survives a livereload / rerender
-
+```
+```
 this.attributes = {
 	propfloat: 1.0,
 	propstring: "HELLO",
 	propcustom: Config({type:vec2})
 }
-
+```
 Attributes are also automatically created if you pass them to the constructor function. view({myprop:10}) automatically creates the myprop attribute
 
 Styles
@@ -71,7 +75,7 @@ Styles are supported using the 'style' property that can live on 4 levels:
 - nestedclass
 
 The following style match patterns are supported
-
+```
 this.style = {
 	$:{ // match all
 	}
@@ -84,7 +88,7 @@ this.style = {
 	label_class:{ // match all labels with class:'class'
 	}
 }
-
+zzz
 Have fun!
 
 ## License
