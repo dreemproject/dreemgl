@@ -17,7 +17,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	
 	this.attributes = {
 		// the class for which to create the documentation. If a string is assigned, the model will be interpreted as a markdown text document.
-		class: Config({type:Function})
+		classconstr: Config({type:Function})
 	}
 
 	// A doc item is an item with a heading, such as methods or attributes
@@ -412,7 +412,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	this.render = function(){	
 		var functions = [];
 		var res = [];
-		var R = this.class// 	require("$classes/dataset")
+		var R = this.classconstr// 	require("$classes/dataset")
 		if(typeof(R) === "string") {
 			return [markdown({bg:0, body: " " + R.toString()})]
 		} 
@@ -430,7 +430,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 	// Show the documentation for a dreemgl class.
 	this.constructor.examples = {
 		Usage:function(){
-			return [docviewer({class: docviewer})]		
+			return [docviewer({classconstr: docviewer})]		
 		}
 	}
 })
