@@ -689,7 +689,8 @@ define.class('$system/base/node', function(require){
 
 		if(this.vscrollbar){
 			var scroll = this.vscrollbar
-			var totalsize = Math.floor(this.layout.boundh), viewsize = Math.floor(this.layout.height * this.zoom)
+			var totalsize = Math.floor(this.layout.boundh)
+			var viewsize = Math.floor(this.layout.height * this.zoom)
 			if(totalsize > viewsize+1){
 				scroll._visible = true
 				scroll._total = totalsize
@@ -706,7 +707,8 @@ define.class('$system/base/node', function(require){
 		}
 		if(this.hscrollbar){
 			var scroll = this.hscrollbar
-			var totalsize = Math.floor(this.layout.boundw), viewsize = Math.floor(this.layout.width* this.zoom)
+			var totalsize = Math.floor(this._layout.boundw)
+			var viewsize = Math.floor(this._layout.width* this.zoom)
 			if(totalsize > viewsize + 1){
 				scroll._visible = true
 				scroll._total = totalsize

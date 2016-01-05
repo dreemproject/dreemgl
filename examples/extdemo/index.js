@@ -20,12 +20,11 @@ define.class('$server/composition',function(require, $ui$, screen, $examples$gui
 							padding:15,
 							borderradius:20
 						},
-						slideheight: 800,
-						position: 'absolute',
-						x: 0,
-						bgcolor: 'black',
+						flex:1,
 						viewport:'2d',
 						overflow:'scroll',
+						slideheight: 800,
+						bgcolor: 'black',
 						scroll:Config({persist:true})
 					},
 					slides$intro({

@@ -5,74 +5,68 @@
 
 define.class(function ($ui$, view, label) {
 
-    this.slidetitle = "Resources";
+	this.slidetitle = "Resources";
 
-    this.flexdirection = 'column';
-    this.bgcolor = 'transparent';
+	this.flexdirection = 'column';
+	this.bgcolor = 'transparent';
 
-    this.attributes = {
-        smallfont: Config({type:int, value:30}),
-        largefont: Config({type:int, value:40}),
-        space: Config({type:int, value:20})
-    };
+	this.style = {
+		label:{
+			margintop:10
+		},
+		label_small:{
+			fgcolor:'darkyellow',
+			bgcolor:'transparent',
+			alignself:'center',
+			fontsize:30
+		},
+		label_large:{
+			fgcolor:'#333', 
+			bgcolor:'transparent',
+			fontsize:40
+		}
+	}
 
-    this.render = function render() {
-        return [
-            label({
-                text:'+ Detailed Component Guide',
-                fgcolor:'#333', bgcolor:'transparent',
-                fontsize:this.largefont,
-                margintop:0
-            }),
-            label({
-                text:'./examples/guide/README.md',
-                fgcolor:'darkyellow', bgcolor:'transparent',
-                alignself:'center',
-                fontsize:this.smallfont,
-                margintop:this.space
-            }),
-            label({
-                text:'+ Web Service Example (Sample Component)',
-                fgcolor:'#333', bgcolor:'transparent',
-                fontsize:this.largefont,
-                margintop:this.space
-            }),
-            label({
-                text:'https://github.com/teem2/teem-sample_component',
-                fgcolor:'darkyellow', bgcolor:'transparent',
-                alignself:'center',
-                fontsize:this.smallfont,
-                margintop:this.space
-            }),
-            label({
-                text:'+ IoT Example (Estimote Beacon)',
-                fgcolor:'#333', bgcolor:'transparent',
-                fontsize:this.largefont,
-                margintop:this.space
-            }),
-            label({
-                text:'https://github.com/teem2/teem-estimotebeacon',
-                fgcolor:'darkyellow', bgcolor:'transparent',
-                alignself:'center',
-                fontsize:this.smallfont,
-                margintop:this.space
-            }),
-            label({
-                text:'+ Questions?',
-                fgcolor:'#333', bgcolor:'transparent',
-                fontsize:this.largefont,
-                margintop:this.space
-            }),
-            label({
-                text:'Find me on slack or email mason@teem.nu!',
-                fgcolor:'darkpink', bgcolor:'transparent',
-                alignself:'center',
-                fontsize:this.smallfont,
-                margintop:this.space
-            })
+	this.render = function render() {
+		return [
+			label({
+				text:'+ Detailed Component Guide',
+				fgcolor:'#333', bgcolor:'transparent',
+				class:'large',
+				margintop:0
+			}),
+			label({
+				text:'./examples/guide/README.md',
+				class:'small'
+			}),
+			label({
+				text:'+ Web Service Example (Sample Component)',
+				class:'large'
+			}),
+			label({
+				text:'https://github.com/teem2/teem-sample_component',
+				class:'small'
+			}),
+			label({
+				text:'+ IoT Example (Estimote Beacon)',
+				class:'large'
+			}),
+			label({
+				text:'https://github.com/teem2/teem-estimotebeacon',
+				class:'small'
+			}),
+			label({
+				text:'+ Questions?',
+				class:'large'
+			}),
+			label({
+				text:'Find me on slack or email mason@teem.nu!',
+				fgcolor:'darkpink', bgcolor:'transparent',
+				class:'small'
+			})
 
-        ];
-    };
+		];
+	};
 });
 
 //https://github.com/teem2/dreemgl/tree/master/compositions/guide
