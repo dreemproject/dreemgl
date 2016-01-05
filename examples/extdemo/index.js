@@ -15,19 +15,18 @@ define.class('$server/composition',function(require, $ui$, screen, $examples$gui
 			// `examples/guide/search.js` is used here
 			$examples$guide$search({name:'search', keyword:"Aliens"}),
 			screen({name:'desktop'},
-				slideviewer(
-					{ name: 'slides',
-						  slide:{
-						padding:15,
-						borderradius:20
-					  },
-					  slideheight: 800,
-					  position: 'absolute',
-					  x: 0,
-					  bgcolor: 'black',
-					  viewport:'2d',
-					  overflow:'scroll',
-					  scroll:Config({persist:true})
+				slideviewer({ name: 'slides',
+						slide:{
+							padding:15,
+							borderradius:20
+						},
+						slideheight: 800,
+						position: 'absolute',
+						x: 0,
+						bgcolor: 'black',
+						viewport:'2d',
+						overflow:'scroll',
+						scroll:Config({persist:true})
 					},
 					slides$intro({
 						flex:1,

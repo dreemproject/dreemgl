@@ -722,7 +722,8 @@ define.class('$system/base/node', function(require){
 	}
 
 	// called by doLayout, to update the matrices to layout and parent matrix
-	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput){
+	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
+
 		// allow pre-matrix gen hooking
 		if(this.atMatrix) this.atMatrix()
 
@@ -747,7 +748,7 @@ define.class('$system/base/node', function(require){
 		}
 		if(width > boundsobj.boundw) boundsobj.boundw = width
 		if(height > boundsobj.boundh) boundsobj.boundh = height
-	
+		if(bailbound) return
 
 		var matrix_changed = parent_changed
 		if (parentviewport == '3d'){// && !this._mode ){	
@@ -811,17 +812,20 @@ define.class('$system/base/node', function(require){
 		var children = this.children
 		if(children) for(var i = 0; i < children.length; i++){
 			var child = children[i]
-			if(child._viewport) continue // it will get its own pass
 			
 			var clayout = child.layout
 			clayout.absx = layout.absx + clayout.left 
 			clayout.absy = layout.absy + clayout.top
 
-			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj)
+			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj, child._viewport)
 		}
 		
 		if(!boundsinput){
 			this.updateScrollbars()
+		}
+
+		if(this.constructor.name === 'slideviewer'){
+			console.log("UPDATING",this,boundsinput, this._layout.boundw)
 		}
 
 		this.matrix_dirty = false

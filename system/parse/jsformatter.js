@@ -179,10 +179,10 @@ define.class(function(require, exports){
 
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
-			if(!has_newlines && i){
-				this.comma(exports._Object, this.group++)
-				this.space()
-			}
+			//if(!has_newlines && i){
+			//	this.comma(exports._Object, this.group++)
+			//	this.space()
+			//}
 			if(this.lastIsNewline()) this.tab(this.indent)
 			if(has_newlines) this.comments(prop.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
@@ -192,7 +192,10 @@ define.class(function(require, exports){
 				this.colon(exports._Object)
 				this.expand(prop.value)
 			}
-			if(i < n.keys.length - 1) this.comma(exports._Object, this.group++)
+			if(i < n.keys.length - 1){
+				this.comma(exports._Object, this.group++)
+				this.space()
+			}
 			if(has_newlines && !this.comments(prop.cmr)){
 				this.newline()
 			}
