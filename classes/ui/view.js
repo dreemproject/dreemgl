@@ -257,7 +257,10 @@ define.class('$system/base/node', function(require){
 	this.name = ""
 	this.class = ""
 
-	this.visible = this.camera = this.lookat = this.up = function(){this.redraw();};
+	this.onvisible = this.oncamera = this.onlookat = this.onup = function(){
+		this.redraw();
+	};
+
 	this.boundscheck = true
 	// the local matrix	
 	this.modelmatrix = mat4.identity()
@@ -277,7 +280,7 @@ define.class('$system/base/node', function(require){
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
 
-	this.dropshadowradius= function(event){
+	this.ondropshadowradius = function(event){
 		if (this.dropshadowopacity > 0){
 			this.shadowrect = true;
 		}else{
@@ -286,7 +289,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	// listen to switch the shaders when borderradius changes
-	this.borderradius = function(event){
+	this.onborderradius = function(event){
 		var value = event.value
 		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
 			// this switches the bg shader to the rounded one
@@ -301,7 +304,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	// listen to switch shaders when border width changes
-	this.borderwidth = function(event){
+	this.onborderwidth = function(event){
 		var value = event.value
 		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
 			// turn it on by assigning an order number
@@ -312,7 +315,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	// listen to the viewport to turn off our background and border shaders when 3D
-	this.viewport = function(event){
+	this.onviewport = function(event){
 		if(event.value === '3d'){
 			this.bg = false
 			this.border = false
@@ -320,21 +323,21 @@ define.class('$system/base/node', function(require){
 	}
 
 	// automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
-	this.overflow = function(){
+	this.onoverflow = function(){
 		if(this._overflow){
 			if(!this._viewport) this._viewport = '2d'
 		}
 	}
 
 	// setting focus to true
-	this.focus = function(event){
+	this.onfocus = function(event){
 		if(!event.mark){ // someone set it to true that wasnt us
 			this.screen.setFocus(this)
 		}
 	}
 
 	// put a tablistener
-	this.tabstop = function(event){
+	this.ontabstop = function(event){
 		if(isNaN(event.old) && !isNaN(event.value)){
 			this.addListener('keydown', function(value){
 				if(value.name === 'tab'){
@@ -360,7 +363,7 @@ define.class('$system/base/node', function(require){
 	this.matrix_dirty = true
 
 	// initialization of a view
-	this.init = function(prev){
+	this.oninit = function(prev){
 
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
