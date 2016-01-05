@@ -291,8 +291,8 @@ define.class(function(require, exports){
 		var clipview = undefined
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
-			var view = this.drawpass_list[i]
 
+			var view = this.drawpass_list[i]
 			var skip = false
 			var last = i === len - 1
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){

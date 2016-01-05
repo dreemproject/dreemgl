@@ -152,10 +152,11 @@ define.class(function(require, exports){
 
 		for(var i = 0; i < n.elems.length; i++){
 			var elem = n.elems[i]
-			if(!has_newlines && i) this.comma(exports._Array, this.group++)
+			//if(!has_newlines && i) this.comma(exports._Array, this.group++)
 			this.comments(elem.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
 			this.expand(elem)
+			if(i < n.elems.length - 1) this.comma(exports._Array, this.group++)
 			if(has_newlines && !this.comments(elem.cmr))
 				this.newline()
 		}
@@ -176,8 +177,6 @@ define.class(function(require, exports){
 		var old_indent = this.indent
 		this.indent++
 
-		//console.log(this.indent)
-
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
 			if(!has_newlines && i){
@@ -193,6 +192,7 @@ define.class(function(require, exports){
 				this.colon(exports._Object)
 				this.expand(prop.value)
 			}
+			if(i < n.keys.length - 1) this.comma(exports._Object, this.group++)
 			if(has_newlines && !this.comments(prop.cmr)){
 				this.newline()
 			}

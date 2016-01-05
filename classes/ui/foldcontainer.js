@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class(function($ui$, view, label, icon, $$, require){
+define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.position = "relative"
@@ -35,7 +35,7 @@ define.class(function($ui$, view, label, icon, $$, require){
 	}
 
 	// subclass to lay out the clickable portion of the folding container 
-	define.class(this, 'clickablebar', function(view){
+	define.class(this, 'clickablebar', view, function(){
 		
 		this.bggradient = function(a,b){	
 			var fill = mix(col1, col2,  (a.y)/0.8);

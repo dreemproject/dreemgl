@@ -9,26 +9,28 @@ define.class(function(exports){
 
 	var initializing = false
 
-	exports.process = function render(inew_version, old_version, globals, state, rerender, nochild){
+	function __atAttributeGet(key){
+		if(!initializing){
+			exports.process(this, undefined, undefined, true)
+			this.relayout()
+		}
+	}
+		
+	function atAttributeGet(key){
+		// lets find out if we already have a listener on it
+		if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGet')){
+			this.addListener(key, __atAttributeGet)
+		}
+	}
+
+	exports.process = function render(inew_version, old_version, state, rerender, nochild){
+
 		var new_version = inew_version
 		var is_root = false
+
 		if(!state){
 			state = {wires:[], render_block: []}
 			is_root = true
-		}
-		/*
- 		if(new_version.preRender && !rerender){
- 			if(state.render_block.indexOf(new_version) == -1){
- 				state.render_block.push(new_version)
-	 			new_version = new_version.preRender() // allow postprocessing of children and or replacement of self
-	 			if(new_version !== inew_version){
-	 				new_version.parent = inew_version.parent
-	 			}
-	 		}
- 		}*/
-
-		if(new_version) for(var key in globals){
-			new_version[key] = globals[key]
 		}
 
 		// call connect wires before
@@ -53,41 +55,30 @@ define.class(function(exports){
 			old_children = new_version.children
 		}
 
-		// then call render
-		function __atAttributeGet(key){
-			//debugger
-			// we need to call re-render on this
-			if(!initializing){
-				render(this, undefined, globals, undefined, true)
-				this.relayout()
-			}
-			//this.setDirty(true)
-			//if(this.reLayout) this.reLayout()
+		// lets only do this if we have a render function
+		if(new_version.render){
+			// then call render
+			
+			// store the attribute dependencies
+			new_version.atAttributeGet = atAttributeGet
+			new_version.rerender = __atAttributeGet
+
+			// lets check if object.constructor  a module, ifso 
+			if(new_version.classroot === undefined){
+				new_version.classroot = new_version
+				//console.log(object)
+	 		}
+
+	 		define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
+
+	 		new_version.children = new_version.render()
+
+	 		define.atConstructor = undefined
+			new_version.atAttributeGet = undefined
 		}
-
-		// store the attribute dependencies
-		new_version.atAttributeGet = function(key){
-			// lets find out if we already have a listener on it
-			if(this.getAttributeConfig(key).rerender !== false && !this.hasListenerProp(key, 'name', '__atAttributeGet')){
-				this.addListener(key, __atAttributeGet)
-			}
+		else{
+			new_version.children = new_version.constructor_children
 		}
-
-		new_version.rerender = __atAttributeGet
-
-		// lets check if object.constructor  a module, ifso 
-		if(new_version.classroot === undefined){
-			new_version.classroot = new_version
-			//console.log(object)
- 		}
-
- 		define.atConstructor =  new_version.atStyleConstructor.bind(new_version)
-
- 		new_version.children = new_version.render()
-
- 		define.atConstructor = undefined
-
-		new_version.atAttributeGet = undefined
 
 		if(!Array.isArray(new_version.children)){
 			if(new_version.children) new_version.children = [new_version.children]
@@ -128,19 +119,22 @@ define.class(function(exports){
 			if(new_child.parent) childreuse = true
 
 			new_child.parent = new_version
+			new_child.screen = new_version.screen
+			new_child.rpc = new_version.rpc
 			new_child.parent_viewport = new_version.parent_viewport
-			new_child =  new_children[i] = render(new_child, old_child, globals, state, childreuse)
-	
-			// lets not do this
-			//var name = new_child.name || new_child.constructor.name
-			//if(name !== undefined && !(name in new_version)) new_version[name] = new_child
+			new_children[i] = render(new_child, old_child, state, childreuse)
 		}
 
 		if(old_children) for(;i < old_children.length;i++){
-			old_children[i].emitRecursive('destroy')
+			var child = old_children[i]
+			child.destroyed = true
+			child.emit('destroy')
 		}
 
-		if(old_version) old_version.emit('destroy')
+		if(old_version){
+			old_version.destroyed = true
+			old_version.emit('destroy')
+		}
 
 		if(is_root){
 			initializing = true
@@ -150,8 +144,8 @@ define.class(function(exports){
 			initializing = false
 
 			// signal to our device we have a newly rendered node
-			if(globals.device){
-				globals.device.atNewlyRendered(new_version)
+			if(new_version.screen){
+				new_version.screen.device.atNewlyRendered(new_version)
 			}
 		}
 

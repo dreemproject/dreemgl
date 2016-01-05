@@ -568,10 +568,9 @@ define.class(function(require, $ui$view) {
 			vroot.render = render
 			vroot.parent = this
 			vroot.screen = this
-			vroot.composition = this.composition
 			vroot.parent_viewport = this
 			// render it
-			Render.process(vroot, undefined, this.globals, undefined, true)
+			Render.process(vroot, undefined, undefined, true)
 
 			var mychild = vroot.children[0]
 			//console.log(mychild)

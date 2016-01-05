@@ -272,12 +272,11 @@ define.class('$system/base/node', function(require){
 
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
-	this.device = {size:vec2(), frame:{size:vec2()}}
+	this.screen = {device:{size:vec2(), frame:{size:vec2()}}}
 
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
 
-	
 	this.dropshadowradius= function(event){
 		if (this.dropshadowopacity > 0){
 			this.shadowrect = true;
@@ -366,7 +365,9 @@ define.class('$system/base/node', function(require){
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 		this.shader_list = []
-		this.was_initialized = true
+
+		this.initialized = true
+
 		if(prev){
 			this.modelmatrix = prev.modelmatrix
 			this.totalmatrix = prev.totalmatrix
@@ -530,7 +531,7 @@ define.class('$system/base/node', function(require){
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
-		if(this.device && this.device.redraw) this.device.redraw()
+		if(this.screen.device && this.screen.device.redraw) this.screen.device.redraw()
 	}
 	
 	// updates all the shaders
@@ -943,7 +944,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.startAnimation = function(key, value, track, resolve){
-		if(this.screen) return this.screen.startAnimationRoot(this, key, value, track, resolve)
+		if(this.initialized) return this.screen.startAnimationRoot(this, key, value, track, resolve)
 		else{
 			return false
 	//		this['_' + key] = value
@@ -951,15 +952,15 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.stopAnimation = function(key){
-		if(this.screen) this.screen.stopAnimationRoot(this, key)
+		if(this.initialized) this.screen.stopAnimationRoot(this, key)
 	}
 
 	this.playAnimation = function(key){
-		if(this.screen) this.screen.playAnimationRoot(this, key)
+		if(this.initialized) this.screen.playAnimationRoot(this, key)
 	}
 
 	this.pauseAnimation = function(key){
-		if(this.screen) this.screen.pauseAnimationRoot(this, key)
+		if(this.initialized) this.screen.pauseAnimationRoot(this, key)
 	}
 
 	this.bgcolorfn = function(pos){
@@ -994,7 +995,6 @@ define.class('$system/base/node', function(require){
 		}
 	})
 	this.hardrect = false
-
 
 	this.bordercolorfn = function(pos){
 		return bordercolor

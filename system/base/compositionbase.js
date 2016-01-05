@@ -57,7 +57,7 @@ define.class('$system/base/node',function(require){
 
 	this.renderComposition = function(){
 		// we have to render the RPC bus
-		Render.process(this, undefined, {}, undefined, false, true)
+		Render.process(this, undefined, undefined, false, true)
 
 		//this.children = this.render()
 

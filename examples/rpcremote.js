@@ -13,8 +13,8 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 	}),
 	screen({
 		name:'mobile',
-		// make an exportable wire to something internal
-		mousepos: wire('this.main.pos'),
+		// make an exportable attribute to something internal
+		mousepos: wire('this.main.pos')
 		},
 		view({
 			name:'main',
@@ -23,10 +23,13 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 			is: draggable()
 		})
 	),
-	screen({name:'remote'},
+	screen({
+		name:'remote',
+		movepos: wire('this.rpc.mobile.mousepos')
+		},
 		view({
 			size: vec2(200, 200),
-			pos: wire('this.mobile.mousepos'),
+			pos: wire('this.screen.movepos'),
 			bgcolor: 'red',
 			init: function(){
 				console.log("screen2", this.rpc.server.test)
