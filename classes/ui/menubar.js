@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class( function(require, $ui$, view, label, button){	
+define.class( function(require, $ui$, view, label, menubutton){	
 
 	this.bgcolor = "#585858" 
 	this.flexdirection = "row" 
@@ -27,9 +27,8 @@ define.class( function(require, $ui$, view, label, button){
 		for(var m in this.menus){
 			var res = []
 			var menu = this.menus[m]
-
 			mres.push(
-				button({
+				menubutton({
 					buttoncolor1:"#585858",
 					buttoncolor2:"#585858",
 					hovercolor1:"#737373",
@@ -41,12 +40,10 @@ define.class( function(require, $ui$, view, label, button){
 					margin:vec4(4,0,0,0),
 					padding:5,  
 					text:menu.name, 
-					menucommands: 
-					menu.commands, 
+					commands: menu.commands, 
 					click: function(){
 						// lets open a modal dialog
-						this.screen.contextMenu(this.menucommands, this.layout.absx,this.layout.absy + this.layout.height);
-						
+						this.screen.contextMenu(this.commands, this.layout.absx,this.layout.absy + this.layout.height);
 					}
 			}))
 		}

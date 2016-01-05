@@ -615,7 +615,13 @@ define.class('$ui/view', function(require,
 		
 	this.render = function(){
 		return [
-			menubar({})		
+			menubar({menus:[
+				{name:"File", commands:[
+					{name:"Open", commands:[{name:"subcommands"}]}
+					]}
+				,
+			{name:"Help"}
+				]})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" }

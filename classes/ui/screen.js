@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$view, $ui$, button, view) {
+define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 	
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
@@ -80,18 +80,27 @@ define.class(function(require, $ui$view, $ui$, button, view) {
 	this.invertedmousecoords = vec2();
 	
 	// display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.
-	this.contextMenu = function(menucommands, x,y){
+	this.contextMenu = function(commands, x,y){
 		
 		if (!y) y = this.mouse._y;
 		if (!x) x = this.mouse._x;
 		
 		this.openModal(function(){
 			var res = [];
-			for(var a in menucommands){
-				var c = menucommands[a];
+			for(var a in commands){
+				var c = commands[a];
 				//console.log("menucommand: ", c);
+				var act = c.clickaction;
+				if (!act && c.commands){
+					act = function(){
+						console.log("opening submenu?"); 
+						console.log(this.constructor.name, this.layout);
+						this.screen.contextMenu(this.commands, this.layout.absx + this.layout.width, this.layout.absy);
+						return true;
+					}
+				}
 				res.push(
-					button({
+					menubutton({
 						padding:vec4(5 ,0,5,4),
 						margin:0,
 						borderradius: 6,
@@ -105,10 +114,12 @@ define.class(function(require, $ui$view, $ui$, button, view) {
 						buttoncolor2:"#a3a3a3",
 						textcolor:"#3b3b3b",
 						textactivecolor:"white",
-						clickaction: c.action,
+						clickaction: act,
+						commands: c.commands,
 						click:function(){
-							if(this.clickaction) this.clickaction()
-							this.screen.closeModal(true);
+							var close = false;
+							if(this.clickaction) close = this.clickaction()
+							if (!close) this.screen.closeModal(true);
 						}
 					})
 				)
@@ -130,7 +141,7 @@ define.class(function(require, $ui$view, $ui$, button, view) {
 				size:[300,NaN],position:'absolute'
 			}, res)
 		}.bind(this)).then(function(result){
-			console.log(result)
+			
 		})
 
 				

@@ -235,15 +235,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 					,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
 					,this.inputbutton({name:"input 2", bgcolor:"#800000"})
 					,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
+					,button({icon:"plus", click:function(){						
+						// todo: build attribute list with tons of submenus...
+							this.screen.contextMenu([{name:"some attrib"}])
+						}
+					})
 				)
 				,view({class:'between2'}
 					,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
 					,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
+					,button({icon:"plus", alignself:"flex-end",click:function(){
+						// todo: build attribute list with tons of submenus...
+						this.screen.contextMenu([{name:"some attrib"}])
+					} })
 				)
-			)
-			,view({name:"addbuttons"}
-				,button({icon:"plus"})
-				,button({icon:"plus"})
 			)
 		]
 	}

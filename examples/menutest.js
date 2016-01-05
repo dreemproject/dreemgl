@@ -35,7 +35,7 @@ define.class('$server/composition', function($ui$, screen, view, menubar, button
 					),
 					view({bg:false, flex:1, alignitems:"center", justifycontent:"center" },
 					button({text:"Open a menu!", alignself:"center", click:function(){
-						this.screen.contextMenu([{name:"Peekaboo!"}])
+					this.screen.contextMenu([{name:"Peekaboo!"},{name:"Submenu", commands:[{name:"I am in a submenu!"}]}])
 					} })))
 				)
 		)
