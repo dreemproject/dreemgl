@@ -5,7 +5,7 @@
 
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
-		$widgets$, propviewer,searchbox,
+		$widgets$, propviewer,searchbox, jsviewer,
 		$server$, sourceset, dataset, $$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
@@ -284,9 +284,12 @@ define.class('$ui/view', function(require,
 		this.screen.locationhash = function(event){
 			if(event.value.composition)
 			require.async(event.value.composition).then(function(result){
+
 				this.sourceset.parse(result)
-			
 				this.sourceset.stringify()
+
+				this.find('jsviewer').sourceset = this.sourceset
+
 			}.bind(this))
 		}.bind(this)
 
@@ -658,55 +661,58 @@ define.class('$ui/view', function(require,
 						,library({name:"thelibrary", dataset:this.librarydata})
 					)
 				)
-				,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
-					,view({name:"underlayer", bg:0}
-						,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
-					)
-					,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
-						return this.renderConnections();
-					}.bind(this)}
-						,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
-						,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
-						,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
-						,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
-						,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
-						,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
-					)
-					,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
-					,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
-						return this.renderBlocks();
-					}.bind(this)}
-						,block({name:"phone", title:"Phone", x:200, y:20})
-						,block({name:"tv", title:"Television", x:50, y:200})
-						,block({name:"tablet", title:"Tablet",x:300, y:120})						
-						,block({name:"thing", title:"Thing",x:500, y:120})						
-						,block({name:"a", title:"block A", x:50, y:300})
-						,block({name:"b", title:"block B", x:150, y:500})
-						,block({name:"c", title:"block C", x:250, y:400})
-						,block({name:"d", title:"block D", x:350, y:500})
-						,block({name:"e", title:"block E", x:450, y:600})
-						,block({name:"f", title:"block F", x:550, y:700})
-					)
-											
-					,view({name:"popuplayer", bg:false},
-						view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
-							label({text:"Connection", bg:0, margin:4})
-							,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0 })
+				,splitcontainer({flexdirection:"column", direction:"horizontal"}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+						,view({name:"underlayer", bg:0}
+							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 						)
-						,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
-						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-							label({text:"Block", bg:0, margin:4})
-							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
+							return this.renderConnections();
+						}.bind(this)}
+							,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
+							,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
+							,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
+							,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
+							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
+							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
 						)
-						
-						,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
-						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-							label({text:"Group", bg:0, margin:4})
-							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
-						)
-						,this.selectorrect({name:"selectorrect"})							
 						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
+						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
+							return this.renderBlocks();
+						}.bind(this)}
+							,block({name:"phone", title:"Phone", x:200, y:20})
+							,block({name:"tv", title:"Television", x:50, y:200})
+							,block({name:"tablet", title:"Tablet",x:300, y:120})						
+							,block({name:"thing", title:"Thing",x:500, y:120})						
+							,block({name:"a", title:"block A", x:50, y:300})
+							,block({name:"b", title:"block B", x:150, y:500})
+							,block({name:"c", title:"block C", x:250, y:400})
+							,block({name:"d", title:"block D", x:350, y:500})
+							,block({name:"e", title:"block E", x:450, y:600})
+							,block({name:"f", title:"block F", x:550, y:700})
+						)
+												
+						,view({name:"popuplayer", bg:false},
+							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
+								label({text:"Connection", bg:0, margin:4})
+								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0 })
+							)
+							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
+							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
+								label({text:"Block", bg:0, margin:4})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+							)
+							
+							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
+							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
+								label({text:"Group", bg:0, margin:4})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+							)
+							,this.selectorrect({name:"selectorrect"})							
+							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
+						)
 					)
+					,jsviewer({name:'jsviewer', overflow:'scroll', flex:0.1})
 				)
 				//,splitcontainer({flex:0.5,direction:"horizontal"}
 //					,dockpanel({title:"Properties", viewport:"2D"}

@@ -137,6 +137,7 @@ define.class(function(require, $server$, dataset){
 				var attribs = clazz.prototype._attributes
 				for(var key in attribs){
 					var attrib = attribs[key]
+					
 					if(attrib.flow){
 						var con = {
 							name: key,

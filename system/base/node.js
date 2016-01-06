@@ -551,6 +551,9 @@ define.class(function(require, constructor){
 			else if(typeof value === 'function' && !value.is_wired){
 				config.type = Function
 			}
+			else if(typeof value === 'string'){
+				config.type = String
+			}
 		}
 		if(config.persist){
 			if(config.alias) throw new Error('Cannot define a persist property '+key+' with alias, use the alias attribute '+config.alias)
