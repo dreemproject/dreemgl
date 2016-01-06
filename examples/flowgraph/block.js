@@ -24,7 +24,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		borderselected: Config({type:float, value:0, motion:"linear", duration: 0.1}),
 		focusbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"}),
 		hoverbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"}),
-		inselection : Config({type:boolean, value:false})
+		inselection : Config({type:boolean, value:false}),
+		inputs: [{name:"a0", title:"test input!", color:vec4("blue")}],
+		outputs:[{name:"b1", title:"output? ", color:vec4("yellow")}]
 	}
 		
 	this.tooltip = 'issablock'
@@ -41,20 +43,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	this.updatecolor = function(){	
-			if (this._inselection) {
-				this.bordercolor = this.focusbordercolor;
-				this.borderselected = 1;
+		if (this._inselection) {
+			this.bordercolor = this.focusbordercolor;
+			this.borderselected = 1;
+		}
+		else{
+			this.borderselected = 0;
+			if (this.over){
+				this.bordercolor = this.hoverbordercolor;
 			}
 			else{
-				this.borderselected = 0;
-				if (this.over){
-					this.bordercolor = this.hoverbordercolor;
-				}
-				else{
-					this.bordercolor = this.neutralbordercolor;
-				}
+				this.bordercolor = this.neutralbordercolor;
 			}
 		}
+	}
 		
 		
 	this.move = function(x,y) {
@@ -179,7 +181,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	define.class(this, "inputbutton", function($ui$, view, label){
 		this.bg = false;
 		this.attributes = {
-			name:"thing"
+			name:"thing",
+			title:"tadaa" 
 		}
 		
 		this.clicked = function(){
@@ -192,7 +195,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.render =function(){
 			return [
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
-				label({text:this.name, bg:false, alignself:"center"})
+				label({text:this.title, bg:false, alignself:"center"})
 			]
 		}
 	})
@@ -219,11 +222,31 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	// the style classes 
 	this.style = {
 		label_head:{bg:0, margin:vec4(6,0,4,0)},
-		view_main:{bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1},
-		view_between1:{bg:false, width:140, flex: 1, justifycontent:"space-between"},
+		view_main:{bgcolor:"#343434", height: 40,width:240, flex: 1, margin:1},
+		view_between1:{bg:false, width:240, flex: 1, justifycontent:"space-between"},
 		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
 		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
 		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+	}
+	
+	this.renderInputs = function(){
+		var res = [];
+		for(var i = 0;i<this.inputs.length;i++){
+			var inp = this.inputs[i];
+			res.push(this.inputbutton({name:inp.name, title:inp.title, bgcolor:inp.color}))	
+		}
+		return res;
+	}
+	
+	this.renderOutputs = function(){
+		var res = [];
+		for(var i = 0;i<this.outputs.length;i++){
+			var outp = this.outputs[i];
+			res.push(this.outputbutton({name:outp.name, title:outp.title, bgcolor:outp.color}))	
+		}
+		return res;
+		
+		
 	}
 
 	this.render = function(){
@@ -231,23 +254,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			label({text:this.title,class:'head'})
 			,view({class:'main'})
 			,view({class:'between1'}
-				,view({class:'head'}
-					,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
-					,this.inputbutton({name:"input 2", bgcolor:"#800000"})
-					,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
-					,button({icon:"plus", click:function(){						
-						// todo: build attribute list with tons of submenus...
-							this.screen.contextMenu([{name:"some attrib"}])
-						}
-					})
+				,view({class:'head',render: function(){return this.renderInputs()}.bind(this)}
+				
 				)
-				,view({class:'between2'}
-					,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
-					,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
-					,button({icon:"plus", alignself:"flex-end",click:function(){
-						// todo: build attribute list with tons of submenus...
-						this.screen.contextMenu([{name:"some attrib"}])
-					} })
+				,view({class:'between2',render: function(){return this.renderOutputs()}.bind(this)}
+					
 				)
 			)
 		]

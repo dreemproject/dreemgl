@@ -706,11 +706,11 @@ define.class('$ui/view', function(require,
 						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 					)
 				)
-				,splitcontainer({flex:0.5,direction:"horizontal"}
-					,dockpanel({title:"Properties", viewport:"2D"}
-						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
-					)	
-				)
+				//,splitcontainer({flex:0.5,direction:"horizontal"}
+//					,dockpanel({title:"Properties", viewport:"2D"}
+	//					,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
+		//			)	
+			//	)
 			)
 		];
 	}
