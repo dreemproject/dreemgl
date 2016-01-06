@@ -187,7 +187,10 @@
 		function require(dep_path, ext){
 			// skip nodejs style includes
 			var abs_path = define.joinPath(base_path, define.expandVariables(dep_path))
-			if(!define.fileExt(abs_path)) abs_path = abs_path + '.js'
+			if(!ext && !define.fileExt(abs_path)) abs_path = abs_path + '.js'
+			if (ext) {
+				console.log('got here', ext, abs_path)
+			}
 
 			// lets look it up
 			var module = define.module[abs_path]
@@ -234,11 +237,13 @@
 			return new Promise(function(resolve, reject){
 				if(define.factory[path]){
 					// if its already asynchronously loading.. 
-					var module = require(path)
+					var module = require(path, ext)
+					console.log('here2>', path, ext, module)
 					return resolve(module)
 				}
 				define.loadAsync(dep_path, from_file, ext).then(function(){
-					var module = require(path)
+					var module = require(path, ext)
+					console.log('here>', path, ext, module)
 					resolve(module)
 				}, reject)
 			})
@@ -2305,10 +2310,12 @@
 		}
 
 		// parsing a wired function as string
-		exports.wire = function wire(string){
-			src = "return " + string
-			var fn = new Function('find','rpc',src)
-			fn.is_wired = true
+		exports.wire = function wire(fn){
+			if (typeof(fn) !== 'function') {
+				src = "return " + fn.toString()
+				fn = new Function(src)
+			}
+			fn.is_wired = true;
 			return fn
 		}
 
