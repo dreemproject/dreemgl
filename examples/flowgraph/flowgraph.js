@@ -6,7 +6,7 @@
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, propviewer,searchbox,
-		$server$, sourceset, dataset, $$, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
+		$server$, sourceset, dataset, $$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
@@ -587,6 +587,45 @@ define.class('$ui/view', function(require,
 		});		
 
 	}
+	this.helpAbout = function(){
+		this.screen.openModal(function(){
+			return aboutdialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+		}.bind(this)).then(function(res){
+			
+		});		
+		
+	}
+	this.helpReference = function(){
+		this.screen.openModal(function(){
+			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				title:"Reference",
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+		}.bind(this)).then(function(res){
+			
+		});	
+	}
+	this.helpGettingStarted = function(){
+		this.screen.openModal(function(){
+			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				title:"Getting started",
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+		}.bind(this)).then(function(res){
+			
+		});	
+	}
 	
 	this.render = function(){
 		return [
@@ -597,7 +636,11 @@ define.class('$ui/view', function(require,
 						{name: "Rename composition", clickaction:function(){this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
-			{name:"Help"}
+			{name:"Help", commands:[
+				{name:"About Flowgraph", clickaction:function(){this.helpAbout();return true;}.bind(this)},
+				{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
+				{name:"Reference", clickaction:function(){this.helpReference();return true;}.bind(this)}
+			]}
 				]})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
