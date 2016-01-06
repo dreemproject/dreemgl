@@ -15,7 +15,7 @@ define.class(function($server$, composition, $ui$, screen, view, label, require)
 		}
 
 		var views = [
-				screen({clearcolor:'#484230'}
+				screen({name:'default', clearcolor:'#484230'}
 					   ,dynviews)
 			];
 
