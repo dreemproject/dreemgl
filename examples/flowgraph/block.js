@@ -28,9 +28,35 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		inputs: [{name:"a0", title:"test input!", color:vec4("blue")}],
 		outputs:[{name:"b1", title:"output? ", color:vec4("yellow")}]
 	}
-		
+		this.colormap = {
+			float:vec4("white");
+		}
 	this.tooltip = 'issablock'
-
+	this.oninputs = function()
+	{
+		for (var i = 0;i<this.inputs.length;i++){
+			var inp = this.inputs[i];
+			if (this.colormap[inp.type]){
+				inp.color = this.colormap[inp.type];
+			}
+			else{
+				inp.color = vec4("gray");
+			}
+		}
+	}
+	
+	this.onoutputs = function(){
+		for (var i = 0;i<this.outputs.length;i++){
+			var outp = this.outputs[i];
+			if (this.colormap[outp.type]){
+				outp.color = this.colormap[outp.type];
+			}
+			else{
+				outp.color = vec4("gray");
+			}
+		}
+	}
+	
 	this.bordercolorfn = function(pos){
 		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0:0.0;		
 		return mix(bordercolor, mix(vec4(focusbordercolor.xyz*.8,1.0), focusbordercolor, check), borderselected);
