@@ -184,8 +184,8 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 	}
 	
 	// internal: remap the mouse to a view node	
-	this.remapMouse = function(node){
-
+	this.remapMouse = function(node, dbg){
+			
 		var parentlist = []
 		var ip = node.parent
 		
@@ -198,10 +198,19 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			if (ip._viewport || !ip.parent) parentlist.push(ip)
 			ip = ip.parent
 		}
-
 		var logging = false
+		if (dbg) 
+		{
+			logging = true;
+		}
+		
+		if (logging)
+		{
+			//console.clear()
+			console.log(node.constructor.name)
+			console.log(node.layout);
 
-		if (logging) console.clear()
+		}
 		if (logging){
 			var	parentdesc = "Parentchain: "
 			for(var i =parentlist.length-1;i>=0;i--) {
@@ -286,7 +295,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			lastmode = newmode
 			// console.log(i, raystart, "last");	
 		}
-
+	if (logging) console.log(node._viewport, node.viewportmatrix, node.totalmatrix);
 		var MM = node._viewport?node.viewportmatrix: node.totalmatrix
 		mat4.invert(MM, this.remapmatrix)
 		raystart = vec3.mul_mat4(raystart, this.remapmatrix)

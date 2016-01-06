@@ -3,8 +3,7 @@
 define.class('$server/composition', function(
 	$server$, service,
 	$ui$, screen, view, 
-	$flow$, rovi,xypad,
-	$behaviors$, draggable){ 
+	$flow$, rovi,xypad){ 
 	
 	
 	
@@ -21,6 +20,6 @@ define.class('$server/composition', function(
 			flowdata:{x:10,y:10}
 			})
 		]
-		};
+	};
 	
 })
