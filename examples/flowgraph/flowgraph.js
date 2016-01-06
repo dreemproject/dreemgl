@@ -266,7 +266,7 @@ define.class('$ui/view', function(require,
 		this.currentconnection = undefined;		
 		this.allblocks = [];
 		this.allconnections = [];
-	
+		this.newconnection = {};
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[]});
 
@@ -414,12 +414,7 @@ define.class('$ui/view', function(require,
 	this.cancelconnection = function(){
 		
 		console.log("cancelling exiting connection setup...");
-
-		this.newconnectionsourceblock = undefined;
-		this.newconnectionsourceoutput = undefined;
-		
-		this.newconnectiontargetblock = undefined;
-		this.newconnectiontargetinput = undefined;				
+		this.newconnection = {};
 		
 		var connectingconnection = this.find("openconnector");
 		if (connectingconnection && connectingconnection.visible) 
@@ -442,12 +437,12 @@ define.class('$ui/view', function(require,
 		if (connectingconnection)
 		{
 			connectingconnection.visible = true;
-			connectingconnection.from = this.newconnectionsourceblock;
-			connectingconnection.fromoutput = this.newconnectionsourceoutput;
-			connectingconnection.to = this.newconnectiontargetblock;
-			connectingconnection.toinput = this.newconnectiontargetinput;
+			connectingconnection.from = this.newconnection.sourceblock;
+			connectingconnection.fromoutput = this.newconnection.sourceoutput;
+			connectingconnection.to = this.newconnection.targetblock;
+			connectingconnection.toinput = this.newconnection.targetinput;
 
-			console.log(this.newconnectionsourceblock,this.newconnectionsourceoutput,this.newconnectiontargetblock,this.newconnectiontargetinput);
+			console.log(this.newconnection.sourceblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput);
 			
 			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length>0){
 				console.log("setting to??", connectingconnection.to);
@@ -476,9 +471,9 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.setconnectionstartpoint = function(sourceblockname, outputname){		
-		this.newconnectionsourceblock = sourceblockname;
-		this.newconnectionsourceoutput = outputname;
-		if (this.newconnectiontargetblock && this.newconnectiontargetblock !== "undefined" ){
+		this.newconnection.sourceblock = sourceblockname;
+		this.newconnection.sourceoutput = outputname;
+		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ){
 			this.makenewconnection();
 		}
 		else{
@@ -487,9 +482,9 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.setconnectionendpoint = function(targetblockname, inputname){		
-		this.newconnectiontargetblock = targetblockname;
-		this.newconnectiontargetinput = inputname;
-		if (this.newconnectionsourceblock && this.newconnectionsourceblock !== "undefined" ){
+		this.newconnection.targetblock = targetblockname;
+		this.newconnection.targetinput = inputname;
+		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ){
 			this.makenewconnection();
 		}
 		else{
