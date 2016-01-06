@@ -12,6 +12,13 @@ define.class(function(require, $server$, dataset){
 		if(source) this.parse(source)
 	}
 	
+	this.createWire = function(sblock, soutput, tblock, toutput){
+		var target = this.data.childnames[tblock]
+		if(!target) return console.error("cannot find target " + tblock)
+		// lets access the ast object for target
+		console.log(target.propobj)
+	}
+
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
 	this.parse = function(classconstr){
 		var source = classconstr.module.factory.body.toString()
@@ -57,10 +64,11 @@ define.class(function(require, $server$, dataset){
 		var render = findRenderFunction(this.ast)
 		var ret = findReturnArray(render.body)
 			
-		this.data = {
+		var data = this.data = {
 			name:'root', 
 			node:ret.elems, 
-			children:[]
+			children:[],
+			childnames:{}
 		}
 		
 		// now we need to walk this fucker.
@@ -86,6 +94,7 @@ define.class(function(require, $server$, dataset){
 						}
 						else if(name === 'name'){
 							output.name = key.value.value
+							data.childnames[output.name] = output
 						}
 						else if(key.value.type === 'Call' && key.value.fn.name === 'wire'){
 							var wire = key.value

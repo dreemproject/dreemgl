@@ -408,6 +408,14 @@ define.class('$ui/view', function(require,
 		
 		// DO CONNECTION HERE!
 		console.log("making connection...");
+
+		this.sourceset.createWire(
+			this.newconnection.sourceblock,
+			this.newconnection.sourceoutput,
+			this.newconnection.targetblock,
+			this.newconnection.targetoutput
+		)
+
 		this.cancelconnection();
 	}	
 	
