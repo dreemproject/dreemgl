@@ -10,10 +10,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	}
 	
 	this.padding = 0;
-	this.margin = 40;
+	this.margin = 140;
 	this.borderradius =  vec4(10,10,1,1);
 	this.bgcolor = vec4("#4e4e4e");
 	this.flex = 1;
+	this.maxwidth = 500;
+
 	this.flexdirection ="column" 
 	this.dropshadowopacity = 0.4;
 			this.padding=4;

@@ -524,6 +524,7 @@ define.class('$ui/view', function(require,
 
 		for(var a in this.sourceset.data.children){
 			var topnode = this.sourceset.data.children[a];
+			// block({name:"e", title:"block E", x:450, y:600}) 
 			res.push(block({title:topnode.name}))
 		}
 		return res;
@@ -658,7 +659,7 @@ define.class('$ui/view', function(require,
 					,view({name:"underlayer", bg:0}
 						,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 					)
-					,view({name:"connectionlayer", bg:false, dataset: this.sourceset, arender:function(){
+					,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
 						return this.renderConnections();
 					}.bind(this)}
 						,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
@@ -669,7 +670,7 @@ define.class('$ui/view', function(require,
 						,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
 					)
 					,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
-					,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
+					,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
 						return this.renderBlocks();
 					}.bind(this)}
 						,block({name:"phone", title:"Phone", x:200, y:20})

@@ -5,9 +5,7 @@
 
 define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 	
-	
-
-	this.bg = false;
+	this.bgcolor = vec4(0,0,0,0.5);
 	this.render =function(){
 		return dialog({title:"Open composition", position:"relative"},
 			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) }

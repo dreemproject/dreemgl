@@ -4,10 +4,8 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $$,dialog, $ui$, textbox,view, icon, treeview, cadgrid, label, button, $$, ballbutton){
-	
-	
+		
 	this.bgcolor = vec4(0,0,0,0.5);
-	//this.flex = 1;
 	this.render =function(){
 		return dialog({title:"New composition", position:"relative"},
 			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) },

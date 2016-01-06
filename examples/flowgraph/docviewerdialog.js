@@ -5,11 +5,13 @@
 
 define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon, treeview, cadgrid, label, button, $$, ballbutton, $widgets$, markdown){
 
+	this.bgcolor = vec4(0,0,0,0.5);
+	this.flexdirection ="column" 
 	this.attributes = {
 		title:"Docviewer",
 		body:"some bodytext here..."
 	}
-	this.bg = false;
+
 	this.render =function(){
 		return dialog({title:this.title, position:"relative"},
 			view({bg:false, flexdirection:"column", padding:20 },
