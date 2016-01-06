@@ -18,7 +18,7 @@ define.class('$server/composition', function(
 				name:'xy1',
 				flowdata:{x:30,y:20}
 				})			
-			,labtext({name:'lab'})
+			,labtext({name:'lab', flowdata:{x:20,y:20}})
 		]
 	};
 	
