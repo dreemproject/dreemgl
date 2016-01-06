@@ -8,8 +8,8 @@ define.class('$server/composition', function(
 	this.render = function(){ return [
 		rovi({
 			name:'myservice',
-			flowdata:{x:120,y:130},
-			query: wire('this.rpc.xy1.mousepos')
+			flowdata:{x:120,y:130}
+			//query: wire('this.rpc.xy1.mousepos')
 		}),
 		xypad({
 			name:'xy1',

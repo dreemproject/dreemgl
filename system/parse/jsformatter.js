@@ -132,7 +132,7 @@ define.class(function(require, exports){
 		if(n.kind == 'num')
 			this.add(n.raw, this.group++, exports._Value, exports._Number)
 		else if(n.kind == 'string')
-			this.add(n.raw, this.group++, exports._Value, exports._String)
+			this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', this.group++, exports._Value, exports._String)
 		else
 			this.add(n.raw, this.group++, exports._Value)
 	}

@@ -28,15 +28,17 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		inputs: [{name:"a0", title:"test input!", color:vec4("blue")}],
 		outputs:[{name:"b1", title:"output? ", color:vec4("yellow")}]
 	}
-		this.colormap = {
-			float:vec4("white"),
-			vec2:vec4("yellow"),
-			vec3:vec4("blue"),
-			vec4:vec4("blue"),			
-			Array:vec4("green"),
-			String:vec4("orange"),
-			Object:vec4("purple")
-		}
+
+	this.colormap = {
+		float:vec4("white"),
+		vec2:vec4("yellow"),
+		vec3:vec4("blue"),
+		vec4:vec4("blue"),			
+		Array:vec4("green"),
+		String:vec4("orange"),
+		Object:vec4("purple")
+	}
+
 	this.tooltip = 'issablock'
 	this.oninputs = function()
 	{
@@ -146,7 +148,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	this.mouseleftdown = function(p){
-		this.moveToFront()
+		//this.moveToFront()
 		var props = this.find("mainproperties");
 		if (props) props.target = this.name;
 		
