@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, 
-		$ui$, view, icon, treeview, cadgrid, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
+		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, propviewer,searchbox,
 		$server$, sourceset, dataset, $$, library, dockpanel, block, connection){
 
@@ -537,12 +537,61 @@ define.class('$ui/view', function(require,
 		this.updatepopupuiposition();
 		
 	}
+
+	this.getCompositionName = function(){
+		// todo: get actual name from here..
+		return "somename.js";
+	}	
+
+	this.openComposition = function(){
+		this.screen.openModal(function(){
+			return view({
+				
+				bgcolor:"#a3a3a3",flexdirection:"column",
+				dropshadowopacity: 0.4,
+				padding:4,
+				dropshadowhardness:0,
+				dropshadowradius: 20,
+				dropshadowoffset:vec2(9,9), 
+				borderradius:7,
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}}, 
+			foldcontainer({title:"base"},label({text:"some label? "})))
+		}.bind(this)).then(function(res){
+			
+			console.log(" opencomp result: " , res);
+		});		
 		
+	}
+	
+	this.newComposition = function(){
+		this.screen.openModal(function(){
+			return view({})
+		}).then(function(res){
+			
+			console.log(" newcomp result: " , res);
+		});		
+	}
+	
+	this.renameComposition = function(){
+		this.screen.openModal(function(){
+			return view({}, textbox({value:this.getCompositionName()}))
+		}.bind(this)).then(function(res){
+			
+			console.log(" rename composition result: " , res);
+		});		
+
+	}
+	
 	this.render = function(){
 		return [
 			menubar({menus:[
 				{name:"File", commands:[
-					{name:"Open", commands:[{name:"subcommands"}]}
+					{name:"Open composition", clickaction:function(){this.openComposition();}.bind(this)},
+					{name:"New composition", clickaction:function(){this.newComposition();}.bind(this)},
+						{name: "Rename composition", clickaction:function(){this.renameComposition();}.bind(this), enabled: false}
 					]}
 				,
 			{name:"Help"}

@@ -6,6 +6,19 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		var fs = require('fs')
 		this.name = 'fileio'
 
+		function newComposition(inname){
+			console.log("new composition creation requested:", inname, options);
+			// todo: create folder in default composition path
+			// todo: create default index.js using options from options.
+
+			// todo: if things go wrong, return false
+			return true;
+		}
+
+		function getCompositionList(){
+			return [];
+		}
+	
 		function readRecurDir(base, inname, ignoreset){
 			var local = path.join(base, inname)
 			var dir = fs.readdirSync(local)
