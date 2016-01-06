@@ -31,8 +31,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.colormap = {
 			float:vec4("white"),
 			vec2:vec4("yellow"),
-			Object:vec4("blue"),
-			array:vec4("green")
+			vec3:vec4("blue"),
+			vec4:vec4("blue"),			
+			Array:vec4("green"),
+			String:vec4("orange"),
+			Object:vec4("purple")
 		}
 	this.tooltip = 'issablock'
 	this.oninputs = function()
@@ -40,7 +43,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		for (var i = 0;i<this.inputs.length;i++){
 			var inp = this.inputs[i];
 			
-			if (this.colormap[inp.type.name]){
+			if (inp.type && this.colormap[inp.type.name]){
 				inp.color = this.colormap[inp.type.name];
 			}
 			else{
@@ -52,8 +55,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.onoutputs = function(){
 		for (var i = 0;i<this.outputs.length;i++){
 			var outp = this.outputs[i];
-			
-			if (this.colormap[outp.type.name]){
+		
+			if (outp.type && this.colormap[outp.type.name]){
 				outp.color = this.colormap[outp.type.name];
 			}
 			else{
