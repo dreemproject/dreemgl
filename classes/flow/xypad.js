@@ -5,7 +5,7 @@
 
 define.class('$ui/screen', function(require, $ui$, view, icon, label, button, scrollbar){
 	this.attributes = {
-		mousepos: Config(type:vec2, flow:"out", value: wire('this.main.pos'))
+		mousepos: Config({type:vec2, flow:"out", value: wire('this.main.pos')})
 	}
 	
 	
