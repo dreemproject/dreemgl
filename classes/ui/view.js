@@ -4,8 +4,10 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/node', function(require){
+
 	var Animate = require('$system/base/animate')
 	var FlexLayout = require('$system/lib/layout')
+	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 	
 	var view = this.constructor
@@ -225,7 +227,6 @@ define.class('$system/base/node', function(require){
 		// wether this view has focus
 		miss: Config({type:Event}),
 
-		
 		// drop shadow size
 		dropshadowradius:Config({type:float, value:20}),
 		// drop shadow movement
@@ -976,6 +977,25 @@ define.class('$system/base/node', function(require){
 
 	this.bgcolorfn = function(pos){
 		return bgcolor
+	}
+
+	this.appendChild = function(render){
+		// wrap our render function in a temporary view
+		var vroot = view()
+		// set up a temporary view
+		vroot.render = render
+		vroot.parent = this
+		vroot.screen = this.screen
+		vroot.parent_viewport = this._viewport?this:this.parent_viewport
+		// render it
+		Render.process(vroot, undefined, undefined, true)
+		// move the children over
+		this.children.push.apply(this.children, vroot.children)
+		for(var i = 0; i < vroot.children.length; i++){
+			vroot.children[i].parent = this
+		}
+		// lets cause a relayout
+		this.relayout()
 	}
 
 	// standard bg is undecided

@@ -13,9 +13,21 @@ define.class(function(require, $server$, dataset){
 	}
 	
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
-	this.parse = function(source){
+	this.parse = function(classconstr){
+		var source = classconstr.module.factory.body.toString()
+		this.classconstr = classconstr
+
+		var resolver = {}
+
 		// lets create an AST
 		this.ast = jsparser.parse(source)
+
+		var deps = this.ast.steps[0].params
+		var args = this.classconstr.module.factory.body.class_args
+		for(var i = 0; i < deps.length; i++){
+			resolver[ deps[i].id.name ] = args[i]
+		}
+
 		// we need to find the render function in the composition root
 		// so how shall we do that.
 		// well.. 
@@ -41,16 +53,20 @@ define.class(function(require, $server$, dataset){
 			}
 		}
 
-		var render = findRenderFunction(this.ast)
 		// lets find the return array
+		var render = findRenderFunction(this.ast)
 		var ret = findReturnArray(render.body)
 			
-		this.data = {name:'root', node:ret.elems, children:[]}
+		this.data = {
+			name:'root', 
+			node:ret.elems, 
+			children:[]
+		}
+		
 		// now we need to walk this fucker.
-		function walkComposition(array, output){
+		function walkArgs(array, output){
 			for(var i = 0; i < array.length; i++){
 				var item = array[i]
-
 				if(item.type === 'Object'){
 					output.propobj = item
 					// lets put some props on there
@@ -61,34 +77,77 @@ define.class(function(require, $server$, dataset){
 						var name = key.key.name
 						var value = key.value
 						if(name === 'flowdata'){
-							output.flowdata = key.value
+							var fd = output.flowdata = {}
+							
+							for(var k = 0; k < key.value.keys.length; k++){
+								var fditem = key.value.keys[k]
+								fd[fditem.key.name] = fditem.value.value
+							}
+							
+						}
+						else if(name === 'name'){
+							output.name = key.value.value
+						}
+						else if(key.value.type === 'Call' && key.value.fn.name === 'wire'){
+							var wire = key.value
+							var str = wire.args[0].value
+
+							if(str.indexOf('this.rpc') !== 0) continue
+
+							var parts = str.slice(9).split('.')
+							if(parts.length !== 2) continue
+							if(!output.wires) output.wires = []
+							output.wires.push({
+								from:parts[0],
+								output:parts[1],
+								input:name
+							})
 						}
 					}
 					continue
 				}
+			}
+		}
+
+		function walkComposition(array, output){
+			for(var i = 0; i < array.length; i++){
+				var item = array[i]
+
 				if(item.type !== 'Call') continue
-				var name 
+				var classname 
 				if(item.fn.type === 'Key' && item.fn.object.type === 'This'){
-					name = 'this.' + item.fn.key.name
+					classname = 'this.' + item.fn.key.name
 				}
 				else if(item.fn.type === 'Id'){
-					name = item.fn.name
+					classname = item.fn.name
 				}
 				else {
-					console.error(name = "Please implement in sourceset.js")
+					console.error(classname = "Please implement in sourceset.js")
 				}
+
 				var child = {
-					name: name,
+					classname: classname,
 					node: item,
 					children:[]
 				}
+				
+				// we haz classname.
+				var clazz = resolver[classname]
+				var attribs = clazz.prototype._attributes
+				for(var key in attribs){
+					var inout = attribs[key].flow
+					if(inout){
+						
+					}
+				}
+
 				output.children.push(child)
+				walkArgs(item.args, child)
 				//walkTree(item.args, child)
 			}
 		}
 		walkComposition(ret.elems, this.data)
 		// lets generate the connection view
-
 		//	Call->args->object
 		//console.log(this.calltree)
 		// cal something

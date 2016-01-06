@@ -15,13 +15,13 @@ define.class('$ui/view', function(require,
 	this.flexdirection = "column";
 	
 	this.attributes = {
-		sourceset: {}
+		sourceset:{}
 	}
 	
 	define.class(this, "selectorrect", view, function(){
 		//debugger
 		this.bordercolorfn = function(pos){
-			var check = (int(mod(0.20*(gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)? 1.0: 0.0
+			var check = (int(mod(0.20 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0
 			return vec4(check * vec3(0.8), 1)
 		}
 		this.bordercolor = vec4(1, 1, 1, 0.4)
@@ -31,10 +31,6 @@ define.class('$ui/view', function(require,
 		this.position = "absolute"
 		this.visible = false
 	})
-	
-	
-	
-	
 	
 	this.addToSelection = function(obj){		
 		var f = this.currentselection.indexOf(obj)
@@ -284,12 +280,11 @@ define.class('$ui/view', function(require,
 			lib.dataset = this.librarydata  = dataset(tree)
 			
 		}.bind(this))
-				
-
+		
 		this.screen.locationhash = function(event){
 			if(event.value.composition)
 			require.async(event.value.composition).then(function(result){
-				this.sourceset.parse(result.module.factory.body.toString())
+				this.sourceset.parse(result)
 			
 				this.sourceset.stringify()
 			}.bind(this))
@@ -521,11 +516,17 @@ define.class('$ui/view', function(require,
 		var res = [];
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-
 		for(var a in this.sourceset.data.children){
-			var topnode = this.sourceset.data.children[a];
+			var node = this.sourceset.data.children[a];
 			// block({name:"e", title:"block E", x:450, y:600}) 
-			res.push(block({title:topnode.name}))
+			res.push(
+				block({
+					x:node.flowdata.x,
+					y:node.flowdata.y,
+					name:node.name,
+					title:node.classname + ':' + node.name
+				})
+			)
 		}
 		return res;
 	}

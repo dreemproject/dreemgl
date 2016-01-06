@@ -409,7 +409,7 @@
 			}
 		})
 		Object.defineProperty(Constructor, 'body', {value:body})
-
+		body.class_args = args
 		return body.apply(Constructor.prototype, args)
 	}
 

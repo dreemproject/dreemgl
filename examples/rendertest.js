@@ -56,12 +56,16 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 			,view({// size:[100,100],
 				name:'viewbg',
 				flexdirection:'column',
-				margin:4,
+				margin:40,
 				flex:1,
 				borderradius:30,
 				bgcolor:'#CBD6D9'
 				}
-				,button({text:'I BUTTON!', flex:1})
+				,button({text:'I BUTTON!', flex:1, click:function(){
+					this.parent.appendChild(function(){
+						return button({text:'hii',flex:1})
+					})
+				}})
 				,view({clearcolor:"lightblue", mode:'3D', flex:1, margin:2, bgcolor:'lightblue', name:'3dview', borderwidth:0, bordercolor:"black", borderradius:1, camera:vec3(2.1,2,2)}
 					,cube({dimension:vec3(1)})
 					,cube({dimension:vec3(1), translate:vec3(1.5,0,-1.5)})
@@ -81,7 +85,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 							//return 'red'
 						}
 					},
-					bgcolor:'#A39565', bordercolor:"#484230", borderwidth: 20
+					bgcolor:'#A39565', bordercolor:"#484230", borderwidth: 20,
 					}
 					,mousedebug({flex:1,height:100, width:100, margin:20})
 				)
