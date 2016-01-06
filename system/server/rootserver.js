@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Teem server
 
@@ -17,6 +17,7 @@ define.class(function(require){
 	var ExternalApps = require('./externalapps')
 	var NodeWebSocket = require('./nodewebsocket')
 	var mimeFromFile = require('./mimefromfile')
+	var HTMLParser = require('$system/parse/htmlparser')
 	var CompositionServer = require('./compositionserver')
 
 	var BusServer = require('$system/rpc/busserver')
@@ -50,7 +51,7 @@ define.class(function(require){
 			console.color('Server running' + txt + '~~ Ready to go!\n')
 		}
 		else {
-			this.address = 'http://' + iface + ':' + port + '/' 
+			this.address = 'http://' + iface + ':' + port + '/'
 			console.color('Server running on ~c~' + this.address + "~~\n")
 		}
 		// use the browser spawner
@@ -71,7 +72,7 @@ define.class(function(require){
 				}
 			}
 			//file = file.slice(define.expandVariables(define.$root).length).replace(/\\/g, "/")
-			// ok lets rip off our 
+			// ok lets rip off our
 			this.broadcast({
 				type:'filechange',
 				file: file
@@ -100,7 +101,7 @@ define.class(function(require){
 	this.default_composition = null
 
 	this.getComposition = function(file){
-		
+
 		// lets find the composition either in define.COMPOSITIONS
 		if(!this.compositions[file]) this.compositions[file] = new CompositionServer(this.args, file, this)
 		return this.compositions[file]
@@ -112,7 +113,7 @@ define.class(function(require){
 		sock.url = req.url
 		var mypath = req.url.slice(1)
 		if(mypath) this.getComposition('$' + mypath).busserver.addWebSocket(sock)
-		else this.busserver.addWebSocket(sock) 
+		else this.busserver.addWebSocket(sock)
 	}
 
 	// maps an input path into our files
@@ -171,7 +172,7 @@ define.class(function(require){
 			proxy_req.end()
 			return
 		}
-		
+
 		if(requrl =='/favicon.ico'){
 			res.writeHead(200)
 			res.end()
@@ -180,8 +181,75 @@ define.class(function(require){
 
 		var reqquery = requrl.split('?')
 
-		// ok if we are a /single fetch 
+		// ok if we are a /single fetch
 		var file = this.mapPath(reqquery[0])
+		var urlext = define.fileExt(reqquery[0])
+
+		var xmlToJS = function(filepath) {
+			var makeSpace = function(indent) {
+				var out = '';
+				for (var i = 0; i < indent; i++) {
+					out += '  ';
+				}
+				return out;
+			}
+			var filterSpecial = function(child) {
+				return child.tag.indexOf('$') !== 0;
+			}
+			var tagToFunc = function(child, indent) {
+				// console.log('tagToFunc', indent, child, child.tag.indexOf('$'))
+				var outputthis = filterSpecial(child);
+				var out = '';
+				var children = child.child && child.child.filter(filterSpecial);
+				if (outputthis) {
+					out += makeSpace(indent);
+					// name
+					out += child.tag + '(';
+					// attributes
+					out += JSON.stringify(child.attr);
+					if (children && children.length) out += ',\n'
+				}
+				if (children && children.length) {
+					indent++;
+					for (var i = 0; i < children.length; i++) {
+						newchild = children[i];
+						if (filterSpecial(newchild)) {
+							out += tagToFunc(newchild, indent);
+							if (i !== children.length - 1) {
+								out += ','
+							}
+							out += '\n';
+						}
+					}
+					indent--;
+				}
+				if (outputthis) {
+					if (children && children.length) out += makeSpace(indent);
+					out += ')';
+				}
+				return out;
+			}
+			// transform .dre to .js
+			// console.log('parsing .dre file', filepath);
+			var parsed = HTMLParser(fs.readFileSync(filepath));
+			// console.log('parsed', JSON.stringify(parsed.node));
+			var out = 'define.class(function($server$, composition, role, $ui$, screen, view){\n  this.render = function(){ return [\n';
+			out += tagToFunc(parsed.node, 1);
+			out += '  ];\n};\n});'
+			// console.log('result', out)
+			// write to .dre.js file and redirect there
+			// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version
+			return out;
+		}
+		if (urlext === 'dre') {
+			var url = reqquery[0];
+			var filepath = define.expandVariables('$root' + url)
+			var out = xmlToJS(filepath)
+			fs.writeFileSync(filepath + '.js', out);
+			res.writeHead(307, {location:url + '.js'})
+			res.end()
+			return
+		}
 
 		if(file === false){ // file is a search
 			// what are we looking for
@@ -237,7 +305,7 @@ define.class(function(require){
 			if( req.headers['if-none-match'] == header.etag){
 				res.writeHead(304,header)
 				res.end()
-				return 
+				return
 			}
 			// lets add a gzip cache
 			var type = header["Content-Type"]
@@ -273,7 +341,7 @@ define.class(function(require){
 				else{
 					var stream = fs.createReadStream(file)
 					res.writeHead(200, header)
-					stream.pipe(res)					
+					stream.pipe(res)
 				}
 			}
 			else{
@@ -282,7 +350,7 @@ define.class(function(require){
 				stream.pipe(res)
 			}
 			// ok so we get a filechange right?
-			
+
 		}.bind(this)
 	}
 })
