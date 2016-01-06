@@ -524,7 +524,9 @@ define.class('$ui/view', function(require,
 					x:node.flowdata.x,
 					y:node.flowdata.y,
 					name:node.name,
-					title:node.classname + ':' + node.name
+					title:node.classname + ':' + node.name,
+					inputs:node.inputs,
+					outputs:node.outputs
 				})
 			)
 		}

@@ -127,16 +127,29 @@ define.class(function(require, $server$, dataset){
 				var child = {
 					classname: classname,
 					node: item,
-					children:[]
+					children:[],
+					inputs:[],
+					outputs:[]
 				}
 				
 				// we haz classname.
 				var clazz = resolver[classname]
 				var attribs = clazz.prototype._attributes
 				for(var key in attribs){
-					var inout = attribs[key].flow
-					if(inout){
-
+					var attrib = attribs[key]
+					if(attrib.flow){
+						var con = {
+							name: key,
+							title: key,
+							type: attrib.type,
+							attrib: attrib
+						}
+						if(attrib.flow === 'in'){
+							child.inputs.push(con)
+						}
+						else if(attrib.flow === 'out'){
+							child.outputs.push(con)
+						}
 					}
 				}
 
