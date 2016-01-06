@@ -304,8 +304,8 @@ define.class('$ui/view', function(require,
 
 				// write it back to disk
 				this.sourceset.onchange = function(){
-					console.log(event.value.composition)
-				}
+					this.rpc.fileio.saveComposition(event.value.composition, this.sourceset.last_source)
+				}.bind(this)
 
 				//this.find('jsviewer').sourceset = this.sourceset
 
@@ -659,7 +659,6 @@ define.class('$ui/view', function(require,
 			
 		});	
 	}
-	
 	this.helpGettingStarted = function(){
 		this.screen.openModal(function(){
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
@@ -674,14 +673,6 @@ define.class('$ui/view', function(require,
 		});	
 	}
 	
-	this.undo = function(){
-		this.sourceset.undo();
-	}
-	this.redo = function(){
-		this.sourceset.redo();
-	}
-	
-	
 	this.render = function(){
 		return [
 			menubar({menus:[
@@ -691,17 +682,12 @@ define.class('$ui/view', function(require,
 						{name: "Rename composition", clickaction:function(){this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
-				{name:"Edit", commands:[
-					{name:"Undo", clickaction:function(){this.undo();return true;}.bind(this)},
-					{name:"Redo", clickaction:function(){this.redo();return true;}.bind(this)}						
-				]}
-				,
-				{name:"Help", commands:[
-					{name:"About Flowgraph", clickaction:function(){this.helpAbout();return true;}.bind(this)},
-					{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
-					{name:"Reference", clickaction:function(){this.helpReference();return true;}.bind(this)}
-				]}
-			]})		
+			{name:"Help", commands:[
+				{name:"About Flowgraph", clickaction:function(){this.helpAbout();return true;}.bind(this)},
+				{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
+				{name:"Reference", clickaction:function(){this.helpReference();return true;}.bind(this)}
+			]}
+				]})		
 			,splitcontainer({}
 				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" }

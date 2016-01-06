@@ -6,6 +6,10 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		var fs = require('fs')
 		this.name = 'fileio'
 
+		this.saveComposition = function(name, data){
+			fs.writeFile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
+		}
+
 		function newComposition(inname){
 			console.log("new composition creation requested:", inname, options);
 			// todo: create folder in default composition path

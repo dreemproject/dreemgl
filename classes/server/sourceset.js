@@ -249,6 +249,7 @@ define.class(function(require, $server$, dataset){
 			buf.char_count += str.length
 			buf.out += str
 		})
+		this.last_source = buf.out
 		return buf.out
 	}
 })
