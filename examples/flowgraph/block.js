@@ -29,7 +29,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		outputs:[{name:"b1", title:"output? ", color:vec4("yellow")}]
 	}
 		this.colormap = {
-			float:vec4("white");
+			float:vec4("white"),
+			vec2:vec4("yellow"),
+			Object:vec4("blue"),
+			array:vec4("green")
 		}
 	this.tooltip = 'issablock'
 	this.oninputs = function()
