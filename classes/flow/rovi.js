@@ -6,9 +6,8 @@
 define.class('$system/base/node', function(require, $ui$, label){	
 
 	this.attributes = {
-		
-		data:Config({flow:"out",type:Object, value:[]}),
-		query:Config({flow:"in", type:String, value:""})
+		data: Config({flow:"out", value:[]}),
+		query: Config({flow:"in", value:""})
 	}
 	
 	this.onquery = function(){
