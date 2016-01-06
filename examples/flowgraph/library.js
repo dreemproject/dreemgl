@@ -63,7 +63,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 			if (!this.dataset) return [];
 			var res = [];
-			
+			console.log(this.dataset);
 			for(var a = 0;a<data.children.length;a++){
 				var ds = data.children[a];
 				
