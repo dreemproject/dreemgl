@@ -428,16 +428,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._bgimage){
-			// Assume image was loaded via require (a Texture.Image object)
-			if(typeof this._bgimage === 'string'){
-				// Path to image was specified
-				require.async(this._bgimage).then(function(result){
-					this.setBgImage(result)
-				}.bind(this))
-			}
-			else{
-				this.setBgImage(this._bgimage)
-			}
+			this.onbgimage()
 		}
 
 		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
@@ -451,6 +442,20 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.sortShaders()
+	}
+
+	this.onbgimage = function(){
+		if(this.initialized){
+			if(typeof this._bgimage === 'string'){
+				// Path to image was specified
+				require.async(this._bgimage).then(function(result){
+					this.setBgImage(result)
+				}.bind(this))
+			}
+			else{
+				this.setBgImage(this._bgimage)
+			}
+		}
 	}
 
 	this.setBgImage = function(image){
