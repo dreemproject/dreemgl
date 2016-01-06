@@ -241,8 +241,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.render = function(){
 		if (this.hasball) return [ballbutton({click:function(){
 			this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
-				console.log("removeconnection");
-			}}])
+				this.keydownDelete()
+			}.bind(this)}])
 		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#3b3b3b", bordercolor:wire("this.parent.bgcolor")})];
 		return [];
 	}

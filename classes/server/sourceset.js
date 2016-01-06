@@ -8,6 +8,10 @@ define.class(function(require, $server$, dataset){
 	var jsparser = require('$system/parse/onejsparser')
 	var jsformatter = require('$system/parse/jsformatter')
 
+	this.attributes = {
+		change: Config({type:Event})
+	}
+
 	this.atConstructor = function(source){
 		if(source) this.parse(source)
 		this.last_source = source
@@ -21,6 +25,22 @@ define.class(function(require, $server$, dataset){
 		var str = this.stringify()
 		this.process()
 		this.notifyAssignedAttributes()
+		// save to disk.
+		this.emit('change')
+	}
+
+	this.deleteWire = function(sblock, soutput, tblock, tinput){
+		var target = this.data.childnames[tblock]
+		if(!target) return console.error("cannot find target " + tblock)
+		// ok we need to do keys
+		var props = target.propobj.keys
+		for(var i = 0; i < props.length; i++){
+			if(props[i].key.name == tinput){
+				props.splice(i,1)
+				break
+			}
+		}
+
 	}
 
 	this.createWire = function(sblock, soutput, tblock, tinput){

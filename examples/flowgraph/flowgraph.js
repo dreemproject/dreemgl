@@ -122,7 +122,16 @@ define.class('$ui/view', function(require,
 	this.removeConnection = function (conn){
 		if (conn == undefined) conn = this.currentconnection
 		if (conn){
-			console.log("TODO: removing connection!", conn)
+
+			this.sourceset.fork(function(){
+				this.sourceset.deleteWire(
+					conn.from,
+					conn.fromoutput,
+					conn.to,
+					conn.toinput
+				)
+			}.bind(this))
+
 			this.removeFromSelection(conn)
 			this.setActiveConnection(undefined)
 			this.updateSelectedItems()
@@ -292,9 +301,13 @@ define.class('$ui/view', function(require,
 			require.async(event.value.composition).then(function(result){
 
 				this.sourceset.parse(result)
-				this.sourceset.stringify()
 
-				this.find('jsviewer').sourceset = this.sourceset
+				// write it back to disk
+				this.sourceset.onchange = function(){
+					console.log(event.value.composition)
+				}
+
+				//this.find('jsviewer').sourceset = this.sourceset
 
 			}.bind(this))
 		}.bind(this)
@@ -416,18 +429,13 @@ define.class('$ui/view', function(require,
 		console.log("making connection...");
 
 		this.sourceset.fork(function(){
-	
 			this.sourceset.createWire(
 				this.newconnection.sourceblock,
 				this.newconnection.sourceoutput,
 				this.newconnection.targetblock,
 				this.newconnection.targetinput
 			)
-
-
-
 		}.bind(this))
-
 
 		this.cancelconnection();
 	}	
@@ -554,9 +562,6 @@ define.class('$ui/view', function(require,
 		for(var i = 0;i<this.sourceset.data.children.length;i++){
 			var node = this.sourceset.data.children[i];
 			// block({name:"e", title:"block E", x:450, y:600}) 
-
-			console.log(node.name, node.flowdata)
-
 			res.push(
 				block({
 					pos:vec3(node.flowdata.x,
@@ -717,18 +722,19 @@ define.class('$ui/view', function(require,
 						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
 							return this.renderConnections();
 						}.bind(this)}
+						/*
 							,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
 							,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
 							,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
 							,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
 							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
 							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
-						)
+						*/)
 						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
 							return this.renderBlocks();
 						}.bind(this)}
-							,block({name:"phone", title:"Phone", x:200, y:20})
+						/*	,block({name:"phone", title:"Phone", x:200, y:20})
 							,block({name:"tv", title:"Television", x:50, y:200})
 							,block({name:"tablet", title:"Tablet",x:300, y:120})						
 							,block({name:"thing", title:"Thing",x:500, y:120})						
@@ -738,7 +744,7 @@ define.class('$ui/view', function(require,
 							,block({name:"d", title:"block D", x:350, y:500})
 							,block({name:"e", title:"block E", x:450, y:600})
 							,block({name:"f", title:"block F", x:550, y:700})
-						)
+						*/)
 												
 						,view({name:"popuplayer", bg:false},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},

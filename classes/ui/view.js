@@ -385,7 +385,7 @@ define.class('$system/base/node', function(require){
 			this.viewportmatrix = mat4()
 		}
 
-		if(this._bgimage){
+		if(this._bgimage || this._wiredfn_bgimage){
 			// set the bg shader
 			this.bg = this.hardimage
 		}
