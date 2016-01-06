@@ -39,6 +39,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	{
 		for (var i = 0;i<this.inputs.length;i++){
 			var inp = this.inputs[i];
+			console.log(inp);
 			if (this.colormap[inp.type]){
 				inp.color = this.colormap[inp.type];
 			}
