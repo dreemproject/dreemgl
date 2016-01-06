@@ -6,7 +6,7 @@
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, propviewer,searchbox,
-		$server$, sourceset, dataset, $$, library, dockpanel, block, connection){
+		$server$, sourceset, dataset, $$, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
@@ -545,20 +545,13 @@ define.class('$ui/view', function(require,
 
 	this.openComposition = function(){
 		this.screen.openModal(function(){
-			return view({
-				
-				bgcolor:"#a3a3a3",flexdirection:"column",
-				dropshadowopacity: 0.4,
-				padding:4,
-				dropshadowhardness:0,
-				dropshadowradius: 20,
-				dropshadowoffset:vec2(9,9), 
-				borderradius:7,
+			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
 				miss:function(){
 					this.screen.closeModal(false)
 				
-			}}, 
-			foldcontainer({title:"base"},label({text:"some label? "})))
+			}} );
+			
 		}.bind(this)).then(function(res){
 			
 			console.log(" opencomp result: " , res);
@@ -568,7 +561,12 @@ define.class('$ui/view', function(require,
 	
 	this.newComposition = function(){
 		this.screen.openModal(function(){
-			return view({})
+			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
 		}).then(function(res){
 			
 			console.log(" newcomp result: " , res);
@@ -577,7 +575,12 @@ define.class('$ui/view', function(require,
 	
 	this.renameComposition = function(){
 		this.screen.openModal(function(){
-			return view({}, textbox({value:this.getCompositionName()}))
+			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
 		}.bind(this)).then(function(res){
 			
 			console.log(" rename composition result: " , res);
@@ -589,9 +592,9 @@ define.class('$ui/view', function(require,
 		return [
 			menubar({menus:[
 				{name:"File", commands:[
-					{name:"Open composition", clickaction:function(){this.openComposition();}.bind(this)},
-					{name:"New composition", clickaction:function(){this.newComposition();}.bind(this)},
-						{name: "Rename composition", clickaction:function(){this.renameComposition();}.bind(this), enabled: false}
+					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
+					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},
+						{name: "Rename composition", clickaction:function(){this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
 			{name:"Help"}

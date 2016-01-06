@@ -7,7 +7,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 	
 	this.bg = false;
 	this.render =function(){
-		return dialog({title:"Rename composition:", position:"relative"},
+		return dialog({title:"Rename composition", position:"relative"},
 			view({bg:false, flexdirection:"column", padding:20 },
 				view({margin:10, flexdirection:"row",bg:false, flex:1}, 
 					label({text:"old name:",bg:false}),
@@ -15,11 +15,11 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 				), 
 				view({margin:10, flexdirection:"row",bg:false, flex:1}, 
 					label({text:"new name:",bg:false}),
-					textbox({value:"tadaa", marginleft: 20, bgcolor:"#202020", multiline:false})
+					textbox({value:"tadaa", name:"newnamebox", marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
 				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   }, 
-					button({padding:10, text:"OK" }),
-					button({padding: 10, marginleft:10, text:"Cancel" })
+					button({padding:10, text:"OK", icon:"check", click: function(){this.screen.closeModal(this.find("newnamebox").value);} }),
+					button({padding: 10, marginleft:10, icon:"close", text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)
 			)
 		);		

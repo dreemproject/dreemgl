@@ -15,7 +15,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	this.bgcolor = vec4("#4e4e4e");
 	this.flex = 1;
 	this.flexdirection ="column" 
-	
+	this.dropshadowopacity = 0.4;
+			this.padding=4;
+			this.dropshadowhardness=0,
+			this.dropshadowradius=20
+			this.dropshadowoffset=vec2(9,9);
+				
 	this.render = function(){
 		return [
 				view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},

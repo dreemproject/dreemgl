@@ -9,8 +9,12 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon
 
 	this.bg = false;
 	this.render =function(){
-		return dialog({title:"Open composition:", position:"relative"},
-			view({bg:false, flexdirection:"column", padding:20 }
+		return dialog({title:"Open composition", position:"relative"},
+			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) }
+			,
+			view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   }, 
+					button({padding: 10, marginleft:10, icon:"close",text:"Cancel", click: function(){this.screen.closeModal(false);} })
+ 				)
 			)
 		);		
 	}

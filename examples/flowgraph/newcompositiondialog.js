@@ -5,18 +5,24 @@
 
 define.class('$ui/view', function(require, $$,dialog, $ui$, textbox,view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 	
-		
-	this.bg = false;
+	
+	this.bgcolor = vec4(0,0,0,0.5);
+	//this.flex = 1;
 	this.render =function(){
-		return dialog({title:"New composition:", position:"relative"},
-			view({bg:false, flexdirection:"column", padding:20 },
+		return dialog({title:"New composition", position:"relative"},
+			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) },
 				view({margin:10, flexdirection:"row",bg:false, flex:1}, 
 					label({text:"Name:",bg:false}),
-					textbox({value:"tadaa", marginleft: 20, bgcolor:"#202020", multiline:false})
+					textbox({value:"tadaa",name:"newnamebox",  onvalue:function(){console.log(this.find("newnamebox").value)}.bind(this),marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
+				view({margin:10, flexdirection:"row",bg:false, flex:1}, 
+					label({text:"Folder to be created:",bg:false}),
+					label({marginleft:10,name:"pathlabel", text:"$root/tadaa",bg:false})
+				),
+				
 				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   }, 
-					button({padding:10, text:"OK" }),
-					button({padding: 10, marginleft:10, text:"Cancel" })
+					button({padding:10, text:"OK", icon:"check", click: function(){this.screen.closeModal(this.find("newnamebox").value);} }),
+					button({padding: 10, marginleft:10, icon:"close", text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)
 			)
 		);		

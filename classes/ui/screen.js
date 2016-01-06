@@ -117,8 +117,10 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 						clickaction: act,
 						commands: c.commands,
 						click:function(){
+							console.log("hmm");
 							var close = false;
 							if(this.clickaction) close = this.clickaction()
+								console.log(close);
 							if (!close) this.screen.closeModal(true);
 						}
 					})

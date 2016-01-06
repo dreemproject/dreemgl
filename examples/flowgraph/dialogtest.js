@@ -12,6 +12,9 @@ define.class('$server/composition', function(require, $ui$,treeview,  speakergri
 				style:{
 					$:{
 						fontsize:12
+					},
+					"textbox":{
+						padding:4
 					}
 				}},
 				speakergrid({bgcolor:"blue", clearcolor:"blue"},
