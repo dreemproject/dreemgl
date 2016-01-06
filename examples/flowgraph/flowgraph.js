@@ -415,12 +415,19 @@ define.class('$ui/view', function(require,
 		// DO CONNECTION HERE!
 		console.log("making connection...");
 
-		this.sourceset.createWire(
-			this.newconnection.sourceblock,
-			this.newconnection.sourceoutput,
-			this.newconnection.targetblock,
-			this.newconnection.targetoutput
-		)
+		this.sourceset.fork(function(){
+	
+			this.sourceset.createWire(
+				this.newconnection.sourceblock,
+				this.newconnection.sourceoutput,
+				this.newconnection.targetblock,
+				this.newconnection.targetinput
+			)
+
+
+
+		}.bind(this))
+
 
 		this.cancelconnection();
 	}	
@@ -547,10 +554,13 @@ define.class('$ui/view', function(require,
 		for(var i = 0;i<this.sourceset.data.children.length;i++){
 			var node = this.sourceset.data.children[i];
 			// block({name:"e", title:"block E", x:450, y:600}) 
+
+			console.log(node.name, node.flowdata)
+
 			res.push(
 				block({
-					x:node.flowdata.x,
-					y:node.flowdata.y,
+					pos:vec3(node.flowdata.x,
+					node.flowdata.y,0),
 					name:node.name,
 					title:node.classname + ':' + node.name,
 					inputs:node.inputs,
@@ -736,7 +746,7 @@ define.class('$ui/view', function(require,
 							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
-					,jsviewer({name:'jsviewer', overflow:'scroll', flex:0.1})
+					,jsviewer({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 				//,splitcontainer({flex:0.5,direction:"horizontal"}
 //					,dockpanel({title:"Properties", viewport:"2D"}

@@ -10,24 +10,55 @@ define.class(function(require, $server$, dataset){
 
 	this.atConstructor = function(source){
 		if(source) this.parse(source)
+		this.last_source = source
 	}
 	
-	this.createWire = function(sblock, soutput, tblock, toutput){
-		var target = this.data.childnames[tblock]
-		if(!target) return console.error("cannot find target " + tblock)
-		// lets access the ast object for target
-		console.log(target.propobj)
+	this.fork = function(callback){
+		this.undo_stack.push(this.last_source)
+		this.redo_stack.length = 0
+		callback()
+		// lets reserialize
+		var str = this.stringify()
+		this.process()
+		this.notifyAssignedAttributes()
 	}
 
-	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
-	this.parse = function(classconstr){
-		var source = classconstr.module.factory.body.toString()
-		this.classconstr = classconstr
+	this.createWire = function(sblock, soutput, tblock, tinput){
+		var target = this.data.childnames[tblock]
+		if(!target) return console.error("cannot find target " + tblock)
+		// ok we need to do keys
+		var props = target.propobj.keys
+		for(var i = 0; i < props.length; i++){
+			if(props[i].key.name == tinput) break
+		}
 
+		// create a new one
+		var to = {
+			type:"Call",
+			fn:{
+				type:"Id",
+				name:"wire"
+			},
+			args:[{
+				type:"Value",
+				kind:"string",
+				value:'this.rpc.' + sblock + '.' + soutput
+			}]
+		}
+
+		if(i === props.length){
+			props.push({
+				key:{name:tinput, type:'Id'},
+				value:to
+			})
+		}
+		else{
+			props[i].value.value = to
+		}
+	}
+
+	this.process = function(){
 		var resolver = {}
-
-		// lets create an AST
-		this.ast = jsparser.parse(source)
 
 		var deps = this.ast.steps[0].params
 		var args = this.classconstr.module.factory.body.class_args
@@ -169,6 +200,17 @@ define.class(function(require, $server$, dataset){
 			}
 		}
 		walkComposition(ret.elems, this.data)
+	}
+
+	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
+	this.parse = function(classconstr){
+		var source = classconstr.module.factory.body.toString()
+		this.classconstr = classconstr
+
+		// lets create an AST
+		this.ast = jsparser.parse(source)
+
+		this.process()
 		// lets generate the connection view
 		//	Call->args->object
 		//console.log(this.calltree)
