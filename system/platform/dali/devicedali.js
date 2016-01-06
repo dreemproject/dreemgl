@@ -66,7 +66,7 @@ define.class(function(require, exports){
 	this.Texture = require('./texturedali')
 	this.DrawPass = require('./drawpassdali')
 
-	this.preserveDrawingBuffer = true
+	this.preserveDrawingBuffer = false
 	this.premultipliedAlpha = false
 	this.antialias = false
 	this.debug_pick = false
@@ -294,18 +294,23 @@ console.log('animFrame', time);
 			}
 		}
 
-
+		var clipview = undefined
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
+
 			var view = this.drawpass_list[i]
 			var skip = false
 			var last = i === len - 1
-
 			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
 			if(view.draw_dirty & 1 || last){
-				//console.log("DiRTY", view)
+			
+				if(!last){
+					if(clipview === undefined) clipview = view
+					else clipview = null
+				}
+
 				var hastime = view.drawpass.drawColor(last, stime)
 				view.draw_dirty &= 2
 				if(hastime){

@@ -33,7 +33,7 @@ define.class(function(exports){
 
 
 	// Set emitcode to true to emit dali code
-	DaliApi.emitcode = true;
+	DaliApi.emitcode = false;
 
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
