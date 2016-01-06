@@ -419,8 +419,7 @@ define.class('$ui/view', function(require,
 		this.cancelconnection();
 	}	
 	
-	this.cancelconnection = function(){
-		
+	this.cancelconnection = function(){		
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
 		
@@ -514,7 +513,24 @@ define.class('$ui/view', function(require,
 	this.renderConnections = function(){
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-		var res = [];		
+		var res = [];	
+		for(var i = 0;i<this.sourceset.data.children.length;i++){
+			var node = this.sourceset.data.children[i];
+			// block({name:"e", title:"block E", x:450, y:600}) 
+			
+			if (node.wires){
+				for(var j = 0;j<node.wires.length;j++) {
+					var w = node.wires[j];
+					res.push(connection({
+								from:w.from, 
+								fromoutput:w.output, 
+								to:node.name, 
+								toinput:w.input 
+							}));
+				}
+			}
+		}
+		
 		return res;
 	}
 	
@@ -522,8 +538,8 @@ define.class('$ui/view', function(require,
 		var res = [];
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-		for(var a in this.sourceset.data.children){
-			var node = this.sourceset.data.children[a];
+		for(var i = 0;i<this.sourceset.data.children.length;i++){
+			var node = this.sourceset.data.children[i];
 			// block({name:"e", title:"block E", x:450, y:600}) 
 			res.push(
 				block({
@@ -544,8 +560,7 @@ define.class('$ui/view', function(require,
 			var bl = this.dragselectset[i];
 			this.addToSelection(bl);
 		}
-		this.updatepopupuiposition();
-		
+		this.updatepopupuiposition();		
 	}
 
 	this.getCompositionName = function(){
