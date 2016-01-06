@@ -56,7 +56,7 @@ define.class(function(require, constructor){
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
 				this.constructor_children.push(arg)
-				//var name = arg.name
+				var name = arg.name
 				//if(name !== undefined && !(name in this)) this[name] = arg
 			}
 		}		
@@ -759,8 +759,8 @@ define.class(function(require, constructor){
 				var part = ref[k]
 				if(k === ref.length - 1){
 					// lets add a listener 
-					if(!obj.isAttribute(part)){
-						console.log("Attribute does not exist: "+ref.join('.')+" in wiring " + this[wiredfn_key].toString())
+					if(!obj || obj.isAttribute(part)){
+						console.error("Attribute does not exist: "+ref.join('.')+" in wiring " + this[wiredfn_key].toString())
 						continue
 					}
 

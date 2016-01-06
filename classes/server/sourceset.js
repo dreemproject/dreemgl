@@ -83,7 +83,6 @@ define.class(function(require, $server$, dataset){
 								var fditem = key.value.keys[k]
 								fd[fditem.key.name] = fditem.value.value
 							}
-							
 						}
 						else if(name === 'name'){
 							output.name = key.value.value
@@ -137,7 +136,7 @@ define.class(function(require, $server$, dataset){
 				for(var key in attribs){
 					var inout = attribs[key].flow
 					if(inout){
-						
+
 					}
 				}
 

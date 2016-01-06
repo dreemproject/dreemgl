@@ -7,8 +7,7 @@ define.class('$ui/screen', function(require, $ui$, view, icon, label, button, sc
 	this.attributes = {
 		mousepos: Config({type:vec2, flow:"out", value: wire('this.main.pos')})
 	}
-	
-	
+		
 	this.render = function(){	
 		return view({
 			name:'main',
