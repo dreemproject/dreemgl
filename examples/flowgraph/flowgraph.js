@@ -46,7 +46,7 @@ define.class('$ui/view', function(require,
 	this.removeFromSelection = function(obj){
 		if (this.currentblock == obj){
 			this.currentblock = undefined
-			this.updatepopupuiposition()
+			this.updatePopupUIPosition()
 		}
 		
 		var f = this.currentselection.indexOf(obj)
@@ -70,7 +70,7 @@ define.class('$ui/view', function(require,
 			if (f > -1) newval = 1
 			if (obj._inselection != newval) obj.inselection = newval
 		}
-		this.updatepopupuiposition()
+		this.updatePopupUIPosition()
 	}
 	
 	this.inSelection = function(obj){
@@ -93,7 +93,7 @@ define.class('$ui/view', function(require,
 			obj.updateMove(dx, dy, snap)
 		}
 		this.updateconnections()
-		this.updatepopupuiposition()
+		this.updatePopupUIPosition()
 	}
 	
 	this.clearSelection = function(update){
@@ -103,6 +103,11 @@ define.class('$ui/view', function(require,
 		if (update) this.updateSelectedItems()
 	}
 
+	this.addBlock = function(folder, blockname){
+		console.log(folder,blockname);
+		console.log("adding block from library! TODODODODODODO");
+	}
+
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock
 		if (block){
@@ -110,7 +115,7 @@ define.class('$ui/view', function(require,
 			this.removeFromSelection(block)
 			this.setActiveBlock(undefined)
 			this.updateSelectedItems()
-			this.updatepopupuiposition()
+			this.updatePopupUIPosition()
 		}
 	}
 	
@@ -121,11 +126,11 @@ define.class('$ui/view', function(require,
 			this.removeFromSelection(conn)
 			this.setActiveConnection(undefined)
 			this.updateSelectedItems()
-			this.updatepopupuiposition()
+			this.updatePopupUIPosition()
 		}
 	}
 	
-	this.updatepopupuiposition = function(){
+	this.updatePopupUIPosition = function(){
 		var bg = this.findChild("blockui")
 		var cg = this.findChild("connectionui")
 		var gg = this.findChild("groupui")
@@ -136,6 +141,7 @@ define.class('$ui/view', function(require,
 		bg.visible = false;
 		
 		return;
+		// todo - decide if the group UI is needed at all..
 		
 		if (this.currentselection.length == 1){
 
@@ -239,7 +245,7 @@ define.class('$ui/view', function(require,
 			this.currentconnection = undefined;
 				this.addToSelection(block);
 		}
-		this.updatepopupuiposition();
+		this.updatePopupUIPosition();
 	}
 	
 	this.setActiveConnection = function(conn){
@@ -249,7 +255,7 @@ define.class('$ui/view', function(require,
 			this.currentblock = undefined;
 			this.addToSelection(conn);								
 		}	
-		this.updatepopupuiposition();
+		this.updatePopupUIPosition();
 	}
 	
 	this.updateconnections = function(){
@@ -272,7 +278,7 @@ define.class('$ui/view', function(require,
 
 		this.sourceset = sourceset()
 		
-		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
+		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result){
 			var lib = this.find('thelibrary');
 			var tree = result.value
 			tree.name = 'Library'
@@ -560,7 +566,7 @@ define.class('$ui/view', function(require,
 			var bl = this.dragselectset[i];
 			this.addToSelection(bl);
 		}
-		this.updatepopupuiposition();		
+		this.updatePopupUIPosition();		
 	}
 
 	this.getCompositionName = function(){
@@ -670,12 +676,12 @@ define.class('$ui/view', function(require,
 			,splitcontainer({}
 				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" }
-						,searchbox()
+						//,searchbox()
 						
 						,treeview({flex:1, dataset: this.sourceset})
 					)
 					,dockpanel({title:"Library", viewport:"2D" }
-						,searchbox()
+						//,searchbox()
 						,library({name:"thelibrary", dataset:this.librarydata})
 					)
 				)

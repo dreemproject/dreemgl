@@ -9,7 +9,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.attributes = {
 			classdesc: Config({type:Object, value: undefined}),
 			col1: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.1}),
-			col2: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.2})
+			col2: Config({value:vec4("#454545"), persist:true, meta:"color", motion:"linear", duration:0.2}),
+			folder:""
 		}
 		
 		this.bg = {
@@ -24,14 +25,23 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.margin = vec4(2,2,2,0)
 		this.justifycontent = "flex-start"
 		this.alignitems = "center"
-		///this.aligncontent = "center"
+		this.addBlock = function(){
+			var fg = this.find("flowgraph");
+			if (fg){
+				fg.addBlock(this.folder,this.classdesc.name);
+			}
+		}
+		
 		this.render = function(){
 			return [
 				//view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
 				//	,icon({icon:"cube", fgcolor:this.fgcolor,margin:0,alignself:"center", fontsize:20})
 				//)
 				//,
-				label({text:this.classdesc.name, margin:3,fgcolor:this.fgcolor, bg:0})
+				view({justifycontent:"space-between", flex:1, bg:false},
+					label({text:this.classdesc.name, margin:3,fgcolor:this.fgcolor, bg:0, flex:1})
+					,button({icon:"plus", click:function(){this.addBlock()}.bind(this)})
+				)
 			]
 		}
 	})
@@ -41,10 +51,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 		this.attributes = {
 			dataset:Config({type:Object}),
-			//fontsize:Config({type:float, meta:"fontsize", value: 15})
 		}
-		this.flexwrap  = "nowrap" 
 		
+		this.flexwrap  = "nowrap" 		
 		this.flexdirection = "column" 
 		this.fgcolor = "#f0f0f0"
 		this.bgcolor = "#3a3a3a"
@@ -53,12 +62,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var data = this.dataset
 
 			if (!this.dataset) return [];
-					
 			var res = [];
-			for(var a  in data.children){
+			
+			for(var a = 0;a<data.children.length;a++){
 				var ds = data.children[a];
+				
 				if (!ds.children || ds.children.length == 0){
-					res.push(this.outer.classlibclass({classdesc: ds, fgcolor:this.fgcolor}));
+					res.push(this.outer.classlibclass({classdesc: ds,folder:data.name, fgcolor:this.fgcolor}));
 				}
 			}
 			
@@ -78,7 +88,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.render =function(){
 		var data = this.dataset.data
 		if (!this.dataset) return [];
-		
 		var res = [];
 		for(var a  in data.children){
 			var ds = data.children[a];
