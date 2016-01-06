@@ -36,16 +36,30 @@ The default path symbols are:
 ```
 
 Adding a path is done using the commandline
-node server.js -path mylib:../mydir
+node server.js -path mylib:../mydir mylib2:../mydir2
 
 ## Dreemclasses 
 classes are defined in a single file, using the following syntax:
 ```
-define.class('$ui/view', function($ui$, label){
+define.class('$ui/view', function(require, exports, $ui$, label){
+	var mylib = require('./mylib')
+
+	this.method = function(){
+	}
+
+	exports.staticmethod = function(){
+	}
 })
 ```
+
 Please note the 'require' syntax to specify the baseclass, and the $ui$ to switch directory in the dependency-class list.
 Other syntax: $$ - current directory, $$$ - parent directory, relative$dir$
+
+The prototype of the class is the 'this' of the function.
+Note the 2 specially named arguments 'require' and 'exports' where they appear
+doesnt matter, the name does.
+exports is the class constructor function, which can hold the static methods.
+require is simply the local instance of require if needed for normal requires.
 
 After the baseclass and dependencies, you can define attributes on a dreemclass.
 
@@ -69,6 +83,44 @@ this.attributes = {
 }
 ```
 Attributes are also automatically created if you pass them to the constructor function. view({myprop:10}) automatically creates the myprop attribute
+
+## Events and attributes
+
+Attributes allow listeners, and this forms the core eventhandling system.
+When a value of an attribute changes, using a simple assignment:
+```
+this.attr = 10
+````
+This will fire all the listeners to this attribute. Adding listeners to attributes is advised to use the onattr (on prefix) syntax
+```
+this.onattr = function(event){
+	// event object contains value, old, type, etc
+}
+```
+Attribute listeners are called parent-on-up in the prototype hierarchy,
+and each prototypelevel only has one 'onattr' slot, since this is a normal property.
+Emitting an event on an attribute can be done by assigning to it, but also using the emit syntax. This object goes to all the listeners as an argument
+```
+this.emit('attr',{type:'myown'})
+```
+It is also possible to mark values going into a setter using the Mark wrapper.
+```
+this.attr = Mark(15, true) // or plainly Mark(15)
+```
+This 'mark' is passed into the event object to all the listener as the mark property. Using this it is possible to break infinite feedback loops like so
+```
+this.onattr = function(event){
+	if(event.mark) return // someone did an attribute assign using the Mark
+}
+```
+
+It is also possible to use addListener, this adds a list of listeners which are not the same as the onattr (on prefix) slots on the prototype chain. However
+this is exceedingly rare
+```
+this.addListener('attr', function(event){
+	
+})
+```
 
 ## Styles
 
@@ -97,6 +149,8 @@ this.style = {
 	}
 }
 ```
+
+
 Have fun!
 
 ## License
