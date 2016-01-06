@@ -5,16 +5,12 @@ define.class('$server/composition', function(
 	$ui$, screen, view, 
 	$flow$, rovi,xypad){ 
 	
-	
-	
-	this.render = function(){ 
-		return [
-
+	this.render = function(){ return [
 		rovi({
 			name:'myservice',
 			flowdata:{x:30,y:20},
 			query: wire('this.rpc.xy1.mousepos')
-			}),
+		}),
 		xypad({
 			name:'xy1',
 			flowdata:{x:10,y:10}

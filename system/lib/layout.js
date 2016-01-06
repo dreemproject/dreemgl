@@ -109,9 +109,9 @@ define(function () {
 		
 		var total = 1;
 				
-		var ref = node.ref
-		var ol = ref.oldlayout
-		
+		//var ref = node.ref
+		//var ol = ref.oldlayout
+		/*
 		if(!node.dirty && ol &&
 			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) && 
 			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) && 
@@ -121,19 +121,19 @@ define(function () {
 			putBackOldLayout(node)
 			//ref.debug_view = true
 			return 1
-		}
+		}*/
 		//else ref.debug_view = false
 
 		total += layoutNodeImpl(node, parentMaxWidth, parentDirection);
 
-		ref._layout.last_left = ref._layout.left
-		ref._layout.last_top = ref._layout.top
-		ref._layout.last_pos0 = ref._pos[0]
-		ref._layout.last_pos1 = ref._pos[1]
-		ref._layout.last_size0 = ref._size[0]
-		ref._layout.last_size1 = ref._size[1]
-		ref._layout.parentMaxWidth = parentMaxWidth
-		ref._layout.parentDirection = parentDirection
+		//ref._layout.last_left = ref._layout.left
+		//ref._layout.last_top = ref._layout.top
+		//ref._layout.last_pos0 = ref._pos[0]
+		//ref._layout.last_pos1 = ref._pos[1]
+		//ref._layout.last_size0 = ref._size[0]
+		//ref._layout.last_size1 = ref._size[1]
+		//ref._layout.parentMaxWidth = parentMaxWidth
+		//ref._layout.parentDirection = parentDirection
 		
 		return total;
 	}

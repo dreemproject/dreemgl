@@ -380,9 +380,9 @@ define.class('$system/base/node', function(require){
 		}
 		else{
 			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = prev? prev.totalmatrix: mat4.identity()
-			else this.totalmatrix = prev? prev.totalmatrix: mat4()
-			this.viewportmatrix = prev? prev.viewportmatrix: mat4()
+			if(this._viewport) this.totalmatrix = mat4.identity()
+			else this.totalmatrix = mat4()
+			this.viewportmatrix = mat4()
 		}
 
 		if(this._bgimage){
