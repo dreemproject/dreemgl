@@ -351,7 +351,7 @@ define.class('$system/base/node', function(require){
 
 	// returns the mouse in local coordinates
 	this.localMouse = function(){
-		return vec2(this.screen.remapMouse(this, " dbg" ))
+		return vec2(this.screen.remapMouse(this))
 	}
 
 	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
@@ -803,7 +803,6 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._viewport){
-			if (true) console.log(" IS A VIEWPORT");
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
 			}
