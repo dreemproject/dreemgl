@@ -3,17 +3,20 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/screen', function(require, $ui$, view, icon, label, button, scrollbar){
+define.class('$ui/screen', function(require, $ui$, view, icon, label, button, scrollbar,$behaviors$, draggable){
 	this.attributes = {
-		mousepos: Config({type:vec2, flow:"out", value: wire('this.main.pos')})
+		mousepos: Config({type:vec2, flow:"out"})
 	}
 		
 	this.render = function(){	
 		return view({
 			name:'main',
 			size: vec2(200, 200),
-			bgcolor: vec4('yellow'),
-			is: draggable()
+			bgcolor: vec4('yellow'),		
+			is: draggable(),
+			onpos: function(){
+				this.mousepos = this.pos;
+			}.bind(this)
 		})	
 	}
 })
