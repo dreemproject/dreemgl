@@ -38,7 +38,7 @@ The default path symbols are:
 Adding a path is done using the commandline
 node server.js -path mylib:../mydir mylib2:../mydir2
 
-## Dreemclasses 
+## Classes 
 classes are defined in a single file, using the following syntax:
 ```
 define.class('$ui/view', function(require, exports, $ui$, label){

@@ -69,7 +69,11 @@ define.class(function (require, $ui$, view, label) {
             ),
             view(
                 {flexdirection: 'column', flex: 0, alignself: 'stretch', padding:10, bgcolor:'transparent'},
-                label({fontsize:28, bgcolor:'transparent', text: wire('"The current value of search.keyword is: " + this.rpc.search.keyword'), alignself: 'center'}),
+                label({fontsize:28, bgcolor:'transparent', 
+                    init:function(){
+                        console.log('here', this.rpc.search)
+                    },
+                    text: wire('"The current value of search.keyword is: " + this.rpc.search.keyword'), alignself: 'center'}),
                 label({fontsize:18, bgcolor:'transparent', text:'(Try using the POST API scripts in ./examples/extdemo/bin/ to get and set this value!)', alignself: 'center'})
             )
         ];
