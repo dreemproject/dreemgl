@@ -39,9 +39,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	{
 		for (var i = 0;i<this.inputs.length;i++){
 			var inp = this.inputs[i];
-			console.log(inp);
-			if (this.colormap[inp.type]){
-				inp.color = this.colormap[inp.type];
+			
+			if (this.colormap[inp.type.name]){
+				inp.color = this.colormap[inp.type.name];
 			}
 			else{
 				inp.color = vec4("gray");
@@ -52,8 +52,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.onoutputs = function(){
 		for (var i = 0;i<this.outputs.length;i++){
 			var outp = this.outputs[i];
-			if (this.colormap[outp.type]){
-				outp.color = this.colormap[outp.type];
+			
+			if (this.colormap[outp.type.name]){
+				outp.color = this.colormap[outp.type.name];
 			}
 			else{
 				outp.color = vec4("gray");
