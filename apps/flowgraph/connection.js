@@ -50,7 +50,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	this.noboundscheck = true
 	
-	this.inselection = function(){	
+	this.oninselection = function(){	
 		if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
 		this.redraw();
 		this.updatecolor ();
@@ -106,6 +106,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.color2 = this.neutralcolor2;
 				this.linewidth = this.neutrallinewidth;
 			}
+		}
+		
+		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+				var H = this.findChild("handle");
+		
+		if (H){
+			H.bordercolor = this.centralcolor;
 		}
 	}
 	

@@ -18,7 +18,7 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 			{
 				tri.angle = this.triangleangle - PI/2;
 				tri.bgcolor = this.bordercolor;
-				}
+			}
 		}
 		
 		this.onballsize = function(){
@@ -69,6 +69,15 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 			this.pressedcolor2 = lighter;
 		}
 		
+		this.onbordercolor = function(){
+			var tri = this.find("thetri");
+			if (tri)
+			{
+				tri.angle = this.triangleangle - PI/2;
+				tri.bgcolor = this.bordercolor;
+				}
+		}
+		
 		this.justifycontent = "center"
 		
 		this.render =function(){
@@ -76,7 +85,7 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 			return [icon({icon:this.icon, alignself:"center", fgcolor:wire("this.parent.bordercolor") })];
 		
 			if (this.triangle){
-				return [this.triangledisp({name:"thetri" })]
+				return [this.triangledisp({name:"thetri", bgcolor:wire("this.bordercolor") })]
 			}
 			return [];
 		}
