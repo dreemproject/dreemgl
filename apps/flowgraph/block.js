@@ -351,8 +351,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.render = function(){
 		return [
-			view({class:'header'}
-				,view({bg:0}
+			view({class:'header',alignitems:"center" }
+				,view({bg:0, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
 					,button({class:"header", icon:"pencil",click:function(){this.renameBlock();}.bind(this)})
 					)
