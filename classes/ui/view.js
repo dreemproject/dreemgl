@@ -991,6 +991,7 @@ define.class('$system/base/node', function(require){
 		// set up a temporary view
 		vroot.render = render
 		vroot.parent = this
+		vroot.rpc = this.rpc
 		vroot.screen = this.screen
 		vroot.parent_viewport = this._viewport?this:this.parent_viewport
 		// render it

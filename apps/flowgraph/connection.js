@@ -114,11 +114,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 			var	fg = this.find("flowgraph");
 			fg.moveSelected(dx,dy);
-			
-			
 		}.bind(this);
-	
-	
 	}
 	
 	this.mouseleftup = function(p){	
@@ -192,6 +188,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 //				this.color_blend = 'src_alpha * src_color + dst_color'
 
 		this.color = function(){
+			//return 'blue'
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 			return vec4(view.bgcolor.xyz,a);

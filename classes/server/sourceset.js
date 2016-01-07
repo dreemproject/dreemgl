@@ -59,8 +59,31 @@ define.class(function(require, $server$, dataset){
 			uname = classname + id
 		}
 		
-		// ok we need to make sure our classname+folder is in the
-		// root deplist
+		// add it to the deplist.
+		var deps = this.ast.steps[0].params
+		var $folder = '$'+folder.replace(/\//g,'$')+'$'
+		
+		var dir = '$$'
+		for(var i = 0; i < deps.length; i ++){
+			var name = deps[i].id.name
+			if(name === $folder) break
+		}
+		if(i === deps.length){
+			deps.push(
+				{type:'Def',id:{type:'Id', name:$folder}},
+				{type:'Def',id:{type:'Id', name:classname}}
+			)
+		}
+		else{
+			for(var j = i; j < deps.length; j ++){
+				if(deps[j].id.name === classname) break
+			}
+			if(j === deps.length){
+				deps.splice(i,0,
+					{type:'Def',id:{type:'Id', name:classname}}
+				)
+			}
+		}
 
 		this.data.retarray.elems.push({
 			type:"Call",
@@ -78,8 +101,12 @@ define.class(function(require, $server$, dataset){
 		})
 	}
 
-	this.removeBlock = function(folder, classname){
-		
+	this.removeBlock = function(blockname){
+		// lets remove this thing
+		node = this.data.childnames[blockname]
+		// lets find it
+		var id = this.data.retarray.elems.indexOf(node.node)
+		this.data.retarray.elems.splice(id, 1)
 	}
 
 	function genFlowDataObject(data){
@@ -156,6 +183,7 @@ define.class(function(require, $server$, dataset){
 
 		var deps = this.ast.steps[0].params
 		var args = this.classconstr.module.factory.body.class_args
+
 		for(var i = 0; i < deps.length; i++){
 			resolver[ deps[i].id.name ] = args[i]
 		}
@@ -285,9 +313,7 @@ define.class(function(require, $server$, dataset){
 
 		// lets create an AST
 		this.ast = jsparser.parse(source)
-
 		this.process()
-
 		this.notifyAssignedAttributes()
 	}
 

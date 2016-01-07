@@ -70,6 +70,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	}
 
 	this.bgcolorfn = function(pos){
+		//return 'red'
 		return mix(col1, col2, pos.y/0.8)
 	}
 

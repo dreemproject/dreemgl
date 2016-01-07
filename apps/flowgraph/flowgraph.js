@@ -127,7 +127,11 @@ define.class('$ui/view', function(require,
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock
 		if (block){
-			console.log("TODO: removing block!", block)
+
+			this.sourceset.fork(function(){
+				this.sourceset.removeBlock(block.name)
+			}.bind(this))
+
 			this.removeFromSelection(block)
 			this.setActiveBlock(undefined)
 			this.updateSelectedItems()

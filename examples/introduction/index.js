@@ -167,8 +167,9 @@ define.class('$server/composition', function(require,
 								cornerradius:0,
 								bg:{
 									value:1,
+									dump:1,
 									color:function(){
-										return mix('red', 'yellow', abs(sin(mesh.y*10.+value)))
+										return mix('blue', 'yellow', abs(sin(mesh.y*10.+value)))
 									}
 								}
 							}),
