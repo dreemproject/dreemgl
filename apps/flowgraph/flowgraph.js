@@ -444,6 +444,11 @@ define.class('$ui/view', function(require,
 		this.cancelConnection()
 	}
 	
+	
+	this.setBlockName = function(block, newname){
+		console.log("TODODODODODODO: setBlockName - change name to", newname);
+	}
+	
 	this.moveBlock = function(block){
 
 		this.sourceset.fork(function(){
@@ -613,6 +618,9 @@ define.class('$ui/view', function(require,
 		this.screen.openModal(function(){
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
+				
+				
+			
 				miss:function(){
 					this.screen.closeModal(false)
 				
