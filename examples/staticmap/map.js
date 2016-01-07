@@ -2,7 +2,7 @@ define.class('$ui/view', function() {
 
     this.attributes = {
       apikey:   "AIzaSyDL5stf137yu1GJpVzU2tlCFE0ssgaC9R0",
-      endpoint: "http://maps.googleapis.com/maps/api/staticmap?",
+      endpoint: "https://maps.googleapis.com/maps/api/staticmap?",
       location: "Seocho-gu, Seoul, South Korea",
       format:"jpg",
       maptype:"roadmap", //of roadmap,satellite,terrain,hybrid
