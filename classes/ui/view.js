@@ -351,7 +351,9 @@ define.class('$system/base/node', function(require){
 
 	// returns the mouse in local coordinates
 	this.localMouse = function(){
-		return vec2(this.screen.remapMouse(this))
+		var ret = vec2(this.screen.remapMouse(this))
+	//	if(ret[0]<0) debugger
+		return ret
 	}
 
 	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty

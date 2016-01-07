@@ -11,7 +11,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 	}
 	
 	this.onquery = function(){
-		this.data = [{name:"res1"}, {name:JSON.stringify(this.query)}];
+		this.data = ["HELLO!"+JSON.stringify(this.query)];
 	}
 	
 	this.init = function(){

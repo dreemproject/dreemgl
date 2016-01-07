@@ -266,7 +266,9 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 			
 				// console.log(i, ressofar, "viewportmatrix");
-
+				
+				if (logging)  console.log(i, "LAYOUT", P.layout.width, P.layout.height);
+				
 				mat4.scalematrix([P.layout.width/2,P.layout.height/2,1000/2], scaletemp)
 				mat4.invert(scaletemp, this.remapmatrix)
 
