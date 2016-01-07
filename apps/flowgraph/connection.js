@@ -11,6 +11,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		fromoutput: Config({type:String, value:""}),
 		toinput: Config({type:String, value:""}),
 		linewidth: Config({type:float, value:3, duration:0.5, motion:"bounce"}),
+		glowlinewidth: Config({type:float, value:12, duration:0.5, motion:"bounce"}),
 		focussedcolor: Config({type:vec4, value:vec4("#d0d0d0"), meta:"color" }),
 		hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
 		focussedwidth: Config({type:float, value:3}),
@@ -178,9 +179,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-		
+				this.color_blend = 'src_alpha * src_color + dst_color'
+
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+			return vec4(vec3(0.3) + view.bgcolor.xyz*1.9,a);
 			return vec4(view.bgcolor.xyz,a);
 		}	
 	}) 
@@ -213,7 +216,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.position = function(){
 			var a = mesh.x;
 			var a2 = mesh.x+0.001;
-			var b = mesh.y * view.linewidth;
+			var b = mesh.y * view.glowlinewidth;
 			
 			var ddp = view.topos - view.frompos;
 			
@@ -228,14 +231,17 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-		
+		this.color_blend = 'src_alpha * src_color + dst_color'
+  
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
-			return vec4(view.bgcolor.xyz,a);
+			return vec4(view.bgcolor.xyz,a*0.3);
+			return vec4(vec3(0.5) + view.bgcolor.xyz*1.3,a);
 		}	
 	}) 
 
 	this.bg = this.connectionshader;
+	this.glowconnectionshader = 1;
 	this.calculateposition = function(){
 		var F = this.find(this._from);
 		var T = this.find(this._to);
