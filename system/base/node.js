@@ -587,7 +587,6 @@ define.class(function(require, constructor){
 					this.addListener(key, listeners[i])
 				}
 			}
-			console.log(newconfig)
 
 			return
 		}
