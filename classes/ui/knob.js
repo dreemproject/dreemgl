@@ -172,7 +172,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.alignitems = "center";	
 	this.borderwidth = 2;
 	
-	this.bg = {pick_only:true};
+	this.bg = {pickonly:true};
 	
 	this.render = function(){
 		return [

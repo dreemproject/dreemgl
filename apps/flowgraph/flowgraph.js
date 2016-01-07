@@ -105,8 +105,8 @@ define.class('$ui/view', function(require,
 	}
 
 	this.addBlock = function(folder, blockname){
-		console.log(folder,blockname);
-		console.log("adding block from library! TODODODODODODO");
+		console.log(folder, blockname)
+		//console.log("adding block from library! TODODODODODODO");
 	}
 
 	this.removeBlock = function (block){
@@ -427,7 +427,7 @@ define.class('$ui/view', function(require,
 
 	this.makeNewConnection = function(){
 		// DO CONNECTION HERE!
-		console.log("making connection...");
+		console.log("making connection...")
 
 		this.sourceset.fork(function(){
 			this.sourceset.createWire(
@@ -438,8 +438,8 @@ define.class('$ui/view', function(require,
 			)
 		}.bind(this))
 
-		this.cancelConnection();
-	}	
+		this.cancelConnection()
+	}
 	
 	this.moveBlock = function(block){
 
