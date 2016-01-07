@@ -15,12 +15,7 @@ define.class(function (require, $ui$, view, label) {
     };
 
     this.onPoster = function (event) {
-        var url = event.value;
-        if (url && url.startsWith && url.startsWith('http')) {
-            this.bgimage = "https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDL5stf137yu1GJpVzU2tlCFE0ssgaC9R0&center=Portland%2C%20OR&maptype=roadmap&scale=2&zoom=14&size=100x100&format=jpg";
-        } else {
-            this.bgimage = null;
-        }
+        this.bgimage = event.value;
     };
 
     this.render = function() { return [
