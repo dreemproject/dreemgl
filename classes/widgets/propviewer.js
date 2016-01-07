@@ -17,7 +17,9 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	this.bgcolor = vec4("blue");
 	this.padding = 0
 	this.bg = 0;
+	
 	this.uppercaseFirst = function (inp) {
+		if (!inp || inp.length == 0) return inp;
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
 	}
 	

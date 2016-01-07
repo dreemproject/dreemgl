@@ -14,6 +14,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.borderwidth = 2;
 	this.bordercolor = vec4("#606060")
 	
+	function uppercaseFirst (inp) {
+		if (!inp || inp.length == 0) return inp;
+		return inp.charAt(0).toUpperCase() + inp.slice(1);
+	}
+	
+	
 	// the style classes 
 	
 	this.hovertext = "";
@@ -264,7 +270,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.hovertext = this.title+ (this.type?(": "+ this.type):"");
 			return [
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
-				label({marginleft:5, text:this.title, bg:false, alignself:"center"})
+				label({marginleft:5, text:uppercaseFirst(this.title), bg:false, alignself:"center"})
 			]
 		}
 	})
@@ -295,7 +301,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.hovertext = this.title+ (this.type?(": "+ this.type):"");
 		
 			return [
-				label({text:this.name, bg:false, alignself:"center", marginright: 5}),
+				label({text:uppercaseFirst(this.name), bg:false, alignself:"center", marginright: 5}),
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}

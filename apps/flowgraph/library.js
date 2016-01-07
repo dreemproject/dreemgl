@@ -51,13 +51,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 		this.attributes = {
 			dataset:Config({type:Object}),
+			parentfolder : ""
 		}
 		
 		this.flexwrap  = "nowrap" 		
 		this.flexdirection = "column" 
 		this.fgcolor = "#f0f0f0"
 		this.bgcolor = "#3a3a3a"
-
+		
 		this.render =function(){
 			var data = this.dataset
 
@@ -67,14 +68,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			for(var a = 0;a<data.children.length;a++){
 				var ds = data.children[a];
 				
-				if (!ds.children || ds.children.length == 0 ){
-					res.push(this.outer.classlibclass({classdesc: ds,folder:data.name, fgcolor:this.fgcolor}));
-				}
-				else{
 					if (ds.isfolder){
 					//console.log(ds);
-					res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor}));
-					}
+					res.push(this.outer.libraryfolder({marginleft:10,parentfolder: ((this.parentfolder && this.parentfolder.length>0)?this.parentfolder+"/":"")+data.name, dataset: ds, fgcolor:this.fgcolor}));
+					}else{
+					res.push(this.outer.classlibclass({marginleft:20,classdesc: ds,folder:((this.parentfolder && this.parentfolder.length>0)?this.parentfolder+"/":"")+data.name, fgcolor:this.fgcolor}));
+				
 				}
 			}
 			

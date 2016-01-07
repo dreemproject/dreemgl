@@ -569,6 +569,11 @@ define.class('$ui/view', function(require,
 		return res;
 	}
 	
+	function uppercaseFirst (inp) {
+		if (!inp || inp.length == 0) return inp;
+		return inp.charAt(0).toUpperCase() + inp.slice(1);
+	}
+	
 	this.renderBlocks = function(){
 		var res = [];
 		if (!this.sourceset) return;
@@ -582,7 +587,7 @@ define.class('$ui/view', function(require,
 					pos:vec3(node.flowdata.x,
 					node.flowdata.y,0),
 					name:node.name,
-					title:node.classname + ':' + node.name,
+					title:uppercaseFirst(node.classname + ': ' + node.name),
 					inputs:node.inputs,
 					outputs:node.outputs
 				})

@@ -193,7 +193,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
-			return vec4(vec3(0.3) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.9,a);
+			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 			return vec4(view.bgcolor.xyz,a);
 		}	
 	}) 
@@ -241,12 +241,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-		this.color_blend = 'src_alpha * src_color + dst_color'
+		//this.color_blend = 'src_alpha * src_color + dst_color'
   
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
-			return vec4(vec3(0.5) + view.bgcolor.xyz*1.3,a);
+			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);
 		}	
 	}) 
 
