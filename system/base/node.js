@@ -189,6 +189,7 @@ define.class(function(require, constructor){
 		}
 	}
 	
+	var global_emit_lock = []
 	// emit an event for an attribute key. the order 	
 	this.emit = function(key, event){
 		var on_key = 'on' + key
@@ -203,7 +204,12 @@ define.class(function(require, constructor){
 		}
 
 		if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
-			stack[j].call(this, event)
+			var item = stack[j]
+			if(global_emit_lock.indexOf(item) === -1){
+				global_emit_lock.push(item)
+				item.call(this, event)
+				global_emit_lock.pop()
+			}
 		}
 
 		var proto = this
@@ -211,7 +217,12 @@ define.class(function(require, constructor){
 			if(proto.hasOwnProperty(listen_key)){
 				var listeners = proto[listen_key]
 				for(var j = 0; j < listeners.length; j++){
-					listeners[j].call(this, event)
+					var item = listeners[j]
+					if(global_emit_lock.indexOf(item) === -1){
+						global_emit_lock.push(item)
+						item.call(this, event)
+						global_emit_lock.pop()
+					}
 				}
 			}
 			proto = Object.getPrototypeOf(proto)
