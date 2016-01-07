@@ -779,6 +779,9 @@ define.class(function(require, constructor){
 					var newobj = obj[part]
 					if(!newobj){
 						if(obj === this){ // lets make an alias on this, scan the parent chain
+							obj = this.find(part)
+							if(obj) this[part] = obj
+							/*
 							while(obj){
 								if(part in obj){
 									if(part in this) console.log("Aliasing error with "+part)
@@ -787,7 +790,7 @@ define.class(function(require, constructor){
 									break
 								}
 								obj = obj.parent
-							}
+							}*/
 						}
 					}	
 					else obj = newobj
