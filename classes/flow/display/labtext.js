@@ -8,7 +8,7 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid, numberbox,vie
 	this.attributes = {
 		number: Config({type:float, flow:"in", value:0}),
 		number2: Config({type:vec2, flow:"in", value:vec2(0)}),
-		text: Config({ value:"empty",flow:"in"})
+		text: Config({ type:Object, flow:"in"})
 	}
 	
 	this.clearcolor = "red";
@@ -18,14 +18,14 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid, numberbox,vie
 				view({bg:false, flexdirection:"column", flex:1, justifycontent:"center" },
 					view({bg:false, flexdirection:"row" , justifycontent:"center" },
 						view({bgcolor:vec4(1,1,1,0.2),padding:40,borderradius:50,  flexdirection:"column" ,alignitems:"center", justifycontent:"center" },
-							numberbox({margin:10, value:wire("this.parent.parent.parent.parent.parent.number"), fontsize:100,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
+							numberbox({margin:10, value:this.number, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
 					
 							view({bg:false, alignself:"center", margin:10}, 
-								numberbox({value:this.number2[0], fontsize:100,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
-								numberbox({value:this.number2[1], fontsize:100,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) 
+								numberbox({value:this.number2[0], decimals:2, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
+								numberbox({value:this.number2[1], decimals:2, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) 
 							)						
 								
-							,label({margin:10, fgcolor:"white", text: this.text, bg:false, alignself:"center", fontsize:100})
+							,label({margin:10, fgcolor:"white", text: JSON.stringify(this.text), bg:false, alignself:"center", fontsize:30})
 						)
 					)
 				)

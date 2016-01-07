@@ -11,10 +11,10 @@ define.class('$system/base/node', function(require, $ui$, label){
 	}
 	
 	this.onquery = function(){
-		this.data = [{name:"res1"}, {name:"res2"}];
+		this.data = [{name:"res1"}, {name:JSON.stringify(this.query)}];
 	}
 	
 	this.init = function(){
-		console.log("rovi service initialized");
+		console.log(this.name+" service initialized");
 	}
 })
