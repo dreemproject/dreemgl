@@ -1153,7 +1153,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.color = function(){
-			var col = view.bgcolorfn(pos.xy)
+			var col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 

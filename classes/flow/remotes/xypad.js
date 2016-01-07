@@ -16,7 +16,7 @@ define.class('$ui/screen', function(require, $ui$,cadgrid, view, icon, label, bu
 			borderradius: 40,
 			is: draggable(),
 			onpos: function(){
-				this.mousepos = this.pos;
+				this.mousepos = this.find("main").pos ;
 			}.bind(this)
 		}))
 	}

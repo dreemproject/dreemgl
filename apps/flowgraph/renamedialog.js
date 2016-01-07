@@ -7,7 +7,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 	
 	this.bgcolor = vec4(0,0,0,0.5);
 
-	this.render =function(){
+	this.render =function(){	
 		return dialog({title:"Rename composition"},
 			view({bg:false, flexdirection:"column", padding:20 },
 				view({margin:10, flexdirection:"row",bg:false, flex:1}, 

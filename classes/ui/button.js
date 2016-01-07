@@ -18,7 +18,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		fontsize: Config({type: float, value: 14, meta:"fontsize"}),
 		
 		// Gradient color 1	
-		col1: Config({meta:"color", value: vec4("#272727"), duration: 0.1, motion:"linear"}),
+		col1: Config({meta:"color",type:vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
 		
 		// Gradient color 2
 		col2: Config({meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
@@ -30,16 +30,16 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		textactivecolor: Config({meta:"color", type: vec4, value: vec4("white")}),
 		
 		// First gradient color for the button background in neutral state
-		buttoncolor1: Config({meta:"color", type: vec4, value: vec4("#272727")}),
+		buttoncolor1: Config({meta:"color", type: vec4, value: vec4("#636363")}),
 		
 		// Second gradient color for the button background in neutral state	
-		buttoncolor2: Config({meta:"color", type: vec4, value: vec4("#272727")}),
+		buttoncolor2: Config({meta:"color", type: vec4, value: vec4("#636363")}),
 		
 		// First gradient color for the button background in hovered state
-		hovercolor1: Config({meta:"color", type: vec4, value: vec4("#505050")}),
+		hovercolor1: Config({meta:"color", type: vec4, value: vec4("#c5c5c5")}),
 		
 		// Second gradient color for the button background in hovered state
-		hovercolor2: Config({meta:"color", type: vec4, value: vec4("#505050")}),
+		hovercolor2: Config({meta:"color", type: vec4, value: vec4("#797979")}),
 		
 		// First gradient color for the button background in pressed state
 		pressedcolor1: Config({meta:"color", type: vec4, value: vec4("#707070")}),
@@ -53,7 +53,10 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		// fires when button is clicked
 		click: Config({type:Event}), 
 		
-		bold: true
+		bold: true,
+		
+		enabled: true, 
+		defaultbutton: false
 	}
 
 	var button = this.constructor
@@ -70,18 +73,18 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	}
 
 	this.bgcolorfn = function(pos){
-		//return 'red'
-		return mix(col1, col2, pos.y/0.8)
+		return mix(col1, col2, pos.y)
 	}
 
-	this.bgcolor = '#272727'
+	this.bgcolor = '#636363'
 	this.fgcolor = 'white'
 	this.buttonres = {};
 	this.padding = 2
-	this.borderradius = 3
+	this.borderradius = 7
 	this.borderwidth  = 2
 	this.margin = 0
-	this.bordercolor = vec4("#272727")
+	this.bordercolor = vec4("#636363")
+	
 	this.alignitems = "flex-start"
 	this.justifycontent ="flex-start" 
 
@@ -110,6 +113,9 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	this.statehover = function(){
 		this.col1 = this.hovercolor1
 		this.col2 = this.hovercolor2
+		this.shadowopacity = 1.0;
+		this.bordercolor = vec4("transparent");
+		
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
 
@@ -119,6 +125,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 	this.statenormal = function(first){
 		this.col1 = Mark(this.buttoncolor1, first)
 		this.col2 = Mark(this.buttoncolor2, first)
+		this.shadowopacity = 0.0;
+		this.bordercolor = this.neutralbordercolor;
 		if(this.iconres)this.iconres.fgcolor = this.textcolor
 		if(this.buttonres) this.buttonres.fgcolor = this.textcolor;
 	}
@@ -129,12 +137,15 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		//this.animate({col1:{0:vec4('red'),3:vec4('green')}})
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
+		this.bordercolor = this.neutralbordercolor;
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
 	}
 
 	this.init = function(){
 		this.statenormal(true)
+		this.neutralbordercolor = this.bordercolor;
+	
 	}
 
 	this.mouseover = function(){

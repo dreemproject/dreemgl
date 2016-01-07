@@ -13,14 +13,24 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 	this.alignitems = "flex-start";
 	this.render =function(){
 		return [
-			view({bg:0}, view({ flexdirection:"column", padding:20,bgcolor: vec4("#292929")},
+			view({bg:0}, view({ 
+					flexdirection:"column", 
+					padding:20,
+					bgcolor: vec4("#505050"),
+					borderradius:20,
+					dropshadowopacity:0.4,
+					dropshadowhardness:0,
+					dropshadowradius:20,
+					dropshadowoffset:vec2(9,9)
+
+				},
 				view({margin:10, flexdirection:"row",bg:false}, 
 					label({text:"old name:",bg:false}),
 					textbox({value:this.oldname, enabled: false, marginleft: 20, bgcolor:"#202020", multiline:false})
 				), 
 				view({margin:10, flexdirection:"row",bg:false}, 
 					label({text:"new name:",bg:false}),
-					textbox({value:"tadaa", name:"newnamebox", marginleft: 20, bgcolor:"#202020", multiline:false})
+					textbox({value:this.oldname, name:"newnamebox", marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
 				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   }, 
 					button({padding:10, text:"OK", icon:"check", click: function(){this.screen.closeModal(this.find("newnamebox").value);} }),
