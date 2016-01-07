@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class('$server/composition', function(require, $ui$,treeview,  speakergrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph, renamedialog, newcompositiondialog, opencompositiondialog, aboutdialog, docviewerdialog){	
+define.class('$server/composition', function(require, $ui$,treeview,  speakergrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph, renamedialog, newcompositiondialog, opencompositiondialog, aboutdialog, docviewerdialog, renameblockdialog){	
 
 	this.flexwrap = "nowrap";
 	this.overflow = "scroll"
@@ -19,6 +19,8 @@ define.class('$server/composition', function(require, $ui$,treeview,  speakergri
 					}
 				}},
 				speakergrid({glowcolor:"#505060",  flexwrap:"nowrap", overflow:"scroll" },
+					label({margin:10, paddingtop:10, fontsize:30, text:"Rename block", bg:false}),
+					renameblockdialog({oldname:"this is my old name" }),
 					label({margin:10, paddingtop:10, fontsize:30, text:"Rename composition", bg:false}),
 					renamedialog(),
 					label({margin:10, fontsize:30, text:"New composition", bg:false}),

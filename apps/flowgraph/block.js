@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
+define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton, renameblockdialog){
 
 			
 	this.cursor = "move";
@@ -307,7 +307,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 	})
 	
-	
 	this.renderInputs = function(){
 		var res = [];
 		for(var i = 0;i<this.inputs.length;i++){
@@ -324,10 +323,28 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			res.push(this.outputbutton({name:outp.name, title:outp.title, bgcolor:outp.color}))	
 		}
 		return res;
-		
-		
 	}
 
+	this.renameBlock = function(){
+		this.screen.openModal(function(){
+			return renameblockdialog({oldname:this.name, width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				x:this.screen.mouse._x,
+				y:this.screen.mouse._y + 20,
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+			
+		}.bind(this)).then(function(res){
+			
+			if (res){
+				this.find("flowgraph").setBlockName(this, res);
+			}			
+		}.bind(this));		
+		
+	}
+	
 	this.removeBlock = function(){
 		this.find("flowgraph").removeBlock(this);
 	}
@@ -335,7 +352,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.render = function(){
 		return [
 			view({class:'header'}
-				,label({text:this.title,class:'head'})
+				,view({bg:0}
+					,label({text:this.title,class:'head'})
+					,button({class:"header", icon:"pencil",click:function(){this.renameBlock();}.bind(this)})
+					)
 				,button({class:"header", icon:"remove",click:function(){this.removeBlock();}.bind(this)})
 			)
 			,view({class:'main'},

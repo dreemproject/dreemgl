@@ -446,6 +446,11 @@ define.class('$ui/view', function(require,
 		this.cancelConnection()
 	}
 	
+	
+	this.setBlockName = function(block, newname){
+		console.log("TODODODODODODO: setBlockName - change name to", newname);
+	}
+	
 	this.moveBlock = function(block){
 
 		this.sourceset.fork(function(){
@@ -615,6 +620,9 @@ define.class('$ui/view', function(require,
 		this.screen.openModal(function(){
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
+				
+				
+			
 				miss:function(){
 					this.screen.closeModal(false)
 				
@@ -723,7 +731,7 @@ define.class('$ui/view', function(require,
 			]}
 				]})		
 			,splitcontainer({}
-				,splitcontainer({flex:0.1, flexdirection:"column", direction:"horizontal"}
+				,splitcontainer({flex:0.2, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" , flex: 0.2}
 						//,searchbox()
 						
