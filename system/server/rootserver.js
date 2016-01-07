@@ -195,7 +195,7 @@ define.class(function(require){
 			}
 			var filterSpecial = function(child) {
 				var name = child.tag;
-				return name.indexOf('$') !== 0 && name !== 'method';
+				return name.indexOf('$') !== 0 && (! filterMethods(child)) && (! filterAttributes(child));
 			}
 			var filterMethods = function(child) {
 				return child.tag === 'method';
@@ -207,6 +207,9 @@ define.class(function(require){
 					return {name: child.attr.name, body: fn};
 				}
 			}
+			var filterAttributes = function(child) {
+				return child.tag === 'attribute';
+			}
 			var objToString = function(obj) {
 				var out = '{';
 				var keys = Object.keys(obj);
@@ -216,6 +219,11 @@ define.class(function(require){
 
 					out += key + ': ';
 					if (typeof val === 'function') {
+						out += val;
+					} else if (typeof val === 'object') {
+						out += objToString(val);
+					} else if (val.indexOf('Config({') === 0) {
+						// don't wrap Config in quotes
 						out += val;
 					} else {
 						out += '"';
@@ -240,6 +248,24 @@ define.class(function(require){
 						var method = methods[i];
 						attr[method.name] = method.body;
 						// console.log('found method:', method)
+					}
+				}
+
+				// add attributes
+				var attributes = child.child && child.child.filter(filterAttributes);
+				if (attributes) {
+					for (var i = 0; i < attributes.length; i++) {
+						var attribute = attributes[i].attr;
+						// console.log('found attribute:', attribute)
+						var val = attribute.value;
+						var type = attribute.type;
+						if (type === 'string') {
+							val = '"' + val + '"';
+						}
+						if (! attr.attributes) {
+							attr.attributes = {};
+						}
+						attr.attributes[attribute.name] = 'Config({type: ' + type + ', value: ' + val + '})';
 					}
 				}
 
