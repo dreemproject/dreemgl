@@ -68,7 +68,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	{
 		for (var i = 0;i<this.inputs.length;i++){
 			var inp = this.inputs[i];
-			console.log(inp.type.name);
+			
 			if (inp.type && this.colormap[inp.type.name]){
 				inp.color = this.colormap[inp.type.name];
 			}
@@ -311,8 +311,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.renderInputs = function(){
 		var res = [];
 		for(var i = 0;i<this.inputs.length;i++){
-			var inp = this.inputs[i];
-			console.log(inp);
+			var inp = this.inputs[i];			
 			res.push(this.inputbutton({name:inp.name, type:inp.type.name, title:inp.title, bgcolor:inp.color}))	
 		}
 		return res;
