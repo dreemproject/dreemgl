@@ -194,37 +194,79 @@ define.class(function(require){
 				return out;
 			}
 			var filterSpecial = function(child) {
-				return child.tag.indexOf('$') !== 0;
+				var name = child.tag;
+				return name.indexOf('$') !== 0 && name !== 'method';
+			}
+			var filterMethods = function(child) {
+				return child.tag === 'method';
+			}
+			var toMethod = function(child) {
+				if (child.tag === 'method') {
+					var body = HTMLParser.reserialize(child.child[0]);
+					var fn = new Function(child.attr.args, body);
+					return {name: child.attr.name, body: fn};
+				}
+			}
+			var objToString = function(obj) {
+				var out = '{';
+				var keys = Object.keys(obj);
+				for (var i = 0; i < keys.length; i++) {
+					var key = keys[i];
+					var val = obj[key];
+
+					out += key + ': ';
+					if (typeof val === 'function') {
+						out += val;
+					} else {
+						out += '"';
+						out += val;
+						out += '"';
+					}
+					if (i < keys.length - 1) out += ', ';
+				}
+				out += '}';
+				return out;
 			}
 			var tagToFunc = function(child, indent) {
 				// console.log('tagToFunc', indent, child, child.tag.indexOf('$'))
 				var outputthis = filterSpecial(child);
 				var out = '';
+				var attr = child.attr;
+
+				// add methods to attributes hash
+				var methods = child.child && child.child.filter(filterMethods).map(toMethod);
+				if (methods) {
+					for (var i = 0; i < methods.length; i++) {
+						var method = methods[i];
+						attr[method.name] = method.body;
+						// console.log('found method:', method)
+					}
+				}
+
 				var children = child.child && child.child.filter(filterSpecial);
+				var hasChildren = children && children.length;
 				if (outputthis) {
 					out += makeSpace(indent);
 					// name
 					out += child.tag + '(';
 					// attributes
-					out += JSON.stringify(child.attr);
-					if (children && children.length) out += ',\n'
+					out += objToString(attr, indent);
+					if (hasChildren) out += ',\n'
 				}
-				if (children && children.length) {
+				if (hasChildren) {
 					indent++;
 					for (var i = 0; i < children.length; i++) {
 						newchild = children[i];
-						if (filterSpecial(newchild)) {
-							out += tagToFunc(newchild, indent);
-							if (i !== children.length - 1) {
-								out += ','
-							}
-							out += '\n';
+						out += tagToFunc(newchild, indent);
+						if (i !== children.length - 1) {
+							out += ','
 						}
+						out += '\n';
 					}
 					indent--;
 				}
 				if (outputthis) {
-					if (children && children.length) out += makeSpace(indent);
+					if (hasChildren) out += makeSpace(indent);
 					out += ')';
 				}
 				return out;
