@@ -67,12 +67,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			for(var a = 0;a<data.children.length;a++){
 				var ds = data.children[a];
 				
-				if (!ds.children || ds.children.length == 0){
+				if (!ds.children || ds.children.length == 0 ){
 					res.push(this.outer.classlibclass({classdesc: ds,folder:data.name, fgcolor:this.fgcolor}));
 				}
 				else{
+					if (ds.isfolder){
 					//console.log(ds);
 					res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor}));
+					}
 				}
 			}
 			

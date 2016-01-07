@@ -10,7 +10,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 			fs.writeFile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
 		}
 
-		this.newComposition = function (inname){
+		this.newComposition = function (name){
 			console.log("new composition creation requested:", inname, options);
 			// todo: create folder in default composition path
 			// todo: create default index.js using options from options.
@@ -27,7 +27,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		function readRecurDir(base, inname, ignoreset){
 			var local = path.join(base, inname)
 			var dir = fs.readdirSync(local)
-			var out = {name:inname, collapsed:1, children:[]}
+			var out = {isfolder:true, name:inname, collapsed:1, children:[]}
 			for(var i = 0; i < dir.length;i++){
 				var name = dir[i]
 				var mypath = path.join(local, name)
@@ -48,7 +48,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 					out.children.push(readRecurDir(local, name, ignoreset))
 				}
 				else{
-					out.children.push({name:name, size:stat.size})
+					out.children.push({name:name, isfolder:false, size:stat.size})
 				}
 			}
 			return out

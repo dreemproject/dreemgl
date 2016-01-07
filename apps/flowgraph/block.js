@@ -223,8 +223,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.clicked = function(){
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
-			fg.setconnectionendpoint(bl.name, this.name);
-		
+			fg.setConnectionEndpoint(bl.name, this.name);	
 		}	
 
 		this.render =function(){
@@ -243,7 +242,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.clicked = function(){					
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
-			fg.setconnectionstartpoint(bl.name, this.name);			
+			fg.setConnectionStartpoint(bl.name, this.name);			
 		}
 		
 		this.render =function(){

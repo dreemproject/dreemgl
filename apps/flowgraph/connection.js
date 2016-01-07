@@ -28,7 +28,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.redraw();
 		this.updatecolor ();
 	}
-
 	
 	this.destroy = function(){
 		fg = this.find("flowgraph");
@@ -37,9 +36,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			if (index > -1) fg.allconnections.splice(index, 1);
 		}
 	}
-	
-	
-	
+		
 	this.init = function(){
 		this.neutralcolor = this.bgcolor;
 		this.neutrallinewidth = this.linewidth;
@@ -58,7 +55,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.screen.defaultKeyboardHandler(this, v);
 	}
 
-	
 	this.over = false;
 	
 	this.updatecolor = function(){	
@@ -81,20 +77,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.focus =function(){
 	}
 	
-	
 	this.mouseleftdown = function(){
 		var fg = this.find("flowgraph");
-		
-		
+			
 		if (!this.screen.keyboard.shift && !fg.inSelection(this)){
 			fg.clearSelection();
 		}
+	
 		if (this.screen.keyboard.shift && fg.inSelection(this)){
 			fg.removeFromSelection(this);
 			fg.updateSelectedItems();
 	
 			return;
 		}
+		
 		fg.setActiveConnection(this);
 		fg.updateSelectedItems();
 		
@@ -114,8 +110,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	}
 	
-	this.mouseleftup = function(p){
-	
+	this.mouseleftup = function(p){	
 		this.mousemove = function(){};
 	}
 

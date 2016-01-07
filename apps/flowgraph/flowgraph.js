@@ -92,7 +92,7 @@ define.class('$ui/view', function(require,
 			var obj = this.currentselection[a]
 			obj.updateMove(dx, dy, snap)
 		}
-		this.updateconnections()
+		this.updateConnections()
 		this.updatePopupUIPosition()
 	}
 	
@@ -267,7 +267,7 @@ define.class('$ui/view', function(require,
 		this.updatePopupUIPosition();
 	}
 	
-	this.updateconnections = function(){
+	this.updateConnections = function(){
 		var cl = this.find("connectionlayer");
 		for(var a in cl.children){
 			cl.children[a].calculateposition()
@@ -323,19 +323,19 @@ define.class('$ui/view', function(require,
 
 	// right before the recalculateMatrix call
 	this.atMatrix = function(){
-		this.updateconnections();
+		this.updateConnections();
 	}	
 	
 	this.updateZoom = function(z){	
 	}
 	
-	this.gridclick = function(p, origin){
+	this.gridClick = function(p, origin){
 		
-		this.cancelconnection();
+		this.cancelConnection();
 			var cg= this.find("centralconstructiongrid");
 		
 			origin.startselectposition = cg.localMouse();
-			this.startdragselect();
+			this.startDragSelect();
 			
 			origin.mousemove = function(){				
 				var cg= this.find("centralconstructiongrid");
@@ -423,7 +423,7 @@ define.class('$ui/view', function(require,
 			}	
 		
 	}
-	this.makenewconnection = function(){
+	this.makeNewConnection = function(){
 		
 		// DO CONNECTION HERE!
 		console.log("making connection...");
@@ -437,10 +437,10 @@ define.class('$ui/view', function(require,
 			)
 		}.bind(this))
 
-		this.cancelconnection();
+		this.cancelConnection();
 	}	
 	
-	this.cancelconnection = function(){		
+	this.cancelConnection = function(){		
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
 		
@@ -458,7 +458,7 @@ define.class('$ui/view', function(require,
 		}
 	}
 	
-	this.setupconnectionmousemove = function(){
+	this.setupConnectionMouseMove = function(){
 		console.log("setting up new connection drag...");
 
 		var connectingconnection = this.find("openconnector");
@@ -498,29 +498,29 @@ define.class('$ui/view', function(require,
 		}
 	}
 	
-	this.setconnectionstartpoint = function(sourceblockname, outputname){		
+	this.setConnectionStartpoint = function(sourceblockname, outputname){		
 		this.newconnection.sourceblock = sourceblockname;
 		this.newconnection.sourceoutput = outputname;
 		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ){
-			this.makenewconnection();
+			this.makeNewConnection();
 		}
 		else{
-			this.setupconnectionmousemove();
+			this.setupConnectionMouseMove();
 		}
 	}
 	
-	this.setconnectionendpoint = function(targetblockname, inputname){		
+	this.setConnectionEndpoint = function(targetblockname, inputname){		
 		this.newconnection.targetblock = targetblockname;
 		this.newconnection.targetinput = inputname;
 		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ){
-			this.makenewconnection();
+			this.makeNewConnection();
 		}
 		else{
-			this.setupconnectionmousemove();
+			this.setupConnectionMouseMove();
 		}			
 	}
 	
-	this.startdragselect = function(){
+	this.startDragSelect = function(){
 		this.dragselectset = [];
 		if (!this.screen.keyboard.shift){
 			this.clearSelection(true);
@@ -713,7 +713,7 @@ define.class('$ui/view', function(require,
 					)
 				)
 				,splitcontainer({flexdirection:"column", direction:"horizontal"}
-					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 						)
