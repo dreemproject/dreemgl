@@ -32,7 +32,12 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.justifycontent = "center";
 	this.alignitems = "center";	
 	
-	this.value = function(){
+	this.onvalue = function(){
+		
+		var expo = Math.pow(10, this.decimals);
+		this.value = Math.round(this.value * expo) / expo;
+		
+		
 		var tn = this.findChild("thenumber");
 		if (tn) {
 			tn.text = this._value.toString();
