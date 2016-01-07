@@ -424,13 +424,8 @@ define.class('$ui/view', function(require,
 			}	
 		
 	}
-<<<<<<< Updated upstream
-	this.makeNewConnection = function(){
-		
-=======
 
-	this.makenewconnection = function(){
->>>>>>> Stashed changes
+	this.makeNewConnection = function(){
 		// DO CONNECTION HERE!
 		console.log("making connection...");
 
@@ -446,9 +441,6 @@ define.class('$ui/view', function(require,
 		this.cancelConnection();
 	}	
 	
-<<<<<<< Updated upstream
-	this.cancelConnection = function(){		
-=======
 	this.moveBlock = function(block){
 
 		this.sourceset.fork(function(){
@@ -459,8 +451,7 @@ define.class('$ui/view', function(require,
 		}.bind(this))
 	}
 
-	this.cancelconnection = function(){		
->>>>>>> Stashed changes
+	this.cancelConnection = function(){		
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
 		
