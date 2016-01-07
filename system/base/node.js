@@ -198,31 +198,33 @@ define.class(function(require, constructor){
 		if(this[lock_key]) return
 
 		this[lock_key] = true
+		try{
+			var proto = this
+			var stack
 
-		var proto = this
-		var stack
-
-		while(on_key in proto){
-			if(proto.hasOwnProperty(on_key)) (stack || (stack = [])).push(proto[on_key])
-			proto = Object.getPrototypeOf(proto)
-		}
-
-		if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
-			stack[j].call(this, event)
-		}
-
-		var proto = this
-		while(listen_key in proto){
-			if(proto.hasOwnProperty(listen_key)){
-				var listeners = proto[listen_key]
-				for(var j = 0; j < listeners.length; j++){
-					listeners[j].call(this, event)
-				}
+			while(on_key in proto){
+				if(proto.hasOwnProperty(on_key)) (stack || (stack = [])).push(proto[on_key])
+				proto = Object.getPrototypeOf(proto)
 			}
-			proto = Object.getPrototypeOf(proto)
+
+			if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
+				stack[j].call(this, event)
+			}
+
+			var proto = this
+			while(listen_key in proto){
+				if(proto.hasOwnProperty(listen_key)){
+					var listeners = proto[listen_key]
+					for(var j = 0; j < listeners.length; j++){
+						listeners[j].call(this, event)
+					}
+				}
+				proto = Object.getPrototypeOf(proto)
+			}
 		}
-		
-		this[lock_key] = false
+		finally{
+			this[lock_key] = false
+		}
 	}
 
 	// add a listener to an attribute

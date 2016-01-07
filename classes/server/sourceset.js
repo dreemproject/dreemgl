@@ -29,6 +29,24 @@ define.class(function(require, $server$, dataset){
 		this.emit('change')
 	}
 
+	this.setFlowData = function(block, data){
+		var target = this.data.childnames[block]
+		var fdn = target.flowdatanode
+
+		var obj = {
+			type:"Object",
+			keys:[]
+		}
+		for(var key in data){
+			obj.keys.push({
+				kind:"init",
+				key:{type:"Id",name:key},
+				value:{type:"Value",kind:"num",value:data[key]}
+			})
+		}
+		fdn.value = obj
+	}
+
 	this.deleteWire = function(sblock, soutput, tblock, tinput){
 		var target = this.data.childnames[tblock]
 		if(!target) return console.error("cannot find target " + tblock)
@@ -136,11 +154,13 @@ define.class(function(require, $server$, dataset){
 						var name = key.key.name
 						var value = key.value
 						if(name === 'flowdata'){
-							var fd = output.flowdata = {}
-							
-							for(var k = 0; k < key.value.keys.length; k++){
-								var fditem = key.value.keys[k]
-								fd[fditem.key.name] = fditem.value.value
+							var fdoutput = output.flowdata = {}
+							output.flowdatanode = key
+							var flowdata = value
+
+							for(var k = 0; k < flowdata.keys.length; k++){
+								var fditem = flowdata.keys[k]
+								fdoutput[fditem.key.name] = fditem.value.value
 							}
 						}
 						else if(name === 'name'){

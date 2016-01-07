@@ -86,11 +86,12 @@ define.class('$ui/view', function(require,
 		}		
 	}
 
-	this.moveSelected = function(dx, dy, snap){
-		if (!snap) snap = 1
+	this.moveSelected = function(dx, dy, store){
+		var snap = 1
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.updateMove(dx, dy, snap)
+			if(store) this.moveBlock(obj)
 		}
 		this.updateConnections()
 		this.updatePopupUIPosition()
@@ -250,17 +251,17 @@ define.class('$ui/view', function(require,
 	
 	this.setActiveBlock = function(block){
 		this.currentblock = block
-		if ( block){
-			this.currentconnection = undefined;
-				this.addToSelection(block);
+		if(block){
+			this.currentconnection = undefined
+			this.addToSelection(block)
 		}
-		this.updatePopupUIPosition();
+		this.updatePopupUIPosition()
 	}
 	
 	this.setActiveConnection = function(conn){
 		this.currentconnection = conn;
 		
-		if (conn){
+		if(conn){
 			this.currentblock = undefined;
 			this.addToSelection(conn);								
 		}	
@@ -274,7 +275,7 @@ define.class('$ui/view', function(require,
 			//cl.children[a].layout = 1
 		}
 	}
-		
+	
 	this.init = function(){		
 		this.currentselection = [];
 		this.currentblock = undefined;
@@ -423,8 +424,13 @@ define.class('$ui/view', function(require,
 			}	
 		
 	}
+<<<<<<< Updated upstream
 	this.makeNewConnection = function(){
 		
+=======
+
+	this.makenewconnection = function(){
+>>>>>>> Stashed changes
 		// DO CONNECTION HERE!
 		console.log("making connection...");
 
@@ -440,7 +446,21 @@ define.class('$ui/view', function(require,
 		this.cancelConnection();
 	}	
 	
+<<<<<<< Updated upstream
 	this.cancelConnection = function(){		
+=======
+	this.moveBlock = function(block){
+
+		this.sourceset.fork(function(){
+			var flowdata = block.flowdata
+			flowdata.x = block.pos[0]
+			flowdata.y = block.pos[1]
+			this.sourceset.setFlowData(block.name, flowdata)
+		}.bind(this))
+	}
+
+	this.cancelconnection = function(){		
+>>>>>>> Stashed changes
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
 		
@@ -543,11 +563,11 @@ define.class('$ui/view', function(require,
 				for(var j = 0;j<node.wires.length;j++) {
 					var w = node.wires[j];
 					res.push(connection({
-								from:w.from, 
-								fromoutput:w.output, 
-								to:node.name, 
-								toinput:w.input 
-							}));
+						from:w.from, 
+						fromoutput:w.output, 
+						to:node.name, 
+						toinput:w.input 
+					}));
 				}
 			}
 		}
@@ -564,6 +584,7 @@ define.class('$ui/view', function(require,
 			// block({name:"e", title:"block E", x:450, y:600}) 
 			res.push(
 				block({
+					flowdata:node.flowdata,
 					pos:vec3(node.flowdata.x,
 					node.flowdata.y,0),
 					name:node.name,

@@ -15,6 +15,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.bordercolor = vec4("#6c6c6c")
 	
 	this.attributes = {
+		flowdata:{},
 		pos: Config({persist: true}),
 		inputattributes: Config({type:Object, value:["color"]}),
 		outputattributes: Config({type:Object, value:["clicked","something"]}),
@@ -103,6 +104,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var fg = this.find("flowgraph")
 		fg.setActiveBlock(this);
 		fg.updateconnections();
+		
 	}
 	
 	this.keydownUparrow = function(){this.move(0,-1);}
@@ -170,24 +172,29 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.startposition = this.parent.localMouse();
 		fg.setupSelectionMove();
 		this.mousemove = function(evt){
-			p = this.parent.localMouse()
+			var p = this.parent.localMouse()
 			var dx = p[0] - this.startposition[0];
 			var dy = p[1] - this.startposition[1];
 	
 			var	fg = this.find("flowgraph");
-			fg.moveSelected(dx,dy);
+			fg.moveSelected(dx, dy, false);
 			
 			
 		}.bind(this);
 	}
 	
 	this.mouseleftup = function(p){
+		var p = this.parent.localMouse()
 		var x = Math.floor(this.pos[0]/this.snap)*this.snap;
 		var y = Math.floor(this.pos[1]/this.snap)*this.snap;
+		var dx = p[0] - this.startposition[0];
+		var dy = p[1] - this.startposition[1];
+
 		this.pos = vec2(x,y);
 		this.redraw();
 		this.relayout();
-		
+		this.find("flowgraph").moveSelected(dx,dy,true)
+
 		this.mousemove = function(){};
 	}
 	

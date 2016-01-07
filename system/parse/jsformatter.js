@@ -130,11 +130,11 @@ define.class(function(require, exports){
 
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 		if(n.kind == 'num')
-			this.add(n.raw, this.group++, exports._Value, exports._Number)
+			this.add(n.raw!==undefined?n.raw:''+n.value, this.group++, exports._Value, exports._Number)
 		else if(n.kind == 'string')
 			this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', this.group++, exports._Value, exports._String)
 		else
-			this.add(n.raw, this.group++, exports._Value)
+			this.add(n.raw!==undefined?n.raw:''+n.value, this.group++, exports._Value)
 	}
 	
 	this.This = function(n){//: { },
