@@ -32,6 +32,15 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		}
 
 		this.getCompositionList = function(){
+			
+			var root = {collapsed:0, children:[]}
+			
+			var pathset = ["compositions"];
+			var ret = readRecurDir(define.expandVariables(define['$compositions']), '', [])
+			ret.name = "compositions"
+			root.children.push(ret)
+			return root
+
 			return [];
 		}
 		
@@ -67,17 +76,12 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 
 		// recursively read the flowgraph related class library
 		this.readFlowLibrary = function(ignoreset){
-			// lets read all paths.
-			// lets read the directory and return it
 			var root = {collapsed:0, children:[]}
 			
 			var pathset = ["flow"];
-			//for(var key in pathset){
-				//if(ignoreset.indexOf(key) !== -1) continue
-				var ret = readRecurDir(define.expandVariables(define['$flow']), '', [])
-				ret.name = "flow"
-				root.children.push(ret)
-			//}
+			var ret = readRecurDir(define.expandVariables(define['$flow']), '', [])
+			ret.name = "flow"
+			root.children.push(ret)
 			return root
 			
 		}

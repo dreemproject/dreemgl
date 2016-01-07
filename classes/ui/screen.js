@@ -646,6 +646,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			vroot.render = render
 			vroot.parent = this
 			vroot.screen = this
+			vroot.rpc = this.rpc;
 			vroot.parent_viewport = this
 			// render it
 			Render.process(vroot, undefined, undefined, true)

@@ -632,9 +632,15 @@ define.class('$ui/view', function(require,
 			}} );
 			
 		}.bind(this)).then(function(res){
-			
+				if(res){
+					console.log(res);
+					this.screen.locationhash = {
+						composition:"$compositions/"+ res
+					}
+
+				}
 			console.log(" opencomp result: " , res);
-		});		
+		}.bind(this));		
 		
 	}
 	
