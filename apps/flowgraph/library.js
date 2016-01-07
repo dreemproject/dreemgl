@@ -5,6 +5,11 @@
 
 define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 	
+	function uppercaseFirst (inp) {
+		if (!inp || inp.length == 0) return inp;
+		return inp.charAt(0).toUpperCase() + inp.slice(1);
+	}
+	
 	define.class(this, "classlibclass", view, function($ui$, view, label, icon){
 		this.attributes = {
 			classdesc: Config({type:Object, value: undefined}),
@@ -29,7 +34,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var fg = this.find("flowgraph");
 			if (fg){
 				
-				fg.addBlock(this.folder,this.classdesc.name);
+				fg.addBlock(this.folder,this.classdesc.name.substr(0,this.classdesc.name.length-3 ));
 			}
 		}
 		
@@ -40,7 +45,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				//)
 				//,
 				view({justifycontent:"space-between", flex:1, bg:false},
-					label({text:this.classdesc.name, margin:3,fgcolor:this.fgcolor, bg:0, flex:1})
+					label({text:this.classdesc.name.substr(0,this.classdesc.name.length-3 ), margin:3,fgcolor:this.fgcolor, bg:0, flex:1})
 					,button({icon:"plus", click:function(){this.addBlock()}.bind(this)})
 				)
 			]
