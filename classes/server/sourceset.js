@@ -61,7 +61,7 @@ define.class(function(require, $server$, dataset){
 			args:[{
 				type:"Object",
 				keys:[
-					{key:{type:"Id",name:"name"}, value:{type:"Value",value:blockname}},
+					{key:{type:"Id",name:"name"}, value:{type:"Value",kind:"string",value:blockname}},
 					{key:{type:"Id",name:"flowdata"}, value:genFlowDataObject({x:0,y:0})}
 				]
 			}]
