@@ -36,4 +36,6 @@ Then launch the DreemGL DALi application using this command (while replacing the
 
 ```Bash
 node server.js -width 1920 -height 1080 -dalilib "/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali" -dali
- examples/tvdemo```
+ examples/tvdemo
+ ```
+ 
