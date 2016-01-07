@@ -3,12 +3,12 @@ define.class("$server/composition",function($server$, service, $ui$, screen, vie
 		return [
 			rovi({
 				name:'myservice', 
-				flowdata:{x:586, y:365}, 
+				flowdata:{x:235, y:339}, 
 				query:wire("this.rpc.xy1.mousepos")
 			}),
 			xypad({
 				name:'xy1', 
-				flowdata:{x:213, y:160}
+				flowdata:{x:20, y:81}
 			}),
 			labtext({name:'lab', flowdata:{x:1193, y:136}, number2:wire("this.rpc.myservice.data"), number:wire("this.rpc.xy1.mousepos"), text:wire("this.rpc.xy1.mousepos")})
 		]
