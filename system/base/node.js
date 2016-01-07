@@ -749,14 +749,15 @@ define.class(function(require, constructor){
 				bindcall.initialized = true
 				for(var i = 0; i < deps.length; i++) deps[i]()
 			}
-			this[key] = this[wiredfn_key].call(this)
+			this[key] = this[wiredfn_key].call(this, this[wiredcl_key].find)
 		}.bind(this)
 
 		this[wiredcl_key] = bindcall
+		bindcall.find = {}
 
 		for(var j = 0; j < state.references.length; j++){
 			var ref = state.references[j]
-			var obj = {'this':this}
+			var obj = {'this':this,'find':bindcall.find}
 			for(var k = 0; k < ref.length; k++){
 
 				var part = ref[k]
@@ -778,9 +779,9 @@ define.class(function(require, constructor){
 				else{
 					var newobj = obj[part]
 					if(!newobj){
-						if(obj === this){ // lets make an alias on this, scan the parent chain
+						if(obj === bindcall.find){ // lets make an alias on this, scan the parent chain
 							obj = this.find(part)
-							if(obj) this[part] = obj
+							if(obj) bindcall.find[part] = obj
 							/*
 							while(obj){
 								if(part in obj){
