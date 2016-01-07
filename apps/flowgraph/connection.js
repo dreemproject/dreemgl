@@ -89,7 +89,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.over = false;
 	
 	this.updatecolor = function(){	
-		if (this._inselection) {
+		if (this.inselection) {
 			this.color1 = this.focussedcolor;
 			this.color2 = this.focussedcolor;
 			this.linewidth = this.focussedwidth;
