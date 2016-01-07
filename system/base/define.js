@@ -2307,7 +2307,7 @@
 		// parsing a wired function as string
 		exports.wire = function wire(string){
 			src = "return " + string
-			var fn = new Function('find',src)
+			var fn = new Function('find','rpc',src)
 			fn.is_wired = true
 			return fn
 		}
