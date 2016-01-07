@@ -624,6 +624,7 @@ define.class('$ui/view', function(require,
 	}	
 
 	this.openComposition = function(){
+		this.screen.closeModal(false);
 		this.screen.openModal(function(){
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
@@ -649,6 +650,8 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.newComposition = function(){
+		this.screen.closeModal(false);
+		
 		this.screen.openModal(function(){
 			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
@@ -671,6 +674,8 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.renameComposition = function(){
+		this.screen.closeModal(false);
+		
 		this.screen.openModal(function(){
 			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
