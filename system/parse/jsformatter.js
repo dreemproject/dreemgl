@@ -129,7 +129,16 @@ define.class(function(require, exports){
 	}
 
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
-		if(n.kind == 'num')
+		if(n.kind === undefined){
+			var str 
+			if(typeof n.value === 'string'){
+				if(n.value.indexOf('"')!==-1) str = "'" + n.value + "'"
+				else str = '"' + n.value + '"'
+			}
+			else str = '' + n.value
+			this.add(str, this.group++, exports._Value, exports._Number)
+		}
+		else if(n.kind == 'num')
 			this.add(n.raw!==undefined?n.raw:''+n.value, this.group++, exports._Value, exports._Number)
 		else if(n.kind == 'string')
 			this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', this.group++, exports._Value, exports._String)
