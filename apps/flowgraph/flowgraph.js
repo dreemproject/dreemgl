@@ -731,7 +731,7 @@ define.class('$ui/view', function(require,
 			]}
 				]})		
 			,splitcontainer({}
-				,splitcontainer({flex:0.1, flexdirection:"column", direction:"horizontal"}
+				,splitcontainer({flex:0.2, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" , flex: 0.2}
 						//,searchbox()
 						

@@ -24,7 +24,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.minwidth = 50;
 	this.minheight = 50;
 		
-	this.layout = function(){
+	this.atMatrix = function(){
 		//console.log(" l!", this.layout);
 		this.findChild("thedial").width = this.layout.width;
 		this.findChild("thedial").height = this.layout.width;
@@ -53,7 +53,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		}
 		
 		this.width = function(){
-			console.log(this._width);
+		//	console.log(this._width);
 		}
 		this.bg = function(){
 			this.mesh = vec2.array();

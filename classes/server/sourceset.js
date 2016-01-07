@@ -33,7 +33,6 @@ define.class(function(require, $server$, dataset){
 		}
 	}
 
-
 	this.atConstructor = function(source){
 		if(source) this.parse(source)
 		this.last_source = source
@@ -44,28 +43,40 @@ define.class(function(require, $server$, dataset){
 		this.redo_stack.length = 0
 		callback()
 		// lets reserialize
-		var str = this.stringify()
+		this.last_source = this.stringify()
 		this.process()
 		this.notifyAssignedAttributes()
 		// save to disk.
 		this.emit('change')
 	}
 
-	this.addBlock = function(folder, blockname){
+	this.addBlock = function(folder, classname){
 		// okaaaay. we need a block.
 		// lets add it to the ast!
-		console.log(blockname)
+		var id = 0
+		var uname = classname + id
+		while(uname in this.data.childnames){
+			id++
+			uname = classname + id
+		}
 		this.data.retarray.elems.push({
 			type:"Call",
-			fn:{type:"Id",name:blockname},
+			fn:{type:"Id",name:classname},
 			args:[{
 				type:"Object",
 				keys:[
-					{key:{type:"Id",name:"name"}, value:{type:"Value",kind:"string",value:blockname}},
+					{
+						key:{type:"Id",name:"name"}, 
+					 	value:{type:"Value",kind:"string",value:uname}
+					},
 					{key:{type:"Id",name:"flowdata"}, value:genFlowDataObject({x:0,y:0})}
 				]
 			}]
 		})
+	}
+
+	this.removeBlock = function(folder, classname){
+		
 	}
 
 	function genFlowDataObject(data){
@@ -274,10 +285,7 @@ define.class(function(require, $server$, dataset){
 		this.ast = jsparser.parse(source)
 
 		this.process()
-		// lets generate the connection view
-		//	Call->args->object
-		//console.log(this.calltree)
-		// cal something
+
 		this.notifyAssignedAttributes()
 	}
 
@@ -292,7 +300,6 @@ define.class(function(require, $server$, dataset){
 			buf.char_count += str.length
 			buf.out += str
 		})
-		this.last_source = buf.out
 		return buf.out
 	}
 })
