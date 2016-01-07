@@ -51,14 +51,17 @@ define.class(function(require, $server$, dataset){
 	}
 
 	this.addBlock = function(folder, classname){
-		// okaaaay. we need a block.
-		// lets add it to the ast!
+
 		var id = 0
 		var uname = classname + id
 		while(uname in this.data.childnames){
 			id++
 			uname = classname + id
 		}
+		
+		// ok we need to make sure our classname+folder is in the
+		// root deplist
+
 		this.data.retarray.elems.push({
 			type:"Call",
 			fn:{type:"Id",name:classname},
@@ -112,7 +115,6 @@ define.class(function(require, $server$, dataset){
 				break
 			}
 		}
-
 	}
 
 	this.createWire = function(sblock, soutput, tblock, tinput){

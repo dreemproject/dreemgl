@@ -13,11 +13,22 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		}
 
 		this.newComposition = function (name){
-			console.log("new composition creation requested:", inname, options);
+			console.log("new composition creation requested:", name);
 			// todo: create folder in default composition path
 			// todo: create default index.js using options from options.
 			// todo: if things go wrong, return false
-			return true;
+			var path = define.expandVariables(this.rootdirectory)+'/'+name
+			var file = path +'/index.js';
+			try{
+				fs.mkdirSync(path)
+			}catch(e){}
+
+			fs.writeFileSync(file,
+			"define.class('$server/composition',function(){\n"+
+			"	this.render = function(){ return [\n"+
+			"	]}\n"+
+			"})")
+			return  this.rootdirectory + '/' + name
 		}
 
 		this.getCompositionList = function(){

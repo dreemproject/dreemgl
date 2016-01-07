@@ -83,7 +83,7 @@ define.class('$ui/view', function(require,
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.setupMove()
-		}		
+		}
 	}
 
 	this.moveSelected = function(dx, dy, store){
@@ -91,8 +91,21 @@ define.class('$ui/view', function(require,
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.updateMove(dx, dy, snap)
-			if(store) this.moveBlock(obj)
 		}
+
+		if(store){
+			this.sourceset.fork(function(){
+				for(var a in this.currentselection){
+					var obj = this.currentselection[a]
+					if(!(obj instanceof block)) continue
+					var flowdata = obj.flowdata
+					flowdata.x = obj.pos[0]
+					flowdata.y = obj.pos[1]
+					this.sourceset.setFlowData(obj.name, flowdata)
+				}
+			}.bind(this))
+		}
+
 		this.updateConnections()
 		this.updatePopupUIPosition()
 	}
@@ -451,16 +464,6 @@ define.class('$ui/view', function(require,
 		console.log("TODODODODODODO: setBlockName - change name to", newname);
 	}
 	
-	this.moveBlock = function(block){
-
-		this.sourceset.fork(function(){
-			var flowdata = block.flowdata
-			flowdata.x = block.pos[0]
-			flowdata.y = block.pos[1]
-			this.sourceset.setFlowData(block.name, flowdata)
-		}.bind(this))
-	}
-
 	this.cancelConnection = function(){		
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
@@ -644,9 +647,17 @@ define.class('$ui/view', function(require,
 				
 			}} );
 		}).then(function(res){
-			
+			if(res){
+				this.rpc.fileio.newComposition(res).then(function(result){
+					console.log(result)
+					// switch to new thing
+					this.screen.locationhash = {
+						composition:result.value
+					}
+				}.bind(this))
+			}
 			console.log(" newcomp result: " , res);
-		});		
+		}.bind(this));		
 	}
 	
 	this.renameComposition = function(){
