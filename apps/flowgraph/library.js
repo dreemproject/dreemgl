@@ -28,6 +28,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.addBlock = function(){
 			var fg = this.find("flowgraph");
 			if (fg){
+				
 				fg.addBlock(this.folder,this.classdesc.name);
 			}
 		}
@@ -68,10 +69,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			for(var a = 0;a<data.children.length;a++){
 				var ds = data.children[a];
 				
-					if (ds.isfolder){
-					//console.log(ds);
-					res.push(this.outer.libraryfolder({marginleft:10,parentfolder: ((this.parentfolder && this.parentfolder.length>0)?this.parentfolder+"/":"")+data.name, dataset: ds, fgcolor:this.fgcolor}));
-					}else{
+				if (ds.isfolder){
+					if (ds.children && ds.children.length > 0){
+						res.push(this.outer.libraryfolder({marginleft:10,parentfolder: ((this.parentfolder && this.parentfolder.length>0)?this.parentfolder+"/":"")+data.name, dataset: ds, fgcolor:this.fgcolor}));
+					}
+				}
+					else{
 					res.push(this.outer.classlibclass({marginleft:20,classdesc: ds,folder:((this.parentfolder && this.parentfolder.length>0)?this.parentfolder+"/":"")+data.name, fgcolor:this.fgcolor}));
 				
 				}
