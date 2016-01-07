@@ -9,23 +9,12 @@ define.class('$ui/view', function($ui$, label) {
       endpoint: "http://api.openweathermap.org/data/2.5/weather?",
       location: "Portland,OR",
       servicename:'openweather',
-      reportURL:wire("this.endpoint + 'appid=' + this.apikey + '&q=' + encodeURIComponent(this.location)"),
-      report:wire('this.rpc.openweather.response'),
-      reportx:{
-          "coord":{"lon":-122.68,"lat":45.52},
-          "weather":[{"id":701,"main":"Mist","description":"mist","icon":"50d"}],
-          "base":"stations",
-          "main":{"temp":271.77,"pressure":1015,"humidity":80,"temp_min":271.15,"temp_max":273.15},
-          "visibility":16093,
-          "wind":{"speed":4.1,"deg":120},
-          "clouds":{"all":90},"dt":1451857662,
-          "sys":{"type":1,"id":2274,"message":0.0295,"country":"US","sunrise":1451836250,"sunset":1451868026},
-          "id":5746545,
-          "name":"Portland",
-          "cod":200}
+      reporturl:wire("this.endpoint + 'appid=' + this.apikey + '&q=' + encodeURIComponent(this.location)"),
+      reportjson:wire('rpc.openweather.response'), // TODO use rpc[this.servicename].response once that works
+      report: wire('(this.reportjson ? JSON.parse(this.reportjson) : null)')
     };
 
-    this.onreportURL = function(event) {
+    this.onreporturl = function(event) {
         var url = event.value;
         var weatherservice = this.rpc[this.servicename];
         if (weatherservice) {
@@ -39,21 +28,28 @@ define.class('$ui/view', function($ui$, label) {
         var views = [];
 
         if (this.report) {
-            console.log('>>', this.report)
-            views.push(label({ text:this.report.name, fgcolor:'red'}))
+            if (this.report.name) {
+                var name = this.report.name;
+                if (this.report.sys && this.report.sys.country) {
+                    name = name + ', ' + this.report.sys.country
+                }
+                views.push(label({ text:name, fgcolor:'red'}))
+            }
+            if (this.report.main && this.report.main.temp) {
+                views.push(label({ text:"Temp: " + this.report.main.temp, fgcolor:'blue'}))
+            }
+            if (this.report.weather) {
+                for (var i =0;i < this.report.weather.length;i++) {
+                    var condition = this.report.weather[i];
+                    if (condition.main) {
+                        views.push(label({ text:condition.main, fgcolor:'green'}));
+                    }
+                }
+            }
         }
-
-       //[
-       //    label({ text:this.report.name, fgcolor:'red'}),
-       //    label({ text:this.rep, fgcolor:'pink'}),
-       //    label({ text:"Temp: " + this.report.main.temp, fgcolor:'blue'}),
-       //    label({ text:this.report.weather[0].main, fgcolor:'green'})
-       //];
 
       return views;
     };
-
-
 
 });
 
