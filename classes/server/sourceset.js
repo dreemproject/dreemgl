@@ -12,6 +12,28 @@ define.class(function(require, $server$, dataset){
 		change: Config({type:Event})
 	}
 
+	function findRenderFunction(ast){
+		var steps = ast.steps[0].body.steps
+		for(var i = 0; i < steps.length; i++){
+			var step = steps[i]
+			if(step.type === 'Assign' && step.left.type === 'Key' &&
+				step.left.key.name === 'render'){
+				return step.right
+			}
+		}
+	}
+	
+	function findReturnArray(body){
+		var steps = body.steps
+		for(var i = 0; i < steps.length; i++){
+			var step = steps[i]
+			if(step.type === 'Return'){
+				return step.arg
+			}
+		}
+	}
+
+
 	this.atConstructor = function(source){
 		if(source) this.parse(source)
 		this.last_source = source
@@ -29,10 +51,24 @@ define.class(function(require, $server$, dataset){
 		this.emit('change')
 	}
 
-	this.setFlowData = function(block, data){
-		var target = this.data.childnames[block]
-		var fdn = target.flowdatanode
+	this.addBlock = function(folder, blockname){
+		// okaaaay. we need a block.
+		// lets add it to the ast!
+		console.log(blockname)
+		this.data.retarray.elems.push({
+			type:"Call",
+			fn:{type:"Id",name:blockname},
+			args:[{
+				type:"Object",
+				keys:[
+					{key:{type:"Id",name:"name"}, value:{type:"Value",kind:"string",value:blockname}},
+					{key:{type:"Id",name:"flowdata"}, value:genFlowDataObject({x:0,y:0})}
+				]
+			}]
+		})
+	}
 
+	function genFlowDataObject(data){
 		var obj = {
 			type:"Object",
 			keys:[]
@@ -44,7 +80,14 @@ define.class(function(require, $server$, dataset){
 				value:{type:"Value",kind:"num",value:data[key]}
 			})
 		}
-		fdn.value = obj
+		return obj
+	}
+
+	this.setFlowData = function(block, data){
+		var target = this.data.childnames[block]
+		var fdn = target.flowdatanode
+
+		fdn.value = genFlowDataObject(data)
 	}
 
 	this.deleteWire = function(sblock, soutput, tblock, tinput){
@@ -108,32 +151,12 @@ define.class(function(require, $server$, dataset){
 		// so how shall we do that.
 		// well.. 
 		// lets write the code
-		function findRenderFunction(ast){
-			var steps = ast.steps[0].body.steps
-			for(var i = 0; i < steps.length; i++){
-				var step = steps[i]
-				if(step.type === 'Assign' && step.left.type === 'Key' &&
-					step.left.key.name === 'render'){
-					return step.right
-				}
-			}
-		}
 		
-		function findReturnArray(body){
-			var steps = body.steps
-			for(var i = 0; i < steps.length; i++){
-				var step = steps[i]
-				if(step.type === 'Return'){
-					return step.arg
-				}
-			}
-		}
-
 		// lets find the return array
-		var render = findRenderFunction(this.ast)
-		var ret = findReturnArray(render.body)
+		var ret = findReturnArray(findRenderFunction(this.ast).body)
 			
 		var data = this.data = {
+			retarray: ret,
 			name:'root', 
 			node:ret.elems, 
 			children:[],

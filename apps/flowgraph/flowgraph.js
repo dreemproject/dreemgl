@@ -44,14 +44,14 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.removeFromSelection = function(obj){
-		if (this.currentblock == obj){
+		if(this.currentblock == obj){
 			this.currentblock = undefined
 			this.updatePopupUIPosition()
 		}
 		
 		var f = this.currentselection.indexOf(obj)
-		if (f>-1) this.currentselection.splice(f,1)
-				
+		if(f>-1) this.currentselection.splice(f,1)
+
 		this.updateSelectedItems()
 	}
 	
@@ -105,8 +105,10 @@ define.class('$ui/view', function(require,
 	}
 
 	this.addBlock = function(folder, blockname){
-		console.log(folder, blockname)
 		//console.log("adding block from library! TODODODODODODO");
+		this.sourceset.fork(function(){
+			this.sourceset.addBlock(folder, blockname)
+		}.bind(this))
 	}
 
 	this.removeBlock = function (block){
