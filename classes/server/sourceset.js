@@ -80,13 +80,14 @@ define.class(function(require, $server$, dataset){
 				value:{type:"Value",kind:"num",value:data[key]}
 			})
 		}
+		return obj
 	}
 
 	this.setFlowData = function(block, data){
 		var target = this.data.childnames[block]
 		var fdn = target.flowdatanode
 
-		fdn.value = genFlowDataObject(obj)
+		fdn.value = genFlowDataObject(data)
 	}
 
 	this.deleteWire = function(sblock, soutput, tblock, tinput){
