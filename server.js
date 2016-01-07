@@ -92,6 +92,7 @@ function main(){
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
+		'compositions':'$root/compositions'
 	}
 	if(args['-nomoni']){
 		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]

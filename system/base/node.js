@@ -543,7 +543,7 @@ define.class(function(require, constructor){
 		}
 
 		// figure out the type
-		if(!config.type){
+		if(!is_attribute && !config.type){
 			var value = config.value
 
 			if(typeof value === 'object'){
@@ -587,6 +587,8 @@ define.class(function(require, constructor){
 					this.addListener(key, listeners[i])
 				}
 			}
+			console.log(newconfig)
+
 			return
 		}
 
