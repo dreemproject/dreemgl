@@ -22,7 +22,7 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid, numberbox,vie
 					
 							view({bg:false, alignself:"center", margin:10}, 
 								numberbox({value:this.number2[0], fontsize:100,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
-								numberbox({value:this.number2[0], fontsize:100,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) 
+								numberbox({value:this.number2[1], fontsize:100,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) 
 							)						
 								
 							,label({margin:10, fgcolor:"white", text: this.text, bg:false, alignself:"center", fontsize:100})
