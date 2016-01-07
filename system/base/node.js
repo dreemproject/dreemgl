@@ -189,11 +189,15 @@ define.class(function(require, constructor){
 		}
 	}
 	
-	var global_emit_lock = []
 	// emit an event for an attribute key. the order 	
 	this.emit = function(key, event){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
+		var lock_key = '_lock_' + key
+		
+		if(this[lock_key]) return
+
+		this[lock_key] = true
 
 		var proto = this
 		var stack
@@ -204,12 +208,7 @@ define.class(function(require, constructor){
 		}
 
 		if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
-			var item = stack[j]
-			if(global_emit_lock.indexOf(item) === -1){
-				global_emit_lock.push(item)
-				item.call(this, event)
-				global_emit_lock.pop()
-			}
+			stack[j].call(this, event)
 		}
 
 		var proto = this
@@ -217,16 +216,13 @@ define.class(function(require, constructor){
 			if(proto.hasOwnProperty(listen_key)){
 				var listeners = proto[listen_key]
 				for(var j = 0; j < listeners.length; j++){
-					var item = listeners[j]
-					if(global_emit_lock.indexOf(item) === -1){
-						global_emit_lock.push(item)
-						item.call(this, event)
-						global_emit_lock.pop()
-					}
+					listeners[j].call(this, event)
 				}
 			}
 			proto = Object.getPrototypeOf(proto)
 		}
+		
+		this[lock_key] = false
 	}
 
 	// add a listener to an attribute
