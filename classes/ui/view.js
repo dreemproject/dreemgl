@@ -448,7 +448,7 @@ define.class('$system/base/node', function(require){
 		if(this.initialized){
 			if(typeof this._bgimage === 'string'){
 				// Path to image was specified
-				require.async(this._bgimage).then(function(result){
+				require.async(this._bgimage, 'jpeg').then(function(result){
 					this.setBgImage(result)
 				}.bind(this))
 			}
@@ -546,7 +546,9 @@ define.class('$system/base/node', function(require){
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
-		if(this.screen.device && this.screen.device.redraw) this.screen.device.redraw()
+		if(this.screen.device && this.screen.device.redraw) {
+			this.screen.device.redraw()
+		}
 	}
 	
 	// updates all the shaders

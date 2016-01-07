@@ -17,7 +17,9 @@
 
 define.class(function ($server$, service) {
 
-    this.attributes = {active: Config({type: Object, value:{}})};
+    this.attributes = {
+        active: {}
+    };
 
     this.notify = function(id, type, action) {
         var active = this.active;

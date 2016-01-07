@@ -33,7 +33,7 @@ define.class(function ($ui$, view, label, $examples$guide$, movie, $widgets$, js
 					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./examples/guide/search.js)'}),
 					jsviewer({flex: 1, overflow:'scroll', alignself: 'stretch', source: this.searchCode, fontsize: 14, bgcolor: "#000030", multiline: true}),
 					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./examples/extdemo/index.js)'}),
-					jsviewer({flex: 1,overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false})
+					jsviewer({flex: 1, overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false})
 				),
 				view({flex: 1, flexdirection:'row', padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7"}, cells)
 			)

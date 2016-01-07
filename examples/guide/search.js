@@ -5,9 +5,9 @@ define.class(function(require, $server$, service) {
 
     this.attributes = {
         // The string to search for in the OMDB database
-        keyword: Config({type: String, value: ""}),
+        keyword: "",
         // List of movie objects returned from server
-        results: Config({type: Array, value: []})
+        results: []
     };
 
     this.onkeyword = function (event) {
