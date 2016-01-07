@@ -181,16 +181,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
 		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
 
-		 this.bezier = function(percent,C1,C2,C3,C4) {		
-			
+		this.bezier = function(percent,C1,C2,C3,C4) {					
 			var b1 = B1(percent);
 			var b2 = B2(percent);
 			var b3 = B3(percent);
-			var b4 = B4(percent);
-			
+			var b4 = B4(percent);			
 			return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
 		}
-			
+
 		this.position = function(){
 			var a = mesh.x;
 			var a2 = mesh.x+0.001;
@@ -209,7 +207,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-//				this.color_blend = 'src_alpha * src_color + dst_color'
 
 		this.color = function(){
 			//return 'blue'

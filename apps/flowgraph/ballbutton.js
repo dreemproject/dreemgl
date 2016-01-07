@@ -11,6 +11,7 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 			triangle:false,
 			triangleangle:0
 		}
+		
 		this.ontriangleangle = function(){
 			var tri = this.find("thetri");
 			if (tri)
@@ -20,7 +21,7 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 				}
 		}
 		
-		this.ballsize = function(){
+		this.onballsize = function(){
 			this.width = this.ballsize;
 			this.height = this.ballsize;
 			this.borderradius = this.ballsize/2;
@@ -54,7 +55,8 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 		this.cursor = "pointer" 
 		this.alignitems = "center";
 		this.justifycontent = "center" ;
-		this.bgcolor = function(){
+		
+		this.onbgcolor = function(){
 			
 			var hsv = vec4.toHSV(this.bgcolor);
 			var lighter = vec4.fromHSV(hsv[0], hsv[1]*0.5, Math.min(1, hsv[2]*1.5), 1);
@@ -72,6 +74,7 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 		this.render =function(){
 			if (this.icon && this.icon.length > 0)
 			return [icon({icon:this.icon, alignself:"center", fgcolor:wire("this.parent.bordercolor") })];
+		
 			if (this.triangle){
 				return [this.triangledisp({name:"thetri" })]
 			}

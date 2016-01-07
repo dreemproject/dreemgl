@@ -269,7 +269,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.render =function(){
 			this.hovertext = this.title+ (this.type?(": "+ this.type):"");
 			return [
-				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
+				ballbutton({borderwidth:2, bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
 				label({marginleft:5, text:uppercaseFirst(this.title), bg:false, alignself:"center"})
 			]
 		}
@@ -302,7 +302,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 			return [
 				label({text:uppercaseFirst(this.name), bg:false, alignself:"center", marginright: 5}),
-				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
+				ballbutton({borderwidth:2, bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}
 	})

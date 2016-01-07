@@ -114,7 +114,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.col1 = this.hovercolor1
 		this.col2 = this.hovercolor2
 		this.shadowopacity = 1.0;
-		this.bordercolor = vec4("transparent");
+		//this.bordercolor = vec4("transparent");
 		
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
@@ -126,7 +126,7 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		this.col1 = Mark(this.buttoncolor1, first)
 		this.col2 = Mark(this.buttoncolor2, first)
 		this.shadowopacity = 0.0;
-		this.bordercolor = this.neutralbordercolor;
+	//	this.bordercolor = this.neutralbordercolor;
 		if(this.iconres)this.iconres.fgcolor = this.textcolor
 		if(this.buttonres) this.buttonres.fgcolor = this.textcolor;
 	}
@@ -137,14 +137,14 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		//this.animate({col1:{0:vec4('red'),3:vec4('green')}})
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
-		this.bordercolor = this.neutralbordercolor;
+		//this.bordercolor = this.neutralbordercolor;
 		if(this.iconres)this.iconres.fgcolor = this.textactivecolor
 		if(this.buttonres) this.buttonres.fgcolor = this.textactivecolor;
 	}
 
 	this.init = function(){
 		this.statenormal(true)
-		this.neutralbordercolor = this.bordercolor;
+	//	this.neutralbordercolor = this.bordercolor;
 	
 	}
 
