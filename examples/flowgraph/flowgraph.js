@@ -673,6 +673,12 @@ define.class('$ui/view', function(require,
 		});	
 	}
 	
+	this.undo = function(){
+		this.sourceset.undo();
+	}
+	this.redo = function(){
+		this.sourceset.redo();
+	}
 	this.render = function(){
 		return [
 			menubar({menus:[
@@ -682,6 +688,12 @@ define.class('$ui/view', function(require,
 						{name: "Rename composition", clickaction:function(){this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
+			{name:"Edit", commands:[
+				{name:"Undo", icon:"undo", clickaction:function(){this.undo();}.bind(this)},
+				{name:"Redo",icon:"redo",  clickaction:function(){this.redo();}.bind(this)}
+				
+			]}
+				,
 			{name:"Help", commands:[
 				{name:"About Flowgraph", clickaction:function(){this.helpAbout();return true;}.bind(this)},
 				{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
@@ -689,8 +701,8 @@ define.class('$ui/view', function(require,
 			]}
 				]})		
 			,splitcontainer({}
-				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
-					,dockpanel({title:"Composition" }
+				,splitcontainer({flex:0.1, flexdirection:"column", direction:"horizontal"}
+					,dockpanel({title:"Composition" , flex: 0.2}
 						//,searchbox()
 						
 						,treeview({flex:1, dataset: this.sourceset})

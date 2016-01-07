@@ -70,6 +70,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				if (!ds.children || ds.children.length == 0){
 					res.push(this.outer.classlibclass({classdesc: ds,folder:data.name, fgcolor:this.fgcolor}));
 				}
+				else{
+					console.log(ds);
+					res.push(this.outer.libraryfolder({dataset: ds, fgcolor:this.fgcolor}));
+				}
 			}
 			
 			return foldcontainer({title:data.name, basecolor:vec4("#303030"),padding:0,bordercolor:vec4("#3b3b3b"),icon:undefined},view({bg:0, flex:1,flexdirection:"column"},res));
