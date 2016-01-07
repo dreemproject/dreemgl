@@ -59,7 +59,7 @@ define.class( function(require, $ui$, view, label, menubutton){
 		labelres.push(label({margin:vec4(3,0,3,0),text:this.infotext, fgcolor: "white", alignself:"center", bg:false}));
 	}
 	if (this.statustext && this.statustext.length > 0 && this.statustext !== "undefined"){
-		labelres.push(label({margin:vec4(13,0,0,0),text:this.statustext, fgcolor: "#a8a8a8", alignself:"center", bg:false}));
+		labelres.push(label({margin:vec4(13,0,4,0),text:this.statustext, fgcolor: "#a8a8a8", alignself:"center", bg:false}));
 	}
 		return view({bg:false, flex:1, justifycontent:"space-between" }, view({bg:false,alignself:"center"},mres), view({bg:false,alignself:"center"},labelres));
 	}

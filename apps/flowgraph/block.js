@@ -16,6 +16,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	// the style classes 
 	
+	this.hovertext = "";
+	
 	this.mainwidth = 250;
 	this.style = {	
 		label_head:{bg:0, margin:vec4(6,3,4,0), bold:true},
@@ -216,6 +218,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.mouseover = function(){
 		this.over = true;
+		this.screen.status = this.hovertext;
 		this.updatecolor();
 	}
 		
@@ -235,20 +238,30 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	define.class(this, "inputbutton", function($ui$, view, label){
-		this.bg = false;
+		this.bg = {pickonly:true};
 		this.attributes = {
 			name:"thing",
-			title:"tadaa" 
+			title:"tadaa",
+			type:""
 		}
-				this.marginbottom = 4;
+		
+		this.marginbottom = 4;
 
+		
+		
 		this.clicked = function(){
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
 			fg.setConnectionEndpoint(bl.name, this.name);	
 		}	
+		
+		this.mouseover  = function(){
+			this.screen.status = this.hovertext;
+		}
+
 
 		this.render =function(){
+			this.hovertext = this.title+ (this.type?(": "+ this.type):"");
 			return [
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
 				label({marginleft:5, text:this.title, bg:false, alignself:"center"})
@@ -257,18 +270,30 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	})
 	
 	define.class(this, "outputbutton", function($ui$, view, label){
-		this.bg = false;
+		this.bg = {pickonly:true};
 		this.attributes = {
-			name:"thing"		}
+			name:"thing"		,
+			title:"thing",
+			type:""
+			}
 		
+		this.mouseover  = function(){
+			this.screen.status = this.hovertext;
+		}
 		this.clicked = function(){					
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
 			fg.setConnectionStartpoint(bl.name, this.name);			
 		}
+		
+		this.init = function(){
+		
+		}
 		this.marginbottom = 4;
 		
 		this.render =function(){
+				this.hovertext = this.title+ (this.type?(": "+ this.type):"");
+		
 			return [
 				label({text:this.name, bg:false, alignself:"center", marginright: 5}),
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				

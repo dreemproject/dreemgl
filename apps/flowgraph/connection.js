@@ -16,7 +16,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
 		focussedwidth: Config({type:float, value:3}),
 		hoveredwidth: Config({type:float, value:3}),
-		bgcolor: Config({motion:"linear", duration: 0.1}),
+		color1: Config({type:vec4, value:vec4("blue"),motion:"linear", duration: 0.1}),
+		color2: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
+		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
 		hasball: true
 	
@@ -39,9 +41,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 		
 	this.init = function(){
-		this.neutralcolor = this.bgcolor;
+		this.neutralcolor1 = this.color1;
+		this.neutralcolor2 = this.color2;
 		this.neutrallinewidth = this.linewidth;
 		this.find("flowgraph").allconnections.push(this);	
+		
+		this.updatecount = 0;
+
 	}
 	
 	this.keydownDelete = function(){
@@ -60,16 +66,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.updatecolor = function(){	
 		if (this._inselection) {
-			this.bgcolor = this.focussedcolor;
+			this.color1 = this.focussedcolor;
+			this.color2 = this.focussedcolor;
 			this.linewidth = this.focussedwidth;
 		}
 		else{
 			if (this.over){
-				this.bgcolor = this.hoveredcolor;
+				this.color1 = this.hoveredcolor;
+				this.color2 = this.hoveredcolor;
+				
 				this.linewidth = this.hoveredwidth;
 			}
 			else{
-				this.bgcolor = this.neutralcolor;
+				this.color1 = this.neutralcolor1;
+				this.color2 = this.neutralcolor2;
 				this.linewidth = this.neutrallinewidth;
 			}
 		}
@@ -179,11 +189,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-				this.color_blend = 'src_alpha * src_color + dst_color'
+//				this.color_blend = 'src_alpha * src_color + dst_color'
 
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
-			return vec4(vec3(0.3) + view.bgcolor.xyz*1.9,a);
+			return vec4(vec3(0.3) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.9,a);
 			return vec4(view.bgcolor.xyz,a);
 		}	
 	}) 
@@ -235,7 +245,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
   
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
-			return vec4(view.bgcolor.xyz,a*0.3);
+			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
 			return vec4(vec3(0.5) + view.bgcolor.xyz*1.3,a);
 		}	
 	}) 
@@ -246,11 +256,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var F = this.find(this._from);
 		var T = this.find(this._to);
 		
-	
+		var color2 = undefined;
+		var color1 = undefined;
 		if (F){
 			var out = F.findChild(this._fromoutput);
 			var yoff = 0;
 			if (out) {
+				color2 = out.bgcolor;
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
@@ -268,6 +280,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var inp = T.findChild(this._toinput);
 			var yoff = 0;
 			if (inp) {
+				color1 = inp.bgcolor;
+				
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;
 				yoff += inp.parent.parent.layout.top + 10;
@@ -282,9 +296,17 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.topos = this.localMouse();;
 		}
 		
+		
+		if (color1 && !color2) color2 = color1;else if (color2 && !color1) color1 = color2;
+		if (color1) this.neutralcolor1 = this.color1 = Mark(color1, !this.updatecount);
+		if (color2) this.neutralcolor2 = this.color2 =  Mark(color2, !this.updatecount);
+		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+		this.updatecount++;
+		
 		var H = this.findChild("handle");
 		
 		if (H){
+			H.bordercolor = this.centralcolor;
 			H.pos = vec2((this.frompos[0] + this.topos[0])*0.5 - 12,(this.frompos[1] + this.topos[1])*0.5 - 12);
 		}
 	}
@@ -294,7 +316,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
 				this.keydownDelete()
 			}.bind(this)}])
-		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#303030", bordercolor:wire("this.parent.bgcolor")})];
+		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#303030"})];
 		return [];
 	}
 })

@@ -27,6 +27,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 		globalmouserightup: Config({type:Event}),
 		globalmousewheelx: Config({type:Event}),
 		globalmousewheely: Config({type:Event}),
+		status:""
 	}
 
 	this.bg = false

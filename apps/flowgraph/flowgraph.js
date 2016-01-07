@@ -277,6 +277,9 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.init = function(){		
+		this.screen.onstatus = function(){
+			this.find("themenu").statustext = this.screen.status;
+		}
 		this.currentselection = [];
 		this.currentblock = undefined;
 		this.currentconnection = undefined;		
@@ -693,7 +696,7 @@ define.class('$ui/view', function(require,
 	}
 	this.render = function(){
 		return [
-			menubar({menus:[
+			menubar({name:"themenu", menus:[
 				{name:"File", commands:[
 					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
 					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},
