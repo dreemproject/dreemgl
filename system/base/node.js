@@ -778,8 +778,8 @@ define.class(function(require, constructor){
 				var part = ref[k]
 				if(k === ref.length - 1){
 					// lets add a listener 
-					if(!obj || !obj.isAttribute(part)){
-						console.error("Attribute does not exist: "+ref.join('.')+" in wiring " + this[wiredfn_key].toString())
+					if(!obj || !obj.isAttribute || !obj.isAttribute(part)){
+						console.error("Attribute does not exist: "+ref.join('.') + " (at " + part + ") in wiring " + this[wiredfn_key].toString())
 						continue
 					}
 

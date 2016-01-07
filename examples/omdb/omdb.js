@@ -1,4 +1,4 @@
-define.class("$server/service", function(require) {
+define.class("$examples/request/get", function() {
 
     this.attributes = {
         // Base API URL
@@ -6,35 +6,29 @@ define.class("$server/service", function(require) {
         // The string to search for in the OMDB database
         keyword: Config({type: String}),
         // List of movie objects returned from server
-        results: Config({type: Array, value: []})
+        results: []
     };
 
     this.onkeyword = function (event) {
-
-        var http = require('http');
-
-        var req = http.request({
-            hostname: "www.omdbapi.com",
-            path: "/?s=" + this.keyword
-        }, function(res){
-            console.log(res);
-        });
-
-        req.end();
-
-
-        var keyword = event.value;
-        //var request = require('request');
-        //if (keyword && request) {
-        //    request(this.apiurl + keyword.replace(/[^a-z0-9_-]/ig, '+'), (function (error, response, body) {
-        //        if (!error && response.statusCode == 200) {
-        //            var res = JSON.parse(body);
-        //            this.results = res["Search"];
-        //        }
-        //    }).bind(this))
-        //} else if (!request) {
-        //    console.log('WARNING: if "request" is missing, please cd to "./examples/guide/" and run "npm install"')
-        //}
+        var kw = event.value;
+        if (kw) {
+            this.url = this.apiurl + kw.replace(/[^a-z0-9_-]/ig, '+');
+        } else {
+            this.url = null;
+        }
     };
+
+    this.onresponse = function (event) {
+        var body = event.value;
+        if (body) {
+            var res = JSON.parse(body);
+            if (res && res.Search) {
+                this.results = res.Search;
+            } else {
+                this.results = []
+            }
+        }
+    }
+
 
 });
