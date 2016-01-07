@@ -572,6 +572,12 @@ define.class(function(require, constructor){
 			}
 			this._attributes[key] = newconfig
 			if('value' in config) this[key] = config.value
+			if('listeners' in config){
+				var listeners = config.listeners
+				for(var i = 0; i < listeners.length; i++){
+					this.addListener(key, listeners[i])
+				}
+			}
 			return
 		}
 
@@ -605,6 +611,8 @@ define.class(function(require, constructor){
 		}
 		this._attributes[key] = config
 		
+		if(config.listeners) this[listen_key] = config.listeners
+
 		var setter
 		// define attribute gettersetters
 
