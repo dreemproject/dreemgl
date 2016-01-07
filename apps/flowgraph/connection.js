@@ -184,6 +184,56 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			return vec4(view.bgcolor.xyz,a);
 		}	
 	}) 
+	
+	define.class(this, "glowconnectionshader", this.Shader,function($ui$, view){	
+		this.mesh = vec2.array()
+		
+		for(var i = 0;i<100;i++){
+			this.mesh.push([i/100.0,-0.5])
+			this.mesh.push([i/100.0, 0.5])
+		}
+					
+		this.drawtype = this.TRIANGLE_STRIP
+		
+		this.B1 = function (t) { return t * t * t; }
+		this.B2 = function (t) { return 3 * t * t * (1 - t); }
+		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
+		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
+
+		 this.bezier = function(percent,C1,C2,C3,C4) {		
+			
+			var b1 = B1(percent);
+			var b2 = B2(percent);
+			var b3 = B3(percent);
+			var b4 = B4(percent);
+			
+			return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
+		}
+			
+		this.position = function(){
+			var a = mesh.x;
+			var a2 = mesh.x+0.001;
+			var b = mesh.y * view.linewidth;
+			
+			var ddp = view.topos - view.frompos;
+			
+			var curve = min(100.,length(ddp)/2);
+			posA = this.bezier(a, view.frompos, view.frompos + vec2(curve,0), view.topos - vec2(curve,0), view.topos);
+			posB = this.bezier(a2, view.frompos, view.frompos + vec2(curve,0), view.topos - vec2(curve,0), view.topos);
+			
+			var dp = normalize(posB - posA);
+			
+			var rev = vec2(-dp.y, dp.x);
+			posA += rev * b;
+			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
+			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
+		}
+		
+		this.color = function(){
+			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+			return vec4(view.bgcolor.xyz,a);
+		}	
+	}) 
 
 	this.bg = this.connectionshader;
 	this.calculateposition = function(){
@@ -238,7 +288,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
 				this.keydownDelete()
 			}.bind(this)}])
-		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#3b3b3b", bordercolor:wire("this.parent.bgcolor")})];
+		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#303030", bordercolor:wire("this.parent.bgcolor")})];
 		return [];
 	}
 })

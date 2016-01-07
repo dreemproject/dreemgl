@@ -37,7 +37,9 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 			this.pressedcolor1 = lighter;
 			this.pressedcolor2 = lighter;
 		}
-
+		
+		this.justifycontent = "center"
+		
 		this.render =function(){
 			if (this.icon && this.icon.length > 0)
 			return [icon({icon:this.icon, alignself:"center", fgcolor:wire("this.parent.bordercolor") })];

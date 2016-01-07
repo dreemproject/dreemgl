@@ -8,11 +8,25 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			
 	this.cursor = "move";
 	this.position = "absolute" ;
-	this.bgcolor = vec4("#6c6c6c" )
+	this.bgcolor = vec4("#292929" )
 	this.padding = 0;
 	this.borderradius = 10;
 	this.borderwidth = 2;
-	this.bordercolor = vec4("#6c6c6c")
+	this.bordercolor = vec4("#606060")
+	
+	// the style classes 
+	
+	this.mainwidth = 250;
+	this.style = {	
+		label_head:{bg:0, margin:vec4(6,3,4,0), bold:true},
+		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
+		view_header:{width:this.mainwidth, bg:0, flex:1, justifycontent:"space-between"},
+		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},
+		view_between1:{bg:false, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
+		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
+		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
+		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+	}
 	
 	this.attributes = {
 		flowdata:{},
@@ -226,7 +240,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			name:"thing",
 			title:"tadaa" 
 		}
-		
+				this.marginbottom = 4;
+
 		this.clicked = function(){
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
@@ -236,7 +251,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.render =function(){
 			return [
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
-				label({text:this.title, bg:false, alignself:"center"})
+				label({marginleft:5, text:this.title, bg:false, alignself:"center"})
 			]
 		}
 	})
@@ -251,24 +266,16 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var	fg = this.find("flowgraph");
 			fg.setConnectionStartpoint(bl.name, this.name);			
 		}
+		this.marginbottom = 4;
 		
 		this.render =function(){
 			return [
-				label({text:this.name, bg:false, alignself:"center"}),
+				label({text:this.name, bg:false, alignself:"center", marginright: 5}),
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}
 	})
 	
-	// the style classes 
-	this.style = {
-		label_head:{bg:0, margin:vec4(6,0,4,0)},
-		view_main:{bgcolor:"#343434", height: 40,width:240, flex: 1, margin:1},
-		view_between1:{bg:false, width:240, flex: 1, justifycontent:"space-between"},
-		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
-		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
-		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
-	}
 	
 	this.renderInputs = function(){
 		var res = [];
@@ -290,10 +297,19 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	}
 
+	this.removeBlock = function(){
+		this.find("flowgraph").removeBlock(this);
+	}
+	
 	this.render = function(){
 		return [
-			label({text:this.title,class:'head'})
-			,view({class:'main'})
+			view({class:'header'}
+				,label({text:this.title,class:'head'})
+				,button({class:"header", icon:"remove",click:function(){this.removeBlock();}.bind(this)})
+			)
+			,view({class:'main'},
+				view({bgimage:require("./placeholder.png") })
+			)
 			,view({class:'between1'}
 				,view({class:'head',render: function(){return this.renderInputs()}.bind(this)}
 				
