@@ -8,12 +8,12 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 	this.attributes = {
 		oldname:""	
 	}
-	
+	this. flexdirection = "column";
 	this.justifycontent = "flex-start";
 	this.alignitems = "flex-start";
 	this.render =function(){
 		return [
-			view({ flexdirection:"column", padding:20,bgcolor: vec4("#292929")},
+			view({bg:0}, view({ flexdirection:"column", padding:20,bgcolor: vec4("#292929")},
 				view({margin:10, flexdirection:"row",bg:false}, 
 					label({text:"old name:",bg:false}),
 					textbox({value:this.oldname, enabled: false, marginleft: 20, bgcolor:"#202020", multiline:false})
@@ -26,6 +26,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 					button({padding:10, text:"OK", icon:"check", click: function(){this.screen.closeModal(this.find("newnamebox").value);} }),
 					button({padding: 10, marginleft:10, icon:"close", text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)
+			)
 			)
 		]
 	}

@@ -73,7 +73,7 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));
 			
 		
-			var res2 = [view({bg:0},res), icon({alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down" })]
+			var res2 = [view({bg:0},res), icon({alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
 			return res2;
 		}
 
