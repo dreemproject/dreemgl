@@ -147,12 +147,16 @@ define.class(function(require){
 		var requrl = req.url
 
 		// otherwise handle as static file
-		if(requrl.indexOf('/proxy?') == 0){
+		if(requrl.indexOf('/proxy?') === 0){
 			// lets connect a http request and forward it back!
 			var tgt_url = url.parse(decodeURIComponent(requrl.slice(7)))
+			var tgtpath = tgt_url.path;
+			if (tgt_url.search) {
+				tgtpath = tgtpath +tgt_url.search
+			}
 			var proxy_req = http.request({
 				hostname: tgt_url.hostname,
-				path: tgt_url.path + tgt_url.search,
+				path: tgtpath,
 				headers: {
 					accept: req.headers.accept,
 					'user-agent': req.headers['user-agent'],

@@ -3,7 +3,7 @@
  software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
+define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, device) {
 
     this.slidetitle = "Direct Method Calls via POST API";
 
@@ -11,11 +11,10 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
     this.flexdirection = "column";
 
     this.attributes = {
-        deviceList: Config({type: Array}),
-        devices: Config({type: Object}),
-        apiCode: Config({type: String}),
-        clientCode: Config({type: String, value:
-        'require "net/htttp";\n' +
+        deviceList: [],
+        devices: {},
+        apiCode: "",
+        clientCode: 'require "net/htttp";\n' +
         'require "json";\n' +
         '\n' +
         'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
@@ -31,7 +30,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
         '  puts "sending JSON: #{req.body}"\n' +
         '  http.request(req)\n' +
         '\n' +
-        'end'})
+        'end'
     };
 
     this.ondevices = function (e) {
@@ -57,7 +56,6 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
             }
         }
 
-
         return [
             label({marginleft:15, fgcolor:'red', bgcolor:'transparent', text:'Use POST API when data is coming from external source, like IoT devices!'}),
             view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
@@ -66,7 +64,7 @@ define.class(function ($ui$, view, label, $widgets$, jsviewer, $$, device) {
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', fontsize:14, flex: 0, alignself: 'stretch', text:'DreemGL Server (./examples/extdemo/devices.js)'}),
                     jsviewer({ flex: 1, overflow:'scroll', alignself: 'stretch', source: this.apiCode, fontsize: 13, bgcolor: "#000030", multiline: true}),
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, alignself: 'stretch', text:'Method call via API (Ruby Example)'}),
-                    label({ flex: 1, alignself: 'stretch', text: this.clientCode, fontsize: 12, fgcolor:'yellow', bgcolor: "#000030", multiline: false})
+                    textbox({ flex: 1, alignself: 'stretch', value:this.clientCode, readonly:true, fontsize: 12, fgcolor:'yellow', bgcolor: "#000030", multiline: false})
                 ),
                 view(
                     {flexdirection: 'column', flex: 1, alignself: 'stretch', clipping:true, padding: 4, margin: 10, bgcolor:'transparent'},

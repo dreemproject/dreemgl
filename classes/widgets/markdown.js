@@ -60,7 +60,7 @@ define.class(function($ui$, view, label){
 				// default text
 			}
 			
-			res.push(label({fgcolor: this.fontcolor, margin: Margin, text: L, fontsize: fontsize, multiline: true, align: this.align}));
+			res.push(label({fgcolor: this.fontcolor, bg:false, margin: Margin, text: L, fontsize: fontsize, multiline: true, align: this.align}));
 		}
 		
 		return res;
@@ -90,7 +90,7 @@ define.class(function($ui$, view, label){
 				return this.buildMarkdown(lines);
 			}
 			else{
-				return [label({fgcolor:"#303030", text:"unknown format for body!\n\n" + this.body.toString(), multiline: true, fontsize:12})];
+				return [label({fgcolor:"#303030", bg:false, text:"unknown format for body!\n\n" + this.body.toString(), multiline: true, fontsize:12})];
 			}
 		}
 	}

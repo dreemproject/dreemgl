@@ -1,6 +1,6 @@
 define.class(function($server$, composition, $ui$, screen, view, label, require){
   this.render = function(){ return [
-      screen({clearcolor:'#484230'},
+      screen({name:'default', clearcolor:'#484230'},
              view({
 				 flexflow: 'row wrap'
 				 ,flexdirection:'row'

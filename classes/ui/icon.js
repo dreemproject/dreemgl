@@ -13,11 +13,11 @@ define.class( function(require, label){
 		icon: Config({type:String, value:'wrench'})
 	}
 
-	this.init = function(){
+	this.oninit = function(){
 		this.text = table[this.icon]
 	}
 	
-	this.icon = function(){
+	this.onicon = function(){
 		this.text = table[this.icon]
 	}
 	
@@ -27,6 +27,7 @@ define.class( function(require, label){
 
 	// the font awesome 
 	var table = {
+		'undefined':'',
 		'500px':'\uf26e',
 		'adjust':'\uf042',
 		'adn':'\uf170',

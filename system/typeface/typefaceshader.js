@@ -412,7 +412,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var matrix = view.totalmatrix  * view.viewmatrix
 		
 		// compute the main position and one rectgle atan fontsize for the pixelscale
-		var pos1 = vec4(mesh.pos.xy + mesh.shift, 0, 1) * matrix
+		var pos1 = vec4(mesh.pos.xy + mesh.shift , 0, 1) * matrix
 		var pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.z), 0, 1) * matrix
 		
 		// compute the pixelscaling used in the pixelshader AA

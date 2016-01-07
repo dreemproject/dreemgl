@@ -96,7 +96,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.fgcolor = vec4("black")
 		this.bgcolor = "#3b3b3b";
 		this.flexdirection = "row"
-	
+		this.flexwrap = 'nowrap'
 		// Open/close this node
 		this.toggle = function(){
 			if (this.item){

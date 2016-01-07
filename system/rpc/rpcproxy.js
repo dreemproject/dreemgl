@@ -78,7 +78,7 @@ define.class('$system/base/node', function(require, exports){
 						props.value = undefined
 					}
 					else props.value = value
-					proxy.defineAttribute(key, props)
+					proxy.defineAttribute(key, Config(props))
 				}
 				else{
 					var prop = proto[key]

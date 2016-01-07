@@ -33,7 +33,7 @@ define.class(function(exports){
 
 
 	// Set emitcode to true to emit dali code
-	DaliApi.emitcode = true;
+	DaliApi.emitcode = false;
 
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
@@ -45,13 +45,14 @@ define.class(function(exports){
 	 * Static method to add an actor to the stage.
 	 * In our usage, it will add the actor to the layer added to the stage.
 	 * @param {object} actor DaliActor object
+	 * @param {object} layer DaliLayer object to use. If missing, the root layer
+	 *                 is used.
 	 */
-	DaliApi.addActor = function(actor) {
-		DaliApi.layer.add(actor.daliactor);
+	DaliApi.addActor = function(actor, layer) {
+		if (!layer)
+			layer = DaliApi.layer;
 
-		if (DaliApi.emitcode) {
-			console.log('DALICODE: stagelayer.add(' + actor.name() + ');');
-		}
+		layer.add(actor);
 	}
 
 
@@ -64,6 +65,8 @@ define.class(function(exports){
 	 * @param {string} dalilib Path to dali lib (optional)
 	 */
 	DaliApi.initialize = function(width, height, name, dalilib) {
+		DaliLayer = require('./dali_layer')
+
 		var window= {
 			x:0,
 			y:0,
@@ -102,14 +105,11 @@ define.class(function(exports){
 
 			// Create a top-level 2D layer to the stage
 			var dali = DaliApi.dali;
-			DaliApi.layer = new dali.Layer();
-			DaliApi.layer.behavior = "Dali::Layer::LAYER_2D";
-			dali.stage.add(DaliApi.layer);
+			DaliApi.layer = new DaliLayer();
+			dali.stage.add(DaliApi.layer.dalilayer);
 
 			if (DaliApi.emitcode) {
-				console.log('DALICODE: var stagelayer = new dali.Layer();');
-				console.log('DALICODE: stagelayer.behavior = "Dali::Layer::LAYER_2D";');
-				console.log('DALICODE: dali.stage.add(stagelayer);');
+				console.log('DALICODE: dali.stage.add(' + DaliApi.layer.name() + ');');
 			}
 
 		}
@@ -118,6 +118,7 @@ define.class(function(exports){
 			console.log(e.stack);
 		}
     }
+
 
 	/**
 	 * @method createDaliObjects

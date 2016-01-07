@@ -187,7 +187,7 @@
 		function require(dep_path, ext){
 			// skip nodejs style includes
 			var abs_path = define.joinPath(base_path, define.expandVariables(dep_path))
-			if(!define.fileExt(abs_path)) abs_path = abs_path + '.js'
+			if(!ext && !define.fileExt(abs_path)) abs_path = abs_path + '.js'
 
 			// lets look it up
 			var module = define.module[abs_path]
@@ -234,11 +234,11 @@
 			return new Promise(function(resolve, reject){
 				if(define.factory[path]){
 					// if its already asynchronously loading.. 
-					var module = require(path)
+					var module = require(path, ext)
 					return resolve(module)
 				}
 				define.loadAsync(dep_path, from_file, ext).then(function(){
-					var module = require(path)
+					var module = require(path, ext)
 					resolve(module)
 				}, reject)
 			})
@@ -409,7 +409,7 @@
 			}
 		})
 		Object.defineProperty(Constructor, 'body', {value:body})
-
+		body.class_args = args
 		return body.apply(Constructor.prototype, args)
 	}
 
@@ -750,7 +750,7 @@
 				var ext = inext === undefined ? define.fileExt(url): inext;
 				var abs_url, fac_url
 
-				if(url.indexOf('http:') === 0){ // we are fetching a url..
+				if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
 					fac_url = url
 					abs_url = define.$root + '/proxy?' + encodeURIComponent(url)
 				}
@@ -2183,7 +2183,7 @@
 
 		// global functions
 		exports.flow = function(value){
-			console.log(value)
+			console.log('global>', value)
 			return value
 		}
 
@@ -2305,10 +2305,12 @@
 		}
 
 		// parsing a wired function as string
-		exports.wire = function wire(string){
-			src = "return " + string
-			var fn = new Function(src)
-			fn.is_wired = true
+		exports.wire = function wire(fn){
+			if (typeof(fn) !== 'function') {
+				src = "return " + fn.toString()
+				fn = new Function('find','rpc', src)
+			}
+			fn.is_wired = true;
 			return fn
 		}
 

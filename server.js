@@ -84,10 +84,12 @@ function main(){
 		'system':'$root/system',
 		'resources':'$root/resources',
 		'examples':'$root/examples',
+		'apps':'$root/apps',
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
 		'ui':'$root/classes/ui',
+		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
 	}

@@ -4,8 +4,10 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/node', function(require){
+
 	var Animate = require('$system/base/animate')
 	var FlexLayout = require('$system/lib/layout')
+	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 	
 	var view = this.constructor
@@ -225,7 +227,6 @@ define.class('$system/base/node', function(require){
 		// wether this view has focus
 		miss: Config({type:Event}),
 
-		
 		// drop shadow size
 		dropshadowradius:Config({type:float, value:20}),
 		// drop shadow movement
@@ -379,12 +380,12 @@ define.class('$system/base/node', function(require){
 		}
 		else{
 			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = prev? prev.totalmatrix: mat4.identity()
-			else this.totalmatrix = prev? prev.totalmatrix: mat4()
-			this.viewportmatrix = prev? prev.viewportmatrix: mat4()
+			if(this._viewport) this.totalmatrix = mat4.identity()
+			else this.totalmatrix = mat4()
+			this.viewportmatrix = mat4()
 		}
 
-		if(this._bgimage){
+		if(this._bgimage || this._wiredfn_bgimage){
 			// set the bg shader
 			this.bg = this.hardimage
 		}
@@ -427,19 +428,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._bgimage){
-			// Assume image was loaded via require (a Texture.Image object)
-			var image = this._bgimage;
-			if(typeof this._bgimage === 'string'){
-				// Path to image was specified
-				image = new Shader.Texture.Image(this._bgimage);
-			}
-
-			var img = this.bgshader.texture = Shader.Texture.fromImage(image);
-			if(isNaN(this._size[0])){
-				this._size = img.size
-				this.relayout()
-			}
-			else this.redraw()
+			this.onbgimage()
 		}
 
 		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
@@ -453,6 +442,29 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.sortShaders()
+	}
+
+	this.onbgimage = function(){
+		if(this.initialized){
+			if(typeof this._bgimage === 'string'){
+				// Path to image was specified
+				require.async(this._bgimage, 'jpeg').then(function(result){
+					this.setBgImage(result)
+				}.bind(this))
+			}
+			else{
+				this.setBgImage(this._bgimage)
+			}
+		}
+	}
+
+	this.setBgImage = function(image){
+		var img = this.bgshader.texture = Shader.Texture.fromImage(image);
+		if(isNaN(this._size[0])){
+			this._size = img.size
+			this.relayout()
+		}
+		else this.redraw()
 	}
 
 	// emit an event upward (to all parents) untill a listener is hit
@@ -534,7 +546,9 @@ define.class('$system/base/node', function(require){
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
-		if(this.screen.device && this.screen.device.redraw) this.screen.device.redraw()
+		if(this.screen.device && this.screen.device.redraw) {
+			this.screen.device.redraw()
+		}
 	}
 	
 	// updates all the shaders
@@ -689,7 +703,8 @@ define.class('$system/base/node', function(require){
 
 		if(this.vscrollbar){
 			var scroll = this.vscrollbar
-			var totalsize = Math.floor(this.layout.boundh), viewsize = Math.floor(this.layout.height * this.zoom)
+			var totalsize = Math.floor(this.layout.boundh)
+			var viewsize = Math.floor(this.layout.height * this.zoom)
 			if(totalsize > viewsize+1){
 				scroll._visible = true
 				scroll._total = totalsize
@@ -706,7 +721,8 @@ define.class('$system/base/node', function(require){
 		}
 		if(this.hscrollbar){
 			var scroll = this.hscrollbar
-			var totalsize = Math.floor(this.layout.boundw), viewsize = Math.floor(this.layout.width* this.zoom)
+			var totalsize = Math.floor(this._layout.boundw)
+			var viewsize = Math.floor(this._layout.width* this.zoom)
 			if(totalsize > viewsize + 1){
 				scroll._visible = true
 				scroll._total = totalsize
@@ -722,7 +738,8 @@ define.class('$system/base/node', function(require){
 	}
 
 	// called by doLayout, to update the matrices to layout and parent matrix
-	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput){
+	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
+
 		// allow pre-matrix gen hooking
 		if(this.atMatrix) this.atMatrix()
 
@@ -747,7 +764,7 @@ define.class('$system/base/node', function(require){
 		}
 		if(width > boundsobj.boundw) boundsobj.boundw = width
 		if(height > boundsobj.boundh) boundsobj.boundh = height
-	
+		if(bailbound) return
 
 		var matrix_changed = parent_changed
 		if (parentviewport == '3d'){// && !this._mode ){	
@@ -793,7 +810,6 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._viewport){
-
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
 			}
@@ -811,13 +827,12 @@ define.class('$system/base/node', function(require){
 		var children = this.children
 		if(children) for(var i = 0; i < children.length; i++){
 			var child = children[i]
-			if(child._viewport) continue // it will get its own pass
 			
 			var clayout = child.layout
 			clayout.absx = layout.absx + clayout.left 
 			clayout.absy = layout.absy + clayout.top
 
-			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj)
+			child.updateMatrices(this.totalmatrix, parentmode, matrix_changed, boundsobj, child._viewport)
 		}
 		
 		if(!boundsinput){
@@ -968,6 +983,25 @@ define.class('$system/base/node', function(require){
 
 	this.bgcolorfn = function(pos){
 		return bgcolor
+	}
+
+	this.appendChild = function(render){
+		// wrap our render function in a temporary view
+		var vroot = view()
+		// set up a temporary view
+		vroot.render = render
+		vroot.parent = this
+		vroot.screen = this.screen
+		vroot.parent_viewport = this._viewport?this:this.parent_viewport
+		// render it
+		Render.process(vroot, undefined, undefined, true)
+		// move the children over
+		this.children.push.apply(this.children, vroot.children)
+		for(var i = 0; i < vroot.children.length; i++){
+			vroot.children[i].parent = this
+		}
+		// lets cause a relayout
+		this.relayout()
 	}
 
 	// standard bg is undecided

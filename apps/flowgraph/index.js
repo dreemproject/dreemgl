@@ -6,10 +6,28 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		var fs = require('fs')
 		this.name = 'fileio'
 
+		this.saveComposition = function(name, data){
+			fs.writeFile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
+		}
+
+		this.newComposition = function (name){
+			console.log("new composition creation requested:", inname, options);
+			// todo: create folder in default composition path
+			// todo: create default index.js using options from options.
+
+			// todo: if things go wrong, return false
+			return true;
+		}
+
+		this.getCompositionList = function(){
+			return [];
+		}
+		
+	
 		function readRecurDir(base, inname, ignoreset){
 			var local = path.join(base, inname)
 			var dir = fs.readdirSync(local)
-			var out = {name:inname, collapsed:1, children:[]}
+			var out = {isfolder:true, name:inname, collapsed:1, children:[]}
 			for(var i = 0; i < dir.length;i++){
 				var name = dir[i]
 				var mypath = path.join(local, name)
@@ -30,12 +48,29 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 					out.children.push(readRecurDir(local, name, ignoreset))
 				}
 				else{
-					out.children.push({name:name, size:stat.size})
+					out.children.push({name:name, isfolder:false, size:stat.size})
 				}
 			}
 			return out
 		}
 
+		// recursively read the flowgraph related class library
+		this.readFlowLibrary = function(ignoreset){
+			// lets read all paths.
+			// lets read the directory and return it
+			var root = {collapsed:0, children:[]}
+			
+			var pathset = ["flow"];
+			//for(var key in pathset){
+				//if(ignoreset.indexOf(key) !== -1) continue
+				var ret = readRecurDir(define.expandVariables(define['$flow']), '', [])
+				ret.name = "flow"
+				root.children.push(ret)
+			//}
+			return root
+			
+		}
+		
 		// recursively read all directories starting from a base path
 		// <name> the base path to start reading
 		// <ignoreset> files and directories to ignore while recursively expanding
@@ -68,7 +103,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 				flexwrap:"nowrap", 
 				flexdirection:"row",
 				style:{
-					"*":{
+					$:{
 						fontsize:12
 					}
 				}},

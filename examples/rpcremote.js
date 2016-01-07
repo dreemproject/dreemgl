@@ -1,7 +1,12 @@
 //Pure JS based composition
-define.class('$server/composition', function($server$, service, $ui$, screen, view, $behaviors$, draggable){ this.render = function(){ return [
+define.class('$server/composition', function(
+	$server$, service,
+	$ui$, screen, view, 
+	$behaviors$, draggable){ this.render = function(){ return [
 
 	service({
+		name:'myservice',
+		flowdata:{x:30,y:20},
 		test: 10,
 		dosomething: function(){
 			console.log("dosomething called on server")
@@ -13,6 +18,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 	}),
 	screen({
 		name:'mobile',
+		flowdata:{x:10,y:10},
 		// make an exportable attribute to something internal
 		mousepos: wire('this.main.pos')
 		},
@@ -25,6 +31,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 	),
 	screen({
 		name:'remote',
+		flowdata:{x:30,y:00},
 		movepos: wire('this.rpc.mobile.mousepos')
 		},
 		view({

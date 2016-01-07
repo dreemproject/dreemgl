@@ -48,6 +48,7 @@ define.class(function(require, baseclass){
 	}
 
 	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
+//console.log('allocDrawTarget', width, height, drawtarget, passid);
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
@@ -181,7 +182,7 @@ define.class(function(require, baseclass){
 		var view = this.view
 		var device = this.device
 		var layout = view._layout
-
+		var gl = device.gl
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 
 		if(isroot){
@@ -194,7 +195,7 @@ define.class(function(require, baseclass){
 			var twidth = layout.width * ratio, theight = layout.height * ratio
 			this.allocDrawTarget(twidth, theight, this.view, 'pick_buffer', passid)
 		}
-
+		gl.disable(gl.SCISSOR_TEST)
 		device.bindFramebuffer(this.pick_buffer || null)
 		device.clear(0,0,0,0)
 		
@@ -301,7 +302,7 @@ define.class(function(require, baseclass){
 		for(var j = 0; j < shaders.length; j++){
 			// lets draw em
 			var shader = shaders[j]
-			if(shader.pick_only || !shader.visible) continue // was pick only
+			if(shader.pickonly || !shader.visible) continue // was pick only
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
@@ -310,11 +311,12 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.drawColor = function(isroot, time){
+	this.drawColor = function(isroot, time, clipview){
 
 		var view = this.view
 		var device = this.device
 		var layout = view._layout
+		var gl = device.gl
 
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 	
@@ -337,6 +339,26 @@ define.class(function(require, baseclass){
 
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
+
+		gl.disable(gl.SCISSOR_TEST)
+
+		if(isroot){
+			/*
+			if(clipview){
+				var ratio = this.device.frame.ratio
+				var xs = this.device.frame.size[0] / ratio
+				var ys = this.device.frame.size[1] / ratio
+				var clayout = clipview._layout
+				var c1 = vec2.mul_mat4(vec2(0, 0),clipview.viewportmatrix)
+				var c2 = vec2.mul_mat4(vec2(clayout.width, clayout.height),clipview.viewportmatrix)
+				var x1 = c1[0], y1 = c1[1], x2 = c2[0] - x1, y2 = c2[1] - y1
+				gl.enable(gl.SCISSOR_TEST)
+				gl.scissor((x1)*ratio, (ys - y2 - y1)*ratio, x2 * ratio, (y2)*ratio)//x1*2, y1*2, x2*2, y2*2)
+			}
+			*/
+		}
+
+		device.clear(view._clearcolor)
 
 		var draw = view
 		while(draw){

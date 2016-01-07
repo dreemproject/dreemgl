@@ -129,12 +129,21 @@ define.class(function(require, exports){
 	}
 
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
-		if(n.kind == 'num')
-			this.add(n.raw, this.group++, exports._Value, exports._Number)
+		if(n.kind === undefined){
+			var str 
+			if(typeof n.value === 'string'){
+				if(n.value.indexOf('"')!==-1) str = "'" + n.value + "'"
+				else str = '"' + n.value + '"'
+			}
+			else str = '' + n.value
+			this.add(str, this.group++, exports._Value, exports._Number)
+		}
+		else if(n.kind == 'num')
+			this.add(n.raw!==undefined?n.raw:''+n.value, this.group++, exports._Value, exports._Number)
 		else if(n.kind == 'string')
-			this.add(n.raw, this.group++, exports._Value, exports._String)
+			this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', this.group++, exports._Value, exports._String)
 		else
-			this.add(n.raw, this.group++, exports._Value)
+			this.add(n.raw!==undefined?n.raw:''+n.value, this.group++, exports._Value)
 	}
 	
 	this.This = function(n){//: { },
@@ -179,10 +188,10 @@ define.class(function(require, exports){
 
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
-			if(!has_newlines && i){
-				this.comma(exports._Object, this.group++)
-				this.space()
-			}
+			//if(!has_newlines && i){
+			//	this.comma(exports._Object, this.group++)
+			//	this.space()
+			//}
 			if(this.lastIsNewline()) this.tab(this.indent)
 			if(has_newlines) this.comments(prop.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
@@ -192,7 +201,10 @@ define.class(function(require, exports){
 				this.colon(exports._Object)
 				this.expand(prop.value)
 			}
-			if(i < n.keys.length - 1) this.comma(exports._Object, this.group++)
+			if(i < n.keys.length - 1){
+				this.comma(exports._Object, this.group++)
+				this.space()
+			}
 			if(has_newlines && !this.comments(prop.cmr)){
 				this.newline()
 			}

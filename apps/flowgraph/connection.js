@@ -11,11 +11,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		fromoutput: Config({type:String, value:""}),
 		toinput: Config({type:String, value:""}),
 		linewidth: Config({type:float, value:3, duration:0.5, motion:"bounce"}),
+		glowlinewidth: Config({type:float, value:12, duration:0.5, motion:"bounce"}),
 		focussedcolor: Config({type:vec4, value:vec4("#d0d0d0"), meta:"color" }),
 		hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
 		focussedwidth: Config({type:float, value:3}),
 		hoveredwidth: Config({type:float, value:3}),
-		bgcolor: Config({motion:"linear", duration: 0.1}),
+		color1: Config({type:vec4, value:vec4("blue"),motion:"linear", duration: 0.1}),
+		color2: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
+		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
 		hasball: true
 	
@@ -28,7 +31,6 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.redraw();
 		this.updatecolor ();
 	}
-
 	
 	this.destroy = function(){
 		fg = this.find("flowgraph");
@@ -37,13 +39,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			if (index > -1) fg.allconnections.splice(index, 1);
 		}
 	}
-	
-	
-	
+		
 	this.init = function(){
-		this.neutralcolor = this.bgcolor;
+		this.neutralcolor1 = this.color1;
+		this.neutralcolor2 = this.color2;
 		this.neutrallinewidth = this.linewidth;
 		this.find("flowgraph").allconnections.push(this);	
+		
+		this.updatecount = 0;
+
 	}
 	
 	this.keydownDelete = function(){
@@ -58,21 +62,24 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.screen.defaultKeyboardHandler(this, v);
 	}
 
-	
 	this.over = false;
 	
 	this.updatecolor = function(){	
 		if (this._inselection) {
-			this.bgcolor = this.focussedcolor;
+			this.color1 = this.focussedcolor;
+			this.color2 = this.focussedcolor;
 			this.linewidth = this.focussedwidth;
 		}
 		else{
 			if (this.over){
-				this.bgcolor = this.hoveredcolor;
+				this.color1 = this.hoveredcolor;
+				this.color2 = this.hoveredcolor;
+				
 				this.linewidth = this.hoveredwidth;
 			}
 			else{
-				this.bgcolor = this.neutralcolor;
+				this.color1 = this.neutralcolor1;
+				this.color2 = this.neutralcolor2;
 				this.linewidth = this.neutrallinewidth;
 			}
 		}
@@ -81,20 +88,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.focus =function(){
 	}
 	
-	
 	this.mouseleftdown = function(){
 		var fg = this.find("flowgraph");
-		
-		
+			
 		if (!this.screen.keyboard.shift && !fg.inSelection(this)){
 			fg.clearSelection();
 		}
+	
 		if (this.screen.keyboard.shift && fg.inSelection(this)){
 			fg.removeFromSelection(this);
 			fg.updateSelectedItems();
 	
 			return;
 		}
+		
 		fg.setActiveConnection(this);
 		fg.updateSelectedItems();
 		
@@ -114,8 +121,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	}
 	
-	this.mouseleftup = function(p){
-	
+	this.mouseleftup = function(p){	
 		this.mousemove = function(){};
 	}
 
@@ -183,23 +189,80 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-		
+//				this.color_blend = 'src_alpha * src_color + dst_color'
+
 		this.color = function(){
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 			return vec4(view.bgcolor.xyz,a);
+		}	
+	}) 
+	
+	define.class(this, "glowconnectionshader", this.Shader,function($ui$, view){	
+		this.mesh = vec2.array()
+		
+		for(var i = 0;i<100;i++){
+			this.mesh.push([i/100.0,-0.5])
+			this.mesh.push([i/100.0, 0.5])
+		}
+					
+		this.drawtype = this.TRIANGLE_STRIP
+		
+		this.B1 = function (t) { return t * t * t; }
+		this.B2 = function (t) { return 3 * t * t * (1 - t); }
+		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
+		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
+
+		 this.bezier = function(percent,C1,C2,C3,C4) {		
+			
+			var b1 = B1(percent);
+			var b2 = B2(percent);
+			var b3 = B3(percent);
+			var b4 = B4(percent);
+			
+			return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
+		}
+			
+		this.position = function(){
+			var a = mesh.x;
+			var a2 = mesh.x+0.001;
+			var b = mesh.y * view.glowlinewidth;
+			
+			var ddp = view.topos - view.frompos;
+			
+			var curve = min(100.,length(ddp)/2);
+			posA = this.bezier(a, view.frompos, view.frompos + vec2(curve,0), view.topos - vec2(curve,0), view.topos);
+			posB = this.bezier(a2, view.frompos, view.frompos + vec2(curve,0), view.topos - vec2(curve,0), view.topos);
+			
+			var dp = normalize(posB - posA);
+			
+			var rev = vec2(-dp.y, dp.x);
+			posA += rev * b;
+			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
+			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
+		}
+		//this.color_blend = 'src_alpha * src_color + dst_color'
+  
+		this.color = function(){
+			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
+			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);
 		}	
 	}) 
 
 	this.bg = this.connectionshader;
+	this.glowconnectionshader = 1;
 	this.calculateposition = function(){
 		var F = this.find(this._from);
 		var T = this.find(this._to);
 		
-	
+		var color2 = undefined;
+		var color1 = undefined;
 		if (F){
 			var out = F.findChild(this._fromoutput);
 			var yoff = 0;
 			if (out) {
+				color2 = out.bgcolor;
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
@@ -217,6 +280,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var inp = T.findChild(this._toinput);
 			var yoff = 0;
 			if (inp) {
+				color1 = inp.bgcolor;
+				
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;
 				yoff += inp.parent.parent.layout.top + 10;
@@ -231,15 +296,27 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.topos = this.localMouse();;
 		}
 		
+		
+		if (color1 && !color2) color2 = color1;else if (color2 && !color1) color1 = color2;
+		if (color1) this.neutralcolor1 = this.color1 = Mark(color1, !this.updatecount);
+		if (color2) this.neutralcolor2 = this.color2 =  Mark(color2, !this.updatecount);
+		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+		this.updatecount++;
+		
 		var H = this.findChild("handle");
 		
 		if (H){
+			H.bordercolor = this.centralcolor;
 			H.pos = vec2((this.frompos[0] + this.topos[0])*0.5 - 12,(this.frompos[1] + this.topos[1])*0.5 - 12);
 		}
 	}
 
 	this.render = function(){
-		if (this.hasball) return [ballbutton({name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#3b3b3b", bordercolor:wire("this.parent.bgcolor")})];
+		if (this.hasball) return [ballbutton({click:function(){
+			this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
+				this.keydownDelete()
+			}.bind(this)}])
+		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#303030"})];
 		return [];
 	}
 })

@@ -12,6 +12,7 @@ define.class(function(require, $ui$, textbox){
 	this.attributes = {
 		// The code to display
 		source: Config({type:String, value:""}),
+		sourceset: null,
 		// wrap the text
 		wrap: Config({type:Boolean, value:false})
 	}
@@ -142,7 +143,8 @@ define.class(function(require, $ui$, textbox){
 			var textbuf = this.mesh = this.newText()
 
 			textbuf.font = view.font
-			var ast = Parser.parse(view.source)
+
+			var ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
 
 			textbuf.fontsize = view.fontsize
 			textbuf.add_y = textbuf.line_height

@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class( function(require, $ui$, view, label, button){	
+define.class( function(require, $ui$, view, label, menubutton){	
 
 	this.bgcolor = "#585858" 
 	this.flexdirection = "row" 
@@ -27,9 +27,8 @@ define.class( function(require, $ui$, view, label, button){
 		for(var m in this.menus){
 			var res = []
 			var menu = this.menus[m]
-
 			mres.push(
-				button({
+				menubutton({
 					buttoncolor1:"#585858",
 					buttoncolor2:"#585858",
 					hovercolor1:"#737373",
@@ -41,12 +40,10 @@ define.class( function(require, $ui$, view, label, button){
 					margin:vec4(4,0,0,0),
 					padding:5,  
 					text:menu.name, 
-					menucommands: 
-					menu.commands, 
+					commands: menu.commands, 
 					click: function(){
 						// lets open a modal dialog
-						this.screen.contextMenu(this.menucommands, this.layout.absx,this.layout.absy + this.layout.height);
-						
+						this.screen.contextMenu(this.commands, this.layout.absx,this.layout.absy + this.layout.height);
 					}
 			}))
 		}
@@ -62,7 +59,7 @@ define.class( function(require, $ui$, view, label, button){
 		labelres.push(label({margin:vec4(3,0,3,0),text:this.infotext, fgcolor: "white", alignself:"center", bg:false}));
 	}
 	if (this.statustext && this.statustext.length > 0 && this.statustext !== "undefined"){
-		labelres.push(label({margin:vec4(13,0,0,0),text:this.statustext, fgcolor: "#a8a8a8", alignself:"center", bg:false}));
+		labelres.push(label({margin:vec4(13,0,4,0),text:this.statustext, fgcolor: "#a8a8a8", alignself:"center", bg:false}));
 	}
 		return view({bg:false, flex:1, justifycontent:"space-between" }, view({bg:false,alignself:"center"},mres), view({bg:false,alignself:"center"},labelres));
 	}

@@ -3,14 +3,23 @@ define.class(function(){
 	// alright what does a draggable do?... well
 	this.mouseleftdown = function(event){
 		var start = event.local
+		var startx = this.pos[0];
+		var starty = this.pos[1];	
+		
+		var startposition = this.parent.localMouse();
 		// ok we start dragging a rectangle
 		// how does that work?
-		var origin = this.pos
 		this.mousemove = function(event){
-			var pos = event.local
-			var delta = [(pos[0]- start[0]), (pos[1]- start[1])]
-			this.pos = [origin[0] + delta[0], origin[1] + delta[1]]
-			origin[0] += delta[0], origin[1] += delta[1]
+			
+			p = this.parent.localMouse()
+			var dx = p[0] - startposition[0];
+			var dy = p[1] - startposition[1];
+	
+			console.log(dx,dy);
+	
+
+			this.pos = [startx  + dx, starty + dy]
+			//origin[0] += delta[0], origin[1] += delta[1]
 		}
 	}
 

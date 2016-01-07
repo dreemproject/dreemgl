@@ -160,7 +160,8 @@ define.class(function( $ui$, view, label, icon, $$, require){
 		}
 
 		if (this.text && this.text.length > 0){			
-			this.buttonres = label({alignself:"center", bgcolor:this.bgcolor, fgcolor:this.textcolor,  position: "relative", text: this.text})
+			
+			this.buttonres = label({alignself:"center", marginleft:this.iconres?4:0, bgcolor:this.bgcolor, fgcolor:this.textcolor,  position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 		

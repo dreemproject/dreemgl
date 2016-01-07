@@ -609,6 +609,9 @@ console.log('************************************************************');
 	// A view (the this pointer) makes one call to drawArrays for each shader.
 	// A typical number is two (one for border and one for hardimage
 	this.drawArrays = function(devicegl, sub, start, end){
+if (this.texture) {
+  console.trace('drawArrays');
+}
 //console.trace('*****drawArrays', (this.view? this.view.id : '<screen>'));
 		// console.log('PROG', this.vtx_state.code);
 		//if(this.mydbg) debugger

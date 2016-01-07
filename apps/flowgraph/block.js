@@ -8,13 +8,36 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			
 	this.cursor = "move";
 	this.position = "absolute" ;
-	this.bgcolor = vec4("#6c6c6c" )
+	this.bgcolor = vec4("#292929" )
 	this.padding = 0;
 	this.borderradius = 10;
 	this.borderwidth = 2;
-	this.bordercolor = vec4("#6c6c6c")
+	this.bordercolor = vec4("#606060")
+	
+	function uppercaseFirst (inp) {
+		if (!inp || inp.length == 0) return inp;
+		return inp.charAt(0).toUpperCase() + inp.slice(1);
+	}
+	
+	
+	// the style classes 
+	
+	this.hovertext = "";
+	
+	this.mainwidth = 250;
+	this.style = {	
+		label_head:{bg:0, margin:vec4(6,3,4,0), bold:true},
+		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
+		view_header:{width:this.mainwidth, bg:0, flex:1, justifycontent:"space-between"},
+		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},
+		view_between1:{bg:false, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
+		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
+		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
+		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+	}
 	
 	this.attributes = {
+		flowdata:{},
 		pos: Config({persist: true}),
 		inputattributes: Config({type:Object, value:["color"]}),
 		outputattributes: Config({type:Object, value:["clicked","something"]}),
@@ -24,12 +47,49 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		borderselected: Config({type:float, value:0, motion:"linear", duration: 0.1}),
 		focusbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#d0d0d0", meta:"color"}),
 		hoverbordercolor: Config({motion:"linear", duration: 0.1, type:vec4, value:"#e0e0e0", meta:"color"}),
-		inselection : Config({type:boolean, value:false})
+		inselection : Config({type:boolean, value:false}),
+		inputs: [{name:"a0", title:"test input!", color:vec4("blue")}],
+		outputs:[{name:"b1", title:"output? ", color:vec4("yellow")}]
 	}
-		
-	this.tooltip = 'issablock'
 
+	this.colormap = {
+		float:vec4("white"),
+		vec2:vec4("yellow"),
+		vec3:vec4("blue"),
+		vec4:vec4("blue"),			
+		Array:vec4("green"),
+		String:vec4("orange"),
+		Object:vec4("purple")
+	}
+
+	this.tooltip = 'issablock'
+	this.oninputs = function()
+	{
+		for (var i = 0;i<this.inputs.length;i++){
+			var inp = this.inputs[i];
+			
+			if (inp.type && this.colormap[inp.type.name]){
+				inp.color = this.colormap[inp.type.name];
+			}
+			else{
+				inp.color = vec4("gray");
+			}
+		}
+	}
+	
+	this.onoutputs = function(){
+		for (var i = 0;i<this.outputs.length;i++){
+			var outp = this.outputs[i];
 		
+			if (outp.type && this.colormap[outp.type.name]){
+				outp.color = this.colormap[outp.type.name];
+			}
+			else{
+				outp.color = vec4("gray");
+			}
+		}
+	}
+	
 	this.bordercolorfn = function(pos){
 		var check = (int(mod(0.34*( gl_FragCoord.x + gl_FragCoord.y ),2.)) == 1)?1.0:0.0;		
 		return mix(bordercolor, mix(vec4(focusbordercolor.xyz*.8,1.0), focusbordercolor, check), borderselected);
@@ -41,20 +101,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	this.updatecolor = function(){	
-			if (this._inselection) {
-				this.bordercolor = this.focusbordercolor;
-				this.borderselected = 1;
+		if (this._inselection) {
+			this.bordercolor = this.focusbordercolor;
+			this.borderselected = 1;
+		}
+		else{
+			this.borderselected = 0;
+			if (this.over){
+				this.bordercolor = this.hoverbordercolor;
 			}
 			else{
-				this.borderselected = 0;
-				if (this.over){
-					this.bordercolor = this.hoverbordercolor;
-				}
-				else{
-					this.bordercolor = this.neutralbordercolor;
-				}
+				this.bordercolor = this.neutralbordercolor;
 			}
 		}
+	}
 		
 		
 	this.move = function(x,y) {
@@ -66,6 +126,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var fg = this.find("flowgraph")
 		fg.setActiveBlock(this);
 		fg.updateconnections();
+		
 	}
 	
 	this.keydownUparrow = function(){this.move(0,-1);}
@@ -111,7 +172,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	this.mouseleftdown = function(p){
-		this.moveToFront()
+		//this.moveToFront()
 		var props = this.find("mainproperties");
 		if (props) props.target = this.name;
 		
@@ -133,24 +194,29 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.startposition = this.parent.localMouse();
 		fg.setupSelectionMove();
 		this.mousemove = function(evt){
-			p = this.parent.localMouse()
+			var p = this.parent.localMouse()
 			var dx = p[0] - this.startposition[0];
 			var dy = p[1] - this.startposition[1];
 	
 			var	fg = this.find("flowgraph");
-			fg.moveSelected(dx,dy);
+			fg.moveSelected(dx, dy, false);
 			
 			
 		}.bind(this);
 	}
 	
 	this.mouseleftup = function(p){
+		var p = this.parent.localMouse()
 		var x = Math.floor(this.pos[0]/this.snap)*this.snap;
 		var y = Math.floor(this.pos[1]/this.snap)*this.snap;
+		var dx = p[0] - this.startposition[0];
+		var dy = p[1] - this.startposition[1];
+
 		this.pos = vec2(x,y);
 		this.redraw();
 		this.relayout();
-		
+		this.find("flowgraph").moveSelected(dx,dy,true)
+
 		this.mousemove = function(){};
 	}
 	
@@ -158,6 +224,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.mouseover = function(){
 		this.over = true;
+		this.screen.status = this.hovertext;
 		this.updatecolor();
 	}
 		
@@ -177,73 +244,110 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	define.class(this, "inputbutton", function($ui$, view, label){
-		this.bg = false;
+		this.bg = {pickonly:true};
 		this.attributes = {
-			name:"thing"
+			name:"thing",
+			title:"tadaa",
+			type:""
 		}
+		
+		this.marginbottom = 4;
+
+		
 		
 		this.clicked = function(){
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
-			fg.setconnectionendpoint(bl.name, this.name);
-		
+			fg.setConnectionEndpoint(bl.name, this.name);	
 		}	
+		
+		this.mouseover  = function(){
+			this.screen.status = this.hovertext;
+		}
+
 
 		this.render =function(){
+			this.hovertext = this.title+ (this.type?(": "+ this.type):"");
 			return [
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
-				label({text:this.name, bg:false, alignself:"center"})
+				label({marginleft:5, text:uppercaseFirst(this.title), bg:false, alignself:"center"})
 			]
 		}
 	})
 	
 	define.class(this, "outputbutton", function($ui$, view, label){
-		this.bg = false;
+		this.bg = {pickonly:true};
 		this.attributes = {
-			name:"thing"		}
+			name:"thing"		,
+			title:"thing",
+			type:""
+			}
 		
+		this.mouseover  = function(){
+			this.screen.status = this.hovertext;
+		}
 		this.clicked = function(){					
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
-			fg.setconnectionstartpoint(bl.name, this.name);			
+			fg.setConnectionStartpoint(bl.name, this.name);			
 		}
 		
+		this.init = function(){
+		
+		}
+		this.marginbottom = 4;
+		
 		this.render =function(){
+				this.hovertext = this.title+ (this.type?(": "+ this.type):"");
+		
 			return [
-				label({text:this.name, bg:false, alignself:"center"}),
+				label({text:uppercaseFirst(this.name), bg:false, alignself:"center", marginright: 5}),
 				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}
 	})
 	
-	// the style classes 
-	this.style = {
-		label_head:{bg:0, margin:vec4(6,0,4,0)},
-		view_main:{bgcolor:"#343434", height: 40,width:140, flex: 1, margin:1},
-		view_between1:{bg:false, width:140, flex: 1, justifycontent:"space-between"},
-		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
-		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
-		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+	
+	this.renderInputs = function(){
+		var res = [];
+		for(var i = 0;i<this.inputs.length;i++){
+			var inp = this.inputs[i];
+			res.push(this.inputbutton({name:inp.name, title:inp.title, bgcolor:inp.color}))	
+		}
+		return res;
+	}
+	
+	this.renderOutputs = function(){
+		var res = [];
+		for(var i = 0;i<this.outputs.length;i++){
+			var outp = this.outputs[i];
+			res.push(this.outputbutton({name:outp.name, title:outp.title, bgcolor:outp.color}))	
+		}
+		return res;
+		
+		
 	}
 
+	this.removeBlock = function(){
+		this.find("flowgraph").removeBlock(this);
+	}
+	
 	this.render = function(){
 		return [
-			label({text:this.title,class:'head'})
-			,view({class:'main'})
-			,view({class:'between1'}
-				,view({class:'head'}
-					,this.inputbutton({name:"input 1", bgcolor:"#ff00ff"})
-					,this.inputbutton({name:"input 2", bgcolor:"#800000"})
-					,this.inputbutton({name:"input 3", bgcolor:"#ffff00"})
-				)
-				,view({class:'between2'}
-					,this.outputbutton({name:"output 1", bgcolor:"#a78f68" })
-					,this.outputbutton({name:"output 2", bgcolor:"#ff8000"})
-				)
+			view({class:'header'}
+				,label({text:this.title,class:'head'})
+				,button({class:"header", icon:"remove",click:function(){this.removeBlock();}.bind(this)})
 			)
-			,view({name:"addbuttons"}
-				,button({icon:"plus"})
-				,button({icon:"plus"})
+			,view({class:'main'},
+				view({bgimage:require("./placeholder.png") })
+			)
+			,view({class:'between1'}
+				,view({class:'head',render: function(){return this.renderInputs()}.bind(this)}
+				
+				)
+				,view({class:'between2',render: function(){return this.renderOutputs()}.bind(this)}
+					
+				)
 			)
 		]
 	}
