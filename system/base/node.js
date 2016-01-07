@@ -764,7 +764,6 @@ define.class(function(require, constructor){
 				if(k === ref.length - 1){
 					// lets add a listener 
 					if(!obj || !obj.isAttribute(part)){
-						console.log(">", obj, part)
 						console.error("Attribute does not exist: "+ref.join('.')+" in wiring " + this[wiredfn_key].toString())
 						continue
 					}
