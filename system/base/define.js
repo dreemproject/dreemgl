@@ -2308,7 +2308,7 @@
 		exports.wire = function wire(fn){
 			if (typeof(fn) !== 'function') {
 				src = "return " + fn.toString()
-				fn = new Function(src)
+				fn = new Function('find','rpc', src)
 			}
 			fn.is_wired = true;
 			return fn
