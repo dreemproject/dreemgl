@@ -152,7 +152,6 @@ define.class(function(require){
 			var tgt_url = url.parse(decodeURIComponent(requrl.slice(7)))
 			var tgtpath = tgt_url.path;
 			if (tgt_url.search) {
-				console.log(';;;',tgt_url)
 				tgtpath = tgtpath +tgt_url.search
 			}
 			var proxy_req = http.request({

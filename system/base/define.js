@@ -188,9 +188,6 @@
 			// skip nodejs style includes
 			var abs_path = define.joinPath(base_path, define.expandVariables(dep_path))
 			if(!ext && !define.fileExt(abs_path)) abs_path = abs_path + '.js'
-			if (ext) {
-				console.log('got here', ext, abs_path)
-			}
 
 			// lets look it up
 			var module = define.module[abs_path]
@@ -238,12 +235,10 @@
 				if(define.factory[path]){
 					// if its already asynchronously loading.. 
 					var module = require(path, ext)
-					console.log('here2>', path, ext, module)
 					return resolve(module)
 				}
 				define.loadAsync(dep_path, from_file, ext).then(function(){
 					var module = require(path, ext)
-					console.log('here>', path, ext, module)
 					resolve(module)
 				}, reject)
 			})
@@ -2188,7 +2183,7 @@
 
 		// global functions
 		exports.flow = function(value){
-			console.log(value)
+			console.log('global>', value)
 			return value
 		}
 

@@ -449,8 +449,6 @@ define.class('$system/base/node', function(require){
 			if(typeof this._bgimage === 'string'){
 				// Path to image was specified
 				require.async(this._bgimage, 'jpeg').then(function(result){
-					console.log('result', result)
-					console.dir(result)
 					this.setBgImage(result)
 				}.bind(this))
 			}
@@ -462,7 +460,6 @@ define.class('$system/base/node', function(require){
 
 	this.setBgImage = function(image){
 		var img = this.bgshader.texture = Shader.Texture.fromImage(image);
-		console.log('gota?', img, isNaN(this._size[0]), this.bgshader.texture)
 		if(isNaN(this._size[0])){
 			this._size = img.size
 			this.relayout()
@@ -540,9 +537,7 @@ define.class('$system/base/node', function(require){
 
 	// redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
-		console.log('<<<redraw>>>')
 		if(!this.parent_viewport || this.parent_viewport.draw_dirty === 3) return
-		console.log('<<<redraw2>>>')
 		var parent = this
 		while(parent){
 			var viewport = parent.parent_viewport
@@ -552,8 +547,6 @@ define.class('$system/base/node', function(require){
 			parent = viewport.parent
 		}
 		if(this.screen.device && this.screen.device.redraw) {
-			console.log('<<<redraw3>>>')
-
 			this.screen.device.redraw()
 		}
 	}
