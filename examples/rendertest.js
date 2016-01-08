@@ -61,7 +61,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 				borderradius:30,
 				bgcolor:'#CBD6D9'
 				}
-				,button({text:'I BUTTON!', flex:1, click:function(){
+				,button({text:'test', flex:1, click:function(){
 					this.parent.appendChild(function(){
 						return button({text:'hii',flex:1})
 					})
@@ -70,7 +70,6 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					,cube({dimension:vec3(1)})
 					,cube({dimension:vec3(1), translate:vec3(1.5,0,-1.5)})
 					,cube({dimension:vec3(1), translate:vec3(-1.5,0,1.5)})
-				
 				)
 				,mousedebug({flex:1,mode:'2D',margin:20})
 				,view({

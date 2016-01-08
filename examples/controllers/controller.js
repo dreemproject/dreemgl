@@ -1,7 +1,7 @@
 define.class("$ui/view", function() {
 
     this.attributes = {
-        activekey:'',
+        value:'',
         activekeys:[]
     };
 
@@ -11,7 +11,7 @@ define.class("$ui/view", function() {
             active.unshift(key);
             this.activekeys = active;
         }
-        this.activekey = key;
+        this.value = key;
     };
 
     this.unpress = function(key) {
@@ -20,7 +20,16 @@ define.class("$ui/view", function() {
             active.splice(active.indexOf(key), 1);
             this.activekeys = active;
         }
-        this.activekey = this.activekeys[0];
+        this.value = this.activekeys[0];
     };
+
+    this.onactivekeys = function() {
+        console.log("active key are now", this.activekeys)
+    }
+
+    this.onvalue = function() {
+        console.log("current value", this.value)
+    }
+
 
 });

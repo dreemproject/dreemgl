@@ -6,11 +6,31 @@
 define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 	
 	this.bgcolor = vec4(0,0,0,0.5);
+	
+	this.attributes = {
+		compositions: []
+	}
+	
+	this.init = function(){
+		this.rpc.fileio.getCompositionList().then(function(ret){
+			this.compositions = ret.value.children[0].children;
+		}.bind(this))
+	}
 	this.render =function(){
+		
+		var res = [];
+		
+		for(var i =0 ;i<this.compositions.length;i++){
+			var c= this.compositions[i];
+			console.log(c);
+			res.push(button({text:c.name,name:c.name, margin:4, click:function(){this.screen.closeModal(this.name);}}));
+		}
+		
 		return dialog({title:"Open composition", position:"relative"},
 			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) }
-			,
+			,res,
 			view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   }, 
+					
 					button({padding: 10, marginleft:10, icon:"close",text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)
 			)

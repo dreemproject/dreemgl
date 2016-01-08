@@ -7,14 +7,44 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 
 		this.attributes = {
 			ballsize: 16,
-			icon: ""
+			icon: "",
+			triangle:false,
+			triangleangle:0
 		}
 		
-		this.ballsize = function(){
+		this.ontriangleangle = function(){
+			var tri = this.find("thetri");
+			if (tri)
+			{
+				tri.angle = this.triangleangle - PI/2;
+				tri.bgcolor = this.bordercolor;
+			}
+		}
+		
+		this.onballsize = function(){
 			this.width = this.ballsize;
 			this.height = this.ballsize;
 			this.borderradius = this.ballsize/2;
 		}
+		
+		define.class(this, "triangledisp", function($ui$, view, label){
+			this.attributes= {angle: 0, radius:8}
+			this.bg = function(){
+				this.mesh = vec3.array();
+				this.mesh.push(0,0,0);
+				this.mesh.push((PI*2)/3,0,0);
+				this.mesh.push((PI*2*2)/3,0,0);
+				this.color = function(){
+					return view.bgcolor;
+				}
+				this.position = function(){
+					var p = vec2(sin(mesh.x-view.angle)*view.radius, cos(mesh.x - view.angle) * view.radius);
+					
+					return vec4(p.xy + vec2(0,7), 0, 1) * view.totalmatrix * view.viewmatrix
+
+				}
+			}
+		})
 		
 		this.borderradius = 8;
 		this.borderwidth = 3;
@@ -25,7 +55,8 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 		this.cursor = "pointer" 
 		this.alignitems = "center";
 		this.justifycontent = "center" ;
-		this.bgcolor = function(){
+		
+		this.onbgcolor = function(){
 			
 			var hsv = vec4.toHSV(this.bgcolor);
 			var lighter = vec4.fromHSV(hsv[0], hsv[1]*0.5, Math.min(1, hsv[2]*1.5), 1);
@@ -38,11 +69,24 @@ define.class('$ui/button', function(require, $ui$, view, icon, treeview, cadgrid
 			this.pressedcolor2 = lighter;
 		}
 		
+		this.onbordercolor = function(){
+			var tri = this.find("thetri");
+			if (tri)
+			{
+				tri.angle = this.triangleangle - PI/2;
+				tri.bgcolor = this.bordercolor;
+				}
+		}
+		
 		this.justifycontent = "center"
 		
 		this.render =function(){
 			if (this.icon && this.icon.length > 0)
 			return [icon({icon:this.icon, alignself:"center", fgcolor:wire("this.parent.bordercolor") })];
+		
+			if (this.triangle){
+				return [this.triangledisp({name:"thetri", bgcolor:wire("this.bordercolor") })]
+			}
 			return [];
 		}
 		

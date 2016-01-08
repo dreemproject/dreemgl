@@ -351,7 +351,9 @@ define.class('$system/base/node', function(require){
 
 	// returns the mouse in local coordinates
 	this.localMouse = function(){
-		return vec2(this.screen.remapMouse(this))
+		var ret = vec2(this.screen.remapMouse(this))
+	//	if(ret[0]<0) debugger
+		return ret
 	}
 
 	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
@@ -991,6 +993,7 @@ define.class('$system/base/node', function(require){
 		// set up a temporary view
 		vroot.render = render
 		vroot.parent = this
+		vroot.rpc = this.rpc
 		vroot.screen = this.screen
 		vroot.parent_viewport = this._viewport?this:this.parent_viewport
 		// render it
@@ -1152,7 +1155,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.color = function(){
-			var col = view.bgcolorfn(pos.xy)
+			var col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 

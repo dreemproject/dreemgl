@@ -13,14 +13,34 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		}
 
 		this.newComposition = function (name){
-			console.log("new composition creation requested:", inname, options);
+			console.log("new composition creation requested:", name);
 			// todo: create folder in default composition path
 			// todo: create default index.js using options from options.
 			// todo: if things go wrong, return false
-			return true;
+			var path = define.expandVariables(this.rootdirectory)+'/'+name
+			var file = path +'/index.js';
+			try{
+				fs.mkdirSync(path)
+			}catch(e){}
+
+			fs.writeFileSync(file,
+			"define.class('$server/composition',function(){\n"+
+			"	this.render = function(){ return [\n"+
+			"	]}\n"+
+			"})")
+			return  this.rootdirectory + '/' + name
 		}
 
 		this.getCompositionList = function(){
+			
+			var root = {collapsed:0, children:[]}
+			
+			var pathset = ["compositions"];
+			var ret = readRecurDir(define.expandVariables(define['$compositions']), '', [])
+			ret.name = "compositions"
+			root.children.push(ret)
+			return root
+
 			return [];
 		}
 		
@@ -56,17 +76,12 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 
 		// recursively read the flowgraph related class library
 		this.readFlowLibrary = function(ignoreset){
-			// lets read all paths.
-			// lets read the directory and return it
 			var root = {collapsed:0, children:[]}
 			
 			var pathset = ["flow"];
-			//for(var key in pathset){
-				//if(ignoreset.indexOf(key) !== -1) continue
-				var ret = readRecurDir(define.expandVariables(define['$flow']), '', [])
-				ret.name = "flow"
-				root.children.push(ret)
-			//}
+			var ret = readRecurDir(define.expandVariables(define['$flow']), '', [])
+			ret.name = "flow"
+			root.children.push(ret)
 			return root
 			
 		}

@@ -37,7 +37,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				fg.addBlock(this.folder,this.classdesc.name.substr(0,this.classdesc.name.length-3 ));
 			}
 		}
-		
+
+		this.doHover = function(){
+			this.screen.status = "Add block: " +this.classdesc.name.substr(0,this.classdesc.name.length-3 );
+		}
+
 		this.render = function(){
 			return [
 				//view({bgcolor:"#707070", width:30, height:30, borderwidth:1, borderradius:2, bordercolor:"#505050", margin:2, justifycontent:"center" }
@@ -46,7 +50,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				//,
 				view({justifycontent:"space-between", flex:1, bg:false},
 					label({text:this.classdesc.name.substr(0,this.classdesc.name.length-3 ), margin:3,fgcolor:this.fgcolor, bg:0, flex:1})
-					,button({icon:"plus", click:function(){this.addBlock()}.bind(this)})
+					,button({icon:"plus", mouseover:function(){this.doHover();}.bind(this),click:function(){this.addBlock()}.bind(this)})
 				)
 			]
 		}

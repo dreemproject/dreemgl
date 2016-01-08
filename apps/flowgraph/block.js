@@ -53,13 +53,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.colormap = {
-		float:vec4("white"),
+		float:vec4("red"),
+		FloatLike: vec4("red"),
 		vec2:vec4("yellow"),
 		vec3:vec4("blue"),
 		vec4:vec4("blue"),			
-		Array:vec4("green"),
+		Array:vec4(0.2,1,0,1),
 		String:vec4("orange"),
-		Object:vec4("purple")
+		Object:vec4(1,0,0.8,1)
 	}
 
 	this.tooltip = 'issablock'
@@ -267,9 +268,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 
 		this.render =function(){
-			this.hovertext = this.title+ (this.type?(": "+ this.type):"");
+			this.hovertext = "Input " + this.title+ (this.type?(": "+ this.type):"");
 			return [
-				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
+				ballbutton({borderwidth:2, bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
 				label({marginleft:5, text:uppercaseFirst(this.title), bg:false, alignself:"center"})
 			]
 		}
@@ -298,11 +299,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.marginbottom = 4;
 		
 		this.render =function(){
-				this.hovertext = this.title+ (this.type?(": "+ this.type):"");
+				this.hovertext = "Output " + this.title+ (this.type?(": "+ this.type):"");
 		
 			return [
 				label({text:uppercaseFirst(this.name), bg:false, alignself:"center", marginright: 5}),
-				ballbutton({bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
+				ballbutton({borderwidth:2, bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})				
 			]
 		}
 	})
@@ -310,8 +311,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.renderInputs = function(){
 		var res = [];
 		for(var i = 0;i<this.inputs.length;i++){
-			var inp = this.inputs[i];
-			res.push(this.inputbutton({name:inp.name, title:inp.title, bgcolor:inp.color}))	
+			var inp = this.inputs[i];			
+			res.push(this.inputbutton({name:inp.name, type:inp.type.name, title:inp.title, bgcolor:inp.color}))	
 		}
 		return res;
 	}
@@ -320,7 +321,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var res = [];
 		for(var i = 0;i<this.outputs.length;i++){
 			var outp = this.outputs[i];
-			res.push(this.outputbutton({name:outp.name, title:outp.title, bgcolor:outp.color}))	
+			res.push(this.outputbutton({name:outp.name, type:outp.type.name, title:outp.title, bgcolor:outp.color}))	
 		}
 		return res;
 	}
@@ -351,8 +352,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.render = function(){
 		return [
-			view({class:'header'}
-				,view({bg:0}
+			view({class:'header',alignitems:"center" }
+				,view({bg:0, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
 					,button({class:"header", icon:"pencil",click:function(){this.renameBlock();}.bind(this)})
 					)

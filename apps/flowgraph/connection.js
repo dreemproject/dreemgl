@@ -24,9 +24,33 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	}
 
+		
+		this.B1 = function (t) { return t * t * t; }
+		this.B2 = function (t) { return 3 * t * t * (1 - t); }
+		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
+		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
+
+		 this.bezier = function(percent,C1,C2,C3,C4) {		
+			
+			var b1 = this.B1(percent);
+			var b2 = this.B2(percent);
+			var b3 = this.B3(percent);
+			var b4 = this.B4(percent);
+			
+			//return 
+			
+				var A1 = vec2.vec2_mul_float32(C1, b1 )
+				var A2 = vec2.vec2_mul_float32(C2, b2 )
+				var A3 = vec2.vec2_mul_float32(C3, b3 )
+				var A4 = vec2.vec2_mul_float32(C4, b4 )
+
+			return vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));
+				
+		}
+		
 	this.noboundscheck = true
 	
-	this.inselection = function(){	
+	this.oninselection = function(){	
 		if (this._inselection == 1) this.bordercolor = this.focusbordercolor;else this.bordercolor = this.neutralbordercolor;		
 		this.redraw();
 		this.updatecolor ();
@@ -65,7 +89,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.over = false;
 	
 	this.updatecolor = function(){	
-		if (this._inselection) {
+		if (this.inselection) {
 			this.color1 = this.focussedcolor;
 			this.color2 = this.focussedcolor;
 			this.linewidth = this.focussedwidth;
@@ -82,6 +106,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.color2 = this.neutralcolor2;
 				this.linewidth = this.neutrallinewidth;
 			}
+		}
+		
+		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+				var H = this.findChild("handle");
+		
+		if (H){
+			H.bordercolor = this.centralcolor;
 		}
 	}
 	
@@ -114,11 +145,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 			var	fg = this.find("flowgraph");
 			fg.moveSelected(dx,dy);
-			
-			
 		}.bind(this);
-	
-	
 	}
 	
 	this.mouseleftup = function(p){	
@@ -161,16 +188,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
 		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
 
-		 this.bezier = function(percent,C1,C2,C3,C4) {		
-			
+		this.bezier = function(percent,C1,C2,C3,C4) {					
 			var b1 = B1(percent);
 			var b2 = B2(percent);
 			var b3 = B3(percent);
-			var b4 = B4(percent);
-			
+			var b4 = B4(percent);			
 			return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
 		}
-			
+
 		this.position = function(){
 			var a = mesh.x;
 			var a2 = mesh.x+0.001;
@@ -189,9 +214,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
 			return vec4(posA, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
-//				this.color_blend = 'src_alpha * src_color + dst_color'
 
 		this.color = function(){
+			//return 'blue'
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 			return vec4(view.bgcolor.xyz,a);
@@ -308,6 +333,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		if (H){
 			H.bordercolor = this.centralcolor;
 			H.pos = vec2((this.frompos[0] + this.topos[0])*0.5 - 12,(this.frompos[1] + this.topos[1])*0.5 - 12);
+			
+			var ddp = vec2.sub(this.topos, this.frompos);
+			//console.log(ddp);
+			var curve = min(100.,vec2.len(ddp)/2);
+			
+					var F2 = vec2.add(this.frompos, vec2(curve,0));
+					var T2 = vec2.add(this.topos, vec2(-curve,0));
+			var A1 = this.bezier(0.49, this.frompos, F2,T2, this.topos);
+			var A2 = this.bezier(0.51, this.frompos, F2,T2, this.topos);
+			var delta = vec2.sub(A1, A2);
+			var angle = Math.atan2(delta[1], delta[0]);
+			H.triangleangle = angle;
+			
+		
 		}
 	}
 
@@ -316,7 +355,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.screen.contextMenu([{name:"Remove", icon:"remove", clickaction:function(){
 				this.keydownDelete()
 			}.bind(this)}])
-		}.bind(this),name:"handle", position:"absolute", ballsize: 24, icon:"play", bgcolor:"#303030"})];
+		}.bind(this),name:"handle", position:"absolute", ballsize: 24, triangle:true, bgcolor:"#303030"})];
 		return [];
 	}
 })

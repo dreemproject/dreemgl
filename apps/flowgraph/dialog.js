@@ -18,10 +18,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 
 	this.flexdirection ="column" 
 	this.dropshadowopacity = 0.4;
-			this.padding=4;
-			this.dropshadowhardness=0,
-			this.dropshadowradius=20
-			this.dropshadowoffset=vec2(9,9);
+	this.padding=4;
+	this.dropshadowhardness=0,
+	this.dropshadowradius=20
+	this.dropshadowoffset=vec2(9,9);
 				
 	this.render = function(){
 		return [

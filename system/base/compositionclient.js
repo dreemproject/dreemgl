@@ -24,6 +24,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.session = previous.session
 			this.bus = previous.bus
 			this.rpc = previous.rpc
+			this.rpc.disconnectAll()
 			this.rpc.host = this
 			this.rendered = true
 		}

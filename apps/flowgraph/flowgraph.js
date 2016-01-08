@@ -83,7 +83,7 @@ define.class('$ui/view', function(require,
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.setupMove()
-		}		
+		}
 	}
 
 	this.moveSelected = function(dx, dy, store){
@@ -91,8 +91,21 @@ define.class('$ui/view', function(require,
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.updateMove(dx, dy, snap)
-			if(store) this.moveBlock(obj)
 		}
+
+		if(store){
+			this.sourceset.fork(function(){
+				for(var a in this.currentselection){
+					var obj = this.currentselection[a]
+					if(!(obj instanceof block)) continue
+					var flowdata = obj.flowdata
+					flowdata.x = obj.pos[0]
+					flowdata.y = obj.pos[1]
+					this.sourceset.setFlowData(obj.name, flowdata)
+				}
+			}.bind(this))
+		}
+
 		this.updateConnections()
 		this.updatePopupUIPosition()
 	}
@@ -114,7 +127,11 @@ define.class('$ui/view', function(require,
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock
 		if (block){
-			console.log("TODO: removing block!", block)
+
+			this.sourceset.fork(function(){
+				this.sourceset.removeBlock(block.name)
+			}.bind(this))
+
 			this.removeFromSelection(block)
 			this.setActiveBlock(undefined)
 			this.updateSelectedItems()
@@ -451,16 +468,6 @@ define.class('$ui/view', function(require,
 		console.log("TODODODODODODO: setBlockName - change name to", newname);
 	}
 	
-	this.moveBlock = function(block){
-
-		this.sourceset.fork(function(){
-			var flowdata = block.flowdata
-			flowdata.x = block.pos[0]
-			flowdata.y = block.pos[1]
-			this.sourceset.setFlowData(block.name, flowdata)
-		}.bind(this))
-	}
-
 	this.cancelConnection = function(){		
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
@@ -617,6 +624,7 @@ define.class('$ui/view', function(require,
 	}	
 
 	this.openComposition = function(){
+		this.screen.closeModal(false);
 		this.screen.openModal(function(){
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
@@ -629,13 +637,21 @@ define.class('$ui/view', function(require,
 			}} );
 			
 		}.bind(this)).then(function(res){
-			
+				if(res){
+					console.log(res);
+					this.screen.locationhash = {
+						composition:"$compositions/"+ res
+					}
+
+				}
 			console.log(" opencomp result: " , res);
-		});		
+		}.bind(this));		
 		
 	}
 	
 	this.newComposition = function(){
+		this.screen.closeModal(false);
+		
 		this.screen.openModal(function(){
 			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
@@ -644,12 +660,22 @@ define.class('$ui/view', function(require,
 				
 			}} );
 		}).then(function(res){
-			
+			if(res){
+				this.rpc.fileio.newComposition(res).then(function(result){
+					console.log(result)
+					// switch to new thing
+					this.screen.locationhash = {
+						composition:result.value
+					}
+				}.bind(this))
+			}
 			console.log(" newcomp result: " , res);
-		});		
+		}.bind(this));		
 	}
 	
 	this.renameComposition = function(){
+		this.screen.closeModal(false);
+		
 		this.screen.openModal(function(){
 			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute", 
@@ -796,11 +822,15 @@ define.class('$ui/view', function(require,
 					)
 					,jsviewer({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
-				//,splitcontainer({flex:0.5,direction:"horizontal"}
-//					,dockpanel({title:"Properties", viewport:"2D"}
-	//					,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
-		//			)	
-			//	)
+/*
+
+,splitcontainer({flex:0.5,direction:"horizontal"}
+,dockpanel({title:"Properties", viewport:"2D"}
+,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
+)	
+)
+
+*/
 			)
 		];
 	}
