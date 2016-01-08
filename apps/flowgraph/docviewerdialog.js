@@ -15,7 +15,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 	this.render =function(){
 		return dialog({title:this.title, position:"relative"},
 			view({bg:false, flexdirection:"column", padding:20 },
-			docviewer({classconstr:textbox, fontcolor:"white", bg:false}),
+			//docviewer({classconstr:textbox, fontcolor:"white", bg:false}),
 				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   }, 
 					button({padding:10, text:"Close", icon:"check", click: function(){this.screen.closeModal(true);} })
  				)
