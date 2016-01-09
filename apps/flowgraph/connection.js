@@ -23,30 +23,27 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		hasball: true
 	
 	}
-
 		
-		this.B1 = function (t) { return t * t * t; }
-		this.B2 = function (t) { return 3 * t * t * (1 - t); }
-		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
-		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
+	this.B1 = function (t) { return t * t * t; }
+	this.B2 = function (t) { return 3 * t * t * (1 - t); }
+	this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
+	this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
 
-		 this.bezier = function(percent,C1,C2,C3,C4) {		
-			
-			var b1 = this.B1(percent);
-			var b2 = this.B2(percent);
-			var b3 = this.B3(percent);
-			var b4 = this.B4(percent);
-			
-			//return 
-			
-				var A1 = vec2.vec2_mul_float32(C1, b1 )
-				var A2 = vec2.vec2_mul_float32(C2, b2 )
-				var A3 = vec2.vec2_mul_float32(C3, b3 )
-				var A4 = vec2.vec2_mul_float32(C4, b4 )
+	this.bezier = function(percent,C1,C2,C3,C4) {		
+		
+		var b1 = this.B1(percent);
+		var b2 = this.B2(percent);
+		var b3 = this.B3(percent);
+		var b4 = this.B4(percent);
+		
+		//return 
+		var A1 = vec2.vec2_mul_float32(C1, b1 )
+		var A2 = vec2.vec2_mul_float32(C2, b2 )
+		var A3 = vec2.vec2_mul_float32(C3, b3 )
+		var A4 = vec2.vec2_mul_float32(C4, b4 )
 
-			return vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));
-				
-		}
+		return vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));			
+	}
 		
 	this.noboundscheck = true
 	
@@ -217,7 +214,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		this.color = function(){
 			//return 'blue'
-			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+			var a= 1.0 - pow(abs(mesh.y*2.0), 2.5);
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 			return vec4(view.bgcolor.xyz,a);
 		}	
@@ -238,13 +235,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
 		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
 
-		 this.bezier = function(percent,C1,C2,C3,C4) {		
-			
+		this.bezier = function(percent,C1,C2,C3,C4) {		
 			var b1 = B1(percent);
 			var b2 = B2(percent);
 			var b3 = B3(percent);
 			var b4 = B4(percent);
-			
 			return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
 		}
 			
@@ -269,6 +264,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		//this.color_blend = 'src_alpha * src_color + dst_color'
   
 		this.color = function(){
+			//return 'red'
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
 			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);

@@ -6,14 +6,14 @@
 define.class('$system/base/midi', function (require, exports){
 
 	exports.midiAttributes = {
-		message:Event,
-		noteoff:Event,
-		noteon:Event,
-		polypressure:Event,
-		controlchange:Event,
-		programchange:Event,
-		aftertouch:Event,
-		pitchbend:Event
+		message:Config({type:Event}),
+		noteoff:Config({type:Event}),
+		noteon:Config({type:Event}),
+		polypressure:Config({type:Event}),
+		controlchange:Config({type:Event}),
+		programchange:Config({type:Event}),
+		aftertouch:Config({type:Event}),
+		pitchbend:Config({type:Event})
 	}
 	
 	this.Input = define.class(function midiInput($system$base$node){

@@ -14,7 +14,6 @@ define.class(function(require, exports){
 	// require embedded classes	
 	this.Shader = require('./shaderwebgl')
 	this.Texture = require('./texturewebgl')
-	this.Texture.Image = typeof Image !== 'undefined' && Image
 	this.DrawPass = require('./drawpasswebgl')
 	
 	this.preserveDrawingBuffer = false

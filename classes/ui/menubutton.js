@@ -9,8 +9,6 @@ define.class(function(require,$ui$, button, textbox, label,button , view){
 	
 	this.attributes = {
 		commands:[],
-		
-		
 	}
 	
 	

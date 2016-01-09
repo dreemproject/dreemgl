@@ -203,7 +203,7 @@ define.class(function(require, baseclass){
 		var draw = view
 		while(draw){
 			pick_id++
-			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_pick = 1
@@ -354,7 +354,7 @@ define.class(function(require, baseclass){
 			//}
 			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			//	var draw = dl[i]
-			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_color = 1

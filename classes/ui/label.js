@@ -35,11 +35,13 @@ define.class(function(require, $ui$, view){
 	
 		// Alignment of the bodytext.
 		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"}),
-		bold: false
-	}
+		bold: false,
 
-	this.font = require('$resources/fonts/opensans_bold_ascii.glf')
+		bgcolor: vec4("white")
+	}
 	
+	this.measure_with_cursor = false
+
 	this.bold = function(){
 		if (this.bold) {
 			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
@@ -73,7 +75,7 @@ define.class(function(require, $ui$, view){
 			mesh.clear()
 
 			if (this.multiline){
-				mesh.addWithinWidth(text, maxwidth? maxwidth: this.layout.width)
+				mesh.addWithinWidth(view.text, maxwidth? maxwidth: this.layout.width)
 			}
 			else{
 				mesh.add(view.text,0 ,0 ,0)
@@ -84,7 +86,6 @@ define.class(function(require, $ui$, view){
 			this.mesh = mesh
 		}
 	})
-	this.typefacenormal = false
 
 	// the subpixel font used to render with subpixel antialiasing
 	define.class(this, 'typefacesubpixelaa', this.typefacenormal, function(){
@@ -93,13 +94,11 @@ define.class(function(require, $ui$, view){
 		this.subpixel = true
 		this.boldness = 0.6
 	})
-	this.typefacesubpixelaa = false
 
 	define.class(this, 'typefaceglyphy', this.typefacenormal, function(){
 		this.glyphy_pixel = this.glyphy_atlas_draw
 		this.glyphy_mesh = this.glyphy_mesh_atlas
 	})
-	this.typefaceglyphy = false
 
 	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
 	define.class(this, 'typeface', this.typefacenormal, function(){
@@ -128,12 +127,6 @@ define.class(function(require, $ui$, view){
 		this.selectShader()
 	}
 
-	this.measure_with_cursor = false
-	this.bgcolor = vec4("white")
-
-	this.init = function(){
-	}
-	
 	this.measure = function(width){
 		if(this.typefaceshader.update_dirty){
 			this.typefaceshader.update()
@@ -146,7 +139,6 @@ define.class(function(require, $ui$, view){
 		this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 	else
 		this.font = require('$resources/fonts/opensans_regular_ascii.glf')
-
 
 	var label = this.constructor
 	// A label.

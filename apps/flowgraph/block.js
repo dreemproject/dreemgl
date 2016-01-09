@@ -38,7 +38,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	
 	this.attributes = {
 		flowdata:{},
-		pos: Config({persist: true}),
+		//pos: Config({persist: true}),
 		inputattributes: Config({type:Object, value:["color"]}),
 		outputattributes: Config({type:Object, value:["clicked","something"]}),
 		title: Config({type:String, value:"Untitled"}),

@@ -15,7 +15,6 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 		this.volume = 127;
 	
 		this.message = function(msg){
-			console.log(msg)
 			if(this.fwd) this.out.message = msg
 		}
 
@@ -107,14 +106,13 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 			this.timer = setInterval(this.tick.bind(this), 5)
 
 			midi.openInput(this.inid).then(function(inp){
-
 				this.inp = inp
 				// slap the midi event api onto us
 				var obj = this
 				for(var key in midiAttributes){
 					inp[key] = (function(key){
 						return function(event){
-							if(obj[key])obj[key](event.value)
+							if(obj[key]) obj[key](event.value)
 						}
 					})(key)
 				}
@@ -162,22 +160,23 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 			console.log('here')	
 		}},
 			arpeggiator({
-				arp1:function(l, m, n, o, p){
+				arp2:function(l, m, n, o, p){
 					for(var i = 4; i < 7; i++){
 						p['c'+i]
 						//o[this.slide]
-						if(this.volume>60) o['e'+i]
-						else o['ds'+i]
+						//if(this.volume>60) o['e'+i]
+						//else o['ds'+i]
 
 						o['g'+i]
+						o['b'+i]
 					}
 					this.loop
 				},
-				arpnice:function(l, m, n, o, p){
+				arp1:function(l, m, n, o, p){
 					for(var i = 4; i < 7; i++){
 						p['c'+i]
-						o[this.slide]
-						o['g'+i]
+						p[this.slide]
+						p['g'+i]
 					}
 					this.loop
 				}

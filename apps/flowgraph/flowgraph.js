@@ -822,7 +822,7 @@ define.class('$ui/view', function(require,
 					)
 					,jsviewer({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
-/*
+
 
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({title:"Properties", viewport:"2D"}
@@ -830,7 +830,7 @@ define.class('$ui/view', function(require,
 )	
 )
 
-*/
+
 			)
 		];
 	}
