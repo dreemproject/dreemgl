@@ -2,12 +2,28 @@ define.class('$ui/screen', function($ui$, view, $examples$staticmap$, map){
 
     this.attributes = {
         location: Config({type:String, flow:"in"}),
-        zoomLevel: Config({type:float, flow:"in"})
+        zoomLevel: Config({type:String, flow:"in"}),
+        zooml: Config({type:int, value:14})
     };
 
     this.bestZoom = function () {
 
-        var zl = this.zoomLevel * 21;
+        var zl = this.zooml;
+
+        var zlf = parseFloat(this.zoomLevel);
+
+        if (zlf) {
+            zl = zlf * 21;
+        } else {
+            if (this.zoomLevel === 'up' || this.zoomLevel === 'left') {
+                zl++;
+                this.zoomLevel = undefined
+            } else if (this.zoomLevel === 'down' || this.zoomLevel === 'right') {
+                zl--;
+                this.zoomLevel = undefined
+            }
+        }
+
         if (!zl) {
             zl = 14; //default
         }
@@ -18,10 +34,11 @@ define.class('$ui/screen', function($ui$, view, $examples$staticmap$, map){
             zl = 21; //max
         }
 
-        return Math.round(zl);
+        this.zooml = Math.round(zl);
+        return this.zooml;
     };
 
     this.render = function(){
-        return view({bgcolor:"#000030"}, map({width:300, height:300, location:this.location, mapzoom:this.bestZoom()}))
+        return map({width:400, height:400, location:this.location, mapzoom:this.bestZoom()})
     }
 });
