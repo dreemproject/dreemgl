@@ -8,7 +8,7 @@ define.class("$server/composition",function($server$, service, $ui$, screen, vie
 			webrequest({name:"webrequest0", flowdata:{x:338, y:148}, url:wire("this.rpc.outputs0.url")}),
 			knob({name:"knob0", flowdata:{x:32, y:464}}),
 			album({name:"album0", flowdata:{x:696, y:33}, images:wire("this.rpc.omdb0.results"), selection:wire("this.rpc.dpad0.value")}),
-			dpad({name:"dpad0", flowdata:{x:303, y:291}})
+			dpad({name:"dpad0", flowdata:{x:317, y:291}})
 		]
 	}
 	

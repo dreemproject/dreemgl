@@ -32,9 +32,6 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
                 this.selected = this.images.length * knobval;
             }
         }
-
-        console.log('val', dir, this.selected)
-
     };
 
     this.render = function() {
