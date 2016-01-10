@@ -6,7 +6,8 @@ define.class("$examples/request/get", function() {
         // The string to search for in the OMDB database
         keyword: Config({type: String, flow:"in"}),
         // List of movie objects returned from server
-        results: Config({type:Array, value:[], flow:"out"})
+        results: Config({type:Array, value:[], flow:"out"}),
+        url: Config({type:String})
     };
 
     this.onkeyword = function (event) {

@@ -26,11 +26,11 @@ define.class("$ui/view", function() {
     };
 
     this.onactivekeys = function() {
-        console.log("active key are now", this.activekeys)
+        //console.log("active key are now", this.activekeys)
     }
 
     this.onvalue = function() {
-        console.log("current value", this.value)
+        //console.log("current value", this.value)
     }
 
 
