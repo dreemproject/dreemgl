@@ -6,13 +6,34 @@
 define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
 
     this.attributes = {
+        selection: Config({type:String, flow:"in"}),
+        selected: Config({type:int, value:0, persist:true}),
         images: Config({type:Array, flow:"in"})
+    };
+
+    this.onselection = function(event) {
+        if (!this.images || !this.images.length) {
+            return;
+        }
+
+        var dir = event.value;
+        if (dir === 'left') {
+            this.selected = Math.max(0, this.selected - 1)
+        } else if (dir === 'right') {
+            this.selected = Math.min(this.images.length - 1, this.selected + 1)
+        } else if (dir === 'up') {
+            this.selected = Math.max(0, this.selected - 6)
+        } else if (dir === 'down') {
+            this.selected = Math.min(this.images.length - 1, this.selected + 6)
+        }
+
     };
 
     this.render = function() {
 
         var views = [];
         if (this.images) {
+            var j = 0;
             for (var i = 0; i < this.images.length; i++) {
                 var image = this.images[i];
                 var img;
@@ -24,7 +45,13 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
                     img = image
                 }
                 if (img) {
-                    views.push(view({width:100, height:150, margin:5, flex:0, bgimage:img}))
+                    var v = view({width:100, height:150, margin:5, flex:0, bgimage:img});
+                    if (j++ == this.selected) {
+                        v.bordercolor = 'yellow'
+                        v.borderwidth = 5
+                        v.borderradius = 5
+                    }
+                    views.push(v)
                 }
             }
         }
