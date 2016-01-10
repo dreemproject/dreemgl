@@ -1,6 +1,7 @@
-define.class("./controller", function($ui$, knob, $$, controllerbutton) {
+define.class("./controller", function($ui$, knob) {
 
     this.attributes = {
+        value:Config({type:float, value:0.5, persist:true})
     };
 
     this.render = function() {

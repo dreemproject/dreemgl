@@ -3,8 +3,8 @@ define.class("$ui/view", function() {
     this.bgcolor = 'transparent';
 
     this.attributes = {
-        value:'',
-        activekeys:[]
+        value:Config({type:String, value:'', persist:true}),
+        activekeys:Config({type:Array, value:[], persist:true})
     };
 
     this.press = function(key) {
