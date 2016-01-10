@@ -8,12 +8,17 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
     this.attributes = {
         selection: Config({type:String, flow:"in"}),
         selected: Config({type:int, value:0, persist:true}),
+        selecteditem: Config({type:Object, value:null, persist:true, flow:"out"}),
         lastknob: Config({type:float, value:0.5, persist:true}),
-        images: Config({type:Array, flow:"in", persist:true})
+        items: Config({type:Array, flow:"in", persist:true})
+    };
+
+    this.onselected = function(event) {
+        this.selecteditem = this.items[this.selected]
     };
 
     this.onselection = function(event) {
-        if (!this.images || !this.images.length) {
+        if (!this.items || !this.items.length) {
             return;
         }
 
@@ -21,15 +26,15 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
         if (dir === 'left') {
             this.selected = Math.max(0, this.selected - 1)
         } else if (dir === 'right') {
-            this.selected = Math.min(this.images.length - 1, this.selected + 1)
+            this.selected = Math.min(this.items.length - 1, this.selected + 1)
         } else if (dir === 'up') {
             this.selected = Math.max(0, this.selected - 6)
         } else if (dir === 'down') {
-            this.selected = Math.min(this.images.length - 1, this.selected + 6)
+            this.selected = Math.min(this.items.length - 1, this.selected + 6)
         } else {
             var knobval = parseFloat(dir);
             if (knobval) {
-                this.selected = this.images.length * knobval;
+                this.selected = this.items.length * knobval;
             }
         }
     };
@@ -37,17 +42,17 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
     this.render = function() {
 
         var views = [];
-        if (this.images) {
+        if (this.items) {
             var j = 0;
-            for (var i = 0; i < this.images.length; i++) {
-                var image = this.images[i];
+            for (var i = 0; i < this.items.length; i++) {
+                var item = this.items[i];
                 var img;
-                if (typeof(image.Poster) === 'string' && image.Poster.startsWith('http')) {
-                    img = image.Poster
-                } else if (typeof(image.image) === 'string' && image.image.startsWith('http')) {
-                    img = image.image
-                } else if (typeof(image) === 'string' && image.startsWith('http')) {
-                    img = image
+                if (typeof(item.Poster) === 'string' && item.Poster.startsWith('http')) {
+                    img = item.Poster
+                } else if (typeof(item.image) === 'string' && item.image.startsWith('http')) {
+                    img = item.image
+                } else if (typeof(item) === 'string' && item.startsWith('http')) {
+                    img = item
                 }
                 if (img) {
                     var v = view({width:100, height:150, margin:5, flex:0, bgimage:img});
