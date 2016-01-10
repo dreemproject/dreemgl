@@ -1,4 +1,4 @@
-define.class("$server/composition",function($server$, service, $ui$, screen, view, $flow$services$, map, omdb, webrequest, $flow$controllers$, xypad, knob, gamepad, keyboard, dpad, $flow$displays$, labtext, inputs, outputs, album, $flow$devices$, estimote) {
+define.class("$server/composition",function($server$, service, $ui$, screen, view, $flow$services$, map, omdb, webrequest, $flow$controllers$, xypad, knob, keyboard, dpad, $flow$displays$, labtext, inputs, outputs, album, $flow$devices$, estimote) {
 	this.render = function() {
 		return [
 			map({name:"map0", flowdata:{x:385, y:13}, location:wire("this.rpc.outputs0.location"), zoomLevel:wire("this.rpc.knob0.value")}),

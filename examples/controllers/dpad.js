@@ -30,7 +30,6 @@ define.class("./controller", function($ui$, view, $$, controllerbutton) {
                 {width:this.width, flex:1, flexdirection:'row',alignitems:'center',justifycontent:'center'},
                 controllerbutton({text:'down', value:'~D', controller:this})
             )
-
         ];
     }
 
