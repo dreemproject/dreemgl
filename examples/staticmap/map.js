@@ -1,8 +1,12 @@
 define.class('$ui/view', function() {
 
     this.attributes = {
+      //Google Maps API key
       apikey:   "AIzaSyDL5stf137yu1GJpVzU2tlCFE0ssgaC9R0",
+
       endpoint: "https://maps.googleapis.com/maps/api/staticmap?",
+
+      //Location for center of map, can be anything Google Maps understands
       location: "Seocho-gu, Seoul, South Korea",
       format:"jpg",
       maptype:"roadmap", //of roadmap,satellite,terrain,hybrid

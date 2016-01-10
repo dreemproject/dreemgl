@@ -53,14 +53,17 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.colormap = {
-		float:vec4("red"),
-		FloatLike: vec4("red"),
-		vec2:vec4("yellow"),
-		vec3:vec4("blue"),
-		vec4:vec4("blue"),			
-		Array:vec4(0.2,1,0,1),
-		String:vec4("orange"),
-		Object:vec4(1,0,0.8,1)
+		Number:vec4("#FF7260"),
+		int:vec4("#FF0080"),
+		IntLike:vec4("#FF0080"),
+		float:vec4("#D23641"),
+		FloatLike:vec4("#D23641"),
+		Array:vec4("#0198E1"),
+		vec4:vec4("#4FD5D6"),
+		vec3:vec4("#31C3E7"),
+		vec2:vec4("#129492"),
+		String:vec4("#6ADA7A"),
+		Object:vec4("#ffee14")
 	}
 
 	this.tooltip = 'issablock'

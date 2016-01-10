@@ -1,17 +1,16 @@
-define.class("$server/composition",function($server$, service, $ui$, screen, view, $flow$dataset$, rovi, $flow$remotes$, xypad, $flow$display$, labtext) {
+define.class("$server/composition",function($server$, service, $ui$, screen, view, $examples$request$, get, $flow$services$, rovi, map, omdb, weather, webrequest, $flow$controllers$, xypad, knob, gamepad, keyboard, dpad, $flow$displays$, labtext, inputs, outputs) {
 	this.render = function() {
 		return [
-			rovi({
-				name:'myservice', 
-				flowdata:{x:332, y:39}, 
-				query:wire("this.rpc.xy1.mousepos")
-			}),
+			// get({name:'omdb'}),
 			xypad({
 				name:'xy1', 
-				flowdata:{x:27, y:255}
+				flowdata:{x:192, y:14}
 			}),
-			labtext({name:'lab', flowdata:{x:408, y:169}, number:wire("this.rpc.xy1.mousepos")}),
-			labtext({name:"labtext0", flowdata:{x:390, y:420}, text:wire("this.rpc.xy1.mousepos")})
+			map({name:"map0", flowdata:{x:813, y:341}}),
+			outputs({name:"outputs0", flowdata:{x:80, y:139}}),
+			omdb({name:"omdb0", flowdata:{x:600, y:9}, keyword:wire("this.rpc.outputs0.string")}),
+			inputs({name:"inputs0", flowdata:{x:827, y:30}, array:wire("this.rpc.omdb0.results")}),
+			inputs({name:"inputs0", flowdata:{x:870, y:36}, vec2:wire("this.rpc.outputs0.vec2"), int:wire("this.rpc.outputs0.int"), float:wire("this.rpc.outputs0.float"), number:wire("this.rpc.outputs0.number"), vec3:wire("this.rpc.outputs0.vec3"), vec4:wire("this.rpc.outputs0.vec4"), array:wire("this.rpc.outputs0.array"), string:wire("this.rpc.outputs0.string"), object:wire("this.rpc.outputs0.object")})
 		]
 	}
 	

@@ -1,5 +1,7 @@
 define.class("$ui/view", function() {
 
+    this.bgcolor = 'transparent';
+
     this.attributes = {
         value:'',
         activekeys:[]
