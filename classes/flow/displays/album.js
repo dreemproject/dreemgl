@@ -8,7 +8,8 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
     this.attributes = {
         selection: Config({type:String, flow:"in"}),
         selected: Config({type:int, value:0, persist:true}),
-        images: Config({type:Array, flow:"in"})
+        lastknob: Config({type:float, value:0.5, persist:true}),
+        images: Config({type:Array, flow:"in", persist:true})
     };
 
     this.onselection = function(event) {
@@ -25,6 +26,11 @@ define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
             this.selected = Math.max(0, this.selected - 6)
         } else if (dir === 'down') {
             this.selected = Math.min(this.images.length - 1, this.selected + 6)
+        } else {
+            var knobval = parseFloat(dir);
+            if (knobval) {
+                this.selected = this.images.length * knobval;
+            }
         }
 
     };
