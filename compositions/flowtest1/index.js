@@ -1,4 +1,4 @@
-define.class("$server/composition",function($server$, service, $ui$, screen, view, $examples$request$, get, $flow$services$, rovi, map, omdb, weather, webrequest, $flow$controllers$, xypad, knob, gamepad, keyboard, dpad, $flow$displays$, labtext, inputs, outputs) {
+define.class("$server/composition",function($server$, service, $ui$, screen, view, $flow$services$, map, omdb, webrequest, $flow$controllers$, xypad, knob, keyboard, dpad, $flow$displays$, labtext, inputs, outputs, album, $flow$devices$, estimote) {
 	this.render = function() {
 		return [
 			xypad({name:"xypad0", flowdata:{x:36, y:59}}),

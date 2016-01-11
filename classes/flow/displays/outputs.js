@@ -13,7 +13,10 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid){
         vec3: Config({type:vec3, flow:"out", value:vec3(1,2,3)}),
         vec4: Config({type:vec4, flow:"out", value:vec4(1,2,3,4)}),
         array: Config({type:Array, flow:"out", value:[1,2,3,4,5,"6"]}),
-        string: Config({type:String, flow:"out", value:"Paris"}),
+        string: Config({type:String, flow:"out", value:"Cats"}),
+        url: Config({type:String, flow:"out", value:"http://www.samsung.com/us/"}),
+        images: Config({type:Array, flow:"out", value:["https://pbs.twimg.com/profile_images/3207590400/4cd4d8b352ec49cf21c64de20f58f7b4.jpeg","http://hdwpro.com/wp-content/uploads/2015/12/Dark-Pink-Flower.png"]}),
+        location: Config({type:String, flow:"out", value:"Portland,OR"}),
         object: Config({type:Object, flow:"out", value:{some:{complex:'object'}}})
     };
 

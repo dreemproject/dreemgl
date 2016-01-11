@@ -4,9 +4,10 @@ define.class("$examples/request/get", function() {
         // Base API URL
         apiurl:"http://www.omdbapi.com/?s=",
         // The string to search for in the OMDB database
-        keyword: Config({type: String}),
+        keyword: Config({type: String, flow:"in"}),
         // List of movie objects returned from server
-        results: []
+        results: Config({type:Array, value:[], flow:"out"}),
+        url: Config({type:String})
     };
 
     this.onkeyword = function (event) {

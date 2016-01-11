@@ -2,9 +2,9 @@ define.class('$server/service', function(require, $system$server$, nodehttp) {
 
     this.name = "get";
     this.attributes = {
-        url: Config({type:String}),
-        response: Config({type:String}),
-        error: Config({type:String})
+        url: Config({type:String, flow:'in'}),
+        response: Config({type:String, flow:'out'}),
+        error: Config({type:String, flow:'out'})
     };
 
     //this will only exist on the service side

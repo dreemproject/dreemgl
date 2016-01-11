@@ -61,7 +61,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		Array:vec4("#0198E1"),
 		vec4:vec4("#4FD5D6"),
 		vec3:vec4("#31C3E7"),
-		vec2:vec4("#129492"),
+		vec2:vec4("#BF5FFF"),
 		String:vec4("#6ADA7A"),
 		Object:vec4("#ffee14")
 	}
