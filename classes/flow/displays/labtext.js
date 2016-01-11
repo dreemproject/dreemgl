@@ -13,24 +13,22 @@ define.class('$ui/screen', function(require, $ui$,screen, cadgrid, numberbox,vie
 	}
 	
 	this.clearcolor = "red";
-	this.render = function(){	
-	
-		return cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" },
-				view({bg:false, flexdirection:"column", flex:1, justifycontent:"center" },
-					view({bg:false, flexdirection:"row" , justifycontent:"center" },
-						view({bgcolor:vec4(1,1,1,0.2),padding:40,borderradius:50,  flexdirection:"column" ,alignitems:"center", justifycontent:"center" },
-							label({text:this.string, bgcolor:'transparent'}),
-							numberbox({margin:10, value:this.float, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
-					
-							view({bg:false, alignself:"center", margin:10}, 
-								numberbox({value:this.vec2[0], decimals:2, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
-								numberbox({value:this.vec2[1], decimals:2, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"})
-							)						
-								
-							,label({margin:10, fgcolor:"white", text: JSON.stringify(this.text), bg:false, alignself:"center", fontsize:30})
-						)
+	this.render = function(){ return[ 
+		cadgrid({bgcolor:"#000030", majorline: "#003040", minorline: "#002030" },
+			view({bg:false, flexdirection:"column", flex:1, justifycontent:"center" },
+				view({bg:false, flexdirection:"row" , justifycontent:"center" },
+					view({bgcolor:vec4(1,1,1,0.2),padding:40,borderradius:50,  flexdirection:"column" ,alignitems:"center", justifycontent:"center" },
+						label({text:this.string, bgcolor:'transparent'}),
+						numberbox({margin:10, value:this.float, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
+						view({bg:false, alignself:"center", margin:10}, 
+							numberbox({value:this.vec2[0], decimals:2, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"}) ,
+							numberbox({value:this.vec2[1], decimals:2, fontsize:50,alignself:"flex-start", alignself:"center",  alignitems:"center", justifycontent:"flex-start"})
+						),					
+							
+						label({margin:10, fgcolor:"white", text: JSON.stringify(this.text), bg:false, alignself:"center", fontsize:30})
 					)
 				)
-			);
-	}
+			)
+		)
+	]}
 })

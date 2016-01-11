@@ -1371,6 +1371,48 @@
 
 
 
+	define.prim = {
+		int8:function int8(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint8:function uint8(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		int16:function int16(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint16:function uint16(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		int32:function int32(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint32:function uint32(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		half:function half(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		float32:function float32(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		float64:function float64(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		bool:function boolean(value){
+			if(value && value.isArray) return value
+			return value? true: false
+		}
+	}
 
 	define.struct = function(def, id){
 
@@ -1401,26 +1443,7 @@
 		var mysize = getStructSize(def)
 		var Struct
 		if(def.prim){
-			if(myarray === Float32Array || myarray === Float64Array){
-				Struct = function FloatLike(value){
-					if(value && value.isArray) return value
-					return parseFloat(value)
-				}
-			}
-			else{
-				if(id === 'bool'){
-					Struct = function BoolLike(value){
-						if(value && value.isArray) return value
-						return value? true: false
-					}
-				}
-				else{
-					Struct = function IntLike(value){
-						if(value && value.isArray) return value
-						return parseInt(value)
-					}
-				}
-			}
+			Struct = define.prim[id]
 			Struct.bytes = def.bytes
 			Struct.primitive = true
 		}

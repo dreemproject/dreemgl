@@ -820,16 +820,16 @@ define.class('$ui/view', function(require,
 							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
-					,jsviewer({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
+					,jsviewer({name:'jsviewer', readonly:false, sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 
-
+/*
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({title:"Properties", viewport:"2D"}
 ,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
 )	
 )
-
+*/
 
 			)
 		];
