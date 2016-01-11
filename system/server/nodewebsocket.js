@@ -105,6 +105,7 @@ define.class(function(require){
 		this.maskcount = 0 // mask counter
 		this.paylen = 0 // payload length
 		this.readyState = 1
+		this.partial_msg = ''
 		// 10 second ping frames
 		this.pingframe = new Buffer(2)
 		this.pingframe[0] = 9 | 128
@@ -225,10 +226,15 @@ define.class(function(require){
 		}
 
 		if(this.expected) return false
-
-		this.atMessage(this.output.toString('utf8', 0, this.written))
-		this.expected = 1
+		if(!this.partial){
+			this.atMessage(this.partial_msg + this.output.toString('utf8', 0, this.written))
+			this.partial_msg = ''
+		}
+		else{
+			this.partial_msg += this.output.toString('utf8', 0, this.written)
+		}
 		this.written = 0
+		this.expected = 1
 		this.state = this.opcode
 		return true
 	}
@@ -351,8 +357,15 @@ define.class(function(require){
 		if(this.head()) return
 		var frame = this.header[0] & 128
 		var type = this.header[0] & 15
-		if(type == 1){
-			if(!frame) return this.error("only final frames supported")
+		if(type === 0 || type == 1){
+			if(!frame){
+			 //return this.error("only final frames supported")
+				this.partial = true
+			}
+			else{
+				this.partial = false
+			}
+
 			this.expected = 1
 			this.state = this.len1
 			return true
