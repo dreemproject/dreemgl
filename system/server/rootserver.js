@@ -195,20 +195,24 @@ define.class(function(require){
 			}
 			var filterSpecial = function(child) {
 				var name = child.tag;
-				return name.indexOf('$') !== 0 && (! filterMethods(child)) && (! filterAttributes(child));
+				return name.indexOf('$') !== 0 && (! filterMethods(child)) && (! filterAttributes(child)) && (! filterHandlers(child));
 			}
 			var filterMethods = function(child) {
 				return child.tag === 'method';
 			}
 			var toMethod = function(child) {
-				if (child.tag === 'method') {
-					var body = HTMLParser.reserialize(child.child[0]);
-					var fn = new Function(child.attr.args, body);
-					return {name: child.attr.name, body: fn};
-				}
+				var body = HTMLParser.reserialize(child.child[0]);
+				var fn = new Function(child.attr.args, body);
+				return {attr: child.attr, body: fn};
 			}
 			var filterAttributes = function(child) {
 				return child.tag === 'attribute';
+			}
+			var filterHandlers = function(child) {
+				return child.tag === 'handler';
+			}
+			var capitalize = function(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
 			}
 			var objToString = function(obj) {
 				var out = '{';
@@ -236,17 +240,17 @@ define.class(function(require){
 				return out;
 			}
 			var tagToFunc = function(child, indent) {
-				// console.log('tagToFunc', indent, child, child.tag.indexOf('$'))
+				// console.log('tagToFunc', indent, child, child.attr)
 				var outputthis = filterSpecial(child);
 				var out = '';
-				var attr = child.attr;
+				var attr = child.attr || {};
 
 				// add methods to attributes hash
 				var methods = child.child && child.child.filter(filterMethods).map(toMethod);
 				if (methods) {
 					for (var i = 0; i < methods.length; i++) {
 						var method = methods[i];
-						attr[method.name] = method.body;
+						attr[method.attr.name] = method.body;
 						// console.log('found method:', method)
 					}
 				}
@@ -254,18 +258,33 @@ define.class(function(require){
 				// add attributes
 				var attributes = child.child && child.child.filter(filterAttributes);
 				if (attributes) {
+					if (! attr.attributes) {
+						attr.attributes = {};
+					}
 					for (var i = 0; i < attributes.length; i++) {
 						var attribute = attributes[i].attr;
-						// console.log('found attribute:', attribute)
 						var val = attribute.value;
-						var type = attribute.type;
-						if (type === 'string') {
+						var type = capitalize(attribute.type);
+						if (type === 'String') {
 							val = '"' + val + '"';
 						}
-						if (! attr.attributes) {
-							attr.attributes = {};
-						}
+						// console.log('found attribute:', attribute, val, type)
 						attr.attributes[attribute.name] = 'Config({type: ' + type + ', value: ' + val + '})';
+					}
+				}
+
+				// add handlers
+				var handlers = child.child && child.child.filter(filterHandlers).map(toMethod);
+				if (handlers) {
+					if (! attr.attributes) {
+						attr.attributes = {};
+					}
+					for (var i = 0; i < handlers.length; i++) {
+						var handler = handlers[i];
+						// chop off leading 'on'
+						var attrname = handler.attr.event.substring(2);
+						// register listener for that event
+						attr.attributes[attrname] = 'Config({listeners: [' + handler.body + ']})';
 					}
 				}
 
