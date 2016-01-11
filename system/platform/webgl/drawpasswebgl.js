@@ -203,7 +203,7 @@ define.class(function(require, baseclass){
 		var draw = view
 		while(draw){
 			pick_id++
-			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_pick = 1
@@ -294,7 +294,7 @@ define.class(function(require, baseclass){
 		for(var j = 0; j < shaders.length; j++){
 			// lets draw em
 			var shader = shaders[j]
-			if(shader.pick_only || !shader.visible) continue // was pick only
+			if(shader.pickonly || !shader.visible) continue // was pick only
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
@@ -354,7 +354,7 @@ define.class(function(require, baseclass){
 			//}
 			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			//	var draw = dl[i]
-			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_color = 1

@@ -117,6 +117,9 @@ define.class(function(exports){
 			}
 			var childreuse = false
 			if(new_child.parent) childreuse = true
+			
+			//var name = new_child.name
+			//if(name !== undefined && !(name in new_version)) new_version[name] = new_child
 
 			new_child.parent = new_version
 			new_child.screen = new_version.screen

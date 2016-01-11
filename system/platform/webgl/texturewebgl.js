@@ -6,7 +6,8 @@
 
 define.class('$system/base/texture', function(exports){
 	var Texture = exports
-	Texture.Image = window.Image
+	Texture.Image = typeof window !== 'undefined'? window.Image: function(){}
+	
 	this.atConstructor = function(type, w, h, device){
 		this.device = device
 		this.type = type

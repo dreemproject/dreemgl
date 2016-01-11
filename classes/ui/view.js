@@ -4,8 +4,10 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/node', function(require){
+
 	var Animate = require('$system/base/animate')
 	var FlexLayout = require('$system/lib/layout')
+	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 	
 	var view = this.constructor
@@ -225,7 +227,6 @@ define.class('$system/base/node', function(require){
 		// wether this view has focus
 		miss: Config({type:Event}),
 
-		
 		// drop shadow size
 		dropshadowradius:Config({type:float, value:20}),
 		// drop shadow movement
@@ -350,7 +351,9 @@ define.class('$system/base/node', function(require){
 
 	// returns the mouse in local coordinates
 	this.localMouse = function(){
-		return vec2(this.screen.remapMouse(this))
+		var ret = vec2(this.screen.remapMouse(this))
+	//	if(ret[0]<0) debugger
+		return ret
 	}
 
 	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
@@ -379,12 +382,12 @@ define.class('$system/base/node', function(require){
 		}
 		else{
 			this.modelmatrix = mat4()
-			if(this._viewport) this.totalmatrix = prev? prev.totalmatrix: mat4.identity()
-			else this.totalmatrix = prev? prev.totalmatrix: mat4()
-			this.viewportmatrix = prev? prev.viewportmatrix: mat4()
+			if(this._viewport) this.totalmatrix = mat4.identity()
+			else this.totalmatrix = mat4()
+			this.viewportmatrix = mat4()
 		}
 
-		if(this._bgimage){
+		if(this._bgimage || this._wiredfn_bgimage){
 			// set the bg shader
 			this.bg = this.hardimage
 		}
@@ -427,16 +430,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._bgimage){
-			// Assume image was loaded via require (a Texture.Image object)
-			if(typeof this._bgimage === 'string'){
-				// Path to image was specified
-				require.async(this._bgimage).then(function(result){
-					this.setBgImage(result)
-				}.bind(this))
-			}
-			else{
-				this.setBgImage(this._bgimage)
-			}
+			this.onbgimage()
 		}
 
 		//if(this.debug !== undefined && this.debug.indexOf('shaderlist') !== -1){
@@ -450,6 +444,20 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.sortShaders()
+	}
+
+	this.onbgimage = function(){
+		if(this.initialized){
+			if(typeof this._bgimage === 'string'){
+				// Path to image was specified
+				require.async(this._bgimage, 'jpeg').then(function(result){
+					this.setBgImage(result)
+				}.bind(this))
+			}
+			else{
+				this.setBgImage(this._bgimage)
+			}
+		}
 	}
 
 	this.setBgImage = function(image){
@@ -540,7 +548,9 @@ define.class('$system/base/node', function(require){
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
-		if(this.screen.device && this.screen.device.redraw) this.screen.device.redraw()
+		if(this.screen.device && this.screen.device.redraw) {
+			this.screen.device.redraw()
+		}
 	}
 	
 	// updates all the shaders
@@ -802,7 +812,6 @@ define.class('$system/base/node', function(require){
 		}
 
 		if(this._viewport){
-
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
 			}
@@ -978,6 +987,26 @@ define.class('$system/base/node', function(require){
 		return bgcolor
 	}
 
+	this.appendChild = function(render){
+		// wrap our render function in a temporary view
+		var vroot = view()
+		// set up a temporary view
+		vroot.render = render
+		vroot.parent = this
+		vroot.rpc = this.rpc
+		vroot.screen = this.screen
+		vroot.parent_viewport = this._viewport?this:this.parent_viewport
+		// render it
+		Render.process(vroot, undefined, undefined, true)
+		// move the children over
+		this.children.push.apply(this.children, vroot.children)
+		for(var i = 0; i < vroot.children.length; i++){
+			vroot.children[i].parent = this
+		}
+		// lets cause a relayout
+		this.relayout()
+	}
+
 	// standard bg is undecided
 	define.class(this, 'bg', this.Shader, function(){
 		this.updateorder = 0
@@ -1126,7 +1155,7 @@ define.class('$system/base/node', function(require){
 		}
 
 		this.color = function(){
-			var col = view.bgcolorfn(pos.xy)
+			var col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 

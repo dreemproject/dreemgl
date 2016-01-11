@@ -49,7 +49,8 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 			title: Config({type:String}),
 			icon: Config({type:String, value:""}),
 			col1: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.1}),
-			col2: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14})
+			col2: Config({value:vec4(0,0,0,0),persist:true, meta:"color", motion:"linear", duration:0.14}),
+			collapsed: false
 		}
 		this.position = "relative";
 
@@ -61,14 +62,17 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 		}
 
 		this.padding = 3
-
+		this.justifycontent=  "space-between" 
+		this.alignitems = "flex-start";
+		this.flex = 1
 		// The clickable bar creates icon and a textfield children.
 		this.render = function(){			
 			var res = [];
 
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
-			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));
-			return res;
+			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));					
+			var res2 = [view({bg:0},res), icon({fontsize:this.outer.fontsize,alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
+			return res2;
 		}
 
 		this.statedefault = function(first){
@@ -135,7 +139,8 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 			bordercolor: this.bordercolor,
 			icon: this.icon?this.icon:"", 
 			title: this.title,
-			fontsize: this.fontsize
+			fontsize: this.fontsize,
+			collapsed: this.collapsed
 		});
 		
 		this.bar.click = this.toggle.bind(this);

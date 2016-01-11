@@ -56,7 +56,7 @@ define.class(function(require, constructor){
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
 				this.constructor_children.push(arg)
-				//var name = arg.name
+				var name = arg.name
 				//if(name !== undefined && !(name in this)) this[name] = arg
 			}
 		}		
@@ -193,28 +193,37 @@ define.class(function(require, constructor){
 	this.emit = function(key, event){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
+		var lock_key = '_lock_' + key
+		
+		if(this[lock_key]) return
 
-		var proto = this
-		var stack
+		this[lock_key] = true
+		try{
+			var proto = this
+			var stack
 
-		while(on_key in proto){
-			if(proto.hasOwnProperty(on_key)) (stack || (stack = [])).push(proto[on_key])
-			proto = Object.getPrototypeOf(proto)
-		}
-
-		if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
-			stack[j].call(this, event)
-		}
-
-		var proto = this
-		while(listen_key in proto){
-			if(proto.hasOwnProperty(listen_key)){
-				var listeners = proto[listen_key]
-				for(var j = 0; j < listeners.length; j++){
-					listeners[j].call(this, event)
-				}
+			while(on_key in proto){
+				if(proto.hasOwnProperty(on_key)) (stack || (stack = [])).push(proto[on_key])
+				proto = Object.getPrototypeOf(proto)
 			}
-			proto = Object.getPrototypeOf(proto)
+
+			if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
+				stack[j].call(this, event)
+			}
+
+			var proto = this
+			while(listen_key in proto){
+				if(proto.hasOwnProperty(listen_key)){
+					var listeners = proto[listen_key]
+					for(var j = 0; j < listeners.length; j++){
+						listeners[j].call(this, event)
+					}
+				}
+				proto = Object.getPrototypeOf(proto)
+			}
+		}
+		finally{
+			this[lock_key] = false
 		}
 	}
 
@@ -534,7 +543,7 @@ define.class(function(require, constructor){
 		}
 
 		// figure out the type
-		if(!config.type){
+		if(!is_attribute && !config.type){
 			var value = config.value
 
 			if(typeof value === 'object'){
@@ -550,6 +559,9 @@ define.class(function(require, constructor){
 			}
 			else if(typeof value === 'function' && !value.is_wired){
 				config.type = Function
+			}
+			else if(typeof value === 'string'){
+				config.type = String
 			}
 		}
 		if(config.persist){
@@ -569,6 +581,13 @@ define.class(function(require, constructor){
 			}
 			this._attributes[key] = newconfig
 			if('value' in config) this[key] = config.value
+			if('listeners' in config){
+				var listeners = config.listeners
+				for(var i = 0; i < listeners.length; i++){
+					this.addListener(key, listeners[i])
+				}
+			}
+
 			return
 		}
 
@@ -602,6 +621,8 @@ define.class(function(require, constructor){
 		}
 		this._attributes[key] = config
 		
+		if(config.listeners) this[listen_key] = config.listeners
+
 		var setter
 		// define attribute gettersetters
 
@@ -746,21 +767,22 @@ define.class(function(require, constructor){
 				bindcall.initialized = true
 				for(var i = 0; i < deps.length; i++) deps[i]()
 			}
-			this[key] = this[wiredfn_key].call(this)
+			this[key] = this[wiredfn_key].call(this, this[wiredcl_key].find, this.rpc)
 		}.bind(this)
 
 		this[wiredcl_key] = bindcall
+		bindcall.find = {}
 
 		for(var j = 0; j < state.references.length; j++){
 			var ref = state.references[j]
-			var obj = {'this':this}
+			var obj = {'this':this,'find':bindcall.find,'rpc':this.rpc}
 			for(var k = 0; k < ref.length; k++){
 
 				var part = ref[k]
 				if(k === ref.length - 1){
 					// lets add a listener 
-					if(!obj.isAttribute(part)){
-						console.log("Attribute does not exist: "+ref.join('.')+" in wiring " + this[wiredfn_key].toString())
+					if(!obj || !obj.isAttribute || !obj.isAttribute(part)){
+						console.error("Attribute does not exist: "+ref.join('.') + " (at " + part + ") in wiring " + this[wiredfn_key].toString())
 						continue
 					}
 
@@ -775,7 +797,10 @@ define.class(function(require, constructor){
 				else{
 					var newobj = obj[part]
 					if(!newobj){
-						if(obj === this){ // lets make an alias on this, scan the parent chain
+						if(obj === bindcall.find){ // lets make an alias on this, scan the parent chain
+							obj = this.find(part)
+							if(obj) bindcall.find[part] = obj
+							/*
 							while(obj){
 								if(part in obj){
 									if(part in this) console.log("Aliasing error with "+part)
@@ -784,7 +809,7 @@ define.class(function(require, constructor){
 									break
 								}
 								obj = obj.parent
-							}
+							}*/
 						}
 					}	
 					else obj = newobj

@@ -5,8 +5,8 @@
 
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
-		$widgets$, propviewer,searchbox,
-		$server$, sourceset, dataset, $$, library, dockpanel, block, connection){
+		$widgets$, propviewer,searchbox, jsviewer,
+		$server$, sourceset, dataset, $$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
@@ -15,13 +15,13 @@ define.class('$ui/view', function(require,
 	this.flexdirection = "column";
 	
 	this.attributes = {
-		sourceset: {}
+		sourceset:{}
 	}
 	
 	define.class(this, "selectorrect", view, function(){
 		//debugger
 		this.bordercolorfn = function(pos){
-			var check = (int(mod(0.20*(gl_FragCoord.x + gl_FragCoord.y + time*40.),2.)) == 1)? 1.0: 0.0
+			var check = (int(mod(0.20 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0
 			return vec4(check * vec3(0.8), 1)
 		}
 		this.bordercolor = vec4(1, 1, 1, 0.4)
@@ -31,10 +31,6 @@ define.class('$ui/view', function(require,
 		this.position = "absolute"
 		this.visible = false
 	})
-	
-	
-	
-	
 	
 	this.addToSelection = function(obj){		
 		var f = this.currentselection.indexOf(obj)
@@ -48,14 +44,14 @@ define.class('$ui/view', function(require,
 	}
 	
 	this.removeFromSelection = function(obj){
-		if (this.currentblock == obj){
+		if(this.currentblock == obj){
 			this.currentblock = undefined
-			this.updatepopupuiposition()
+			this.updatePopupUIPosition()
 		}
 		
 		var f = this.currentselection.indexOf(obj)
-		if (f>-1) this.currentselection.splice(f,1)
-				
+		if(f>-1) this.currentselection.splice(f,1)
+
 		this.updateSelectedItems()
 	}
 	
@@ -74,7 +70,7 @@ define.class('$ui/view', function(require,
 			if (f > -1) newval = 1
 			if (obj._inselection != newval) obj.inselection = newval
 		}
-		this.updatepopupuiposition()
+		this.updatePopupUIPosition()
 	}
 	
 	this.inSelection = function(obj){
@@ -87,17 +83,31 @@ define.class('$ui/view', function(require,
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.setupMove()
-		}		
+		}
 	}
 
-	this.moveSelected = function(dx, dy, snap){
-		if (!snap) snap = 1
+	this.moveSelected = function(dx, dy, store){
+		var snap = 1
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
 			obj.updateMove(dx, dy, snap)
 		}
-		this.updateconnections()
-		this.updatepopupuiposition()
+
+		if(store){
+			this.sourceset.fork(function(){
+				for(var a in this.currentselection){
+					var obj = this.currentselection[a]
+					if(!(obj instanceof block)) continue
+					var flowdata = obj.flowdata
+					flowdata.x = obj.pos[0]
+					flowdata.y = obj.pos[1]
+					this.sourceset.setFlowData(obj.name, flowdata)
+				}
+			}.bind(this))
+		}
+
+		this.updateConnections()
+		this.updatePopupUIPosition()
 	}
 	
 	this.clearSelection = function(update){
@@ -107,29 +117,49 @@ define.class('$ui/view', function(require,
 		if (update) this.updateSelectedItems()
 	}
 
+	this.addBlock = function(folder, blockname){
+		//console.log("adding block from library! TODODODODODODO");
+		this.sourceset.fork(function(){
+			this.sourceset.addBlock(folder, blockname)
+		}.bind(this))
+	}
+
 	this.removeBlock = function (block){
 		if (block == undefined) block = this.currentblock
 		if (block){
-			console.log("TODO: removing block!", block)
+
+			this.sourceset.fork(function(){
+				this.sourceset.removeBlock(block.name)
+			}.bind(this))
+
 			this.removeFromSelection(block)
 			this.setActiveBlock(undefined)
 			this.updateSelectedItems()
-			this.updatepopupuiposition()
+			this.updatePopupUIPosition()
 		}
 	}
 	
 	this.removeConnection = function (conn){
 		if (conn == undefined) conn = this.currentconnection
 		if (conn){
-			console.log("TODO: removing connection!", conn)
+
+			this.sourceset.fork(function(){
+				this.sourceset.deleteWire(
+					conn.from,
+					conn.fromoutput,
+					conn.to,
+					conn.toinput
+				)
+			}.bind(this))
+
 			this.removeFromSelection(conn)
 			this.setActiveConnection(undefined)
 			this.updateSelectedItems()
-			this.updatepopupuiposition()
+			this.updatePopupUIPosition()
 		}
 	}
 	
-	this.updatepopupuiposition = function(){
+	this.updatePopupUIPosition = function(){
 		var bg = this.findChild("blockui")
 		var cg = this.findChild("connectionui")
 		var gg = this.findChild("groupui")
@@ -140,6 +170,7 @@ define.class('$ui/view', function(require,
 		bg.visible = false;
 		
 		return;
+		// todo - decide if the group UI is needed at all..
 		
 		if (this.currentselection.length == 1){
 
@@ -239,44 +270,47 @@ define.class('$ui/view', function(require,
 	
 	this.setActiveBlock = function(block){
 		this.currentblock = block
-		if ( block){
-			this.currentconnection = undefined;
-				this.addToSelection(block);
+		if(block){
+			this.currentconnection = undefined
+			this.addToSelection(block)
 		}
-		this.updatepopupuiposition();
+		this.updatePopupUIPosition()
 	}
 	
 	this.setActiveConnection = function(conn){
 		this.currentconnection = conn;
 		
-		if (conn){
+		if(conn){
 			this.currentblock = undefined;
 			this.addToSelection(conn);								
 		}	
-		this.updatepopupuiposition();
+		this.updatePopupUIPosition();
 	}
 	
-	this.updateconnections = function(){
+	this.updateConnections = function(){
 		var cl = this.find("connectionlayer");
 		for(var a in cl.children){
 			cl.children[a].calculateposition()
 			//cl.children[a].layout = 1
 		}
 	}
-		
+	
 	this.init = function(){		
+		this.screen.onstatus = function(){
+			this.find("themenu").statustext = this.screen.status;
+		}
 		this.currentselection = [];
 		this.currentblock = undefined;
 		this.currentconnection = undefined;		
 		this.allblocks = [];
 		this.allconnections = [];
-	
+		this.newconnection = {};
 		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
 		this.librarydata = dataset({children:[]});
 
 		this.sourceset = sourceset()
 		
-		this.rpc.fileio.readAllPaths(['resources','server.js','resources','cache','@/\\.','.git', '.gitignore']).then(function(result){
+		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result){
 			var lib = this.find('thelibrary');
 			var tree = result.value
 			tree.name = 'Library'
@@ -284,14 +318,20 @@ define.class('$ui/view', function(require,
 			lib.dataset = this.librarydata  = dataset(tree)
 			
 		}.bind(this))
-				
-
+		
 		this.screen.locationhash = function(event){
 			if(event.value.composition)
 			require.async(event.value.composition).then(function(result){
-				this.sourceset.parse(result.module.factory.body.toString())
-			
-				this.sourceset.stringify()
+
+				this.sourceset.parse(result)
+
+				// write it back to disk
+				this.sourceset.onchange = function(){
+					this.rpc.fileio.saveComposition(event.value.composition, this.sourceset.last_source)
+				}.bind(this)
+
+				//this.find('jsviewer').sourceset = this.sourceset
+
 			}.bind(this))
 		}.bind(this)
 
@@ -306,19 +346,19 @@ define.class('$ui/view', function(require,
 
 	// right before the recalculateMatrix call
 	this.atMatrix = function(){
-		this.updateconnections();
+		this.updateConnections();
 	}	
 	
 	this.updateZoom = function(z){	
 	}
 	
-	this.gridclick = function(p, origin){
+	this.gridClick = function(p, origin){
 		
-		this.cancelconnection();
+		this.cancelConnection();
 			var cg= this.find("centralconstructiongrid");
 		
 			origin.startselectposition = cg.localMouse();
-			this.startdragselect();
+			this.startDragSelect();
 			
 			origin.mousemove = function(){				
 				var cg= this.find("centralconstructiongrid");
@@ -406,22 +446,31 @@ define.class('$ui/view', function(require,
 			}	
 		
 	}
-	this.makenewconnection = function(){
-		
-		// DO CONNECTION HERE!
-		console.log("making connection...");
-		this.cancelconnection();
-	}	
-	
-	this.cancelconnection = function(){
-		
-		console.log("cancelling exiting connection setup...");
 
-		this.newconnectionsourceblock = undefined;
-		this.newconnectionsourceoutput = undefined;
-		
-		this.newconnectiontargetblock = undefined;
-		this.newconnectiontargetinput = undefined;				
+	this.makeNewConnection = function(){
+		// DO CONNECTION HERE!
+		console.log("making connection...")
+
+		this.sourceset.fork(function(){
+			this.sourceset.createWire(
+				this.newconnection.sourceblock,
+				this.newconnection.sourceoutput,
+				this.newconnection.targetblock,
+				this.newconnection.targetinput
+			)
+		}.bind(this))
+
+		this.cancelConnection()
+	}
+	
+	
+	this.setBlockName = function(block, newname){
+		console.log("TODODODODODODO: setBlockName - change name to", newname);
+	}
+	
+	this.cancelConnection = function(){		
+		console.log("cancelling exiting connection setup...");
+		this.newconnection = {};
 		
 		var connectingconnection = this.find("openconnector");
 		if (connectingconnection && connectingconnection.visible) 
@@ -437,19 +486,19 @@ define.class('$ui/view', function(require,
 		}
 	}
 	
-	this.setupconnectionmousemove = function(){
+	this.setupConnectionMouseMove = function(){
 		console.log("setting up new connection drag...");
 
 		var connectingconnection = this.find("openconnector");
 		if (connectingconnection)
 		{
 			connectingconnection.visible = true;
-			connectingconnection.from = this.newconnectionsourceblock;
-			connectingconnection.fromoutput = this.newconnectionsourceoutput;
-			connectingconnection.to = this.newconnectiontargetblock;
-			connectingconnection.toinput = this.newconnectiontargetinput;
+			connectingconnection.from = this.newconnection.sourceblock;
+			connectingconnection.fromoutput = this.newconnection.sourceoutput;
+			connectingconnection.to = this.newconnection.targetblock;
+			connectingconnection.toinput = this.newconnection.targetinput;
 
-			console.log(this.newconnectionsourceblock,this.newconnectionsourceoutput,this.newconnectiontargetblock,this.newconnectiontargetinput);
+			console.log(this.newconnection.sourceblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput);
 			
 			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length>0){
 				console.log("setting to??", connectingconnection.to);
@@ -477,29 +526,29 @@ define.class('$ui/view', function(require,
 		}
 	}
 	
-	this.setconnectionstartpoint = function(sourceblockname, outputname){		
-		this.newconnectionsourceblock = sourceblockname;
-		this.newconnectionsourceoutput = outputname;
-		if (this.newconnectiontargetblock && this.newconnectiontargetblock !== "undefined" ){
-			this.makenewconnection();
+	this.setConnectionStartpoint = function(sourceblockname, outputname){		
+		this.newconnection.sourceblock = sourceblockname;
+		this.newconnection.sourceoutput = outputname;
+		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ){
+			this.makeNewConnection();
 		}
 		else{
-			this.setupconnectionmousemove();
+			this.setupConnectionMouseMove();
 		}
 	}
 	
-	this.setconnectionendpoint = function(targetblockname, inputname){		
-		this.newconnectiontargetblock = targetblockname;
-		this.newconnectiontargetinput = inputname;
-		if (this.newconnectionsourceblock && this.newconnectionsourceblock !== "undefined" ){
-			this.makenewconnection();
+	this.setConnectionEndpoint = function(targetblockname, inputname){		
+		this.newconnection.targetblock = targetblockname;
+		this.newconnection.targetinput = inputname;
+		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ){
+			this.makeNewConnection();
 		}
 		else{
-			this.setupconnectionmousemove();
+			this.setupConnectionMouseMove();
 		}			
 	}
 	
-	this.startdragselect = function(){
+	this.startDragSelect = function(){
 		this.dragselectset = [];
 		if (!this.screen.keyboard.shift){
 			this.clearSelection(true);
@@ -513,18 +562,50 @@ define.class('$ui/view', function(require,
 	this.renderConnections = function(){
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-		var res = [];		
+		var res = [];	
+		for(var i = 0;i<this.sourceset.data.children.length;i++){
+			var node = this.sourceset.data.children[i];
+			// block({name:"e", title:"block E", x:450, y:600}) 
+			
+			if (node.wires){
+				for(var j = 0;j<node.wires.length;j++) {
+					var w = node.wires[j];
+					res.push(connection({
+						from:w.from, 
+						fromoutput:w.output, 
+						to:node.name, 
+						toinput:w.input 
+					}));
+				}
+			}
+		}
+		
 		return res;
+	}
+	
+	function uppercaseFirst (inp) {
+		if (!inp || inp.length == 0) return inp;
+		return inp.charAt(0).toUpperCase() + inp.slice(1);
 	}
 	
 	this.renderBlocks = function(){
 		var res = [];
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-
-		for(var a in this.sourceset.data.children){
-			var topnode = this.sourceset.data.children[a];
-			res.push(block({title:topnode.name}))
+		for(var i = 0;i<this.sourceset.data.children.length;i++){
+			var node = this.sourceset.data.children[i];
+			// block({name:"e", title:"block E", x:450, y:600}) 
+			res.push(
+				block({
+					flowdata:node.flowdata,
+					pos:vec3(node.flowdata.x,
+					node.flowdata.y,0),
+					name:node.name,
+					title:uppercaseFirst(node.classname + ': ' + node.name),
+					inputs:node.inputs,
+					outputs:node.outputs
+				})
+			)
 		}
 		return res;
 	}
@@ -534,8 +615,7 @@ define.class('$ui/view', function(require,
 			var bl = this.dragselectset[i];
 			this.addToSelection(bl);
 		}
-		this.updatepopupuiposition();
-		
+		this.updatePopupUIPosition();		
 	}
 
 	this.getCompositionName = function(){
@@ -544,125 +624,213 @@ define.class('$ui/view', function(require,
 	}	
 
 	this.openComposition = function(){
+		this.screen.closeModal(false);
 		this.screen.openModal(function(){
-			return view({
+			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
 				
-				bgcolor:"#a3a3a3",flexdirection:"column",
-				dropshadowopacity: 0.4,
-				padding:4,
-				dropshadowhardness:0,
-				dropshadowradius: 20,
-				dropshadowoffset:vec2(9,9), 
-				borderradius:7,
+				
+			
 				miss:function(){
 					this.screen.closeModal(false)
 				
-			}}, 
-			foldcontainer({title:"base"},label({text:"some label? "})))
-		}.bind(this)).then(function(res){
+			}} );
 			
+		}.bind(this)).then(function(res){
+				if(res){
+					console.log(res);
+					this.screen.locationhash = {
+						composition:"$compositions/"+ res
+					}
+
+				}
 			console.log(" opencomp result: " , res);
-		});		
+		}.bind(this));		
 		
 	}
 	
 	this.newComposition = function(){
+		this.screen.closeModal(false);
+		
 		this.screen.openModal(function(){
-			return view({})
+			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
 		}).then(function(res){
-			
+			if(res){
+				this.rpc.fileio.newComposition(res).then(function(result){
+					console.log(result)
+					// switch to new thing
+					this.screen.locationhash = {
+						composition:result.value
+					}
+				}.bind(this))
+			}
 			console.log(" newcomp result: " , res);
-		});		
+		}.bind(this));		
 	}
 	
 	this.renameComposition = function(){
+		this.screen.closeModal(false);
+		
 		this.screen.openModal(function(){
-			return view({}, textbox({value:this.getCompositionName()}))
+			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
 		}.bind(this)).then(function(res){
 			
 			console.log(" rename composition result: " , res);
 		});		
 
 	}
+	this.helpAbout = function(){
+		this.screen.openModal(function(){
+			return aboutdialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+		}.bind(this)).then(function(res){
+			
+		});		
+		
+	}
+	this.helpReference = function(){
+		this.screen.openModal(function(){
+			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				title:"Reference",
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+		}.bind(this)).then(function(res){
+			
+		});	
+	}
+	this.helpGettingStarted = function(){
+		this.screen.openModal(function(){
+			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
+				position:"absolute", 
+				title:"Getting started",
+				miss:function(){
+					this.screen.closeModal(false)
+				
+			}} );
+		}.bind(this)).then(function(res){
+			
+		});	
+	}
 	
+	this.undo = function(){
+		this.sourceset.undo();
+	}
+	this.redo = function(){
+		this.sourceset.redo();
+	}
 	this.render = function(){
 		return [
-			menubar({menus:[
+			menubar({name:"themenu", menus:[
 				{name:"File", commands:[
-					{name:"Open composition", clickaction:function(){this.openComposition();}.bind(this)},
-					{name:"New composition", clickaction:function(){this.newComposition();}.bind(this)},
-						{name: "Rename composition", clickaction:function(){this.renameComposition();}.bind(this), enabled: false}
+					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
+					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},
+						{name: "Rename composition", clickaction:function(){this.renameComposition();return true;}.bind(this), enabled: false}
 					]}
 				,
-			{name:"Help"}
+			{name:"Edit", commands:[
+				{name:"Undo", icon:"undo", clickaction:function(){this.undo();}.bind(this)},
+				{name:"Redo",icon:"redo",  clickaction:function(){this.redo();}.bind(this)}
+				
+			]}
+				,
+			{name:"Help", commands:[
+				{name:"About Flowgraph", clickaction:function(){this.helpAbout();return true;}.bind(this)},
+				{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
+				{name:"Reference", clickaction:function(){this.helpReference();return true;}.bind(this)}
+			]}
 				]})		
 			,splitcontainer({}
-				,splitcontainer({flex:0.3, flexdirection:"column", direction:"horizontal"}
-					,dockpanel({title:"Composition" }
-						,searchbox()
+				,splitcontainer({flex:0.2, flexdirection:"column", direction:"horizontal"}
+					,dockpanel({title:"Composition" , flex: 0.2}
+						//,searchbox()
 						
 						,treeview({flex:1, dataset: this.sourceset})
 					)
 					,dockpanel({title:"Library", viewport:"2D" }
-						,searchbox()
+						//,searchbox()
 						,library({name:"thelibrary", dataset:this.librarydata})
 					)
 				)
-				,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridclick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
-					,view({name:"underlayer", bg:0}
-						,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
-					)
-					,view({name:"connectionlayer", bg:false, dataset: this.sourceset, arender:function(){
-						return this.renderConnections();
-					}.bind(this)}
-						,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
-						,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
-						,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
-						,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
-						,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
-						,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
-					)
-					,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
-					,view({name:"blocklayer", bg:0,  dataset: this.sourceset, arender:function(){
-						return this.renderBlocks();
-					}.bind(this)}
-						,block({name:"phone", title:"Phone", x:200, y:20})
-						,block({name:"tv", title:"Television", x:50, y:200})
-						,block({name:"tablet", title:"Tablet",x:300, y:120})						
-						,block({name:"thing", title:"Thing",x:500, y:120})						
-						,block({name:"a", title:"block A", x:50, y:300})
-						,block({name:"b", title:"block B", x:150, y:500})
-						,block({name:"c", title:"block C", x:250, y:400})
-						,block({name:"d", title:"block D", x:350, y:500})
-						,block({name:"e", title:"block E", x:450, y:600})
-						,block({name:"f", title:"block F", x:550, y:700})
-					)
-											
-					,view({name:"popuplayer", bg:false},
-						view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
-							label({text:"Connection", bg:0, margin:4})
-							,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0 })
+				,splitcontainer({flexdirection:"column", direction:"horizontal"}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+						,view({name:"underlayer", bg:0}
+							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 						)
-						,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
-						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-							label({text:"Block", bg:0, margin:4})
-							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
-						)
-						
-						,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
-						//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-							label({text:"Group", bg:0, margin:4})
-							,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
-						)
-						,this.selectorrect({name:"selectorrect"})							
+						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
+							return this.renderConnections();
+						}.bind(this)}
+						/*
+							,connection({from:"phone", to:"tv",fromoutput:"output 1" , toinput:"input 1" })
+							,connection({from:"tablet", to:"thing",fromoutput:"output 1" , toinput:"input 2" })
+							,connection({from:"a", fromoutput:"output 1",  to:"b", toinput:"input 2" })
+							,connection({from:"b", fromoutput:"output 2", to:"c", toinput:"input 1" })
+							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
+							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
+						*/)
 						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
+						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
+							return this.renderBlocks();
+						}.bind(this)}
+						/*	,block({name:"phone", title:"Phone", x:200, y:20})
+							,block({name:"tv", title:"Television", x:50, y:200})
+							,block({name:"tablet", title:"Tablet",x:300, y:120})						
+							,block({name:"thing", title:"Thing",x:500, y:120})						
+							,block({name:"a", title:"block A", x:50, y:300})
+							,block({name:"b", title:"block B", x:150, y:500})
+							,block({name:"c", title:"block C", x:250, y:400})
+							,block({name:"d", title:"block D", x:350, y:500})
+							,block({name:"e", title:"block E", x:450, y:600})
+							,block({name:"f", title:"block F", x:550, y:700})
+						*/)
+												
+						,view({name:"popuplayer", bg:false},
+							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
+								label({text:"Connection", bg:0, margin:4})
+								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0 })
+							)
+							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
+							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
+								label({text:"Block", bg:0, margin:4})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+							)
+							
+							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
+							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
+								label({text:"Group", bg:0, margin:4})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+							)
+							,this.selectorrect({name:"selectorrect"})							
+							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
+						)
 					)
+					,jsviewer({name:'jsviewer', readonly:false, sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
-				,splitcontainer({flex:0.5,direction:"horizontal"}
-					,dockpanel({title:"Properties", viewport:"2D"}
-						,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
-					)	
-				)
+
+/*
+,splitcontainer({flex:0.5,direction:"horizontal"}
+,dockpanel({title:"Properties", viewport:"2D"}
+,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
+)	
+)
+*/
+
 			)
 		];
 	}

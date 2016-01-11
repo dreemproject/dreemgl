@@ -187,7 +187,7 @@
 		function require(dep_path, ext){
 			// skip nodejs style includes
 			var abs_path = define.joinPath(base_path, define.expandVariables(dep_path))
-			if(!define.fileExt(abs_path)) abs_path = abs_path + '.js'
+			if(!ext && !define.fileExt(abs_path)) abs_path = abs_path + '.js'
 
 			// lets look it up
 			var module = define.module[abs_path]
@@ -234,11 +234,11 @@
 			return new Promise(function(resolve, reject){
 				if(define.factory[path]){
 					// if its already asynchronously loading.. 
-					var module = require(path)
+					var module = require(path, ext)
 					return resolve(module)
 				}
 				define.loadAsync(dep_path, from_file, ext).then(function(){
-					var module = require(path)
+					var module = require(path, ext)
 					resolve(module)
 				}, reject)
 			})
@@ -409,7 +409,7 @@
 			}
 		})
 		Object.defineProperty(Constructor, 'body', {value:body})
-
+		body.class_args = args
 		return body.apply(Constructor.prototype, args)
 	}
 
@@ -750,7 +750,7 @@
 				var ext = inext === undefined ? define.fileExt(url): inext;
 				var abs_url, fac_url
 
-				if(url.indexOf('http:') === 0){ // we are fetching a url..
+				if(url.indexOf('http:') === 0 || url.indexOf('https:') === 0){ // we are fetching a url..
 					fac_url = url
 					abs_url = define.$root + '/proxy?' + encodeURIComponent(url)
 				}
@@ -1371,6 +1371,48 @@
 
 
 
+	define.prim = {
+		int8:function int8(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint8:function uint8(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		int16:function int16(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint16:function uint16(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		int32:function int32(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint32:function uint32(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		half:function half(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		float32:function float32(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		float64:function float64(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		bool:function boolean(value){
+			if(value && value.isArray) return value
+			return value? true: false
+		}
+	}
 
 	define.struct = function(def, id){
 
@@ -1401,26 +1443,7 @@
 		var mysize = getStructSize(def)
 		var Struct
 		if(def.prim){
-			if(myarray === Float32Array || myarray === Float64Array){
-				Struct = function FloatLike(value){
-					if(value && value.isArray) return value
-					return parseFloat(value)
-				}
-			}
-			else{
-				if(id === 'bool'){
-					Struct = function BoolLike(value){
-						if(value && value.isArray) return value
-						return value? true: false
-					}
-				}
-				else{
-					Struct = function IntLike(value){
-						if(value && value.isArray) return value
-						return parseInt(value)
-					}
-				}
-			}
+			Struct = define.prim[id]
 			Struct.bytes = def.bytes
 			Struct.primitive = true
 		}
@@ -2183,7 +2206,7 @@
 
 		// global functions
 		exports.flow = function(value){
-			console.log(value)
+			console.log('global>', value)
 			return value
 		}
 
@@ -2305,10 +2328,12 @@
 		}
 
 		// parsing a wired function as string
-		exports.wire = function wire(string){
-			src = "return " + string
-			var fn = new Function(src)
-			fn.is_wired = true
+		exports.wire = function wire(fn){
+			if (typeof(fn) !== 'function') {
+				src = "return " + fn.toString()
+				fn = new Function('find','rpc', src)
+			}
+			fn.is_wired = true;
 			return fn
 		}
 

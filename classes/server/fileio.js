@@ -42,7 +42,10 @@ define.class(function(require, service){
 	this.writefile = function(name, data){
 		
 		try{
-			return fs.writeFileSync(define.expandVariables( name), data)
+			console.log(name);
+			var fullname = define.expandVariables( name);
+			console.log("writing file:",fullname);
+			return fs.writeFileSync(fullname, data)
 		}
 		catch(e){
 			return null

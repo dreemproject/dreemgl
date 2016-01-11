@@ -6,6 +6,8 @@
 
 define.class(function(require, exports){
 
+	var rpcproxy = require('./rpcproxy')
+
 	this.atConstructor = function(host){
 		this.host = host
 		this.promises = {}
@@ -21,6 +23,16 @@ define.class(function(require, exports){
 	this.attributeRpc = function(name, msg){
 		msg.rpcid = name
 		return this.host.setRpcAttribute(msg, null )
+	}
+
+	// lets disconnect all listeners
+	this.disconnectAll = function(){
+		for(var key in this){
+			var obj = this[key]
+			if(obj instanceof rpcproxy){
+				obj.disconnectAll()
+			}
+		}
 	}
 
 	this.resolveReturn = function(msg){

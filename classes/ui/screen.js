@@ -27,6 +27,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 		globalmouserightup: Config({type:Event}),
 		globalmousewheelx: Config({type:Event}),
 		globalmousewheely: Config({type:Event}),
+		status:""
 	}
 
 	this.bg = false
@@ -43,7 +44,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 	this.atConstructor = function(){
 	}
 
-	this.init = function (previous) {
+	this.oninit = function (previous) {
 		// ok. lets bind inputs
 		this.modal_stack = []
 		this.focus_view = undefined
@@ -182,8 +183,8 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 	}
 	
 	// internal: remap the mouse to a view node	
-	this.remapMouse = function(node){
-
+	this.remapMouse = function(node, dbg){
+			
 		var parentlist = []
 		var ip = node.parent
 		
@@ -196,10 +197,19 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			if (ip._viewport || !ip.parent) parentlist.push(ip)
 			ip = ip.parent
 		}
-
 		var logging = false
+		if (dbg) 
+		{
+			logging = true;
+		}
+		
+		if (logging)
+		{
+			//console.clear()
+			console.log(node.constructor.name)
+			console.log(node.layout);
 
-		if (logging) console.clear()
+		}
 		if (logging){
 			var	parentdesc = "Parentchain: "
 			for(var i =parentlist.length-1;i>=0;i--) {
@@ -256,7 +266,9 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 			
 				// console.log(i, ressofar, "viewportmatrix");
-
+				
+				if (logging)  console.log(i, "LAYOUT", P.layout.width, P.layout.height);
+				
 				mat4.scalematrix([P.layout.width/2,P.layout.height/2,1000/2], scaletemp)
 				mat4.invert(scaletemp, this.remapmatrix)
 
@@ -284,7 +296,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			lastmode = newmode
 			// console.log(i, raystart, "last");	
 		}
-
+	if (logging) console.log(node._viewport, node.viewportmatrix, node.totalmatrix);
 		var MM = node._viewport?node.viewportmatrix: node.totalmatrix
 		mat4.invert(MM, this.remapmatrix)
 		raystart = vec3.mul_mat4(raystart, this.remapmatrix)
@@ -636,6 +648,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			vroot.render = render
 			vroot.parent = this
 			vroot.screen = this
+			vroot.rpc = this.rpc
 			vroot.parent_viewport = this
 			// render it
 			Render.process(vroot, undefined, undefined, true)

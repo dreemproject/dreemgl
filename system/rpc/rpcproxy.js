@@ -7,6 +7,16 @@
 define.class('$system/base/node', function(require, exports){
 	var RpcProxy = exports
 	
+	// disconnect all listeners to this rpc object
+	this.disconnectAll = function(){
+		for(var key in this._attributes){
+			var listen  = this['_listen_'+key]
+			if(listen && listen.length){
+				listen.length = 0
+			}
+		}
+	}
+
 	RpcProxy.defineProp = function(obj, key, value){
 		var store = '__' + key
 		Object.defineProperty(obj, key, {
