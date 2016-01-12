@@ -1808,6 +1808,11 @@ define.class(function(require, exports){
 					}
 				}
 			}
+
+			if(this.storeComments){
+				def.cm1 = this.commentInline()
+			}
+
 			defs.push(this.finishNode(def, "Def"))
 			if (!this.eat(this._comma)) break
 		}

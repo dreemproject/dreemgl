@@ -106,7 +106,6 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 						this.screen.locationhash = function(event){
 						//	debugger
 							if(event.value.path) require.async(event.value.path).then(function(module){
-								console.log(module)
 								this.classconstr = module
 							}.bind(this))
 						}.bind(this)
