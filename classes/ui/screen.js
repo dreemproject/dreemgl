@@ -57,11 +57,12 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 		this.bindInputs()
 	}
 	
-	this.defaultKeyboardHandler = function(target, v){
+	this.defaultKeyboardHandler = function(target, v, prefix){
+		if (!prefix) prefix = "";
 		if(!v.name) return console.log("OH NOES",v)		
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
-		var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
+		var name = prefix + 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
 		this.undo_group++
 
 		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
@@ -73,6 +74,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			target[name](v)
 		}
 		else{
+			console.log(name);
 			if (target.keydownHandler) target.keydownHandler(name);
 		}
 	}
