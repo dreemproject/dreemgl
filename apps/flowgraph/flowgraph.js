@@ -216,7 +216,7 @@ define.class('$ui/view', function(require,
 				var cx = 0;
 				var cy = 0;
 				var n = 0;
-				for(a in this.currentselection){
+				for(var a in this.currentselection){
 					var bl = this.currentselection[a];
 					if (bl instanceof block){
 						n++;

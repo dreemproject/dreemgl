@@ -4,12 +4,12 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class(function(view, button, label){
+define.class('$ui/view', function(view, button, label){
 	// Create a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
 
 	this.attributes = {
 		// The currently active tab. 
-		activetab, Config({type: int, value: 0}),
+		activetab: Config({type: int, value: 0}),
 		// the color of the tab
 		color: Config({type: vec4, value: vec4("#404050")}),
 		// color of hover
@@ -19,7 +19,7 @@ define.class(function(view, button, label){
 	}
 
 	// The currently active tab. 
-	this.persists("activetab")
+	//this.persists("activetab")
 	
 	this.flex = 1;
 	
@@ -37,7 +37,7 @@ define.class(function(view, button, label){
 	})
 	
 	var tabbuttonprox = this.tabbutton;
-	this.flexwrap= ""
+	this.flexwrap= "wrap"
 	this.flexdirection = "column"
 	this.position = "relative"
 	this.flexdirection = "column"
@@ -58,7 +58,7 @@ define.class(function(view, button, label){
 
 	var tabcontrol = this.constructor
 	this.constructor.examples = {
-		Usage:{
+		Usage:function(){
 			return [
 				tabcontrol({}
 					,label({tabicon:"flask", tabname:"Flask",  text: "I am on tab 1 - my icon is a flask!", fgcolor: "blue", fontsize: 20})

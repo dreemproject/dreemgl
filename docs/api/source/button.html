@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='button'>/**
+</span> * @class button
+ * @extends view
+ * Simple button: a rectangle with a textlabel and an icon
+ */
+<span id='button-attribute-text'>/**
+</span> * @attribute {String} text
+ * The label for the button
+ */
+<span id='button-attribute-icon'>/**
+</span> * @attribute {String} icon
+ * The icon for the button, see FontAwesome for the available icon-names.
+ */
+<span id='button-attribute-fontsize'>/**
+</span> * @attribute {float32} [fontsize=&quot;14&quot;]
+ * Font size in device-pixels.
+ */
+<span id='button-attribute-col1'>/**
+</span> * @attribute {vec4} [col1=&quot;0.15294118225574493,0.15294118225574493,0.15294118225574493,1&quot;]
+ * Gradient color 1
+ */
+<span id='button-attribute-col2'>/**
+</span> * @attribute {vec4} [col2=&quot;0.15294118225574493,0.15294118225574493,0.15294118225574493,1&quot;]
+ * Gradient color 2
+ */
+<span id='button-attribute-textcolor'>/**
+</span> * @attribute {vec4} [textcolor=&quot;1,1,1,1&quot;]
+ * Color of the label text in neutral state
+ */
+<span id='button-attribute-textactivecolor'>/**
+</span> * @attribute {vec4} [textactivecolor=&quot;1,1,1,1&quot;]
+ * Color of the label text in pressed-down state
+ */
+<span id='button-attribute-buttoncolor1'>/**
+</span> * @attribute {vec4} [buttoncolor1=&quot;0.38823530077934265,0.38823530077934265,0.38823530077934265,1&quot;]
+ * First gradient color for the button background in neutral state
+ */
+<span id='button-attribute-buttoncolor2'>/**
+</span> * @attribute {vec4} [buttoncolor2=&quot;0.38823530077934265,0.38823530077934265,0.38823530077934265,1&quot;]
+ * Second gradient color for the button background in neutral state
+ */
+<span id='button-attribute-hovercolor1'>/**
+</span> * @attribute {vec4} [hovercolor1=&quot;0.772549033164978,0.772549033164978,0.772549033164978,1&quot;]
+ * First gradient color for the button background in hovered state
+ */
+<span id='button-attribute-hovercolor2'>/**
+</span> * @attribute {vec4} [hovercolor2=&quot;0.4745098054409027,0.4745098054409027,0.4745098054409027,1&quot;]
+ * Second gradient color for the button background in hovered state
+ */
+<span id='button-attribute-pressedcolor1'>/**
+</span> * @attribute {vec4} [pressedcolor1=&quot;0.43921568989753723,0.43921568989753723,0.43921568989753723,1&quot;]
+ * First gradient color for the button background in pressed state
+ */
+<span id='button-attribute-pressedcolor2'>/**
+</span> * @attribute {vec4} [pressedcolor2=&quot;0.43921568989753723,0.43921568989753723,0.43921568989753723,1&quot;]
+ * Second gradient color for the button background in pressed state
+ */
+<span id='button-attribute-internalmargin'>/**
+</span> * @attribute {vec4} [internalmargin=&quot;0,0,0,0&quot;]
+ * Second gradient color for the button background in pressed state
+ */
+<span id='button-attribute-bold'>/**
+</span> * @attribute {boolean} [bold=&quot;true&quot;]
+ */
+<span id='button-attribute-enabled'>/**
+</span> * @attribute {boolean} [enabled=&quot;true&quot;]
+ */
+<span id='button-attribute-defaultbutton'>/**
+</span> * @attribute {boolean} defaultbutton
+ */
+<span id='button-attribute-bgcolor'>/**
+</span> * @attribute {vec4} [bgcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='button-attribute-fgcolor'>/**
+</span> * @attribute {String} [fgcolor=&quot;white&quot;]
+ */
+<span id='button-attribute-padding'>/**
+</span> * @attribute {vec4} [padding=&quot;0,0,0,0&quot;]
+ */
+<span id='button-attribute-borderradius'>/**
+</span> * @attribute {vec4} [borderradius=&quot;0,0,0,0&quot;]
+ */
+<span id='button-attribute-borderwidth'>/**
+</span> * @attribute {vec4} [borderwidth=&quot;0,0,0,0&quot;]
+ */
+<span id='button-attribute-margin'>/**
+</span> * @attribute {vec4} [margin=&quot;0,0,0,0&quot;]
+ */
+<span id='button-attribute-bordercolor'>/**
+</span> * @attribute {vec4} [bordercolor=&quot;0,0,0,0&quot;]
+ */
+<span id='button-attribute-alignitems'>/**
+</span> * @attribute {Enum} [alignitems=&quot;stretch&quot;]
+ */
+<span id='button-attribute-justifycontent'>/**
+</span> * @attribute {Enum} justifycontent
+ */
+<span id='button-method-onbold'>/**
+</span> * @method onbold
+ */
+<span id='button-method-bgcolorfn'>/**
+</span> * @method bgcolorfn
+ * @param pos
+ */
+<span id='button-method-statehover'>/**
+</span> * @method statehover
+ * the hover state when someone hovers over the button
+ */
+<span id='button-method-statenormal'>/**
+</span> * @method statenormal
+ * the normal button state
+ * @param first
+ */
+<span id='button-method-stateclick'>/**
+</span> * @method stateclick
+ * clicked state
+ */
+<span id='button-method-init'>/**
+</span> * @method init
+ */
+<span id='button-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='button-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='button-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ */
+<span id='button-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ * @param event
+ */
+<span id='button-method-render'>/**
+</span> * @method render
+ */
+<span id='button-event-click'>/**
+</span> * @event click
+ */</pre>
+</body>
+</html>

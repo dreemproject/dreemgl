@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='colorpicker'>/**
+</span> * @class colorpicker
+ * @extends view
+ */
+<span id='colorpicker-attribute-value'>/**
+</span> * @attribute {vec4} [value=&quot;white&quot;]
+ * the value of the colorpicker, a color
+ */
+<span id='colorpicker-attribute-fontsize'>/**
+</span> * @attribute {int32} [fontsize=&quot;14&quot;]
+ * the foreground color of the fonts
+ */
+<span id='colorpicker-attribute-internalbordercolor'>/**
+</span> * @attribute {vec4} [internalbordercolor=&quot;1,1,1,0.6000000238418579&quot;]
+ * internal border color
+ */
+<span id='colorpicker-attribute-basehue'>/**
+</span> * @attribute {float32} [basehue=&quot;0.5&quot;]
+ * read-only the hue value (HSV)
+ */
+<span id='colorpicker-attribute-basesat'>/**
+</span> * @attribute {float32} [basesat=&quot;0.8&quot;]
+ * read-only the saturation value (HSV)
+ */
+<span id='colorpicker-attribute-baseval'>/**
+</span> * @attribute {float32} [baseval=&quot;0.5&quot;]
+ * read-only, the value (HSV)
+ */
+<span id='colorpicker-attribute-sliderheight'>/**
+</span> * @attribute {float32} [sliderheight=&quot;15&quot;]
+ */
+<span id='colorpicker-method-internalbordercolor'>/**
+</span> * @method internalbordercolor
+ */
+<span id='colorpicker-method-updatecontrol'>/**
+</span> * @method updatecontrol
+ * @param name
+ * @param val
+ */
+<span id='colorpicker-method-updatelabel'>/**
+</span> * @method updatelabel
+ * @param name
+ * @param val
+ */
+<span id='colorpicker-method-numbertohex'>/**
+</span> * @method numbertohex
+ * @param num
+ */
+<span id='colorpicker-method-buildhexnumber'>/**
+</span> * @method buildhexnumber
+ * @param vector
+ */
+<span id='colorpicker-method-updateallcontrols'>/**
+</span> * @method updateallcontrols
+ */
+<span id='colorpicker-method-value'>/**
+</span> * @method value
+ */
+<span id='colorpicker-method-createColorFromHSV'>/**
+</span> * @method createColorFromHSV
+ */
+<span id='colorpicker-method-createHSVFromColor'>/**
+</span> * @method createHSVFromColor
+ */
+<span id='colorpicker-method-setRed'>/**
+</span> * @method setRed
+ * @param r
+ */
+<span id='colorpicker-method-setGreen'>/**
+</span> * @method setGreen
+ * @param g
+ */
+<span id='colorpicker-method-setBlue'>/**
+</span> * @method setBlue
+ * @param b
+ */
+<span id='colorpicker-method-setHueBase'>/**
+</span> * @method setHueBase
+ * @param h
+ */
+<span id='colorpicker-method-setSatBase'>/**
+</span> * @method setSatBase
+ * @param s
+ */
+<span id='colorpicker-method-setLumBase'>/**
+</span> * @method setLumBase
+ * @param s
+ */
+<span id='colorpicker-method-layout'>/**
+</span> * @method layout
+ */
+<span id='colorpicker-method-render'>/**
+</span> * @method render
+ */
+<span id='colorpicker-customslider'>/**
+</span> * @class colorpicker.customslider
+ * @extends view
+ */
+<span id='colorpicker-customslider-attribute-hsvfrom'>/**
+</span> * @attribute {vec3} [hsvfrom=&quot;0,1,0.5&quot;]
+ * hsv color for the left side
+ */
+<span id='colorpicker-customslider-attribute-hsvto'>/**
+</span> * @attribute {vec3} [hsvto=&quot;1,1,0.5&quot;]
+ * hsv color for the right side
+ */
+<span id='colorpicker-customslider-attribute-hsvhueadd'>/**
+</span> * @attribute {float32} hsvhueadd
+ */
+<span id='colorpicker-customslider-attribute-basehue'>/**
+</span> * @attribute {float32} basehue
+ */
+<span id='colorpicker-customslider-attribute-currentcolor'>/**
+</span> * @attribute {vec4} [currentcolor=&quot;1,0,0,1&quot;]
+ */
+<span id='colorpicker-customslider-attribute-contrastcolor'>/**
+</span> * @attribute {vec4} [contrastcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='colorpicker-customslider-attribute-draggercolor'>/**
+</span> * @attribute {vec4} [draggercolor=&quot;1,1,1,0.800000011920929&quot;]
+ * Color of the draggable part of the scrollbar
+ */
+<span id='colorpicker-customslider-attribute-draggerradius'>/**
+</span> * @attribute {float32} [draggerradius=&quot;3&quot;]
+ * Color of the draggable part of the scrollbar
+ */
+<span id='colorpicker-customslider-attribute-hovercolor'>/**
+</span> * @attribute {vec4} [hovercolor=&quot;0.501960813999176,0.501960813999176,0.7529411911964417,1&quot;]
+ * Color when the mouse is hovering over the draggable part of the scrollbar
+ */
+<span id='colorpicker-customslider-attribute-activecolor'>/**
+</span> * @attribute {vec4} [activecolor=&quot;0.501960813999176,0.501960813999176,0.7529411911964417,1&quot;]
+ * Color of the draggable part of the scrollbar while actively scrolling
+ */
+<span id='colorpicker-customslider-attribute-vertical'>/**
+</span> * @attribute {Boolean} vertical
+ * Is this a horizontal or a vertical scrollbar?
+ */
+<span id='colorpicker-customslider-attribute-offset'>/**
+</span> * @attribute {float32} offset
+ * Current start offset of the scrollbar. Ranges from 0 to total - page
+ */
+<span id='colorpicker-customslider-attribute-page'>/**
+</span> * @attribute {float32} [page=&quot;25&quot;]
+ * Page size, in total
+ */
+<span id='colorpicker-customslider-attribute-total'>/**
+</span> * @attribute {float32} [total=&quot;280&quot;]
+ * total size.
+ */
+<span id='colorpicker-customslider-attribute-bgcolor'>/**
+</span> * @attribute {vec4} [bgcolor=&quot;1,1,1,1&quot;]
+ * set animation on bgcolor
+ */
+<span id='colorpicker-customslider-method-page'>/**
+</span> * @method page
+ */
+<span id='colorpicker-customslider-method-offset'>/**
+</span> * @method offset
+ */
+<span id='colorpicker-customslider-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='colorpicker-customslider-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='colorpicker-customslider-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param event
+ */
+<span id='colorpicker-customslider-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ */
+<span id='colorpicker-colorcirclecontrol'>/**
+</span> * @class colorpicker.colorcirclecontrol
+ * @extends view
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-ringwidth'>/**
+</span> * @attribute {float32} [ringwidth=&quot;0.3&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-hover'>/**
+</span> * @attribute {float32} hover
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-basehue'>/**
+</span> * @attribute {float32} [basehue=&quot;0.7&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-basesat'>/**
+</span> * @attribute {float32} [basesat=&quot;0.7&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-baseval'>/**
+</span> * @attribute {float32} [baseval=&quot;0.7&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-currentcolor'>/**
+</span> * @attribute {vec4} [currentcolor=&quot;white&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-contrastcolor'>/**
+</span> * @attribute {vec4} [contrastcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-attribute-draggersize'>/**
+</span> * @attribute {float32} [draggersize=&quot;8&quot;]
+ */
+<span id='colorpicker-colorcirclecontrol-method-updatehue'>/**
+</span> * @method updatehue
+ * @param mousepos
+ */
+<span id='colorpicker-colorcirclecontrol-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param event
+ */
+<span id='colorpicker-colorcirclecontrol-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ */
+<span id='colorpicker-colorcirclecontrol-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='colorpicker-colorcirclecontrol-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='colorpicker-colorcirclecontrol-method-bg'>/**
+</span> * @method bg
+ */
+<span id='colorpicker-colorcirclecontrol-fg'>/**
+</span> * @class colorpicker.colorcirclecontrol.fg
+ * @extends shaderwebgl
+ */
+<span id='colorpicker-colorcirclecontrol-fg-method-update'>/**
+</span> * @method update
+ */
+<span id='colorpicker-colorcirclecontrol-fg-method-position'>/**
+</span> * @method position
+ */
+<span id='colorpicker-colorcirclecontrol-fg-method-color'>/**
+</span> * @method color
+ */
+<span id='colorpicker-squareview'>/**
+</span> * @class colorpicker.squareview
+ * @extends view
+ */
+<span id='colorpicker-squareview-attribute-basehue'>/**
+</span> * @attribute {float32} [basehue=&quot;0.7&quot;]
+ */
+<span id='colorpicker-squareview-attribute-basesat'>/**
+</span> * @attribute {float32} [basesat=&quot;0.7&quot;]
+ */
+<span id='colorpicker-squareview-attribute-baseval'>/**
+</span> * @attribute {float32} [baseval=&quot;0.7&quot;]
+ */
+<span id='colorpicker-squareview-attribute-currentcolor'>/**
+</span> * @attribute {vec4} [currentcolor=&quot;white&quot;]
+ */
+<span id='colorpicker-squareview-attribute-contrastcolor'>/**
+</span> * @attribute {vec4} [contrastcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='colorpicker-squareview-attribute-draggersize'>/**
+</span> * @attribute {float32} [draggersize=&quot;8&quot;]
+ */
+<span id='colorpicker-squareview-attribute-hover'>/**
+</span> * @attribute {float32} [hover=&quot;1&quot;]
+ */
+<span id='colorpicker-squareview-method-updatecolorfrommouse'>/**
+</span> * @method updatecolorfrommouse
+ * @param p
+ */
+<span id='colorpicker-squareview-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param p
+ */
+<span id='colorpicker-squareview-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ */
+<span id='colorpicker-squareview-fg'>/**
+</span> * @class colorpicker.squareview.fg
+ * @extends shaderwebgl
+ */
+<span id='colorpicker-squareview-fg-method-update'>/**
+</span> * @method update
+ */
+<span id='colorpicker-squareview-fg-method-position'>/**
+</span> * @method position
+ */
+<span id='colorpicker-squareview-fg-method-color'>/**
+</span> * @method color
+ */
+<span id='colorpicker-squareview-bg'>/**
+</span> * @class colorpicker.squareview.bg
+ * @extends shaderwebgl
+ */
+<span id='colorpicker-squareview-bg-method-position'>/**
+</span> * @method position
+ */
+<span id='colorpicker-squareview-bg-method-color'>/**
+</span> * @method color
+ */
+<span id='colorpicker-squareview-bg-method-update'>/**
+</span> * @method update
+ */
+<span id='colorpicker-colorarea'>/**
+</span> * @class colorpicker.colorarea
+ * @extends view
+ */</pre>
+</body>
+</html>

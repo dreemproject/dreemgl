@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='api'>/**
+</span> * @class api
+ * @extends view
+ */
+<span id='api-attribute-setterCode'>/**
+</span> * @attribute {String} [setterCode=&quot;require &quot;net/http&quot;;
+require &quot;json&quot;;
+
+uri = URI.parse(&quot;http://localhost:2000/examples/extdemo&quot;)
+
+Net::HTTP.start(uri.hostname, uri.port) do |http|
+
+  (req = Net::HTTP::Post.new(uri)).body = {
+    rpcid: &quot;search&quot;,
+    type: &quot;attribute&quot;,
+    attribute: &quot;keyword&quot;,
+    value: &quot;Monkey&quot;
+  }.to_json
+
+  puts &quot;sending JSON: #{req.body}&quot;
+  http.request(req)
+
+end&quot;]
+ */
+<span id='api-attribute-getterCode'>/**
+</span> * @attribute {String} [getterCode=&quot;require &quot;net/http&quot;;
+require &quot;json&quot;;
+
+uri = URI.parse(&quot;http://localhost:2000/examples/extdemo&quot;)
+
+Net::HTTP.start(uri.hostname, uri.port) do |http|
+
+  (req = Net::HTTP::Post.new(uri)).body = {
+    rpcid: &quot;search&quot;,
+    type: &quot;attribute&quot;,
+    attribute: &quot;keyword&quot;,
+    get: true
+  }.to_json
+
+  puts &quot;sending JSON: #{req.body}&quot;
+  res = http.request(req)
+  puts &quot;response JSON: #{res.body}&quot;
+
+end&quot;]
+ */
+<span id='api-method-render'>/**
+</span> * @method render
+ */</pre>
+</body>
+</html>

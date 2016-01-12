@@ -4,8 +4,8 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function($ui$, view, label, button, icon){
+// The treeview control - classic treeview with expandable nodes.
 
-	// the treeview control - classic treeview with expandable nodes.
 	this.attributes = {
 		// the dataset to use for tree expansion. It follows a {name:'test',children:[{name:'child'}]} format
 		dataset: {},

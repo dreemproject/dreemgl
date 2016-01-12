@@ -834,7 +834,7 @@ define.class(function(require, constructor){
 		if(!initarray) initarray = [], immediate = true
 
 		if(this._wiredfns){
-			for(key in this._wiredfns){
+			for(var key in this._wiredfns){
 				this.connectWiredAttribute(key, initarray)
 			}
 		}

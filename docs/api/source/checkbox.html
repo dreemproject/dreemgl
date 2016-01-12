@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='checkbox'>/**
+</span> * @class checkbox
+ * @extends view
+ * Simple button: a rectangle with a textlabel and an icon
+ */
+<span id='checkbox-attribute-text'>/**
+</span> * @attribute {String} text
+ * The label for the button
+ */
+<span id='checkbox-attribute-fontsize'>/**
+</span> * @attribute {float32} [fontsize=&quot;14&quot;]
+ * Font size in device-pixels.
+ */
+<span id='checkbox-attribute-col1'>/**
+</span> * @attribute {vec4} [col1=&quot;0.250980406999588,0.250980406999588,0.250980406999588,1&quot;]
+ * Gradient color 1
+ */
+<span id='checkbox-attribute-col2'>/**
+</span> * @attribute {vec4} [col2=&quot;0.250980406999588,0.250980406999588,0.250980406999588,1&quot;]
+ * Gradient color 2
+ */
+<span id='checkbox-attribute-textcolor'>/**
+</span> * @attribute {vec4} [textcolor=&quot;0.250980406999588,0.250980406999588,0.250980406999588,1&quot;]
+ * Color of the label text in neutral state
+ */
+<span id='checkbox-attribute-textactivecolor'>/**
+</span> * @attribute {vec4} [textactivecolor=&quot;0,0.501960813999176,0,1&quot;]
+ * Color of the label text in pressed-down state
+ */
+<span id='checkbox-attribute-buttoncolor1'>/**
+</span> * @attribute {vec4} [buttoncolor1=&quot;1,1,0.9411764740943909,1&quot;]
+ * First gradient color for the button background in neutral state
+ */
+<span id='checkbox-attribute-buttoncolor2'>/**
+</span> * @attribute {vec4} [buttoncolor2=&quot;1,1,1,1&quot;]
+ * Second gradient color for the button background in neutral state
+ */
+<span id='checkbox-attribute-hovercolor1'>/**
+</span> * @attribute {vec4} [hovercolor1=&quot;0.9411764740943909,0.9411764740943909,0.9411764740943909,1&quot;]
+ * First gradient color for the button background in hovered state
+ */
+<span id='checkbox-attribute-hovercolor2'>/**
+</span> * @attribute {vec4} [hovercolor2=&quot;0.9725490212440491,0.9725490212440491,0.9725490212440491,1&quot;]
+ * Second gradient color for the button background in hovered state
+ */
+<span id='checkbox-attribute-pressedcolor1'>/**
+</span> * @attribute {vec4} [pressedcolor1=&quot;0.8156862854957581,0.8156862854957581,0.9411764740943909,1&quot;]
+ * First gradient color for the button background in pressed state
+ */
+<span id='checkbox-attribute-pressedcolor2'>/**
+</span> * @attribute {vec4} [pressedcolor2=&quot;0.8156862854957581,0.8156862854957581,0.9411764740943909,1&quot;]
+ * Second gradient color for the button background in pressed state
+ */
+<span id='checkbox-attribute-value'>/**
+</span> * @attribute {Boolean} value
+ */
+<span id='checkbox-attribute-bgcolor'>/**
+</span> * @attribute {vec4} [bgcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='checkbox-attribute-fgcolor'>/**
+</span> * @attribute {String} [fgcolor=&quot;white&quot;]
+ */
+<span id='checkbox-attribute-buttonres'>/**
+</span> * @attribute {Object} [buttonres=&quot;[object Object]&quot;]
+ */
+<span id='checkbox-attribute-padding'>/**
+</span> * @attribute {vec4} [padding=&quot;0,0,0,0&quot;]
+ */
+<span id='checkbox-attribute-borderradius'>/**
+</span> * @attribute {vec4} [borderradius=&quot;0,0,0,0&quot;]
+ */
+<span id='checkbox-attribute-borderwidth'>/**
+</span> * @attribute {vec4} [borderwidth=&quot;0,0,0,0&quot;]
+ */
+<span id='checkbox-attribute-margin'>/**
+</span> * @attribute {vec4} [margin=&quot;0,0,0,0&quot;]
+ */
+<span id='checkbox-attribute-bordercolor'>/**
+</span> * @attribute {vec4} [bordercolor=&quot;0,0,0,0&quot;]
+ */
+<span id='checkbox-attribute-alignItems'>/**
+</span> * @attribute {String} [alignItems=&quot;center&quot;]
+ */
+<span id='checkbox-method-onclick'>/**
+</span> * @method onclick
+ */
+<span id='checkbox-method-statehover'>/**
+</span> * @method statehover
+ * the hover state when someone hovers over the button
+ */
+<span id='checkbox-method-statenormal'>/**
+</span> * @method statenormal
+ * the normal button state
+ */
+<span id='checkbox-method-stateclick'>/**
+</span> * @method stateclick
+ * clicked state
+ */
+<span id='checkbox-method-init'>/**
+</span> * @method init
+ */
+<span id='checkbox-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='checkbox-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='checkbox-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ */
+<span id='checkbox-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ * @param event
+ */
+<span id='checkbox-method-render'>/**
+</span> * @method render
+ */
+<span id='checkbox-event-click'>/**
+</span> * @event click
+ */</pre>
+</body>
+</html>

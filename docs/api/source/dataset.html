@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='dataset'>/**
+</span> * @class dataset
+ * @extends node
+ * The dataset class allows you to share a single &quot;document&quot; between various parts of your application. 
+ * The dataset provides undo/redo functionality by serializing its contents to a JSON string.
+ * To modify a dataset you need to use the &quot;fork&quot; method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.
+ */
+<span id='dataset-method-_atConstructor'>/**
+</span> * @method _atConstructor
+ * @param data
+ */
+<span id='dataset-method-atAttributeAssign'>/**
+</span> * @method atAttributeAssign
+ * Handles the binding of this dataset to the attribute of something else.
+ * @param obj
+ * @param key
+ */
+<span id='dataset-method-fork'>/**
+</span> * @method fork
+ * Fork starts a new modification on a dataset;
+ * @param callback
+ * the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
+ */
+<span id='dataset-method-silent'>/**
+</span> * @method silent
+ * Silent operates much the same as &lt;fork&gt;, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
+ * @param callback
+ * function; the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
+ */
+<span id='dataset-method-notifyAssignedAttributes'>/**
+</span> * @method notifyAssignedAttributes
+ * Cause objects that have us assigned to reload
+ */
+<span id='dataset-method-parse'>/**
+</span> * @method parse
+ * convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
+ * @param stringdata
+ */
+<span id='dataset-method-stringify'>/**
+</span> * @method stringify
+ * convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
+ * @param data
+ * Object
+ */
+<span id='dataset-method-undo'>/**
+</span> * @method undo
+ * Go back to the previous state. All classes that have this dataset bound will get their assignment updated
+ */
+<span id='dataset-method-redo'>/**
+</span> * @method redo
+ * Go back to the previous state. All classes that have this dataset bound will get their assignment updated
+ */</pre>
+</body>
+</html>

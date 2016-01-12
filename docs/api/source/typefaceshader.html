@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='typefaceshader'>/**
+</span> * @class typefaceshader
+ * @extends shaderwebgl
+ * the font
+ */
+<span id='typefaceshader-method-newText'>/**
+</span> * @method newText
+ * this thing makes a new text array buffer
+ */
+<span id='typefaceshader-method-glyphy_mesh_sdf'>/**
+</span> * @method glyphy_mesh_sdf
+ */
+<span id='typefaceshader-method-glyphy_compute_position'>/**
+</span> * @method glyphy_compute_position
+ */
+<span id='typefaceshader-method-glyphy_mesh_atlas'>/**
+</span> * @method glyphy_mesh_atlas
+ */
+<span id='typefaceshader-method-paint'>/**
+</span> * @method paint
+ * @param p
+ * @param m
+ * @param pixelscale
+ */
+<span id='typefaceshader-method-style'>/**
+</span> * @method style
+ * @param pos
+ */
+<span id='typefaceshader-method-moddist'>/**
+</span> * @method moddist
+ * @param pos
+ * @param dist
+ */
+<span id='typefaceshader-method-glyphy_isinf'>/**
+</span> * @method glyphy_isinf
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_iszero'>/**
+</span> * @method glyphy_iszero
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_ortho'>/**
+</span> * @method glyphy_ortho
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_float_to_byte'>/**
+</span> * @method glyphy_float_to_byte
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_vec4_to_bytes'>/**
+</span> * @method glyphy_vec4_to_bytes
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_float_to_two_nimbles'>/**
+</span> * @method glyphy_float_to_two_nimbles
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_tan2atan'>/**
+</span> * @method glyphy_tan2atan
+ * @param d
+ */
+<span id='typefaceshader-method-glyphy_arc_endpoint_decode'>/**
+</span> * @method glyphy_arc_endpoint_decode
+ * @param v
+ * @param nominal_size
+ */
+<span id='typefaceshader-method-glyphy_arc_center'>/**
+</span> * @method glyphy_arc_center
+ * @param a
+ */
+<span id='typefaceshader-method-glyphy_arc_wedge_contains'>/**
+</span> * @method glyphy_arc_wedge_contains
+ * @param a
+ * @param p
+ */
+<span id='typefaceshader-method-glyphy_arc_wedge_signed_dist_shallow'>/**
+</span> * @method glyphy_arc_wedge_signed_dist_shallow
+ * @param a
+ * @param p
+ */
+<span id='typefaceshader-method-glyphy_arc_wedge_signed_dist'>/**
+</span> * @method glyphy_arc_wedge_signed_dist
+ * @param a
+ * @param p
+ */
+<span id='typefaceshader-method-glyphy_arc_extended_dist'>/**
+</span> * @method glyphy_arc_extended_dist
+ * @param a
+ * @param p
+ */
+<span id='typefaceshader-method-glyphy_arc_list_offset'>/**
+</span> * @method glyphy_arc_list_offset
+ * @param p
+ * @param nominal_size
+ */
+<span id='typefaceshader-method-glyphy_arc_list_decode'>/**
+</span> * @method glyphy_arc_list_decode
+ * @param v
+ * @param nominal_size
+ */
+<span id='typefaceshader-method-glyphy_antialias'>/**
+</span> * @method glyphy_antialias
+ * @param d
+ */
+<span id='typefaceshader-method-glyphy_arc_list'>/**
+</span> * @method glyphy_arc_list
+ * @param p
+ * @param nominal_size
+ * @param _atlas_pos
+ */
+<span id='typefaceshader-method-glyphy_sdf'>/**
+</span> * @method glyphy_sdf
+ * @param p
+ * @param nominal_size
+ * @param _atlas_pos
+ */
+<span id='typefaceshader-method-glyphy_point_dist'>/**
+</span> * @method glyphy_point_dist
+ * @param p
+ * @param nominal_size
+ * @param _atlas_pos
+ */
+<span id='typefaceshader-method-glyph_vertex_transcode'>/**
+</span> * @method glyph_vertex_transcode
+ * @param v
+ */
+<span id='typefaceshader-method-glyphy_sdf_encode'>/**
+</span> * @method glyphy_sdf_encode
+ * @param value
+ */
+<span id='typefaceshader-method-glyphy_sdf_decode'>/**
+</span> * @method glyphy_sdf_decode
+ * @param value
+ */
+<span id='typefaceshader-method-glyphy_sdf_generate'>/**
+</span> * @method glyphy_sdf_generate
+ */
+<span id='typefaceshader-method-glyphy_sdf_draw'>/**
+</span> * @method glyphy_sdf_draw
+ * draw using SDF texture
+ */
+<span id='typefaceshader-method-glyphy_sdf_draw_subpixel_aa'>/**
+</span> * @method glyphy_sdf_draw_subpixel_aa
+ */
+<span id='typefaceshader-method-glyphy_sdf_lookup'>/**
+</span> * @method glyphy_sdf_lookup
+ * @param pos
+ */
+<span id='typefaceshader-method-glyphy_atlas_lookup'>/**
+</span> * @method glyphy_atlas_lookup
+ * @param offset
+ * @param _atlas_pos
+ */
+<span id='typefaceshader-method-glyphy_atlas_draw'>/**
+</span> * @method glyphy_atlas_draw
+ */
+<span id='typefaceshader-method-atExtend'>/**
+</span> * @method atExtend
+ */</pre>
+</body>
+</html>

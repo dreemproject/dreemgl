@@ -6,8 +6,6 @@
 
 define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $widgets$, markdown, jsviewer){
 	
-	var Parser = require("$system/parse/onejsparser")
-
 	this.bgcolor = vec4("#343434")
 	this.padding = 20
 	this.flexdirection = "column"
@@ -135,44 +133,61 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		}
 	});
 
-	// Build a minimal correct version of the ClassDoc structure
-	function BlankDoc(){
-		return {
-			class_name:"",
-			body_text: [], // array with strings. each string = paragraph
-			examples: [],
-			events: [],
-			attributes: [],
-			state_attributes: [],
-			methods: [],
-			inner_classes: [],
-			base_class_chain: []
-		}
-	}
-	
 	// Build a documentation structure for a given constructor function
-	function parseDoc(constructor) {
+	this.parseDoc = function parseDoc(constructor) {
 		if (!constructor) return
 
+		if (!this.BlankDoc) {
+			// Build a minimal correct version of the ClassDoc structure
+			this.BlankDoc = function BlankDoc(){
+				return {
+					class_name:"",
+					body_text: [], // array with strings. each string = paragraph
+					examples: [],
+					events: [],
+					attributes: [],
+					state_attributes: [],
+					methods: [],
+					inner_classes: [],
+					base_class_chain: []
+				}
+			}
+		}
+
+		var class_doc = this.BlankDoc()
+
 		var proto = constructor.prototype
-		var class_doc = BlankDoc()
+
+		if (!proto) {
+			//xxx console.log('this has do constructor, what do?', constructor)
+			return class_doc;
+		}
+
 		var p = constructor
 		
 		// build parent chain
 		while(p) {
-			var prot = Object.getPrototypeOf(p.prototype);
-			if (prot) {
-				p = prot.constructor; 					
-				class_doc.base_class_chain.push({name:p.name, path:p.module? (p.module.id? p.module.id:""):"", p: p});
+			if (p.prototype) {
+				var prot = Object.getPrototypeOf(p.prototype);
+				if (prot) {
+					p = prot.constructor;
+					class_doc.base_class_chain.push({name:p.name, path:p.module? (p.module.id? p.module.id:""):"", p: p});
+				} else {
+					p = null;
+				}
 			} else {
 				p = null;
-			}				
+			}
 		}
 		
 		class_doc.class_name = proto.constructor.name
 
+		if (!this.Parser) {
+			this.Parser = require("$system/parse/onejsparser")
+		}
+
 		// ok lets add the comments at the top of the class
-		var ast = Parser.parse(proto.constructor.body.toString());
+		var ast = this.Parser.parse(proto.constructor.body.toString());
 
 		// lets process the inner classes
 		// lets do an ast match what we want is
@@ -244,6 +259,10 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 						var key = step.right.keys[j]
 						var attrname = key.key.name
 						var attr = proto._attributes[attrname]
+						if (!attr) {
+							//TODO not sure why this one has no name sometimes, plx fix
+							continue;
+						}
 
 						var cmt = grabFirstCommentAbove(key.cmu)
 						var defvaluename = undefined
@@ -426,7 +445,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			return res;	
 		}
 	})
-	
+
 	this.printJSDuck = function(class_doc, parentclass) {
 		var i, j, str;
 		var output = [];
@@ -457,7 +476,15 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				if (attr.body_text) { // && attr.body_text.length
 					attrs.push(attr.name);
 					output.push('/**');
-					output.push(' * @attribute {' +attr.type + '} [' + attr.name + '="' + attr.defvalue + '"]');
+					var defval = attr.defvalue;
+					if (typeof(defval) === 'function') {
+						defval = undefined;
+					}
+					if (defval) {
+						output.push(' * @attribute {' +attr.type + '} [' + attr.name + '="' + defval + '"]');
+					} else {
+						output.push(' * @attribute {' +attr.type + '} ' + attr.name);
+					}
 					for (j=0;j < attr.body_text.length; j++) {
 						str = attr.body_text[j];
 						output.push(' * ' + str);
@@ -473,11 +500,12 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				if (meth.body_text) { //  && meth.body_text.length
 					if (meth && meth.name) {
 						output.push('/**');
-						if (meth.name.startsWith('on')) {
-							output.push(' * @event ' + meth.name);
-						} else {
-							output.push(' * @method ' + meth.name);
-						}
+						output.push(' * @method ' + meth.name);
+						//if (meth.name.startsWith('on')) {
+						//	output.push(' * @event ' + meth.name);
+						//} else {
+						//	output.push(' * @method ' + meth.name);
+						//}
 
 						for (j=0;j < meth.body_text.length; j++) {
 							str = meth.body_text[j];
@@ -514,7 +542,16 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		}
 
 		if (class_doc.events && class_doc.events.length) {
-			console.log('EVENTS', class_doc.events)
+			for (i = 0; i < class_doc.events.length;i++) {
+				var event = class_doc.events[i];
+				output.push('/**');
+				output.push(' * @event ' + event.name);
+				for (j=0;j < event.body_text.length; j++) {
+					str = event.body_text[j];
+					output.push(' * ' + str);
+				}
+				output.push(' */');
+			}
 		}
 		if (class_doc.inner_classes && class_doc.inner_classes.length) {
 			for (i = 0; i < class_doc.inner_classes.length; i++) {
@@ -532,6 +569,18 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		return output;
 
 	};
+
+	this.renderToJSDuck = function(R) {
+
+		var class_doc = parseDoc(R)
+
+		var pr = this.printJSDuck(class_doc).join('\n');
+
+//		console.log(pr)
+
+		return pr;
+
+	}
 	
 	this.render = function(){	
 		var functions = [];
@@ -543,9 +592,6 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		else if(typeof(R) === 'function'){
 
 			var class_doc = parseDoc(R)
-
-			var pr = this.printJSDuck(class_doc).join('\n')
-			console.log(pr)
 
 			return [
 				this.ClassDocView({class_doc:class_doc})

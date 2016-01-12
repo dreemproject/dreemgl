@@ -1,0 +1,4 @@
+/**
+ * @class webrequest
+ * @extends get
+ */

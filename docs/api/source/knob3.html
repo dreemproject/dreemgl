@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='knob'>/**
+</span> * @class knob
+ * @extends view
+ * Simple knob: a dial with a value
+ */
+<span id='knob-attribute-value'>/**
+</span> * @attribute {float32} value
+ */
+<span id='knob-attribute-minvalue'>/**
+</span> * @attribute {float32} minvalue
+ */
+<span id='knob-attribute-maxvalue'>/**
+</span> * @attribute {float32} [maxvalue=&quot;1&quot;]
+ */
+<span id='knob-attribute-stepvalue'>/**
+</span> * @attribute {float32} [stepvalue=&quot;0.01&quot;]
+ */
+<span id='knob-attribute-bordercolor'>/**
+</span> * @attribute {vec4} [bordercolor=&quot;1,1,1,0&quot;]
+ */
+<span id='knob-attribute-draggingbordercolor'>/**
+</span> * @attribute {vec4} [draggingbordercolor=&quot;1,1,0,1&quot;]
+ */
+<span id='knob-attribute-focusbordercolor'>/**
+</span> * @attribute {vec4} [focusbordercolor=&quot;0,0.501960813999176,0,1&quot;]
+ */
+<span id='knob-attribute-outerradius'>/**
+</span> * @attribute {float32} [outerradius=&quot;70&quot;]
+ */
+<span id='knob-attribute-innerradius'>/**
+</span> * @attribute {float32} [innerradius=&quot;30&quot;]
+ */
+<span id='knob-attribute-offset'>/**
+</span> * @attribute {float32} [offset=&quot;8&quot;]
+ */
+<span id='knob-method-atMatrix'>/**
+</span> * @method atMatrix
+ */
+<span id='knob-method-value'>/**
+</span> * @method value
+ */
+<span id='knob-method-focus'>/**
+</span> * @method focus
+ * @param newfocus
+ */
+<span id='knob-method-calcstart'>/**
+</span> * @method calcstart
+ */
+<span id='knob-method-checkandset'>/**
+</span> * @method checkandset
+ * @param newval
+ */
+<span id='knob-method-updatevalue'>/**
+</span> * @method updatevalue
+ * @param p
+ */
+<span id='knob-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param p
+ */
+<span id='knob-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ * @param p
+ */
+<span id='knob-method-render'>/**
+</span> * @method render
+ */
+<span id='knob-dial'>/**
+</span> * @class knob.dial
+ * @extends view
+ */
+<span id='knob-dial-attribute-start'>/**
+</span> * @attribute {float32} start
+ */
+<span id='knob-dial-attribute-end'>/**
+</span> * @attribute {float32} [end=&quot;4.71238898038469&quot;]
+ */
+<span id='knob-dial-method-init'>/**
+</span> * @method init
+ */
+<span id='knob-dial-method-width'>/**
+</span> * @method width
+ */
+<span id='knob-dial-method-bg'>/**
+</span> * @method bg
+ */</pre>
+</body>
+</html>

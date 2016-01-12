@@ -30,7 +30,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		var res = [];
 		var keysgroups = {};
 		
-		for(key in c._attributes){
+        for (var key in c._attributes) {
 			var attr = c._attributes[key];
 			
 			var typename = attr.type? attr.type.name:"NONE";

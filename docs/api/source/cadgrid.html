@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='cadgrid'>/**
+</span> * @class cadgrid
+ * @extends view
+ * The CADGrid class provides a simple way to fill a frame with a classic engineering grid. 
+ * todo:
+ * - support zooming with incremental subdivision lines
+ * - link up to 
+ */
+<span id='cadgrid-attribute-majorevery'>/**
+</span> * @attribute {int32} [majorevery=&quot;5&quot;]
+ */
+<span id='cadgrid-attribute-gridsize'>/**
+</span> * @attribute {int32} [gridsize=&quot;5&quot;]
+ */
+<span id='cadgrid-attribute-minorline'>/**
+</span> * @attribute {vec4} [minorline=&quot;0.8784313797950745,0.9411764740943909,1,1&quot;]
+ */
+<span id='cadgrid-attribute-majorline'>/**
+</span> * @attribute {vec4} [majorline=&quot;0.6901960968971252,0.6901960968971252,0.8784313797950745,1&quot;]
+ */
+<span id='cadgrid-attribute-flex'>/**
+</span> * @attribute {float32} flex
+ */
+<span id='cadgrid-attribute-bgcolor'>/**
+</span> * @attribute {vec4} [bgcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='cadgrid-attribute-flexdirection'>/**
+</span> * @attribute {Enum} [flexdirection=&quot;row&quot;]
+ */
+<span id='cadgrid-attribute-alignitem'>/**
+</span> * @attribute {String} [alignitem=&quot;stretch&quot;]
+ */
+<span id='cadgrid-attribute-alignself'>/**
+</span> * @attribute {Enum} [alignself=&quot;stretch&quot;]
+ */
+<span id='cadgrid-method-gridsize'>/**
+</span> * @method gridsize
+ */
+<span id='cadgrid-method-calcsizes'>/**
+</span> * @method calcsizes
+ */
+<span id='cadgrid-method-oninit'>/**
+</span> * @method oninit
+ */
+<span id='cadgrid-method-onzoom'>/**
+</span> * @method onzoom
+ */</pre>
+</body>
+</html>
