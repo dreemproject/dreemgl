@@ -136,11 +136,17 @@ define.class('$widgets/docviewer.js', function(){
 
 //		console.log(class_doc)
 
-        var out = this.printJSDuck(class_doc).join('\n');
+        var out = ''
+
+        if (class_doc) {
+            out = this.printJSDuck(class_doc).join('\n');
 
 //		console.log(out)
 
+        }
+
         return out;
+
 
     }
 

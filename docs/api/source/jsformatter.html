@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='jsformatter'>/**
+</span> * @class jsformatter
+ * @extends Object
+ */
+<span id='jsformatter-method-atConstructor'>/**
+</span> * @method atConstructor
+ */
+<span id='jsformatter-method-dColon'>/**
+</span> * @method dColon
+ * helper functions
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-dot'>/**
+</span> * @method dot
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-colon'>/**
+</span> * @method colon
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-semiColon'>/**
+</span> * @method semiColon
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-comma'>/**
+</span> * @method comma
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-parenL'>/**
+</span> * @method parenL
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-parenR'>/**
+</span> * @method parenR
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-braceL'>/**
+</span> * @method braceL
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-braceR'>/**
+</span> * @method braceR
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-bracketL'>/**
+</span> * @method bracketL
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-bracketR'>/**
+</span> * @method bracketR
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-operator'>/**
+</span> * @method operator
+ * @param op
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-keyword'>/**
+</span> * @method keyword
+ * @param value
+ * @param type
+ * @param group
+ */
+<span id='jsformatter-method-tab'>/**
+</span> * @method tab
+ * @param indent
+ */
+<span id='jsformatter-method-space'>/**
+</span> * @method space
+ */
+<span id='jsformatter-method-newline'>/**
+</span> * @method newline
+ */
+<span id='jsformatter-method-comment'>/**
+</span> * @method comment
+ * @param text
+ * @param pre
+ */
+<span id='jsformatter-method-comments'>/**
+</span> * @method comments
+ * @param comments
+ * @param prefix
+ */
+<span id='jsformatter-method-lastIsNewline'>/**
+</span> * @method lastIsNewline
+ */
+<span id='jsformatter-method-lastCharCode'>/**
+</span> * @method lastCharCode
+ */
+<span id='jsformatter-method-expand'>/**
+</span> * @method expand
+ * expand ast node
+ * @param n
+ * @param arg
+ */
+<span id='jsformatter-method-Program'>/**
+</span> * @method Program
+ * AST nodes
+ * @param n
+ */
+<span id='jsformatter-method-Empty'>/**
+</span> * @method Empty
+ * @param n
+ */
+<span id='jsformatter-method-Id'>/**
+</span> * @method Id
+ * @param n
+ */
+<span id='jsformatter-method-Value'>/**
+</span> * @method Value
+ * @param n
+ */
+<span id='jsformatter-method-This'>/**
+</span> * @method This
+ * @param n
+ */
+<span id='jsformatter-method-Array'>/**
+</span> * @method Array
+ * @param n
+ */
+<span id='jsformatter-method-Object'>/**
+</span> * @method Object
+ * @param n
+ * @param indent
+ */
+<span id='jsformatter-method-Index'>/**
+</span> * @method Index
+ * @param n
+ */
+<span id='jsformatter-method-Key'>/**
+</span> * @method Key
+ * @param n
+ */
+<span id='jsformatter-method-Block'>/**
+</span> * @method Block
+ * @param n
+ * @param skipbrace
+ */
+<span id='jsformatter-method-List'>/**
+</span> * @method List
+ * @param n
+ */
+<span id='jsformatter-method-Break'>/**
+</span> * @method Break
+ * @param n
+ */
+<span id='jsformatter-method-Continue'>/**
+</span> * @method Continue
+ * @param n
+ */
+<span id='jsformatter-method-Label'>/**
+</span> * @method Label
+ * @param n
+ */
+<span id='jsformatter-method-If'>/**
+</span> * @method If
+ * @param n
+ */
+<span id='jsformatter-method-Switch'>/**
+</span> * @method Switch
+ * @param n
+ */
+<span id='jsformatter-method-Case'>/**
+</span> * @method Case
+ * @param n
+ */
+<span id='jsformatter-method-Throw'>/**
+</span> * @method Throw
+ * @param n
+ */
+<span id='jsformatter-method-Try'>/**
+</span> * @method Try
+ * @param n
+ */
+<span id='jsformatter-method-While'>/**
+</span> * @method While
+ * @param n
+ */
+<span id='jsformatter-method-DoWhile'>/**
+</span> * @method DoWhile
+ * @param n
+ */
+<span id='jsformatter-method-For'>/**
+</span> * @method For
+ * @param n
+ */
+<span id='jsformatter-method-ForIn'>/**
+</span> * @method ForIn
+ * @param n
+ */
+<span id='jsformatter-method-ForOf'>/**
+</span> * @method ForOf
+ * @param n
+ */
+<span id='jsformatter-method-Var'>/**
+</span> * @method Var
+ * @param n
+ */
+<span id='jsformatter-method-Def'>/**
+</span> * @method Def
+ * @param n
+ */
+<span id='jsformatter-method-Function'>/**
+</span> * @method Function
+ * @param n
+ */
+<span id='jsformatter-method-Return'>/**
+</span> * @method Return
+ * @param n
+ */
+<span id='jsformatter-method-Yield'>/**
+</span> * @method Yield
+ * @param n
+ */
+<span id='jsformatter-method-Await'>/**
+</span> * @method Await
+ * @param n
+ */
+<span id='jsformatter-method-Unary'>/**
+</span> * @method Unary
+ * @param n
+ */
+<span id='jsformatter-method-Binary'>/**
+</span> * @method Binary
+ * @param n
+ */
+<span id='jsformatter-method-Logic'>/**
+</span> * @method Logic
+ * @param n
+ */
+<span id='jsformatter-method-Assign'>/**
+</span> * @method Assign
+ * @param n
+ */
+<span id='jsformatter-method-Update'>/**
+</span> * @method Update
+ * @param n
+ */
+<span id='jsformatter-method-Condition'>/**
+</span> * @method Condition
+ * @param n
+ */
+<span id='jsformatter-method-New'>/**
+</span> * @method New
+ * @param n
+ */
+<span id='jsformatter-method-Call'>/**
+</span> * @method Call
+ * @param n
+ */</pre>
+</body>
+</html>

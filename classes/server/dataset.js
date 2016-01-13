@@ -25,16 +25,17 @@ define.class('$system/base/node', function(require, $ui$, label){
 	}
 
 	// Fork starts a new modification on a dataset;
-	// <callback> the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
-	this.fork = function(callback){
+	this.fork = function(callback	// the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
+
+	){
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
 		callback(this.data)
 		this.notifyAssignedAttributes()
 	}
 
-	// Silent operates much the same as <fork>, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
-	// <callback> the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!	
+	// Silent operates much the same as `fork`, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
+	// 'callback' the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
 	this.silent = function(callback /*function*/){
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0

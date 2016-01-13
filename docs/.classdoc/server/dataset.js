@@ -23,9 +23,10 @@
  */
 /**
  * @method silent
- * Silent operates much the same as <fork>, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
+ * Silent operates much the same as `fork`, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
+ * 'callback' the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
  * @param callback
- * function; the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
+ * function
  */
 /**
  * @method notifyAssignedAttributes

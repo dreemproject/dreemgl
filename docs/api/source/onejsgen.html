@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='onejsgen'>/**
+</span> * @class onejsgen
+ * @extends Object
+ */
+<span id='onejsgen-method-expand'>/**
+</span> * @method expand
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-block'>/**
+</span> * @method block
+ * @param array
+ * @param parent
+ * @param state
+ * @param noindent
+ */
+<span id='onejsgen-method-flat'>/**
+</span> * @method flat
+ * @param array
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-list'>/**
+</span> * @method list
+ * @param array
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-needsParens'>/**
+</span> * @method needsParens
+ * @param node
+ * @param other
+ * @param isleft
+ */
+<span id='onejsgen-method-Program'>/**
+</span> * @method Program
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Empty'>/**
+</span> * @method Empty
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Id'>/**
+</span> * @method Id
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Define'>/**
+</span> * @method Define
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Value'>/**
+</span> * @method Value
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-This'>/**
+</span> * @method This
+ * string, number, bool
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Array'>/**
+</span> * @method Array
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Object'>/**
+</span> * @method Object
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Index'>/**
+</span> * @method Index
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Key'>/**
+</span> * @method Key
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-ThisCall'>/**
+</span> * @method ThisCall
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Block'>/**
+</span> * @method Block
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-List'>/**
+</span> * @method List
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Comprehension'>/**
+</span> * @method Comprehension
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Template'>/**
+</span> * @method Template
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Break'>/**
+</span> * @method Break
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Continue'>/**
+</span> * @method Continue
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Label'>/**
+</span> * @method Label
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-If'>/**
+</span> * @method If
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Switch'>/**
+</span> * @method Switch
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Case'>/**
+</span> * @method Case
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Throw'>/**
+</span> * @method Throw
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Try'>/**
+</span> * @method Try
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-While'>/**
+</span> * @method While
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-DoWhile'>/**
+</span> * @method DoWhile
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-For'>/**
+</span> * @method For
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-ForIn'>/**
+</span> * @method ForIn
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-ForOf'>/**
+</span> * @method ForOf
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-ForFrom'>/**
+</span> * @method ForFrom
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-ForTo'>/**
+</span> * @method ForTo
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Var'>/**
+</span> * @method Var
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-TypeVar'>/**
+</span> * @method TypeVar
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Def'>/**
+</span> * @method Def
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Struct'>/**
+</span> * @method Struct
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Enum'>/**
+</span> * @method Enum
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Function'>/**
+</span> * @method Function
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Return'>/**
+</span> * @method Return
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Yield'>/**
+</span> * @method Yield
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Await'>/**
+</span> * @method Await
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Unary'>/**
+</span> * @method Unary
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Binary'>/**
+</span> * @method Binary
+ * alright so how are we going to do parens?
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Logic'>/**
+</span> * @method Logic
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Assign'>/**
+</span> * @method Assign
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Update'>/**
+</span> * @method Update
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Condition'>/**
+</span> * @method Condition
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-New'>/**
+</span> * @method New
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-callArgs'>/**
+</span> * @method callArgs
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Call'>/**
+</span> * @method Call
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Nest'>/**
+</span> * @method Nest
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Class'>/**
+</span> * @method Class
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Quote'>/**
+</span> * @method Quote
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Signal'>/**
+</span> * @method Signal
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-AssignQuote'>/**
+</span> * @method AssignQuote
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Rest'>/**
+</span> * @method Rest
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-CallBlock'>/**
+</span> * @method CallBlock
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-Debugger'>/**
+</span> * @method Debugger
+ * @param node
+ * @param parent
+ * @param state
+ */
+<span id='onejsgen-method-With'>/**
+</span> * @method With
+ * @param node
+ * @param parent
+ * @param state
+ */</pre>
+</body>
+</html>

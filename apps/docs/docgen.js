@@ -37,9 +37,9 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
         }
 
         // recursively read all directories starting from a base path
-        // <name> the base path to start reading
-        // <ignoreset> files and directories to ignore while recursively expanding
-        this.readAllPaths = function(ignoreset){
+
+        this.readAllPaths = function(ignoreset // files and directories to ignore while recursively expanding
+        ){
             // lets read all paths.
             // lets read the directory and return it
             var root = {collapsed:0, children:[]}
@@ -131,7 +131,10 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
                                 || path.indexOf('debug') > -1
                                 || path.indexOf('gitsync') > -1
                                 || path.indexOf('platform') > -1
-                                || path.indexOf('parse') > -1)
+                                || path.indexOf('onejsparser') > -1
+                                || path.indexOf('astwalker') > -1
+                                || path.indexOf('acorn') > -1
+                                || path.indexOf('onejswalk') > -1)
                                 ) {
                                     path = paths.pop()
                                 }

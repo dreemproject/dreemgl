@@ -186,6 +186,9 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			this.Parser = require("$system/parse/onejsparser")
 		}
 
+		if (!proto.constructor.body) {
+			return;
+		}
 		// ok lets add the comments at the top of the class
 		var ast = this.Parser.parse(proto.constructor.body.toString());
 
