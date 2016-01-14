@@ -194,6 +194,10 @@ define.class(function(require, baseclass){
 		
 		var matrices = this.pickmatrices
 		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
+		// calculate the colormatrices too
+		//if(!this.colormatrices.initialized){
+		//	this.calculateDrawMatrices(isroot, this.colormatrices)
+		//}
 
 		var pickguid = vec3()
 		pickguid[0] = (((passid)*131)%256)/255
@@ -328,6 +332,7 @@ define.class(function(require, baseclass){
 
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
+		view.colormatrices = matrices
 
 		gl.disable(gl.SCISSOR_TEST)
 

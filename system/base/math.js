@@ -1205,6 +1205,13 @@ define(function(require, exports){
 		return o
 	}
 	
+	mat4.isIdentity = function(o){
+		return o[0] == 1 && o[1] == 0 && o[2] == 0 && o[3] == 0 && 
+		o[4] == 0 && o[5] == 1 && o[6] == 0 && o[7] == 0 && 
+		o[8] == 0 && o[9] == 0 && o[10]== 1 && o[11]== 0 && 
+		o[12]== 0 && o[13]== 0 && o[14]== 0 && o[15]== 1
+	}
+
 	mat4.normalFromMat4 = function(a, o){
 		if(!o) o = mat4()
 

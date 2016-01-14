@@ -5,7 +5,7 @@
 
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
-		$widgets$, propviewer,searchbox, jsviewer,
+		$widgets$, propviewer,searchbox, jseditor,
 		$server$, sourceset, dataset, $$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
@@ -737,7 +737,7 @@ define.class('$ui/view', function(require,
 	}
 	this.render = function(){
 		return [
-			menubar({name:"themenu", menus:[
+			menubar({viewport:'2d', name:"themenu", menus:[
 				{name:"File", commands:[
 					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
 					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},
@@ -820,7 +820,7 @@ define.class('$ui/view', function(require,
 							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
-					,jsviewer({name:'jsviewer', readonly:false, sourceset:this.sourceset, overflow:'scroll', flex:0.4})
+					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 
 /*

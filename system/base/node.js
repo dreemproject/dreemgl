@@ -29,6 +29,42 @@ define.class(function(require, constructor){
 		this.initFromConstructorArgs(arguments)
 	}
 
+	this.setInterval = function(fn, mstime){
+		if(!this.interval_ids) this.interval_ids = []
+		var id = window.setInterval(function(){
+			this.interval_ids.splice(this.timeout_ids.indexof(id), 1)
+			fn.call(this)
+		}.bind(this), mstime)
+		this.interval_ids.push(id)
+		return id
+	}
+
+	this.clearInterval = function(id){
+		var idx = this.interval_ids.indexof(id)
+		if(idx !== -1){
+			this.interval_ids.splice(idx, 1)
+		 	window.clearInterval(id)
+		}
+	}
+
+	this.setTimeout = function(fn, mstime){
+		if(!this.timeout_ids) this.timeout_ids = []
+		var id = window.setTimeout(function(){
+			this.timeout_ids.splice(this.timeout_ids.indexof(id), 1)
+			fn.call(this)
+		}.bind(this), mstime)
+		this.timeout_ids.push(id)
+		return id
+	}
+
+	this.clearTimeout = function(id){
+		var idx = this.timeout_ids.indexof(id)
+		if(idx !== -1){
+			this.timeout_ids.splice(idx, 1)
+		 	window.clearInterval(id)
+		}
+	}
+
 	// internal, called by the constructor
 	this.initFromConstructorArgs = function(args){
 		var off = 0
@@ -529,7 +565,7 @@ define.class(function(require, constructor){
 		var is_config =  config instanceof Config
 		var is_attribute = !always_define && key in this
 		// use normal value assign
-		if(is_attribute && !is_config || key[0] === 'o' && key[1] === 'n'){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+		if(is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function'){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -595,12 +631,13 @@ define.class(function(require, constructor){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var wiredfn_key = '_wiredfn_' + key
+		var animinit_key = '_animinit_' + key
 		//var config_key = '_config_' + key 
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
 
 		if(!config.group) config.group  = this.constructor.name
-
+		if(config.animinit) this[animinit_key] = 0
 		var init_value = key in this? this[key]:config.value
 
 		if(init_value !== undefined){
@@ -723,7 +760,7 @@ define.class(function(require, constructor){
 					if(type !== Object && type !== Array && type !== Function) value = type(value)
 				}
 
-				if(!mark && config.motion && this.startAnimation(key, value)){
+				if((!mark && (!config.animinit || this[animinit_key]++)) && config.motion && this.startAnimation(key, value)){
 					// store the end value
 					return
 				}

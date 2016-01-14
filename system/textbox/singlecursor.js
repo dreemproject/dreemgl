@@ -196,7 +196,7 @@ define.class(function(require){
 
 		if(this.editor.stripNextOnBackspace){
 			if(this.editor.stripNextOnBackspace(this.lo - 1)){
-				hi++
+				this.hi++
 			}
 
 			var t
@@ -222,7 +222,7 @@ define.class(function(require){
 	this.insert = function(text){
 		var cdelta = 0
 		if(this.editor.processInsert){
-			var pi = this.editor.processInsert(lo, hi, text)
+			var pi = this.editor.processInsert(this.lo, this.hi, text)
 			text = pi[0]
 			cdelta = pi[1]
 		}
