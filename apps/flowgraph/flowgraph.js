@@ -769,7 +769,7 @@ define.class('$ui/view', function(require,
 					)
 				)
 				,splitcontainer({flexdirection:"column", direction:"horizontal"}
-					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 						)

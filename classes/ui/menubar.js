@@ -18,6 +18,13 @@ define.class( function(require, $ui$, view, label, menubutton){
 		statustext: "",
 		menus:[]
 	}	
+	
+	this.onstatustext = function(){
+		if (this.statustext && this.statustext.length > 0)
+		{
+			this.setTimeout(function(){this.statustext = ""}.bind(this), 4000);
+		}
+	}
 		
 	this.render = function(){
 		if (!this.menus) return []

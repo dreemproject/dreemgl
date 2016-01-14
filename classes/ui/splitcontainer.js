@@ -12,7 +12,7 @@ define.class(function($ui$, view, label){
 		// wether the splitcontainer is vertical or not
 		direction: Config({type: Enum("horizontal", "vertical"), value:"vertical"}),
 		// set the width (or height) of the splitter bar
-		splitsize: Config({type: float, value: 6}),
+		splitsize: Config({type: float, value: 8}),
 		// the minimum size of a child controlled by the splitter
 		minimalchildsize: Config({type: float, value: 20}),
 		// the color of the splitter bar
@@ -42,8 +42,9 @@ define.class(function($ui$, view, label){
 			firstnode: Config({type: int, value: 0})
 		}
 	
-		this.bgcolor = vec4("#565656");
+		this.bgcolor = vec4("#737373");
 		this.alignitem = "stretch";
+		this.borderradius = 3;
 		this.attributes = {
 			vertical: Config({type: Boolean, value: false}),
 			splitsize: Config({type: float, value: 6}),

@@ -50,7 +50,7 @@ define.class(function(require, constructor){
 	this.setTimeout = function(fn, mstime){
 		if(!this.timeout_ids) this.timeout_ids = []
 		var id = window.setTimeout(function(){
-			this.timeout_ids.splice(this.timeout_ids.indexof(id), 1)
+			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
 			fn.call(this)
 		}.bind(this), mstime)
 		this.timeout_ids.push(id)
