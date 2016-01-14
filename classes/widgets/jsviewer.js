@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, textbox){
+define.class('$ui/textbox', function(require){
 
 	var JSFormatter = require('$system/parse/jsformatter')	
 	var Parser = require('$system/parse/onejsparser')

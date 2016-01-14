@@ -112,6 +112,8 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 				for(var key in midiAttributes){
 					inp[key] = (function(key){
 						return function(event){
+							console.log(event)
+
 							if(obj[key]) obj[key](event.value)
 						}
 					})(key)
