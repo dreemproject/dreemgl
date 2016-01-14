@@ -16,9 +16,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		hoveredcolor: Config({type:vec4, value:vec4("#f0f0f0"), meta:"color" }),
 		focussedwidth: Config({type:float, value:3}),
 		hoveredwidth: Config({type:float, value:3}),
-		color1: Config({type:vec4, value:vec4("blue"),motion:"linear", duration: 0.1}),
-		color2: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
-		centralcolor: Config({type:vec4, value:vec4("red"),motion:"linear", duration: 0.1}),
+		color1: Config({type:vec4, value:vec4("blue"), animinit:true, motion:"linear", duration: 0.1}),
+		color2: Config({type:vec4, value:vec4("red"), animinit:true,  motion:"linear", duration: 0.1}),
+		centralcolor: Config({type:vec4, value:vec4("red"), animinit:true, motion:"linear", duration: 0.1}),
 		inselection : Config({type:boolean, value:false}),
 		hasball: true
 	
@@ -104,8 +104,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.linewidth = this.neutrallinewidth;
 			}
 		}
-		
-		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
+
+		this.centralcolor = mix(this.color1, this.color2, 0.5)//, !this.updatecount);;
 				var H = this.findChild("handle");
 		
 		if (H){
@@ -316,13 +316,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		//	console.log(" no T", this._to);
 			this.topos = this.localMouse();;
 		}
-		
-		
+				
 		if (color1 && !color2) color2 = color1;else if (color2 && !color1) color1 = color2;
-		if (color1) this.neutralcolor1 = this.color1 = Mark(color1, !this.updatecount);
-		if (color2) this.neutralcolor2 = this.color2 =  Mark(color2, !this.updatecount);
-		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
-		this.updatecount++;
+		if (color1) this.neutralcolor1 = this.color1 = color1//Mark(color1, !this.updatecount);
+		if (color2) this.neutralcolor2 = this.color2 =  color2//Mark(color2, !this.updatecount);
+
+		this.centralcolor = mix(this.color1, this.color2, 0.5)//, !this.updatecount);;
+		//console.log(this.centralcolor)
+		//this.updatecount++;
 		
 		var H = this.findChild("handle");
 		

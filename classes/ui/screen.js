@@ -186,7 +186,6 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 	
 	// internal: remap the mouse to a view node	
 	this.remapMouse = function(node, dbg){
-			
 		var parentlist = []
 		var ip = node.parent
 		
@@ -282,16 +281,16 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 				if (logging)  console.log(i, raystart, "coordinates after adjusting for layoutwidth/height", P._viewport);
 				
 				lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
-				lastprojection = P.drawpass.colormatrices.perspectivematrix;
-				lastviewmatrix = P.drawpass.colormatrices.lookatmatrix;
+				lastprojection = P.colormatrices.perspectivematrix;
+				lastviewmatrix = P.colormatrices.lookatmatrix;
 				camerapos = P._camera;
 			
 			}
 			if(i == 0 && node.noscroll){
-				mat4.invert(P.drawpass.colormatrices.noscrollmatrix, this.remapmatrix)
+				mat4.invert(P.colormatrices.noscrollmatrix, this.remapmatrix)
 			} 
 			else {
-				mat4.invert(P.drawpass.colormatrices.viewmatrix, this.remapmatrix)
+				mat4.invert(P.colormatrices.viewmatrix, this.remapmatrix)
 			}
 			raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 			
