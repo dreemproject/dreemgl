@@ -16,7 +16,7 @@ rm -rf $API_DOCS_DIR
 echo "Regenerating classdoc..."
 #rm -rf ./docs/classdocs/*.js
 #./docs/lib/findocomments.rb
-echo "actually, just manually go here: http://localhost:2000/apps/docs/docgen for now, then rerun this"
+echo "node server.js -browser 'apps/docs/docgen'"
 
 echo "Building docs..."
 jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES"

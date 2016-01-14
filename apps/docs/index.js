@@ -1,5 +1,6 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $server$, fileio, dataset, $ui$, screen, view, splitcontainer, treeview, label, $widgets$, docviewer, jsviewer){
+// Inline documentation and example code viewer
 
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')

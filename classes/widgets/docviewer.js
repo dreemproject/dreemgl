@@ -449,143 +449,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		}
 	})
 
-	this.printJSDuck = function(class_doc, parentclass) {
-		var i, j, str;
-		var output = [];
-
-		output.push('/**');
-		var classname = class_doc.class_name;
-		if (parentclass) {
-			classname = parentclass + '.' + classname
-		}
-		output.push(' * @class ' + classname);
-		if (class_doc.base_class_chain) {
-			var base = class_doc.base_class_chain[0];
-			if (base && base.name) {
-				output.push(' * @extends ' + base.name);
-			}
-		}
-		if (class_doc.body_text) {
-			for (i=0; i < class_doc.body_text.length; i++) {
-				output.push(' * ' + class_doc.body_text[i]);
-			}
-		}
-
-		output.push(' */');
-		var attrs = [];
-		if (class_doc.attributes) {
-			for (i=0; i < class_doc.attributes.length; i++) {
-				var attr = class_doc.attributes[i];
-				if (attr.body_text) { // && attr.body_text.length
-					attrs.push(attr.name);
-					output.push('/**');
-					var defval = attr.defvalue;
-					if (typeof(defval) === 'function') {
-						defval = undefined;
-					}
-					if (defval) {
-						output.push(' * @attribute {' +attr.type + '} [' + attr.name + '="' + defval + '"]');
-					} else {
-						output.push(' * @attribute {' +attr.type + '} ' + attr.name);
-					}
-					for (j=0;j < attr.body_text.length; j++) {
-						str = attr.body_text[j];
-						output.push(' * ' + str);
-					}
-					output.push(' */');
-				}
-			}
-		}
-
-		if (class_doc.methods) {
-			for (i=0; i < class_doc.methods.length; i++) {
-				var meth = class_doc.methods[i];
-				if (meth.body_text) { //  && meth.body_text.length
-					if (meth && meth.name) {
-						output.push('/**');
-						output.push(' * @method ' + meth.name);
-						//if (meth.name.startsWith('on')) {
-						//	output.push(' * @event ' + meth.name);
-						//} else {
-						//	output.push(' * @method ' + meth.name);
-						//}
-
-						for (j=0;j < meth.body_text.length; j++) {
-							str = meth.body_text[j];
-							output.push(' * ' + str);
-						}
-
-						if (meth.params) {
-							for (j=0;j < meth.params.length; j++) {
-								var param = meth.params[j];
-
-								var pbody = '';
-								if (param.body_text && param.body_text.length) {
-									pbody = param.body_text.join('; ')
-								}
-								var typegrabber = /^([^\{}]*)(\{[^\}]+\})\s+(.*)$/;
-								var result = typegrabber.exec(pbody);
-								var ptype = ' ';
-								if (result) {
-									ptype = ' ' + result[2] + ' ';
-									pbody = (result[1] + result[3]).trim();
-								}
-
-								output.push(' * @param' + ptype + param.name);
-								if (pbody.length) {
-									output.push(' * ' + pbody);
-								}
-							}
-						}
-
-						output.push(' */');
-					}
-				}
-			}
-		}
-
-		if (class_doc.events && class_doc.events.length) {
-			for (i = 0; i < class_doc.events.length;i++) {
-				var event = class_doc.events[i];
-				output.push('/**');
-				output.push(' * @event ' + event.name);
-				for (j=0;j < event.body_text.length; j++) {
-					str = event.body_text[j];
-					output.push(' * ' + str);
-				}
-				output.push(' */');
-			}
-		}
-		if (class_doc.inner_classes && class_doc.inner_classes.length) {
-			for (i = 0; i < class_doc.inner_classes.length; i++) {
-				var inner = class_doc.inner_classes[i];
-				output = output.concat(this.printJSDuck(inner, classname));
-			}
-		}
-		if (class_doc.examples && class_doc.examples.length) {
-			console.log('EXAMPLES', class_doc.examples)
-		}
-		if (class_doc.state_attributes && class_doc.state_attributes.length) {
-			console.log('STATE', class_doc.state_attributes)
-		}
-
-		return output;
-
-	};
-
-	this.renderToJSDuck = function(R) {
-
-		var class_doc = parseDoc(R)
-
-		var pr = this.printJSDuck(class_doc).join('\n');
-
-//		console.log(pr)
-
-		return pr;
-
-	}
-	
-	this.render = function(){	
+	this.render = function(){
 		var functions = [];
 		var res = [];
 		var R = this.classconstr// 	require("$classes/dataset")
@@ -594,7 +458,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		} 
 		else if(typeof(R) === 'function'){
 
-			var class_doc = parseDoc(R)
+			var class_doc = this.parseDoc(R)
 
 			return [
 				this.ClassDocView({class_doc:class_doc})

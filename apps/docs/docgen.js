@@ -1,5 +1,6 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $server$, fileio, dataset, $ui$, screen, $widgets$, docprinter){
+//Special composition that generates JSDuck-style documentation and writes into ./docs/.classdoc
 
     define.class(this, 'fileio', function($server$, fileio){
         var path = require('path')
