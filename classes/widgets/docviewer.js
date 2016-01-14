@@ -44,7 +44,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				if (this.item.params && this.item.params.length > 0) { 
 					functionsig = "(" + this.item.params.map(function(a){return a.name}).join(", ") + ")";
 				}
-				res.push(label({bg:0,margin:vec4(2),text: this.item.name + functionsig , fontsize: 20, fgcolor: "black"}));
+				res.push(label({bg:0,margin:vec4(2),text: this.item.name + functionsig , fontsize: 20, fgcolor: "f0f0f0", bold:true}));
 			}
 			else{
 				var sub = [];
@@ -93,7 +93,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			
 			if (this.item.body_text){
 				for(var t in this.item.body_text){
-					res.push(label({bg:0,text: this.item.body_text[t], fgcolor: "white", fontsize: 14, margin: vec4(10,0,10,5)}));
+					res.push(label({bg:0,text: this.item.body_text[t], fgcolor: "white", fontsize: 12, margin: vec4(10,0,10,5)}));
 				}
 			}
 			
@@ -117,12 +117,12 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			
 			if (this.blocktype === "example"){
 				res.push(				
-					view({flexdirection:"row", flex:1, padding: vec4(2), bgcolor: "#f0f0f0"}
+					view({flexdirection:"row", flex:1, padding: vec4(2), bgcolor: "#202020"}
 							,view({bg:0,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0"}
 								,label({fgcolor:"white", bg:0,text:"Code", margin:vec4(10)})
-								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 14, bgcolor:"#000030", multiline: true})
+								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 12, bgcolor:"#000030", multiline: true})
 							)
-							,view({bg:0,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0" } 
+							,view({bg:1,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#808080" } 
 								,label({fgcolor:"white",bgcolor:"transparent",  text:"Live demo", margin:vec4(10)})								
 								,this.item.examplefunc()
 							)
@@ -393,7 +393,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			return foldcontainer(
 					{
 						collapsed:true, bordercolor:"#202020",bg:0,
-						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" },
+						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 15,margin: vec4(10,0,0,20), fgcolor: "white" },
 						view({flexdirection: "column", flex: 1, bg:0
 					}, subs)
 				);
@@ -406,43 +406,43 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			if (!this.class_doc) return [];
 			
 			if (!this.collapsible ){
-				body.push(view({bg:0},[icon({bg:0,fontsize: 38, icon:"cube", fgcolor: "black" }),label({bg:0,text:class_doc.class_name,fontsize: 30,margin: vec4(10,10,0,20), fgcolor: "black" })]));
+				body.push(view({bg:0},[icon({bg:0,fontsize: 38, icon:"cube", fgcolor: "White" }),label({bg:0,text:class_doc.class_name,fontsize: 30,margin: vec4(10,10,0,20), fgcolor: "White" })]));
 			}
 
 			if (class_doc.base_class_chain.length> 0){
-				body.push(view({bg:0}, class_doc.base_class_chain.map(function(r){
+				body.push(view({bg:0, margin:vec4(14)}, class_doc.base_class_chain.map(function(r){
 					return [
 						icon({bg:0,icon:"arrow-right", fgcolor:"#f0f0f0", fontsize:15, margin:vec4(2)})
-						,button({margin: vec4(2),padding:vec4(3), text:r.name, fontsize:12, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
+						,button({margin: vec4(0),padding:vec4(10,0,10,0), text:r.name, fontsize:10, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
 					]
 				}.bind(this))));
 			}
 		
 			if (class_doc.body_text.length > 0) {
-				body.push(markdown({bg:0,body:class_doc.body_text,fontsize: 14, margin: vec4(10,0,10,10), fgcolor: "white" }));
+				body.push(markdown({bg:0,body:class_doc.body_text, margin: vec4(10,0,10,10), fontcolor: "white" }));
 			}
 
 			res.push(view({bg:0,flexdirection:"column", margin: vec4(10,0,0,20)}, body));
 		
-			if(class_doc.examples.length >0) res.push(this.BuildGroup(class_doc.examples, "Examples", "flask", "#e0e0e0", "example"));
-			if(class_doc.attributes.length >0) res.push(this.BuildGroup(class_doc.attributes, "Attributes", "gears", "#f0f0c0"));
-			if(class_doc.state_attributes.length >0) res.push(this.BuildGroup(class_doc.state_attributes, "State Attributes", "archive", "#f0c0c0"));
-			if(class_doc.events.length >0) res.push(this.BuildGroup(class_doc.events, "Events", "plug", "#f0c0f0"));
+			if(class_doc.examples.length >0) res.push(this.BuildGroup(class_doc.examples, "Examples", "flask", "#303030", "example"));
+			if(class_doc.attributes.length >0) res.push(this.BuildGroup(class_doc.attributes, "Attributes", "gears", "#303000"));
+			if(class_doc.state_attributes.length >0) res.push(this.BuildGroup(class_doc.state_attributes, "State Attributes", "archive", "#300000"));
+			if(class_doc.events.length >0) res.push(this.BuildGroup(class_doc.events, "Events", "plug", "#300033"));
 					
 			if (class_doc.inner_classes.length > 0){
 				var classes = []
 				for (var a in class_doc.inner_classes){
 					classes.push(this.outer.ClassDocView({collapsible:true, class_doc: class_doc.inner_classes[a]}))				
 				}
-				res.push(foldcontainer({bg:0,bordercolor:"#202020",collapsed:true,  basecolor:"#c0f0c0", icon:"cubes", title:"Inner classes" , fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" }, view({flexdirection: "column", flex: 1}, classes)));
+				res.push(foldcontainer({bg:0,bordercolor:"#202020",collapsed:true,  basecolor:"#002000", icon:"cubes", title:"Inner classes" , fontsize: 15,margin: vec4(10,0,0,20), fgcolor: "white" }, view({flexdirection: "column", flex: 1, bgcolor:"#404040"}, classes)));
 			}
 		
-			if(class_doc.methods.length >0) res.push(this.BuildGroup(class_doc.methods, "Methods", "paw", "#c0c0f0", "function"));
+			if(class_doc.methods.length >0) res.push(this.BuildGroup(class_doc.methods, "Methods", "paw", "#000030", "function"));
 			
 			
 			if (this.collapsible){
 				
-				return foldcontainer({bg:0,bordercolor:"#202020",basecolor:"#c0f0c0",collapsed:true,icon:"cube", title:class_doc.class_name},view({bg:0, flexdirection:"column", flex:1},res));
+				return foldcontainer({bg:0,bordercolor:"#202020",basecolor:"#002000",collapsed:true,icon:"cube", title:class_doc.class_name, fontsize: 15},view({bg:0, flexdirection:"column", flex:1},res));
 			}
 			
 			return res;	
