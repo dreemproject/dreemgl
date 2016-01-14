@@ -70,10 +70,12 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 				this.haschildren?this.outer.foldbutton({
 					icon:this.folded? "chevron-right":"chevron-down", 
 					padding: 2, 
+					bg:0,
 					click: this.toggleclick
 				}):[], 
 				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
 				this.outer.foldbutton({
+					bg:0,
 					text: this.text, 
 					click:function(){
 						this.emit('select',{node:this})
