@@ -68,7 +68,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.render = function(){
 			return [
 				this.haschildren?this.outer.foldbutton({
-					icon:this.folded? "arrow-right":"arrow-down", 
+					icon:this.folded? "chevron-right":"chevron-down", 
 					padding: 2, 
 					click: this.toggleclick
 				}):[], 
