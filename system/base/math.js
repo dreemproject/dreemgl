@@ -247,6 +247,19 @@ define(function(require, exports){
 		return o;	
 	}
 	
+	vec2.rotate = function(a, ang, o){
+		if(!o) o = vec2()
+
+		var sa = Math.sin(ang);
+		var ca = Math.cos(ang);
+	
+		o = vec2(ca*a[0] - sa * a[1],sa*a[0] + ca * a[1])
+				
+			
+		return o;	
+						
+	}
+	
 	vecApi(vec3)	
 	
 	vec3.intersectplane = function(origin, direction, normal, dist) {
