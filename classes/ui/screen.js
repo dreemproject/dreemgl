@@ -336,7 +336,8 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 	
 	// pick a view at the mouse coordinate and console.log its structure
 	this.debugPick = function(){
-		this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
+		this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(msg){
+			var view = msg.view
 			if(this.last_debug_view === view) return
 			this.last_debug_view = view
 			var found 

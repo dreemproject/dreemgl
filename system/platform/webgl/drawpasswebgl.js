@@ -263,10 +263,12 @@ define.class(function(require, baseclass){
 		var pick_id = 0
 		while(draw){
 			
-			if(id > pick_id && id <= pick_id + draw.pickrange) return draw
+			if(id > pick_id && id <= pick_id + draw.pickrange){
+				draw.last_pick_id = id - pick_id
+				return draw
+			}
 
 			pick_id+=draw.pickrange;
-
 			
 			draw = this.nextItem(draw)
 		}
