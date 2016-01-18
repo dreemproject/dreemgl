@@ -13,9 +13,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	
 	
 		this.attributes = {
-			mapxcenter: 19296,
-			mapycenter: 24641,
-			zoomlevel: 16
+			mapxcenter: Math.floor(19296/2),
+			mapycenter: Math.floor(24641/2),
+			zoomlevel: 15
 			
 		}
 		
@@ -23,7 +23,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.attributes = {
 				tilex:19295,
 				tiley:24641,
-				zoomlevel: 16
+				zoomlevel: 14
 			}
 			this.padding =10;
 			this.width = 1024;
@@ -46,13 +46,14 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			var y = Math.ceil((height * z )/ 1024);
 			//console.log(x,y);
 			//console.log(z, Math.floor(log(z)/log(2)));
-			this.zoomlevel = 16  + Math.floor( log(z)/log(2));
+		//	this.zoomlevel = 16  + Math.floor( log(z)/log(2));
 		}
 		
 		this.render = function(){
 		//console.log(	this.screen.width);
 			var res = []
-			var scaler = 512 * Math.pow(2, this.zoomlevel - 16)
+			var scalefac = Math.pow(2, this.zoomlevel - 16);
+			var scaler = 1024 ;//* scalefac;
 			console.log("scaler:", scaler);
 			for(var x = 0;x<6;x++){
 				for(var y = 0;y<6;y++){
@@ -64,6 +65,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							position:"absolute", 
 							x: x * scaler , 
 							y: y * scaler   ,
+							scalefac: scalefac,
 							//width: scaler,
 							//height: scaler,
 							zoomlevel: this.zoomlevel
@@ -87,7 +89,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				roads:[],
 				waters:[], 
 				earths:[], 
-				landuses:[]	
+				landuses:[]	, 
+				scalefactor: 1.0
 			}
 			
 			this.init = function(){
@@ -103,7 +106,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			define.class(this, "building", function($ui$, view){
 				
 				this.attributes = {				
-					buildings:[]
+					buildings:[],
+					scalefactor: 1.0
 				}
 				this.boundscheck = false;
 				this.NOTmouseover =  function(){
@@ -201,59 +205,64 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				this.bg = function(){
 				
-				this.color1 = {pedestrian:"lightgray", parking:"gray", park:"green", earth:"green", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-				this.color2 = {pedestrian:"yellow", parking:"lightgray", park:"lime", earth:"gray", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-				
+					this.color1 = {pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+					this.color2 = {pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 					
-				this.vertexstruct =  define.struct({		
-					pos:vec2,
-					color1:vec4,
-					color2:vec4, 
-					id: float
-				})
-				
-				this.mesh = this.vertexstruct.array();
-				this.pick = function(){
-					return mesh.id;
-				}
-				this.color = function(){
+						
+					this.vertexstruct =  define.struct({		
+						pos:vec2,
+						color1:vec4,
+						color2:vec4, 
+						id: float
+					})
 					
-					return mix("white", mesh.color1, 0.5 + 0.5 *sin(gl_FragCoord.x + gl_FragCoord.y));
-				}
-		
-				this.update = function(){
 					this.mesh = this.vertexstruct.array();
-					
-					for(var i = 0;i<this.view.lands.length;i++){
-						var land = this.view.lands[i];
+					this.pick = function(){
+						return mesh.id;
+					}
+					this.color = function(){
 						
-						var color1 = vec4("green");
-						var color2 = vec4("lime");
+						var xy = vec2(gl_FragCoord.xy)*0.2;
+						var n1 = (noise.noise2d(xy))*0.25 + 0.25;
+						var n2 = 0.8*noise.noise2d(xy*14.3)
+						return mix(mesh.color1, mesh.color2,n1+n2);
+
 						
-						if (this.color1[land.kind]) color1 = this.color1[land.kind];else console.log("unknown land type:", land.kind);
-						if (this.color2[land.kind]) color2 = this.color2[land.kind];else console.log("unknown land type:", land.kind);
-					
-						if (land.arcs){
-							for(var j = 0;j<land.arcs.length;j++){
-								var arc = land.arcs[j];
-								var tris = arctotriangles(arc);
-								for(var a = 0;a<tris.length;a++){
-									this.mesh.push(tris[a], vec4(color1), vec4(color2), i);
+					}
+			
+					this.update = function(){
+						this.mesh = this.vertexstruct.array();
+						
+						for(var i = 0;i<this.view.lands.length;i++){
+							var land = this.view.lands[i];
+							
+							var color1 = vec4("green");
+							var color2 = vec4("lime");
+							
+							if (this.color1[land.kind]) color1 = this.color1[land.kind];else console.log("unknown land type:", land.kind);
+							if (this.color2[land.kind]) color2 = this.color2[land.kind];else console.log("unknown land type:", land.kind);
+						
+							if (land.arcs){
+								for(var j = 0;j<land.arcs.length;j++){
+									var arc = land.arcs[j];
+									var tris = arctotriangles(arc);
+									for(var a = 0;a<tris.length;a++){
+										this.mesh.push(tris[a], vec4(color1), vec4(color2), i);
+									}
 								}
 							}
 						}
 					}
-				}
-				
-				this.position = function(){					
-					return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
+					
+					this.position = function(){					
+						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
+					}
+						
+					this.drawtype = this.TRIANGLES
+					this.linewidth = 4;
+					
 				}
 					
-				this.drawtype = this.TRIANGLES
-				this.linewidth = 4;
-				
-				}
-				
 							
 			})
 			
@@ -504,7 +513,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.loadurl = function(x,y,z){	
 				//http://vector.mapzen.com/osm/{layers}/{z}/{x}/{y}.{format}?api_key=vector-tiles-Qpvj7U4
-				console.log("grabbing", x,y,z);
+				//console.log("grabbing", x,y,z);
 				
 				var res = this.rpc.urlfetch.grabmap(x,y,z).then(function(result){
 					console.log(result.value);
@@ -629,7 +638,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		})			
 	})
 		
-	console.log(define.classPath(this));
 	
 	define.class(this, "urlfetch", function($server$, service){
 		this.grabmap = function(x,y,z){
@@ -642,10 +650,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 			
 			var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".topojson?api_key=vector-tiles-Qpvj7U4" 
-			//var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".json?api_key=vector-tiles-Qpvj7U4" 
-			console.log("HELLO", define.classPath(this))
-
-			console.log("grabbing..", fileurl);
 			
 			
 			var P = define.deferPromise()
