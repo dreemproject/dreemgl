@@ -48,7 +48,7 @@ define.class(function(require){
 		for(var key in define.paths){
 			if(this.paths) this.paths += ',\n\t\t', this.pathset += ','
 			this.paths += '$'+key+':"$root/'+key+'"'
-			this.pathset += key+':1'
+			this.pathset += '"'+key+'":1'
 		}
 		this.pathset += '}'
 
@@ -134,7 +134,7 @@ define.class(function(require){
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
 			'	   $platform:"webgl",\n'+
-			'      paths:'+pathset+',\n'
+			'      paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
 			'      main:["$system/base/math", "' + boot + '"],\n'+
 			'      atMain:function(require, modules){\n'+
