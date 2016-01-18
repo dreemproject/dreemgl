@@ -194,11 +194,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}
 				
 				this.mouseover =  function(evt){
-					var l = this.lands[evt.pickid];
-					if (l){
-					var text = "Land: " + this.lands[evt.pickid].kind;				
+					//console.log(this.last_pick_id)
+					var text = "Land: " + this.lands[this.last_pick_id - 1].kind;				
+
 					this.screen.status = text;				
-					}
 				}			
 				
 				
@@ -231,8 +230,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						var n1 = (noise.noise2d(xy))*0.25 + 0.25;
 						var n2 = 0.8*noise.noise2d(xy*14.3)
 						
-						PickGuid.x = mod(mesh.id, 256.);
-						PickGuid.y = floor(mesh.id/256.);
+						PickGuid.x = floor(mesh.id/256.);
+						PickGuid.y =  mod(mesh.id, 256.);
 						return mix(mesh.color1, mesh.color2,n1+n2);
 
 						
