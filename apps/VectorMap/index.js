@@ -207,8 +207,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				this.bg = function(){
 				
-					this.color1 = {pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-					this.color2 = {pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+					this.color1 = {water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+					this.color2 = {water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 					
 						
 					this.vertexstruct =  define.struct({		
@@ -567,7 +567,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					
 					for (var i = 0;i<this.thedata.objects.water.geometries.length;i++){
 						var Bb = this.thedata.objects.water.geometries[i];
-						var B = {arcs:[]};
+						var B = {arcs:[], kind:"water" };
 						if(Bb.arcs)
 							for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
@@ -643,13 +643,14 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				res.push(this.land({lands:this.earths}));
 				
-				for (var i =0;i<this.waters.length;i++){
-					res.push(this.water({water:this.waters[i]}));
-				}
+				//for (var i =0;i<this.waters.length;i++){
+				//	res.push(this.water({water:this.waters[i]}));
+			//	}
+					res.push(this.land({lands:this.waters}));
 				
-				for (var i =0;i<this.landuses.length;i++){
-					res.push(this.land({land:this.landuses[i]}));
-				}
+			//	for (var i =0;i<this.landuses.length;i++){
+					res.push(this.land({lands:this.landuses}));
+				//}
 				
 				res.push(this.building({buildings: this.buildings}));			
 				
