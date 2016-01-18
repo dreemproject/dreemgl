@@ -201,6 +201,11 @@ define.class(function(require, exports){
 	this.doPick = function(){
 		this.pick_timer = 0
 		var x = this.pick_x, y = this.pick_y
+
+		if(!this.first_draw_done){
+			this.doColor(this.last_time)
+		}
+
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var last = i === len - 1 
 			var skip = false
@@ -226,10 +231,10 @@ define.class(function(require, exports){
 		this.pick_resolve = []
 
 		if(this.debug_pick){
-			var data = this.readPixels(x*this.ratio,this.main_frame.size[1] - y*this.ratio,1,1)
+			var data = this.readPixels(x * this.ratio,this.main_frame.size[1] - y * this.ratio, 1, 1)
 		}
 		else{
-			var data = this.readPixels(0,0,1,1)
+			var data = this.readPixels(0, 0, 1, 1)
 		}
 		
 		// decode the pass and drawid
@@ -264,19 +269,20 @@ define.class(function(require, exports){
 
 	this.doColor = function(time){
 		if(!this.first_time) this.first_time = time
+		this.last_time = time
+	
+		if(!this.screen) return
+
+		this.first_draw_done = true
 
 		var stime = (time - this.first_time) / 1000
 		//console.log(this.last_time - stime)
 
-		this.last_time = stime
-	
 		// lets layout shit that needs layouting.
 		var anim_redraw = this.anim_redraws
 		anim_redraw.length = 0
 		this.screen.doAnimation(stime, anim_redraw)
 
-		// set the size externally of the main view
-		//var screen = this.layout_list[this.layout_list.length - 1]
 		this.screen._maxsize =
 		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
 		// do the dirty layouts
@@ -305,7 +311,7 @@ define.class(function(require, exports){
 			var view = this.drawpass_list[i]
 			var skip = false
 			var last = i === len - 1
-			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
+			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
 				skip = last = true							
 			}
 			if(view.draw_dirty & 1 || last){
@@ -350,6 +356,7 @@ define.class(function(require, exports){
 		}
 		
 		if(!node.parent){ // fast path to chuck the whole set
+			//console.log("FLUSHING ALL")
 			// lets put all the drawpasses in a pool for reuse
 			for(var i = 0; i < this.drawpass_list.length; i++) {
 				var draw = this.drawpass_list[i]
@@ -363,6 +370,7 @@ define.class(function(require, exports){
 			this.layout_idx_first = 0
 			this.layout_idx = 0
 			this.addDrawPassRecursive(node)
+			this.first_draw_done = false
 		}
 		else{ // else we remove drawpasses first then re-add them
 			this.removeDrawPasses(node)
