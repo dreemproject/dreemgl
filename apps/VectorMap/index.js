@@ -15,29 +15,29 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		this.attributes = {
 			mapxcenter: 19296,
 			mapycenter: 24641,
-			zoomlevel: 15
+			zoomlevel: 16
 			
 		}
 		
-			define.class(this, "debugmaptile", function($ui$, view, label){
-				this.attributes = {
-					tilex:19295,
-					tiley:24641,
-					zoomlevel: 16
-				}
-				this.padding =10;
-				this.width = 1024;
-				this.height = 1024;
-				this.position="absolute" 
-				this.borderwidth = 10;
-				this.bgcolor = "gray";
-				this.bordercolor = "lightblue" 
-				this.borderradius = 0.1;
-				this.justifycontent = "flex-start" 
-				this.render =function(){
-						return [label({fontsize: 40,alignself:"flex-start",bg:0,text:"x: " + this.tilex + " y: " + this.tiley + " zoomlevel: " + this.zoomlevel})]
-				}
-			})
+		define.class(this, "debugmaptile", function($ui$, view, label){
+			this.attributes = {
+				tilex:19295,
+				tiley:24641,
+				zoomlevel: 16
+			}
+			this.padding =10;
+			this.width = 1024;
+			this.height = 1024;
+			this.position="absolute" 
+			this.borderwidth = 10;
+			this.bgcolor = "gray";
+			this.bordercolor = "lightblue" 
+			this.borderradius = 0.1;
+			this.justifycontent = "flex-start" 
+			this.render =function(){
+					return [label({fontsize: 40,alignself:"flex-start",bg:0,text:"x: " + this.tilex + " y: " + this.tiley + " zoomlevel: " + this.zoomlevel})]
+			}
+		})
 	
 		this.setZoomLevel = function(z, width, height){
 			//console.log(z, width, height);
@@ -46,26 +46,26 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			var y = Math.ceil((height * z )/ 1024);
 			//console.log(x,y);
 			//console.log(z, Math.floor(log(z)/log(2)));
-			this.zoomlevel = 15  + Math.floor( log(z)/log(2));
+			this.zoomlevel = 16  + Math.floor( log(z)/log(2));
 		}
 		
 		this.render = function(){
 		//console.log(	this.screen.width);
 			var res = []
-			var scaler = 512 * Math.pow(2, this.zoomlevel - 15)
-			//console.log("scaler:", scaler);
+			var scaler = 512 * Math.pow(2, this.zoomlevel - 16)
+			console.log("scaler:", scaler);
 			for(var x = 0;x<6;x++){
 				for(var y = 0;y<6;y++){
 					res.push(this.maptile(
 						{
 							name:"tile1",
 							tilex: this.mapxcenter + x, 
-							tiley: this.mapxcenter + y,
+							tiley: this.mapycenter + y,
 							position:"absolute", 
 							x: x * scaler , 
 							y: y * scaler   ,
-							width: scaler,
-							height: scaler,
+							//width: scaler,
+							//height: scaler,
 							zoomlevel: this.zoomlevel
 						}
 					))
@@ -273,8 +273,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						
 						var width = 3;
 						var color = vec4("gray") 
-						if (this.widths[this.road.kind]) width = this.widths[this.road.kind];else console.log("unknown road type:", this.road.kind);
-						if (this.colors[this.road.kind]) color = this.colors[this.road.kind];else console.log("unknown road type:", this.road.kind);
+						if (this.widths[this.road.kind]) width = this.widths[this.road.kind];
+						if (this.colors[this.road.kind]) color = this.colors[this.road.kind];
 						res.push(this.outer.linestring({linewidth: width, arc:this.road.arcs[i], color:color}));
 					}
 					return res;
@@ -520,7 +520,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
-					console.log(this.thedata);
+					//console.log(this.thedata);
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
 						var B = {h:Bb.properties.height, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
@@ -535,6 +535,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					for (var i = 0;i<this.thedata.objects.water.geometries.length;i++){
 						var Bb = this.thedata.objects.water.geometries[i];
 						var B = {arcs:[]};
+						if(Bb.arcs)
 							for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							
@@ -635,10 +636,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			var nodehttp = require('$system/server/nodehttp');
 			var fs = require('fs');
-			console.log(define.classPath(this));
 			var cachedname = define.expandVariables(define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json");
 			if (fs.existsSync(cachedname)){
-				console.log("serving from tilecache:" ,cachedname);
 				return fs.readFileSync(cachedname).toString()
 			}
 			
