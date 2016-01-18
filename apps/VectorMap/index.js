@@ -636,9 +636,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			var nodehttp = require('$system/server/nodehttp');
 			var fs = require('fs');
 			console.log(define.classPath(this));
-			var cachedname = define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json";
-			console.log(cachedname);
+			var cachedname = define.expandVariables(define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json");
 			if (fs.existsSync(cachedname)){
+				console.log("serving from tilecache:" ,cachedname);
 				return fs.readFileSync(cachedname).toString()
 			}
 			
@@ -648,12 +648,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 			console.log("grabbing..", fileurl);
 			
+			
+			var P = define.deferPromise()
+
 			nodehttp.get(fileurl).then(function(v){
-					resolve(v);
+				fs.writeFileSync(cachedname, v);				
+				P.resolve(v);
 			})
 			
-			return new Promise;
-			
+			return P;
 		}.bind(this)		
 	})
 	
