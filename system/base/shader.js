@@ -638,11 +638,12 @@ define.class(function(require, exports){
 		pix_pick += pix_base
 		pix_pick += 'uniform vec3 _pickguid;\n'
 		pix_pick += 'uniform float _pickalpha;\n'
+		pix_pick += 'vec2 PickGuid = vec2(0,0);\n'
 		pix_pick += '//------------------- Pick Pixel shader main -------------------\nvoid main(){\n'
 		pix_pick += this.compileUniformRename(pix_state.uniforms)
 		pix_pick += '\tvec4 col = ' + this.toVec4(pix_code, pix_ast, alpha_code, alpha_ast) + ';\n'
 		pix_pick += ''
-		pix_pick += '\tgl_FragColor = vec4(_pickguid.xyz, col.a>_pickalpha?1.:0.);\n'
+		pix_pick += '\tgl_FragColor = vec4(_pickguid.xyz+vec3(0, PickGuid.xy), col.a>_pickalpha?1.:0.);\n'
 		pix_pick += '}\n'
 
 		if(this.dump){
