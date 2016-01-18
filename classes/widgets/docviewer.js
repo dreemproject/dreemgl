@@ -6,8 +6,6 @@
 
 define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $widgets$, markdown, jsviewer){
 	
-	var Parser = require("$system/parse/onejsparser")
-
 	this.bgcolor = vec4("#343434")
 	this.padding = 20
 	this.flexdirection = "column"
@@ -46,7 +44,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				if (this.item.params && this.item.params.length > 0) { 
 					functionsig = "(" + this.item.params.map(function(a){return a.name}).join(", ") + ")";
 				}
-				res.push(label({bg:0,margin:vec4(2),text: this.item.name + functionsig , fontsize: 20, fgcolor: "black"}));
+				res.push(label({bg:0,margin:vec4(2),text: this.item.name + functionsig , fontsize: 20, fgcolor: "f0f0f0", bold:true}));
 			}
 			else{
 				var sub = [];
@@ -95,7 +93,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			
 			if (this.item.body_text){
 				for(var t in this.item.body_text){
-					res.push(label({bg:0,text: this.item.body_text[t], fgcolor: "white", fontsize: 14, margin: vec4(10,0,10,5)}));
+					res.push(label({bg:0,text: this.item.body_text[t], fgcolor: "white", fontsize: 12, margin: vec4(10,0,10,5)}));
 				}
 			}
 			
@@ -119,12 +117,12 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			
 			if (this.blocktype === "example"){
 				res.push(				
-					view({flexdirection:"row", flex:1, padding: vec4(2), bgcolor: "#f0f0f0"}
+					view({flexdirection:"row", flex:1, padding: vec4(2), bgcolor: "#202020"}
 							,view({bg:0,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0"}
 								,label({fgcolor:"white", bg:0,text:"Code", margin:vec4(10)})
-								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 14, bgcolor:"#000030", multiline: true})
+								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 12, bgcolor:"#000030", multiline: true})
 							)
-							,view({bg:0,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0" } 
+							,view({bg:1,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#808080" } 
 								,label({fgcolor:"white",bgcolor:"transparent",  text:"Live demo", margin:vec4(10)})								
 								,this.item.examplefunc()
 							)
@@ -135,44 +133,64 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 		}
 	});
 
-	// Build a minimal correct version of the ClassDoc structure
-	function BlankDoc(){
-		return {
-			class_name:"",
-			body_text: [], // array with strings. each string = paragraph
-			examples: [],
-			events: [],
-			attributes: [],
-			state_attributes: [],
-			methods: [],
-			inner_classes: [],
-			base_class_chain: []
-		}
-	}
-	
 	// Build a documentation structure for a given constructor function
-	function parseDoc(constructor) {
+	this.parseDoc = function parseDoc(constructor) {
 		if (!constructor) return
 
+		if (!this.BlankDoc) {
+			// Build a minimal correct version of the ClassDoc structure
+			this.BlankDoc = function BlankDoc(){
+				return {
+					class_name:"",
+					body_text: [], // array with strings. each string = paragraph
+					examples: [],
+					events: [],
+					attributes: [],
+					state_attributes: [],
+					methods: [],
+					inner_classes: [],
+					base_class_chain: []
+				}
+			}
+		}
+
+		var class_doc = this.BlankDoc()
+
 		var proto = constructor.prototype
-		var class_doc = BlankDoc()
+
+		if (!proto) {
+			//xxx console.log('this has do constructor, what do?', constructor)
+			return class_doc;
+		}
+
 		var p = constructor
 		
 		// build parent chain
 		while(p) {
-			var prot = Object.getPrototypeOf(p.prototype);
-			if (prot) {
-				p = prot.constructor; 					
-				class_doc.base_class_chain.push({name:p.name, path:p.module? (p.module.id? p.module.id:""):"", p: p});
+			if (p.prototype) {
+				var prot = Object.getPrototypeOf(p.prototype);
+				if (prot) {
+					p = prot.constructor;
+					class_doc.base_class_chain.push({name:p.name, path:p.module? (p.module.id? p.module.id:""):"", p: p});
+				} else {
+					p = null;
+				}
 			} else {
 				p = null;
-			}				
+			}
 		}
 		
 		class_doc.class_name = proto.constructor.name
 
+		if (!this.Parser) {
+			this.Parser = require("$system/parse/onejsparser")
+		}
+
+		if (!proto.constructor.body) {
+			return;
+		}
 		// ok lets add the comments at the top of the class
-		var ast = Parser.parse(proto.constructor.body.toString());
+		var ast = this.Parser.parse(proto.constructor.body.toString());
 
 		// lets process the inner classes
 		// lets do an ast match what we want is
@@ -225,8 +243,16 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 
 		if(!body_steps[0]) return class_doc
 
-		grabFirstCommentBelow(body_steps[0].cmu)
-		
+		var classcomment = grabFirstCommentBelow(body_steps[0].cmu)
+		if (classcomment) {
+			if (!class_doc.body_text) {
+				class_doc.body_text = []
+			}
+			for (i=0;i<classcomment.length;i++) {
+				class_doc.body_text.push(classcomment[i]);
+			}
+		}
+
 		for (var i = 0; i < body_steps.length; i++) {				
 			var step = body_steps[i]
 
@@ -236,6 +262,10 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 						var key = step.right.keys[j]
 						var attrname = key.key.name
 						var attr = proto._attributes[attrname]
+						if (!attr) {
+							//TODO not sure why this one has no name sometimes, plx fix
+							continue;
+						}
 
 						var cmt = grabFirstCommentAbove(key.cmu)
 						var defvaluename = undefined
@@ -280,8 +310,18 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 						var param = stepright.params[p];						
 						var paramname = param.id.name; 		
 						var paramtag = '<' + paramname  + '>';
-						var param = {name: paramname, body_text: []}
-						
+
+						var pbody_text = [];
+						if (param.cm1) {
+							for (var k = 0; k < param.cm1.length;k++) {
+								if (param.cm1[k] != 1) {
+									pbody_text.push(param.cm1[k])
+								}
+							}
+						}
+
+						param = {name: paramname, body_text: pbody_text};
+
 						var remaining = [];
 						for(var a in method.body_text){
 							var L = method.body_text[a];
@@ -353,7 +393,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			return foldcontainer(
 					{
 						collapsed:true, bordercolor:"#202020",bg:0,
-						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" },
+						basecolor:color, icon:icon, title:title ,flex:1, fontsize: 15,margin: vec4(10,0,0,20), fgcolor: "white" },
 						view({flexdirection: "column", flex: 1, bg:0
 					}, subs)
 				);
@@ -366,50 +406,50 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			if (!this.class_doc) return [];
 			
 			if (!this.collapsible ){
-				body.push(view({bg:0},[icon({bg:0,fontsize: 38, icon:"cube", fgcolor: "black" }),label({bg:0,text:class_doc.class_name,fontsize: 30,margin: vec4(10,10,0,20), fgcolor: "black" })]));
+				body.push(view({bg:0},[icon({bg:0,fontsize: 38, icon:"cube", fgcolor: "White" }),label({bg:0,text:class_doc.class_name,fontsize: 30,margin: vec4(10,10,0,20), fgcolor: "White" })]));
 			}
 
 			if (class_doc.base_class_chain.length> 0){
-				body.push(view({bg:0}, class_doc.base_class_chain.map(function(r){
+				body.push(view({bg:0, margin:vec4(14)}, class_doc.base_class_chain.map(function(r){
 					return [
 						icon({bg:0,icon:"arrow-right", fgcolor:"#f0f0f0", fontsize:15, margin:vec4(2)})
-						,button({margin: vec4(2),padding:vec4(3), text:r.name, fontsize:12, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
+						,button({margin: vec4(0),padding:vec4(10,0,10,0), text:r.name, fontsize:10, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
 					]
 				}.bind(this))));
 			}
 		
 			if (class_doc.body_text.length > 0) {
-				body.push(markdown({bg:0,body:class_doc.body_text,fontsize: 14, margin: vec4(10,0,10,10), fgcolor: "white" }));
+				body.push(markdown({bg:0,body:class_doc.body_text, margin: vec4(10,0,10,10), fontcolor: "white" }));
 			}
 
 			res.push(view({bg:0,flexdirection:"column", margin: vec4(10,0,0,20)}, body));
 		
-			if(class_doc.examples.length >0) res.push(this.BuildGroup(class_doc.examples, "Examples", "flask", "#e0e0e0", "example"));
-			if(class_doc.attributes.length >0) res.push(this.BuildGroup(class_doc.attributes, "Attributes", "gears", "#f0f0c0"));
-			if(class_doc.state_attributes.length >0) res.push(this.BuildGroup(class_doc.state_attributes, "State Attributes", "archive", "#f0c0c0"));
-			if(class_doc.events.length >0) res.push(this.BuildGroup(class_doc.events, "Events", "plug", "#f0c0f0"));
+			if(class_doc.examples.length >0) res.push(this.BuildGroup(class_doc.examples, "Examples", "flask", "#303030", "example"));
+			if(class_doc.attributes.length >0) res.push(this.BuildGroup(class_doc.attributes, "Attributes", "gears", "#303000"));
+			if(class_doc.state_attributes.length >0) res.push(this.BuildGroup(class_doc.state_attributes, "State Attributes", "archive", "#300000"));
+			if(class_doc.events.length >0) res.push(this.BuildGroup(class_doc.events, "Events", "plug", "#300033"));
 					
 			if (class_doc.inner_classes.length > 0){
 				var classes = []
 				for (var a in class_doc.inner_classes){
 					classes.push(this.outer.ClassDocView({collapsible:true, class_doc: class_doc.inner_classes[a]}))				
 				}
-				res.push(foldcontainer({bg:0,bordercolor:"#202020",collapsed:true,  basecolor:"#c0f0c0", icon:"cubes", title:"Inner classes" , fontsize: 20,margin: vec4(10,0,0,20), fgcolor: "white" }, view({flexdirection: "column", flex: 1}, classes)));
+				res.push(foldcontainer({bg:0,bordercolor:"#202020",collapsed:true,  basecolor:"#002000", icon:"cubes", title:"Inner classes" , fontsize: 15,margin: vec4(10,0,0,20), fgcolor: "white" }, view({flexdirection: "column", flex: 1, bgcolor:"#404040"}, classes)));
 			}
 		
-			if(class_doc.methods.length >0) res.push(this.BuildGroup(class_doc.methods, "Methods", "paw", "#c0c0f0", "function"));
+			if(class_doc.methods.length >0) res.push(this.BuildGroup(class_doc.methods, "Methods", "paw", "#000030", "function"));
 			
 			
 			if (this.collapsible){
 				
-				return foldcontainer({bg:0,bordercolor:"#202020",basecolor:"#c0f0c0",collapsed:true,icon:"cube", title:class_doc.class_name},view({bg:0, flexdirection:"column", flex:1},res));
+				return foldcontainer({bg:0,bordercolor:"#202020",basecolor:"#002000",collapsed:true,icon:"cube", title:class_doc.class_name, fontsize: 15},view({bg:0, flexdirection:"column", flex:1},res));
 			}
 			
 			return res;	
 		}
 	})
-	
-	this.render = function(){	
+
+	this.render = function(){
 		var functions = [];
 		var res = [];
 		var R = this.classconstr// 	require("$classes/dataset")
@@ -417,9 +457,11 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			return [markdown({bg:0, body: " " + R.toString()})]
 		} 
 		else if(typeof(R) === 'function'){
-			var class_doc = parseDoc(R)		
+
+			var class_doc = this.parseDoc(R)
+
 			return [
-				this.ClassDocView({class_doc:class_doc}),
+				this.ClassDocView({class_doc:class_doc})
 			
 			]
 		}

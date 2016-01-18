@@ -64,6 +64,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.init = function(){
 		this.neutralcolor1 = this.color1;
 		this.neutralcolor2 = this.color2;
+		this.neutralcolor = 
 		this.neutrallinewidth = this.linewidth;
 		this.find("flowgraph").allconnections.push(this);	
 		
@@ -287,7 +288,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
-				this.neutralcolor = this.bgcolor = out.bgcolor;
+				this.neutralcolor1 = this.bgcolor = out.bgcolor;
 			}
 			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+yoff)
 		}
@@ -306,7 +307,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;
 				yoff += inp.parent.parent.layout.top + 10;
-				if (!F) this.neutralcolor = this.bgcolor = inp.bgcolor;
+				if (!F) this.neutralcolor2 = this.bgcolor = inp.bgcolor;
 		
 			}
 			
@@ -320,7 +321,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 		if (color1 && !color2) color2 = color1;else if (color2 && !color1) color1 = color2;
 		if (color1) this.neutralcolor1 = this.color1 = Mark(color1, !this.updatecount);
-		if (color2) this.neutralcolor2 = this.color2 =  Mark(color2, !this.updatecount);
+		if (color2) this.neutralcolor2 = this.color2 = Mark(color2, !this.updatecount);
 		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
 		this.updatecount++;
 		

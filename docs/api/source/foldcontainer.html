@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='foldcontainer'>/**
+</span> * @class foldcontainer
+ * @extends view
+ * the foldcontainer shows/hides all its children when the top bar is clicked
+ */
+<span id='foldcontainer-attribute-collapsed'>/**
+</span> * @attribute {boolean} collapsed
+ * The current state of the foldcontainer. false = open, Ttue = closed.
+ */
+<span id='foldcontainer-attribute-icon'>/**
+</span> * @attribute {String} [icon=&quot;times&quot;]
+ * The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
+ */
+<span id='foldcontainer-attribute-title'>/**
+</span> * @attribute {String} [title=&quot;folding thing&quot;]
+ */
+<span id='foldcontainer-attribute-basecolor'>/**
+</span> * @attribute {vec4} [basecolor=&quot;0.501960813999176,0.501960813999176,0.7529411911964417,1&quot;]
+ * The main color from which the foldcontainer will build some gradients.
+ */
+<span id='foldcontainer-attribute-fontsize'>/**
+</span> * @attribute {float32} [fontsize=&quot;12&quot;]
+ */
+<span id='foldcontainer-attribute-autogradient'>/**
+</span> * @attribute {boolean} autogradient
+ */
+<span id='foldcontainer-method-toggle'>/**
+</span> * @method toggle
+ * Function to change the open/closed state. Used by the click handler of the clickablebar.
+ */
+<span id='foldcontainer-method-render'>/**
+</span> * @method render
+ */
+<span id='foldcontainer-clickablebar'>/**
+</span> * @class foldcontainer.clickablebar
+ * @extends view
+ * subclass to lay out the clickable portion of the folding container
+ */
+<span id='foldcontainer-clickablebar-attribute-title'>/**
+</span> * @attribute {String} title
+ */
+<span id='foldcontainer-clickablebar-attribute-icon'>/**
+</span> * @attribute {String} icon
+ */
+<span id='foldcontainer-clickablebar-attribute-col1'>/**
+</span> * @attribute {vec4} [col1=&quot;0,0,0,0&quot;]
+ */
+<span id='foldcontainer-clickablebar-attribute-col2'>/**
+</span> * @attribute {vec4} [col2=&quot;0,0,0,0&quot;]
+ */
+<span id='foldcontainer-clickablebar-attribute-collapsed'>/**
+</span> * @attribute {boolean} collapsed
+ */
+<span id='foldcontainer-clickablebar-method-bggradient'>/**
+</span> * @method bggradient
+ * @param a
+ * @param b
+ */
+<span id='foldcontainer-clickablebar-method-toggle'>/**
+</span> * @method toggle
+ * default click-handler - when not bound this write &quot;nothing happens&quot; to the console.
+ */
+<span id='foldcontainer-clickablebar-method-render'>/**
+</span> * @method render
+ * The clickable bar creates icon and a textfield children.
+ */
+<span id='foldcontainer-clickablebar-method-statedefault'>/**
+</span> * @method statedefault
+ * @param first
+ */
+<span id='foldcontainer-clickablebar-method-stateover'>/**
+</span> * @method stateover
+ */
+<span id='foldcontainer-clickablebar-method-stateclick'>/**
+</span> * @method stateclick
+ */
+<span id='foldcontainer-clickablebar-method-layout'>/**
+</span> * @method layout
+ */
+<span id='foldcontainer-clickablebar-method-init'>/**
+</span> * @method init
+ */
+<span id='foldcontainer-containerview'>/**
+</span> * @class foldcontainer.containerview
+ * @extends view
+ * the main container view
+ */</pre>
+</body>
+</html>

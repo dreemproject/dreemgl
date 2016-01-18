@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='label'>/**
+</span> * @class label
+ * @extends view
+ * require(&quot;$fonts/arial_bold.glf&quot;)
+ */
+<span id='label-attribute-fgcolor'>/**
+</span> * @attribute {vec4} [fgcolor=&quot;1,1,1,1&quot;]
+ * the text color
+ */
+<span id='label-attribute-text'>/**
+</span> * @attribute {String} [text=&quot;text&quot;]
+ * The string to display.
+ */
+<span id='label-attribute-fontsize'>/**
+</span> * @attribute {float32} [fontsize=&quot;18&quot;]
+ * Size of the font in pixels
+ */
+<span id='label-attribute-boldness'>/**
+</span> * @attribute {float32} boldness
+ * the boldness of the font (try values 0 - 1)
+ */
+<span id='label-attribute-font'>/**
+</span> * @attribute {Object} font
+ * reference to the font typeface, require it with require(&#39;font:&#39;)
+ */
+<span id='label-attribute-multiline'>/**
+</span> * @attribute {Boolean} multiline
+ * Should the text wrap around when its width has been reached?
+ */
+<span id='label-attribute-subpixel'>/**
+</span> * @attribute {Boolean} subpixel
+ * turn on subpixel aa, this requieres a bgcolor to be present
+ */
+<span id='label-attribute-align'>/**
+</span> * @attribute {Enum} [align=&quot;left&quot;]
+ * Alignment of the bodytext.
+ */
+<span id='label-attribute-bold'>/**
+</span> * @attribute {boolean} bold
+ */
+<span id='label-attribute-bgcolor'>/**
+</span> * @attribute {vec4} [bgcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='label-method-bold'>/**
+</span> * @method bold
+ */
+<span id='label-method-selectShader'>/**
+</span> * @method selectShader
+ */
+<span id='label-method-font'>/**
+</span> * @method font
+ * @param event
+ */
+<span id='label-method-subpixel'>/**
+</span> * @method subpixel
+ * @param event
+ */
+<span id='label-method-measure'>/**
+</span> * @method measure
+ * @param width
+ */
+<span id='label-typefacenormal'>/**
+</span> * @class label.typefacenormal
+ * @extends typefaceshader
+ * the normal font
+ */
+<span id='label-typefacenormal-method-update'>/**
+</span> * @method update
+ */
+<span id='label-typefacesubpixelaa'>/**
+</span> * @class label.typefacesubpixelaa
+ * @extends typefacenormal
+ * the subpixel font used to render with subpixel antialiasing
+ */
+<span id='label-typefaceglyphy'>/**
+</span> * @class label.typefaceglyphy
+ * @extends typefacenormal
+ */
+<span id='label-typeface'>/**
+</span> * @class label.typeface
+ * @extends typefacenormal
+ * the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
+ */</pre>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='treeview'>/**
+</span> * @class treeview
+ * @extends view
+ * The treeview control - classic treeview with expandable nodes.
+ */
+<span id='treeview-attribute-dataset'>/**
+</span> * @attribute {Object} [dataset=&quot;[object Object]&quot;]
+ * the dataset to use for tree expansion. It follows a {name:&#39;test&#39;,children:[{name:&#39;child&#39;}]} format
+ */
+<span id='treeview-method-render'>/**
+</span> * @method render
+ * the renderfunction for the treeview recursively expands using treeitem subclasses.
+ */
+<span id='treeview-event-select'>/**
+</span> * @event select
+ */
+<span id='treeview-foldbutton'>/**
+</span> * @class treeview.foldbutton
+ * @extends button
+ * The fold button is a very very flat button.
+ */
+<span id='treeview-newitemheading'>/**
+</span> * @class treeview.newitemheading
+ * @extends view
+ * newitemheading combines a few foldbuttons in to a full &quot;item&quot; in the tree
+ */
+<span id='treeview-newitemheading-attribute-folded'>/**
+</span> * @attribute {boolean} folded
+ */
+<span id='treeview-newitemheading-attribute-toggleclick'>/**
+</span> * @attribute {Function} toggleclick
+ */
+<span id='treeview-newitemheading-method-render'>/**
+</span> * @method render
+ */
+<span id='treeview-newitemheading-event-select'>/**
+</span> * @event select
+ */
+<span id='treeview-treeitem'>/**
+</span> * @class treeview.treeitem
+ * @extends view
+ * the treeitem subclass contains 3 controls: a newitemheading, a set of treelines and an optional set of children treeitems in case the current node is expanded
+ */
+<span id='treeview-treeitem-attribute-text'>/**
+</span> * @attribute {String} text
+ */
+<span id='treeview-treeitem-attribute-item'>/**
+</span> * @attribute {Object} [item=&quot;[object Object]&quot;]
+ */
+<span id='treeview-treeitem-method-toggle'>/**
+</span> * @method toggle
+ * Open/close this node
+ */
+<span id='treeview-treeitem-method-processSelect'>/**
+</span> * @method processSelect
+ * build path for the current treeitem and call the outer selectclick handler
+ * @param value
+ */
+<span id='treeview-treeitem-method-atConstructor'>/**
+</span> * @method atConstructor
+ */
+<span id='treeview-treeitem-method-render'>/**
+</span> * @method render
+ */
+<span id='treeview-treeline'>/**
+</span> * @class treeview.treeline
+ * @extends view
+ * subclass to render the gridlines of the tree
+ */
+<span id='treeview-treeline-method-render'>/**
+</span> * @method render
+ */</pre>
+</body>
+</html>

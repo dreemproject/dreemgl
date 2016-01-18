@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='slideviewer'>/**
+</span> * @class slideviewer
+ * @extends view
+ * slide viewer is an automatic slide viewer that turns child nodes into slides
+ * use attributes named &#39;slidetitle&#39; on a child to set the slide title1
+ */
+<span id='slideviewer-attribute-slidewidth'>/**
+</span> * @attribute {float32} [slidewidth=&quot;1024&quot;]
+ * the width of a slide
+ */
+<span id='slideviewer-attribute-slideheight'>/**
+</span> * @attribute {float32} [slideheight=&quot;1024&quot;]
+ * the height of a slide
+ */
+<span id='slideviewer-attribute-slidemargin'>/**
+</span> * @attribute {float32} [slidemargin=&quot;10&quot;]
+ * the margin between slides
+ */
+<span id='slideviewer-attribute-page'>/**
+</span> * @attribute {int32} page
+ * the current page
+ */
+<span id='slideviewer-attribute-scroll'>/**
+</span> * @attribute {vec2} [scroll=&quot;0,0&quot;]
+ * animate the scroll
+ */
+<span id='slideviewer-attribute-pos'>/**
+</span> * @attribute {vec3} [pos=&quot;0,0,0&quot;]
+ * persist the postiion
+ */
+<span id='slideviewer-method-page'>/**
+</span> * @method page
+ * @param event
+ */
+<span id='slideviewer-method-scroll'>/**
+</span> * @method scroll
+ * @param event
+ */
+<span id='slideviewer-method-keydown'>/**
+</span> * @method keydown
+ * @param key
+ */
+<span id='slideviewer-method-focuslost'>/**
+</span> * @method focuslost
+ * deny focus loss
+ */
+<span id='slideviewer-method-init'>/**
+</span> * @method init
+ */
+<span id='slideviewer-method-render'>/**
+</span> * @method render
+ */
+<span id='slideviewer-slide'>/**
+</span> * @class slideviewer.slide
+ * @extends view
+ * the class for a nested slide, its automatically wrapped around children
+ */
+<span id='slideviewer-slide-method-viewportblend'>/**
+</span> * @method viewportblend
+ */
+<span id='slideviewer-slide-method-render'>/**
+</span> * @method render
+ */</pre>
+</body>
+</html>

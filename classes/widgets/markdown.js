@@ -16,7 +16,7 @@ define.class(function($ui$, view, label){
 		align: Config({type: String,  value: "left"}),
 
 		// Base fontsize - heading sizes will be multiples of this value.
-		fontsize: Config({type:Number, value: 13}),
+		fontsize: Config({type:Number, value: 14}),
 		
 		// The color to use as the default color for this textblock.
 		fontcolor: Config({type:vec4, value: vec4("#202020")})

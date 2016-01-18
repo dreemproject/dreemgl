@@ -65,10 +65,9 @@ define.class('$server/service', function() {
 
         var ts = Date.now();
 
-        var device_uuid, beacon_uuid, delta;
-        for (beacon_uuid in this.beacon_data) {
-            for (device_uuid in this.beacon_data[beacon_uuid]) {
-                delta = ts - this.beacon_data[beacon_uuid][device_uuid]['ts'];
+        for (var beacon_uuid in this.beacon_data) {
+            for (var device_uuid in this.beacon_data[beacon_uuid]) {
+                var delta = ts - this.beacon_data[beacon_uuid][device_uuid]['ts'];
                 if (delta > age) {
                     delete this.beacon_data[beacon_uuid][device_uuid];
                     if (Object.keys(this.beacon_data[beacon_uuid]).length == 0) {
@@ -78,9 +77,9 @@ define.class('$server/service', function() {
             }
         }
 
-        for (device_uuid in this.device_data) {
-            for (beacon_uuid in this.device_data[device_uuid]) {
-                delta = ts - this.device_data[device_uuid][beacon_uuid]['ts'];
+        for (var device_uuid in this.device_data) {
+            for (var beacon_uuid in this.device_data[device_uuid]) {
+                var delta = ts - this.device_data[device_uuid][beacon_uuid]['ts'];
                 if (delta > age) {
                     delete this.device_data[device_uuid][beacon_uuid];
                     if (Object.keys(this.device_data[device_uuid]).length == 0) {

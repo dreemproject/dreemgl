@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='block'>/**
+</span> * @class block
+ * @extends view
+ */
+<span id='block-attribute-flowdata'>/**
+</span> * @attribute {Object} [flowdata=&quot;[object Object]&quot;]
+ */
+<span id='block-attribute-inputattributes'>/**
+</span> * @attribute {Object} [inputattributes=&quot;color&quot;]
+ * pos: Config({persist: true}),
+ */
+<span id='block-attribute-outputattributes'>/**
+</span> * @attribute {Object} [outputattributes=&quot;clicked,something&quot;]
+ */
+<span id='block-attribute-title'>/**
+</span> * @attribute {String} [title=&quot;Untitled&quot;]
+ */
+<span id='block-attribute-snap'>/**
+</span> * @attribute {int32} [snap=&quot;1&quot;]
+ */
+<span id='block-attribute-bordercolor'>/**
+</span> * @attribute {vec4} [bordercolor=&quot;0,0,0,0&quot;]
+ */
+<span id='block-attribute-borderselected'>/**
+</span> * @attribute {float32} borderselected
+ */
+<span id='block-attribute-focusbordercolor'>/**
+</span> * @attribute {vec4} [focusbordercolor=&quot;#d0d0d0&quot;]
+ */
+<span id='block-attribute-hoverbordercolor'>/**
+</span> * @attribute {vec4} [hoverbordercolor=&quot;#e0e0e0&quot;]
+ */
+<span id='block-attribute-inselection'>/**
+</span> * @attribute {boolean} inselection
+ */
+<span id='block-attribute-inputs'>/**
+</span> * @attribute {Array} [inputs=&quot;[object Object]&quot;]
+ */
+<span id='block-attribute-outputs'>/**
+</span> * @attribute {Array} [outputs=&quot;[object Object]&quot;]
+ */
+<span id='block-method-oninputs'>/**
+</span> * @method oninputs
+ */
+<span id='block-method-onoutputs'>/**
+</span> * @method onoutputs
+ */
+<span id='block-method-bordercolorfn'>/**
+</span> * @method bordercolorfn
+ * @param pos
+ */
+<span id='block-method-inselection'>/**
+</span> * @method inselection
+ */
+<span id='block-method-updatecolor'>/**
+</span> * @method updatecolor
+ */
+<span id='block-method-move'>/**
+</span> * @method move
+ * @param x
+ * @param y
+ */
+<span id='block-method-keydownUparrow'>/**
+</span> * @method keydownUparrow
+ */
+<span id='block-method-keydownDownarrow'>/**
+</span> * @method keydownDownarrow
+ */
+<span id='block-method-keydownLeftarrow'>/**
+</span> * @method keydownLeftarrow
+ */
+<span id='block-method-keydownRightarrow'>/**
+</span> * @method keydownRightarrow
+ */
+<span id='block-method-keydownUparrowShift'>/**
+</span> * @method keydownUparrowShift
+ */
+<span id='block-method-keydownDownarrowShift'>/**
+</span> * @method keydownDownarrowShift
+ */
+<span id='block-method-keydownLeftarrowShift'>/**
+</span> * @method keydownLeftarrowShift
+ */
+<span id='block-method-keydownRightarrowShift'>/**
+</span> * @method keydownRightarrowShift
+ */
+<span id='block-method-keydownDelete'>/**
+</span> * @method keydownDelete
+ */
+<span id='block-method-keydown'>/**
+</span> * @method keydown
+ * @param v
+ */
+<span id='block-method-init'>/**
+</span> * @method init
+ */
+<span id='block-method-destroy'>/**
+</span> * @method destroy
+ */
+<span id='block-method-setupMove'>/**
+</span> * @method setupMove
+ */
+<span id='block-method-updateMove'>/**
+</span> * @method updateMove
+ * @param dx
+ * @param dy
+ * @param snap
+ */
+<span id='block-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param p
+ */
+<span id='block-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ * @param p
+ */
+<span id='block-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='block-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='block-method-layout'>/**
+</span> * @method layout
+ */
+<span id='block-method-renderInputs'>/**
+</span> * @method renderInputs
+ */
+<span id='block-method-renderOutputs'>/**
+</span> * @method renderOutputs
+ */
+<span id='block-method-renameBlock'>/**
+</span> * @method renameBlock
+ */
+<span id='block-method-removeBlock'>/**
+</span> * @method removeBlock
+ */
+<span id='block-method-render'>/**
+</span> * @method render
+ */
+<span id='block-inputbutton'>/**
+</span> * @class block.inputbutton
+ * @extends view
+ */
+<span id='block-inputbutton-attribute-title'>/**
+</span> * @attribute {String} [title=&quot;tadaa&quot;]
+ */
+<span id='block-inputbutton-attribute-type'>/**
+</span> * @attribute {String} type
+ */
+<span id='block-inputbutton-method-clicked'>/**
+</span> * @method clicked
+ */
+<span id='block-inputbutton-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='block-inputbutton-method-render'>/**
+</span> * @method render
+ */
+<span id='block-outputbutton'>/**
+</span> * @class block.outputbutton
+ * @extends view
+ */
+<span id='block-outputbutton-attribute-title'>/**
+</span> * @attribute {String} [title=&quot;thing&quot;]
+ */
+<span id='block-outputbutton-attribute-type'>/**
+</span> * @attribute {String} type
+ */
+<span id='block-outputbutton-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='block-outputbutton-method-clicked'>/**
+</span> * @method clicked
+ */
+<span id='block-outputbutton-method-init'>/**
+</span> * @method init
+ */
+<span id='block-outputbutton-method-render'>/**
+</span> * @method render
+ */</pre>
+</body>
+</html>

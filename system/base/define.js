@@ -263,7 +263,9 @@
 					function wipe_module(name){
 						//console.log("Reloading "+define.fileName(name))
 						for(var key in define.factory){
-							var deps = define.factory[key].deps
+							var fac = define.factory[key]
+							if(!fac) continue
+							var deps = fac.deps
 							if(key !== name && define.module[key] && deps && deps.indexOf(name) !== -1){
 								// remove module
 								define.module[key] = undefined
@@ -1251,9 +1253,12 @@
 				if(ext !== '' && ext !== 'js'){
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){		
 						// Construct a Texture.Image object given its path
-						var tex = define.expandVariables('$system/platform/$platform/texture$platform')
-						var Texture = define.require(tex);
-						return new Texture.Image(full_name)
+						if(define.$platform === 'dali'){
+							var tex = define.expandVariables('$system/platform/$platform/texture$platform')
+							var Texture = define.require(tex);
+							return new Texture.Image(full_name)
+						}
+						return undefined
 					}
 					else{
 						// read it as an arraybuffer
@@ -1902,7 +1907,7 @@
 
 
 
-	
+
 	define.parseGLF = function(blob){
 		// arg. we need to forward ref vec2 and ivec2
 		// how do we do this.

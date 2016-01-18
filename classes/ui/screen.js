@@ -57,11 +57,12 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 		this.bindInputs()
 	}
 	
-	this.defaultKeyboardHandler = function(target, v){
+	this.defaultKeyboardHandler = function(target, v, prefix){
+		if (!prefix) prefix = "";
 		if(!v.name) return console.log("OH NOES",v)		
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
-		var name = 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
+		var name = prefix + 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
 		this.undo_group++
 
 		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
@@ -73,6 +74,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 			target[name](v)
 		}
 		else{
+			console.log(name);
 			if (target.keydownHandler) target.keydownHandler(name);
 		}
 	}
@@ -232,14 +234,14 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 		
 		for(var i = parentlist.length - 1; i >= 0; i--) {
 			var P = parentlist[i]
-
+			
 			var newmode = P.parent? P._viewport:"2d"
-
+			if (logging) console.log(i, "logging for ", newmode, raystart, P.parent);
 			if (P.parent) {
 
 				var MM = P._viewport? P.viewportmatrix: P.totalmatrix
 				
-				if (!P.viewportmatrix) console.log("whaaa" )
+				if (!P.viewportmatrix) console.log(i, "whaaa" )
 				mat4.invert(P.viewportmatrix, this.remapmatrix)
 
 				if (lastmode == "3d") { // 3d to layer transition -> do a raypick.
@@ -277,26 +279,42 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 
 				raystart = vec3.mul_mat4(raystart, transtemp2)
 			
-				if (logging)  console.log(i, raystart, "coordinates after adjusting for layoutwidth/height", P._viewport);
-				
 				lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
 				lastprojection = P.drawpass.colormatrices.perspectivematrix;
 				lastviewmatrix = P.drawpass.colormatrices.lookatmatrix;
 				camerapos = P._camera;
+				
+				if (logging){
+					if (lastprojection) mat4.debug(lastprojection);
+				if (lastviewmatrix) 	mat4.debug(lastviewmatrix);
+					console.log(i, raystart, "coordinates after adjusting for layoutwidth/height", P._viewport);
+				}				
+
+				
 			
 			}
 			if(i == 0 && node.noscroll){
+				if (logging) 
+				{
+					console.log("i==0, noscroll!");
+				}
 				mat4.invert(P.drawpass.colormatrices.noscrollmatrix, this.remapmatrix)
 			} 
 			else {
+				if (logging){	
+					console.log(i, "noscroll = false -  using regular viewmatrix!");
+					mat4.debug(P.drawpass.colormatrices.viewmatrix);
+				}
 				mat4.invert(P.drawpass.colormatrices.viewmatrix, this.remapmatrix)
+				
 			}
+			if (logging) mat4.debug(this.remapmatrix);
 			raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 			
 			lastmode = newmode
 			// console.log(i, raystart, "last");	
 		}
-	if (logging) console.log(node._viewport, node.viewportmatrix, node.totalmatrix);
+		if (logging) console.log(node._viewport, node.viewportmatrix, node.totalmatrix);
 		var MM = node._viewport?node.viewportmatrix: node.totalmatrix
 		mat4.invert(MM, this.remapmatrix)
 		raystart = vec3.mul_mat4(raystart, this.remapmatrix)
@@ -305,7 +323,11 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 		if (lastmode == "3d"){
 			if (logging)  console.log("last mode was 3d..")
 		}
-		if (logging)  console.log(" ", raystart, "final transform using own worldmodel")
+		if (logging)
+		{
+		//	mat4.debug(MM);
+			console.log(" ", raystart, "final transform using own worldmodel")
+		}
 
 		// console.log("_", ressofar, "result");
 

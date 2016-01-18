@@ -8,11 +8,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			
 	this.cursor = "move";
 	this.position = "absolute" ;
-	this.bgcolor = vec4("#292929" )
+	this.bgcolor = vec4("#3b3b3b" )
 	this.padding = 0;
 	this.borderradius = 10;
 	this.borderwidth = 2;
-	this.bordercolor = vec4("#606060")
+	this.bordercolor = vec4("#727272")
 	
 	function uppercaseFirst (inp) {
 		if (!inp || inp.length == 0) return inp;

@@ -6,7 +6,6 @@
 
 if(typeof process !== 'undefined' && require.main === module){
 	var require = require('../../define')
-	var fs = require('fs')
 	var defs = require('./onejsdef.js')
 	// read self
 	var head = fs.readFileSync(module.filename).toString().match(/^[\S\s]*\/\/ generated/)[0]

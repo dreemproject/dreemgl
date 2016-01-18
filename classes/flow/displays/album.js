@@ -4,19 +4,28 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
+// An Album will display a simple list of image urls, or objects with `.image` url properties.
 
     this.attributes = {
+
+        // The input for the selection control widget
         selection: Config({type:String, flow:"in"}),
-        selected: Config({type:int, value:0, persist:true}),
+
+        // The currently selected item
         selecteditem: Config({type:Object, value:null, persist:true, flow:"out"}),
-        lastknob: Config({type:float, value:0.5, persist:true}),
-        items: Config({type:Array, flow:"in", persist:true})
+
+        // Items to display in the album (typically a list of image URLs, or structures with .image attributes)
+        items: Config({type:Array, flow:"in", persist:true}),
+
+        selected: Config({type:int, value:0, persist:true}),
+        lastknob: Config({type:float, value:0.5, persist:true})
     };
 
     this.onselected = function(event) {
         this.selecteditem = this.items[this.selected]
     };
 
+    // Fired when selection controller has input ready to process
     this.onselection = function(event) {
         if (!this.items || !this.items.length) {
             return;

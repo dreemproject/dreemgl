@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='fileio'>/**
+</span> * @class fileio
+ * @extends service
+ * The fileio class provides an easy RPC mechanism to load/create/save/enumerate files and directories. The fileio instance should live on the server part of the composition.
+ * do not ever put this in a web-facing composition as it has no security features
+ */
+<span id='fileio-method-filechange'>/**
+</span> * @method filechange
+ * @param name
+ */
+<span id='fileio-method-readfile'>/**
+</span> * @method readfile
+ * Return the full contents of a file as a string. Returns the result of node.js fs.readFileSync or null in case of exception
+ * @param name
+ * The file to read. File paths can use $-shortcuts to refer to various folders
+ */
+<span id='fileio-method-writefile'>/**
+</span> * @method writefile
+ * writefile synchronously writes data to a file. Returns the result of node.js fs.writeFileSync or null in case of exception
+ * @param name
+ * The file to read. File paths can use $-shortcuts to refer to various folders
+ * @param data
+ * The data to write
+ */
+<span id='fileio-method-readdir'>/**
+</span> * @method readdir
+ * reads a directory and returns its contents
+ * @param name
+ * the name of the directory to read
+ */</pre>
+</body>
+</html>

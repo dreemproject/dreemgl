@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='numberbox'>/**
+</span> * @class numberbox
+ * @extends view
+ * Simple numberbox: a number with a plus and a minus button
+ */
+<span id='numberbox-attribute-value'>/**
+</span> * @attribute {float32} value
+ */
+<span id='numberbox-attribute-minvalue'>/**
+</span> * @attribute {float32} minvalue
+ */
+<span id='numberbox-attribute-maxvalue'>/**
+</span> * @attribute {float32} maxvalue
+ */
+<span id='numberbox-attribute-stepvalue'>/**
+</span> * @attribute {float32} [stepvalue=&quot;1&quot;]
+ */
+<span id='numberbox-attribute-bordercolor'>/**
+</span> * @attribute {vec4} [bordercolor=&quot;#262626&quot;]
+ */
+<span id='numberbox-attribute-draggingbordercolor'>/**
+</span> * @attribute {vec4} [draggingbordercolor=&quot;0.43921568989753723,0.43921568989753723,0.43921568989753723,1&quot;]
+ */
+<span id='numberbox-attribute-focusbordercolor'>/**
+</span> * @attribute {vec4} [focusbordercolor=&quot;0.3764705955982208,0.3764705955982208,0.3764705955982208,1&quot;]
+ */
+<span id='numberbox-attribute-decimals'>/**
+</span> * @attribute {int32} decimals
+ */
+<span id='numberbox-attribute-fontsize'>/**
+</span> * @attribute {float32} [fontsize=&quot;14&quot;]
+ * Font size in device-pixels.
+ */
+<span id='numberbox-attribute-title'>/**
+</span> * @attribute {String} title
+ */
+<span id='numberbox-method-onvalue'>/**
+</span> * @method onvalue
+ */
+<span id='numberbox-method-keydownUparrow'>/**
+</span> * @method keydownUparrow
+ */
+<span id='numberbox-method-keydownDownarrow'>/**
+</span> * @method keydownDownarrow
+ */
+<span id='numberbox-method-keydownRightarrow'>/**
+</span> * @method keydownRightarrow
+ */
+<span id='numberbox-method-keydownLeftarrow'>/**
+</span> * @method keydownLeftarrow
+ */
+<span id='numberbox-method-keydownUparrowShift'>/**
+</span> * @method keydownUparrowShift
+ */
+<span id='numberbox-method-keydownDownarrowShift'>/**
+</span> * @method keydownDownarrowShift
+ */
+<span id='numberbox-method-keydownRightarrowShift'>/**
+</span> * @method keydownRightarrowShift
+ */
+<span id='numberbox-method-keydownLeftarrowShift'>/**
+</span> * @method keydownLeftarrowShift
+ */
+<span id='numberbox-method-init'>/**
+</span> * @method init
+ */
+<span id='numberbox-method-keydown'>/**
+</span> * @method keydown
+ * @param v
+ */
+<span id='numberbox-method-focus'>/**
+</span> * @method focus
+ * @param newfocus
+ */
+<span id='numberbox-method-checkandset'>/**
+</span> * @method checkandset
+ * @param newval
+ */
+<span id='numberbox-method-upclick'>/**
+</span> * @method upclick
+ */
+<span id='numberbox-method-downclick'>/**
+</span> * @method downclick
+ */
+<span id='numberbox-method-updatevalue'>/**
+</span> * @method updatevalue
+ * @param p
+ */
+<span id='numberbox-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param p
+ */
+<span id='numberbox-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ * @param p
+ */
+<span id='numberbox-method-render'>/**
+</span> * @method render
+ */</pre>
+</body>
+</html>

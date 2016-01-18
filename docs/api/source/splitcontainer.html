@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='splitcontainer'>/**
+</span> * @class splitcontainer
+ * @extends view
+ * splitcontainer adds dragbars between nodes to make all the nodes resizable. 
+ */
+<span id='splitcontainer-attribute-direction'>/**
+</span> * @attribute {Enum} [direction=&quot;vertical&quot;]
+ * wether the splitcontainer is vertical or not
+ */
+<span id='splitcontainer-attribute-splitsize'>/**
+</span> * @attribute {float32} [splitsize=&quot;6&quot;]
+ * set the width (or height) of the splitter bar
+ */
+<span id='splitcontainer-attribute-minimalchildsize'>/**
+</span> * @attribute {float32} [minimalchildsize=&quot;20&quot;]
+ * the minimum size of a child controlled by the splitter
+ */
+<span id='splitcontainer-attribute-splittercolor'>/**
+</span> * @attribute {vec4} [splittercolor=&quot;0.2823529541492462,0.2823529541492462,0.2823529541492462,1&quot;]
+ * the color of the splitter bar
+ */
+<span id='splitcontainer-attribute-hovercolor'>/**
+</span> * @attribute {vec4} [hovercolor=&quot;0.43921568989753723,0.43921568989753723,0.43921568989753723,1&quot;]
+ * color of splitter bar on hover
+ */
+<span id='splitcontainer-attribute-activecolor'>/**
+</span> * @attribute {vec4} [activecolor=&quot;0.43921568989753723,0.43921568989753723,0.6274510025978088,1&quot;]
+ * color of the splitter bar when dragging it
+ */
+<span id='splitcontainer-method-direction'>/**
+</span> * @method direction
+ */
+<span id='splitcontainer-method-render'>/**
+</span> * @method render
+ */
+<span id='splitcontainer-splitter'>/**
+</span> * @class splitcontainer.splitter
+ * @extends view
+ * the visual class that defines the draggable bar between the resizable children
+ */
+<span id='splitcontainer-splitter-attribute-firstnode'>/**
+</span> * @attribute {int32} firstnode
+ */
+<span id='splitcontainer-splitter-attribute-vertical'>/**
+</span> * @attribute {Boolean} vertical
+ */
+<span id='splitcontainer-splitter-attribute-splitsize'>/**
+</span> * @attribute {float32} [splitsize=&quot;6&quot;]
+ */
+<span id='splitcontainer-splitter-attribute-splittercolor'>/**
+</span> * @attribute {vec4} [splittercolor=&quot;0.250980406999588,0.250980406999588,0.3137255012989044,1&quot;]
+ */
+<span id='splitcontainer-splitter-attribute-hovercolor'>/**
+</span> * @attribute {vec4} [hovercolor=&quot;0.9411764740943909,0.3137255012989044,0.6274510025978088,1&quot;]
+ */
+<span id='splitcontainer-splitter-attribute-bgcolor'>/**
+</span> * @attribute {vec4} [bgcolor=&quot;1,1,1,1&quot;]
+ */
+<span id='splitcontainer-splitter-attribute-activecolor'>/**
+</span> * @attribute {vec4} [activecolor=&quot;0.43921568989753723,0.43921568989753723,0.6274510025978088,1&quot;]
+ */
+<span id='splitcontainer-splitter-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='splitcontainer-splitter-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='splitcontainer-splitter-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ * @param event
+ */
+<span id='splitcontainer-splitter-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ */
+<span id='splitcontainer-splitter-method-vertical'>/**
+</span> * @method vertical
+ */</pre>
+</body>
+</html>

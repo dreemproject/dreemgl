@@ -12,15 +12,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	this.padding = 0;
 	this.margin = 4;
 	this.borderradius =  vec4(10,10,1,1);
-	this.bgcolor = vec4("#4e4e4e");
+	this.bgcolor = vec4("red");
 	this.flex = 1;
 	this.flexdirection ="column" 
 	
 	this.render = function(){
 		return [
 			view({bgcolor:"#585858",borderradius:0, bordercolor:"transparent" , borderwidth:0, margin:0, padding:vec4(0)},
-				view({margin:vec4(1,1,2,0),bgcolor:"#3c3c3c", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
-					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
+				view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
+					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
 				)
 			)
 			,this.constructor_children

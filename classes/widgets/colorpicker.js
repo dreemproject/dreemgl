@@ -103,6 +103,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	
 	this.createColorFromHSV = function(){
 		this._value = vec4.fromHSV(this.basehue, this.basesat, this.baseval);		
+		if (this.valuechange) this.valuechange(this._value);
 	}
 
 	this.createHSVFromColor = function(){

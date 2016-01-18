@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='external'>/**
+</span> * @class external
+ * @extends view
+ */
+<span id='external-attribute-deviceList'>/**
+</span> * @attribute {Array} [deviceList=&quot;&quot;]
+ */
+<span id='external-attribute-devices'>/**
+</span> * @attribute {Object} [devices=&quot;[object Object]&quot;]
+ */
+<span id='external-attribute-apiCode'>/**
+</span> * @attribute {String} apiCode
+ */
+<span id='external-attribute-clientCode'>/**
+</span> * @attribute {String} [clientCode=&quot;require &quot;net/htttp&quot;;
+require &quot;json&quot;;
+
+uri = URI.parse(&quot;http://localhost:2000/examples/extdemo&quot;)
+Net::HTTP.start(uri.hostname, uri.port) do |http|
+
+  (req = Net::HTTP::Post.new(uri)).body = {
+    rpcid: &quot;devbus&quot;,
+    type: &quot;method&quot;,
+    method: &quot;notify&quot;,
+    args: [&quot;deviceID&quot;,&quot;deviceType&quot;,&quot;&lt;join/part&gt;&quot;]
+  }.to_json
+
+  puts &quot;sending JSON: #{req.body}&quot;
+  http.request(req)
+
+end&quot;]
+ */
+<span id='external-method-ondevices'>/**
+</span> * @method ondevices
+ * @param e
+ */
+<span id='external-method-render'>/**
+</span> * @method render
+ */</pre>
+</body>
+</html>

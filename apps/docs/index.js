@@ -1,5 +1,6 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $server$, fileio, dataset, $ui$, screen, view, splitcontainer, treeview, label, $widgets$, docviewer, jsviewer){
+// Inline documentation and example code viewer
 
 	define.class(this, 'fileio', function($server$,fileio){
 		var path = require('path')
@@ -37,9 +38,9 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 		}
 
 		// recursively read all directories starting from a base path
-		// <name> the base path to start reading
-		// <ignoreset> files and directories to ignore while recursively expanding
-		this.readAllPaths = function(ignoreset){
+		this.readAllPaths = function(ignoreset 		// files and directories to ignore while recursively expanding
+
+		){
 			// lets read all paths.
 			// lets read the directory and return it
 			var root = {collapsed:0, children:[]}
@@ -106,7 +107,6 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 						this.screen.locationhash = function(event){
 						//	debugger
 							if(event.value.path) require.async(event.value.path).then(function(module){
-								console.log(module)
 								this.classconstr = module
 							}.bind(this))
 						}.bind(this)

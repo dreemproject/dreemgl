@@ -4,8 +4,8 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function($ui$, view, label, button, icon){
+// The treeview control - classic treeview with expandable nodes.
 
-	// the treeview control - classic treeview with expandable nodes.
 	this.attributes = {
 		// the dataset to use for tree expansion. It follows a {name:'test',children:[{name:'child'}]} format
 		dataset: {},
@@ -68,12 +68,14 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.render = function(){
 			return [
 				this.haschildren?this.outer.foldbutton({
-					icon:this.folded? "arrow-right":"arrow-down", 
+					icon:this.folded? "chevron-right":"chevron-down", 
 					padding: 2, 
+					bg:0,
 					click: this.toggleclick
 				}):[], 
 				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
 				this.outer.foldbutton({
+					bg:0,
 					text: this.text, 
 					click:function(){
 						this.emit('select',{node:this})

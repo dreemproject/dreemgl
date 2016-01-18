@@ -4,6 +4,16 @@ define.mixin(function(require){
 	var Cursor = require('./singlecursor')
 	var parse = new (require('$system/parse/onejsparser'))()
 
+	// change sources
+	var enumchange = this.enumchange = {
+		keypress:1,
+		delete:2,
+		clipboard:3,
+		undoredo:4
+	}
+
+	this.change = 0
+
 	this.doCursor = function(){
 		var cursor0 = this.cursorset.list[0]
 		if(this.cursorset.list.length === 1 && cursor0.start === cursor0.end){
@@ -153,14 +163,14 @@ define.mixin(function(require){
 		this.undo_group++
 		this.cursorset.insert(event.text)
 		this.doCursor()
-		//change = Change.clipboard
+		this.change = enumchange.clipboard
 	}
 
 	this.keypress = function(event){
 		this.undo_group++
-		this.cursorset.insert(event.value)
+		this.cursorset.insert(event.value)  
 		this.doCursor()
-		//change = Change.keyPress		
+		this.change = enumchange.keypress		
 	}
 
 	var utfmap = {
@@ -233,7 +243,7 @@ define.mixin(function(require){
 			else if(trans !== undefined){
 				if(this.readonly) return
 				this.cursorset.insert(trans)
-				change = Change.keyPress
+				this.change = enumchange.keypress
 			}
 		}
 	}
@@ -315,7 +325,7 @@ define.mixin(function(require){
 	this.keyZCmd = function(){
 		if(this.readonly) return
 		this.undoRedo(this.undo_stack, this.redo_stack)
-		//change = Change.undoRedo
+		this.change = enumchange.undoredo
 		//doCursor()
 	}
 
@@ -323,6 +333,7 @@ define.mixin(function(require){
 	this.keyYCmd = function(){
 		if(this.readonly) return
 		this.undoRedo(this.redo_stack, this.undo_stack)
+		this.change = enumchange.undoredo
 		//change = Change.undoRedo
 		//doCursor()
 	}
@@ -338,13 +349,14 @@ define.mixin(function(require){
 	this.keyXCmd = function(){
 		if(this.readonly) return
 		// cut the crap
+		this.change = enumchange.delete
 		this.cursorset.delete()
 	}
 
 	this.keyBackspace = function(){
 		if(this.readonly) return
 		this.cursorset.backspace()
-		//change = Change.delete
+		this.change = enumchange.delete
 		this.selectionToClipboard()	
 		this.doCursor()
 	}
@@ -360,6 +372,7 @@ define.mixin(function(require){
 
 	this.keyDelete = function(){
 		if(this.readonly) return
+		this.change = enumchange.delete
 		this.cursorset.delete()
 		this.selectionToClipboard()	
 		this.doCursor()

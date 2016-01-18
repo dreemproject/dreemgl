@@ -247,6 +247,19 @@ define(function(require, exports){
 		return o;	
 	}
 	
+	vec2.rotate = function(a, ang, o){
+		if(!o) o = vec2()
+
+		var sa = Math.sin(ang);
+		var ca = Math.cos(ang);
+	
+		o = vec2(ca*a[0] - sa * a[1],sa*a[0] + ca * a[1])
+				
+			
+		return o;	
+						
+	}
+	
 	vecApi(vec3)	
 	
 	vec3.intersectplane = function(origin, direction, normal, dist) {
@@ -1205,6 +1218,13 @@ define(function(require, exports){
 		return o
 	}
 	
+	mat4.isIdentity = function(o){
+		return o[0] == 1 && o[1] == 0 && o[2] == 0 && o[3] == 0 && 
+		o[4] == 0 && o[5] == 1 && o[6] == 0 && o[7] == 0 && 
+		o[8] == 0 && o[9] == 0 && o[10]== 1 && o[11]== 0 && 
+		o[12]== 0 && o[13]== 0 && o[14]== 0 && o[15]== 1
+	}
+
 	mat4.normalFromMat4 = function(a, o){
 		if(!o) o = mat4()
 

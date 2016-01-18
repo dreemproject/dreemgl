@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='connection'>/**
+</span> * @class connection
+ * @extends view
+ */
+<span id='connection-attribute-from'>/**
+</span> * @attribute {String} from
+ */
+<span id='connection-attribute-to'>/**
+</span> * @attribute {String} to
+ */
+<span id='connection-attribute-fromoutput'>/**
+</span> * @attribute {String} fromoutput
+ */
+<span id='connection-attribute-toinput'>/**
+</span> * @attribute {String} toinput
+ */
+<span id='connection-attribute-linewidth'>/**
+</span> * @attribute {float32} [linewidth=&quot;3&quot;]
+ */
+<span id='connection-attribute-glowlinewidth'>/**
+</span> * @attribute {float32} [glowlinewidth=&quot;12&quot;]
+ */
+<span id='connection-attribute-focussedcolor'>/**
+</span> * @attribute {vec4} [focussedcolor=&quot;0.8156862854957581,0.8156862854957581,0.8156862854957581,1&quot;]
+ */
+<span id='connection-attribute-hoveredcolor'>/**
+</span> * @attribute {vec4} [hoveredcolor=&quot;0.9411764740943909,0.9411764740943909,0.9411764740943909,1&quot;]
+ */
+<span id='connection-attribute-focussedwidth'>/**
+</span> * @attribute {float32} [focussedwidth=&quot;3&quot;]
+ */
+<span id='connection-attribute-hoveredwidth'>/**
+</span> * @attribute {float32} [hoveredwidth=&quot;3&quot;]
+ */
+<span id='connection-attribute-color1'>/**
+</span> * @attribute {vec4} [color1=&quot;0,0,1,1&quot;]
+ */
+<span id='connection-attribute-color2'>/**
+</span> * @attribute {vec4} [color2=&quot;1,0,0,1&quot;]
+ */
+<span id='connection-attribute-centralcolor'>/**
+</span> * @attribute {vec4} [centralcolor=&quot;1,0,0,1&quot;]
+ */
+<span id='connection-attribute-inselection'>/**
+</span> * @attribute {boolean} inselection
+ */
+<span id='connection-attribute-hasball'>/**
+</span> * @attribute {boolean} [hasball=&quot;true&quot;]
+ */
+<span id='connection-method-B1'>/**
+</span> * @method B1
+ * @param t
+ */
+<span id='connection-method-B2'>/**
+</span> * @method B2
+ * @param t
+ */
+<span id='connection-method-B3'>/**
+</span> * @method B3
+ * @param t
+ */
+<span id='connection-method-B4'>/**
+</span> * @method B4
+ * @param t
+ */
+<span id='connection-method-bezier'>/**
+</span> * @method bezier
+ * @param percent
+ * @param C1
+ * @param C2
+ * @param C3
+ * @param C4
+ */
+<span id='connection-method-oninselection'>/**
+</span> * @method oninselection
+ */
+<span id='connection-method-destroy'>/**
+</span> * @method destroy
+ */
+<span id='connection-method-init'>/**
+</span> * @method init
+ */
+<span id='connection-method-keydownDelete'>/**
+</span> * @method keydownDelete
+ */
+<span id='connection-method-keydownHandler'>/**
+</span> * @method keydownHandler
+ * @param name
+ */
+<span id='connection-method-keydown'>/**
+</span> * @method keydown
+ * @param v
+ */
+<span id='connection-method-updatecolor'>/**
+</span> * @method updatecolor
+ */
+<span id='connection-method-focus'>/**
+</span> * @method focus
+ */
+<span id='connection-method-mouseleftdown'>/**
+</span> * @method mouseleftdown
+ */
+<span id='connection-method-mouseleftup'>/**
+</span> * @method mouseleftup
+ * @param p
+ */
+<span id='connection-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='connection-method-mouseout'>/**
+</span> * @method mouseout
+ */
+<span id='connection-method-updateMove'>/**
+</span> * @method updateMove
+ */
+<span id='connection-method-setupMove'>/**
+</span> * @method setupMove
+ */
+<span id='connection-method-calculateposition'>/**
+</span> * @method calculateposition
+ */
+<span id='connection-method-render'>/**
+</span> * @method render
+ */
+<span id='connection-connectionshader'>/**
+</span> * @class connection.connectionshader
+ * @extends shaderwebgl
+ */
+<span id='connection-connectionshader-method-B1'>/**
+</span> * @method B1
+ * @param t
+ */
+<span id='connection-connectionshader-method-B2'>/**
+</span> * @method B2
+ * @param t
+ */
+<span id='connection-connectionshader-method-B3'>/**
+</span> * @method B3
+ * @param t
+ */
+<span id='connection-connectionshader-method-B4'>/**
+</span> * @method B4
+ * @param t
+ */
+<span id='connection-connectionshader-method-bezier'>/**
+</span> * @method bezier
+ * @param percent
+ * @param C1
+ * @param C2
+ * @param C3
+ * @param C4
+ */
+<span id='connection-connectionshader-method-position'>/**
+</span> * @method position
+ */
+<span id='connection-connectionshader-method-color'>/**
+</span> * @method color
+ */
+<span id='connection-glowconnectionshader'>/**
+</span> * @class connection.glowconnectionshader
+ * @extends shaderwebgl
+ */
+<span id='connection-glowconnectionshader-method-B1'>/**
+</span> * @method B1
+ * @param t
+ */
+<span id='connection-glowconnectionshader-method-B2'>/**
+</span> * @method B2
+ * @param t
+ */
+<span id='connection-glowconnectionshader-method-B3'>/**
+</span> * @method B3
+ * @param t
+ */
+<span id='connection-glowconnectionshader-method-B4'>/**
+</span> * @method B4
+ * @param t
+ */
+<span id='connection-glowconnectionshader-method-bezier'>/**
+</span> * @method bezier
+ * @param percent
+ * @param C1
+ * @param C2
+ * @param C3
+ * @param C4
+ */
+<span id='connection-glowconnectionshader-method-position'>/**
+</span> * @method position
+ */
+<span id='connection-glowconnectionshader-method-color'>/**
+</span> * @method color
+ */</pre>
+</body>
+</html>

@@ -87,9 +87,8 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 		}
 		
 		// recursively read all directories starting from a base path
-		// <name> the base path to start reading
-		// <ignoreset> files and directories to ignore while recursively expanding
-		this.readAllPaths = function(ignoreset){
+		this.readAllPaths = function(ignoreset //files and directories to ignore while recursively expanding
+		){
 			// lets read all paths.
 			// lets read the directory and return it
 			var root = {collapsed:0, children:[]}
