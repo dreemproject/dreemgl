@@ -171,8 +171,10 @@
 		if(cls.prototype) cls = cls.prototype
 		var mod = cls.constructor.module
 		var fn = mod.filename
+		console.log("FILENAME", fn)
 		for(var key in define.paths){
 			var path = define.expandVariables(define['$'+key])
+			console.log("PATH", path)
 			if(fn.indexOf(path) === 0){
 				// Return the class path as a symbol base
 				return define.filePath('$'+key+fn.slice(path.length)) + '/'

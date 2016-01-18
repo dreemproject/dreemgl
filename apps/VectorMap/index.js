@@ -641,7 +641,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".topojson?api_key=vector-tiles-Qpvj7U4" 
 			//var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".json?api_key=vector-tiles-Qpvj7U4" 
-			
+			console.log("HELLO", define.classPath(this))
+
 			console.log("grabbing..", fileurl);
 			
 			return nodehttp.get(fileurl);
