@@ -11,11 +11,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	
 	define.class(this, "mainscreen", function($ui$, view){		
 	
-	
+	var L = 2;
 		this.attributes = {
-			mapxcenter: Math.floor(19296/2),
-			mapycenter: Math.floor(24641/2),
-			zoomlevel: 15
+			mapxcenter: Math.floor(19296/Math.pow(2, L)),
+			mapycenter: Math.floor(24641/Math.pow(2,L)),
+			zoomlevel: 16 - L
 			
 		}
 		
@@ -246,8 +246,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							var color1 = vec4("green");
 							var color2 = vec4("lime");
 							
-							if (this.color1[land.kind]) color1 = this.color1[land.kind];else console.log("unknown land type:", land.kind);
-							if (this.color2[land.kind]) color2 = this.color2[land.kind];else console.log("unknown land type:", land.kind);
+							if (this.color1[land.kind]) color1 = this.color1[land.kind];
+							if (this.color2[land.kind]) color2 = this.color2[land.kind];
 						
 							if (land.arcs){
 								for(var j = 0;j<land.arcs.length;j++){
@@ -553,6 +553,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
+					var KindSet = {};
 					//console.log(this.thedata);
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
@@ -562,6 +563,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							}
 						}
+						KindSet[B.kind] = true;
 						Bset.push(B);
 					}
 					
@@ -583,6 +585,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							
 						}
+						KindSet[B.kind] = true;
 						Eset.push(B);
 					}
 					
@@ -594,6 +597,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							
 						}
+						KindSet[B.kind] = true;
 						Lset.push(B);
 					}
 					
@@ -604,6 +608,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						{
 							B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);	
 						}
+						KindSet[B.kind] = true;
 						Rset.push(B);
 					}		
 					
@@ -614,6 +619,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						for(var k = 0;k<Bb.arcs.length;k++){
 							B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);	
 						}
+						KindSet[B.kind] = true;
 						Rset.push(B);
 					}
 					
@@ -624,6 +630,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.waters = Wset;
 					this.earths = Eset;
 					this.landuses = Lset;
+					console.log(KindSet);
 			}
 			
 			this.load = function(name){
