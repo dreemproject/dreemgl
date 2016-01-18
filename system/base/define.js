@@ -180,6 +180,16 @@
 		}
 	}
 
+	define.deferPromise = function(){
+		var res, rej
+		var prom = new Promise(function(ires, irej){
+			res = ires, rej = irej
+		})
+		prom.resolve = res
+		prom.reject = rej
+		return prom
+	}
+
 
 
 
