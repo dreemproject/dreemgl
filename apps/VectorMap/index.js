@@ -627,13 +627,16 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 		})			
 	})
-			
+		
+	console.log(define.classPath(this));
+	
 	define.class(this, "urlfetch", function($server$, service){
 		this.grabmap = function(x,y,z){
 			
 			var nodehttp = require('$system/server/nodehttp');
 			var fs = require('fs');
-			var cachedname = define.classPath(this) + "cache/" + x +"_"+y+"_" + z+".json";
+			console.log(define.classPath(this));
+			var cachedname = define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json";
 			console.log(cachedname);
 			if (fs.existsSync(cachedname)){
 				return fs.readFileSync(cachedname).toString()
@@ -645,9 +648,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 			console.log("grabbing..", fileurl);
 			
-			return nodehttp.get(fileurl);
+			nodehttp.get(fileurl).then(function(v){
+					resolve(v);
+			})
 			
-		}		
+			return new Promise;
+			
+		}.bind(this)		
 	})
 	
 	this.render = function(){ return [
