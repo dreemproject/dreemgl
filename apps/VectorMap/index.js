@@ -80,41 +80,43 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		define.class(this, "water", function($ui$, view){
 			
 			this.boundscheck = false;
-			this.attributes = {
-				
+			
+			this.attributes = {		
 				water:{}
 			}
+			
 			this.mouseover =  function(){
 				var text = "Water!";				
-				this.screen.status = text;
-				
+				this.screen.status = text;	
 			}
+			
 			this.render = function(){
 				var res = [];
 				for (var i =0;i<this.water.arcs.length;i++){
 					res.push(this.outer.waterpolygon({arc:this.water.arcs[i], color:vec4("lightblue") }));
 				}
 				return res;
-			};
-			
+			};			
 		})
 	
 		define.class(this, "land", function($ui$, view){
 			this.boundscheck = false;
-			this.attributes = {
-				
+			this.attributes = {				
 				lands:[]
 			}
-			this.NOTmouseover =  function(){
-				var text = "Land: " + this.land.kind;				
-				this.screen.status = text;
-				
+			
+			this.mouseover =  function(evt){
+				var text = "Land: " + this.lands[evt.pickid].kind;				
+				this.screen.status = text;				
+			}			
+			
+			
+			this.onlands = function(){
+				this.pickrange = this.lands.length;
 			}
 			
-				
-
 			this.bg = function(){
-				
+			
 			this.color1 = {pedestrian:"lightgray", parking:"gray", park:"green", earth:"green", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 			this.color2 = {pedestrian:"yellow", parking:"lightgray", park:"lime", earth:"gray", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 			
@@ -122,11 +124,14 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.vertexstruct =  define.struct({		
 				pos:vec2,
 				color1:vec4,
-				color2:vec4
+				color2:vec4, 
+				id: float
 			})
 			
 			this.mesh = this.vertexstruct.array();
-
+			this.pick = function(){
+				return mesh.id;
+			}
 			this.color = function(){
 				return mesh.color1;
 			}
@@ -148,7 +153,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							var arc = land.arcs[j];
 							var tris = arctotriangles(arc);
 							for(var a = 0;a<tris.length;a++){
-								this.mesh.push(tris[a], vec4(color1), vec4(color2));
+								this.mesh.push(tris[a], vec4(color1), vec4(color2), i);
 							}
 						}
 					}
@@ -166,10 +171,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 						
 		})
-		
-
-
-		
 		
 		define.class(this, "road", function($ui$, view){
 			this.boundscheck = false;

@@ -206,7 +206,7 @@ define.class(function(require, baseclass){
 		var pick_id = 0
 		var draw = view
 		while(draw){
-			pick_id++
+			pick_id+= draw.pickrange;
 			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
@@ -262,10 +262,12 @@ define.class(function(require, baseclass){
 		var draw = view
 		var pick_id = 0
 		while(draw){
-			pick_id++
+			
+			if(id > pick_id && id <= pick_id + draw.pickrange) return draw
 
-			if(id === pick_id) return draw
+			pick_id+=draw.pickrange;
 
+			
 			draw = this.nextItem(draw)
 		}
 	}
