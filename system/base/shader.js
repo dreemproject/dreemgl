@@ -593,6 +593,7 @@ define.class(function(require, exports){
 			pix_base += 'vec4 dump;\n'
 		}
 
+		pix_base += 'vec2 PickGuid = vec2(0,0);\n'
 		pix_base += this.compileStructs(pix_state.structs)
 		pix_base += this.compileVaryings(pix_state.attributes, 'Attribute varyings')
 		pix_base += this.compileVaryings(pix_state.varyings, 'Varyings')
@@ -623,7 +624,6 @@ define.class(function(require, exports){
 		}
 
 		pix_color += pix_base 
-
 		pix_color += '//------------------- Color Pixel shader main -------------------\nvoid main(){\n'
 		pix_color += this.compileUniformRename(pix_state.uniforms)
 		if(pix_state.dump.set){
@@ -638,7 +638,6 @@ define.class(function(require, exports){
 		pix_pick += pix_base
 		pix_pick += 'uniform vec3 _pickguid;\n'
 		pix_pick += 'uniform float _pickalpha;\n'
-		pix_pick += 'vec2 PickGuid = vec2(0,0);\n'
 		pix_pick += '//------------------- Pick Pixel shader main -------------------\nvoid main(){\n'
 		pix_pick += this.compileUniformRename(pix_state.uniforms)
 		pix_pick += '\tvec4 col = ' + this.toVec4(pix_code, pix_ast, alpha_code, alpha_ast) + ';\n'
