@@ -94,7 +94,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 
 				if(ret && typeof ret === 'object' && ret.then){ // its a promise.
 					ret.then(function(result){
-						rmsg.value = result.value
+						rmsg.value = result
 						resolve(rmsg)
 					})
 				}
