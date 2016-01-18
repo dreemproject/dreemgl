@@ -194,8 +194,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}
 				
 				this.mouseover =  function(evt){
+					var l = this.lands[evt.pickid];
+					if (l){
 					var text = "Land: " + this.lands[evt.pickid].kind;				
 					this.screen.status = text;				
+					}
 				}			
 				
 				
@@ -274,25 +277,102 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			define.class(this, "road", function($ui$, view){
 				this.boundscheck = false;
 				
-				this.attributes = {
-					
-					road:{}
+				this.attributes = {					
+					roads:[]
 				}
-				this.widths = {path:2,ferry:4, "rail" : 5, "minor_road": 4, "major_road" : 10, path: 3, highway:12}
-				this.colors = {path:"brown", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-				this.render = function(){
-						
-					var res = [];
-					for (var i =0;i<this.road.arcs.length;i++){
-						
-						var width = 3;
-						var color = vec4("gray") 
-						if (this.widths[this.road.kind]) width = this.widths[this.road.kind];
-						if (this.colors[this.road.kind]) color = this.colors[this.road.kind];
-						res.push(this.outer.linestring({linewidth: width, arc:this.road.arcs[i], color:color}));
+				
+				this.bg = function(){		
+					this.vertexstruct =  define.struct({		
+						pos:vec2,
+						color:vec4,
+						side: float, 
+						dist: float,
+						linewidth:float,
+						sidevec:vec2
+					})
+					
+					this.mesh = this.vertexstruct.array();
+					
+					this.color = function(){
+						if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
+						if (abs(mesh.side) > 0.75) return mix("#f0f0f0", mesh.color, 0.6)
+						if (abs(mesh.side) < 0.1) return  mix("#f0f0f0", mesh.color, 0.6 * (min(1., max(0.0,0.8 + 5.0*sin(mesh.dist*0.5)))))
+						return mesh.color;
 					}
-					return res;
-				};
+					
+					this.widths = {path:2,ferry:4, "rail" : 5, "minor_road": 4, "major_road" : 10, path: 3, highway:12}
+					this.colors = {path:"brown", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
+				
+					this.update = function(){
+						this.mesh = this.vertexstruct.array();
+						
+						for (var i = 0;i<this.view.roads.length;i++){
+							var R = this.view.roads[i];
+							//console.log(R);
+							var linewidth = 3;
+							var color = vec4("gray") 
+							if (this.widths[R.kind]) linewidth = this.widths[R.kind];
+							if (this.colors[R.kind]) color = vec4(this.colors[R.kind]);
+
+								
+							for(var rr = 0;rr<R.arcs.length;rr++){
+								
+								
+								var currentarc = R.arcs[rr]
+								var A0 = currentarc[0];
+								//this.mesh.push(A0[0], A0[1], this.view.color);
+								var nx = A0[0];
+								var ny = A0[1];
+								var dist = 0;
+								var dist2 = 0;
+								var lastsdelta = vec2(0,0);
+								for(var a = 1;a<currentarc.length;a++){					
+									var A =currentarc[a];
+									var tnx = nx + A[0];
+									var tny = ny + A[1];
+									var predelt = vec2( tnx - nx, tny - ny);
+									var delta = vec2.normalize(predelt);
+									var sdelta = vec2.rotate(delta, PI/2);
+							
+									var dist2 = dist +  vec2.len(predelt);
+
+									if (a>1){
+										this.mesh.push(nx,ny, color, 1, dist,linewidth,lastsdelta);
+										this.mesh.push(nx,ny, color,-1, dist,linewidth,lastsdelta);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth,sdelta);
+										
+										this.mesh.push(nx,ny, color, 1, dist,linewidth, lastsdelta);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth, sdelta);
+										this.mesh.push(nx,ny, color,-1, dist,linewidth, sdelta);
+											
+									}
+									
+									this.mesh.push( nx, ny,color, 1, dist ,linewidth, sdelta);
+									this.mesh.push( nx, ny,color,-1, dist ,linewidth, sdelta);
+									this.mesh.push(tnx,tny,color, 1, dist2,linewidth, sdelta);
+									
+									this.mesh.push(nx,ny,color,-1, dist,linewidth, sdelta);
+									this.mesh.push(tnx,tny,color,1,dist2,linewidth, sdelta);
+									this.mesh.push(tnx,tny,color,-1, dist2,linewidth, sdelta);
+									
+									lastsdelta = vec2(sdelta[0], sdelta[1]);
+									dist = dist2;									
+									nx = tnx;
+									ny = tny;
+								}
+							}
+						}
+					}
+					this.position = function(){					
+						var pos = mesh.pos + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
+						return vec4(pos.x, 1000-pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
+					}
+					
+					this.drawtype = this.TRIANGLES
+					this.linewidth = 4;		
+				
+				}
+				
 				
 			})
 					
@@ -455,66 +535,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}
 			});
 
-			define.class(this, "linestring", function($ui$, view){
-				this.boundscheck = false;
-				
-				this.attributes = {
-					arc:[],
-					color:vec4("red"), linewidth: 10.0
-				}
-				
-				this.bg = function(){		
-					this.vertexstruct =  define.struct({		
-						pos:vec2,
-						color:vec4,
-						side: float, 
-						dist: float
-					})
-					
-					this.mesh = this.vertexstruct.array();
-					this.color = function(){
-						if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
-						if (abs(mesh.side) > 0.75) return mix("#f0f0f0", mesh.color, 0.6)
-						if (abs(mesh.side) < 0.1) return  mix("#f0f0f0", mesh.color, 0.6 * (min(1., max(0.0,0.8 + 5.0*sin(mesh.dist*0.5)))))
-						return mesh.color;
-					}
-			
-					this.update = function(){
-						this.mesh = this.vertexstruct.array();
-						var A0 = this.view.arc[0];
-						//this.mesh.push(A0[0], A0[1], this.view.color);
-						var nx = A0[0];
-						var ny = A0[1];
-						var dist = 0;
-						for(var a = 1;a<this.view.arc.length;a++){					
-							var A = this.view.arc[a];
-							var tnx = nx + A[0];
-							var tny = ny + A[1];
-							var predelt = vec2( tnx - nx, tny - ny);
-							var delta = vec2.normalize(predelt);
-							var sdelta = vec2.rotate(delta, PI/2);
-							
-							this.mesh.push(nx+ sdelta[0]*this.view.linewidth,ny+ sdelta[1]*this.view.linewidth, this.view.color,1, dist);
-							this.mesh.push(nx- sdelta[0]*this.view.linewidth,ny- sdelta[1]*this.view.linewidth, this.view.color,-1, dist);
-							
-							dist += vec2.len(predelt);
-							
-							this.mesh.push(tnx+ sdelta[0]*this.view.linewidth,tny+ sdelta[1]*this.view.linewidth, this.view.color,1,dist);
-							this.mesh.push(tnx- sdelta[0]*this.view.linewidth,tny- sdelta[1]*this.view.linewidth, this.view.color,-1, dist);
-													
-							nx = tnx;
-							ny = tny;
-						}
-					}
-					
-					this.position = function(){					
-						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
-					}
-					
-					this.drawtype = this.TRIANGLE_STRIP
-					this.linewidth = 4;		
-				}
-			});
 			
 			this.loadurl = function(x,y,z){	
 				//http://vector.mapzen.com/osm/{layers}/{z}/{x}/{y}.{format}?api_key=vector-tiles-Qpvj7U4
@@ -634,9 +654,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				res.push(this.building({buildings: this.buildings}));			
 				
-				for(var i = 0 ;i<this.roads.length;i++){
-					res.push(this.road({road: this.roads[i]}));			
-				}
+				//for(var i = 0 ;i<this.roads.length;i++){
+					res.push(this.road({roads: this.roads}));			
+				//}
 			
 				return res;
 			}
