@@ -66,6 +66,9 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 		else{
 			obj = context[name]
 		}
+		if(typeof obj === 'undefined' && context.wildcard){
+			obj = context.wildcard
+		}
 		
 		if(typeof obj === 'number'){
 			state.uniforms[outname] = node.infer = float32

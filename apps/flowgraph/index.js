@@ -12,8 +12,8 @@ define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, s
 			fs.writeFile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
 		}
 
-		this.newComposition = function (name){
-			console.log("new composition creation requested:", name);
+		this.newComposition = function(name){
+			console.log("new composition creation requested:", name)
 			// todo: create folder in default composition path
 			// todo: create default index.js using options from options.
 			// todo: if things go wrong, return false

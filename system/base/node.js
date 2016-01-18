@@ -459,7 +459,7 @@ define.class(function(require, constructor){
 
 		// (re)define the class		
 		if(style._base[name] !== base || !style._class[name]){
-			var clsname = base.name + '_' +(where+'_'||'')+ (style._match||'star')
+			var clsname = base.name + '_' +(where?where+'_':'')+ (style._match||'star')
 			var cls = style._class[name] = base.extend(style, original.outer, clsname)			
 		 	style._base[name] = base
 		 	return /*cache[cacheid] =*/ cls
@@ -565,7 +565,7 @@ define.class(function(require, constructor){
 		var is_config =  config instanceof Config
 		var is_attribute = !always_define && key in this
 		// use normal value assign
-		if(is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function'){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+		if(!always_define && (is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function')){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -689,6 +689,9 @@ define.class(function(require, constructor){
 						this.defineAttribute(key, value)
 						return
 					}
+					else if(value instanceof Animate){
+						return this.startAnimation(key, value)
+					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
@@ -749,6 +752,9 @@ define.class(function(require, constructor){
 					else if(value instanceof Config){
 						this.defineAttribute(key, value)
 						return
+					}
+					else if(value instanceof Animate){
+						return this.startAnimation(key, value)
 					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){

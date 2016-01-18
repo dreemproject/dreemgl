@@ -150,7 +150,6 @@
 		type = type.toLowerCase()
 		
 		if(type === 'json')	return 'json'
-
 		if(type === 'txt' || type === 'obj' || type === 'text' || type === 'md') return 'text'
 		
 		return 'arraybuffer'
@@ -168,15 +167,25 @@
 		}
 	}
 
+	// returns a class dir you can use, has / appended already
+	define.classPath = function(cls){
+		if(cls.prototype) cls = cls.prototype
+		var mod = cls.constructor.module
+		var fn = mod.filename
+		for(var key in define.paths){
+			var path = define.expandVariables(define['$'+key])
+			if(fn.indexOf(path) === 0){
+				// Return the class path as a symbol base
+				return define.filePath('$'+key+fn.slice(path.length)) + '/'
+			}
+		}
+	}
 
 
 
 
 
 	//  require implementation
-
-
-
 
 
 
@@ -200,6 +209,9 @@
 				//console.log('skipping', dep_path)
 				return null
 			}
+
+			// lets reverse our path
+
 
 			module = {exports:{}, factory:factory, id:abs_path, filename:abs_path}
 			define.module[abs_path] = module
@@ -2346,6 +2358,13 @@
 			var obj = Object.create(Config.prototype)
 			obj.constructor = Config
 			obj.config = object
+			return obj
+		}
+
+		exports.Animate = function(track){
+			var obj = Object.create(Animate.prototype)
+			obj.constructor = Animate
+			obj.track = track
 			return obj
 		}
 	}

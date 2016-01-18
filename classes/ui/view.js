@@ -5,7 +5,6 @@
 
 define.class('$system/base/node', function(require){
 
-	var Animate = require('$system/base/animate')
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
@@ -280,6 +279,14 @@ define.class('$system/base/node', function(require){
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
 	this.screen = {device:{size:vec2(), frame:{size:vec2()}}}
+
+	this.noise = require('$system/shaderlib/noiselib')
+	this.pal = require('$system/shaderlib/palettelib')
+	this.shape = require('$system/shaderlib/shapelib')
+	this.math = require('$system/shaderlib/mathlib')
+	this.demo = require('$system/shaderlib/demolib')
+	this.material = require('$system/shaderlib/materiallib')
+	this.colorlib = require('$system/shaderlib/colorlib')
 
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
@@ -970,7 +977,6 @@ define.class('$system/base/node', function(require){
 		if(this.initialized) return this.screen.startAnimationRoot(this, key, value, track, resolve)
 		else{
 			return false
-	//		this['_' + key] = value
 		}
 	}
 

@@ -4,9 +4,11 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$ui/view', function(require, $ui$, view, label, icon){
+define.class('view$7b4da53b904a3f94f078ca14cd53b33d8f3384b9d3eb7169c119cfaa', function(require, 
+		view$b7269fa2508548e4032c455818f1e321, view, 
+		label, icon){
+
 	// Simple button: a rectangle with a textlabel and an icon
-	
 	this.attributes = {
 		// The label for the button
 		text: Config({type: String, value: ""}),
@@ -18,7 +20,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		fontsize: Config({type: float, value: 14, meta:"fontsize"}),
 		
 		// Gradient color 1	
-		col1: Config({meta:"color",type:vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
+		col1: Config({meta:"color", type:vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
 		
 		// Gradient color 2
 		col2: Config({meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
