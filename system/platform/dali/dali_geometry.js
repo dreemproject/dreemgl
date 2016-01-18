@@ -51,9 +51,42 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Geometry();');
-			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + drawtype + ');');
+			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + this.drawtypeDali(drawtype) + ');');
 		}		
 	}
+
+	// Internal method to convert a drawtype into the dali value, if possible
+	this.drawtypeDali = function(drawtype) {
+		var dali = DaliApi.dali;
+
+		switch (drawtype) {
+		case dali.GEOMETRY_LINES:
+			drawtype = 'dali.GEOMETRY_LINES';
+			break;
+		case dali.GEOMETRY_LINE_LOOP:
+			drawtype = 'GEOMETRY_LINE_LOOP';
+			break;
+		case dali.GEOMETRY_LINE_STRIP:
+			drawtype = 'dali.GEOMETRY_LINE_STRIP';
+			break;
+
+		case dali.GEOMETRY_TRIANGLES:
+			drawtype = 'dali.GEOMETRY_TRIANGLES';
+			break;
+		case dali.GEOMETRY_TRIANGLE_FAN:
+			drawtype = 'dali.GEOMETRY_TRIANGLE_FAN';
+			break;
+		case dali.GEOMETRY_TRIANGLE_STRIP:
+			drawtype = 'dali.GEOMETRY_TRIANGLE_STRIP';
+			break;
+
+		default:
+			break;
+		}
+
+		return drawtype;
+	}
+
 
 	/**
 	 * @method addGeometry
@@ -82,7 +115,7 @@ define.class(function(require, exports){
 			// I found that keys with nested information (ie. has _DOT_)
 			// do not require vertex.
 			if (name.indexOf('_DOT_') > 0) {
-				console.log('DaliGeometry.addGeometry Skipping texture', name);
+				//console.log('DaliGeometry.addGeometry Skipping texture', name);
 				continue;
 			}
 
@@ -120,7 +153,7 @@ define.class(function(require, exports){
 	 * @param {Object} shader_dali Compiled data structure
 	 * @param {Object} attrlocs Compiled data structure
 	 */
-	this.addAttributeGeometry = function(shader_dali, attrlocs) {
+	this.addAttributeGeometryAlt = function(shader_dali, attrlocs) {
 		var dali = DaliApi.dali;
 
 		if (Object.keys(attrlocs) == 0)
@@ -144,7 +177,7 @@ define.class(function(require, exports){
 			if (typeof attrloc.slots === 'undefined')
 				continue;
 
-			console.log('**** **** attrloc.name', name, key, attrloc.slots);
+			//console.log('**** **** attrloc.name', name, key, attrloc.slots);
 
 			switch (attrloc.slots) {
 			case 1:
@@ -207,7 +240,7 @@ define.class(function(require, exports){
 	 * @param {Object} shader_dali Compiled data structure
 	 * @param {Object} attrlocs Compiled data structure
 	 */
-	this.addAttributeGeometryOrig = function(shader_dali, attrlocs) {
+	this.addAttributeGeometry = function(shader_dali, attrlocs) {
 		var dali = DaliApi.dali;
 
 		if (Object.keys(attrlocs) == 0)
@@ -229,7 +262,7 @@ define.class(function(require, exports){
 			if (typeof attrloc.slots === 'undefined')
 				continue;
 
-			console.log('**** **** attrloc.name', name, key, attrloc.slots);
+			//console.log('**** **** attrloc.name', name, key, attrloc.slots);
 
 			switch (attrloc.slots) {
 			case 1:

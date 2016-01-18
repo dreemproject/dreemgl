@@ -45,9 +45,12 @@ define.class(function(require, exports){
 		this.daliactor = new dali.Actor();
 		this.onstage = false;
 		
-		var width = view.view.width || 100;
-		var height = view.view.height || 100;
+		var layout = view.view._layout;
+		var width = layout.width || 100;
+		var height = layout.height || 100;
+
 		this.daliactor.size = [width, height, 0];
+		//this.daliactor.position = [layout.top, layout.left, 0]
 
 		this.daliactor.parentOrigin = dali.TOP_LEFT;
 		this.daliactor.anchorPoint = dali.TOP_LEFT;

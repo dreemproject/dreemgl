@@ -38,19 +38,39 @@ define.class(function(exports){
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
 	// depthIndex property of Renderers.)
-	DaliApi.layer = undefined;
+	DaliApi.rootlayer = undefined;
+
+	// The current layer to use when adding actors
+	DaliApi.currentlayer = undefined;
+
+	/**
+	 * @method setLayer
+	 * Static method to specify the layer to use when actors are added to the
+	 * stage. Simple applications will never call this method because the
+	 * default layer is sufficient.
+	 * @param {object} layer DaliLayer object to use. If missing, the default
+	 *                       layer is used.
+	 */
+	DaliApi.setLayer = function(layer) {
+		if (!layer)
+			layer = DaliApi.rootlayer;
+
+		//console.log('+++++setLayer', layer);
+		DaliApi.currentlayer = layer;
+	}
 
 	/**
 	 * @method addActor
 	 * Static method to add an actor to the stage.
 	 * In our usage, it will add the actor to the layer added to the stage.
 	 * @param {object} actor DaliActor object
-	 * @param {object} layer DaliLayer object to use. If missing, the root layer
-	 *                 is used.
+	 * @param {object} layer DaliLayer object to use. If missing, the current
+	 *                 layer is used.
 	 */
 	DaliApi.addActor = function(actor, layer) {
+		//console.log('+++ addActor', layer);
 		if (!layer)
-			layer = DaliApi.layer;
+			layer = DaliApi.currentlayer;
 
 		layer.add(actor);
 	}
@@ -105,11 +125,11 @@ define.class(function(exports){
 
 			// Create a top-level 2D layer to the stage
 			var dali = DaliApi.dali;
-			DaliApi.layer = new DaliLayer();
-			dali.stage.add(DaliApi.layer.dalilayer);
+			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, width, height);
+			dali.stage.add(DaliApi.rootlayer.dalilayer);
 
 			if (DaliApi.emitcode) {
-				console.log('DALICODE: dali.stage.add(' + DaliApi.layer.name() + ');');
+				console.log('DALICODE: dali.stage.add(' + DaliApi.rootlayer.name() + ');');
 			}
 
 		}
@@ -128,7 +148,7 @@ define.class(function(exports){
 	 * @param {object} shader Instance with runtime values (ex. hardrect)
 	 */
 	DaliApi.createDaliObjects = function(obj, shader) {
-		console.log('createDaliObjects on', obj.object_type);
+		//console.log('createDaliObjects on', obj.object_type);
 
 		//if (shader.view) 
 		//	console.log('*** ** * bgcolor', shader.view.bgcolor);
@@ -186,7 +206,6 @@ define.class(function(exports){
 		DaliRenderer = require('./dali_renderer')
 		DaliActor = require('./dali_actor')
 
-		console.log('*** ** * createDaliActor', obj.object_type, shader.object_type);
 //		if (shader.view && !shader.view.bgcolor) {
 //			shader.view.bgcolor = "vec4('transparent')"
 //		}
