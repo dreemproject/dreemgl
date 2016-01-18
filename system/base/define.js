@@ -93,7 +93,6 @@
 
 
 
-
 	define.fileName = function(file){
 		file = file.replace(/\\/g,'/')
 		var file = file.slice(define.filePath(file).length)

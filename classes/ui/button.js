@@ -4,9 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('view$7b4da53b904a3f94f078ca14cd53b33d8f3384b9d3eb7169c119cfaa', function(require, 
-		view$b7269fa2508548e4032c455818f1e321, view, 
-		label, icon){
+define.class('$ui/view', function(require, $ui$, label, icon){
 
 	// Simple button: a rectangle with a textlabel and an icon
 	this.attributes = {
