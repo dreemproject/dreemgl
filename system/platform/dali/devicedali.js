@@ -86,7 +86,7 @@ define.class(function(require, exports){
 		//TODO Use setTimeout for animation until dali animation ready (DALI)
 		this.time = 0;
 		this.animFrame = function(time){
-console.log('animFrame', time);
+			//console.log('animFrame', time);
 			var interval = 16; // 500;
 			var t = this.doColor(time);
 			//console.log('animFrame', t, time);
@@ -141,7 +141,7 @@ console.log('animFrame', time);
 		this.height = size.y;
 		this.ratio = dpi.x / dpi.y;
 
-		console.log('initResize size ', size, dpi);
+		//console.log('initResize size ', size, dpi);
 
 		//HACK to emulate gl (to avoid javascript errors)
 		this.gl = gl;
@@ -186,6 +186,10 @@ console.log('animFrame', time);
 
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
+
+		// Set the layer to use (root layer if frame.dali_layer doesn't exist)
+		//TODO When layers are used, use framebuffers to render them.
+		//this.DaliApi.setLayer(frame.dali_layer);
 	}
 
 	this.readPixels = function(x, y, w, h){

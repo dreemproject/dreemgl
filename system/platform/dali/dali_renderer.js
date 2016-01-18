@@ -44,11 +44,11 @@ define.class(function(require, exports){
 		this.dalimaterial = material;
 		this.dalirenderer = new dali.Renderer(this.daligeometry.daligeometry, this.dalimaterial.dalimaterial);
 
-		this.dalirenderer.depthIndex = 0;
+		//this.dalirenderer.depthIndex = 0;
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + ' = new dali.Renderer(' + this.daligeometry.name() + ', ' + this.dalimaterial.name() + ');');
-			console.log('DALICODE: ' + this.name() + '.depthIndex = 0;');
+			//console.log('DALICODE: ' + this.name() + '.depthIndex = 0;');
 		}		
 
 	}

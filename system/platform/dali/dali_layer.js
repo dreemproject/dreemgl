@@ -52,12 +52,6 @@ define.class(function(require, exports){
 		this.dalilayer.parentOrigin = dali.TOP_LEFT;
 		this.dalilayer.anchorPoint = dali.TOP_LEFT;
 
-		// Add to another layer unless parent is null
-		if (typeof parent === 'undefined')
-			parent = DaliApi.layer;
-		if (parent)
-			parent.add(this.dalilayer);
-
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Layer();');
 			console.log('DALICODE: ' + this.name() + '.behavior = "Dali::Layer::LAYER_2D"');
@@ -65,19 +59,36 @@ define.class(function(require, exports){
 				console.log('DALICODE: ' + this.name() + '.size = [' + width + ', ' + height + ', 0];');
 			console.log('DALICODE: ' + this.name() + '.parentOrigin = dali.TOP_LEFT;');
 			console.log('DALICODE: ' + this.name() + '.anchorPoint = dali.TOP_LEFT;');
-			console.log('DALICODE: ' + this.name() + '.anchorPoint = dali.TOP_LEFT;');
 		}		
 		
+
+		// Add to another layer unless parent is null (root layer)
+		if (typeof parent === 'undefined')
+			parent = DaliApi.currentlayer;
+		if (parent) {
+			DaliApi.rootlayer.add(this);
+			//parent.add(this);
+		}
 	}
 
 
 	/**
 	 * @method add
 	 * Add an actor to this layer.
-	 * @param {object} actor DaliActor object
+	 * @param {object} actor DaliActor or DaliLayer object
 	 */
 	this.add = function(actor) {
-		this.dalilayer.add(actor.daliactor)
+//console.trace('adding layer');
+		if (actor.dalilayer) {
+			// Adding a layer to an existing layer
+			this.dalilayer.add(actor.dalilayer)
+		}
+		else {
+			// Adding an actor to a layer
+//console.trace("adding actor to layer", Object.keys(actor));
+			this.dalilayer.add(actor.daliactor)
+		}
+
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.add(' + actor.name() + ');');
@@ -90,7 +101,7 @@ define.class(function(require, exports){
 	}
 
 	this.inspect = function(depth) {
-		var obj = {dalilayer:this.id, obj:[this.dalirenderer.inspect(depth)]};
+		var obj = {dalilayer:this.id};
 		var util = require('util')
 		return util.inspect(obj, {depth: null});
 	}

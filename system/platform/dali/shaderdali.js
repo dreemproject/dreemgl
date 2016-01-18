@@ -31,7 +31,7 @@ define.class('$system/base/shader', function(require, exports){
 	 *                  In dali, this is a hash containing a dali_shader object
 	 */
 	this.compileShader = function(gldevice){
-		console.log('*#*#*#*# compileShader', this.view ? this.view.id : '<SCREEN>');
+		//console.log('*#*#*#*# compileShader', this.view ? this.view.id : '<SCREEN>');
 		var vtx_state = this.vtx_state
 		var pix_state = this.pix_state
 		var vtx_code = vtx_state.code
@@ -234,7 +234,7 @@ console.log('*******************************************************************
 			DaliApi.createDaliActor(root, shader);
 		}
 
-		console.log('useShader', root.view ? root.view.id : 'screen', 'shader', shader.object_type, 'root', root.object_type)
+		//console.log('useShader', root.view ? root.view.id : 'screen', 'shader', shader.object_type, 'root', root.object_type)
 
 		// use the shader
 		gl.useProgram(shader)
@@ -243,7 +243,7 @@ console.log('*******************************************************************
 		var dalimaterial = root ? root.dalimaterial : undefined;
         var daligeometry = root.daligeometry;
 
-		console.log('daliactor', daliactor.id, 'shader', shader.dalishader.id, 'geometry', daligeometry.id);
+		//console.log('daliactor', daliactor.id, 'shader', shader.dalishader.id, 'geometry', daligeometry.id);
 
 		// set uniforms
 		//shader.addUniforms(shader.dreem_shader);
@@ -277,7 +277,7 @@ console.log('*******************************************************************
 				if (dalimaterial) {
   					var index = dalimaterial.addTexture(texture, ti.loc, sampler);
 					gltex.texture_index = index;
-					console.log('**** **** **** dali.addTexture', ti.loc, texture.image.getWidth(), texture.image.getHeight(), 'return index', index);
+					//console.log('**** **** **** dali.addTexture', ti.loc, texture.image.getWidth(), texture.image.getHeight(), 'return index', index);
 				}
 }
 			if(!gltex) return 0
@@ -340,18 +340,14 @@ console.log('*******************************************************************
 		ATTRLOC_ATTRIBPTR
 		ATTRLOC_END
 
-		//DALI
-		//FIX
-		//console.log('root.view', root.view);
-		
 		var dalimaterial = root.dalimaterial;
 
 		// set up blend mode
 		if(root.alpha_blend_eq.op){
-			console.log('==== alpha_blend_eq.op');
+			//console.log('==== alpha_blend_eq.op');
 			var constant = root.constant
 			if(constant) {
-				console.log('CONSTANT', constant[0], constant[1], constant[2], constant[3], 'Not implemented');
+				//console.log('CONSTANT', constant[0], constant[1], constant[2], constant[3], 'Not implemented');
 				gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
 			}
 			gl.enable(gl.BLEND)
@@ -364,7 +360,7 @@ console.log('*******************************************************************
 			)
 
 			// DALI
-			console.log('*** full blend');
+			//console.log('*** full blend');
 			dalimaterial.setBlendMode(dali.BLENDING_ON);
 			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
 			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
@@ -374,7 +370,7 @@ console.log('*******************************************************************
 			//console.log('BLEND', root.color_blend_eq);
 			var constant = root.constant
 			if (constant) {
-				console.log('CONSTANT 2', constant[0], constant[1], constant[2], constant[3], 'Not implemented');
+				//console.log('CONSTANT 2', constant[0], constant[1], constant[2], constant[3], 'Not implemented');
 				gl.blendColor(constant[0], constant[1], constant[2], constant.length>3? constant[3]: 1)
 			}
 			gl.enable(gl.BLEND)
@@ -396,7 +392,7 @@ console.log('*******************************************************************
 			
 		}
 		else{
-			console.log('==== blend disabled');
+			//console.log('==== blend disabled');
 			gl.disable(gl.BLEND)
 			//DALI
 			dalimaterial.setBlendMode(dali.BLENDING_OFF);
@@ -422,7 +418,7 @@ console.log('*******************************************************************
 		// Make sure the object has dali
 		//DaliApi.createDaliObjects(this.shader);
 
-console.log('*****compileUse', shader.object_type, this.object_type);
+		//console.log('*****compileUse', shader.object_type, this.object_type);
 		// alright lets compile our useShader from 
 		var tpl = this.useShaderTemplate.toString()
 		tpl = tpl.replace(/^function/, "function useshader_" + (this.view?this.view.constructor.name:'anonymous') + '_shader_' + this.constructor.name)
@@ -503,7 +499,6 @@ console.log('*****compileUse', shader.object_type, this.object_type);
 			var texlocs = shader.texlocs
 			var texid = 0
 			for(var key in texlocs){
-console.log('******************************** key', key);
 				var texinfo = texlocs[key]
 				var split = texinfo.split
 
@@ -541,9 +536,9 @@ console.log('******************************** key', key);
 			var len = 0 // pull the length out of the buffers
 			var lastbuf
 			if (Object.keys(attrlocs).length > 0) {
-console.log('*************************** attrlocs ***********************');
-console.log(attrlocs);
-console.log('************************************************************');
+				//console.log('*************************** attrlocs ***********************');
+				//console.log(attrlocs);
+				//console.log('************************************************************');
 				out += 'root.daligeometry.addAttributeGeometry(root, shader.attrlocs)\n'
 			}
 
@@ -609,10 +604,10 @@ console.log('************************************************************');
 	// A view (the this pointer) makes one call to drawArrays for each shader.
 	// A typical number is two (one for border and one for hardimage
 	this.drawArrays = function(devicegl, sub, start, end){
-if (this.texture) {
-  console.trace('drawArrays');
-}
-//console.trace('*****drawArrays', (this.view? this.view.id : '<screen>'));
+		//if (this.texture) {
+		//	console.trace('drawArrays');
+		//}
+		//console.trace('*****drawArrays', (this.view? this.view.id : '<screen>'));
 		// console.log('PROG', this.vtx_state.code);
 		//if(this.mydbg) debugger
 		if(!this.hasOwnProperty('shader') || this.shader === undefined) this.compile(devicegl)
