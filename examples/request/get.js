@@ -2,8 +2,14 @@ define.class('$server/service', function(require, $system$server$, nodehttp) {
 
     this.name = "get";
     this.attributes = {
+
+        // The URL to fetch
         url: Config({type:String, flow:'in'}),
+
+        // If the URL is retreived successfully, it's body will be stored here
         response: Config({type:String, flow:'out'}),
+
+        // This value will be set if an error occours when retreiving the URL
         error: Config({type:String, flow:'out'})
     };
 

@@ -125,6 +125,7 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
                                 while (path && (
                                 // FIXME: these paths don't have files that can be read properly for various reasons
                                 path.indexOf('fontsdfgen') > -1
+                                || path.indexOf('index.js') > -1
                                 || path.indexOf('define') > -1
                                 || path.indexOf('docs/api') > -1
                                 || path.indexOf('lib') > -1
