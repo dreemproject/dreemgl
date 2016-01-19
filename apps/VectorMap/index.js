@@ -11,7 +11,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	
 	define.class(this, "mainscreen", function($ui$, view){		
 	
-	var L = 2;
+	var L = 0;
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
 			mapycenter: Math.floor(21534/Math.pow(2,L)),
@@ -578,12 +578,31 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						var B = {arcs:[], kind:"water" };
 						//console.log(Bb);
 						if(Bb.arcs)
+							if (Bb.type == "MultiLineString"){
+								var arc = [];
+								for(var k = 0;k<Bb.arcs.length;k++){
+									var sourcearc = this.thedata.arcs[Bb.arcs[k]];
+									var x = sourcearc[0][0];
+									var y = sourcearc[0][1];
+									arc.push(x,y);
+									for(var l = 1;l<sourcearc.length;l++)
+									{
+//										console.log(l, sourcearc[l]);
+										x+= sourcearc[l][0];
+										y+= sourcearc[l][1];
+										arc.push(x,y);
+	//									arc.push(sourcearc[l]);
+									}
+								}
+								B.arcs.push(arc);
+							}
+							else
 							for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							
 						}
-						if (Bb.type == "LineString" || Bb.type=="MultiLineString" ){
-							Rset.push(B);
+						if (Bb.type == "LineString" ){
+							//Rset.push(B);
 						}
 						else{
 							Wset.push(B);
@@ -662,9 +681,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				res.push(this.land({lands:this.earths}));
 				
-				res.push(this.land({lands:this.waters}));
 				
 				res.push(this.land({lands:this.landuses}));
+				res.push(this.land({lands:this.waters}));
 				
 				res.push(this.building({buildings: this.buildings}));			
 				
