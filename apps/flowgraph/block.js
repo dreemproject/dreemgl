@@ -18,8 +18,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		if (!inp || inp.length == 0) return inp;
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
 	}
-	
-	
+		
 	// the style classes 
 	
 	this.hovertext = "";
@@ -27,7 +26,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.mainwidth = 250;
 
 	this.style = {	
-		label_head:{margin:vec4(6,3,4,0), bold:true},
+		label_head:{bg:false,margin:vec4(6,3,4,0), bold:true},
 		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
 		view_header:{width:this.mainwidth, bg:0, flex:1, justifycontent:"space-between"},
 		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},

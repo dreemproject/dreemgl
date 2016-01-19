@@ -264,7 +264,7 @@ define.class(function(require, baseclass){
 		while(draw){
 			
 			if(id > pick_id && id <= pick_id + draw.pickrange){
-				draw.last_pick_id = pick_id + draw.pickrange - id
+				draw.last_pick_id = (pick_id + draw.pickrange) - id
 				return draw
 			}
 
