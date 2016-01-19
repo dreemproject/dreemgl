@@ -11,11 +11,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	
 	define.class(this, "mainscreen", function($ui$, view){		
 	
+	define.class(this, "tiledmap", function($ui$, view){
 	
-	var KindSet = this.KindSet = {};
-	var UnhandledKindSet = this.UnhandledKindSet = {};
+		var KindSet = this.KindSet = {};
+		var UnhandledKindSet = this.UnhandledKindSet = {};
 	
-	var L = -2;
+		var L = -2;
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
 			mapycenter: Math.floor(21534/Math.pow(2,L)),
@@ -74,7 +75,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							scalefac: scalefac,
 							//width: scaler,
 							//height: scaler,
-							zoomlevel: this.zoomlevel
+							zoomlevel: this.zoomlevel,
 						}
 					))
 				
@@ -100,9 +101,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				scalefactor: 1.0
 			}
 			
-			this.init = function(){
-				console.log("init maptile");
-				
+			this.init = function(){								
 				this.rpc.urlfetch.grabmap(this.tilex, this.tiley, this.zoomlevel).then(function(result){
 					this.loadstring(result.value)
 				}.bind(this));
@@ -148,21 +147,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					
 					
 					this.vertexstruct =  define.struct({		
-						pos:vec2,
+						pos:vec3,
 						color:vec4, 
 						id: float
 					})
 					this.mesh = this.vertexstruct.array();
 					this.color = function(){
-						//return mesh.color;
-						var sizer = 0.7
 
-						PickGuid = mesh.id;// mod(mesh.id, 256.)
-						//PickGuid.y = floor(mesh.id/256.)
-						
-						//dump = mesh.id * 0.01
+						PickGuid = mesh.id;
 						return mesh.color;
-//						return mix("#f0f0a0", mesh.color, 1.0-min(pow(0.5 + 0.5 *sin((gl_FragCoord.x + gl_FragCoord.y)*sizer),0.2),pow((0.5 + 0.5 *sin((-gl_FragCoord.x + gl_FragCoord.y)*sizer)),0.2)));
 
 					}
 			
@@ -172,20 +165,42 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						for(var i = 0;i<this.view.buildings.length;i++){
 							var building = this.view.buildings[i];
 							
-							var theH = building.h;
+							var theH = building.h*10;
 							
 							if (building.arcs)
 							for(var j = 0;j<building.arcs.length;j++){
 								var arc = building.arcs[j];
 								var tris = arctotriangles(arc);
-								
-								
-								for(var a = 0;a<tris.length;a++){
-									var c = 0.3;
-									this.mesh.push(tris[a], c,c,c, 1, i);
-								}
-							}
+								var A1 = vec2(arc[0][0], arc[0][1])
+								var OA1 = A1;
+								var c = 0.3;
 							
+								for(var a = 1;a<arc.length+1;a++)
+								{
+									var ca = arc[a%arc.length];
+									
+									var A2 = vec2(A1[0] + ca[0], A1[1] + ca[1]);
+									if (a  == arc.length){
+										A2[1] -= OA1[1];
+										A2[0] -= OA1[0];
+									}
+									
+									c = 0.5 + 0.5 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
+									
+									this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
+									this.mesh.push(A2[0],A2[1],0, c,c,c, 1, i);
+									this.mesh.push(A2[0]+theH,A2[1]+theH,theH, c,c,c, 1, i);
+									this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
+									this.mesh.push(A2[0]+theH,A2[1]+theH,theH, c,c,c, 1, i);
+									this.mesh.push(A1[0]+theH,A1[1]+theH,theH, c,c,c, 1, i);
+									A1 = A2;
+							
+								}
+								c = 0.4
+								for(var a = 0;a<tris.length;a++){
+									this.mesh.push(tris[a][0]+theH,tris[a][1]+theH,theH, c,c,c, 1, i);
+								}
+							}							
 						}
 					}
 					
@@ -200,29 +215,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 							
 			})
-			
-			define.class(this, "water", function($ui$, view){
-				
-				this.boundscheck = false;
-				
-				this.attributes = {		
-					water:{}
-				}
-				
-				this.mouseover =  function(){
-					var text = "Water!";				
-					this.screen.status = text;	
-				}
-				
-				this.render = function(){
-					var res = [];
-					for (var i =0;i<this.water.arcs.length;i++){
-						res.push(this.outer.waterpolygon({arc:this.water.arcs[i], color:vec4("lightblue") }));
-					}
-					return res;
-				};			
-			})
-		
+						
 			define.class(this, "land", function($ui$, view){
 				this.boundscheck = false;
 				this.attributes = {				
@@ -319,8 +312,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.attributes = {					
 					roads:[],
 					zoomlevel: 16,
+					zoomscale: 2.0
 				}
-				this.zoomscale = 2.0;
 				
 				
 				this.bg = function(){		
@@ -337,9 +330,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.mesh = this.vertexstruct.array();
 					
 					this.color = function(){
-						//if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
-						if (abs(mesh.side) > 0.75) return mix(mesh.markcolor, mesh.color, 0.6)
-						if (abs(mesh.side) < 0.1) return  mix(mesh.markcolor, mesh.color, 0.6 * (min(1., max(0.0,0.8 + 5.0*sin(mesh.dist*0.5)))))
+						if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
+					//	if (abs(mesh.side) > 0.75) return mix(mesh.markcolor, mesh.color, 0.6)
+	//					if (abs(mesh.side) < 0.1) return  mix(mesh.markcolor, mesh.color, 0.6 * (min(1., max(0.0,0.8 + 5.0*sin(mesh.dist*0.5)))))
 						return mesh.color;
 					}
 					
@@ -496,148 +489,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				return verts;
 				
 			}
-		
-			define.class(this, "arc", function($ui$, view){
-				this.boundscheck = false;
-				
-				this.attributes = {
-					arc:[],
-					color:vec4("red")
-				}
-				this.bg = function(){
-					
-					
-					this.vertexstruct =  define.struct({		
-						pos:vec2,
-						color:vec4
-					})
-					this.mesh = this.vertexstruct.array();
-						this.color = function(){
-					return mesh.color;
-				}
-			
-					this.update = function(){
-						this.mesh = this.vertexstruct.array();
-						
-						var tris = arctotriangles(this.view.arc);
-						
-						for(var a = 0;a<tris.length;a++){
-							this.mesh.push(tris[a], this.view.color);
-						}
-						
-					}
-					
-					this.position = function(){					
-						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
-					}
-					
-				this.drawtype = this.TRIANGLES
-				this.linewidth = 4;
-				
-				}
-			});
-			
-			define.class(this, "waterpolygon", function($ui$, view){
-				this.boundscheck = false;
-				
-				this.time = 0;
-				
-				this.attributes = {
-					arc:[],
-					color:vec4("red")
-				}
-				
-				this.bg = function(){
-									
-					this.vertexstruct =  define.struct({		
-						pos:vec2,
-						color:vec4
-					})
-					
-					this.mesh = this.vertexstruct.array();
-					this.color = function(){
-						//var xy = vec2(gl_FragCoord.xy);
-						//var n1 = noise.noise2d(xy*0.5)*0.2+0.2;
-						return "#78b0d3";
-					}
-				
-					this.update = function(){
-						this.mesh = this.vertexstruct.array();
-						
-						var tris = arctotriangles(this.view.arc);
-						
-						for(var a = 0;a<tris.length;a++){
-							this.mesh.push(tris[a], this.view.color);
-						}
-						
-					}
-					
-					this.position = function(){					
-						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
-					}
-					
-				this.drawtype = this.TRIANGLES
-				this.linewidth = 4;
-				
-				}
-			});
-			
-			define.class(this, "landpolygon", function($ui$, view){
-				this.boundscheck = false;
-				
-				this.time = 0;
-				this.attributes = {
-					arc:[],
-					color1:vec4("red"),
-					color2: vec4("green")
-				}
-				this.bg = function(){
-					
-					
-					this.vertexstruct =  define.struct({		
-						pos:vec2,
-						color:vec4
-					})
-					this.mesh = this.vertexstruct.array();
-					this.color = function(){
-						var xy = vec2(gl_FragCoord.xy)*0.2;
-						//var n1 = (noise.noise2d(xy))*0.25 + 0.25;
-						//var n2 = 0.5*noise.noise2d(xy*14.3)
-						var themix =0.5
-						return mix(view.color1, view.color2,themix);
-					}
-				
-					this.update = function(){
-						this.mesh = this.vertexstruct.array();
-						
-						var tris = arctotriangles(this.view.arc);
-						
-						for(var a = 0;a<tris.length;a++){
-							this.mesh.push(tris[a], this.view.color);
-						}
-						
-						
-					}
-					
-					this.position = function(){					
-						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
-					}
-					
-				this.drawtype = this.TRIANGLES
-				this.linewidth = 4;
-				
-				}
-			});
-
-			
-			this.loadurl = function(x,y,z){	
-				//http://vector.mapzen.com/osm/{layers}/{z}/{x}/{y}.{format}?api_key=vector-tiles-Qpvj7U4
-				//console.log("grabbing", x,y,z);
-				
-				var res = this.rpc.urlfetch.grabmap(x,y,z).then(function(result){
-					console.log(result.value);
-				})			
-			}
+	
 			
 			this.loadstring = function(str){
 				this.thedata = JSON.parse(str);	
@@ -647,8 +499,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
-					var Rpset = [];
-					//console.log(this.thedata);
+					
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
 						var B = {h:Bb.properties.height?Bb.properties.height:3.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
@@ -745,7 +596,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					
 					this.buildings = Bset;
 					this.roads = Rset;
-					this.roadpolies = Rpset;
 					this.waters = Wset;
 					this.earths = Eset;
 					this.landuses = Lset;
@@ -762,26 +612,30 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.render = function(){	
 				var res = [];
-						
-				
+										
 				res.push(this.land({lands:this.earths}));
-				
-				
+								
 				res.push(this.land({lands:this.landuses}));
+				
 				res.push(this.land({lands:this.waters}));
-				res.push(this.road({roads:this.roadpolies}));
+				
+				res.push(this.road({name:"theroads", roads: this.roads, zoomscale:Math.pow(2.0, this.zoomlevel-15)}));			
 				
 				res.push(this.building({buildings: this.buildings}));			
-				
-				res.push(this.road({name:"theroads", roads: this.roads}));			
-			//	res.push(this.land({lands:this.roadpolies}));
-				
+								
 				return res;
 			}
 		})			
 	})
 		
 	
+		this.render = function(){
+			return this.tiledmap({name:"themap"});
+		}
+		
+		
+
+	})
 	define.class(this, "urlfetch", function($server$, service){
 		this.grabmap = function(x,y,z){
 			
@@ -819,19 +673,14 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				menubar({
 					name:"themenu",menus:[
 						{name:"File", commands:[
-							{name:"Map 1", clickaction:function(){this.find("tile1").load("map1.json");}},
-							{name:"Map 2", clickaction:function(){this.find("tile1").load("map2.json");}},
-							{name:"Map 3", clickaction:function(){this.find("tile1").load("map3.json");}},
-							{name:"Map 4", clickaction:function(){this.find("tile1").load("map4.json");}},
-							{name:"Map 5", clickaction:function(){this.find("tile1").load("map5.json");}},
-							{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}		,				
 							{name:"Dump KindSet", clickaction:function(){for(var i in this.find("themap").KindSet){console.log(i)};for(var i in this.find("themap").UnhandledKindSet){console.log("unhandled:", i)};}}						
 						]}
 					]}
 				),
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
-				this.mainscreen({ name:"themap",  boundscheck:false}),
-				view({width:2000, height:2000, bg:0}))
+				this.mainscreen({  boundscheck:false})
+				//,view({width:2000, height:2000, bg:0})
+				)
 			
 			
 		)
