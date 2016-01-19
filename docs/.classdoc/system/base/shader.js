@@ -3,9 +3,6 @@
  * @extends Object
  */
 /**
- * @method _atConstructor
- */
-/**
  * @method compileHeader
  */
 /**

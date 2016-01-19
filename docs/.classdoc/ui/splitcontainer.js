@@ -8,7 +8,7 @@
  * wether the splitcontainer is vertical or not
  */
 /**
- * @attribute {float32} [splitsize="6"]
+ * @attribute {float32} [splitsize="8"]
  * set the width (or height) of the splitter bar
  */
 /**

@@ -13,7 +13,7 @@
  * accepted values are "left", "right", "justify" and "center"
  */
 /**
- * @attribute {Number} [fontsize="13"]
+ * @attribute {Number} [fontsize="14"]
  * Base fontsize - heading sizes will be multiples of this value.
  */
 /**

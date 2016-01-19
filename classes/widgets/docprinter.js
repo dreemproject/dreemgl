@@ -33,6 +33,9 @@ define.class('$widgets/docviewer.js', function(){
         if (class_doc.attributes) {
             for (i=0; i < class_doc.attributes.length; i++) {
                 var attr = class_doc.attributes[i];
+                if (attr.name && attr.name.startsWith('_')) {
+                    continue;
+                }
                 if (attr.body_text) { // && attr.body_text.length
                     attrs.push(attr.name);
                     output.push('/**');
@@ -57,6 +60,10 @@ define.class('$widgets/docviewer.js', function(){
         if (class_doc.methods) {
             for (i=0; i < class_doc.methods.length; i++) {
                 var meth = class_doc.methods[i];
+                if (meth.name && meth.name.startsWith('_')) {
+                    continue;
+                }
+
                 if (meth.body_text) { //  && meth.body_text.length
                     if (meth && meth.name) {
                         output.push('/**');
@@ -104,6 +111,10 @@ define.class('$widgets/docviewer.js', function(){
         if (class_doc.events && class_doc.events.length) {
             for (i = 0; i < class_doc.events.length;i++) {
                 var event = class_doc.events[i];
+                if (event.name && event.name.startsWith('_')) {
+                    continue;
+                }
+
                 output.push('/**');
                 output.push(' * @event ' + event.name);
                 for (j=0;j < event.body_text.length; j++) {
@@ -116,6 +127,9 @@ define.class('$widgets/docviewer.js', function(){
         if (class_doc.inner_classes && class_doc.inner_classes.length) {
             for (i = 0; i < class_doc.inner_classes.length; i++) {
                 var inner = class_doc.inner_classes[i];
+                if (inner.class_name && inner.class_name.startsWith('_')) {
+                    continue;
+                }
                 output = output.concat(this.printJSDuck(inner, classname));
             }
         }

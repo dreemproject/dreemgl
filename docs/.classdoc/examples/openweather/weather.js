@@ -15,15 +15,6 @@
  * @attribute {String} [servicename="openweather"]
  */
 /**
- * @attribute {typeless} reporturl
- */
-/**
- * @attribute {typeless} reportjson
- */
-/**
- * @attribute {typeless} report
- */
-/**
  * @method onreporturl
  * @param event
  */

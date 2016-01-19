@@ -1,6 +1,7 @@
 /**
  * @class index
  * @extends compositionwebgl
+ * Inline documentation and example code viewer
  */
 /**
  * @method render

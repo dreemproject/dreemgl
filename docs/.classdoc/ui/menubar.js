@@ -15,5 +15,8 @@
  * @attribute {Array} [menus=""]
  */
 /**
+ * @method onstatustext
+ */
+/**
  * @method render
  */

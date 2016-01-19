@@ -136,4 +136,5 @@
  */
 /**
  * @event click
+ * Simple button: a rectangle with a textlabel and an icon
  */

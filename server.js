@@ -85,6 +85,7 @@ function main(){
 		'resources':'$root/resources',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
+		'docs':'$root/docs',
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',

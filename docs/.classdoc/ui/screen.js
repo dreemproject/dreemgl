@@ -20,6 +20,7 @@
  * @method defaultKeyboardHandler
  * @param target
  * @param v
+ * @param prefix
  */
 /**
  * @method contextMenu

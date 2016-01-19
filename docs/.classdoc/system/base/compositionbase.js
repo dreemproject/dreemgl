@@ -3,9 +3,6 @@
  * @extends node
  */
 /**
- * @method _atConstructor
- */
-/**
  * @method atConstructor
  */
 /**

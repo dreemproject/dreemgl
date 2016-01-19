@@ -3,9 +3,6 @@
  * @extends button
  */
 /**
- * @attribute {typeless} value
- */
-/**
  * @attribute {Object} controller
  */
 /**

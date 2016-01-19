@@ -30,8 +30,5 @@
  * @attribute {String} [endpoint="https://maps.googleapis.com/maps/api/staticmap?"]
  */
 /**
- * @attribute {typeless} mapurl
- */
-/**
  * @attribute {Object} bgimage
  */

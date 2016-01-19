@@ -15,12 +15,166 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='index'>/**
-</span> * @class index
+  <pre class="prettyprint lang-js"><span id='vectormap'>/**
+</span> * @class vectormap
  * @extends compositionwebgl
  */
-<span id='index-method-render'>/**
+<span id='vectormap-method-render'>/**
 </span> * @method render
+ */
+<span id='vectormap-mainscreen'>/**
+</span> * @class vectormap.mainscreen
+ * @extends view
+ */
+<span id='vectormap-mainscreen-method-render'>/**
+</span> * @method render
+ */
+<span id='vectormap-mainscreen-tiledmap'>/**
+</span> * @class vectormap.mainscreen.tiledmap
+ * @extends view
+ */
+<span id='vectormap-mainscreen-tiledmap-attribute-mapxcenter'>/**
+</span> * @attribute {float32} [mapxcenter=&quot;19294&quot;]
+ * mapxcenter: Math.floor(33656/Math.pow(2, L)),
+ * mapycenter: Math.floor(21534/Math.pow(2,L)),
+ */
+<span id='vectormap-mainscreen-tiledmap-attribute-mapycenter'>/**
+</span> * @attribute {float32} [mapycenter=&quot;24640&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-attribute-zoomlevel'>/**
+</span> * @attribute {float32} [zoomlevel=&quot;16&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-method-setZoomLevel'>/**
+</span> * @method setZoomLevel
+ * @param z
+ * @param width
+ * @param height
+ */
+<span id='vectormap-mainscreen-tiledmap-method-render'>/**
+</span> * @method render
+ */
+<span id='vectormap-mainscreen-tiledmap-debugmaptile'>/**
+</span> * @class vectormap.mainscreen.tiledmap.debugmaptile
+ * @extends view
+ */
+<span id='vectormap-mainscreen-tiledmap-debugmaptile-attribute-tilex'>/**
+</span> * @attribute {float32} [tilex=&quot;19295&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-debugmaptile-attribute-tiley'>/**
+</span> * @attribute {float32} [tiley=&quot;24641&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-debugmaptile-attribute-zoomlevel'>/**
+</span> * @attribute {float32} [zoomlevel=&quot;14&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-debugmaptile-method-render'>/**
+</span> * @method render
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile'>/**
+</span> * @class vectormap.mainscreen.tiledmap.maptile
+ * @extends view
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-tilex'>/**
+</span> * @attribute {float32} [tilex=&quot;19295&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-tiley'>/**
+</span> * @attribute {float32} [tiley=&quot;24641&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-zoomlevel'>/**
+</span> * @attribute {float32} [zoomlevel=&quot;16&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-arcs'>/**
+</span> * @attribute {Array} [arcs=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-buildings'>/**
+</span> * @attribute {Array} [buildings=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-roads'>/**
+</span> * @attribute {Array} [roads=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-roadpolies'>/**
+</span> * @attribute {Array} [roadpolies=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-waters'>/**
+</span> * @attribute {Array} [waters=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-earths'>/**
+</span> * @attribute {Array} [earths=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-landuses'>/**
+</span> * @attribute {Array} [landuses=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-attribute-scalefactor'>/**
+</span> * @attribute {float32} [scalefactor=&quot;1&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-method-init'>/**
+</span> * @method init
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-method-loadstring'>/**
+</span> * @method loadstring
+ * @param str
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-method-load'>/**
+</span> * @method load
+ * @param name
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-method-render'>/**
+</span> * @method render
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-building'>/**
+</span> * @class vectormap.mainscreen.tiledmap.maptile.building
+ * @extends view
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-building-attribute-buildings'>/**
+</span> * @attribute {Array} [buildings=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-building-attribute-scalefactor'>/**
+</span> * @attribute {float32} [scalefactor=&quot;1&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-building-method-onbuildings'>/**
+</span> * @method onbuildings
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-building-method-mouseover'>/**
+</span> * @method mouseover
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-building-method-bg'>/**
+</span> * @method bg
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-land'>/**
+</span> * @class vectormap.mainscreen.tiledmap.maptile.land
+ * @extends view
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-land-attribute-lands'>/**
+</span> * @attribute {Array} [lands=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-land-method-mouseover'>/**
+</span> * @method mouseover
+ * @param evt
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-land-method-onlands'>/**
+</span> * @method onlands
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-land-method-bg'>/**
+</span> * @method bg
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-road'>/**
+</span> * @class vectormap.mainscreen.tiledmap.maptile.road
+ * @extends view
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-road-attribute-roads'>/**
+</span> * @attribute {Array} [roads=&quot;&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-road-attribute-zoomlevel'>/**
+</span> * @attribute {float32} [zoomlevel=&quot;16&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-road-attribute-zoomscale'>/**
+</span> * @attribute {float32} [zoomscale=&quot;2&quot;]
+ */
+<span id='vectormap-mainscreen-tiledmap-maptile-road-method-bg'>/**
+</span> * @method bg
+ */
+<span id='vectormap-urlfetch'>/**
+</span> * @class vectormap.urlfetch
+ * @extends service
  */</pre>
 </body>
 </html>

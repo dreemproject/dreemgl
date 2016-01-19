@@ -4,8 +4,22 @@
  * Node class provides attributes for events and values, propertybinding and constructor semantics
  */
 /**
- * @method _atConstructor
- * internal, called by the constructor
+ * @method setInterval
+ * @param fn
+ * @param mstime
+ */
+/**
+ * @method clearInterval
+ * @param id
+ */
+/**
+ * @method setTimeout
+ * @param fn
+ * @param mstime
+ */
+/**
+ * @method clearTimeout
+ * @param id
  */
 /**
  * @method initFromConstructorArgs

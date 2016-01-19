@@ -12,15 +12,6 @@
  * @param constructor
  */
 /**
- * @method printJSDuck
- * @param class_doc
- * @param parentclass
- */
-/**
- * @method renderToJSDuck
- * @param R
- */
-/**
  * @method render
  */
 /**
