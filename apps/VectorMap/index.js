@@ -7,11 +7,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		var KindSet = this.KindSet = {};
 		var UnhandledKindSet = this.UnhandledKindSet = {};
 	
-		var L = -2;
+		var L = 0;
 
 		this.attributes = {
-			mapxcenter: Math.floor(33656/Math.pow(2, L)),
-			mapycenter: Math.floor(21534/Math.pow(2,L)),
+//			mapxcenter: Math.floor(33656/Math.pow(2, L)),
+//			mapycenter: Math.floor(21534/Math.pow(2,L)),
+			mapxcenter: Math.floor((9647*2)/Math.pow(2, L)),
+			mapycenter: Math.floor((12320*2)/Math.pow(2,L)),
 			zoomlevel: 16 - L			
 		}
 
@@ -152,9 +154,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						for(var i = 0;i<this.view.buildings.length;i++){
 							var building = this.view.buildings[i];
 							
-							var theH = building.h*10;
-							var isox = theH*0.5
-							var isoy = theH
+							var theH = building.h;
+							var isofac =0 
+							var isox = (theH*0.5)*isofac
+							var isoy = (theH)*isofac
 								
 							if (building.arcs)
 							for(var j = 0;j<building.arcs.length;j++){
@@ -193,7 +196,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					}
 					
 					this.position = function(){					
-						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
+						return vec4(mesh.pos.x, 1000-mesh.pos.y, mesh.pos.z, 1) * view.totalmatrix * view.viewmatrix
 					}
 					
 					this.drawtype = this.TRIANGLES
@@ -648,8 +651,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					]}
 				),
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
-				this.mainscreen({  boundscheck:false})
-				//,view({width:2000, height:2000, bg:0})
+				this.mainscreen({ 
+				
+				camera:[0,0,100], lookat:[1000,1000,0],farplane:20000, up:[0,0,-1],viewport:"3d",
+				boundscheck:false, flex:1, 
+				})
+					//,view({width:2000, height:2000, bg:0})
 				)
 			
 			
