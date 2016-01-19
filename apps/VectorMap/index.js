@@ -285,21 +285,21 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						dist: float,
 						linewidth:float,
 						sidevec:vec2, 
-						//markcolor: vec4
+						markcolor: vec4
 					})
 					
 					this.mesh = this.vertexstruct.array();
 					
 					this.color = function(){
-						if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
-						if (abs(mesh.side) > 0.75) return mix("#f0f0f0", mesh.color, 0.6)
-						if (abs(mesh.side) < 0.1) return  mix("#f0f0f0", mesh.color, 0.6 * (min(1., max(0.0,0.8 + 5.0*sin(mesh.dist*0.5)))))
+						//if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
+						if (abs(mesh.side) > 0.75) return mix(mesh.markcolor, mesh.color, 0.6)
+						if (abs(mesh.side) < 0.1) return  mix(mesh.markcolor, mesh.color, 0.6 * (min(1., max(0.0,0.8 + 5.0*sin(mesh.dist*0.5)))))
 						return mesh.color;
 					}
 					
 					this.widths = {water:20, path:2,ferry:4, "rail" : 5, "minor_road": 4, "major_road" : 10, path: 3, highway:12}
 					this.colors = {water:"#30a0ff", path:"brown", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-					this.markcolor = {water:"#30a0ff"}
+					this.markcolors = {water:"#30a0ff"}
 				
 					this.update = function(){
 						//console.log("updating");
@@ -313,6 +313,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							var markcolor = vec4("white");
 							if (this.widths[R.kind]) linewidth = this.widths[R.kind];
 							if (this.colors[R.kind]) color = vec4(this.colors[R.kind]);
+							if (this.markcolors[R.kind]) markcolor = vec4(this.markcolors[R.kind]);
 
 								
 							for(var rr = 0;rr<R.arcs.length;rr++){
@@ -340,23 +341,23 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 									var dist2 = dist +  vec2.len(predelt);
 
 									if (a>1){
-										this.mesh.push(nx,ny, color, 1, dist,linewidth,lastsdelta);
-										this.mesh.push(nx,ny, color,-1, dist,linewidth,lastsdelta);
-										this.mesh.push(nx,ny, color, 1, dist,linewidth,sdelta);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth,lastsdelta, markcolor);
+										this.mesh.push(nx,ny, color,-1, dist,linewidth,lastsdelta, markcolor);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth,sdelta, markcolor);
 										
-										this.mesh.push(nx,ny, color, 1, dist,linewidth, lastsdelta);
-										this.mesh.push(nx,ny, color, 1, dist,linewidth, sdelta);
-										this.mesh.push(nx,ny, color,-1, dist,linewidth, sdelta);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth, lastsdelta, markcolor);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth, sdelta, markcolor);
+										this.mesh.push(nx,ny, color,-1, dist,linewidth, sdelta, markcolor);
 											
 									}
 									
-									this.mesh.push( nx, ny,color, 1, dist ,linewidth, sdelta);
-									this.mesh.push( nx, ny,color,-1, dist ,linewidth, sdelta);
-									this.mesh.push(tnx,tny,color, 1, dist2,linewidth, sdelta);
+									this.mesh.push( nx, ny,color, 1, dist ,linewidth, sdelta, markcolor);
+									this.mesh.push( nx, ny,color,-1, dist ,linewidth, sdelta, markcolor);
+									this.mesh.push(tnx,tny,color, 1, dist2,linewidth, sdelta, markcolor);
 									
-									this.mesh.push(nx,ny,color,-1, dist,linewidth, sdelta);
-									this.mesh.push(tnx,tny,color,1,dist2,linewidth, sdelta);
-									this.mesh.push(tnx,tny,color,-1, dist2,linewidth, sdelta);
+									this.mesh.push(nx,ny,color,-1, dist,linewidth, sdelta, markcolor);
+									this.mesh.push(tnx,tny,color,1,dist2,linewidth, sdelta, markcolor);
+									this.mesh.push(tnx,tny,color,-1, dist2,linewidth, sdelta, markcolor);
 									
 									lastsdelta = vec2(sdelta[0], sdelta[1]);
 									dist = dist2;									
