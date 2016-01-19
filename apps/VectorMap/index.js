@@ -1,27 +1,18 @@
-//Pure JS based composition
-
-//C:\Projects\dgl3\dreemgl>node server.js -path map:<path>
-
-
 define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup){
 	
-	this.attributes = {
-	
-	}	
-	
 	define.class(this, "mainscreen", function($ui$, view){		
-	
-	
-	var KindSet = this.KindSet = {};
-	var UnhandledKindSet = this.UnhandledKindSet = {};
-	
-	var L = -2;
+		
+		var KindSet = this.KindSet = {};
+		var UnhandledKindSet = this.UnhandledKindSet = {};
+		
+		var L = -1;
+
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
 			mapycenter: Math.floor(21534/Math.pow(2,L)),
-			zoomlevel: 16 - L
-			
+			zoomlevel: 16 - L			
 		}
+
 		console.log("addfactor:", Math.pow(2, L));
 		define.class(this, "debugmaptile", function($ui$, view, label){
 			this.attributes = {
@@ -106,8 +97,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.rpc.urlfetch.grabmap(this.tilex, this.tiley, this.zoomlevel).then(function(result){
 					this.loadstring(result.value)
 				}.bind(this));
-				
-					
 			}
 			
 			define.class(this, "building", function($ui$, view){
@@ -116,13 +105,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					buildings:[],
 					scalefactor: 1.0
 				}
+
 				this.boundscheck = false;
-				
 				
 				this.onbuildings = function(){
 					this.pickrange = this.buildings.length;
 					//console.log("setting pickrange:", this.pickrange);
-					
 				}
 			
 			
@@ -143,27 +131,19 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					}
 				}
 				
-				
 				this.bg = function(){
-					
 					
 					this.vertexstruct =  define.struct({		
 						pos:vec2,
 						color:vec4, 
 						id: float
 					})
-					this.mesh = this.vertexstruct.array();
+
+					this.mesh = this.vertexstruct.array()
+
 					this.color = function(){
-						//return mesh.color;
-						var sizer = 0.7
-
-						PickGuid = mesh.id;// mod(mesh.id, 256.)
-						//PickGuid.y = floor(mesh.id/256.)
-						
-						//dump = mesh.id * 0.01
-						return mesh.color;
-//						return mix("#f0f0a0", mesh.color, 1.0-min(pow(0.5 + 0.5 *sin((gl_FragCoord.x + gl_FragCoord.y)*sizer),0.2),pow((0.5 + 0.5 *sin((-gl_FragCoord.x + gl_FragCoord.y)*sizer)),0.2)));
-
+						PickGuid = mesh.id
+						return mesh.color
 					}
 			
 					this.update = function(){
@@ -193,12 +173,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						return vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
 					}
 					
-				this.drawtype = this.TRIANGLES
-				this.linewidth = 4;
+					this.drawtype = this.TRIANGLES
+					this.linewidth = 4
 				
 				}
-				
-							
 			})
 			
 			define.class(this, "water", function($ui$, view){
@@ -242,16 +220,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}
 				
 				this.bg = function(){
-				
-				
-				//library
-				
-				//tower
-				
-				
+								
 					this.color1 = {retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 					this.color2 = {retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-					
 						
 					this.vertexstruct =  define.struct({		
 						pos:vec2,
@@ -261,10 +232,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					})
 					
 					this.mesh = this.vertexstruct.array();
-					
-					//this.pick = function(){
-				//		return mesh.id;
-				//	}
 					
 					this.color = function(){						
 						var xy = vec2(mesh.pos.xy)*0.2
@@ -306,11 +273,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					}
 						
 					this.drawtype = this.TRIANGLES
-					this.linewidth = 4;
-					
+					this.linewidth = 4
 				}
-					
-							
 			})
 			
 			define.class(this, "road", function($ui$, view){
@@ -320,9 +284,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					roads:[],
 					zoomlevel: 16,
 				}
-				this.zoomscale = 2.0;
-				
-				
+
+				this.zoomscale = 2.0
+								
 				this.bg = function(){		
 					this.vertexstruct =  define.struct({		
 						pos:vec2,
@@ -809,46 +773,39 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	this.render = function(){ return [
 		fileio(),
 		this.urlfetch({name:"urlfetch"}),
-		screen({name:"index", style:{
-					$:{
-						fontsize:12
-					}
-				},
-				onstatus:function(){this.find("themenu").infotext = this.status;},
-				clearcolor:vec4('#303030'), overflow:'hidden', title:"VectorMap" },
-				menubar({
-					name:"themenu",menus:[
-						{name:"File", commands:[
-							{name:"Map 1", clickaction:function(){this.find("tile1").load("map1.json");}},
-							{name:"Map 2", clickaction:function(){this.find("tile1").load("map2.json");}},
-							{name:"Map 3", clickaction:function(){this.find("tile1").load("map3.json");}},
-							{name:"Map 4", clickaction:function(){this.find("tile1").load("map4.json");}},
-							{name:"Map 5", clickaction:function(){this.find("tile1").load("map5.json");}},
-							{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}		,				
-							{name:"Dump KindSet", clickaction:function(){for(var i in this.find("themap").KindSet){console.log(i)};for(var i in this.find("themap").UnhandledKindSet){console.log("unhandled:", i)};}}						
-						]}
+		screen({
+			name:"index", 
+			style:{$:{fontsize:12}},
+			onstatus:function(){
+				this.find("themenu").infotext = this.status;
+			},
+			clearcolor:vec4('#303030'), overflow:'hidden', title:"VectorMap" },
+			menubar({
+				name:"themenu",menus:[
+					{name:"File", commands:[
+						{name:"Map 1", clickaction:function(){this.find("tile1").load("map1.json");}},
+						{name:"Map 2", clickaction:function(){this.find("tile1").load("map2.json");}},
+						{name:"Map 3", clickaction:function(){this.find("tile1").load("map3.json");}},
+						{name:"Map 4", clickaction:function(){this.find("tile1").load("map4.json");}},
+						{name:"Map 5", clickaction:function(){this.find("tile1").load("map5.json");}},
+						{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}		,				
+						{name:"Dump KindSet", clickaction:function(){for(var i in this.find("themap").KindSet){console.log(i)};for(var i in this.find("themap").UnhandledKindSet){console.log("unhandled:", i)};}}						
 					]}
-				),
-				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
-				this.mainscreen({ name:"themap",  boundscheck:false}),
-				view({width:2000, height:2000, bg:0}))
-			
-			
+				]}
+			),
+			view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
+			this.mainscreen({ name:"themap",  boundscheck:false}),
+			view({width:2000, height:2000, bg:0}))
 		)
 
-		,screen({name:"remote", style:{
-					$:{
-						fontsize:12
-					}
-				},
-				init:function(){
-					console.log(this.rpc.index)
-				},
-				clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
-				speakergrid({justifycontent:"center", alignitems:"center" })
-			
-			
+		,screen({
+			name:"remote", 
+			style:{$:{fontsize:12}},
+			init:function(){
+				console.log(this.rpc.index)
+			},
+			clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
+			speakergrid({justifycontent:"center", alignitems:"center" })
 		)
-	
 	]}
 })
