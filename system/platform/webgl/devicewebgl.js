@@ -227,9 +227,10 @@ define.class(function(require, exports){
 		}
 		
 		// decode the pass and drawid
-		var passid = (data[0]*43)%256
-		var drawid = (((data[2]<<8) | data[1])*60777)%65536
+		var passid = data[0]//(data[0]*43)%256
+		var drawid = (((data[2]<<8) | data[1]))//*60777)%65536
 		// lets find the view.
+
 		var passview = this.drawpass_list[passid - 1]
 		var drawpass = passview && passview.drawpass
 		var view = drawpass && drawpass.getDrawID(drawid)

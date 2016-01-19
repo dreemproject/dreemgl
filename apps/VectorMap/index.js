@@ -15,7 +15,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};
 	
-	var L = -1;
+	var L = -2;
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
 			mapycenter: Math.floor(21534/Math.pow(2,L)),
@@ -156,10 +156,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.color = function(){
 						//return mesh.color;
 						var sizer = 0.7
-						PickGuid.x = floor(mesh.id/256.);
-						PickGuid.y = mod(mesh.id, 256.);
+
+						PickGuid = mesh.id;// mod(mesh.id, 256.)
+						//PickGuid.y = floor(mesh.id/256.)
 						
-						
+						//dump = mesh.id * 0.01
 						return mesh.color;
 //						return mix("#f0f0a0", mesh.color, 1.0-min(pow(0.5 + 0.5 *sin((gl_FragCoord.x + gl_FragCoord.y)*sizer),0.2),pow((0.5 + 0.5 *sin((-gl_FragCoord.x + gl_FragCoord.y)*sizer)),0.2)));
 
@@ -176,7 +177,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								var tris = arctotriangles(arc);
 								for(var a = 0;a<tris.length;a++){
 									var c = 0.3;
-									this.mesh.push(tris[a], vec4(c,c,c, 1), i);
+									this.mesh.push(tris[a], c,c,c, 1, i);
 								}
 							}
 							
@@ -261,12 +262,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				//	}
 					
 					this.color = function(){						
-						var xy = vec2(mesh.pos.xy)*0.2;
+						var xy = vec2(mesh.pos.xy)*0.2
 						//var n1 = (noise.noise2d(xy))*0.25 + 0.25;
 						//var n2 = 0.8*noise.noise2d(xy*2.3)
 						var themix = 0.5
-						PickGuid.x = floor(mesh.id/256.);
-						PickGuid.y = mod(mesh.id, 256.);
+						PickGuid = mesh.id
+						//mod(mesh.id, 256.)
+						//PickGuid.y = floor(mesh.id/256.)
 						return mix(mesh.color1, mesh.color2,themix);						
 					}
 			

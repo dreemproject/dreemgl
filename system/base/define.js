@@ -1702,7 +1702,10 @@
 		for(var i = inpoff, len = inp.length; i < len; i++){
 			var item = inp[i]
 			if(typeof item == 'number') out[outoff++] = item
-			else outoff = define.arraySplat(out, outoff, item, 0, depth++)
+			else if(typeof item === 'string'){
+				define.arraySplat(out, outoff, vec4(item), 0, depth++)
+			}
+			else if(typeof item === 'object') outoff = define.arraySplat(out, outoff, item, 0, depth++)
 		}
 		return outoff
 	}
