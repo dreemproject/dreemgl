@@ -237,12 +237,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					
 					this.color = function(){						
 						var xy = vec2(mesh.pos.xy)*0.2;
-						var n1 = (noise.noise2d(xy))*0.25 + 0.25;
-						var n2 = 0.8*noise.noise2d(xy*2.3)
-						
+						//var n1 = (noise.noise2d(xy))*0.25 + 0.25;
+						//var n2 = 0.8*noise.noise2d(xy*2.3)
+						var themix = 0.5
 						PickGuid.x = floor(mesh.id/256.);
 						PickGuid.y = mod(mesh.id, 256.);
-						return mix(mesh.color1, mesh.color2,n1+n2);						
+						return mix(mesh.color1, mesh.color2,themix);						
 					}
 			
 					this.update = function(){
@@ -528,9 +528,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.mesh = this.vertexstruct.array();
 					this.color = function(){
 						var xy = vec2(gl_FragCoord.xy)*0.2;
-						var n1 = (noise.noise2d(xy))*0.25 + 0.25;
-						var n2 = 0.5*noise.noise2d(xy*14.3)
-						return mix(view.color1, view.color2,n1+n2);
+						//var n1 = (noise.noise2d(xy))*0.25 + 0.25;
+						//var n2 = 0.5*noise.noise2d(xy*14.3)
+						var themix =0.5
+						return mix(view.color1, view.color2,themix);
 					}
 				
 					this.update = function(){
