@@ -15,7 +15,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};
 	
-	var L = -1;
+	var L = -2;
+	
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
 			mapycenter: Math.floor(21534/Math.pow(2,L)),
@@ -170,10 +171,14 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						
 						for(var i = 0;i<this.view.buildings.length;i++){
 							var building = this.view.buildings[i];
+							
+							
 							if (building.arcs)
 							for(var j = 0;j<building.arcs.length;j++){
 								var arc = building.arcs[j];
 								var tris = arctotriangles(arc);
+								
+								
 								for(var a = 0;a<tris.length;a++){
 									var c = 0.3;
 									this.mesh.push(tris[a], vec4(c,c,c, 1), i);
@@ -644,7 +649,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					//console.log(this.thedata);
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
-						var B = {h:Bb.properties.height,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
+						var B = {h:Bb.properties.height?Bb.properties.height:3.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
 							if (Bb.arcs){
 								for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
