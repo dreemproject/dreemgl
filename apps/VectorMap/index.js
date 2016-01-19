@@ -11,6 +11,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	
 	define.class(this, "mainscreen", function($ui$, view){		
 	
+	
+	var KindSet = this.KindSet = {};
+	var UnhandledKindSet = this.UnhandledKindSet = {};
+	
 	var L = 0;
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
@@ -44,6 +48,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			var x = Math.ceil((width * z )/ 1024);
 			var y = Math.ceil((height * z )/ 1024);
+			this.find("theroads").zoomscale = z;
 			//console.log(x,y);
 			//console.log(z, Math.floor(log(z)/log(2)));
 		//	this.zoomlevel = 16  + Math.floor( log(z)/log(2));
@@ -207,8 +212,14 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				this.bg = function(){
 				
-					this.color1 = {water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-					this.color2 = {water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+				
+				//library
+				
+				//tower
+				
+				
+					this.color1 = {retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+					this.color2 = {retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 					
 						
 					this.vertexstruct =  define.struct({		
@@ -240,11 +251,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						for(var i = 0;i<this.view.lands.length;i++){
 							var land = this.view.lands[i];
 							
-							var color1 = vec4("green");
-							var color2 = vec4("lime");
+							var color1 = vec4("black");
+							var color2 = vec4("black");
 							
-							if (this.color1[land.kind]) color1 = this.color1[land.kind];
-							if (this.color2[land.kind]) color2 = this.color2[land.kind];
+							if (this.color1[land.kind]) color1 = this.color1[land.kind];else UnhandledKindSet[land.kind] = true;
+							if (this.color2[land.kind]) color2 = this.color2[land.kind];else UnhandledKindSet[land.kind] = true;
 						
 							if (land.arcs){
 								for(var j = 0;j<land.arcs.length;j++){
@@ -274,8 +285,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.boundscheck = false;
 				
 				this.attributes = {					
-					roads:[]
+					roads:[],
+					zoomlevel: 16,
 				}
+				this.zoomscale = 2.0;
+				
 				
 				this.bg = function(){		
 					this.vertexstruct =  define.struct({		
@@ -297,9 +311,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						return mesh.color;
 					}
 					
-					this.widths = {water:20, path:2,ferry:4, "rail" : 5, "minor_road": 4, "major_road" : 10, path: 3, highway:12}
-					this.colors = {water:"#30a0ff", path:"brown", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-					this.markcolors = {water:"#30a0ff"}
+					this.widths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
+					this.colors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
+					this.markcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 				
 					this.update = function(){
 						//console.log("updating");
@@ -310,11 +324,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							//console.log(R);
 							var linewidth = 3;
 							var color = vec4("gray") ;
-							var markcolor = vec4("white");
 							if (this.widths[R.kind]) linewidth = this.widths[R.kind];
 							if (this.colors[R.kind]) color = vec4(this.colors[R.kind]);
+							var markcolor = color;
 							if (this.markcolors[R.kind]) markcolor = vec4(this.markcolors[R.kind]);
-
+						
+						//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
 								
 							for(var rr = 0;rr<R.arcs.length;rr++){
 								
@@ -368,7 +383,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						}
 					}
 					this.position = function(){					
-						var pos = mesh.pos + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
+						var pos = mesh.pos + mesh.sidevec * mesh.side * view.zoomscale*mesh.linewidth*0.5;
 						return vec4(pos.x, 1000-pos.y, 0, 1) * view.totalmatrix * view.viewmatrix
 					}
 					
@@ -559,7 +574,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
-					var KindSet = {};
+					
 					//console.log(this.thedata);
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
@@ -661,7 +676,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.waters = Wset;
 					this.earths = Eset;
 					this.landuses = Lset;
-			//		console.log(KindSet);
+					//for(var i in KindSet){console.log(i)};
 			}
 			
 			this.load = function(name){
@@ -687,7 +702,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				res.push(this.building({buildings: this.buildings}));			
 				
-				res.push(this.road({roads: this.roads}));			
+				res.push(this.road({name:"theroads", roads: this.roads}));			
 				
 				return res;
 			}
@@ -737,7 +752,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							{name:"Map 3", clickaction:function(){this.find("tile1").load("map3.json");}},
 							{name:"Map 4", clickaction:function(){this.find("tile1").load("map4.json");}},
 							{name:"Map 5", clickaction:function(){this.find("tile1").load("map5.json");}},
-							{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}						
+							{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}		,				
+							{name:"Dump KindSet", clickaction:function(){for(var i in this.find("themap").KindSet){console.log(i)};for(var i in this.find("themap").UnhandledKindSet){console.log("unhandled:", i)};}}						
 						]}
 					]}
 				),
