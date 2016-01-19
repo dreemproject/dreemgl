@@ -200,7 +200,7 @@ define.class(function(require, baseclass){
 		//}
 
 		var pickguid = vec3()
-		pickguid[0] = (((passid)*131)%256)/255
+		pickguid[0] = passid/255//(((passid)*131)%256)/255
 
 		// modulo inverse: http://www.wolframalpha.com/input/?i=multiplicative+inverse+of+31+mod+256
 		var pick_id = 0
@@ -212,7 +212,7 @@ define.class(function(require, baseclass){
 			else{
 				draw._first_draw_pick = 1
 
-				var id = (pick_id*29401)%65536
+				var id = pick_id//(pick_id*29401)%65536
 				pickguid[1] = (id&255)/255
 				pickguid[2] = (id>>8)/255
 
@@ -264,11 +264,11 @@ define.class(function(require, baseclass){
 		while(draw){
 			
 			if(id > pick_id && id <= pick_id + draw.pickrange){
-				draw.last_pick_id = id - pick_id
+				draw.last_pick_id = pick_id + draw.pickrange - id
 				return draw
 			}
 
-			pick_id+=draw.pickrange;
+			pick_id += draw.pickrange
 			
 			draw = this.nextItem(draw)
 		}
@@ -297,6 +297,7 @@ define.class(function(require, baseclass){
 
 	this.drawNormal = function(draw, matrices){
 		draw.updateShaders()
+		var count = 0
 		// alright lets iterate the shaders and call em
 		var shaders = draw.shader_draw_list
 		for(var j = 0; j < shaders.length; j++){
@@ -306,9 +307,10 @@ define.class(function(require, baseclass){
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
-
+			count++
 			shader.drawArrays(this.device)
 		}
+		return count
 	}
 
 	this.drawColor = function(isroot, time, clipview){
@@ -316,7 +318,7 @@ define.class(function(require, baseclass){
 		var device = this.device
 		var layout = view._layout
 		var gl = device.gl
-
+		var count = 0
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 	
 		// lets see if we need to allocate our framebuffer..
@@ -379,7 +381,7 @@ define.class(function(require, baseclass){
 					this.drawBlend(draw)
 				}
 				else{
-					this.drawNormal(draw, matrices)
+					count += this.drawNormal(draw, matrices)
 				}
 
 				if(draw.debug_view){
@@ -389,7 +391,7 @@ define.class(function(require, baseclass){
 			}
 			draw = this.nextItem(draw)
 		}
-
+		//console.log(count)
 		return hastime
 	}
 
