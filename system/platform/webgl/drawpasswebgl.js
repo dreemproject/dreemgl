@@ -103,7 +103,7 @@ define.class(function(require, baseclass){
 				var sizel = 0
 				var sizer = 1
 				mat4.ortho(scroll[0] + mousex - sizel, scroll[0] + mousex + sizer, scroll[1] + mousey - sizer,  scroll[1] + mousey + sizel, -100, 100, storage.viewmatrix)
-				mat4.ortho( mousex - sizel, mousex + sizer, mousey - sizer, mousey + sizel, -100, 100, storage.noscrollmatrix)
+				mat4.ortho(mousex - sizel, mousex + sizer, mousey - sizer, mousey + sizel, -100, 100, storage.noscrollmatrix)
 			}
 			else{
 				var zoom = view._zoom
@@ -243,6 +243,10 @@ define.class(function(require, baseclass){
 					for(var j = 0; j < shaders.length; j++){
 						var shader = shaders[j]
 
+						if(view._viewport === '3d'){
+							shader.depth_test = 'src_depth <= dst_depth'
+						}
+
 						shader.pickguid = pickguid
 						if(!shader.visible) continue
 						if(draw.pickalpha !== undefined)shader.pickalpha = draw.pickalpha
@@ -276,7 +280,7 @@ define.class(function(require, baseclass){
 
 	this.drawBlend = function(draw){
 		if(!draw.drawpass.color_buffer){
-			console.error("Null color_buffer detected")
+			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?")
 		}
 		else {
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
@@ -295,7 +299,7 @@ define.class(function(require, baseclass){
 		}				
 	}
 
-	this.drawNormal = function(draw, matrices){
+	this.drawNormal = function(draw, view, matrices){
 		draw.updateShaders()
 		var count = 0
 		// alright lets iterate the shaders and call em
@@ -303,6 +307,10 @@ define.class(function(require, baseclass){
 		for(var j = 0; j < shaders.length; j++){
 			// lets draw em
 			var shader = shaders[j]
+			if(view._viewport === '3d'){
+				shader.depth_test = 'src_depth < dst_depth'
+			}
+
 			if(shader.pickonly || !shader.visible) continue // was pick only
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
@@ -381,7 +389,7 @@ define.class(function(require, baseclass){
 					this.drawBlend(draw)
 				}
 				else{
-					count += this.drawNormal(draw, matrices)
+					count += this.drawNormal(draw, view, matrices)
 				}
 
 				if(draw.debug_view){
