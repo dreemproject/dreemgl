@@ -172,6 +172,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						for(var i = 0;i<this.view.buildings.length;i++){
 							var building = this.view.buildings[i];
 							
+							var theH = building.h;
 							
 							if (building.arcs)
 							for(var j = 0;j<building.arcs.length;j++){
@@ -230,7 +231,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				this.mouseover =  function(evt){
 					//console.log(this.last_pick_id)
-					var text = "Land: " + this.lands[this.last_pick_id - 1].kind;				
+					var text = "Land: " + this.lands[this.last_pick_id ].kind;				
 
 					this.screen.status = text;				
 				}			
