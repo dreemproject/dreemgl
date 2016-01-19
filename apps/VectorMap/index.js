@@ -153,7 +153,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							var building = this.view.buildings[i];
 							
 							var theH = building.h*10;
-							
+							var isox = theH*0.5
+							var isoy = theH
+								
 							if (building.arcs)
 							for(var j = 0;j<building.arcs.length;j++){
 								var arc = building.arcs[j];
@@ -161,7 +163,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								var A1 = vec2(arc[0][0], arc[0][1])
 								var OA1 = A1;
 								var c = 0.3;
-							
 								for(var a = 1;a<arc.length+1;a++)
 								{
 									var ca = arc[a%arc.length];
@@ -172,20 +173,20 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 										A2[0] -= OA1[0];
 									}
 									
-									c = 0.5 + 0.5 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
+									c = 0.7 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
 									
 									this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
 									this.mesh.push(A2[0],A2[1],0, c,c,c, 1, i);
-									this.mesh.push(A2[0]+theH,A2[1]+theH,theH, c,c,c, 1, i);
+									this.mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i);
 									this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
-									this.mesh.push(A2[0]+theH,A2[1]+theH,theH, c,c,c, 1, i);
-									this.mesh.push(A1[0]+theH,A1[1]+theH,theH, c,c,c, 1, i);
+									this.mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i);
+									this.mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i);
 									A1 = A2;
 							
 								}
 								c = 0.4
 								for(var a = 0;a<tris.length;a++){
-									this.mesh.push(tris[a][0]+theH,tris[a][1]+theH,theH, c,c,c, 1, i);
+									this.mesh.push(tris[a][0]+isox,tris[a][1]+isoy,theH, c,c,c, 1, i);
 								}
 							}							
 						}
