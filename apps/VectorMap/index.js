@@ -653,7 +653,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
 				this.mainscreen({ 
 				
-				camera:[0,0,1000 ], lookat:[1000,1000,0],farplane:20000, up:[0,0,-1],viewport:"3d",
+				camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:20000, up:[0,0,-1],viewport:"3d",
 				boundscheck:false, flex:1, 
 				})
 					//,view({width:2000, height:2000, bg:0})
