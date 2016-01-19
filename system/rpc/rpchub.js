@@ -50,11 +50,13 @@ define.class(function(require, exports){
 
 	this.allocPromise = function(){
 		var uid 
-
-		if(this.uid_free.length) uid = this.uid_free.pop()
+		
+		if(this.uid_free.length){
+			uid = this.uid_free.pop()
+		}
 		else uid = this.uid++
 
-		if(this.uid > 100){
+		if(this.uid > 500){
 			// TODO make a promise timeout cleanup
 			console.log('Warning, we have an RPC promise leak')
 			for(var i = 0;i<100;i++){
