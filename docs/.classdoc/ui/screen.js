@@ -88,29 +88,8 @@
  * @param render
  */
 /**
- * @method startAnimationRoot
- * internal, start an animation, delegated from view
- * @param obj
- * @param key
- * @param value
- * @param track
- * @param promise
- */
-/**
- * @method stopAnimationRoot
- * internal, stop an animation, delegated from view
- * @param obj
- * @param key
- */
-/**
  * @method atRender
  * called when something renders
- */
-/**
- * @method doAnimation
- * internal, called by the renderer to animate all items in our viewtree
- * @param time
- * @param redrawlist
  */
 /**
  * @event wakeup

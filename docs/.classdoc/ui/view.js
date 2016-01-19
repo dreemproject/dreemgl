@@ -394,10 +394,6 @@
  * called at every frame draw
  */
 /**
- * @method sortShaders
- * internal, sorts the shaders
- */
-/**
  * @method atInnerClassAssign
  * custom hook in the inner class assignment to handle nested shaders specifically
  * @param key

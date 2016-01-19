@@ -6,9 +6,19 @@
 
 define.class('$widgets/docviewer.js', function(){
 
+    // Prints comment-ized AST as JSDuck comments
     this.printJSDuck = function(class_doc, parentclass) {
         var i, j, str;
         var output = [];
+
+        var firstline;
+        var internal = 'internal, ';
+        if (class_doc.body_text) {
+            firstline = class_doc.body_text[0]
+            if (firstline && firstline.startsWith(internal)) {
+                return output;
+            }
+        }
 
         output.push('/**');
         var classname = class_doc.class_name;
@@ -37,6 +47,11 @@ define.class('$widgets/docviewer.js', function(){
                     continue;
                 }
                 if (attr.body_text) { // && attr.body_text.length
+                    firstline = attr.body_text[0]
+                    if (firstline && firstline.startsWith(internal)) {
+                        continue
+                    }
+
                     attrs.push(attr.name);
                     output.push('/**');
                     var defval = attr.defvalue;
@@ -65,6 +80,12 @@ define.class('$widgets/docviewer.js', function(){
                 }
 
                 if (meth.body_text) { //  && meth.body_text.length
+                    firstline = meth.body_text[0]
+                    if (firstline && firstline.startsWith(internal)) {
+                        continue
+                    }
+
+
                     if (meth && meth.name) {
                         output.push('/**');
                         output.push(' * @method ' + meth.name);
@@ -114,6 +135,11 @@ define.class('$widgets/docviewer.js', function(){
                 if (event.name && event.name.startsWith('_')) {
                     continue;
                 }
+                firstline = event.body_text[0]
+                if (firstline && firstline.startsWith(internal)) {
+                    continue
+                }
+
 
                 output.push('/**');
                 output.push(' * @event ' + event.name);

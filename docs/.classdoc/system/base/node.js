@@ -22,19 +22,7 @@
  * @param id
  */
 /**
- * @method initFromConstructorArgs
- * internal, called by the constructor
- * @param args
- */
-/**
  * @method mixin
- */
-/**
- * @method findChild
- * internal, used by find
- * @param name
- * @param ignore
- * @param nocache
  */
 /**
  * @method find
@@ -59,11 +47,6 @@
 /**
  * @method hasWires
  * check if an attribute has wires connected
- * @param key
- */
-/**
- * @method wiredCall
- * internal, returns the wired-call for an attribute
  * @param key
  */
 /**
@@ -126,48 +109,9 @@
  * @param where
  */
 /**
- * @method animateAttribute
- * internal, animate an attribute with an animation object see animate
- * @param arg
- */
-/**
- * @method defineAttribute
- * internal, define an attribute, use the attributes =  api
- * @param key
- * @param config
- * @param always_define
- */
-/**
- * @method connectWiredAttribute
- * internal, connect a wired attribute up to its listeners
- * @param key
- * @param initarray
- */
-/**
  * @method emitForward
  * return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
  * @param key
- */
-/**
- * @method connectWires
- * internal, connect all wires using the initarray returned by connectWiredAttribute
- * @param initarray
- * @param depth
- */
-/**
- * @method disconnectWires
- * internal, does nothing sofar
- */
-/**
- * @method startMotion
- * internal, used by the attribute setter to start a 'motion' which is an auto-animated attribute
- * @param key
- * @param value
- */
-/**
- * @method createRpcProxy
- * internal, create an rpc proxy
- * @param parent
  */
 /**
  * @event init
