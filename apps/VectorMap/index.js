@@ -13,12 +13,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	
 	var L = 2;
 		this.attributes = {
-			mapxcenter: Math.floor(19296/Math.pow(2, L)),
-			mapycenter: Math.floor(24641/Math.pow(2,L)),
+			mapxcenter: Math.floor(33656/Math.pow(2, L)),
+			mapycenter: Math.floor(21534/Math.pow(2,L)),
 			zoomlevel: 16 - L
 			
 		}
-		
+		console.log("addfactor:", Math.pow(2, L));
 		define.class(this, "debugmaptile", function($ui$, view, label){
 			this.attributes = {
 				tilex:19295,
@@ -284,7 +284,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						side: float, 
 						dist: float,
 						linewidth:float,
-						sidevec:vec2
+						sidevec:vec2, 
+						//markcolor: vec4
 					})
 					
 					this.mesh = this.vertexstruct.array();
@@ -296,17 +297,20 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						return mesh.color;
 					}
 					
-					this.widths = {path:2,ferry:4, "rail" : 5, "minor_road": 4, "major_road" : 10, path: 3, highway:12}
-					this.colors = {path:"brown", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
+					this.widths = {water:20, path:2,ferry:4, "rail" : 5, "minor_road": 4, "major_road" : 10, path: 3, highway:12}
+					this.colors = {water:"#30a0ff", path:"brown", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
+					this.markcolor = {water:"#30a0ff"}
 				
 					this.update = function(){
+						//console.log("updating");
 						this.mesh = this.vertexstruct.array();
 						
 						for (var i = 0;i<this.view.roads.length;i++){
 							var R = this.view.roads[i];
 							//console.log(R);
 							var linewidth = 3;
-							var color = vec4("gray") 
+							var color = vec4("gray") ;
+							var markcolor = vec4("white");
 							if (this.widths[R.kind]) linewidth = this.widths[R.kind];
 							if (this.colors[R.kind]) color = vec4(this.colors[R.kind]);
 
@@ -315,6 +319,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								
 								
 								var currentarc = R.arcs[rr]
+								
+								//console.log(R, currentarc);
+								//continue;
 								var A0 = currentarc[0];
 								//this.mesh.push(A0[0], A0[1], this.view.color);
 								var nx = A0[0];
@@ -373,6 +380,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			})
 					
 			function arctotriangles(arc){
+				if (!arc) return [];
 				var verts = [];
 				var flatverts = [];
 				var A0 = arc[0];
@@ -567,12 +575,18 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					for (var i = 0;i<this.thedata.objects.water.geometries.length;i++){
 						var Bb = this.thedata.objects.water.geometries[i];
 						var B = {arcs:[], kind:"water" };
+						//console.log(Bb);
 						if(Bb.arcs)
 							for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							
 						}
-						Wset.push(B);
+						if (Bb.type == "LineString" || Bb.type=="MultiLineString" ){
+							Rset.push(B);
+						}
+						else{
+							Wset.push(B);
+						}
 					}
 					
 					for (var i = 0;i<this.thedata.objects.earth.geometries.length;i++){
@@ -627,7 +641,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.waters = Wset;
 					this.earths = Eset;
 					this.landuses = Lset;
-					console.log(KindSet);
+			//		console.log(KindSet);
 			}
 			
 			this.load = function(name){
@@ -641,27 +655,20 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.render = function(){	
 				var res = [];
 				
-				for (var i =0;i<this.arcs.length;i++){
-					res.push(this.arc({arc:this.arcs[i]}));
-				}
+			//	for (var i =0;i<this.arcs.length;i++){
+		//			res.push(this.arc({arc:this.arcs[i]}));
+			//	}
 				
 				res.push(this.land({lands:this.earths}));
 				
-				//for (var i =0;i<this.waters.length;i++){
-				//	res.push(this.water({water:this.waters[i]}));
-			//	}
-					res.push(this.land({lands:this.waters}));
+				res.push(this.land({lands:this.waters}));
 				
-			//	for (var i =0;i<this.landuses.length;i++){
-					res.push(this.land({lands:this.landuses}));
-				//}
+				res.push(this.land({lands:this.landuses}));
 				
 				res.push(this.building({buildings: this.buildings}));			
 				
-				//for(var i = 0 ;i<this.roads.length;i++){
-					res.push(this.road({roads: this.roads}));			
-				//}
-			
+				res.push(this.road({roads: this.roads}));			
+				
 				return res;
 			}
 		})			
@@ -702,19 +709,20 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				},
 				onstatus:function(){this.find("themenu").infotext = this.status;},
 				clearcolor:vec4('#303030'), overflow:'hidden', title:"VectorMap" },
-			menubar({name:"themenu",menus:[
-				{name:"File", commands:[
-					{name:"Map 1", clickaction:function(){this.find("tile1").load("map1.json");}},
-					{name:"Map 2", clickaction:function(){this.find("tile1").load("map2.json");}},
-					{name:"Map 3", clickaction:function(){this.find("tile1").load("map3.json");}},
-					{name:"Map 4", clickaction:function(){this.find("tile1").load("map4.json");}},
-					{name:"Map 5", clickaction:function(){this.find("tile1").load("map5.json");}},
-					{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}
-					
+				menubar({
+					name:"themenu",menus:[
+						{name:"File", commands:[
+							{name:"Map 1", clickaction:function(){this.find("tile1").load("map1.json");}},
+							{name:"Map 2", clickaction:function(){this.find("tile1").load("map2.json");}},
+							{name:"Map 3", clickaction:function(){this.find("tile1").load("map3.json");}},
+							{name:"Map 4", clickaction:function(){this.find("tile1").load("map4.json");}},
+							{name:"Map 5", clickaction:function(){this.find("tile1").load("map5.json");}},
+							{name:"Map 6", clickaction:function(){this.find("tile1").load("map6.json");}}						
+						]}
 					]}
-				]}),
-				view({flex:1, overflow:"scroll", bg:0, clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
-				this.mainscreen({ name:"themap", bg:0, boundscheck:false}),
+				),
+				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
+				this.mainscreen({ name:"themap",  boundscheck:false}),
 				view({width:2000, height:2000, bg:0}))
 			
 			
