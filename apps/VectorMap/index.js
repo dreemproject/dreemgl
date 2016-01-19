@@ -15,7 +15,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};
 	
-	var L = 0;
+	var L = -1;
 		this.attributes = {
 			mapxcenter: Math.floor(33656/Math.pow(2, L)),
 			mapycenter: Math.floor(21534/Math.pow(2,L)),
@@ -38,8 +38,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.bordercolor = "lightblue" 
 			this.borderradius = 0.1;
 			this.justifycontent = "flex-start" 
+			
 			this.render =function(){
-					return [label({fontsize: 40,alignself:"flex-start",bg:0,text:"x: " + this.tilex + " y: " + this.tiley + " zoomlevel: " + this.zoomlevel})]
+				return [label({fontsize: 40,alignself:"flex-start",bg:0,text:"x: " + this.tilex + " y: " + this.tiley + " zoomlevel: " + this.zoomlevel})]
 			}
 		})
 	
@@ -48,7 +49,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			var x = Math.ceil((width * z )/ 1024);
 			var y = Math.ceil((height * z )/ 1024);
-			this.find("theroads").zoomscale = z;
+		//	this.find("theroads").zoomscale = z;
 			//console.log(x,y);
 			//console.log(z, Math.floor(log(z)/log(2)));
 		//	this.zoomlevel = 16  + Math.floor( log(z)/log(2));
@@ -92,6 +93,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				arcs:[], 
 				buildings:[],
 				roads:[],
+				roadpolies:[],
 				waters:[], 
 				earths:[], 
 				landuses:[]	, 
@@ -115,12 +117,30 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					scalefactor: 1.0
 				}
 				this.boundscheck = false;
-				this.NOTmouseover =  function(){
-					var text = "";
-					if (this.building.name) text += this.building.name;
-					if (this.building.street) text += " " + this.building.street;
-					if (this.building.housenumber) text += " " + this.building.housenumber;				
+				
+				
+				this.onbuildings = function(){
+					this.pickrange = this.buildings.length;
+					//console.log("setting pickrange:", this.pickrange);
+					
+				}
+			
+			
+				this.mouseover =  function(){
+					var building = this.buildings[this.last_pick_id ];
+					if (building){
+					var text = "Building";
+						//console.log(building);
+					
+					if (building.kind) text += " " + building.kind;
+					if (building.name) text += " " + building.name;
+					if (building.street) text += " " + building.street;
+					if (building.housenumber) text += " " + building.housenumber;				
 					this.screen.status = text;
+					}
+					else{
+						console.log(this.last_pick_id);
+					}
 				}
 				
 				
@@ -129,12 +149,17 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					
 					this.vertexstruct =  define.struct({		
 						pos:vec2,
-						color:vec4
+						color:vec4, 
+						id: float
 					})
 					this.mesh = this.vertexstruct.array();
 					this.color = function(){
 						//return mesh.color;
 						var sizer = 0.7
+						PickGuid.x = floor(mesh.id/256.);
+						PickGuid.y = mod(mesh.id, 256.);
+						
+						
 						return mesh.color;
 //						return mix("#f0f0a0", mesh.color, 1.0-min(pow(0.5 + 0.5 *sin((gl_FragCoord.x + gl_FragCoord.y)*sizer),0.2),pow((0.5 + 0.5 *sin((-gl_FragCoord.x + gl_FragCoord.y)*sizer)),0.2)));
 
@@ -151,7 +176,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								var tris = arctotriangles(arc);
 								for(var a = 0;a<tris.length;a++){
 									var c = 0.3;
-									this.mesh.push(tris[a], vec4(c,c,c, 1));
+									this.mesh.push(tris[a], vec4(c,c,c, 1), i);
 								}
 							}
 							
@@ -335,18 +360,49 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								
 								
 								var currentarc = R.arcs[rr]
+								if (currentarc.length == 1){
+									continue
+								}
+								//	console.log(R, currentarc, currentarc.length, currentarc[0].length);
 								
 								//console.log(R, currentarc);
 								//continue;
 								var A0 = currentarc[0];
+								var A1 = vec2(currentarc[1][0]+A0[0],currentarc[1][1]+A0[1]) ;
+								
 								//this.mesh.push(A0[0], A0[1], this.view.color);
 								var nx = A0[0];
 								var ny = A0[1];
+								
+								var odx = A1[0]-A0[0];
+								var ody = A1[1]-A0[1];
+								
+									var predelta = vec2.normalize(vec2(odx, ody));
+									var presdelta = vec2.rotate(predelta, 3.1415/2.0);
+							
+							
+							
 								var dist = 0;
 								var dist2 = 0;
 								var lastsdelta = vec2(0,0);
+							//	color = vec4("blue");
+								this.mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
+								this.mesh.push(nx,ny, color, -1, dist,linewidth,presdelta, markcolor);
+
+								this.mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+
+								this.mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+								this.mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, color, -0.5, -10 ,linewidth,presdelta, markcolor);
+
+								//this.mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
+								this.mesh.push(nx,ny, color, -1, dist,linewidth,presdelta, markcolor);
+
+
+							//	color = vec4(0,0,0.03,0.1)
+							var lastdelta = vec2(0);
 								for(var a = 1;a<currentarc.length;a++){					
 									var A =currentarc[a];
+									
 									var tnx = nx + A[0];
 									var tny = ny + A[1];
 									var predelt = vec2( tnx - nx, tny - ny);
@@ -354,18 +410,18 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 									var sdelta = vec2.rotate(delta, PI/2);
 							
 									var dist2 = dist +  vec2.len(predelt);
-
+									
 									if (a>1){
 										this.mesh.push(nx,ny, color, 1, dist,linewidth,lastsdelta, markcolor);
-										this.mesh.push(nx,ny, color,-1, dist,linewidth,lastsdelta, markcolor);
 										this.mesh.push(nx,ny, color, 1, dist,linewidth,sdelta, markcolor);
+										this.mesh.push(nx,ny, color, -1, dist,linewidth,sdelta, markcolor);
 										
-										this.mesh.push(nx,ny, color, 1, dist,linewidth, lastsdelta, markcolor);
-										this.mesh.push(nx,ny, color, 1, dist,linewidth, sdelta, markcolor);
-										this.mesh.push(nx,ny, color,-1, dist,linewidth, sdelta, markcolor);
+										this.mesh.push(nx,ny, color, 1, dist,linewidth,lastsdelta, markcolor);
+										this.mesh.push(nx,ny, color,-1, dist,linewidth,sdelta, markcolor);
+										this.mesh.push(nx,ny, color, -1, dist,linewidth,lastsdelta, markcolor);
 											
 									}
-									
+									//color = vec4(0,1,0,0.2)
 									this.mesh.push( nx, ny,color, 1, dist ,linewidth, sdelta, markcolor);
 									this.mesh.push( nx, ny,color,-1, dist ,linewidth, sdelta, markcolor);
 									this.mesh.push(tnx,tny,color, 1, dist2,linewidth, sdelta, markcolor);
@@ -378,7 +434,17 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 									dist = dist2;									
 									nx = tnx;
 									ny = tny;
+									lastdelta = delta;
 								}
+						//		color = vec4("red");
+								this.mesh.push(nx,ny, color, 1, dist,linewidth,lastsdelta, markcolor);
+								this.mesh.push(nx,ny, color, -1, dist,linewidth,lastsdelta, markcolor);
+								this.mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+
+								this.mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+								this.mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, color, -0.5, dist+linewidth*0.5,linewidth,lastsdelta, markcolor);
+								this.mesh.push(nx,ny, color, -1, dist,linewidth,presdelta, markcolor);
+
 							}
 						}
 					}
@@ -569,17 +635,16 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.loadstring = function(str){
 				this.thedata = JSON.parse(str);	
 					
-					var Aset = [];					
 					var Bset = [];
 					var Rset = [];
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
-					
+					var Rpset = [];
 					//console.log(this.thedata);
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
-						var B = {h:Bb.properties.height, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
+						var B = {h:Bb.properties.height,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
 							if (Bb.arcs){
 								for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
@@ -651,12 +716,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					for (var i = 0;i<this.thedata.objects.roads.geometries.length;i++){
 						var Bb = this.thedata.objects.roads.geometries[i];
 						var B = { arcs:[], kind: Bb.properties.kind};						
-						for(var k = 0;k<Bb.arcs.length;k++)
-						{
-							B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);	
-						}
+							for(var k = 0;k<Bb.arcs.length;k++){
+								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);	
+							}
+							Rset.push(B);
 						KindSet[B.kind] = true;
-						Rset.push(B);
+						
+						
 					}		
 					
 					for (var i = 0;i<this.thedata.objects.transit.geometries.length;i++){
@@ -667,13 +733,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);	
 						}
 						KindSet[B.kind] = true;
-						Rset.push(B);
+						//Rset.push(B);
 					}
 					
-					//console.log(this.thedata);
-					this.arcs = Aset;
 					this.buildings = Bset;
 					this.roads = Rset;
+					this.roadpolies = Rpset;
 					this.waters = Wset;
 					this.earths = Eset;
 					this.landuses = Lset;
@@ -690,20 +755,19 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.render = function(){	
 				var res = [];
-				
-			//	for (var i =0;i<this.arcs.length;i++){
-		//			res.push(this.arc({arc:this.arcs[i]}));
-			//	}
+						
 				
 				res.push(this.land({lands:this.earths}));
 				
 				
 				res.push(this.land({lands:this.landuses}));
 				res.push(this.land({lands:this.waters}));
+				res.push(this.road({roads:this.roadpolies}));
 				
 				res.push(this.building({buildings: this.buildings}));			
 				
 				res.push(this.road({name:"theroads", roads: this.roads}));			
+			//	res.push(this.land({lands:this.roadpolies}));
 				
 				return res;
 			}
