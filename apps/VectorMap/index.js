@@ -114,7 +114,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 									A2[0] -= OA1[0];
 								}
 								
-								c = 0.7 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
+								c = 0.4 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
 								
 								this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
 								this.mesh.push(A2[0],A2[1],0, c,c,c, 1, i);
