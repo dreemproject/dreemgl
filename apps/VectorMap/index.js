@@ -38,7 +38,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.attributes = {				
 				buildings:[],
 				scalefactor: 1.0,
-				currentbuilding:0
+				currentbuilding:-1
 			}
 
 			this.boundscheck = false;
