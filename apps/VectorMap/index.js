@@ -82,7 +82,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.color = function(){
 
 					PickGuid = mesh.id;
-					if (abs(view.currentbuilding - mesh.id)<0.2) return "red"
+					if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color.x, 0, 0, 1);
 					return mesh.color;
 				}
 		
