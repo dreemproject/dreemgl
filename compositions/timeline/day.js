@@ -1,4 +1,4 @@
-define.class(function (require, hour, $ui$, view, label) {
+define.class('$ui/view', function (require, hour, $ui$, view, label) {
 
 	this.flexdirection = 'column';
 	this.bgcolor = 'black';
@@ -14,7 +14,7 @@ define.class(function (require, hour, $ui$, view, label) {
 
 	this.renderHours = function() {
  		var hourViews = [];
- 		for (var i=0;i<24;i++) {
+ 		for (var i = 0;i < 24; i++) {
  			hourViews.push(hour({
 				text: i,
 				bgcolor: vec3(1, 1, i/24)

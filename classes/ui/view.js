@@ -301,8 +301,17 @@ define.class('$system/base/node', function(require){
 
 	// listen to switch the shaders when borderradius changes
 	this.onborderradius = function(event){
-		var value = event.value
-		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
+		this.setBorderShaders()
+	}
+
+	this.onborderwidth = function(event){
+		this.setBorderShaders()
+	}
+
+	this.setBorderShaders = function(){
+		var radius = this._borderradius
+		//var value = event.value
+		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
 			// this switches the bg shader to the rounded one
 			this.bg = this.roundedrect
 			this.border = this.roundedborder
@@ -311,18 +320,13 @@ define.class('$system/base/node', function(require){
 			this.bg = this.hardrect
 			this.border = this.hardborder
 		}
-		if(this._borderwidth[0] === 0 && this._borderwidth[1] === 0 && this._borderwidth[2] === 0 && this._borderwidth[3] === 0) this.border = false
-	}
-
-	// listen to switch shaders when border width changes
-	this.onborderwidth = function(event){
-		var value = event.value
-		if(typeof value === 'number' && value !== 0 || value[0] !== 0 || value[1] !== 0 || value[2] !== 0 || value[3] !== 0){
-			// turn it on by assigning an order number
+		var width = this._borderwidth
+		if(width[0] === 0 && width[1] === 0 && width[2] === 0 && width[3] === 0){
+			this.border = false
+		}
+		else{
 			this.border = true
 		}
-		else this.border = false
-		this.relayout()
 	}
 
 	// listen to the viewport to turn off our background and border shaders when 3D
