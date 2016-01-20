@@ -1,4 +1,4 @@
-define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup, $3d$, ballrotate){
+define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup, $3d$, ballrotate, $$, urlfetch){
 	
 	define.class(this, "mainscreen", function($ui$, view){		
 	
@@ -236,7 +236,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				this.position = function(){					
 					var r = vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix;
-					r.w -= mesh.pos.z*0.01;
+				//	r.w -= mesh.pos.z*0.01;
 					return r
 				}
 					
@@ -393,7 +393,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.position = function(){					
 					var pos = mesh.pos.xy + mesh.sidevec * mesh.side * view.zoomscale*mesh.linewidth*0.5;
 					var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
-					res.w += mesh.pos.z;
+				//	res.w += mesh.pos.z;
 					return res
 				}
 				
@@ -658,33 +658,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		
 
 	})
-	define.class(this, "urlfetch", function($server$, service){
-		this.grabmap = function(x,y,z){
-			
-			var nodehttp = require('$system/server/nodehttp');
-			var fs = require('fs');
-			var cachedname = define.expandVariables(define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json");
-			if (fs.existsSync(cachedname)){
-				return fs.readFileSync(cachedname).toString()
-			}
-			
-			var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".topojson?api_key=vector-tiles-Qpvj7U4" 
-			
-			
-			var P = define.deferPromise()
-
-			nodehttp.get(fileurl).then(function(v){
-				fs.writeFileSync(cachedname, v);				
-				P.resolve(v);
-			})
-			
-			return P;
-		}.bind(this)		
-	})
+	
 	
 	this.render = function(){ return [
 		fileio(),
-		this.urlfetch({name:"urlfetch"}),
+		urlfetch({name:"urlfetch"}),
 		
 		screen({name:"index", style:{
 					$:{
@@ -706,7 +684,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
 				this.mainscreen({ name:"mainscreen", 				
 					//perspective cam: 
-					camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
+					//camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
 					// "ortho" cam: 
 					//camera:[3000,3000,6000 ], fov:30, lookat:[3000,3000,0],nearplane:10, farplane:12000, up:[0,1,0],viewport:"3d",
 					boundscheck:false, flex:1, 
@@ -727,6 +705,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			},
 			clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
 			speakergrid({justifycontent:"center", alignitems:"center" }, view({width:300, bg:0, flexdirection:"column", alignself:"center"}
+			,label({fontsize:40, text:"Vectormap" , bg:0})
 			,button({text:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
 			,button({text:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
 			,button({text:"Noord Amsterdam",click:function(){this.rpc.index.moveTo(33656,21434, 16);}, margin:2})
