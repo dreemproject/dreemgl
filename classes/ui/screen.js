@@ -697,6 +697,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	this.startAnimationRoot = function(obj, key, value, track, promise){
 		// ok so. if we get a config passed in, we pass that in
 		var config = obj.getAttributeConfig(key)
+
 		var first = obj['_' + key]
 
 		var anim = new Animate(config, obj, key, track, first, value)

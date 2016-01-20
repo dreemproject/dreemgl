@@ -6,10 +6,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			centerx: Config({value:0}),
 			centery: Config({value:0}),
 			zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
+
 			levels: [],
 			blocksize: 500				
 		}
-		
+
 		this.keydown = function(v){	
 			this.screen.defaultKeyboardHandler(this, v);					
 		}
