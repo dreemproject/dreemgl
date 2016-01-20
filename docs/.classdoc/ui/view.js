@@ -338,8 +338,10 @@
  */
 /**
  * @method onborderwidth
- * listen to switch shaders when border width changes
  * @param event
+ */
+/**
+ * @method setBorderShaders
  */
 /**
  * @method onviewport
@@ -537,108 +539,4 @@
  */
 /**
  * @event miss
- */
-/**
- * @class view.bg
- * @extends shaderwebgl
- * standard bg is undecided
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.border
- * @extends shaderwebgl
- * standard border is undecided too
- */
-/**
- * @class view.hardrect
- * @extends shaderwebgl
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.hardborder
- * @extends shaderwebgl
- */
-/**
- * @method update
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.hardimage
- * @extends hardrect
- * hard edged bgimage shader
- */
-/**
- * @method color
- */
-/**
- * @class view.roundedrect
- * @extends shaderwebgl
- * rounded rect shader class
- */
-/**
- * @method update
- */
-/**
- * @method color
- */
-/**
- * @method position
- */
-/**
- * @class view.shadowrect
- * @extends shaderwebgl
- * rounded rect shader class
- */
-/**
- * @method update
- */
-/**
- * @method color
- */
-/**
- * @method position
- */
-/**
- * @class view.viewportblend
- * @extends shaderwebgl
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.roundedborder
- * @extends shaderwebgl
- * rounded corner border shader
- */
-/**
- * @method update
- */
-/**
- * @method color
- */
-/**
- * @method position
- */
-/**
- * @class view.scrollbar
- * @extends scrollbar
- * lets pull in the scrollbar on the view
  */

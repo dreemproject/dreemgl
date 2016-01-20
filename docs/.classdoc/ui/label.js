@@ -59,25 +59,3 @@
  * @method measure
  * @param width
  */
-/**
- * @class label.typefacenormal
- * @extends typefaceshader
- * the normal font
- */
-/**
- * @method update
- */
-/**
- * @class label.typefacesubpixelaa
- * @extends typefacenormal
- * the subpixel font used to render with subpixel antialiasing
- */
-/**
- * @class label.typefaceglyphy
- * @extends typefacenormal
- */
-/**
- * @class label.typeface
- * @extends typefacenormal
- * the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
- */

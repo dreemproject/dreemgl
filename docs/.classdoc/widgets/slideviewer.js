@@ -50,14 +50,3 @@
 /**
  * @method render
  */
-/**
- * @class slideviewer.slide
- * @extends view
- * the class for a nested slide, its automatically wrapped around children
- */
-/**
- * @method viewportblend
- */
-/**
- * @method render
- */

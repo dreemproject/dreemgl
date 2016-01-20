@@ -56,16 +56,3 @@
 /**
  * @method render
  */
-/**
- * @class ballbutton.triangledisp
- * @extends view
- */
-/**
- * @attribute {float32} angle
- */
-/**
- * @attribute {float32} [radius="8"]
- */
-/**
- * @method bg
- */

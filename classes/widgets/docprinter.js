@@ -156,7 +156,7 @@ define.class('$widgets/docviewer.js', function(){
                 if (inner.class_name && inner.class_name.startsWith('_')) {
                     continue;
                 }
-                output = output.concat(this.printJSDuck(inner, classname));
+//                output = output.concat(this.printJSDuck(inner, classname));
             }
         }
         if (class_doc.examples && class_doc.examples.length) {

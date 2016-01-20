@@ -22,7 +22,3 @@
 /**
  * @method render
  */
-/**
- * @class tabcontainer.tabbutton
- * @extends button
- */

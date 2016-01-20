@@ -38,23 +38,3 @@
 /**
  * @method init
  */
-/**
- * @class textbox.cursors
- * @extends cursorshader
- */
-/**
- * @method atConstructor
- */
-/**
- * @method update
- */
-/**
- * @class textbox.markers
- * @extends markershader
- */
-/**
- * @method atConstructor
- */
-/**
- * @method update
- */

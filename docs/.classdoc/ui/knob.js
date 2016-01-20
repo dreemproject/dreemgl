@@ -65,22 +65,3 @@
 /**
  * @method render
  */
-/**
- * @class knob.dial
- * @extends view
- */
-/**
- * @attribute {float32} start
- */
-/**
- * @attribute {float32} [end="4.71238898038469"]
- */
-/**
- * @method init
- */
-/**
- * @method width
- */
-/**
- * @method bg
- */
