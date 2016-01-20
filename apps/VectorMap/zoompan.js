@@ -3,9 +3,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	define.class(this, "tiledmap", function($ui$, view)
 	{
 		this.attributes = {
-			centerx: Config({value:0, motion:"inoutquad", duration:0.7}),
-			centery: Config({value:0, motion:"inoutquad", duration:0.7}),
-			zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
+			centerx: Config({value:0}),
+			centery: Config({value:0}),
+			zoomlevel: 4,//Config({value:4, motion:"inoutquad", duration:1.7}),
+			//zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
 			levels: [],
 			blocksize: 500				
 		}
@@ -18,6 +19,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.color = function(){
 				
 				var dist = abs(view.zoomlevel - mesh.id );
+				
 				if (dist > 1.0) dist = 1.0;
 				
 				
@@ -44,16 +46,16 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				var low = Math.max(0, Math.floor(view.zoomlevel-1));
 				var high = Math.min(view.levels.length, Math.ceil(view.zoomlevel + 1));
+				
 				for(var i = low ;i<high;i++){
-				w = h = Math.pow(2,i-this.view.zoomlevel-0) * this.view.blocksize;
-				var bw = (Math.ceil(this.view.layout.width / (w)));
-				var bh = (Math.ceil(this.view.layout.height /(h)));
-				//console.log(w,h, bw,bh);
-				//console.log(bw, bh)
+					w = h = Math.pow(2,i-this.view.zoomlevel-0) * this.view.blocksize;
+					var bw = (Math.ceil(this.view.layout.width / (w)));
+					var bh = (Math.ceil(this.view.layout.height /(h)));
 					for(var xx = 0;xx<(bw+1);xx++){
 						for(var yy = 0;yy<(bh+1);yy++){
-							var x = w * xx;
-							var y =  h * yy;
+							var x = w * xx ;
+							var y = h * yy;
+							
 							mesh.push(x,y,0, i);
 							mesh.push(x+w,y,0, i);
 							
@@ -73,7 +75,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.position = function(){		
 
 				var xy = mesh.pos.xy;		
-				xy += vec2(view.centerx, view.centery)*view.blocksize  ;			
+				xy -= vec2(view.centerx, view.centery)*view.blocksize  ;			
 					var r = vec4(xy, 0, 1) * view.totalmatrix * view.viewmatrix;
 					return r
 			}
@@ -88,9 +90,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		
 		
 		this.moveTo = function(x,y,z){
-			this.centerx = x;
-			this.centery = y;
-			this.zoomlevel = Animate({1:z-1, 2:z});		
+			
+			var dist = vec2(x - this.centerx,y - this.centery);
+			var l = vec2.len(dist);
+			console.log(l);
+			var totaltime = Math.max(0.3,Math.min(10, l*0.3));
+			var halftime = totaltime / 2;			
+			this.centerx = Animate({totaltime:{motion:"inoutquad", value:x}});
+			this.centery = Animate({totaltime:{motion:"inoutquad", value:y}});
+			this.zoomlevel = Animate({halftime:{motion:"outquad",value:this.zoomlevel-0.4}, totaltime:{motion:"inquad", value:z}});		
 
 			for(var xx = -3; xx < 3; xx++){
 				for(var yy = -3; yy < 3; yy++){			
