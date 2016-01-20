@@ -5,8 +5,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		this.attributes = {
 			centerx: Config({value:0}),
 			centery: Config({value:0}),
-			zoomlevel: 4,//Config({value:4, motion:"inoutquad", duration:1.7}),
-			//zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
+			zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
 			levels: [],
 			blocksize: 500				
 		}
