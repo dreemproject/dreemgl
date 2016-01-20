@@ -5,53 +5,66 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		this.attributes = {
 			centerx: Config({value:0, motion:"inoutquad", duration:0.7}),
 			centery: Config({value:0, motion:"inoutquad", duration:0.7}),
-			zoomlevel: Config({value:4, motion:"inoutquad", duration:0.7}),
+			zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
 			levels: [],
-			blocksize: 300
-				
+			blocksize: 500				
 		}
 		
+		this.keydown = function(v){	
+			this.screen.defaultKeyboardHandler(this, v);					
+		}
+
 		this.bg = function(){
 			this.color = function(){
-				var c = 1.0/(1.0+abs(view.zoomlevel - mesh.id + 1));
 				
-				return vec4(mesh.color.xyz*c, 1);
+				var dist = abs(view.zoomlevel - mesh.id );
+				if (dist > 1.0) dist = 1.0;
+				
+				
+				return vec4(vec4("blue").xyz*(1.0-dist), 1.0);
 			}
-			
+			this.color_blend = 'src_alpha * src_color + dst_color'
+  
 			this.vertexstruct =  define.struct({		
 					pos:vec3,
-					color:vec4, 
+				//	color:vec4, 
 					id: float
 				})
 
-			this.mesh = this.vertexstruct.array();
+			this.mesh = this.vertexstruct.array(10000);
 			
 			this.update = function(){
-				var mesh =this.mesh = this.vertexstruct.array();
+				var mesh = this.mesh ;
+				mesh.length = 0;
 				var cx = this.view.layout.width/2;
 				var cy = this.view.layout.height/2;
 				var w = 100;
 				var h = 200;
-				var bw = (Math.ceil(this.view.layout.width / (this.view.blocksize )));
-				var bh = (Math.ceil(this.view.layout.height /( this.view.blocksize)));
-				console.log(bw*2, bh*2)
-				for(var i = 0;i<this.view.levels.length;i++){
-					w = h = Math.pow(2,i-this.view.zoomlevel-2) * this.view.blocksize;
-					for(var xx = -bw;xx<(bw+1);xx++){
-						for(var yy = -bh;yy<(bh+1);yy++){
-							var x = cx + w * xx;
-							var y = cy + h * yy;
-							mesh.push(x,y,0,vec4("blue"), i);
-							mesh.push(x+w,y,0,vec4("blue"), i);
+				var view = this.view;
+				
+				var low = Math.max(0, Math.floor(view.zoomlevel-1));
+				var high = Math.min(view.levels.length, Math.ceil(view.zoomlevel + 1));
+				for(var i = low ;i<high;i++){
+				w = h = Math.pow(2,i-this.view.zoomlevel-0) * this.view.blocksize;
+				var bw = (Math.ceil(this.view.layout.width / (w)));
+				var bh = (Math.ceil(this.view.layout.height /(h)));
+				//console.log(w,h, bw,bh);
+				//console.log(bw, bh)
+					for(var xx = 0;xx<(bw+1);xx++){
+						for(var yy = 0;yy<(bh+1);yy++){
+							var x = w * xx;
+							var y =  h * yy;
+							mesh.push(x,y,0, i);
+							mesh.push(x+w,y,0, i);
 							
-							mesh.push(x+w,y,0,vec4("blue"), i);
-							mesh.push(x+w,y+h,0,vec4("blue"), i);
+							mesh.push(x+w,y,0, i);
+							mesh.push(x+w,y+h,0, i);
 							
-							mesh.push(x+w,y+h,0,vec4("blue"), i);
-							mesh.push(x,y+h,0,vec4("blue"), i);
+							mesh.push(x+w,y+h,0, i);
+							mesh.push(x,y+h,0, i);
 							
-							mesh.push(x,y+h,0,vec4("blue"), i);
-							mesh.push(x,y,0,vec4("blue"), i);
+							mesh.push(x,y+h,0, i);
+							mesh.push(x,y,0, i);
 						}
 					}
 				}
@@ -77,7 +90,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		this.moveTo = function(x,y,z){
 			this.centerx = x;
 			this.centery = y;
-			this.zoomlevel = z;		
+			this.zoomlevel = Animate({value:z});		
 
 			for(var xx = -3; xx < 3; xx++){
 				for(var yy = -3; yy < 3; yy++){			
@@ -85,8 +98,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.addToQueue(x + xx,y + yy,z);	
 				}
 			}
-			
-			
 		}
 		
 		this.requestPending = false;
