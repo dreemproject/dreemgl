@@ -25,9 +25,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 	}
 
 	// Fork starts a new modification on a dataset;
-	this.fork = function(callback	// the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
-
-	){
+	this.fork = function(callback){	// the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
 		callback(this.data)

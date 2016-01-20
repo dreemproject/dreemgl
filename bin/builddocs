@@ -4,6 +4,7 @@ BIN_DIR="$(dirname $0)"
 DOCS_DIR="$BIN_DIR/../docs"
 CLASSDOC_DIR="$DOCS_DIR/.classdoc"
 API_DOCS_DIR="$DOCS_DIR/api"
+SRC_DOCS_DIR="$DOCS_DIR/api/source"
 
 DOCS_TITLE="Dreem API documentation"
 COPYRIGHT="Copyright (c) 2014-2016 Teem2 LLC"
@@ -14,12 +15,15 @@ echo "Removing old docs..."
 rm -rf $API_DOCS_DIR
 
 echo "Regenerating classdoc..."
-#rm -rf ./docs/classdocs/*.js
-#./docs/lib/findocomments.rb
-echo "node server.js -browser 'apps/docs/docgen'"
+echo "Press [ENTER] once doc generator is finished"
+node server.js -browser 'apps/docs/docgen' &
+read
 
 echo "Building docs..."
 jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES"
 
 echo "Building source docs..."
-#./docs/lib/buildsourcedocs.rb
+
+rm -rf "$SRC_DOCS_DIR"/*
+"$BIN_DIR/buildsourcedocs.rb"
+

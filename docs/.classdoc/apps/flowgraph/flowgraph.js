@@ -142,12 +142,3 @@
 /**
  * @method render
  */
-/**
- * @class flowgraph.selectorrect
- * @extends view
- */
-/**
- * @method bordercolorfn
- * debugger
- * @param pos
- */

@@ -15,7 +15,6 @@
  * @method fork
  * Fork starts a new modification on a dataset;
  * @param callback
- * the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
  */
 /**
  * @method silent

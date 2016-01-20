@@ -150,15 +150,16 @@ define.class('$widgets/docviewer.js', function(){
                 output.push(' */');
             }
         }
-        if (class_doc.inner_classes && class_doc.inner_classes.length) {
-            for (i = 0; i < class_doc.inner_classes.length; i++) {
-                var inner = class_doc.inner_classes[i];
-                if (inner.class_name && inner.class_name.startsWith('_')) {
-                    continue;
-                }
-                output = output.concat(this.printJSDuck(inner, classname));
-            }
-        }
+        // TODO: JSDuck doesn't handle inner classes in the right way yet, so don't add them
+        //if (class_doc.inner_classes && class_doc.inner_classes.length) {
+        //    for (i = 0; i < class_doc.inner_classes.length; i++) {
+        //        var inner = class_doc.inner_classes[i];
+        //        if (inner.class_name && inner.class_name.startsWith('_')) {
+        //            continue;
+        //        }
+        //        output = output.concat(this.printJSDuck(inner, classname));
+        //    }
+        //}
         if (class_doc.examples && class_doc.examples.length) {
             console.log('EXAMPLES', class_doc.examples)
         }

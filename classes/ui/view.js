@@ -77,6 +77,24 @@ define.class('$system/base/node', function(require){
 		// alias for the z component of size
 		depth: Config({alias:'size', index:2}),
 
+		percentsize: Config({type:vec3, value:vec3(NaN)}),
+
+		// percentage widths/heights
+		percentwidth: Config({alias:'percentsize', index:0}),
+		// percentage widths/heights
+		percentheight: Config({type:'percentsize', index:1}),
+		// percentage widths/heights
+		percentdepth: Config({type:'percentsize', index:2}),
+
+		percentpos: Config({type:vec3, value:vec3(NaN)}),
+
+		// percentage widths/heights
+		percentx: Config({alias:'percentpos', index:0}),
+		// percentage widths/heights
+		percenty: Config({type:'percentpos', index:1}),
+		// percentage widths/heights
+		percentz: Config({type:'percentpos', index:2}),
+
 		// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
 		pixelratio: Config({type: float, value:NaN}),
 
@@ -553,12 +571,20 @@ define.class('$system/base/node', function(require){
 
 	// redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
-		if(!this.parent_viewport || this.parent_viewport.draw_dirty === 3) return
+		this.draw_dirty = 3
+		if(!this.parent_viewport){
+			return
+		}
+		if(this.parent_viewport.draw_dirty === 3){
+			return
+		}
 		var parent = this
 		while(parent){
 			var viewport = parent.parent_viewport
 			if(!viewport) break
-			if(viewport.draw_dirty === 3) return
+			if(viewport.draw_dirty === 3){
+				return
+			}
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
@@ -953,6 +979,12 @@ define.class('$system/base/node', function(require){
 			var layout = this._layout
 			var flex = this._flex
 			var size = this._size
+			
+			//var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
+			//var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
+
+			//this._size = vec2(layout.width, layout.height)
+			
 			var flexwrap = this._flexwrap
 			this._flex = 1
 			this._size = vec2(layout.width, layout.height)

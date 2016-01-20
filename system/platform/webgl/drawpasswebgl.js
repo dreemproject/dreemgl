@@ -206,6 +206,8 @@ define.class(function(require, baseclass){
 		var pick_id = 0
 		var draw = view
 		while(draw){
+			draw.draw_dirty &= 1
+
 			pick_id+= draw.pickrange;
 			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
@@ -370,6 +372,8 @@ define.class(function(require, baseclass){
 
 		var draw = view
 		while(draw){
+			draw.draw_dirty &= 2
+
 			//}
 			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			//	var draw = dl[i]
@@ -391,6 +395,7 @@ define.class(function(require, baseclass){
 				else{
 					count += this.drawNormal(draw, view, matrices)
 				}
+				
 
 				if(draw.debug_view){
 					this.debugrect.view = draw

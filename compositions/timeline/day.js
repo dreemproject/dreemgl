@@ -19,7 +19,8 @@ define.class('$ui/view', function (require, hour, event, $ui$, view, label) {
 			var h = i;
 			if (this.format == '12') {
 				h = (h % 12 || 12) + ' ' + (i < 12 ? 'am' : 'pm');
-			} else {
+			}
+			else {
 				h += ' h';
 			}
  			hours.push(hour({
@@ -50,7 +51,7 @@ define.class('$ui/view', function (require, hour, event, $ui$, view, label) {
 			borderbottomwidth: 1,
 			bordercolor: 'black',
 			borderradius: 0,
-			padding: vec4(12, 8, 12, 4)
+			padding: vec4(12, 8, 12, 4),
 		})
 		,view(
 			{

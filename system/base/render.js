@@ -12,7 +12,7 @@ define.class(function(exports){
 	function __atAttributeGet(key){
 		if(!initializing){
 			exports.process(this, undefined, undefined, true)
-			this.relayout()
+			//this.relayout()
 		}
 	}
 		
@@ -29,7 +29,7 @@ define.class(function(exports){
 		var is_root = false
 
 		if(!state){
-			state = {wires:[], render_block: []}
+			state = {wires:[], render_block:[]}
 			is_root = true
 		}
 

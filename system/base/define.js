@@ -2218,10 +2218,11 @@
 
 			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
 				
-			function Enum(value){
+			function Enum(value){				
 				if(typeof value !== 'string'){
-					console.error('Enum not string' + value, origset.join('|'))
-					return types[0]
+					value = String(value)
+				//	console.error('Enum not string' + value, origset.join('|'))
+				//	return types[0]
 				}
 				var index = matchset.indexOf(enumCanon(value))
 

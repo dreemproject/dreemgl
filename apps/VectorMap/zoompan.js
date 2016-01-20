@@ -5,12 +5,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		this.attributes = {
 			centerx: Config({value:0}),
 			centery: Config({value:0}),
-			zoomlevel: 4,//Config({value:4, motion:"inoutquad", duration:1.7}),
-			//zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
+			zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
+
 			levels: [],
 			blocksize: 500				
 		}
-		
+
 		this.keydown = function(v){	
 			this.screen.defaultKeyboardHandler(this, v);					
 		}
@@ -91,23 +91,30 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		
 		this.moveTo = function(x,y,z){
 			
-			var dist = vec2(x - this.centerx,y - this.centery);
+			var dist = vec2((x?x:this.centerx) - this.centerx,(y?y:this.centery) - this.centery);
 			var l = vec2.len(dist);
-			console.log(l);
-			var totaltime = Math.max(0.3,Math.min(10, l*0.3));
+			var totaltime = Math.max(1.,Math.min(10, l*0.3));
 			var halftime = totaltime / 2;	
-			var xanim = {}
-			xanim[totaltime] = {motion:"inoutquad", value:x};
-			var yanim = {}
-			yanim[totaltime] = {motion:"inoutquad", value:y};
-			this.centerx = Animate(xanim);
-			this.centery = Animate(yanim);
 			
-			var zanim = {}
-			zanim[halftime] = {motion:"outquad", value:this.zoomlevel-0.4};
-			zanim[totaltime] = {motion:"inquad", value:z};
+			if (x !== undefined) {
+				var xanim = {}
+				xanim[totaltime] = {motion:"inoutquad", value:x};
+			}
 			
-			this.zoomlevel = Animate(zanim);		
+			if (y !== undefined) {
+				var yanim = {}
+				yanim[totaltime] = {motion:"inoutquad", value:y};
+				this.centerx = Animate(xanim);
+				this.centery = Animate(yanim);
+			}
+			
+			if (z !== undefined) {
+				var zanim = {}
+				zanim[halftime] = {motion:"outquad", value:this.zoomlevel-0.4};
+				zanim[totaltime] = {motion:"inquad", value:z};
+			
+				this.zoomlevel = Animate(zanim);		
+			}
 
 			for(var xx = -3; xx < 3; xx++){
 				for(var yy = -3; yy < 3; yy++){			
