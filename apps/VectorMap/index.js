@@ -82,7 +82,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.color = function(){
 
 					PickGuid = mesh.id;
-					if (view.currentbuilding == mesh.id) return "red"
+					if (abs(view.currentbuilding - mesh.id)<0.2) return "red"
 					return mesh.color;
 				}
 		
@@ -146,15 +146,19 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		define.class(this, "land", function($ui$, view){
 			this.boundscheck = false;
 			this.attributes = {				
-				lands:[]
+				lands:[],
+				currentland: -1
 			}
 			
 			this.mouseover =  function(evt){
 				//console.log(this.last_pick_id)
+				this.currentland = this.last_pick_id ;
 				var text = "Land: " + this.lands[this.last_pick_id ].kind;
 				this.screen.status = text;				
 			}			
-			
+			this.mouseout = function(){
+				this.currentland = -1;
+			}
 			
 			this.onlands = function(){
 				this.pickrange = this.lands.length;
@@ -208,6 +212,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					//var n2 = 0.8*noise.noise2d(xy*2.3)
 					var themix = 0.5
 					PickGuid = mesh.id
+					if (abs(view.currentland - mesh.id)<0.2) return "red";
 					//mod(mesh.id, 256.)
 					//PickGuid.y = floor(mesh.id/256.)
 					return mix(mesh.color1, mesh.color2,themix);						
