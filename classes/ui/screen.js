@@ -3,7 +3,7 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
+define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')

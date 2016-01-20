@@ -4,8 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class('$ui/view', function($ui$, view, label, icon, $$, require){
-
+define.class('$ui/view', function(require, $ui$, view, label, icon){
 	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.position = "relative"
 	this.borderwidth = 1
@@ -63,11 +62,12 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 
 		this.padding = 3
 		this.justifycontent=  "space-between" 
-		this.alignitems = "flex-start";
+		this.alignitems = "flex-start"
 		this.flex = 1
+
 		// The clickable bar creates icon and a textfield children.
-		this.render = function(){			
-			var res = [];
+		this.render = function(){
+			var res = []
 
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
 			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));					
@@ -160,7 +160,6 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 		
 		return res;
 	}
-
 	
 	var foldcontainer = this.constructor;
 

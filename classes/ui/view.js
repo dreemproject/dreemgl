@@ -259,7 +259,7 @@ define.class('$system/base/node', function(require){
 
 	this.onvisible = this.oncamera = this.onlookat = this.onup = function(){
 		this.redraw();
-	};
+	}
 	
 	// the number of pick ID's to reserve for this view.
 	this.pickrange = 1;	
