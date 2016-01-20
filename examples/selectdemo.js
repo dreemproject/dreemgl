@@ -1,7 +1,7 @@
 //Pure JS based composition
 define.class(function($server$, composition, $ui$, screen, cadgrid, view){
 
-	define.class(this, "selectorrect", view, function(){
+	define.class(this, "selectorrect", view, function(){ 
 		this.name = 'selectorrect'
 		this.bordercolorfn = function(pos){
 			var check = (int(mod(0.20 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0

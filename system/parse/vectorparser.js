@@ -331,6 +331,15 @@ define(function(require, exports){
 			return a;
 		}
 
+		var vec4m = col.match(/^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$/i);
+		if( vec4m ) {
+			a[0] = vec4m[1];
+			a[1] = vec4m[2];
+			a[2] = vec4m[3];
+			a[3] = vec4m[4];
+			return a;
+		}
+
 		// lets parse the color
 		var len = col.length
 		var i = 0
