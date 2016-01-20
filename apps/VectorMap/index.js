@@ -1,4 +1,4 @@
-define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup){
+define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup, $3d$, ballrotate){
 	
 	define.class(this, "mainscreen", function($ui$, view){		
 	
@@ -32,8 +32,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 			return verts;			
 		}
-	
-	
+		
 		define.class(this, "building", function($ui$, view){
 			
 			this.attributes = {				
@@ -164,28 +163,28 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						tower:26, 
 						library:25, 
 						common:24, 
-						sports_centre:23, 
-						bridge:22, 
-						university:21, 
-						breakwater:20, 
-						playground:19, 
-						forest:18,
-						pitch:17, 
-						grass:16, 
-						village_green:15, 
-						garden:14, 
-						residential:13, 
-						footway:12, 
-						pedestrian:11,
-						water:-50,
-						pedestrian:9, 
-						parking:8, 
-						park:7, 
-						earth:6, 
-						pier:5, 
-						"rail" : 4,
-						"minor_road":2, 
-						"major_road" :1, highway:0}
+						sports_centre:-23, 
+						bridge:-22, 
+						university:-21, 
+						breakwater:-20, 
+						playground:-19, 
+						forest:-18,
+						pitch:-17, 
+						grass:-16, 
+						village_green:-15, 
+						garden:-14, 
+						residential:-13, 
+						footway:-12, 
+						pedestrian:-11,
+						water:-5,
+						pedestrian:-9, 
+						parking:-8, 
+						park:-7, 
+						earth:-6, 
+						pier:-5, 
+						"rail" : -4,
+						"minor_road":-55, 
+						"major_road" :-55, highway:-55}
 				
 				this.vertexstruct =  define.struct({
 					pos:vec3,
@@ -281,7 +280,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.update = function(){
 					//console.log("updating");
 					this.mesh = this.vertexstruct.array();
-						var 	z = 0.1;
+					var 	z = 0.1;
 
 					for (var i = 0;i<this.view.roads.length;i++){							
 						
@@ -393,7 +392,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}
 				this.position = function(){					
 					var pos = mesh.pos.xy + mesh.sidevec * mesh.side * view.zoomscale*mesh.linewidth*0.5;
-					return vec4(pos.x, 1000-pos.y, mesh.pos.z, 1.0) * view.totalmatrix * view.viewmatrix
+					var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
+					res.w += mesh.pos.z;
+					return res
 				}
 				
 				this.drawtype = this.TRIANGLES
@@ -404,11 +405,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 		var KindSet = this.KindSet = {};
 		var UnhandledKindSet = this.UnhandledKindSet = {};	
+		
+		
+		//9647*2,12320*2
+		//33656,21534
 		var L = 0;
 
 		this.attributes = {
-			mapxcenter: Math.floor(33656/Math.pow(2, L)),
-			mapycenter: Math.floor(21534/Math.pow(2,L)),
+			mapxcenter: Math.floor(9647*2/Math.pow(2, L)),
+			mapycenter: Math.floor(12320*2/Math.pow(2,L)),
 			zoomlevel: 16 - L			
 		}
 
@@ -482,6 +487,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			return res;
 		}
 		
+		this.tilesets = [];
+		
 		define.class(this, "maptile", function($ui$, view){
 			
 			this.attributes = {
@@ -514,7 +521,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
-					console.log(this.thedata);
+					
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
 						var B = {h:Bb.properties.height?Bb.properties.height:3.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
@@ -697,10 +704,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					]}
 				),
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
-				this.mainscreen({ 				
+				this.mainscreen({ name:"mainscreen", 				
+					//perspective cam: 
 					camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
+					// "ortho" cam: 
+					//camera:[3000,3000,6000 ], fov:30, lookat:[3000,3000,0],nearplane:10, farplane:12000, up:[0,1,0],viewport:"3d",
 					boundscheck:false, flex:1, 
-				})
+				}),
+				ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"mainscreen"})
+						
 				//,view({width:2000, height:2000, bg:0})
 			)
 			
@@ -714,13 +726,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				console.log(this.rpc.index)
 			},
 			clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
-			speakergrid({justifycontent:"center", alignitems:"center" }
+			speakergrid({justifycontent:"center", alignitems:"center" }, view({width:300, bg:0, flexdirection:"column", alignself:"center"}
 			,button({text:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
 			,button({text:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
 			,button({text:"Noord Amsterdam",click:function(){this.rpc.index.moveTo(33656,21434, 16);}, margin:2})
 			,button({text:"Sausalito",click:function(){this.rpc.index.moveTo(9647,12320, 16);}, margin:2})
 			,button({text:"San Fransisco",click:function(){this.rpc.index.moveTo(9647,12320, 16);}, margin:2})
-			)
+			))
 		)
 	]}
 })

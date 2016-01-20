@@ -54,6 +54,7 @@ define.class(function(require, $ui$view){
 				this.camera_start = vec3.sub(t._camera, t._lookat );
 			}.bind(this);
 		}
+		else{console.log("target not found!", this.target)}
 	}
 
 	this.mouseleftup = function(){
