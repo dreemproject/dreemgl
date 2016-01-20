@@ -979,16 +979,16 @@ define.class('$system/base/node', function(require){
 			var layout = this._layout
 			var flex = this._flex
 			var size = this._size
+						
+			//var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
+			//var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
 			
-			
-			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
-			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
-			//console.log(presizex,presizey);
+			//console.log(this._percentsize, presizex,presizey);
 			//this._size = vec2(layout.width, layout.height)
 			
 			var flexwrap = this._flexwrap
 			this._flex = 1
-			this._size = vec2(layout.width, layout.height)
+			this._size = vec2(presizex, presizey)
 			this._flexwrap = false
 
 			if(this.measure) this.measure() // otherwise it doesnt get called
@@ -1004,9 +1004,34 @@ define.class('$system/base/node', function(require){
 			emitPostLayout(copynodes)
 		}
 		else{
+			var layout = this._layout
+			
+			//this._size = vec2(presizex, presizey)
+			var size = this._size
+			var pos = this._pos;
+			
+			var presizex = isNaN(this._percentsize[0])?size[0]:this.parent._layout.width * 0.01 * this._percentsize[0];
+			var presizey = isNaN(this._percentsize[1])?size[1]: this.parent._layout.height * 0.01 * this._percentsize[1];
+			var presizez = isNaN(this._percentsize[2])?size[2]: this.parent.depth * 0.01 * this._percentsize[2];
+			
+			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0];
+			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1];
+			
+			
+			//console.log("This is where we get the percentage size", this._percentsize, presizex,presizey);
+			
+			this._size = vec2(presizex, presizey);
+			this._pos = vec2(preposx, preposy);
+			//console.log(this._percentpos, this._pos ,pos);
+			
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
+			this._size = size
+			this._pos = pos;
+			
 			emitPostLayout(copynodes)
+			
+			
 		}
 	}
 

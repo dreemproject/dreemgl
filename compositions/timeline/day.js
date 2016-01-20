@@ -38,7 +38,7 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 	this.render = function() { return [
 		label({
 			name:"label",
-			text: this.date.toLocaleDateString(),
+			//text: this.date.toLocaleDateString(),
 			fgcolor:vec3(0.2,0.2,0.2),
 			fontsize:24,
 			bgcolor:vec3(0.9,0.9,0.9),
@@ -47,27 +47,26 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 			borderradius: 0,
 			padding: vec4(12, 8, 12, 4),
 		})
-		,view({flexdirection :"row", flex: 1,bg:0}
 			,view({
 					flex:1,
 					flexdirection: 'column',
 					overflow: 'scroll'
 				},
 				this.renderHours()
-			)
 			,view({
 					position:"absolute" ,
-					percentagesize:vec2(20,20),
-					x: 300,
-					y:10,
-					height:100,
-					
-					bgcolor:"red",
+					viewport:"2d",
+					percentsize:vec3(50,100,1),
+					percentpos:vec3(50,0,1),
+					//x: 300,
+					//y:10,
+					bgcolor:vec4(1,1,1,0.4),
 					alignself:"flex-end",			
 					flexdirection: 'column',
 					overflow: 'scroll'
 				}				
-			)
 		)		
+			)
+			
 	]}
 });
