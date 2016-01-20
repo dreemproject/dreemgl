@@ -77,7 +77,7 @@
  */
 /**
  * @attribute {Enum} overflow
- * overflow control, shows scrollbars when the content is larger than the viewport. Only works on viewport:'2D'
+ * overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
  * works the same way as the CSS property
  */
 /**
