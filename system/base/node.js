@@ -754,7 +754,7 @@ define.class(function(require, constructor){
 						return
 					}
 					else if(value instanceof Animate){
-						return this.startAnimation(key, value)
+						return this.startAnimation(key, undefined, value.track)
 					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
