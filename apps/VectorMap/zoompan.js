@@ -3,15 +3,17 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	define.class(this, "tiledmap", function($ui$, view)
 	{
 		this.attributes = {
-			centerx: 1000.0,
-			centery: 1000.0,
-			zoomlevel: Config({value:4, motion:"easeinout", duration:0.4}),
-			levels: []
+			centerx: Config({value:0, motion:"inoutquad", duration:0.7}),
+			centery: Config({value:0, motion:"inoutquad", duration:0.7}),
+			zoomlevel: Config({value:4, motion:"inoutquad", duration:0.7}),
+			levels: [],
+			blocksize: 300
+				
 		}
 		
 		this.bg = function(){
 			this.color = function(){
-				var c = 1.0/(1.0+abs(view.zoomlevel - mesh.id));
+				var c = 1.0/(1.0+abs(view.zoomlevel - mesh.id + 1));
 				
 				return vec4(mesh.color.xyz*c, 1);
 			}
@@ -30,12 +32,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				var cy = this.view.layout.height/2;
 				var w = 100;
 				var h = 200;
+				var bw = (Math.ceil(this.view.layout.width / (this.view.blocksize )));
+				var bh = (Math.ceil(this.view.layout.height /( this.view.blocksize)));
+				console.log(bw*2, bh*2)
 				for(var i = 0;i<this.view.levels.length;i++){
-					w = h = Math.pow(2,i-this.view.zoomlevel) * 500;
-					for(var xx = -1;xx<2;xx++){
-						for(var yy = -1;yy<2;yy++){
-							var x = cx - w/2 + w * xx;
-							var y = cy - h/2 + h * yy;
+					w = h = Math.pow(2,i-this.view.zoomlevel-2) * this.view.blocksize;
+					for(var xx = -bw;xx<(bw+1);xx++){
+						for(var yy = -bh;yy<(bh+1);yy++){
+							var x = cx + w * xx;
+							var y = cy + h * yy;
 							mesh.push(x,y,0,vec4("blue"), i);
 							mesh.push(x+w,y,0,vec4("blue"), i);
 							
@@ -52,8 +57,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}
 			}
 			
-			this.position = function(){					
-					var r = vec4(mesh.pos.x, mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix;
+			this.position = function(){		
+
+				var xy = mesh.pos.xy;		
+				xy += vec2(view.centerx, view.centery)*view.blocksize  ;			
+					var r = vec4(xy, 0, 1) * view.totalmatrix * view.viewmatrix;
 					return r
 			}
 			
@@ -93,9 +101,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			if (this.requestPending) return;
 			if (this.loadqueue.length > 0){
 				// sort queue on distance to cursor
-
-				
-				
 			}
 		}
 
@@ -129,11 +134,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			speakergrid({justifycontent:"center", alignitems:"center" }, view({width:300, bg:0, flexdirection:"column", alignself:"center"}
 				,label({fontsize:40, text:"Zoompan" , bg:0})
 				,button({text:"0,0,5",click:function(){this.rpc.index.moveTo(0,0,5);}, margin:2})
-				,button({text:"10,0,5",click:function(){this.rpc.index.moveTo(10,0,5);}, margin:2})
-				,button({text:"0,10,5",click:function(){this.rpc.index.moveTo(0,10,5);}, margin:2})
+				,button({text:"1,0,5",click:function(){this.rpc.index.moveTo(1,0,5);}, margin:2})
+				,button({text:"0,1,5",click:function(){this.rpc.index.moveTo(0,1,5);}, margin:2})
 				,button({text:"0,0,6",click:function(){this.rpc.index.moveTo(0,0,6);}, margin:2})
-				,button({text:"10,0,4",click:function(){this.rpc.index.moveTo(10,0,4);}, margin:2})
-				,button({text:"0,10,4",click:function(){this.rpc.index.moveTo(0,10,4);}, margin:2})
+				,button({text:"4,0,4",click:function(){this.rpc.index.moveTo(4,0,4);}, margin:2})
+				,button({text:"0,2,4",click:function(){this.rpc.index.moveTo(0,2,4);}, margin:2})
 				,button({text:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
 				,button({text:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
 				,button({text:"Noord Amsterdam",click:function(){this.rpc.index.moveTo(33656,21434, 16);}, margin:2})

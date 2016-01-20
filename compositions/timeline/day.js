@@ -14,7 +14,7 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 
 	this.renderHours = function() {
  		var hourViews = [];
- 		for (var i=0;i<24;i++) {
+ 		for (var i = 0;i < 24; i++) {
  			hourViews.push(hour({
 				text: i,
 				bgcolor: vec4(0, 0, 0, i % 2 ? 0 : 0.01)
