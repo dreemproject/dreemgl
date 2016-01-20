@@ -9,7 +9,7 @@ here:
 
 ## Views
 
-view.js is the baseclass of all visible items on screen.  It contains
+[view.js](https://github.com/teem2/dreemgl/blob/dev/system/base/view.js) is the baseclass of all visible items on screen.  It contains
 all attributes that are used by the render system to layout, and draw
 a view. A **view** has a set of 'children' on this.children and a set of
 **shaders** that it iterates over to draw them.
