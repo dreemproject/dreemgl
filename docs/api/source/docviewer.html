@@ -907,7 +907,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 }
 
                                                 <span class="keyword">var</span> typename = <span class="string"><span class="delimiter">&quot;</span><span class="content">typeless</span><span class="delimiter">&quot;</span></span>;
-                                                <span class="keyword">if</span> (attr.type) typename = attr.type.name.toString()
+                                                <span class="keyword">if</span> (attr.type &amp;&amp; attr.type.name) typename = attr.type.name.toString()
 
                                                 <span class="keyword">if</span>(typename === <span class="string"><span class="delimiter">'</span><span class="content">Event</span><span class="delimiter">'</span></span>){
                                                         class_doc.events.push({<span class="key">name</span>: attrname, <span class="key">body_text</span>: grabFirstCommentAbove(step.cmu)})

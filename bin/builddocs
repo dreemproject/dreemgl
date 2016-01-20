@@ -16,8 +16,10 @@ rm -rf $API_DOCS_DIR
 
 echo "Regenerating classdoc..."
 echo "Press [ENTER] once doc generator is finished"
+killall node
 node server.js -browser 'apps/docs/docgen' &
 read
+killall node
 
 echo "Building docs..."
 jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES"

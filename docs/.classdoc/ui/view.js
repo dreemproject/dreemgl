@@ -109,6 +109,36 @@
  * alias for the z component of size
  */
 /**
+ * @attribute {vec3} [percentsize="NaN,NaN,NaN"]
+ */
+/**
+ * @attribute {typeless} percentwidth
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentheight
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentdepth
+ * percentage widths/heights
+ */
+/**
+ * @attribute {vec3} [percentpos="NaN,NaN,NaN"]
+ */
+/**
+ * @attribute {typeless} percentx
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percenty
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentz
+ * percentage widths/heights
+ */
+/**
  * @attribute {float32} pixelratio
  * the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
  */

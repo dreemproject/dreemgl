@@ -274,7 +274,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 						}
 
 						var typename = "typeless";
-						if (attr.type) typename = attr.type.name.toString()
+						if (attr.type && attr.type.name) typename = attr.type.name.toString()
 
 						if(typename === 'Event'){
 							class_doc.events.push({name: attrname, body_text: grabFirstCommentAbove(step.cmu)})

@@ -572,6 +572,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n418" name="n418">418</a>
 <a href="#n419" name="n419">419</a>
 <strong><a href="#n420" name="n420">420</a></strong>
+<a href="#n421" name="n421">421</a>
+<a href="#n422" name="n422">422</a>
+<a href="#n423" name="n423">423</a>
+<a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
@@ -781,6 +786,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> pick_id = <span class="integer">0</span>
                 <span class="keyword">var</span> draw = view
                 <span class="keyword">while</span>(draw){
+                        draw.draw_dirty &amp;= <span class="integer">1</span>
+
                         pick_id+= draw.pickrange;
                         <span class="keyword">if</span>(!draw._visible || draw._first_draw_pick &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
                         }
@@ -945,6 +952,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">var</span> draw = view
                 <span class="keyword">while</span>(draw){
+                        draw.draw_dirty &amp;= <span class="integer">2</span>
+
                         <span class="comment">//}</span>
                         <span class="comment">//for(var dl = this.draw_list, i = 0; i &lt; dl.length; i++){</span>
                         <span class="comment">//        var draw = dl[i]</span>
@@ -966,6 +975,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">else</span>{
                                         count += <span class="local-variable">this</span>.drawNormal(draw, view, matrices)
                                 }
+                                
 
                                 <span class="keyword">if</span>(draw.debug_view){
                                         <span class="local-variable">this</span>.debugrect.view = draw

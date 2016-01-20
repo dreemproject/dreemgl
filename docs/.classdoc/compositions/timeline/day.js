@@ -9,6 +9,9 @@
  * @attribute {Enum} [format="24"]
  */
 /**
+ * @method init
+ */
+/**
  * @method ondate
  * @param event
  */
