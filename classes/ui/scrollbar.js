@@ -77,9 +77,9 @@ define.class(function($ui$, view){
 		}
 	}
 
-	this.borderwidth = 0
+	//this.borderwidth = 0
 	this.margin = 1
-	this.bordercolor = vec4("#303030")
+	//this.bordercolor = vec4("#303030")
 	
 	this.pressed = 0
 	this.hovered = 0
