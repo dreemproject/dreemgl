@@ -37,7 +37,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.attributes = {				
 				buildings:[],
-				scalefactor: 1.0
+				scalefactor: 1.0,
+				currentbuilding:0
 			}
 
 			this.boundscheck = false;
@@ -48,8 +49,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 		
 		
+			this.mouseout = function(){
+				this.currentbuilding = -1;
+			}
 			this.mouseover =  function(){
 				var building = this.buildings[this.last_pick_id ];
+				this.currentbuilding = this.last_pick_id;
 				if (building){
 				var text = "Building";
 					//console.log(building);
@@ -77,6 +82,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.color = function(){
 
 					PickGuid = mesh.id;
+					if (view.currentbuilding == mesh.id) return "red"
 					return mesh.color;
 				}
 		
