@@ -95,10 +95,19 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			var l = vec2.len(dist);
 			console.log(l);
 			var totaltime = Math.max(0.3,Math.min(10, l*0.3));
-			var halftime = totaltime / 2;			
-			this.centerx = Animate({totaltime:{motion:"inoutquad", value:x}});
-			this.centery = Animate({totaltime:{motion:"inoutquad", value:y}});
-			this.zoomlevel = Animate({halftime:{motion:"outquad",value:this.zoomlevel-0.4}, totaltime:{motion:"inquad", value:z}});		
+			var halftime = totaltime / 2;	
+			var xanim = {}
+			xanim[totaltime] = {motion:"inoutquad", value:x};
+			var yanim = {}
+			yanim[totaltime] = {motion:"inoutquad", value:y};
+			this.centerx = Animate(xanim);
+			this.centery = Animate(yanim);
+			
+			var zanim = {}
+			zanim[halftime] = {motion:"outquad", value:this.zoomlevel-0.4};
+			zanim[totaltime] = {motion:"inquad", value:z};
+			
+			this.zoomlevel = Animate(zanim);		
 
 			for(var xx = -3; xx < 3; xx++){
 				for(var yy = -3; yy < 3; yy++){			
