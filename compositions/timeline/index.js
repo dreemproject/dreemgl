@@ -5,8 +5,8 @@ define.class('$server/composition', function(require, day, $ui$, screen, view) {
 		{
 			name: 'Breakfast',
 			location: 'Barkeley',
-			start: new Date(now.getYear(),now.getMonth(),now.getDate(),9,0,0),
-			end: new Date(now.getYear(),now.getMonth(),now.getDate(),10,30,0),
+			start: new Date(now.getYear(),now.getMonth(),now.getDate(),7,0,0),
+			end: new Date(now.getYear(),now.getMonth(),now.getDate(),9,30,0),
 		},
 		{
 			name: 'Lunch',
