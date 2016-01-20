@@ -1493,7 +1493,13 @@
 					}
 					// treat as array
 					if(arg0 === null  || arg0 === undefined) return out
-					if(arg0.struct || Array.isArray(arg0)){
+					if(Array.isArray(arg0)){
+						var iter = Math.min(mysize, arg0.length)
+						for(var i = 0; i < iter; i++) out[i] = arg0[i]
+						for(;i<mysize;i++) out[i] = 1
+						return out
+					}
+					if(arg0.struct){
 						var iter = Math.min(mysize, arg0.struct.slots)
 						for(var i = 0; i < iter; i++) out[i] = arg0[i]
 						for(;i<mysize;i++) out[i] = 1
