@@ -979,6 +979,12 @@ define.class('$system/base/node', function(require){
 			var layout = this._layout
 			var flex = this._flex
 			var size = this._size
+			
+			//var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
+			//var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
+
+			//this._size = vec2(layout.width, layout.height)
+			
 			var flexwrap = this._flexwrap
 			this._flex = 1
 			this._size = vec2(layout.width, layout.height)
