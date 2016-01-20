@@ -90,7 +90,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		this.moveTo = function(x,y,z){
 			this.centerx = x;
 			this.centery = y;
-			this.zoomlevel = Animate({value:z});		
+			this.zoomlevel = Animate({1:z-1, 2:z});		
 
 			for(var xx = -3; xx < 3; xx++){
 				for(var yy = -3; yy < 3; yy++){			
