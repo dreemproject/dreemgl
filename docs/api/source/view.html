@@ -1605,6 +1605,32 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1451" name="n1451">1451</a>
 <a href="#n1452" name="n1452">1452</a>
 <a href="#n1453" name="n1453">1453</a>
+<a href="#n1454" name="n1454">1454</a>
+<a href="#n1455" name="n1455">1455</a>
+<a href="#n1456" name="n1456">1456</a>
+<a href="#n1457" name="n1457">1457</a>
+<a href="#n1458" name="n1458">1458</a>
+<a href="#n1459" name="n1459">1459</a>
+<strong><a href="#n1460" name="n1460">1460</a></strong>
+<a href="#n1461" name="n1461">1461</a>
+<a href="#n1462" name="n1462">1462</a>
+<a href="#n1463" name="n1463">1463</a>
+<a href="#n1464" name="n1464">1464</a>
+<a href="#n1465" name="n1465">1465</a>
+<a href="#n1466" name="n1466">1466</a>
+<a href="#n1467" name="n1467">1467</a>
+<a href="#n1468" name="n1468">1468</a>
+<a href="#n1469" name="n1469">1469</a>
+<strong><a href="#n1470" name="n1470">1470</a></strong>
+<a href="#n1471" name="n1471">1471</a>
+<a href="#n1472" name="n1472">1472</a>
+<a href="#n1473" name="n1473">1473</a>
+<a href="#n1474" name="n1474">1474</a>
+<a href="#n1475" name="n1475">1475</a>
+<a href="#n1476" name="n1476">1476</a>
+<a href="#n1477" name="n1477">1477</a>
+<a href="#n1478" name="n1478">1478</a>
+<a href="#n1479" name="n1479">1479</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
@@ -1684,6 +1710,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">height</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
                 <span class="comment">// alias for the z component of size</span>
                 <span class="key">depth</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
+
+                <span class="key">percentsize</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>)}),
+
+                <span class="comment">// percentage widths/heights</span>
+                <span class="key">percentwidth</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
+                <span class="comment">// percentage widths/heights</span>
+                <span class="key">percentheight</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
+                <span class="comment">// percentage widths/heights</span>
+                <span class="key">percentdepth</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
+
+                <span class="key">percentpos</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>)}),
+
+                <span class="comment">// percentage widths/heights</span>
+                <span class="key">percentx</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
+                <span class="comment">// percentage widths/heights</span>
+                <span class="key">percenty</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
+                <span class="comment">// percentage widths/heights</span>
+                <span class="key">percentz</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)</span>
                 <span class="key">pixelratio</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>:<span class="predefined-constant">NaN</span>}),
@@ -2161,12 +2205,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// redraw our view and bubble up the viewport dirtiness to the root</span>
         <span class="local-variable">this</span>.<span class="function">redraw</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.parent_viewport || <span class="local-variable">this</span>.parent_viewport.draw_dirty === <span class="integer">3</span>) <span class="keyword">return</span>
+                <span class="local-variable">this</span>.draw_dirty = <span class="integer">3</span>
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.parent_viewport){
+                        <span class="keyword">return</span>
+                }
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport.draw_dirty === <span class="integer">3</span>){
+                        <span class="keyword">return</span>
+                }
                 <span class="keyword">var</span> parent = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(parent){
                         <span class="keyword">var</span> viewport = parent.parent_viewport
                         <span class="keyword">if</span>(!viewport) <span class="keyword">break</span>
-                        <span class="keyword">if</span>(viewport.draw_dirty === <span class="integer">3</span>) <span class="keyword">return</span>
+                        <span class="keyword">if</span>(viewport.draw_dirty === <span class="integer">3</span>){
+                                <span class="keyword">return</span>
+                        }
                         viewport.draw_dirty = <span class="integer">3</span>
                         parent = viewport.parent
                 }

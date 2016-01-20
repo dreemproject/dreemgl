@@ -207,6 +207,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n53" name="n53">53</a>
 <a href="#n54" name="n54">54</a>
 <a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, hour, <span class="predefined">$ui$</span>, view, label) {
 
@@ -214,7 +218,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>;
         <span class="local-variable">this</span>.flex =<span class="integer">1</span>;
 
-
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
+                window.d = <span class="local-variable">this</span>
+        }
+        
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">date</span>: <span class="predefined-constant">null</span>,
                 <span class="key">format</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">24</span><span class="delimiter">&quot;</span></span>}),
@@ -230,7 +237,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> h = i;
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.format == <span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>) {
                                 h = (h % <span class="integer">12</span> || <span class="integer">12</span>) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + (i &lt; <span class="integer">12</span> ? <span class="string"><span class="delimiter">'</span><span class="content">am</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">pm</span><span class="delimiter">'</span></span>);
-                        } <span class="keyword">else</span> {
+                        } 
+                        <span class="keyword">else</span> {
                                 h += <span class="string"><span class="delimiter">'</span><span class="content"> h</span><span class="delimiter">'</span></span>;
                         }
                          hourViews.push(hour({

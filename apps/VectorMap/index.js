@@ -694,9 +694,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
 				this.mainscreen({ name:"mainscreen", 				
 					//perspective cam: 
-					//camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
+					camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
 					// "ortho" cam: 
-					camera:vec3(3000,3000,6000), fov:30, lookat:vec3(3000,3000,0),nearplane:10, farplane:12000, up:vec3(0,1,0),viewport:"3d",
+					//camera:vec3(3000,3000,6000), fov:30, lookat:vec3(3000,3000,0),nearplane:10, farplane:12000, up:vec3(0,1,0),viewport:"3d",
 					boundscheck:false, flex:1, 
 				}),
 				ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"mainscreen"})

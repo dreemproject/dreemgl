@@ -317,6 +317,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n163" name="n163">163</a>
 <a href="#n164" name="n164">164</a>
 <a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
 </pre></td>
   <td class="code"><pre><span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$server$</span>, fileio, dataset, <span class="predefined">$ui$</span>, screen, <span class="predefined">$widgets$</span>, docprinter){
@@ -443,13 +447,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                             <span class="keyword">function</span> <span class="function">buildDocs</span>(paths) {
                                 <span class="keyword">var</span> path = paths.pop();
                                 <span class="keyword">while</span> (path &amp;&amp; (
-                                <span class="comment">// FIXME: these paths don't have files that can be read properly for various reasons</span>
+                                <span class="comment">// FIXME: many of these paths have files that can't be read properly for various reasons</span>
                                 path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">fontsdfgen</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">define</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">docs/api</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
+                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">docs/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">lib</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">index.js</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">textboximpl</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
+                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">examples/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
+                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">apps/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
+                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">flow/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
+                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">compositions/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/server/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">debug</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
                                 || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">gitsync</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
@@ -462,7 +470,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                     path = paths.pop()
                                 }
                                 <span class="keyword">if</span> (path) {
-                                    <span class="comment">//console.log('Fetch Path:', path)</span>
+                                    console.log(<span class="string"><span class="delimiter">'</span><span class="content">Fetch Path:</span><span class="delimiter">'</span></span>, path)
                                     require.async(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + path).then(<span class="keyword">function</span>(module){
                                         <span class="keyword">var</span> rendered = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">docs</span><span class="delimiter">'</span></span>).renderToJSDuck(module);
                                         <span class="local-variable">this</span>.rpc.fileio.writeToPath(path, rendered).then(<span class="keyword">function</span>(){

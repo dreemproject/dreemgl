@@ -571,7 +571,6 @@ define.class('$system/base/node', function(require){
 
 	// redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
-		this.draw_dirty = 3
 		if(!this.parent_viewport){
 			return
 		}
@@ -588,6 +587,7 @@ define.class('$system/base/node', function(require){
 			viewport.draw_dirty = 3
 			parent = viewport.parent
 		}
+		this.draw_dirty = 3
 		if(this.screen.device && this.screen.device.redraw) {
 			this.screen.device.redraw()
 		}

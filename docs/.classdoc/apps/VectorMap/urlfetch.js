@@ -1,4 +1,0 @@
-/**
- * @class urlfetch
- * @extends service
- */
