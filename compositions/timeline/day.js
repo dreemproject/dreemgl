@@ -45,15 +45,27 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 			borderbottomwidth: 1,
 			bordercolor: 'black',
 			borderradius: 0,
-			padding: vec4(12, 8, 12, 4)
+			padding: vec4(12, 8, 12, 4),
 		})
-
-		,view({
-			flex:1,
-			flexdirection: 'column',
-			overflow: 'scroll'
-		},
-			this.renderHours()
-		)
+		,view({flexdirection :"row", flex: 1,bg:0}
+			,view({
+					flex:1,
+					flexdirection: 'column',
+					overflow: 'scroll'
+				},
+				this.renderHours()
+			)
+			,view({
+					position:"absolute" ,
+					width:200,
+					x: 300,
+					flex: 1,
+					bgcolor:"red",
+					alignself:"flex-end",			
+					flexdirection: 'column',
+					overflow: 'scroll'
+				}				
+			)
+		)		
 	]}
 });
