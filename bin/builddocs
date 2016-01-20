@@ -15,6 +15,7 @@ echo "Removing old docs..."
 rm -rf $API_DOCS_DIR
 
 echo "Regenerating classdoc..."
+rm -rf "$CLASSDOC_DIR"
 echo "Press [ENTER] once doc generator is finished"
 killall node
 node server.js -browser 'apps/docs/docgen' &

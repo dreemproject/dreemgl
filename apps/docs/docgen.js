@@ -123,13 +123,17 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
                             function buildDocs(paths) {
                                 var path = paths.pop();
                                 while (path && (
-                                // FIXME: these paths don't have files that can be read properly for various reasons
+                                // FIXME: many of these paths have files that can't be read properly for various reasons
                                 path.indexOf('fontsdfgen') > -1
                                 || path.indexOf('define') > -1
-                                || path.indexOf('docs/api') > -1
+                                || path.indexOf('docs/') > -1
                                 || path.indexOf('lib') > -1
                                 || path.indexOf('index.js') > -1
                                 || path.indexOf('textboximpl') > -1
+                                || path.indexOf('examples/') > -1
+                                || path.indexOf('apps/') > -1
+                                || path.indexOf('flow/') > -1
+                                || path.indexOf('compositions/') > -1
                                 || path.indexOf('/server/') > -1
                                 || path.indexOf('debug') > -1
                                 || path.indexOf('gitsync') > -1
@@ -142,7 +146,7 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
                                     path = paths.pop()
                                 }
                                 if (path) {
-                                    //console.log('Fetch Path:', path)
+                                    console.log('Fetch Path:', path)
                                     require.async('$' + path).then(function(module){
                                         var rendered = this.find('docs').renderToJSDuck(module);
                                         this.rpc.fileio.writeToPath(path, rendered).then(function(){
