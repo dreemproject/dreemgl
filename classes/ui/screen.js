@@ -437,7 +437,7 @@ define.class(function(require, $ui$view, $ui$, button, view, menubutton) {
 					// lets find the mouseover or mousemove view
 					var mo_view = view && view.findEmitUpward('mouseover')
 					this.mouse_view = view
-					if(this.mouse_over !== mo_view || this.last_over_pick_id !== mo_view.last_pick_id){
+					if(this.mouse_over !== mo_view || mo_view && this.last_over_pick_id !== mo_view.last_pick_id){
 						if(this.mouse_over) this.mouse_over.emitUpward('mouseout', {local:this.remapMouse(this.mouse_over)})
 						this.mouse_over = mo_view
 						if(this.mouse_over) this.mouse_over.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_over)})

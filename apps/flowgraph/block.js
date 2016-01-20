@@ -129,7 +129,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.pos = vec2(Math.round(nx),Math.round(ny));
 		var fg = this.find("flowgraph")
 		fg.setActiveBlock(this);
-		fg.updateconnections();
+		fg.updateConnections();
 		
 	}
 	
@@ -166,7 +166,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	this.setupMove = function(){
 		this.startx = this.pos[0];
-		this.starty = this.pos[1];	
+		this.starty = this.pos[1];
+		console.log(this.pos)
 	}
 	
 	this.updateMove = function(dx, dy, snap){
@@ -203,6 +204,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var dy = p[1] - this.startposition[1];
 	
 			var	fg = this.find("flowgraph");
+
 			fg.moveSelected(dx, dy, false);
 			
 			
@@ -248,21 +250,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	define.class(this, "inputbutton", function($ui$, view, label){
-		this.bg = {pickonly:true};
+		this.bg = {pickonly:true}
+
 		this.attributes = {
 			name:"thing",
 			title:"tadaa",
 			type:""
 		}
 		
-		this.marginbottom = 4;
-
-		
+		this.marginbottom = 4
 		
 		this.clicked = function(){
-			var	bl = this.parent.parent.parent;
-			var	fg = this.find("flowgraph");
-			fg.setConnectionEndpoint(bl.name, this.name);	
+			var	bl = this.parent.parent.parent
+			var	fg = this.find("flowgraph")
+			fg.setConnectionEndpoint(bl.name, this.name)
 		}	
 		
 		this.mouseover  = function(){
@@ -282,10 +283,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	define.class(this, "outputbutton", function($ui$, view, label){
 		this.bg = {pickonly:true};
 		this.attributes = {
-			name:"thing"		,
+			name:"thing",
 			title:"thing",
 			type:""
-			}
+		}
 		
 		this.mouseover  = function(){
 			this.screen.status = this.hovertext;
@@ -359,7 +360,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				,view({bg:0, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
 					,button({class:"header", icon:"pencil",click:function(){this.renameBlock();}.bind(this)})
-					)
+				)
 				,button({class:"header", icon:"remove",click:function(){this.removeBlock();}.bind(this)})
 			)
 			,view({class:'main'},
