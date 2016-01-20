@@ -258,6 +258,7 @@ define.class(function(require, exports){
 	}
 
 	this.doColor = function(time){
+
 		if(!this.first_time) this.first_time = time
 		this.last_time = time
 	
@@ -302,7 +303,7 @@ define.class(function(require, exports){
 			var skip = false
 			var last = i === len - 1
 			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
-				skip = last = true							
+				skip = last = true
 			}
 
 			if(view.draw_dirty & 1 || last){
@@ -359,6 +360,7 @@ define.class(function(require, exports){
 			this.layout_idx = 0
 			this.addDrawPassRecursive(node)
 			this.first_draw_done = false
+			this.redraw()
 		}
 		else{ // else we remove drawpasses first then re-add them
 			this.removeDrawPasses(node)

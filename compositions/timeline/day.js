@@ -4,7 +4,10 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 	this.bgcolor = 'black';
 	this.flex =1;
 
-
+	this.init = function(){
+		window.d = this
+	}
+	
 	this.attributes = {
 		date: null,
 		format: Config({type: Enum('12','24'),  value: "24"}),
@@ -20,7 +23,8 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 			var h = i;
 			if (this.format == '12') {
 				h = (h % 12 || 12) + ' ' + (i < 12 ? 'am' : 'pm');
-			} else {
+			} 
+			else {
 				h += ' h';
 			}
  			hourViews.push(hour({

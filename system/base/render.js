@@ -12,8 +12,7 @@ define.class(function(exports){
 	function __atAttributeGet(key){
 		if(!initializing){
 			exports.process(this, undefined, undefined, true)
-			this.relayout()
-			this.redraw()
+			//this.relayout()
 		}
 	}
 		
