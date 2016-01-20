@@ -332,6 +332,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n178" name="n178">178</a>
 <a href="#n179" name="n179">179</a>
 <strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> <span class="function">vectormap</span>(require,  <span class="predefined">$server$</span>, fileio,<span class="predefined">$ui$</span>, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, <span class="predefined">$widgets$</span>, colorpicker,  jsviewer, radiogroup, <span class="predefined">$3d$</span>, ballrotate, <span class="predefined">$$</span>, urlfetch){
 
@@ -426,23 +433,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 
                 <span class="local-variable">this</span>.<span class="function">moveTo</span> = <span class="keyword">function</span>(x,y,z){
                         
-                        <span class="keyword">var</span> dist = vec2(x - <span class="local-variable">this</span>.centerx,y - <span class="local-variable">this</span>.centery);
+                        <span class="keyword">var</span> dist = vec2((x?x:<span class="local-variable">this</span>.centerx) - <span class="local-variable">this</span>.centerx,(y?y:<span class="local-variable">this</span>.centery) - <span class="local-variable">this</span>.centery);
                         <span class="keyword">var</span> l = vec2.len(dist);
-                        console.log(l);
-                        <span class="keyword">var</span> totaltime = Math.max(<span class="float">0.3</span>,Math.min(<span class="integer">10</span>, l*<span class="float">0.3</span>));
+                        <span class="keyword">var</span> totaltime = Math.max(<span class="integer">1</span>.,Math.min(<span class="integer">10</span>, l*<span class="float">0.3</span>));
                         <span class="keyword">var</span> halftime = totaltime / <span class="integer">2</span>;        
-                        <span class="keyword">var</span> xanim = {}
-                        xanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:x};
-                        <span class="keyword">var</span> yanim = {}
-                        yanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:y};
-                        <span class="local-variable">this</span>.centerx = Animate(xanim);
-                        <span class="local-variable">this</span>.centery = Animate(yanim);
                         
-                        <span class="keyword">var</span> zanim = {}
-                        zanim[halftime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">outquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.zoomlevel-<span class="float">0.4</span>};
-                        zanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:z};
+                        <span class="keyword">if</span> (x !== <span class="predefined-constant">undefined</span>) {
+                                <span class="keyword">var</span> xanim = {}
+                                xanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:x};
+                        }
                         
-                        <span class="local-variable">this</span>.zoomlevel = Animate(zanim);                
+                        <span class="keyword">if</span> (y !== <span class="predefined-constant">undefined</span>) {
+                                <span class="keyword">var</span> yanim = {}
+                                yanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:y};
+                                <span class="local-variable">this</span>.centerx = Animate(xanim);
+                                <span class="local-variable">this</span>.centery = Animate(yanim);
+                        }
+                        
+                        <span class="keyword">if</span> (z !== <span class="predefined-constant">undefined</span>) {
+                                <span class="keyword">var</span> zanim = {}
+                                zanim[halftime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">outquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.zoomlevel-<span class="float">0.4</span>};
+                                zanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:z};
+                        
+                                <span class="local-variable">this</span>.zoomlevel = Animate(zanim);                
+                        }
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> xx = -<span class="integer">3</span>; xx &lt; <span class="integer">3</span>; xx++){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> yy = -<span class="integer">3</span>; yy &lt; <span class="integer">3</span>; yy++){                        
