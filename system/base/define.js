@@ -1494,7 +1494,9 @@
 					// treat as array
 					if(arg0 === null  || arg0 === undefined) return out
 					if(arg0.struct || Array.isArray(arg0)){
-						for(var i = 0; i < mysize; i++) out[i] = arg0[i]
+						var iter = Math.min(mysize, arg0.struct.slots)
+						for(var i = 0; i < iter; i++) out[i] = arg0[i]
+						for(;i<mysize;i++) out[i] = 1
 						return out
 					}
 					if(arg0.____struct && arg0.data){

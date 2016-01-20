@@ -309,7 +309,6 @@ define(function(require, exports){
 			a[2] = rgb[3]/255.0;
 			a[3] = 1.0;
 //			console.log("rgb" ,a);
-
 			return a;
 		}
 
