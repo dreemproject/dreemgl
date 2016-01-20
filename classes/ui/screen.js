@@ -667,7 +667,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			this.releaseCapture()
 
 			// wrap our render function in a temporary view
-			var vroot = $ui$view()
+			var vroot = view()
 			// set up stuff
 			vroot.render = render
 			vroot.parent = this
