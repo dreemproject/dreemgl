@@ -637,8 +637,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.load = function(name){
 				this.rpc.fileio.readfile("$apps/VectorMap/"+name  ).then(function(result){
-					this.loadstring(result.value);					
-				
+					this.loadstring(result.value);
 				}.bind(this));		
 			}	
 			
@@ -684,7 +683,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.find("themap").moveTo(x,y,zoom);
 				},
 				onstatus:function(){this.find("themenu").infotext = this.status;},
-				clearcolor:vec4('#303030'), overflow:'hidden', title:"VectorMap" },
+				clearcolor:vec4('#303030'), overflow:'hidden', title:"VectorMap"},
 				menubar({
 					name:"themenu",menus:[
 						{name:"File", commands:[
@@ -714,6 +713,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			init:function(){
 				console.log(this.rpc.index)
 			},
+			
 			clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
 			speakergrid({justifycontent:"center", alignitems:"center" }, view({width:300, bg:0, flexdirection:"column", alignself:"center"}
 			,label({fontsize:40, text:"Vectormap" , bg:0})

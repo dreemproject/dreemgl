@@ -57,9 +57,11 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 			)
 			,view({
 					position:"absolute" ,
-					width:200,
+					percentagesize:vec2(20,20),
 					x: 300,
-					flex: 1,
+					y:10,
+					height:100,
+					
 					bgcolor:"red",
 					alignself:"flex-end",			
 					flexdirection: 'column',
