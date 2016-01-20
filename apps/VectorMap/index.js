@@ -180,7 +180,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						pedestrian:-9, 
 						parking:-8, 
 						park:-7, 
-						earth:-6, 
+						earth:10, 
 						pier:-5, 
 						"rail" : -4,
 						"minor_road":-55, 
@@ -236,7 +236,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				
 				this.position = function(){					
 					var r = vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix;
-				//	r.w -= mesh.pos.z*0.01;
+					r.w -= mesh.pos.z*0.01;
 					return r
 				}
 					
@@ -393,7 +393,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.position = function(){					
 					var pos = mesh.pos.xy + mesh.sidevec * mesh.side * view.zoomscale*mesh.linewidth*0.5;
 					var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
-				//	res.w += mesh.pos.z;
+					res.w += mesh.pos.z;
 					return res
 				}
 				
@@ -686,7 +686,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					//perspective cam: 
 					//camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
 					// "ortho" cam: 
-					//camera:[3000,3000,6000 ], fov:30, lookat:[3000,3000,0],nearplane:10, farplane:12000, up:[0,1,0],viewport:"3d",
+					camera:[3000,3000,6000 ], fov:30, lookat:[3000,3000,0],nearplane:10, farplane:12000, up:[0,1,0],viewport:"3d",
 					boundscheck:false, flex:1, 
 				}),
 				ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"mainscreen"})
