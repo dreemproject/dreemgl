@@ -1,4 +1,4 @@
-define.class(function (require, hour, $ui$, view, label) {
+define.class('$ui/view', function (require, hour, $ui$, view, label) {
 
 	this.flexdirection = 'column';
 	this.bgcolor = 'black';
@@ -17,7 +17,7 @@ define.class(function (require, hour, $ui$, view, label) {
  		for (var i=0;i<24;i++) {
  			hourViews.push(hour({
 				text: i,
-				bgcolor: vec3(1, 1, i/24)
+				bgcolor: vec4(0, 0, 0, i % 2 ? 0 : 0.01)
 			}));
  		}
  		return hourViews;
@@ -29,8 +29,12 @@ define.class(function (require, hour, $ui$, view, label) {
 			text: this.date.toLocaleDateString(),
 			fgcolor:vec3(0.2,0.2,0.2),
 			fontsize:24,
-			bgcolor:vec3(0.9,0.9,0.9)
+			bgcolor:vec3(0.9,0.9,0.9),
+			borderbottomwidth: 1,
+			bordercolor: 'black',
+			borderradius: 0
 		})
+
 		,view({
 			flex:1,
 			flexdirection: 'column',
