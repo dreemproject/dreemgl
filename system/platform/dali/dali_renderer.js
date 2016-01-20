@@ -27,6 +27,12 @@ define.class(function(require, exports){
 	var DaliRenderer = exports
 	DaliRenderer.GlobalId = 0
 
+	// The depth index does not auto-increment. Child layers should have a 
+	// larger value than parent so child actors are rendered after parent.
+	// An alternate solution suggested by Nick, is to add an actor as a child
+	// to another actor (no depthindex changes are needed).
+	DaliRenderer.DepthIndex = 5
+
 	/**
 	 * @method constructor
 	 * Create a dali.Renderer object by specifying a geometry and material
@@ -44,11 +50,12 @@ define.class(function(require, exports){
 		this.dalimaterial = material;
 		this.dalirenderer = new dali.Renderer(this.daligeometry.daligeometry, this.dalimaterial.dalimaterial);
 
-		//this.dalirenderer.depthIndex = 0;
+		DaliRenderer.DepthIndex += 5;
+		this.dalirenderer.depthIndex = DaliRenderer.DepthIndex;
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + ' = new dali.Renderer(' + this.daligeometry.name() + ', ' + this.dalimaterial.name() + ');');
-			//console.log('DALICODE: ' + this.name() + '.depthIndex = 0;');
+			console.log('DALICODE: ' + this.name() + '.depthIndex = ' + DaliRenderer.DepthIndex + ';');
 		}		
 
 	}
