@@ -3,9 +3,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 	define.class(this, "mainscreen", function($ui$, view){		
 	
 	define.class(this, "tiledmap", function($ui$, view){
-	
+
 		var earcut = require('$system/lib/earcut-port.js')().earcut;
-		
+
 		function arctotriangles(arc){
 			if (!arc) return []
 			var verts = []
@@ -34,7 +34,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 			return verts
 		}
-		
+
 		define.class(this, "building", function($ui$, view){
 			
 			this.attributes = {

@@ -32,7 +32,7 @@ define.class(function(require, constructor){
 	this.setInterval = function(fn, mstime){
 		if(!this.interval_ids) this.interval_ids = []
 		var id = window.setInterval(function(){
-			this.interval_ids.splice(this.timeout_ids.indexof(id), 1)
+			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
 			fn.call(this)
 		}.bind(this), mstime)
 		this.interval_ids.push(id)
@@ -40,7 +40,7 @@ define.class(function(require, constructor){
 	}
 
 	this.clearInterval = function(id){
-		var idx = this.interval_ids.indexof(id)
+		var idx = this.interval_ids.indexOf(id)
 		if(idx !== -1){
 			this.interval_ids.splice(idx, 1)
 		 	window.clearInterval(id)
