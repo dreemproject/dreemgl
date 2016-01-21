@@ -6,7 +6,6 @@
 define.class('$system/base/node', function(require){
 // Base UI object
 
-
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')

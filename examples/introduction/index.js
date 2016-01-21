@@ -3,7 +3,7 @@ define.class('$server/composition', function(require,
 	$behaviors$, draggable, 
 	$3d$, teapot, ballrotate, 
 	$widgets$, docviewer, jsviewer, slideviewer){
-	// Live coding presentation docs!
+	// internal, Live coding presentation docs!
 	this.attributes = {
 		test:vec4('red')
 	}

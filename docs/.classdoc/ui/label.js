@@ -1,7 +1,7 @@
 /**
  * @class label
  * @extends view
- * require("$fonts/arial_bold.glf")
+ * A simple UI label for displaying text
  */
 /**
  * @attribute {vec4} [fgcolor="1,1,1,1"]
