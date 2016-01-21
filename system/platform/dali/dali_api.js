@@ -1,4 +1,4 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -32,7 +32,8 @@ define.class(function(exports){
 	});
 
 
-	// Set emitcode to true to emit dali code
+	// Set emitcode to true to emit dali code to the console. These lines
+	// are preceeded with DALICODE to make it easier to extract into a file.
 	DaliApi.emitcode = false;
 
 	// Create all actors on a layer to ignore depth test.
@@ -40,7 +41,15 @@ define.class(function(exports){
 	// depthIndex property of Renderers.)
 	DaliApi.rootlayer = undefined;
 
-	// The current layer to use when adding actors
+	// The current layer to use when adding actors. Set by setLayer(). If
+	// currentlayer is never set, the root layer (DaliApi.rootlayer) is used.
+	// Actors are added in order so the normal order of execution is:
+	//   - Create a DaliLayer object,
+    //   - Call DaliApi.setLayer to make this layer the current layer
+	//   - Add actors using DaliApi.addActor. This will use the current layer
+	//     if none was specified.
+	//   - Repeat the above process. You can reset the current layer by
+	//     passing null to DaliApi.setLayer
 	DaliApi.currentlayer = undefined;
 
 	/**
@@ -48,27 +57,26 @@ define.class(function(exports){
 	 * Static method to specify the layer to use when actors are added to the
 	 * stage. Simple applications will never call this method because the
 	 * default layer is sufficient.
-	 * @param {object} layer DaliLayer object to use. If missing, the default
-	 *                       layer is used.
+	 * @param {object} layer DaliLayer object to use. If missing, the built-in
+	 *                       root layer is used.
 	 */
 	DaliApi.setLayer = function(layer) {
 		if (!layer)
 			layer = DaliApi.rootlayer;
 
-		//console.log('+++++setLayer', layer);
 		DaliApi.currentlayer = layer;
 	}
 
 	/**
 	 * @method addActor
 	 * Static method to add an actor to the stage.
-	 * In our usage, it will add the actor to the layer added to the stage.
+	 * In our usage, it will add the actor to the current layer. The second
+	 * parameter is optional and specifies the DaliLayer object to use.
 	 * @param {object} actor DaliActor object
 	 * @param {object} layer DaliLayer object to use. If missing, the current
 	 *                 layer is used.
 	 */
 	DaliApi.addActor = function(actor, layer) {
-		//console.log('+++ addActor', layer);
 		if (!layer)
 			layer = DaliApi.currentlayer;
 
@@ -78,11 +86,13 @@ define.class(function(exports){
 
 	/**
 	 * @method initialize
-	 * Static method to initialize and create the dali stage
+	 * Static method to initialize and create the dali stage. This method is
+	 * called when dali starts running.
 	 * @param {number} width Width of stage
 	 * @param {number} height Height of stage
 	 * @param {string} name Name of stage
-	 * @param {string} dalilib Path to dali lib (optional)
+	 * @param {string} dalilib Path to dali lib (optional). If the path is
+	 *                 missing, a fixed path is used.
 	 */
 	DaliApi.initialize = function(width, height, name, dalilib) {
 		DaliLayer = require('./dali_layer')
@@ -106,7 +116,7 @@ define.class(function(exports){
 			'view-mode': viewMode,
 		}
 
-		// include the Dali/nodejs interface
+		// include the Dali/nodejs interface.
 		if (!dalilib)
 			dalilib = '/home/dali/teem/src/dreemgl/Release/dali';
 
@@ -121,9 +131,10 @@ define.class(function(exports){
 		}
 
 		try {
+            // Load the library and make available as DaliApi.dali
 			DaliApi.dali = define.require(dalilib)(options);
 
-			// Create a top-level 2D layer to the stage
+			// Create a top-level 2D layer to the stage. 
 			var dali = DaliApi.dali;
 			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, width, height);
 			dali.stage.add(DaliApi.rootlayer.dalilayer);
@@ -142,53 +153,24 @@ define.class(function(exports){
 
 	/**
 	 * @method createDaliObjects
-	 * Static method to create dali objects on the specified object
+	 * Static method to create dali objects on the specified object. Most
+	 * objects, such as actor and geometry are attached to a view using
+	 * createDaliActor(). Currently, only the shader object is attached to
+	 * object.
 	 * @param {object} obj Object to attach dali objects to. This should
-	 *                     already contain an element dalishader
+	 *                     already contain an element dalishader. In webgl
+	 *                     the object is an object created by gl.createProgram.
+	 *                     In dali, a custom object is created in shaderdali.js
+	 *                     to hold the compiled state of the shader. This object
+	 *                     also holds an instance of DaliShader.
 	 * @param {object} shader Instance with runtime values (ex. hardrect)
 	 */
 	DaliApi.createDaliObjects = function(obj, shader) {
-		//console.log('createDaliObjects on', obj.object_type);
-
-		//if (shader.view) 
-		//	console.log('*** ** * bgcolor', shader.view.bgcolor);
-		//if (shader.view && !shader.view.bgcolor) {
-		//	shader.view.bgcolor = "vec4('transparent')"
-		//}
-
 		if (!obj.dalishader) {
 			console.log('WARNING. createDaliObjects cannot find DaliShader', Object.keys(obj));
 		}
 
 		obj.dreem_obj = shader;
-
-		// Create a daligeometry object, and this will be reused as much as
-		// possible.
-		if (typeof obj.daligeometry === 'undefined') {
-			//DaliGeometry = require('./dali_geometry')
-
-			//obj.daligeometry = new DaliGeometry();
-			//obj.daligeometry.addGeometry(shader);
-		}
-
-/*
-			if (shader && shader.attrlocs) {
-				console.log('==== DaliApi. addAttributeGeometry');
-				obj.daligeometry.addAttributeGeometry(obj, shader.attrlocs);
-			}
-			else {
-				console.log('==== DaliApi. addGeometry');
-				obj.daligeometry.addGeometry(shader);
-			}
-
-//console.log('Calling DaliMaterial with shader = ', shader.object_type);
-//			obj.dalimaterial = new DaliMaterial(obj.dalishader)
-//			obj.dalirenderer = new DaliRenderer(obj.daligeometry, obj.dalimaterial);
-			//remove
-			//obj.daliactor = new DaliActor(obj);
-			//obj.daliactor.addRenderer(obj.dalirenderer);
-		}
-*/
 	}
 
 
@@ -197,8 +179,10 @@ define.class(function(exports){
 	 * Static method to create dali.Actor object on the specified object,
 	 * using dali geometries located in another object. A Material and Renderer
 	 * are also created on the object.
-	 * @param {object} obj Object to attach dali actor to
-	 * @param {object} shader Object used for createDaliObjects 
+	 * @param {object} obj Object to attach dali actor to. This is a view
+	 *                 object.
+	 * @param {object} shader Shader object containing compiled shader
+	 *                 information (from createDaliObjects).
 	 */
 	DaliApi.createDaliActor = function(obj, shader) {
 		DaliGeometry = require('./dali_geometry')
@@ -206,26 +190,17 @@ define.class(function(exports){
 		DaliRenderer = require('./dali_renderer')
 		DaliActor = require('./dali_actor')
 
-//		if (shader.view && !shader.view.bgcolor) {
-//			shader.view.bgcolor = "vec4('transparent')"
-//		}
-
-		// Re-use the geometry, unless we have a texture
-		
-
+		// TODO: Re-use the geometry, unless we have a texture
 		obj.daligeometry = new DaliGeometry(obj.drawtype);
 		obj.daligeometry.addGeometry(shader.dreem_obj);
 
 		//console.log('Calling DaliMaterial with shader = ', shader.object_type);
 		obj.dalimaterial = new DaliMaterial(shader.dalishader)
 		obj.dalirenderer = new DaliRenderer(obj.daligeometry, obj.dalimaterial);
-//		obj.dalirenderer = new DaliRenderer(shader.daligeometry, obj.dalimaterial);
 
 
 		obj.daliactor = new DaliActor(obj);
 		obj.daliactor.addRenderer(obj.dalirenderer);
-
-		//console.trace('***** daliactor created on', obj.object_type, obj.daliactor);
 	}
 
 
@@ -235,7 +210,7 @@ define.class(function(exports){
 	 * @param {object} color 4 element array of [r,g,b,a]
 	 */
 	DaliApi.setBackgroundColor = function(color) {
-		//TODO Is it faster if I cache the last value
+		//TODO This is frequently set, although it often does not change. Cache?
 		DaliApi.dali.stage.setBackgroundColor(color);
 
 		if (DaliApi.emitcode) {
@@ -244,54 +219,23 @@ define.class(function(exports){
 
 	}
 
-	/**
-	 * @method createShader
-	 * Static method to create a dali.Shader object.
-	 * @param {string} vertexShader VertexShader code
-	 * @param {string} fragmentShader FragmentShader code
-	 * @returns {object} Instance of dali.Shader
-	 */
-/*
-	DaliApi.createShader = function(vertexShader, fragmentShader) {
-		var shaderOptions = {
-            vertexShader : vertexShader,
-            fragmentShader: fragmentShader
-        };
-		
-		var dali = DaliApi.dali;
-		var shader = new dali.Shader(shaderOptions);
-
-		return shader;
-	}
-*/
-
-	/**
-	 * @method createMaterial
-	 * Static method to create a dali.Material object. Textures are added
-	 * later.
-	 * @param {object} shader dali.Shader object
-	 * @returns {object} Instance of dali.Material
-	 */
-/*
-	DaliApi.createMaterial = function(shader) {
-		var material = new dali.Material(shader);
-		return material;
-	}
-*/
 
 	/**
 	 * @method daliBuffer
 	 * Static. Build a Dali property buffer, given a value, and type.
 	 * value can be an array or a single value, but the value is a float.
+	 * A cache is maintained to reuse proper buffers. The cache key is a
+	 * hash value of the dali.PropertyBuffer (see DaliApi.getHash).
 	 * @param {Object} vals Value to use. Either a single value or an
 	 * array can be specified.
 	 * @param {Object} Format hash, suitable for dali.PropertyBuffer.
-	 * The hash looks like {name : type}.
+	 * The hash looks like {name : type}. See dali docs for dali.PropertyBuffer.
 	 * @param {Number} nrecs The number of records, in the buffer.
-	 * @return {Object} [dali.PropertyBuffer, id].
+	 * @return {Object} [dali.PropertyBuffer, id]. This is the same value stored
+	 * in the cache DaliApi.BufferCache.
 	 */
 	DaliApi.BufferId = 0
-	DaliApi.BufferCache = {}; // hash -> [Dali.PropertyBuffer, id]
+	DaliApi.BufferCache = {}; // key: hash  value: [Dali.PropertyBuffer, id]
 	DaliApi.daliBuffer = function(vals, format, nrecs) {
 		//console.log('daliBuffer format', format, 'nrecs', nrecs, 'vals', vals.length);
 		var dali = DaliApi.dali;
@@ -354,7 +298,8 @@ define.class(function(exports){
 
 	/**
 	 * @method getArrayValue
-	 * Given the name of a uniform object, retrieve the array of values.
+	 * Given the name of a uniform object, retrieve the array of values from 
+	 * the dreemgl compiled structure. In webgl this extraction happens inline.
 	 * NaN and null values are converted to 0 (dali will error on these)
 	 * @param {Object} obj Compiled object
 	 * @return {Object} single value or array, or undefined if name not found.
@@ -389,7 +334,8 @@ define.class(function(exports){
 
 	/**
 	 * @method getDaliPropertySize
-	 * Static. Return the number of elements required for a dali property.
+	 * Static. Return the number of elements required for a dali property, 
+	 * given the dali constant.
 	 * From Nick (via slack).
 	 * @param {Number} format property constant
 	 * @return {Number} Number of elements
@@ -451,7 +397,8 @@ define.class(function(exports){
 	/**
 	 * @method getHash
 	 * Static. Compute the hash of the specified data. The data is first
-	 * converted to json, and an xor-like hash is used.
+	 * converted to json, and an xor-like hash is used. These values are used
+	 * as keys in caches.
 	 * @param {Object} data Object to compute the hash
 	 * @return {Number} Hash value
 	 */
