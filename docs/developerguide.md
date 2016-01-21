@@ -1,11 +1,13 @@
-# Getting Started with DreemGL
+# Developer's Guide to DreemGL
+This guide is intended for developers who will write applications or extend the DreemGL framework. For a list of available documentation, see 
+
 DreemGL is DreemGL, an open-source multi-screen prototyping framework
 for iOT with a visual editor and shader styling for webGL and DALi
 runtimes written in JavaScript. An overview of the framework is shown
 here:
 
 ![Architecture Image]
-(https://github.com/teem2/dreemgl/tree/dev/docs/architecture.png)
+(https://github.com/teem2/dreemgl/tree/dev/docs/images/architecture.png)
 
 ## Views
 
@@ -76,8 +78,8 @@ very expensive to just use the `render` function.
 
 If you make the UI much more stateful by dynamically adding children
 using the `appendChild` function, then live reloading becomes much
-harder. Unless you have a very good reason, we recommend that you do
-not use `appendChild` and instead use the `render` functions.
+harder. Unless you have a very good reason, we recommend that you **do
+not use** `appendChild` and instead use the `render` functions.
 
 The reason you may need to use an `appendChild` function, is that if you call
 a constructor (of a view) like this: 
@@ -198,7 +200,7 @@ This will emit the `init` event on the screen, and call the `render`
 function on that screen. At that point, every widget in the tree will
 recursively get `render` on itself called to determine its children.
 
-*So how do render functions know when to re-render themselves?* 
+#### So how do render functions know when to re-render themselves? 
 
 If you look at
 [system/base/render.js](https://github.com/teem2/dreemgl/blob/dev/system/base/render.js),
@@ -221,7 +223,7 @@ cached, so if you just add an item at the end of a list, it is not
 very expensive to just use the `render` function.
 
 
-## Adding Children to Views Using appendChild Function 
+## Adding Children to Views Using `appendChild` Function 
 
 If you make the UI much more stateful by dynamically adding children
 using the `appendChild` function, then live reloading becomes much
@@ -239,8 +241,91 @@ yet. There is also other behind-the-scenes stuff happening such as
 style application, which restricts the creation of views to be inside
 specific scopes.
 
+## Shaders
+Each view contains several shaders (such as `bg`, `border`) which can be assigned
+to a specific shader class. Views may turn on shaders when certain
+features are enabled, for example: 
+`hardrect` is assigned to `this.bg` if `this.borderradius` is `square`. This keeps performance fast by default.
 
-### Other Useful Documentation
+### How do shaders work with view attributes?
+`redraw()` is called whenever a view changes an attribute that a shader is bound to. This causes the new value to be used in the shader.
+
+
+### How does typing work in shaders?
+All data passed to shaders must have an explicit type. Dreemgl provides a few mechanisms to make this convenient.
+
+````
+// define a custom struct for use later
+this.vertexstruct =  define.struct({	 
+ pos:vec3,
+ color:vec4,
+ id: float
+})
+
+// make an instance of the vertex struct
+this.mesh = this.vertexstruct.array();
+
+// push values onto the struct instance in the order they were declared in this.vertexstruct
+this.mesh.push(pos, color, id)
+````
+
+Builtin `structs` use the same mechanism, e.g. `vec2()` is really an instance of `define.struct`, see 
+[system/base/define.js](https://github.com/teem2/dreemgl/blob/master/system/base/define.js). 
+
+### How does the shader compiler work?  
+The shader compiler lives on a baseclass of all the shaders, at
+[system/base/shader.js](https://github.com/teem2/dreemgl/blob/master/system/base/shader.js).
+Every time you extend a shader class it will run the js code-compiler
+to generate a pixel/vertexshader from that shader class with a hook.
+So, every level of the shader prototype chain has a fully-generated
+set of shaders that you can place into a GL context.
+
+The shader compiler also will turn function references on its objects
+into getter/setters that will flag a shader ‘dirty’ so it knows when
+extending it actually made it dirty.  If you just extend a shader and
+only overload uniforms, it wont flag dirty.  The shader compiler knows
+how to walk js object structures, and you can reference values on the
+shader object itself and the view.  It will only dynamically listen to
+values on the view (via the attribute system).
+
+`this.style` can make this more efficient. If you override `bg` in an
+instance it is slow. However, `this.style` allows instances with
+special overrides to create an interim class, allowing for compilation
+and faster instancing. In this way, style properties end up in the
+prototype and can still be overridden on a per-instance basis.
+
+
+### Should variables be on the view or on the shader?
+For interactivity variabes, like `pixelSize`, you should put variables on the
+view and access them in the shader.  For shader-specific functions and
+variables, it is fine to access them directly in the shader, but you
+will not get automatic listeners and therefore redraw.
+
+Example: You want to control `pixelSize` in a `mouseleftup` function
+
+To do this, you would put variables on the view, and access them in the shader as `view.pixelSize`.
+Manipulating them using `this.pixelSize =...` allows the shader to bind itself to `view.pixelSize` via a listener
+so that you get an automatic redraw if you change it.
+
+### Can I write custom shaders?
+Yes. If you want to write custom shaders you need to pick the shader you will subclass OR use `bgcolorfn`.
+We recommend that you make a new shader class on a new view class with custom geometry to build most widgets.
+
+You can also freely inherit it instances, but if you intend to instance many of these, then it makes more sense to put it in a class.
+keep in mind if you are instancing 'a lot of those' it makes a lot of sense to put it in a class
+
+### How do I use texture in a shader? 
+Example: You want to use `bgimage` resource image as texture in `bg`'s color function
+
+Image objects are automatically converted to texture objects, so you can do the following:
+````
+mytexture:require('./mytexture.jpg')
+color:function(){
+   return mytexture.sample(...)
+}
+```
+
+# Other Useful Documentation
 
  * [API Reference] need to add links
  * [IoT]Adding components and services
