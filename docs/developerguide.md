@@ -7,7 +7,8 @@ runtimes written in JavaScript. An overview of the framework is shown
 here:
 
 ![Architecture Image]
-(https://github.com/teem2/dreemgl/tree/dev/docs/images/architecture.png)
+(https://raw.githubusercontent.com/teem2/dreemgl/dev/docs/images/architecture.png)
+
 
 ## Views
 
