@@ -871,6 +871,7 @@ define.class('$system/base/node', function(require){
 			var child = children[i]
 
 			var clayout = child.layout
+			if(!clayout) continue
 			clayout.absx = layout.absx + clayout.left
 			clayout.absy = layout.absy + clayout.top
 

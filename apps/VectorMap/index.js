@@ -7,66 +7,67 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		var earcut = require('$system/lib/earcut-port.js')().earcut;
 		
 		function arctotriangles(arc){
-			if (!arc) return [];
-			var verts = [];
-			var flatverts = [];
-			var A0 = arc[0];
-			var nx = A0[0];
-			var ny = A0[1];
-			flatverts.push(nx);
-			flatverts.push(ny);
-		
-			for (var i =1 ;i<arc.length;i++){
-				var A = arc[i];
-				nx +=  A[0];
-				ny +=  A[1];
-				flatverts.push(nx);
-				flatverts.push(ny);
+			if (!arc) return []
+			var verts = []
+			var flatverts = []
+			var A0 = arc[0]
+			var nx = A0[0]
+			var ny = A0[1]
+
+			flatverts.push(nx)
+			flatverts.push(ny)
+			
+			for (var i = 1; i < arc.length; i++){
+				var A = arc[i]
+				nx += A[0]
+				ny += A[1]
+				flatverts.push(nx)
+				flatverts.push(ny)
 			}
 			
-			var triangles = earcut(flatverts);
+			var triangles = earcut(flatverts)
 			
-			for(var i = 0;i<triangles.length;i++){
-				idx = triangles[i];
-				verts.push(vec2(flatverts[idx*2],flatverts[idx*2 + 1]));
+			for(var i = 0; i < triangles.length; i++){
+				idx = triangles[i]
+				verts.push(vec2(flatverts[idx * 2], flatverts[idx * 2 + 1]))
 			}
-			return verts;			
+
+			return verts
 		}
 		
 		define.class(this, "building", function($ui$, view){
 			
-			this.attributes = {				
-				buildings:[],
+			this.attributes = {
+				buildings: [],
 				scalefactor: 1.0,
-				currentbuilding:-1
+				currentbuilding: -1
 			}
 
-			this.boundscheck = false;
+			this.boundscheck = false
 			
 			this.onbuildings = function(){
-				this.pickrange = this.buildings.length;
+				this.pickrange = this.buildings.length
 				//console.log("setting pickrange:", this.pickrange);
 			}
-		
-		
+			
 			this.mouseout = function(){
 				this.currentbuilding = -1;
 			}
+
 			this.mouseover =  function(){
-				var building = this.buildings[this.last_pick_id ];
-				this.currentbuilding = this.last_pick_id;
-				if (building){
-				var text = "Building";
+				var building = this.buildings[this.last_pick_id]
+				this.currentbuilding = this.last_pick_id
+				if(building){
+					var text = "Building"
 					//console.log(building);
-				
-				if (building.kind) text += " " + building.kind;
-				if (building.name) text += " " + building.name;
-				if (building.street) text += " " + building.street;
-				if (building.housenumber) text += " " + building.housenumber;				
-				this.screen.status = text;
+					if(building.kind) text += " " + building.kind
+					if(building.name) text += " " + building.name
+					if(building.street) text += " " + building.street
+					if(building.housenumber) text += " " + building.housenumber
+					this.screen.status = text
 				}
-				else{
-					console.log(this.last_pick_id);
+				else {
+					console.log(this.last_pick_id)
 				}
 			}
 			
@@ -83,6 +84,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 					PickGuid = mesh.id;
 					if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color.x, 0, 0, 1);
+					//return pal.pal1(mesh.pos.z/300.-0.1*view.time +mesh.id/100.) * mesh.color
 					return mesh.color;
 				}
 		
@@ -144,8 +146,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		})
 					
 		define.class(this, "land", function($ui$, view){
-			this.boundscheck = false;
-			this.attributes = {				
+			this.boundscheck = false
+			this.attributes = {
 				lands:[],
 				currentland: -1
 			}
@@ -522,8 +524,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				}.bind(this));
 			}
 			
-
-			
 			this.loadstring = function(str){
 				this.thedata = JSON.parse(str);	
 					
@@ -569,7 +569,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								B.arcs.push(arc);
 							}
 							else
-							for(var k = 0;k<Bb.arcs.length;k++){
+							for(var k = 0; k < Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
 							
 						}
@@ -669,6 +669,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 	})
 	
+
+	var myclass = define.class('$system/base/node', function(){
+
+	})
 	
 	this.render = function(){ return [
 		fileio(),
@@ -691,6 +695,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						]}
 					]}
 				),
+				myclass({}),
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
 				this.mainscreen({ name:"mainscreen", 				
 					//perspective cam: 

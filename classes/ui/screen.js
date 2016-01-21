@@ -60,8 +60,10 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	this.defaultKeyboardHandler = function(target, v, prefix){
 		if (!prefix) prefix = "";
 		if(!v.name) return console.log("OH NOES",v)		
+
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
+
 		var name = prefix + 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
 		this.undo_group++
 
@@ -69,13 +71,13 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		if(keyboard.ctrl) name += 'Ctrl'
 		if(keyboard.alt) name += 'Alt'
 		if(keyboard.shift) name += 'Shift'
-				
+			
 		if(target[name]) {
 			target[name](v)
 		}
 		else{
-			console.log(name);
-			if (target.keydownHandler) target.keydownHandler(name);
+			//console.log(name)
+			if (target.keydownHandler) target.keydownHandler(name)
 		}
 	}
 
@@ -146,33 +148,27 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}.bind(this)).then(function(result){
 			
 		})
-
-				
 	};
 	
 	function UnProject(glx, gly, glz, modelview, projection){
-		var inv = vec4();
+		var inv = vec4()
 
-		var A = mat4.mat4_mul_mat4(modelview, projection);
-		var m = mat4.invert(A);
+		var A = mat4.mat4_mul_mat4(modelview, projection)
+		var m = mat4.invert(A)
 
+		inv[0] = glx
+		inv[1] = gly
+		inv[2] = 2.0 * glz - 1.0
+		inv[3] = 1.0
 
-
-		inv[0]=glx;
-		inv[1]=gly;
-		inv[2]=2.0*glz-1.0;
-		inv[3]=1.0;
-
-		out = vec4.vec4_mul_mat4(inv, m);
-
+		out = vec4.vec4_mul_mat4(inv, m)
 
 		// divide by W to perform perspective!
-		out[0] /= out[3];
-		out[1] /= out[3];
-		out[2] /= out[3];
+		out[0] /= out[3]
+		out[1] /= out[3]
+		out[2] /= out[3]
 
-
-		return vec3(out);
+		return vec3(out)
 	}
 
 	this.globalMouse = function(node){
@@ -343,7 +339,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			var found 
 			function dump(walk, parent){
 				var layout = walk.layout || {}
-				var named = (new Function("return function "+(walk.name || walk.constructor.name)+'(){}'))()
+				var named = (new Function("return function " + (walk.name || walk.constructor.name) + '(){}'))()
 				Object.defineProperty(named.prototype, 'zflash', {
 					get:function(){
 						// humm. ok so we wanna flash it
@@ -385,7 +381,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	}
 
 	this.releaseCapture = function(){
-		this.mouse_capture = undefined;
+		this.mouse_capture = undefined
 	}
 
 	// bind all keyboard/mouse/touch inputs for delegating it into the view tree
