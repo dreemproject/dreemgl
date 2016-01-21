@@ -5,7 +5,8 @@
 // ruler class
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
-	// the foldcontainer shows/hides all its children when the top bar is clicked
+	// The foldcontainer shows/hides all its children when the top bar is clicked
+
 	this.position = "relative"
 	this.borderwidth = 1
 	this.borderradius = 1

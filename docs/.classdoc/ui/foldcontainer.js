@@ -1,7 +1,7 @@
 /**
  * @class foldcontainer
  * @extends view
- * the foldcontainer shows/hides all its children when the top bar is clicked
+ * The foldcontainer shows/hides all its children when the top bar is clicked
  */
 /**
  * @attribute {boolean} collapsed

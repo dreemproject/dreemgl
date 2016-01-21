@@ -1,7 +1,7 @@
 /**
  * @class slideviewer
  * @extends view
- * slide viewer is an automatic slide viewer that turns child nodes into slides
+ * Slide viewer is an automatic slide viewer that turns child nodes into slides
  * use attributes named 'slidetitle' on a child to set the slide title1
  */
 /**

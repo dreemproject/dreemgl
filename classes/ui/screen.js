@@ -4,6 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
+// Screens are the root of a view hierarchy, typically mapping to a physical device.
 
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')

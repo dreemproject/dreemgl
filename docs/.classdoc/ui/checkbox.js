@@ -1,7 +1,7 @@
 /**
  * @class checkbox
  * @extends view
- * Simple button: a rectangle with a textlabel and an icon
+ * Simple toggle button: a rectangle with a textlabel and an icon
  */
 /**
  * @attribute {String} text

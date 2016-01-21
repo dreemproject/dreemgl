@@ -5,8 +5,7 @@
 
 
 define.class(function(require,$ui$, button, textbox, label,button , view){
-	// Simple knob: a dial with a value
-	
+
 	this.attributes = {
 		commands:[],
 	}

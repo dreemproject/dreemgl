@@ -5,8 +5,8 @@
 
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
+// Simple button: a rectangle with a textlabel and an icon
 
-	// Simple button: a rectangle with a textlabel and an icon
 	this.attributes = {
 		// The label for the button
 		text: Config({type: String, value: ""}),

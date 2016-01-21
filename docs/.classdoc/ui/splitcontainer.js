@@ -1,7 +1,7 @@
 /**
  * @class splitcontainer
  * @extends view
- * splitcontainer adds dragbars between nodes to make all the nodes resizable. 
+ * Splitcontainer adds dragbars between nodes to make all the nodes resizable.
  */
 /**
  * @attribute {Enum} [direction="vertical"]

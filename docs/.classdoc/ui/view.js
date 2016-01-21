@@ -1,7 +1,7 @@
 /**
  * @class view
  * @extends node
- * Base UI object
+ * Base UI view object
  */
 /**
  * @attribute {boolean} [visible="true"]
