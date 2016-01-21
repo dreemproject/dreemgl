@@ -40,7 +40,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			var fill = mix(col1, col2,  (a.y)/0.8);
 			return fill;
 		}
-		
+
 		// default click-handler - when not bound this write "nothing happens" to the console. 
 		this.toggle = function(){console.log("nothing happens")}
 		
@@ -110,6 +110,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		
 		this.layout  = function(){this.statedefault();};
 		this.init = function(){
+				console.log("HERE",this.bgcolor)
 			this.statedefault(true)
 		}
 		this.mouseover = this.stateover
@@ -134,7 +135,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 	this.render = function(){
 		
 		this.bar = this.clickablebar({
-			bgcolor:"red",
+			bgcolor:vec4("#3c3c3c"),
 			borderwidth: this.borderwidth, 
 			bordercolor: this.bordercolor,
 			icon: this.icon?this.icon:"", 
