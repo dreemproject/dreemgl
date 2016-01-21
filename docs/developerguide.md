@@ -186,6 +186,10 @@ features are enabled, for example:
 ### How does typing work in shaders?
 All data passed to shaders must have an explicit type. Dreemgl provides a few mechanisms to make this convenient.
 
+Type information specified on view attributes is automatically used. If a type can't be determined, type inferencing is used.
+
+Dreemgl also provides a mechanism to create structs:
+
 ````
 // define a custom struct for use later
 this.vertexstruct =  define.struct({	 
@@ -194,7 +198,7 @@ this.vertexstruct =  define.struct({
  id: float
 })
 
-// make an instance of the vertex struct
+// make an instance of vertexstruct
 this.mesh = this.vertexstruct.array();
 
 // push values onto the struct instance in the order they were declared in this.vertexstruct

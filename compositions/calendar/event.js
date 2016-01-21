@@ -12,14 +12,37 @@ define.class('$ui/view', function ($ui$, label) {
 		this.top = 50 * start;
 	}
 
+	this.onmousemove = function (event) {
+		this.drag = vec2(event.local.x, event.local.y);
+		if (event.local.y < 6) {
+			this.cursor = 'ns-resize';
+			if (this.dragging) {
+				this.top = this.topstart + this.drag.y - this.dragstart.y;
+			}
+		} else if (this.height - event.local.y < 6) {
+			this.cursor = 'ns-resize';
+		} else {
+			this.cursor = 'pointer';
+		}
+	}
+	this.onmouseleftdown = function (event) {
+		this.dragging = true;
+		this.topstart = this.top;
+		this.heightstart = this.height;
+		this.dragstart = vec2(event.local.x, event.local.y);
+	}
+	this.onmouseleftup = function () {
+		this.dragging = false;
+	}
+
 	this.position = 'absolute';
 	this.height = 200;
 	this.left = 64;
 	this.right = 32;
-	this.borderradius = 12;
+	this.borderradius = 6;
 	this.borderwidth = 1;
 	this.bordercolor = vec4(0, 0, 0, 0.25);
-	this.bgcolor = vec4(0.5, 1, 0.5, 0.5);
+	this.bgcolor = vec4(0.5, 1, 0.5, 1);
 
 	this.render = function () {
 		return [

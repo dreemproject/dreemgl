@@ -25,7 +25,7 @@ define.class('$server/composition', function(require, day, $ui$, screen, view) {
 	this.render = function() {
 		return [
 			screen({name:'index'},
-				day({date: now.toLocaleDateString(), format: '24', events: eventsDummyData})
+				day({date: now.toLocaleDateString(), format: '12', events: eventsDummyData})
 			)
 		];
 	};

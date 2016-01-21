@@ -1,4 +1,4 @@
-define.class('$ui/view', function (require, hour, $ui$, view, label) {
+define.class('$ui/view', function (require, hour, event, $ui$, view, label) {
 
 	this.flexdirection = 'column';
 	this.bgcolor = 'black';
@@ -7,9 +7,9 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 	this.init = function(){
 		window.d = this
 	}
-	
+
 	this.attributes = {
-		date: null,
+		date: Config({type: String,  value: ""}),
 		format: Config({type: Enum('12','24'),  value: "24"}),
 	};
 
@@ -18,27 +18,37 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 	};
 
 	this.renderHours = function() {
- 		var hourViews = [];
- 		for (var i = 0;i < 24; i++) {
+		var hours = [];
+		for (var i = 0;i < 24; i++) {
 			var h = i;
 			if (this.format == '12') {
 				h = (h % 12 || 12) + ' ' + (i < 12 ? 'am' : 'pm');
-			} 
+			}
 			else {
 				h += ' h';
 			}
- 			hourViews.push(hour({
+			hours.push(hour({
 				text: h,
 				bgcolor: vec4(0, 0, 0, i % 2 ? 0 : 0.01)
 			}));
- 		}
- 		return hourViews;
+		}
+		return hours;
+	}
+
+	this.renderEvents = function() {
+		var events = [];
+		for (var i = 0;i < this.events.length; i++) {
+			events.push(event({
+				data: this.events[i]
+			}));
+		}
+		return events;
 	}
 
 	this.render = function() { return [
 		label({
 			name:"label",
-			//text: this.date.toLocaleDateString(),
+			text: this.date,
 			fgcolor:vec3(0.2,0.2,0.2),
 			fontsize:24,
 			bgcolor:vec3(0.9,0.9,0.9),
@@ -52,21 +62,9 @@ define.class('$ui/view', function (require, hour, $ui$, view, label) {
 					flexdirection: 'column',
 					overflow: 'scroll'
 				},
-				this.renderHours()
-			,view({
-					position:"absolute" ,
-					viewport:"2d",
-					percentsize:vec3(50,100,1),
-					percentpos:vec3(50,0,1),
-					//x: 300,
-					//y:10,
-					bgcolor:vec4(1,1,1,0.4),
-					alignself:"flex-end",			
-					flexdirection: 'column',
-					overflow: 'scroll'
-				}				
-		)		
+				this.renderHours(),
+				this.renderEvents()
 			)
-			
+
 	]}
 });
