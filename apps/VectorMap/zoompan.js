@@ -1,14 +1,63 @@
 define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup, $3d$, ballrotate, $$, urlfetch){
+	define.class(this, "mapdataset", function($ui$, view)
+	{
+		this.requestPending = false;
+		this.loadqueue = [];
+		this.loadqueuehash = [];
+		this.loadedblocks = {};
+			
+		this.createHash = function(x, y, z){
+			return x + "_" + y + "_" + z;
+		}
 
+		this.addToQueue = function(x, y, z){		
+			var hash = this.createHash(x, y, z);
+			this.loadqueuehash[hash] = 1;
+			this.loadqueue.push({x:x, y:y, z:z});
+			this.updateLoadQueue();
+		}
+
+		this.blockLoaded = function(x, y, z, data){
+			var hash = this.createHash(x,y,z);
+			this.loadedblocks[hash] = {x:x, y:y, z:z, blockdata:data};
+		}
+
+		this.updateLoadQueue = function(){
+			console.log('.');
+			if (this.requestPending) return;
+			if (this.loadqueue.length > 0){
+				var zscalar = 1;
+				// sort queue on distance to cursor
+				for (var i = 0;i<this.loadqueue.length;i++){
+					var q = this.loadqueue[i];
+					var dx = this.centerx - q.x;
+					var dy = this.centery - q.y;
+					var dz = (this.centerz - q.z)*zscalar;
+					q.dist = dx * dx + dy * dy + dz * dz;
+				}
+				this.loadqueue.sort(function(a,b){if (a.dist < b.dist) return -1; if (a.dist > b.dist) return 1; return 0;});
+				
+				var first = this.loadqueue.shift();
+				this.requestPending = true;
+			}
+		}
+		
+		this.init = function(){
+			console.log(" init");
+			this.setInterval(function(){this.updateLoadQueue();}.bind(this), 50);
+
+		}
+
+	})
+	
 	define.class(this, "tiledmap", function($ui$, view)
 	{
 		this.attributes = {
 			centerx: Config({value:0}),
 			centery: Config({value:0}),
 			zoomlevel: Config({value:4, motion:"inoutquad", duration:1.7}),
-
 			levels: [],
-			blocksize: 500				
+			blocksize: 150				
 		}
 
 		this.keydown = function(v){	
@@ -16,22 +65,18 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		}
 
 		this.bg = function(){
-			this.color = function(){
-				
-				var dist = abs(view.zoomlevel - mesh.id );
-				
+			this.color = function(){		
+				var dist = abs(view.zoomlevel - mesh.id );	
 				if (dist > 1.0) dist = 1.0;
-				
-				
 				return vec4(vec4("blue").xyz*(1.0-dist), 1.0);
 			}
+
 			this.color_blend = 'src_alpha * src_color + dst_color'
   
 			this.vertexstruct =  define.struct({		
 					pos:vec3,
-				//	color:vec4, 
 					id: float
-				})
+			})
 
 			this.mesh = this.vertexstruct.array(10000);
 			
@@ -51,8 +96,15 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					w = h = Math.pow(2,i-this.view.zoomlevel-0) * this.view.blocksize;
 					var bw = (Math.ceil(this.view.layout.width / (w)));
 					var bh = (Math.ceil(this.view.layout.height /(h)));
-					for(var xx = 0;xx<(bw+1);xx++){
-						for(var yy = 0;yy<(bh+1);yy++){
+					
+					var sx = Math.floor(view.centerx) ;
+					var sy = Math.floor(view.centery) ;
+
+					var ex = sx + bw+1;
+					var ey = sy + bw+1;
+					
+					for(var xx = sx;xx<ex;xx++){
+						for(var yy = sy;yy<ey;yy++){
 							var x = w * xx ;
 							var y = h * yy;
 							
@@ -81,16 +133,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 			
 			this.drawtype = this.LINES
-				
-				
 		};
 		
 		this.flex = 1;
 		this.overflow = "hidden" 
 		
-		
-		this.moveTo = function(x,y,z){
-			
+		this.moveTo = function(x,y,z){		
 			var dist = vec2((x?x:this.centerx) - this.centerx,(y?y:this.centery) - this.centery);
 			var l = vec2.len(dist);
 			var totaltime = Math.max(1.,Math.min(10, l*0.3));
@@ -110,9 +158,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			if (z !== undefined) {
 				var zanim = {}
-				zanim[halftime] = {motion:"outquad", value:this.zoomlevel-0.4};
-				zanim[totaltime] = {motion:"inquad", value:z};
-			
+				if ( z < this.zoomlevel){					
+					zanim[totaltime] = {motion:"inoutquad", value:z};
+				}
+				else {
+					zanim[halftime] = {motion:"outquad", value:this.zoomlevel-0.4};
+					zanim[totaltime] = {motion:"inquad", value:z};
+				}
 				this.zoomlevel = Animate(zanim);		
 			}
 
@@ -124,26 +176,13 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 		}
 		
-		this.requestPending = false;
-		this.loadqueue = [];
-		
-		this.addToQueue = function(x,y,z){
-			this.loadqueue.push({x:x, y:y, z:z});
-			this.updateLoadQueue();
-		}
-		
-		this.updateLoadQueue = function(){
-			if (this.requestPending) return;
-			if (this.loadqueue.length > 0){
-				// sort queue on distance to cursor
-			}
-		}
-
+	
 		this.init = function(){
 			
 			for(var i = 0;i<18;i++){
 				this.levels[i] = {}
 			}
+			
 		}
 		
 	})
@@ -154,7 +193,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			urlfetch({name:"urlfetch"}),
 			screen({name:"index", clearcolor:vec4("#000030"), moveTo:function(x,y,z){
 				this.find("tiledmap").moveTo(x,y,z)
-			}}			
+			}}		
+				,this.mapdataset()
 				,this.tiledmap({name:"tiledmap" })
 				
 			) 
