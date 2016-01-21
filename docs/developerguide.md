@@ -1,5 +1,5 @@
 # Developer's Guide to DreemGL
-This guide is intended for developers who will write applications or extend the DreemGL framework. For a list of available documentation, see 
+This guide is intended for developers who want to write applications or extend the DreemGL framework.
 
 DreemGL is DreemGL, an open-source multi-screen prototyping framework
 for iOT with a visual editor and shader styling for webGL and DALi
