@@ -82,13 +82,13 @@ harder. Unless you have a very good reason, we recommend that you **do
 not use** `appendChild` and instead use the `render` functions.
 
 The reason you may need to use an `appendChild` function, is that if you call
-a constructor (of a view) like this: 
+a constructor of a view like this: 
 
 `view({props})` 
 
 it returns a view, but that view has not yet been initialized. `init`
 has not been called on it yet, nor does it have `render` called on it
-yet. There is also other behind-the-scenes stuff happening such as
+yet. There are also other behind-the-scenes operations happening such as
 style application, which restricts the creation of views to be inside
 specific scopes.
 
@@ -167,79 +167,10 @@ Attributes are also automatically readable in shaders. So, the following example
 makes a view where the background shader reads a property all without
 the need for declaring/creating attributes.
 
-Please note that event flow does follow the inheritance structure of
+Event flow follows the inheritance structure of
 the class. Base classes get their listeners called first as you can
 see in the implementation of
 [node.js](https://github.com/teem2/dreemgl/blob/dev/system/base/node.js).
-
-
-## Adding Children to Views Using Render Functions
-
-To add children to views, the recommended way is to use `render`
-functions which generate children based on state on properties. If you
-do it this way, then `livereload` works. If you make the UI much more
-stateful by dynamically adding children using the `appendChild`
-function, then live reloading becomes much harder as described further on.
-
-Learning how to use the render functions is very important. For many
-smaller scale datasets, it works great and is the recommended
-methodology. For very large scale datasets, it is adviseable to use
-the typed-array api, where you essentially write your own renderer for
-very large datasets.
-
-
-### How Render Functions Work
-
-When the UI initializes, it calls `render` on the composition,
-returning a tree. Then, the UI finds the screen it wants to show, and
-then it calls `Render.process` (see
-[system/base/render.js](https://github.com/teem2/dreemgl/blob/dev/system/base/render.js))
-on that screen.
-
-This will emit the `init` event on the screen, and call the `render`
-function on that screen. At that point, every widget in the tree will
-recursively get `render` on itself called to determine its children.
-
-#### So how do render functions know when to re-render themselves? 
-
-If you look at
-[system/base/render.js](https://github.com/teem2/dreemgl/blob/dev/system/base/render.js),
-you will see that DreemGL 'watches' all the attribute getters on the
-object it calls `render` on.
-
-So, this example:
-
-`view({prop:10, render:function(){ return view({bla:this.prop}) }})`
-
-creates an update bind between the `prop` on the parent view and its
-`render` function. If that `prop` gets changed anywhere, 'render` will
-be called again automatically.
-
-This is similar to how react works, except the 'state' object is put on the component in pieces.
-
-`render` is relatively fast, and can be used to do a fair amount of
-dynamic UI with a `render` function. It is also incremental and
-cached, so if you just add an item at the end of a list, it is not
-very expensive to just use the `render` function.
-
-
-## Adding Children to Views Using `appendChild` Function 
-
-If you make the UI much more stateful by dynamically adding children
-using the `appendChild` function, then live reloading becomes much
-harder. Unless you have a very good reason, we recommend that you do
-not use `appendChild` and instead use the `render` functions.
-
-The reason you may need to use an `appendChild` function, is that if you call
-a constructor (of a view) like this: 
-
-`view({props})` 
-
-it returns a view, but that view has not yet been initialized. `init`
-has not been called on it yet, nor does it have `render` called on it
-yet. There is also other behind-the-scenes stuff happening such as
-style application, which restricts the creation of views to be inside
-specific scopes.
 
 ## Shaders
 Each view contains several shaders (such as `bg`, `border`) which can be assigned
