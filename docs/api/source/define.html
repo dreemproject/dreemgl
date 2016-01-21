@@ -2828,6 +2828,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2674" name="n2674">2674</a>
 <a href="#n2675" name="n2675">2675</a>
 <a href="#n2676" name="n2676">2676</a>
+<a href="#n2677" name="n2677">2677</a>
+<a href="#n2678" name="n2678">2678</a>
+<a href="#n2679" name="n2679">2679</a>
+<strong><a href="#n2680" name="n2680">2680</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
@@ -3085,7 +3089,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> dep_path = define.joinPath(base_path, define.expandVariables(path))
                         <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
                                 <span class="keyword">if</span>(define.factory[path]){
-                                        <span class="comment">// if its already asynchronously loading.. </span>
+                                        <span class="comment">// if its already asynchronously loading..</span>
                                         <span class="keyword">var</span> module = require(path, ext)
                                         <span class="keyword">return</span> resolve(module)
                                 }
@@ -3693,8 +3697,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         define.script_tags[location.origin + url] = script
 
                                         script.type = <span class="string"><span class="delimiter">'</span><span class="content">text/javascript</span><span class="delimiter">'</span></span>
-                                        script.src = url
-                                        
+
                                         <span class="comment">//define.script_tags[url] = script</span>
                                         window.<span class="function">onerror</span> = <span class="keyword">function</span>(error, url, line){
                                                 <span class="keyword">var</span> script = define.script_tags[url]
@@ -3707,14 +3710,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.rejected) <span class="keyword">return</span>
                                                 <span class="comment">// pull out the last factor</span>
                                                 <span class="keyword">var</span> factory = define.last_factory
+
                                                 define.factory[facurl] = factory
-        
+
+                                                <span class="keyword">if</span>(!factory) <span class="keyword">return</span> reject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Factory is null for </span><span class="delimiter">&quot;</span></span>+url+<span class="string"><span class="delimiter">&quot;</span><span class="content"> from file </span><span class="delimiter">&quot;</span></span>+from_file + <span class="string"><span class="delimiter">&quot;</span><span class="content"> : </span><span class="delimiter">&quot;</span></span> + facurl)
+
                                                 <span class="keyword">var</span> module_deps = factory.deps = []
-        
+
                                                 define.last_factory = <span class="predefined-constant">undefined</span>
-                                                <span class="keyword">if</span>(!factory) <span class="keyword">return</span> reject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Factory is null for </span><span class="delimiter">&quot;</span></span>+url+<span class="string"><span class="delimiter">&quot;</span><span class="content"> from file </span><span class="delimiter">&quot;</span></span>+from_file)
+
                                                 <span class="comment">// parse the function for other requires</span>
-                
                                                 Promise.all(define.findRequiresInFactory(factory).map(<span class="keyword">function</span>(path){
                                                         <span class="comment">// ignore nodejs style module requires</span>
                                                         <span class="keyword">if</span>(path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>) === -<span class="integer">1</span> &amp;&amp; path.charAt(<span class="integer">0</span>) !== <span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>){
@@ -3748,6 +3753,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="keyword">if</span>(script.readyState == <span class="string"><span class="delimiter">'</span><span class="content">loaded</span><span class="delimiter">'</span></span> || script.readyState == <span class="string"><span class="delimiter">'</span><span class="content">complete</span><span class="delimiter">'</span></span>) onLoad()
                                         }
                                         define.in_body_exec = <span class="predefined-constant">false</span>
+
+                                        script.src = url
+
                                         document.getElementsByTagName(<span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>)[<span class="integer">0</span>].appendChild(script)
                                 })
                         }

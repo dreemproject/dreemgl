@@ -19,9 +19,12 @@ define.class("../webgl/devicewebgl", function(require, exports){
 	this.DrawPass = require('./drawpassnodegl')
 
 	var WebGL = require('node-webgl')
-  	var Image = WebGL.Image
-	this.document = WebGL.document()
-	this.Texture.Image = Image
+  	var Image;
+	if (WebGL) {
+		Image = WebGL.Image
+		this.document = WebGL.document()
+		this.Texture.Image = Image
+	}
 
 	// create nodegl context
 	this.createContext = function(){

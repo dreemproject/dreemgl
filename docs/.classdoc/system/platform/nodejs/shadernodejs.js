@@ -1,0 +1,4 @@
+/**
+ * @class shadernodejs
+ * @extends shader
+ */

@@ -1,6 +1,6 @@
 /**
  * @class cursorshader
- * @extends shaderwebgl
+ * @extends shadernodejs
  */
 /**
  * @method position

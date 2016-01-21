@@ -1,0 +1,4 @@
+/**
+ * @class omdb
+ * @extends omdb
+ */

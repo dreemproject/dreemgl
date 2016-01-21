@@ -1,0 +1,4 @@
+/**
+ * @class texturenodejs
+ * @extends texture
+ */

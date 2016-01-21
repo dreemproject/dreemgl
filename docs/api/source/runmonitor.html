@@ -259,10 +259,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-<span class="comment">// RunMonitor class executes ourselves as a subprocess, receives the dependency file names</span>
-<span class="comment">// from the child process and manages restart/killing when files change</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
+<span class="comment">// RunMonitor class executes ourselves as a subprocess, receives the dependency file names</span>
+<span class="comment">// from the child process and manages restart/killing when files change</span>
 
         <span class="keyword">var</span> FileWatcher = require(<span class="string"><span class="delimiter">'</span><span class="content">./filewatcher</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> ExternalApps = require(<span class="string"><span class="delimiter">'</span><span class="content">./externalapps</span><span class="delimiter">'</span></span>)

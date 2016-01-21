@@ -104,7 +104,7 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
                                     }
                                     p = p.parent
                                 }
-                                if (fullname.endsWith('.js') && fullname.indexOf('node_modules') < 0) {
+                                if (fullname.endsWith('.js') && fullname.indexOf('node_modules') < 0 && fullname.indexOf('docs/api') < 0) {
                                     paths.push(fullname)
                                 }
 
@@ -120,45 +120,30 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
                             }
                             var extracted = wlk(tree);
 
-                            function buildDocs(paths) {
+                            function fetch(paths) {
                                 var path = paths.pop();
-                                while (path && (
-                                // FIXME: many of these paths have files that can't be read properly for various reasons
-                                path.indexOf('fontsdfgen') > -1
-                                || path.indexOf('define') > -1
-                                || path.indexOf('docs/') > -1
-                                || path.indexOf('lib') > -1
-                                || path.indexOf('index.js') > -1
-                                || path.indexOf('textboximpl') > -1
-                                || path.indexOf('examples/') > -1
-                                || path.indexOf('apps/') > -1
-                                || path.indexOf('flow/') > -1
-                                || path.indexOf('compositions/') > -1
-                                || path.indexOf('/server/') > -1
-                                || path.indexOf('debug') > -1
-                                || path.indexOf('gitsync') > -1
-                                || path.indexOf('platform') > -1
-                                || path.indexOf('onejsparser') > -1
-                                || path.indexOf('astwalker') > -1
-                                || path.indexOf('acorn') > -1
-                                || path.indexOf('onejswalk') > -1)
-                                ) {
-                                    path = paths.pop()
+                                console.log('Fetch Path:', path)
+                                require.async('$' + path).then(function(module){
+                                    var rendered = this.find('docs').renderToJSDuck(module);
+                                    this.rpc.fileio.writeToPath(path, rendered).then(function(){
+                                        console.log('Write complete:', path)
+                                    });
+                                }.bind(this), function(err) {
+                                    console.log('Write Fail?', path, ":", err);
+                                }.bind(this))
+                                if (paths.length) {
+                                    setTimeout(function(){
+                                        fetch.bind(this)(paths)
+                                    }.bind(this), 50)
                                 }
-                                if (path) {
-                                    console.log('Fetch Path:', path)
-                                    require.async('$' + path).then(function(module){
-                                        var rendered = this.find('docs').renderToJSDuck(module);
-                                        this.rpc.fileio.writeToPath(path, rendered).then(function(){
-                                            console.log('Write complete:', path)
-                                        });
-                                        buildDocs.bind(this)(paths);
-                                    }.bind(this))
-                                }
-
                             }
 
-                            buildDocs.bind(this)(extracted.sort())
+                            extracted = extracted.filter(function(arg){ return arg.indexOf('example') < 0 }).sort();
+                            try {
+                                fetch.bind(this)(extracted)
+                            } catch (err) {
+                                console.log('Uncaught exception:', err)
+                            }
 
                         }.bind(this))
 

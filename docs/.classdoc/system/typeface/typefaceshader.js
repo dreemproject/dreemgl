@@ -1,6 +1,6 @@
 /**
  * @class typefaceshader
- * @extends shaderwebgl
+ * @extends shadernodejs
  * the font
  */
 /**

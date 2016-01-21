@@ -254,7 +254,7 @@
 			var dep_path = define.joinPath(base_path, define.expandVariables(path))
 			return new Promise(function(resolve, reject){
 				if(define.factory[path]){
-					// if its already asynchronously loading.. 
+					// if its already asynchronously loading..
 					var module = require(path, ext)
 					return resolve(module)
 				}
@@ -862,8 +862,7 @@
 					define.script_tags[location.origin + url] = script
 
 					script.type = 'text/javascript'
-					script.src = url
-					
+
 					//define.script_tags[url] = script
 					window.onerror = function(error, url, line){
 						var script = define.script_tags[url]
@@ -876,14 +875,16 @@
 						if(this.rejected) return
 						// pull out the last factor
 						var factory = define.last_factory
+
 						define.factory[facurl] = factory
-	
+
+						if(!factory) return reject("Factory is null for "+url+" from file "+from_file + " : " + facurl)
+
 						var module_deps = factory.deps = []
-	
+
 						define.last_factory = undefined
-						if(!factory) return reject("Factory is null for "+url+" from file "+from_file)
+
 						// parse the function for other requires
-		
 						Promise.all(define.findRequiresInFactory(factory).map(function(path){
 							// ignore nodejs style module requires
 							if(path.indexOf('$') === -1 && path.charAt(0) !== '.'){
@@ -917,6 +918,9 @@
 						if(script.readyState == 'loaded' || script.readyState == 'complete') onLoad()
 					}
 					define.in_body_exec = false
+
+					script.src = url
+
 					document.getElementsByTagName('head')[0].appendChild(script)
 				})
 			}

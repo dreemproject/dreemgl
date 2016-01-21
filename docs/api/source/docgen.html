@@ -306,21 +306,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n152" name="n152">152</a>
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
-<a href="#n158" name="n158">158</a>
-<a href="#n159" name="n159">159</a>
-<strong><a href="#n160" name="n160">160</a></strong>
-<a href="#n161" name="n161">161</a>
-<a href="#n162" name="n162">162</a>
-<a href="#n163" name="n163">163</a>
-<a href="#n164" name="n164">164</a>
-<a href="#n165" name="n165">165</a>
-<a href="#n166" name="n166">166</a>
-<a href="#n167" name="n167">167</a>
-<a href="#n168" name="n168">168</a>
-<a href="#n169" name="n169">169</a>
 </pre></td>
   <td class="code"><pre><span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$server$</span>, fileio, dataset, <span class="predefined">$ui$</span>, screen, <span class="predefined">$widgets$</span>, docprinter){
@@ -428,7 +413,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                     }
                                     p = p.parent
                                 }
-                                <span class="keyword">if</span> (fullname.endsWith(<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>) &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">node_modules</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span>) {
+                                <span class="keyword">if</span> (fullname.endsWith(<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>) &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">node_modules</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span> &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">docs/api</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span>) {
                                     paths.push(fullname)
                                 }
 
@@ -444,45 +429,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                             }
                             <span class="keyword">var</span> extracted = wlk(tree);
 
-                            <span class="keyword">function</span> <span class="function">buildDocs</span>(paths) {
+                            <span class="keyword">function</span> <span class="function">fetch</span>(paths) {
                                 <span class="keyword">var</span> path = paths.pop();
-                                <span class="keyword">while</span> (path &amp;&amp; (
-                                <span class="comment">// FIXME: many of these paths have files that can't be read properly for various reasons</span>
-                                path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">fontsdfgen</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">define</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">docs/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">lib</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">index.js</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">textboximpl</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">examples/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">apps/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">flow/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">compositions/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">/server/</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">debug</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">gitsync</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">platform</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">onejsparser</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">astwalker</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">acorn</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>
-                                || path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">onejswalk</span><span class="delimiter">'</span></span>) &gt; -<span class="integer">1</span>)
-                                ) {
-                                    path = paths.pop()
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Fetch Path:</span><span class="delimiter">'</span></span>, path)
+                                require.async(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + path).then(<span class="keyword">function</span>(module){
+                                    <span class="keyword">var</span> rendered = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">docs</span><span class="delimiter">'</span></span>).renderToJSDuck(module);
+                                    <span class="local-variable">this</span>.rpc.fileio.writeToPath(path, rendered).then(<span class="keyword">function</span>(){
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Write complete:</span><span class="delimiter">'</span></span>, path)
+                                    });
+                                }.bind(<span class="local-variable">this</span>), <span class="keyword">function</span>(err) {
+                                    console.log(<span class="string"><span class="delimiter">'</span><span class="content">Write Fail?</span><span class="delimiter">'</span></span>, path, <span class="string"><span class="delimiter">&quot;</span><span class="content">:</span><span class="delimiter">&quot;</span></span>, err);
+                                }.bind(<span class="local-variable">this</span>))
+                                <span class="keyword">if</span> (paths.length) {
+                                    setTimeout(<span class="keyword">function</span>(){
+                                        fetch.bind(<span class="local-variable">this</span>)(paths)
+                                    }.bind(<span class="local-variable">this</span>), <span class="integer">50</span>)
                                 }
-                                <span class="keyword">if</span> (path) {
-                                    console.log(<span class="string"><span class="delimiter">'</span><span class="content">Fetch Path:</span><span class="delimiter">'</span></span>, path)
-                                    require.async(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + path).then(<span class="keyword">function</span>(module){
-                                        <span class="keyword">var</span> rendered = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">docs</span><span class="delimiter">'</span></span>).renderToJSDuck(module);
-                                        <span class="local-variable">this</span>.rpc.fileio.writeToPath(path, rendered).then(<span class="keyword">function</span>(){
-                                            console.log(<span class="string"><span class="delimiter">'</span><span class="content">Write complete:</span><span class="delimiter">'</span></span>, path)
-                                        });
-                                        buildDocs.bind(<span class="local-variable">this</span>)(paths);
-                                    }.bind(<span class="local-variable">this</span>))
-                                }
-
                             }
 
-                            buildDocs.bind(<span class="local-variable">this</span>)(extracted.sort())
+                            extracted = extracted.filter(<span class="keyword">function</span>(arg){ <span class="keyword">return</span> arg.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">example</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span> }).sort();
+                            <span class="keyword">try</span> {
+                                fetch.bind(<span class="local-variable">this</span>)(extracted)
+                            } <span class="keyword">catch</span> (err) {
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Uncaught exception:</span><span class="delimiter">'</span></span>, err)
+                            }
 
                         }.bind(<span class="local-variable">this</span>))
 

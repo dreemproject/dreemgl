@@ -1,0 +1,4 @@
+/**
+ * @class touchdali
+ * @extends touch
+ */

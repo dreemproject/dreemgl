@@ -1,6 +1,6 @@
 /**
  * @class markershader
- * @extends shaderwebgl
+ * @extends shadernodejs
  */
 /**
  * @method position

@@ -209,6 +209,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n55" name="n55">55</a>
 <a href="#n56" name="n56">56</a>
 <a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
@@ -231,9 +234,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.DrawPass = require(<span class="string"><span class="delimiter">'</span><span class="content">./drawpassnodegl</span><span class="delimiter">'</span></span>)
 
         <span class="keyword">var</span> WebGL = require(<span class="string"><span class="delimiter">'</span><span class="content">node-webgl</span><span class="delimiter">'</span></span>)
-          <span class="keyword">var</span> Image = WebGL.Image
-        <span class="local-variable">this</span>.document = WebGL.document()
-        <span class="local-variable">this</span>.Texture.Image = Image
+          <span class="keyword">var</span> Image;
+        <span class="keyword">if</span> (WebGL) {
+                Image = WebGL.Image
+                <span class="local-variable">this</span>.document = WebGL.document()
+                <span class="local-variable">this</span>.Texture.Image = Image
+        }
 
         <span class="comment">// create nodegl context</span>
         <span class="local-variable">this</span>.<span class="function">createContext</span> = <span class="keyword">function</span>(){

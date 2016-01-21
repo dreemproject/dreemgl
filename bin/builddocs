@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 BIN_DIR="$(dirname $0)"
-DOCS_DIR="$BIN_DIR/../docs"
+ROOT_DIR="$BIN_DIR/.."
+DOCS_DIR="$ROOT_DIR/docs"
 CLASSDOC_DIR="$DOCS_DIR/.classdoc"
 API_DOCS_DIR="$DOCS_DIR/api"
 SRC_DOCS_DIR="$DOCS_DIR/api/source"
@@ -16,11 +17,7 @@ rm -rf $API_DOCS_DIR
 
 echo "Regenerating classdoc..."
 rm -rf "$CLASSDOC_DIR"
-echo "Press [ENTER] once doc generator is finished"
-killall node
-node server.js -browser 'apps/docs/docgen' &
-read
-killall node
+node $ROOT_DIR/server.js -jsduckgen
 
 echo "Building docs..."
 jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES"

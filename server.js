@@ -112,7 +112,16 @@ function main(){
 
 	define.$platform = 'headless'
 
-	if(args['-nodegl']){
+	if (args['-jsduckgen']) {
+		define.$platform = 'nodejs'
+		for(var key in define.paths){
+			define['$'+key] = define.paths[key]
+		}
+
+		var DocBuilder = require('$system/server/docbuilder')
+		new DocBuilder(args)
+
+	} else if(args['-nodegl']){
 		// lets do an async require on our UI
 		define.$platform = 'nodegl'
 		var NodeGL = require('$system/platform/nodegl/bootnodegl')
