@@ -384,10 +384,10 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}.bind(this))
 	}
 
-	
 	this.releaseCapture = function(){
 		this.mouse_capture = undefined;
 	}
+
 	// bind all keyboard/mouse/touch inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){

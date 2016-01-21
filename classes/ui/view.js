@@ -980,8 +980,8 @@ define.class('$system/base/node', function(require){
 			var flex = this._flex
 			var size = this._size
 						
-			//var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
-			//var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
+			var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];
+			var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];
 			
 			//console.log(this._percentsize, presizex,presizey);
 			//this._size = vec2(layout.width, layout.height)
