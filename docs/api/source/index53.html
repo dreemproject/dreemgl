@@ -383,7 +383,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n229" name="n229">229</a>
 <strong><a href="#n230" name="n230">230</a></strong>
 <a href="#n231" name="n231">231</a>
-<a href="#n232" name="n232">232</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require,
         <span class="predefined">$ui$</span>, screen, view, button, label, 
@@ -425,18 +424,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 ballrotate({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ballrotate1</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">teapot1</span><span class="delimiter">&quot;</span></span>})
                                                 ,view({
                                                         <span class="key">flex</span>:<span class="integer">1</span>,
-                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">teapot1</span><span class="delimiter">&quot;</span></span>, 
+                                                        <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">teapot1</span><span class="delimiter">&quot;</span></span>, 
                                                         <span class="key">clearcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">rgba(255,255,255,0)</span><span class="delimiter">'</span></span>,
                                                         <span class="key">viewport</span>: <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>,
                                                         <span class="key">bg</span>:<span class="integer">0</span>,
                                                         <span class="key">camera</span>: vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">8</span>)
                                                 },
                                                 teapot({
-                                                        <span class="key">detail</span>:<span class="integer">6</span>,
-                                                        <span class="key">pos</span>:[<span class="integer">0</span>,<span class="integer">0</span>,-<span class="float">0.5</span>], 
-                                                        <span class="key">rotate</span>:[-<span class="float">.6</span>*PI,PI,<span class="integer">0</span>], 
-                                                        <span class="key">radius</span>:<span class="float">0.8</span>, 
-                                                        <span class="key">size</span>:vec3(<span class="float">0.5</span>)
+                                                        <span class="key">detail</span>: <span class="integer">6</span>,
+                                                        <span class="key">pos</span>: [<span class="integer">0</span>,<span class="integer">0</span>,-<span class="float">0.5</span>], 
+                                                        <span class="key">rotate</span>: [-<span class="float">.6</span>*PI,PI,<span class="integer">0</span>], 
+                                                        <span class="key">radius</span>: <span class="float">0.8</span>, 
+                                                        <span class="key">size</span>: vec3(<span class="float">0.5</span>)
                                                 }),
                                                 <span class="integer">0</span>),
                                         <span class="integer">0</span>),
@@ -578,7 +577,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         <span class="key">multiline</span>: <span class="predefined-constant">true</span>
                                                 })
                                         ),
-
                                         view({
                                                 <span class="key">flex</span>:<span class="integer">1</span>,
                                                 <span class="key">slidetitle</span>:<span class="string"><span class="delimiter">'</span><span class="content">Live documentation</span><span class="delimiter">'</span></span>

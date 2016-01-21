@@ -155,71 +155,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
   <td class="line-numbers"><pre><a href="#n1" name="n1">1</a>
 <a href="#n2" name="n2">2</a>
 <a href="#n3" name="n3">3</a>
-<a href="#n4" name="n4">4</a>
-<a href="#n5" name="n5">5</a>
-<a href="#n6" name="n6">6</a>
-<a href="#n7" name="n7">7</a>
-<a href="#n8" name="n8">8</a>
-<a href="#n9" name="n9">9</a>
-<strong><a href="#n10" name="n10">10</a></strong>
-<a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, day, <span class="predefined">$ui$</span>, screen, view) {
-
-        <span class="keyword">var</span> now = <span class="keyword">new</span> Date();
-        <span class="keyword">var</span> eventsDummyData = [
-                {
-                        <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Breakfast</span><span class="delimiter">'</span></span>,
-                        <span class="key">location</span>: <span class="string"><span class="delimiter">'</span><span class="content">Barkeley</span><span class="delimiter">'</span></span>,
-                        <span class="key">start</span>: <span class="keyword">new</span> Date(now.getYear(),now.getMonth(),now.getDate(),<span class="integer">7</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                        <span class="key">end</span>: <span class="keyword">new</span> Date(now.getYear(),now.getMonth(),now.getDate(),<span class="integer">9</span>,<span class="integer">30</span>,<span class="integer">0</span>),
-                },
-                {
-                        <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Lunch</span><span class="delimiter">'</span></span>,
-                        <span class="key">location</span>: <span class="string"><span class="delimiter">'</span><span class="content">Oakland</span><span class="delimiter">'</span></span>,
-                        <span class="key">start</span>: <span class="keyword">new</span> Date(now.getYear(),now.getMonth(),now.getDate(),<span class="integer">14</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                        <span class="key">end</span>: <span class="keyword">new</span> Date(now.getYear(),now.getMonth(),now.getDate(),<span class="integer">15</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                },
-                {
-                        <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">Dinner</span><span class="delimiter">'</span></span>,
-                        <span class="key">location</span>: <span class="string"><span class="delimiter">'</span><span class="content">Sausalito</span><span class="delimiter">'</span></span>,
-                        <span class="key">start</span>: <span class="keyword">new</span> Date(now.getYear(),now.getMonth(),now.getDate(),<span class="integer">19</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                        <span class="key">end</span>: <span class="keyword">new</span> Date(now.getYear(),now.getMonth(),now.getDate(),<span class="integer">20</span>,<span class="integer">30</span>,<span class="integer">0</span>),
-                }
-        ];
-
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>},
-                                day({<span class="key">date</span>: now.toLocaleDateString(), <span class="key">format</span>: <span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>, <span class="key">events</span>: eventsDummyData})
-                        )
-                ];
-        };
-
-});
-</pre></td>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>,<span class="keyword">function</span>(){        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
+        ]}
+})</pre></td>
 </tr></table>
 
 </body>

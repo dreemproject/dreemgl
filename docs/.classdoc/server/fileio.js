@@ -5,10 +5,6 @@
  * do not ever put this in a web-facing composition as it has no security features
  */
 /**
- * @method filechange
- * @param name
- */
-/**
  * @method readfile
  * Return the full contents of a file as a string. Returns the result of node.js fs.readFileSync or null in case of exception
  * @param name

@@ -1,4 +1,0 @@
-/**
- * @class devicenodejs
- * @extends device
- */

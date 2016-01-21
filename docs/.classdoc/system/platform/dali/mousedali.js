@@ -1,4 +1,0 @@
-/**
- * @class mousedali
- * @extends mouse
- */

@@ -1,4 +1,0 @@
-/**
- * @class midinodejs
- * @extends midi
- */

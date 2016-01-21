@@ -11,6 +11,3 @@
  * @method render
  * the renderfunction for the treeview recursively expands using treeitem subclasses.
  */
-/**
- * @event select
- */

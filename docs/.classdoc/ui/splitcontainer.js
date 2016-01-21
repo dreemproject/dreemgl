@@ -27,9 +27,3 @@
  * @attribute {vec4} [activecolor="0.43921568989753723,0.43921568989753723,0.6274510025978088,1"]
  * color of the splitter bar when dragging it
  */
-/**
- * @method direction
- */
-/**
- * @method render
- */

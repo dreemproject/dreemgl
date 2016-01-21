@@ -4,6 +4,8 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/node', function(require){
+// Base UI object
+
 
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')

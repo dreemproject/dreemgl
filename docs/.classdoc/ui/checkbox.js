@@ -52,39 +52,6 @@
  * Second gradient color for the button background in pressed state
  */
 /**
- * @attribute {Boolean} value
- */
-/**
- * @attribute {vec4} [bgcolor="1,1,1,1"]
- */
-/**
- * @attribute {String} [fgcolor="white"]
- */
-/**
- * @attribute {Object} [buttonres="[object Object]"]
- */
-/**
- * @attribute {vec4} [padding="0,0,0,0"]
- */
-/**
- * @attribute {vec4} [borderradius="0,0,0,0"]
- */
-/**
- * @attribute {vec4} [borderwidth="0,0,0,0"]
- */
-/**
- * @attribute {vec4} [margin="0,0,0,0"]
- */
-/**
- * @attribute {vec4} [bordercolor="0,0,0,0"]
- */
-/**
- * @attribute {String} [alignItems="center"]
- */
-/**
- * @method onclick
- */
-/**
  * @method statehover
  * the hover state when someone hovers over the button
  */
@@ -95,26 +62,4 @@
 /**
  * @method stateclick
  * clicked state
- */
-/**
- * @method init
- */
-/**
- * @method mouseover
- */
-/**
- * @method mouseout
- */
-/**
- * @method mouseleftdown
- */
-/**
- * @method mouseleftup
- * @param event
- */
-/**
- * @method render
- */
-/**
- * @event click
  */

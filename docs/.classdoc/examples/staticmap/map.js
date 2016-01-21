@@ -27,9 +27,3 @@
  * @attribute {float32} [mapzoom="14"]
  * Map zoom level 0 ~ 21+ (0 is whole earth, 21 is street level)
  */
-/**
- * @attribute {String} [endpoint="https://maps.googleapis.com/maps/api/staticmap?"]
- */
-/**
- * @attribute {Object} bgimage
- */

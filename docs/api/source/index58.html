@@ -162,17 +162,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n8" name="n8">8</a>
 <a href="#n9" name="n9">9</a>
 <strong><a href="#n10" name="n10">10</a></strong>
-<a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(module, <span class="predefined">$server$</span>, service, <span class="predefined">$ui$</span>, screen, view, <span class="predefined">$flow$services$</span>, map, omdb, webrequest, <span class="predefined">$flow$controllers$</span>, xypad, knob, keyboard, dpad, <span class="predefined">$flow$displays$</span>, shaderviz, labtext, inputs, outputs, album, <span class="predefined">$flow$devices$</span>, estimote) {
-        
-        define.classPath(<span class="local-variable">this</span>)
-
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$server$</span>, service, <span class="predefined">$ui$</span>, screen, view, <span class="predefined">$flow$services$</span>, map, omdb, webrequest, <span class="predefined">$flow$controllers$</span>, xypad, knob, keyboard, dpad, <span class="predefined">$flow$displays$</span>, labtext, inputs, outputs, album, <span class="predefined">$flow$devices$</span>, estimote) {
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
-                        xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">41</span>, <span class="key">y</span>:<span class="integer">354</span>}}),
-                        shaderviz({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">shaderviz</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">445</span>, <span class="key">y</span>:<span class="integer">109</span>}, <span class="key">shaderpos</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.mousepos</span><span class="delimiter">&quot;</span></span>)})
+                        xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">14</span>, <span class="key">y</span>:<span class="integer">341</span>}}),
+                        labtext({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">labtext0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">293</span>, <span class="key">y</span>:<span class="integer">158</span>}, <span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.dpad0.value</span><span class="delimiter">&quot;</span></span>), <span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.mousepos</span><span class="delimiter">&quot;</span></span>)}),
+                        dpad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">dpad0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">15</span>, <span class="key">y</span>:<span class="integer">81</span>}})
                 ]
         }
 }

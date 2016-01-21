@@ -1,4 +1,0 @@
-/**
- * @class drawpassnodegl
- * @extends drawpasswebgl
- */

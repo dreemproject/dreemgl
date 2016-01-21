@@ -327,6 +327,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n173" name="n173">173</a>
 <a href="#n174" name="n174">174</a>
 <a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
@@ -370,7 +371,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> fill = mix(col1, col2,  (a.y)/<span class="float">0.8</span>);
                         <span class="keyword">return</span> fill;
                 }
-                
+
                 <span class="comment">// default click-handler - when not bound this write &quot;nothing happens&quot; to the console. </span>
                 <span class="local-variable">this</span>.<span class="function">toggle</span> = <span class="keyword">function</span>(){console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">nothing happens</span><span class="delimiter">&quot;</span></span>)}
                 
@@ -440,6 +441,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 
                 <span class="local-variable">this</span>.<span class="function">layout</span>  = <span class="keyword">function</span>(){<span class="local-variable">this</span>.statedefault();};
                 <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">HERE</span><span class="delimiter">&quot;</span></span>,<span class="local-variable">this</span>.bgcolor)
                         <span class="local-variable">this</span>.statedefault(<span class="predefined-constant">true</span>)
                 }
                 <span class="local-variable">this</span>.mouseover = <span class="local-variable">this</span>.stateover
@@ -464,7 +466,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 
                 <span class="local-variable">this</span>.bar = <span class="local-variable">this</span>.clickablebar({
-                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">bgcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3c3c3c</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">borderwidth</span>: <span class="local-variable">this</span>.borderwidth, 
                         <span class="key">bordercolor</span>: <span class="local-variable">this</span>.bordercolor,
                         <span class="key">icon</span>: <span class="local-variable">this</span>.icon?<span class="local-variable">this</span>.icon:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, 

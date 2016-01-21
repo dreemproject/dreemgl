@@ -4,27 +4,6 @@
  * Node class provides attributes for events and values, propertybinding and constructor semantics
  */
 /**
- * @method setInterval
- * @param fn
- * @param mstime
- */
-/**
- * @method clearInterval
- * @param id
- */
-/**
- * @method setTimeout
- * @param fn
- * @param mstime
- */
-/**
- * @method clearTimeout
- * @param id
- */
-/**
- * @method mixin
- */
-/**
  * @method find
  * find node by name, they look up the .name property or the name of the constructor (class name) by default
  * @param name
@@ -101,12 +80,6 @@
  * @method definePersist
  * mark an attribute as persistent accross live reload / renders
  * @param arg
- */
-/**
- * @method atStyleConstructor
- * @param original
- * @param props
- * @param where
  */
 /**
  * @method emitForward

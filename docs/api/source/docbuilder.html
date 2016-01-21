@@ -680,6 +680,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n526" name="n526">526</a>
 <a href="#n527" name="n527">527</a>
 <a href="#n528" name="n528">528</a>
+<a href="#n529" name="n529">529</a>
+<strong><a href="#n530" name="n530">530</a></strong>
+<a href="#n531" name="n531">531</a>
+<a href="#n532" name="n532">532</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
  You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
@@ -726,12 +730,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> extracted = wlk(tree).sort();
 
         <span class="keyword">function</span> <span class="function">fetch</span>(path) {
-<span class="comment">//            console.log('Fetch Path:', path)</span>
+            console.log(<span class="string"><span class="delimiter">'</span><span class="content">Fetch Path:</span><span class="delimiter">'</span></span>, path)
             <span class="keyword">var</span> expandedPath = define.expandVariables(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + path);
             <span class="keyword">var</span> module = require(expandedPath)
             <span class="keyword">var</span> class_doc = <span class="local-variable">this</span>.parseDoc(module)
             <span class="keyword">var</span> out = <span class="local-variable">this</span>.printJSDuck(class_doc).join(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>);
-            <span class="local-variable">this</span>.writeToPath(path, out);
+            <span class="keyword">if</span> (out) {
+                <span class="local-variable">this</span>.writeToPath(path, out);
+            } <span class="keyword">else</span> {
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">No comments for</span><span class="delimiter">'</span></span>, path)
+            }
         }
 
         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;extracted.length;i++) {
@@ -742,8 +750,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">Error loading:</span><span class="delimiter">'</span></span>, path, err)
             }
         }
-
-
     }
 
     <span class="keyword">function</span> <span class="function">readRecurDir</span>(base, inname, ignoreset){
@@ -1040,167 +1046,169 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
     }
 
     <span class="local-variable">this</span>.<span class="function">printJSDuck</span> = <span class="keyword">function</span>(class_doc, parentclass) {
-        <span class="keyword">var</span> i, j, str;
+        <span class="keyword">var</span> i, j, str, firstline;
+        <span class="keyword">var</span> internal = <span class="string"><span class="delimiter">'</span><span class="content">internal,</span><span class="delimiter">'</span></span>;
         <span class="keyword">var</span> output = [];
 
         <span class="keyword">if</span> (!class_doc) {
             <span class="keyword">return</span> output;
         }
 
-        <span class="keyword">var</span> firstline;
-        <span class="keyword">var</span> internal = <span class="string"><span class="delimiter">'</span><span class="content">internal, </span><span class="delimiter">'</span></span>;
-        <span class="keyword">if</span> (class_doc.body_text) {
+        <span class="keyword">if</span> (class_doc.body_text &amp;&amp; class_doc.body_text.length) {
             firstline = class_doc.body_text[<span class="integer">0</span>]
             <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
                 <span class="keyword">return</span> output;
             }
-        }
 
-        output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
-        <span class="keyword">var</span> classname = class_doc.class_name;
-        <span class="keyword">if</span> (parentclass) {
-            classname = parentclass + <span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span> + classname
-        }
-        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @class </span><span class="delimiter">'</span></span> + classname);
-        <span class="keyword">if</span> (class_doc.base_class_chain) {
-            <span class="keyword">var</span> base = class_doc.base_class_chain[<span class="integer">0</span>];
-            <span class="keyword">if</span> (base &amp;&amp; base.name) {
-                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @extends </span><span class="delimiter">'</span></span> + base.name);
+            output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
+            <span class="keyword">var</span> classname = class_doc.class_name;
+            <span class="keyword">if</span> (parentclass) {
+                classname = parentclass + <span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span> + classname
             }
-        }
-        <span class="keyword">if</span> (class_doc.body_text) {
-            <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.body_text.length; i++) {
-                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + class_doc.body_text[i]);
-            }
-        }
-
-        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
-        <span class="keyword">var</span> attrs = [];
-        <span class="keyword">if</span> (class_doc.attributes) {
-            <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.attributes.length; i++) {
-                <span class="keyword">var</span> attr = class_doc.attributes[i];
-                <span class="keyword">if</span> (attr.name &amp;&amp; attr.name.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>)) {
-                    <span class="keyword">continue</span>;
-                }
-                <span class="keyword">if</span> (attr.body_text) { <span class="comment">// &amp;&amp; attr.body_text.length</span>
-                    firstline = attr.body_text[<span class="integer">0</span>]
-                    <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
-                        <span class="keyword">continue</span>
-                    }
-
-                    attrs.push(attr.name);
-                    output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
-                    <span class="keyword">var</span> defval = attr.defvalue;
-                    <span class="keyword">if</span> (<span class="keyword">typeof</span>(defval) === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
-                        defval = <span class="predefined-constant">undefined</span>;
-                    }
-                    <span class="keyword">if</span> (defval) {
-                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} [</span><span class="delimiter">'</span></span> + attr.name + <span class="string"><span class="delimiter">'</span><span class="content">=&quot;</span><span class="delimiter">'</span></span> + defval + <span class="string"><span class="delimiter">'</span><span class="content">&quot;]</span><span class="delimiter">'</span></span>);
-                    } <span class="keyword">else</span> {
-                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} </span><span class="delimiter">'</span></span> + attr.name);
-                    }
-                    <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; attr.body_text.length; j++) {
-                        str = attr.body_text[j];
-                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
-                    }
-                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
+            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @class </span><span class="delimiter">'</span></span> + classname);
+            <span class="keyword">if</span> (class_doc.base_class_chain) {
+                <span class="keyword">var</span> base = class_doc.base_class_chain[<span class="integer">0</span>];
+                <span class="keyword">if</span> (base &amp;&amp; base.name) {
+                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @extends </span><span class="delimiter">'</span></span> + base.name);
                 }
             }
-        }
-
-        <span class="keyword">if</span> (class_doc.methods) {
-            <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.methods.length; i++) {
-                <span class="keyword">var</span> meth = class_doc.methods[i];
-                <span class="keyword">if</span> (meth.name &amp;&amp; meth.name.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>)) {
-                    <span class="keyword">continue</span>;
+            <span class="keyword">if</span> (class_doc.body_text) {
+                <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.body_text.length; i++) {
+                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + class_doc.body_text[i]);
                 }
+            }
 
-                <span class="keyword">if</span> (meth.body_text) { <span class="comment">//  &amp;&amp; meth.body_text.length</span>
-                    firstline = meth.body_text[<span class="integer">0</span>]
-                    <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
-                        <span class="keyword">continue</span>
+            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
+            <span class="keyword">var</span> attrs = [];
+            <span class="keyword">if</span> (class_doc.attributes) {
+                <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.attributes.length; i++) {
+                    <span class="keyword">var</span> attr = class_doc.attributes[i];
+                    <span class="keyword">if</span> (attr.name &amp;&amp; attr.name.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>)) {
+                        <span class="keyword">continue</span>;
                     }
+                    <span class="keyword">if</span> (attr.body_text &amp;&amp; attr.body_text.length) {
+                        firstline = attr.body_text[<span class="integer">0</span>]
+                        <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
+                            <span class="keyword">continue</span>
+                        }
 
-
-                    <span class="keyword">if</span> (meth &amp;&amp; meth.name) {
+                        attrs.push(attr.name);
                         output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
-                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @method </span><span class="delimiter">'</span></span> + meth.name);
-                        <span class="comment">//if (meth.name.startsWith('on')) {</span>
-                        <span class="comment">//        output.push(' * @event ' + meth.name);</span>
-                        <span class="comment">//} else {</span>
-                        <span class="comment">//        output.push(' * @method ' + meth.name);</span>
-                        <span class="comment">//}</span>
-
-                        <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; meth.body_text.length; j++) {
-                            str = meth.body_text[j];
+                        <span class="keyword">var</span> defval = attr.defvalue;
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(defval) === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
+                            defval = <span class="predefined-constant">undefined</span>;
+                        }
+                        <span class="keyword">if</span> (defval) {
+                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} [</span><span class="delimiter">'</span></span> + attr.name + <span class="string"><span class="delimiter">'</span><span class="content">=&quot;</span><span class="delimiter">'</span></span> + defval + <span class="string"><span class="delimiter">'</span><span class="content">&quot;]</span><span class="delimiter">'</span></span>);
+                        } <span class="keyword">else</span> {
+                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} </span><span class="delimiter">'</span></span> + attr.name);
+                        }
+                        <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; attr.body_text.length; j++) {
+                            str = attr.body_text[j];
                             output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
                         }
-
-                        <span class="keyword">if</span> (meth.params) {
-                            <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; meth.params.length; j++) {
-                                <span class="keyword">var</span> param = meth.params[j];
-
-                                <span class="keyword">var</span> pbody = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
-                                <span class="keyword">if</span> (param.body_text &amp;&amp; param.body_text.length) {
-                                    pbody = param.body_text.join(<span class="string"><span class="delimiter">'</span><span class="content">; </span><span class="delimiter">'</span></span>)
-                                }
-                                <span class="keyword">var</span> typegrabber = <span class="regexp"><span class="delimiter">/</span><span class="content">^([^</span><span class="content">\{</span><span class="content">}]*)(</span><span class="content">\{</span><span class="content">[^</span><span class="content">\}</span><span class="content">]+</span><span class="content">\}</span><span class="content">)</span><span class="char">\s</span><span class="content">+(.*)$</span><span class="delimiter">/</span></span>;
-                                <span class="keyword">var</span> result = typegrabber.exec(pbody);
-                                <span class="keyword">var</span> ptype = <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>;
-                                <span class="keyword">if</span> (result) {
-                                    ptype = <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + result[<span class="integer">2</span>] + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>;
-                                    pbody = (result[<span class="integer">1</span>] + result[<span class="integer">3</span>]).trim();
-                                }
-
-                                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @param</span><span class="delimiter">'</span></span> + ptype + param.name);
-                                <span class="keyword">if</span> (pbody.length) {
-                                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + pbody);
-                                }
-                            }
-                        }
-
                         output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
                     }
                 }
             }
-        }
 
-        <span class="keyword">if</span> (class_doc.events &amp;&amp; class_doc.events.length) {
-            <span class="keyword">for</span> (i = <span class="integer">0</span>; i &lt; class_doc.events.length;i++) {
-                <span class="keyword">var</span> event = class_doc.events[i];
-                <span class="keyword">if</span> (event.name &amp;&amp; event.name.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>)) {
-                    <span class="keyword">continue</span>;
-                }
-                firstline = event.body_text[<span class="integer">0</span>]
-                <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
-                    <span class="keyword">continue</span>
-                }
+            <span class="keyword">if</span> (class_doc.methods) {
+                <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.methods.length; i++) {
+                    <span class="keyword">var</span> meth = class_doc.methods[i];
+                    <span class="keyword">if</span> (meth.name &amp;&amp; meth.name.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>)) {
+                        <span class="keyword">continue</span>;
+                    }
+
+                    <span class="keyword">if</span> (meth.body_text &amp;&amp; meth.body_text.length) {
+                        firstline = meth.body_text[<span class="integer">0</span>]
+                        <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
+                            <span class="keyword">continue</span>
+                        }
 
 
-                output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
-                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @event </span><span class="delimiter">'</span></span> + event.name);
-                <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; event.body_text.length; j++) {
-                    str = event.body_text[j];
-                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
+                        <span class="keyword">if</span> (meth &amp;&amp; meth.name) {
+                            output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
+                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @method </span><span class="delimiter">'</span></span> + meth.name);
+                            <span class="comment">//if (meth.name.startsWith('on')) {</span>
+                            <span class="comment">//        output.push(' * @event ' + meth.name);</span>
+                            <span class="comment">//} else {</span>
+                            <span class="comment">//        output.push(' * @method ' + meth.name);</span>
+                            <span class="comment">//}</span>
+
+                            <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; meth.body_text.length; j++) {
+                                str = meth.body_text[j];
+                                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
+                            }
+
+                            <span class="keyword">if</span> (meth.params) {
+                                <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; meth.params.length; j++) {
+                                    <span class="keyword">var</span> param = meth.params[j];
+
+                                    <span class="keyword">var</span> pbody = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
+                                    <span class="keyword">if</span> (param.body_text &amp;&amp; param.body_text.length) {
+                                        pbody = param.body_text.join(<span class="string"><span class="delimiter">'</span><span class="content">; </span><span class="delimiter">'</span></span>)
+                                    }
+                                    <span class="keyword">var</span> typegrabber = <span class="regexp"><span class="delimiter">/</span><span class="content">^([^</span><span class="content">\{</span><span class="content">}]*)(</span><span class="content">\{</span><span class="content">[^</span><span class="content">\}</span><span class="content">]+</span><span class="content">\}</span><span class="content">)</span><span class="char">\s</span><span class="content">+(.*)$</span><span class="delimiter">/</span></span>;
+                                    <span class="keyword">var</span> result = typegrabber.exec(pbody);
+                                    <span class="keyword">var</span> ptype = <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>;
+                                    <span class="keyword">if</span> (result) {
+                                        ptype = <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + result[<span class="integer">2</span>] + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>;
+                                        pbody = (result[<span class="integer">1</span>] + result[<span class="integer">3</span>]).trim();
+                                    }
+
+                                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @param</span><span class="delimiter">'</span></span> + ptype + param.name);
+                                    <span class="keyword">if</span> (pbody.length) {
+                                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + pbody);
+                                    }
+                                }
+                            }
+
+                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
+                        }
+                    }
                 }
-                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
             }
-        }
-        <span class="comment">// TODO: JSDuck doesn't handle inner classes in the right way yet, so don't add them</span>
-        <span class="comment">//if (class_doc.inner_classes &amp;&amp; class_doc.inner_classes.length) {</span>
-        <span class="comment">//    for (i = 0; i &lt; class_doc.inner_classes.length; i++) {</span>
-        <span class="comment">//        var inner = class_doc.inner_classes[i];</span>
-        <span class="comment">//        if (inner.class_name &amp;&amp; inner.class_name.startsWith('_')) {</span>
-        <span class="comment">//            continue;</span>
-        <span class="comment">//        }</span>
-        <span class="comment">//        output = output.concat(this.printJSDuck(inner, classname));</span>
-        <span class="comment">//    }</span>
-        <span class="comment">//}</span>
-        <span class="keyword">if</span> (class_doc.examples &amp;&amp; class_doc.examples.length) {
-            console.log(<span class="string"><span class="delimiter">'</span><span class="content">EXAMPLES</span><span class="delimiter">'</span></span>, class_doc.examples)
-        }
-        <span class="keyword">if</span> (class_doc.state_attributes &amp;&amp; class_doc.state_attributes.length) {
-            console.log(<span class="string"><span class="delimiter">'</span><span class="content">STATE</span><span class="delimiter">'</span></span>, class_doc.state_attributes)
+
+            <span class="keyword">if</span> (class_doc.events &amp;&amp; class_doc.events.length) {
+                <span class="keyword">for</span> (i = <span class="integer">0</span>; i &lt; class_doc.events.length;i++) {
+                    <span class="keyword">var</span> event = class_doc.events[i];
+                    <span class="keyword">if</span> (event.name &amp;&amp; event.name.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>)) {
+                        <span class="keyword">continue</span>;
+                    }
+                    <span class="keyword">if</span> (event.body_text &amp;&amp; event.body_text.length) {
+                        firstline = event.body_text[<span class="integer">0</span>];
+                        <span class="keyword">if</span> (firstline &amp;&amp; firstline.startsWith(internal)) {
+                            <span class="keyword">continue</span>
+                        }
+
+
+                        output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
+                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @event </span><span class="delimiter">'</span></span> + event.name);
+                        <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; event.body_text.length; j++) {
+                            str = event.body_text[j];
+                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
+                        }
+                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
+                    }
+                }
+            }
+            <span class="comment">// TODO: JSDuck doesn't handle inner classes in the right way yet, so don't add them</span>
+            <span class="comment">//if (class_doc.inner_classes &amp;&amp; class_doc.inner_classes.length) {</span>
+            <span class="comment">//    for (i = 0; i &lt; class_doc.inner_classes.length; i++) {</span>
+            <span class="comment">//        var inner = class_doc.inner_classes[i];</span>
+            <span class="comment">//        if (inner.class_name &amp;&amp; inner.class_name.startsWith('_')) {</span>
+            <span class="comment">//            continue;</span>
+            <span class="comment">//        }</span>
+            <span class="comment">//        output = output.concat(this.printJSDuck(inner, classname));</span>
+            <span class="comment">//    }</span>
+            <span class="comment">//}</span>
+            <span class="keyword">if</span> (class_doc.examples &amp;&amp; class_doc.examples.length) {
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">EXAMPLES</span><span class="delimiter">'</span></span>, class_doc.examples)
+            }
+            <span class="keyword">if</span> (class_doc.state_attributes &amp;&amp; class_doc.state_attributes.length) {
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">STATE</span><span class="delimiter">'</span></span>, class_doc.state_attributes)
+            }
+
         }
 
         <span class="keyword">return</span> output;

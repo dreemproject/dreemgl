@@ -214,7 +214,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
 <a href="#n62" name="n62">62</a>
-<a href="#n63" name="n63">63</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
@@ -237,34 +236,33 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> t = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>.target)
                 <span class="keyword">if</span> (t){
 
-                        <span class="local-variable">this</span>.clickstart = event.local        
+                        <span class="local-variable">this</span>.clickstart = event.local
                         <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(event){
                                 <span class="keyword">var</span> a = event.local
 
-                                <span class="keyword">var</span> t = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>.target);
+                                <span class="keyword">var</span> t = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>.target)
                 
-                                <span class="keyword">var</span> dx = a[<span class="integer">0</span>] - <span class="local-variable">this</span>.clickstart[<span class="integer">0</span>];
-                                <span class="keyword">var</span> dy = a[<span class="integer">1</span>] - <span class="local-variable">this</span>.clickstart[<span class="integer">1</span>];
+                                <span class="keyword">var</span> dx = a[<span class="integer">0</span>] - <span class="local-variable">this</span>.clickstart[<span class="integer">0</span>]
+                                <span class="keyword">var</span> dy = a[<span class="integer">1</span>] - <span class="local-variable">this</span>.clickstart[<span class="integer">1</span>]
                                 
-                                <span class="local-variable">this</span>.camera_start = vec3.sub(t._camera, t._lookat );
-                                <span class="keyword">var</span> M4 = mat4.invert(t.viewmatrix);
+                                <span class="local-variable">this</span>.camera_start = vec3.sub(t._camera, t._lookat)
+                                <span class="keyword">var</span> M4 = mat4.invert(t.viewmatrix)
                                 <span class="comment">// console.log(M4);</span>
                                 <span class="keyword">var</span> screenup = vec3.normalize(vec3.vec3_mul_mat4(vec3(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), M4));                                
                                 <span class="comment">// var M = mat4.R(0,-dy*0.01,-dx*0.01);                                        </span>
                                 <span class="comment">// console.log(&quot;screenup:&quot;, screenup);</span>
                                 
-                                <span class="keyword">var</span> M1 = mat4.identity();
-                                <span class="keyword">var</span> M2 = mat4.rotate(M1, dx*<span class="float">0.01</span>, t._up)
+                                <span class="keyword">var</span> M1 = mat4.identity()
+                                <span class="keyword">var</span> M2 = mat4.rotate(M1, dx * <span class="float">0.01</span>, t._up)
                                 
-                                <span class="keyword">var</span> axis = vec3.normalize(vec3.cross(<span class="local-variable">this</span>.camera_start, t._up));
-                                <span class="keyword">var</span> M3 = mat4.rotate(M2, dy*<span class="float">0.01</span>, axis)
-                                                                
-                                <span class="keyword">var</span> Rot = vec3.vec3_mul_mat4(<span class="local-variable">this</span>.camera_start, M3);
-                                <span class="keyword">var</span> Res = vec3.add(Rot, t._lookat);
+                                <span class="keyword">var</span> axis = vec3.normalize(vec3.cross(<span class="local-variable">this</span>.camera_start, t._up))
+                                <span class="keyword">var</span> M3 = mat4.rotate(M2, dy * <span class="float">0.01</span>, axis)
                                 
-                                t._camera = Res;
-
-                                t.redraw();
+                                <span class="keyword">var</span> Rot = vec3.vec3_mul_mat4(<span class="local-variable">this</span>.camera_start, M3)
+                                <span class="keyword">var</span> Res = vec3.add(Rot, t._lookat)
+                                
+                                t._camera = Res
+                                t.redraw()
                                 <span class="comment">//this.target.updateLookAtMatrix();</span>
                                 <span class="comment">//this.target.setDirty();</span>
                                 

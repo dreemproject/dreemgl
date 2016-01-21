@@ -20,10 +20,3 @@
  * @attribute {vec4} [fontcolor="0.125490203499794,0.125490203499794,0.125490203499794,1"]
  * The color to use as the default color for this textblock.
  */
-/**
- * @method buildMarkdown
- * @param lines
- */
-/**
- * @method render
- */

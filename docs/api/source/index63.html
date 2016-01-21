@@ -880,76 +880,82 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n726" name="n726">726</a>
 <a href="#n727" name="n727">727</a>
 <a href="#n728" name="n728">728</a>
+<a href="#n729" name="n729">729</a>
+<strong><a href="#n730" name="n730">730</a></strong>
+<a href="#n731" name="n731">731</a>
+<a href="#n732" name="n732">732</a>
+<a href="#n733" name="n733">733</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> <span class="function">vectormap</span>(require,  <span class="predefined">$server$</span>, fileio,<span class="predefined">$ui$</span>, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, <span class="predefined">$widgets$</span>, colorpicker,  jsviewer, radiogroup, <span class="predefined">$3d$</span>, ballrotate, <span class="predefined">$$</span>, urlfetch){
         
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mainscreen</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){                
         
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tiledmap</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
-        
+
                 <span class="keyword">var</span> earcut = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/earcut-port.js</span><span class="delimiter">'</span></span>)().earcut;
-                
+
                 <span class="keyword">function</span> <span class="function">arctotriangles</span>(arc){
-                        <span class="keyword">if</span> (!arc) <span class="keyword">return</span> [];
-                        <span class="keyword">var</span> verts = [];
-                        <span class="keyword">var</span> flatverts = [];
-                        <span class="keyword">var</span> A0 = arc[<span class="integer">0</span>];
-                        <span class="keyword">var</span> nx = A0[<span class="integer">0</span>];
-                        <span class="keyword">var</span> ny = A0[<span class="integer">1</span>];
-                        flatverts.push(nx);
-                        flatverts.push(ny);
-                
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i =<span class="integer">1</span> ;i&lt;arc.length;i++){
-                                <span class="keyword">var</span> A = arc[i];
-                                nx +=  A[<span class="integer">0</span>];
-                                ny +=  A[<span class="integer">1</span>];
-                                flatverts.push(nx);
-                                flatverts.push(ny);
+                        <span class="keyword">if</span> (!arc) <span class="keyword">return</span> []
+                        <span class="keyword">var</span> verts = []
+                        <span class="keyword">var</span> flatverts = []
+                        <span class="keyword">var</span> A0 = arc[<span class="integer">0</span>]
+                        <span class="keyword">var</span> nx = A0[<span class="integer">0</span>]
+                        <span class="keyword">var</span> ny = A0[<span class="integer">1</span>]
+
+                        flatverts.push(nx)
+                        flatverts.push(ny)
+                        
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; arc.length; i++){
+                                <span class="keyword">var</span> A = arc[i]
+                                nx += A[<span class="integer">0</span>]
+                                ny += A[<span class="integer">1</span>]
+                                flatverts.push(nx)
+                                flatverts.push(ny)
                         }
                         
-                        <span class="keyword">var</span> triangles = earcut(flatverts);
+                        <span class="keyword">var</span> triangles = earcut(flatverts)
                         
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;triangles.length;i++){
-                                idx = triangles[i];
-                                verts.push(vec2(flatverts[idx*<span class="integer">2</span>],flatverts[idx*<span class="integer">2</span> + <span class="integer">1</span>]));
-                        }
-                        <span class="keyword">return</span> verts;                        
-                }
-                
-                define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">building</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
-                        
-                        <span class="local-variable">this</span>.attributes = {                                
-                                <span class="key">buildings</span>:[],
-                                <span class="key">scalefactor</span>: <span class="float">1.0</span>,
-                                <span class="key">currentbuilding</span>:-<span class="integer">1</span>
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; triangles.length; i++){
+                                idx = triangles[i]
+                                verts.push(vec2(flatverts[idx * <span class="integer">2</span>], flatverts[idx * <span class="integer">2</span> + <span class="integer">1</span>]))
                         }
 
-                        <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">false</span>;
+                        <span class="keyword">return</span> verts
+                }
+
+                define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">building</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
+                        
+                        <span class="local-variable">this</span>.attributes = {
+                                <span class="key">buildings</span>: [],
+                                <span class="key">scalefactor</span>: <span class="float">1.0</span>,
+                                <span class="key">currentbuilding</span>: -<span class="integer">1</span>
+                        }
+
+                        <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">false</span>
                         
                         <span class="local-variable">this</span>.<span class="function">onbuildings</span> = <span class="keyword">function</span>(){
-                                <span class="local-variable">this</span>.pickrange = <span class="local-variable">this</span>.buildings.length;
+                                <span class="local-variable">this</span>.pickrange = <span class="local-variable">this</span>.buildings.length
                                 <span class="comment">//console.log(&quot;setting pickrange:&quot;, this.pickrange);</span>
                         }
-                
-                
+                        
                         <span class="local-variable">this</span>.<span class="function">mouseout</span> = <span class="keyword">function</span>(){
                                 <span class="local-variable">this</span>.currentbuilding = -<span class="integer">1</span>;
                         }
+
                         <span class="local-variable">this</span>.<span class="function">mouseover</span> =  <span class="keyword">function</span>(){
-                                <span class="keyword">var</span> building = <span class="local-variable">this</span>.buildings[<span class="local-variable">this</span>.last_pick_id ];
-                                <span class="local-variable">this</span>.currentbuilding = <span class="local-variable">this</span>.last_pick_id;
-                                <span class="keyword">if</span> (building){
-                                <span class="keyword">var</span> text = <span class="string"><span class="delimiter">&quot;</span><span class="content">Building</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">var</span> building = <span class="local-variable">this</span>.buildings[<span class="local-variable">this</span>.last_pick_id]
+                                <span class="local-variable">this</span>.currentbuilding = <span class="local-variable">this</span>.last_pick_id
+                                <span class="keyword">if</span>(building){
+                                        <span class="keyword">var</span> text = <span class="string"><span class="delimiter">&quot;</span><span class="content">Building</span><span class="delimiter">&quot;</span></span>
                                         <span class="comment">//console.log(building);</span>
-                                
-                                <span class="keyword">if</span> (building.kind) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.kind;
-                                <span class="keyword">if</span> (building.name) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.name;
-                                <span class="keyword">if</span> (building.street) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.street;
-                                <span class="keyword">if</span> (building.housenumber) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.housenumber;                                
-                                <span class="local-variable">this</span>.screen.status = text;
+                                        <span class="keyword">if</span>(building.kind) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.kind
+                                        <span class="keyword">if</span>(building.name) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.name
+                                        <span class="keyword">if</span>(building.street) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.street
+                                        <span class="keyword">if</span>(building.housenumber) text += <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + building.housenumber
+                                        <span class="local-variable">this</span>.screen.status = text
                                 }
-                                <span class="keyword">else</span>{
-                                        console.log(<span class="local-variable">this</span>.last_pick_id);
+                                <span class="keyword">else</span> {
+                                        console.log(<span class="local-variable">this</span>.last_pick_id)
                                 }
                         }
                         
@@ -965,7 +971,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
 
                                         PickGuid = mesh.id;
-                                        <span class="keyword">if</span> (abs(view.currentbuilding - mesh.id)&lt;<span class="float">0.2</span>) <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>
+                                        <span class="keyword">if</span> (abs(view.currentbuilding - mesh.id)&lt;<span class="float">0.2</span>) <span class="keyword">return</span> vec4(mesh.color.x, <span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">1</span>);
+                                        <span class="comment">//return pal.pal1(mesh.pos.z/300.-0.1*view.time +mesh.id/100.) * mesh.color</span>
                                         <span class="keyword">return</span> mesh.color;
                                 }
                 
@@ -997,7 +1004,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                                         A2[<span class="integer">0</span>] -= OA1[<span class="integer">0</span>];
                                                                 }
                                                                 
-                                                                c = <span class="float">0.7</span> + <span class="float">0.3</span> *Math.sin(Math.atan2(A2[<span class="integer">1</span>]-A1[<span class="integer">1</span>], A2[<span class="integer">0</span>]-A1[<span class="integer">0</span>]));
+                                                                c = <span class="float">0.4</span> + <span class="float">0.3</span> *Math.sin(Math.atan2(A2[<span class="integer">1</span>]-A1[<span class="integer">1</span>], A2[<span class="integer">0</span>]-A1[<span class="integer">0</span>]));
                                                                 
                                                                 <span class="local-variable">this</span>.mesh.push(A1[<span class="integer">0</span>],A1[<span class="integer">1</span>],<span class="integer">0</span>, c,c,c, <span class="integer">1</span>, i);
                                                                 <span class="local-variable">this</span>.mesh.push(A2[<span class="integer">0</span>],A2[<span class="integer">1</span>],<span class="integer">0</span>, c,c,c, <span class="integer">1</span>, i);
@@ -1027,8 +1034,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 })
                                         
                 define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">land</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
-                        <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">false</span>;
-                        <span class="local-variable">this</span>.attributes = {                                
+                        <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.attributes = {
                                 <span class="key">lands</span>:[],
                                 <span class="key">currentland</span>: -<span class="integer">1</span>
                         }
@@ -1405,8 +1412,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }.bind(<span class="local-variable">this</span>));
                         }
                         
-
-                        
                         <span class="local-variable">this</span>.<span class="function">loadstring</span> = <span class="keyword">function</span>(str){
                                 <span class="local-variable">this</span>.thedata = JSON.parse(str);        
                                         
@@ -1452,7 +1457,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                                 B.arcs.push(arc);
                                                         }
                                                         <span class="keyword">else</span>
-                                                        <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>;k&lt;Bb.arcs.length;k++){
+                                                        <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>; k &lt; Bb.arcs.length;k++){
                                                                 B.arcs.push(<span class="local-variable">this</span>.thedata.arcs[Bb.arcs[k]]);
                                                         
                                                 }
@@ -1520,8 +1525,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         
                         <span class="local-variable">this</span>.<span class="function">load</span> = <span class="keyword">function</span>(name){
                                 <span class="local-variable">this</span>.rpc.fileio.readfile(<span class="string"><span class="delimiter">&quot;</span><span class="content">$apps/VectorMap/</span><span class="delimiter">&quot;</span></span>+name  ).then(<span class="keyword">function</span>(result){
-                                        <span class="local-variable">this</span>.loadstring(result.value);                                        
-                                
+                                        <span class="local-variable">this</span>.loadstring(result.value);
                                 }.bind(<span class="local-variable">this</span>));                
                         }        
                         
@@ -1553,6 +1557,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         })
         
+
+        <span class="keyword">var</span> myclass = define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
+
+        })
         
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                 fileio(),
@@ -1567,7 +1575,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">themap</span><span class="delimiter">&quot;</span></span>).moveTo(x,y,zoom);
                                 },
                                 <span class="function">onstatus</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">themenu</span><span class="delimiter">&quot;</span></span>).infotext = <span class="local-variable">this</span>.status;},
-                                <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">#303030</span><span class="delimiter">'</span></span>), <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">VectorMap</span><span class="delimiter">&quot;</span></span> },
+                                <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">#303030</span><span class="delimiter">'</span></span>), <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">VectorMap</span><span class="delimiter">&quot;</span></span>},
                                 menubar({
                                         <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">themenu</span><span class="delimiter">&quot;</span></span>,<span class="key">menus</span>:[
                                                 {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">File</span><span class="delimiter">&quot;</span></span>, <span class="key">commands</span>:[
@@ -1575,12 +1583,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 ]}
                                         ]}
                                 ),
+                                myclass({}),
                                 view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">darkblue</span><span class="delimiter">&quot;</span></span>, <span class="key">clearcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>, <span class="function">onzoom</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">themap</span><span class="delimiter">&quot;</span></span>).setZoomLevel(<span class="local-variable">this</span>.zoom, <span class="local-variable">this</span>.layout.width, <span class="local-variable">this</span>.layout.height);}},
                                 <span class="local-variable">this</span>.mainscreen({ <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainscreen</span><span class="delimiter">&quot;</span></span>,                                 
                                         <span class="comment">//perspective cam: </span>
-                                        <span class="comment">//camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:&quot;3d&quot;,</span>
+                                        <span class="key">camera</span>:[<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1000</span> ], <span class="key">lookat</span>:[<span class="integer">1000</span>,<span class="integer">1000</span>,<span class="integer">0</span>],<span class="key">nearplane</span>:<span class="integer">10</span>, <span class="key">farplane</span>:<span class="integer">12000</span>, <span class="key">up</span>:[<span class="integer">0</span>,<span class="integer">0</span>,-<span class="integer">1</span>],<span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,
                                         <span class="comment">// &quot;ortho&quot; cam: </span>
-                                        <span class="key">camera</span>:vec3(<span class="integer">3000</span>,<span class="integer">3000</span>,<span class="integer">6000</span>), <span class="key">fov</span>:<span class="integer">30</span>, <span class="key">lookat</span>:vec3(<span class="integer">3000</span>,<span class="integer">3000</span>,<span class="integer">0</span>),<span class="key">nearplane</span>:<span class="integer">10</span>, <span class="key">farplane</span>:<span class="integer">12000</span>, <span class="key">up</span>:vec3(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>),<span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="comment">//camera:vec3(3000,3000,6000), fov:30, lookat:vec3(3000,3000,0),nearplane:10, farplane:12000, up:vec3(0,1,0),viewport:&quot;3d&quot;,</span>
                                         <span class="key">boundscheck</span>:<span class="predefined-constant">false</span>, <span class="key">flex</span>:<span class="integer">1</span>, 
                                 }),
                                 ballrotate({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ballrotate1</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainscreen</span><span class="delimiter">&quot;</span></span>})
@@ -1597,6 +1606,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="function">init</span>:<span class="keyword">function</span>(){
                                 console.log(<span class="local-variable">this</span>.rpc.index)
                         },
+                        
                         <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">darkgray</span><span class="delimiter">'</span></span>), <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">VectorMap remote</span><span class="delimiter">&quot;</span></span> },
                         speakergrid({<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }, view({<span class="key">width</span>:<span class="integer">300</span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}
                         ,label({<span class="key">fontsize</span>:<span class="integer">40</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Vectormap</span><span class="delimiter">&quot;</span></span> , <span class="key">bg</span>:<span class="integer">0</span>})

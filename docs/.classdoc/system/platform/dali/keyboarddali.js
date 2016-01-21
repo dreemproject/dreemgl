@@ -1,4 +1,0 @@
-/**
- * @class keyboarddali
- * @extends keyboard
- */

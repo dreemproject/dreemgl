@@ -900,21 +900,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n746" name="n746">746</a>
 <a href="#n747" name="n747">747</a>
 <a href="#n748" name="n748">748</a>
-<a href="#n749" name="n749">749</a>
-<strong><a href="#n750" name="n750">750</a></strong>
-<a href="#n751" name="n751">751</a>
-<a href="#n752" name="n752">752</a>
-<a href="#n753" name="n753">753</a>
-<a href="#n754" name="n754">754</a>
-<a href="#n755" name="n755">755</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, button, view, menubutton) {
-        
+
         <span class="keyword">var</span> FlexLayout = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/layout</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/render</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Animate = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/animate</span><span class="delimiter">'</span></span>)
@@ -942,13 +935,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span>
 
-        <span class="local-variable">this</span>.rpcproxy = <span class="predefined-constant">false</span>        
+        <span class="local-variable">this</span>.rpcproxy = <span class="predefined-constant">false</span>
         <span class="local-variable">this</span>.viewport = <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.dirty = <span class="predefined-constant">true</span>
         <span class="local-variable">this</span>.flex = <span class="predefined-constant">NaN</span>
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>
-        
+
         <span class="local-variable">this</span>.tooltip = <span class="string"><span class="delimiter">'</span><span class="content">Application</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
@@ -961,17 +954,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.mouse_view = <span class="predefined-constant">undefined</span>
                 <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>
                 <span class="local-variable">this</span>.keyboard = <span class="local-variable">this</span>.device.keyboard
-                <span class="local-variable">this</span>.mouse = <span class="local-variable">this</span>.device.mouse 
+                <span class="local-variable">this</span>.mouse = <span class="local-variable">this</span>.device.mouse
                 <span class="local-variable">this</span>.touch = <span class="local-variable">this</span>.device.touch
                 <span class="local-variable">this</span>.midi = <span class="local-variable">this</span>.device.midi
                 <span class="local-variable">this</span>.bindInputs()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">defaultKeyboardHandler</span> = <span class="keyword">function</span>(target, v, prefix){
                 <span class="keyword">if</span> (!prefix) prefix = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                <span class="keyword">if</span>(!v.name) <span class="keyword">return</span> console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">OH NOES</span><span class="delimiter">&quot;</span></span>,v)                
+
                 <span class="keyword">var</span> keyboard = <span class="local-variable">this</span>.screen.keyboard
                 keyboard.textarea.focus()
+
                 <span class="keyword">var</span> name = prefix + <span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span> + v.name[<span class="integer">0</span>].toUpperCase() + v.name.slice(<span class="integer">1</span>)
                 <span class="local-variable">this</span>.undo_group++
 
@@ -979,25 +973,27 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(keyboard.ctrl) name += <span class="string"><span class="delimiter">'</span><span class="content">Ctrl</span><span class="delimiter">'</span></span>
                 <span class="keyword">if</span>(keyboard.alt) name += <span class="string"><span class="delimiter">'</span><span class="content">Alt</span><span class="delimiter">'</span></span>
                 <span class="keyword">if</span>(keyboard.shift) name += <span class="string"><span class="delimiter">'</span><span class="content">Shift</span><span class="delimiter">'</span></span>
-                                
+
                 <span class="keyword">if</span>(target[name]) {
                         target[name](v)
                 }
                 <span class="keyword">else</span>{
-                        console.log(name);
-                        <span class="keyword">if</span> (target.keydownHandler) target.keydownHandler(name);
+                        <span class="comment">//console.log(name)</span>
+                        <span class="keyword">if</span> (target.keydownHandler) target.keydownHandler(name)
                 }
         }
 
         <span class="local-variable">this</span>.remapmatrix = mat4();
         <span class="local-variable">this</span>.invertedmousecoords = vec2();
-        
+
         <span class="comment">// display a classic &quot;rightclick&quot; or &quot;dropdown&quot; menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.</span>
         <span class="local-variable">this</span>.<span class="function">contextMenu</span> = <span class="keyword">function</span>(commands, x,y){
-                
+
                 <span class="keyword">if</span> (!y) y = <span class="local-variable">this</span>.mouse._y;
                 <span class="keyword">if</span> (!x) x = <span class="local-variable">this</span>.mouse._x;
-                
+
+                <span class="comment">// TODO(aki): move menu into a configurable component.</span>
+
                 <span class="local-variable">this</span>.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">var</span> res = [];
                         <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> commands){
@@ -1006,7 +1002,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> act = c.clickaction;
                                 <span class="keyword">if</span> (!act &amp;&amp; c.commands){
                                         <span class="function">act</span> = <span class="keyword">function</span>(){
-                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">opening submenu?</span><span class="delimiter">&quot;</span></span>); 
+                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">opening submenu?</span><span class="delimiter">&quot;</span></span>);
                                                 console.log(<span class="local-variable">this</span>.constructor.name, <span class="local-variable">this</span>.layout);
                                                 <span class="local-variable">this</span>.screen.contextMenu(<span class="local-variable">this</span>.commands, <span class="local-variable">this</span>.layout.absx + <span class="local-variable">this</span>.layout.width, <span class="local-variable">this</span>.layout.absy);
                                                 <span class="keyword">return</span> <span class="predefined-constant">true</span>;
@@ -1019,11 +1015,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="key">borderradius</span>: <span class="integer">6</span>,
                                                 <span class="key">bold</span>:<span class="predefined-constant">false</span>,
                                                 <span class="key">text</span>:c.name,
-                                                
+
                                                 <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a3a3a3</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                                 <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>, 
+                                                <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a3a3a3</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">textcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">textactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
@@ -1043,46 +1039,40 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">padding</span>:<span class="integer">4</span>,
                                 <span class="key">dropshadowhardness</span>:<span class="integer">0</span>,
                                 <span class="key">dropshadowradius</span>: <span class="integer">20</span>,
-                                <span class="key">dropshadowoffset</span>:vec2(<span class="integer">9</span>,<span class="integer">9</span>), 
+                                <span class="key">dropshadowoffset</span>:vec2(<span class="integer">9</span>,<span class="integer">9</span>),
                                 <span class="key">borderradius</span>:<span class="integer">7</span>,
                                 <span class="function">miss</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
                                 },
-                                <span class="function">init</span>:<span class="keyword">function</span>(){                                                                        
+                                <span class="function">init</span>:<span class="keyword">function</span>(){
                                 },
                                 <span class="key">pos</span>:[x,y],
                                 <span class="key">size</span>:[<span class="integer">300</span>,<span class="predefined-constant">NaN</span>],<span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
                         }, res)
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(result){
-                        
+
                 })
-
-                                
         };
-        
+
         <span class="keyword">function</span> <span class="function">UnProject</span>(glx, gly, glz, modelview, projection){
-                <span class="keyword">var</span> inv = vec4();
+                <span class="keyword">var</span> inv = vec4()
 
-                <span class="keyword">var</span> A = mat4.mat4_mul_mat4(modelview, projection);
-                <span class="keyword">var</span> m = mat4.invert(A);
+                <span class="keyword">var</span> A = mat4.mat4_mul_mat4(modelview, projection)
+                <span class="keyword">var</span> m = mat4.invert(A)
 
+                inv[<span class="integer">0</span>] = glx
+                inv[<span class="integer">1</span>] = gly
+                inv[<span class="integer">2</span>] = <span class="float">2.0</span> * glz - <span class="float">1.0</span>
+                inv[<span class="integer">3</span>] = <span class="float">1.0</span>
 
-
-                inv[<span class="integer">0</span>]=glx;
-                inv[<span class="integer">1</span>]=gly;
-                inv[<span class="integer">2</span>]=<span class="float">2.0</span>*glz-<span class="float">1.0</span>;
-                inv[<span class="integer">3</span>]=<span class="float">1.0</span>;
-
-                out = vec4.vec4_mul_mat4(inv, m);
-
+                out = vec4.vec4_mul_mat4(inv, m)
 
                 <span class="comment">// divide by W to perform perspective!</span>
-                out[<span class="integer">0</span>] /= out[<span class="integer">3</span>];
-                out[<span class="integer">1</span>] /= out[<span class="integer">3</span>];
-                out[<span class="integer">2</span>] /= out[<span class="integer">3</span>];
+                out[<span class="integer">0</span>] /= out[<span class="integer">3</span>]
+                out[<span class="integer">1</span>] /= out[<span class="integer">3</span>]
+                out[<span class="integer">2</span>] /= out[<span class="integer">3</span>]
 
-
-                <span class="keyword">return</span> vec3(out);
+                <span class="keyword">return</span> vec3(out)
         }
 
         <span class="local-variable">this</span>.<span class="function">globalMouse</span> = <span class="keyword">function</span>(node){
@@ -1093,13 +1083,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">return</span> vec2(<span class="local-variable">this</span>.mouse._x, <span class="local-variable">this</span>.mouse._y);
         }
-        
-        <span class="comment">// internal: remap the mouse to a view node        </span>
+
+        <span class="comment">// internal: remap the mouse to a view node</span>
         <span class="local-variable">this</span>.<span class="function">remapMouse</span> = <span class="keyword">function</span>(node, dbg){
-                        
+
                 <span class="keyword">var</span> parentlist = []
                 <span class="keyword">var</span> ip = node.parent
-                
+
                 <span class="keyword">var</span> sx = <span class="local-variable">this</span>.device.main_frame.size[<span class="integer">0</span>]  / <span class="local-variable">this</span>.device.ratio
                 <span class="keyword">var</span> sy = <span class="local-variable">this</span>.device.main_frame.size[<span class="integer">1</span>]  / <span class="local-variable">this</span>.device.ratio
                 <span class="keyword">var</span> mx = <span class="local-variable">this</span>.mouse._x/(sx/<span class="integer">2</span>) - <span class="float">1.0</span>
@@ -1110,11 +1100,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ip = ip.parent
                 }
                 <span class="keyword">var</span> logging = <span class="predefined-constant">false</span>
-                <span class="keyword">if</span> (dbg) 
+                <span class="keyword">if</span> (dbg)
                 {
                         logging = <span class="predefined-constant">true</span>;
                 }
-                
+
                 <span class="keyword">if</span> (logging)
                 {
                         <span class="comment">//console.clear()</span>
@@ -1129,7 +1119,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                         console.log(parentdesc)
                 }
-                
+
                 <span class="keyword">var</span> raystart = vec3(mx,my,-<span class="integer">100</span>)
                 <span class="keyword">var</span> rayend   = vec3(mx,my,<span class="integer">100</span>)
                 <span class="keyword">var</span> lastrayafteradjust = vec3(mx,my,-<span class="integer">100</span>)
@@ -1138,26 +1128,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> camerapos = vec3(<span class="integer">0</span>)
                 <span class="keyword">var</span> scaletemp = mat4.scalematrix([<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>])
                 <span class="keyword">var</span> transtemp2 = mat4.translatematrix([-<span class="integer">1</span>,-<span class="integer">1</span>,<span class="integer">0</span>])
-                
+
                 <span class="keyword">if</span> (logging)  console.log(parentlist.length-<span class="integer">1</span>, raystart, <span class="string"><span class="delimiter">&quot;</span><span class="content">mousecoords in GL space</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">var</span> lastmode = <span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = parentlist.length - <span class="integer">1</span>; i &gt;= <span class="integer">0</span>; i--) {
                         <span class="keyword">var</span> P = parentlist[i]
-                        
+
                         <span class="keyword">var</span> newmode = P.parent? P._viewport:<span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>
                         <span class="keyword">if</span> (logging) console.log(i, <span class="string"><span class="delimiter">&quot;</span><span class="content">logging for </span><span class="delimiter">&quot;</span></span>, newmode, raystart, P.parent);
                         <span class="keyword">if</span> (P.parent) {
 
                                 <span class="keyword">var</span> MM = P._viewport? P.viewportmatrix: P.totalmatrix
-                                
+
                                 <span class="keyword">if</span> (!P.viewportmatrix) console.log(i, <span class="string"><span class="delimiter">&quot;</span><span class="content">whaaa</span><span class="delimiter">&quot;</span></span> )
                                 mat4.invert(P.viewportmatrix, <span class="local-variable">this</span>.remapmatrix)
 
                                 <span class="keyword">if</span> (lastmode == <span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>) { <span class="comment">// 3d to layer transition -&gt; do a raypick.</span>
 
                                         <span class="keyword">if</span> (logging) console.log(i, lastrayafteradjust, <span class="string"><span class="delimiter">&quot;</span><span class="content">performing raypick on previous clipspace coordinates</span><span class="delimiter">&quot;</span></span> )
-                                        
+
                                         <span class="keyword">var</span> startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, <span class="integer">0</span>, lastviewmatrix, lastprojection)
                                         <span class="keyword">var</span> endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, <span class="integer">1</span>, lastviewmatrix, lastprojection)
 
@@ -1176,53 +1166,53 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
 
                                 raystart = vec3.mul_mat4(raystart, <span class="local-variable">this</span>.remapmatrix)
-                        
+
                                 <span class="comment">// console.log(i, ressofar, &quot;viewportmatrix&quot;);</span>
-                                
+
                                 <span class="keyword">if</span> (logging)  console.log(i, <span class="string"><span class="delimiter">&quot;</span><span class="content">LAYOUT</span><span class="delimiter">&quot;</span></span>, P.layout.width, P.layout.height);
-                                
+
                                 mat4.scalematrix([P.layout.width/<span class="integer">2</span>,P.layout.height/<span class="integer">2</span>,<span class="integer">1000</span>/<span class="integer">2</span>], scaletemp)
                                 mat4.invert(scaletemp, <span class="local-variable">this</span>.remapmatrix)
 
-                                raystart = vec3.mul_mat4(raystart, <span class="local-variable">this</span>.remapmatrix)                                
-                                <span class="comment">// console.log(i, ressofar, &quot;scalematrix&quot;);        </span>
+                                raystart = vec3.mul_mat4(raystart, <span class="local-variable">this</span>.remapmatrix)
+                                <span class="comment">// console.log(i, ressofar, &quot;scalematrix&quot;);</span>
 
                                 raystart = vec3.mul_mat4(raystart, transtemp2)
-                        
+
                                 lastrayafteradjust = vec3(raystart.x, raystart.y,-<span class="integer">1</span>);
                                 lastprojection = P.drawpass.colormatrices.perspectivematrix;
                                 lastviewmatrix = P.drawpass.colormatrices.lookatmatrix;
                                 camerapos = P._camera;
-                                
+
                                 <span class="keyword">if</span> (logging){
                                         <span class="keyword">if</span> (lastprojection) mat4.debug(lastprojection);
                                 <span class="keyword">if</span> (lastviewmatrix)         mat4.debug(lastviewmatrix);
                                         console.log(i, raystart, <span class="string"><span class="delimiter">&quot;</span><span class="content">coordinates after adjusting for layoutwidth/height</span><span class="delimiter">&quot;</span></span>, P._viewport);
-                                }                                
+                                }
 
-                                
-                        
+
+
                         }
                         <span class="keyword">if</span>(i == <span class="integer">0</span> &amp;&amp; node.noscroll){
-                                <span class="keyword">if</span> (logging) 
+                                <span class="keyword">if</span> (logging)
                                 {
                                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">i==0, noscroll!</span><span class="delimiter">&quot;</span></span>);
                                 }
                                 mat4.invert(P.drawpass.colormatrices.noscrollmatrix, <span class="local-variable">this</span>.remapmatrix)
-                        } 
+                        }
                         <span class="keyword">else</span> {
-                                <span class="keyword">if</span> (logging){        
+                                <span class="keyword">if</span> (logging){
                                         console.log(i, <span class="string"><span class="delimiter">&quot;</span><span class="content">noscroll = false -  using regular viewmatrix!</span><span class="delimiter">&quot;</span></span>);
                                         mat4.debug(P.drawpass.colormatrices.viewmatrix);
                                 }
                                 mat4.invert(P.drawpass.colormatrices.viewmatrix, <span class="local-variable">this</span>.remapmatrix)
-                                
+
                         }
                         <span class="keyword">if</span> (logging) mat4.debug(<span class="local-variable">this</span>.remapmatrix);
                         raystart = vec3.mul_mat4(raystart, <span class="local-variable">this</span>.remapmatrix)
-                        
+
                         lastmode = newmode
-                        <span class="comment">// console.log(i, raystart, &quot;last&quot;);        </span>
+                        <span class="comment">// console.log(i, raystart, &quot;last&quot;);</span>
                 }
                 <span class="keyword">if</span> (logging) console.log(node._viewport, node.viewportmatrix, node.totalmatrix);
                 <span class="keyword">var</span> MM = node._viewport?node.viewportmatrix: node.totalmatrix
@@ -1243,17 +1233,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">return</span> vec2(raystart.x, raystart.y)
         }
-        
+
         <span class="comment">// pick a view at the mouse coordinate and console.log its structure</span>
         <span class="local-variable">this</span>.<span class="function">debugPick</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.device.pickScreen(<span class="local-variable">this</span>.mouse.x, <span class="local-variable">this</span>.mouse.y).then(<span class="keyword">function</span>(msg){
                         <span class="keyword">var</span> view = msg.view
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.last_debug_view === view) <span class="keyword">return</span>
                         <span class="local-variable">this</span>.last_debug_view = view
-                        <span class="keyword">var</span> found 
+                        <span class="keyword">var</span> found
                         <span class="keyword">function</span> <span class="function">dump</span>(walk, parent){
                                 <span class="keyword">var</span> layout = walk.layout || {}
-                                <span class="keyword">var</span> named = (<span class="keyword">new</span> Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">return function </span><span class="delimiter">&quot;</span></span>+(walk.name || walk.constructor.name)+<span class="string"><span class="delimiter">'</span><span class="content">(){}</span><span class="delimiter">'</span></span>))()
+                                <span class="keyword">var</span> named = (<span class="keyword">new</span> Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">return function </span><span class="delimiter">&quot;</span></span> + (walk.name || walk.constructor.name) + <span class="string"><span class="delimiter">'</span><span class="content">(){}</span><span class="delimiter">'</span></span>))()
                                 Object.defineProperty(named.prototype, <span class="string"><span class="delimiter">'</span><span class="content">zflash</span><span class="delimiter">'</span></span>, {
                                         <span class="function">get</span>:<span class="keyword">function</span>(){
                                                 <span class="comment">// humm. ok so we wanna flash it</span>
@@ -1294,10 +1284,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }.bind(<span class="local-variable">this</span>))
         }
 
-        
         <span class="local-variable">this</span>.<span class="function">releaseCapture</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>;
+                <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>
         }
+
         <span class="comment">// bind all keyboard/mouse/touch inputs for delegating it into the view tree</span>
         <span class="local-variable">this</span>.<span class="function">bindInputs</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.keyboard.<span class="function">down</span> = <span class="keyword">function</span>(v){
@@ -1370,7 +1360,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.mouse_capture) {
                                 <span class="local-variable">this</span>.mouse_capture = <span class="local-variable">this</span>.mouse_view
-                        } 
+                        }
                         <span class="comment">// lets give this thing focus</span>
                         <span class="comment">//if (this.mouse_view){</span>
                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.mouse_view)){
@@ -1380,7 +1370,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.modal){
                                         <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">miss</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
                                 }
-                        <span class="comment">//} </span>
+                        <span class="comment">//}</span>
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="local-variable">this</span>.mouse.<span class="function">leftup</span> = <span class="keyword">function</span>(){
@@ -1446,7 +1436,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         if(this.modal_miss){
                                 this.modal_miss = false
                                 return
-                        }                        
+                        }
                         if (this.lastmouseguid &gt; 0) {
                                 if (this.uieventdebug){
                                         console.log(&quot; clicked: &quot; + this.guidmap[this.lastmouseguid].constructor.name);
@@ -1472,7 +1462,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// focus the next view from view</span>
         <span class="local-variable">this</span>.<span class="function">focusNext</span> = <span class="keyword">function</span>(view){
                 <span class="comment">// continue the childwalk.</span>
-                <span class="keyword">var</span> screen = <span class="local-variable">this</span>, found 
+                <span class="keyword">var</span> screen = <span class="local-variable">this</span>, found
                 <span class="keyword">function</span> <span class="function">findnext</span>(node, find){
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; node.children.length; i++){
                                 <span class="keyword">var</span> view = node.children[i]
@@ -1486,7 +1476,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span>(findnext(view, find)) <span class="keyword">return</span> <span class="predefined-constant">true</span>
                         }
                 }
-                
+
                 <span class="keyword">if</span>(!findnext(<span class="local-variable">this</span>, view)){
                         found = <span class="predefined-constant">true</span>
                         findnext(<span class="local-variable">this</span>)
@@ -1517,7 +1507,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-
         <span class="comment">// Modal handling</span>
 
         <span class="comment">// check if a view is in the modal chain</span>
@@ -1536,24 +1525,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
         }
-        
+
         <span class="comment">// close the current modal window</span>
         <span class="local-variable">this</span>.<span class="function">closeModal</span> = <span class="keyword">function</span>(value){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.modal &amp;&amp; <span class="local-variable">this</span>.modal.resolve)
                         <span class="keyword">return</span> <span class="local-variable">this</span>.modal.resolve(value)
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">releaseCapture</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_capture){
                         <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                        <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>                                
+                        <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>
                 }
         }
 
-
         <span class="comment">// open a modal window from object like so: this.openModal( view({size:[100,100]}))</span>
         <span class="local-variable">this</span>.<span class="function">closeModal</span> = <span class="keyword">function</span>(value){
-<span class="comment">// lets close the modal window</span>
+                <span class="comment">// lets close the modal window</span>
                 <span class="keyword">var</span> modal_stack = <span class="local-variable">this</span>.modal_stack
 
                 <span class="keyword">var</span> mymodal = modal_stack.pop()
@@ -1573,11 +1561,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">openModal</span> = <span class="keyword">function</span>(render){
                 <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
-                        
+
                         <span class="local-variable">this</span>.releaseCapture()
 
                         <span class="comment">// wrap our render function in a temporary view</span>
-                        <span class="keyword">var</span> vroot = <span class="predefined">$ui$view</span>()
+                        <span class="keyword">var</span> vroot = view()
                         <span class="comment">// set up stuff</span>
                         vroot.render = render
                         vroot.parent = <span class="local-variable">this</span>
@@ -1602,7 +1590,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// animation</span>
 
-
         <span class="comment">// internal, start an animation, delegated from view</span>
         <span class="local-variable">this</span>.<span class="function">startAnimationRoot</span> = <span class="keyword">function</span>(obj, key, value, track, promise){
                 <span class="comment">// ok so. if we get a config passed in, we pass that in</span>
@@ -1618,13 +1605,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
 
-
         <span class="comment">// internal, stop an animation, delegated from view</span>
         <span class="local-variable">this</span>.<span class="function">stopAnimationRoot</span> = <span class="keyword">function</span>(obj, key){
                 <span class="keyword">var</span> animkey = obj.getViewGuid() + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> anim = <span class="local-variable">this</span>.anims[animkey]
                 <span class="keyword">if</span>(anim){
-                        <span class="keyword">delete</span> <span class="local-variable">this</span>.anims[animkey]                        
+                        <span class="keyword">delete</span> <span class="local-variable">this</span>.anims[animkey]
                         <span class="keyword">if</span>(anim.promise)anim.promise.reject()
                 }
         }
@@ -1643,7 +1629,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> mytime = time - anim.start_time
                         <span class="keyword">var</span> value = anim.compute(mytime)
                         <span class="keyword">if</span>(value <span class="keyword">instanceof</span> anim.End){
-                                <span class="keyword">delete</span> <span class="local-variable">this</span>.anims[key] 
+                                <span class="keyword">delete</span> <span class="local-variable">this</span>.anims[key]
                                 <span class="comment">//console.log(value.last_value)</span>
                                 anim.obj[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + anim.key] = value.last_value
                                 anim.obj.emit(anim.key, {<span class="key">animate</span>:<span class="predefined-constant">true</span>, <span class="key">end</span>:<span class="predefined-constant">true</span>, <span class="key">key</span>: anim.key, <span class="key">owner</span>:anim.obj, <span class="key">value</span>:value.last_value})

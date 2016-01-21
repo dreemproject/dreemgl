@@ -29,24 +29,6 @@
  * persist the postiion
  */
 /**
- * @method page
- * @param event
- */
-/**
- * @method scroll
- * @param event
- */
-/**
- * @method keydown
- * @param key
- */
-/**
  * @method focuslost
  * deny focus loss
- */
-/**
- * @method init
- */
-/**
- * @method render
  */

@@ -190,6 +190,29 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n36" name="n36">36</a>
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (<span class="predefined">$ui$</span>, label) {
 
@@ -205,14 +228,37 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.top = <span class="integer">50</span> * start;
         }
 
+        <span class="local-variable">this</span>.<span class="function">onmousemove</span> = <span class="keyword">function</span> (event) {
+                <span class="local-variable">this</span>.drag = vec2(event.local.x, event.local.y);
+                <span class="keyword">if</span> (event.local.y &lt; <span class="integer">6</span>) {
+                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">ns-resize</span><span class="delimiter">'</span></span>;
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.dragging) {
+                                <span class="local-variable">this</span>.top = <span class="local-variable">this</span>.topstart + <span class="local-variable">this</span>.drag.y - <span class="local-variable">this</span>.dragstart.y;
+                        }
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.height - event.local.y &lt; <span class="integer">6</span>) {
+                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">ns-resize</span><span class="delimiter">'</span></span>;
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">'</span><span class="content">pointer</span><span class="delimiter">'</span></span>;
+                }
+        }
+        <span class="local-variable">this</span>.<span class="function">onmouseleftdown</span> = <span class="keyword">function</span> (event) {
+                <span class="local-variable">this</span>.dragging = <span class="predefined-constant">true</span>;
+                <span class="local-variable">this</span>.topstart = <span class="local-variable">this</span>.top;
+                <span class="local-variable">this</span>.heightstart = <span class="local-variable">this</span>.height;
+                <span class="local-variable">this</span>.dragstart = vec2(event.local.x, event.local.y);
+        }
+        <span class="local-variable">this</span>.<span class="function">onmouseleftup</span> = <span class="keyword">function</span> () {
+                <span class="local-variable">this</span>.dragging = <span class="predefined-constant">false</span>;
+        }
+
         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>;
         <span class="local-variable">this</span>.height = <span class="integer">200</span>;
         <span class="local-variable">this</span>.left = <span class="integer">64</span>;
         <span class="local-variable">this</span>.right = <span class="integer">32</span>;
-        <span class="local-variable">this</span>.borderradius = <span class="integer">12</span>;
+        <span class="local-variable">this</span>.borderradius = <span class="integer">6</span>;
         <span class="local-variable">this</span>.borderwidth = <span class="integer">1</span>;
         <span class="local-variable">this</span>.bordercolor = vec4(<span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">0</span>, <span class="float">0.25</span>);
-        <span class="local-variable">this</span>.bgcolor = vec4(<span class="float">0.5</span>, <span class="integer">1</span>, <span class="float">0.5</span>, <span class="float">0.5</span>);
+        <span class="local-variable">this</span>.bgcolor = vec4(<span class="float">0.5</span>, <span class="integer">1</span>, <span class="float">0.5</span>, <span class="integer">1</span>);
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span> () {
                 <span class="keyword">return</span> [

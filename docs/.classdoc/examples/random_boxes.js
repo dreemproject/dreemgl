@@ -13,6 +13,3 @@
  * When the mouse is clicked, change the location of each view
  * @param event
  */
-/**
- * @method render
- */

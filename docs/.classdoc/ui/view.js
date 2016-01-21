@@ -1,6 +1,7 @@
 /**
  * @class view
  * @extends node
+ * Base UI object
  */
 /**
  * @attribute {boolean} [visible="true"]
@@ -109,9 +110,6 @@
  * alias for the z component of size
  */
 /**
- * @attribute {vec3} [percentsize="NaN,NaN,NaN"]
- */
-/**
  * @attribute {typeless} percentwidth
  * percentage widths/heights
  */
@@ -122,9 +120,6 @@
 /**
  * @attribute {typeless} percentdepth
  * percentage widths/heights
- */
-/**
- * @attribute {vec3} [percentpos="NaN,NaN,NaN"]
  */
 /**
  * @attribute {typeless} percentx
@@ -348,30 +343,13 @@
  * drop shadow color
  */
 /**
- * @attribute {boolean} focus
- */
-/**
  * @attribute {float32} tabstop
  * tabstop, sorted by number
- */
-/**
- * @attribute {Enum} cursor
- */
-/**
- * @method ondropshadowradius
- * @param event
  */
 /**
  * @method onborderradius
  * listen to switch the shaders when borderradius changes
  * @param event
- */
-/**
- * @method onborderwidth
- * @param event
- */
-/**
- * @method setBorderShaders
  */
 /**
  * @method onviewport
@@ -402,24 +380,10 @@
  * @param prev
  */
 /**
- * @method onbgimage
- */
-/**
- * @method setBgImage
- * @param image
- */
-/**
  * @method emitUpward
  * emit an event upward (to all parents) untill a listener is hit
  * @param key
  * @param msg
- */
-/**
- * @method findEmitUpward
- * @param key
- */
-/**
- * @method computeCursor
  */
 /**
  * @method atDraw
@@ -438,9 +402,6 @@
 /**
  * @method reupdate
  * updates all the shaders
- */
-/**
- * @method getViewGuid
  */
 /**
  * @method updateShaders
@@ -464,109 +425,10 @@
  * @param bailbound
  */
 /**
- * @method relayoutRecur
- * @param source
- */
-/**
- * @method relayout
- * @param shallow
- */
-/**
- * @method rematrix
- */
-/**
  * @method pos
  * moving a position in absolute should only trigger a matrix reload
  */
 /**
  * @method doLayout
  * called by the render engine
- */
-/**
- * @method startAnimation
- * @param key
- * @param value
- * @param track
- * @param resolve
- */
-/**
- * @method stopAnimation
- * @param key
- */
-/**
- * @method playAnimation
- * @param key
- */
-/**
- * @method pauseAnimation
- * @param key
- */
-/**
- * @method bgcolorfn
- * @param pos
- */
-/**
- * @method appendChild
- * @param render
- */
-/**
- * @method bordercolorfn
- * @param pos
- */
-/**
- * @method dropshadowopacity
- */
-/**
- * @method moveToFront
- */
-/**
- * @method moveToBack
- */
-/**
- * @event mousedblclick
- */
-/**
- * @event mouseout
- */
-/**
- * @event mouseover
- */
-/**
- * @event mousemove
- */
-/**
- * @event mouseleftdown
- */
-/**
- * @event mouseleftup
- */
-/**
- * @event mouserightdown
- */
-/**
- * @event mouserightup
- */
-/**
- * @event mousewheelx
- */
-/**
- * @event mousewheely
- */
-/**
- * @event mousezoom
- */
-/**
- * @event keyup
- */
-/**
- * @event keydown
- */
-/**
- * @event keypress
- */
-/**
- * @event keypaste
- */
-/**
- * @event miss
  */

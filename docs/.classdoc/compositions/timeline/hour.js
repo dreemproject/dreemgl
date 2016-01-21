@@ -1,4 +1,0 @@
-/**
- * @class hour
- * @extends label
- */

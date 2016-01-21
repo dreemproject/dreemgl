@@ -1,4 +1,0 @@
-/**
- * @class shadernodegl
- * @extends shaderwebgl
- */

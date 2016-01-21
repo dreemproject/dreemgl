@@ -35,27 +35,3 @@
  * @attribute {Enum} [align="left"]
  * Alignment of the bodytext.
  */
-/**
- * @attribute {boolean} bold
- */
-/**
- * @attribute {vec4} [bgcolor="1,1,1,1"]
- */
-/**
- * @method bold
- */
-/**
- * @method selectShader
- */
-/**
- * @method font
- * @param event
- */
-/**
- * @method subpixel
- * @param event
- */
-/**
- * @method measure
- * @param width
- */

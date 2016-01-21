@@ -1,4 +1,0 @@
-/**
- * @class touchnodegl
- * @extends touch
- */

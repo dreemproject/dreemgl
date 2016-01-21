@@ -8,6 +8,3 @@
  * alright what does a draggable do?... well
  * @param event
  */
-/**
- * @method mouseleftup
- */

@@ -218,15 +218,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n64" name="n64">64</a>
 <a href="#n65" name="n65">65</a>
 <a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, hour, event, <span class="predefined">$ui$</span>, view, label) {
 
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>;
         <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>;
-        <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
+        <span class="local-variable">this</span>.flex =<span class="integer">1</span>;
+
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
+                window.d = <span class="local-variable">this</span>
+        }
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">date</span>: <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
+                <span class="key">date</span>: Config({<span class="key">type</span>: String,  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">format</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">24</span><span class="delimiter">&quot;</span></span>}),
         };
 
@@ -235,8 +243,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         };
 
         <span class="local-variable">this</span>.<span class="function">renderHours</span> = <span class="keyword">function</span>() {
-                 <span class="keyword">var</span> hours = [];
-                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="integer">24</span>; i++) {
+                <span class="keyword">var</span> hours = [];
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="integer">24</span>; i++) {
                         <span class="keyword">var</span> h = i;
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.format == <span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>) {
                                 h = (h % <span class="integer">12</span> || <span class="integer">12</span>) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + (i &lt; <span class="integer">12</span> ? <span class="string"><span class="delimiter">'</span><span class="content">am</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">pm</span><span class="delimiter">'</span></span>);
@@ -244,22 +252,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">else</span> {
                                 h += <span class="string"><span class="delimiter">'</span><span class="content"> h</span><span class="delimiter">'</span></span>;
                         }
-                         hours.push(hour({
+                        hours.push(hour({
                                 <span class="key">text</span>: h,
                                 <span class="key">bgcolor</span>: vec4(<span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">0</span>, i % <span class="integer">2</span> ? <span class="integer">0</span> : <span class="float">0.01</span>)
                         }));
-                 }
-                 <span class="keyword">return</span> hours;
+                }
+                <span class="keyword">return</span> hours;
         }
 
         <span class="local-variable">this</span>.<span class="function">renderEvents</span> = <span class="keyword">function</span>() {
-                 <span class="keyword">var</span> events = [];
-                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="local-variable">this</span>.events.length; i++) {
-                         events.push(event({
+                <span class="keyword">var</span> events = [];
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="local-variable">this</span>.events.length; i++) {
+                        events.push(event({
                                 <span class="key">data</span>: <span class="local-variable">this</span>.events[i]
                         }));
-                 }
-                 <span class="keyword">return</span> events;
+                }
+                <span class="keyword">return</span> events;
         }
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
@@ -274,15 +282,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">borderradius</span>: <span class="integer">0</span>,
                         <span class="key">padding</span>: vec4(<span class="integer">12</span>, <span class="integer">8</span>, <span class="integer">12</span>, <span class="integer">4</span>),
                 })
-                ,view(
-                        {
-                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
-                                <span class="key">overflow</span>: <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
-                        },
-                        <span class="local-variable">this</span>.renderHours(),
-                        <span class="local-variable">this</span>.renderEvents()
-                )
+                        ,view({
+                                        <span class="key">flex</span>:<span class="integer">1</span>,
+                                        <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
+                                        <span class="key">overflow</span>: <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
+                                },
+                                <span class="local-variable">this</span>.renderHours(),
+                                <span class="local-variable">this</span>.renderEvents()
+                        )
+
         ]}
 });
 </pre></td>

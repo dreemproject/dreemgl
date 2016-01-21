@@ -1416,6 +1416,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1262" name="n1262">1262</a>
 <a href="#n1263" name="n1263">1263</a>
 <a href="#n1264" name="n1264">1264</a>
+<a href="#n1265" name="n1265">1265</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Copyright (c) 2014, Facebook, Inc.
@@ -1462,6 +1463,7 @@ define(<span class="keyword">function</span> () {
                 <span class="comment">// alright so. what we need to do is bubble down layout_dirty</span>
                 <span class="keyword">if</span>(!nochildren &amp;&amp; node.children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; node.children.length;i++){
                         <span class="keyword">var</span> child = node.children[i]
+                        <span class="keyword">if</span>(!(<span class="string"><span class="delimiter">'</span><span class="content">_viewport</span><span class="delimiter">'</span></span> <span class="keyword">in</span> child))<span class="keyword">continue</span>
                         <span class="keyword">if</span>(child._viewport){ <span class="comment">// its using a different layout pass</span>
                                 <span class="comment">// if we are flex, we have to compute the layout of this child</span>
                                 <span class="keyword">if</span>(!isNaN(child._flex)){

@@ -1637,6 +1637,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1483" name="n1483">1483</a>
 <a href="#n1484" name="n1484">1484</a>
 <a href="#n1485" name="n1485">1485</a>
+<a href="#n1486" name="n1486">1486</a>
+<a href="#n1487" name="n1487">1487</a>
+<a href="#n1488" name="n1488">1488</a>
+<a href="#n1489" name="n1489">1489</a>
+<strong><a href="#n1490" name="n1490">1490</a></strong>
+<a href="#n1491" name="n1491">1491</a>
+<a href="#n1492" name="n1492">1492</a>
+<a href="#n1493" name="n1493">1493</a>
+<a href="#n1494" name="n1494">1494</a>
+<a href="#n1495" name="n1495">1495</a>
+<a href="#n1496" name="n1496">1496</a>
+<a href="#n1497" name="n1497">1497</a>
+<a href="#n1498" name="n1498">1498</a>
+<a href="#n1499" name="n1499">1499</a>
+<strong><a href="#n1500" name="n1500">1500</a></strong>
+<a href="#n1501" name="n1501">1501</a>
+<a href="#n1502" name="n1502">1502</a>
+<a href="#n1503" name="n1503">1503</a>
+<a href="#n1504" name="n1504">1504</a>
+<a href="#n1505" name="n1505">1505</a>
+<a href="#n1506" name="n1506">1506</a>
+<a href="#n1507" name="n1507">1507</a>
+<a href="#n1508" name="n1508">1508</a>
+<a href="#n1509" name="n1509">1509</a>
+<strong><a href="#n1510" name="n1510">1510</a></strong>
+<a href="#n1511" name="n1511">1511</a>
+<a href="#n1512" name="n1512">1512</a>
+<a href="#n1513" name="n1513">1513</a>
+<a href="#n1514" name="n1514">1514</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
@@ -1644,6 +1673,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
+<span class="comment">// Base UI object</span>
+
 
         <span class="keyword">var</span> FlexLayout = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/layout</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/render</span><span class="delimiter">'</span></span>)
@@ -2211,7 +2242,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// redraw our view and bubble up the viewport dirtiness to the root</span>
         <span class="local-variable">this</span>.<span class="function">redraw</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.draw_dirty = <span class="integer">3</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.parent_viewport){
                         <span class="keyword">return</span>
                 }
@@ -2228,6 +2258,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         viewport.draw_dirty = <span class="integer">3</span>
                         parent = viewport.parent
                 }
+                <span class="local-variable">this</span>.draw_dirty = <span class="integer">3</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.screen.device &amp;&amp; <span class="local-variable">this</span>.screen.device.redraw) {
                         <span class="local-variable">this</span>.screen.device.redraw()
                 }
@@ -2511,6 +2542,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> child = children[i]
 
                         <span class="keyword">var</span> clayout = child.layout
+                        <span class="keyword">if</span>(!clayout) <span class="keyword">continue</span>
                         clayout.absx = layout.absx + clayout.left
                         clayout.absy = layout.absy + clayout.top
 
@@ -2619,15 +2651,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
                         <span class="keyword">var</span> flex = <span class="local-variable">this</span>._flex
                         <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
+                                                
+                        <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?layout.width:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>];
+                        <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?layout.height: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>];
                         
-                        <span class="comment">//var presizex = isNaN(this._percentsize[0])?layout.width:this.parent._layout.width * 0.01 * this._percentsize[0];</span>
-                        <span class="comment">//var presizey = isNaN(this._percentsize[1])?layout.height: this.parent._layout.height * 0.01 * this._percentsize[1];</span>
-
+                        <span class="comment">//console.log(this._percentsize, presizex,presizey);</span>
                         <span class="comment">//this._size = vec2(layout.width, layout.height)</span>
                         
                         <span class="keyword">var</span> flexwrap = <span class="local-variable">this</span>._flexwrap
                         <span class="local-variable">this</span>._flex = <span class="integer">1</span>
-                        <span class="local-variable">this</span>._size = vec2(layout.width, layout.height)
+                        <span class="local-variable">this</span>._size = vec2(presizex, presizey)
                         <span class="local-variable">this</span>._flexwrap = <span class="predefined-constant">false</span>
 
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.measure) <span class="local-variable">this</span>.measure() <span class="comment">// otherwise it doesnt get called</span>
@@ -2643,9 +2676,34 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         emitPostLayout(copynodes)
                 }
                 <span class="keyword">else</span>{
+                        <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
+                        
+                        <span class="comment">//this._size = vec2(presizex, presizey)</span>
+                        <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
+                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>._pos;
+                        
+                        <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?size[<span class="integer">0</span>]:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>];
+                        <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?size[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>];
+                        <span class="keyword">var</span> presizez = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">2</span>])?size[<span class="integer">2</span>]: <span class="local-variable">this</span>.parent.depth * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">2</span>];
+                        
+                        <span class="keyword">var</span> preposx = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">0</span>])?pos[<span class="integer">0</span>]:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">0</span>];
+                        <span class="keyword">var</span> preposy = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">1</span>])?pos[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">1</span>];
+                        
+                        
+                        <span class="comment">//console.log(&quot;This is where we get the percentage size&quot;, this._percentsize, presizex,presizey);</span>
+                        
+                        <span class="local-variable">this</span>._size = vec2(presizex, presizey);
+                        <span class="local-variable">this</span>._pos = vec2(preposx, preposy);
+                        <span class="comment">//console.log(this._percentpos, this._pos ,pos);</span>
+                        
                         <span class="keyword">var</span> copynodes = FlexLayout.fillNodes(<span class="local-variable">this</span>)
                         FlexLayout.computeLayout(copynodes)
+                        <span class="local-variable">this</span>._size = size
+                        <span class="local-variable">this</span>._pos = pos;
+                        
                         emitPostLayout(copynodes)
+                        
+                        
                 }
         }
 

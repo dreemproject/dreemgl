@@ -1128,7 +1128,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">setInterval</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.interval_ids) <span class="local-variable">this</span>.interval_ids = []
                 <span class="keyword">var</span> id = window.setInterval(<span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.interval_ids.splice(<span class="local-variable">this</span>.timeout_ids.indexof(id), <span class="integer">1</span>)
+                        <span class="local-variable">this</span>.interval_ids.splice(<span class="local-variable">this</span>.interval_ids.indexOf(id), <span class="integer">1</span>)
                         fn.call(<span class="local-variable">this</span>)
                 }.bind(<span class="local-variable">this</span>), mstime)
                 <span class="local-variable">this</span>.interval_ids.push(id)
@@ -1136,7 +1136,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">clearInterval</span> = <span class="keyword">function</span>(id){
-                <span class="keyword">var</span> idx = <span class="local-variable">this</span>.interval_ids.indexof(id)
+                <span class="keyword">var</span> idx = <span class="local-variable">this</span>.interval_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.interval_ids.splice(idx, <span class="integer">1</span>)
                          window.clearInterval(id)

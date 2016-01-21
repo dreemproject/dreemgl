@@ -11,7 +11,3 @@
  * @attribute {Array} [results=""]
  * List of movie objects returned from server
  */
-/**
- * @method onkeyword
- * @param event
- */
