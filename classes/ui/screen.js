@@ -50,10 +50,12 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		this.modal_stack = []
 		this.focus_view = undefined
 		this.mouse_view = undefined
+		this.pointer_view = undefined
 		this.mouse_capture = undefined
 		this.keyboard = this.device.keyboard
 		this.mouse = this.device.mouse
 		this.touch = this.device.touch
+		this.pointer = this.device.pointer
 		this.midi = this.device.midi
 		this.bindInputs()
 	}
@@ -417,6 +419,50 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			if(!this.inModalChain(this.focus_view)) return
 			this.focus_view.emitUpward('keypaste', v)
 		}.bind(this)
+		
+		// Event handler for pointer `start` event. Picks a view, sets it as `pointer_view` and emits `pointerstart` event.
+		this.pointer.start = function(e){
+			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
+				if(view){
+					this.pointer_view = view;
+					view.emitUpward('pointerstart', e);
+				}
+			}.bind(this))
+		}.bind(this);
+
+		// Event handler for pointer `move` event. Emits `pointermove` event from `pointer_view`.
+		this.pointer.move = function(e){
+			if (this.pointer_view){
+				this.pointer_view.emitUpward('pointermove', e);
+			}
+		}.bind(this);
+
+		// Event handler for pointer `end` event. Emits `pointerend` event `pointer_view`.
+		this.pointer.end = function(e){
+			if(this.pointer_view){
+				this.pointer_view.emitUpward('pointerend', e);
+				delete this.pointer_view;
+			}
+		}.bind(this);
+
+		// Event handler for pointer `tap` event. Picks a view, sets it as `pointer_view` and emits `pointertap` event.
+		this.pointer.tap = function(e){
+			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
+				if(view){
+					view.emitUpward('pointertap', e);
+				}
+			}.bind(this))
+		}.bind(this);
+
+		// Event handler for pointer `hover` event. Picks a view, sets it as `pointer_view` and emits `pointerhover` event.
+		this.pointer.hover = function(e){
+			// TODO(aki): screen picking is expensive for continuous events like hover. Conseder optimizing.
+			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
+				if(view){
+					view.emitUpward('pointerhover', e);
+				}
+			}.bind(this))
+		}.bind(this);
 
 		this.mouse.move = function(){
 			this.emit('globalmousemove', {global:this.globalMouse(this)})
