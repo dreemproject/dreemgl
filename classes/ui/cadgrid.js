@@ -40,6 +40,7 @@ define.class('$ui/view',  function(view, label){
 		this.calcsizes()
 	}
 
+
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
 	this.bg = {
 		position:function(){
@@ -55,7 +56,6 @@ define.class('$ui/view',  function(view, label){
 			
 		},
 		grid: function(a){
-			
 			var horizmaj = mod(a.x ,view.majorsize)/view.majorsize;
 			var vertmaj =  mod(a.y , view.majorsize)/view.majorsize;
 			

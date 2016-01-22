@@ -1,4 +1,4 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -28,12 +28,8 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 
 		baseclass.prototype.atConstructor.call(this, previous, parent)
 
-		//TEST
-		//this.renderComposition();
-
-	    //TEST (this will render the display)
+	    //Render the display
 	    this.doRender();
-
 	}
 
 	this.createBus = function(){
@@ -47,7 +43,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	this.doRender = function(previous, parent){
 		baseclass.prototype.doRender.call(this, previous, parent)
 
-/*
+/*  webgl
 		this.screen.addListener('locationhash', function(event){
 			var obj = event.value
 			var str = ''

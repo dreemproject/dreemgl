@@ -23,8 +23,9 @@ define.class(function(require, exports){
 		this.obj = obj
 		this.key = key
 		// the internal track construct
-		if(track) this.track = track
-		else this.track = config
+		this.track = track
+		//else this.track = config
+
 		if(config.motion) this.motion = config.motion
 
 		if(typeof this.motion === 'string') this.motion = float.ease[this.motion] || float.ease.linear
@@ -60,7 +61,7 @@ define.class(function(require, exports){
 					if(time > this.end_time) this.end_time = time
 				}
 			}
-			if(this.config.duration !== undefined){
+			if(!this.track && this.config.duration !== undefined){
 				var duration = this.config.duration
 				this.order.push(duration)
 				this.values[duration] = {value:this.type(this.last_value)}
@@ -171,6 +172,7 @@ define.class(function(require, exports){
 								
 				if(value2.motion) inter_key_time = value2.motion(inter_key_time)
 				var out = mix(value1.value, value2.value, inter_key_time)
+
 				return out
 			}
 		}

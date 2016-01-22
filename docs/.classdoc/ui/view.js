@@ -1,6 +1,7 @@
 /**
  * @class view
  * @extends node
+ * Base UI view object
  */
 /**
  * @attribute {boolean} [visible="true"]
@@ -77,7 +78,7 @@
  */
 /**
  * @attribute {Enum} overflow
- * overflow control, shows scrollbars when the content is larger than the viewport. Only works on viewport:'2D'
+ * overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
  * works the same way as the CSS property
  */
 /**
@@ -107,6 +108,30 @@
 /**
  * @attribute {typeless} depth
  * alias for the z component of size
+ */
+/**
+ * @attribute {typeless} percentwidth
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentheight
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentdepth
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentx
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percenty
+ * percentage widths/heights
+ */
+/**
+ * @attribute {typeless} percentz
+ * percentage widths/heights
  */
 /**
  * @attribute {float32} pixelratio
@@ -318,27 +343,12 @@
  * drop shadow color
  */
 /**
- * @attribute {boolean} focus
- */
-/**
  * @attribute {float32} tabstop
  * tabstop, sorted by number
  */
 /**
- * @attribute {Enum} cursor
- */
-/**
- * @method ondropshadowradius
- * @param event
- */
-/**
  * @method onborderradius
  * listen to switch the shaders when borderradius changes
- * @param event
- */
-/**
- * @method onborderwidth
- * listen to switch shaders when border width changes
  * @param event
  */
 /**
@@ -370,32 +380,14 @@
  * @param prev
  */
 /**
- * @method onbgimage
- */
-/**
- * @method setBgImage
- * @param image
- */
-/**
  * @method emitUpward
  * emit an event upward (to all parents) untill a listener is hit
  * @param key
  * @param msg
  */
 /**
- * @method findEmitUpward
- * @param key
- */
-/**
- * @method computeCursor
- */
-/**
  * @method atDraw
  * called at every frame draw
- */
-/**
- * @method sortShaders
- * internal, sorts the shaders
  */
 /**
  * @method atInnerClassAssign
@@ -410,9 +402,6 @@
 /**
  * @method reupdate
  * updates all the shaders
- */
-/**
- * @method getViewGuid
  */
 /**
  * @method updateShaders
@@ -436,213 +425,10 @@
  * @param bailbound
  */
 /**
- * @method relayoutRecur
- * @param source
- */
-/**
- * @method relayout
- * @param shallow
- */
-/**
- * @method rematrix
- */
-/**
  * @method pos
  * moving a position in absolute should only trigger a matrix reload
  */
 /**
  * @method doLayout
  * called by the render engine
- */
-/**
- * @method startAnimation
- * @param key
- * @param value
- * @param track
- * @param resolve
- */
-/**
- * @method stopAnimation
- * @param key
- */
-/**
- * @method playAnimation
- * @param key
- */
-/**
- * @method pauseAnimation
- * @param key
- */
-/**
- * @method bgcolorfn
- * @param pos
- */
-/**
- * @method appendChild
- * @param render
- */
-/**
- * @method bordercolorfn
- * @param pos
- */
-/**
- * @method dropshadowopacity
- */
-/**
- * @method moveToFront
- */
-/**
- * @method moveToBack
- */
-/**
- * @event mousedblclick
- */
-/**
- * @event mouseout
- */
-/**
- * @event mouseover
- */
-/**
- * @event mousemove
- */
-/**
- * @event mouseleftdown
- */
-/**
- * @event mouseleftup
- */
-/**
- * @event mouserightdown
- */
-/**
- * @event mouserightup
- */
-/**
- * @event mousewheelx
- */
-/**
- * @event mousewheely
- */
-/**
- * @event mousezoom
- */
-/**
- * @event keyup
- */
-/**
- * @event keydown
- */
-/**
- * @event keypress
- */
-/**
- * @event keypaste
- */
-/**
- * @event miss
- */
-/**
- * @class view.bg
- * @extends shaderwebgl
- * standard bg is undecided
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.border
- * @extends shaderwebgl
- * standard border is undecided too
- */
-/**
- * @class view.hardrect
- * @extends shaderwebgl
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.hardborder
- * @extends shaderwebgl
- */
-/**
- * @method update
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.hardimage
- * @extends hardrect
- * hard edged bgimage shader
- */
-/**
- * @method color
- */
-/**
- * @class view.roundedrect
- * @extends shaderwebgl
- * rounded rect shader class
- */
-/**
- * @method update
- */
-/**
- * @method color
- */
-/**
- * @method position
- */
-/**
- * @class view.shadowrect
- * @extends shaderwebgl
- * rounded rect shader class
- */
-/**
- * @method update
- */
-/**
- * @method color
- */
-/**
- * @method position
- */
-/**
- * @class view.viewportblend
- * @extends shaderwebgl
- */
-/**
- * @method position
- */
-/**
- * @method color
- */
-/**
- * @class view.roundedborder
- * @extends shaderwebgl
- * rounded corner border shader
- */
-/**
- * @method update
- */
-/**
- * @method color
- */
-/**
- * @method position
- */
-/**
- * @class view.scrollbar
- * @extends scrollbar
- * lets pull in the scrollbar on the view
  */

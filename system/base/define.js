@@ -93,7 +93,6 @@
 
 
 
-
 	define.fileName = function(file){
 		file = file.replace(/\\/g,'/')
 		var file = file.slice(define.filePath(file).length)
@@ -150,7 +149,6 @@
 		type = type.toLowerCase()
 		
 		if(type === 'json')	return 'json'
-
 		if(type === 'txt' || type === 'obj' || type === 'text' || type === 'md') return 'text'
 		
 		return 'arraybuffer'
@@ -168,15 +166,35 @@
 		}
 	}
 
+	// returns a class dir you can use, has / appended already
+	define.classPath = function(cls){
+		if(cls.prototype) cls = cls.prototype
+		var mod = cls.constructor.module
+		var fn = mod.filename.replace(/\\/g,'/')
+		for(var key in define.paths){
+			var path = define.expandVariables(define['$'+key])
+			if(fn.indexOf(path) === 0){
+				// Return the class path as a symbol base
+				return define.filePath('$'+key+fn.slice(path.length)) + '/'
+			}
+		}
+	}
+
+	define.deferPromise = function(){
+		var res, rej
+		var prom = new Promise(function(ires, irej){
+			res = ires, rej = irej
+		})
+		prom.resolve = res
+		prom.reject = rej
+		return prom
+	}
 
 
 
 
 
 	//  require implementation
-
-
-
 
 
 
@@ -200,6 +218,9 @@
 				//console.log('skipping', dep_path)
 				return null
 			}
+
+			// lets reverse our path
+
 
 			module = {exports:{}, factory:factory, id:abs_path, filename:abs_path}
 			define.module[abs_path] = module
@@ -233,7 +254,7 @@
 			var dep_path = define.joinPath(base_path, define.expandVariables(path))
 			return new Promise(function(resolve, reject){
 				if(define.factory[path]){
-					// if its already asynchronously loading.. 
+					// if its already asynchronously loading..
 					var module = require(path, ext)
 					return resolve(module)
 				}
@@ -841,8 +862,7 @@
 					define.script_tags[location.origin + url] = script
 
 					script.type = 'text/javascript'
-					script.src = url
-					
+
 					//define.script_tags[url] = script
 					window.onerror = function(error, url, line){
 						var script = define.script_tags[url]
@@ -855,14 +875,16 @@
 						if(this.rejected) return
 						// pull out the last factor
 						var factory = define.last_factory
+
 						define.factory[facurl] = factory
-	
+
+						if(!factory) return reject("Factory is null for "+url+" from file "+from_file + " : " + facurl)
+
 						var module_deps = factory.deps = []
-	
+
 						define.last_factory = undefined
-						if(!factory) return reject("Factory is null for "+url+" from file "+from_file)
+
 						// parse the function for other requires
-		
 						Promise.all(define.findRequiresInFactory(factory).map(function(path){
 							// ignore nodejs style module requires
 							if(path.indexOf('$') === -1 && path.charAt(0) !== '.'){
@@ -896,6 +918,9 @@
 						if(script.readyState == 'loaded' || script.readyState == 'complete') onLoad()
 					}
 					define.in_body_exec = false
+
+					script.src = url
+
 					document.getElementsByTagName('head')[0].appendChild(script)
 				})
 			}
@@ -1472,8 +1497,16 @@
 					}
 					// treat as array
 					if(arg0 === null  || arg0 === undefined) return out
-					if(arg0.struct || Array.isArray(arg0)){
-						for(var i = 0; i < mysize; i++) out[i] = arg0[i]
+					if(Array.isArray(arg0)){
+						var iter = Math.min(mysize, arg0.length)
+						for(var i = 0; i < iter; i++) out[i] = arg0[i]
+						for(;i<mysize;i++) out[i] = 1
+						return out
+					}
+					if(arg0.struct){
+						var iter = Math.min(mysize, arg0.struct.slots)
+						for(var i = 0; i < iter; i++) out[i] = arg0[i]
+						for(;i<mysize;i++) out[i] = 1
 						return out
 					}
 					if(arg0.____struct && arg0.data){
@@ -1681,7 +1714,10 @@
 		for(var i = inpoff, len = inp.length; i < len; i++){
 			var item = inp[i]
 			if(typeof item == 'number') out[outoff++] = item
-			else outoff = define.arraySplat(out, outoff, item, 0, depth++)
+			else if(typeof item === 'string'){
+				define.arraySplat(out, outoff, vec4(item), 0, depth++)
+			}
+			else if(typeof item === 'object') outoff = define.arraySplat(out, outoff, item, 0, depth++)
 		}
 		return outoff
 	}
@@ -2192,10 +2228,11 @@
 
 			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
 				
-			function Enum(value){
+			function Enum(value){				
 				if(typeof value !== 'string'){
-					console.error('Enum not string' + value, origset.join('|'))
-					return types[0]
+					value = String(value)
+				//	console.error('Enum not string' + value, origset.join('|'))
+				//	return types[0]
 				}
 				var index = matchset.indexOf(enumCanon(value))
 
@@ -2346,6 +2383,13 @@
 			var obj = Object.create(Config.prototype)
 			obj.constructor = Config
 			obj.config = object
+			return obj
+		}
+
+		exports.Animate = function(track){
+			var obj = Object.create(Animate.prototype)
+			obj.constructor = Animate
+			obj.track = track
 			return obj
 		}
 	}

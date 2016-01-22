@@ -5,30 +5,30 @@
 
 define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton, renameblockdialog){
 
-			
-	this.cursor = "move";
-	this.position = "absolute" ;
+	this.cursor = "move"
+	this.position = "absolute"
 	this.bgcolor = vec4("#3b3b3b" )
-	this.padding = 0;
-	this.borderradius = 10;
-	this.borderwidth = 2;
+	this.padding = 0
+	this.borderradius = 10
+	this.borderwidth = 2
 	this.bordercolor = vec4("#727272")
 	
 	function uppercaseFirst (inp) {
 		if (!inp || inp.length == 0) return inp;
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
 	}
-	
-	
+		
 	// the style classes 
 	
 	this.hovertext = "";
 	
 	this.mainwidth = 250;
+
 	this.style = {	
-		label_head:{bg:0, margin:vec4(6,3,4,0), bold:true},
+		label_head:{bg:false,margin:vec4(6,3,4,0), bold:true},
 		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
 		view_header:{width:this.mainwidth, bg:0, flex:1, justifycontent:"space-between"},
+		
 		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},
 		view_between1:{bg:false, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
 		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
@@ -129,7 +129,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.pos = vec2(Math.round(nx),Math.round(ny));
 		var fg = this.find("flowgraph")
 		fg.setActiveBlock(this);
-		fg.updateconnections();
+		fg.updateConnections();
 		
 	}
 	
@@ -166,7 +166,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 	this.setupMove = function(){
 		this.startx = this.pos[0];
-		this.starty = this.pos[1];	
+		this.starty = this.pos[1];
+		console.log(this.pos)
 	}
 	
 	this.updateMove = function(dx, dy, snap){
@@ -203,6 +204,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var dy = p[1] - this.startposition[1];
 	
 			var	fg = this.find("flowgraph");
+
 			fg.moveSelected(dx, dy, false);
 			
 			
@@ -248,21 +250,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 	
 	define.class(this, "inputbutton", function($ui$, view, label){
-		this.bg = {pickonly:true};
+		this.bg = {pickonly:true}
+
 		this.attributes = {
 			name:"thing",
 			title:"tadaa",
 			type:""
 		}
 		
-		this.marginbottom = 4;
-
-		
+		this.marginbottom = 4
 		
 		this.clicked = function(){
-			var	bl = this.parent.parent.parent;
-			var	fg = this.find("flowgraph");
-			fg.setConnectionEndpoint(bl.name, this.name);	
+			var	bl = this.parent.parent.parent
+			var	fg = this.find("flowgraph")
+			fg.setConnectionEndpoint(bl.name, this.name)
 		}	
 		
 		this.mouseover  = function(){
@@ -282,10 +283,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	define.class(this, "outputbutton", function($ui$, view, label){
 		this.bg = {pickonly:true};
 		this.attributes = {
-			name:"thing"		,
+			name:"thing",
 			title:"thing",
 			type:""
-			}
+		}
 		
 		this.mouseover  = function(){
 			this.screen.status = this.hovertext;
@@ -359,7 +360,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				,view({bg:0, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
 					,button({class:"header", icon:"pencil",click:function(){this.renameBlock();}.bind(this)})
-					)
+				)
 				,button({class:"header", icon:"remove",click:function(){this.removeBlock();}.bind(this)})
 			)
 			,view({class:'main'},

@@ -12,7 +12,7 @@ function DaliImage(path)
 }
 
 
-define.class('$system/base/texture', function(exports){
+define.class('$system/base/texture', function(exports, require){
 	var Texture = exports
 
 	Texture.GlobalId = 0

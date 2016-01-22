@@ -5,7 +5,7 @@
 
 
 define.class(function($ui$, view, label){
-	// splitcontainer adds dragbars between nodes to make all the nodes resizable. 
+	// Splitcontainer adds dragbars between nodes to make all the nodes resizable.
 	
 	// should the splitter bars be introduced horizontally or vertically? 
 	this.attributes = {

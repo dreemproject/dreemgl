@@ -2,12 +2,15 @@
 
 DreemGL is an open source JS webGL and DALi (Dynamic Animation Library; a cross-platform 3D UI Toolkit) prototyping framework with 
 shader styling and render functions.
+![Architecture Image]
+(https://raw.githubusercontent.com/teem2/dreemgl/dev/docs/images/architecture.png)
 
-To start dreemGL type
+## Start DreemGL
+To start DreemGL type:
 
 ```node server.js```
 
-Intro presentation
+To view the Intro presentation, click here:
 
 [http://127.0.0.1:2000/introduction](http://127.0.0.1:2000/introductio)
 

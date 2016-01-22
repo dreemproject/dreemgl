@@ -1,0 +1,6 @@
+{
+    "ecmaFeatures": {
+        "blockBindings": true,
+        "forOf": true
+    }
+}

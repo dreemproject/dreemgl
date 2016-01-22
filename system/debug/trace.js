@@ -6,7 +6,7 @@
 
 define(function(require, exports){
 
-	var dump = require('$debug/dump')
+	var dump = require('$system/debug/dump')
 	var file_color = {}
 	var file_colorid = 1
 	var file_colors = ['r','g','b','y','m','c']

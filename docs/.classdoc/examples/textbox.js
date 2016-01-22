@@ -1,8 +1,5 @@
 /**
  * @class textbox
- * @extends compositionwebgl
+ * @extends compositionnodejs
  * what if we do this
- */
-/**
- * @method render
  */

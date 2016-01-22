@@ -1,19 +1,19 @@
 //Pure JS based composition
-define.class('$server/composition', function(require, $ui$,treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
+define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
 
-	define.class(this, 'fileio', function($server$,fileio){
+	define.class(this, 'fileio', function($server$, fileio){
 		var path = require('path')
 		var fs = require('fs')
+
 		this.name = 'fileio'
-		
 		this.rootdirectory = '$compositions'
 
 		this.saveComposition = function(name, data){
 			fs.writeFile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
 		}
 
-		this.newComposition = function (name){
-			console.log("new composition creation requested:", name);
+		this.newComposition = function(name){
+			console.log("new composition creation requested:", name)
 			// todo: create folder in default composition path
 			// todo: create default index.js using options from options.
 			// todo: if things go wrong, return false

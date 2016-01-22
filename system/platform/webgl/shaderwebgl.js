@@ -85,7 +85,7 @@ define.class('$system/base/shader', function(require, exports){
 			if (!gl.getShaderParameter(pix_pick_shader, gl.COMPILE_STATUS)){
 				var err = gl.getShaderInfoLog(pix_pick_shader)
 
-				console.log(err.toString(), this.annotateLines(pix))
+				console.log(err.toString(), this.annotateLines(pix_pick))
 				throw new Error(err)
 			}
 

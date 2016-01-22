@@ -1,7 +1,7 @@
 /* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+   See the License for the specific language governing permissions and limitations under the License.*/
 
 // Dreem/Dali server
 require = require('./system/base/define') // support define.js modules
@@ -85,6 +85,7 @@ function main(){
 		'resources':'$root/resources',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
+		'docs':'$root/docs',
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
@@ -111,7 +112,16 @@ function main(){
 
 	define.$platform = 'headless'
 
-	if(args['-nodegl']){
+	if (args['-jsduckgen']) {
+		define.$platform = 'nodejs'
+		for(var key in define.paths){
+			define['$'+key] = define.paths[key]
+		}
+
+		var DocBuilder = require('$system/server/docbuilder')
+		new DocBuilder(args)
+
+	} else if(args['-nodegl']){
 		// lets do an async require on our UI
 		define.$platform = 'nodegl'
 		var NodeGL = require('$system/platform/nodegl/bootnodegl')

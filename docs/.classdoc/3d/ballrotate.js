@@ -7,10 +7,3 @@
  * @attribute {String} target
  * the target view to control with this
  */
-/**
- * @method mouseleftdown
- * @param event
- */
-/**
- * @method mouseleftup
- */

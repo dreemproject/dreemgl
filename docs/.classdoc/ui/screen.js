@@ -1,25 +1,11 @@
 /**
  * @class screen
  * @extends view
+ * Screens are the root of a view hierarchy, typically mapping to a physical device.
  */
 /**
  * @attribute {Object} [locationhash="[object Object]"]
  * the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
- */
-/**
- * @attribute {String} status
- */
-/**
- * @method atConstructor
- */
-/**
- * @method oninit
- * @param previous
- */
-/**
- * @method defaultKeyboardHandler
- * @param target
- * @param v
  */
 /**
  * @method contextMenu
@@ -27,10 +13,6 @@
  * @param commands
  * @param x
  * @param y
- */
-/**
- * @method globalMouse
- * @param node
  */
 /**
  * @method remapMouse
@@ -41,9 +23,6 @@
 /**
  * @method debugPick
  * pick a view at the mouse coordinate and console.log its structure
- */
-/**
- * @method releaseCapture
  */
 /**
  * @method bindInputs
@@ -75,75 +54,11 @@
  * @param value
  */
 /**
- * @method releaseCapture
- */
-/**
  * @method closeModal
  * open a modal window from object like so: this.openModal( view({size:[100,100]}))
  * @param value
  */
 /**
- * @method openModal
- * @param render
- */
-/**
- * @method startAnimationRoot
- * internal, start an animation, delegated from view
- * @param obj
- * @param key
- * @param value
- * @param track
- * @param promise
- */
-/**
- * @method stopAnimationRoot
- * internal, stop an animation, delegated from view
- * @param obj
- * @param key
- */
-/**
  * @method atRender
  * called when something renders
- */
-/**
- * @method doAnimation
- * internal, called by the renderer to animate all items in our viewtree
- * @param time
- * @param redrawlist
- */
-/**
- * @event wakeup
- */
-/**
- * @event globalkeyup
- */
-/**
- * @event globalkeydown
- */
-/**
- * @event globalkeypress
- */
-/**
- * @event globalkeypaste
- */
-/**
- * @event globalmousemove
- */
-/**
- * @event globalmouseleftdown
- */
-/**
- * @event globalmouseleftup
- */
-/**
- * @event globalmouserightdown
- */
-/**
- * @event globalmouserightup
- */
-/**
- * @event globalmousewheelx
- */
-/**
- * @event globalmousewheely
  */

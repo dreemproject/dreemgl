@@ -5,10 +5,6 @@
 
 
 define.class(function(view, label){
-	// The CADGrid class provides a simple way to fill a frame with a classic engineering grid. 
-	// todo:
-	// - support zooming with incremental subdivision lines
-	// - link up to 
 
 	this.flex = 1;
 	this.flexdirection = "column"

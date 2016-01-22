@@ -354,97 +354,96 @@ define.class('$ui/view', function(require,
 	
 	this.gridClick = function(p, origin){
 		
-		this.cancelConnection();
-			var cg= this.find("centralconstructiongrid");
+		this.cancelConnection()
+		var cg= this.find("centralconstructiongrid")
+	
+		origin.startselectposition = cg.localMouse()
+		this.startDragSelect()
 		
-			origin.startselectposition = cg.localMouse();
-			this.startDragSelect();
-			
-			origin.mousemove = function(){				
-				var cg= this.find("centralconstructiongrid");
-				var np = cg.localMouse();
-				var fg = this.find("flowgraph");
-				var sq = this.findChild("selectorrect");
-				if(sq){
-					var sx = Math.min(this.startselectposition[0], np[0]);
-					var sy = Math.min(this.startselectposition[1], np[1]);
-					var ex = Math.max(this.startselectposition[0], np[0]);
-					var ey = Math.max(this.startselectposition[1], np[1]);
-					
-					sq.visible = true;
-					sq.redraw();
+		origin.mousemove = function(){				
+			var cg= this.find("centralconstructiongrid")
+			var np = cg.localMouse()
+			var fg = this.find("flowgraph")
+			var sq = this.findChild("selectorrect")
+			if(sq){
+				var sx = Math.min(this.startselectposition[0], np[0])
+				var sy = Math.min(this.startselectposition[1], np[1])
+				var ex = Math.max(this.startselectposition[0], np[0])
+				var ey = Math.max(this.startselectposition[1], np[1])
 				
-					sq.pos = vec2(sx,sy);
-					sq.size = vec3(ex-sx, ey-sy, 1);
-					fg.dragselectset = [];
-					for(var a in fg.allblocks){
-						var bl = fg.allblocks[a];
-						
-						cx = bl.pos[0] + bl.layout.width/2; 
-						cy = bl.pos[1] + bl.layout.height/2;
-						
-						if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
-							bl.inselection = 1;
-							fg.dragselectset.push(bl);
-						}	
-						else{
-							if (fg.originalselection.indexOf(bl) >-1)
-							{
-								bl.inselection = 1;
-							}
-							else{
-								bl.inselection = 0;
-							}
-						}					
-					}					
-					for(var a in fg.allconnections){
-						var con = fg.allconnections[a];
-						
-						
-						ax = con.frompos[0];
-						ay = con.frompos[1];
-						
-						bx = con.topos[0];
-						by = con.topos[1];
-						
-						
-						cx = (ax+bx)/2;
-						cy = (ay+by)/2;
-						
-						if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
-								||
-							(bx >= sx && bx <= ex && by >= sy && by <=ey)
-							|| 
-							(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
-							)
-						 {
-							con.inselection = 1;
-							fg.dragselectset.push(con);
-						}	
-						else{
-							if (fg.originalselection.indexOf(con) >-1)
-							{
-								con.inselection = 1;
-							}
-							else{
-								con.inselection = 0;
-							}
-						}					
-					}					
-				} 					
-			}
+				sq.visible = true;
+				sq.redraw();
 			
-			origin.mouseleftup = function(){
-				var sq = this.findChild("selectorrect");
-				if (sq){
-					sq.visible = false;
-					sq.redraw();
-				}
-				fg = this.find("flowgraph");
-				fg.commitdragselect();
-				this.mousemove = function(){};
-			}	
+				sq.pos = vec2(sx,sy);
+				sq.size = vec3(ex-sx, ey-sy, 1);
+				fg.dragselectset = [];
+				for(var a in fg.allblocks){
+					var bl = fg.allblocks[a];
+					
+					cx = bl.pos[0] + bl.layout.width/2; 
+					cy = bl.pos[1] + bl.layout.height/2;
+					
+					if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
+						bl.inselection = 1;
+						fg.dragselectset.push(bl);
+					}	
+					else{
+						if (fg.originalselection.indexOf(bl) >-1)
+						{
+							bl.inselection = 1;
+						}
+						else{
+							bl.inselection = 0;
+						}
+					}					
+				}					
+				for(var a in fg.allconnections){
+					var con = fg.allconnections[a];
+					
+					
+					ax = con.frompos[0];
+					ay = con.frompos[1];
+					
+					bx = con.topos[0];
+					by = con.topos[1];
+					
+					
+					cx = (ax+bx)/2;
+					cy = (ay+by)/2;
+					
+					if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
+							||
+						(bx >= sx && bx <= ex && by >= sy && by <=ey)
+						|| 
+						(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
+						)
+					 {
+						con.inselection = 1;
+						fg.dragselectset.push(con);
+					}	
+					else{
+						if (fg.originalselection.indexOf(con) >-1)
+						{
+							con.inselection = 1;
+						}
+						else{
+							con.inselection = 0;
+						}
+					}					
+				}					
+			} 					
+		}
 		
+		origin.mouseleftup = function(){
+			var sq = this.findChild("selectorrect");
+			if (sq){
+				sq.visible = false;
+				sq.redraw();
+			}
+			fg = this.find("flowgraph");
+			fg.commitdragselect();
+			this.mousemove = function(){};
+		}
 	}
 
 	this.makeNewConnection = function(){
@@ -823,13 +822,13 @@ define.class('$ui/view', function(require,
 					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 
-/*
+
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({title:"Properties", viewport:"2D"}
 ,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
 )	
 )
-*/
+
 
 			)
 		];

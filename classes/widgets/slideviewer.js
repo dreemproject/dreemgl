@@ -6,7 +6,7 @@
 
 define.class(function($ui$, view, label){
 
-	// slide viewer is an automatic slide viewer that turns child nodes into slides
+	// Slide viewer is an automatic slide viewer that turns child nodes into slides
 	// use attributes named 'slidetitle' on a child to set the slide title1
 	this.attributes = {
 		// the width of a slide

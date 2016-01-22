@@ -1,7 +1,7 @@
 /**
  * @class tabcontainer
  * @extends view
- * Create a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
+ * Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
  */
 /**
  * @attribute {int32} activetab
@@ -18,11 +18,4 @@
 /**
  * @attribute {vec4} [activecolor="0.43921568989753723,0.43921568989753723,0.6274510025978088,1"]
  * color when active
- */
-/**
- * @method render
- */
-/**
- * @class tabcontainer.tabbutton
- * @extends button
  */

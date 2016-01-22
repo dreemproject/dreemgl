@@ -3,7 +3,7 @@ define.class('$server/composition', function(require,
 	$behaviors$, draggable, 
 	$3d$, teapot, ballrotate, 
 	$widgets$, docviewer, jsviewer, slideviewer){
-	// Live coding presentation docs!
+	// internal, Live coding presentation docs!
 	this.attributes = {
 		test:vec4('red')
 	}
@@ -38,18 +38,18 @@ define.class('$server/composition', function(require,
 						ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"teapot1"})
 						,view({
 							flex:1,
-							name:"teapot1", 
+							name: "teapot1", 
 							clearcolor: 'rgba(255,255,255,0)',
 							viewport: '3d',
 							bg:0,
 							camera: vec3(0,0,8)
 						},
 						teapot({
-							detail:6,
-							pos:[0,0,-0.5], 
-							rotate:[-.6*PI,PI,0], 
-							radius:0.8, 
-							size:vec3(0.5)
+							detail: 6,
+							pos: [0,0,-0.5], 
+							rotate: [-.6*PI,PI,0], 
+							radius: 0.8, 
+							size: vec3(0.5)
 						}),
 						0),
 					0),
@@ -191,7 +191,6 @@ define.class('$server/composition', function(require,
 							multiline: true
 						})
 					),
-
 					view({
 						flex:1,
 						slidetitle:'Live documentation'

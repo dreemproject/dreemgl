@@ -3,7 +3,8 @@
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$, view){	
+define.class(function(require, $ui$, view){
+// A simple UI label for displaying text
 
 //	require("$fonts/arial_bold.glf")
 
@@ -70,8 +71,10 @@ define.class(function(require, $ui$, view){
 			mesh.fontsize = view.fontsize
 			mesh.boldness = view.boldness
 			mesh.add_y = mesh.line_height
+
 			mesh.align = view.align
-			mesh.start_y = mesh.line_height
+			mesh.start_x = view.padding[0]
+			mesh.start_y = mesh.line_height + view.padding[1]
 			mesh.clear()
 
 			if (this.multiline){
@@ -132,7 +135,10 @@ define.class(function(require, $ui$, view){
 			this.typefaceshader.update()
 			this.typefaceshader.update_dirty = true
 		}
-		return {width: this.measured_width = this.typefaceshader.mesh.bound_w, height: this.measured_height =this.typefaceshader.mesh.bound_h};
+		return {
+			width: this.measured_width = this.typefaceshader.mesh.bound_w, 
+			height: this.measured_height =this.typefaceshader.mesh.bound_h 
+		};
 	}
 
 	if (define.$platform === 'dali')

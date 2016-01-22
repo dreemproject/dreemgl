@@ -1,7 +1,7 @@
 /**
  * @class label
  * @extends view
- * require("$fonts/arial_bold.glf")
+ * A simple UI label for displaying text
  */
 /**
  * @attribute {vec4} [fgcolor="1,1,1,1"]
@@ -34,50 +34,4 @@
 /**
  * @attribute {Enum} [align="left"]
  * Alignment of the bodytext.
- */
-/**
- * @attribute {boolean} bold
- */
-/**
- * @attribute {vec4} [bgcolor="1,1,1,1"]
- */
-/**
- * @method bold
- */
-/**
- * @method selectShader
- */
-/**
- * @method font
- * @param event
- */
-/**
- * @method subpixel
- * @param event
- */
-/**
- * @method measure
- * @param width
- */
-/**
- * @class label.typefacenormal
- * @extends typefaceshader
- * the normal font
- */
-/**
- * @method update
- */
-/**
- * @class label.typefacesubpixelaa
- * @extends typefacenormal
- * the subpixel font used to render with subpixel antialiasing
- */
-/**
- * @class label.typefaceglyphy
- * @extends typefacenormal
- */
-/**
- * @class label.typeface
- * @extends typefacenormal
- * the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
  */

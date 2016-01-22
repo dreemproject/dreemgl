@@ -224,7 +224,14 @@ define.class(function(require, $server$, dataset){
 
 							for(var k = 0; k < flowdata.keys.length; k++){
 								var fditem = flowdata.keys[k]
-								fdoutput[fditem.key.name] = fditem.value.value
+								var value 
+								if(fditem.value.type === 'Unary'){
+									value = fditem.value.op === '-'? -fditem.value.arg.value: fditem.value.arg.value
+								}
+								else{
+									value = fditem.value.value
+								}
+								fdoutput[fditem.key.name] = value
 							}
 						}
 						else if(name === 'name'){

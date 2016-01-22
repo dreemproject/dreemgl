@@ -13,17 +13,10 @@
  * accepted values are "left", "right", "justify" and "center"
  */
 /**
- * @attribute {Number} [fontsize="13"]
+ * @attribute {Number} [fontsize="14"]
  * Base fontsize - heading sizes will be multiples of this value.
  */
 /**
  * @attribute {vec4} [fontcolor="0.125490203499794,0.125490203499794,0.125490203499794,1"]
  * The color to use as the default color for this textblock.
- */
-/**
- * @method buildMarkdown
- * @param lines
- */
-/**
- * @method render
  */

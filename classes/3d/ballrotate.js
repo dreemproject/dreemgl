@@ -19,34 +19,33 @@ define.class(function(require, $ui$view){
 		var t = this.find(this.target)
 		if (t){
 
-			this.clickstart = event.local	
+			this.clickstart = event.local
 			this.mousemove = function(event){
 				var a = event.local
 
-				var t = this.find(this.target);
+				var t = this.find(this.target)
 		
-				var dx = a[0] - this.clickstart[0];
-				var dy = a[1] - this.clickstart[1];
+				var dx = a[0] - this.clickstart[0]
+				var dy = a[1] - this.clickstart[1]
 				
-				this.camera_start = vec3.sub(t._camera, t._lookat );
-				var M4 = mat4.invert(t.viewmatrix);
+				this.camera_start = vec3.sub(t._camera, t._lookat)
+				var M4 = mat4.invert(t.viewmatrix)
 				// console.log(M4);
 				var screenup = vec3.normalize(vec3.vec3_mul_mat4(vec3(0,1,0), M4));				
 				// var M = mat4.R(0,-dy*0.01,-dx*0.01);					
 				// console.log("screenup:", screenup);
 				
-				var M1 = mat4.identity();
-				var M2 = mat4.rotate(M1, dx*0.01, t._up)
+				var M1 = mat4.identity()
+				var M2 = mat4.rotate(M1, dx * 0.01, t._up)
 				
-				var axis = vec3.normalize(vec3.cross(this.camera_start, t._up));
-				var M3 = mat4.rotate(M2, dy*0.01, axis)
-								
-				var Rot = vec3.vec3_mul_mat4(this.camera_start, M3);
-				var Res = vec3.add(Rot, t._lookat);
+				var axis = vec3.normalize(vec3.cross(this.camera_start, t._up))
+				var M3 = mat4.rotate(M2, dy * 0.01, axis)
 				
-				t._camera = Res;
-
-				t.redraw();
+				var Rot = vec3.vec3_mul_mat4(this.camera_start, M3)
+				var Res = vec3.add(Rot, t._lookat)
+				
+				t._camera = Res
+				t.redraw()
 				//this.target.updateLookAtMatrix();
 				//this.target.setDirty();
 				
@@ -54,6 +53,7 @@ define.class(function(require, $ui$view){
 				this.camera_start = vec3.sub(t._camera, t._lookat );
 			}.bind(this);
 		}
+		else{console.log("target not found!", this.target)}
 	}
 
 	this.mouseleftup = function(){

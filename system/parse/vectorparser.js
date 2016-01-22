@@ -309,7 +309,6 @@ define(function(require, exports){
 			a[2] = rgb[3]/255.0;
 			a[3] = 1.0;
 //			console.log("rgb" ,a);
-
 			return a;
 		}
 
@@ -323,6 +322,15 @@ define(function(require, exports){
 		}
 	
 		var vec4m = col.match(/^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*$/i);
+		if( vec4m ) {
+			a[0] = vec4m[1];
+			a[1] = vec4m[2];
+			a[2] = vec4m[3];
+			a[3] = vec4m[4];
+			return a;
+		}
+
+		var vec4m = col.match(/^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$/i);
 		if( vec4m ) {
 			a[0] = vec4m[1];
 			a[1] = vec4m[2];

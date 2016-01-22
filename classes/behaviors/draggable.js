@@ -14,10 +14,6 @@ define.class(function(){
 			p = this.parent.localMouse()
 			var dx = p[0] - startposition[0];
 			var dy = p[1] - startposition[1];
-	
-			console.log(dx,dy);
-	
-
 			this.pos = [startx  + dx, starty + dy]
 			//origin[0] += delta[0], origin[1] += delta[1]
 		}

@@ -5,8 +5,8 @@
 
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
-	// Simple button: a rectangle with a textlabel and an icon
-	
+// Simple button: a rectangle with a textlabel and an icon
+
 	this.attributes = {
 		// The label for the button
 		text: Config({type: String, value: ""}),
@@ -18,7 +18,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		fontsize: Config({type: float, value: 14, meta:"fontsize"}),
 		
 		// Gradient color 1	
-		col1: Config({meta:"color",type:vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
+		col1: Config({meta:"color", type:vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
 		
 		// Gradient color 2
 		col2: Config({meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),

@@ -1,7 +1,7 @@
 /**
  * @class slideviewer
  * @extends view
- * slide viewer is an automatic slide viewer that turns child nodes into slides
+ * Slide viewer is an automatic slide viewer that turns child nodes into slides
  * use attributes named 'slidetitle' on a child to set the slide title1
  */
 /**
@@ -29,35 +29,6 @@
  * persist the postiion
  */
 /**
- * @method page
- * @param event
- */
-/**
- * @method scroll
- * @param event
- */
-/**
- * @method keydown
- * @param key
- */
-/**
  * @method focuslost
  * deny focus loss
- */
-/**
- * @method init
- */
-/**
- * @method render
- */
-/**
- * @class slideviewer.slide
- * @extends view
- * the class for a nested slide, its automatically wrapped around children
- */
-/**
- * @method viewportblend
- */
-/**
- * @method render
  */

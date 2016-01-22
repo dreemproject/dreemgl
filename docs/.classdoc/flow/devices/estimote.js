@@ -1,4 +1,0 @@
-/**
- * @class estimote
- * @extends relay
- */

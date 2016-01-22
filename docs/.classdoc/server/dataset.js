@@ -6,10 +6,6 @@
  * To modify a dataset you need to use the "fork" method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.
  */
 /**
- * @method _atConstructor
- * @param data
- */
-/**
  * @method atAttributeAssign
  * Handles the binding of this dataset to the attribute of something else.
  * @param obj
@@ -19,7 +15,6 @@
  * @method fork
  * Fork starts a new modification on a dataset;
  * @param callback
- * the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
  */
 /**
  * @method silent
