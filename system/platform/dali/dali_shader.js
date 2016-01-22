@@ -1,4 +1,4 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -23,7 +23,7 @@ define.class(function(require, exports){
 	// DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
-	// Assign an id to each dalishader object
+	// Assign a unique id to each dalishader object
 	var DaliShader = exports
 	DaliShader.GlobalId = 0
 
@@ -57,7 +57,6 @@ define.class(function(require, exports){
 			vs = vs.replace(/\n/g, "\nDALICODE: ");
 			fs = fs.replace(/\n/g, "\nDALICODE: ");
 
-			//var fs = fragmentShader.replace(/\n/g, "\\n");
 			console.log('DALICODE: var vertexShader' + this.id + ' = "' + vs + '"');
 			console.log('DALICODE: var fragmentShader' + this.id + ' = "' + fs + '"');
 			console.log('DALICODE: var shaderOptions' + this.id + ' = {vertexShader : vertexShader' + this.id + ', fragmentShader: fragmentShader' + this.id + ' };');

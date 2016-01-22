@@ -1,4 +1,4 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -60,6 +60,7 @@ define.class(function(require, exports){
 	this.Keyboard = require('./keyboarddali')
 	this.Mouse = require('./mousedali')
 	this.Touch = require('./touchdali')
+	this.Pointer = require('./pointerdali')
 
 	// require embedded classes	
 	this.Shader = require('./shaderdali')
@@ -79,7 +80,7 @@ define.class(function(require, exports){
 		this.shadercache = previous &&  previous.shadercache || {}
 		this.drawpass_list = previous && previous.drawpass_list || []
 		this.layout_list = previous && previous.layout_list || []
-		this.pick_resolve = []	
+		this.pick_resolve = []
 		this.anim_redraws = []
 		this.doPick = this.doPick.bind(this)
 
@@ -106,17 +107,19 @@ define.class(function(require, exports){
 			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
 			this.touch = previous.touch
+			this.pointer = previous.track
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
 			this.frame = this.main_frame = previous.main_frame
 		}
 		else{
-			this.frame = 
+			this.frame =
 			this.main_frame = this.Texture.fromType('rgb_depth')
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
 			this.touch = new this.Touch(this)
+			this.pointer = new this.Pointer(this)
 			this.drawtarget_pools = {}
 
 			this.createContext()
@@ -207,7 +210,7 @@ define.class(function(require, exports){
 		}
 
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
-			var last = i === len - 1 
+			var last = i === len - 1
 			var skip = false
 			var view = this.drawpass_list[i]
 
@@ -236,10 +239,10 @@ define.class(function(require, exports){
 		else{
 			var data = this.readPixels(0, 0, 1, 1)
 		}
-		
+
 		// decode the pass and drawid
-		var passid = (data[0]*43)%256 - 1
-		var drawid = (((data[2]<<8) | data[1])*60777)%65536 - 1
+		var passid = data[0]//(data[0]*43)%256
+		var drawid = (((data[2]<<8) | data[1]))//*60777)%65536
 		// lets find the view.
 		var passview = this.drawpass_list[passid]
 		var drawpass = passview && passview.drawpass
@@ -270,7 +273,7 @@ define.class(function(require, exports){
 	this.doColor = function(time){
 		if(!this.first_time) this.first_time = time
 		this.last_time = time
-	
+
 		if(!this.screen) return
 
 		this.first_draw_done = true
@@ -315,7 +318,7 @@ define.class(function(require, exports){
 				skip = last = true							
 			}
 			if(view.draw_dirty & 1 || last){
-			
+
 				if(!last){
 					if(clipview === undefined) clipview = view
 					else clipview = null
@@ -354,7 +357,7 @@ define.class(function(require, exports){
 		while(!node._viewport){
 			node = node.parent
 		}
-		
+
 		if(!node.parent){ // fast path to chuck the whole set
 			//console.log("FLUSHING ALL")
 			// lets put all the drawpasses in a pool for reuse
@@ -371,6 +374,7 @@ define.class(function(require, exports){
 			this.layout_idx = 0
 			this.addDrawPassRecursive(node)
 			this.first_draw_done = false
+			this.redraw()
 		}
 		else{ // else we remove drawpasses first then re-add them
 			this.removeDrawPasses(node)
@@ -423,7 +427,7 @@ define.class(function(require, exports){
 			this.addDrawPassRecursive(children[i])
 		}
 
-		// lets create a drawpass 
+		// lets create a drawpass
 		if(view._viewport){
 			var pass = new this.DrawPass(this, view)
 			this.drawpass_list.splice(this.drawpass_idx,0,view)
@@ -457,7 +461,7 @@ define.class(function(require, exports){
 		this.redraw()
 		// do stuff
 	}
-	
+
 
 
 })
