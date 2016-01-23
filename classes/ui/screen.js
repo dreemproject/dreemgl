@@ -16,6 +16,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// when the browser comes out of standby it fires wakup event
 		wakeup: Config({type:Event}),
 
+		// TODO(aki): DEPRICATE
 		// globally hookable input events
 		globalkeyup: Config({type:Event}),
 		globalkeydown: Config({type:Event}),
@@ -28,6 +29,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		globalmouserightup: Config({type:Event}),
 		globalmousewheelx: Config({type:Event}),
 		globalmousewheely: Config({type:Event}),
+		//
 		status:""
 	}
 
@@ -49,11 +51,11 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// ok. lets bind inputs
 		this.modal_stack = []
 		this.focus_view = undefined
-		this.mouse_view = undefined
+		// this.pointer_view = undefined
 		this.pointer_view = undefined
-		this.mouse_capture = undefined
+		// this.pointer_capture = undefined
 		this.keyboard = this.device.keyboard
-		this.mouse = this.device.mouse
+		// this.pointer = this.device.mouse
 		this.pointer = this.device.pointer
 		this.midi = this.device.midi
 		this.bindInputs()
@@ -88,8 +90,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	// display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.
 	this.contextMenu = function(commands, x,y){
 
-		if (!y) y = this.mouse._y;
-		if (!x) x = this.mouse._x;
+		if (!y) y = this.pointer._y;
+		if (!x) x = this.pointer._x;
 
 		// TODO(aki): move menu into a configurable component.
 
@@ -177,10 +179,9 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	this.globalMouse = function(node){
 		var sx = this.device.main_frame.size[0]  / this.device.ratio
 		var sy = this.device.main_frame.size[1]  / this.device.ratio
-		var mx = this.mouse._x/(sx/2) - 1.0
-		var my = -1 * (this.mouse._y/(sy/2) - 1.0)
-
-		return vec2(this.mouse._x, this.mouse._y);
+		var mx = this.pointer._x/(sx/2) - 1.0
+		var my = -1 * (this.pointer._y/(sy/2) - 1.0)
+		return vec2(this.pointer._x, this.pointer._y);
 	}
 
 	// internal: remap the mouse to a view node
@@ -191,8 +192,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 
 		var sx = this.device.main_frame.size[0]  / this.device.ratio
 		var sy = this.device.main_frame.size[1]  / this.device.ratio
-		var mx = this.mouse._x/(sx/2) - 1.0
-		var my = -1 * (this.mouse._y/(sy/2) - 1.0)
+		var mx = this.pointer._x/(sx/2) - 1.0
+		var my = -1 * (this.pointer._y/(sy/2) - 1.0)
 
 		while (ip){
 			if (ip._viewport || !ip.parent) parentlist.push(ip)
@@ -335,7 +336,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 
 	// pick a view at the mouse coordinate and console.log its structure
 	this.debugPick = function(){
-		this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(msg){
+		this.device.pickScreen(this.pointer.x, this.pointer.y).then(function(msg){
 			var view = msg.view
 			if(this.last_debug_view === view) return
 			this.last_debug_view = view
@@ -384,7 +385,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	}
 
 	this.releaseCapture = function(){
-		this.mouse_capture = undefined
+		this.pointer_capture = undefined
 	}
 
 	// bind all keyboard/pointer inputs for delegating it into the view tree
@@ -425,6 +426,19 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				if(view){
 					this.pointer_view = view;
 					view.emitUpward('pointerstart', e);
+					// TODO(aki): DEPRICATE! reverse compatibitity with mouseleftdown
+					{
+						// lets give this thing focus
+						if (e.value[0].button === undefined || e.value[0].button === 1) {
+							if(this.inModalChain(view)){
+								this.setFocus(view)
+								view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(view)})
+							}
+							else if(this.modal){
+								this.modal.emitUpward('miss', {global:this.globalMouse(this)})
+							}
+						}
+					}
 				}
 			}.bind(this))
 		}.bind(this);
@@ -432,16 +446,40 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Event handler for pointer `move` event. Emits `pointermove` event from `pointer_view`.
 		this.pointer.move = function(e){
 			if (this.pointer_view){
-				this.pointer_view.emitUpward('pointermove', e);
+				this.pointer_view.emitUpward('pointermove', e)
+				//TODO(aki): DEPRICATE
+				{
+					this.pointer_view.computeCursor()
+					this.pointer_view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(this.pointer_view)})
+				}
 			}
 		}.bind(this);
 
 		// Event handler for pointer `end` event. Emits `pointerend` event `pointer_view`.
 		this.pointer.end = function(e){
-			if(this.pointer_view){
-				this.pointer_view.emitUpward('pointerend', e);
-				delete this.pointer_view;
-			}
+			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
+				if (view){
+					view.emitUpward('pointerend', e);
+					// TODO(aki): DEPRICATE
+					{
+						if (e.value[0].button === undefined || e.value[0].button === 1) {
+							view.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(view), isover:this.pointer_view === view})
+							if (this.pointer_view !== view){
+								if (this.pointer_view) {
+									this.pointer_view.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
+								}
+								var pos = this.remapMouse(view)
+								view.computeCursor()
+								view.emitUpward('mouseover', {local: pos})
+								view.emitUpward('mousemove', {local: pos})
+							} else if (this.pointer_view) {
+								this.pointer_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
+							}
+						}
+					}
+					this.pointer_view = view
+				}
+			}.bind(this))
 		}.bind(this);
 
 		// Event handler for pointer `tap` event. Picks a view, sets it as `pointer_view` and emits `pointertap` event.
@@ -459,137 +497,54 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
 				if(view){
 					view.emitUpward('pointerhover', e);
+					// TODO(aki): DEPRICATE! reverse compatibitity with mouse
+					{
+						view.computeCursor()
+						view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
+						// lets check the debug click
+						if(this.keyboard.alt && this.keyboard.shift){
+							return this.debugPick()
+						} else this.last_debug_view = undefined
+						// ok so. lets query the renderer for the view thats under the mouse
+						if(!this.inModalChain(view)){
+							this.pointer_view = view
+							return
+						}
+						// lets find the mouseover or mousemove view
+						var mo_view = view && view.findEmitUpward('mouseover')
+						if(this.pointer_over !== mo_view || mo_view && this.last_over_pick_id !== mo_view.last_pick_id){
+							if(this.pointer_over) this.pointer_over.emitUpward('mouseout', {local:this.remapMouse(this.pointer_over)})
+							this.pointer_over = mo_view
+							if(this.pointer_over) this.pointer_over.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_over)})
+						}
+						this.last_over_pick_guid = view.last_pick_id
+					}
+					this.pointer_view = view
 				}
 			}.bind(this))
 		}.bind(this);
 
-		this.mouse.move = function(){
-			this.emit('globalmousemove', {global:this.globalMouse(this)})
-			// lets check the debug click
-			if(this.keyboard.alt && this.keyboard.shift){
-				return this.debugPick()
-			} else this.last_debug_view = undefined
-
-			// ok so. lets query the renderer for the view thats under the mouse
-			if(!this.mouse_capture){
-				this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
-					if(!this.inModalChain(view)){
-						this.mouse_view = view
-						return
-					}
-					// lets find the mouseover or mousemove view
-					var mo_view = view && view.findEmitUpward('mouseover')
-					this.mouse_view = view
-					if(this.mouse_over !== mo_view || mo_view && this.last_over_pick_id !== mo_view.last_pick_id){
-						if(this.mouse_over) this.mouse_over.emitUpward('mouseout', {local:this.remapMouse(this.mouse_over)})
-						this.mouse_over = mo_view
-						if(this.mouse_over) this.mouse_over.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_over)})
-					}
-					if(view){
-						view.computeCursor()
-						view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
-					}
-					this.last_over_pick_guid = view.last_pick_id
-
-				}.bind(this))
-			}
-			else{
-				this.mouse_capture.emitUpward('mousemove', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
-			}
-		}.bind(this)
-
-		this.mouse.leftdown = function(){
-			this.emit('globalmouseleftdown', {global:this.globalMouse(this)})
-
-			if (!this.mouse_capture) {
-				this.mouse_capture = this.mouse_view
-			}
-			// lets give this thing focus
-			//if (this.mouse_view){
-				if(this.inModalChain(this.mouse_view)){
-					this.setFocus(this.mouse_view)
-					this.mouse_view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
+		// TODO(aki): DEPRICATE
+		{
+			this.pointer.wheelx = function(){
+				this.emit('globalmousewheelx', {wheel:this.pointer.wheelx, global:this.globalMouse(this)})
+				if (this.pointer_capture) this.pointer_capture.emitUpward('mousewheelx', {wheel:this.pointer.wheelx,global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
+				else if(this.inModalChain(this.pointer_view)) this.pointer_view.emitUpward('mousewheelx', {wheel:this.pointer.wheelx, global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
+			}.bind(this)
+			this.pointer.wheely = function(){
+				this.emit('globalmousewheely', {wheel:this.pointer.wheely, global:this.globalMouse(this)})
+				if (this.pointer_capture) this.pointer_capture.emitUpward('mousewheely', {wheel:this.pointer.wheely,global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
+				else if(this.pointer_view && this.inModalChain(this.pointer_view) ){
+					this.pointer_view.emitUpward('mousewheely', {wheel:this.pointer.wheely, global:this.globalMouse(this), local:this.remapMouse(this.pointer_view)})
 				}
-				else if(this.modal){
-					this.modal.emitUpward('miss', {global:this.globalMouse(this)})
+			}.bind(this)
+			this.pointer.zoom = function(){
+				if (this.pointer_capture) this.pointer_capture.emitUpward('mousezoom', {zoom:this.pointer.zoom, global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
+				else if(this.pointer_view && this.inModalChain(this.pointer_view)){
+					this.pointer_view.emitUpward('mousezoom', {zoom:this.pointer.zoom, global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
 				}
-			//}
-		}.bind(this)
-
-		this.mouse.leftup = function(){
-			this.emit('globalmouseleftup', {global:this.globalMouse(this)})
-			// make sure we send the right mouse out/overs when losing capture
-			this.device.pickScreen(this.mouse.x, this.mouse.y).then(function(view){
-				if(this.mouse_capture){
-					this.mouse_capture.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture), isover:this.mouse_capture === view})
-				}
-				if(this.mouse_capture !== view){
-					if(this.mouse_capture) this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
-					if(view){
-						var pos = this.remapMouse(view)
-						view.computeCursor()
-						view.emitUpward('mouseover', {local:pos})
-						view.emitUpward('mousemove', {local:pos})
-					}
-				}
-				else if(this.mouse_capture) this.mouse_capture.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
-				this.mouse_view = view
-				this.mouse_capture = false
-			}.bind(this))
-		}.bind(this)
-
-		this.mouse.wheelx = function(){
-			this.emit('globalmousewheelx', {wheel:this.mouse.wheelx, global:this.globalMouse(this)})
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheelx', {wheel:this.mouse.wheelx,global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
-			else if(this.inModalChain(this.mouse_view)) this.mouse_view.emitUpward('mousewheelx', {wheel:this.mouse.wheelx, global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
-		}.bind(this)
-
-		this.mouse.wheely = function(){
-			this.emit('globalmousewheely', {wheel:this.mouse.wheely, global:this.globalMouse(this)})
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousewheely', {wheel:this.mouse.wheely,global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
-			else if(this.mouse_view && this.inModalChain(this.mouse_view) ){
-				this.mouse_view.emitUpward('mousewheely', {wheel:this.mouse.wheely, global:this.globalMouse(this), local:this.remapMouse(this.mouse_view)})
-			}
-		}.bind(this)
-
-		this.mouse.zoom = function(){
-			if (this.mouse_capture) this.mouse_capture.emitUpward('mousezoom', {zoom:this.mouse.zoom, global:this.globalMouse(this), local:this.remapMouse(this.mouse_capture)})
-			else if(this.mouse_view && this.inModalChain(this.mouse_view)){
-				this.mouse_view.emitUpward('mousezoom', {zoom:this.mouse.zoom, global:this.globalMouse(this),local:this.remapMouse(this.mouse_view)})
-			}
-		}.bind(this)
-
-
-		/*
-		this.mouse.click = function () {
-			if(this.modal_miss){
-				this.modal_miss = false
-				return
-			}
-			if (this.lastmouseguid > 0) {
-				if (this.uieventdebug){
-					console.log(" clicked: " + this.guidmap[this.lastmouseguid].constructor.name);
-				}
-				var overnode = this.guidmap[this.lastmouseguid];
-				if (this.inModalChain(overnode) && overnode && overnode.emit) overnode.emit('click')
-			}
-		}.bind(this)
-
-		this.mouse.dblclick = function () {
-			if(this.modal_miss){
-				this.modal_miss = false
-				return
-			}
-			if (this.lastmouseguid > 0) {
-				if (this.uieventdebug){
-					console.log(" clicked: " + this.guidmap[this.lastmouseguid].constructor.name);
-				}
-				var overnode = this.guidmap[this.lastmouseguid];
-				if (this.inModalChain(overnode) && overnode && overnode.emit) overnode.emit('dblclick')
-			}
-		}.bind(this)
-
-		*/
+			}.bind(this)
+		}
 	}
 
 	// set the focus to a view node
@@ -676,9 +631,9 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	}
 
 	this.releaseCapture = function(){
-		if(this.mouse_capture){
-			this.mouse_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.mouse_capture)})
-			this.mouse_capture = undefined
+		if(this.pointer_capture){
+			this.pointer_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_capture)})
+			this.pointer_capture = undefined
 		}
 	}
 

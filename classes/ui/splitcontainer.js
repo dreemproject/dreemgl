@@ -1,13 +1,13 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class(function($ui$, view, label){
 	// Splitcontainer adds dragbars between nodes to make all the nodes resizable.
-	
-	// should the splitter bars be introduced horizontally or vertically? 
+
+	// should the splitter bars be introduced horizontally or vertically?
 	this.attributes = {
 		// wether the splitcontainer is vertical or not
 		direction: Config({type: Enum("horizontal", "vertical"), value:"vertical"}),
@@ -22,26 +22,26 @@ define.class(function($ui$, view, label){
 		// color of the splitter bar when dragging it
 		activecolor: Config({type: vec4, value: vec4("#7070a0")})
 	}
-	
+
 	this.bg = false;
 	this.flex = 1.0
 	this.flexdirection = "row";
-	this.position = "relative" 
+	this.position = "relative"
 	this.borderwidth = 0
 	this.bordercolor = vec4("#303060")
-	
+
 	this.direction = function(){
 		this.flexdirection = this.direction=="horizontal"?"column":"row" ;
 
 		}
-	
+
 	// the visual class that defines the draggable bar between the resizable children
 	define.class(this, 'splitter', function(view){
-		
+
 		this.attributes = {
 			firstnode: Config({type: int, value: 0})
 		}
-	
+
 		this.bgcolor = vec4("#737373");
 		this.alignitem = "stretch";
 		this.borderradius = 3;
@@ -69,15 +69,15 @@ define.class(function($ui$, view, label){
 			var dragstart = this.parent.localMouse()
 
 			this.pressed++
-			//var dragstart = {x: this.screen.mouse.x, y:this.screen.mouse.y}
-			
+			//var dragstart = {x: this.screen.pointer.x, y:this.screen.pointer.y}
+
 			var flexstart = {
-				left: this.parent.children[this.firstnode].flex, 
+				left: this.parent.children[this.firstnode].flex,
 				right: this.parent.children[this.firstnode+2].flex,
-				
-				leftwidth: this.parent.children[this.firstnode].layout.width, 
+
+				leftwidth: this.parent.children[this.firstnode].layout.width,
 				leftheight: this.parent.children[this.firstnode].layout.height,
-				
+
 				rightwidth: this.parent.children[this.firstnode+2].layout.width,
 				rightheight: this.parent.children[this.firstnode+2].layout.height
 			}
@@ -99,7 +99,7 @@ define.class(function($ui$, view, label){
 				if (this.vertical){
 					var h1 = flexstart.leftheight
 					var h2 = flexstart.rightheight
-					
+
 					var hadd = h1 + h2
 					h1 += dy
 					h2 -= dy
@@ -112,7 +112,7 @@ define.class(function($ui$, view, label){
 				else{
 					var w1 = flexstart.leftwidth
 					var w2 = flexstart.rightwidth
-					
+
 					var wadd = w1 + w2
 					w1 += dx
 					w2 -= dx
@@ -121,7 +121,7 @@ define.class(function($ui$, view, label){
 					var f2n = w2 / (wadd)
 					leftnode.flex = f1n * totf
 					rightnode.flex = f2n * totf
-				} 
+				}
 				this.parent.redraw()
 				// lets trigger layout dirty...
 				/*
@@ -139,7 +139,7 @@ define.class(function($ui$, view, label){
 		this.mouseleftup = function(){
 			//this.pressed--;
 			this.mousemove = function(){};
-			//this.setDirty(true);			
+			//this.setDirty(true);
 		}
 		/*
 		this.atDraw = function(){
@@ -156,7 +156,7 @@ define.class(function($ui$, view, label){
 		*/
 		this.bg = {
 			acolor: function(){
-				
+
 				if (view.vertical )
 				{
 					var yy = mesh.y*view.layout.height;
@@ -179,7 +179,7 @@ define.class(function($ui$, view, label){
 			}
 		}
 	})
-	
+
 	this.render = function(){
 		if (this.constructor_children.length > 1){
 			var children = []
@@ -190,18 +190,18 @@ define.class(function($ui$, view, label){
 				children.push( this.splitter({
 					vertical: this.direction=="horizontal",
 					cursor: this.direction=="horizontal"?'ns-resize':'ew-resize',
-					firstnode: (i-1)*2, 
-					splitsize: this.splitsize, 
-					splittercolor: this.splittercolor, 
-					hovercolor: this.hovercolor, 
+					firstnode: (i-1)*2,
+					splitsize: this.splitsize,
+					splittercolor: this.splittercolor,
+					hovercolor: this.hovercolor,
 					activecolor: this.activecolor
 				}))
 
 				children.push(view({
 					bg:false,
-					clipping: true, 
-					flex: this.constructor_children[i].flex 
-				},this.constructor_children[i]))				
+					clipping: true,
+					flex: this.constructor_children[i].flex
+				},this.constructor_children[i]))
 
 			}
 			return children
@@ -212,7 +212,7 @@ define.class(function($ui$, view, label){
 	}
 
 	var splitcontainer = this.constructor
-	
+
 	// Basic usage of the splitcontainer
 	this.constructor.examples = {
 		Usage:function(){ return [

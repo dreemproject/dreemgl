@@ -58,7 +58,6 @@ define.class(function(require, exports){
 	this.DaliApi = require('./dali_api')
 
 	this.Keyboard = require('./keyboarddali')
-	this.Mouse = require('./mousedali')
 	this.Pointer = require('./pointerdali')
 
 	// require embedded classes
@@ -103,7 +102,6 @@ define.class(function(require, exports){
 		if(previous){
 			this.canvas = previous.canvas
 			this.gl = previous.gl
-			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
 			this.pointer = previous.pointer
 			this.parent = previous.parent
@@ -113,8 +111,6 @@ define.class(function(require, exports){
 		else{
 			this.frame =
 			this.main_frame = this.Texture.fromType('rgb_depth')
-
-			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
 			this.pointer = new this.Pointer(this)
 			this.drawtarget_pools = {}

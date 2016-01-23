@@ -13,11 +13,27 @@ define.class('$system/base/node', function(){
 		hover:Config({type:Event}),
 		end:Config({type:Event}),
 		tap:Config({type:Event}),
+		wheel:Config({type:Event}),
 
-		//
-		// wheelx: Config({type:int}),
-		// wheely: Config({type:int}),
-		// zoom: Config({type:int})
-
+		// TODO(aki): DEPRICATE (moved from mouse.js)
+		// event api
+		down:Config({type:Event}),
+		up: Config({type:Event}),
+		x: Config({type:float}),
+		y: Config({type:float}),
+		left: Config({type:int}),
+		middle: Config({type:int}),
+		right: Config({type:int}),
+		click: Config({type:int}),
+		blurred: Config({type:int}),
+		dblclick: Config({type:int}),
+		clicker: Config({type:int}),
+		leftdown: Config({type:int}),
+		leftup: Config({type:int}),
+		rightdown: Config({type:int}),
+		rightup: Config({type:int}),
+		wheelx: Config({type:int}),
+		wheely: Config({type:int}),
+		zoom: Config({type:int})
 	}
 })

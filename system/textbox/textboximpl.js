@@ -28,14 +28,14 @@ define.mixin(function(require){
 		if(!stack) stack = this.undo_stack
 		// merge undo groups if it merges
 		var last = stack[stack.length - 1]
-		if(last && last.type == 'insert' && 
+		if(last && last.type == 'insert' &&
 			last.start == end){
 			var group = last.group
 			last.group = this.undo_group
 			for(var i = stack.length - 2;i>=0;i--){
 				if(stack[i].group == group) stack[i].group =  this.undo_group
 			}
-		}		
+		}
 		stack.push({
 			group:  this.undo_group,
 			type: 'insert',
@@ -49,7 +49,7 @@ define.mixin(function(require){
 		if(!stack) stack = this.undo_stack
 		// merge undo objects if it merges
 		var last = stack[stack.length - 1]
-		if(last && last.type == 'delete' && 
+		if(last && last.type == 'delete' &&
 			last.end == start){
 			last.end += end - start
 			return
@@ -127,7 +127,7 @@ define.mixin(function(require){
 				pos ++
 			}
 		}
-		else{ // if we are a newline 
+		else{ // if we are a newline
 			if(this.textbuf.charCodeAt(pos - 1) == 9){
 				while(pos > 0 && this.textbuf.charCodeAt(pos - 1) != 10){
 					pos --
@@ -148,13 +148,13 @@ define.mixin(function(require){
 		}
 		return pos
 	}
-	
+
 	// called after child constructors
 	this.initEditImpl = function(){
 		this.cursorset = new CursorSet(this)
 		this.undo_stack = []
 		this.redo_stack = []
-		this.undo_group = 0	
+		this.undo_group = 0
 		this.cursorset.update()
 		//this.cursorset.moveDown(0, 0)
 	}
@@ -168,9 +168,9 @@ define.mixin(function(require){
 
 	this.keypress = function(event){
 		this.undo_group++
-		this.cursorset.insert(event.value)  
+		this.cursorset.insert(event.value)
 		this.doCursor()
-		this.change = enumchange.keypress		
+		this.change = enumchange.keypress
 	}
 
 	var utfmap = {
@@ -253,14 +253,14 @@ define.mixin(function(require){
 		this.cursorset.update()
 		// we are done. serialize to clipboard
 		this.doCursor()
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.onmousemove = function(){}
 	}
 
 	this.mouseleftdown = function(event){
 		var start = event.local
 		var keyboard = this.screen.keyboard
-		var mouse = this.screen.mouse
+		var mouse = this.screen.pointer
 		//console.log(mouse.clicker)
 		if(keyboard.alt){
 			var clone
@@ -277,10 +277,10 @@ define.mixin(function(require){
 		}
 		else if(keyboard.meta ){
 			var cursor = this.cursorset.addCursor()
-			// in that case what we need to 
+			// in that case what we need to
 			this.cursorset.fusing = false
 			cursor.moveTo(start[0], start[1])
-			// lets make it select the word 
+			// lets make it select the word
 
 			if(mouse.clicker == 2) cursor.selectWord()
 			else if(mouse.clicker == 3){
@@ -301,7 +301,7 @@ define.mixin(function(require){
 		}
 		// normal selection
 		else{
-			// in that case what we need to 
+			// in that case what we need to
 			this.cursorset.fusing = true
 
 			this.cursorset.moveTo(start[0], start[1])
@@ -320,7 +320,7 @@ define.mixin(function(require){
 		}
 	}
 
-	// alright so. undo. 
+	// alright so. undo.
 	this.keyZCtrl =
 	this.keyZCmd = function(){
 		if(this.readonly) return
@@ -338,14 +338,14 @@ define.mixin(function(require){
 		//doCursor()
 	}
 
-	this.keyACtrl = 
+	this.keyACtrl =
 	this.keyACmd = function(){
 		// select all
 		this.cursorset.selectAll()
 		this.selectionToClipboard()
 	}
 
-	this.keyXCtrl = 
+	this.keyXCtrl =
 	this.keyXCmd = function(){
 		if(this.readonly) return
 		// cut the crap
@@ -357,10 +357,10 @@ define.mixin(function(require){
 		if(this.readonly) return
 		this.cursorset.backspace()
 		this.change = enumchange.delete
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
-	
+
 	// move selection up one line
 	this.keyDownarrowAlt = function(){
 
@@ -374,7 +374,7 @@ define.mixin(function(require){
 		if(this.readonly) return
 		this.change = enumchange.delete
 		this.cursorset.delete()
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
@@ -386,101 +386,101 @@ define.mixin(function(require){
 		this.doCursor()
 	}
 
-	this.keyBackspaceCtrl = 
+	this.keyBackspaceCtrl =
 	this.keyBackspaceAlt = function(){
 		if(this.readonly) return
 		this.cursorset.backspaceWord()
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
 	this.keyBackspaceCmd = function(){
 		if(this.readonly) return
 		this.cursorset.backspaceLine()
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
 	this.keyDeleteCmd = function(){
 		if(this.readonly) return
 		this.cursorset.deleteLine()
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyLeftArrowAltShift = 
-	this.keyLeftArrowCtrlShift = 
-	this.keyLeftArrowCtrl = 
+	this.keyLeftArrowAltShift =
+	this.keyLeftArrowCtrlShift =
+	this.keyLeftArrowCtrl =
 	this.keyLeftarrowAlt = function(){
 		this.cursorset.moveLeftWord(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
-	
-	this.keyRightArrowAltShift = 
-	this.keyRightArrowCtrlShift = 
-	this.keyRightArrowCtrl = 
+
+	this.keyRightArrowAltShift =
+	this.keyRightArrowCtrlShift =
+	this.keyRightArrowCtrl =
 	this.keyRightarrowAlt = function(){
 		this.cursorset.moveRightWord(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyLeftarrowCmdShift = 
+	this.keyLeftarrowCmdShift =
 	this.keyLeftarrowCmd = function(){
 		this.cursorset.moveLeftLine(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyRightarrowCmdShift = 
+	this.keyRightarrowCmdShift =
 	this.keyRightarrowCmd = function(){
 		this.cursorset.moveRightLine(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
- 
-	this.keyHome = 
-	this.keyUparrowCmdShift = 
+
+	this.keyHome =
+	this.keyUparrowCmdShift =
 	this.keyUparrowCmd = function(){
 		this.cursorset.moveTop(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyEnd = 
-	this.keyDownarrowCmdShift = 
+	this.keyEnd =
+	this.keyDownarrowCmdShift =
 	this.keyDownarrowCmd = function(){
 		this.cursorset.moveBottom(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyLeftarrowShift = 
-	this.keyLeftarrow = function(){ 
+	this.keyLeftarrowShift =
+	this.keyLeftarrow = function(){
 		this.cursorset.moveLeft(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyRightarrowShift = 
+	this.keyRightarrowShift =
 	this.keyRightarrow = function(){
 		this.cursorset.moveRight(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyUparrowShift = 
+	this.keyUparrowShift =
 	this.keyUparrow = function(){
 		this.cursorset.moveUp(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 
-	this.keyDownarrowShift = 
+	this.keyDownarrowShift =
 	this.keyDownarrow = function(){
 		this.cursorset.moveDown(this.screen.keyboard.shift)
-		this.selectionToClipboard()	
+		this.selectionToClipboard()
 		this.doCursor()
 	}
 })

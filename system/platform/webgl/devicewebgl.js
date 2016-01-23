@@ -7,7 +7,6 @@
 define.class(function(require, exports){
 
 	this.Keyboard = require('./keyboardwebgl')
-	this.Mouse = require('./mousewebgl')
 	this.Pointer = require('./pointerwebgl')
 	this.Midi = require('./midiwebgl')
 
@@ -45,7 +44,6 @@ define.class(function(require, exports){
 		if(previous){
 			this.canvas = previous.canvas
 			this.gl = previous.gl
-			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
 			this.pointer = previous.pointer
 			this.midi = previous.midi
@@ -57,7 +55,6 @@ define.class(function(require, exports){
 			this.frame =
 			this.main_frame = this.Texture.fromType('rgb_depth')
 
-			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
 			this.pointer = new this.Pointer(this)
 			this.midi = new this.Midi(this)
