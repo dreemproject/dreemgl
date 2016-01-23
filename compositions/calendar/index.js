@@ -1,6 +1,6 @@
 define.class('$server/composition', function(require, day, $ui$, screen, view) {
 
-	var now = new Date();
+	var now = new Date()
 	var eventsDummyData = [
 		{
 			name: 'Breakfast',
@@ -20,14 +20,14 @@ define.class('$server/composition', function(require, day, $ui$, screen, view) {
 			start: new Date(now.getYear(),now.getMonth(),now.getDate(),19,0,0),
 			end: new Date(now.getYear(),now.getMonth(),now.getDate(),20,30,0),
 		}
-	];
+	]
 
 	this.render = function() {
 		return [
 			screen({name:'index'},
 				day({date: now.toLocaleDateString(), format: '12', events: eventsDummyData})
 			)
-		];
-	};
+		]
+	}
 
-});
+})
