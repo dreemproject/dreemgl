@@ -54,7 +54,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		this.mouse_capture = undefined
 		this.keyboard = this.device.keyboard
 		this.mouse = this.device.mouse
-		this.touch = this.device.touch
 		this.pointer = this.device.pointer
 		this.midi = this.device.midi
 		this.bindInputs()
@@ -388,7 +387,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		this.mouse_capture = undefined
 	}
 
-	// bind all keyboard/mouse/touch inputs for delegating it into the view tree
+	// bind all keyboard/pointer inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){
 			this.emit('globalkeydown', v)
@@ -419,7 +418,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			if(!this.inModalChain(this.focus_view)) return
 			this.focus_view.emitUpward('keypaste', v)
 		}.bind(this)
-		
+
 		// Event handler for pointer `start` event. Picks a view, sets it as `pointer_view` and emits `pointerstart` event.
 		this.pointer.start = function(e){
 			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){

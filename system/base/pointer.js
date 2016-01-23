@@ -12,6 +12,12 @@ define.class('$system/base/node', function(){
 		move:Config({type:Event}),
 		hover:Config({type:Event}),
 		end:Config({type:Event}),
-		tap:Config({type:Event})
+		tap:Config({type:Event}),
+
+		//
+		// wheelx: Config({type:int}),
+		// wheely: Config({type:int}),
+		// zoom: Config({type:int})
+
 	}
 })

@@ -6,9 +6,28 @@
 
 define.class('$system/base/pointer', function (require, exports){
 
-	this.tapspeed = 150;
+	this.tapspeed = 150
+	this.ratio = 0
+
+	this._cursor = 'arrow'
+	this._tooltip = 'Application'
+
+	Object.defineProperty(this, 'cursor', {
+		get:function(){
+			return this._cursor
+		},
+		set:function(value){
+			this._cursor = value
+			if (value === 'arrow') value = 'default'
+			this.device.keyboard.textarea.style.cursor =
+			document.body.style.cursor = value
+		}
+	})
 
 	this.atConstructor = function(device){
+
+		this.device = device
+		if (this.ratio == 0) this.ratio = window.devicePixelRatio
 
 		// Sets the start attribute/event.
 		this.setstart = function(touchList) {

@@ -8,7 +8,6 @@ define.class(function(require, exports){
 
 	this.Keyboard = require('./keyboardwebgl')
 	this.Mouse = require('./mousewebgl')
-	this.Touch = require('./touchwebgl')
 	this.Pointer = require('./pointerwebgl')
 	this.Midi = require('./midiwebgl')
 
@@ -48,8 +47,7 @@ define.class(function(require, exports){
 			this.gl = previous.gl
 			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
-			this.touch = previous.touch
-			this.pointer = previous.track
+			this.pointer = previous.pointer
 			this.midi = previous.midi
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
@@ -61,7 +59,6 @@ define.class(function(require, exports){
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
-			this.touch = new this.Touch(this)
 			this.pointer = new this.Pointer(this)
 			this.midi = new this.Midi(this)
 			this.drawtarget_pools = {}

@@ -1,6 +1,6 @@
-/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -18,7 +18,7 @@ define.class(function(require, exports){
 	,createFramebuffer: function() { return {};}
 	,bindFramebuffer: function() {}
 	,renderbufferStorage: function() {}
-	,framebufferRenderbuffer: function() {}	
+	,framebufferRenderbuffer: function() {}
 	,viewport: function() {}
 	,clearColor: function() {}
 	,clear: function() {}
@@ -35,10 +35,10 @@ define.class(function(require, exports){
 	,createBuffer: function() {return 0;}
 	,bindBuffer: function() {}
 	,bufferData: function() {}
-	,enable: function() {}		
-	,disable: function() {}		
-	,blendEquation: function() {}		
-	,blendFunc: function() {}		
+	,enable: function() {}
+	,disable: function() {}
+	,blendEquation: function() {}
+	,blendFunc: function() {}
 	,enableVertexAttribArray: function() {}
 	,vertexAttribPointer: function() {}
 	,uniform1f: function(l,v) {console.log('uniform1f', l,v);return 0;}
@@ -59,10 +59,9 @@ define.class(function(require, exports){
 
 	this.Keyboard = require('./keyboarddali')
 	this.Mouse = require('./mousedali')
-	this.Touch = require('./touchdali')
 	this.Pointer = require('./pointerdali')
 
-	// require embedded classes	
+	// require embedded classes
 	this.Shader = require('./shaderdali')
 	this.Texture = require('./texturedali')
 	this.DrawPass = require('./drawpassdali')
@@ -106,8 +105,7 @@ define.class(function(require, exports){
 			this.gl = previous.gl
 			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
-			this.touch = previous.touch
-			this.pointer = previous.track
+			this.pointer = previous.pointer
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
 			this.frame = this.main_frame = previous.main_frame
@@ -118,7 +116,6 @@ define.class(function(require, exports){
 
 			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
-			this.touch = new this.Touch(this)
 			this.pointer = new this.Pointer(this)
 			this.drawtarget_pools = {}
 
@@ -183,7 +180,7 @@ define.class(function(require, exports){
 
 	this.bindFramebuffer = function(frame){
 		if(!frame) frame = this.main_frame
-	
+
 		this.frame = frame
 		this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
 
@@ -315,7 +312,7 @@ define.class(function(require, exports){
 			var skip = false
 			var last = i === len - 1
 			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
-				skip = last = true							
+				skip = last = true
 			}
 			if(view.draw_dirty & 1 || last){
 
@@ -333,8 +330,8 @@ define.class(function(require, exports){
 
 			if(skip){
 				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-				
-				
+
+
 				this.screen.draw_dirty &= 2
 				break
 			}
