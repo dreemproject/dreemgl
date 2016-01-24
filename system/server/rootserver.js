@@ -1,8 +1,8 @@
-/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-   
+
 define.class(function(require){
 // Teem server
 
@@ -185,13 +185,14 @@ define.class(function(require){
 		var file = this.mapPath(reqquery[0])
 
 		var urlext = define.fileExt(reqquery[0])
+		// write .dre to .dre.js files
 		if (urlext === 'dre') {
 			var dreurl = reqquery[0];
 			var filepath = define.expandVariables('$root' + dreurl)
-			var out = XMLConverter(filepath)
-			// write to .dre.js file
+			var dre = fs.readFileSync(filepath);
+			var js = XMLConverter(dre)
 			// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version
-			fs.writeFileSync(filepath + '.js', out);
+			fs.writeFileSync(filepath + '.js', js);
 			this.watcher.watch(file)
 		}
 
@@ -228,7 +229,7 @@ define.class(function(require){
 					if(err || !stat.isFile()){
 						res.writeHead(404)
 						res.end()
-						console.color('~br~Error~y~ ' + file + '~~ File not found, returning 403\n')
+						console.color('~br~Error~y~ ' + file + '~~ File not found, returning 404\n')
 						return
 					}
 					processFile(stat)
