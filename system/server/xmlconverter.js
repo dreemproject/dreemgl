@@ -2,13 +2,12 @@
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-// childPromise turns a childprocess into a promise that resolves with the output of the process
 
+// converts .dre xml into dreemgl-compliant javascript. Supports methods, attributes, attribute declarations and handlers.
 define(function(require){
 	var fs = require('fs')
 	var HTMLParser = require('$system/parse/htmlparser')
 
-	// transform .dre to .js
 	return function(filepath) {
 		var makeSpace = function(indent) {
 			var out = '';
@@ -17,6 +16,7 @@ define(function(require){
 			}
 			return out;
 		}
+		// filter out methods attributes and handlers
 		var filterSpecial = function(child) {
 			var name = child.tag;
 			return name.indexOf('$') !== 0 && (! filterMethods(child)) && (! filterAttributes(child)) && (! filterHandlers(child));
@@ -24,9 +24,11 @@ define(function(require){
 		var filterMethods = function(child) {
 			return child.tag === 'method';
 		}
+		// compile methods to JS function bodies
 		var toMethod = function(child) {
 			var body = HTMLParser.reserialize(child.child[0]);
-			var fn = new Function(child.attr.args, body);
+			var args = child.attr.args || ''
+			var fn = 'function(' + args + ') {' + body + '}';
 			return {attr: child.attr, body: fn};
 		}
 		var filterAttributes = function(child) {
@@ -46,14 +48,14 @@ define(function(require){
 				var val = obj[key];
 
 				out += key + ': ';
-				if (typeof val === 'function') {
-					out += val;
-				} else if (typeof val === 'object') {
+				if (typeof val === 'object') {
 					out += objToString(val);
-				} else if (val.indexOf('Config({') === 0) {
-					// don't wrap Config in quotes
+				} else if (val.indexOf('function(') === 0 ||
+									 val.indexOf('Config({') === 0) {
+					// don't wrap Config or function(...) in quotes
 					out += val;
 				} else {
+					// fall back to string values
 					out += '"' + val + '"';
 				}
 				if (i < keys.length - 1) out += ', ';
@@ -80,7 +82,7 @@ define(function(require){
 
 			// add attributes
 			var attributes = child.child && child.child.filter(filterAttributes);
-			if (attributes) {
+			if (attributes && attributes.length) {
 				if (! attr.attributes) {
 					attr.attributes = {};
 				}
@@ -98,16 +100,23 @@ define(function(require){
 
 			// add handlers
 			var handlers = child.child && child.child.filter(filterHandlers).map(toMethod);
-			if (handlers) {
+			if (handlers && handlers.length) {
 				if (! attr.attributes) {
 					attr.attributes = {};
 				}
+				var handlersByEvent = {};
+				// write out listener functions for each event
 				for (i = 0; i < handlers.length; i++) {
 					var handler = handlers[i];
 					// chop off leading 'on'
 					var attrname = handler.attr.event.substring(2);
 					// register listener for that event
-					attr.attributes[attrname] = 'Config({listeners: [' + handler.body + ']})';
+					if (! handlersByEvent[attrname]) handlersByEvent[attrname] = [];
+					handlersByEvent[attrname].push(handler.body);
+				}
+				for (var eventname in handlersByEvent) {
+					var listeners = handlersByEvent[eventname].join(', ')
+					attr.attributes[eventname] = 'Config({listeners: [' + listeners + ']})';
 				}
 			}
 
@@ -117,10 +126,11 @@ define(function(require){
 				out += makeSpace(indent);
 				// name
 				var tagname = child.tag;
-        tagnames[tagname] = true;
+				if (! tagnames[tagname]) tagnames[tagname] = 0;
+        tagnames[tagname]++;
 				out += tagname + '(';
 				// attributes
-				out += objToString(attr, indent);
+				out += objToString(attr);
 				if (hasChildren) out += ',\n'
 			}
 			if (hasChildren) {
@@ -143,14 +153,16 @@ define(function(require){
 			return out;
 		}
 
-	// look for include paths for tags
-		var findIncludes = function(includes) {
+		// look for includes by name across server paths
+		var findIncludes = function(tagnames) {
 			var tagbypath = {};
-			for (var i = 0; i < includes.length; i++) {
-				var tagname = includes[i];
+			for (var i = 0; i < tagnames.length; i++) {
+				var tagname = tagnames[i];
 				for (var key in define.paths) {
 					var filepath = define.expandVariables('$' + key) + '/' + tagname + '.js';
+					// look for tagname file in expanded path
 					if (fs.existsSync(filepath)) {
+						// add to the list of tags at that path
 						if (! tagbypath[key]) {
 							tagbypath[key] = [];
 						}
@@ -159,29 +171,31 @@ define(function(require){
 					}
 				}
       }
-      var includearray = [];
+      // flatten to a list of includes
+      var includes = ['require'];
       for (var key in tagbypath) {
-				includearray.push('$' + key + '$');
-				includearray = includearray.concat(tagbypath[key]);
+				includes.push('$' + key + '$');
+				includes = includes.concat(tagbypath[key]);
       }
-      return includearray;
+      return includes;
 		}
 
+		var dre = fs.readFileSync(filepath);
 		// console.log('parsing .dre file', filepath);
-		var parsed = HTMLParser(fs.readFileSync(filepath));
+		var parsed = HTMLParser(dre);
 		// console.log('parsed', JSON.stringify(parsed.node));
     var tagnames = {};
-    var body = tagToFunc(parsed.node, 1, tagnames);
+    var body = tagToFunc(parsed.node, 2, tagnames);
     // find includes based on tags found
-    var includearray = findIncludes(Object.keys(tagnames));
-
-	// console.log('tagname', includearray)
-	var out = '// DO NOT MODIFY: generated from ' + filepath + '\n';
-		out += 'define.class(\'$server/composition\', function(require,' + includearray + '){\n'
-		out += '\tthis.render = function(){ return [\n';
+    var includes = findIncludes(Object.keys(tagnames));
+		// console.log('includes', includes)
+		var out = '// DO NOT MODIFY: generated from ' + filepath + ' on ' + new Date() + '\n';
+		out += 'define.class(\'$server/composition\', function(' + includes.join(', ') + '){\n'
+		out += '\tthis.render = function() {\n'
+		out += '\t\treturn [\n';
 		out += body;
-		out += '\t];\n};\n});'
-		// console.log('result', out, includearray)
+		out += '\t\t];\n\t}\n});'
+		// console.log('result', out, includes)
 		return out;
 	}
 })
