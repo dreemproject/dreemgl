@@ -336,7 +336,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				position:"absolute",
 				x:this.screen.pointer._x,
 				y:this.screen.pointer._y + 20,
-				miss:function(){
+				blur:function(){
 					this.screen.closeModal(false)
 
 			}} );

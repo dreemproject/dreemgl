@@ -242,8 +242,8 @@ define.class('$system/base/node', function(require){
 		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
-		// wether this view has focus
-		miss: Config({type:Event}),
+		// fires when this view loses focus
+		blur: Config({type:Event}),
 
 		// drop shadow size
 		dropshadowradius:Config({type:float, value:20}),
@@ -256,6 +256,7 @@ define.class('$system/base/node', function(require){
 		// drop shadow color
 		dropshadowcolor:Config({type:vec4,meta:"color", value:vec4("black")}),
 
+		// whether this view has focus
 		focus: false,
 		// tabstop, sorted by number
 		tabstop: NaN,
