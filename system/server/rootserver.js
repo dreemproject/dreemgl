@@ -17,8 +17,8 @@ define.class(function(require){
 	var ExternalApps = require('./externalapps')
 	var NodeWebSocket = require('./nodewebsocket')
 	var mimeFromFile = require('./mimefromfile')
-	var HTMLParser = require('$system/parse/htmlparser')
 	var CompositionServer = require('./compositionserver')
+	var XMLConverter = require('./xmlconverter')
 
 	var BusServer = require('$system/rpc/busserver')
 
@@ -183,159 +183,16 @@ define.class(function(require){
 
 		// ok if we are a /single fetch
 		var file = this.mapPath(reqquery[0])
+
 		var urlext = define.fileExt(reqquery[0])
-
-		var xmlToJS = function(filepath) {
-			var makeSpace = function(indent) {
-				var out = '';
-				for (var i = 0; i < indent; i++) {
-					out += '  ';
-				}
-				return out;
-			}
-			var filterSpecial = function(child) {
-				var name = child.tag;
-				return name.indexOf('$') !== 0 && (! filterMethods(child)) && (! filterAttributes(child)) && (! filterHandlers(child));
-			}
-			var filterMethods = function(child) {
-				return child.tag === 'method';
-			}
-			var toMethod = function(child) {
-				var body = HTMLParser.reserialize(child.child[0]);
-				var fn = new Function(child.attr.args, body);
-				return {attr: child.attr, body: fn};
-			}
-			var filterAttributes = function(child) {
-				return child.tag === 'attribute';
-			}
-			var filterHandlers = function(child) {
-				return child.tag === 'handler';
-			}
-			var capitalize = function(string) {
-				return string.charAt(0).toUpperCase() + string.slice(1);
-			}
-			var objToString = function(obj) {
-				var out = '{';
-				var keys = Object.keys(obj);
-				for (var i = 0; i < keys.length; i++) {
-					var key = keys[i];
-					var val = obj[key];
-
-					out += key + ': ';
-					if (typeof val === 'function') {
-						out += val;
-					} else if (typeof val === 'object') {
-						out += objToString(val);
-					} else if (val.indexOf('Config({') === 0) {
-						// don't wrap Config in quotes
-						out += val;
-					} else {
-						out += '"';
-						out += val;
-						out += '"';
-					}
-					if (i < keys.length - 1) out += ', ';
-				}
-				out += '}';
-				return out;
-			}
-			var tagToFunc = function(child, indent) {
-				// console.log('tagToFunc', indent, child, child.attr)
-				var outputthis = filterSpecial(child);
-				var out = '';
-				var attr = child.attr || {};
-
-				// add methods to attributes hash
-				var methods = child.child && child.child.filter(filterMethods).map(toMethod);
-				if (methods) {
-					for (var i = 0; i < methods.length; i++) {
-						var method = methods[i];
-						attr[method.attr.name] = method.body;
-						// console.log('found method:', method)
-					}
-				}
-
-				// add attributes
-				var attributes = child.child && child.child.filter(filterAttributes);
-				if (attributes) {
-					if (! attr.attributes) {
-						attr.attributes = {};
-					}
-					for (var i = 0; i < attributes.length; i++) {
-						var attribute = attributes[i].attr;
-						var val = attribute.value;
-						var type = capitalize(attribute.type);
-						if (type === 'String') {
-							val = '"' + val + '"';
-						}
-						// console.log('found attribute:', attribute, val, type)
-						attr.attributes[attribute.name] = 'Config({type: ' + type + ', value: ' + val + '})';
-					}
-				}
-
-				// add handlers
-				var handlers = child.child && child.child.filter(filterHandlers).map(toMethod);
-				if (handlers) {
-					if (! attr.attributes) {
-						attr.attributes = {};
-					}
-					for (var i = 0; i < handlers.length; i++) {
-						var handler = handlers[i];
-						// chop off leading 'on'
-						var attrname = handler.attr.event.substring(2);
-						// register listener for that event
-						attr.attributes[attrname] = 'Config({listeners: [' + handler.body + ']})';
-					}
-				}
-
-				var children = child.child && child.child.filter(filterSpecial);
-				var hasChildren = children && children.length;
-				if (outputthis) {
-					out += makeSpace(indent);
-					// name
-					out += child.tag + '(';
-					// attributes
-					out += objToString(attr, indent);
-					if (hasChildren) out += ',\n'
-				}
-				if (hasChildren) {
-					indent++;
-					for (var i = 0; i < children.length; i++) {
-						newchild = children[i];
-						out += tagToFunc(newchild, indent);
-						if (i !== children.length - 1) {
-							out += ','
-						}
-						out += '\n';
-					}
-					indent--;
-				}
-				if (outputthis) {
-					if (hasChildren) out += makeSpace(indent);
-					out += ')';
-				}
-				return out;
-			}
-			// transform .dre to .js
-			// console.log('parsing .dre file', filepath);
-			var parsed = HTMLParser(fs.readFileSync(filepath));
-			// console.log('parsed', JSON.stringify(parsed.node));
-			var out = 'define.class(function($server$, composition, role, $ui$, screen, view){\n  this.render = function(){ return [\n';
-			out += tagToFunc(parsed.node, 1);
-			out += '  ];\n};\n});'
-			// console.log('result', out)
-			// write to .dre.js file and redirect there
-			// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version
-			return out;
-		}
 		if (urlext === 'dre') {
-			var url = reqquery[0];
-			var filepath = define.expandVariables('$root' + url)
-			var out = xmlToJS(filepath)
+			var dreurl = reqquery[0];
+			var filepath = define.expandVariables('$root' + dreurl)
+			var out = XMLConverter(filepath)
+			// write to .dre.js file
+			// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version
 			fs.writeFileSync(filepath + '.js', out);
-			res.writeHead(307, {location:url + '.js'})
-			res.end()
-			return
+			this.watcher.watch(file)
 		}
 
 		if(file === false){ // file is a search
@@ -358,7 +215,7 @@ define.class(function(require){
 		}
 
 		var fileext = define.fileExt(file)
-		if(!fileext){
+		if(!fileext || fileext === 'dre'){
 			var composition = this.getComposition('$'+reqquery[0].slice(1))
 			if(composition) return composition.request(req, res)
 		}
