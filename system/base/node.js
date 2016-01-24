@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, constructor){
@@ -27,6 +27,42 @@ define.class(function(require, constructor){
 		this.children =
 		this.constructor_children = []
 		this.initFromConstructorArgs(arguments)
+	}
+
+	this.setInterval = function(fn, mstime){
+		if(!this.interval_ids) this.interval_ids = []
+		var id = window.setInterval(function(){
+			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
+			fn.call(this)
+		}.bind(this), mstime)
+		this.interval_ids.push(id)
+		return id
+	}
+
+	this.clearInterval = function(id){
+		var idx = this.interval_ids.indexOf(id)
+		if(idx !== -1){
+			this.interval_ids.splice(idx, 1)
+		 	window.clearInterval(id)
+		}
+	}
+
+	this.setTimeout = function(fn, mstime){
+		if(!this.timeout_ids) this.timeout_ids = []
+		var id = window.setTimeout(function(){
+			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
+			fn.call(this)
+		}.bind(this), mstime)
+		this.timeout_ids.push(id)
+		return id
+	}
+
+	this.clearTimeout = function(id){
+		var idx = this.timeout_ids.indexof(id)
+		if(idx !== -1){
+			this.timeout_ids.splice(idx, 1)
+		 	window.clearInterval(id)
+		}
 	}
 
 	// internal, called by the constructor
@@ -423,7 +459,7 @@ define.class(function(require, constructor){
 
 		// (re)define the class		
 		if(style._base[name] !== base || !style._class[name]){
-			var clsname = base.name + '_' +(where+'_'||'')+ (style._match||'star')
+			var clsname = base.name + '_' +(where?where+'_':'')+ (style._match||'star')
 			var cls = style._class[name] = base.extend(style, original.outer, clsname)			
 		 	style._base[name] = base
 		 	return /*cache[cacheid] =*/ cls
@@ -529,7 +565,7 @@ define.class(function(require, constructor){
 		var is_config =  config instanceof Config
 		var is_attribute = !always_define && key in this
 		// use normal value assign
-		if(is_attribute && !is_config || key[0] === 'o' && key[1] === 'n'){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+		if(!always_define && (is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function')){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -595,12 +631,13 @@ define.class(function(require, constructor){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var wiredfn_key = '_wiredfn_' + key
+		var animinit_key = '_animinit_' + key
 		//var config_key = '_config_' + key 
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
 
 		if(!config.group) config.group  = this.constructor.name
-
+		if(config.animinit) this[animinit_key] = 0
 		var init_value = key in this? this[key]:config.value
 
 		if(init_value !== undefined){
@@ -651,6 +688,9 @@ define.class(function(require, constructor){
 					else if(value instanceof Config){
 						this.defineAttribute(key, value)
 						return
+					}
+					else if(value instanceof Animate){
+						return this.startAnimation(key, value)
 					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
@@ -713,6 +753,9 @@ define.class(function(require, constructor){
 						this.defineAttribute(key, value)
 						return
 					}
+					else if(value instanceof Animate){
+						return this.startAnimation(key, undefined, value.track)
+					}
 				}
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
@@ -723,7 +766,7 @@ define.class(function(require, constructor){
 					if(type !== Object && type !== Array && type !== Function) value = type(value)
 				}
 
-				if(!mark && config.motion && this.startAnimation(key, value)){
+				if((!mark && (!config.animinit || this[animinit_key]++)) && config.motion && this.startAnimation(key, value)){
 					// store the end value
 					return
 				}
@@ -834,7 +877,7 @@ define.class(function(require, constructor){
 		if(!initarray) initarray = [], immediate = true
 
 		if(this._wiredfns){
-			for(key in this._wiredfns){
+			for(var key in this._wiredfns){
 				this.connectWiredAttribute(key, initarray)
 			}
 		}

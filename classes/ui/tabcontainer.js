@@ -1,15 +1,15 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class(function(view, button, label){
-	// Create a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
+define.class('$ui/view', function(view, button, label){
+	// Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
 
 	this.attributes = {
 		// The currently active tab. 
-		activetab, Config({type: int, value: 0}),
+		activetab: Config({type: int, value: 0}),
 		// the color of the tab
 		color: Config({type: vec4, value: vec4("#404050")}),
 		// color of hover
@@ -19,7 +19,7 @@ define.class(function(view, button, label){
 	}
 
 	// The currently active tab. 
-	this.persists("activetab")
+	//this.persists("activetab")
 	
 	this.flex = 1;
 	
@@ -37,7 +37,7 @@ define.class(function(view, button, label){
 	})
 	
 	var tabbuttonprox = this.tabbutton;
-	this.flexwrap= ""
+	this.flexwrap= "wrap"
 	this.flexdirection = "column"
 	this.position = "relative"
 	this.flexdirection = "column"
@@ -58,7 +58,7 @@ define.class(function(view, button, label){
 
 	var tabcontrol = this.constructor
 	this.constructor.examples = {
-		Usage:{
+		Usage:function(){
 			return [
 				tabcontrol({}
 					,label({tabicon:"flask", tabname:"Flask",  text: "I am on tab 1 - my icon is a flask!", fgcolor: "blue", fontsize: 20})

@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, icon, label, button, scrollbar){
@@ -12,15 +12,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	this.padding = 0;
 	this.margin = 4;
 	this.borderradius =  vec4(10,10,1,1);
-	this.bgcolor = vec4("#4e4e4e");
+	this.bgcolor = vec4("red");
 	this.flex = 1;
 	this.flexdirection ="column" 
 	
 	this.render = function(){
 		return [
 			view({bgcolor:"#585858",borderradius:0, bordercolor:"transparent" , borderwidth:0, margin:0, padding:vec4(0)},
-				view({margin:vec4(1,1,2,0),bgcolor:"#3c3c3c", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
-					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
+				view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
+					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
 				)
 			)
 			,this.constructor_children

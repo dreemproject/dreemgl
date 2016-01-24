@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // parse a color string into a [r,g,b] 0-1 float array
 
@@ -309,7 +309,6 @@ define(function(require, exports){
 			a[2] = rgb[3]/255.0;
 			a[3] = 1.0;
 //			console.log("rgb" ,a);
-
 			return a;
 		}
 
@@ -323,6 +322,15 @@ define(function(require, exports){
 		}
 	
 		var vec4m = col.match(/^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*$/i);
+		if( vec4m ) {
+			a[0] = vec4m[1];
+			a[1] = vec4m[2];
+			a[2] = vec4m[3];
+			a[3] = vec4m[4];
+			return a;
+		}
+
+		var vec4m = col.match(/^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$/i);
 		if( vec4m ) {
 			a[0] = vec4m[1];
 			a[1] = vec4m[2];

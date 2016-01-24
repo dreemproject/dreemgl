@@ -1,4 +1,4 @@
-/* Copyright 2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -21,7 +21,7 @@ define.class(function(require, exports){
 	// DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
-	// Assign an id to each daliactor object
+	// Assign a unique id to each daliactor object
 	var DaliLayer = exports
 	DaliLayer.GlobalId = 0
 
@@ -31,7 +31,8 @@ define.class(function(require, exports){
 	 * You can access the dali.Layer object as this.dalilayer
 	 * @param {Object} parent The layer object to add this layer to. If this
 	 * is not defined, the layer is added to the top-level layer. If null,
-	 * the layer is not added.
+	 * the layer is not added. The null case is used to initialize the 
+	 * root layer.
 	 * @param {Number} width The width of the layer, in pixels.
 	 * @param {Number} height The height of the layer, in pixels.
 	 */
@@ -52,12 +53,6 @@ define.class(function(require, exports){
 		this.dalilayer.parentOrigin = dali.TOP_LEFT;
 		this.dalilayer.anchorPoint = dali.TOP_LEFT;
 
-		// Add to another layer unless parent is null
-		if (typeof parent === 'undefined')
-			parent = DaliApi.layer;
-		if (parent)
-			parent.add(this.dalilayer);
-
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Layer();');
 			console.log('DALICODE: ' + this.name() + '.behavior = "Dali::Layer::LAYER_2D"');
@@ -65,19 +60,34 @@ define.class(function(require, exports){
 				console.log('DALICODE: ' + this.name() + '.size = [' + width + ', ' + height + ', 0];');
 			console.log('DALICODE: ' + this.name() + '.parentOrigin = dali.TOP_LEFT;');
 			console.log('DALICODE: ' + this.name() + '.anchorPoint = dali.TOP_LEFT;');
-			console.log('DALICODE: ' + this.name() + '.anchorPoint = dali.TOP_LEFT;');
 		}		
 		
+
+		// Add to another layer unless parent is null (root layer)
+		if (typeof parent === 'undefined')
+			parent = DaliApi.currentlayer;
+		if (parent) {
+			DaliApi.rootlayer.add(this);
+			//parent.add(this);
+		}
 	}
 
 
 	/**
 	 * @method add
 	 * Add an actor to this layer.
-	 * @param {object} actor DaliActor object
+	 * @param {object} actor DaliActor or DaliLayer object
 	 */
 	this.add = function(actor) {
-		this.dalilayer.add(actor.daliactor)
+		if (actor.dalilayer) {
+			// Adding a layer to an existing layer
+			this.dalilayer.add(actor.dalilayer)
+		}
+		else {
+			// Adding an actor to a layer
+			this.dalilayer.add(actor.daliactor)
+		}
+
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.add(' + actor.name() + ');');
@@ -90,7 +100,7 @@ define.class(function(require, exports){
 	}
 
 	this.inspect = function(depth) {
-		var obj = {dalilayer:this.id, obj:[this.dalirenderer.inspect(depth)]};
+		var obj = {dalilayer:this.id};
 		var util = require('util')
 		return util.inspect(obj, {depth: null});
 	}

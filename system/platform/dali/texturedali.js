@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -12,7 +12,7 @@ function DaliImage(path)
 }
 
 
-define.class('$system/base/texture', function(exports){
+define.class('$system/base/texture', function(exports, require){
 	var Texture = exports
 
 	Texture.GlobalId = 0
@@ -39,7 +39,7 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	Texture.fromType = function(type){
-		console.log('********** fromType', type);
+		//console.log('********** fromType', type);
 		return new Texture(type,0,0)
 	}
 
@@ -55,7 +55,7 @@ define.class('$system/base/texture', function(exports){
 		var img = new dali.ResourceImage({url: fullpath});
 
 		var tex = new Texture('rgba', img.getWidth(), img.getHeight())
-		console.log('********** fromImage', img.getWidth(), img.getHeight());
+		//console.log('********** fromImage', img.getWidth(), img.getHeight());
 		tex.image = img
 
 		if (DaliApi.emitcode) {
@@ -90,7 +90,7 @@ define.class('$system/base/texture', function(exports){
 			height: h,
 			pixelFormat : dali.PIXEL_FORMAT_RGBA8888
 		};
-		console.log('********** fromArray', image_options, uint8.length);
+		//console.log('********** fromArray', image_options, uint8.length);
 
 		var img = new dali.BufferImage(uint8, image_options);
 		tex.image = img;
@@ -200,6 +200,12 @@ define.class('$system/base/texture', function(exports){
 		}
 
 		
+		// Create a layer object and attach to the texture. This will be
+		// activated when dalidevice#bindFramebuffer is called. The layer's
+		// parent will be the current layer
+		DaliLayer = require('./dali_layer')
+		this.dali_layer = new DaliLayer(DaliApi.currentlayer, this.size[0], this.size[1]);
+
 		console.log('texturedali.initAsRendertarget texture NOT implemented');
 
 		gl.texImage2D(gl.TEXTURE_2D, 0, this.glbuf_type, this.size[0], this.size[1], 0, this.glbuf_type, this.gldata_type, null)
@@ -257,7 +263,7 @@ define.class('$system/base/texture', function(exports){
 	
 	this.createGLTexture = function(gl, texid, texinfo){
 		var samplerid = texinfo.samplerid
-		console.log('**** createGLTexture', samplerid)
+		//console.log('**** createGLTexture', samplerid)
 
 		if(this.image && this.image[samplerid]){
 			this[samplerid] = this.image[samplerid]
@@ -281,11 +287,11 @@ define.class('$system/base/texture', function(exports){
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, samplerdef.UNPACK_PREMULTIPLY_ALPHA_WEBGL || false)
 
 		if(this.array){
-			console.log('texturedali.createGLTexture texture NOT implemented from array', this.size[0], this.size[1]);
+			//console.log('texturedali.createGLTexture texture NOT implemented from array', this.size[0], this.size[1]);
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.array))
 		}
 		else if(this.image){
-			console.log('texturedali.createGLTexture texture NOT implemented from image', this.size[0], this.size[1]);
+			//console.log('texturedali.createGLTexture texture NOT implemented from image', this.size[0], this.size[1]);
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
 			this.image[samplerid] = gltex
 		}
@@ -306,7 +312,7 @@ define.class('$system/base/texture', function(exports){
 	}
 
 	this.updateGLTexture = function(gl, gltex){
-		console.log('+++++updateGLTexture');
+		//console.log('+++++updateGLTexture');
 		if(this.array){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
 		}

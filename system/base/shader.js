@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -593,6 +593,7 @@ define.class(function(require, exports){
 			pix_base += 'vec4 dump;\n'
 		}
 
+		pix_base += 'float PickGuid = 0.;\n'
 		pix_base += this.compileStructs(pix_state.structs)
 		pix_base += this.compileVaryings(pix_state.attributes, 'Attribute varyings')
 		pix_base += this.compileVaryings(pix_state.varyings, 'Varyings')
@@ -623,7 +624,6 @@ define.class(function(require, exports){
 		}
 
 		pix_color += pix_base 
-
 		pix_color += '//------------------- Color Pixel shader main -------------------\nvoid main(){\n'
 		pix_color += this.compileUniformRename(pix_state.uniforms)
 		if(pix_state.dump.set){
@@ -641,8 +641,8 @@ define.class(function(require, exports){
 		pix_pick += '//------------------- Pick Pixel shader main -------------------\nvoid main(){\n'
 		pix_pick += this.compileUniformRename(pix_state.uniforms)
 		pix_pick += '\tvec4 col = ' + this.toVec4(pix_code, pix_ast, alpha_code, alpha_ast) + ';\n'
-		pix_pick += ''
-		pix_pick += '\tgl_FragColor = vec4(_pickguid.xyz, col.a>_pickalpha?1.:0.);\n'
+		pix_pick += '\tfloat _pickguid2 = (_pickguid.y * 255. + _pickguid.z * 255.*256.) - PickGuid;\n'
+		pix_pick += '\tgl_FragColor = vec4(_pickguid.x, mod(_pickguid2,256.)/255., floor(_pickguid2/256.)/255., col.a>_pickalpha?1.:0.);\n'
 		pix_pick += '}\n'
 
 		if(this.dump){

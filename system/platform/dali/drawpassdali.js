@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -201,21 +201,28 @@ define.class(function(require, baseclass){
 		
 		var matrices = this.pickmatrices
 		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
+		// calculate the colormatrices too
+		//if(!this.colormatrices.initialized){
+		//	this.calculateDrawMatrices(isroot, this.colormatrices)
+		//}
 
 		var pickguid = vec3()
-		pickguid[0] = (((passid)*131)%256)/255
+		pickguid[0] = passid/255//(((passid)*131)%256)/255
+
 
 		// modulo inverse: http://www.wolframalpha.com/input/?i=multiplicative+inverse+of+31+mod+256
 		var pick_id = 0
 		var draw = view
 		while(draw){
-			pick_id++
-			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			draw.draw_dirty &= 1
+
+			pick_id+= draw.pickrange;
+			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_pick = 1
 
-				var id = (pick_id*29401)%65536
+				var id = pick_id//(pick_id*29401)%65536
 				pickguid[1] = (id&255)/255
 				pickguid[2] = (id>>8)/255
 
@@ -266,10 +273,15 @@ define.class(function(require, baseclass){
 		var draw = view
 		var pick_id = 0
 		while(draw){
-			pick_id++
+			
+			if(id > pick_id && id <= pick_id + draw.pickrange){
+				draw.last_pick_id = (pick_id + draw.pickrange) - id
+				return draw
+			}
 
-			if(id === pick_id) return draw
+			pick_id += draw.pickrange
 
+			
 			draw = this.nextItem(draw)
 		}
 	}
@@ -297,6 +309,7 @@ define.class(function(require, baseclass){
 
 	this.drawNormal = function(draw, matrices){
 		draw.updateShaders()
+		var count = 0
 		// alright lets iterate the shaders and call em
 		var shaders = draw.shader_draw_list
 		for(var j = 0; j < shaders.length; j++){
@@ -307,8 +320,10 @@ define.class(function(require, baseclass){
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
 
+			count++
 			shader.drawArrays(this.device)
 		}
+		return count
 	}
 
 	this.drawColor = function(isroot, time, clipview){
@@ -317,6 +332,7 @@ define.class(function(require, baseclass){
 		var device = this.device
 		var layout = view._layout
 		var gl = device.gl
+		var count = 0
 
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 	
@@ -339,6 +355,8 @@ define.class(function(require, baseclass){
 
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
+		view.colormatrices = matrices
+
 
 		gl.disable(gl.SCISSOR_TEST)
 
@@ -362,10 +380,12 @@ define.class(function(require, baseclass){
 
 		var draw = view
 		while(draw){
+			draw.draw_dirty &= 2
+
 			//}
 			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			//	var draw = dl[i]
-			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && view.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_color = 1
@@ -381,8 +401,9 @@ define.class(function(require, baseclass){
 					this.drawBlend(draw)
 				}
 				else{
-					this.drawNormal(draw, matrices)
+					count += this.drawNormal(draw, matrices)
 				}
+
 
 				if(draw.debug_view){
 					this.debugrect.view = draw
@@ -391,7 +412,7 @@ define.class(function(require, baseclass){
 			}
 			draw = this.nextItem(draw)
 		}
-
+		//console.log(count)
 		return hastime
 	}
 

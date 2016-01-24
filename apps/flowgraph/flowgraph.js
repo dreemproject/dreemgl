@@ -1,11 +1,11 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, 
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
-		$widgets$, propviewer,searchbox, jsviewer,
+		$widgets$, propviewer,searchbox, jseditor,
 		$server$, sourceset, dataset, $$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
@@ -216,7 +216,7 @@ define.class('$ui/view', function(require,
 				var cx = 0;
 				var cy = 0;
 				var n = 0;
-				for(a in this.currentselection){
+				for(var a in this.currentselection){
 					var bl = this.currentselection[a];
 					if (bl instanceof block){
 						n++;
@@ -354,97 +354,96 @@ define.class('$ui/view', function(require,
 	
 	this.gridClick = function(p, origin){
 		
-		this.cancelConnection();
-			var cg= this.find("centralconstructiongrid");
+		this.cancelConnection()
+		var cg= this.find("centralconstructiongrid")
+	
+		origin.startselectposition = cg.localMouse()
+		this.startDragSelect()
 		
-			origin.startselectposition = cg.localMouse();
-			this.startDragSelect();
-			
-			origin.mousemove = function(){				
-				var cg= this.find("centralconstructiongrid");
-				var np = cg.localMouse();
-				var fg = this.find("flowgraph");
-				var sq = this.findChild("selectorrect");
-				if(sq){
-					var sx = Math.min(this.startselectposition[0], np[0]);
-					var sy = Math.min(this.startselectposition[1], np[1]);
-					var ex = Math.max(this.startselectposition[0], np[0]);
-					var ey = Math.max(this.startselectposition[1], np[1]);
-					
-					sq.visible = true;
-					sq.redraw();
+		origin.mousemove = function(){				
+			var cg= this.find("centralconstructiongrid")
+			var np = cg.localMouse()
+			var fg = this.find("flowgraph")
+			var sq = this.findChild("selectorrect")
+			if(sq){
+				var sx = Math.min(this.startselectposition[0], np[0])
+				var sy = Math.min(this.startselectposition[1], np[1])
+				var ex = Math.max(this.startselectposition[0], np[0])
+				var ey = Math.max(this.startselectposition[1], np[1])
 				
-					sq.pos = vec2(sx,sy);
-					sq.size = vec3(ex-sx, ey-sy, 1);
-					fg.dragselectset = [];
-					for(var a in fg.allblocks){
-						var bl = fg.allblocks[a];
-						
-						cx = bl.pos[0] + bl.layout.width/2; 
-						cy = bl.pos[1] + bl.layout.height/2;
-						
-						if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
-							bl.inselection = 1;
-							fg.dragselectset.push(bl);
-						}	
-						else{
-							if (fg.originalselection.indexOf(bl) >-1)
-							{
-								bl.inselection = 1;
-							}
-							else{
-								bl.inselection = 0;
-							}
-						}					
-					}					
-					for(var a in fg.allconnections){
-						var con = fg.allconnections[a];
-						
-						
-						ax = con.frompos[0];
-						ay = con.frompos[1];
-						
-						bx = con.topos[0];
-						by = con.topos[1];
-						
-						
-						cx = (ax+bx)/2;
-						cy = (ay+by)/2;
-						
-						if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
-								||
-							(bx >= sx && bx <= ex && by >= sy && by <=ey)
-							|| 
-							(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
-							)
-						 {
-							con.inselection = 1;
-							fg.dragselectset.push(con);
-						}	
-						else{
-							if (fg.originalselection.indexOf(con) >-1)
-							{
-								con.inselection = 1;
-							}
-							else{
-								con.inselection = 0;
-							}
-						}					
-					}					
-				} 					
-			}
+				sq.visible = true;
+				sq.redraw();
 			
-			origin.mouseleftup = function(){
-				var sq = this.findChild("selectorrect");
-				if (sq){
-					sq.visible = false;
-					sq.redraw();
-				}
-				fg = this.find("flowgraph");
-				fg.commitdragselect();
-				this.mousemove = function(){};
-			}	
+				sq.pos = vec2(sx,sy);
+				sq.size = vec3(ex-sx, ey-sy, 1);
+				fg.dragselectset = [];
+				for(var a in fg.allblocks){
+					var bl = fg.allblocks[a];
+					
+					cx = bl.pos[0] + bl.layout.width/2; 
+					cy = bl.pos[1] + bl.layout.height/2;
+					
+					if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
+						bl.inselection = 1;
+						fg.dragselectset.push(bl);
+					}	
+					else{
+						if (fg.originalselection.indexOf(bl) >-1)
+						{
+							bl.inselection = 1;
+						}
+						else{
+							bl.inselection = 0;
+						}
+					}					
+				}					
+				for(var a in fg.allconnections){
+					var con = fg.allconnections[a];
+					
+					
+					ax = con.frompos[0];
+					ay = con.frompos[1];
+					
+					bx = con.topos[0];
+					by = con.topos[1];
+					
+					
+					cx = (ax+bx)/2;
+					cy = (ay+by)/2;
+					
+					if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
+							||
+						(bx >= sx && bx <= ex && by >= sy && by <=ey)
+						|| 
+						(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
+						)
+					 {
+						con.inselection = 1;
+						fg.dragselectset.push(con);
+					}	
+					else{
+						if (fg.originalselection.indexOf(con) >-1)
+						{
+							con.inselection = 1;
+						}
+						else{
+							con.inselection = 0;
+						}
+					}					
+				}					
+			} 					
+		}
 		
+		origin.mouseleftup = function(){
+			var sq = this.findChild("selectorrect");
+			if (sq){
+				sq.visible = false;
+				sq.redraw();
+			}
+			fg = this.find("flowgraph");
+			fg.commitdragselect();
+			this.mousemove = function(){};
+		}
 	}
 
 	this.makeNewConnection = function(){
@@ -737,7 +736,7 @@ define.class('$ui/view', function(require,
 	}
 	this.render = function(){
 		return [
-			menubar({name:"themenu", menus:[
+			menubar({viewport:'2d', name:"themenu", menus:[
 				{name:"File", commands:[
 					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
 					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},
@@ -769,7 +768,7 @@ define.class('$ui/view', function(require,
 					)
 				)
 				,splitcontainer({flexdirection:"column", direction:"horizontal"}
-					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#3b3b3b",gridsize:5,majorevery:5,  majorline:"#474747", minorline:"#383838", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
 						)
@@ -820,9 +819,9 @@ define.class('$ui/view', function(require,
 							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
-					,jsviewer({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
+					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
-/*
+
 
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({title:"Properties", viewport:"2D"}
@@ -830,7 +829,7 @@ define.class('$ui/view', function(require,
 )	
 )
 
-*/
+
 			)
 		];
 	}

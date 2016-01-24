@@ -1,4 +1,4 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -23,7 +23,7 @@ define.class(function(require, exports){
 	// DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
-	// Assign an id to each daligeometry object
+	// Assign a unique id to each daligeometry object
 	var DaliGeometry = exports
 	DaliGeometry.GlobalId = 0
 
@@ -32,14 +32,14 @@ define.class(function(require, exports){
 	 * Create a dali.Geometry object, using triangles
 	 * You can access the dali.Geometry object as this.daligeometry
 	 * @param {number} drawtype Line drawing type. dali uses the same values
-	 *                 as webgl.
+	 *                 as webgl. The default is dali.GEOMETRY_TRIANGLES.
 	 */
 	this.atConstructor = function(drawtype) {
 		this.object_type = 'DaliGeometry'
 
 		var dali = DaliApi.dali;
 
-		// Keep track of all vertex_buffers added.
+		// Keep track of all vertex_buffers added. This acts as a cache
 		// Values = [format_hash, data_hash, vertex_index, vertex_buffer, buffer_id];
 		this.vertex_buffers = {};
 
@@ -51,9 +51,43 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Geometry();');
-			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + drawtype + ');');
+			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + this.drawtypeDali(drawtype) + ');');
 		}		
 	}
+
+	// Internal method to convert a drawtype into the dali value, if possible.
+	// This is used when generating dali output to the console.
+	this.drawtypeDali = function(drawtype) {
+		var dali = DaliApi.dali;
+
+		switch (drawtype) {
+		case dali.GEOMETRY_LINES:
+			drawtype = 'dali.GEOMETRY_LINES';
+			break;
+		case dali.GEOMETRY_LINE_LOOP:
+			drawtype = 'GEOMETRY_LINE_LOOP';
+			break;
+		case dali.GEOMETRY_LINE_STRIP:
+			drawtype = 'dali.GEOMETRY_LINE_STRIP';
+			break;
+
+		case dali.GEOMETRY_TRIANGLES:
+			drawtype = 'dali.GEOMETRY_TRIANGLES';
+			break;
+		case dali.GEOMETRY_TRIANGLE_FAN:
+			drawtype = 'dali.GEOMETRY_TRIANGLE_FAN';
+			break;
+		case dali.GEOMETRY_TRIANGLE_STRIP:
+			drawtype = 'dali.GEOMETRY_TRIANGLE_STRIP';
+			break;
+
+		default:
+			break;
+		}
+
+		return drawtype;
+	}
+
 
 	/**
 	 * @method addGeometry
@@ -64,7 +98,8 @@ define.class(function(require, exports){
 		//console.trace('addGeometry');
 		var dali = DaliApi.dali;
 
-		//TODO
+		// Make sure the correct object was passed. dreem_shader holds the
+		// dreemgl compiled structures.
 		if (!dreem_shader.vtx_state) {
 			console.log('WARNING. Incorrect object passed to addGeometry', dreem_shader.object_type);
 			return;
@@ -79,10 +114,10 @@ define.class(function(require, exports){
 			var name = keys[i];
 			var storedname = '_' + name;
 
-			// I found that keys with nested information (ie. has _DOT_)
+			// I found that dreemgl keys with nested information (ie. has _DOT_)
 			// do not require vertex.
 			if (name.indexOf('_DOT_') > 0) {
-				console.log('DaliGeometry.addGeometry Skipping texture', name);
+				//console.log('DaliGeometry.addGeometry Skipping texture', name);
 				continue;
 			}
 
@@ -115,12 +150,17 @@ define.class(function(require, exports){
 
 
 	/**
-	 * @method addAttributeGeometry
-	 * Add other attribute geometries to a dali Actor.
+	 * @method addAttributeGeometryAlt
+	 * Add other attribute geometries to a dali Actor. This version was used
+	 * during testing to make sure DALi could handle the packed layout outlined
+	 * in the docs.
+	 *
+	 * This version can be removed if no problems are found.
+	 * 
 	 * @param {Object} shader_dali Compiled data structure
 	 * @param {Object} attrlocs Compiled data structure
 	 */
-	this.addAttributeGeometry = function(shader_dali, attrlocs) {
+	this.addAttributeGeometryAlt = function(shader_dali, attrlocs) {
 		var dali = DaliApi.dali;
 
 		if (Object.keys(attrlocs) == 0)
@@ -143,8 +183,6 @@ define.class(function(require, exports){
 			// Skip invalid entries
 			if (typeof attrloc.slots === 'undefined')
 				continue;
-
-			console.log('**** **** attrloc.name', name, key, attrloc.slots);
 
 			switch (attrloc.slots) {
 			case 1:
@@ -207,7 +245,7 @@ define.class(function(require, exports){
 	 * @param {Object} shader_dali Compiled data structure
 	 * @param {Object} attrlocs Compiled data structure
 	 */
-	this.addAttributeGeometryOrig = function(shader_dali, attrlocs) {
+	this.addAttributeGeometry = function(shader_dali, attrlocs) {
 		var dali = DaliApi.dali;
 
 		if (Object.keys(attrlocs) == 0)
@@ -228,8 +266,6 @@ define.class(function(require, exports){
 			// Skip invalid entries
 			if (typeof attrloc.slots === 'undefined')
 				continue;
-
-			console.log('**** **** attrloc.name', name, key, attrloc.slots);
 
 			switch (attrloc.slots) {
 			case 1:
@@ -258,12 +294,11 @@ define.class(function(require, exports){
 
 		if (!name || (Object.keys(format).length == 0)) return;
 
-		//console.log('***********************addAttributeGeometry*************************');
+		//console.log('***************addAttributeGeometry******************');
 		//console.log(attrlocs);
-		//console.log('************************************************************');
+		//console.log('*****************************************************');
 
 		var arr = shader_dali[name];
-		//console.trace('**** addAttributeGeometry', name, arr.array.length);
 		
 		var data = [];
 
@@ -282,7 +317,6 @@ define.class(function(require, exports){
 		}
 
 		// Add or update a vertex buffer
-		//console.log('updating 2', format, nslots, data.length);
 		if (data.length > 0)
 			this.updateVertexBuffer('attribgeom', data, format, nslots);
 	}

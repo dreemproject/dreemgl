@@ -5,4 +5,5 @@ node_modules/
 cache/
 .DS_Store
 *.marks
-
+apps/VectorMap/tilecache/*.json
+compositions/flowtest1/index.js

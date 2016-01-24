@@ -1,12 +1,12 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // ruler class
 
-define.class('$ui/view', function($ui$, view, label, icon, $$, require){
+define.class('$ui/view', function(require, $ui$, view, label, icon){
+	// The foldcontainer shows/hides all its children when the top bar is clicked
 
-	// the foldcontainer shows/hides all its children when the top bar is clicked
 	this.position = "relative"
 	this.borderwidth = 1
 	this.borderradius = 1
@@ -41,7 +41,7 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 			var fill = mix(col1, col2,  (a.y)/0.8);
 			return fill;
 		}
-		
+
 		// default click-handler - when not bound this write "nothing happens" to the console. 
 		this.toggle = function(){console.log("nothing happens")}
 		
@@ -63,17 +63,16 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 
 		this.padding = 3
 		this.justifycontent=  "space-between" 
-		this.alignitems = "flex-start";
+		this.alignitems = "flex-start"
 		this.flex = 1
+
 		// The clickable bar creates icon and a textfield children.
-		this.render = function(){			
-			var res = [];
+		this.render = function(){
+			var res = []
 
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
-			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));
-			
-		
-			var res2 = [view({bg:0},res), icon({alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
+			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));					
+			var res2 = [view({bg:0},res), icon({fontsize:this.outer.fontsize,alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
 			return res2;
 		}
 
@@ -112,6 +111,7 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 		
 		this.layout  = function(){this.statedefault();};
 		this.init = function(){
+			//	console.log("HERE",this.bgcolor)
 			this.statedefault(true)
 		}
 		this.mouseover = this.stateover
@@ -136,7 +136,7 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 	this.render = function(){
 		
 		this.bar = this.clickablebar({
-			bgcolor:"red",
+			bgcolor:vec4("#3c3c3c"),
 			borderwidth: this.borderwidth, 
 			bordercolor: this.bordercolor,
 			icon: this.icon?this.icon:"", 
@@ -162,7 +162,6 @@ define.class('$ui/view', function($ui$, view, label, icon, $$, require){
 		
 		return res;
 	}
-
 	
 	var foldcontainer = this.constructor;
 

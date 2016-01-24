@@ -1,20 +1,10 @@
-define.class("$server/composition",function($server$, service, $ui$, screen, view, $flow$dataset$, rovi, $flow$remotes$, xypad, $flow$display$, labtext) {
+define.class("$server/composition",function($server$, service, $ui$, screen, view, $flow$services$, map, omdb, webrequest, $flow$controllers$, xypad, knob, keyboard, dpad, $flow$displays$, labtext, inputs, outputs, album, $flow$devices$, estimote) {
 	this.render = function() {
 		return [
-			rovi({
-				name:'myservice', 
-				flowdata:{x:379, y:33}, 
-				query:wire("this.rpc.xy1.mousepos")
-			}),
-			xypad({
-				name:'xy1', 
-				flowdata:{x:71, y:101}
-			}),
-			labtext({name:'lab', flowdata:{x:519, y:203}, number:wire("this.rpc.xy1.mousepos"), number2:wire("this.rpc.xy1.mousepos")}),
-			rovi({name:"rovi0", flowdata:{x:98, y:401}, query:wire("this.rpc.xy1.mousepos")}),
-			labtext({name:"labtext0", flowdata:{x:460, y:392}, text:wire("this.rpc.rovi0.data")})
+			xypad({name:"xypad0", flowdata:{x:3, y:267}}),
+			labtext({name:"labtext0", flowdata:{x:312, y:95}, string:wire("this.rpc.dpad0.value"), vec2:wire("this.rpc.xypad0.mousepos")}),
+			dpad({name:"dpad0", flowdata:{x:15, y:81}})
 		]
 	}
-	
 }
 )

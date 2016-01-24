@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
@@ -23,30 +23,27 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		hasball: true
 	
 	}
-
 		
-		this.B1 = function (t) { return t * t * t; }
-		this.B2 = function (t) { return 3 * t * t * (1 - t); }
-		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
-		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
+	this.B1 = function (t) { return t * t * t; }
+	this.B2 = function (t) { return 3 * t * t * (1 - t); }
+	this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
+	this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
 
-		 this.bezier = function(percent,C1,C2,C3,C4) {		
-			
-			var b1 = this.B1(percent);
-			var b2 = this.B2(percent);
-			var b3 = this.B3(percent);
-			var b4 = this.B4(percent);
-			
-			//return 
-			
-				var A1 = vec2.vec2_mul_float32(C1, b1 )
-				var A2 = vec2.vec2_mul_float32(C2, b2 )
-				var A3 = vec2.vec2_mul_float32(C3, b3 )
-				var A4 = vec2.vec2_mul_float32(C4, b4 )
+	this.bezier = function(percent,C1,C2,C3,C4) {		
+		
+		var b1 = this.B1(percent);
+		var b2 = this.B2(percent);
+		var b3 = this.B3(percent);
+		var b4 = this.B4(percent);
+		
+		//return 
+		var A1 = vec2.vec2_mul_float32(C1, b1 )
+		var A2 = vec2.vec2_mul_float32(C2, b2 )
+		var A3 = vec2.vec2_mul_float32(C3, b3 )
+		var A4 = vec2.vec2_mul_float32(C4, b4 )
 
-			return vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));
-				
-		}
+		return vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));			
+	}
 		
 	this.noboundscheck = true
 	
@@ -67,6 +64,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.init = function(){
 		this.neutralcolor1 = this.color1;
 		this.neutralcolor2 = this.color2;
+		this.neutralcolor = 
 		this.neutrallinewidth = this.linewidth;
 		this.find("flowgraph").allconnections.push(this);	
 		
@@ -217,7 +215,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		this.color = function(){
 			//return 'blue'
-			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
+			var a= 1.0 - pow(abs(mesh.y*2.0), 2.5);
 			return vec4(vec3(0.01) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*1.1,a);
 			return vec4(view.bgcolor.xyz,a);
 		}	
@@ -238,13 +236,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.B3 = function (t) { return 3 * t * (1 - t) * (1 - t); }
 		this.B4 = function (t) { return (1 - t) * (1 - t) * (1 - t); }
 
-		 this.bezier = function(percent,C1,C2,C3,C4) {		
-			
+		this.bezier = function(percent,C1,C2,C3,C4) {		
 			var b1 = B1(percent);
 			var b2 = B2(percent);
 			var b3 = B3(percent);
 			var b4 = B4(percent);
-			
 			return C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;		
 		}
 			
@@ -269,6 +265,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		//this.color_blend = 'src_alpha * src_color + dst_color'
   
 		this.color = function(){
+			//return 'red'
 			var a= 1.0-pow(abs(mesh.y*2.0), 2.5);
 			return vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*0.3);
 			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);
@@ -291,7 +288,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
-				this.neutralcolor = this.bgcolor = out.bgcolor;
+				this.neutralcolor1 = this.bgcolor = out.bgcolor;
 			}
 			this.frompos = vec2(F._pos[0]+ F._layout.width-3,F._pos[1]+yoff)
 		}
@@ -310,7 +307,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;
 				yoff += inp.parent.parent.layout.top + 10;
-				if (!F) this.neutralcolor = this.bgcolor = inp.bgcolor;
+				if (!F) this.neutralcolor2 = this.bgcolor = inp.bgcolor;
 		
 			}
 			
@@ -324,7 +321,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		
 		if (color1 && !color2) color2 = color1;else if (color2 && !color1) color1 = color2;
 		if (color1) this.neutralcolor1 = this.color1 = Mark(color1, !this.updatecount);
-		if (color2) this.neutralcolor2 = this.color2 =  Mark(color2, !this.updatecount);
+		if (color2) this.neutralcolor2 = this.color2 = Mark(color2, !this.updatecount);
 		this.centralcolor = Mark(mix(this.color1, this.color2, 0.5), !this.updatecount);;
 		this.updatecount++;
 		

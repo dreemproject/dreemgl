@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 // Micro AMD module loader for browser and node.js and basic system homogenisation library
@@ -93,7 +93,6 @@
 
 
 
-
 	define.fileName = function(file){
 		file = file.replace(/\\/g,'/')
 		var file = file.slice(define.filePath(file).length)
@@ -150,7 +149,6 @@
 		type = type.toLowerCase()
 		
 		if(type === 'json')	return 'json'
-
 		if(type === 'txt' || type === 'obj' || type === 'text' || type === 'md') return 'text'
 		
 		return 'arraybuffer'
@@ -168,15 +166,35 @@
 		}
 	}
 
+	// returns a class dir you can use, has / appended already
+	define.classPath = function(cls){
+		if(cls.prototype) cls = cls.prototype
+		var mod = cls.constructor.module
+		var fn = mod.filename.replace(/\\/g,'/')
+		for(var key in define.paths){
+			var path = define.expandVariables(define['$'+key])
+			if(fn.indexOf(path) === 0){
+				// Return the class path as a symbol base
+				return define.filePath('$'+key+fn.slice(path.length)) + '/'
+			}
+		}
+	}
+
+	define.deferPromise = function(){
+		var res, rej
+		var prom = new Promise(function(ires, irej){
+			res = ires, rej = irej
+		})
+		prom.resolve = res
+		prom.reject = rej
+		return prom
+	}
 
 
 
 
 
 	//  require implementation
-
-
-
 
 
 
@@ -200,6 +218,9 @@
 				//console.log('skipping', dep_path)
 				return null
 			}
+
+			// lets reverse our path
+
 
 			module = {exports:{}, factory:factory, id:abs_path, filename:abs_path}
 			define.module[abs_path] = module
@@ -233,7 +254,7 @@
 			var dep_path = define.joinPath(base_path, define.expandVariables(path))
 			return new Promise(function(resolve, reject){
 				if(define.factory[path]){
-					// if its already asynchronously loading.. 
+					// if its already asynchronously loading..
 					var module = require(path, ext)
 					return resolve(module)
 				}
@@ -263,7 +284,9 @@
 					function wipe_module(name){
 						//console.log("Reloading "+define.fileName(name))
 						for(var key in define.factory){
-							var deps = define.factory[key].deps
+							var fac = define.factory[key]
+							if(!fac) continue
+							var deps = fac.deps
 							if(key !== name && define.module[key] && deps && deps.indexOf(name) !== -1){
 								// remove module
 								define.module[key] = undefined
@@ -839,8 +862,7 @@
 					define.script_tags[location.origin + url] = script
 
 					script.type = 'text/javascript'
-					script.src = url
-					
+
 					//define.script_tags[url] = script
 					window.onerror = function(error, url, line){
 						var script = define.script_tags[url]
@@ -853,14 +875,16 @@
 						if(this.rejected) return
 						// pull out the last factor
 						var factory = define.last_factory
+
 						define.factory[facurl] = factory
-	
+
+						if(!factory) return reject("Factory is null for "+url+" from file "+from_file + " : " + facurl)
+
 						var module_deps = factory.deps = []
-	
+
 						define.last_factory = undefined
-						if(!factory) return reject("Factory is null for "+url+" from file "+from_file)
+
 						// parse the function for other requires
-		
 						Promise.all(define.findRequiresInFactory(factory).map(function(path){
 							// ignore nodejs style module requires
 							if(path.indexOf('$') === -1 && path.charAt(0) !== '.'){
@@ -894,6 +918,9 @@
 						if(script.readyState == 'loaded' || script.readyState == 'complete') onLoad()
 					}
 					define.in_body_exec = false
+
+					script.src = url
+
 					document.getElementsByTagName('head')[0].appendChild(script)
 				})
 			}
@@ -1251,9 +1278,12 @@
 				if(ext !== '' && ext !== 'js'){
 					if(ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'png'){		
 						// Construct a Texture.Image object given its path
-						var tex = define.expandVariables('$system/platform/$platform/texture$platform')
-						var Texture = define.require(tex);
-						return new Texture.Image(full_name)
+						if(define.$platform === 'dali'){
+							var tex = define.expandVariables('$system/platform/$platform/texture$platform')
+							var Texture = define.require(tex);
+							return new Texture.Image(full_name)
+						}
+						return undefined
 					}
 					else{
 						// read it as an arraybuffer
@@ -1371,6 +1401,48 @@
 
 
 
+	define.prim = {
+		int8:function int8(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint8:function uint8(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		int16:function int16(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint16:function uint16(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		int32:function int32(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		uint32:function uint32(value){
+			if(value && value.isArray) return value
+			return parseInt(value)
+		},
+		half:function half(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		float32:function float32(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		float64:function float64(value){
+			if(value && value.isArray) return value
+			return parseFloat(value)
+		},
+		bool:function boolean(value){
+			if(value && value.isArray) return value
+			return value? true: false
+		}
+	}
 
 	define.struct = function(def, id){
 
@@ -1401,26 +1473,7 @@
 		var mysize = getStructSize(def)
 		var Struct
 		if(def.prim){
-			if(myarray === Float32Array || myarray === Float64Array){
-				Struct = function FloatLike(value){
-					if(value && value.isArray) return value
-					return parseFloat(value)
-				}
-			}
-			else{
-				if(id === 'bool'){
-					Struct = function BoolLike(value){
-						if(value && value.isArray) return value
-						return value? true: false
-					}
-				}
-				else{
-					Struct = function IntLike(value){
-						if(value && value.isArray) return value
-						return parseInt(value)
-					}
-				}
-			}
+			Struct = define.prim[id]
 			Struct.bytes = def.bytes
 			Struct.primitive = true
 		}
@@ -1444,8 +1497,16 @@
 					}
 					// treat as array
 					if(arg0 === null  || arg0 === undefined) return out
-					if(arg0.struct || Array.isArray(arg0)){
-						for(var i = 0; i < mysize; i++) out[i] = arg0[i]
+					if(Array.isArray(arg0)){
+						var iter = Math.min(mysize, arg0.length)
+						for(var i = 0; i < iter; i++) out[i] = arg0[i]
+						for(;i<mysize;i++) out[i] = 1
+						return out
+					}
+					if(arg0.struct){
+						var iter = Math.min(mysize, arg0.struct.slots)
+						for(var i = 0; i < iter; i++) out[i] = arg0[i]
+						for(;i<mysize;i++) out[i] = 1
 						return out
 					}
 					if(arg0.____struct && arg0.data){
@@ -1653,7 +1714,10 @@
 		for(var i = inpoff, len = inp.length; i < len; i++){
 			var item = inp[i]
 			if(typeof item == 'number') out[outoff++] = item
-			else outoff = define.arraySplat(out, outoff, item, 0, depth++)
+			else if(typeof item === 'string'){
+				define.arraySplat(out, outoff, vec4(item), 0, depth++)
+			}
+			else if(typeof item === 'object') outoff = define.arraySplat(out, outoff, item, 0, depth++)
 		}
 		return outoff
 	}
@@ -1879,7 +1943,7 @@
 
 
 
-	
+
 	define.parseGLF = function(blob){
 		// arg. we need to forward ref vec2 and ivec2
 		// how do we do this.
@@ -2164,10 +2228,11 @@
 
 			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
 				
-			function Enum(value){
+			function Enum(value){				
 				if(typeof value !== 'string'){
-					console.error('Enum not string' + value, origset.join('|'))
-					return types[0]
+					value = String(value)
+				//	console.error('Enum not string' + value, origset.join('|'))
+				//	return types[0]
 				}
 				var index = matchset.indexOf(enumCanon(value))
 
@@ -2318,6 +2383,13 @@
 			var obj = Object.create(Config.prototype)
 			obj.constructor = Config
 			obj.config = object
+			return obj
+		}
+
+		exports.Animate = function(track){
+			var obj = Object.create(Animate.prototype)
+			obj.constructor = Animate
+			obj.track = track
 			return obj
 		}
 	}

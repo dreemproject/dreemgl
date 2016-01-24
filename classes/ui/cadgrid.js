@@ -1,47 +1,45 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(view, label){
+define.class('$ui/view',  function(view, label){
 	// The CADGrid class provides a simple way to fill a frame with a classic engineering grid. 
 	// todo:
 	// - support zooming with incremental subdivision lines
 	// - link up to 
 
-	this.flex = 1;
-	this.flexdirection = "column"
-	this.alignitem = "stretch"
-	this.alignself = "stretch"
-	
 	this.attributes = {
 		majorevery: Config({type:int,minvalue:1, value:5}),
 		gridsize: Config({type:int, minvalue:1,value:5}),
 		minorline: Config({type:vec4, value: vec4("#e0f0ff"), meta:"color"}),
-		majorline: Config({type:vec4, value: vec4("#b0b0e0"), meta:"color"})
+		majorline: Config({type:vec4, value: vec4("#b0b0e0"), meta:"color"}),
+		flex: 1,
+		bgcolor: vec4("white"),
+		flexdirection: "column",
+		alignitem: "stretch",
+		alignself: "stretch"
 	}
-	
-	this.minorsize = 10;
-	this.majorsize = 100;
 	
 	this.gridsize = function(){}
 	
+	this.minorsize = 10
+	this.majorsize = 100
+	
 	this.calcsizes = function(){
-		this.minorsize =this.gridsize  *this.majorevery* Math.pow(this.majorevery , Math.ceil(Math.log(this.zoom )/Math.log(this.majorevery )));
-		this.majorsize = this.minorsize * this.majorevery;
-
+		this.minorsize = this.gridsize  *this.majorevery* Math.pow(this.majorevery , Math.ceil(Math.log(this.zoom )/Math.log(this.majorevery )))
+		this.majorsize = this.minorsize * this.majorevery
 	}
 
 	this.oninit = function(){
-		this.calcsizes();		
+		this.calcsizes()
 	}
 
 	this.onzoom = function(){
-		this.calcsizes();
+		this.calcsizes()
 	}
 
-	this.bgcolor = vec4("white")
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
 	this.bg = {
@@ -58,7 +56,6 @@ define.class(function(view, label){
 			
 		},
 		grid: function(a){
-			
 			var horizmaj = mod(a.x ,view.majorsize)/view.majorsize;
 			var vertmaj =  mod(a.y , view.majorsize)/view.majorsize;
 			
@@ -80,10 +77,6 @@ define.class(function(view, label){
 	}
 
 	var cadgrid = this.constructor
-	
-	// The CADGrid does not do anything to its children - plain passthrough
-	this.render = function(){return this.constructor_children;}
-	
 	// Minimal usage example:
 	this.constructor.examples = {
 		Usage:function(){return cadgrid({width:200,height:200})}

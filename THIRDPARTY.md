@@ -20,3 +20,6 @@ Inspired by tutorial by Forbes Lindesay (C) 2013, released under MIT License
 
 Glyphy /system/font/fontshader and /resources/fonts/encoder
 Ported/refactored/rewritten, original by Behdad Esfahbod Copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
+
+Earcut triangulator: /system/lib/earcut-port.js 
+Ported to DreemGL class module, original Copyright (c) 2015, Mapbox - https://github.com/mapbox/earcut

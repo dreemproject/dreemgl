@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -18,7 +18,7 @@ define.class(function(require, exports){
 	,createFramebuffer: function() { return {};}
 	,bindFramebuffer: function() {}
 	,renderbufferStorage: function() {}
-	,framebufferRenderbuffer: function() {}	
+	,framebufferRenderbuffer: function() {}
 	,viewport: function() {}
 	,clearColor: function() {}
 	,clear: function() {}
@@ -35,10 +35,10 @@ define.class(function(require, exports){
 	,createBuffer: function() {return 0;}
 	,bindBuffer: function() {}
 	,bufferData: function() {}
-	,enable: function() {}		
-	,disable: function() {}		
-	,blendEquation: function() {}		
-	,blendFunc: function() {}		
+	,enable: function() {}
+	,disable: function() {}
+	,blendEquation: function() {}
+	,blendFunc: function() {}
 	,enableVertexAttribArray: function() {}
 	,vertexAttribPointer: function() {}
 	,uniform1f: function(l,v) {console.log('uniform1f', l,v);return 0;}
@@ -58,10 +58,9 @@ define.class(function(require, exports){
 	this.DaliApi = require('./dali_api')
 
 	this.Keyboard = require('./keyboarddali')
-	this.Mouse = require('./mousedali')
-	this.Touch = require('./touchdali')
+	this.Pointer = require('./pointerdali')
 
-	// require embedded classes	
+	// require embedded classes
 	this.Shader = require('./shaderdali')
 	this.Texture = require('./texturedali')
 	this.DrawPass = require('./drawpassdali')
@@ -79,14 +78,14 @@ define.class(function(require, exports){
 		this.shadercache = previous &&  previous.shadercache || {}
 		this.drawpass_list = previous && previous.drawpass_list || []
 		this.layout_list = previous && previous.layout_list || []
-		this.pick_resolve = []	
+		this.pick_resolve = []
 		this.anim_redraws = []
 		this.doPick = this.doPick.bind(this)
 
 		//TODO Use setTimeout for animation until dali animation ready (DALI)
 		this.time = 0;
 		this.animFrame = function(time){
-console.log('animFrame', time);
+			//console.log('animFrame', time);
 			var interval = 16; // 500;
 			var t = this.doColor(time);
 			//console.log('animFrame', t, time);
@@ -103,20 +102,17 @@ console.log('animFrame', time);
 		if(previous){
 			this.canvas = previous.canvas
 			this.gl = previous.gl
-			this.mouse = previous.mouse
 			this.keyboard = previous.keyboard
-			this.touch = previous.touch
+			this.pointer = previous.pointer
 			this.parent = previous.parent
 			this.drawtarget_pools = previous.drawtarget_pools
 			this.frame = this.main_frame = previous.main_frame
 		}
 		else{
-			this.frame = 
+			this.frame =
 			this.main_frame = this.Texture.fromType('rgb_depth')
-
-			this.mouse = new this.Mouse(this)
 			this.keyboard = new this.Keyboard(this)
-			this.touch = new this.Touch(this)
+			this.pointer = new this.Pointer(this)
 			this.drawtarget_pools = {}
 
 			this.createContext()
@@ -141,7 +137,7 @@ console.log('animFrame', time);
 		this.height = size.y;
 		this.ratio = dpi.x / dpi.y;
 
-		console.log('initResize size ', size, dpi);
+		//console.log('initResize size ', size, dpi);
 
 		//HACK to emulate gl (to avoid javascript errors)
 		this.gl = gl;
@@ -180,12 +176,16 @@ console.log('animFrame', time);
 
 	this.bindFramebuffer = function(frame){
 		if(!frame) frame = this.main_frame
-	
+
 		this.frame = frame
 		this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)
 
 		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, frame.glframe_buf || null)
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
+
+		// Set the layer to use (root layer if frame.dali_layer doesn't exist)
+		//TODO When layers are used, use framebuffers to render them.
+		//this.DaliApi.setLayer(frame.dali_layer);
 	}
 
 	this.readPixels = function(x, y, w, h){
@@ -197,8 +197,13 @@ console.log('animFrame', time);
 	this.doPick = function(){
 		this.pick_timer = 0
 		var x = this.pick_x, y = this.pick_y
+
+		if(!this.first_draw_done){
+			this.doColor(this.last_time)
+		}
+
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
-			var last = i === len - 1 
+			var last = i === len - 1
 			var skip = false
 			var view = this.drawpass_list[i]
 
@@ -222,15 +227,15 @@ console.log('animFrame', time);
 		this.pick_resolve = []
 
 		if(this.debug_pick){
-			var data = this.readPixels(x*this.ratio,this.main_frame.size[1] - y*this.ratio,1,1)
+			var data = this.readPixels(x * this.ratio,this.main_frame.size[1] - y * this.ratio, 1, 1)
 		}
 		else{
-			var data = this.readPixels(0,0,1,1)
+			var data = this.readPixels(0, 0, 1, 1)
 		}
-		
+
 		// decode the pass and drawid
-		var passid = (data[0]*43)%256 - 1
-		var drawid = (((data[2]<<8) | data[1])*60777)%65536 - 1
+		var passid = data[0]//(data[0]*43)%256
+		var drawid = (((data[2]<<8) | data[1]))//*60777)%65536
 		// lets find the view.
 		var passview = this.drawpass_list[passid]
 		var drawpass = passview && passview.drawpass
@@ -260,19 +265,20 @@ console.log('animFrame', time);
 
 	this.doColor = function(time){
 		if(!this.first_time) this.first_time = time
+		this.last_time = time
+
+		if(!this.screen) return
+
+		this.first_draw_done = true
 
 		var stime = (time - this.first_time) / 1000
 		//console.log(this.last_time - stime)
 
-		this.last_time = stime
-	
 		// lets layout shit that needs layouting.
 		var anim_redraw = this.anim_redraws
 		anim_redraw.length = 0
 		this.screen.doAnimation(stime, anim_redraw)
 
-		// set the size externally of the main view
-		//var screen = this.layout_list[this.layout_list.length - 1]
 		this.screen._maxsize =
 		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
 		// do the dirty layouts
@@ -301,11 +307,11 @@ console.log('animFrame', time);
 			var view = this.drawpass_list[i]
 			var skip = false
 			var last = i === len - 1
-			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
-				skip = last = true							
+			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
+				skip = last = true
 			}
 			if(view.draw_dirty & 1 || last){
-			
+
 				if(!last){
 					if(clipview === undefined) clipview = view
 					else clipview = null
@@ -320,8 +326,8 @@ console.log('animFrame', time);
 
 			if(skip){
 				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-				
-				
+
+
 				this.screen.draw_dirty &= 2
 				break
 			}
@@ -344,8 +350,9 @@ console.log('animFrame', time);
 		while(!node._viewport){
 			node = node.parent
 		}
-		
+
 		if(!node.parent){ // fast path to chuck the whole set
+			//console.log("FLUSHING ALL")
 			// lets put all the drawpasses in a pool for reuse
 			for(var i = 0; i < this.drawpass_list.length; i++) {
 				var draw = this.drawpass_list[i]
@@ -359,6 +366,8 @@ console.log('animFrame', time);
 			this.layout_idx_first = 0
 			this.layout_idx = 0
 			this.addDrawPassRecursive(node)
+			this.first_draw_done = false
+			this.redraw()
 		}
 		else{ // else we remove drawpasses first then re-add them
 			this.removeDrawPasses(node)
@@ -411,7 +420,7 @@ console.log('animFrame', time);
 			this.addDrawPassRecursive(children[i])
 		}
 
-		// lets create a drawpass 
+		// lets create a drawpass
 		if(view._viewport){
 			var pass = new this.DrawPass(this, view)
 			this.drawpass_list.splice(this.drawpass_idx,0,view)
@@ -445,7 +454,7 @@ console.log('animFrame', time);
 		this.redraw()
 		// do stuff
 	}
-	
+
 
 
 })

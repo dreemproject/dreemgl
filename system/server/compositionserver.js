@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // parse a color string into a [r,g,b] 0-1 float array
 
@@ -43,10 +43,15 @@ define.class(function(require){
 		this.components = {}
 
 		this.paths = ""
+		this.pathset = '{'
+
 		for(var key in define.paths){
-			if(this.paths) this.paths += ',\n\t\t'
+			if(this.paths) this.paths += ',\n\t\t', this.pathset += ','
 			this.paths += '$'+key+':"$root/'+key+'"'
+			this.pathset += '"'+key+'":1'
 		}
+		this.pathset += '}'
+
 
 		this.fast_list = ['$examples']
 		// lets compile and run the dreem composition
@@ -109,7 +114,7 @@ define.class(function(require){
 		}
 	}
 
-	this.loadHTML = function(title, boot, paths){
+	this.loadHTML = function(title, boot, paths, pathset){
 		return '<html lang="en">\n'+
 			' <head>\n'+
 			'  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n'+
@@ -129,6 +134,7 @@ define.class(function(require){
 			'  <script type="text/javascript">\n'+
 			'    window.define = {\n'+
 			'	   $platform:"webgl",\n'+
+			'      paths:'+pathset+',\n'+
 			'     '+paths+',\n'+
 			'      main:["$system/base/math", "' + boot + '"],\n'+
 			'      atMain:function(require, modules){\n'+
@@ -191,7 +197,7 @@ define.class(function(require){
 			return
 		}
 
-		var html = this.loadHTML(this.title, this.filename, this.paths)
+		var html = this.loadHTML(this.title, this.filename, this.paths, this.pathset)
 		res.writeHead(200, header)
 		res.write(html)
 		res.end()

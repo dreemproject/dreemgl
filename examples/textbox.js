@@ -26,21 +26,21 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
 			button({text:'test'}),
 			label({fgcolor:'red', mouseleftdown:function(){
 				// lets open a modal dialog
-				this.screen.openModal(
+				this.screen.openModal(function(){return [
 					view({
 						miss:function(){
-							this.resolve(false)
+							this.screen.closeModal(false)
 						},
 						init:function(){
 							console.log('here')
 						},
 						pos:[0,0],
-						size:[300,300],position:'absolute',text:'I IZ HERE'
-					}, button({text:'blurp'}))
-				).then(function(result){
+						size:[300,300],position:'absolute',text:'body'
+					}, button({text:'test123'}))
+				]}).then(function(result){
 					console.log(result)
 				})
-			},text:'HELLLLOOO'})
+			},text:'Click me to open modal'})
 		)
 	]}
 })

@@ -12,17 +12,17 @@ define(function () {
 
 	function fillNodes(node, nochildren) {
 		var newnode = {
-			children:[], 
-			ref:node, 
+			children:[],
+			ref:node,
 			dirty: node.layout_dirty,
 			layout:{
-				width:undefined, 
-				height:undefined, 
-				absx:0, 
-				absy:0, 
-				top:0, 
-				left:0, 
-				right:0, 
+				width:undefined,
+				height:undefined,
+				absx:0,
+				absy:0,
+				top:0,
+				left:0,
+				right:0,
 				bottom:0,
 			}
 		}
@@ -37,12 +37,13 @@ define(function () {
 
 		// store old layout
 		node.oldlayout = node._layout
-		
+
 		var layout = node._layout = newnode.layout
-		
+
 		// alright so. what we need to do is bubble down layout_dirty
 		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
 			var child = node.children[i]
+			if(!('_viewport' in child))continue
 			if(child._viewport){ // its using a different layout pass
 				// if we are flex, we have to compute the layout of this child
 				if(!isNaN(child._flex)){
@@ -75,7 +76,7 @@ define(function () {
 		var ref = node.ref
 
 		var layout = ref._layout, oldlayout = ref.oldlayout
-		layout.absx = 0 
+		layout.absx = 0
 		layout.absy = 0
 		layout.width = oldlayout.width
 		layout.height = oldlayout.height
@@ -106,17 +107,17 @@ define(function () {
 	}
 
 	function layoutNode(node, parentMaxWidth, /*css_direction_t*/parentDirection) {
-		
+
 		var total = 1;
-				
+
 		//var ref = node.ref
 		//var ol = ref.oldlayout
 		/*
 		if(!node.dirty && ol &&
-			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) && 
-			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) && 
-			(isNaN(ol.last_pos0) && isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) && 
-			(isNaN(ol.last_pos1) && isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) && 
+			(isNaN(ol.last_size0) && isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) &&
+			(isNaN(ol.last_size1) && isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) &&
+			(isNaN(ol.last_pos0) && isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) &&
+			(isNaN(ol.last_pos1) && isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) &&
 			ol.parentMaxWidth === parentMaxWidth && ol.parentDirection === parentDirection){
 			putBackOldLayout(node)
 			//ref.debug_view = true
@@ -134,7 +135,7 @@ define(function () {
 		//ref._layout.last_size1 = ref._size[1]
 		//ref._layout.parentMaxWidth = parentMaxWidth
 		//ref._layout.parentDirection = parentDirection
-		
+
 		return total;
 	}
 	var CSS_UNDEFINED;
@@ -331,7 +332,7 @@ define(function () {
 
 	function getLeadingPaddingAndBorder(node, axis) {
 		var style = node.ref
-		if(axis === 'row') return (style._padding[0] >=0? style._padding[0]: 0) + (style._borderwidth[0] >=0? style._borderwidth[0]: 0) 
+		if(axis === 'row') return (style._padding[0] >=0? style._padding[0]: 0) + (style._borderwidth[0] >=0? style._borderwidth[0]: 0)
 		if(axis === 'column') return (style._padding[1] >=0? style._padding[1]: 0) + (style._borderwidth[1] >=0? style._borderwidth[1]: 0)
 		throw new Error('implement other axes')
 	}
@@ -524,7 +525,9 @@ define(function () {
 		return b;
 	}
 
-	var round = Math.round
+	var round = function() {
+		return arguments[0];
+	}
 
 	// When the user specifically sets a value for width or height
 	function setDimensionFromStyle(node, axis) {
@@ -538,7 +541,7 @@ define(function () {
 		}
 
 		// The dimensions can never be smaller than the padding and border
-		var bound 
+		var bound
 		if(axis === 'row') bound = node.ref._size[0]
 		else if(axis === 'column') bound = node.ref._size[1]
 		else throw new Error('axis not found')
@@ -548,7 +551,7 @@ define(function () {
 			getPaddingAndBorderAxis(node, axis)
 		));
 	}
-	
+
 	function setTrailingPosition(node, child, axis) {
 		child.layout[trailing[axis]] = round(node.layout[dim[axis]] -
 				child.layout[dim[axis]] - child.layout[pos[axis]]);
@@ -1255,7 +1258,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 			child.nextAbsoluteChild = null;
 		}
 	}
-	
+
 	return {
 		computeLayout: layoutNode,
 		fillNodes: fillNodes,

@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -33,20 +33,19 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		this.findChild("thedialbg").width = this.layout.width;
 		this.findChild("thedialbg").height = this.layout.width;
 		//	this.findChild("thedialbg").relayout();
-			//this.findChild("thedialbg").redraw();
-			
-			
+		//this.findChild("thedialbg").redraw();
 	}
+
 	define.class(this, "dial", function($ui$, view){
 		
-		this.innerradius = 20;
-		this.outerradius = 26;
+		this.innerradius = 20
+		this.outerradius = 26
 
-	
 		this.attributes = {
 			start:Config({type:float, value:0}),
 			end:Config({type:float, value: PI*1.5}),
 		}
+
 		this.init = function(){
 			this.width = this.parent.layout.width;
 			this.height = this.parent.layout.height;
@@ -55,6 +54,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		this.width = function(){
 		//	console.log(this._width);
 		}
+
 		this.bg = function(){
 			this.mesh = vec2.array();
 			
@@ -93,18 +93,18 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		};
 	})
 	
-	
 	this.neutralbordercolor = this.bordercolor;
 	this.tabstop = 0;
 	
-	this.bg = false;//{pick_only:true};
-	this.fgcolor="#101010";
+	this.bg = false//{pick_only:true};
+	this.fgcolor="#101010"
 	this.bgcolor = "red"
+
 	this.value = function(){	
-		var td = this.findChild("thedial");		
+		var td = this.findChild("thedial")
 		if (td) {
-			td._start = this.calcstart();
-			td.redraw();			
+			td._start = this.calcstart()
+			td.redraw()
 		}
 	}
 	

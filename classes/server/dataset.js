@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/node', function(require, $ui$, label){	
@@ -25,16 +25,15 @@ define.class('$system/base/node', function(require, $ui$, label){
 	}
 
 	// Fork starts a new modification on a dataset;
-	// <callback> the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
-	this.fork = function(callback){
+	this.fork = function(callback){	// the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0
 		callback(this.data)
 		this.notifyAssignedAttributes()
 	}
 
-	// Silent operates much the same as <fork>, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
-	// <callback> the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!	
+	// Silent operates much the same as `fork`, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack
+	// 'callback' the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!
 	this.silent = function(callback /*function*/){
 		this.undo_stack.push(this.stringify(this.data))
 		this.redo_stack.length = 0

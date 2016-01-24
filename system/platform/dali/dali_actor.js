@@ -1,4 +1,4 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -22,7 +22,7 @@ define.class(function(require, exports){
 	// DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
-	// Assign an id to each daliactor object
+	// Assign a unique id to each daliactor object
 	var DaliActor = exports
 	DaliActor.GlobalId = 0
 
@@ -37,18 +37,21 @@ define.class(function(require, exports){
 
 		var dali = DaliApi.dali;
 
-		// Cache the property values
+		// Cache the property values (uniforms) to minimize writes.
 		this.property_cache = {};
 
+		// Keep a copy of the view in case it is useful.
 		this.id = ++DaliActor.GlobalId;
 		this.view = view;
 		this.daliactor = new dali.Actor();
 		this.onstage = false;
 		
-		var width = view.view.width || 100;
-		var height = view.view.height || 100;
-		this.daliactor.size = [width, height, 0];
+		// The width/height of the actor to stored in a view's layout
+		var layout = view.view._layout;
+		var width = layout.width || 100;
+		var height = layout.height || 100;
 
+		this.daliactor.size = [width, height, 0];
 		this.daliactor.parentOrigin = dali.TOP_LEFT;
 		this.daliactor.anchorPoint = dali.TOP_LEFT;
 
@@ -103,12 +106,12 @@ define.class(function(require, exports){
 	}
 
 
-	// Internal method to format a single value
+	// Internal method to format a single value when emitting dali code
 	this.formatSingle = function(value) {
 		if (typeof value === 'undefined')
 			return 0;
 
-		//TODO I've seen NaN values. Dali doesn't accept them
+		// I've seen NaN values. Dali doesn't accept them
 		if (isNaN(value) || value === null) {
 			return 0;
 		}
@@ -121,10 +124,10 @@ define.class(function(require, exports){
 		if (value == ivalue)
 			return ivalue;
 
-		return value; // .toPrecision(3);
+		return value;
 	}
 
-	// Internal method to format a value for display
+	// Internal method to format a value when emitting dali code
 	this.formatValue = function(value) {
 		if (!Array.isArray(value))
 			return this.formatSingle(value);
@@ -139,8 +142,9 @@ define.class(function(require, exports){
 
 	/**
 	 * @method setUniformValue
-	 * Sets a uniform value. If a value exists in the cache, the property
-	 * is set directory. Otherwise, registerAnimatableProperty is called.
+	 * Sets a uniform value. If a value exists in the cache (and has changed),
+	 * the property is set directly. Otherwise, registerAnimatableProperty
+	 * is called.
 	 * @param {string} Name of uniform to set
 	 * @param {Object} Compiled uniform structure
 	 */
@@ -155,7 +159,6 @@ define.class(function(require, exports){
 			return;
 
 		var fval = this.formatValue(val);
-		//console.log('+++ set uniform', this.id, key, fval);
 
 		if (lasthash) {
 			// Existing value. Set the property directly

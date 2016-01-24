@@ -1,19 +1,19 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/midi', function (require, exports){
 
 	exports.midiAttributes = {
-		message:Event,
-		noteoff:Event,
-		noteon:Event,
-		polypressure:Event,
-		controlchange:Event,
-		programchange:Event,
-		aftertouch:Event,
-		pitchbend:Event
+		message:Config({type:Event}),
+		noteoff:Config({type:Event}),
+		noteon:Config({type:Event}),
+		polypressure:Config({type:Event}),
+		controlchange:Config({type:Event}),
+		programchange:Config({type:Event}),
+		aftertouch:Config({type:Event}),
+		pitchbend:Config({type:Event})
 	}
 	
 	this.Input = define.class(function midiInput($system$base$node){

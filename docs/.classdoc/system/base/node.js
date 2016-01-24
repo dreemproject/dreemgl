@@ -1,0 +1,96 @@
+/**
+ * @class node
+ * @extends Object
+ * Node class provides attributes for events and values, propertybinding and constructor semantics
+ */
+/**
+ * @method find
+ * find node by name, they look up the .name property or the name of the constructor (class name) by default
+ * @param name
+ * @param ignore
+ */
+/**
+ * @method hideProperty
+ * hide a property, pass in any set of strings
+ */
+/**
+ * @method isAttribute
+ * check if property is an attribute
+ * @param key
+ */
+/**
+ * @method getAttributeConfig
+ * returns the attribute config object (the one passed into this.attributes={attr:{config}}
+ * @param key
+ */
+/**
+ * @method hasWires
+ * check if an attribute has wires connected
+ * @param key
+ */
+/**
+ * @method emitRecursive
+ * emits an event recursively on all children
+ * @param key
+ * @param event
+ * @param block
+ */
+/**
+ * @method emit
+ * emit an event for an attribute key. the order
+ * @param key
+ * @param event
+ */
+/**
+ * @method addListener
+ * add a listener to an attribute
+ * @param key
+ * @param cb
+ */
+/**
+ * @method removeListener
+ * remove a listener from an attribute, uses the actual function reference to find it
+ * if you dont pass in a function reference it removes all listeners
+ * @param key
+ * @param cb
+ */
+/**
+ * @method hasListenerProp
+ * check if an attribute has a listener with a .name property set to fnname
+ * @param key
+ * @param prop
+ * @param value
+ */
+/**
+ * @method hasListeners
+ * returns true if attribute has any listeners
+ * @param key
+ */
+/**
+ * @method removeAllListeners
+ * remove all listeners from a node
+ */
+/**
+ * @method setWiredAttribute
+ * set the wired function for an attribute
+ * @param key
+ * @param value
+ */
+/**
+ * @method definePersist
+ * mark an attribute as persistent accross live reload / renders
+ * @param arg
+ */
+/**
+ * @method emitForward
+ * return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
+ * @param key
+ */
+/**
+ * @event init
+ * always define an init and deinit
+ */
+/**
+ * @event destroy
+ * always define an init and deinit
+ */

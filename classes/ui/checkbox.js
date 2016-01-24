@@ -1,11 +1,11 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(view,icon){
-	// Simple button: a rectangle with a textlabel and an icon
+define.class('$ui/view', function(icon){
+	// Simple toggle button: a rectangle with a textlabel and an icon
 	
 	this.attributes = {
 		// The label for the button
@@ -42,47 +42,34 @@ define.class(function(view,icon){
 
 		// fires when button is clicked
 		click:Config({type:Event}),
-		value:Config({type:Boolean, value:false})
+		value:Config({type:Boolean, value:false}),
+
+		bgcolor: '#202020',
+		fgcolor: 'white',
+		buttonres: {},
+		padding: 8,
+		borderradius: 3,
+		borderwidth: 2,
+		margin: 4,
+		bordercolor: vec4("lightgray"),
+		alignItems: "center"
 	}
 
-	
+	this.style = {
+		icon:{
+			fgcolor:Config({motion:'linear', duration:0.1})
+		}
+	}
+
 	this.onclick = function(){		
 		this.value  = this.value?false:true;
 	}
-	
-	var button = this.constructor
-
-	this.bgcolor = '#202020'
-	this.fgcolor = 'white'
-	this.buttonres = {};
-	this.padding = 8
-	this.borderradius = 3
-	this.borderwidth  = 2
-	this.margin = 4
-	this.bordercolor = vec4("lightgray")
-	this.alignItems = "center"
 
 	this.bg = {
 		color: function(){
 			return mix(view.col1, view.col2, (uv.y)/0.8)
 		}
 	}
-
-	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
-	define.class(this, 'iconclass', function(icon){
-		this.attributes = {
-			fgcolor:Config({motion:'linear', duration:0.1})
-		}
-	})
-
-	// The icon class used for the icon display. Exposed to allow overloading/replacing from the outside.
-	define.class(this, 'labelclass', function(label){
-		this.subpixel = false
-		this.typefacesubpixelaa =  {
-			boldness:0.9
-		}
-		this.bg = 0
-	})
 
 	// the hover state when someone hovers over the button
 	this.statehover = function(){
@@ -119,19 +106,19 @@ define.class(function(view,icon){
 	}
 
 	this.render = function(){
-		
-			this.iconres = this.iconclass({fontsize: this.fontsize, fgcolor:this.value?this.fgcolor:vec4("transparent"), icon: "check"}); 
-			return [this.iconres]
-		
+		return [
+			icon({fgcolor:this.value? this.fgcolor: vec4("transparent"), icon: "check"})
+		]
 	}
 
 	// Basic usage of the button.	
+	var checkbox = this.constructor
 	this.constructor.examples = {
 		Usage:function(){
 			return [
-				button({text:"Press me!"})
-				,button({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  })
-				,button({text:"With an icon!", icon:"flask" })
+				checkbox({text:"Press me!"})
+				,checkbox({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  })
+				,checkbox({text:"With an icon!", icon:"flask" })
 			]
 		}
 	}	
