@@ -532,9 +532,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n378" name="n378">378</a>
 <a href="#n379" name="n379">379</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton, renameblockdialog){
@@ -546,30 +546,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.borderradius = <span class="integer">10</span>
         <span class="local-variable">this</span>.borderwidth = <span class="integer">2</span>
         <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#727272</span><span class="delimiter">&quot;</span></span>)
-        
+
         <span class="keyword">function</span> <span class="function">uppercaseFirst</span> (inp) {
                 <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp;
                 <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>);
         }
-                
-        <span class="comment">// the style classes </span>
-        
+
+        <span class="comment">// the style classes</span>
+
         <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-        
+
         <span class="local-variable">this</span>.mainwidth = <span class="integer">250</span>;
 
-        <span class="local-variable">this</span>.style = {        
+        <span class="local-variable">this</span>.style = {
                 <span class="key">label_head</span>:{<span class="key">bg</span>:<span class="predefined-constant">false</span>,<span class="key">margin</span>:vec4(<span class="integer">6</span>,<span class="integer">3</span>,<span class="integer">4</span>,<span class="integer">0</span>), <span class="key">bold</span>:<span class="predefined-constant">true</span>},
                 <span class="key">view_main</span>:{<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>:<span class="local-variable">this</span>.mainwidth, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">margin</span>:<span class="integer">1</span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
                 <span class="key">view_header</span>:{<span class="key">width</span>:<span class="local-variable">this</span>.mainwidth, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},
-                
+
                 <span class="key">button_header</span>:{<span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#292929</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>:<span class="integer">4</span>},
                 <span class="key">view_between1</span>:{<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">width</span>:<span class="local-variable">this</span>.mainwidth, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},
                 <span class="key">view_between2</span>:{<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>:<span class="integer">8</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                 <span class="key">view_head</span>:{<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>:-<span class="integer">8</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                 <span class="key">view_addbuttons</span>:{<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,<span class="key">width</span>:<span class="integer">140</span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>}
         }
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">flowdata</span>:{},
                 <span class="comment">//pos: Config({persist: true}),</span>
@@ -605,7 +605,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         {
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.inputs.length;i++){
                         <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i];
-                        
+
                         <span class="keyword">if</span> (inp.type &amp;&amp; <span class="local-variable">this</span>.colormap[inp.type.name]){
                                 inp.color = <span class="local-variable">this</span>.colormap[inp.type.name];
                         }
@@ -614,11 +614,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">onoutputs</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.outputs.length;i++){
                         <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i];
-                
+
                         <span class="keyword">if</span> (outp.type &amp;&amp; <span class="local-variable">this</span>.colormap[outp.type.name]){
                                 outp.color = <span class="local-variable">this</span>.colormap[outp.type.name];
                         }
@@ -627,18 +627,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">bordercolorfn</span> = <span class="keyword">function</span>(pos){
-                <span class="keyword">var</span> check = (<span class="reserved">int</span>(mod(<span class="float">0.34</span>*( gl_FragCoord.x + gl_FragCoord.y ),<span class="integer">2</span>.)) == <span class="integer">1</span>)?<span class="float">1.0</span>:<span class="float">0.0</span>;                
+                <span class="keyword">var</span> check = (<span class="reserved">int</span>(mod(<span class="float">0.34</span>*( gl_FragCoord.x + gl_FragCoord.y ),<span class="integer">2</span>.)) == <span class="integer">1</span>)?<span class="float">1.0</span>:<span class="float">0.0</span>;
                 <span class="keyword">return</span> mix(bordercolor, mix(vec4(focusbordercolor.xyz*<span class="float">.8</span>,<span class="float">1.0</span>), focusbordercolor, check), borderselected);
                 <span class="keyword">return</span> vec4(check);
         }
-                
-        <span class="local-variable">this</span>.<span class="function">inselection</span> = <span class="keyword">function</span>(){        
+
+        <span class="local-variable">this</span>.<span class="function">inselection</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updatecolor();
         }
-        
-        <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(){        
+
+        <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._inselection) {
                         <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor;
                         <span class="local-variable">this</span>.borderselected = <span class="integer">1</span>;
@@ -653,8 +653,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         }
-                
-                
+
+
         <span class="local-variable">this</span>.<span class="function">move</span> = <span class="keyword">function</span>(x,y) {
                 <span class="keyword">var</span> nx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>] + x;
                 <span class="keyword">var</span> ny = <span class="local-variable">this</span>.pos[<span class="integer">1</span>] + y;
@@ -664,9 +664,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
                 fg.setActiveBlock(<span class="local-variable">this</span>);
                 fg.updateConnections();
-                
+
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">keydownUparrow</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.move(<span class="integer">0</span>,-<span class="integer">1</span>);}
         <span class="local-variable">this</span>.<span class="function">keydownDownarrow</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.move(<span class="integer">0</span>,<span class="integer">1</span>);}
         <span class="local-variable">this</span>.<span class="function">keydownLeftarrow</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.move(-<span class="integer">1</span>,<span class="integer">0</span>);}
@@ -675,21 +675,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">keydownDownarrowShift</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.move(<span class="integer">0</span>,<span class="integer">10</span>);}
         <span class="local-variable">this</span>.<span class="function">keydownLeftarrowShift</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.move(-<span class="integer">10</span>,<span class="integer">0</span>);}
         <span class="local-variable">this</span>.<span class="function">keydownRightarrowShift</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.move(<span class="integer">10</span>,<span class="integer">0</span>);}
-        
+
         <span class="local-variable">this</span>.<span class="function">keydownDelete</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
                 fg.removeBlock(<span class="local-variable">this</span>);
         }
-        
-        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){                        
+
+        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
                 <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.neutralbordercolor = <span class="local-variable">this</span>.bordercolor;
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).allblocks.push(<span class="local-variable">this</span>);        
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).allblocks.push(<span class="local-variable">this</span>);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">destroy</span> = <span class="keyword">function</span>(){
                 fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (fg){
@@ -697,54 +697,54 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (index &gt; -<span class="integer">1</span>) fg.allblocks.splice(index, <span class="integer">1</span>);
                 }
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">setupMove</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.startx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>];
                 <span class="local-variable">this</span>.starty = <span class="local-variable">this</span>.pos[<span class="integer">1</span>];
-                console.log(<span class="local-variable">this</span>.pos)
+                <span class="comment">//console.log(this.pos)</span>
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">updateMove</span> = <span class="keyword">function</span>(dx, dy, snap){
                 <span class="keyword">var</span> x = Math.floor((<span class="local-variable">this</span>.startx+dx)/snap)*<span class="local-variable">this</span>.snap;
-                <span class="keyword">var</span> y = Math.floor((<span class="local-variable">this</span>.starty+dy)/snap)*<span class="local-variable">this</span>.snap;        
-                <span class="local-variable">this</span>.pos = vec2(x,y);        
+                <span class="keyword">var</span> y = Math.floor((<span class="local-variable">this</span>.starty+dy)/snap)*<span class="local-variable">this</span>.snap;
+                <span class="local-variable">this</span>.pos = vec2(x,y);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(p){
                 <span class="comment">//this.moveToFront()</span>
                 <span class="keyword">var</span> props = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (props) props.target = <span class="local-variable">this</span>.name;
-                
+
                 <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-                
+
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; !fg.inSelection(<span class="local-variable">this</span>)){
                         fg.clearSelection();
                 }
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; fg.inSelection(<span class="local-variable">this</span>)){
                         fg.removeFromSelection(<span class="local-variable">this</span>);
                         fg.updateSelectedItems();
-        
+
                         <span class="keyword">return</span>;
                 }
                 fg.setActiveBlock(<span class="local-variable">this</span>);
                 fg.updateSelectedItems();
-                
-                
+
+
                 <span class="local-variable">this</span>.startposition = <span class="local-variable">this</span>.parent.localMouse();
                 fg.setupSelectionMove();
                 <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(evt){
                         <span class="keyword">var</span> p = <span class="local-variable">this</span>.parent.localMouse()
                         <span class="keyword">var</span> dx = p[<span class="integer">0</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">0</span>];
                         <span class="keyword">var</span> dy = p[<span class="integer">1</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">1</span>];
-        
+
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
 
                         fg.moveSelected(dx, dy, <span class="predefined-constant">false</span>);
-                        
-                        
+
+
                 }.bind(<span class="local-variable">this</span>);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(p){
                 <span class="keyword">var</span> p = <span class="local-variable">this</span>.parent.localMouse()
                 <span class="keyword">var</span> x = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">0</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap;
@@ -759,21 +759,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){};
         }
-        
+
         <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
-        
+
         <span class="local-variable">this</span>.<span class="function">mouseover</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>;
                 <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext;
                 <span class="local-variable">this</span>.updatecolor();
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">mouseout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
                 <span class="local-variable">this</span>.updatecolor();
         }
 
-                
+
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
@@ -782,7 +782,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ab.y = <span class="local-variable">this</span>._layout.height + <span class="integer">2</span>;
                 }
         }
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">inputbutton</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
                 <span class="local-variable">this</span>.bg = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>}
 
@@ -791,15 +791,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tadaa</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
-                
+
                 <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>
-                
+
                 <span class="local-variable">this</span>.<span class="function">clicked</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
                         fg.setConnectionEndpoint(bl.name, <span class="local-variable">this</span>.name)
-                }        
-                
+                }
+
                 <span class="local-variable">this</span>.<span class="function">mouseover</span>  = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext;
                 }
@@ -813,7 +813,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ]
                 }
         })
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">outputbutton</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
                 <span class="local-variable">this</span>.bg = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
                 <span class="local-variable">this</span>.attributes = {
@@ -821,45 +821,45 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thing</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">mouseover</span>  = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext;
                 }
-                <span class="local-variable">this</span>.<span class="function">clicked</span> = <span class="keyword">function</span>(){                                        
+                <span class="local-variable">this</span>.<span class="function">clicked</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent;
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-                        fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name);                        
+                        fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name);
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
-                
+
                 }
                 <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>;
-                
+
                 <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
                                 <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Output </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type):<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
-                
+
                         <span class="keyword">return</span> [
                                 label({<span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.name), <span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>: <span class="integer">5</span>}),
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="function">mouseleftdown</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.clicked();}.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})                                
+                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="function">mouseleftdown</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.clicked();}.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
         })
-        
+
         <span class="local-variable">this</span>.<span class="function">renderInputs</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> res = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.inputs.length;i++){
-                        <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i];                        
-                        res.push(<span class="local-variable">this</span>.inputbutton({<span class="key">name</span>:inp.name, <span class="key">type</span>:inp.type.name, <span class="key">title</span>:inp.title, <span class="key">bgcolor</span>:inp.color}))        
+                        <span class="keyword">var</span> inp = <span class="local-variable">this</span>.inputs[i];
+                        res.push(<span class="local-variable">this</span>.inputbutton({<span class="key">name</span>:inp.name, <span class="key">type</span>:inp.type.name, <span class="key">title</span>:inp.title, <span class="key">bgcolor</span>:inp.color}))
                 }
                 <span class="keyword">return</span> res;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">renderOutputs</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> res = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.outputs.length;i++){
                         <span class="keyword">var</span> outp = <span class="local-variable">this</span>.outputs[i];
-                        res.push(<span class="local-variable">this</span>.outputbutton({<span class="key">name</span>:outp.name, <span class="key">type</span>:outp.type.name, <span class="key">title</span>:outp.title, <span class="key">bgcolor</span>:outp.color}))        
+                        res.push(<span class="local-variable">this</span>.outputbutton({<span class="key">name</span>:outp.name, <span class="key">type</span>:outp.type.name, <span class="key">title</span>:outp.title, <span class="key">bgcolor</span>:outp.color}))
                 }
                 <span class="keyword">return</span> res;
         }
@@ -867,27 +867,27 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">renameBlock</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> renameblockdialog({<span class="key">oldname</span>:<span class="local-variable">this</span>.name, <span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
-                                <span class="key">x</span>:<span class="local-variable">this</span>.screen.mouse._x,
-                                <span class="key">y</span>:<span class="local-variable">this</span>.screen.mouse._y + <span class="integer">20</span>,
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">x</span>:<span class="local-variable">this</span>.screen.pointer._x,
+                                <span class="key">y</span>:<span class="local-variable">this</span>.screen.pointer._y + <span class="integer">20</span>,
                                 <span class="function">miss</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
-                        
+
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
-                        
+
                         <span class="keyword">if</span> (res){
                                 <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).setBlockName(<span class="local-variable">this</span>, res);
-                        }                        
-                }.bind(<span class="local-variable">this</span>));                
-                
+                        }
+                }.bind(<span class="local-variable">this</span>));
+
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">removeBlock</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).removeBlock(<span class="local-variable">this</span>);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> [
                         view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">header</span><span class="delimiter">'</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
@@ -902,10 +902,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         )
                         ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">between1</span><span class="delimiter">'</span></span>}
                                 ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>,<span class="function">render</span>: <span class="keyword">function</span>(){<span class="keyword">return</span> <span class="local-variable">this</span>.renderInputs()}.bind(<span class="local-variable">this</span>)}
-                                
+
                                 )
                                 ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">between2</span><span class="delimiter">'</span></span>,<span class="function">render</span>: <span class="keyword">function</span>(){<span class="keyword">return</span> <span class="local-variable">this</span>.renderOutputs()}.bind(<span class="local-variable">this</span>)}
-                                        
+
                                 )
                         )
                 ]

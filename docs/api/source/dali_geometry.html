@@ -568,10 +568,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n414" name="n414">414</a>
 <a href="#n415" name="n415">415</a>
 <a href="#n416" name="n416">416</a>
+<a href="#n417" name="n417">417</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
@@ -591,10 +592,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// Assign an id to each daligeometry object</span>
+        <span class="comment">// Assign a unique id to each daligeometry object</span>
         <span class="keyword">var</span> DaliGeometry = exports
         DaliGeometry.GlobalId = <span class="integer">0</span>
 
@@ -603,14 +604,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * Create a dali.Geometry object, using triangles
          * You can access the dali.Geometry object as this.daligeometry
          * @param {number} drawtype Line drawing type. dali uses the same values
-         *                 as webgl.
+         *                 as webgl. The default is dali.GEOMETRY_TRIANGLES.
          */</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(drawtype) {
                 <span class="local-variable">this</span>.object_type = <span class="string"><span class="delimiter">'</span><span class="content">DaliGeometry</span><span class="delimiter">'</span></span>
 
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
-                <span class="comment">// Keep track of all vertex_buffers added.</span>
+                <span class="comment">// Keep track of all vertex_buffers added. This acts as a cache</span>
                 <span class="comment">// Values = [format_hash, data_hash, vertex_index, vertex_buffer, buffer_id];</span>
                 <span class="local-variable">this</span>.vertex_buffers = {};
 
@@ -623,10 +624,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.Geometry();</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setGeometryType(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.drawtypeDali(drawtype) + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
         }
 
-        <span class="comment">// Internal method to convert a drawtype into the dali value, if possible</span>
+        <span class="comment">// Internal, method to convert a drawtype into the dali value, if possible.</span>
+        <span class="comment">// This is used when generating dali output to the console.</span>
         <span class="local-variable">this</span>.<span class="function">drawtypeDali</span> = <span class="keyword">function</span>(drawtype) {
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
@@ -668,7 +670,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">//console.trace('addGeometry');</span>
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
-                <span class="comment">//TODO</span>
+                <span class="comment">// Make sure the correct object was passed. dreem_shader holds the</span>
+                <span class="comment">// dreemgl compiled structures.</span>
                 <span class="keyword">if</span> (!dreem_shader.vtx_state) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">WARNING. Incorrect object passed to addGeometry</span><span class="delimiter">'</span></span>, dreem_shader.object_type);
                         <span class="keyword">return</span>;
@@ -683,7 +686,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> name = keys[i];
                         <span class="keyword">var</span> storedname = <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + name;
 
-                        <span class="comment">// I found that keys with nested information (ie. has _DOT_)</span>
+                        <span class="comment">// I found that dreemgl keys with nested information (ie. has _DOT_)</span>
                         <span class="comment">// do not require vertex.</span>
                         <span class="keyword">if</span> (name.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">_DOT_</span><span class="delimiter">'</span></span>) &gt; <span class="integer">0</span>) {
                                 <span class="comment">//console.log('DaliGeometry.addGeometry Skipping texture', name);</span>
@@ -719,8 +722,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
 
         <span class="comment">/**
-         * @method addAttributeGeometry
-         * Add other attribute geometries to a dali Actor.
+         * @method addAttributeGeometryAlt
+         * Add other attribute geometries to a dali Actor. This version was used
+         * during testing to make sure DALi could handle the packed layout outlined
+         * in the docs.
+         *
+         * This version can be removed if no problems are found.
+         *
          * @param {Object} shader_dali Compiled data structure
          * @param {Object} attrlocs Compiled data structure
          */</span>
@@ -747,8 +755,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">// Skip invalid entries</span>
                         <span class="keyword">if</span> (<span class="keyword">typeof</span> attrloc.slots === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)
                                 <span class="keyword">continue</span>;
-
-                        <span class="comment">//console.log('**** **** attrloc.name', name, key, attrloc.slots);</span>
 
                         <span class="keyword">switch</span> (attrloc.slots) {
                         <span class="keyword">case</span> <span class="integer">1</span>:
@@ -779,7 +785,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">// Extract the data from the array</span>
                         <span class="keyword">var</span> arr = shader_dali[name];
                         <span class="comment">//console.trace('**** addAttributeGeometry', name, arr.array.length);</span>
-                
+
                         <span class="keyword">var</span> data = [];
                         <span class="keyword">if</span> (arr &amp;&amp; arr.array) {
                                 <span class="comment">// Find the offset and length of the data to extract</span>
@@ -833,8 +839,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span> (<span class="keyword">typeof</span> attrloc.slots === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)
                                 <span class="keyword">continue</span>;
 
-                        <span class="comment">//console.log('**** **** attrloc.name', name, key, attrloc.slots);</span>
-
                         <span class="keyword">switch</span> (attrloc.slots) {
                         <span class="keyword">case</span> <span class="integer">1</span>:
                                 type = dali.PROPERTY_FLOAT;
@@ -862,13 +866,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (!name || (Object.keys(format).length == <span class="integer">0</span>)) <span class="keyword">return</span>;
 
-                <span class="comment">//console.log('***********************addAttributeGeometry*************************');</span>
+                <span class="comment">//console.log('***************addAttributeGeometry******************');</span>
                 <span class="comment">//console.log(attrlocs);</span>
-                <span class="comment">//console.log('************************************************************');</span>
+                <span class="comment">//console.log('*****************************************************');</span>
 
                 <span class="keyword">var</span> arr = shader_dali[name];
-                <span class="comment">//console.trace('**** addAttributeGeometry', name, arr.array.length);</span>
-                
+
                 <span class="keyword">var</span> data = [];
 
                 <span class="keyword">if</span> (arr &amp;&amp; arr.array) {
@@ -886,7 +889,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="comment">// Add or update a vertex buffer</span>
-                <span class="comment">//console.log('updating 2', format, nslots, data.length);</span>
                 <span class="keyword">if</span> (data.length &gt; <span class="integer">0</span>)
                         <span class="local-variable">this</span>.updateVertexBuffer(<span class="string"><span class="delimiter">'</span><span class="content">attribgeom</span><span class="delimiter">'</span></span>, data, format, nslots);
         }
@@ -933,7 +935,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">delete</span> <span class="local-variable">this</span>.vertex_buffers[name];
                         }
                 }
-                
+
                 <span class="comment">// Generate the buffer</span>
                 <span class="keyword">if</span> (!buffer) {
                         <span class="keyword">var</span> ret = DaliApi.daliBuffer(data, format, data.length / nitems);
@@ -943,7 +945,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         <span class="keyword">if</span> (DaliApi.emitcode) {
                                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.addVertexBuffer(buffer</span><span class="delimiter">'</span></span> + bufferindex + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>);
-                        }                
+                        }
 
                         <span class="comment">// Store the index so it can be removed later</span>
                         <span class="local-variable">this</span>.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex];

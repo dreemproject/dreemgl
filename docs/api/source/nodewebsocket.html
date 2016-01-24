@@ -539,13 +539,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n385" name="n385">385</a>
 <a href="#n386" name="n386">386</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
-<span class="comment">// node websocket</span>
+<span class="comment">// internal, node websocket</span>
 
         <span class="keyword">var</span> crypto = require(<span class="string"><span class="delimiter">'</span><span class="content">crypto</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> url = require(<span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span>)
@@ -616,7 +616,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="local-variable">this</span>.socket = socket
-                
+
                  <span class="comment">// calc key</span>
                 <span class="keyword">var</span> key = req.headers[<span class="string"><span class="delimiter">'</span><span class="content">sec-websocket-key</span><span class="delimiter">'</span></span>]
                 <span class="keyword">var</span> sha1 = crypto.createHash(<span class="string"><span class="delimiter">'</span><span class="content">sha1</span><span class="delimiter">'</span></span>);
@@ -712,12 +712,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(buf.length &lt; <span class="integer">126</span>){
                         head = <span class="keyword">new</span> Buffer(<span class="integer">2</span>)
                         head[<span class="integer">1</span>] = buf.length
-                } 
+                }
                 <span class="keyword">else</span> <span class="keyword">if</span> (buf.length&lt;=<span class="integer">65535</span>){
                         head = <span class="keyword">new</span> Buffer(<span class="integer">4</span>)
                         head[<span class="integer">1</span>] = <span class="integer">126</span>
                         head.writeUInt16BE(buf.length, <span class="integer">2</span>)
-                } 
+                }
                 <span class="keyword">else</span> {
                         head = <span class="keyword">new</span> Buffer(<span class="integer">10</span>)
                         head[<span class="integer">1</span>] = <span class="integer">127</span>
@@ -813,7 +813,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">len2</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.head()) <span class="keyword">return</span> 
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.head()) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.paylen = <span class="local-variable">this</span>.header.readUInt16BE(<span class="local-variable">this</span>.written - <span class="integer">2</span>)
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.masked){
@@ -825,7 +825,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.state = <span class="local-variable">this</span>.data
                         <span class="local-variable">this</span>.written = <span class="integer">0</span>
                 }
-                
+
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
 
@@ -874,7 +874,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">return</span> <span class="predefined-constant">true</span>
                 }
                 <span class="local-variable">this</span>.expected = <span class="integer">1</span>
-                <span class="local-variable">this</span>.written = <span class="integer">0</span> 
+                <span class="local-variable">this</span>.written = <span class="integer">0</span>
                 <span class="local-variable">this</span>.state = <span class="local-variable">this</span>.opcode
                 <span class="local-variable">this</span>.socket.write(<span class="local-variable">this</span>.pongframe)
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
@@ -889,7 +889,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">return</span> <span class="predefined-constant">true</span>
                 }
                 <span class="local-variable">this</span>.expected = <span class="integer">1</span>
-                <span class="local-variable">this</span>.written = <span class="integer">0</span> 
+                <span class="local-variable">this</span>.written = <span class="integer">0</span>
                 <span class="local-variable">this</span>.state = <span class="local-variable">this</span>.opcode
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
@@ -924,7 +924,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">return</span> <span class="local-variable">this</span>.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">opcode not supported </span><span class="delimiter">&quot;</span></span> + type)
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

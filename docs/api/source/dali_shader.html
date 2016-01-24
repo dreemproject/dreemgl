@@ -256,11 +256,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n102" name="n102">102</a>
 <a href="#n103" name="n103">103</a>
 <a href="#n104" name="n104">104</a>
-<a href="#n105" name="n105">105</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
@@ -280,10 +279,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// Assign an id to each dalishader object</span>
+        <span class="comment">// Assign a unique id to each dalishader object</span>
         <span class="keyword">var</span> DaliShader = exports
         DaliShader.GlobalId = <span class="integer">0</span>
 
@@ -317,7 +316,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         vs = vs.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">DALICODE: </span><span class="delimiter">&quot;</span></span>);
                         fs = fs.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">DALICODE: </span><span class="delimiter">&quot;</span></span>);
 
-                        <span class="comment">//var fs = fragmentShader.replace(/\n/g, &quot;\\n&quot;);</span>
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var vertexShader</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content"> = &quot;</span><span class="delimiter">'</span></span> + vs + <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var fragmentShader</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content"> = &quot;</span><span class="delimiter">'</span></span> + fs + <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var shaderOptions</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content"> = {vertexShader : vertexShader</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content">, fragmentShader: fragmentShader</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content"> };</span><span class="delimiter">'</span></span>);

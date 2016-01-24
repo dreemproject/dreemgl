@@ -380,16 +380,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n226" name="n226">226</a>
 <a href="#n227" name="n227">227</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
         <span class="comment">// Splitcontainer adds dragbars between nodes to make all the nodes resizable.</span>
-        
-        <span class="comment">// should the splitter bars be introduced horizontally or vertically? </span>
+
+        <span class="comment">// should the splitter bars be introduced horizontally or vertically?</span>
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// wether the splitcontainer is vertical or not</span>
                 <span class="key">direction</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>}),
@@ -404,26 +404,26 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// color of the splitter bar when dragging it</span>
                 <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#7070a0</span><span class="delimiter">&quot;</span></span>)})
         }
-        
+
         <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span>;
         <span class="local-variable">this</span>.flex = <span class="float">1.0</span>
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>;
-        <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
         <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303060</span><span class="delimiter">&quot;</span></span>)
-        
+
         <span class="local-variable">this</span>.<span class="function">direction</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.flexdirection = <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>?<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> ;
 
                 }
-        
+
         <span class="comment">// the visual class that defines the draggable bar between the resizable children</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">splitter</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(view){
-                
+
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">firstnode</span>: Config({<span class="key">type</span>: <span class="reserved">int</span>, <span class="key">value</span>: <span class="integer">0</span>})
                 }
-        
+
                 <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>);
                 <span class="local-variable">this</span>.alignitem = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.borderradius = <span class="integer">3</span>;
@@ -451,15 +451,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> dragstart = <span class="local-variable">this</span>.parent.localMouse()
 
                         <span class="local-variable">this</span>.pressed++
-                        <span class="comment">//var dragstart = {x: this.screen.mouse.x, y:this.screen.mouse.y}</span>
-                        
+                        <span class="comment">//var dragstart = {x: this.screen.pointer.x, y:this.screen.pointer.y}</span>
+
                         <span class="keyword">var</span> flexstart = {
-                                <span class="key">left</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].flex, 
+                                <span class="key">left</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].flex,
                                 <span class="key">right</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].flex,
-                                
-                                <span class="key">leftwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.width, 
+
+                                <span class="key">leftwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.width,
                                 <span class="key">leftheight</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.height,
-                                
+
                                 <span class="key">rightwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].layout.width,
                                 <span class="key">rightheight</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].layout.height
                         }
@@ -481,7 +481,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
                                         <span class="keyword">var</span> h1 = flexstart.leftheight
                                         <span class="keyword">var</span> h2 = flexstart.rightheight
-                                        
+
                                         <span class="keyword">var</span> hadd = h1 + h2
                                         h1 += dy
                                         h2 -= dy
@@ -494,7 +494,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">else</span>{
                                         <span class="keyword">var</span> w1 = flexstart.leftwidth
                                         <span class="keyword">var</span> w2 = flexstart.rightwidth
-                                        
+
                                         <span class="keyword">var</span> wadd = w1 + w2
                                         w1 += dx
                                         w2 -= dx
@@ -503,7 +503,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> f2n = w2 / (wadd)
                                         leftnode.flex = f1n * totf
                                         rightnode.flex = f2n * totf
-                                } 
+                                }
                                 <span class="local-variable">this</span>.parent.redraw()
                                 <span class="comment">// lets trigger layout dirty...</span>
                                 <span class="comment">/*
@@ -521,7 +521,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(){
                         <span class="comment">//this.pressed--;</span>
                         <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){};
-                        <span class="comment">//this.setDirty(true);                        </span>
+                        <span class="comment">//this.setDirty(true);</span>
                 }
                 <span class="comment">/*
                 this.atDraw = function(){
@@ -538,7 +538,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 */</span>
                 <span class="local-variable">this</span>.bg = {
                         <span class="function">acolor</span>: <span class="keyword">function</span>(){
-                                
+
                                 <span class="keyword">if</span> (view.vertical )
                                 {
                                         <span class="keyword">var</span> yy = mesh.y*view.layout.height;
@@ -561,7 +561,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                 }
         })
-        
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children.length &gt; <span class="integer">1</span>){
                         <span class="keyword">var</span> children = []
@@ -572,18 +572,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 children.push( <span class="local-variable">this</span>.splitter({
                                         <span class="key">vertical</span>: <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">cursor</span>: <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>?<span class="string"><span class="delimiter">'</span><span class="content">ns-resize</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>,
-                                        <span class="key">firstnode</span>: (i-<span class="integer">1</span>)*<span class="integer">2</span>, 
-                                        <span class="key">splitsize</span>: <span class="local-variable">this</span>.splitsize, 
-                                        <span class="key">splittercolor</span>: <span class="local-variable">this</span>.splittercolor, 
-                                        <span class="key">hovercolor</span>: <span class="local-variable">this</span>.hovercolor, 
+                                        <span class="key">firstnode</span>: (i-<span class="integer">1</span>)*<span class="integer">2</span>,
+                                        <span class="key">splitsize</span>: <span class="local-variable">this</span>.splitsize,
+                                        <span class="key">splittercolor</span>: <span class="local-variable">this</span>.splittercolor,
+                                        <span class="key">hovercolor</span>: <span class="local-variable">this</span>.hovercolor,
                                         <span class="key">activecolor</span>: <span class="local-variable">this</span>.activecolor
                                 }))
 
                                 children.push(view({
                                         <span class="key">bg</span>:<span class="predefined-constant">false</span>,
-                                        <span class="key">clipping</span>: <span class="predefined-constant">true</span>, 
-                                        <span class="key">flex</span>: <span class="local-variable">this</span>.constructor_children[i].flex 
-                                },<span class="local-variable">this</span>.constructor_children[i]))                                
+                                        <span class="key">clipping</span>: <span class="predefined-constant">true</span>,
+                                        <span class="key">flex</span>: <span class="local-variable">this</span>.constructor_children[i].flex
+                                },<span class="local-variable">this</span>.constructor_children[i]))
 
                         }
                         <span class="keyword">return</span> children
@@ -594,7 +594,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="keyword">var</span> splitcontainer = <span class="local-variable">this</span>.constructor
-        
+
         <span class="comment">// Basic usage of the splitcontainer</span>
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> [
@@ -606,7 +606,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 )]}
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

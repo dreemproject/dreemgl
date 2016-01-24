@@ -326,14 +326,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n172" name="n172">172</a>
 <a href="#n173" name="n173">173</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(exports){
-        
-        <span class="comment">// Reactive renderer</span>
+
+        <span class="comment">// internal, Reactive renderer</span>
 
         <span class="keyword">var</span> initializing = <span class="predefined-constant">false</span>
 
@@ -343,7 +343,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//this.relayout()</span>
                 }
         }
-                
+
         <span class="keyword">function</span> <span class="function">atAttributeGet</span>(key){
                 <span class="comment">// lets find out if we already have a listener on it</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.getAttributeConfig(key).rerender !== <span class="predefined-constant">false</span> &amp;&amp; !<span class="local-variable">this</span>.hasListenerProp(key, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">__atAttributeGet</span><span class="delimiter">'</span></span>)){
@@ -386,12 +386,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// lets only do this if we have a render function</span>
                 <span class="keyword">if</span>(new_version.render){
                         <span class="comment">// then call render</span>
-                        
+
                         <span class="comment">// store the attribute dependencies</span>
                         new_version.atAttributeGet = atAttributeGet
                         new_version.rerender = __atAttributeGet
 
-                        <span class="comment">// lets check if object.constructor  a module, ifso </span>
+                        <span class="comment">// lets check if object.constructor  a module, ifso</span>
                         <span class="keyword">if</span>(new_version.classroot === <span class="predefined-constant">undefined</span>){
                                 new_version.classroot = new_version
                                 <span class="comment">//console.log(object)</span>
@@ -423,7 +423,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 new_version.parent.parent_viewport.child_viewport_list.push(new_version)
                         }
                 }
-                 <span class="comment">// what we need to do, is </span>
+                 <span class="comment">// what we need to do, is</span>
 
                 <span class="keyword">var</span> new_children = new_version.children
 
@@ -445,7 +445,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="keyword">var</span> childreuse = <span class="predefined-constant">false</span>
                         <span class="keyword">if</span>(new_child.parent) childreuse = <span class="predefined-constant">true</span>
-                        
+
                         <span class="comment">//var name = new_child.name</span>
                         <span class="comment">//if(name !== undefined &amp;&amp; !(name in new_version)) new_version[name] = new_child</span>
 

@@ -637,15 +637,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n483" name="n483">483</a>
 <a href="#n484" name="n484">484</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Simple and fast HTML Parser</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
 
-        <span class="comment">// Reserialize tries to turn the JS datastructure the parser outputs back into valid XML</span>
+        <span class="comment">// internal, Reserialize tries to turn the JS datastructure the parser outputs back into valid XML</span>
         exports.<span class="function">reserialize</span> = <span class="keyword">function</span>(node, spacing, indent){
                 <span class="keyword">if</span>(spacing === <span class="predefined-constant">undefined</span>) spacing = <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>
                 <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -756,17 +756,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> node
         }
 
-        exports.appendChild = 
+        exports.appendChild =
         <span class="local-variable">this</span>.<span class="function">appendChild</span> = <span class="keyword">function</span>(node, value){
                 <span class="keyword">var</span> i = <span class="integer">0</span>
                 <span class="keyword">if</span>(!node.child) node.child = [value]
                 <span class="keyword">else</span> node.child.push(value)
         }
 
-        exports.createNode = 
+        exports.createNode =
         <span class="local-variable">this</span>.<span class="function">createNode</span> = <span class="keyword">function</span>(tag, charpos){
                 <span class="keyword">return</span> {<span class="key">tag</span>:tag, <span class="key">pos</span>: charpos}
-        } 
+        }
 
         <span class="local-variable">this</span>.<span class="function">atError</span> = <span class="keyword">function</span>(message, where){
                 <span class="local-variable">this</span>.errors.push({<span class="key">message</span>:message, <span class="key">where</span>:where})
@@ -830,7 +830,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.tagname = <span class="local-variable">this</span>.parents.pop()
                         <span class="local-variable">this</span>.node = <span class="local-variable">this</span>.parents.pop()
                 }
-        } 
+        }
 
         <span class="comment">/* Internal Called when encountering a closing tag &lt;/tag&gt; */</span>
         <span class="local-variable">this</span>.<span class="function">atClosingTag</span> = <span class="keyword">function</span>(name, start, end){
@@ -852,7 +852,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span>{
                         <span class="local-variable">this</span>.atError(<span class="string"><span class="delimiter">'</span><span class="content">Dangling closing tag &lt;/</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">&gt;</span><span class="delimiter">'</span></span>, start)
                 }
-        } 
+        }
 
         <span class="comment">/* Internal Called when encountering a closing tag &lt;/close&gt; */</span>
         <span class="local-variable">this</span>.<span class="function">atImmediateClosingTag</span> = <span class="keyword">function</span>(start, end){
@@ -871,7 +871,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.node.attr) <span class="local-variable">this</span>.node.attr = {}
                 <span class="local-variable">this</span>.node.attr[<span class="local-variable">this</span>.last_attr] = <span class="predefined-constant">null</span>
-        } 
+        }
 
         <span class="comment">/* Internal Called when encountering an attribute value &quot;value&quot; */</span>
         <span class="local-variable">this</span>.<span class="function">atAttrValue</span> = <span class="keyword">function</span>(val, start, end){
@@ -881,11 +881,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span>{
                         <span class="local-variable">this</span>.node.attr[<span class="local-variable">this</span>.last_attr] = <span class="local-variable">this</span>.processEntities(val, start)
                 }
-        } 
+        }
 
         <span class="comment">// all magic HTML this closing tags. set this to undefined if you want XML behavior</span>
         <span class="local-variable">this</span>.self_closing_tags = {
-                <span class="key"><span class="delimiter">'</span><span class="content">area</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">base</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">br</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">col</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">embed</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">hr</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">img</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, 
+                <span class="key"><span class="delimiter">'</span><span class="content">area</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">base</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">br</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">col</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">embed</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">hr</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">img</span><span class="delimiter">'</span></span>:<span class="integer">1</span>,
                 <span class="key"><span class="delimiter">'</span><span class="content">input</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">keygen</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">link</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">menuitem</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">meta</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">param</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">source</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">track</span><span class="delimiter">'</span></span>:<span class="integer">1</span>, <span class="key"><span class="delimiter">'</span><span class="content">wbr</span><span class="delimiter">'</span></span>:<span class="integer">1</span>
         }
 
@@ -960,7 +960,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * &lt;tag attr='hi'&gt;mytext&lt;/tag&gt;
          *
          * becomes this JS object:
-         * { 
+         * {
          *   tag:'$root'
          *   child:[{
          *     tag:'mytag'
@@ -1001,9 +1001,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> ch = source.charCodeAt(pos++)
                         <span class="keyword">if</span>(ch == <span class="integer">60</span>){ <span class="comment">// &lt;</span>
                                 <span class="keyword">var</span> next = source.charCodeAt(pos)
-                                <span class="keyword">if</span>(next == <span class="integer">32</span> || next == <span class="integer">9</span> || next == <span class="integer">10</span> || next == <span class="integer">12</span> || next ==  <span class="integer">37</span> || 
-                                        next == <span class="integer">40</span> || next == <span class="integer">41</span> || next == <span class="integer">45</span> || 
-                                        next == <span class="integer">35</span> || next == <span class="integer">36</span> || next == <span class="integer">92</span> || next == <span class="integer">94</span> || 
+                                <span class="keyword">if</span>(next == <span class="integer">32</span> || next == <span class="integer">9</span> || next == <span class="integer">10</span> || next == <span class="integer">12</span> || next ==  <span class="integer">37</span> ||
+                                        next == <span class="integer">40</span> || next == <span class="integer">41</span> || next == <span class="integer">45</span> ||
+                                        next == <span class="integer">35</span> || next == <span class="integer">36</span> || next == <span class="integer">92</span> || next == <span class="integer">94</span> ||
                                         (next &gt;=<span class="integer">48</span> &amp;&amp; next &lt;= <span class="integer">57</span>)) <span class="keyword">continue</span>
                                 <span class="comment">// lets emit textnode since last</span>
                                 <span class="keyword">if</span>(start != pos - <span class="integer">1</span>){
@@ -1073,7 +1073,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         start = pos
                                         <span class="keyword">continue</span>
                                 }
-                                
+
                                 start = pos <span class="comment">// try to parse a tag</span>
                                 <span class="keyword">var</span> tag = <span class="predefined-constant">true</span> <span class="comment">// first name encountered is tagname</span>
                                 <span class="keyword">while</span>(pos &lt; len){
@@ -1120,7 +1120,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.parents.length) <span class="local-variable">this</span>.atError(<span class="string"><span class="delimiter">&quot;</span><span class="content">Missign closing tags at end</span><span class="delimiter">&quot;</span></span>, pos)
                 <span class="keyword">return</span> root
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

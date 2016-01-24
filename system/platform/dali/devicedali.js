@@ -6,7 +6,7 @@
 
 define.class(function(require, exports){
 
-	//HACK to simulate gl (during dev)
+	//internal, HACK to simulate gl (during dev)
 	gl = {
 	getUniformLocation: function() {}
 	,getAttribLocation: function() {}
@@ -377,7 +377,7 @@ define.class(function(require, exports){
 		node.relayout()
 	}
 
-	// remove drawpasses related to a view
+	// internal, remove drawpasses related to a view
 	this.removeDrawPasses = function(view){
 		// we have to remove all the nodes which have view as their parent layer
 		var drawpass_list = this.drawpass_list
@@ -412,7 +412,7 @@ define.class(function(require, exports){
 		if(this.layout_idx === Infinity) this.layout_idx = 0
 	}
 
-	// add drawpasses and layouts recursively from a view
+	// internal, add drawpasses and layouts recursively from a view
 	this.addDrawPassRecursive = function(view){
 		// lets first walk our children( depth first)
 		var children = view.children

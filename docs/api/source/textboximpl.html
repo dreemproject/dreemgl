@@ -669,14 +669,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(!stack) stack = <span class="local-variable">this</span>.undo_stack
                 <span class="comment">// merge undo groups if it merges</span>
                 <span class="keyword">var</span> last = stack[stack.length - <span class="integer">1</span>]
-                <span class="keyword">if</span>(last &amp;&amp; last.type == <span class="string"><span class="delimiter">'</span><span class="content">insert</span><span class="delimiter">'</span></span> &amp;&amp; 
+                <span class="keyword">if</span>(last &amp;&amp; last.type == <span class="string"><span class="delimiter">'</span><span class="content">insert</span><span class="delimiter">'</span></span> &amp;&amp;
                         last.start == end){
                         <span class="keyword">var</span> group = last.group
                         last.group = <span class="local-variable">this</span>.undo_group
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = stack.length - <span class="integer">2</span>;i&gt;=<span class="integer">0</span>;i--){
                                 <span class="keyword">if</span>(stack[i].group == group) stack[i].group =  <span class="local-variable">this</span>.undo_group
                         }
-                }                
+                }
                 stack.push({
                         <span class="key">group</span>:  <span class="local-variable">this</span>.undo_group,
                         <span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">insert</span><span class="delimiter">'</span></span>,
@@ -690,7 +690,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(!stack) stack = <span class="local-variable">this</span>.undo_stack
                 <span class="comment">// merge undo objects if it merges</span>
                 <span class="keyword">var</span> last = stack[stack.length - <span class="integer">1</span>]
-                <span class="keyword">if</span>(last &amp;&amp; last.type == <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span> &amp;&amp; 
+                <span class="keyword">if</span>(last &amp;&amp; last.type == <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span> &amp;&amp;
                         last.end == start){
                         last.end += end - start
                         <span class="keyword">return</span>
@@ -768,7 +768,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 pos ++
                         }
                 }
-                <span class="keyword">else</span>{ <span class="comment">// if we are a newline </span>
+                <span class="keyword">else</span>{ <span class="comment">// if we are a newline</span>
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(pos - <span class="integer">1</span>) == <span class="integer">9</span>){
                                 <span class="keyword">while</span>(pos &gt; <span class="integer">0</span> &amp;&amp; <span class="local-variable">this</span>.textbuf.charCodeAt(pos - <span class="integer">1</span>) != <span class="integer">10</span>){
                                         pos --
@@ -789,13 +789,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="keyword">return</span> pos
         }
-        
+
         <span class="comment">// called after child constructors</span>
         <span class="local-variable">this</span>.<span class="function">initEditImpl</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset = <span class="keyword">new</span> CursorSet(<span class="local-variable">this</span>)
                 <span class="local-variable">this</span>.undo_stack = []
                 <span class="local-variable">this</span>.redo_stack = []
-                <span class="local-variable">this</span>.undo_group = <span class="integer">0</span>        
+                <span class="local-variable">this</span>.undo_group = <span class="integer">0</span>
                 <span class="local-variable">this</span>.cursorset.update()
                 <span class="comment">//this.cursorset.moveDown(0, 0)</span>
         }
@@ -809,57 +809,57 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="local-variable">this</span>.<span class="function">keypress</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.undo_group++
-                <span class="local-variable">this</span>.cursorset.insert(event.value)  
+                <span class="local-variable">this</span>.cursorset.insert(event.value)
                 <span class="local-variable">this</span>.doCursor()
-                <span class="local-variable">this</span>.change = enumchange.keypress                
+                <span class="local-variable">this</span>.change = enumchange.keypress
         }
 
         <span class="keyword">var</span> utfmap = {
                 <span class="key">accent</span>:<span class="integer">1</span>, <span class="key">_accent</span>:<span class="string"><span class="delimiter">'</span><span class="content">`</span><span class="delimiter">'</span></span>,
-                <span class="key">num1</span>:<span class="string"><span class="delimiter">'</span><span class="content">¡</span><span class="delimiter">'</span></span>, <span class="key">_num1</span>:<span class="string"><span class="delimiter">'</span><span class="content">⁄</span><span class="delimiter">'</span></span>,
-                <span class="key">num2</span>:<span class="string"><span class="delimiter">'</span><span class="content">™</span><span class="delimiter">'</span></span>, <span class="key">_num2</span>:<span class="string"><span class="delimiter">'</span><span class="content">€</span><span class="delimiter">'</span></span>,
-                <span class="key">num3</span>:<span class="string"><span class="delimiter">'</span><span class="content">£</span><span class="delimiter">'</span></span>, <span class="key">_num3</span>:<span class="string"><span class="delimiter">'</span><span class="content">‹</span><span class="delimiter">'</span></span>,
-                <span class="key">num4</span>:<span class="string"><span class="delimiter">'</span><span class="content">¢</span><span class="delimiter">'</span></span>,<span class="key">_num4</span>:<span class="string"><span class="delimiter">'</span><span class="content">›</span><span class="delimiter">'</span></span>,
-                <span class="key">num5</span>:<span class="string"><span class="delimiter">'</span><span class="content">∞</span><span class="delimiter">'</span></span>,<span class="key">_num5</span>:<span class="string"><span class="delimiter">'</span><span class="content">ﬁ</span><span class="delimiter">'</span></span>,
-                <span class="key">num6</span>:<span class="string"><span class="delimiter">'</span><span class="content">§</span><span class="delimiter">'</span></span>,<span class="key">_num6</span>:<span class="string"><span class="delimiter">'</span><span class="content">ﬂ</span><span class="delimiter">'</span></span>,
-                <span class="key">num7</span>:<span class="string"><span class="delimiter">'</span><span class="content">¶</span><span class="delimiter">'</span></span>,<span class="key">_num7</span>:<span class="string"><span class="delimiter">'</span><span class="content">‡</span><span class="delimiter">'</span></span>,
-                <span class="key">num8</span>:<span class="string"><span class="delimiter">'</span><span class="content">•</span><span class="delimiter">'</span></span>,<span class="key">_num8</span>:<span class="string"><span class="delimiter">'</span><span class="content">°</span><span class="delimiter">'</span></span>,
-                <span class="key">num9</span>:<span class="string"><span class="delimiter">'</span><span class="content">ª</span><span class="delimiter">'</span></span>,<span class="key">_num9</span>:<span class="string"><span class="delimiter">'</span><span class="content">·</span><span class="delimiter">'</span></span>,
-                <span class="key">num0</span>:<span class="string"><span class="delimiter">'</span><span class="content">º</span><span class="delimiter">'</span></span>,<span class="key">_num0</span>:<span class="string"><span class="delimiter">'</span><span class="content">‚</span><span class="delimiter">'</span></span>,
-                <span class="key">equals</span>:<span class="string"><span class="delimiter">'</span><span class="content">≠</span><span class="delimiter">'</span></span>,<span class="key">_equalt</span>:<span class="string"><span class="delimiter">'</span><span class="content">±</span><span class="delimiter">'</span></span>,
-                <span class="key">q</span>:<span class="string"><span class="delimiter">'</span><span class="content">œ</span><span class="delimiter">'</span></span>,<span class="key">_q</span>:<span class="string"><span class="delimiter">'</span><span class="content">Œ</span><span class="delimiter">'</span></span>,
-                <span class="key">w</span>:<span class="string"><span class="delimiter">'</span><span class="content">∑</span><span class="delimiter">'</span></span>,<span class="key">_w</span>:<span class="string"><span class="delimiter">'</span><span class="content">„</span><span class="delimiter">'</span></span>,
-                <span class="key">e</span>:<span class="integer">2</span>, <span class="key">_e</span>:<span class="string"><span class="delimiter">'</span><span class="content">´</span><span class="delimiter">'</span></span>,
-                <span class="key">r</span>:<span class="string"><span class="delimiter">'</span><span class="content">®</span><span class="delimiter">'</span></span>, <span class="key">_r</span>:<span class="string"><span class="delimiter">'</span><span class="content">‰</span><span class="delimiter">'</span></span>,
-                <span class="key">t</span>:<span class="string"><span class="delimiter">'</span><span class="content">†</span><span class="delimiter">'</span></span>,<span class="key">_t</span>:<span class="string"><span class="delimiter">'</span><span class="content">ˇ</span><span class="delimiter">'</span></span>, <span class="key">y</span>:<span class="string"><span class="delimiter">'</span><span class="content">¥</span><span class="delimiter">'</span></span>,
-                <span class="key">u</span>:<span class="integer">3</span>, <span class="key">_u</span>:<span class="string"><span class="delimiter">'</span><span class="content">¨</span><span class="delimiter">'</span></span>,
-                <span class="key">i</span>:<span class="integer">4</span>, <span class="key">_i</span>:<span class="string"><span class="delimiter">'</span><span class="content">ˆ</span><span class="delimiter">'</span></span>,
-                <span class="key">o</span>:<span class="string"><span class="delimiter">'</span><span class="content">ø</span><span class="delimiter">'</span></span>, <span class="key">_o</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ø</span><span class="delimiter">'</span></span>,
-                <span class="key">p</span>:<span class="string"><span class="delimiter">'</span><span class="content">π</span><span class="delimiter">'</span></span>, <span class="key">_p</span>:<span class="string"><span class="delimiter">'</span><span class="content">∏</span><span class="delimiter">'</span></span>,
-                <span class="key">openbracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">“</span><span class="delimiter">'</span></span>, <span class="key">_openbracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">”</span><span class="delimiter">'</span></span>,
-                <span class="key">closebracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">‘</span><span class="delimiter">'</span></span>, <span class="key">_closebracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">’</span><span class="delimiter">'</span></span>,
-                <span class="key">backslash</span>:<span class="string"><span class="delimiter">'</span><span class="content">«</span><span class="delimiter">'</span></span>, <span class="key">_backslash</span>:<span class="string"><span class="delimiter">'</span><span class="content">»</span><span class="delimiter">'</span></span>,
-                <span class="key">a</span>:<span class="string"><span class="delimiter">'</span><span class="content">å</span><span class="delimiter">'</span></span>,<span class="key">_a</span>:<span class="string"><span class="delimiter">'</span><span class="content">Å</span><span class="delimiter">'</span></span>,
-                <span class="key">s</span>:<span class="string"><span class="delimiter">'</span><span class="content">ß</span><span class="delimiter">'</span></span>,<span class="key">_s</span>:<span class="string"><span class="delimiter">'</span><span class="content">Í</span><span class="delimiter">'</span></span>,
-                <span class="key">d</span>:<span class="string"><span class="delimiter">'</span><span class="content">∂</span><span class="delimiter">'</span></span>,<span class="key">_d</span>:<span class="string"><span class="delimiter">'</span><span class="content">Î</span><span class="delimiter">'</span></span>,
-                <span class="key">f</span>:<span class="string"><span class="delimiter">'</span><span class="content">ƒ</span><span class="delimiter">'</span></span>,<span class="key">_f</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ï</span><span class="delimiter">'</span></span>,
-                <span class="key">g</span>:<span class="string"><span class="delimiter">'</span><span class="content">©</span><span class="delimiter">'</span></span>,<span class="key">_g</span>:<span class="string"><span class="delimiter">'</span><span class="content">˝</span><span class="delimiter">'</span></span>,
-                <span class="key">h</span>:<span class="string"><span class="delimiter">'</span><span class="content">˙</span><span class="delimiter">'</span></span>,<span class="key">_h</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ó</span><span class="delimiter">'</span></span>,
-                <span class="key">j</span>:<span class="string"><span class="delimiter">'</span><span class="content">∆</span><span class="delimiter">'</span></span>,<span class="key">_j</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ô</span><span class="delimiter">'</span></span>,
-                <span class="key">k</span>:<span class="string"><span class="delimiter">'</span><span class="content">˚</span><span class="delimiter">'</span></span>,<span class="key">_k</span>:<span class="string"><span class="delimiter">'</span><span class="content"></span><span class="delimiter">'</span></span>,
-                <span class="key">l</span>:<span class="string"><span class="delimiter">'</span><span class="content">¬</span><span class="delimiter">'</span></span>,<span class="key">_l</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ò</span><span class="delimiter">'</span></span>,
-                <span class="key">semicolon</span>:<span class="string"><span class="delimiter">'</span><span class="content">…</span><span class="delimiter">'</span></span>, <span class="key">_semicolon</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ú</span><span class="delimiter">'</span></span>,
-                <span class="key">singlequote</span>:<span class="string"><span class="delimiter">'</span><span class="content">æ</span><span class="delimiter">'</span></span>, <span class="key">_singlequote</span>:<span class="string"><span class="delimiter">'</span><span class="content">Æ</span><span class="delimiter">'</span></span>,
-                <span class="key">z</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ω</span><span class="delimiter">'</span></span>, <span class="key">_z</span>:<span class="string"><span class="delimiter">'</span><span class="content">¸</span><span class="delimiter">'</span></span>,
-                <span class="key">x</span>:<span class="string"><span class="delimiter">'</span><span class="content">≈</span><span class="delimiter">'</span></span>, <span class="key">_x</span>:<span class="string"><span class="delimiter">'</span><span class="content">˛</span><span class="delimiter">'</span></span>,
-                <span class="key">c</span>:<span class="string"><span class="delimiter">'</span><span class="content">ç</span><span class="delimiter">'</span></span>, <span class="key">_c</span>:<span class="string"><span class="delimiter">'</span><span class="content">Ç</span><span class="delimiter">'</span></span>,
-                <span class="key">v</span>:<span class="string"><span class="delimiter">'</span><span class="content">√</span><span class="delimiter">'</span></span>, <span class="key">_v</span>:<span class="string"><span class="delimiter">'</span><span class="content">◊</span><span class="delimiter">'</span></span>,
-                <span class="key">b</span>:<span class="string"><span class="delimiter">'</span><span class="content">∫</span><span class="delimiter">'</span></span>, <span class="key">_b</span>:<span class="string"><span class="delimiter">'</span><span class="content">ı</span><span class="delimiter">'</span></span>,
-                <span class="key">n</span>:<span class="integer">5</span>, <span class="key">_n</span>:<span class="string"><span class="delimiter">'</span><span class="content">˜</span><span class="delimiter">'</span></span>,
-                <span class="key">m</span>:<span class="string"><span class="delimiter">'</span><span class="content">µ</span><span class="delimiter">'</span></span>, <span class="key">_m</span>:<span class="string"><span class="delimiter">'</span><span class="content">Â</span><span class="delimiter">'</span></span>,
-                <span class="key">comma</span>:<span class="string"><span class="delimiter">'</span><span class="content">≤</span><span class="delimiter">'</span></span>, <span class="key">_comma</span>:<span class="string"><span class="delimiter">'</span><span class="content">¯</span><span class="delimiter">'</span></span>,
-                <span class="key">period</span>:<span class="string"><span class="delimiter">'</span><span class="content">≥</span><span class="delimiter">'</span></span>, <span class="key">_period</span>:<span class="string"><span class="delimiter">'</span><span class="content">˘</span><span class="delimiter">'</span></span>,
-                <span class="key">slash</span>:<span class="string"><span class="delimiter">'</span><span class="content">÷</span><span class="delimiter">'</span></span>, <span class="key">_slash</span>:<span class="string"><span class="delimiter">'</span><span class="content">¿</span><span class="delimiter">'</span></span>
+                <span class="key">num1</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_num1</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num2</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_num2</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num3</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_num3</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num4</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_num4</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num5</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_num5</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num6</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_num6</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num7</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_num7</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">num8</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_num8</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">num9</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_num9</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">num0</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_num0</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">equals</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_equalt</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">q</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_q</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">w</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_w</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">e</span>:<span class="integer">2</span>, <span class="key">_e</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">r</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_r</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">t</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_t</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">y</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">u</span>:<span class="integer">3</span>, <span class="key">_u</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">i</span>:<span class="integer">4</span>, <span class="key">_i</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">o</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_o</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">p</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_p</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">openbracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_openbracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">closebracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_closebracket</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">backslash</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_backslash</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">a</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_a</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">s</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_s</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">d</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_d</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">f</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_f</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">g</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_g</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">h</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_h</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">j</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,<span class="key">_j</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">k</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_k</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">l</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,<span class="key">_l</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">semicolon</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_semicolon</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">singlequote</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_singlequote</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">z</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_z</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">x</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_x</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">c</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_c</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">v</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_v</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>,
+                <span class="key">b</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_b</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">n</span>:<span class="integer">5</span>, <span class="key">_n</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">m</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_m</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">comma</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_comma</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">period</span>:<span class="string"><span class="delimiter">'</span><span class="content">���</span><span class="delimiter">'</span></span>, <span class="key">_period</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>,
+                <span class="key">slash</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>, <span class="key">_slash</span>:<span class="string"><span class="delimiter">'</span><span class="content">��</span><span class="delimiter">'</span></span>
         }
 
         <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
@@ -894,14 +894,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.cursorset.update()
                 <span class="comment">// we are done. serialize to clipboard</span>
                 <span class="local-variable">this</span>.doCursor()
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.<span class="function">onmousemove</span> = <span class="keyword">function</span>(){}
         }
 
         <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">var</span> start = event.local
                 <span class="keyword">var</span> keyboard = <span class="local-variable">this</span>.screen.keyboard
-                <span class="keyword">var</span> mouse = <span class="local-variable">this</span>.screen.mouse
+                <span class="keyword">var</span> mouse = <span class="local-variable">this</span>.screen.pointer
                 <span class="comment">//console.log(mouse.clicker)</span>
                 <span class="keyword">if</span>(keyboard.alt){
                         <span class="keyword">var</span> clone
@@ -918,10 +918,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(keyboard.meta ){
                         <span class="keyword">var</span> cursor = <span class="local-variable">this</span>.cursorset.addCursor()
-                        <span class="comment">// in that case what we need to </span>
+                        <span class="comment">// in that case what we need to</span>
                         <span class="local-variable">this</span>.cursorset.fusing = <span class="predefined-constant">false</span>
                         cursor.moveTo(start[<span class="integer">0</span>], start[<span class="integer">1</span>])
-                        <span class="comment">// lets make it select the word </span>
+                        <span class="comment">// lets make it select the word</span>
 
                         <span class="keyword">if</span>(mouse.clicker == <span class="integer">2</span>) cursor.selectWord()
                         <span class="keyword">else</span> <span class="keyword">if</span>(mouse.clicker == <span class="integer">3</span>){
@@ -942,7 +942,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="comment">// normal selection</span>
                 <span class="keyword">else</span>{
-                        <span class="comment">// in that case what we need to </span>
+                        <span class="comment">// in that case what we need to</span>
                         <span class="local-variable">this</span>.cursorset.fusing = <span class="predefined-constant">true</span>
 
                         <span class="local-variable">this</span>.cursorset.moveTo(start[<span class="integer">0</span>], start[<span class="integer">1</span>])
@@ -961,7 +961,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
         }
 
-        <span class="comment">// alright so. undo. </span>
+        <span class="comment">// alright so. undo.</span>
         <span class="local-variable">this</span>.keyZCtrl =
         <span class="local-variable">this</span>.<span class="function">keyZCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
@@ -979,14 +979,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="comment">//doCursor()</span>
         }
 
-        <span class="local-variable">this</span>.keyACtrl = 
+        <span class="local-variable">this</span>.keyACtrl =
         <span class="local-variable">this</span>.<span class="function">keyACmd</span> = <span class="keyword">function</span>(){
                 <span class="comment">// select all</span>
                 <span class="local-variable">this</span>.cursorset.selectAll()
                 <span class="local-variable">this</span>.selectionToClipboard()
         }
 
-        <span class="local-variable">this</span>.keyXCtrl = 
+        <span class="local-variable">this</span>.keyXCtrl =
         <span class="local-variable">this</span>.<span class="function">keyXCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="comment">// cut the crap</span>
@@ -998,10 +998,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.cursorset.backspace()
                 <span class="local-variable">this</span>.change = enumchange.<span class="keyword">delete</span>
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
-        
+
         <span class="comment">// move selection up one line</span>
         <span class="local-variable">this</span>.<span class="function">keyDownarrowAlt</span> = <span class="keyword">function</span>(){
 
@@ -1015,7 +1015,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.change = enumchange.<span class="keyword">delete</span>
                 <span class="local-variable">this</span>.cursorset.<span class="keyword">delete</span>()
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
@@ -1027,104 +1027,105 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyBackspaceCtrl = 
+        <span class="local-variable">this</span>.keyBackspaceCtrl =
         <span class="local-variable">this</span>.<span class="function">keyBackspaceAlt</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.cursorset.backspaceWord()
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
         <span class="local-variable">this</span>.<span class="function">keyBackspaceCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.cursorset.backspaceLine()
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
         <span class="local-variable">this</span>.<span class="function">keyDeleteCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.cursorset.deleteLine()
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyLeftArrowAltShift = 
-        <span class="local-variable">this</span>.keyLeftArrowCtrlShift = 
-        <span class="local-variable">this</span>.keyLeftArrowCtrl = 
+        <span class="local-variable">this</span>.keyLeftArrowAltShift =
+        <span class="local-variable">this</span>.keyLeftArrowCtrlShift =
+        <span class="local-variable">this</span>.keyLeftArrowCtrl =
         <span class="local-variable">this</span>.<span class="function">keyLeftarrowAlt</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveLeftWord(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
-        
-        <span class="local-variable">this</span>.keyRightArrowAltShift = 
-        <span class="local-variable">this</span>.keyRightArrowCtrlShift = 
-        <span class="local-variable">this</span>.keyRightArrowCtrl = 
+
+        <span class="local-variable">this</span>.keyRightArrowAltShift =
+        <span class="local-variable">this</span>.keyRightArrowCtrlShift =
+        <span class="local-variable">this</span>.keyRightArrowCtrl =
         <span class="local-variable">this</span>.<span class="function">keyRightarrowAlt</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveRightWord(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyLeftarrowCmdShift = 
+        <span class="local-variable">this</span>.keyLeftarrowCmdShift =
         <span class="local-variable">this</span>.<span class="function">keyLeftarrowCmd</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveLeftLine(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyRightarrowCmdShift = 
+        <span class="local-variable">this</span>.keyRightarrowCmdShift =
         <span class="local-variable">this</span>.<span class="function">keyRightarrowCmd</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveRightLine(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
- 
-        <span class="local-variable">this</span>.keyHome = 
-        <span class="local-variable">this</span>.keyUparrowCmdShift = 
+
+        <span class="local-variable">this</span>.keyHome =
+        <span class="local-variable">this</span>.keyUparrowCmdShift =
         <span class="local-variable">this</span>.<span class="function">keyUparrowCmd</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveTop(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyEnd = 
-        <span class="local-variable">this</span>.keyDownarrowCmdShift = 
+        <span class="local-variable">this</span>.keyEnd =
+        <span class="local-variable">this</span>.keyDownarrowCmdShift =
         <span class="local-variable">this</span>.<span class="function">keyDownarrowCmd</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveBottom(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyLeftarrowShift = 
-        <span class="local-variable">this</span>.<span class="function">keyLeftarrow</span> = <span class="keyword">function</span>(){ 
+        <span class="local-variable">this</span>.keyLeftarrowShift =
+        <span class="local-variable">this</span>.<span class="function">keyLeftarrow</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveLeft(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyRightarrowShift = 
+        <span class="local-variable">this</span>.keyRightarrowShift =
         <span class="local-variable">this</span>.<span class="function">keyRightarrow</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveRight(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyUparrowShift = 
+        <span class="local-variable">this</span>.keyUparrowShift =
         <span class="local-variable">this</span>.<span class="function">keyUparrow</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveUp(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
 
-        <span class="local-variable">this</span>.keyDownarrowShift = 
+        <span class="local-variable">this</span>.keyDownarrowShift =
         <span class="local-variable">this</span>.<span class="function">keyDownarrow</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.cursorset.moveDown(<span class="local-variable">this</span>.screen.keyboard.shift)
-                <span class="local-variable">this</span>.selectionToClipboard()        
+                <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -2838,10 +2838,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2684" name="n2684">2684</a>
 <a href="#n2685" name="n2685">2685</a>
 <a href="#n2686" name="n2686">2686</a>
+<a href="#n2687" name="n2687">2687</a>
+<a href="#n2688" name="n2688">2688</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">// Micro AMD module loader for browser and node.js and basic system homogenisation library</span>
@@ -2851,7 +2853,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// not a web-facing backend.</span>
 <span class="comment">// dreemGL is not optimized to be a neat NPM module, fit into browserify or express or otherwise</span>
 <span class="comment">// be a grab-and-use JS thing that respects the constraints that this would require.</span>
-<span class="comment">// Also any nodejs code is NOT deploy-safe because of the automatic RPC system and should </span>
+<span class="comment">// Also any nodejs code is NOT deploy-safe because of the automatic RPC system and should</span>
 <span class="comment">// NOT be put webfacing as is.</span>
 <span class="comment">// And since it keeps websocket connections to all clients for live reloading</span>
 <span class="comment">// and RPC, it will rapidly stop working if faced with any large number of connections.</span>
@@ -2863,10 +2865,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// dreemGL is a prototyping toolkit, and aimed at quickly being able to do certain things</span>
 <span class="comment">// having globals helps there and most have been carefully chosen to be global.</span>
 <span class="comment">// Also all the math things are global, in math.js to be more GLSL-like in JS.</span>
-<span class="comment">// The prototypes of Float32Array are modified to add the GLSL swizzle (.xyxy) apis.        </span>
+<span class="comment">// The prototypes of Float32Array are modified to add the GLSL swizzle (.xyxy) apis.</span>
 <span class="comment">// The nodeJS Module loader is hooked to allow for loading the custom AMD extension</span>
-<span class="comment">// you see in dreemGL, which fuses classes with modules. And this may have some </span>
-<span class="comment">// compatibility repercussions for some modules that assume 'define' works a certain way </span>
+<span class="comment">// you see in dreemGL, which fuses classes with modules. And this may have some</span>
+<span class="comment">// compatibility repercussions for some modules that assume 'define' works a certain way</span>
 <span class="comment">// If you need to require nodejs modules using the require provided by define,</span>
 <span class="comment">// use require('module') dont use './' or '/' these are interpreted as define.js modules</span>
 <span class="comment">// The browser require will ignore require('module') so if you stick to a clean</span>
@@ -2874,7 +2876,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// All these choices are to support the design goals of dreemGL some of which are:</span>
 <span class="comment">// - be a low cognitive overhead prototyping toolkit</span>
 <span class="comment">// - symmetrical loading of the entire 'app' in both nodejs and browser for automatic</span>
-<span class="comment">//   rpc interface handling </span>
+<span class="comment">//   rpc interface handling</span>
 <span class="comment">// - low jank, all rendering in JS (the timeline is super important here)</span>
 <span class="comment">// - do not transcompile anything and run in browser and node with same files</span>
 <span class="comment">// - optimized live editability and reloading of all class hierarchy parts (thats the reason</span>
@@ -2988,10 +2990,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         define.<span class="function">lookupFileType</span> = <span class="keyword">function</span>(type){
                 type = type.toLowerCase()
-                
+
                 <span class="keyword">if</span>(type === <span class="string"><span class="delimiter">'</span><span class="content">json</span><span class="delimiter">'</span></span>)        <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">json</span><span class="delimiter">'</span></span>
                 <span class="keyword">if</span>(type === <span class="string"><span class="delimiter">'</span><span class="content">txt</span><span class="delimiter">'</span></span> || type === <span class="string"><span class="delimiter">'</span><span class="content">obj</span><span class="delimiter">'</span></span> || type === <span class="string"><span class="delimiter">'</span><span class="content">text</span><span class="delimiter">'</span></span> || type === <span class="string"><span class="delimiter">'</span><span class="content">md</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">text</span><span class="delimiter">'</span></span>
-                
+
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">arraybuffer</span><span class="delimiter">'</span></span>
         }
 
@@ -3113,10 +3115,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 define.reload_id++
 
                                 <span class="comment">// lets wipe the old module</span>
-                                <span class="keyword">var</span> old_module = define.module[path] 
+                                <span class="keyword">var</span> old_module = define.module[path]
                                 <span class="keyword">var</span> old_factory = define.factory[path]
 
                                 define.module[path] = define.factory[path] = <span class="predefined-constant">undefined</span>
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>, path)
 
                                 <span class="comment">// lets require it async</span>
                                 define.require.async(path).then(<span class="keyword">function</span>(new_class){
@@ -3134,7 +3137,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                                 <span class="comment">// try to wipe all modules that depend our this one</span>
                                                                 wipe_module(key)
                                                         }
-                                                }                                                        
+                                                }
                                         }
                                         wipe_module(path)
 
@@ -3156,9 +3159,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         define.<span class="function">findRequiresInFactory</span> = <span class="keyword">function</span>(factory){
                 <span class="keyword">var</span> search = factory.toString()
-                
+
                 <span class="keyword">if</span>(factory.body) search += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> + factory.body.toString()
-                <span class="keyword">if</span>(factory.depstring) search += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> + factory.depstring.toString()                
+                <span class="keyword">if</span>(factory.depstring) search += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> + factory.depstring.toString()
 
                 <span class="keyword">var</span> req = []
                 <span class="comment">// bail out if we redefine require</span>
@@ -3305,7 +3308,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         <span class="keyword">return</span> obj
                 }
-                
+
                 <span class="keyword">if</span>(define.debug){
                         <span class="keyword">var</span> fnname
                         <span class="keyword">if</span>(in_name){
@@ -3331,7 +3334,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="keyword">else</span>{
                         <span class="keyword">var</span> Constructor = MyConstructor
-                }                
+                }
 
                 <span class="keyword">var</span> final_at_extend = Array.isArray(body)? body: []
 
@@ -3369,7 +3372,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">if</span>(module){
                                 <span class="keyword">if</span>(body &amp;&amp; body.mixin) module.exports = Constructor.prototype
                                 <span class="keyword">else</span> module.exports = Constructor
-                                
+
                                 Object.defineProperty(Constructor, <span class="string"><span class="delimiter">'</span><span class="content">module</span><span class="delimiter">'</span></span>, {<span class="key">value</span>:module})
 
                                 define.applyBody(body, Constructor, baseclass, require)
@@ -3400,7 +3403,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> str = fn.toString()
 
                 str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\*</span><span class="content">[</span><span class="char">\s</span><span class="char">\S</span><span class="content">]*?</span><span class="content">\*</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>).replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\/</span><span class="content">[^</span><span class="char">\n</span><span class="content">]*</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                
+
                 <span class="keyword">var</span> result;
                 <span class="keyword">var</span> output = []
                 <span class="keyword">var</span> result = str.match(<span class="regexp"><span class="delimiter">/</span><span class="content">function</span><span class="char">\s</span><span class="content">*[$_</span><span class="char">\w</span><span class="content">]*</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="content">([$_</span><span class="char">\w</span><span class="content">,</span><span class="char">\s</span><span class="content">]*)</span><span class="content">\)</span><span class="delimiter">/</span></span>)
@@ -3436,7 +3439,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         Object.defineProperty(outer_this, classname, {
                                 <span class="function">get</span>:<span class="keyword">function</span>(){
                                         <span class="keyword">var</span> cls = <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + classname]
-                                        <span class="keyword">if</span>(cls) cls.outer = <span class="local-variable">this</span> 
+                                        <span class="keyword">if</span>(cls) cls.outer = <span class="local-variable">this</span>
                                         <span class="keyword">return</span> cls
                                 },
                                 <span class="function">set</span>:<span class="keyword">function</span>(value){
@@ -3453,7 +3456,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + classname] = value
                                                 <span class="keyword">return</span>
                                         }
-                                        <span class="comment">// otherwise use it as an extend </span>
+                                        <span class="comment">// otherwise use it as an extend</span>
                                         <span class="keyword">var</span> cls = <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + classname]
                                         <span class="comment">// ok so the problem here is, that if we are inherited</span>
                                         <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + classname] = cls.extend(value, <span class="local-variable">this</span>)
@@ -3512,14 +3515,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> outer_module = outer_require.module
                         <span class="keyword">var</span> module = {<span class="key">exports</span>:{}, <span class="key">filename</span>:outer_module.filename, <span class="key">factory</span>:outer_module.factory}
                         moduleFactory(outer_require, module.exports, module)
-                        
+
                         <span class="keyword">if</span>(outer_this){
                                 outer_this[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + classname] = module.exports
                                 <span class="keyword">if</span>(outer_this.atInnerClassAssign) outer_this.atInnerClassAssign(classname, module.exports)
                                 <span class="keyword">if</span>(!outer_this.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">_inner_classes</span><span class="delimiter">'</span></span>)) outer_this._inner_classes = Object.create(outer_this._inner_classes || {})
                                 outer_this._inner_classes[classname] = module.exports
                         }
-        
+
                         <span class="keyword">return</span> module.exports
                 }
 
@@ -3598,7 +3601,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
         <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)(<span class="keyword">function</span>(){ <span class="comment">// browser implementation</span>
-                
+
                 <span class="comment">// if define was already defined use it as a config store</span>
                 <span class="comment">// storage structures</span>
                 define.download_queue = {}
@@ -3625,7 +3628,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }
 
                                 <span class="keyword">if</span>(define.reload_id) abs_url += <span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span> + define.getReloadID()
-                                        
+
                                 <span class="keyword">if</span>(module_deps &amp;&amp; module_deps.indexOf(fac_url) === -<span class="integer">1</span>) module_deps.push(fac_url)
 
                                 <span class="keyword">if</span>(define.factory[fac_url]) <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve){resolve()})
@@ -3640,7 +3643,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">if</span>(ext === <span class="string"><span class="delimiter">'</span><span class="content">js</span><span class="delimiter">'</span></span>){
                                         prom = loadScript(fac_url, abs_url, from_file)
                                 }
-                                <span class="keyword">else</span> <span class="keyword">if</span>(ext === <span class="string"><span class="delimiter">'</span><span class="content">jpg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">jpeg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">gif</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">png</span><span class="delimiter">'</span></span>){                
+                                <span class="keyword">else</span> <span class="keyword">if</span>(ext === <span class="string"><span class="delimiter">'</span><span class="content">jpg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">jpeg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">gif</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">png</span><span class="delimiter">'</span></span>){
                                         prom = loadImage(fac_url, abs_url, from_file)
                                 }
                                 <span class="keyword">else</span>  prom = loadXHR(fac_url, abs_url, from_file, ext)
@@ -3684,7 +3687,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         }
                                                         <span class="keyword">var</span> blob = define.processFileType(type, req.response)
                                                         define.factory[facurl] = blob
-                                                        
+
                                                         <span class="comment">// do a post process on the file type</span>
                                                         resolve(blob)
                                                 }
@@ -3695,11 +3698,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         <span class="comment">// insert by script tag</span>
                         <span class="keyword">function</span> <span class="function">loadScript</span>(facurl, url, from_file){
+                                <span class="keyword">if</span> (! url) <span class="keyword">return</span>;
                                 <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
 
                                         <span class="keyword">var</span> script = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">script</span><span class="delimiter">'</span></span>)
                                         <span class="keyword">var</span> base_path = define.filePath(url)
-                                                
+
                                         define.script_tags[location.origin + url] = script
 
                                         script.type = <span class="string"><span class="delimiter">'</span><span class="content">text/javascript</span><span class="delimiter">'</span></span>
@@ -3744,14 +3748,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 })
                                         }
 
-                                        script.<span class="function">onerror</span> = <span class="keyword">function</span>(exception, path, line){ 
+                                        script.<span class="function">onerror</span> = <span class="keyword">function</span>(exception, path, line){
                                                 <span class="keyword">var</span> error = <span class="string"><span class="delimiter">&quot;</span><span class="content">Error loading </span><span class="delimiter">&quot;</span></span> + url + <span class="string"><span class="delimiter">&quot;</span><span class="content"> from </span><span class="delimiter">&quot;</span></span> + from_file
                                                 console.error(error)
                                                 <span class="local-variable">this</span>.rejected = <span class="predefined-constant">true</span>
-                                                <span class="keyword">if</span>(reject) reject({<span class="key">error</span>:error, <span class="key">exception</span>:exception, <span class="key">path</span>:path, <span class="key">line</span>:line})
-                                                <span class="keyword">else</span>{
+                                                <span class="comment">// if(reject) reject({error:error, exception:exception, path:path, line:line})</span>
+                                                <span class="comment">// else{</span>
                                                         define.showException({<span class="key">error</span>:error, <span class="key">exception</span>:exception, <span class="key">path</span>:path, <span class="key">line</span>:line})
-                                                }
+                                                <span class="comment">// }</span>
                                         }
                                         script.onload = onLoad
                                         script.<span class="function">onreadystatechange</span> = <span class="keyword">function</span>(){
@@ -3789,7 +3793,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="comment">// lets append the div</span>
                         <span class="keyword">var</span> div = define.exception_div = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">div</span><span class="delimiter">'</span></span>)
                         div.style.cssText =<span class="string"><span class="delimiter">'</span><span class="content">position:absolute;left:10;top:10;padding:30px;background-color:white;border-radius:10px;border:2px dotted #ffc0c0;color:#202020;margin:20px;margin-left:20px;font-size:14pt;font-family:arial, helvetica;</span><span class="delimiter">'</span></span>
-                        
+
                         div.innerHTML = <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;b&gt;DreemGL has encountered a problem!&lt;/b&gt;&lt;br/&gt;</span><span class="delimiter">&quot;</span></span>+exc.error+<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;br/&gt;&lt;div&gt;</span><span class="delimiter">&quot;</span></span>+exc.exception+<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;br/&gt;&lt;br/&gt;&lt;div style='color:black'&gt;&lt;a href='view-source:</span><span class="delimiter">&quot;</span></span>+exc.path+<span class="string"><span class="delimiter">&quot;</span><span class="content">#</span><span class="delimiter">&quot;</span></span>+exc.line+<span class="string"><span class="delimiter">&quot;</span><span class="content">'&gt;in </span><span class="delimiter">&quot;</span></span>+exc.path+<span class="string"><span class="delimiter">&quot;</span><span class="content"> on line </span><span class="delimiter">&quot;</span></span>+exc.line+<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;/a&gt;&lt;/div&gt;</span><span class="delimiter">&quot;</span></span>
                         document.body.appendChild(div)
                 }
@@ -3851,7 +3855,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }
                                 <span class="keyword">else</span> <span class="keyword">if</span> (msg.type === <span class="string"><span class="delimiter">'</span><span class="content">close</span><span class="delimiter">'</span></span>) {
                                         window.close() <span class="comment">// close the window</span>
-                                } 
+                                }
                                 <span class="keyword">else</span> <span class="keyword">if</span> (msg.type === <span class="string"><span class="delimiter">'</span><span class="content">delay</span><span class="delimiter">'</span></span>) { <span class="comment">// a delay refresh message</span>
                                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">Got delay refresh from server!</span><span class="delimiter">'</span></span>);
                                         setTimeout(<span class="keyword">function</span>() {
@@ -3934,7 +3938,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="key">port</span>: myurl.port,
                                                 <span class="key">path</span>: myurl.path,
                                                 <span class="key">headers</span>:headers
-                                        }, 
+                                        },
                                         <span class="keyword">function</span>(res){
                                                 <span class="comment">//console.log(res)</span>
                                                 <span class="keyword">if</span>(res.statusCode === <span class="integer">200</span>){
@@ -3966,7 +3970,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> Module = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">module</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">var</span> modules = []
                 <span class="keyword">var</span> _compile = Module.prototype._compile
-                Module.prototype.<span class="function">_compile</span> = <span class="keyword">function</span>(content, filename){  
+                Module.prototype.<span class="function">_compile</span> = <span class="keyword">function</span>(content, filename){
                         modules.push(<span class="local-variable">this</span>)
                         <span class="keyword">try</span> {
                                 <span class="keyword">var</span> ret = _compile.call(<span class="local-variable">this</span>, content, filename)
@@ -4024,7 +4028,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         }
                                                         <span class="comment">// alright now, lets load up the root</span>
                                                         loadModuleAsync(define.expandVariables(data.boot), modurl).then(<span class="keyword">function</span>(result){
-                                                                <span class="comment">// ok so, </span>
+                                                                <span class="comment">// ok so,</span>
                                                                 resolve(result)
                                                         })
                                                         <span class="keyword">return</span>
@@ -4064,7 +4068,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                                                                 <span class="keyword">var</span> ext = define.fileExt(dep_path)
                                                                 <span class="keyword">if</span>(!ext) dep_path += <span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>
-                
+
                                                                 <span class="keyword">return</span> loadModuleAsync(dep_path, modurl)
 
                                                         })).then(<span class="keyword">function</span>(){
@@ -4073,12 +4077,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         }).<span class="keyword">catch</span>(<span class="keyword">function</span>(error){
                                                                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">CAUGHT ERROR </span><span class="delimiter">&quot;</span></span>, error)
                                                         })
-        
+
                                                         <span class="keyword">return</span>
                                                         <span class="comment">// lets initialize the module</span>
                                                 }
                                                 <span class="keyword">return</span> resolve(result.path)
-        
+
                                         }).<span class="keyword">catch</span>(<span class="keyword">function</span>(err){
                                                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error in </span><span class="delimiter">&quot;</span></span>+modurl+<span class="string"><span class="delimiter">&quot;</span><span class="content"> from </span><span class="delimiter">&quot;</span></span>+includefrom,err,err.stack)
                                         })
@@ -4117,7 +4121,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="comment">// we cant require non js files</span>
                                 <span class="keyword">var</span> ext = define.fileExt(full_name)
                                 <span class="keyword">if</span>(ext !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> &amp;&amp; ext !== <span class="string"><span class="delimiter">'</span><span class="content">js</span><span class="delimiter">'</span></span>){
-                                        <span class="keyword">if</span>(ext === <span class="string"><span class="delimiter">'</span><span class="content">jpg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">jpeg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">gif</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">png</span><span class="delimiter">'</span></span>){                
+                                        <span class="keyword">if</span>(ext === <span class="string"><span class="delimiter">'</span><span class="content">jpg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">jpeg</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">gif</span><span class="delimiter">'</span></span> || ext === <span class="string"><span class="delimiter">'</span><span class="content">png</span><span class="delimiter">'</span></span>){
                                                 <span class="comment">// Construct a Texture.Image object given its path</span>
                                                 <span class="keyword">if</span>(define.<span class="predefined">$platform</span> === <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>){
                                                         <span class="keyword">var</span> tex = define.expandVariables(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/texture$platform</span><span class="delimiter">'</span></span>)
@@ -4158,7 +4162,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         noderequirewrapper.<span class="function">clearCache</span> = <span class="keyword">function</span>(name){
                                 Module._cache = {}
                         }
-                        
+
                         noderequirewrapper.module = module
 
                         noderequirewrapper.<span class="function">async</span> = <span class="keyword">function</span>(modname){
@@ -4218,7 +4222,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 global.define.module = {}
                 global.define.factory = {}
                 <span class="comment">// fetch a new require for the main module and return that</span>
-                
+
                 define.define(<span class="keyword">function</span>(require){
                         module.exports = require
                 })
@@ -4322,10 +4326,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">function</span> <span class="function">MyStruct</span>(){
                                 <span class="keyword">var</span> out = <span class="keyword">new</span> myarray(mysize), len = <span class="local-variable">arguments</span>.length
                                 out.<span class="function">toJSON</span> = <span class="keyword">function</span>(){
-                                        
+
                                         <span class="keyword">var</span> res = [];
-                                        res.push.apply(res, <span class="local-variable">this</span>);                                                                                
-                                        <span class="keyword">return</span> {<span class="key">____struct</span>: <span class="local-variable">this</span>.struct.id, <span class="key">data</span>: res}; 
+                                        res.push.apply(res, <span class="local-variable">this</span>);
+                                        <span class="keyword">return</span> {<span class="key">____struct</span>: <span class="local-variable">this</span>.struct.id, <span class="key">data</span>: res};
                                 }
                                 out.struct = MyStruct
                                 <span class="keyword">if</span>(len === <span class="integer">0</span>) <span class="keyword">return</span> out
@@ -4366,7 +4370,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         MyStruct.fromString.apply(out, <span class="local-variable">arguments</span>)
                                         <span class="keyword">return</span> out
                                 }
-                                
+
                                 <span class="keyword">var</span> outoff = <span class="integer">0</span>
                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
                                         <span class="keyword">var</span> item = <span class="local-variable">arguments</span>[i]
@@ -4438,7 +4442,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="keyword">if</span>(ch !== <span class="integer">115</span> &amp;&amp; ch !== <span class="integer">116</span>){i = <span class="integer">0</span>;<span class="keyword">break</span>}
                                 }
                         }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(mysize === <span class="integer">3</span>){ 
+                        <span class="keyword">else</span> <span class="keyword">if</span>(mysize === <span class="integer">3</span>){
                                 <span class="keyword">while</span>(i &lt; l){ <span class="comment">// xyz</span>
                                         ch = key.charCodeAt(i++)
                                         <span class="keyword">if</span>(ch !== <span class="integer">120</span> &amp;&amp; ch !== <span class="integer">121</span> &amp;&amp; ch !== <span class="integer">122</span>) {i = <span class="integer">0</span>;<span class="keyword">break</span>}
@@ -4464,14 +4468,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">while</span>(i &lt; l){ <span class="comment">// stpq</span>
                                         ch = key.charCodeAt(i++)
                                         <span class="keyword">if</span>(ch !== <span class="integer">115</span> &amp;&amp; ch !== <span class="integer">116</span> &amp;&amp; ch !== <span class="integer">112</span> &amp;&amp; ch !== <span class="integer">113</span>){i = <span class="integer">0</span>;<span class="keyword">break</span>}
-                                }                                
+                                }
                         }
                         <span class="keyword">if</span>(i == l){
                                 <span class="keyword">var</span> swiz = define.typemap.swizzle[myprim.def.type]
                                 <span class="keyword">if</span>(!swiz) <span class="keyword">return</span>
                                 <span class="keyword">return</span> swiz[l]
                         }
-                }                        
+                }
 
                 <span class="keyword">if</span>(id !== <span class="predefined-constant">undefined</span>) Struct.id = id
 
@@ -4572,7 +4576,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">else</span>{
                                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> node){
                                         node[key] = define.structFromJSON(node[key]);
-                                }                                
+                                }
                         }
                 }
                 <span class="keyword">return</span> node;
@@ -4629,7 +4633,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">else</span> <span class="local-variable">this</span>.allocated = <span class="local-variable">this</span>.allocated * <span class="integer">2</span> <span class="comment">// exponential strategy</span>
 
                                 <span class="keyword">var</span> oldarray = <span class="local-variable">this</span>.array
-                                <span class="keyword">var</span> newarray = <span class="keyword">new</span> <span class="local-variable">this</span>.arrayconstructor(<span class="local-variable">this</span>.allocated * <span class="local-variable">this</span>.slots)                                
+                                <span class="keyword">var</span> newarray = <span class="keyword">new</span> <span class="local-variable">this</span>.arrayconstructor(<span class="local-variable">this</span>.allocated * <span class="local-variable">this</span>.slots)
                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; oldsize; i++) newarray[i] = oldarray[i]
                                 <span class="local-variable">this</span>.array = newarray
                         }
@@ -4646,7 +4650,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
 
                 self.<span class="function">push</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.length ++ 
+                        <span class="local-variable">this</span>.length ++
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.length &gt;= <span class="local-variable">this</span>.allocated) <span class="local-variable">this</span>.ensureSize(<span class="local-variable">this</span>.length)
                         <span class="local-variable">this</span>.clean = <span class="predefined-constant">false</span>
                         <span class="keyword">var</span> base = (<span class="local-variable">this</span>.length -<span class="integer">1</span>) * <span class="local-variable">this</span>.slots
@@ -4695,11 +4699,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
 
                 <span class="comment">// Simple quad geometry api</span>
-                <span class="comment">// 0___14 </span>
+                <span class="comment">// 0___14</span>
                 <span class="comment">// |   /|</span>
                 <span class="comment">// |  / |</span>
                 <span class="comment">// | /  |</span>
-                <span class="comment">// |/   | </span>
+                <span class="comment">// |/   |</span>
                 <span class="comment">// 23---5</span>
 
                 <span class="comment">// lets return a single slot</span>
@@ -4823,9 +4827,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="key">tmin_y</span>: vfloat32[off++],
                                         <span class="key">tmax_x</span>: vfloat32[off++],
                                         <span class="key">tmax_y</span>: vfloat32[off++]
-                                }                                
+                                }
                                 glyphs[unicode] = glyph
-                                glyph.width = glyph.max_x - glyph.min_x 
+                                glyph.width = glyph.max_x - glyph.min_x
                                 glyph.height = glyph.max_y - glyph.min_y
                         }
                         font.tex_array = blob.slice(off * <span class="integer">4</span>)
@@ -4857,13 +4861,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="key">atlas_y</span>: vuint8[off*<span class="integer">4</span>+<span class="integer">3</span>]
                                 }
                                 off++
-                                glyph.width = glyph.max_x - glyph.min_x 
+                                glyph.width = glyph.max_x - glyph.min_x
                                 glyph.height = glyph.max_y - glyph.min_y
                         }
                         font.tex_array = blob.slice(off * <span class="integer">4</span>)
                 }
                 <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Error in font file</span><span class="delimiter">'</span></span>)
-                
+
                 <span class="keyword">if</span>(!(<span class="integer">32</span> <span class="keyword">in</span> font.glyphs)) font.count++
                 font.glyphs[<span class="integer">32</span>] = { <span class="comment">// space</span>
                         <span class="key">min_x</span>: <span class="integer">0</span>,
@@ -4947,7 +4951,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 <span class="comment">// primitive types</span>
                 exports.string = String
-                exports.<span class="reserved">boolean</span> = 
+                exports.<span class="reserved">boolean</span> =
                 exports.bool = define.struct({<span class="key">prim</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">bool</span><span class="delimiter">'</span></span>, <span class="key">bytes</span>:<span class="integer">4</span>, <span class="key">array</span>:Int32Array},<span class="string"><span class="delimiter">'</span><span class="content">bool</span><span class="delimiter">'</span></span>)
                 exports.<span class="reserved">float</span> =
                 exports.float32 = define.struct({<span class="key">prim</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">float32</span><span class="delimiter">'</span></span>,<span class="key">bytes</span>:<span class="integer">4</span>, <span class="key">array</span>:Float32Array},<span class="string"><span class="delimiter">'</span><span class="content">float32</span><span class="delimiter">'</span></span>)
@@ -5011,7 +5015,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="comment">// vec2 type</span>
                 exports.vec2 = define.struct({
                         <span class="key">r</span>:<span class="string"><span class="delimiter">'</span><span class="content">x</span><span class="delimiter">'</span></span>,<span class="key">g</span>:<span class="string"><span class="delimiter">'</span><span class="content">y</span><span class="delimiter">'</span></span>,
-                        <span class="key">s</span>:<span class="string"><span class="delimiter">'</span><span class="content">x</span><span class="delimiter">'</span></span>,<span class="key">t</span>:<span class="string"><span class="delimiter">'</span><span class="content">y</span><span class="delimiter">'</span></span>,                
+                        <span class="key">s</span>:<span class="string"><span class="delimiter">'</span><span class="content">x</span><span class="delimiter">'</span></span>,<span class="key">t</span>:<span class="string"><span class="delimiter">'</span><span class="content">y</span><span class="delimiter">'</span></span>,
                         <span class="key">x</span>:exports.float32,
                         <span class="key">y</span>:exports.float32
                 }, <span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>)
@@ -5036,7 +5040,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 <span class="comment">// mat3</span>
                 exports.mat3 = define.struct({
-                        <span class="key">a</span>:exports.float32, <span class="key">b</span>:exports.float32, <span class="key">c</span>:exports.float32, 
+                        <span class="key">a</span>:exports.float32, <span class="key">b</span>:exports.float32, <span class="key">c</span>:exports.float32,
                         <span class="key">d</span>:exports.float32, <span class="key">e</span>:exports.float32, <span class="key">f</span>:exports.float32,
                         <span class="key">g</span>:exports.float32, <span class="key">h</span>:exports.float32, <span class="key">i</span>:exports.float32
                 }, <span class="string"><span class="delimiter">'</span><span class="content">mat3</span><span class="delimiter">'</span></span>)
@@ -5056,7 +5060,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">z</span>:exports.float32,
                         <span class="key">w</span>:exports.float32
                 }, <span class="string"><span class="delimiter">'</span><span class="content">quat</span><span class="delimiter">'</span></span>)
-                
+
 
                 exports.<span class="function">Enum</span> = <span class="keyword">function</span> <span class="function">Enum</span>(){
                         <span class="keyword">var</span> matchset = Array.prototype.slice.call(<span class="local-variable">arguments</span>)
@@ -5068,8 +5072,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; matchset.length; i++) matchset[i] = enumCanon(matchset[i])
-                                
-                        <span class="keyword">function</span> <span class="function">Enum</span>(value){                                
+
+                        <span class="keyword">function</span> <span class="function">Enum</span>(value){
                                 <span class="keyword">if</span>(<span class="keyword">typeof</span> value !== <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
                                         value = String(value)
                                 <span class="comment">//        console.error('Enum not string' + value, origset.join('|'))</span>
@@ -5279,29 +5283,29 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         }
 
         <span class="keyword">function</span> <span class="function">defineComponent</span>(proto, name, index){
-                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> <span class="local-variable">this</span>[index] },<span class="function">set</span>:<span class="keyword">function</span>(v){ 
-                        <span class="local-variable">this</span>[index] = v 
+                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> <span class="local-variable">this</span>[index] },<span class="function">set</span>:<span class="keyword">function</span>(v){
+                        <span class="local-variable">this</span>[index] = v
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.atChange) <span class="local-variable">this</span>.atChange(index)
                 }})
         }
 
         <span class="keyword">function</span> <span class="function">defineSwiz2</span>(proto, name, i0, i1, vec){
-                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> vec(<span class="local-variable">this</span>[i0], <span class="local-variable">this</span>[i1]) },<span class="function">set</span>:<span class="keyword">function</span>(v){ 
-                        <span class="local-variable">this</span>[i0] = v[<span class="integer">0</span>], <span class="local-variable">this</span>[i1] = v[<span class="integer">1</span>] 
+                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> vec(<span class="local-variable">this</span>[i0], <span class="local-variable">this</span>[i1]) },<span class="function">set</span>:<span class="keyword">function</span>(v){
+                        <span class="local-variable">this</span>[i0] = v[<span class="integer">0</span>], <span class="local-variable">this</span>[i1] = v[<span class="integer">1</span>]
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.atChange) <span class="local-variable">this</span>.atChange(-<span class="integer">1</span>)
                 }})
         }
 
         <span class="keyword">function</span> <span class="function">defineSwiz3</span>(proto, name, i0, i1, i2, vec){
-                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> vec(<span class="local-variable">this</span>[i0], <span class="local-variable">this</span>[i1], <span class="local-variable">this</span>[i2]) },<span class="function">set</span>:<span class="keyword">function</span>(v){ 
-                        <span class="local-variable">this</span>[i0] = v[<span class="integer">0</span>], <span class="local-variable">this</span>[i1] = v[<span class="integer">1</span>], <span class="local-variable">this</span>[i2] = v[<span class="integer">2</span>] 
+                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> vec(<span class="local-variable">this</span>[i0], <span class="local-variable">this</span>[i1], <span class="local-variable">this</span>[i2]) },<span class="function">set</span>:<span class="keyword">function</span>(v){
+                        <span class="local-variable">this</span>[i0] = v[<span class="integer">0</span>], <span class="local-variable">this</span>[i1] = v[<span class="integer">1</span>], <span class="local-variable">this</span>[i2] = v[<span class="integer">2</span>]
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.atChange) <span class="local-variable">this</span>.atChange(-<span class="integer">1</span>)
                 }})
         }
 
         <span class="keyword">function</span> <span class="function">defineSwiz4</span>(proto, name, i0, i1, i2, i3, vec){
-                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> vec(<span class="local-variable">this</span>[i0], <span class="local-variable">this</span>[i1], <span class="local-variable">this</span>[i2], <span class="local-variable">this</span>[i3]) },<span class="function">set</span>:<span class="keyword">function</span>(v){ 
-                        <span class="local-variable">this</span>[i0] = v[<span class="integer">0</span>], <span class="local-variable">this</span>[i1] = v[<span class="integer">1</span>], <span class="local-variable">this</span>[i2] = v[<span class="integer">2</span>], <span class="local-variable">this</span>[i3] = v[<span class="integer">3</span>] 
+                Object.defineProperty(proto, name, {<span class="function">get</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> vec(<span class="local-variable">this</span>[i0], <span class="local-variable">this</span>[i1], <span class="local-variable">this</span>[i2], <span class="local-variable">this</span>[i3]) },<span class="function">set</span>:<span class="keyword">function</span>(v){
+                        <span class="local-variable">this</span>[i0] = v[<span class="integer">0</span>], <span class="local-variable">this</span>[i1] = v[<span class="integer">1</span>], <span class="local-variable">this</span>[i2] = v[<span class="integer">2</span>], <span class="local-variable">this</span>[i3] = v[<span class="integer">3</span>]
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.atChange) <span class="local-variable">this</span>.atChange(-<span class="integer">1</span>)
                 }})
         }

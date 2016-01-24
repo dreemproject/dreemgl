@@ -440,10 +440,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n286" name="n286">286</a>
 <a href="#n287" name="n287">287</a>
 <a href="#n288" name="n288">288</a>
+<a href="#n289" name="n289">289</a>
+<strong><a href="#n290" name="n290">290</a></strong>
+<a href="#n291" name="n291">291</a>
+<a href="#n292" name="n292">292</a>
+<a href="#n293" name="n293">293</a>
+<a href="#n294" name="n294">294</a>
+<a href="#n295" name="n295">295</a>
+<a href="#n296" name="n296">296</a>
+<a href="#n297" name="n297">297</a>
+<a href="#n298" name="n298">298</a>
+<a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
@@ -461,6 +474,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> NodeWebSocket = require(<span class="string"><span class="delimiter">'</span><span class="content">./nodewebsocket</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> mimeFromFile = require(<span class="string"><span class="delimiter">'</span><span class="content">./mimefromfile</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> CompositionServer = require(<span class="string"><span class="delimiter">'</span><span class="content">./compositionserver</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> XMLConverter = require(<span class="string"><span class="delimiter">'</span><span class="content">./xmlconverter</span><span class="delimiter">'</span></span>)
 
         <span class="keyword">var</span> BusServer = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/busserver</span><span class="delimiter">'</span></span>)
 
@@ -493,7 +507,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         console.color(<span class="string"><span class="delimiter">'</span><span class="content">Server running</span><span class="delimiter">'</span></span> + txt + <span class="string"><span class="delimiter">'</span><span class="content">~~ Ready to go!</span><span class="content">\n</span><span class="delimiter">'</span></span>)
                 }
                 <span class="keyword">else</span> {
-                        <span class="local-variable">this</span>.address = <span class="string"><span class="delimiter">'</span><span class="content">http://</span><span class="delimiter">'</span></span> + iface + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> 
+                        <span class="local-variable">this</span>.address = <span class="string"><span class="delimiter">'</span><span class="content">http://</span><span class="delimiter">'</span></span> + iface + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>
                         console.color(<span class="string"><span class="delimiter">'</span><span class="content">Server running on ~c~</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.address + <span class="string"><span class="delimiter">&quot;</span><span class="content">~~</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
                 }
                 <span class="comment">// use the browser spawner</span>
@@ -514,7 +528,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }
                         }
                         <span class="comment">//file = file.slice(define.expandVariables(define.$root).length).replace(/\\/g, &quot;/&quot;)</span>
-                        <span class="comment">// ok lets rip off our </span>
+                        <span class="comment">// ok lets rip off our</span>
                         <span class="local-variable">this</span>.broadcast({
                                 <span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">filechange</span><span class="delimiter">'</span></span>,
                                 <span class="key">file</span>: file
@@ -543,7 +557,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.default_composition = <span class="predefined-constant">null</span>
 
         <span class="local-variable">this</span>.<span class="function">getComposition</span> = <span class="keyword">function</span>(file){
-                
+
                 <span class="comment">// lets find the composition either in define.COMPOSITIONS</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.compositions[file]) <span class="local-variable">this</span>.compositions[file] = <span class="keyword">new</span> CompositionServer(<span class="local-variable">this</span>.args, file, <span class="local-variable">this</span>)
                 <span class="keyword">return</span> <span class="local-variable">this</span>.compositions[file]
@@ -555,7 +569,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 sock.url = req.url
                 <span class="keyword">var</span> mypath = req.url.slice(<span class="integer">1</span>)
                 <span class="keyword">if</span>(mypath) <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + mypath).busserver.addWebSocket(sock)
-                <span class="keyword">else</span> <span class="local-variable">this</span>.busserver.addWebSocket(sock) 
+                <span class="keyword">else</span> <span class="local-variable">this</span>.busserver.addWebSocket(sock)
         }
 
         <span class="comment">// maps an input path into our files</span>
@@ -614,7 +628,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         proxy_req.end()
                         <span class="keyword">return</span>
                 }
-                
+
                 <span class="keyword">if</span>(requrl ==<span class="string"><span class="delimiter">'</span><span class="content">/favicon.ico</span><span class="delimiter">'</span></span>){
                         res.writeHead(<span class="integer">200</span>)
                         res.end()
@@ -623,8 +637,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">var</span> reqquery = requrl.split(<span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span>)
 
-                <span class="comment">// ok if we are a /single fetch </span>
+                <span class="comment">// ok if we are a /single fetch</span>
                 <span class="keyword">var</span> file = <span class="local-variable">this</span>.mapPath(reqquery[<span class="integer">0</span>])
+
+                <span class="keyword">var</span> urlext = define.fileExt(reqquery[<span class="integer">0</span>])
+                <span class="comment">// write .dre to .dre.js files</span>
+                <span class="keyword">if</span> (urlext === <span class="string"><span class="delimiter">'</span><span class="content">dre</span><span class="delimiter">'</span></span>) {
+                        <span class="keyword">var</span> dreurl = reqquery[<span class="integer">0</span>];
+                        <span class="keyword">var</span> filepath = define.expandVariables(<span class="string"><span class="delimiter">'</span><span class="content">$root</span><span class="delimiter">'</span></span> + dreurl)
+                        <span class="keyword">var</span> dre = fs.readFileSync(filepath);
+                        <span class="keyword">var</span> js = XMLConverter(dre)
+                        <span class="comment">// TODO: warn for overwrites to changed file, e.g. check hash of file versus old version</span>
+                        fs.writeFileSync(filepath + <span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>, js);
+                        <span class="local-variable">this</span>.watcher.watch(file)
+                }
 
                 <span class="keyword">if</span>(file === <span class="predefined-constant">false</span>){ <span class="comment">// file is a search</span>
                         <span class="comment">// what are we looking for</span>
@@ -646,7 +672,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">var</span> fileext = define.fileExt(file)
-                <span class="keyword">if</span>(!fileext){
+                <span class="keyword">if</span>(!fileext || fileext === <span class="string"><span class="delimiter">'</span><span class="content">dre</span><span class="delimiter">'</span></span>){
                         <span class="keyword">var</span> composition = <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+reqquery[<span class="integer">0</span>].slice(<span class="integer">1</span>))
                         <span class="keyword">if</span>(composition) <span class="keyword">return</span> composition.request(req, res)
                 }
@@ -659,7 +685,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">if</span>(err || !stat.isFile()){
                                                 res.writeHead(<span class="integer">404</span>)
                                                 res.end()
-                                                console.color(<span class="string"><span class="delimiter">'</span><span class="content">~br~Error~y~ </span><span class="delimiter">'</span></span> + file + <span class="string"><span class="delimiter">'</span><span class="content">~~ File not found, returning 403</span><span class="content">\n</span><span class="delimiter">'</span></span>)
+                                                console.color(<span class="string"><span class="delimiter">'</span><span class="content">~br~Error~y~ </span><span class="delimiter">'</span></span> + file + <span class="string"><span class="delimiter">'</span><span class="content">~~ File not found, returning 404</span><span class="content">\n</span><span class="delimiter">'</span></span>)
                                                 <span class="keyword">return</span>
                                         }
                                         processFile(stat)
@@ -680,7 +706,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span>( req.headers[<span class="string"><span class="delimiter">'</span><span class="content">if-none-match</span><span class="delimiter">'</span></span>] == header.etag){
                                 res.writeHead(<span class="integer">304</span>,header)
                                 res.end()
-                                <span class="keyword">return</span> 
+                                <span class="keyword">return</span>
                         }
                         <span class="comment">// lets add a gzip cache</span>
                         <span class="keyword">var</span> type = header[<span class="string"><span class="delimiter">&quot;</span><span class="content">Content-Type</span><span class="delimiter">&quot;</span></span>]
@@ -716,7 +742,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">else</span>{
                                         <span class="keyword">var</span> stream = fs.createReadStream(file)
                                         res.writeHead(<span class="integer">200</span>, header)
-                                        stream.pipe(res)                                        
+                                        stream.pipe(res)
                                 }
                         }
                         <span class="keyword">else</span>{
@@ -725,10 +751,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 stream.pipe(res)
                         }
                         <span class="comment">// ok so we get a filechange right?</span>
-                        
+
                 }.bind(<span class="local-variable">this</span>)
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

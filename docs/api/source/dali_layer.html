@@ -260,11 +260,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n106" name="n106">106</a>
 <a href="#n107" name="n107">107</a>
 <a href="#n108" name="n108">108</a>
-<a href="#n109" name="n109">109</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
@@ -282,10 +281,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// Assign an id to each daliactor object</span>
+        <span class="comment">// Assign a unique id to each daliactor object</span>
         <span class="keyword">var</span> DaliLayer = exports
         DaliLayer.GlobalId = <span class="integer">0</span>
 
@@ -295,7 +294,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * You can access the dali.Layer object as this.dalilayer
          * @param {Object} parent The layer object to add this layer to. If this
          * is not defined, the layer is added to the top-level layer. If null,
-         * the layer is not added.
+         * the layer is not added. The null case is used to initialize the
+         * root layer.
          * @param {Number} width The width of the layer, in pixels.
          * @param {Number} height The height of the layer, in pixels.
          */</span>
@@ -308,7 +308,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.dalilayer = <span class="keyword">new</span> dali.Layer();
 
                 <span class="local-variable">this</span>.onstage = <span class="predefined-constant">false</span>;
-                
+
                 <span class="local-variable">this</span>.dalilayer.behavior = <span class="string"><span class="delimiter">&quot;</span><span class="content">Dali::Layer::LAYER_2D</span><span class="delimiter">&quot;</span></span>;
                 <span class="keyword">if</span> (width &amp;&amp; height)
                         <span class="local-variable">this</span>.dalilayer.size = [width, height, <span class="integer">0</span>];
@@ -323,8 +323,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.size = [</span><span class="delimiter">'</span></span> + width + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + height + <span class="string"><span class="delimiter">'</span><span class="content">, 0];</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.parentOrigin = dali.TOP_LEFT;</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.anchorPoint = dali.TOP_LEFT;</span><span class="delimiter">'</span></span>);
-                }                
-                
+                }
+
 
                 <span class="comment">// Add to another layer unless parent is null (root layer)</span>
                 <span class="keyword">if</span> (<span class="keyword">typeof</span> parent === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)
@@ -342,14 +342,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * @param {object} actor DaliActor or DaliLayer object
          */</span>
         <span class="local-variable">this</span>.<span class="function">add</span> = <span class="keyword">function</span>(actor) {
-<span class="comment">//console.trace('adding layer');</span>
                 <span class="keyword">if</span> (actor.dalilayer) {
                         <span class="comment">// Adding a layer to an existing layer</span>
                         <span class="local-variable">this</span>.dalilayer.add(actor.dalilayer)
                 }
                 <span class="keyword">else</span> {
                         <span class="comment">// Adding an actor to a layer</span>
-<span class="comment">//console.trace(&quot;adding actor to layer&quot;, Object.keys(actor));</span>
                         <span class="local-variable">this</span>.dalilayer.add(actor.daliactor)
                 }
 

@@ -1701,13 +1701,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// alias for the z component of pos</span>
                 <span class="key">front</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">pos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
-                <span class="comment">// the bottom/right/rear corner</span>
+                <span class="comment">// internal, the bottom/right/rear corner, used by layout</span>
                 <span class="key">corner</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>)}),
-                <span class="comment">// alias for the x component of corner</span>
+                <span class="comment">// internal, alias for the x component of corner</span>
                 <span class="key">right</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
-                <span class="comment">// alias for  y component of corner</span>
+                <span class="comment">// internal, alias for  y component of corner</span>
                 <span class="key">bottom</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>,<span class="key">index</span>:<span class="integer">1</span>}),
-                <span class="comment">// alias for z component of corner</span>
+                <span class="comment">// internal, alias for z component of corner</span>
                 <span class="key">rear</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// the background color of a view, referenced by various shaders</span>
@@ -1736,7 +1736,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">w</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
                 <span class="comment">// alias for the y component of size</span>
                 <span class="key">h</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
-                <span class="comment">// alias for the z component of size</span>
+                <span class="comment">// internal, alias for the z component of size</span>
                 <span class="key">d</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// alias for the x component of size</span>
@@ -2190,7 +2190,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(node){
                         <span class="keyword">if</span>(node._cursor !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>){
-                                <span class="local-variable">this</span>.screen.mouse.cursor = node._cursor
+                                <span class="local-variable">this</span>.screen.pointer.cursor = node._cursor
                                 <span class="keyword">break</span>
                         }
                         node = node.parent
@@ -2649,13 +2649,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
                         <span class="keyword">var</span> flex = <span class="local-variable">this</span>._flex
                         <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
-                                                
+
                         <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?layout.width:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>];
                         <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?layout.height: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>];
-                        
+
                         <span class="comment">//console.log(this._percentsize, presizex,presizey);</span>
                         <span class="comment">//this._size = vec2(layout.width, layout.height)</span>
-                        
+
                         <span class="keyword">var</span> flexwrap = <span class="local-variable">this</span>._flexwrap
                         <span class="local-variable">this</span>._flex = <span class="integer">1</span>
                         <span class="local-variable">this</span>._size = vec2(presizex, presizey)
@@ -2675,33 +2675,33 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">else</span>{
                         <span class="keyword">var</span> layout = <span class="local-variable">this</span>._layout
-                        
+
                         <span class="comment">//this._size = vec2(presizex, presizey)</span>
                         <span class="keyword">var</span> size = <span class="local-variable">this</span>._size
                         <span class="keyword">var</span> pos = <span class="local-variable">this</span>._pos;
-                        
+
                         <span class="keyword">var</span> presizex = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">0</span>])?size[<span class="integer">0</span>]:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">0</span>];
                         <span class="keyword">var</span> presizey = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">1</span>])?size[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">1</span>];
                         <span class="keyword">var</span> presizez = isNaN(<span class="local-variable">this</span>._percentsize[<span class="integer">2</span>])?size[<span class="integer">2</span>]: <span class="local-variable">this</span>.parent.depth * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentsize[<span class="integer">2</span>];
-                        
+
                         <span class="keyword">var</span> preposx = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">0</span>])?pos[<span class="integer">0</span>]:<span class="local-variable">this</span>.parent._layout.width * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">0</span>];
                         <span class="keyword">var</span> preposy = isNaN(<span class="local-variable">this</span>._percentpos[<span class="integer">1</span>])?pos[<span class="integer">1</span>]: <span class="local-variable">this</span>.parent._layout.height * <span class="float">0.01</span> * <span class="local-variable">this</span>._percentpos[<span class="integer">1</span>];
-                        
-                        
+
+
                         <span class="comment">//console.log(&quot;This is where we get the percentage size&quot;, this._percentsize, presizex,presizey);</span>
-                        
+
                         <span class="local-variable">this</span>._size = vec2(presizex, presizey);
                         <span class="local-variable">this</span>._pos = vec2(preposx, preposy);
                         <span class="comment">//console.log(this._percentpos, this._pos ,pos);</span>
-                        
+
                         <span class="keyword">var</span> copynodes = FlexLayout.fillNodes(<span class="local-variable">this</span>)
                         FlexLayout.computeLayout(copynodes)
                         <span class="local-variable">this</span>._size = size
                         <span class="local-variable">this</span>._pos = pos;
-                        
+
                         emitPostLayout(copynodes)
-                        
-                        
+
+
                 }
         }
 

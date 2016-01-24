@@ -218,10 +218,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n64" name="n64">64</a>
 <a href="#n65" name="n65">65</a>
 <a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
@@ -231,7 +238,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  * class is used to encapsulate the api to simplify how it is embedded into
  * the dreemgl dali platform.
  *
- * Each instance of DaliRenderer contains a dali.Renderer object, which 
+ * Each instance of DaliRenderer contains a dali.Renderer object, which
  * combines a DaliGeometry object and a DaliMaterial object
  */</span>
 
@@ -241,12 +248,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// Assign an id to each dalirenderer object</span>
+        <span class="comment">// Assign a unique id to each dalirenderer object</span>
         <span class="keyword">var</span> DaliRenderer = exports
         DaliRenderer.GlobalId = <span class="integer">0</span>
+
+        <span class="comment">// The depth index does not auto-increment. Child layers should have a</span>
+        <span class="comment">// larger value than parent so child actors are rendered after parent.</span>
+        <span class="comment">// An alternate solution suggested by Nick, is to add an actor as a child</span>
+        <span class="comment">// to another actor (no depthindex changes are needed).</span>
+        DaliRenderer.DepthIndex = <span class="integer">5</span>
 
         <span class="comment">/**
          * @method constructor
@@ -265,12 +278,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.dalimaterial = material;
                 <span class="local-variable">this</span>.dalirenderer = <span class="keyword">new</span> dali.Renderer(<span class="local-variable">this</span>.daligeometry.daligeometry, <span class="local-variable">this</span>.dalimaterial.dalimaterial);
 
-                <span class="comment">//this.dalirenderer.depthIndex = 0;</span>
+                DaliRenderer.DepthIndex += <span class="integer">5</span>;
+                <span class="local-variable">this</span>.dalirenderer.depthIndex = DaliRenderer.DepthIndex;
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.Renderer(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.daligeometry.name() + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.dalimaterial.name() + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                        <span class="comment">//console.log('DALICODE: ' + this.name() + '.depthIndex = 0;');</span>
-                }                
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.depthIndex = </span><span class="delimiter">'</span></span> + DaliRenderer.DepthIndex + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>);
+                }
 
         }
 

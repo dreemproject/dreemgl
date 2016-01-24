@@ -280,156 +280,135 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n126" name="n126">126</a>
 <a href="#n127" name="n127">127</a>
 <a href="#n128" name="n128">128</a>
-<a href="#n129" name="n129">129</a>
-<strong><a href="#n130" name="n130">130</a></strong>
-<a href="#n131" name="n131">131</a>
-<a href="#n132" name="n132">132</a>
-<a href="#n133" name="n133">133</a>
-<a href="#n134" name="n134">134</a>
-<a href="#n135" name="n135">135</a>
-<a href="#n136" name="n136">136</a>
-<a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
 </pre></td>
-  <td class="code"><pre>module.exports = ForeverAgent
-ForeverAgent.SSL = ForeverAgentSSL
+  <td class="code"><pre><span class="comment">//Pure JS based composition</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, treeview,  cadgrid, splitcontainer, screen, view, label, button, <span class="predefined">$widgets$</span>, propviewer, colorpicker, <span class="predefined">$$</span>, flowgraph){        
 
-<span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>)
-  , Agent = require(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>).Agent
-  , net = require(<span class="string"><span class="delimiter">'</span><span class="content">net</span><span class="delimiter">'</span></span>)
-  , tls = require(<span class="string"><span class="delimiter">'</span><span class="content">tls</span><span class="delimiter">'</span></span>)
-  , AgentSSL = require(<span class="string"><span class="delimiter">'</span><span class="content">https</span><span class="delimiter">'</span></span>).Agent
-  
-<span class="keyword">function</span> <span class="function">getConnectionName</span>(host, port) {  
-  <span class="keyword">var</span> name = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> host === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-    name = host + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + port
-  } <span class="keyword">else</span> {
-    <span class="comment">// For node.js v012.0 and iojs-v1.5.1, host is an object. And any existing localAddress is part of the connection name.</span>
-    name = host.host + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + host.port + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + (host.localAddress ? (host.localAddress + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>) : <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>)
-  }
-  <span class="keyword">return</span> name
-}    
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, fileio){
+                <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
+                <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
 
-<span class="keyword">function</span> <span class="function">ForeverAgent</span>(options) {
-  <span class="keyword">var</span> self = <span class="local-variable">this</span>
-  self.options = options || {}
-  self.requests = {}
-  self.sockets = {}
-  self.freeSockets = {}
-  self.maxSockets = self.options.maxSockets || Agent.defaultMaxSockets
-  self.minSockets = self.options.minSockets || ForeverAgent.defaultMinSockets
-  self.on(<span class="string"><span class="delimiter">'</span><span class="content">free</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(socket, host, port) {
-    <span class="keyword">var</span> name = getConnectionName(host, port)
+                <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>
+                <span class="local-variable">this</span>.rootdirectory = <span class="string"><span class="delimiter">'</span><span class="content">$compositions</span><span class="delimiter">'</span></span>
 
-    <span class="keyword">if</span> (self.requests[name] &amp;&amp; self.requests[name].length) {
-      self.requests[name].shift().onSocket(socket)
-    } <span class="keyword">else</span> <span class="keyword">if</span> (self.sockets[name].length &lt; self.minSockets) {
-      <span class="keyword">if</span> (!self.freeSockets[name]) self.freeSockets[name] = []
-      self.freeSockets[name].push(socket)
-      
-      <span class="comment">// if an error happens while we don't use the socket anyway, meh, throw the socket away</span>
-      <span class="keyword">var</span> <span class="function">onIdleError</span> = <span class="keyword">function</span>() {
-        socket.destroy()
-      }
-      socket._onIdleError = onIdleError
-      socket.on(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>, onIdleError)
-    } <span class="keyword">else</span> {
-      <span class="comment">// If there are no pending requests just destroy the</span>
-      <span class="comment">// socket and it will get removed from the pool. This</span>
-      <span class="comment">// gets us out of timeout issues and allows us to</span>
-      <span class="comment">// default to Connection:keep-alive.</span>
-      socket.destroy()
-    }
-  })
+                <span class="local-variable">this</span>.<span class="function">saveComposition</span> = <span class="keyword">function</span>(name, data){
+                        fs.writeFile(define.expandVariables(name)+<span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">define.class(&quot;$server/composition&quot;,</span><span class="delimiter">'</span></span>+data+<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>)
+                }
 
-}
-util.inherits(ForeverAgent, Agent)
+                <span class="local-variable">this</span>.<span class="function">newComposition</span> = <span class="keyword">function</span>(name){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">new composition creation requested:</span><span class="delimiter">&quot;</span></span>, name)
+                        <span class="comment">// todo: create folder in default composition path</span>
+                        <span class="comment">// todo: create default index.js using options from options.</span>
+                        <span class="comment">// todo: if things go wrong, return false</span>
+                        <span class="keyword">var</span> path = define.expandVariables(<span class="local-variable">this</span>.rootdirectory)+<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+name
+                        <span class="keyword">var</span> file = path +<span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>;
+                        <span class="keyword">try</span>{
+                                fs.mkdirSync(path)
+                        }<span class="keyword">catch</span>(e){}
 
-ForeverAgent.defaultMinSockets = <span class="integer">5</span>
+                        fs.writeFileSync(file,
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">define.class('$server/composition',function(){</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">        this.render = function(){ return [</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">        ]}</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">})</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">return</span>  <span class="local-variable">this</span>.rootdirectory + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + name
+                }
 
+                <span class="local-variable">this</span>.<span class="function">getCompositionList</span> = <span class="keyword">function</span>(){
+                        
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+                        
+                        <span class="keyword">var</span> pathset = [<span class="string"><span class="delimiter">&quot;</span><span class="content">compositions</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$compositions</span><span class="delimiter">'</span></span>]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, [])
+                        ret.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">compositions</span><span class="delimiter">&quot;</span></span>
+                        root.children.push(ret)
+                        <span class="keyword">return</span> root
 
-ForeverAgent.prototype.createConnection = net.createConnection
-ForeverAgent.prototype.addRequestNoreuse = Agent.prototype.addRequest
-ForeverAgent.prototype.<span class="function">addRequest</span> = <span class="keyword">function</span>(req, host, port) {
-  <span class="keyword">var</span> name = getConnectionName(host, port)
-  
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> host !== <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-    <span class="keyword">var</span> options = host
-    port = options.port
-    host = options.host
-  }
+                        <span class="keyword">return</span> [];
+                }
+                
+                <span class="keyword">function</span> <span class="function">readRecurDir</span>(base, inname, ignoreset){
+                        <span class="keyword">var</span> local = path.join(base, inname)
+                        <span class="keyword">var</span> dir = fs.readdirSync(local)
+                        <span class="keyword">var</span> out = {<span class="key">isfolder</span>:<span class="predefined-constant">true</span>, <span class="key">name</span>:inname, <span class="key">collapsed</span>:<span class="integer">1</span>, <span class="key">children</span>:[]}
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; dir.length;i++){
+                                <span class="keyword">var</span> name = dir[i]
+                                <span class="keyword">var</span> mypath = path.join(local, name)
+                                <span class="keyword">if</span>(ignoreset){
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; ignoreset.length; j++){
+                                                <span class="keyword">var</span> item = ignoreset[j]
+                                                <span class="keyword">if</span>(<span class="keyword">typeof</span> item === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
+                                                        <span class="keyword">if</span>(mypath.indexOf(item) !== -<span class="integer">1</span>)  <span class="keyword">break</span>
+                                                }
+                                                <span class="keyword">else</span>{
+                                                        <span class="keyword">if</span>(mypath.match(item)) <span class="keyword">break</span>
+                                                }
+                                        }
+                                        <span class="keyword">if</span>(j &lt; ignoreset.length) <span class="keyword">continue</span>
+                                }
+                                <span class="keyword">var</span> stat = fs.statSync(mypath)
+                                <span class="keyword">if</span>(stat.isDirectory()){
+                                        out.children.push(readRecurDir(local, name, ignoreset))
+                                }
+                                <span class="keyword">else</span>{
+                                        out.children.push({<span class="key">name</span>:name, <span class="key">isfolder</span>:<span class="predefined-constant">false</span>, <span class="key">size</span>:stat.size})
+                                }
+                        }
+                        <span class="keyword">return</span> out
+                }
 
-  <span class="keyword">if</span> (<span class="local-variable">this</span>.freeSockets[name] &amp;&amp; <span class="local-variable">this</span>.freeSockets[name].length &gt; <span class="integer">0</span> &amp;&amp; !req.useChunkedEncodingByDefault) {
-    <span class="keyword">var</span> idleSocket = <span class="local-variable">this</span>.freeSockets[name].pop()
-    idleSocket.removeListener(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>, idleSocket._onIdleError)
-    <span class="keyword">delete</span> idleSocket._onIdleError
-    req._reusedSocket = <span class="predefined-constant">true</span>
-    req.onSocket(idleSocket)
-  } <span class="keyword">else</span> {
-    <span class="local-variable">this</span>.addRequestNoreuse(req, host, port)
-  }
-}
+                <span class="comment">// recursively read the flowgraph related class library</span>
+                <span class="local-variable">this</span>.<span class="function">readFlowLibrary</span> = <span class="keyword">function</span>(ignoreset){
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+                        
+                        <span class="keyword">var</span> pathset = [<span class="string"><span class="delimiter">&quot;</span><span class="content">flow</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$flow</span><span class="delimiter">'</span></span>]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, [])
+                        ret.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">flow</span><span class="delimiter">&quot;</span></span>
+                        root.children.push(ret)
+                        <span class="keyword">return</span> root
+                        
+                }
+                
+                <span class="comment">// recursively read all directories starting from a base path</span>
+                <span class="local-variable">this</span>.<span class="function">readAllPaths</span> = <span class="keyword">function</span>(ignoreset <span class="comment">//files and directories to ignore while recursively expanding</span>
+                ){
+                        <span class="comment">// lets read all paths.</span>
+                        <span class="comment">// lets read the directory and return it</span>
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
 
-ForeverAgent.prototype.<span class="function">removeSocket</span> = <span class="keyword">function</span>(s, name, host, port) {
-  <span class="keyword">if</span> (<span class="local-variable">this</span>.sockets[name]) {
-    <span class="keyword">var</span> index = <span class="local-variable">this</span>.sockets[name].indexOf(s)
-    <span class="keyword">if</span> (index !== -<span class="integer">1</span>) {
-      <span class="local-variable">this</span>.sockets[name].splice(index, <span class="integer">1</span>)
-    }
-  } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.sockets[name] &amp;&amp; <span class="local-variable">this</span>.sockets[name].length === <span class="integer">0</span>) {
-    <span class="comment">// don't leak</span>
-    <span class="keyword">delete</span> <span class="local-variable">this</span>.sockets[name]
-    <span class="keyword">delete</span> <span class="local-variable">this</span>.requests[name]
-  }
-  
-  <span class="keyword">if</span> (<span class="local-variable">this</span>.freeSockets[name]) {
-    <span class="keyword">var</span> index = <span class="local-variable">this</span>.freeSockets[name].indexOf(s)
-    <span class="keyword">if</span> (index !== -<span class="integer">1</span>) {
-      <span class="local-variable">this</span>.freeSockets[name].splice(index, <span class="integer">1</span>)
-      <span class="keyword">if</span> (<span class="local-variable">this</span>.freeSockets[name].length === <span class="integer">0</span>) {
-        <span class="keyword">delete</span> <span class="local-variable">this</span>.freeSockets[name]
-      }
-    }
-  }
+                        <span class="keyword">if</span>(ignoreset) ignoreset = ignoreset.map(<span class="keyword">function</span>(value){
+                                <span class="keyword">if</span>(value.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">@</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) <span class="keyword">return</span> <span class="keyword">new</span> RegExp(value.slice(<span class="integer">1</span>))
+                                <span class="keyword">return</span> value
+                        })
 
-  <span class="keyword">if</span> (<span class="local-variable">this</span>.requests[name] &amp;&amp; <span class="local-variable">this</span>.requests[name].length) {
-    <span class="comment">// If we have pending requests and a socket gets closed a new one</span>
-    <span class="comment">// needs to be created to take over in the pool for the one that closed.</span>
-    <span class="local-variable">this</span>.createSocket(name, host, port).emit(<span class="string"><span class="delimiter">'</span><span class="content">free</span><span class="delimiter">'</span></span>)
-  }
-}
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
+                                <span class="keyword">if</span>(ignoreset.indexOf(key) !== -<span class="integer">1</span>) <span class="keyword">continue</span>
+                                <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, ignoreset)
+                                ret.name = key
+                                root.children.push(ret)
+                        }
+                        <span class="keyword">return</span> root
+                }
+        })
 
-<span class="keyword">function</span> <span class="function">ForeverAgentSSL</span> (options) {
-  ForeverAgent.call(<span class="local-variable">this</span>, options)
-}
-util.inherits(ForeverAgentSSL, ForeverAgent)
-
-ForeverAgentSSL.prototype.createConnection = createConnectionSSL
-ForeverAgentSSL.prototype.addRequestNoreuse = AgentSSL.prototype.addRequest
-
-<span class="keyword">function</span> <span class="function">createConnectionSSL</span> (port, host, options) {
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> port === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
-    options = port;
-  } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> host === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
-    options = host;
-  } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> options === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) {
-    options = options;
-  } <span class="keyword">else</span> {
-    options = {};
-  }
-
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> port === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>) {
-    options.port = port;
-  }
-
-  <span class="keyword">if</span> (<span class="keyword">typeof</span> host === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-    options.host = host;
-  }
-
-  <span class="keyword">return</span> tls.connect(options);
-}
-</pre></td>
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){                
+                <span class="keyword">return</span> [
+                        <span class="local-variable">this</span>.fileio(),
+                        screen({
+                                <span class="key">bg</span>:<span class="integer">0</span>,
+                                <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>),
+                                <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>, 
+                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">style</span>:{
+                                        <span class="predefined">$</span>:{
+                                                <span class="key">fontsize</span>:<span class="integer">12</span>
+                                        }
+                                }},
+                                flowgraph()
+                        )
+                ]                
+        }
+})</pre></td>
 </tr></table>
 
 </body>

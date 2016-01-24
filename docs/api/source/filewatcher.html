@@ -223,13 +223,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-<span class="comment">// Watch file changes</span>
+<span class="comment">// internal, Watch file changes</span>
 
         <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> promisify = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/promisify</span><span class="delimiter">'</span></span>)
@@ -292,7 +292,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">watch</span> = <span class="keyword">function</span>(file <span class="comment">/*String:path of file to watch*/</span>){
                 <span class="keyword">if</span>(!(file <span class="keyword">in</span> <span class="local-variable">this</span>.files)) <span class="local-variable">this</span>.files[file] = <span class="predefined-constant">null</span>
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

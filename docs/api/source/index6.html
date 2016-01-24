@@ -178,35 +178,33 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">// Copyright 2011 Mark Cavage &lt;mcavage@gmail.com&gt; All rights reserved.</span>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$examples$</span>, <span class="predefined">$$</span>, omdb) {
 
-<span class="keyword">var</span> errors = require(<span class="string"><span class="delimiter">'</span><span class="content">./errors</span><span class="delimiter">'</span></span>);
-<span class="keyword">var</span> types = require(<span class="string"><span class="delimiter">'</span><span class="content">./types</span><span class="delimiter">'</span></span>);
-
-<span class="keyword">var</span> Reader = require(<span class="string"><span class="delimiter">'</span><span class="content">./reader</span><span class="delimiter">'</span></span>);
-<span class="keyword">var</span> Writer = require(<span class="string"><span class="delimiter">'</span><span class="content">./writer</span><span class="delimiter">'</span></span>);
-
-
-<span class="comment">///--- Exports</span>
-
-module.exports = {
-
-  <span class="key">Reader</span>: Reader,
-
-  <span class="key">Writer</span>: Writer
-
-};
-
-<span class="keyword">for</span> (<span class="keyword">var</span> t <span class="keyword">in</span> types) {
-  <span class="keyword">if</span> (types.hasOwnProperty(t))
-    module.exports[t] = types[t];
-}
-<span class="keyword">for</span> (<span class="keyword">var</span> e <span class="keyword">in</span> errors) {
-  <span class="keyword">if</span> (errors.hasOwnProperty(e))
-    module.exports[e] = errors[e];
-}
+    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
+        omdb({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">omdb</span><span class="delimiter">'</span></span>, <span class="key">keyword</span>:<span class="string"><span class="delimiter">'</span><span class="content">Monkey</span><span class="delimiter">'</span></span>}),
+        screen(
+            view({
+                <span class="key">flex</span>:<span class="integer">1</span>,
+                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>,
+                <span class="key">movielist</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">rpc.omdb.results</span><span class="delimiter">'</span></span>),
+                <span class="function">render</span>:<span class="keyword">function</span>(){
+                    <span class="keyword">var</span> views = [];
+                    <span class="keyword">if</span> (<span class="local-variable">this</span>.movielist) {
+                            console.log(<span class="local-variable">this</span>.movielist)
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.movielist.length; i++) {
+                            <span class="keyword">var</span> movie = <span class="local-variable">this</span>.movielist[i];
+                            <span class="keyword">if</span> (movie &amp;&amp; movie.Poster &amp;&amp; movie.Poster.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>)) {
+                                views.push(view({<span class="key">bgimage</span>:movie.Poster}))
+                            }
+                        }
+                    }
+                    <span class="keyword">return</span> views;
+                }
+            })
+        )
+    ] }
+});
 </pre></td>
 </tr></table>
 

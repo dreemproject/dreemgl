@@ -1,6 +1,6 @@
-/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -19,7 +19,7 @@
  */
 
 define.class(function(require, exports){
-	// DaliApi is a static object to access the dali api
+	// internal, DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
 	// Assign a unique id to each daliactor object
@@ -45,7 +45,7 @@ define.class(function(require, exports){
 		this.view = view;
 		this.daliactor = new dali.Actor();
 		this.onstage = false;
-		
+
 		// The width/height of the actor to stored in a view's layout
 		var layout = view.view._layout;
 		var width = layout.width || 100;
@@ -60,8 +60,8 @@ define.class(function(require, exports){
 			console.log('DALICODE: ' + this.name() + '.size = [' + width + ', ' + height + ', 0];');
 			console.log('DALICODE: ' + this.name() + '.parentOrigin = dali.TOP_LEFT;');
 			console.log('DALICODE: ' + this.name() + '.anchorPoint = dali.TOP_LEFT;');
-		}		
-		
+		}
+
 	}
 
 	/**
@@ -79,7 +79,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.addRenderer(' + this.dalirenderer.name() + ');');
-		}		
+		}
 
 		// Add the actor to the stage
 		if (!this.onstage) {
@@ -88,7 +88,7 @@ define.class(function(require, exports){
 		}
 
 
-	}	
+	}
 
 
 	/**
@@ -106,7 +106,7 @@ define.class(function(require, exports){
 	}
 
 
-	// Internal method to format a single value when emitting dali code
+	// Internal, method to format a single value when emitting dali code
 	this.formatSingle = function(value) {
 		if (typeof value === 'undefined')
 			return 0;
@@ -127,7 +127,7 @@ define.class(function(require, exports){
 		return value;
 	}
 
-	// Internal method to format a value when emitting dali code
+	// Internal, method to format a value when emitting dali code
 	this.formatValue = function(value) {
 		if (!Array.isArray(value))
 			return this.formatSingle(value);
@@ -178,7 +178,7 @@ define.class(function(require, exports){
 			else {
 				console.log('DALICODE: ' + this.name() + '.registerAnimatableProperty(\'' + key + '\', ' + JSON.stringify(val) + ');');
 			}
-		}		
+		}
 
 	}
 

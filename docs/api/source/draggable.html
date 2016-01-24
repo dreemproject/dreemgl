@@ -189,13 +189,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">var</span> start = event.local
                 <span class="keyword">var</span> startx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>];
-                <span class="keyword">var</span> starty = <span class="local-variable">this</span>.pos[<span class="integer">1</span>];        
-                
+                <span class="keyword">var</span> starty = <span class="local-variable">this</span>.pos[<span class="integer">1</span>];
+
                 <span class="keyword">var</span> startposition = <span class="local-variable">this</span>.parent.localMouse();
                 <span class="comment">// ok we start dragging a rectangle</span>
                 <span class="comment">// how does that work?</span>
                 <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(event){
-                        
+
                         p = <span class="local-variable">this</span>.parent.localMouse()
                         <span class="keyword">var</span> dx = p[<span class="integer">0</span>] - startposition[<span class="integer">0</span>];
                         <span class="keyword">var</span> dy = p[<span class="integer">1</span>] - startposition[<span class="integer">1</span>];
@@ -210,9 +210,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="comment">// it waits for leftmousedown</span>
         <span class="comment">// then moves itself till leftmouseup</span>
-        <span class="comment">// and make it do touch too</span>
+        <span class="comment">// and make it do pointer instead</span>
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

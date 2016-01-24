@@ -36,22 +36,6 @@
  * alias for the z component of pos
  */
 /**
- * @attribute {vec3} [corner="NaN,NaN,NaN"]
- * the bottom/right/rear corner
- */
-/**
- * @attribute {typeless} right
- * alias for the x component of corner
- */
-/**
- * @attribute {typeless} bottom
- * alias for  y component of corner
- */
-/**
- * @attribute {typeless} rear
- * alias for z component of corner
- */
-/**
  * @attribute {vec4} [bgcolor="1,1,1,1"]
  * the background color of a view, referenced by various shaders
  */
@@ -92,10 +76,6 @@
 /**
  * @attribute {typeless} h
  * alias for the y component of size
- */
-/**
- * @attribute {typeless} d
- * alias for the z component of size
  */
 /**
  * @attribute {typeless} width

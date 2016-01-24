@@ -602,28 +602,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n448" name="n448">448</a>
 <a href="#n449" name="n449">449</a>
 <strong><a href="#n450" name="n450">450</a></strong>
-<a href="#n451" name="n451">451</a>
-<a href="#n452" name="n452">452</a>
-<a href="#n453" name="n453">453</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
 
         <span class="local-variable">this</span>.Keyboard = require(<span class="string"><span class="delimiter">'</span><span class="content">./keyboardwebgl</span><span class="delimiter">'</span></span>)
-        <span class="local-variable">this</span>.Mouse = require(<span class="string"><span class="delimiter">'</span><span class="content">./mousewebgl</span><span class="delimiter">'</span></span>)
-        <span class="local-variable">this</span>.Touch = require(<span class="string"><span class="delimiter">'</span><span class="content">./touchwebgl</span><span class="delimiter">'</span></span>)
+        <span class="local-variable">this</span>.Pointer = require(<span class="string"><span class="delimiter">'</span><span class="content">./pointerwebgl</span><span class="delimiter">'</span></span>)
         <span class="local-variable">this</span>.Midi = require(<span class="string"><span class="delimiter">'</span><span class="content">./midiwebgl</span><span class="delimiter">'</span></span>)
-        
-        <span class="comment">// require embedded classes        </span>
+
+        <span class="comment">// require embedded classes</span>
         <span class="local-variable">this</span>.Shader = require(<span class="string"><span class="delimiter">'</span><span class="content">./shaderwebgl</span><span class="delimiter">'</span></span>)
         <span class="local-variable">this</span>.Texture = require(<span class="string"><span class="delimiter">'</span><span class="content">./texturewebgl</span><span class="delimiter">'</span></span>)
         <span class="local-variable">this</span>.DrawPass = require(<span class="string"><span class="delimiter">'</span><span class="content">./drawpasswebgl</span><span class="delimiter">'</span></span>)
-        
+
         <span class="local-variable">this</span>.preserveDrawingBuffer = <span class="predefined-constant">false</span>
         <span class="local-variable">this</span>.premultipliedAlpha = <span class="predefined-constant">false</span>
         <span class="local-variable">this</span>.antialias = <span class="predefined-constant">false</span>
@@ -637,7 +633,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.shadercache = previous &amp;&amp;  previous.shadercache || {}
                 <span class="local-variable">this</span>.drawpass_list = previous &amp;&amp; previous.drawpass_list || []
                 <span class="local-variable">this</span>.layout_list = previous &amp;&amp; previous.layout_list || []
-                <span class="local-variable">this</span>.pick_resolve = []        
+                <span class="local-variable">this</span>.pick_resolve = []
                 <span class="local-variable">this</span>.anim_redraws = []
                 <span class="local-variable">this</span>.doPick = <span class="local-variable">this</span>.doPick.bind(<span class="local-variable">this</span>)
 
@@ -649,25 +645,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">else</span> <span class="local-variable">this</span>.anim_req = <span class="predefined-constant">false</span>
                         <span class="comment">//if(this.pick_resolve.length) this.doPick()</span>
                 }.bind(<span class="local-variable">this</span>)
-        
+
                 <span class="keyword">if</span>(previous){
                         <span class="local-variable">this</span>.canvas = previous.canvas
                         <span class="local-variable">this</span>.gl = previous.gl
-                        <span class="local-variable">this</span>.mouse = previous.mouse
                         <span class="local-variable">this</span>.keyboard = previous.keyboard
-                        <span class="local-variable">this</span>.touch = previous.touch
+                        <span class="local-variable">this</span>.pointer = previous.pointer
                         <span class="local-variable">this</span>.midi = previous.midi
                         <span class="local-variable">this</span>.parent = previous.parent
                         <span class="local-variable">this</span>.drawtarget_pools = previous.drawtarget_pools
                         <span class="local-variable">this</span>.frame = <span class="local-variable">this</span>.main_frame = previous.main_frame
                 }
                 <span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.frame = 
+                        <span class="local-variable">this</span>.frame =
                         <span class="local-variable">this</span>.main_frame = <span class="local-variable">this</span>.Texture.fromType(<span class="string"><span class="delimiter">'</span><span class="content">rgb_depth</span><span class="delimiter">'</span></span>)
 
-                        <span class="local-variable">this</span>.mouse = <span class="keyword">new</span> <span class="local-variable">this</span>.Mouse(<span class="local-variable">this</span>)
                         <span class="local-variable">this</span>.keyboard = <span class="keyword">new</span> <span class="local-variable">this</span>.Keyboard(<span class="local-variable">this</span>)
-                        <span class="local-variable">this</span>.touch = <span class="keyword">new</span> <span class="local-variable">this</span>.Touch(<span class="local-variable">this</span>)
+                        <span class="local-variable">this</span>.pointer = <span class="keyword">new</span> <span class="local-variable">this</span>.Pointer(<span class="local-variable">this</span>)
                         <span class="local-variable">this</span>.midi = <span class="keyword">new</span> <span class="local-variable">this</span>.Midi(<span class="local-variable">this</span>)
                         <span class="local-variable">this</span>.drawtarget_pools = {}
 
@@ -697,7 +691,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.canvas = document.createElement(<span class="string"><span class="delimiter">&quot;</span><span class="content">canvas</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.canvas.className = <span class="string"><span class="delimiter">'</span><span class="content">unselectable</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.parent.appendChild(<span class="local-variable">this</span>.canvas)
-                
+
                 <span class="keyword">var</span> options = {
                         <span class="key">alpha</span>: <span class="local-variable">this</span>.frame.type.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>) != -<span class="integer">1</span>,
                         <span class="key">depth</span>: <span class="local-variable">this</span>.frame.type.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">depth</span><span class="delimiter">'</span></span>) != -<span class="integer">1</span>,
@@ -708,8 +702,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">preferLowPowerToHighPerformance</span>: <span class="local-variable">this</span>.preferLowPowerToHighPerformance
                 }
 
-                <span class="local-variable">this</span>.gl = <span class="local-variable">this</span>.canvas.getContext(<span class="string"><span class="delimiter">'</span><span class="content">webgl</span><span class="delimiter">'</span></span>, options) || 
-                        <span class="local-variable">this</span>.canvas.getContext(<span class="string"><span class="delimiter">'</span><span class="content">webgl-experimental</span><span class="delimiter">'</span></span>, options) || 
+                <span class="local-variable">this</span>.gl = <span class="local-variable">this</span>.canvas.getContext(<span class="string"><span class="delimiter">'</span><span class="content">webgl</span><span class="delimiter">'</span></span>, options) ||
+                        <span class="local-variable">this</span>.canvas.getContext(<span class="string"><span class="delimiter">'</span><span class="content">webgl-experimental</span><span class="delimiter">'</span></span>, options) ||
                         <span class="local-variable">this</span>.canvas.getContext(<span class="string"><span class="delimiter">'</span><span class="content">experimental-webgl</span><span class="delimiter">'</span></span>, options)
 
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.gl){
@@ -718,7 +712,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="comment">// require derivatives</span>
-                <span class="local-variable">this</span>.getExtension(<span class="string"><span class="delimiter">'</span><span class="content">OES_standard_derivatives</span><span class="delimiter">'</span></span>)                
+                <span class="local-variable">this</span>.getExtension(<span class="string"><span class="delimiter">'</span><span class="content">OES_standard_derivatives</span><span class="delimiter">'</span></span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">initResize</span> = <span class="keyword">function</span>(){
@@ -743,7 +737,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         <span class="local-variable">this</span>.main_frame.ratio = pixelRatio
                         <span class="local-variable">this</span>.main_frame.size = vec2(sw, sh) <span class="comment">// actual size</span>
-                        
+
                         <span class="local-variable">this</span>.size = vec2(w, h)
                         <span class="local-variable">this</span>.ratio = <span class="local-variable">this</span>.main_frame.ratio
 
@@ -755,7 +749,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.redraw()
                 }.bind(<span class="local-variable">this</span>)
 
-                resize()                
+                resize()
         }
 
         <span class="local-variable">this</span>.<span class="function">clear</span> = <span class="keyword">function</span>(r, g, b, a){
@@ -781,7 +775,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">bindFramebuffer</span> = <span class="keyword">function</span>(frame){
                 <span class="keyword">if</span>(!frame) frame = <span class="local-variable">this</span>.main_frame
-        
+
                 <span class="local-variable">this</span>.frame = frame
                 <span class="comment">//this.size = vec2(frame.size[0]/frame.ratio, frame.size[1]/frame.ratio)</span>
 
@@ -802,9 +796,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.first_draw_done){
                         <span class="local-variable">this</span>.doColor(<span class="local-variable">this</span>.last_time)
                 }
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = <span class="local-variable">this</span>.drawpass_list.length; i &lt; len; i++){
-                        <span class="keyword">var</span> last = i === len - <span class="integer">1</span> 
+                        <span class="keyword">var</span> last = i === len - <span class="integer">1</span>
                         <span class="keyword">var</span> skip = <span class="predefined-constant">false</span>
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.drawpass_list[i]
 
@@ -833,7 +827,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span>{
                         <span class="keyword">var</span> data = <span class="local-variable">this</span>.readPixels(<span class="integer">0</span>, <span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">1</span>)
                 }
-                
+
                 <span class="comment">// decode the pass and drawid</span>
                 <span class="keyword">var</span> passid = data[<span class="integer">0</span>]<span class="comment">//(data[0]*43)%256</span>
                 <span class="keyword">var</span> drawid = (((data[<span class="integer">2</span>]&lt;&lt;<span class="integer">8</span>) | data[<span class="integer">1</span>]))<span class="comment">//*60777)%65536</span>
@@ -869,7 +863,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.first_time) <span class="local-variable">this</span>.first_time = time
                 <span class="local-variable">this</span>.last_time = time
-        
+
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.screen) <span class="keyword">return</span>
 
                 <span class="local-variable">this</span>.first_draw_done = <span class="predefined-constant">true</span>
@@ -915,7 +909,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
 
                         <span class="keyword">if</span>(view.draw_dirty &amp; <span class="integer">1</span> || last){
-                        
+
                                 <span class="keyword">if</span>(!last){
                                         <span class="keyword">if</span>(clipview === <span class="predefined-constant">undefined</span>) clipview = view
                                         <span class="keyword">else</span> clipview = <span class="predefined-constant">null</span>
@@ -951,7 +945,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">while</span>(!node._viewport){
                         node = node.parent
                 }
-                
+
                 <span class="keyword">if</span>(!node.parent){ <span class="comment">// fast path to chuck the whole setc</span>
                         <span class="comment">//console.log(&quot;FLUSHING ALL&quot;)</span>
                         <span class="comment">// lets put all the drawpasses in a pool for reuse</span>
@@ -1021,7 +1015,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.addDrawPassRecursive(children[i])
                 }
 
-                <span class="comment">// lets create a drawpass </span>
+                <span class="comment">// lets create a drawpass</span>
                 <span class="keyword">if</span>(view._viewport){
                         <span class="keyword">var</span> pass = <span class="keyword">new</span> <span class="local-variable">this</span>.DrawPass(<span class="local-variable">this</span>, view)
                         <span class="local-variable">this</span>.drawpass_list.splice(<span class="local-variable">this</span>.drawpass_idx,<span class="integer">0</span>,view)
@@ -1055,10 +1049,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.redraw()
                 <span class="comment">// do stuff</span>
         }
-        
 
 
-})</pre></td>
+
+})
+</pre></td>
 </tr></table>
 
 </body>
