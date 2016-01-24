@@ -167,7 +167,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.setupMove = function(){
 		this.startx = this.pos[0];
 		this.starty = this.pos[1];
-		console.log(this.pos)
+		//console.log(this.pos)
 	}
 
 	this.updateMove = function(dx, dy, snap){
