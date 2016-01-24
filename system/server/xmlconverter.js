@@ -146,21 +146,23 @@ define(function(require){
 	// look for include paths for tags
 		var findIncludes = function(includes) {
 			var tagbypath = {};
-      includes.map(function(tagname) {
-	for (var key in define.paths) {
-		var filepath = define.expandVariables('$' + key) + '/' + tagname + '.js';
-		if (fs.existsSync(filepath)) {
-			if (! tagbypath[key]) {
-				tagbypath[key] = [];
-			}
-			tagbypath[key].push(tagname);
-		}
-	}
-      })
+			for (var i = 0; i < includes.length; i++) {
+				var tagname = includes[i];
+				for (var key in define.paths) {
+					var filepath = define.expandVariables('$' + key) + '/' + tagname + '.js';
+					if (fs.existsSync(filepath)) {
+						if (! tagbypath[key]) {
+							tagbypath[key] = [];
+						}
+						tagbypath[key].push(tagname);
+						break;
+					}
+				}
+      }
       var includearray = [];
       for (var key in tagbypath) {
-	includearray.push('$' + key + '$');
-	includearray = includearray.concat(tagbypath[key]);
+				includearray.push('$' + key + '$');
+				includearray = includearray.concat(tagbypath[key]);
       }
       return includearray;
 		}

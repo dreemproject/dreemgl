@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 // Dreem/Dali server
@@ -22,7 +22,7 @@ var path = require('path')
 var ansicolor = require('$system/debug/ansicolor')
 console.color = ansicolor(function(v){
 	process.stdout.write(v)
-}) 
+})
 
 console.clear = function(){
 	process.stdout.write("\033[2J");
@@ -41,7 +41,7 @@ console.dump = function(){
 }
 
 function main(){
-	var argv = process.argv	
+	var argv = process.argv
 	var args = {}
 	for(var lastkey = '', arg, i = 0; i<argv.length; i++){
 		arg = argv[i]
@@ -83,8 +83,6 @@ function main(){
 	define.paths = {
 		'system':'$root/system',
 		'resources':'$root/resources',
-		'examples':'$root/examples',
-		'apps':'$root/apps',
 		'3d':'$root/classes/3d',
 		'behaviors':'$root/classes/behaviors',
 		'server':'$root/classes/server',
@@ -92,7 +90,9 @@ function main(){
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
-		'compositions':'$root/compositions'
+		'compositions':'$root/compositions',
+		'examples':'$root/examples',
+		'apps':'$root/apps'
 	}
 	if(args['-nomoni']){
 		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
@@ -100,7 +100,7 @@ function main(){
 			if(!paths[i]) continue
 			var parts = paths[i].split(':')
 			var mypath =  parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
-			console.log('Mapping '+parts[0]+' to ' + mypath)	
+			console.log('Mapping '+parts[0]+' to ' + mypath)
 			define.paths[parts[0]] = mypath
 		}
 		// put them on the define
@@ -120,12 +120,12 @@ function main(){
 	else if(args['-nomoni']){
 		if(args['-sync']){
 			var GitSync = require('$system/server/gitsync')
-			
+
 			new GitSync(args)
 		}
 		else if(args['-dali']){
             // Place the dali/nodejs package at the root of dreemgl
-            
+
 		    var composition = args['-dali'];
 		    if (composition === true)
 			composition = 'examples/rendertest'
