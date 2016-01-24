@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+BIN_DIR="$(dirname $0)"
+ROOT_DIR="$BIN_DIR/.."
+REPORT_DIR="$ROOT_DIR/report"
+
+echo "Removing old report..."
+rm -rf $REPORT_DIR
+
+echo "Regenerating report... (be sure to 'npm install -g plato')"
+cd $ROOT_DIR
+plato -r -d $REPORT_DIR -l .jshintrc -e .eslintrc -x system\/lib\|midiwebgl.js\|gitsync.js\|fontsdfgen.js system/ classes/
