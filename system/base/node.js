@@ -930,7 +930,7 @@ define.class(function(require, constructor){
 
 	this.hideProperty(Object.keys(this))
 
-	// always define an init and deinit
+	// internal, always define an init and destroy
 	this.attributes = {
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
 		init:Config({type:Event}),

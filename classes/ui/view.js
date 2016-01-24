@@ -33,13 +33,13 @@ define.class('$system/base/node', function(require){
 		// alias for the z component of pos
 		front: Config({alias:'pos', index:2}),
 
-		// internal, the bottom/right/rear corner, used by layout
+		// the bottom/right/rear corner, used by layout
 		corner: Config({type:vec3, value:vec3(NaN)}),
-		// internal, alias for the x component of corner
+		// alias for the x component of corner
 		right: Config({alias:'corner', index:0}),
-		// internal, alias for  y component of corner
+		// alias for  y component of corner
 		bottom: Config({alias:'corner',index:1}),
-		// internal, alias for z component of corner
+		// alias for z component of corner
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
@@ -571,7 +571,7 @@ define.class('$system/base/node', function(require){
 		this['_' + key] = cls.extend(value, this)
 	}
 
-	// redraw our view and bubble up the viewport dirtiness to the root
+	// internal, redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
 		if(!this.parent_viewport){
 			return
@@ -1057,6 +1057,8 @@ define.class('$system/base/node', function(require){
 		if(this.initialized) this.screen.pauseAnimationRoot(this, key)
 	}
 
+	// Determines the background color that should be drawn at a given position.
+	// Defaults to bgcolor.
 	this.bgcolorfn = function(pos){
 		return bgcolor
 	}

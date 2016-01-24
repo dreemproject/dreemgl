@@ -2026,7 +2026,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.hideProperty(Object.keys(<span class="local-variable">this</span>))
 
-        <span class="comment">// always define an init and deinit</span>
+        <span class="comment">// internal, always define an init and destroy</span>
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// the init event, not called when the object is constructed but specifically when it is being initialized by the render</span>
                 <span class="key">init</span>:Config({<span class="key">type</span>:Event}),

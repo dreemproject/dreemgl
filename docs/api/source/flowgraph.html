@@ -991,26 +991,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n837" name="n837">837</a>
 <a href="#n838" name="n838">838</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, 
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require,
                 <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
                 <span class="predefined">$widgets$</span>, propviewer,searchbox, jseditor,
                 <span class="predefined">$server$</span>, sourceset, dataset, <span class="predefined">$$</span>, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">flowgraph</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.flex = <span class="integer">1</span>
-        <span class="local-variable">this</span>.clearcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span> 
-        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.clearcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">sourceset</span>:{}
         }
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>(){
                 <span class="comment">//debugger</span>
                 <span class="local-variable">this</span>.<span class="function">bordercolorfn</span> = <span class="keyword">function</span>(pos){
@@ -1024,30 +1024,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.visible = <span class="predefined-constant">false</span>
         })
-        
-        <span class="local-variable">this</span>.<span class="function">addToSelection</span> = <span class="keyword">function</span>(obj){                
+
+        <span class="local-variable">this</span>.<span class="function">addToSelection</span> = <span class="keyword">function</span>(obj){
                 <span class="keyword">var</span> f = <span class="local-variable">this</span>.currentselection.indexOf(obj)
                 <span class="keyword">if</span> (f == -<span class="integer">1</span>) <span class="local-variable">this</span>.currentselection.push(obj)
                 <span class="keyword">else</span> <span class="keyword">return</span>
-                
+
                 <span class="local-variable">this</span>.updateSelectedItems()
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.currentselection.length &gt; <span class="integer">1</span>) <span class="keyword">return</span> <span class="predefined-constant">false</span>;
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">removeFromSelection</span> = <span class="keyword">function</span>(obj){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.currentblock == obj){
                         <span class="local-variable">this</span>.currentblock = <span class="predefined-constant">undefined</span>
                         <span class="local-variable">this</span>.updatePopupUIPosition()
                 }
-                
+
                 <span class="keyword">var</span> f = <span class="local-variable">this</span>.currentselection.indexOf(obj)
                 <span class="keyword">if</span>(f&gt;-<span class="integer">1</span>) <span class="local-variable">this</span>.currentselection.splice(f,<span class="integer">1</span>)
 
                 <span class="local-variable">this</span>.updateSelectedItems()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">updateSelectedItems</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.allblocks){
                         <span class="keyword">var</span> obj = <span class="local-variable">this</span>.allblocks[a]
@@ -1065,13 +1065,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="local-variable">this</span>.updatePopupUIPosition()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">inSelection</span> = <span class="keyword">function</span>(obj){
                 <span class="keyword">var</span> f = <span class="local-variable">this</span>.currentselection.indexOf(obj)
                 <span class="keyword">if</span> (f &gt; -<span class="integer">1</span>) <span class="keyword">return</span> <span class="predefined-constant">true</span>
                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">setupSelectionMove</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.currentselection){
                         <span class="keyword">var</span> obj = <span class="local-variable">this</span>.currentselection[a]
@@ -1102,7 +1102,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.updateConnections()
                 <span class="local-variable">this</span>.updatePopupUIPosition()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">clearSelection</span> = <span class="keyword">function</span>(update){
                 <span class="local-variable">this</span>.currentblock = <span class="predefined-constant">undefined</span>
                 <span class="local-variable">this</span>.currentconnection = <span class="predefined-constant">undefined</span>
@@ -1131,7 +1131,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.updatePopupUIPosition()
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">removeConnection</span> = <span class="keyword">function</span> (conn){
                 <span class="keyword">if</span> (conn == <span class="predefined-constant">undefined</span>) conn = <span class="local-variable">this</span>.currentconnection
                 <span class="keyword">if</span> (conn){
@@ -1151,41 +1151,41 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.updatePopupUIPosition()
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">updatePopupUIPosition</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> bg = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">blockui</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">var</span> cg = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">connectionui</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">var</span> gg = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">groupui</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">var</span> gbg = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">groupbg</span><span class="delimiter">&quot;</span></span>)
-                
+
                 gbg.visible =<span class="predefined-constant">false</span>;
                 gg.visible = <span class="predefined-constant">false</span>;
                 bg.visible = <span class="predefined-constant">false</span>;
-                
+
                 <span class="keyword">return</span>;
                 <span class="comment">// todo - decide if the group UI is needed at all..</span>
-                
+
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.currentselection.length == <span class="integer">1</span>){
 
                         gg.visible = <span class="predefined-constant">false</span>;
                         gbg.visible = <span class="predefined-constant">false</span>;
-                        <span class="local-variable">this</span>.currentblock = <span class="predefined-constant">undefined</span>;                        
+                        <span class="local-variable">this</span>.currentblock = <span class="predefined-constant">undefined</span>;
                         <span class="local-variable">this</span>.currentconnection = <span class="predefined-constant">undefined</span>;
-                        
+
                         <span class="keyword">var</span> b= <span class="local-variable">this</span>.currentselection[<span class="integer">0</span>];
-                        
+
                         <span class="keyword">if</span> (b <span class="keyword">instanceof</span> block) <span class="local-variable">this</span>.currentblock = b;
                         <span class="keyword">if</span> (b <span class="keyword">instanceof</span> connection) <span class="local-variable">this</span>.currentconnection  = b;
-                        
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.currentblock){
                                 bg.x = <span class="local-variable">this</span>.currentblock.pos[<span class="integer">0</span>];
                                 bg.y = <span class="local-variable">this</span>.currentblock.pos[<span class="integer">1</span>]-bg.layout.height - <span class="integer">3</span>;
                                 bg.visible = <span class="predefined-constant">true</span>;
                         }
                         <span class="keyword">else</span>{
-                                bg.visible = <span class="predefined-constant">false</span>;                                        
+                                bg.visible = <span class="predefined-constant">false</span>;
                         }
-                        
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.currentconnection){
                                 cg.x = (<span class="local-variable">this</span>.currentconnection.frompos[<span class="integer">0</span>] + <span class="local-variable">this</span>.currentconnection.topos[<span class="integer">0</span>])/<span class="integer">2</span>
                                 cg.y = (<span class="local-variable">this</span>.currentconnection.frompos[<span class="integer">1</span>] + <span class="local-variable">this</span>.currentconnection.topos[<span class="integer">1</span>])/<span class="integer">2</span>
@@ -1215,29 +1215,29 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 n++;
                                                 <span class="keyword">if</span> (bl.pos[<span class="integer">0</span>] &lt; minx) minx = bl.pos[<span class="integer">0</span>];<span class="keyword">else</span> <span class="keyword">if</span> (bl.pos[<span class="integer">0</span>]&gt;maxx) maxx = bl.pos[<span class="integer">0</span>];
                                                 <span class="keyword">if</span> (bl.pos[<span class="integer">1</span>] &lt; miny) miny = bl.pos[<span class="integer">1</span>];<span class="keyword">else</span> <span class="keyword">if</span> (bl.pos[<span class="integer">1</span>]&gt;maxy) maxy = bl.pos[<span class="integer">1</span>];
-                                                
+
                                                 <span class="keyword">var</span> x2 = bl.pos[<span class="integer">0</span>] + bl.layout.width;
                                                 <span class="keyword">var</span> y2 = bl.pos[<span class="integer">1</span>] + bl.layout.height;
                                                 <span class="keyword">if</span> (x2 &lt; minx) minx = x2;<span class="keyword">else</span> <span class="keyword">if</span> (x2&gt;maxx) maxx = x2;
                                                 <span class="keyword">if</span> (y2 &lt; miny) miny = y2;<span class="keyword">else</span> <span class="keyword">if</span> (y2&gt;maxy) maxy = y2;
 
 
-                                                cx += bl.pos[<span class="integer">0</span>] + bl.layout.width/<span class="integer">2</span>; 
-                                                cy += bl.pos[<span class="integer">1</span>] + bl.layout.height/<span class="integer">2</span>;        
+                                                cx += bl.pos[<span class="integer">0</span>] + bl.layout.width/<span class="integer">2</span>;
+                                                cy += bl.pos[<span class="integer">1</span>] + bl.layout.height/<span class="integer">2</span>;
                                         }
                                         <span class="keyword">else</span>{
                                                 <span class="keyword">if</span> (bl <span class="keyword">instanceof</span> connection){
                                                         <span class="keyword">var</span> ax = bl.frompos[<span class="integer">0</span>];
                                                         <span class="keyword">var</span> ay = bl.frompos[<span class="integer">1</span>];
-                                                             
+
                                                         <span class="keyword">var</span> bx = bl.topos[<span class="integer">0</span>];
                                                         <span class="keyword">var</span> by = bl.topos[<span class="integer">1</span>];
-                                                
+
                                                         <span class="keyword">if</span> (ax &gt; maxx) maxx = ax;<span class="keyword">else</span> <span class="keyword">if</span> (ax&lt;minx) minx = ax;
                                                         <span class="keyword">if</span> (bx &gt; maxx) maxx = bx;<span class="keyword">else</span> <span class="keyword">if</span> (bx&lt;minx) minx = bx;
                                                         <span class="keyword">if</span> (ay &gt; maxy) maxy = ay;<span class="keyword">else</span> <span class="keyword">if</span> (ay&lt;miny) miny = ay;
                                                         <span class="keyword">if</span> (by &gt; maxy) maxy = by;<span class="keyword">else</span> <span class="keyword">if</span> (by&lt;miny) miny = by;
-                                                
+
                                                         cx += (ax+bx)/<span class="integer">2</span>;
                                                         cy += (ay+by)/<span class="integer">2</span>;
                                                         n++;
@@ -1246,21 +1246,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                                 cx /= n;
                                 cy /= n;
-                                
+
                                 gg.pos = vec2(cx - cg.layout.width/<span class="integer">2</span>, cy - cg.layout.height/<span class="integer">2</span>)
-                                
+
                                 gbg.pos = vec2(minx-<span class="integer">20</span>,miny-<span class="integer">20</span>);
                                 gbg.size = vec2(maxx-minx + <span class="integer">40</span>, maxy-miny+ <span class="integer">40</span>);
-                                
+
                         }
                         <span class="keyword">else</span>{
                                 gg.visible = <span class="predefined-constant">false</span>;
                                 gbg.visible = <span class="predefined-constant">false</span>;
-                        
+
                         }
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">setActiveBlock</span> = <span class="keyword">function</span>(block){
                 <span class="local-variable">this</span>.currentblock = block
                 <span class="keyword">if</span>(block){
@@ -1269,17 +1269,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="local-variable">this</span>.updatePopupUIPosition()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">setActiveConnection</span> = <span class="keyword">function</span>(conn){
                 <span class="local-variable">this</span>.currentconnection = conn;
-                
+
                 <span class="keyword">if</span>(conn){
                         <span class="local-variable">this</span>.currentblock = <span class="predefined-constant">undefined</span>;
-                        <span class="local-variable">this</span>.addToSelection(conn);                                                                
-                }        
+                        <span class="local-variable">this</span>.addToSelection(conn);
+                }
                 <span class="local-variable">this</span>.updatePopupUIPosition();
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">updateConnections</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> cl = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">connectionlayer</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> cl.children){
@@ -1287,31 +1287,31 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//cl.children[a].layout = 1</span>
                 }
         }
-        
-        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){                
+
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.<span class="function">onstatus</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">themenu</span><span class="delimiter">&quot;</span></span>).statustext = <span class="local-variable">this</span>.screen.status;
                 }
                 <span class="local-variable">this</span>.currentselection = [];
                 <span class="local-variable">this</span>.currentblock = <span class="predefined-constant">undefined</span>;
-                <span class="local-variable">this</span>.currentconnection = <span class="predefined-constant">undefined</span>;                
+                <span class="local-variable">this</span>.currentconnection = <span class="predefined-constant">undefined</span>;
                 <span class="local-variable">this</span>.allblocks = [];
                 <span class="local-variable">this</span>.allconnections = [];
                 <span class="local-variable">this</span>.newconnection = {};
-                <span class="local-variable">this</span>.model = dataset({<span class="key">children</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Role</span><span class="delimiter">&quot;</span></span>},{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Server</span><span class="delimiter">&quot;</span></span>}], <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Composition</span><span class="delimiter">&quot;</span></span>});        
+                <span class="local-variable">this</span>.model = dataset({<span class="key">children</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Role</span><span class="delimiter">&quot;</span></span>},{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Server</span><span class="delimiter">&quot;</span></span>}], <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Composition</span><span class="delimiter">&quot;</span></span>});
                 <span class="local-variable">this</span>.librarydata = dataset({<span class="key">children</span>:[]});
 
                 <span class="local-variable">this</span>.sourceset = sourceset()
-                
+
                 <span class="local-variable">this</span>.rpc.fileio.readFlowLibrary([<span class="string"><span class="delimiter">'</span><span class="content">@/</span><span class="char">\\</span><span class="content">.</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">.git</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">.gitignore</span><span class="delimiter">'</span></span>]).then(<span class="keyword">function</span>(result){
                         <span class="keyword">var</span> lib = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">thelibrary</span><span class="delimiter">'</span></span>);
                         <span class="keyword">var</span> tree = result.value
                         tree.name = <span class="string"><span class="delimiter">'</span><span class="content">Library</span><span class="delimiter">'</span></span>
                         tree.collapsed = <span class="predefined-constant">false</span>
                         lib.dataset = <span class="local-variable">this</span>.librarydata  = dataset(tree)
-                        
+
                 }.bind(<span class="local-variable">this</span>))
-                
+
                 <span class="local-variable">this</span>.screen.<span class="function">locationhash</span> = <span class="keyword">function</span>(event){
                         <span class="keyword">if</span>(event.value.composition)
                         require.async(event.value.composition).then(<span class="keyword">function</span>(result){
@@ -1333,27 +1333,27 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> tree = result.value
                                 tree.collapsed = <span class="predefined-constant">false</span>
                                 <span class="comment">// lets make a dataset</span>
-                                
+
                 }.bind(<span class="local-variable">this</span>))
         }
 
         <span class="comment">// right before the recalculateMatrix call</span>
         <span class="local-variable">this</span>.<span class="function">atMatrix</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateConnections();
-        }        
-        
-        <span class="local-variable">this</span>.<span class="function">updateZoom</span> = <span class="keyword">function</span>(z){        
         }
-        
+
+        <span class="local-variable">this</span>.<span class="function">updateZoom</span> = <span class="keyword">function</span>(z){
+        }
+
         <span class="local-variable">this</span>.<span class="function">gridClick</span> = <span class="keyword">function</span>(p, origin){
-                
+
                 <span class="local-variable">this</span>.cancelConnection()
                 <span class="keyword">var</span> cg= <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>)
-        
+
                 origin.startselectposition = cg.localMouse()
                 <span class="local-variable">this</span>.startDragSelect()
-                
-                origin.<span class="function">mousemove</span> = <span class="keyword">function</span>(){                                
+
+                origin.<span class="function">mousemove</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> cg= <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">var</span> np = cg.localMouse()
                         <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
@@ -1363,23 +1363,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> sy = Math.min(<span class="local-variable">this</span>.startselectposition[<span class="integer">1</span>], np[<span class="integer">1</span>])
                                 <span class="keyword">var</span> ex = Math.max(<span class="local-variable">this</span>.startselectposition[<span class="integer">0</span>], np[<span class="integer">0</span>])
                                 <span class="keyword">var</span> ey = Math.max(<span class="local-variable">this</span>.startselectposition[<span class="integer">1</span>], np[<span class="integer">1</span>])
-                                
+
                                 sq.visible = <span class="predefined-constant">true</span>;
                                 sq.redraw();
-                        
+
                                 sq.pos = vec2(sx,sy);
                                 sq.size = vec3(ex-sx, ey-sy, <span class="integer">1</span>);
                                 fg.dragselectset = [];
                                 <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> fg.allblocks){
                                         <span class="keyword">var</span> bl = fg.allblocks[a];
-                                        
-                                        cx = bl.pos[<span class="integer">0</span>] + bl.layout.width/<span class="integer">2</span>; 
+
+                                        cx = bl.pos[<span class="integer">0</span>] + bl.layout.width/<span class="integer">2</span>;
                                         cy = bl.pos[<span class="integer">1</span>] + bl.layout.height/<span class="integer">2</span>;
-                                        
+
                                         <span class="keyword">if</span> (cx &gt;= sx &amp;&amp; cx &lt;= ex &amp;&amp; cy &gt;= sy &amp;&amp; cy &lt;=ey) {
                                                 bl.inselection = <span class="integer">1</span>;
                                                 fg.dragselectset.push(bl);
-                                        }        
+                                        }
                                         <span class="keyword">else</span>{
                                                 <span class="keyword">if</span> (fg.originalselection.indexOf(bl) &gt;-<span class="integer">1</span>)
                                                 {
@@ -1388,32 +1388,32 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">else</span>{
                                                         bl.inselection = <span class="integer">0</span>;
                                                 }
-                                        }                                        
-                                }                                        
+                                        }
+                                }
                                 <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> fg.allconnections){
                                         <span class="keyword">var</span> con = fg.allconnections[a];
-                                        
-                                        
+
+
                                         ax = con.frompos[<span class="integer">0</span>];
                                         ay = con.frompos[<span class="integer">1</span>];
-                                        
+
                                         bx = con.topos[<span class="integer">0</span>];
                                         by = con.topos[<span class="integer">1</span>];
-                                        
-                                        
+
+
                                         cx = (ax+bx)/<span class="integer">2</span>;
                                         cy = (ay+by)/<span class="integer">2</span>;
-                                        
+
                                         <span class="keyword">if</span> ( (ax &gt;= sx &amp;&amp; ax &lt;= ex &amp;&amp; ay &gt;= sy &amp;&amp; ay &lt;=ey)
                                                         ||
                                                 (bx &gt;= sx &amp;&amp; bx &lt;= ex &amp;&amp; by &gt;= sy &amp;&amp; by &lt;=ey)
-                                                || 
+                                                ||
                                                 (cx &gt;= sx &amp;&amp; cx &lt;= ex &amp;&amp; cy &gt;= sy &amp;&amp; cy &lt;=ey)
                                                 )
                                          {
                                                 con.inselection = <span class="integer">1</span>;
                                                 fg.dragselectset.push(con);
-                                        }        
+                                        }
                                         <span class="keyword">else</span>{
                                                 <span class="keyword">if</span> (fg.originalselection.indexOf(con) &gt;-<span class="integer">1</span>)
                                                 {
@@ -1422,11 +1422,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">else</span>{
                                                         con.inselection = <span class="integer">0</span>;
                                                 }
-                                        }                                        
-                                }                                        
-                        }                                         
+                                        }
+                                }
+                        }
                 }
-                
+
                 origin.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> sq = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">if</span> (sq){
@@ -1454,18 +1454,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.cancelConnection()
         }
-        
-        
+
+
         <span class="local-variable">this</span>.<span class="function">setBlockName</span> = <span class="keyword">function</span>(block, newname){
                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">TODODODODODODO: setBlockName - change name to</span><span class="delimiter">&quot;</span></span>, newname);
         }
-        
-        <span class="local-variable">this</span>.<span class="function">cancelConnection</span> = <span class="keyword">function</span>(){                
+
+        <span class="local-variable">this</span>.<span class="function">cancelConnection</span> = <span class="keyword">function</span>(){
                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">cancelling exiting connection setup...</span><span class="delimiter">&quot;</span></span>);
                 <span class="local-variable">this</span>.newconnection = {};
-                
+
                 <span class="keyword">var</span> connectingconnection = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">openconnector</span><span class="delimiter">&quot;</span></span>);
-                <span class="keyword">if</span> (connectingconnection &amp;&amp; connectingconnection.visible) 
+                <span class="keyword">if</span> (connectingconnection &amp;&amp; connectingconnection.visible)
                 {
                         <span class="local-variable">this</span>.screen.<span class="function">globalmousemove</span> = <span class="keyword">function</span>(){};
                         connectingconnection.from = <span class="predefined-constant">undefined</span>;
@@ -1477,7 +1477,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         connectingconnection.redraw();
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">setupConnectionMouseMove</span> = <span class="keyword">function</span>(){
                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">setting up new connection drag...</span><span class="delimiter">&quot;</span></span>);
 
@@ -1491,12 +1491,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         connectingconnection.toinput = <span class="local-variable">this</span>.newconnection.targetinput;
 
                         console.log(<span class="local-variable">this</span>.newconnection.sourceblock,<span class="local-variable">this</span>.newconnection.sourceoutput,<span class="local-variable">this</span>.newconnection.targetblock,<span class="local-variable">this</span>.newconnection.targetinput);
-                        
+
                         <span class="keyword">if</span> (connectingconnection.to &amp;&amp; connectingconnection.to !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span> &amp;&amp; connectingconnection.to.length&gt;<span class="integer">0</span>){
                                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">setting to??</span><span class="delimiter">&quot;</span></span>, connectingconnection.to);
                                 <span class="keyword">var</span> b = <span class="local-variable">this</span>.find(connectingconnection.to);
                                 <span class="keyword">if</span> (b){
-                                        <span class="keyword">var</span> ball = b.findChild(connectingconnection.toinput);                                
+                                        <span class="keyword">var</span> ball = b.findChild(connectingconnection.toinput);
                                         connectingconnection.bgcolor = ball.bgcolor;
                                 }
                         }
@@ -1505,20 +1505,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         console.log(connectingconnection.from);
                                         <span class="keyword">var</span> b = <span class="local-variable">this</span>.find(connectingconnection.from);
                                         <span class="keyword">if</span>(b){
-                                                <span class="keyword">var</span> ball = b.findChild(connectingconnection.fromoutput);                                
+                                                <span class="keyword">var</span> ball = b.findChild(connectingconnection.fromoutput);
                                                 connectingconnection.bgcolor = ball.bgcolor;
                                         }
-                                }                                
+                                }
                         }
                         connectingconnection.calculateposition();
                         <span class="local-variable">this</span>.screen.<span class="function">globalmousemove</span> = <span class="keyword">function</span>(){
-                                connectingconnection.calculateposition();        
+                                connectingconnection.calculateposition();
                                 connectingconnection.redraw();
                         }
                 }
         }
-        
-        <span class="local-variable">this</span>.<span class="function">setConnectionStartpoint</span> = <span class="keyword">function</span>(sourceblockname, outputname){                
+
+        <span class="local-variable">this</span>.<span class="function">setConnectionStartpoint</span> = <span class="keyword">function</span>(sourceblockname, outputname){
                 <span class="local-variable">this</span>.newconnection.sourceblock = sourceblockname;
                 <span class="local-variable">this</span>.newconnection.sourceoutput = outputname;
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.newconnection.targetblock &amp;&amp; <span class="local-variable">this</span>.newconnection.targetblock !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span> ){
@@ -1528,8 +1528,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.setupConnectionMouseMove();
                 }
         }
-        
-        <span class="local-variable">this</span>.<span class="function">setConnectionEndpoint</span> = <span class="keyword">function</span>(targetblockname, inputname){                
+
+        <span class="local-variable">this</span>.<span class="function">setConnectionEndpoint</span> = <span class="keyword">function</span>(targetblockname, inputname){
                 <span class="local-variable">this</span>.newconnection.targetblock = targetblockname;
                 <span class="local-variable">this</span>.newconnection.targetinput = inputname;
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.newconnection.sourceblock &amp;&amp; <span class="local-variable">this</span>.newconnection.sourceblock !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span> ){
@@ -1537,9 +1537,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">else</span>{
                         <span class="local-variable">this</span>.setupConnectionMouseMove();
-                }                        
+                }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">startDragSelect</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.dragselectset = [];
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.screen.keyboard.shift){
@@ -1550,43 +1550,43 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.originalselection.push(<span class="local-variable">this</span>.currentselection[i]);
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">renderConnections</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.sourceset) <span class="keyword">return</span>;
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.sourceset.data) <span class="keyword">return</span>;
-                <span class="keyword">var</span> res = [];        
+                <span class="keyword">var</span> res = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.sourceset.data.children.length;i++){
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.sourceset.data.children[i];
-                        <span class="comment">// block({name:&quot;e&quot;, title:&quot;block E&quot;, x:450, y:600}) </span>
-                        
+                        <span class="comment">// block({name:&quot;e&quot;, title:&quot;block E&quot;, x:450, y:600})</span>
+
                         <span class="keyword">if</span> (node.wires){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;node.wires.length;j++) {
                                         <span class="keyword">var</span> w = node.wires[j];
                                         res.push(connection({
-                                                <span class="key">from</span>:w.from, 
-                                                <span class="key">fromoutput</span>:w.output, 
-                                                <span class="key">to</span>:node.name, 
-                                                <span class="key">toinput</span>:w.input 
+                                                <span class="key">from</span>:w.from,
+                                                <span class="key">fromoutput</span>:w.output,
+                                                <span class="key">to</span>:node.name,
+                                                <span class="key">toinput</span>:w.input
                                         }));
                                 }
                         }
                 }
-                
+
                 <span class="keyword">return</span> res;
         }
-        
+
         <span class="keyword">function</span> <span class="function">uppercaseFirst</span> (inp) {
                 <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp;
                 <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">renderBlocks</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> res = [];
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.sourceset) <span class="keyword">return</span>;
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.sourceset.data) <span class="keyword">return</span>;
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.sourceset.data.children.length;i++){
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.sourceset.data.children[i];
-                        <span class="comment">// block({name:&quot;e&quot;, title:&quot;block E&quot;, x:450, y:600}) </span>
+                        <span class="comment">// block({name:&quot;e&quot;, title:&quot;block E&quot;, x:450, y:600})</span>
                         res.push(
                                 block({
                                         <span class="key">flowdata</span>:node.flowdata,
@@ -1601,33 +1601,33 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">return</span> res;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">commitdragselect</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> <span class="local-variable">this</span>.dragselectset){
                         <span class="keyword">var</span> bl = <span class="local-variable">this</span>.dragselectset[i];
                         <span class="local-variable">this</span>.addToSelection(bl);
                 }
-                <span class="local-variable">this</span>.updatePopupUIPosition();                
+                <span class="local-variable">this</span>.updatePopupUIPosition();
         }
 
         <span class="local-variable">this</span>.<span class="function">getCompositionName</span> = <span class="keyword">function</span>(){
                 <span class="comment">// todo: get actual name from here..</span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">somename.js</span><span class="delimiter">&quot;</span></span>;
-        }        
+        }
 
         <span class="local-variable">this</span>.<span class="function">openComposition</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>);
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> opencompositiondialog({<span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
-                                
-                                
-                        
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
+
+
+
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
-                        
+
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
                                 <span class="keyword">if</span>(res){
                                         console.log(res);
@@ -1637,19 +1637,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                 }
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> opencomp result: </span><span class="delimiter">&quot;</span></span> , res);
-                }.bind(<span class="local-variable">this</span>));                
-                
+                }.bind(<span class="local-variable">this</span>));
+
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">newComposition</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>);
-                
+
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> newcompositiondialog({<span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
                 }).then(<span class="keyword">function</span>(res){
                         <span class="keyword">if</span>(res){
@@ -1662,65 +1662,65 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }.bind(<span class="local-variable">this</span>))
                         }
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> newcomp result: </span><span class="delimiter">&quot;</span></span> , res);
-                }.bind(<span class="local-variable">this</span>));                
+                }.bind(<span class="local-variable">this</span>));
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">renameComposition</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>);
-                
+
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> renamedialog({<span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
-                        
+
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> rename composition result: </span><span class="delimiter">&quot;</span></span> , res);
-                });                
+                });
 
         }
         <span class="local-variable">this</span>.<span class="function">helpAbout</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> aboutdialog({<span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
-                        
-                });                
-                
+
+                });
+
         }
         <span class="local-variable">this</span>.<span class="function">helpReference</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> docviewerdialog({<span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Reference</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
-                        
-                });        
+
+                });
         }
         <span class="local-variable">this</span>.<span class="function">helpGettingStarted</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> docviewerdialog({<span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
-                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, 
+                                <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Getting started</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                
+
                         }} );
                 }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(res){
-                        
-                });        
+
+                });
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">undo</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.sourceset.undo();
         }
@@ -1739,7 +1739,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Edit</span><span class="delimiter">&quot;</span></span>, <span class="key">commands</span>:[
                                 {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Undo</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">undo</span><span class="delimiter">&quot;</span></span>, <span class="function">clickaction</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.undo();}.bind(<span class="local-variable">this</span>)},
                                 {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Redo</span><span class="delimiter">&quot;</span></span>,<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">redo</span><span class="delimiter">&quot;</span></span>,  <span class="function">clickaction</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.redo();}.bind(<span class="local-variable">this</span>)}
-                                
+
                         ]}
                                 ,
                         {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Help</span><span class="delimiter">&quot;</span></span>, <span class="key">commands</span>:[
@@ -1747,12 +1747,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Getting started</span><span class="delimiter">&quot;</span></span>, <span class="function">clickaction</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.helpGettingStarted();<span class="keyword">return</span> <span class="predefined-constant">true</span>;}.bind(<span class="local-variable">this</span>)},
                                 {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Reference</span><span class="delimiter">&quot;</span></span>, <span class="function">clickaction</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.helpReference();<span class="keyword">return</span> <span class="predefined-constant">true</span>;}.bind(<span class="local-variable">this</span>)}
                         ]}
-                                ]})                
+                                ]})
                         ,splitcontainer({}
                                 ,splitcontainer({<span class="key">flex</span>:<span class="float">0.2</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">direction</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>}
                                         ,dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Composition</span><span class="delimiter">&quot;</span></span> , <span class="key">flex</span>: <span class="float">0.2</span>}
                                                 <span class="comment">//,searchbox()</span>
-                                                
+
                                                 ,treeview({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">dataset</span>: <span class="local-variable">this</span>.sourceset})
                                         )
                                         ,dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Library</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span> }
@@ -1763,7 +1763,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 ,splitcontainer({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">direction</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>}
                                         ,cadgrid({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>, <span class="function">mouseleftdown</span>: <span class="keyword">function</span>(p){<span class="local-variable">this</span>.gridClick(p, <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">centralconstructiongrid</span><span class="delimiter">'</span></span>));}.bind(<span class="local-variable">this</span>),<span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span> ,<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,<span class="key">gridsize</span>:<span class="integer">5</span>,<span class="key">majorevery</span>:<span class="integer">5</span>,  <span class="key">majorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#575757</span><span class="delimiter">&quot;</span></span>, <span class="key">minorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#484848</span><span class="delimiter">&quot;</span></span>, <span class="function">zoom</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.updateZoom(<span class="local-variable">this</span>.zoom)}.bind(<span class="local-variable">this</span>)}
                                                 ,view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">underlayer</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>}
-                                                        ,view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">groupbg</span><span class="delimiter">&quot;</span></span>,<span class="key">visible</span>:<span class="predefined-constant">false</span>, <span class="key">bgcolor</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.08</span>) , <span class="key">borderradius</span>:<span class="integer">8</span>, <span class="key">borderwidth</span>:<span class="integer">0</span>, <span class="key">bordercolor</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">0.5</span>,<span class="float">0.9</span>),<span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>})                                                        
+                                                        ,view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">groupbg</span><span class="delimiter">&quot;</span></span>,<span class="key">visible</span>:<span class="predefined-constant">false</span>, <span class="key">bgcolor</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.08</span>) , <span class="key">borderradius</span>:<span class="integer">8</span>, <span class="key">borderwidth</span>:<span class="integer">0</span>, <span class="key">bordercolor</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">0.5</span>,<span class="float">0.9</span>),<span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>})
                                                 )
                                                 ,view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">connectionlayer</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">dataset</span>: <span class="local-variable">this</span>.sourceset, <span class="function">render</span>:<span class="keyword">function</span>(){
                                                         <span class="keyword">return</span> <span class="local-variable">this</span>.renderConnections();
@@ -1782,8 +1782,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 }.bind(<span class="local-variable">this</span>)}
                                                 <span class="comment">/*        ,block({name:&quot;phone&quot;, title:&quot;Phone&quot;, x:200, y:20})
                                                         ,block({name:&quot;tv&quot;, title:&quot;Television&quot;, x:50, y:200})
-                                                        ,block({name:&quot;tablet&quot;, title:&quot;Tablet&quot;,x:300, y:120})                                                
-                                                        ,block({name:&quot;thing&quot;, title:&quot;Thing&quot;,x:500, y:120})                                                
+                                                        ,block({name:&quot;tablet&quot;, title:&quot;Tablet&quot;,x:300, y:120})
+                                                        ,block({name:&quot;thing&quot;, title:&quot;Thing&quot;,x:500, y:120})
                                                         ,block({name:&quot;a&quot;, title:&quot;block A&quot;, x:50, y:300})
                                                         ,block({name:&quot;b&quot;, title:&quot;block B&quot;, x:150, y:500})
                                                         ,block({name:&quot;c&quot;, title:&quot;block C&quot;, x:250, y:400})
@@ -1791,7 +1791,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         ,block({name:&quot;e&quot;, title:&quot;block E&quot;, x:450, y:600})
                                                         ,block({name:&quot;f&quot;, title:&quot;block F&quot;, x:550, y:700})
                                                 */</span>)
-                                                                                                
+
                                                 ,view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">popuplayer</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="predefined-constant">false</span>},
                                                         view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">connectionui</span><span class="delimiter">&quot;</span></span>,<span class="key">visible</span>:<span class="predefined-constant">false</span>,<span class="key">bgcolor</span>:vec4(<span class="float">0.2</span>,<span class="float">0.2</span>,<span class="float">0.2</span>,<span class="float">0.5</span>),<span class="key">padding</span>:<span class="integer">5</span>, <span class="key">borderradius</span>:vec4(<span class="integer">1</span>,<span class="integer">14</span>,<span class="integer">14</span>,<span class="integer">14</span>), <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,<span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                                                                 label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Connection</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">margin</span>:<span class="integer">4</span>})
@@ -1802,13 +1802,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Block</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">margin</span>:<span class="integer">4</span>})
                                                                 ,button({<span class="key">padding</span>:<span class="integer">0</span>,<span class="key">borderwidth</span>:<span class="integer">0</span>, <span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.removeBlock(<span class="predefined-constant">undefined</span>)}.bind(<span class="local-variable">this</span>),<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">4</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>})
                                                         )
-                                                        
+
                                                         ,view({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">groupui</span><span class="delimiter">&quot;</span></span>,<span class="key">visible</span>:<span class="predefined-constant">false</span>, <span class="key">bgcolor</span>:vec4(<span class="float">0.2</span>,<span class="float">0.2</span>,<span class="float">0.2</span>,<span class="float">0.5</span>),<span class="key">borderradius</span>:<span class="integer">8</span>, <span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,<span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                                                         <span class="comment">//,view({name:&quot;blockui&quot;,x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:&quot;absolute&quot;},</span>
                                                                 label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Group</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">margin</span>:<span class="integer">4</span>})
                                                                 ,button({<span class="key">padding</span>:<span class="integer">0</span>,<span class="key">borderwidth</span>:<span class="integer">0</span>, <span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.removeBlock(<span class="predefined-constant">undefined</span>)}.bind(<span class="local-variable">this</span>),<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">delete</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">4</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>})
                                                         )
-                                                        ,<span class="local-variable">this</span>.selectorrect({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>})                                                        
+                                                        ,<span class="local-variable">this</span>.selectorrect({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>})
                                                         ,view({<span class="key">bg</span>:<span class="predefined-constant">false</span>}, connection({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">openconnector</span><span class="delimiter">&quot;</span></span>, <span class="key">hasball</span>: <span class="predefined-constant">false</span>, <span class="key">visible</span>:<span class="predefined-constant">false</span>}))
                                                 )
                                         )
@@ -1818,8 +1818,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
 ,splitcontainer({<span class="key">flex</span>:<span class="float">0.5</span>,<span class="key">direction</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>}
 ,dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span>}
-,propviewer({<span class="key">flex</span>:<span class="integer">2</span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})                
-)        
+,propviewer({<span class="key">flex</span>:<span class="integer">2</span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})
+)
 )
 
 
@@ -1827,8 +1827,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 ];
         }
 });
-        
-        </pre></td>
+
+
+</pre></td>
 </tr></table>
 
 </body>

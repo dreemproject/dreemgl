@@ -36,6 +36,22 @@
  * alias for the z component of pos
  */
 /**
+ * @attribute {vec3} [corner="NaN,NaN,NaN"]
+ * the bottom/right/rear corner, used by layout
+ */
+/**
+ * @attribute {typeless} right
+ * alias for the x component of corner
+ */
+/**
+ * @attribute {typeless} bottom
+ * alias for  y component of corner
+ */
+/**
+ * @attribute {typeless} rear
+ * alias for z component of corner
+ */
+/**
  * @attribute {vec4} [bgcolor="1,1,1,1"]
  * the background color of a view, referenced by various shaders
  */
@@ -303,6 +319,10 @@
  * drop shadow color
  */
 /**
+ * @attribute {boolean} focus
+ * whether this view has focus
+ */
+/**
  * @attribute {float32} tabstop
  * tabstop, sorted by number
  */
@@ -311,6 +331,8 @@
  * returns the mouse position in local coordinates
  */
 /**
- * @method redraw
- * redraw our view and bubble up the viewport dirtiness to the root
+ * @method bgcolorfn
+ * Determines the background color that should be drawn at a given position.
+ * Defaults to bgcolor.
+ * @param pos
  */

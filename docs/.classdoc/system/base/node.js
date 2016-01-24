@@ -28,11 +28,3 @@
  * @param key
  * @param cb
  */
-/**
- * @event init
- * always define an init and deinit
- */
-/**
- * @event destroy
- * always define an init and deinit
- */
