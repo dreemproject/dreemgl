@@ -1,5 +1,5 @@
 /**
  * @class service
  * @extends node
- * an empty server side service baseclass inherit from this to define server side components
+ * An empty server side service baseclass. Inherit from this to define server side components
  */

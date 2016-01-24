@@ -1732,9 +1732,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size</span>
                 <span class="key">size</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xyz</span><span class="delimiter">&quot;</span></span>}),
 
-                <span class="comment">// alias for the x component of size</span>
+                <span class="comment">// internal, alias for the x component of size</span>
                 <span class="key">w</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
-                <span class="comment">// alias for the y component of size</span>
+                <span class="comment">// internal, alias for the y component of size</span>
                 <span class="key">h</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
                 <span class="comment">// internal, alias for the z component of size</span>
                 <span class="key">d</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">size</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
@@ -1748,20 +1748,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="key">percentsize</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>)}),
 
-                <span class="comment">// percentage widths/heights</span>
+                <span class="comment">// alias for the x component of percentsize</span>
                 <span class="key">percentwidth</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
-                <span class="comment">// percentage widths/heights</span>
+                <span class="comment">// alias for the y component of percentsize</span>
                 <span class="key">percentheight</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
-                <span class="comment">// percentage widths/heights</span>
+                <span class="comment">// alias for the z component of percentsize</span>
                 <span class="key">percentdepth</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="key">percentpos</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>)}),
 
-                <span class="comment">// percentage widths/heights</span>
+                <span class="comment">// internal, percentage widths/heights</span>
                 <span class="key">percentx</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
-                <span class="comment">// percentage widths/heights</span>
+                <span class="comment">// internal, percentage widths/heights</span>
                 <span class="key">percenty</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
-                <span class="comment">// percentage widths/heights</span>
+                <span class="comment">// internal, percentage widths/heights</span>
                 <span class="key">percentz</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)</span>
@@ -1986,7 +1986,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// listen to switch the shaders when borderradius changes</span>
+        <span class="comment">// internal, listen to switch the shaders when borderradius changes</span>
         <span class="local-variable">this</span>.<span class="function">onborderradius</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
@@ -2016,7 +2016,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// listen to the viewport to turn off our background and border shaders when 3D</span>
+        <span class="comment">// internal, listen to the viewport to turn off our background and border shaders when 3D</span>
         <span class="local-variable">this</span>.<span class="function">onviewport</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">if</span>(event.value === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                         <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span>
@@ -2024,21 +2024,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set</span>
+        <span class="comment">// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set</span>
         <span class="local-variable">this</span>.<span class="function">onoverflow</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._overflow){
                         <span class="keyword">if</span>(!<span class="local-variable">this</span>._viewport) <span class="local-variable">this</span>._viewport = <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>
                 }
         }
 
-        <span class="comment">// setting focus to true</span>
+        <span class="comment">// internal, setting focus to true</span>
         <span class="local-variable">this</span>.<span class="function">onfocus</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">if</span>(!event.mark){ <span class="comment">// someone set it to true that wasnt us</span>
                         <span class="local-variable">this</span>.screen.setFocus(<span class="local-variable">this</span>)
                 }
         }
 
-        <span class="comment">// put a tablistener</span>
+        <span class="comment">// internal, put a tablistener</span>
         <span class="local-variable">this</span>.<span class="function">ontabstop</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">if</span>(isNaN(event.old) &amp;&amp; !isNaN(event.value)){
                         <span class="local-variable">this</span>.addListener(<span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(value){
@@ -2050,7 +2050,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// returns the mouse in local coordinates</span>
+        <span class="comment">// returns the mouse position in local coordinates</span>
         <span class="local-variable">this</span>.<span class="function">localMouse</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> ret = vec2(<span class="local-variable">this</span>.screen.remapMouse(<span class="local-variable">this</span>))
         <span class="comment">//        if(ret[0]&lt;0) debugger</span>
@@ -2066,7 +2066,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// update matrix stack</span>
         <span class="local-variable">this</span>.matrix_dirty = <span class="predefined-constant">true</span>
 
-        <span class="comment">// initialization of a view</span>
+        <span class="comment">// internal, initialization of a view</span>
         <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(prev){
 
                 <span class="local-variable">this</span>.anims = {}
@@ -2170,7 +2170,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">else</span> <span class="local-variable">this</span>.redraw()
         }
 
-        <span class="comment">// emit an event upward (to all parents) untill a listener is hit</span>
+        <span class="comment">// internal, emit an event upward (to all parents) untill a listener is hit</span>
         <span class="local-variable">this</span>.<span class="function">emitUpward</span> = <span class="keyword">function</span>(key, msg){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span>+key] || <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span>+key]){
                         <span class="local-variable">this</span>.emit(key, msg)
@@ -2197,7 +2197,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// called at every frame draw</span>
+        <span class="comment">// internal, called at every frame draw</span>
         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.debug !== <span class="predefined-constant">undefined</span> &amp;&amp; <span class="local-variable">this</span>.debug.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">atdraw</span><span class="delimiter">'</span></span>)!== -<span class="integer">1</span>) console.log(<span class="local-variable">this</span>)
         }
@@ -2216,7 +2216,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
 
-        <span class="comment">// custom hook in the inner class assignment to handle nested shaders specifically</span>
+        <span class="comment">// internal, custom hook in the inner class assignment to handle nested shaders specifically</span>
         <span class="local-variable">this</span>.<span class="function">atInnerClassAssign</span> = <span class="keyword">function</span>(key, value){
 
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">shader_enable</span><span class="delimiter">'</span></span>)) <span class="local-variable">this</span>.shader_enable = Object.create(<span class="local-variable">this</span>.shader_enable || {})
@@ -2262,7 +2262,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// updates all the shaders</span>
+        <span class="comment">// internal, updates all the shaders</span>
         <span class="local-variable">this</span>.<span class="function">reupdate</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> shaders = <span class="local-variable">this</span>.shader_list
                 <span class="keyword">if</span>(shaders) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; shaders.length; i++){
@@ -2283,7 +2283,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> <span class="local-variable">this</span>.viewguid = id
         }
 
-        <span class="comment">// this gets called by the render engine</span>
+        <span class="comment">// internal, this gets called by the render engine</span>
         <span class="local-variable">this</span>.<span class="function">updateShaders</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.update_dirty) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.update_dirty = <span class="predefined-constant">false</span>
@@ -2319,7 +2319,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
 
-        <span class="comment">// decide to inject scrollbars into our childarray</span>
+        <span class="comment">// internal, decide to inject scrollbars into our childarray</span>
         <span class="local-variable">this</span>.<span class="function">atRender</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; (<span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>|| <span class="local-variable">this</span>._overflow === <span class="string"><span class="delimiter">'</span><span class="content">auto</span><span class="delimiter">'</span></span>)){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar) <span class="local-variable">this</span>.vscrollbar.value = <span class="integer">0</span>
@@ -2409,7 +2409,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// show/hide scrollbars</span>
+        <span class="comment">// internal, show/hide scrollbars</span>
         <span class="local-variable">this</span>.<span class="function">updateScrollbars</span> = <span class="keyword">function</span>(){
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar){
@@ -2448,7 +2448,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// called by doLayout, to update the matrices to layout and parent matrix</span>
+        <span class="comment">// internal, called by doLayout, to update the matrices to layout and parent matrix</span>
         <span class="local-variable">this</span>.<span class="function">updateMatrices</span> = <span class="keyword">function</span>(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
 
                 <span class="comment">// allow pre-matrix gen hooking</span>
@@ -2614,7 +2614,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// moving a position in absolute should only trigger a matrix reload</span>
+        <span class="comment">// internal, moving a position in absolute should only trigger a matrix reload</span>
         <span class="local-variable">this</span>.<span class="function">pos</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._position === <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>){
                         <span class="local-variable">this</span>._layout.left = <span class="local-variable">this</span>._pos[<span class="integer">0</span>]
@@ -2641,7 +2641,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.position =
         <span class="local-variable">this</span>.relayout
 
-        <span class="comment">// called by the render engine</span>
+        <span class="comment">// internal, called by the render engine</span>
         <span class="local-variable">this</span>.<span class="function">doLayout</span> = <span class="keyword">function</span>(){
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.parent &amp;&amp; !isNaN(<span class="local-variable">this</span>._flex)){ <span class="comment">// means our layout has been externally defined</span>

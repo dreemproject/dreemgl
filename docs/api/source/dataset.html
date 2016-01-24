@@ -248,13 +248,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n94" name="n94">94</a>
 <a href="#n95" name="n95">95</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, label){        
-        <span class="comment">// The dataset class allows you to share a single &quot;document&quot; between various parts of your application. </span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, label){
+        <span class="comment">// The dataset class allows you to share a single &quot;document&quot; between various parts of your application.</span>
         <span class="comment">// The dataset provides undo/redo functionality by serializing its contents to a JSON string.</span>
         <span class="comment">// To modify a dataset you need to use the &quot;fork&quot; method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.</span>
 
@@ -265,7 +265,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.data = data
         }
 
-        <span class="comment">// Handles the binding of this dataset to the attribute of something else.</span>
+        <span class="comment">// internal, Handles the binding of this dataset to the attribute of something else.</span>
         <span class="local-variable">this</span>.<span class="function">atAttributeAssign</span> = <span class="keyword">function</span>(obj, key){
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.connected_objects.length; i++){
                         <span class="keyword">var</span> co = <span class="local-variable">this</span>.connected_objects[i];
@@ -282,7 +282,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.notifyAssignedAttributes()
         }
 
-        <span class="comment">// Silent operates much the same as `fork`, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack</span>
+        <span class="comment">// internal, Silent operates much the same as `fork`, but does not notify listeners bound to this dataset. This can be used in case you are CERTAIN that this object is the only object in your application that listens to your changed property, but you still need to save the state to the undo stack</span>
         <span class="comment">// 'callback' the function that will be called with a modifyable javascript object. DO NOT under any circumstances directly modify this data property!</span>
         <span class="local-variable">this</span>.<span class="function">silent</span> = <span class="keyword">function</span>(callback <span class="comment">/*function*/</span>){
                 <span class="local-variable">this</span>.undo_stack.push(<span class="local-variable">this</span>.stringify(<span class="local-variable">this</span>.data))
@@ -291,7 +291,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.atChange) <span class="local-variable">this</span>.atChange()
         }
 
-        <span class="comment">// Cause objects that have us assigned to reload</span>
+        <span class="comment">// internal, Cause objects that have us assigned to reload</span>
         <span class="local-variable">this</span>.<span class="function">notifyAssignedAttributes</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.connected_objects.length; i++){
                         <span class="keyword">var</span> o = <span class="local-variable">this</span>.connected_objects[i]
@@ -299,23 +299,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.atChange) <span class="local-variable">this</span>.atChange()
         }
-        
+
         <span class="comment">// Convert all javascript binary arrays in to their correct objects.</span>
         <span class="comment">// &lt;node&gt; the node to clean up.</span>
-        
-        
-        <span class="comment">// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice. </span>
+
+
+        <span class="comment">// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.</span>
         <span class="local-variable">this</span>.<span class="function">parse</span> = <span class="keyword">function</span>(stringdata){
                 <span class="keyword">var</span> data = JSON.parse(stringdata)
                 data = define.structFromJSON(data);
                 <span class="keyword">return</span> data;
         }
-        
+
         <span class="comment">// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.</span>
         <span class="local-variable">this</span>.<span class="function">stringify</span> = <span class="keyword">function</span>(data <span class="comment">/*Object*/</span>) <span class="comment">/*String*/</span> {
                 <span class="keyword">return</span> JSON.stringify(data);
         }
-        
+
         <span class="comment">// Go back to the previous state. All classes that have this dataset bound will get their assignment updated</span>
         <span class="local-variable">this</span>.<span class="function">undo</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.undo_stack.length) <span class="keyword">return</span>
@@ -324,14 +324,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.notifyAssignedAttributes();
         }
 
-        <span class="comment">// Go back to the previous state. All classes that have this dataset bound will get their assignment updated</span>
+        <span class="comment">// Go forward to the next state. All classes that have this dataset bound will get their assignment updated</span>
         <span class="local-variable">this</span>.<span class="function">redo</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.redo_stack.length) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.undo_stack.push(<span class="local-variable">this</span>.stringify(<span class="local-variable">this</span>.data))
                 <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.parse(<span class="local-variable">this</span>.redo_stack.pop())
                 <span class="local-variable">this</span>.notifyAssignedAttributes()
         }
-        
+
         <span class="comment">// Basic dataset modification example:</span>
         <span class="keyword">var</span> dataset = <span class="local-variable">this</span>.constructor
         <span class="local-variable">this</span>.constructor.examples = {
@@ -341,8 +341,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> label({<span class="key">text</span>:a.data.something});
                 }
         }
-        
-})</pre></td>
+
+})
+</pre></td>
 </tr></table>
 
 </body>

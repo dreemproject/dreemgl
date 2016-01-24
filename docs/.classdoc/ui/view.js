@@ -70,14 +70,6 @@
  * size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
  */
 /**
- * @attribute {typeless} w
- * alias for the x component of size
- */
-/**
- * @attribute {typeless} h
- * alias for the y component of size
- */
-/**
  * @attribute {typeless} width
  * alias for the x component of size
  */
@@ -91,27 +83,15 @@
  */
 /**
  * @attribute {typeless} percentwidth
- * percentage widths/heights
+ * alias for the x component of percentsize
  */
 /**
  * @attribute {typeless} percentheight
- * percentage widths/heights
+ * alias for the y component of percentsize
  */
 /**
  * @attribute {typeless} percentdepth
- * percentage widths/heights
- */
-/**
- * @attribute {typeless} percentx
- * percentage widths/heights
- */
-/**
- * @attribute {typeless} percenty
- * percentage widths/heights
- */
-/**
- * @attribute {typeless} percentz
- * percentage widths/heights
+ * alias for the z component of percentsize
  */
 /**
  * @attribute {float32} pixelratio
@@ -327,88 +307,10 @@
  * tabstop, sorted by number
  */
 /**
- * @method onborderradius
- * listen to switch the shaders when borderradius changes
- * @param event
- */
-/**
- * @method onviewport
- * listen to the viewport to turn off our background and border shaders when 3D
- * @param event
- */
-/**
- * @method onoverflow
- * automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
- */
-/**
- * @method onfocus
- * setting focus to true
- * @param event
- */
-/**
- * @method ontabstop
- * put a tablistener
- * @param event
- */
-/**
  * @method localMouse
- * returns the mouse in local coordinates
- */
-/**
- * @method oninit
- * initialization of a view
- * @param prev
- */
-/**
- * @method emitUpward
- * emit an event upward (to all parents) untill a listener is hit
- * @param key
- * @param msg
- */
-/**
- * @method atDraw
- * called at every frame draw
- */
-/**
- * @method atInnerClassAssign
- * custom hook in the inner class assignment to handle nested shaders specifically
- * @param key
- * @param value
+ * returns the mouse position in local coordinates
  */
 /**
  * @method redraw
  * redraw our view and bubble up the viewport dirtiness to the root
- */
-/**
- * @method reupdate
- * updates all the shaders
- */
-/**
- * @method updateShaders
- * this gets called by the render engine
- */
-/**
- * @method atRender
- * decide to inject scrollbars into our childarray
- */
-/**
- * @method updateScrollbars
- * show/hide scrollbars
- */
-/**
- * @method updateMatrices
- * called by doLayout, to update the matrices to layout and parent matrix
- * @param parentmatrix
- * @param parentviewport
- * @param parent_changed
- * @param boundsinput
- * @param bailbound
- */
-/**
- * @method pos
- * moving a position in absolute should only trigger a matrix reload
- */
-/**
- * @method doLayout
- * called by the render engine
  */
