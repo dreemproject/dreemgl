@@ -110,14 +110,14 @@ define.class(function(require, $server$, service){
 	  Convert lat-lng to mercator meters
 	*/
 	this.latLngToMeters = function(x, y) {
-
+		y = this.wrapLng(y + 360)
 		// Latitude
-		y = Math.log(Math.tan(y*Math.PI/360 + Math.PI/4)) / Math.PI;
+		var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);
+		y = Math.log(t) / Math.PI;
 		y *= this.half_circumference_meters;
-
+		
 		// Longitude
 		x *= this.half_circumference_meters / 180;
-
 		return [x, y];
 	};
 
@@ -128,7 +128,7 @@ define.class(function(require, $server$, service){
 		return x;
 	};
 
-	// Run an in-place transform function on each cooordinate in a GeoJSON geometry
+	/*// Run an in-place transform function on each cooordinate in a GeoJSON geometry
 	this.transformGeometry = function (geometry, transform) {
 		if (geometry == null) {
 			return; // skip if missing geometry (valid GeoJSON)
@@ -149,6 +149,6 @@ define.class(function(require, $server$, service){
 			});
 		}
 		// TODO: support GeometryCollection
-	};
+	};*/
 
 })

@@ -40,7 +40,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			this.attributes = {
 				buildings: [],
 				scalefactor: 1.0,
-				currentbuilding: -1
+				currentbuilding: -1,
+				currentbuildingid: -1
 			}
 
 			this.boundscheck = false
@@ -52,12 +53,16 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.mouseout = function(){
 				this.currentbuilding = -1;
+				this.currentbuildingid = -1;
 			}
 
 			this.mouseover =  function(){
 				var building = this.buildings[this.last_pick_id]
 				this.currentbuilding = this.last_pick_id
 				if(building){
+					this.currentbuildingid = building.id;
+					console.log(this.currentbuildingid, building.id, building);
+					
 					var text = "Building"
 					//console.log(building);
 					if(building.kind) text += " " + building.kind
@@ -67,6 +72,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					this.screen.status = text
 				}
 				else {
+					this.currentbuildingid = -1;
+				
 					console.log(this.last_pick_id)
 				}
 			}
@@ -76,7 +83,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.vertexstruct =  define.struct({		
 					pos:vec3,
 					color:vec4, 
-					id: float
+					id: float,
+					buildingid: float
 				})
 
 				this.mesh = this.vertexstruct.array();
@@ -84,6 +92,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 					PickGuid = mesh.id;
 					if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color.x, 0, 0, 1);
+					if (abs(view.currentbuildingid - mesh.buildingid)<0.2) return vec4(mesh.color.x * 0.8, 0, 0, 1);
 					//return pal.pal1(mesh.pos.z/300.-0.1*view.time +mesh.id/100.) * mesh.color
 					return mesh.color;
 				}
@@ -118,18 +127,18 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 								
 								c = 0.4 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
 								
-								this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
-								this.mesh.push(A2[0],A2[1],0, c,c,c, 1, i);
-								this.mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i);
-								this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i);
-								this.mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i);
-								this.mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i);
+								this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i,building.id);
+								this.mesh.push(A2[0],A2[1],0, c,c,c, 1, i,building.id);
+								this.mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,building.id);
+								this.mesh.push(A1[0],A1[1],0, c,c,c, 1, i,building.id);
+								this.mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,building.id);
+								this.mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,building.id);
 								A1 = A2;
 						
 							}
 							c = 0.4
 							for(var a = 0;a<tris.length;a++){
-								this.mesh.push(tris[a][0]+isox,tris[a][1]+isoy,theH, c,c,c, 1, i);
+								this.mesh.push(tris[a][0]+isox,tris[a][1]+isoy,theH, c,c,c, 1, i,building.id);
 							}
 						}							
 					}
@@ -251,7 +260,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var r = vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix;
 				
 
-					//r.w -= mesh.pos.z*0.01;
+					r.w -= mesh.pos.z*0.01;
 					return r
 				}
 					
@@ -408,7 +417,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				this.position = function(){					
 					var pos = mesh.pos.xy + mesh.sidevec * mesh.side * view.zoomscale*mesh.linewidth*0.5;
 					var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
-					//res.w += mesh.pos.z;
+					res.w += mesh.pos.z;
 					return res
 				}
 				
@@ -418,6 +427,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}	
 		})
 				
+		
 		var KindSet = this.KindSet = {};
 		var UnhandledKindSet = this.UnhandledKindSet = {};	
 		
@@ -537,7 +547,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
-						var B = {h:Bb.properties.height?Bb.properties.height:3.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
+					//	console.log(Bb.properties);
+						var B = {id:Bb.properties.id,h:Bb.properties.height?Bb.properties.height:3.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
 							if (Bb.arcs){
 								for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
@@ -701,9 +712,9 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				view({flex:1, overflow:"scroll", bgcolor:"darkblue", clearcolor:"#505050", onzoom: function(){this.find("themap").setZoomLevel(this.zoom, this.layout.width, this.layout.height);}},
 				this.mainscreen({ name:"mainscreen", 				
 					//perspective cam: 
-			//		camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
+					//camera:[0,0,1000 ], lookat:[1000,1000,0],nearplane:10, farplane:12000, up:[0,0,-1],viewport:"3d",
 					// "ortho" cam: 
-					//camera:vec3(3000,3000,6000), fov:30, lookat:vec3(3000,3000,0),nearplane:10, farplane:12000, up:vec3(0,1,0),viewport:"3d",
+					camera:vec3(3000,3000,6000), fov:30, lookat:vec3(3000,3000,0),nearplane:10, farplane:12000, up:vec3(0,1,0),viewport:"3d",
 					boundscheck:false, flex:1, 
 				}),
 				ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"mainscreen"})

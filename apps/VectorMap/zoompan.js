@@ -7,8 +7,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			var keys = Object.keys(this.datasource.loadedblocks);
 			for(var i =0 ;i<keys.length;i++){
 				var lb = this.datasource.loadedblocks[keys[i]]
-			//	console.log(lb.x, lb.y);
-				res.push(view({width:18, height:18, position:"absolute", x: lb.z*200 + 100 + 20*lb.x, y:100 + 20*lb.y,bgcolor:vec4(Math.sin(lb.z*2), Math.cos(lb.z*2.1), 1, 1)}))
+				res.push(view({width:18, height:18, position:"absolute", x: lb.z*200 + 100 + 20 * lb.x, y:100 + 20 * lb.y,bgcolor:vec4(Math.sin(lb.z*2), Math.cos(lb.z*2.1), 1, 1)}))
 			}
 			return res;
 		}
@@ -22,7 +21,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			dataset: {}				
 		}
 		
-		
 		this.oncenterx = function(){
 			if (this.dataset){
 				
@@ -30,6 +28,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		
 			}
 		}
+
 		this.oncentery = function(){
 			if (this.dataset){
 				
@@ -38,7 +37,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			}
 		}
 	
-
 		this.keydownLeftarrow = function(){
 			this.centerx --;
 		}
@@ -188,7 +186,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			screen({name:"index", clearcolor:vec4("#000030"), moveTo:function(x,y,z){
 				this.find("tiledmap").moveTo(x,y,z)
 			}}		
-				,mapdata = map.mapdataset()
+				,mapdata =this.map()
 
 				,this.tiledmap({name:"tiledmap", datasource: mapdata})				
 			) 
