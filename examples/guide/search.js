@@ -1,4 +1,4 @@
-define.class(function(require, $server$, service) {
+define.class('$server/service', function(require, $system$server$, nodehttp) {
 
     // internal, Base API URL
     this.apiurl = "http://www.omdbapi.com/?s=";
@@ -10,19 +10,29 @@ define.class(function(require, $server$, service) {
         results: []
     };
 
-    this.onkeyword = function (event) {
-        var keyword = event.value;
-        var request = require('request');
-        if (keyword && request) {
-            request(this.apiurl + keyword.replace(/[^a-z0-9_-]/ig, '+'), (function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    var res = JSON.parse(body);
-                    this.results = res["Search"];
-                }
-            }).bind(this))
-        } else if (!request) {
-            console.log('WARNING: if "request" is missing, please cd to "./examples/guide/" and run "npm install"')
-        }
-    };
+	var libexists = require('url');
+	if (libexists) {
+		this.onkeyword = function (event) {
+			var self = this;
+			var keyword = event.value;
+
+			if (keyword) {
+				var url = this.apiurl + keyword.replace(/[^a-z0-9_-]/ig, '+');
+				if (url) {
+					nodehttp.get(url).then(function(resp) {
+						var res = JSON.parse(resp);
+						self.results = res["Search"];
+					}, function(err) {
+						console.log('ERROR with OMDB Search:', err);
+						self.results = [];
+					});
+				} else {
+					self.results = [];
+				}
+			}
+		};
+	}
+
+
 
 });
