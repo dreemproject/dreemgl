@@ -78,7 +78,9 @@ define.class('$system/base/pointer', function (require, exports){
 			//
 
 			// TODO(aki): consider moving to screen.
-			this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+			if(!('ontouchstart' in window)){
+				this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+			}
 			if (device.keyboard) device.keyboard.checkSpecialKeys(touchList[0].e)
 
 			var pointers = []
@@ -121,7 +123,9 @@ define.class('$system/base/pointer', function (require, exports){
 			// TODO(aki): make sure this functions with touch (no buttons)
 			// lets move our textarea only if right mouse is down
 			if (touchList[0].button == 2){
-				this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+				if(!('ontouchstart' in window)){
+					this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+				}
 			}
 
 			var pointers = []
@@ -167,7 +171,9 @@ define.class('$system/base/pointer', function (require, exports){
 			//
 
 			// TODO(aki): consider moving to screen.
-			this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+			if(!('ontouchstart' in window)){
+				this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+			}
 			if (device.keyboard) device.keyboard.checkSpecialKeys(touchList[0].e)
 
 			var pointers = []
