@@ -1,23 +1,23 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, 
+define.class('$ui/view', function(require,
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, propviewer,searchbox, jseditor,
 		$server$, sourceset, dataset, $$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
-	this.clearcolor = "#565656" 
-	this.bgcolor = "#565656" 
+	this.clearcolor = "#565656"
+	this.bgcolor = "#565656"
 	this.flexdirection = "column";
-	
+
 	this.attributes = {
 		sourceset:{}
 	}
-	
+
 	define.class(this, "selectorrect", view, function(){
 		//debugger
 		this.bordercolorfn = function(pos){
@@ -31,30 +31,30 @@ define.class('$ui/view', function(require,
 		this.position = "absolute"
 		this.visible = false
 	})
-	
-	this.addToSelection = function(obj){		
+
+	this.addToSelection = function(obj){
 		var f = this.currentselection.indexOf(obj)
 		if (f == -1) this.currentselection.push(obj)
 		else return
-		
+
 		this.updateSelectedItems()
 
 		if (this.currentselection.length > 1) return false;
 		return true;
 	}
-	
+
 	this.removeFromSelection = function(obj){
 		if(this.currentblock == obj){
 			this.currentblock = undefined
 			this.updatePopupUIPosition()
 		}
-		
+
 		var f = this.currentselection.indexOf(obj)
 		if(f>-1) this.currentselection.splice(f,1)
 
 		this.updateSelectedItems()
 	}
-	
+
 	this.updateSelectedItems = function(){
 		for(var a in this.allblocks){
 			var obj = this.allblocks[a]
@@ -72,13 +72,13 @@ define.class('$ui/view', function(require,
 		}
 		this.updatePopupUIPosition()
 	}
-	
+
 	this.inSelection = function(obj){
 		var f = this.currentselection.indexOf(obj)
 		if (f > -1) return true
 		return false
 	}
-	
+
 	this.setupSelectionMove = function(){
 		for(var a in this.currentselection){
 			var obj = this.currentselection[a]
@@ -109,7 +109,7 @@ define.class('$ui/view', function(require,
 		this.updateConnections()
 		this.updatePopupUIPosition()
 	}
-	
+
 	this.clearSelection = function(update){
 		this.currentblock = undefined
 		this.currentconnection = undefined
@@ -138,7 +138,7 @@ define.class('$ui/view', function(require,
 			this.updatePopupUIPosition()
 		}
 	}
-	
+
 	this.removeConnection = function (conn){
 		if (conn == undefined) conn = this.currentconnection
 		if (conn){
@@ -158,41 +158,41 @@ define.class('$ui/view', function(require,
 			this.updatePopupUIPosition()
 		}
 	}
-	
+
 	this.updatePopupUIPosition = function(){
 		var bg = this.findChild("blockui")
 		var cg = this.findChild("connectionui")
 		var gg = this.findChild("groupui")
 		var gbg = this.findChild("groupbg")
-		
+
 		gbg.visible =false;
 		gg.visible = false;
 		bg.visible = false;
-		
+
 		return;
 		// todo - decide if the group UI is needed at all..
-		
+
 		if (this.currentselection.length == 1){
 
 			gg.visible = false;
 			gbg.visible = false;
-			this.currentblock = undefined;			
+			this.currentblock = undefined;
 			this.currentconnection = undefined;
-			
+
 			var b= this.currentselection[0];
-			
+
 			if (b instanceof block) this.currentblock = b;
 			if (b instanceof connection) this.currentconnection  = b;
-			
+
 			if (this.currentblock){
 				bg.x = this.currentblock.pos[0];
 				bg.y = this.currentblock.pos[1]-bg.layout.height - 3;
 				bg.visible = true;
 			}
 			else{
-				bg.visible = false;					
+				bg.visible = false;
 			}
-			
+
 			if (this.currentconnection){
 				cg.x = (this.currentconnection.frompos[0] + this.currentconnection.topos[0])/2
 				cg.y = (this.currentconnection.frompos[1] + this.currentconnection.topos[1])/2
@@ -222,29 +222,29 @@ define.class('$ui/view', function(require,
 						n++;
 						if (bl.pos[0] < minx) minx = bl.pos[0];else if (bl.pos[0]>maxx) maxx = bl.pos[0];
 						if (bl.pos[1] < miny) miny = bl.pos[1];else if (bl.pos[1]>maxy) maxy = bl.pos[1];
-						
+
 						var x2 = bl.pos[0] + bl.layout.width;
 						var y2 = bl.pos[1] + bl.layout.height;
 						if (x2 < minx) minx = x2;else if (x2>maxx) maxx = x2;
 						if (y2 < miny) miny = y2;else if (y2>maxy) maxy = y2;
 
 
-						cx += bl.pos[0] + bl.layout.width/2; 
-						cy += bl.pos[1] + bl.layout.height/2;	
+						cx += bl.pos[0] + bl.layout.width/2;
+						cy += bl.pos[1] + bl.layout.height/2;
 					}
 					else{
 						if (bl instanceof connection){
 							var ax = bl.frompos[0];
 							var ay = bl.frompos[1];
-						             
+
 							var bx = bl.topos[0];
 							var by = bl.topos[1];
-						
+
 							if (ax > maxx) maxx = ax;else if (ax<minx) minx = ax;
 							if (bx > maxx) maxx = bx;else if (bx<minx) minx = bx;
 							if (ay > maxy) maxy = ay;else if (ay<miny) miny = ay;
 							if (by > maxy) maxy = by;else if (by<miny) miny = by;
-						
+
 							cx += (ax+bx)/2;
 							cy += (ay+by)/2;
 							n++;
@@ -253,21 +253,21 @@ define.class('$ui/view', function(require,
 				}
 				cx /= n;
 				cy /= n;
-				
+
 				gg.pos = vec2(cx - cg.layout.width/2, cy - cg.layout.height/2)
-				
+
 				gbg.pos = vec2(minx-20,miny-20);
 				gbg.size = vec2(maxx-minx + 40, maxy-miny+ 40);
-				
+
 			}
 			else{
 				gg.visible = false;
 				gbg.visible = false;
-			
+
 			}
 		}
 	}
-	
+
 	this.setActiveBlock = function(block){
 		this.currentblock = block
 		if(block){
@@ -276,17 +276,17 @@ define.class('$ui/view', function(require,
 		}
 		this.updatePopupUIPosition()
 	}
-	
+
 	this.setActiveConnection = function(conn){
 		this.currentconnection = conn;
-		
+
 		if(conn){
 			this.currentblock = undefined;
-			this.addToSelection(conn);								
-		}	
+			this.addToSelection(conn);
+		}
 		this.updatePopupUIPosition();
 	}
-	
+
 	this.updateConnections = function(){
 		var cl = this.find("connectionlayer");
 		for(var a in cl.children){
@@ -294,31 +294,31 @@ define.class('$ui/view', function(require,
 			//cl.children[a].layout = 1
 		}
 	}
-	
-	this.init = function(){		
+
+	this.init = function(){
 		this.screen.onstatus = function(){
 			this.find("themenu").statustext = this.screen.status;
 		}
 		this.currentselection = [];
 		this.currentblock = undefined;
-		this.currentconnection = undefined;		
+		this.currentconnection = undefined;
 		this.allblocks = [];
 		this.allconnections = [];
 		this.newconnection = {};
-		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});	
+		this.model = dataset({children:[{name:"Role"},{name:"Server"}], name:"Composition"});
 		this.librarydata = dataset({children:[]});
 
 		this.sourceset = sourceset()
-		
+
 		this.rpc.fileio.readFlowLibrary(['@/\\.','.git', '.gitignore']).then(function(result){
 			var lib = this.find('thelibrary');
 			var tree = result.value
 			tree.name = 'Library'
 			tree.collapsed = false
 			lib.dataset = this.librarydata  = dataset(tree)
-			
+
 		}.bind(this))
-		
+
 		this.screen.locationhash = function(event){
 			if(event.value.composition)
 			require.async(event.value.composition).then(function(result){
@@ -340,27 +340,27 @@ define.class('$ui/view', function(require,
 				var tree = result.value
 				tree.collapsed = false
 				// lets make a dataset
-				
+
 		}.bind(this))
 	}
 
 	// right before the recalculateMatrix call
 	this.atMatrix = function(){
 		this.updateConnections();
-	}	
-	
-	this.updateZoom = function(z){	
 	}
-	
+
+	this.updateZoom = function(z){
+	}
+
 	this.gridClick = function(p, origin){
-		
+
 		this.cancelConnection()
 		var cg= this.find("centralconstructiongrid")
-	
+
 		origin.startselectposition = cg.localMouse()
 		this.startDragSelect()
-		
-		origin.mousemove = function(){				
+
+		origin.mousemove = function(){
 			var cg= this.find("centralconstructiongrid")
 			var np = cg.localMouse()
 			var fg = this.find("flowgraph")
@@ -370,23 +370,23 @@ define.class('$ui/view', function(require,
 				var sy = Math.min(this.startselectposition[1], np[1])
 				var ex = Math.max(this.startselectposition[0], np[0])
 				var ey = Math.max(this.startselectposition[1], np[1])
-				
+
 				sq.visible = true;
 				sq.redraw();
-			
+
 				sq.pos = vec2(sx,sy);
 				sq.size = vec3(ex-sx, ey-sy, 1);
 				fg.dragselectset = [];
 				for(var a in fg.allblocks){
 					var bl = fg.allblocks[a];
-					
-					cx = bl.pos[0] + bl.layout.width/2; 
+
+					cx = bl.pos[0] + bl.layout.width/2;
 					cy = bl.pos[1] + bl.layout.height/2;
-					
+
 					if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
 						bl.inselection = 1;
 						fg.dragselectset.push(bl);
-					}	
+					}
 					else{
 						if (fg.originalselection.indexOf(bl) >-1)
 						{
@@ -395,32 +395,32 @@ define.class('$ui/view', function(require,
 						else{
 							bl.inselection = 0;
 						}
-					}					
-				}					
+					}
+				}
 				for(var a in fg.allconnections){
 					var con = fg.allconnections[a];
-					
-					
+
+
 					ax = con.frompos[0];
 					ay = con.frompos[1];
-					
+
 					bx = con.topos[0];
 					by = con.topos[1];
-					
-					
+
+
 					cx = (ax+bx)/2;
 					cy = (ay+by)/2;
-					
+
 					if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
 							||
 						(bx >= sx && bx <= ex && by >= sy && by <=ey)
-						|| 
+						||
 						(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
 						)
 					 {
 						con.inselection = 1;
 						fg.dragselectset.push(con);
-					}	
+					}
 					else{
 						if (fg.originalselection.indexOf(con) >-1)
 						{
@@ -429,11 +429,11 @@ define.class('$ui/view', function(require,
 						else{
 							con.inselection = 0;
 						}
-					}					
-				}					
-			} 					
+					}
+				}
+			}
 		}
-		
+
 		origin.mouseleftup = function(){
 			var sq = this.findChild("selectorrect");
 			if (sq){
@@ -461,18 +461,18 @@ define.class('$ui/view', function(require,
 
 		this.cancelConnection()
 	}
-	
-	
+
+
 	this.setBlockName = function(block, newname){
 		console.log("TODODODODODODO: setBlockName - change name to", newname);
 	}
-	
-	this.cancelConnection = function(){		
+
+	this.cancelConnection = function(){
 		console.log("cancelling exiting connection setup...");
 		this.newconnection = {};
-		
+
 		var connectingconnection = this.find("openconnector");
-		if (connectingconnection && connectingconnection.visible) 
+		if (connectingconnection && connectingconnection.visible)
 		{
 			this.screen.globalmousemove = function(){};
 			connectingconnection.from = undefined;
@@ -484,7 +484,7 @@ define.class('$ui/view', function(require,
 			connectingconnection.redraw();
 		}
 	}
-	
+
 	this.setupConnectionMouseMove = function(){
 		console.log("setting up new connection drag...");
 
@@ -498,12 +498,12 @@ define.class('$ui/view', function(require,
 			connectingconnection.toinput = this.newconnection.targetinput;
 
 			console.log(this.newconnection.sourceblock,this.newconnection.sourceoutput,this.newconnection.targetblock,this.newconnection.targetinput);
-			
+
 			if (connectingconnection.to && connectingconnection.to !== "undefined" && connectingconnection.to.length>0){
 				console.log("setting to??", connectingconnection.to);
 				var b = this.find(connectingconnection.to);
 				if (b){
-					var ball = b.findChild(connectingconnection.toinput);				
+					var ball = b.findChild(connectingconnection.toinput);
 					connectingconnection.bgcolor = ball.bgcolor;
 				}
 			}
@@ -512,20 +512,20 @@ define.class('$ui/view', function(require,
 					console.log(connectingconnection.from);
 					var b = this.find(connectingconnection.from);
 					if(b){
-						var ball = b.findChild(connectingconnection.fromoutput);				
+						var ball = b.findChild(connectingconnection.fromoutput);
 						connectingconnection.bgcolor = ball.bgcolor;
 					}
-				}				
+				}
 			}
 			connectingconnection.calculateposition();
 			this.screen.globalmousemove = function(){
-				connectingconnection.calculateposition();	
+				connectingconnection.calculateposition();
 				connectingconnection.redraw();
 			}
 		}
 	}
-	
-	this.setConnectionStartpoint = function(sourceblockname, outputname){		
+
+	this.setConnectionStartpoint = function(sourceblockname, outputname){
 		this.newconnection.sourceblock = sourceblockname;
 		this.newconnection.sourceoutput = outputname;
 		if (this.newconnection.targetblock && this.newconnection.targetblock !== "undefined" ){
@@ -535,8 +535,8 @@ define.class('$ui/view', function(require,
 			this.setupConnectionMouseMove();
 		}
 	}
-	
-	this.setConnectionEndpoint = function(targetblockname, inputname){		
+
+	this.setConnectionEndpoint = function(targetblockname, inputname){
 		this.newconnection.targetblock = targetblockname;
 		this.newconnection.targetinput = inputname;
 		if (this.newconnection.sourceblock && this.newconnection.sourceblock !== "undefined" ){
@@ -544,9 +544,9 @@ define.class('$ui/view', function(require,
 		}
 		else{
 			this.setupConnectionMouseMove();
-		}			
+		}
 	}
-	
+
 	this.startDragSelect = function(){
 		this.dragselectset = [];
 		if (!this.screen.keyboard.shift){
@@ -557,43 +557,43 @@ define.class('$ui/view', function(require,
 			this.originalselection.push(this.currentselection[i]);
 		}
 	}
-	
+
 	this.renderConnections = function(){
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
-		var res = [];	
+		var res = [];
 		for(var i = 0;i<this.sourceset.data.children.length;i++){
 			var node = this.sourceset.data.children[i];
-			// block({name:"e", title:"block E", x:450, y:600}) 
-			
+			// block({name:"e", title:"block E", x:450, y:600})
+
 			if (node.wires){
 				for(var j = 0;j<node.wires.length;j++) {
 					var w = node.wires[j];
 					res.push(connection({
-						from:w.from, 
-						fromoutput:w.output, 
-						to:node.name, 
-						toinput:w.input 
+						from:w.from,
+						fromoutput:w.output,
+						to:node.name,
+						toinput:w.input
 					}));
 				}
 			}
 		}
-		
+
 		return res;
 	}
-	
+
 	function uppercaseFirst (inp) {
 		if (!inp || inp.length == 0) return inp;
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
 	}
-	
+
 	this.renderBlocks = function(){
 		var res = [];
 		if (!this.sourceset) return;
 		if (!this.sourceset.data) return;
 		for(var i = 0;i<this.sourceset.data.children.length;i++){
 			var node = this.sourceset.data.children[i];
-			// block({name:"e", title:"block E", x:450, y:600}) 
+			// block({name:"e", title:"block E", x:450, y:600})
 			res.push(
 				block({
 					flowdata:node.flowdata,
@@ -608,33 +608,33 @@ define.class('$ui/view', function(require,
 		}
 		return res;
 	}
-	
+
 	this.commitdragselect = function(){
 		for(var i in this.dragselectset){
 			var bl = this.dragselectset[i];
 			this.addToSelection(bl);
 		}
-		this.updatePopupUIPosition();		
+		this.updatePopupUIPosition();
 	}
 
 	this.getCompositionName = function(){
 		// todo: get actual name from here..
 		return "somename.js";
-	}	
+	}
 
 	this.openComposition = function(){
 		this.screen.closeModal(false);
 		this.screen.openModal(function(){
 			return opencompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute", 
-				
-				
-			
-				miss:function(){
+				position:"absolute",
+
+
+
+				blur:function(){
 					this.screen.closeModal(false)
-				
+
 			}} );
-			
+
 		}.bind(this)).then(function(res){
 				if(res){
 					console.log(res);
@@ -644,19 +644,19 @@ define.class('$ui/view', function(require,
 
 				}
 			console.log(" opencomp result: " , res);
-		}.bind(this));		
-		
+		}.bind(this));
+
 	}
-	
+
 	this.newComposition = function(){
 		this.screen.closeModal(false);
-		
+
 		this.screen.openModal(function(){
 			return newcompositiondialog({width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute", 
-				miss:function(){
+				position:"absolute",
+				blur:function(){
 					this.screen.closeModal(false)
-				
+
 			}} );
 		}).then(function(res){
 			if(res){
@@ -669,65 +669,65 @@ define.class('$ui/view', function(require,
 				}.bind(this))
 			}
 			console.log(" newcomp result: " , res);
-		}.bind(this));		
+		}.bind(this));
 	}
-	
+
 	this.renameComposition = function(){
 		this.screen.closeModal(false);
-		
+
 		this.screen.openModal(function(){
 			return renamedialog({width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute", 
-				miss:function(){
+				position:"absolute",
+				blur:function(){
 					this.screen.closeModal(false)
-				
+
 			}} );
 		}.bind(this)).then(function(res){
-			
+
 			console.log(" rename composition result: " , res);
-		});		
+		});
 
 	}
 	this.helpAbout = function(){
 		this.screen.openModal(function(){
 			return aboutdialog({width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute", 
-				miss:function(){
+				position:"absolute",
+				blur:function(){
 					this.screen.closeModal(false)
-				
+
 			}} );
 		}.bind(this)).then(function(res){
-			
-		});		
-		
+
+		});
+
 	}
 	this.helpReference = function(){
 		this.screen.openModal(function(){
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute", 
+				position:"absolute",
 				title:"Reference",
-				miss:function(){
+				blur:function(){
 					this.screen.closeModal(false)
-				
+
 			}} );
 		}.bind(this)).then(function(res){
-			
-		});	
+
+		});
 	}
 	this.helpGettingStarted = function(){
 		this.screen.openModal(function(){
 			return docviewerdialog({width:this.screen.size[0],height:this.screen.size[1],
-				position:"absolute", 
+				position:"absolute",
 				title:"Getting started",
-				miss:function(){
+				blur:function(){
 					this.screen.closeModal(false)
-				
+
 			}} );
 		}.bind(this)).then(function(res){
-			
-		});	
+
+		});
 	}
-	
+
 	this.undo = function(){
 		this.sourceset.undo();
 	}
@@ -746,7 +746,7 @@ define.class('$ui/view', function(require,
 			{name:"Edit", commands:[
 				{name:"Undo", icon:"undo", clickaction:function(){this.undo();}.bind(this)},
 				{name:"Redo",icon:"redo",  clickaction:function(){this.redo();}.bind(this)}
-				
+
 			]}
 				,
 			{name:"Help", commands:[
@@ -754,12 +754,12 @@ define.class('$ui/view', function(require,
 				{name:"Getting started", clickaction:function(){this.helpGettingStarted();return true;}.bind(this)},
 				{name:"Reference", clickaction:function(){this.helpReference();return true;}.bind(this)}
 			]}
-				]})		
+				]})
 			,splitcontainer({}
 				,splitcontainer({flex:0.2, flexdirection:"column", direction:"horizontal"}
 					,dockpanel({title:"Composition" , flex: 0.2}
 						//,searchbox()
-						
+
 						,treeview({flex:1, dataset: this.sourceset})
 					)
 					,dockpanel({title:"Library", viewport:"2D" }
@@ -770,7 +770,7 @@ define.class('$ui/view', function(require,
 				,splitcontainer({flexdirection:"column", direction:"horizontal"}
 					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
-							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})							
+							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 						)
 						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
 							return this.renderConnections();
@@ -789,8 +789,8 @@ define.class('$ui/view', function(require,
 						}.bind(this)}
 						/*	,block({name:"phone", title:"Phone", x:200, y:20})
 							,block({name:"tv", title:"Television", x:50, y:200})
-							,block({name:"tablet", title:"Tablet",x:300, y:120})						
-							,block({name:"thing", title:"Thing",x:500, y:120})						
+							,block({name:"tablet", title:"Tablet",x:300, y:120})
+							,block({name:"thing", title:"Thing",x:500, y:120})
 							,block({name:"a", title:"block A", x:50, y:300})
 							,block({name:"b", title:"block B", x:150, y:500})
 							,block({name:"c", title:"block C", x:250, y:400})
@@ -798,7 +798,7 @@ define.class('$ui/view', function(require,
 							,block({name:"e", title:"block E", x:450, y:600})
 							,block({name:"f", title:"block F", x:550, y:700})
 						*/)
-												
+
 						,view({name:"popuplayer", bg:false},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
 								label({text:"Connection", bg:0, margin:4})
@@ -809,13 +809,13 @@ define.class('$ui/view', function(require,
 								label({text:"Block", bg:0, margin:4})
 								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
 							)
-							
+
 							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"Group", bg:0, margin:4})
 								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
 							)
-							,this.selectorrect({name:"selectorrect"})							
+							,this.selectorrect({name:"selectorrect"})
 							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
@@ -825,8 +825,8 @@ define.class('$ui/view', function(require,
 
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({title:"Properties", viewport:"2D"}
-,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})		
-)	
+,propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})
+)
 )
 
 
@@ -834,5 +834,5 @@ define.class('$ui/view', function(require,
 		];
 	}
 });
-	
-	
+
+

@@ -311,10 +311,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n157" name="n157">157</a>
 <a href="#n158" name="n158">158</a>
 <a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
@@ -334,24 +335,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// Assign an id to each dalimaterial object</span>
+        <span class="comment">// Assign a unique id to each dalimaterial object</span>
         <span class="keyword">var</span> DaliMaterial = exports
         DaliMaterial.GlobalId = <span class="integer">0</span>
 
         <span class="comment">/**
          * @method constructor
          * Create a dali.Material object.
-         * You can access the dali.Material object as this.dalimaterial
+         * You can access the dali.Material object as this.dalimaterial.
+         * The passed shader object is available as this.dalishader.
          * @param {object} shader DaliShader object
          */</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(shader) {
                 <span class="local-variable">this</span>.object_type = <span class="string"><span class="delimiter">'</span><span class="content">DaliMaterial</span><span class="delimiter">'</span></span>
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
-                <span class="comment">// Cache the property values</span>
+                <span class="comment">// Cache the property values (blend-related)</span>
                 <span class="local-variable">this</span>.property_cache = {};
 
                 <span class="local-variable">this</span>.id = ++DaliMaterial.GlobalId;
@@ -360,7 +362,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content"> = new dali.Material(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.dalishader.name() + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
 
         }
 
@@ -375,7 +377,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: var texid = </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.addTexture(texture</span><span class="delimiter">'</span></span> + texture.id + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="char">\'</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">, sampler</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
 
                 <span class="keyword">return</span> <span class="local-variable">this</span>.dalimaterial.addTexture(texture.image, name, sampler);
         }
@@ -390,14 +392,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.removeTexture(</span><span class="delimiter">'</span></span> + index + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
 
                 <span class="local-variable">this</span>.dalimaterial.removeTexture(index);
         }
 
         <span class="comment">/**
          * @method setBlendMode
-         * Forward request to dali.Material object
+         * Forward request to dali.Material object. dali enumerations match webgl.
          * @param {number} mode Set the blending mode
          */</span>
         <span class="local-variable">this</span>.<span class="function">setBlendMode</span> = <span class="keyword">function</span>(mode) {
@@ -410,7 +412,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setBlendMode(</span><span class="delimiter">'</span></span> + mode + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
         }
 
 
@@ -432,7 +434,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setBlendEquation(</span><span class="delimiter">'</span></span> + equationRgb + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + equationAlpha + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
         }
 
 
@@ -456,7 +458,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setBlendFunc(</span><span class="delimiter">'</span></span> + srcFactorRgb + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + dstFactorRgb + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + srcFactorAlpha + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + dstFactorAlpha + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
         }
 
 

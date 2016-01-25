@@ -33,7 +33,7 @@ define.class('$system/base/node', function(require){
 		// alias for the z component of pos
 		front: Config({alias:'pos', index:2}),
 
-		// the bottom/right/rear corner
+		// the bottom/right/rear corner, used by layout
 		corner: Config({type:vec3, value:vec3(NaN)}),
 		// alias for the x component of corner
 		right: Config({alias:'corner', index:0}),
@@ -64,11 +64,11 @@ define.class('$system/base/node', function(require){
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
 		size: Config({type:vec3, value:vec3(NaN), meta:"xyz"}),
 
-		// alias for the x component of size
+		// internal, alias for the x component of size
 		w: Config({alias:'size', index:0}),
-		// alias for the y component of size
+		// internal, alias for the y component of size
 		h: Config({alias:'size', index:1}),
-		// alias for the z component of size
+		// internal, alias for the z component of size
 		d: Config({alias:'size', index:2}),
 
 		// alias for the x component of size
@@ -80,20 +80,20 @@ define.class('$system/base/node', function(require){
 
 		percentsize: Config({type:vec3, value:vec3(NaN)}),
 
-		// percentage widths/heights
+		// alias for the x component of percentsize
 		percentwidth: Config({alias:'percentsize', index:0}),
-		// percentage widths/heights
+		// alias for the y component of percentsize
 		percentheight: Config({type:'percentsize', index:1}),
-		// percentage widths/heights
+		// alias for the z component of percentsize
 		percentdepth: Config({type:'percentsize', index:2}),
 
 		percentpos: Config({type:vec3, value:vec3(NaN)}),
 
-		// percentage widths/heights
+		// internal, percentage widths/heights
 		percentx: Config({alias:'percentpos', index:0}),
-		// percentage widths/heights
+		// internal, percentage widths/heights
 		percenty: Config({type:'percentpos', index:1}),
-		// percentage widths/heights
+		// internal, percentage widths/heights
 		percentz: Config({type:'percentpos', index:2}),
 
 		// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
@@ -208,7 +208,7 @@ define.class('$system/base/node', function(require){
 		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
 		up: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
 
-		// the current time which can be used in shaders to create continous animations
+		// internal, the current time which can be used in shaders to create continous animations
 		time:Config({meta:"hidden", value:0}),
 
 		// fired when the mouse doubleclicks
@@ -242,8 +242,8 @@ define.class('$system/base/node', function(require){
 		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
-		// wether this view has focus
-		miss: Config({type:Event}),
+		// fires when this view loses focus
+		blur: Config({type:Event}),
 
 		// drop shadow size
 		dropshadowradius:Config({type:float, value:20}),
@@ -256,6 +256,7 @@ define.class('$system/base/node', function(require){
 		// drop shadow color
 		dropshadowcolor:Config({type:vec4,meta:"color", value:vec4("black")}),
 
+		// whether this view has focus
 		focus: false,
 		// tabstop, sorted by number
 		tabstop: NaN,
@@ -318,7 +319,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// listen to switch the shaders when borderradius changes
+	// internal, listen to switch the shaders when borderradius changes
 	this.onborderradius = function(event){
 		this.setBorderShaders()
 	}
@@ -348,7 +349,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// listen to the viewport to turn off our background and border shaders when 3D
+	// internal, listen to the viewport to turn off our background and border shaders when 3D
 	this.onviewport = function(event){
 		if(event.value === '3d'){
 			this.bg = false
@@ -356,21 +357,21 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
+	// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
 	this.onoverflow = function(){
 		if(this._overflow){
 			if(!this._viewport) this._viewport = '2d'
 		}
 	}
 
-	// setting focus to true
+	// internal, setting focus to true
 	this.onfocus = function(event){
 		if(!event.mark){ // someone set it to true that wasnt us
 			this.screen.setFocus(this)
 		}
 	}
 
-	// put a tablistener
+	// internal, put a tablistener
 	this.ontabstop = function(event){
 		if(isNaN(event.old) && !isNaN(event.value)){
 			this.addListener('keydown', function(value){
@@ -382,7 +383,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// returns the mouse in local coordinates
+	// returns the mouse position in local coordinates
 	this.localMouse = function(){
 		var ret = vec2(this.screen.remapMouse(this))
 	//	if(ret[0]<0) debugger
@@ -398,7 +399,7 @@ define.class('$system/base/node', function(require){
 	// update matrix stack
 	this.matrix_dirty = true
 
-	// initialization of a view
+	// internal, initialization of a view
 	this.oninit = function(prev){
 
 		this.anims = {}
@@ -502,7 +503,7 @@ define.class('$system/base/node', function(require){
 		else this.redraw()
 	}
 
-	// emit an event upward (to all parents) untill a listener is hit
+	// internal, emit an event upward (to all parents) untill a listener is hit
 	this.emitUpward = function(key, msg){
 		if(this['_listen_'+key] || this['on'+key]){
 			this.emit(key, msg)
@@ -529,7 +530,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// called at every frame draw
+	// internal, called at every frame draw
 	this.atDraw = function(){
 		if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
 	}
@@ -548,7 +549,7 @@ define.class('$system/base/node', function(require){
 	}
 
 
-	// custom hook in the inner class assignment to handle nested shaders specifically
+	// internal, custom hook in the inner class assignment to handle nested shaders specifically
 	this.atInnerClassAssign = function(key, value){
 
 		if(!this.hasOwnProperty('shader_enable')) this.shader_enable = Object.create(this.shader_enable || {})
@@ -570,7 +571,7 @@ define.class('$system/base/node', function(require){
 		this['_' + key] = cls.extend(value, this)
 	}
 
-	// redraw our view and bubble up the viewport dirtiness to the root
+	// internal, redraw our view and bubble up the viewport dirtiness to the root
 	this.redraw = function(){
 		if(!this.parent_viewport){
 			return
@@ -594,7 +595,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// updates all the shaders
+	// internal, updates all the shaders
 	this.reupdate = function(){
 		var shaders = this.shader_list
 		if(shaders) for(var i = 0; i < shaders.length; i++){
@@ -615,7 +616,7 @@ define.class('$system/base/node', function(require){
 		return this.viewguid = id
 	}
 
-	// this gets called by the render engine
+	// internal, this gets called by the render engine
 	this.updateShaders = function(){
 		if(!this.update_dirty) return
 		this.update_dirty = false
@@ -651,7 +652,7 @@ define.class('$system/base/node', function(require){
 	}
 
 
-	// decide to inject scrollbars into our childarray
+	// internal, decide to inject scrollbars into our childarray
 	this.atRender = function(){
 		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow === 'auto')){
 			if(this.vscrollbar) this.vscrollbar.value = 0
@@ -741,7 +742,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// show/hide scrollbars
+	// internal, show/hide scrollbars
 	this.updateScrollbars = function(){
 
 		if(this.vscrollbar){
@@ -780,7 +781,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// called by doLayout, to update the matrices to layout and parent matrix
+	// internal, called by doLayout, to update the matrices to layout and parent matrix
 	this.updateMatrices = function(parentmatrix, parentviewport, parent_changed, boundsinput, bailbound){
 
 		// allow pre-matrix gen hooking
@@ -946,7 +947,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// moving a position in absolute should only trigger a matrix reload
+	// internal, moving a position in absolute should only trigger a matrix reload
 	this.pos = function(){
 		if(this._position === 'absolute'){
 			this._layout.left = this._pos[0]
@@ -973,7 +974,7 @@ define.class('$system/base/node', function(require){
 	this.position =
 	this.relayout
 
-	// called by the render engine
+	// internal, called by the render engine
 	this.doLayout = function(){
 
 		if(this.parent && !isNaN(this._flex)){ // means our layout has been externally defined
@@ -1056,6 +1057,8 @@ define.class('$system/base/node', function(require){
 		if(this.initialized) this.screen.pauseAnimationRoot(this, key)
 	}
 
+	// Determines the background color that should be drawn at a given position.
+	// Defaults to bgcolor.
 	this.bgcolorfn = function(pos){
 		return bgcolor
 	}

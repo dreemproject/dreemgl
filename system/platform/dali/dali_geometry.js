@@ -1,6 +1,6 @@
-/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -20,7 +20,7 @@
  */
 
 define.class(function(require, exports){
-	// DaliApi is a static object to access the dali api
+	// internal, DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
 	// Assign a unique id to each daligeometry object
@@ -52,10 +52,10 @@ define.class(function(require, exports){
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Geometry();');
 			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + this.drawtypeDali(drawtype) + ');');
-		}		
+		}
 	}
 
-	// Internal method to convert a drawtype into the dali value, if possible.
+	// Internal, method to convert a drawtype into the dali value, if possible.
 	// This is used when generating dali output to the console.
 	this.drawtypeDali = function(drawtype) {
 		var dali = DaliApi.dali;
@@ -156,7 +156,7 @@ define.class(function(require, exports){
 	 * in the docs.
 	 *
 	 * This version can be removed if no problems are found.
-	 * 
+	 *
 	 * @param {Object} shader_dali Compiled data structure
 	 * @param {Object} attrlocs Compiled data structure
 	 */
@@ -213,7 +213,7 @@ define.class(function(require, exports){
 			// Extract the data from the array
 			var arr = shader_dali[name];
 			//console.trace('**** addAttributeGeometry', name, arr.array.length);
-		
+
 			var data = [];
 			if (arr && arr.array) {
 				// Find the offset and length of the data to extract
@@ -299,7 +299,7 @@ define.class(function(require, exports){
 		//console.log('*****************************************************');
 
 		var arr = shader_dali[name];
-		
+
 		var data = [];
 
 		if (arr && arr.array) {
@@ -363,7 +363,7 @@ define.class(function(require, exports){
 				delete this.vertex_buffers[name];
 			}
 		}
-		
+
 		// Generate the buffer
 		if (!buffer) {
 			var ret = DaliApi.daliBuffer(data, format, data.length / nitems);
@@ -373,7 +373,7 @@ define.class(function(require, exports){
 
 			if (DaliApi.emitcode) {
 				console.log('DALICODE: ' + this.name() + '.addVertexBuffer(buffer' + bufferindex + ')');
-			}		
+			}
 
 			// Store the index so it can be removed later
 			this.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex];

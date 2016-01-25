@@ -1417,6 +1417,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1263" name="n1263">1263</a>
 <a href="#n1264" name="n1264">1264</a>
 <a href="#n1265" name="n1265">1265</a>
+<a href="#n1266" name="n1266">1266</a>
+<a href="#n1267" name="n1267">1267</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Copyright (c) 2014, Facebook, Inc.
@@ -1432,17 +1434,17 @@ define(<span class="keyword">function</span> () {
 
         <span class="keyword">function</span> <span class="function">fillNodes</span>(node, nochildren) {
                 <span class="keyword">var</span> newnode = {
-                        <span class="key">children</span>:[], 
-                        <span class="key">ref</span>:node, 
+                        <span class="key">children</span>:[],
+                        <span class="key">ref</span>:node,
                         <span class="key">dirty</span>: node.layout_dirty,
                         <span class="key">layout</span>:{
-                                <span class="key">width</span>:<span class="predefined-constant">undefined</span>, 
-                                <span class="key">height</span>:<span class="predefined-constant">undefined</span>, 
-                                <span class="key">absx</span>:<span class="integer">0</span>, 
-                                <span class="key">absy</span>:<span class="integer">0</span>, 
-                                <span class="key">top</span>:<span class="integer">0</span>, 
-                                <span class="key">left</span>:<span class="integer">0</span>, 
-                                <span class="key">right</span>:<span class="integer">0</span>, 
+                                <span class="key">width</span>:<span class="predefined-constant">undefined</span>,
+                                <span class="key">height</span>:<span class="predefined-constant">undefined</span>,
+                                <span class="key">absx</span>:<span class="integer">0</span>,
+                                <span class="key">absy</span>:<span class="integer">0</span>,
+                                <span class="key">top</span>:<span class="integer">0</span>,
+                                <span class="key">left</span>:<span class="integer">0</span>,
+                                <span class="key">right</span>:<span class="integer">0</span>,
                                 <span class="key">bottom</span>:<span class="integer">0</span>,
                         }
                 }
@@ -1457,9 +1459,9 @@ define(<span class="keyword">function</span> () {
 
                 <span class="comment">// store old layout</span>
                 node.oldlayout = node._layout
-                
+
                 <span class="keyword">var</span> layout = node._layout = newnode.layout
-                
+
                 <span class="comment">// alright so. what we need to do is bubble down layout_dirty</span>
                 <span class="keyword">if</span>(!nochildren &amp;&amp; node.children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; node.children.length;i++){
                         <span class="keyword">var</span> child = node.children[i]
@@ -1496,7 +1498,7 @@ define(<span class="keyword">function</span> () {
                 <span class="keyword">var</span> ref = node.ref
 
                 <span class="keyword">var</span> layout = ref._layout, oldlayout = ref.oldlayout
-                layout.absx = <span class="integer">0</span> 
+                layout.absx = <span class="integer">0</span>
                 layout.absy = <span class="integer">0</span>
                 layout.width = oldlayout.width
                 layout.height = oldlayout.height
@@ -1527,17 +1529,17 @@ define(<span class="keyword">function</span> () {
         }
 
         <span class="keyword">function</span> <span class="function">layoutNode</span>(node, parentMaxWidth, <span class="comment">/*css_direction_t*/</span>parentDirection) {
-                
+
                 <span class="keyword">var</span> total = <span class="integer">1</span>;
-                                
+
                 <span class="comment">//var ref = node.ref</span>
                 <span class="comment">//var ol = ref.oldlayout</span>
                 <span class="comment">/*
                 if(!node.dirty &amp;&amp; ol &amp;&amp;
-                        (isNaN(ol.last_size0) &amp;&amp; isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) &amp;&amp; 
-                        (isNaN(ol.last_size1) &amp;&amp; isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) &amp;&amp; 
-                        (isNaN(ol.last_pos0) &amp;&amp; isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) &amp;&amp; 
-                        (isNaN(ol.last_pos1) &amp;&amp; isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) &amp;&amp; 
+                        (isNaN(ol.last_size0) &amp;&amp; isNaN(ref._size[0]) ||  ol.last_size0 === ref._size[0]) &amp;&amp;
+                        (isNaN(ol.last_size1) &amp;&amp; isNaN(ref._size[1]) || ol.last_size1 === ref._size[1]) &amp;&amp;
+                        (isNaN(ol.last_pos0) &amp;&amp; isNaN(ref._pos[0]) || ol.last_pos0 === ref._pos[0]) &amp;&amp;
+                        (isNaN(ol.last_pos1) &amp;&amp; isNaN(ref._pos[1]) || ol.last_pos1 === ref._pos[1]) &amp;&amp;
                         ol.parentMaxWidth === parentMaxWidth &amp;&amp; ol.parentDirection === parentDirection){
                         putBackOldLayout(node)
                         //ref.debug_view = true
@@ -1555,7 +1557,7 @@ define(<span class="keyword">function</span> () {
                 <span class="comment">//ref._layout.last_size1 = ref._size[1]</span>
                 <span class="comment">//ref._layout.parentMaxWidth = parentMaxWidth</span>
                 <span class="comment">//ref._layout.parentDirection = parentDirection</span>
-                
+
                 <span class="keyword">return</span> total;
         }
         <span class="keyword">var</span> CSS_UNDEFINED;
@@ -1752,7 +1754,7 @@ define(<span class="keyword">function</span> () {
 
         <span class="keyword">function</span> <span class="function">getLeadingPaddingAndBorder</span>(node, axis) {
                 <span class="keyword">var</span> style = node.ref
-                <span class="keyword">if</span>(axis === <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> (style._padding[<span class="integer">0</span>] &gt;=<span class="integer">0</span>? style._padding[<span class="integer">0</span>]: <span class="integer">0</span>) + (style._borderwidth[<span class="integer">0</span>] &gt;=<span class="integer">0</span>? style._borderwidth[<span class="integer">0</span>]: <span class="integer">0</span>) 
+                <span class="keyword">if</span>(axis === <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> (style._padding[<span class="integer">0</span>] &gt;=<span class="integer">0</span>? style._padding[<span class="integer">0</span>]: <span class="integer">0</span>) + (style._borderwidth[<span class="integer">0</span>] &gt;=<span class="integer">0</span>? style._borderwidth[<span class="integer">0</span>]: <span class="integer">0</span>)
                 <span class="keyword">if</span>(axis === <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> (style._padding[<span class="integer">1</span>] &gt;=<span class="integer">0</span>? style._padding[<span class="integer">1</span>]: <span class="integer">0</span>) + (style._borderwidth[<span class="integer">1</span>] &gt;=<span class="integer">0</span>? style._borderwidth[<span class="integer">1</span>]: <span class="integer">0</span>)
                 <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">implement other axes</span><span class="delimiter">'</span></span>)
         }
@@ -1945,7 +1947,9 @@ define(<span class="keyword">function</span> () {
                 <span class="keyword">return</span> b;
         }
 
-        <span class="keyword">var</span> round = Math.round
+        <span class="keyword">var</span> <span class="function">round</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> <span class="local-variable">arguments</span>[<span class="integer">0</span>];
+        }
 
         <span class="comment">// When the user specifically sets a value for width or height</span>
         <span class="keyword">function</span> <span class="function">setDimensionFromStyle</span>(node, axis) {
@@ -1959,7 +1963,7 @@ define(<span class="keyword">function</span> () {
                 }
 
                 <span class="comment">// The dimensions can never be smaller than the padding and border</span>
-                <span class="keyword">var</span> bound 
+                <span class="keyword">var</span> bound
                 <span class="keyword">if</span>(axis === <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>) bound = node.ref._size[<span class="integer">0</span>]
                 <span class="keyword">else</span> <span class="keyword">if</span>(axis === <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>) bound = node.ref._size[<span class="integer">1</span>]
                 <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">axis not found</span><span class="delimiter">'</span></span>)
@@ -1969,7 +1973,7 @@ define(<span class="keyword">function</span> () {
                         getPaddingAndBorderAxis(node, axis)
                 ));
         }
-        
+
         <span class="keyword">function</span> <span class="function">setTrailingPosition</span>(node, child, axis) {
                 child.layout[trailing[axis]] = round(node.layout[dim[axis]] -
                                 child.layout[dim[axis]] - child.layout[pos[axis]]);
@@ -2676,13 +2680,14 @@ define(<span class="keyword">function</span> () {
                         child.nextAbsoluteChild = <span class="predefined-constant">null</span>;
                 }
         }
-        
+
         <span class="keyword">return</span> {
                 <span class="key">computeLayout</span>: layoutNode,
                 <span class="key">fillNodes</span>: fillNodes,
                 <span class="key">extractNodes</span>: extractNodes
         };
-});</pre></td>
+});
+</pre></td>
 </tr></table>
 
 </body>

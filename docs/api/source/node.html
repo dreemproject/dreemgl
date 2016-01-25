@@ -1093,10 +1093,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n939" name="n939">939</a>
 <strong><a href="#n940" name="n940">940</a></strong>
 <a href="#n941" name="n941">941</a>
+<a href="#n942" name="n942">942</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, constructor){
@@ -1112,7 +1113,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> onejsparser = <span class="keyword">new</span> OneJSParser()
         onejsparser.parser_cache = {}
         <span class="keyword">var</span> wiredwalker = <span class="keyword">new</span> WiredWalker()
-        
+
         <span class="comment">// the RPCProxy class reads these booleans to skip RPC interface creation for this prototype level</span>
         <span class="local-variable">this</span>.rpcproxy = <span class="predefined-constant">false</span>
 
@@ -1182,7 +1183,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.name = arg
                                 <span class="keyword">continue</span>
                         }
-                        
+
                         <span class="keyword">if</span>(Array.isArray(arg)){
                                 <span class="local-variable">this</span>.initFromConstructorArgs(arg)
                         }
@@ -1191,7 +1192,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> name = arg.name
                                 <span class="comment">//if(name !== undefined &amp;&amp; !(name in this)) this[name] = arg</span>
                         }
-                }                
+                }
         }
 <span class="comment">/*
         // internal, called by the constructor
@@ -1201,7 +1202,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         var prop = obj[key]
                         var tgt = this
                         var type = 0
-                
+
                         if(!this.constructor_props) this.constructor_props = {}
                         this.constructor_props[key] = prop
 
@@ -1231,47 +1232,48 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="local-variable">this</span>[key] = obj[key]
                                 }
                         }
-                }        
+                }
         }
 
-        <span class="comment">// internal, used by find</span>
-        <span class="local-variable">this</span>.<span class="function">findChild</span> = <span class="keyword">function</span>(name, ignore, nocache){
-                <span class="keyword">if</span>(!nocache){
-                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.find_cache) <span class="local-variable">this</span>.find_cache = {}
-                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.find_cache[name]
-                        <span class="keyword">if</span>(child &amp;&amp; !child.destroyed) <span class="keyword">return</span> child
-                }
-
-                <span class="comment">// ok so first we go down all children</span>
+        <span class="comment">// internal, used by find and findChild</span>
+        <span class="local-variable">this</span>.<span class="function">_findChild</span> = <span class="keyword">function</span>(name, ignore){
                 <span class="keyword">if</span>(<span class="local-variable">this</span> === ignore) <span class="keyword">return</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.name === name){
-                        <span class="keyword">if</span>(!nocache) <span class="local-variable">this</span>.find_cache[name] = <span class="local-variable">this</span>
                         <span class="keyword">return</span> <span class="local-variable">this</span>
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.children.length; i ++){
-                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
-                        <span class="keyword">if</span>(child === ignore) <span class="keyword">continue</span>
-                        <span class="keyword">var</span> ret = child.findChild(name, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
-                        <span class="keyword">if</span>(ret !== <span class="predefined-constant">undefined</span>){
-                                <span class="keyword">if</span>(!nocache) <span class="local-variable">this</span>.find_cache[name] = ret
-                                <span class="keyword">return</span> ret
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.children) {
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.children.length; i ++){
+                                <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
+                                <span class="keyword">if</span>(child === ignore) <span class="keyword">continue</span>
+                                <span class="keyword">var</span> ret = child._findChild(name, ignore)
+                                <span class="keyword">if</span>(ret !== <span class="predefined-constant">undefined</span>){
+                                        <span class="keyword">return</span> ret
+                                }
                         }
                 }
         }
 
-        <span class="comment">// find node by name, they look up the .name property or the name of the constructor (class name) by default</span>
-        <span class="local-variable">this</span>.<span class="function">find</span> = <span class="keyword">function</span>(name, ignore){
+        <span class="comment">// Finds a child node by name.</span>
+        <span class="local-variable">this</span>.<span class="function">findChild</span> = <span class="keyword">function</span>(name){
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.find_cache) <span class="local-variable">this</span>.find_cache = {}
+                <span class="keyword">var</span> child = <span class="local-variable">this</span>.find_cache[name]
+                <span class="keyword">if</span>(child &amp;&amp; !child.destroyed) <span class="keyword">return</span> child
+                <span class="keyword">return</span> <span class="local-variable">this</span>.find_cache[name] = <span class="local-variable">this</span>._findChild(name)
+        }
+
+        <span class="comment">// Finds a parent node by name.</span>
+        <span class="local-variable">this</span>.<span class="function">find</span> = <span class="keyword">function</span>(name){
                 child = <span class="local-variable">this</span>.findChild(name)
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(child === <span class="predefined-constant">undefined</span> &amp;&amp; node.parent){
-                        child = node.parent.findChild(name, node, <span class="predefined-constant">true</span>)
+                        child = node.parent._findChild(name, node)
                         node = node.parent
                 }
                 <span class="local-variable">this</span>.find_cache[name] = child
                 <span class="keyword">return</span> child
         }
 
-        <span class="comment">// hide a property, pass in any set of strings</span>
+        <span class="comment">// internal, hide a property, pass in any set of strings</span>
         <span class="local-variable">this</span>.<span class="function">hideProperty</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;<span class="local-variable">arguments</span>.length; i++){
                         <span class="keyword">var</span> arg = <span class="local-variable">arguments</span>[i]
@@ -1286,31 +1288,31 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// check if property is an attribute</span>
+        <span class="comment">// internal, check if property is an attribute</span>
         <span class="local-variable">this</span>.<span class="function">isAttribute</span> = <span class="keyword">function</span>(key){
                 <span class="keyword">var</span> setter = <span class="local-variable">this</span>.__lookupSetter__(key)
                 <span class="keyword">if</span>(setter !== <span class="predefined-constant">undefined</span> &amp;&amp; setter.isAttribute) <span class="keyword">return</span> <span class="predefined-constant">true</span>
                 <span class="keyword">else</span> <span class="keyword">return</span> <span class="predefined-constant">false</span>
         }
 
-        <span class="comment">// returns the attribute config object (the one passed into this.attributes={attr:{config}}</span>
+        <span class="comment">// internal, returns the attribute config object (the one passed into this.attributes={attr:{config}}</span>
         <span class="local-variable">this</span>.<span class="function">getAttributeConfig</span> = <span class="keyword">function</span>(key){
                 <span class="keyword">return</span> <span class="local-variable">this</span>._attributes[key]
         }
 
-        <span class="comment">// check if an attribute has wires connected</span>
+        <span class="comment">// internal, check if an attribute has wires connected</span>
         <span class="local-variable">this</span>.<span class="function">hasWires</span> = <span class="keyword">function</span>(key){
                 <span class="keyword">var</span> wiredfn_key = <span class="string"><span class="delimiter">'</span><span class="content">_wiredfn_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">return</span> wiredfn_key <span class="keyword">in</span> <span class="local-variable">this</span>
         }
-        
+
         <span class="comment">// internal, returns the wired-call for an attribute</span>
         <span class="local-variable">this</span>.<span class="function">wiredCall</span> = <span class="keyword">function</span>(key){
                 <span class="keyword">var</span> wiredcl_key = <span class="string"><span class="delimiter">'</span><span class="content">_wiredcl_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">return</span> <span class="local-variable">this</span>[wiredcl_key]
         }
-        
-        <span class="comment">// emits an event recursively on all children</span>
+
+        <span class="comment">// internal, emits an event recursively on all children</span>
         <span class="local-variable">this</span>.<span class="function">emitRecursive</span> = <span class="keyword">function</span>(key, event, block){
 
                 <span class="keyword">if</span>(block &amp;&amp; block.indexOf(child)!== -<span class="integer">1</span>) <span class="keyword">return</span>
@@ -1320,13 +1322,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         child.emitRecursive(key, event)
                 }
         }
-        
-        <span class="comment">// emit an event for an attribute key. the order         </span>
+
+        <span class="comment">// emit an event for an attribute key. the order</span>
         <span class="local-variable">this</span>.<span class="function">emit</span> = <span class="keyword">function</span>(key, event){
                 <span class="keyword">var</span> on_key = <span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> lock_key = <span class="string"><span class="delimiter">'</span><span class="content">_lock_</span><span class="delimiter">'</span></span> + key
-                
+
                 <span class="keyword">if</span>(<span class="local-variable">this</span>[lock_key]) <span class="keyword">return</span>
 
                 <span class="local-variable">this</span>[lock_key] = <span class="predefined-constant">true</span>
@@ -1367,7 +1369,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
-                <span class="keyword">var</span> array 
+                <span class="keyword">var</span> array
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(listen_key)) array = <span class="local-variable">this</span>[listen_key] = []
                 <span class="keyword">else</span> array = <span class="local-variable">this</span>[listen_key]
                 <span class="keyword">if</span>(array.indexOf(cb) === -<span class="integer">1</span>){
@@ -1392,7 +1394,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// check if an attribute has a listener with a .name property set to fnname</span>
+        <span class="comment">// internal, check if an attribute has a listener with a .name property set to fnname</span>
         <span class="local-variable">this</span>.<span class="function">hasListenerProp</span> = <span class="keyword">function</span>(key, prop, value){
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(listen_key)) <span class="keyword">return</span> <span class="predefined-constant">false</span>
@@ -1404,7 +1406,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
         }
 
-        <span class="comment">// returns true if attribute has any listeners</span>
+        <span class="comment">// internal, returns true if attribute has any listeners</span>
         <span class="local-variable">this</span>.<span class="function">hasListeners</span> = <span class="keyword">function</span>(key){
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> on_key = <span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span> + key
@@ -1412,7 +1414,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
         }
 
-        <span class="comment">// remove all listeners from a node</span>
+        <span class="comment">// internal, remove all listeners from a node</span>
         <span class="local-variable">this</span>.<span class="function">removeAllListeners</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> keys = Object.keys(<span class="local-variable">this</span>)
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; keys.length; i++){
@@ -1423,17 +1425,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// set the wired function for an attribute</span>
+        <span class="comment">// internal, set the wired function for an attribute</span>
         <span class="local-variable">this</span>.<span class="function">setWiredAttribute</span> = <span class="keyword">function</span>(key, value){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">_wiredfns</span><span class="delimiter">'</span></span>)) <span class="local-variable">this</span>._wiredfns = <span class="local-variable">this</span>._wiredfns?Object.create(<span class="local-variable">this</span>._wiredfns):{}
                 <span class="local-variable">this</span>._wiredfns[key] = value
                 <span class="local-variable">this</span>[<span class="string"><span class="delimiter">'</span><span class="content">_wiredfn_</span><span class="delimiter">'</span></span>+key] = value
         }
 
-        <span class="comment">// mark an attribute as persistent accross live reload / renders</span>
+        <span class="comment">// internal, mark an attribute as persistent accross live reload / renders</span>
         <span class="local-variable">this</span>.<span class="function">definePersist</span> = <span class="keyword">function</span>(arg){
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.hasOwnProperty(<span class="string"><span class="delimiter">&quot;</span><span class="content">_persists</span><span class="delimiter">&quot;</span></span>)){
-                        
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>._persists){
                                 <span class="local-variable">this</span>._persists = Object.create(<span class="local-variable">this</span>._persists)
                         }
@@ -1475,7 +1477,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         })
 
         <span class="keyword">var</span> Style = define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
-                
+
                 <span class="local-variable">this</span>.<span class="function">composeStyle</span> = <span class="keyword">function</span>(){
                         <span class="comment">// lets find the highest matching level</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="local-variable">arguments</span>.length - <span class="integer">1</span>; i &gt;= <span class="integer">0</span>; i--){
@@ -1507,9 +1509,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">// lets return a matching style</span>
                         <span class="keyword">return</span> <span class="local-variable">this</span>.composeStyle(
                                 <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>,
-                                <span class="string"><span class="delimiter">'</span><span class="content">$_</span><span class="delimiter">'</span></span> + props.<span class="reserved">class</span>, 
+                                <span class="string"><span class="delimiter">'</span><span class="content">$_</span><span class="delimiter">'</span></span> + props.<span class="reserved">class</span>,
                                 name,
-                                name + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + props.<span class="reserved">class</span>, 
+                                name + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + props.<span class="reserved">class</span>,
                                 name + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + props.name
                         )
                 }
@@ -1520,9 +1522,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">atStyleConstructor</span> = <span class="keyword">function</span>(original, props, where){
                 <span class="comment">// lets see if we have it in _styles</span>
                 <span class="keyword">var</span> name = original.name
-                
+
                 <span class="keyword">var</span> propobj = props &amp;&amp; Object.getPrototypeOf(props) === Object.prototype? props: {}
-                
+
                 <span class="comment">// we need to flush this cache on livereload</span>
                 <span class="comment">//var cacheid = name + '_' + propobj.class + '_' + propobj.name</span>
                 <span class="comment">//var cache = this._style._cache || (this._style._cache = {})</span>
@@ -1553,10 +1555,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         Object.defineProperty(style, <span class="string"><span class="delimiter">'</span><span class="content">_base</span><span class="delimiter">'</span></span>, {<span class="key">value</span>:{}, <span class="key">configurable</span>:<span class="predefined-constant">true</span>})
                 }
 
-                <span class="comment">// (re)define the class                </span>
+                <span class="comment">// (re)define the class</span>
                 <span class="keyword">if</span>(style._base[name] !== base || !style._class[name]){
                         <span class="keyword">var</span> clsname = base.name + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> +(where?where+<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)+ (style._match||<span class="string"><span class="delimiter">'</span><span class="content">star</span><span class="delimiter">'</span></span>)
-                        <span class="keyword">var</span> cls = style._class[name] = base.extend(style, original.outer, clsname)                        
+                        <span class="keyword">var</span> cls = style._class[name] = base.extend(style, original.outer, clsname)
                          style._base[name] = base
                          <span class="keyword">return</span> <span class="comment">/*cache[cacheid] =*/</span> cls
                 }
@@ -1595,7 +1597,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 },
                 set:function(arg){
                         for(var key in arg){
-                                this['_set_'+key] = arg[key] 
+                                this['_set_'+key] = arg[key]
                         }
                 }
         })
@@ -1608,7 +1610,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 },
                 set:function(arg){
                         for(var key in arg){
-                                this['_get_'+key] = arg[key] 
+                                this['_get_'+key] = arg[key]
                         }
                 }
         })
@@ -1637,7 +1639,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="keyword">else</span>{
                                 <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
-                                        value = value.toLowerCase()        
+                                        value = value.toLowerCase()
                                         <span class="keyword">if</span>(value === <span class="string"><span class="delimiter">'</span><span class="content">stop</span><span class="delimiter">'</span></span>){
                                                 <span class="local-variable">this</span>.stopAnimation(key)
                                         }
@@ -1728,7 +1730,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> wiredfn_key = <span class="string"><span class="delimiter">'</span><span class="content">_wiredfn_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> animinit_key = <span class="string"><span class="delimiter">'</span><span class="content">_animinit_</span><span class="delimiter">'</span></span> + key
-                <span class="comment">//var config_key = '_config_' + key </span>
+                <span class="comment">//var config_key = '_config_' + key</span>
                 <span class="keyword">var</span> get_key = <span class="string"><span class="delimiter">'</span><span class="content">_get_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> set_key = <span class="string"><span class="delimiter">'</span><span class="content">_set_</span><span class="delimiter">'</span></span> + key
 
@@ -1753,7 +1755,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                 }
                 <span class="local-variable">this</span>._attributes[key] = config
-                
+
                 <span class="keyword">if</span>(config.listeners) <span class="local-variable">this</span>[listen_key] = config.listeners
 
                 <span class="keyword">var</span> setter
@@ -1762,7 +1764,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// block attribute emission on objects with an environment thats (stub it)</span>
                 <span class="keyword">if</span>(config.alias){
                         <span class="keyword">var</span> alias_key = <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + config.alias
-                        
+
                         <span class="function">setter</span> = <span class="keyword">function</span>(value){
                                 <span class="keyword">var</span> mark
 
@@ -1856,7 +1858,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; value !== <span class="predefined-constant">null</span> &amp;&amp; value.atAttributeAssign){
                                         value.atAttributeAssign(<span class="local-variable">this</span>, key)
                                 }
-                        
+
                                 <span class="keyword">var</span> type = config.type
                                 <span class="keyword">if</span>(type){
                                         <span class="keyword">if</span>(type !== Object &amp;&amp; type !== Array &amp;&amp; type !== Function) value = type(value)
@@ -1873,7 +1875,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span>(on_key <span class="keyword">in</span> <span class="local-variable">this</span> || listen_key <span class="keyword">in</span> <span class="local-variable">this</span>)  <span class="local-variable">this</span>.emit(key, {<span class="key">setter</span>:<span class="predefined-constant">true</span>, <span class="key">owner</span>:<span class="local-variable">this</span>, <span class="key">key</span>:key, <span class="key">old</span>:old, <span class="key">value</span>:value, <span class="key">mark</span>:mark})
                         }
                 }
-                
+
                 setter.isAttribute = <span class="predefined-constant">true</span>
                 Object.defineProperty(<span class="local-variable">this</span>, key, {
                         <span class="key">configurable</span>:<span class="predefined-constant">true</span>,
@@ -1919,7 +1921,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                 <span class="keyword">var</span> part = ref[k]
                                 <span class="keyword">if</span>(k === ref.length - <span class="integer">1</span>){
-                                        <span class="comment">// lets add a listener </span>
+                                        <span class="comment">// lets add a listener</span>
                                         <span class="keyword">if</span>(!obj || !obj.isAttribute || !obj.isAttribute(part)){
                                                 console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Attribute does not exist: </span><span class="delimiter">&quot;</span></span>+ref.join(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content"> (at </span><span class="delimiter">&quot;</span></span> + part + <span class="string"><span class="delimiter">&quot;</span><span class="content">) in wiring </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>[wiredfn_key].toString())
                                                 <span class="keyword">continue</span>
@@ -1950,7 +1952,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                                 obj = obj.parent
                                                         }*/</span>
                                                 }
-                                        }        
+                                        }
                                         <span class="keyword">else</span> obj = newobj
                                         <span class="keyword">if</span>(!obj) console.log(<span class="string"><span class="delimiter">'</span><span class="content">Cannot find part </span><span class="delimiter">'</span></span> + part + <span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> + ref.join(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content"> in propertybind</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>)
                                 }
@@ -1958,14 +1960,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">if</span>(initarray) initarray.push(bindcall)
         }
-        
-        <span class="comment">// return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key</span>
+
+        <span class="comment">// internal, return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key</span>
         <span class="local-variable">this</span>.<span class="function">emitForward</span> = <span class="keyword">function</span>(key){
                 <span class="keyword">return</span> <span class="keyword">function</span>(value){
                         <span class="local-variable">this</span>.emit(key, value)
                 }.bind(<span class="local-variable">this</span>)
         }
-        
+
         <span class="comment">// internal, connect all wires using the initarray returned by connectWiredAttribute</span>
         <span class="local-variable">this</span>.<span class="function">connectWires</span> = <span class="keyword">function</span>(initarray, depth){
 
@@ -1998,7 +2000,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">// internal, used by the attribute setter to start a 'motion' which is an auto-animated attribute</span>
         <span class="local-variable">this</span>.<span class="function">startMotion</span> = <span class="keyword">function</span>(key, value){
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.screen) <span class="keyword">return</span> <span class="predefined-constant">false</span> 
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.screen) <span class="keyword">return</span> <span class="predefined-constant">false</span>
                 <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startMotion(<span class="local-variable">this</span>, key, value)
         }
 
@@ -2010,7 +2012,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// mixin setter API to easily assign mixins using an is: syntax in the constructors</span>
         Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">is</span><span class="delimiter">'</span></span>, {
                 <span class="function">set</span>:<span class="keyword">function</span>(value){
-                        <span class="comment">// lets copy on value. </span>
+                        <span class="comment">// lets copy on value.</span>
                         <span class="keyword">if</span>(Array.isArray(value)){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;value.length; i++) <span class="local-variable">this</span>.is = value[i]
                                 <span class="keyword">return</span>
@@ -2026,15 +2028,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.hideProperty(Object.keys(<span class="local-variable">this</span>))
 
-        <span class="comment">// always define an init and deinit</span>
+        <span class="comment">// internal, always define an init and destroy</span>
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// the init event, not called when the object is constructed but specifically when it is being initialized by the render</span>
-                <span class="key">init</span>:Config({<span class="key">type</span>:Event}), 
+                <span class="key">init</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// destroy event, called on all the objects that get dropped by the renderer on a re-render</span>
                 <span class="key">destroy</span>:Config({<span class="key">type</span>:Event})
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

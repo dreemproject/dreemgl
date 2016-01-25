@@ -1,11 +1,11 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class(function(require, baseclass){
-	// drawing
+	// internal, drawing
 	var Shader = require('./shaderwebgl')
 
 	this.atConstructor = function(gldevice, view){
@@ -25,11 +25,11 @@ define.class(function(require, baseclass){
 
 		this.debugrect = new DebugRect()
 	}
-	
+
 	this.atDestroy = function(){
 		this.releaseTexture()
 	}
-		
+
 	this.poolDrawTargets = function(){
 		var pools = this.device.drawtarget_pools
 		if(!this.drawtargets) return
@@ -84,7 +84,7 @@ define.class(function(require, baseclass){
 			}
 			else this[drawtarget] = dt
 			dt.passid = passid
-		} 
+		}
 		// make sure the drawtarget has the right size
 		var tsize = this[drawtarget].size
 		if(width !== tsize[0] || height !== tsize[1]){
@@ -92,7 +92,7 @@ define.class(function(require, baseclass){
 			this[drawtarget] = Texture.createRenderTarget(view._viewport === '2d'?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, this.device)
 		}
 	}
-	
+
 	this.calculateDrawMatrices = function(isroot, storage, mousex, mousey){
 		var view = this.view
 		var scroll = view._scroll
@@ -118,7 +118,7 @@ define.class(function(require, baseclass){
 			}
 		}
 		else if(view._viewport === '3d'){
-			storage.perspectivematrix = mat4.perspective(view._fov * PI * 2/360.0 , layout.width/layout.height, view._nearplane, view._farplane)			
+			storage.perspectivematrix = mat4.perspective(view._fov * PI * 2/360.0 , layout.width/layout.height, view._nearplane, view._farplane)
 			storage.lookatmatrix = mat4.lookAt(view._camera, view._lookat, view._up)
 			storage.viewmatrix = mat4.mat4_mul_mat4(storage.lookatmatrix,storage.perspectivematrix);
 		}
@@ -149,7 +149,7 @@ define.class(function(require, baseclass){
 			var zoom = view._zoom
 			if( drawlayout.absy - scroll[1] > height * zoom || drawlayout.absy + drawlayout.height - scroll[1] < 0){
 				return false
-			} 
+			}
 			if(drawlayout.absx - scroll[0] > width * zoom || drawlayout.absx + drawlayout.width - scroll[0] < 0){
 				return false
 			}
@@ -167,10 +167,10 @@ define.class(function(require, baseclass){
 			next = draw.children[next_index]
 		}
 		if(next === view) return undefined
-		if(next) next.draw_index = next_index		
+		if(next) next.draw_index = next_index
 		return next
 	}
-	
+
 	this.drawPick = function(isroot, passid, mousex, mousey, debug){
 		var view = this.view
 		var device = this.device
@@ -191,7 +191,7 @@ define.class(function(require, baseclass){
 		gl.disable(gl.SCISSOR_TEST)
 		device.bindFramebuffer(this.pick_buffer || null)
 		device.clear(0,0,0,0)
-		
+
 		var matrices = this.pickmatrices
 		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
 		// calculate the colormatrices too
@@ -268,14 +268,14 @@ define.class(function(require, baseclass){
 		var draw = view
 		var pick_id = 0
 		while(draw){
-			
+
 			if(id > pick_id && id <= pick_id + draw.pickrange){
 				draw.last_pick_id = (pick_id + draw.pickrange) - id
 				return draw
 			}
 
 			pick_id += draw.pickrange
-			
+
 			draw = this.nextItem(draw)
 		}
 	}
@@ -298,7 +298,7 @@ define.class(function(require, baseclass){
 			blendshader.width = draw._layout.width
 			blendshader.height = draw._layout.height
 			blendshader.drawArrays(this.device)
-		}				
+		}
 	}
 
 	this.drawNormal = function(draw, view, matrices){
@@ -330,19 +330,19 @@ define.class(function(require, baseclass){
 		var gl = device.gl
 		var count = 0
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
-	
+
 		// lets see if we need to allocate our framebuffer..
 		if(!isroot){
 			var ratio = view._pixelratio
 			if(isNaN(ratio)) ratio = device.main_frame.ratio
-			var twidth = layout.width * ratio, theight = layout.height * ratio	
+			var twidth = layout.width * ratio, theight = layout.height * ratio
 			this.allocDrawTarget(twidth, theight, this.view, 'color_buffer')
 		}
 
 		this.device.bindFramebuffer(this.color_buffer || null)
 
 		if(layout.width === 0 || layout.height === 0) return false
-			
+
 		var hastime = false
 		var zoom = view._zoom
 
@@ -385,7 +385,7 @@ define.class(function(require, baseclass){
 				//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
 				draw._time = time
 				if(draw._listen_time || draw.ontime) hastime = true
-					
+
 				draw.viewmatrix = matrices.viewmatrix
 
 				if(draw.atDraw) draw.atDraw(this)
@@ -395,7 +395,7 @@ define.class(function(require, baseclass){
 				else{
 					count += this.drawNormal(draw, view, matrices)
 				}
-				
+
 
 				if(draw.debug_view){
 					this.debugrect.view = draw

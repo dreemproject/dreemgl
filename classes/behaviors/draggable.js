@@ -1,6 +1,6 @@
 define.class(function(){
 
-	// alright what does a draggable do?... well
+	// internal, alright what does a draggable do?... well
 	this.mouseleftdown = function(event){
 		var start = event.local
 		var startx = this.pos[0];

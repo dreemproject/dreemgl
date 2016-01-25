@@ -493,13 +493,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n339" name="n339">339</a>
 <strong><a href="#n340" name="n340">340</a></strong>
 </pre></td>
-  <td class="code"><pre> <span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+  <td class="code"><pre> <span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, dataset){
-        <span class="comment">// Sourceset is a dataset-api on source</span>
+        <span class="comment">// internal, Sourceset is a dataset-api on source</span>
         <span class="keyword">var</span> jsparser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> jsformatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)
 
@@ -517,7 +517,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                 }
         }
-        
+
         <span class="keyword">function</span> <span class="function">findReturnArray</span>(body){
                 <span class="keyword">var</span> steps = body.steps
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; steps.length; i++){
@@ -532,7 +532,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(source) <span class="local-variable">this</span>.parse(source)
                 <span class="local-variable">this</span>.last_source = source
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">fork</span> = <span class="keyword">function</span>(callback){
                 <span class="local-variable">this</span>.undo_stack.push(<span class="local-variable">this</span>.last_source)
                 <span class="local-variable">this</span>.redo_stack.length = <span class="integer">0</span>
@@ -553,11 +553,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         id++
                         uname = classname + id
                 }
-                
+
                 <span class="comment">// add it to the deplist.</span>
                 <span class="keyword">var</span> deps = <span class="local-variable">this</span>.ast.steps[<span class="integer">0</span>].params
                 <span class="keyword">var</span> <span class="predefined">$folder</span> = <span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+folder.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>)+<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>
-                
+
                 <span class="keyword">var</span> dir = <span class="string"><span class="delimiter">'</span><span class="content">$$</span><span class="delimiter">'</span></span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; deps.length; i ++){
                         <span class="keyword">var</span> name = deps[i].id.name
@@ -587,7 +587,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">keys</span>:[
                                         {
-                                                <span class="key">key</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>}, 
+                                                <span class="key">key</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>},
                                                  <span class="key">value</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>,<span class="key">kind</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>,<span class="key">value</span>:uname}
                                         },
                                         {<span class="key">key</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flowdata</span><span class="delimiter">&quot;</span></span>}, <span class="key">value</span>:genFlowDataObject({<span class="key">x</span>:<span class="integer">0</span>,<span class="key">y</span>:<span class="integer">0</span>})}
@@ -685,20 +685,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">// we need to find the render function in the composition root</span>
                 <span class="comment">// so how shall we do that.</span>
-                <span class="comment">// well.. </span>
+                <span class="comment">// well..</span>
                 <span class="comment">// lets write the code</span>
-                
+
                 <span class="comment">// lets find the return array</span>
                 <span class="keyword">var</span> ret = findReturnArray(findRenderFunction(<span class="local-variable">this</span>.ast).body)
-                        
+
                 <span class="keyword">var</span> data = <span class="local-variable">this</span>.data = {
                         <span class="key">retarray</span>: ret,
-                        <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">root</span><span class="delimiter">'</span></span>, 
-                        <span class="key">node</span>:ret.elems, 
+                        <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">root</span><span class="delimiter">'</span></span>,
+                        <span class="key">node</span>:ret.elems,
                         <span class="key">children</span>:[],
                         <span class="key">childnames</span>:{}
                 }
-                
+
                 <span class="comment">// now we need to walk this fucker.</span>
                 <span class="keyword">function</span> <span class="function">walkArgs</span>(array, output){
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length; i++){
@@ -719,7 +719,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                                         <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="integer">0</span>; k &lt; flowdata.keys.length; k++){
                                                                 <span class="keyword">var</span> fditem = flowdata.keys[k]
-                                                                <span class="keyword">var</span> value 
+                                                                <span class="keyword">var</span> value
                                                                 <span class="keyword">if</span>(fditem.value.type === <span class="string"><span class="delimiter">'</span><span class="content">Unary</span><span class="delimiter">'</span></span>){
                                                                         value = fditem.value.op === <span class="string"><span class="delimiter">'</span><span class="content">-</span><span class="delimiter">'</span></span>? -fditem.value.arg.value: fditem.value.arg.value
                                                                 }
@@ -759,7 +759,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> item = array[i]
 
                                 <span class="keyword">if</span>(item.type !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>) <span class="keyword">continue</span>
-                                <span class="keyword">var</span> classname 
+                                <span class="keyword">var</span> classname
                                 <span class="keyword">if</span>(item.fn.type === <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; item.fn.object.type === <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span>){
                                         classname = <span class="string"><span class="delimiter">'</span><span class="content">this.</span><span class="delimiter">'</span></span> + item.fn.key.name
                                 }
@@ -777,13 +777,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="key">inputs</span>:[],
                                         <span class="key">outputs</span>:[]
                                 }
-                                
+
                                 <span class="comment">// we haz classname.</span>
                                 <span class="keyword">var</span> clazz = resolver[classname]
                                 <span class="keyword">var</span> attribs = clazz.prototype._attributes
                                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> attribs){
                                         <span class="keyword">var</span> attrib = attribs[key]
-                                        
+
                                         <span class="keyword">if</span>(attrib.flow){
                                                 <span class="keyword">var</span> con = {
                                                         <span class="key">name</span>: key,
@@ -832,7 +832,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 })
                 <span class="keyword">return</span> buf.out
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -1,10 +1,10 @@
- /* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ /* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $server$, dataset){
-	// Sourceset is a dataset-api on source
+	// internal, Sourceset is a dataset-api on source
 	var jsparser = require('$system/parse/onejsparser')
 	var jsformatter = require('$system/parse/jsformatter')
 
@@ -22,7 +22,7 @@ define.class(function(require, $server$, dataset){
 			}
 		}
 	}
-	
+
 	function findReturnArray(body){
 		var steps = body.steps
 		for(var i = 0; i < steps.length; i++){
@@ -37,7 +37,7 @@ define.class(function(require, $server$, dataset){
 		if(source) this.parse(source)
 		this.last_source = source
 	}
-	
+
 	this.fork = function(callback){
 		this.undo_stack.push(this.last_source)
 		this.redo_stack.length = 0
@@ -58,11 +58,11 @@ define.class(function(require, $server$, dataset){
 			id++
 			uname = classname + id
 		}
-		
+
 		// add it to the deplist.
 		var deps = this.ast.steps[0].params
 		var $folder = '$'+folder.replace(/\//g,'$')+'$'
-		
+
 		var dir = '$$'
 		for(var i = 0; i < deps.length; i ++){
 			var name = deps[i].id.name
@@ -92,7 +92,7 @@ define.class(function(require, $server$, dataset){
 				type:"Object",
 				keys:[
 					{
-						key:{type:"Id",name:"name"}, 
+						key:{type:"Id",name:"name"},
 					 	value:{type:"Value",kind:"string",value:uname}
 					},
 					{key:{type:"Id",name:"flowdata"}, value:genFlowDataObject({x:0,y:0})}
@@ -190,20 +190,20 @@ define.class(function(require, $server$, dataset){
 
 		// we need to find the render function in the composition root
 		// so how shall we do that.
-		// well.. 
+		// well..
 		// lets write the code
-		
+
 		// lets find the return array
 		var ret = findReturnArray(findRenderFunction(this.ast).body)
-			
+
 		var data = this.data = {
 			retarray: ret,
-			name:'root', 
-			node:ret.elems, 
+			name:'root',
+			node:ret.elems,
 			children:[],
 			childnames:{}
 		}
-		
+
 		// now we need to walk this fucker.
 		function walkArgs(array, output){
 			for(var i = 0; i < array.length; i++){
@@ -224,7 +224,7 @@ define.class(function(require, $server$, dataset){
 
 							for(var k = 0; k < flowdata.keys.length; k++){
 								var fditem = flowdata.keys[k]
-								var value 
+								var value
 								if(fditem.value.type === 'Unary'){
 									value = fditem.value.op === '-'? -fditem.value.arg.value: fditem.value.arg.value
 								}
@@ -264,7 +264,7 @@ define.class(function(require, $server$, dataset){
 				var item = array[i]
 
 				if(item.type !== 'Call') continue
-				var classname 
+				var classname
 				if(item.fn.type === 'Key' && item.fn.object.type === 'This'){
 					classname = 'this.' + item.fn.key.name
 				}
@@ -282,13 +282,13 @@ define.class(function(require, $server$, dataset){
 					inputs:[],
 					outputs:[]
 				}
-				
+
 				// we haz classname.
 				var clazz = resolver[classname]
 				var attribs = clazz.prototype._attributes
 				for(var key in attribs){
 					var attrib = attribs[key]
-					
+
 					if(attrib.flow){
 						var con = {
 							name: key,

@@ -568,61 +568,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n414" name="n414">414</a>
 <a href="#n415" name="n415">415</a>
 <a href="#n416" name="n416">416</a>
-<a href="#n417" name="n417">417</a>
-<a href="#n418" name="n418">418</a>
-<a href="#n419" name="n419">419</a>
-<strong><a href="#n420" name="n420">420</a></strong>
-<a href="#n421" name="n421">421</a>
-<a href="#n422" name="n422">422</a>
-<a href="#n423" name="n423">423</a>
-<a href="#n424" name="n424">424</a>
-<a href="#n425" name="n425">425</a>
-<a href="#n426" name="n426">426</a>
-<a href="#n427" name="n427">427</a>
-<a href="#n428" name="n428">428</a>
-<a href="#n429" name="n429">429</a>
-<strong><a href="#n430" name="n430">430</a></strong>
-<a href="#n431" name="n431">431</a>
-<a href="#n432" name="n432">432</a>
-<a href="#n433" name="n433">433</a>
-<a href="#n434" name="n434">434</a>
-<a href="#n435" name="n435">435</a>
-<a href="#n436" name="n436">436</a>
-<a href="#n437" name="n437">437</a>
-<a href="#n438" name="n438">438</a>
-<a href="#n439" name="n439">439</a>
-<strong><a href="#n440" name="n440">440</a></strong>
-<a href="#n441" name="n441">441</a>
-<a href="#n442" name="n442">442</a>
-<a href="#n443" name="n443">443</a>
-<a href="#n444" name="n444">444</a>
-<a href="#n445" name="n445">445</a>
-<a href="#n446" name="n446">446</a>
-<a href="#n447" name="n447">447</a>
-<a href="#n448" name="n448">448</a>
-<a href="#n449" name="n449">449</a>
-<strong><a href="#n450" name="n450">450</a></strong>
-<a href="#n451" name="n451">451</a>
-<a href="#n452" name="n452">452</a>
-<a href="#n453" name="n453">453</a>
-<a href="#n454" name="n454">454</a>
-<a href="#n455" name="n455">455</a>
-<a href="#n456" name="n456">456</a>
-<a href="#n457" name="n457">457</a>
-<a href="#n458" name="n458">458</a>
-<a href="#n459" name="n459">459</a>
-<strong><a href="#n460" name="n460">460</a></strong>
-<a href="#n461" name="n461">461</a>
-<a href="#n462" name="n462">462</a>
-<a href="#n463" name="n463">463</a>
-<a href="#n464" name="n464">464</a>
-<a href="#n465" name="n465">465</a>
-<a href="#n466" name="n466">466</a>
-<a href="#n467" name="n467">467</a>
-<a href="#n468" name="n468">468</a>
-<a href="#n469" name="n469">469</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
@@ -656,7 +603,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         });
 
 
-        <span class="comment">// Set emitcode to true to emit dali code</span>
+        <span class="comment">// Set emitcode to true to emit dali code to the console. These lines</span>
+        <span class="comment">// are preceeded with DALICODE to make it easier to extract into a file.</span>
         DaliApi.emitcode = <span class="predefined-constant">false</span>;
 
         <span class="comment">// Create all actors on a layer to ignore depth test.</span>
@@ -664,7 +612,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// depthIndex property of Renderers.)</span>
         DaliApi.rootlayer = <span class="predefined-constant">undefined</span>;
 
-        <span class="comment">// The current layer to use when adding actors</span>
+        <span class="comment">// The current layer to use when adding actors. Set by setLayer(). If</span>
+        <span class="comment">// currentlayer is never set, the root layer (DaliApi.rootlayer) is used.</span>
+        <span class="comment">// Actors are added in order so the normal order of execution is:</span>
+        <span class="comment">//   - Create a DaliLayer object,</span>
+    <span class="comment">//   - Call DaliApi.setLayer to make this layer the current layer</span>
+        <span class="comment">//   - Add actors using DaliApi.addActor. This will use the current layer</span>
+        <span class="comment">//     if none was specified.</span>
+        <span class="comment">//   - Repeat the above process. You can reset the current layer by</span>
+        <span class="comment">//     passing null to DaliApi.setLayer</span>
         DaliApi.currentlayer = <span class="predefined-constant">undefined</span>;
 
         <span class="comment">/**
@@ -672,27 +628,26 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * Static method to specify the layer to use when actors are added to the
          * stage. Simple applications will never call this method because the
          * default layer is sufficient.
-         * @param {object} layer DaliLayer object to use. If missing, the default
-         *                       layer is used.
+         * @param {object} layer DaliLayer object to use. If missing, the built-in
+         *                       root layer is used.
          */</span>
         DaliApi.<span class="function">setLayer</span> = <span class="keyword">function</span>(layer) {
                 <span class="keyword">if</span> (!layer)
                         layer = DaliApi.rootlayer;
 
-                <span class="comment">//console.log('+++++setLayer', layer);</span>
                 DaliApi.currentlayer = layer;
         }
 
         <span class="comment">/**
          * @method addActor
          * Static method to add an actor to the stage.
-         * In our usage, it will add the actor to the layer added to the stage.
+         * In our usage, it will add the actor to the current layer. The second
+         * parameter is optional and specifies the DaliLayer object to use.
          * @param {object} actor DaliActor object
          * @param {object} layer DaliLayer object to use. If missing, the current
          *                 layer is used.
          */</span>
         DaliApi.<span class="function">addActor</span> = <span class="keyword">function</span>(actor, layer) {
-                <span class="comment">//console.log('+++ addActor', layer);</span>
                 <span class="keyword">if</span> (!layer)
                         layer = DaliApi.currentlayer;
 
@@ -702,11 +657,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method initialize
-         * Static method to initialize and create the dali stage
+         * Static method to initialize and create the dali stage. This method is
+         * called when dali starts running.
          * @param {number} width Width of stage
          * @param {number} height Height of stage
          * @param {string} name Name of stage
-         * @param {string} dalilib Path to dali lib (optional)
+         * @param {string} dalilib Path to dali lib (optional). If the path is
+         *                 missing, a fixed path is used.
          */</span>
         DaliApi.<span class="function">initialize</span> = <span class="keyword">function</span>(width, height, name, dalilib) {
                 DaliLayer = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_layer</span><span class="delimiter">'</span></span>)
@@ -730,7 +687,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key"><span class="delimiter">'</span><span class="content">view-mode</span><span class="delimiter">'</span></span>: viewMode,
                 }
 
-                <span class="comment">// include the Dali/nodejs interface</span>
+                <span class="comment">// include the Dali/nodejs interface.</span>
                 <span class="keyword">if</span> (!dalilib)
                         dalilib = <span class="string"><span class="delimiter">'</span><span class="content">/home/dali/teem/src/dreemgl/Release/dali</span><span class="delimiter">'</span></span>;
 
@@ -745,9 +702,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">try</span> {
+            <span class="comment">// Load the library and make available as DaliApi.dali</span>
                         DaliApi.dali = define.require(dalilib)(options);
 
-                        <span class="comment">// Create a top-level 2D layer to the stage</span>
+                        <span class="comment">// Create a top-level 2D layer to the stage. </span>
                         <span class="keyword">var</span> dali = DaliApi.dali;
                         DaliApi.rootlayer = DaliApi.currentlayer = <span class="keyword">new</span> DaliLayer(<span class="predefined-constant">null</span>, width, height);
                         dali.stage.add(DaliApi.rootlayer.dalilayer);
@@ -766,53 +724,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method createDaliObjects
-         * Static method to create dali objects on the specified object
+         * Static method to create dali objects on the specified object. Most
+         * objects, such as actor and geometry are attached to a view using
+         * createDaliActor(). Currently, only the shader object is attached to
+         * object.
          * @param {object} obj Object to attach dali objects to. This should
-         *                     already contain an element dalishader
+         *                     already contain an element dalishader. In webgl
+         *                     the object is an object created by gl.createProgram.
+         *                     In dali, a custom object is created in shaderdali.js
+         *                     to hold the compiled state of the shader. This object
+         *                     also holds an instance of DaliShader.
          * @param {object} shader Instance with runtime values (ex. hardrect)
          */</span>
         DaliApi.<span class="function">createDaliObjects</span> = <span class="keyword">function</span>(obj, shader) {
-                <span class="comment">//console.log('createDaliObjects on', obj.object_type);</span>
-
-                <span class="comment">//if (shader.view) </span>
-                <span class="comment">//        console.log('*** ** * bgcolor', shader.view.bgcolor);</span>
-                <span class="comment">//if (shader.view &amp;&amp; !shader.view.bgcolor) {</span>
-                <span class="comment">//        shader.view.bgcolor = &quot;vec4('transparent')&quot;</span>
-                <span class="comment">//}</span>
-
                 <span class="keyword">if</span> (!obj.dalishader) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">WARNING. createDaliObjects cannot find DaliShader</span><span class="delimiter">'</span></span>, Object.keys(obj));
                 }
 
                 obj.dreem_obj = shader;
-
-                <span class="comment">// Create a daligeometry object, and this will be reused as much as</span>
-                <span class="comment">// possible.</span>
-                <span class="keyword">if</span> (<span class="keyword">typeof</span> obj.daligeometry === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
-                        <span class="comment">//DaliGeometry = require('./dali_geometry')</span>
-
-                        <span class="comment">//obj.daligeometry = new DaliGeometry();</span>
-                        <span class="comment">//obj.daligeometry.addGeometry(shader);</span>
-                }
-
-<span class="comment">/*
-                        if (shader &amp;&amp; shader.attrlocs) {
-                                console.log('==== DaliApi. addAttributeGeometry');
-                                obj.daligeometry.addAttributeGeometry(obj, shader.attrlocs);
-                        }
-                        else {
-                                console.log('==== DaliApi. addGeometry');
-                                obj.daligeometry.addGeometry(shader);
-                        }
-
-//console.log('Calling DaliMaterial with shader = ', shader.object_type);
-//                        obj.dalimaterial = new DaliMaterial(obj.dalishader)
-//                        obj.dalirenderer = new DaliRenderer(obj.daligeometry, obj.dalimaterial);
-                        //remove
-                        //obj.daliactor = new DaliActor(obj);
-                        //obj.daliactor.addRenderer(obj.dalirenderer);
-                }
-*/</span>
         }
 
 
@@ -821,8 +750,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * Static method to create dali.Actor object on the specified object,
          * using dali geometries located in another object. A Material and Renderer
          * are also created on the object.
-         * @param {object} obj Object to attach dali actor to
-         * @param {object} shader Object used for createDaliObjects 
+         * @param {object} obj Object to attach dali actor to. This is a view
+         *                 object.
+         * @param {object} shader Shader object containing compiled shader
+         *                 information (from createDaliObjects).
          */</span>
         DaliApi.<span class="function">createDaliActor</span> = <span class="keyword">function</span>(obj, shader) {
                 DaliGeometry = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_geometry</span><span class="delimiter">'</span></span>)
@@ -830,26 +761,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 DaliRenderer = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_renderer</span><span class="delimiter">'</span></span>)
                 DaliActor = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_actor</span><span class="delimiter">'</span></span>)
 
-<span class="comment">//                if (shader.view &amp;&amp; !shader.view.bgcolor) {</span>
-<span class="comment">//                        shader.view.bgcolor = &quot;vec4('transparent')&quot;</span>
-<span class="comment">//                }</span>
-
-                <span class="comment">// Re-use the geometry, unless we have a texture</span>
-                
-
+                <span class="comment">// TODO: Re-use the geometry, unless we have a texture</span>
                 obj.daligeometry = <span class="keyword">new</span> DaliGeometry(obj.drawtype);
                 obj.daligeometry.addGeometry(shader.dreem_obj);
 
                 <span class="comment">//console.log('Calling DaliMaterial with shader = ', shader.object_type);</span>
                 obj.dalimaterial = <span class="keyword">new</span> DaliMaterial(shader.dalishader)
                 obj.dalirenderer = <span class="keyword">new</span> DaliRenderer(obj.daligeometry, obj.dalimaterial);
-<span class="comment">//                obj.dalirenderer = new DaliRenderer(shader.daligeometry, obj.dalimaterial);</span>
 
 
                 obj.daliactor = <span class="keyword">new</span> DaliActor(obj);
                 obj.daliactor.addRenderer(obj.dalirenderer);
-
-                <span class="comment">//console.trace('***** daliactor created on', obj.object_type, obj.daliactor);</span>
         }
 
 
@@ -859,7 +781,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * @param {object} color 4 element array of [r,g,b,a]
          */</span>
         DaliApi.<span class="function">setBackgroundColor</span> = <span class="keyword">function</span>(color) {
-                <span class="comment">//TODO Is it faster if I cache the last value</span>
+                <span class="comment">//TODO This is frequently set, although it often does not change. Cache?</span>
                 DaliApi.dali.stage.setBackgroundColor(color);
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
@@ -868,54 +790,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         }
 
-        <span class="comment">/**
-         * @method createShader
-         * Static method to create a dali.Shader object.
-         * @param {string} vertexShader VertexShader code
-         * @param {string} fragmentShader FragmentShader code
-         * @returns {object} Instance of dali.Shader
-         */</span>
-<span class="comment">/*
-        DaliApi.createShader = function(vertexShader, fragmentShader) {
-                var shaderOptions = {
-            vertexShader : vertexShader,
-            fragmentShader: fragmentShader
-        };
-                
-                var dali = DaliApi.dali;
-                var shader = new dali.Shader(shaderOptions);
-
-                return shader;
-        }
-*/</span>
-
-        <span class="comment">/**
-         * @method createMaterial
-         * Static method to create a dali.Material object. Textures are added
-         * later.
-         * @param {object} shader dali.Shader object
-         * @returns {object} Instance of dali.Material
-         */</span>
-<span class="comment">/*
-        DaliApi.createMaterial = function(shader) {
-                var material = new dali.Material(shader);
-                return material;
-        }
-*/</span>
 
         <span class="comment">/**
          * @method daliBuffer
          * Static. Build a Dali property buffer, given a value, and type.
          * value can be an array or a single value, but the value is a float.
+         * A cache is maintained to reuse proper buffers. The cache key is a
+         * hash value of the dali.PropertyBuffer (see DaliApi.getHash).
          * @param {Object} vals Value to use. Either a single value or an
          * array can be specified.
          * @param {Object} Format hash, suitable for dali.PropertyBuffer.
-         * The hash looks like {name : type}.
+         * The hash looks like {name : type}. See dali docs for dali.PropertyBuffer.
          * @param {Number} nrecs The number of records, in the buffer.
-         * @return {Object} [dali.PropertyBuffer, id].
+         * @return {Object} [dali.PropertyBuffer, id]. This is the same value stored
+         * in the cache DaliApi.BufferCache.
          */</span>
         DaliApi.BufferId = <span class="integer">0</span>
-        DaliApi.BufferCache = {}; <span class="comment">// hash -&gt; [Dali.PropertyBuffer, id]</span>
+        DaliApi.BufferCache = {}; <span class="comment">// key: hash  value: [Dali.PropertyBuffer, id]</span>
         DaliApi.<span class="function">daliBuffer</span> = <span class="keyword">function</span>(vals, format, nrecs) {
                 <span class="comment">//console.log('daliBuffer format', format, 'nrecs', nrecs, 'vals', vals.length);</span>
                 <span class="keyword">var</span> dali = DaliApi.dali;
@@ -978,7 +869,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method getArrayValue
-         * Given the name of a uniform object, retrieve the array of values.
+         * Given the name of a uniform object, retrieve the array of values from 
+         * the dreemgl compiled structure. In webgl this extraction happens inline.
          * NaN and null values are converted to 0 (dali will error on these)
          * @param {Object} obj Compiled object
          * @return {Object} single value or array, or undefined if name not found.
@@ -1013,7 +905,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method getDaliPropertySize
-         * Static. Return the number of elements required for a dali property.
+         * Static. Return the number of elements required for a dali property, 
+         * given the dali constant.
          * From Nick (via slack).
          * @param {Number} format property constant
          * @return {Number} Number of elements
@@ -1075,7 +968,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">/**
          * @method getHash
          * Static. Compute the hash of the specified data. The data is first
-         * converted to json, and an xor-like hash is used.
+         * converted to json, and an xor-like hash is used. These values are used
+         * as keys in caches.
          * @param {Object} data Object to compute the hash
          * @return {Number} Hash value
          */</span>

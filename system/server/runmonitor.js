@@ -1,10 +1,10 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
-// RunMonitor class executes ourselves as a subprocess, receives the dependency file names
+// internal, RunMonitor class executes ourselves as a subprocess, receives the dependency file names
 // from the child process and manages restart/killing when files change
 
 	var FileWatcher = require('./filewatcher')
@@ -21,7 +21,7 @@ define.class(function(require){
 
 		this.watcher.atChange = function(file){
 			//if(args['-nodreem'] && file.indexOf('dreem.js') != -1) return
-			
+
 			// lets restart this.child
 			if(this.child){
 				if(this.only_when_down[file]) return

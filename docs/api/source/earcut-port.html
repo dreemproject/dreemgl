@@ -769,7 +769,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span> <span class="function">earcut</span>(){
 
-        <span class="comment">// create a circular doubly linked list from polygon points in the specified winding order</span>
+        <span class="comment">// internal, create a circular doubly linked list from polygon points in the specified winding order</span>
         <span class="keyword">function</span> <span class="function">linkedList</span>(data, start, end, dim, clockwise) {
                 <span class="keyword">var</span> sum = <span class="integer">0</span>,
                         i, j, last;
@@ -1348,7 +1348,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> triangles;
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

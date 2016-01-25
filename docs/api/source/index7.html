@@ -163,36 +163,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n9" name="n9">9</a>
 <strong><a href="#n10" name="n10">10</a></strong>
 <a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">// Copyright 2011 Mark Cavage &lt;mcavage@gmail.com&gt; All rights reserved.</span>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(demo, require, <span class="predefined">$ui$</span>, screen, view) {
 
-<span class="comment">// If you have no idea what ASN.1 or BER is, see this:</span>
-<span class="comment">// ftp://ftp.rsa.com/pub/pkcs/ascii/layman.asc</span>
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">index</span><span class="delimiter">'</span></span>},
+                                demo({})
+                        )
+                ];
+        };
 
-<span class="keyword">var</span> Ber = require(<span class="string"><span class="delimiter">'</span><span class="content">./ber/index</span><span class="delimiter">'</span></span>);
-
-
-
-<span class="comment">///--- Exported API</span>
-
-module.exports = {
-
-  <span class="key">Ber</span>: Ber,
-
-  <span class="key">BerReader</span>: Ber.Reader,
-
-  <span class="key">BerWriter</span>: Ber.Writer
-
-};
+});
 </pre></td>
 </tr></table>
 

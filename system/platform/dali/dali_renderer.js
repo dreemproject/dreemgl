@@ -1,6 +1,6 @@
-/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -10,7 +10,7 @@
  * class is used to encapsulate the api to simplify how it is embedded into
  * the dreemgl dali platform.
  *
- * Each instance of DaliRenderer contains a dali.Renderer object, which 
+ * Each instance of DaliRenderer contains a dali.Renderer object, which
  * combines a DaliGeometry object and a DaliMaterial object
  */
 
@@ -20,14 +20,14 @@
  */
 
 define.class(function(require, exports){
-	// DaliApi is a static object to access the dali api
+	// internal, DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
 	// Assign a unique id to each dalirenderer object
 	var DaliRenderer = exports
 	DaliRenderer.GlobalId = 0
 
-	// The depth index does not auto-increment. Child layers should have a 
+	// The depth index does not auto-increment. Child layers should have a
 	// larger value than parent so child actors are rendered after parent.
 	// An alternate solution suggested by Nick, is to add an actor as a child
 	// to another actor (no depthindex changes are needed).
@@ -56,7 +56,7 @@ define.class(function(require, exports){
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + ' = new dali.Renderer(' + this.daligeometry.name() + ', ' + this.dalimaterial.name() + ');');
 			console.log('DALICODE: ' + this.name() + '.depthIndex = ' + DaliRenderer.DepthIndex + ';');
-		}		
+		}
 
 	}
 

@@ -578,14 +578,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n424" name="n424">424</a>
 <a href="#n425" name="n425">425</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, baseclass){
-        <span class="comment">// drawing</span>
+        <span class="comment">// internal, drawing</span>
         <span class="keyword">var</span> Shader = require(<span class="string"><span class="delimiter">'</span><span class="content">./shaderwebgl</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(gldevice, view){
@@ -605,11 +605,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.debugrect = <span class="keyword">new</span> DebugRect()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">atDestroy</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.releaseTexture()
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">poolDrawTargets</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> pools = <span class="local-variable">this</span>.device.drawtarget_pools
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.drawtargets) <span class="keyword">return</span>
@@ -664,7 +664,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="keyword">else</span> <span class="local-variable">this</span>[drawtarget] = dt
                         dt.passid = passid
-                } 
+                }
                 <span class="comment">// make sure the drawtarget has the right size</span>
                 <span class="keyword">var</span> tsize = <span class="local-variable">this</span>[drawtarget].size
                 <span class="keyword">if</span>(width !== tsize[<span class="integer">0</span>] || height !== tsize[<span class="integer">1</span>]){
@@ -672,7 +672,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>[drawtarget] = Texture.createRenderTarget(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>?Texture.RGB:Texture.RGBA|Texture.DEPTH|Texture.STENCIL, width, height, <span class="local-variable">this</span>.device)
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">calculateDrawMatrices</span> = <span class="keyword">function</span>(isroot, storage, mousex, mousey){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                 <span class="keyword">var</span> scroll = view._scroll
@@ -698,7 +698,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
-                        storage.perspectivematrix = mat4.perspective(view._fov * PI * <span class="integer">2</span>/<span class="float">360.0</span> , layout.width/layout.height, view._nearplane, view._farplane)                        
+                        storage.perspectivematrix = mat4.perspective(view._fov * PI * <span class="integer">2</span>/<span class="float">360.0</span> , layout.width/layout.height, view._nearplane, view._farplane)
                         storage.lookatmatrix = mat4.lookAt(view._camera, view._lookat, view._up)
                         storage.viewmatrix = mat4.mat4_mul_mat4(storage.lookatmatrix,storage.perspectivematrix);
                 }
@@ -729,7 +729,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> zoom = view._zoom
                         <span class="keyword">if</span>( drawlayout.absy - scroll[<span class="integer">1</span>] &gt; height * zoom || drawlayout.absy + drawlayout.height - scroll[<span class="integer">1</span>] &lt; <span class="integer">0</span>){
                                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        } 
+                        }
                         <span class="keyword">if</span>(drawlayout.absx - scroll[<span class="integer">0</span>] &gt; width * zoom || drawlayout.absx + drawlayout.width - scroll[<span class="integer">0</span>] &lt; <span class="integer">0</span>){
                                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
                         }
@@ -747,10 +747,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         next = draw.children[next_index]
                 }
                 <span class="keyword">if</span>(next === view) <span class="keyword">return</span> <span class="predefined-constant">undefined</span>
-                <span class="keyword">if</span>(next) next.draw_index = next_index                
+                <span class="keyword">if</span>(next) next.draw_index = next_index
                 <span class="keyword">return</span> next
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">drawPick</span> = <span class="keyword">function</span>(isroot, passid, mousex, mousey, debug){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                 <span class="keyword">var</span> device = <span class="local-variable">this</span>.device
@@ -771,7 +771,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 gl.disable(gl.SCISSOR_TEST)
                 device.bindFramebuffer(<span class="local-variable">this</span>.pick_buffer || <span class="predefined-constant">null</span>)
                 device.clear(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
-                
+
                 <span class="keyword">var</span> matrices = <span class="local-variable">this</span>.pickmatrices
                 <span class="local-variable">this</span>.calculateDrawMatrices(isroot, matrices, debug?<span class="predefined-constant">undefined</span>:mousex, mousey)
                 <span class="comment">// calculate the colormatrices too</span>
@@ -848,14 +848,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> draw = view
                 <span class="keyword">var</span> pick_id = <span class="integer">0</span>
                 <span class="keyword">while</span>(draw){
-                        
+
                         <span class="keyword">if</span>(id &gt; pick_id &amp;&amp; id &lt;= pick_id + draw.pickrange){
                                 draw.last_pick_id = (pick_id + draw.pickrange) - id
                                 <span class="keyword">return</span> draw
                         }
 
                         pick_id += draw.pickrange
-                        
+
                         draw = <span class="local-variable">this</span>.nextItem(draw)
                 }
         }
@@ -878,7 +878,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         blendshader.width = draw._layout.width
                         blendshader.height = draw._layout.height
                         blendshader.drawArrays(<span class="local-variable">this</span>.device)
-                }                                
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">drawNormal</span> = <span class="keyword">function</span>(draw, view, matrices){
@@ -910,19 +910,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> gl = device.gl
                 <span class="keyword">var</span> count = <span class="integer">0</span>
                 <span class="keyword">if</span>(!layout || layout.width === <span class="integer">0</span> || isNaN(layout.width) || layout.height === <span class="integer">0</span> || isNaN(layout.height)) <span class="keyword">return</span>
-        
+
                 <span class="comment">// lets see if we need to allocate our framebuffer..</span>
                 <span class="keyword">if</span>(!isroot){
                         <span class="keyword">var</span> ratio = view._pixelratio
                         <span class="keyword">if</span>(isNaN(ratio)) ratio = device.main_frame.ratio
-                        <span class="keyword">var</span> twidth = layout.width * ratio, theight = layout.height * ratio        
+                        <span class="keyword">var</span> twidth = layout.width * ratio, theight = layout.height * ratio
                         <span class="local-variable">this</span>.allocDrawTarget(twidth, theight, <span class="local-variable">this</span>.view, <span class="string"><span class="delimiter">'</span><span class="content">color_buffer</span><span class="delimiter">'</span></span>)
                 }
 
                 <span class="local-variable">this</span>.device.bindFramebuffer(<span class="local-variable">this</span>.color_buffer || <span class="predefined-constant">null</span>)
 
                 <span class="keyword">if</span>(layout.width === <span class="integer">0</span> || layout.height === <span class="integer">0</span>) <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        
+
                 <span class="keyword">var</span> hastime = <span class="predefined-constant">false</span>
                 <span class="keyword">var</span> zoom = view._zoom
 
@@ -965,7 +965,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="comment">//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)</span>
                                 draw._time = time
                                 <span class="keyword">if</span>(draw._listen_time || draw.ontime) hastime = <span class="predefined-constant">true</span>
-                                        
+
                                 draw.viewmatrix = matrices.viewmatrix
 
                                 <span class="keyword">if</span>(draw.atDraw) draw.atDraw(<span class="local-variable">this</span>)
@@ -975,7 +975,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">else</span>{
                                         count += <span class="local-variable">this</span>.drawNormal(draw, view, matrices)
                                 }
-                                
+
 
                                 <span class="keyword">if</span>(draw.debug_view){
                                         <span class="local-variable">this</span>.debugrect.view = draw
@@ -1002,7 +1002,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         })
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

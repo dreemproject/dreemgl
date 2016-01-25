@@ -1,12 +1,12 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Simple and fast HTML Parser
 
 define.class(function(require, exports){
 
-	// Reserialize tries to turn the JS datastructure the parser outputs back into valid XML
+	// internal, Reserialize tries to turn the JS datastructure the parser outputs back into valid XML
 	exports.reserialize = function(node, spacing, indent){
 		if(spacing === undefined) spacing = '\t'
 		var ret = ''
@@ -117,17 +117,17 @@ define.class(function(require, exports){
 		return node
 	}
 
-	exports.appendChild = 
+	exports.appendChild =
 	this.appendChild = function(node, value){
 		var i = 0
 		if(!node.child) node.child = [value]
 		else node.child.push(value)
 	}
 
-	exports.createNode = 
+	exports.createNode =
 	this.createNode = function(tag, charpos){
 		return {tag:tag, pos: charpos}
-	} 
+	}
 
 	this.atError = function(message, where){
 		this.errors.push({message:message, where:where})
@@ -191,7 +191,7 @@ define.class(function(require, exports){
 			this.tagname = this.parents.pop()
 			this.node = this.parents.pop()
 		}
-	} 
+	}
 
 	/* Internal Called when encountering a closing tag </tag> */
 	this.atClosingTag = function(name, start, end){
@@ -213,7 +213,7 @@ define.class(function(require, exports){
 		else{
 			this.atError('Dangling closing tag </' + name + '>', start)
 		}
-	} 
+	}
 
 	/* Internal Called when encountering a closing tag </close> */
 	this.atImmediateClosingTag = function(start, end){
@@ -232,7 +232,7 @@ define.class(function(require, exports){
 		}
 		if(!this.node.attr) this.node.attr = {}
 		this.node.attr[this.last_attr] = null
-	} 
+	}
 
 	/* Internal Called when encountering an attribute value "value" */
 	this.atAttrValue = function(val, start, end){
@@ -242,11 +242,11 @@ define.class(function(require, exports){
 		else{
 			this.node.attr[this.last_attr] = this.processEntities(val, start)
 		}
-	} 
+	}
 
 	// all magic HTML this closing tags. set this to undefined if you want XML behavior
 	this.self_closing_tags = {
-		'area':1, 'base':1, 'br':1, 'col':1, 'embed':1, 'hr':1, 'img':1, 
+		'area':1, 'base':1, 'br':1, 'col':1, 'embed':1, 'hr':1, 'img':1,
 		'input':1, 'keygen':1, 'link':1, 'menuitem':1, 'meta':1, 'param':1, 'source':1, 'track':1, 'wbr':1
 	}
 
@@ -321,7 +321,7 @@ define.class(function(require, exports){
 	 * <tag attr='hi'>mytext</tag>
 	 *
 	 * becomes this JS object:
-	 * { 
+	 * {
 	 *   tag:'$root'
 	 *   child:[{
 	 *     tag:'mytag'
@@ -362,9 +362,9 @@ define.class(function(require, exports){
 			var ch = source.charCodeAt(pos++)
 			if(ch == 60){ // <
 				var next = source.charCodeAt(pos)
-				if(next == 32 || next == 9 || next == 10 || next == 12 || next ==  37 || 
-					next == 40 || next == 41 || next == 45 || 
-					next == 35 || next == 36 || next == 92 || next == 94 || 
+				if(next == 32 || next == 9 || next == 10 || next == 12 || next ==  37 ||
+					next == 40 || next == 41 || next == 45 ||
+					next == 35 || next == 36 || next == 92 || next == 94 ||
 					(next >=48 && next <= 57)) continue
 				// lets emit textnode since last
 				if(start != pos - 1){
@@ -434,7 +434,7 @@ define.class(function(require, exports){
 					start = pos
 					continue
 				}
-				
+
 				start = pos // try to parse a tag
 				var tag = true // first name encountered is tagname
 				while(pos < len){

@@ -142,7 +142,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				dropshadowradius: 20,
 				dropshadowoffset:vec2(9,9),
 				borderradius:7,
-				miss:function(){
+				blur:function(){
 					this.screen.closeModal(false)
 				},
 				init:function(){
@@ -435,7 +435,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 								view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(view)})
 							}
 							else if(this.modal){
-								this.modal.emitUpward('miss', {global:this.globalMouse(this)})
+								this.modal.emitUpward('blur', {global:this.globalMouse(this)})
 							}
 						}
 					}

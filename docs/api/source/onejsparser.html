@@ -3367,9 +3367,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n3213" name="n3213">3213</a>
 <a href="#n3214" name="n3214">3214</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">// Parts Copyright (C) Marijn Haverbeke (Apache 2.0 license)</span>
@@ -4648,7 +4648,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// of constructs (for example, the fact that `!x[1]` means `!(x[1])`</span>
         <span class="comment">// instead of `(!x)[1]` is handled by the fact that the parser</span>
         <span class="comment">// function that parses unary prefix operators is called first, and</span>
-        <span class="comment">// in turn calls the function that parses `[]` subscripts — that</span>
+        <span class="comment">// in turn calls the function that parses `[]` subscripts ��� that</span>
         <span class="comment">// way, it'll receive the node for `x[1]` already parsed, and wraps</span>
         <span class="comment">// *that* in the unary operator node.</span>
         <span class="comment">//</span>
@@ -4879,7 +4879,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.raise(<span class="local-variable">this</span>.tokStart, <span class="string"><span class="delimiter">&quot;</span><span class="content">Unexpected token</span><span class="delimiter">&quot;</span></span>)
         }
 
-        <span class="comment">// Verify that a node is an lval — something that can be assigned</span>
+        <span class="comment">// Verify that a node is an lval ��� something that can be assigned</span>
         <span class="comment">// to.</span>
 
         <span class="local-variable">this</span>.<span class="function">checkLVal</span> = <span class="keyword">function</span>(expr) {
@@ -6172,7 +6172,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>))
         }
 
-        <span class="comment">// Parse an atomic expression — either a single token that is an</span>
+        <span class="comment">// Parse an atomic expression ��� either a single token that is an</span>
         <span class="comment">// expression, an expression started by a keyword like `function` or</span>
         <span class="comment">// `new`, or an expression wrapped in punctuation like `()`, `[]`,</span>
         <span class="comment">// or `{}`.</span>
@@ -6334,7 +6334,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="comment">// New's precedence is slightly tricky. It must allow its argument</span>
-        <span class="comment">// to be a `[]` or dot subscript expression, but not a call — at</span>
+        <span class="comment">// to be a `[]` or dot subscript expression, but not a call ��� at</span>
         <span class="comment">// least, not without wrapping it in parentheses. Thus, it uses the</span>
 
         <span class="local-variable">this</span>.<span class="function">parseNew</span> = <span class="keyword">function</span>() {
@@ -6400,8 +6400,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="comment">// we are a shorthand initialized value</span>
                                 prop.<span class="reserved">short</span> = <span class="integer">1</span>
                         }
-                        <span class="comment">// getters and setters are not allowed to clash — either with</span>
-                        <span class="comment">// each other or with an init property — and in this.strict mode,</span>
+                        <span class="comment">// getters and setters are not allowed to clash ��� either with</span>
+                        <span class="comment">// each other or with an init property ��� and in this.strict mode,</span>
                         <span class="comment">// init properties are also not allowed to be repeated.</span>
 
                         <span class="keyword">if</span> (prop.key.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span> &amp;&amp; (<span class="local-variable">this</span>.strict || sawGetSet)) {

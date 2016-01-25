@@ -1,11 +1,11 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, exports){
 
-	// instance of checkable end object
+	// internal, instance of checkable end object
 	this.End = function(){
 	}
 
@@ -34,7 +34,7 @@ define.class(function(require, exports){
 		this.first_value = first_value
 		this.last_value = last_value
 	}
- 	
+
 	this.compute = function(local_time, time_skew){
 		// lazily initialize order
 		if(!this.order){
@@ -100,7 +100,7 @@ define.class(function(require, exports){
 			local_time = this.reverse_time - (local_time - this.reverse_time)
 		}
 
-		// norm time goes from 0 to 1 over the length of the track 
+		// norm time goes from 0 to 1 over the length of the track
 		var norm_time = (local_time / this.end_time) * this.speed
 		// lets check the looping
 		var end_gap = undefined
@@ -121,7 +121,7 @@ define.class(function(require, exports){
 
 		if(end_gap !== undefined){ // alright we are stopping
 			var end = new this.End()
-			// fetch the last key of our track and pass it in as the new first for the next one 
+			// fetch the last key of our track and pass it in as the new first for the next one
 
 			end.last_value = norm_time >= 0.99? this.values[this.order[this.order.length - 1]].value: this.values[this.order[0]].value
 			end.skew = end_gap * this.end_time
@@ -169,7 +169,7 @@ define.class(function(require, exports){
 
 				var value1 = key1 in this.values? this.values[key1]: {value:this.first_value}
 				var value2 = this.values[key2]
-								
+
 				if(value2.motion) inter_key_time = value2.motion(inter_key_time)
 				var out = mix(value1.value, value2.value, inter_key_time)
 

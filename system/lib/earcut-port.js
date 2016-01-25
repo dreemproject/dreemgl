@@ -16,7 +16,7 @@
 
 define.class(function earcut(){
 
-	// create a circular doubly linked list from polygon points in the specified winding order
+	// internal, create a circular doubly linked list from polygon points in the specified winding order
 	function linkedList(data, start, end, dim, clockwise) {
 		var sum = 0,
 			i, j, last;

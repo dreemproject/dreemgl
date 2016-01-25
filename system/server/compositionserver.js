@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // parse a color string into a [r,g,b] 0-1 float array
 
@@ -34,7 +34,7 @@ define.class(function(require){
 		// lets give it a session
 		this.session = Math.random() * 1000000
 
-		this.fast_watcher.atChange = 
+		this.fast_watcher.atChange =
 		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
@@ -88,7 +88,7 @@ define.class(function(require){
 	this.reload = function(){
 		this.destroy()
 
-		// lets fill 
+		// lets fill
 		require.clearCache()
 
 		this.title = define.fileName(this.compname)
@@ -120,10 +120,10 @@ define.class(function(require){
 			'  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\n'+
 			'  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">\n'+
 			'  <meta name="apple-mobile-web-app-capable" content="yes">\n'+
-			'  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n'+	
+			'  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n'+
 			'  <meta name="format-detection" content="telephone=no">\n'+
 			'  <title>' + title + '</title>\n'+
-			'  <style>\n'+ 
+			'  <style>\n'+
 			'    .unselectable{\n'+
 			' 		-webkit-user-select: none;\n'+
   			'		-moz-user-select: none;\n'+
@@ -158,7 +158,7 @@ define.class(function(require){
 	this.request = function(req, res){
 		var base = req.url.split('?')[0]
 		var app = base.split('/')[2] || 'browser'
-		// ok lets serve our Composition device 
+		// ok lets serve our Composition device
 
 		if(req.method == 'POST'){
 			// lets do an RPC call
@@ -191,12 +191,19 @@ define.class(function(require){
 
 		// nodejs root
 		if(req.headers['client-type'] === 'nodejs'){
-			res.writeHead(200, {"Content-type":"text/json"})	
+			res.writeHead(200, {"Content-type":"text/json"})
 			res.write(JSON.stringify({title:this.title, boot:this.filename, paths:define.paths }))
 			res.end()
 			return
 		}
 
+		if (! this.filename) {
+			res.writeHead(404, header)
+			res.write('<body>Sorry, we could not find an application at that URL. <a href="/docs/api/index.html">Try reading the documentation?</a></body>')
+			res.end()
+			return
+		}
+		console.log('loadHTML', this.filename);
 		var html = this.loadHTML(this.title, this.filename, this.paths, this.pathset)
 		res.writeHead(200, header)
 		res.write(html)

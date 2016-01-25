@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, constructor){
@@ -16,7 +16,7 @@ define.class(function(require, constructor){
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}
 	var wiredwalker = new WiredWalker()
-	
+
 	// the RPCProxy class reads these booleans to skip RPC interface creation for this prototype level
 	this.rpcproxy = false
 
@@ -86,7 +86,7 @@ define.class(function(require, constructor){
 				this.name = arg
 				continue
 			}
-			
+
 			if(Array.isArray(arg)){
 				this.initFromConstructorArgs(arg)
 			}
@@ -95,7 +95,7 @@ define.class(function(require, constructor){
 				var name = arg.name
 				//if(name !== undefined && !(name in this)) this[name] = arg
 			}
-		}		
+		}
 	}
 /*
 	// internal, called by the constructor
@@ -105,7 +105,7 @@ define.class(function(require, constructor){
 			var prop = obj[key]
 			var tgt = this
 			var type = 0
-		
+
 			if(!this.constructor_props) this.constructor_props = {}
 			this.constructor_props[key] = prop
 
@@ -135,47 +135,48 @@ define.class(function(require, constructor){
 					this[key] = obj[key]
 				}
 			}
-		}	
+		}
 	}
 
-	// internal, used by find
-	this.findChild = function(name, ignore, nocache){
-		if(!nocache){
-			if(!this.find_cache) this.find_cache = {}
-			var child = this.find_cache[name]
-			if(child && !child.destroyed) return child
-		}
-
-		// ok so first we go down all children
+	// internal, used by find and findChild
+	this._findChild = function(name, ignore){
 		if(this === ignore) return
 		if(this.name === name){
-			if(!nocache) this.find_cache[name] = this
 			return this
 		}
-		if(this.children) for(var i = 0; i < this.children.length; i ++){
-			var child = this.children[i]
-			if(child === ignore) continue
-			var ret = child.findChild(name, undefined, true)
-			if(ret !== undefined){
-				if(!nocache) this.find_cache[name] = ret
-				return ret
+		if(this.children) {
+			for(var i = 0; i < this.children.length; i ++){
+				var child = this.children[i]
+				if(child === ignore) continue
+				var ret = child._findChild(name, ignore)
+				if(ret !== undefined){
+					return ret
+				}
 			}
 		}
 	}
 
-	// find node by name, they look up the .name property or the name of the constructor (class name) by default
-	this.find = function(name, ignore){
+	// Finds a child node by name.
+	this.findChild = function(name){
+		if(!this.find_cache) this.find_cache = {}
+		var child = this.find_cache[name]
+		if(child && !child.destroyed) return child
+		return this.find_cache[name] = this._findChild(name)
+	}
+
+	// Finds a parent node by name.
+	this.find = function(name){
 		child = this.findChild(name)
 		var node = this
 		while(child === undefined && node.parent){
-			child = node.parent.findChild(name, node, true)
+			child = node.parent._findChild(name, node)
 			node = node.parent
 		}
 		this.find_cache[name] = child
 		return child
 	}
 
-	// hide a property, pass in any set of strings
+	// internal, hide a property, pass in any set of strings
 	this.hideProperty = function(){
 		for(var i = 0; i<arguments.length; i++){
 			var arg = arguments[i]
@@ -190,31 +191,31 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// check if property is an attribute
+	// internal, check if property is an attribute
 	this.isAttribute = function(key){
 		var setter = this.__lookupSetter__(key)
 		if(setter !== undefined && setter.isAttribute) return true
 		else return false
 	}
 
-	// returns the attribute config object (the one passed into this.attributes={attr:{config}}
+	// internal, returns the attribute config object (the one passed into this.attributes={attr:{config}}
 	this.getAttributeConfig = function(key){
 		return this._attributes[key]
 	}
 
-	// check if an attribute has wires connected
+	// internal, check if an attribute has wires connected
 	this.hasWires = function(key){
 		var wiredfn_key = '_wiredfn_' + key
 		return wiredfn_key in this
 	}
-	
+
 	// internal, returns the wired-call for an attribute
 	this.wiredCall = function(key){
 		var wiredcl_key = '_wiredcl_' + key
 		return this[wiredcl_key]
 	}
-	
-	// emits an event recursively on all children
+
+	// internal, emits an event recursively on all children
 	this.emitRecursive = function(key, event, block){
 
 		if(block && block.indexOf(child)!== -1) return
@@ -224,13 +225,13 @@ define.class(function(require, constructor){
 			child.emitRecursive(key, event)
 		}
 	}
-	
-	// emit an event for an attribute key. the order 	
+
+	// emit an event for an attribute key. the order
 	this.emit = function(key, event){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var lock_key = '_lock_' + key
-		
+
 		if(this[lock_key]) return
 
 		this[lock_key] = true
@@ -271,7 +272,7 @@ define.class(function(require, constructor){
 		}
 
 		var listen_key = '_listen_' + key
-		var array 
+		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
 		else array = this[listen_key]
 		if(array.indexOf(cb) === -1){
@@ -296,7 +297,7 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// check if an attribute has a listener with a .name property set to fnname
+	// internal, check if an attribute has a listener with a .name property set to fnname
 	this.hasListenerProp = function(key, prop, value){
 		var listen_key = '_listen_' + key
 		if(!this.hasOwnProperty(listen_key)) return false
@@ -308,7 +309,7 @@ define.class(function(require, constructor){
 		return false
 	}
 
-	// returns true if attribute has any listeners
+	// internal, returns true if attribute has any listeners
 	this.hasListeners = function(key){
 		var listen_key = '_listen_' + key
 		var on_key = 'on' + key
@@ -316,7 +317,7 @@ define.class(function(require, constructor){
 		return false
 	}
 
-	// remove all listeners from a node
+	// internal, remove all listeners from a node
 	this.removeAllListeners = function(){
 		var keys = Object.keys(this)
 		for(var i = 0; i < keys.length; i++){
@@ -327,17 +328,17 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// set the wired function for an attribute
+	// internal, set the wired function for an attribute
 	this.setWiredAttribute = function(key, value){
 		if(!this.hasOwnProperty('_wiredfns')) this._wiredfns = this._wiredfns?Object.create(this._wiredfns):{}
 		this._wiredfns[key] = value
 		this['_wiredfn_'+key] = value
 	}
 
-	// mark an attribute as persistent accross live reload / renders
+	// internal, mark an attribute as persistent accross live reload / renders
 	this.definePersist = function(arg){
 		if (!this.hasOwnProperty("_persists")){
-			
+
 			if (this._persists){
 				this._persists = Object.create(this._persists)
 			}
@@ -379,7 +380,7 @@ define.class(function(require, constructor){
 	})
 
 	var Style = define.class(function(){
-		
+
 		this.composeStyle = function(){
 			// lets find the highest matching level
 			for(var i = arguments.length - 1; i >= 0; i--){
@@ -411,9 +412,9 @@ define.class(function(require, constructor){
 			// lets return a matching style
 			return this.composeStyle(
 				'$',
-				'$_' + props.class, 
+				'$_' + props.class,
 				name,
-				name + '_' + props.class, 
+				name + '_' + props.class,
 				name + '_' + props.name
 			)
 		}
@@ -424,9 +425,9 @@ define.class(function(require, constructor){
 	this.atStyleConstructor = function(original, props, where){
 		// lets see if we have it in _styles
 		var name = original.name
-		
+
 		var propobj = props && Object.getPrototypeOf(props) === Object.prototype? props: {}
-		
+
 		// we need to flush this cache on livereload
 		//var cacheid = name + '_' + propobj.class + '_' + propobj.name
 		//var cache = this._style._cache || (this._style._cache = {})
@@ -457,10 +458,10 @@ define.class(function(require, constructor){
 			Object.defineProperty(style, '_base', {value:{}, configurable:true})
 		}
 
-		// (re)define the class		
+		// (re)define the class
 		if(style._base[name] !== base || !style._class[name]){
 			var clsname = base.name + '_' +(where?where+'_':'')+ (style._match||'star')
-			var cls = style._class[name] = base.extend(style, original.outer, clsname)			
+			var cls = style._class[name] = base.extend(style, original.outer, clsname)
 		 	style._base[name] = base
 		 	return /*cache[cacheid] =*/ cls
 		}
@@ -499,7 +500,7 @@ define.class(function(require, constructor){
 		},
 		set:function(arg){
 			for(var key in arg){
-				this['_set_'+key] = arg[key] 
+				this['_set_'+key] = arg[key]
 			}
 		}
 	})
@@ -512,7 +513,7 @@ define.class(function(require, constructor){
 		},
 		set:function(arg){
 			for(var key in arg){
-				this['_get_'+key] = arg[key] 
+				this['_get_'+key] = arg[key]
 			}
 		}
 	})
@@ -541,7 +542,7 @@ define.class(function(require, constructor){
 			}
 			else{
 				if(typeof value === 'string'){
-					value = value.toLowerCase()	
+					value = value.toLowerCase()
 					if(value === 'stop'){
 						this.stopAnimation(key)
 					}
@@ -632,7 +633,7 @@ define.class(function(require, constructor){
 		var listen_key = '_listen_' + key
 		var wiredfn_key = '_wiredfn_' + key
 		var animinit_key = '_animinit_' + key
-		//var config_key = '_config_' + key 
+		//var config_key = '_config_' + key
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
 
@@ -657,7 +658,7 @@ define.class(function(require, constructor){
 			}
 		}
 		this._attributes[key] = config
-		
+
 		if(config.listeners) this[listen_key] = config.listeners
 
 		var setter
@@ -666,7 +667,7 @@ define.class(function(require, constructor){
 		// block attribute emission on objects with an environment thats (stub it)
 		if(config.alias){
 			var alias_key = '_' + config.alias
-			
+
 			setter = function(value){
 				var mark
 
@@ -760,7 +761,7 @@ define.class(function(require, constructor){
 				if(typeof value === 'object' && value !== null && value.atAttributeAssign){
 					value.atAttributeAssign(this, key)
 				}
-			
+
 				var type = config.type
 				if(type){
 					if(type !== Object && type !== Array && type !== Function) value = type(value)
@@ -777,7 +778,7 @@ define.class(function(require, constructor){
 				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
 			}
 		}
-		
+
 		setter.isAttribute = true
 		Object.defineProperty(this, key, {
 			configurable:true,
@@ -823,7 +824,7 @@ define.class(function(require, constructor){
 
 				var part = ref[k]
 				if(k === ref.length - 1){
-					// lets add a listener 
+					// lets add a listener
 					if(!obj || !obj.isAttribute || !obj.isAttribute(part)){
 						console.error("Attribute does not exist: "+ref.join('.') + " (at " + part + ") in wiring " + this[wiredfn_key].toString())
 						continue
@@ -854,7 +855,7 @@ define.class(function(require, constructor){
 								obj = obj.parent
 							}*/
 						}
-					}	
+					}
 					else obj = newobj
 					if(!obj) console.log('Cannot find part ' + part + ' in ' + ref.join('.') + ' in propertybind', this)
 				}
@@ -862,14 +863,14 @@ define.class(function(require, constructor){
 		}
 		if(initarray) initarray.push(bindcall)
 	}
-	
-	// return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
+
+	// internal, return a function that can be assigned as a listener to any value, and then re-emit on this as attribute key
 	this.emitForward = function(key){
 		return function(value){
 			this.emit(key, value)
 		}.bind(this)
 	}
-	
+
 	// internal, connect all wires using the initarray returned by connectWiredAttribute
 	this.connectWires = function(initarray, depth){
 
@@ -902,7 +903,7 @@ define.class(function(require, constructor){
 
 	// internal, used by the attribute setter to start a 'motion' which is an auto-animated attribute
 	this.startMotion = function(key, value){
-		if(!this.screen) return false 
+		if(!this.screen) return false
 		return this.screen.startMotion(this, key, value)
 	}
 
@@ -914,7 +915,7 @@ define.class(function(require, constructor){
 	// mixin setter API to easily assign mixins using an is: syntax in the constructors
 	Object.defineProperty(this, 'is', {
 		set:function(value){
-			// lets copy on value. 
+			// lets copy on value.
 			if(Array.isArray(value)){
 				for(var i = 0; i<value.length; i++) this.is = value[i]
 				return
@@ -930,10 +931,10 @@ define.class(function(require, constructor){
 
 	this.hideProperty(Object.keys(this))
 
-	// always define an init and deinit
+	// internal, always define an init and destroy
 	this.attributes = {
 		// the init event, not called when the object is constructed but specifically when it is being initialized by the render
-		init:Config({type:Event}), 
+		init:Config({type:Event}),
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
 		destroy:Config({type:Event})
 	}

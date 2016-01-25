@@ -184,7 +184,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span> (<span class="predefined">$ui$</span>, view, <span class="predefined">$examples$guide$</span>, movie, <span class="predefined">$$</span>, <span class="predefined">slides$device</span>) {
 
-    <span class="comment">// `$examples$guide$` followed by `movie` is loading the `movie` view found in `./examples/guide/movie.js`</span>
+    <span class="comment">// internal, `$examples$guide$` followed by `movie` is loading the `movie` view found in `./examples/guide/movie.js`</span>
 
     <span class="comment">// The `$` prefix refers to the current directory, regardless of the current directory name</span>
     <span class="comment">// so `$, slides$device` maps to `./examples/&lt;this directory&gt;/slides/device.js`</span>
@@ -200,7 +200,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">return</span> [ movie(<span class="local-variable">this</span>.movieData), <span class="predefined">slides$device</span>(<span class="local-variable">this</span>.deviceData) ]
     }
 
-});</pre></td>
+});
+</pre></td>
 </tr></table>
 
 </body>

@@ -920,6 +920,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// when the browser comes out of standby it fires wakup event</span>
                 <span class="key">wakeup</span>: Config({<span class="key">type</span>:Event}),
 
+                <span class="comment">// TODO(aki): DEPRICATE</span>
                 <span class="comment">// globally hookable input events</span>
                 <span class="key">globalkeyup</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalkeydown</span>: Config({<span class="key">type</span>:Event}),
@@ -932,6 +933,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">globalmouserightup</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalmousewheelx</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalmousewheely</span>: Config({<span class="key">type</span>:Event}),
+                <span class="comment">//</span>
                 <span class="key">status</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
         }
 
@@ -953,11 +955,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// ok. lets bind inputs</span>
                 <span class="local-variable">this</span>.modal_stack = []
                 <span class="local-variable">this</span>.focus_view = <span class="predefined-constant">undefined</span>
-                <span class="local-variable">this</span>.mouse_view = <span class="predefined-constant">undefined</span>
-                <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>
+                <span class="comment">// this.pointer_view = undefined</span>
+                <span class="local-variable">this</span>.pointer_view = <span class="predefined-constant">undefined</span>
+                <span class="comment">// this.pointer_capture = undefined</span>
                 <span class="local-variable">this</span>.keyboard = <span class="local-variable">this</span>.device.keyboard
-                <span class="local-variable">this</span>.mouse = <span class="local-variable">this</span>.device.mouse
-                <span class="local-variable">this</span>.touch = <span class="local-variable">this</span>.device.touch
+                <span class="comment">// this.pointer = this.device.mouse</span>
+                <span class="local-variable">this</span>.pointer = <span class="local-variable">this</span>.device.pointer
                 <span class="local-variable">this</span>.midi = <span class="local-variable">this</span>.device.midi
                 <span class="local-variable">this</span>.bindInputs()
         }
@@ -991,8 +994,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// display a classic &quot;rightclick&quot; or &quot;dropdown&quot; menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.</span>
         <span class="local-variable">this</span>.<span class="function">contextMenu</span> = <span class="keyword">function</span>(commands, x,y){
 
-                <span class="keyword">if</span> (!y) y = <span class="local-variable">this</span>.mouse._y;
-                <span class="keyword">if</span> (!x) x = <span class="local-variable">this</span>.mouse._x;
+                <span class="keyword">if</span> (!y) y = <span class="local-variable">this</span>.pointer._y;
+                <span class="keyword">if</span> (!x) x = <span class="local-variable">this</span>.pointer._x;
 
                 <span class="comment">// TODO(aki): move menu into a configurable component.</span>
 
@@ -1043,7 +1046,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">dropshadowradius</span>: <span class="integer">20</span>,
                                 <span class="key">dropshadowoffset</span>:vec2(<span class="integer">9</span>,<span class="integer">9</span>),
                                 <span class="key">borderradius</span>:<span class="integer">7</span>,
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
                                 },
                                 <span class="function">init</span>:<span class="keyword">function</span>(){
@@ -1080,10 +1083,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">globalMouse</span> = <span class="keyword">function</span>(node){
                 <span class="keyword">var</span> sx = <span class="local-variable">this</span>.device.main_frame.size[<span class="integer">0</span>]  / <span class="local-variable">this</span>.device.ratio
                 <span class="keyword">var</span> sy = <span class="local-variable">this</span>.device.main_frame.size[<span class="integer">1</span>]  / <span class="local-variable">this</span>.device.ratio
-                <span class="keyword">var</span> mx = <span class="local-variable">this</span>.mouse._x/(sx/<span class="integer">2</span>) - <span class="float">1.0</span>
-                <span class="keyword">var</span> my = -<span class="integer">1</span> * (<span class="local-variable">this</span>.mouse._y/(sy/<span class="integer">2</span>) - <span class="float">1.0</span>)
-
-                <span class="keyword">return</span> vec2(<span class="local-variable">this</span>.mouse._x, <span class="local-variable">this</span>.mouse._y);
+                <span class="keyword">var</span> mx = <span class="local-variable">this</span>.pointer._x/(sx/<span class="integer">2</span>) - <span class="float">1.0</span>
+                <span class="keyword">var</span> my = -<span class="integer">1</span> * (<span class="local-variable">this</span>.pointer._y/(sy/<span class="integer">2</span>) - <span class="float">1.0</span>)
+                <span class="keyword">return</span> vec2(<span class="local-variable">this</span>.pointer._x, <span class="local-variable">this</span>.pointer._y);
         }
 
         <span class="comment">// internal: remap the mouse to a view node</span>
@@ -1094,8 +1096,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> sx = <span class="local-variable">this</span>.device.main_frame.size[<span class="integer">0</span>]  / <span class="local-variable">this</span>.device.ratio
                 <span class="keyword">var</span> sy = <span class="local-variable">this</span>.device.main_frame.size[<span class="integer">1</span>]  / <span class="local-variable">this</span>.device.ratio
-                <span class="keyword">var</span> mx = <span class="local-variable">this</span>.mouse._x/(sx/<span class="integer">2</span>) - <span class="float">1.0</span>
-                <span class="keyword">var</span> my = -<span class="integer">1</span> * (<span class="local-variable">this</span>.mouse._y/(sy/<span class="integer">2</span>) - <span class="float">1.0</span>)
+                <span class="keyword">var</span> mx = <span class="local-variable">this</span>.pointer._x/(sx/<span class="integer">2</span>) - <span class="float">1.0</span>
+                <span class="keyword">var</span> my = -<span class="integer">1</span> * (<span class="local-variable">this</span>.pointer._y/(sy/<span class="integer">2</span>) - <span class="float">1.0</span>)
 
                 <span class="keyword">while</span> (ip){
                         <span class="keyword">if</span> (ip._viewport || !ip.parent) parentlist.push(ip)
@@ -1238,7 +1240,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// pick a view at the mouse coordinate and console.log its structure</span>
         <span class="local-variable">this</span>.<span class="function">debugPick</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.device.pickScreen(<span class="local-variable">this</span>.mouse.x, <span class="local-variable">this</span>.mouse.y).then(<span class="keyword">function</span>(msg){
+                <span class="local-variable">this</span>.device.pickScreen(<span class="local-variable">this</span>.pointer.x, <span class="local-variable">this</span>.pointer.y).then(<span class="keyword">function</span>(msg){
                         <span class="keyword">var</span> view = msg.view
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.last_debug_view === view) <span class="keyword">return</span>
                         <span class="local-variable">this</span>.last_debug_view = view
@@ -1287,10 +1289,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">releaseCapture</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>
+                <span class="local-variable">this</span>.pointer_capture = <span class="predefined-constant">undefined</span>
         }
 
-        <span class="comment">// bind all keyboard/mouse/touch inputs for delegating it into the view tree</span>
+        <span class="comment">// bind all keyboard/pointer inputs for delegating it into the view tree</span>
         <span class="local-variable">this</span>.<span class="function">bindInputs</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.keyboard.<span class="function">down</span> = <span class="keyword">function</span>(v){
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalkeydown</span><span class="delimiter">'</span></span>, v)
@@ -1322,133 +1324,131 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.focus_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">keypaste</span><span class="delimiter">'</span></span>, v)
                 }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.mouse.<span class="function">move</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmousemove</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
-                        <span class="comment">// lets check the debug click</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.keyboard.alt &amp;&amp; <span class="local-variable">this</span>.keyboard.shift){
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.debugPick()
-                        } <span class="keyword">else</span> <span class="local-variable">this</span>.last_debug_view = <span class="predefined-constant">undefined</span>
+                <span class="comment">// Event handler for pointer `start` event. Picks a view, sets it as `pointer_view` and emits `pointerstart` event.</span>
+                <span class="local-variable">this</span>.pointer.<span class="function">start</span> = <span class="keyword">function</span>(e){
+                        <span class="local-variable">this</span>.device.pickScreen(e.value[<span class="integer">0</span>].x, e.value[<span class="integer">0</span>].y).then(<span class="keyword">function</span>(view){
+                                <span class="keyword">if</span>(view){
+                                        <span class="local-variable">this</span>.pointer_view = view;
+                                        view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerstart</span><span class="delimiter">'</span></span>, e);
+                                        <span class="comment">// TODO(aki): DEPRICATE! reverse compatibitity with mouseleftdown</span>
+                                        {
+                                                <span class="comment">// lets give this thing focus</span>
+                                                <span class="keyword">if</span> (e.value[<span class="integer">0</span>].button === <span class="predefined-constant">undefined</span> || e.value[<span class="integer">0</span>].button === <span class="integer">1</span>) {
+                                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(view)){
+                                                                <span class="local-variable">this</span>.setFocus(view)
+                                                                view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftdown</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view)})
+                                                        }
+                                                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.modal){
+                                                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">blur</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
+                                                        }
+                                                }
+                                        }
+                                }
+                        }.bind(<span class="local-variable">this</span>))
+                }.bind(<span class="local-variable">this</span>);
 
-                        <span class="comment">// ok so. lets query the renderer for the view thats under the mouse</span>
-                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.mouse_capture){
-                                <span class="local-variable">this</span>.device.pickScreen(<span class="local-variable">this</span>.mouse.x, <span class="local-variable">this</span>.mouse.y).then(<span class="keyword">function</span>(view){
-                                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.inModalChain(view)){
-                                                <span class="local-variable">this</span>.mouse_view = view
-                                                <span class="keyword">return</span>
+                <span class="comment">// Event handler for pointer `move` event. Emits `pointermove` event from `pointer_view`.</span>
+                <span class="local-variable">this</span>.pointer.<span class="function">move</span> = <span class="keyword">function</span>(e){
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_view){
+                                <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermove</span><span class="delimiter">'</span></span>, e)
+                                <span class="comment">//TODO(aki): DEPRICATE</span>
+                                {
+                                        <span class="local-variable">this</span>.pointer_view.computeCursor()
+                                        <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
+                                }
+                        }
+                }.bind(<span class="local-variable">this</span>);
+
+                <span class="comment">// Event handler for pointer `end` event. Emits `pointerend` event `pointer_view`.</span>
+                <span class="local-variable">this</span>.pointer.<span class="function">end</span> = <span class="keyword">function</span>(e){
+                        <span class="local-variable">this</span>.device.pickScreen(e.value[<span class="integer">0</span>].x, e.value[<span class="integer">0</span>].y).then(<span class="keyword">function</span>(view){
+                                <span class="keyword">if</span> (view){
+                                        view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerend</span><span class="delimiter">'</span></span>, e);
+                                        <span class="comment">// TODO(aki): DEPRICATE</span>
+                                        {
+                                                <span class="keyword">if</span> (e.value[<span class="integer">0</span>].button === <span class="predefined-constant">undefined</span> || e.value[<span class="integer">0</span>].button === <span class="integer">1</span>) {
+                                                        view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftup</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view), <span class="key">isover</span>:<span class="local-variable">this</span>.pointer_view === view})
+                                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_view !== view){
+                                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_view) {
+                                                                        <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
+                                                                }
+                                                                <span class="keyword">var</span> pos = <span class="local-variable">this</span>.remapMouse(view)
+                                                                view.computeCursor()
+                                                                view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">local</span>: pos})
+                                                                view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">local</span>: pos})
+                                                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_view) {
+                                                                <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
+                                                        }
+                                                }
                                         }
-                                        <span class="comment">// lets find the mouseover or mousemove view</span>
-                                        <span class="keyword">var</span> mo_view = view &amp;&amp; view.findEmitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>)
-                                        <span class="local-variable">this</span>.mouse_view = view
-                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_over !== mo_view || mo_view &amp;&amp; <span class="local-variable">this</span>.last_over_pick_id !== mo_view.last_pick_id){
-                                                <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_over) <span class="local-variable">this</span>.mouse_over.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_over)})
-                                                <span class="local-variable">this</span>.mouse_over = mo_view
-                                                <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_over) <span class="local-variable">this</span>.mouse_over.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_over)})
-                                        }
-                                        <span class="keyword">if</span>(view){
+                                        <span class="local-variable">this</span>.pointer_view = view
+                                }
+                        }.bind(<span class="local-variable">this</span>))
+                }.bind(<span class="local-variable">this</span>);
+
+                <span class="comment">// Event handler for pointer `tap` event. Picks a view, sets it as `pointer_view` and emits `pointertap` event.</span>
+                <span class="local-variable">this</span>.pointer.<span class="function">tap</span> = <span class="keyword">function</span>(e){
+                        <span class="local-variable">this</span>.device.pickScreen(e.value[<span class="integer">0</span>].x, e.value[<span class="integer">0</span>].y).then(<span class="keyword">function</span>(view){
+                                <span class="keyword">if</span>(view){
+                                        view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointertap</span><span class="delimiter">'</span></span>, e);
+                                }
+                        }.bind(<span class="local-variable">this</span>))
+                }.bind(<span class="local-variable">this</span>);
+
+                <span class="comment">// Event handler for pointer `hover` event. Picks a view, sets it as `pointer_view` and emits `pointerhover` event.</span>
+                <span class="local-variable">this</span>.pointer.<span class="function">hover</span> = <span class="keyword">function</span>(e){
+                        <span class="comment">// TODO(aki): screen picking is expensive for continuous events like hover. Conseder optimizing.</span>
+                        <span class="local-variable">this</span>.device.pickScreen(e.value[<span class="integer">0</span>].x, e.value[<span class="integer">0</span>].y).then(<span class="keyword">function</span>(view){
+                                <span class="keyword">if</span>(view){
+                                        view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerhover</span><span class="delimiter">'</span></span>, e);
+                                        <span class="comment">// TODO(aki): DEPRICATE! reverse compatibitity with mouse</span>
+                                        {
                                                 view.computeCursor()
                                                 view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view)})
+                                                <span class="comment">// lets check the debug click</span>
+                                                <span class="keyword">if</span>(<span class="local-variable">this</span>.keyboard.alt &amp;&amp; <span class="local-variable">this</span>.keyboard.shift){
+                                                        <span class="keyword">return</span> <span class="local-variable">this</span>.debugPick()
+                                                } <span class="keyword">else</span> <span class="local-variable">this</span>.last_debug_view = <span class="predefined-constant">undefined</span>
+                                                <span class="comment">// ok so. lets query the renderer for the view thats under the mouse</span>
+                                                <span class="keyword">if</span>(!<span class="local-variable">this</span>.inModalChain(view)){
+                                                        <span class="local-variable">this</span>.pointer_view = view
+                                                        <span class="keyword">return</span>
+                                                }
+                                                <span class="comment">// lets find the mouseover or mousemove view</span>
+                                                <span class="keyword">var</span> mo_view = view &amp;&amp; view.findEmitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>)
+                                                <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_over !== mo_view || mo_view &amp;&amp; <span class="local-variable">this</span>.last_over_pick_id !== mo_view.last_pick_id){
+                                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_over) <span class="local-variable">this</span>.pointer_over.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_over)})
+                                                        <span class="local-variable">this</span>.pointer_over = mo_view
+                                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_over) <span class="local-variable">this</span>.pointer_over.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_over)})
+                                                }
+                                                <span class="local-variable">this</span>.last_over_pick_guid = view.last_pick_id
                                         }
-                                        <span class="local-variable">this</span>.last_over_pick_guid = view.last_pick_id
-
-                                }.bind(<span class="local-variable">this</span>))
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                        }
-                }.bind(<span class="local-variable">this</span>)
-
-                <span class="local-variable">this</span>.mouse.<span class="function">leftdown</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmouseleftdown</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
-
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.mouse_capture) {
-                                <span class="local-variable">this</span>.mouse_capture = <span class="local-variable">this</span>.mouse_view
-                        }
-                        <span class="comment">// lets give this thing focus</span>
-                        <span class="comment">//if (this.mouse_view){</span>
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.mouse_view)){
-                                        <span class="local-variable">this</span>.setFocus(<span class="local-variable">this</span>.mouse_view)
-                                        <span class="local-variable">this</span>.mouse_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftdown</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_view)})
+                                        <span class="local-variable">this</span>.pointer_view = view
                                 }
-                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.modal){
-                                        <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">miss</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
-                                }
-                        <span class="comment">//}</span>
-                }.bind(<span class="local-variable">this</span>)
-
-                <span class="local-variable">this</span>.mouse.<span class="function">leftup</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmouseleftup</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
-                        <span class="comment">// make sure we send the right mouse out/overs when losing capture</span>
-                        <span class="local-variable">this</span>.device.pickScreen(<span class="local-variable">this</span>.mouse.x, <span class="local-variable">this</span>.mouse.y).then(<span class="keyword">function</span>(view){
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_capture){
-                                        <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftup</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture), <span class="key">isover</span>:<span class="local-variable">this</span>.mouse_capture === view})
-                                }
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_capture !== view){
-                                        <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_capture) <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                                        <span class="keyword">if</span>(view){
-                                                <span class="keyword">var</span> pos = <span class="local-variable">this</span>.remapMouse(view)
-                                                view.computeCursor()
-                                                view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">local</span>:pos})
-                                                view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">local</span>:pos})
-                                        }
-                                }
-                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_capture) <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                                <span class="local-variable">this</span>.mouse_view = view
-                                <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">false</span>
                         }.bind(<span class="local-variable">this</span>))
-                }.bind(<span class="local-variable">this</span>)
+                }.bind(<span class="local-variable">this</span>);
 
-                <span class="local-variable">this</span>.mouse.<span class="function">wheelx</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.mouse.wheelx, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.mouse_capture) <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.mouse.wheelx,<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.mouse_view)) <span class="local-variable">this</span>.mouse_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.mouse.wheelx, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_view)})
-                }.bind(<span class="local-variable">this</span>)
-
-                <span class="local-variable">this</span>.mouse.<span class="function">wheely</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmousewheely</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.mouse.wheely, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.mouse_capture) <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheely</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.mouse.wheely,<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_view &amp;&amp; <span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.mouse_view) ){
-                                <span class="local-variable">this</span>.mouse_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheely</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.mouse.wheely, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_view)})
-                        }
-                }.bind(<span class="local-variable">this</span>)
-
-                <span class="local-variable">this</span>.mouse.<span class="function">zoom</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.mouse_capture) <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousezoom</span><span class="delimiter">'</span></span>, {<span class="key">zoom</span>:<span class="local-variable">this</span>.mouse.zoom, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_view &amp;&amp; <span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.mouse_view)){
-                                <span class="local-variable">this</span>.mouse_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousezoom</span><span class="delimiter">'</span></span>, {<span class="key">zoom</span>:<span class="local-variable">this</span>.mouse.zoom, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_view)})
-                        }
-                }.bind(<span class="local-variable">this</span>)
-
-
-                <span class="comment">/*
-                this.mouse.click = function () {
-                        if(this.modal_miss){
-                                this.modal_miss = false
-                                return
-                        }
-                        if (this.lastmouseguid &gt; 0) {
-                                if (this.uieventdebug){
-                                        console.log(&quot; clicked: &quot; + this.guidmap[this.lastmouseguid].constructor.name);
+                <span class="comment">// TODO(aki): DEPRICATE</span>
+                {
+                        <span class="local-variable">this</span>.pointer.<span class="function">wheelx</span> = <span class="keyword">function</span>(){
+                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheelx, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_capture) <span class="local-variable">this</span>.pointer_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheelx,<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_capture)})
+                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.pointer_view)) <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheelx, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
+                        }.bind(<span class="local-variable">this</span>)
+                        <span class="local-variable">this</span>.pointer.<span class="function">wheely</span> = <span class="keyword">function</span>(){
+                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmousewheely</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheely, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_capture) <span class="local-variable">this</span>.pointer_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheely</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheely,<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_capture)})
+                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_view &amp;&amp; <span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.pointer_view) ){
+                                        <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheely</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheely, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
                                 }
-                                var overnode = this.guidmap[this.lastmouseguid];
-                                if (this.inModalChain(overnode) &amp;&amp; overnode &amp;&amp; overnode.emit) overnode.emit('click')
-                        }
-                }.bind(this)
-
-                this.mouse.dblclick = function () {
-                        if(this.modal_miss){
-                                this.modal_miss = false
-                                return
-                        }
-                        if (this.lastmouseguid &gt; 0) {
-                                if (this.uieventdebug){
-                                        console.log(&quot; clicked: &quot; + this.guidmap[this.lastmouseguid].constructor.name);
+                        }.bind(<span class="local-variable">this</span>)
+                        <span class="local-variable">this</span>.pointer.<span class="function">zoom</span> = <span class="keyword">function</span>(){
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_capture) <span class="local-variable">this</span>.pointer_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousezoom</span><span class="delimiter">'</span></span>, {<span class="key">zoom</span>:<span class="local-variable">this</span>.pointer.zoom, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_capture)})
+                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_view &amp;&amp; <span class="local-variable">this</span>.inModalChain(<span class="local-variable">this</span>.pointer_view)){
+                                        <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousezoom</span><span class="delimiter">'</span></span>, {<span class="key">zoom</span>:<span class="local-variable">this</span>.pointer.zoom, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
                                 }
-                                var overnode = this.guidmap[this.lastmouseguid];
-                                if (this.inModalChain(overnode) &amp;&amp; overnode &amp;&amp; overnode.emit) overnode.emit('dblclick')
-                        }
-                }.bind(this)
-
-                */</span>
+                        }.bind(<span class="local-variable">this</span>)
+                }
         }
 
         <span class="comment">// set the focus to a view node</span>
@@ -1535,9 +1535,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">releaseCapture</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.mouse_capture){
-                        <span class="local-variable">this</span>.mouse_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.mouse_capture)})
-                        <span class="local-variable">this</span>.mouse_capture = <span class="predefined-constant">undefined</span>
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_capture){
+                        <span class="local-variable">this</span>.pointer_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseout</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_capture)})
+                        <span class="local-variable">this</span>.pointer_capture = <span class="predefined-constant">undefined</span>
                 }
         }
 

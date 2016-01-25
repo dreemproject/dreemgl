@@ -1,6 +1,6 @@
-/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
@@ -20,7 +20,7 @@
  */
 
 define.class(function(require, exports){
-	// DaliApi is a static object to access the dali api
+	// internal, DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
 	// Assign a unique id to each dalimaterial object
@@ -47,7 +47,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Material(' + this.dalishader.name() + ');');
-		}		
+		}
 
 	}
 
@@ -62,7 +62,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var texid = ' + this.name() + '.addTexture(texture' + texture.id + ', \'' + name + '\', sampler' + this.id + ');');
-		}		
+		}
 
 		return this.dalimaterial.addTexture(texture.image, name, sampler);
 	}
@@ -77,7 +77,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.removeTexture(' + index + ');');
-		}		
+		}
 
 		this.dalimaterial.removeTexture(index);
 	}
@@ -97,7 +97,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.setBlendMode(' + mode + ');');
-		}		
+		}
 	}
 
 
@@ -119,7 +119,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.setBlendEquation(' + equationRgb + ', ' + equationAlpha + ');');
-		}		
+		}
 	}
 
 
@@ -143,7 +143,7 @@ define.class(function(require, exports){
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: ' + this.name() + '.setBlendFunc(' + srcFactorRgb + ', ' + dstFactorRgb + ', ' + srcFactorAlpha + ', ' + dstFactorAlpha + ');');
-		}		
+		}
 	}
 
 

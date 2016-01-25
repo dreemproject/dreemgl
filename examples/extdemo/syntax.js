@@ -5,7 +5,7 @@
 
 define.class(function ($ui$, view, $examples$guide$, movie, $$, slides$device) {
 
-    // `$examples$guide$` followed by `movie` is loading the `movie` view found in `./examples/guide/movie.js`
+    // internal, `$examples$guide$` followed by `movie` is loading the `movie` view found in `./examples/guide/movie.js`
 
     // The `$` prefix refers to the current directory, regardless of the current directory name
     // so `$, slides$device` maps to `./examples/<this directory>/slides/device.js`

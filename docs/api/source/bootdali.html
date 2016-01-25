@@ -302,11 +302,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n148" name="n148">148</a>
 <a href="#n149" name="n149">149</a>
 <strong><a href="#n150" name="n150">150</a></strong>
-<a href="#n151" name="n151">151</a>
-<a href="#n152" name="n152">152</a>
-<a href="#n153" name="n153">153</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
    software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
@@ -316,7 +313,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
 
-console.log(<span class="string"><span class="delimiter">'</span><span class="content">Loading bootdali</span><span class="delimiter">'</span></span>, define.<span class="predefined">$environment</span>);
+        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Loading bootdali</span><span class="delimiter">'</span></span>, define.<span class="predefined">$environment</span>);
 
         <span class="comment">// composition_client references WebSocket</span>
         <span class="comment">//WebSocket = require('$system/base/nodewebsocket')</span>
@@ -419,9 +416,6 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
 
                 <span class="comment">// lets fill </span>
                 require.clearCache()
-
-                <span class="comment">//TODO Remove?</span>
-                <span class="comment">//define.$drawmode = 'dali'</span>
 
                 <span class="comment">// lets see if our composition is a dir or a jsfile</span>
                 <span class="keyword">var</span> dir = <span class="string"><span class="delimiter">'</span><span class="content">$root/</span><span class="delimiter">'</span></span>

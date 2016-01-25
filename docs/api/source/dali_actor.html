@@ -349,9 +349,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n195" name="n195">195</a>
 <a href="#n196" name="n196">196</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
@@ -370,10 +370,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  */</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-        <span class="comment">// DaliApi is a static object to access the dali api</span>
+        <span class="comment">// internal, DaliApi is a static object to access the dali api</span>
         DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// Assign an id to each daliactor object</span>
+        <span class="comment">// Assign a unique id to each daliactor object</span>
         <span class="keyword">var</span> DaliActor = exports
         DaliActor.GlobalId = <span class="integer">0</span>
 
@@ -388,21 +388,21 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
-                <span class="comment">// Cache the property values</span>
+                <span class="comment">// Cache the property values (uniforms) to minimize writes.</span>
                 <span class="local-variable">this</span>.property_cache = {};
 
+                <span class="comment">// Keep a copy of the view in case it is useful.</span>
                 <span class="local-variable">this</span>.id = ++DaliActor.GlobalId;
                 <span class="local-variable">this</span>.view = view;
                 <span class="local-variable">this</span>.daliactor = <span class="keyword">new</span> dali.Actor();
                 <span class="local-variable">this</span>.onstage = <span class="predefined-constant">false</span>;
-                
+
+                <span class="comment">// The width/height of the actor to stored in a view's layout</span>
                 <span class="keyword">var</span> layout = view.view._layout;
                 <span class="keyword">var</span> width = layout.width || <span class="integer">100</span>;
                 <span class="keyword">var</span> height = layout.height || <span class="integer">100</span>;
 
                 <span class="local-variable">this</span>.daliactor.size = [width, height, <span class="integer">0</span>];
-                <span class="comment">//this.daliactor.position = [layout.top, layout.left, 0]</span>
-
                 <span class="local-variable">this</span>.daliactor.parentOrigin = dali.TOP_LEFT;
                 <span class="local-variable">this</span>.daliactor.anchorPoint = dali.TOP_LEFT;
 
@@ -411,8 +411,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.size = [</span><span class="delimiter">'</span></span> + width + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + height + <span class="string"><span class="delimiter">'</span><span class="content">, 0];</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.parentOrigin = dali.TOP_LEFT;</span><span class="delimiter">'</span></span>);
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.anchorPoint = dali.TOP_LEFT;</span><span class="delimiter">'</span></span>);
-                }                
-                
+                }
+
         }
 
         <span class="comment">/**
@@ -430,7 +430,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.addRenderer(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.dalirenderer.name() + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
-                }                
+                }
 
                 <span class="comment">// Add the actor to the stage</span>
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.onstage) {
@@ -439,7 +439,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
 
-        }        
+        }
 
 
         <span class="comment">/**
@@ -457,12 +457,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
 
-        <span class="comment">// Internal method to format a single value</span>
+        <span class="comment">// Internal, method to format a single value when emitting dali code</span>
         <span class="local-variable">this</span>.<span class="function">formatSingle</span> = <span class="keyword">function</span>(value) {
                 <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)
                         <span class="keyword">return</span> <span class="integer">0</span>;
 
-                <span class="comment">//TODO I've seen NaN values. Dali doesn't accept them</span>
+                <span class="comment">// I've seen NaN values. Dali doesn't accept them</span>
                 <span class="keyword">if</span> (isNaN(value) || value === <span class="predefined-constant">null</span>) {
                         <span class="keyword">return</span> <span class="integer">0</span>;
                 }
@@ -475,10 +475,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span> (value == ivalue)
                         <span class="keyword">return</span> ivalue;
 
-                <span class="keyword">return</span> value; <span class="comment">// .toPrecision(3);</span>
+                <span class="keyword">return</span> value;
         }
 
-        <span class="comment">// Internal method to format a value for display</span>
+        <span class="comment">// Internal, method to format a value when emitting dali code</span>
         <span class="local-variable">this</span>.<span class="function">formatValue</span> = <span class="keyword">function</span>(value) {
                 <span class="keyword">if</span> (!Array.isArray(value))
                         <span class="keyword">return</span> <span class="local-variable">this</span>.formatSingle(value);
@@ -493,8 +493,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">/**
          * @method setUniformValue
-         * Sets a uniform value. If a value exists in the cache, the property
-         * is set directory. Otherwise, registerAnimatableProperty is called.
+         * Sets a uniform value. If a value exists in the cache (and has changed),
+         * the property is set directly. Otherwise, registerAnimatableProperty
+         * is called.
          * @param {string} Name of uniform to set
          * @param {Object} Compiled uniform structure
          */</span>
@@ -509,7 +510,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">return</span>;
 
                 <span class="keyword">var</span> fval = <span class="local-variable">this</span>.formatValue(val);
-                <span class="comment">//console.log('+++ set uniform', this.id, key, fval);</span>
 
                 <span class="keyword">if</span> (lasthash) {
                         <span class="comment">// Existing value. Set the property directly</span>
@@ -529,7 +529,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">else</span> {
                                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.registerAnimatableProperty(</span><span class="char">\'</span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="char">\'</span><span class="content">, </span><span class="delimiter">'</span></span> + JSON.stringify(val) + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
                         }
-                }                
+                }
 
         }
 

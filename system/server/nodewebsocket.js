@@ -1,10 +1,10 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.  
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, 
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
-// node websocket
+// internal, node websocket
 
 	var crypto = require('crypto')
 	var url = require('url')
@@ -75,7 +75,7 @@ define.class(function(require){
 		}
 
 		this.socket = socket
-		
+
 	 	// calc key
 		var key = req.headers['sec-websocket-key']
 		var sha1 = crypto.createHash('sha1');
@@ -171,12 +171,12 @@ define.class(function(require){
 		if(buf.length < 126){
 			head = new Buffer(2)
 			head[1] = buf.length
-		} 
+		}
 		else if (buf.length<=65535){
 			head = new Buffer(4)
 			head[1] = 126
 			head.writeUInt16BE(buf.length, 2)
-		} 
+		}
 		else {
 			head = new Buffer(10)
 			head[1] = 127
@@ -272,7 +272,7 @@ define.class(function(require){
 	}
 
 	this.len2 = function(){
-		if(this.head()) return 
+		if(this.head()) return
 		this.paylen = this.header.readUInt16BE(this.written - 2)
 
 		if(this.masked){
@@ -284,7 +284,7 @@ define.class(function(require){
 			this.state = this.data
 			this.written = 0
 		}
-		
+
 		return true
 	}
 
@@ -333,7 +333,7 @@ define.class(function(require){
 			return true
 		}
 		this.expected = 1
-		this.written = 0 
+		this.written = 0
 		this.state = this.opcode
 		this.socket.write(this.pongframe)
 		return true
@@ -348,7 +348,7 @@ define.class(function(require){
 			return true
 		}
 		this.expected = 1
-		this.written = 0 
+		this.written = 0
 		this.state = this.opcode
 		return true
 	}
