@@ -88,7 +88,7 @@
     "no-extend-native": 1,      // disallow adding to native types
     "no-extra-bind": 1,         // disallow unnecessary function binding
     "no-fallthrough": 1,        // disallow fallthrough of case statements
-    "no-floating-decimal": 1,   // disallow the use of leading or trailing decimal points in numeric literals (off by default)
+    "no-floating-decimal": 0,   // disallow the use of leading or trailing decimal points in numeric literals (off by default)
     "no-implied-eval": 1,       // disallow use of eval()-like methods
     "no-iterator": 1,           // disallow usage of __iterator__ property
     "no-labels": 1,             // disallow use of labeled statements

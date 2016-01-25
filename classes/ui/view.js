@@ -1060,8 +1060,8 @@ define.class('$system/base/node', function(require){
 	}
 
 	// Determines the background color that should be drawn at a given position.
-	// Defaults to bgcolor.
-	this.bgcolorfn = function(pos){
+	// Returns a vec4 color value, defaults to bgcolor.
+	this.bgcolorfn = function(pos /*vec2*/){
 		return bgcolor
 	}
 
