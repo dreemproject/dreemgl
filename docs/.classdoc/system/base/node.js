@@ -4,10 +4,14 @@
  * Node class provides attributes for events and values, propertybinding and constructor semantics
  */
 /**
- * @method find
- * Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.
+ * @method findChild
+ * Finds a child node by name.
  * @param name
- * @param ignore
+ */
+/**
+ * @method find
+ * Finds a parent node by name.
+ * @param name
  */
 /**
  * @method emit

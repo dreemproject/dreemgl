@@ -138,37 +138,38 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// internal, Finds a child node by name.
-	this.findChild = function(name, ignore, nocache){
-		if(!nocache){
-			if(!this.find_cache) this.find_cache = {}
-			var child = this.find_cache[name]
-			if(child && !child.destroyed) return child
-		}
-
-		// ok so first we go down all children
+	// internal, used by find and findChild
+	this._findChild = function(name, ignore){
 		if(this === ignore) return
 		if(this.name === name){
-			if(!nocache) this.find_cache[name] = this
 			return this
 		}
-		if(this.children) for(var i = 0; i < this.children.length; i ++){
-			var child = this.children[i]
-			if(child === ignore) continue
-			var ret = child.findChild(name, undefined, true)
-			if(ret !== undefined){
-				if(!nocache) this.find_cache[name] = ret
-				return ret
+		if(this.children) {
+			for(var i = 0; i < this.children.length; i ++){
+				var child = this.children[i]
+				if(child === ignore) continue
+				var ret = child._findChild(name, ignore)
+				if(ret !== undefined){
+					return ret
+				}
 			}
 		}
 	}
 
-	// Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.
-	this.find = function(name, ignore){
+	// Finds a child node by name.
+	this.findChild = function(name){
+		if(!this.find_cache) this.find_cache = {}
+		var child = this.find_cache[name]
+		if(child && !child.destroyed) return child
+		return this.find_cache[name] = this._findChild(name)
+	}
+
+	// Finds a parent node by name.
+	this.find = function(name){
 		child = this.findChild(name)
 		var node = this
 		while(child === undefined && node.parent){
-			child = node.parent.findChild(name, node, true)
+			child = node.parent._findChild(name, node)
 			node = node.parent
 		}
 		this.find_cache[name] = child

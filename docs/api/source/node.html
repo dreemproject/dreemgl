@@ -1093,6 +1093,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n939" name="n939">939</a>
 <strong><a href="#n940" name="n940">940</a></strong>
 <a href="#n941" name="n941">941</a>
+<a href="#n942" name="n942">942</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1234,37 +1235,38 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// internal, Finds a child node by name.</span>
-        <span class="local-variable">this</span>.<span class="function">findChild</span> = <span class="keyword">function</span>(name, ignore, nocache){
-                <span class="keyword">if</span>(!nocache){
-                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.find_cache) <span class="local-variable">this</span>.find_cache = {}
-                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.find_cache[name]
-                        <span class="keyword">if</span>(child &amp;&amp; !child.destroyed) <span class="keyword">return</span> child
-                }
-
-                <span class="comment">// ok so first we go down all children</span>
+        <span class="comment">// internal, used by find and findChild</span>
+        <span class="local-variable">this</span>.<span class="function">_findChild</span> = <span class="keyword">function</span>(name, ignore){
                 <span class="keyword">if</span>(<span class="local-variable">this</span> === ignore) <span class="keyword">return</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.name === name){
-                        <span class="keyword">if</span>(!nocache) <span class="local-variable">this</span>.find_cache[name] = <span class="local-variable">this</span>
                         <span class="keyword">return</span> <span class="local-variable">this</span>
                 }
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.children) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.children.length; i ++){
-                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
-                        <span class="keyword">if</span>(child === ignore) <span class="keyword">continue</span>
-                        <span class="keyword">var</span> ret = child.findChild(name, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
-                        <span class="keyword">if</span>(ret !== <span class="predefined-constant">undefined</span>){
-                                <span class="keyword">if</span>(!nocache) <span class="local-variable">this</span>.find_cache[name] = ret
-                                <span class="keyword">return</span> ret
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.children) {
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.children.length; i ++){
+                                <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
+                                <span class="keyword">if</span>(child === ignore) <span class="keyword">continue</span>
+                                <span class="keyword">var</span> ret = child._findChild(name, ignore)
+                                <span class="keyword">if</span>(ret !== <span class="predefined-constant">undefined</span>){
+                                        <span class="keyword">return</span> ret
+                                }
                         }
                 }
         }
 
-        <span class="comment">// Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.</span>
-        <span class="local-variable">this</span>.<span class="function">find</span> = <span class="keyword">function</span>(name, ignore){
+        <span class="comment">// Finds a child node by name.</span>
+        <span class="local-variable">this</span>.<span class="function">findChild</span> = <span class="keyword">function</span>(name){
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.find_cache) <span class="local-variable">this</span>.find_cache = {}
+                <span class="keyword">var</span> child = <span class="local-variable">this</span>.find_cache[name]
+                <span class="keyword">if</span>(child &amp;&amp; !child.destroyed) <span class="keyword">return</span> child
+                <span class="keyword">return</span> <span class="local-variable">this</span>.find_cache[name] = <span class="local-variable">this</span>._findChild(name)
+        }
+
+        <span class="comment">// Finds a parent node by name.</span>
+        <span class="local-variable">this</span>.<span class="function">find</span> = <span class="keyword">function</span>(name){
                 child = <span class="local-variable">this</span>.findChild(name)
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(child === <span class="predefined-constant">undefined</span> &amp;&amp; node.parent){
-                        child = node.parent.findChild(name, node, <span class="predefined-constant">true</span>)
+                        child = node.parent._findChild(name, node)
                         node = node.parent
                 }
                 <span class="local-variable">this</span>.find_cache[name] = child
