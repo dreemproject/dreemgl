@@ -79,11 +79,11 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 	
 	this.render =function(){
 		if (this.icon && this.icon.length > 0) return [
-			icon({icon:this.icon, alignself:"center", fgcolor:wire("this.parent.bordercolor") })
+			icon({icon:this.icon, alignself:"center", alignself:'stretch', fgcolor:wire("this.parent.bordercolor") })
 		]
 	
 		if (this.triangle) return [
-			this.triangledisp({name:"thetri", bgcolor:wire("this.bordercolor") })
+			this.triangledisp({name:"thetri", alignself:'stretch',bgcolor:wire("this.bordercolor") })
 		]
 		return []
 	}	
