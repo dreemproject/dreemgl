@@ -325,7 +325,6 @@ define.class(function(require, exports){
 	// Some keywords are treated as regular operators. `in` sometimes
 	// (when parsing `for`) needs to be tested against specifically, so
 	// we assign a variable name to it for quick comparing.
-
 	this._in = {keyword: "in", preIdent:this._name, binop: 7, beforeExpr: true}
 	this._of = {keyword: "of", preIdent:this._name, binop: 7, beforeExpr: true}
 
@@ -439,10 +438,10 @@ define.class(function(require, exports){
 				this.compareTo(cat)
 			}
 			f += "}"
+			// Otherwise, simply generate a flat `switch` statement.
 
-		// Otherwise, simply generate a flat `switch` statement.
-
-		} else {
+		} 
+		else {
 			this.compareTo(words)
 		}
 		return new Function("str", f)
@@ -519,7 +518,6 @@ define.class(function(require, exports){
 			return true
 		}
 	}
-
 
 	exports.isIdentifierStart = 
 	this.isIdentifierStart = function(code) {
@@ -2806,7 +2804,7 @@ define.class(function(require, exports){
 		if(probe) node.store = 8
 		node.fn = base
 		node.args = this.parseExprList(this._parenR, true, true)
-		if(this.storeComments) this.commentTail(node, this._bracketR)
+		if(this.storeComments) this.commentTail(node, this._parenR)
 
 		if(this.debug) console.log(node)
 		return this.parseSubscripts(this.finishNode(node, "Call"))
