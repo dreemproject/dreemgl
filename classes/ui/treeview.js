@@ -20,13 +20,11 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 
 	// The fold button is a very very flat button. 
 	define.class(this, 'foldbutton', button, function(){
-
 		this.borderwidth = 0
 	//	this.borderradius = 0;
 		this.padding =  0
 		this.pickalpha = -1
 		this.labelactivecolor = vec4("#303000")
-
 		this.buttoncolor1 = "#3b3b3b"
 		this.buttoncolor2 = "#3b3b3b"
 		this.pressedcolor1 = "#505050"
@@ -70,12 +68,10 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 				this.haschildren?this.outer.foldbutton({
 					icon:this.folded? "chevron-right":"chevron-down", 
 					padding: 2, 
-					bg:0,
 					click: this.toggleclick
 				}):[], 
 				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
 				this.outer.foldbutton({
-					bg:0,
 					text: this.text, 
 					click:function(){
 						this.emit('select',{node:this})
@@ -161,36 +157,31 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			];
 					
 					
-			if (this.item.collapsed == false)
-			{
-				if (this.item.children)
-				{
-					
+			if (this.item.collapsed == false){
+				if (this.item.children){
 					var childrenarray = this.item.children.map(function(m, i, thearray){return [
-									this.outer.treeline({last:(i == thearray.length-1)?1:0, flexwrap:"nowrap",abg:{
-											color:function(){
-													return "yellow";
-												}
-											}, 
-											padding:0, 
-											flexdirection:"row" },
-											view({bgcolor:"blue", width:14, alignself:"stretch",init:function(){
-											//	console.log(this.size)
-											} , 
-											layout:function(){
-												//console.log(this.layout)
-											}}),
-										this.outer.treeitem({item: m})										
-									)
-									]}.bind(this));
-									
+						this.outer.treeline({last:(i == thearray.length-1)?1:0, flexwrap:"nowrap",abg:{
+							color:function(){
+								return "yellow";
+							}}, 
+							padding:0, 
+							flexdirection:"row" },
+							view({bgcolor:"blue", width:14, alignself:"stretch",init:function(){
+								// console.log(this.size)
+							},
+							layout:function(){
+								//console.log(this.layout)
+							}}),
+						this.outer.treeitem({item: m})
+					)
+					]}.bind(this));
 					res.push(view({
 								bg:0, 
 								flexdirection:"column" , 
 								flexwrap:"nowrap"
 							},
 							childrenarray
-							)
+						)
 					);
 				}
 			}
@@ -215,7 +206,6 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.bgcolor = "#3b3b3b" 
 		this.bg = {
 			color: function(){
-				
 				var pos = mesh.xy * vec2(view.layout.width, view.layout.height)
 				var center = 16
 				var left = 7

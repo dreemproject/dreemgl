@@ -99,7 +99,10 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 		}
 	}
-
+	
+	// Set the background 
+	// vec2 pos: position
+	// return; 
 	this.bgcolorfn = function(pos){
 		return mix(col1, col2, pos.y)
 	}
