@@ -1234,7 +1234,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// internal, used by find</span>
+        <span class="comment">// internal, Finds a child node by name.</span>
         <span class="local-variable">this</span>.<span class="function">findChild</span> = <span class="keyword">function</span>(name, ignore, nocache){
                 <span class="keyword">if</span>(!nocache){
                         <span class="keyword">if</span>(!<span class="local-variable">this</span>.find_cache) <span class="local-variable">this</span>.find_cache = {}
@@ -1259,7 +1259,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// find node by name, they look up the .name property or the name of the constructor (class name) by default</span>
+        <span class="comment">// Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.</span>
         <span class="local-variable">this</span>.<span class="function">find</span> = <span class="keyword">function</span>(name, ignore){
                 child = <span class="local-variable">this</span>.findChild(name)
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>

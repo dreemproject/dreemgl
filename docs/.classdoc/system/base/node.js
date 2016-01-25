@@ -5,7 +5,7 @@
  */
 /**
  * @method find
- * find node by name, they look up the .name property or the name of the constructor (class name) by default
+ * Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.
  * @param name
  * @param ignore
  */

@@ -138,7 +138,7 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// internal, used by find
+	// internal, Finds a child node by name.
 	this.findChild = function(name, ignore, nocache){
 		if(!nocache){
 			if(!this.find_cache) this.find_cache = {}
@@ -163,7 +163,7 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// find node by name, they look up the .name property or the name of the constructor (class name) by default
+	// Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.
 	this.find = function(name, ignore){
 		child = this.findChild(name)
 		var node = this
