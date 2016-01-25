@@ -208,7 +208,7 @@ define.class('$system/base/node', function(require){
 		// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
 		up: Config({group:"3d",type: vec3, value: vec3(0,-1,0)}),
 
-		// the current time which can be used in shaders to create continous animations
+		// internal, the current time which can be used in shaders to create continous animations
 		time:Config({meta:"hidden", value:0}),
 
 		// fired when the mouse doubleclicks

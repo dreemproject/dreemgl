@@ -295,10 +295,6 @@
  * the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'
  */
 /**
- * @attribute {float32} time
- * the current time which can be used in shaders to create continous animations
- */
-/**
  * @attribute {float32} [dropshadowradius="20"]
  * drop shadow size
  */
