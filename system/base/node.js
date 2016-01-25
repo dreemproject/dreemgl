@@ -138,8 +138,8 @@ define.class(function(require, constructor){
 		}	
 	}
 
+	// internal used by find and findChild
 	this._findChild = function(name, ignore){
-		// ok so first we go down all children
 		if(this === ignore) return
 		if(this.name === name){
 			return this
@@ -154,7 +154,7 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// internal, used by find
+	// find node only in the set of children
 	this.findChild = function(name, ignore){
 		if(!this.find_cache) this.find_cache = {}
 		var child = this.find_cache[name]
