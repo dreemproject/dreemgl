@@ -53,7 +53,7 @@ This will emit the `init` event on the screen, and call the `render`
 function on that screen. At that point, every widget in the tree will
 recursively get `render` on itself called to determine its children.
 
-*So how do render functions know when to re-render themselves?* 
+*So how do render functions know when to re-render themselves?*
 If you look at
 [system/base/render.js](https://github.com/teem2/dreemgl/blob/dev/system/base/render.js),
 you will see that DreemGL 'watches' all the attribute getters on the
@@ -75,7 +75,7 @@ cached, so if you just add an item at the end of a list, it is not
 very expensive to just use the `render` function.
 
 
-### Adding Children to Views Using appendChild 
+### Adding Children to Views Using appendChild
 
 If you make the UI much more stateful by dynamically adding children
 using the `appendChild` function, then live reloading becomes much
@@ -83,9 +83,9 @@ harder. Unless you have a very good reason, we recommend that you **do
 not use** `appendChild` and instead use the `render` functions.
 
 The reason you may need to use an `appendChild` function, is that if you call
-a constructor of a view like this: 
+a constructor of a view like this:
 
-`view({props})` 
+`view({props})`
 
 it returns a view, but that view has not yet been initialized. `init`
 has not been called on it yet, nor does it have `render` called on it
@@ -163,7 +163,7 @@ means you can write your components in a very clear and simple way, such as:
 
 Attributes are also automatically readable in shaders. So, the following example:
 
-`view({prop:10, bg:{color(){ return prop*vec4(1) }}})` 
+`view({prop:10, bg:{color(){ return prop*vec4(1) }}})`
 
 makes a view where the background shader reads a property all without
 the need for declaring/creating attributes.
@@ -176,7 +176,7 @@ see in the implementation of
 ## Shaders
 Each view contains several shaders (such as `bg`, `border`) which can be assigned
 to a specific shader class. Views may turn on shaders when certain
-features are enabled, for example: 
+features are enabled, for example:
 `hardrect` is assigned to `this.bg` if `this.borderradius` is `square`. This keeps performance fast by default.
 
 ### How do shaders work with view attributes?
@@ -192,7 +192,7 @@ Dreemgl also provides a mechanism to create structs:
 
 ````
 // define a custom struct for use later
-this.vertexstruct =  define.struct({	 
+this.vertexstruct =  define.struct({
  pos:vec3,
  color:vec4,
  id: float
@@ -205,10 +205,10 @@ this.mesh = this.vertexstruct.array();
 this.mesh.push(pos, color, id)
 ````
 
-Builtin `structs` use the same mechanism, e.g. `vec2()` is really an instance of `define.struct`, see 
-[system/base/define.js](https://github.com/teem2/dreemgl/blob/master/system/base/define.js). 
+Builtin `structs` use the same mechanism, e.g. `vec2()` is really an instance of `define.struct`, see
+[system/base/define.js](https://github.com/teem2/dreemgl/blob/master/system/base/define.js).
 
-### How does the shader compiler work?  
+### How does the shader compiler work?
 The shader compiler lives on a baseclass of all the shaders, at
 [system/base/shader.js](https://github.com/teem2/dreemgl/blob/master/system/base/shader.js).
 Every time you extend a shader class it will run the js code-compiler
@@ -230,7 +230,6 @@ special overrides to create an interim class, allowing for compilation
 and faster instancing. In this way, style properties end up in the
 prototype and can still be overridden on a per-instance basis.
 
-
 ### Should variables be on the view or on the shader?
 For interactivity variabes, like `pixelSize`, you should put variables on the
 view and access them in the shader.  For shader-specific functions and
@@ -248,9 +247,8 @@ Yes. If you want to write custom shaders you need to pick the shader you will su
 We recommend that you make a new shader class on a new view class with custom geometry to build most widgets.
 
 You can also freely inherit it instances, but if you intend to instance many of these, then it makes more sense to put it in a class.
-keep in mind if you are instancing 'a lot of those' it makes a lot of sense to put it in a class
 
-### How do I use texture in a shader? 
+### How do I use texture in a shader?
 Example: You want to use `bgimage` resource image as texture in `bg`'s color function
 
 Image objects are automatically converted to texture objects, so you can do the following:
@@ -266,6 +264,6 @@ color:function(){
  * [API Reference] need to add links
  * [IoT]Adding components and services
  * [Dreem-in-10] an introduction/tutorial
- * [DALI] 
+ * [DALI]
 
 

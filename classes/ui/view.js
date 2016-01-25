@@ -271,18 +271,18 @@ define.class('$system/base/node', function(require){
 			'col-resize','row-resize',
 			'vertical-text','context-menu','no-drop','not-allowed',
 			'alias','cell','copy'
-		), value:''}),
+		), value:''})
 	}
 
 	this.name = ""
 	this.class = ""
 
 	this.onvisible = this.oncamera = this.onlookat = this.onup = function(){
-		this.redraw();
+		this.redraw()
 	}
 
 	// the number of pick ID's to reserve for this view.
-	this.pickrange = 1;
+	this.pickrange = 1
 
 	this.boundscheck = true
 	// the local matrix
@@ -311,7 +311,7 @@ define.class('$system/base/node', function(require){
 	// turn off rpc proxy generation for this prototype level
 	this.rpcproxy = false
 
-	this.ondropshadowradius = function(event){
+	this.ondropshadowradius = function(){
 		if (this.dropshadowopacity > 0){
 			this.shadowrect = true;
 		}else{
@@ -320,11 +320,11 @@ define.class('$system/base/node', function(require){
 	}
 
 	// internal, listen to switch the shaders when borderradius changes
-	this.onborderradius = function(event){
+	this.onborderradius = function(){
 		this.setBorderShaders()
 	}
 
-	this.onborderwidth = function(event){
+	this.onborderwidth = function(){
 		this.setBorderShaders()
 	}
 
@@ -613,7 +613,8 @@ define.class('$system/base/node', function(require){
 			if(node.parent) id += node.parent.children.indexOf(node)
 			node = node.parent
 		}
-		return this.viewguid = id
+		this.viewguid = id
+		return id
 	}
 
 	// internal, this gets called by the render engine
@@ -811,7 +812,7 @@ define.class('$system/base/node', function(require){
 		if(bailbound) return
 
 		var matrix_changed = parent_changed
-		if (parentviewport == '3d'){// && !this._mode ){
+		if (parentviewport === '3d'){// && !this._mode ){
 			matrix_changed = true
 			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
 		}
@@ -821,7 +822,7 @@ define.class('$system/base/node', function(require){
 			if(layout){
 				//console.log(this.matrix_dirty)
 				var ml = this.matrix_layout
-				if(!ml || ml.left != layout.left || ml.top !== layout.top ||
+				if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
 					ml.width !== layout.width || ml.height !== layout.height){
 					this.matrix_layout = {
 						left:layout.left,
@@ -1059,8 +1060,8 @@ define.class('$system/base/node', function(require){
 	}
 
 	// Determines the background color that should be drawn at a given position.
-	// Defaults to bgcolor.
-	this.bgcolorfn = function(pos){
+	// Returns a vec4 color value, defaults to bgcolor.
+	this.bgcolorfn = function(pos /*vec2*/){
 		return bgcolor
 	}
 
@@ -1441,8 +1442,6 @@ define.class('$system/base/node', function(require){
 			var scale1 = ((borderradius[1]-borderwidth[0]))/Math.max(0.01, borderradius[1])
 			var scale2 = ((borderradius[2]-borderwidth[0]))/Math.max(0.01, borderradius[2])
 			var scale3 = ((borderradius[3]-borderwidth[0]))/Math.max(0.01, borderradius[3])
-
-			var pidiv = 20
 
 			var divbase = 0.45
 			var pidiv1 = Math.floor(Math.max(2, divbase* PI * borderradius[0]))

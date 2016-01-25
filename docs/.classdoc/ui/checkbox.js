@@ -4,7 +4,7 @@
  * Simple toggle button: a rectangle with a textlabel and an icon
  */
 /**
- * @attribute {String} text
+ * @attribute {String} [text="undefined"]
  * The label for the button
  */
 /**

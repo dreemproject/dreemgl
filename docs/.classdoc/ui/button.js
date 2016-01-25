@@ -4,11 +4,11 @@
  * Simple button: a rectangle with a textlabel and an icon
  */
 /**
- * @attribute {String} text
+ * @attribute {String} [text="undefined"]
  * The label for the button
  */
 /**
- * @attribute {String} icon
+ * @attribute {String} [icon="undefined"]
  * The icon for the button, see FontAwesome for the available icon-names.
  */
 /**

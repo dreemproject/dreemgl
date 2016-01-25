@@ -1094,16 +1094,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n940" name="n940">940</a></strong>
 <a href="#n941" name="n941">941</a>
 <a href="#n942" name="n942">942</a>
+<a href="#n943" name="n943">943</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, constructor){
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
         <span class="comment">// Node class provides attributes for events and values, propertybinding and constructor semantics</span>
-
-        <span class="keyword">var</span> Node = constructor
 
         <span class="keyword">var</span> OneJSParser =  require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> WiredWalker = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/wiredwalker</span><span class="delimiter">'</span></span>)
@@ -1164,7 +1163,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">// internal, called by the constructor</span>
         <span class="local-variable">this</span>.<span class="function">initFromConstructorArgs</span> = <span class="keyword">function</span>(args){
-                <span class="keyword">var</span> off = <span class="integer">0</span>
+                <span class="comment">// var off = 0</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; args.length; i++){
                         <span class="keyword">var</span> arg = args[i]
                         <span class="keyword">if</span>(<span class="keyword">typeof</span> arg === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; Object.getPrototypeOf(arg) === Object.prototype){
@@ -1179,7 +1178,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">continue</span>
                         }
                         <span class="keyword">if</span>(<span class="keyword">typeof</span> arg === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> &amp;&amp; i === <span class="integer">0</span>){
-                                off = <span class="integer">1</span>
+                                <span class="comment">// off = 1</span>
                                 <span class="local-variable">this</span>.name = arg
                                 <span class="keyword">continue</span>
                         }
@@ -1189,7 +1188,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(arg !== <span class="predefined-constant">undefined</span> &amp;&amp; <span class="keyword">typeof</span> arg === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>){
                                 <span class="local-variable">this</span>.constructor_children.push(arg)
-                                <span class="keyword">var</span> name = arg.name
+                                <span class="comment">// var name = arg.name</span>
                                 <span class="comment">//if(name !== undefined &amp;&amp; !(name in this)) this[name] = arg</span>
                         }
                 }
@@ -1221,7 +1220,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">mixin</span> = <span class="keyword">function</span>(){
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">arguments</span>.length; i++){
                         <span class="keyword">var</span> obj = <span class="local-variable">arguments</span>[i]
-                        <span class="keyword">if</span>(<span class="keyword">typeof</span> obj == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) obj = obj.prototype
+                        <span class="keyword">if</span>(<span class="keyword">typeof</span> obj === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) obj = obj.prototype
                         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj){
                                 <span class="comment">// copy over getters and setters</span>
                                 <span class="keyword">if</span>(obj.__lookupGetter__(key) || obj.__lookupSetter__(key)){
@@ -1258,12 +1257,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.find_cache) <span class="local-variable">this</span>.find_cache = {}
                 <span class="keyword">var</span> child = <span class="local-variable">this</span>.find_cache[name]
                 <span class="keyword">if</span>(child &amp;&amp; !child.destroyed) <span class="keyword">return</span> child
-                <span class="keyword">return</span> <span class="local-variable">this</span>.find_cache[name] = <span class="local-variable">this</span>._findChild(name)
+                child = <span class="local-variable">this</span>.find_cache[name] = <span class="local-variable">this</span>._findChild(name)
+                <span class="keyword">return</span> child
         }
 
         <span class="comment">// Finds a parent node by name.</span>
         <span class="local-variable">this</span>.<span class="function">find</span> = <span class="keyword">function</span>(name){
-                child = <span class="local-variable">this</span>.findChild(name)
+                <span class="keyword">var</span> child = <span class="local-variable">this</span>.findChild(name)
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>
                 <span class="keyword">while</span>(child === <span class="predefined-constant">undefined</span> &amp;&amp; node.parent){
                         child = node.parent._findChild(name, node)
@@ -1728,7 +1728,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> value_key = <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> on_key = <span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
-                <span class="keyword">var</span> wiredfn_key = <span class="string"><span class="delimiter">'</span><span class="content">_wiredfn_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> animinit_key = <span class="string"><span class="delimiter">'</span><span class="content">_animinit_</span><span class="delimiter">'</span></span> + key
                 <span class="comment">//var config_key = '_config_' + key</span>
                 <span class="keyword">var</span> get_key = <span class="string"><span class="delimiter">'</span><span class="content">_get_</span><span class="delimiter">'</span></span> + key
@@ -1972,7 +1971,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">connectWires</span> = <span class="keyword">function</span>(initarray, depth){
 
                 <span class="keyword">var</span> immediate = <span class="predefined-constant">false</span>
-                <span class="keyword">if</span>(!initarray) initarray = [], immediate = <span class="predefined-constant">true</span>
+                <span class="keyword">if</span>(!initarray) {
+                        initarray = []
+                        immediate = <span class="predefined-constant">true</span>
+                }
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._wiredfns){
                         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>._wiredfns){

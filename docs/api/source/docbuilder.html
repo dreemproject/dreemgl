@@ -681,9 +681,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n527" name="n527">527</a>
 <a href="#n528" name="n528">528</a>
 <a href="#n529" name="n529">529</a>
-<strong><a href="#n530" name="n530">530</a></strong>
-<a href="#n531" name="n531">531</a>
-<a href="#n532" name="n532">532</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
  You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
@@ -1096,12 +1093,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         output.push(<span class="string"><span class="delimiter">'</span><span class="content">/**</span><span class="delimiter">'</span></span>);
                         <span class="keyword">var</span> defval = attr.defvalue;
                         <span class="keyword">if</span> (<span class="keyword">typeof</span>(defval) === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
-                            defval = <span class="predefined-constant">undefined</span>;
-                        }
-                        <span class="keyword">if</span> (defval) {
-                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} [</span><span class="delimiter">'</span></span> + attr.name + <span class="string"><span class="delimiter">'</span><span class="content">=&quot;</span><span class="delimiter">'</span></span> + defval + <span class="string"><span class="delimiter">'</span><span class="content">&quot;]</span><span class="delimiter">'</span></span>);
+                                                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} </span><span class="delimiter">'</span></span> + attr.name);
                         } <span class="keyword">else</span> {
-                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} </span><span class="delimiter">'</span></span> + attr.name);
+                                                      output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @attribute {</span><span class="delimiter">'</span></span> +attr.type + <span class="string"><span class="delimiter">'</span><span class="content">} [</span><span class="delimiter">'</span></span> + attr.name + <span class="string"><span class="delimiter">'</span><span class="content">=&quot;</span><span class="delimiter">'</span></span> + defval + <span class="string"><span class="delimiter">'</span><span class="content">&quot;]</span><span class="delimiter">'</span></span>);
                         }
                         <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; attr.body_text.length; j++) {
                             str = attr.body_text[j];

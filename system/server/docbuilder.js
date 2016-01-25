@@ -409,12 +409,9 @@ define.class(function(require){
                         output.push('/**');
                         var defval = attr.defvalue;
                         if (typeof(defval) === 'function') {
-                            defval = undefined;
-                        }
-                        if (defval) {
-                            output.push(' * @attribute {' +attr.type + '} [' + attr.name + '="' + defval + '"]');
+							output.push(' * @attribute {' +attr.type + '} ' + attr.name);
                         } else {
-                            output.push(' * @attribute {' +attr.type + '} ' + attr.name);
+  						    output.push(' * @attribute {' +attr.type + '} [' + attr.name + '="' + defval + '"]');
                         }
                         for (j=0;j < attr.body_text.length; j++) {
                             str = attr.body_text[j];

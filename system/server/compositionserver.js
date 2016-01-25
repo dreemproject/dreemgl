@@ -203,7 +203,6 @@ define.class(function(require){
 			res.end()
 			return
 		}
-		console.log('loadHTML', this.filename);
 		var html = this.loadHTML(this.title, this.filename, this.paths, this.pathset)
 		res.writeHead(200, header)
 		res.write(html)

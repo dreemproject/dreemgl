@@ -16,19 +16,19 @@
  * Size of the font in pixels
  */
 /**
- * @attribute {float32} boldness
+ * @attribute {float32} [boldness="undefined"]
  * the boldness of the font (try values 0 - 1)
  */
 /**
- * @attribute {Object} font
+ * @attribute {Object} [font="undefined"]
  * reference to the font typeface, require it with require('font:')
  */
 /**
- * @attribute {Boolean} multiline
+ * @attribute {Boolean} [multiline="undefined"]
  * Should the text wrap around when its width has been reached?
  */
 /**
- * @attribute {Boolean} subpixel
+ * @attribute {Boolean} [subpixel="undefined"]
  * turn on subpixel aa, this requieres a bgcolor to be present
  */
 /**
