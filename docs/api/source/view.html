@@ -1667,7 +1667,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1513" name="n1513">1513</a>
 <a href="#n1514" name="n1514">1514</a>
 <a href="#n1515" name="n1515">1515</a>
-<a href="#n1516" name="n1516">1516</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
@@ -1942,18 +1941,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="string"><span class="delimiter">'</span><span class="content">col-resize</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">row-resize</span><span class="delimiter">'</span></span>,
                         <span class="string"><span class="delimiter">'</span><span class="content">vertical-text</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">context-menu</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">no-drop</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">not-allowed</span><span class="delimiter">'</span></span>,
                         <span class="string"><span class="delimiter">'</span><span class="content">alias</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">cell</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">copy</span><span class="delimiter">'</span></span>
-                ), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>}),
+                ), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>})
         }
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.<span class="reserved">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
 
         <span class="local-variable">this</span>.onvisible = <span class="local-variable">this</span>.oncamera = <span class="local-variable">this</span>.onlookat = <span class="local-variable">this</span>.<span class="function">onup</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.redraw();
+                <span class="local-variable">this</span>.redraw()
         }
 
         <span class="comment">// the number of pick ID's to reserve for this view.</span>
-        <span class="local-variable">this</span>.pickrange = <span class="integer">1</span>;
+        <span class="local-variable">this</span>.pickrange = <span class="integer">1</span>
 
         <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">true</span>
         <span class="comment">// the local matrix</span>
@@ -1982,7 +1981,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// turn off rpc proxy generation for this prototype level</span>
         <span class="local-variable">this</span>.rpcproxy = <span class="predefined-constant">false</span>
 
-        <span class="local-variable">this</span>.<span class="function">ondropshadowradius</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">ondropshadowradius</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.dropshadowopacity &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>;
                 }<span class="keyword">else</span>{
@@ -1991,11 +1990,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// internal, listen to switch the shaders when borderradius changes</span>
-        <span class="local-variable">this</span>.<span class="function">onborderradius</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">onborderradius</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
 
-        <span class="local-variable">this</span>.<span class="function">onborderwidth</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">onborderwidth</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
 
@@ -2284,7 +2283,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(node.parent) id += node.parent.children.indexOf(node)
                         node = node.parent
                 }
-                <span class="keyword">return</span> <span class="local-variable">this</span>.viewguid = id
+                <span class="local-variable">this</span>.viewguid = id
+                <span class="keyword">return</span> id
         }
 
         <span class="comment">// internal, this gets called by the render engine</span>
@@ -2482,7 +2482,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(bailbound) <span class="keyword">return</span>
 
                 <span class="keyword">var</span> matrix_changed = parent_changed
-                <span class="keyword">if</span> (parentviewport == <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){<span class="comment">// &amp;&amp; !this._mode ){</span>
+                <span class="keyword">if</span> (parentviewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){<span class="comment">// &amp;&amp; !this._mode ){</span>
                         matrix_changed = <span class="predefined-constant">true</span>
                         mat4.TSRT2(<span class="local-variable">this</span>.anchor, <span class="local-variable">this</span>.scale, <span class="local-variable">this</span>.rotate, <span class="local-variable">this</span>.pos, <span class="local-variable">this</span>.modelmatrix);
                 }
@@ -2492,7 +2492,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(layout){
                                 <span class="comment">//console.log(this.matrix_dirty)</span>
                                 <span class="keyword">var</span> ml = <span class="local-variable">this</span>.matrix_layout
-                                <span class="keyword">if</span>(!ml || ml.left != layout.left || ml.top !== layout.top ||
+                                <span class="keyword">if</span>(!ml || ml.left !== layout.left || ml.top !== layout.top ||
                                         ml.width !== layout.width || ml.height !== layout.height){
                                         <span class="local-variable">this</span>.matrix_layout = {
                                                 <span class="key">left</span>:layout.left,
@@ -3111,8 +3111,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> scale1 = ((borderradius[<span class="integer">1</span>]-borderwidth[<span class="integer">0</span>]))/Math.max(<span class="float">0.01</span>, borderradius[<span class="integer">1</span>])
                         <span class="keyword">var</span> scale2 = ((borderradius[<span class="integer">2</span>]-borderwidth[<span class="integer">0</span>]))/Math.max(<span class="float">0.01</span>, borderradius[<span class="integer">2</span>])
                         <span class="keyword">var</span> scale3 = ((borderradius[<span class="integer">3</span>]-borderwidth[<span class="integer">0</span>]))/Math.max(<span class="float">0.01</span>, borderradius[<span class="integer">3</span>])
-
-                        <span class="keyword">var</span> pidiv = <span class="integer">20</span>
 
                         <span class="keyword">var</span> divbase = <span class="float">0.45</span>
                         <span class="keyword">var</span> pidiv1 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * borderradius[<span class="integer">0</span>]))
