@@ -180,7 +180,7 @@ define.class('$system/base/node', function(require){
 		// align items to either start, center, end or stretch them
 		alignitems: Config({group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"}),
 		// overrides the parents alignitems with our own preference
-		alignself: Config({group:"layout", type: Enum('flex-start','center','flex-end','stretch'), value:"stretch"}),
+		alignself: Config({group:"layout", type: Enum('', 'flex-start','center','flex-end','stretch'), value:""}),
 		// item positioning, if absolute it steps 'outside' the normal flex layout
 		position: Config({group:"layout", type:  Enum('relative','absolute'), value: "relative" }),
 
@@ -934,6 +934,7 @@ define.class('$system/base/node', function(require){
 	// scan down and skip overflow something.
 
 	this.relayout = function(shallow){
+		if(this.layout_dirty) return
 		this.layout_dirty = true
 		this.redraw()
 		if(this.parent_viewport) this.parent_viewport.relayoutRecur()
