@@ -194,23 +194,23 @@ define.class(function(require, exports){
 
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 			var last = i === len - 1
-			var skip = false
+			//var skip = false
 			var view = this.drawpass_list[i]
 
 			// little hack to dont use rtt if you only use a single view
-			if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
-				skip = last = true
-			}
+			//if(view.parent == this.screen && view.flex ==1 && this.screen.children.length ===1){
+			//	skip = last = true
+			//}
 			// lets set up glscissor on last
 			// and then read the goddamn pixel
 			if(last || view.draw_dirty & 2){
 				view.draw_dirty &= 1
 				view.drawpass.drawPick(last, i + 1, x, y, this.debug_pick)
 			}
-			if(skip){
-				this.screen.draw_dirty &= 1
-				break
-			}
+			//if(skip){
+			//	this.screen.draw_dirty &= 1
+			//	break
+			//}
 		}
 		// now lets read the pixel under the mouse
 		var pick_resolve = this.pick_resolve
@@ -297,11 +297,11 @@ define.class(function(require, exports){
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 
 			var view = this.drawpass_list[i]
-			var skip = false
+			//var skip = false
 			var last = i === len - 1
-			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
-				skip = last = true
-			}
+			//if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
+			//	skip = last = true
+			//}
 
 			if(view.draw_dirty & 1 || last){
 
@@ -316,11 +316,11 @@ define.class(function(require, exports){
 				}
 			}
 
-			if(skip){
-				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-				this.screen.draw_dirty &= 2
-				break
-			}
+			//if(skip){
+			//	this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
+			//	this.screen.draw_dirty &= 2
+			//	break
+			//}
 		}
 
 		if(anim_redraw.length){

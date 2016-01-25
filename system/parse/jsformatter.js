@@ -182,7 +182,11 @@ define.class(function(require, exports){
 		this.braceL(exports._Object, mygroup)
 		// allright so
 		var has_newlines = false
+
 		if(this.comments(n.cm1)) has_newlines = true
+
+		//console.log(has_newlines, n)
+
 		var old_indent = this.indent
 		this.indent++
 
@@ -665,36 +669,38 @@ define.class(function(require, exports){
 			this.parenR(exports._Call, mygroup)
 		}
 		else this.expand(n.fn)
+
 		mygroup = this.group++
+
 		this.parenL(exports._Call, mygroup)
 
-		// if we get an argument with newlines
+		var has_newlines = false
+		if(this.comments(n.cm1)) has_newlines = true
+		var old_indent = this.indent
 		this.indent++
-		var line = this.line
+
+		// cleanup hack
+		if(n.args.length == 1 && n.args[0].type === 'Object') this.indent--
+
 		for(var i = 0; i < n.args.length; i++){
-			if(i){
-				this.comma(exports._Call), this.space()
-				if(line !== this.line){
-					this.newline()
-					this.tab(this.indent)
-				}
-			}
 			var arg = n.args[i]
-			if(arg.type === 'Object'){
-				this.indent--
-				this.expand(arg, i < n.args.length - 1?true:false)
-				this.indent++
-			}
-			else{
-				this.expand(arg)
-			}
+
+			this.comments(arg.cmu)
+			if(this.lastIsNewline()) this.tab(this.indent)
+			this.expand(arg)
+
+			if(i < n.args.length - 1) this.comma(exports._Call, this.group++)
+			if(has_newlines && !this.comments(arg.cmr))
+				this.newline()
 		}
-		this.indent--
-		if(line !== this.line && this.lastCharCode() !== 125){
-			this.newline()
-			this.tab(this.indent)
-		}
+		if(has_newlines && this.comments(n.cm2)) this.tab(this.indent - 1)
+		
+		if(this.lastIsNewline()) this.tab(old_indent)
+
+		this.indent = old_indent
 		this.parenR(exports._Call, mygroup)
+
+
 	}
 
 	exports.types = {
