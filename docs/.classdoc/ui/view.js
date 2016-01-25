@@ -12,27 +12,27 @@
  * pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
  */
 /**
- * @attribute {typeless} x
+ * @attribute {typeless} [x="undefined"]
  * alias for the x component of pos
  */
 /**
- * @attribute {typeless} y
+ * @attribute {typeless} [y="undefined"]
  * alias for the y component of pos
  */
 /**
- * @attribute {typeless} z
+ * @attribute {typeless} [z="undefined"]
  * alias for the z component of pos
  */
 /**
- * @attribute {typeless} left
+ * @attribute {typeless} [left="undefined"]
  * alias for the x component of pos
  */
 /**
- * @attribute {typeless} top
+ * @attribute {typeless} [top="undefined"]
  * alias for the y component of pos
  */
 /**
- * @attribute {typeless} front
+ * @attribute {typeless} [front="undefined"]
  * alias for the z component of pos
  */
 /**
@@ -40,15 +40,15 @@
  * the bottom/right/rear corner, used by layout
  */
 /**
- * @attribute {typeless} right
+ * @attribute {typeless} [right="undefined"]
  * alias for the x component of corner
  */
 /**
- * @attribute {typeless} bottom
+ * @attribute {typeless} [bottom="undefined"]
  * alias for  y component of corner
  */
 /**
- * @attribute {typeless} rear
+ * @attribute {typeless} [rear="undefined"]
  * alias for z component of corner
  */
 /**
@@ -56,7 +56,7 @@
  * the background color of a view, referenced by various shaders
  */
 /**
- * @attribute {Object} bgimage
+ * @attribute {Object} [bgimage="undefined"]
  * the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
  */
 /**
@@ -77,7 +77,7 @@
  * the zoom factor of the view matrix, allows zooming of items in a viewport. Only works on viewport:'2D'
  */
 /**
- * @attribute {Enum} overflow
+ * @attribute {Enum} [overflow="undefined"]
  * overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
  * works the same way as the CSS property
  */
@@ -86,31 +86,31 @@
  * size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
  */
 /**
- * @attribute {typeless} width
+ * @attribute {typeless} [width="undefined"]
  * alias for the x component of size
  */
 /**
- * @attribute {typeless} height
+ * @attribute {typeless} [height="undefined"]
  * alias for the y component of size
  */
 /**
- * @attribute {typeless} depth
+ * @attribute {typeless} [depth="undefined"]
  * alias for the z component of size
  */
 /**
- * @attribute {typeless} percentwidth
+ * @attribute {typeless} [percentwidth="undefined"]
  * alias for the x component of percentsize
  */
 /**
- * @attribute {typeless} percentheight
+ * @attribute {typeless} [percentheight="undefined"]
  * alias for the y component of percentsize
  */
 /**
- * @attribute {typeless} percentdepth
+ * @attribute {typeless} [percentdepth="undefined"]
  * alias for the z component of percentsize
  */
 /**
- * @attribute {float32} pixelratio
+ * @attribute {float32} [pixelratio="undefined"]
  * the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
  */
 /**
@@ -122,27 +122,27 @@
  * the maximum size for the flexbox layout engine
  */
 /**
- * @attribute {typeless} minwidth
+ * @attribute {typeless} [minwidth="undefined"]
  * alias for the x component of minsize
  */
 /**
- * @attribute {typeless} minheight
+ * @attribute {typeless} [minheight="undefined"]
  * alias for the y component of minsize
  */
 /**
- * @attribute {typeless} mindepth
+ * @attribute {typeless} [mindepth="undefined"]
  * alias for the z component of minsize
  */
 /**
- * @attribute {typeless} maxwidth
+ * @attribute {typeless} [maxwidth="undefined"]
  * alias for the x component of maxsize
  */
 /**
- * @attribute {typeless} maxheight
+ * @attribute {typeless} [maxheight="undefined"]
  * alias for the y component of maxsize
  */
 /**
- * @attribute {typeless} maxdepth
+ * @attribute {typeless} [maxdepth="undefined"]
  * alias for the z component of maxsize
  */
 /**
@@ -150,19 +150,19 @@
  * the margin on 4 sides of the box (left, top, right, bottom). Can be assigned a single value to set them all at once
  */
 /**
- * @attribute {typeless} marginleft
+ * @attribute {typeless} [marginleft="undefined"]
  * alias for the first component of margin
  */
 /**
- * @attribute {typeless} margintop
+ * @attribute {typeless} [margintop="undefined"]
  * alias for the second component of margin
  */
 /**
- * @attribute {typeless} marginright
+ * @attribute {typeless} [marginright="undefined"]
  * alias for the third component of margin
  */
 /**
- * @attribute {typeless} marginbottom
+ * @attribute {typeless} [marginbottom="undefined"]
  * alias for the fourth component of margin
  */
 /**
@@ -170,19 +170,19 @@
  * the padding on 4 sides of the box (left, top, right, bottom) Can be assigned a single value to set them all at once
  */
 /**
- * @attribute {typeless} paddingleft
+ * @attribute {typeless} [paddingleft="undefined"]
  * alias for the first component of padding
  */
 /**
- * @attribute {typeless} paddingtop
+ * @attribute {typeless} [paddingtop="undefined"]
  * alias for the second component of padding
  */
 /**
- * @attribute {typeless} paddingright
+ * @attribute {typeless} [paddingright="undefined"]
  * alias for the third component of padding
  */
 /**
- * @attribute {typeless} paddingbottom
+ * @attribute {typeless} [paddingbottom="undefined"]
  * alias for the fourth component of padding
  */
 /**
@@ -214,23 +214,23 @@
  * the width of the border. Setting this value will automatically enable the border shaders
  */
 /**
- * @attribute {typeless} borderleftwidth
+ * @attribute {typeless} [borderleftwidth="undefined"]
  * alias for the first component of borderwidth
  */
 /**
- * @attribute {typeless} bordertopwidth
+ * @attribute {typeless} [bordertopwidth="undefined"]
  * alias for the second component of borderwith
  */
 /**
- * @attribute {typeless} borderrightwidth
+ * @attribute {typeless} [borderrightwidth="undefined"]
  * alias for the third component of borderwith
  */
 /**
- * @attribute {typeless} borderbottomwidth
+ * @attribute {typeless} [borderbottomwidth="undefined"]
  * alias for the fourth component of borderwith
  */
 /**
- * @attribute {float32} flex
+ * @attribute {float32} [flex="undefined"]
  * turn on flex sizing. Flex is a factor that distributes either the widths or the heights of nodes by this factor
  * flexbox layout is a web standard and has many great tutorials online to learn how it works
  */
@@ -243,7 +243,7 @@
  * which direction the flex layout is working,
  */
 /**
- * @attribute {Enum} justifycontent
+ * @attribute {Enum} [justifycontent="undefined"]
  * pushes items eitehr to the start, center or end
  */
 /**
@@ -251,7 +251,7 @@
  * align items to either start, center, end or stretch them
  */
 /**
- * @attribute {Enum} [alignself="stretch"]
+ * @attribute {Enum} [alignself="undefined"]
  * overrides the parents alignitems with our own preference
  */
 /**
@@ -264,7 +264,7 @@
  * Can be listened to to observe layout changes
  */
 /**
- * @attribute {Enum} viewport
+ * @attribute {Enum} [viewport="undefined"]
  * When set to 2D or 3D the render engine will create a separate texture pass for this view and all its children
  * using a 2D viewport is a great way to optimize render performance as when nothing changes, none of the childstructures
  * need to be processed and a single texture can just be drawn by the parent
@@ -307,7 +307,7 @@
  * drop shadow hardness
  */
 /**
- * @attribute {float32} dropshadowopacity
+ * @attribute {float32} [dropshadowopacity="undefined"]
  * drop shadow opacity
  */
 /**
@@ -315,11 +315,11 @@
  * drop shadow color
  */
 /**
- * @attribute {boolean} focus
+ * @attribute {boolean} [focus="undefined"]
  * whether this view has focus
  */
 /**
- * @attribute {float32} tabstop
+ * @attribute {float32} [tabstop="undefined"]
  * tabstop, sorted by number
  */
 /**
