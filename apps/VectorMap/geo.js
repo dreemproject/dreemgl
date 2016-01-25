@@ -119,14 +119,14 @@ define.class(function(require, $server$, service){
 		// Longitude
 		x *= this.half_circumference_meters / 180;
 		return [x, y];
-	};
+	}
 
 	this.wrapLng = function(x) {
 		if (x > 180 || x < -180) {
 			x = ((x + 180) % 360 + 360) % 360 - 180;
 		}
 		return x;
-	};
+	}
 
 	/*// Run an in-place transform function on each cooordinate in a GeoJSON geometry
 	this.transformGeometry = function (geometry, transform) {

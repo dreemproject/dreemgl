@@ -4,7 +4,7 @@
  * Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
  */
 /**
- * @attribute {int32} activetab
+ * @attribute {int32} [activetab="undefined"]
  * The currently active tab.
  */
 /**

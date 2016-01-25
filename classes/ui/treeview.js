@@ -27,12 +27,12 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.pickalpha = -1
 		this.labelactivecolor = vec4("#303000")
 
-		this.buttoncolor1 =  "#3b3b3b"
-		this.buttoncolor2 ="#3b3b3b"
+		this.buttoncolor1 = "#3b3b3b"
+		this.buttoncolor2 = "#3b3b3b"
 		this.pressedcolor1 = "#505050"
 		this.pressedcolor2 = "#505050"
-		this.hovercolor1 =   "#707070"
-		this.hovercolor2 =   "#707070"
+		this.hovercolor1 = "#707070"
+		this.hovercolor2 = "#707070"
 		this.borderradius = 0
 		this.borderwidth = 0
 		this.fgcolor = "#d0d0d0"

@@ -17,7 +17,7 @@
  * the margin between slides
  */
 /**
- * @attribute {int32} page
+ * @attribute {int32} [page="undefined"]
  * the current page
  */
 /**

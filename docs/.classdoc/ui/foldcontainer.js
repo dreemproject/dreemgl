@@ -4,7 +4,7 @@
  * The foldcontainer shows/hides all its children when the top bar is clicked
  */
 /**
- * @attribute {boolean} collapsed
+ * @attribute {boolean} [collapsed="undefined"]
  * The current state of the foldcontainer. false = open, Ttue = closed.
  */
 /**
