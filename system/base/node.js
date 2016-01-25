@@ -5,7 +5,6 @@
 
 define.class(function(require, constructor){
 	// Node class provides attributes for events and values, propertybinding and constructor semantics
-
 	var Node = constructor
 
 	var OneJSParser =  require('$system/parse/onejsparser')

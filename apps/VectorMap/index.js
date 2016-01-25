@@ -89,12 +89,12 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 
 				this.mesh = this.vertexstruct.array();
 				this.color = function(){
-
+					// return 'red'
 					PickGuid = mesh.id;
 					if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color.x, 0, 0, 1);
 					if (abs(view.currentbuildingid - mesh.buildingid)<0.2) return vec4(mesh.color.x * 0.8, 0, 0, 1);
 					//return pal.pal1(mesh.pos.z/300.-0.1*view.time +mesh.id/100.) * mesh.color
-					return mesh.color;
+					return mesh.color
 				}
 		
 				this.update = function(){
@@ -144,7 +144,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					}
 				}
 				
-				this.position = function(){					
+				this.position = function(){
 					return vec4(mesh.pos.x, 1000-mesh.pos.y, mesh.pos.z, 1) * view.totalmatrix * view.viewmatrix
 				}
 				
@@ -721,8 +721,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 						
 				//,view({width:2000, height:2000, bg:0})
 			)
-			
-			
 		)
 
 		,screen({
@@ -731,7 +729,6 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			init:function(){
 				console.log(this.rpc.index)
 			},
-			
 			clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
 			speakergrid({justifycontent:"center", alignitems:"center" }, view({width:300, bg:0, flexdirection:"column", alignself:"center"}
 			,label({fontsize:40, text:"Vectormap" , bg:0})
