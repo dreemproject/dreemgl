@@ -8,9 +8,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		zoomlevel: 9
 	}
 	
-	this.landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-	this.landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-	this.landoffsets = {
+	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	
+	var landoffsets = {
 		retail:27, 
 		tower:26, 
 		library:25, 
@@ -40,8 +41,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 	
 	this.mouseleftdown = function(){
-		console.log("mousedown");
-		
+		console.log("mousedown");		
 		this.mousemove = function(){
 			console.log("dragging");
 		}
@@ -161,27 +161,31 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 	
 	function buildAreaPolygonVertexBuffer(areas){
+		//console.log(areas);
+		var mesh = LandVertexStruct.array();
+		
 		for(var i = 0;i<areas.length;i++){
 			var off = 0;
-			var land = areas.lands[i];
+			var land = areas[i];
 			
 			var color1 = vec4("black");
 			var color2 = vec4("black");
 			
-			if (this.landcolor1[land.kind]) color1 = this.landcolor1[land.kind];else UnhandledKindSet[land.kind] = true;
-			if (this.landcolor2[land.kind]) color2 = this.landcolor2[land.kind];else UnhandledKindSet[land.kind] = true;
-			if (this.landoffsets[land.kind]) off = this.landoffsets[land.kind];
+			if (landcolor1[land.kind]) color1 = landcolor1[land.kind];else UnhandledKindSet[land.kind] = true;
+			if (landcolor2[land.kind]) color2 = landcolor2[land.kind];else UnhandledKindSet[land.kind] = true;
+			if (landoffsets[land.kind]) off = landoffsets[land.kind];
 			
 			if (land.arcs){
 				for(var j = 0;j<land.arcs.length;j++){
 					var arc = land.arcs[j];
 					var tris = arctotriangles(arc);
 					for(var a = 0;a<tris.length;a++){
-						this.mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
+						mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
 					}
 				}
 			}
 		}
+		return mesh;
 	}
 
 	function buildRoadPolygonVertexBuffer(roads){
@@ -365,9 +369,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
 					
 					for(var rr = 0;rr<R.arcs.length;rr++){
-						
-						//z+=10 ;
-					
 						var currentarc = R.arcs[rr]
 						if (currentarc.length == 1){
 							continue
@@ -476,13 +477,15 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.loadqueue = [];
 		this.loadqueuehash = [];
 		this.loadedblocks = {};
+		
 		var geo = this.geo = geo();
 		
 		this.attributes = {
 			centerx: 0,
 			centery: 0,
-			latlong:vec2(52.3608307,   4.8626387),
-			zoomlevel: 9
+			latlong: vec2(52.3608307,   4.8626387),
+			zoomlevel: 9,
+			callbacktarget: {}
 		}
 		
 		this.setCenterLatLng = function(lat, lng, zoom){	
@@ -673,6 +676,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				r.waters = Wset;
 				r.earths = Eset;
 				r.landuses = Lset;
+				r.roadVertexBuffer = buildRoadPolygonVertexBuffer(r.roads);
+				r.buildingVertexBuffer = buildBuildingVertexBuffer(r.buildings);
+				r.landVertexBuffer = buildAreaPolygonVertexBuffer(r.landuses);
 					//for(var i in KindSet){console.log(i)};
 		
 				var hash = this.createHash(r.x, r.y, r.z);
@@ -683,8 +689,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.cleanLoadedBlocks();
 				this.updateLoadQueue();
 				
-				console.log("tadaaa");
-				//this.find("tiledmap").datasource = this;
+				
 			
 			}
 		}
@@ -761,61 +766,122 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.setCenterLatLng(this.latlong[0], this.latlong[1], this.zoomlevel);			
 		}
 	})
-	
+	this.atDraw = function(){
+		this.updateroads();
+		this.setTimeout(this.updateroads, 10);
+	}
 	this.init = function(){
-		this.dataset = this.mapdataset();
+		this.dataset = this.mapdataset({callbacktarget: this});
+		
+		this.setTimeout(this.updateroads, 10);
+		
+			
 	}
 	
 	define.class(this,"tile", "$ui/view", function(){
+		
 		this.attributes = {
-			trans: vec2(0)
+			trans: vec2(0),
+			coord: vec2(0),
+			centerpos: vec2(4,3),
+			tilearea:vec2(10,6)
 		}
+		
 		this.bg = function(){
 			this.position = function(){		
-				var r = vec4(mesh.x + view.trans.x, 0, mesh.y + view.trans.y, 1) * view.totalmatrix * view.viewmatrix ;
+				idxpos = (view.trans.xy + view.coord.xy);
+				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
+				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y+1)/2.0;
+			
+				var pos = mesh.xy + idxpos * 256.0;
+				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				return r;
 			}
+			
 			this.mesh = vec2.array();
 			this.mesh.push(0,0);
 			this.mesh.push(256,0);
 
-			this.mesh.push(256,0);
 			this.mesh.push(256,256);
-
-			this.mesh.push(256,256);
-			this.mesh.push(0,256);
-
-			this.mesh.push(0,256);
 			this.mesh.push(0,0);
-			this.drawtype = this.LINES
+			this.mesh.push(256,256);
+			this.mesh.push(0,256);
+
+			this.drawtype = this.TRIANGLES
 			
-			this.color = function(){return "blue" }
-		}		
+			this.color = function(){
+				return pal.pal3(sin(floor(idxpos.x)*0.2) + sin(floor(idxpos.y)*0.3));
+			}
+		}
+		
 	});
-	
 	
 	
 	this.bgcolor = vec4(0,0,0,1);
 	this.flex = 1;
 	this.clearcolor = "black"
-	this.overflow = "hidden";
-	this.farplane = 20000;
-	this.fov = 30;
-	this.up = vec3(0,1,0);
-	this.lookat = vec3(0,0,0);
+	this.time = 0;
 	
-	
-	this.render = function(){
-		var res = [this.dataset];
-		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
-		var res3d = []
-		for(var x = -3;x<=3;x++){
-			for(var y = -3;y<=3;y++){
-				res3d.push(this.tile({trans:vec2(-128 + x*256,-128+ y*256)}));
+	this.updateroads = function(){
+		//console.log(".");
+		//this.time+= (1.0/60.0)  *0.002;
+		for(var a = 0;a<this.roadtiles.length;a++){
+			var rs = this.roadtiles[a];
+			for(var b = 0;b<rs.length;b++){
+				var rt = rs[b];
+				rt.trans = vec2(Math.sin(this.time)*5, 0);
+				rt.redraw();
 			}
 		}
 		
-		res.push(view({flex: 1,viewport: "3d",farplane: 20000,camera:vec3(0,-1400 * 0.4,1000 * 0.4), fov: 30, up: vec3(0,1,0)}, res3d));
+		for(var a = 0;a<this.testtiles.length;a++){
+			var rs = this.testtiles[a];
+			for(var b = 0;b<rs.length;b++){
+				var rt = rs[b];
+				rt.coord = vec2(Math.sin(this.time*0.2)*5, Math.sin(this.time*1.12*0.1)*5 );
+				rt.redraw();
+			}
+		}
+	}
+	
+	this.render = function(){
+		this.testtiles = [];
+		this.roadtiles = []
+		
+		var res = [this.dataset];
+		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
+		var res3d = []
+		
+		var tilewidth = 10;
+		var tileheight = 8;
+		var tilearea = vec2(tilewidth, tileheight)
+		
+		for(var x = 0;x<tilewidth;x++){
+			
+			line = [];
+			
+			for(var y = 0;y<tileheight;y++){
+				var t = this.tile({tilearea:tilearea, trans:vec2( x,y)});
+				line.push(t);
+				res3d.push(t);
+			}
+			this.testtiles.push(line);
+		}
+		for(var x = 0;x<tilewidth;x++){
+			
+			line = [];
+			
+			for(var y = 0;y<tileheight;y++){
+				var r = this.road({tilearea:tilearea,centerx: this.dataset.centerx, centery: this.dataset.centery});
+				line.push(r);
+				res3d.push(r)
+			}
+			//console.log(line);
+			this.roadtiles.push(line);
+
+		}
+		var dist = 0.9
+		res.push(view({flex: 1,viewport: "3d",farplane: 20000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
 		return res;
 	}
 })

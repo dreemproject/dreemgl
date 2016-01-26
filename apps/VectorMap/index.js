@@ -66,11 +66,10 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			var res = []
 			var scalefac = Math.pow(2, this.zoomlevel - 16);
 			var scaler = 1024 ;//* scalefac;
-			console.log("scaler:", scaler);
-			for(var x = 0;x<6;x++){
+				for(var x = 0;x<6;x++){
 				for(var y = 0;y<6;y++){
-					res.push(this.maptile(
-						{
+					res.push(
+						this.maptile({
 							name:"tile1",
 							tilex: this.mapxcenter + x, 
 							tiley: this.mapycenter + y,
@@ -81,9 +80,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 							//width: scaler,
 							//height: scaler,
 							zoomlevel: this.zoomlevel,
-						}
-					))
-				
+						})
+					)	
 				}
 			}
 			return res;
@@ -234,17 +232,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			
 			this.render = function(){	
 				var res = [];
-										
 				res.push(this.outer.land({lands:this.earths}));
-								
 				res.push(this.outer.land({lands:this.landuses}));
-				
 				res.push(this.outer.land({lands:this.waters}));
-				
 				res.push(this.outer.road({name:"theroads", roads: this.roads, zoomscale:Math.pow(2.0, this.zoomlevel-15)}));			
-				
 				res.push(this.outer.building({buildings: this.buildings}));			
-								
 				return res;
 			}
 		})			

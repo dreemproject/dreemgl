@@ -17,15 +17,14 @@ define.class(function(view, label){
 		edgecolor: Config({type:vec4, value:vec4("#5b5b5b"), meta:"color"})
 	}
 	
-	this.bgcolor = vec4("white")
+	//this.bgcolor = vec4("white")
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
-	this.bg = {
-		color:function(){
+	this.bgcolorfn = function(a){
 			
-			var dist2 = vec2(0.5,1.0) - mesh.xy;
+			var dist2 = vec2(0.5,1.0) - a.xy;
 			var N = noise.noise2d(gl_FragCoord.xy*0.8)*0.3;
-			return mix(view.glowcolor, view.edgecolor, N+ 1.0-length(mesh.y));
+			return mix(glowcolor, edgecolor, N+ 1.0-length(a.y));
 		}
-	}	
+		
 })
