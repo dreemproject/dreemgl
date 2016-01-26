@@ -113,7 +113,7 @@ define.class(function(require, exports){
 	this.expand = function(n, arg){
 		if(n){
 			if(!this[n.type]) throw new Error('type '+n.type+' not in codeview')
-			else this[n.type](n, arg)
+			else return this[n.type](n, arg)
 		}
 	}
 
@@ -220,6 +220,8 @@ define.class(function(require, exports){
 		}
 		this.indent = old_indent
 		this.braceR(exports._Object, mygroup)
+
+		return has_newlines
 	}
 
 	this.Index = function(n){//: { object:1, index:1 },
@@ -680,14 +682,26 @@ define.class(function(require, exports){
 		this.indent++
 
 		// cleanup hack
-		if(n.args.length == 1 && n.args[0].type === 'Object') this.indent--
+		
+		// lets check if it has a newline
+		var first_is_obj
+		if(n.args[0].type === 'Object'){
+			first_is_obj = true
+			if(n.args.length === 1) this.indent--
+		}
 
 		for(var i = 0; i < n.args.length; i++){
 			var arg = n.args[i]
 
 			this.comments(arg.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
-			this.expand(arg)
+			var has_nl = this.expand(arg)
+
+			// check wether to switch to has_newlines
+			if(i === 0 && first_is_obj){
+				console.log(has_nl)
+				has_newlines = has_nl
+			}
 
 			if(i < n.args.length - 1) this.comma(exports._Call, this.group++)
 			if(has_newlines && !this.comments(arg.cmr))
@@ -700,7 +714,7 @@ define.class(function(require, exports){
 		this.indent = old_indent
 		this.parenR(exports._Call, mygroup)
 
-
+		return has_newlines
 	}
 
 	exports.types = {
