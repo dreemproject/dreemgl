@@ -410,7 +410,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
 
                 <span class="keyword">var</span> p = constructor
-                
+
                 <span class="comment">// build parent chain</span>
                 <span class="keyword">while</span>(p) {
                         <span class="keyword">if</span> (p.prototype) {
@@ -425,7 +425,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 p = <span class="predefined-constant">null</span>;
                         }
                 }
-                
+
                 class_doc.class_name = proto.constructor.name
 
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.Parser) {
@@ -451,16 +451,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">if</span> (com === <span class="integer">1</span>){
                                         <span class="keyword">if</span>(last1 === <span class="predefined-constant">true</span>){
                                                 <span class="keyword">break</span>
-                                        } 
+                                        }
                                         <span class="keyword">else</span> {
                                                 last1 = <span class="predefined-constant">true</span>
                                         }
-                                } 
+                                }
                                 <span class="keyword">else</span> {
                                         last1 = <span class="predefined-constant">false</span>
                                         res.push(com)
                                 }
-                        }                
+                        }
                         <span class="keyword">return</span> res
                 }
 
@@ -473,18 +473,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">if</span> (com === <span class="integer">1</span>){
                                         <span class="keyword">if</span>(last1 === <span class="predefined-constant">true</span>){
                                                 <span class="keyword">break</span>
-                                        } 
+                                        }
                                         <span class="keyword">else</span> {
                                                 last1 = <span class="predefined-constant">true</span>
                                         }
-                                } 
+                                }
                                 <span class="keyword">else</span> {
                                         last1 = <span class="predefined-constant">false</span>
                                         res.unshift(com.trim())
                                 }
                         }
                         <span class="keyword">return</span> res
-                }                
+                }
                 <span class="keyword">var</span> body_steps = class_body.body.steps
 
                 <span class="keyword">if</span>(!body_steps[<span class="integer">0</span>]) <span class="keyword">return</span> class_doc
@@ -499,7 +499,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
                 }
 
-                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; body_steps.length; i++) {                                
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; body_steps.length; i++) {
                         <span class="keyword">var</span> step = body_steps[i]
 
                         <span class="keyword">if</span>(step.type === <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span>){
@@ -530,7 +530,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 }
                                         }
                                 }
-                                <span class="keyword">if</span>(step.left.type === <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; step.left.object.type === <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; step.left.object.object.type === <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp; 
+                                <span class="keyword">if</span>(step.left.type === <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; step.left.object.type === <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; step.left.object.object.type === <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp;
                                         step.left.object.key.name === <span class="string"><span class="delimiter">'</span><span class="content">constructor</span><span class="delimiter">'</span></span> &amp;&amp; step.left.key.name === <span class="string"><span class="delimiter">'</span><span class="content">examples</span><span class="delimiter">'</span></span> &amp;&amp; step.right.type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span>){
                                         <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; step.right.keys.length; j++){
                                                 <span class="keyword">var</span> key = step.right.keys[j]
@@ -549,23 +549,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="keyword">var</span> stepleft = step.left
                                         <span class="keyword">var</span> method = {<span class="key">name</span>:stepleft.key.name, <span class="key">params</span>:[]};
                                         <span class="keyword">var</span> stepright = step.right;
-                                        
+
                                         method.body_text = grabFirstCommentAbove(step.cmu)
-                                        
+
                                         <span class="keyword">for</span>(<span class="keyword">var</span> p <span class="keyword">in</span> stepright.params){
                                                 <span class="keyword">var</span> param = stepright.params[p]
                                                 <span class="keyword">var</span> paramname = param.id.name
                                                 <span class="keyword">var</span> paramtag = <span class="string"><span class="delimiter">'</span><span class="content">&lt;</span><span class="delimiter">'</span></span> + paramname + <span class="string"><span class="delimiter">'</span><span class="content">&gt;</span><span class="delimiter">'</span></span>
 
                                                 <span class="keyword">var</span> pbody_text = []
-                                                
-                                                <span class="comment">//if (param.cm1) {</span>
-                                                <span class="comment">//        for (var k = 0; k &lt; param.cm1.length;k++) {</span>
-                                                <span class="comment">//                if (param.cm1[k] != 1) {</span>
-                                                <span class="comment">//                        pbody_text.push(param.cm1[k])</span>
-                                                <span class="comment">//                }</span>
-                                                <span class="comment">//        }</span>
-                                                <span class="comment">//}</span>
+
+                                                <span class="keyword">if</span> (param.cm1) {
+                                                        <span class="keyword">for</span> (<span class="keyword">var</span> k = <span class="integer">0</span>; k &lt; param.cm1.length;k++) {
+                                                                <span class="keyword">if</span> (param.cm1[k] != <span class="integer">1</span>) {
+                                                                        pbody_text.push(param.cm1[k])
+                                                                }
+                                                        }
+                                                }
 
                                                 param = {<span class="key">name</span>: paramname, <span class="key">body_text</span>: pbody_text};
 
@@ -582,7 +582,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 method.params.push(param)
                                                 method.body_text = remaining
                                         }
-                                        class_doc.methods.push(method)                        
+                                        class_doc.methods.push(method)
                                 }
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span> (step.type ===<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>){
@@ -594,7 +594,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         newclass.class_name = innerclassname;
                                                         newclass.body_text = grabFirstCommentAbove(step.cmu)
                                                         class_doc.inner_classes.push(newclass)
-                                                } 
+                                                }
                                         }
                                 }
                         }
@@ -602,7 +602,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> class_doc
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

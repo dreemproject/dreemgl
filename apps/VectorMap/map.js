@@ -16,9 +16,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 
 		
-	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"#40d020", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"blue", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-//	var landcolor1 ={water:"#40a0ff"};
+	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"#40d020", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"#40d030", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"blue", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"darkgreen", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	//var landcolor1 ={water:"#40a0ff",park:"darkgreen", grass:"white" };
 	
 	var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
 	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
@@ -34,9 +34,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		university:-21, 
 		breakwater:-20, 
 		playground:-19, 
-		forest:-18,
+		forest:-30,
 		pitch:-17, 
-		grass:-16, 
+		grass:-18, 
 		village_green:-15, 
 		garden:-14, 
 		residential:-13, 
@@ -73,7 +73,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	
 	var BuildingVertexStruct = define.struct({		
 		pos:vec3,
-		color:vec4, 
+		color1:vec4, 
 		id: float,
 		buildingid: float
 	})
@@ -118,7 +118,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		for(var i = 0; i < triangles.length; i++){
 			idx = triangles[i]
-			verts.push(vec2(flatverts[idx * 2], flatverts[idx * 2 + 1]))
+			verts.push([flatverts[idx * 2], flatverts[idx * 2 + 1]])
 		}
 
 		return verts
@@ -126,7 +126,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 
 	
 	function buildBuildingVertexBuffer(buildings){
-		var mesh = BuildingVertexStruct.array();
+		var mesh = BuildingVertexStruct.array(buildings.length * 30);
 		
 		for(var i = 0;i<buildings.length;i++){
 			var building = buildings[i];
@@ -135,41 +135,45 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			var isofac = 0 
 			var isox = (theH*0.5)*isofac
 			var isoy = (theH)*isofac
+			var bid = building.id;
 				
 			if (building.arcs)
 			for(var j = 0;j<building.arcs.length;j++){
 				var arc = building.arcs[j];
+				
 				var tris = arctotriangles(arc);
-				var A1 = vec2(arc[0][0], arc[0][1])
+				var A1 = [arc[0][0], arc[0][1]]
 				var OA1 = A1;
 				var c = 0.3;
 				for(var a = 1;a<arc.length+1;a++)
 				{
 					var ca = arc[a%arc.length];
 					
-					var A2 = vec2(A1[0] + ca[0], A1[1] + ca[1]);
+					var A2 = [A1[0] + ca[0], A1[1] + ca[1]];
 					if (a  == arc.length){
 						A2[1] -= OA1[1];
 						A2[0] -= OA1[0];
 					}
 					
 					c = 0.4 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
-					
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,building.id);
-					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,building.id);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,building.id);
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,building.id);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,building.id);
-					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,building.id);
+					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid);
+					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,bid);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid);
+					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid);
+					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,bid);
 					A1 = A2;
 			
 				}
 				c = 0.4
 				for(var a = 0;a<tris.length;a++){
-					mesh.push(tris[a][0]+isox,tris[a][1]+isoy,theH, c,c,c, 1, i,building.id);
+					var atri = tris[a];
+					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c,c,c, 1, i,bid);
 				}
 			}							
 		}
+		//if (!window.teller) window.teller = 0;
+		//window.teller += mesh.length * 40;
 		return mesh;
 	}
 	
@@ -365,10 +369,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.color = function(){
 
 				PickGuid = mesh.id;
-				if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color.x, 0, 0, 1);
-				if (abs(view.currentbuildingid - mesh.buildingid)<0.2) return vec4(mesh.color.x * 0.8, 0, 0, 1);
+				if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color1.x, 0, 0, 1);
+				if (abs(view.currentbuildingid - mesh.buildingid)<0.2) return vec4(mesh.color1.x * 0.8, 0, 0, 1);
 				//return pal.pal1(mesh.pos.z/300.-0.1*view.time +mesh.id/100.) * mesh.color
-				return mesh.color;
+				return mesh.color1;
 			}
 	
 			this.update = function(){
@@ -578,6 +582,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		this.loadstring = function(str){
+		//	if (!window.teller) window.teller = 0;
+		//	window.teller += str.length;
+			
 			if (this.currentRequest) {
 					var Bset = [];
 					var Rset = [];
@@ -778,6 +785,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.cities = {
 				   amsterdam: [52.3608307,   4.8626387],
 				sanfrancisco: [37.6509102,-122.4889338],
+			//	sanfrancisco: [37.8838923,-122.3398295],
+				sanfrancisco_goldengatepark:[37.7677892,-122.4853213],
 					   seoul: [37.5275421, 126.9748078],
 					   seoel: [37.5275421, 126.9748078]
 			}
@@ -891,6 +900,58 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	var tileshadermixin = define.class(Object, function(){
 		
 	})
+	
+	
+	define.class(this,"buildingtile", "$ui/view", function(){
+		this.is = tilebasemixin;
+		this.loadBufferFromTile = function(tile){
+			this.bgshader.mesh = tile.buildingVertexBuffer;					
+		}
+		
+		this.bg = function(){
+			
+			this.position = function(){		
+				
+				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
+				var r = vec4(pos.x, -mesh.pos.z*10, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				r.w += 0.2;
+				
+				return r;
+			}
+			
+			this.mesh =  BuildingVertexStruct.array();
+			
+			this.update = function(){
+				this.mesh =  BuildingVertexStruct.array();
+				var a = TileSize / 4;
+				var b = TileSize - a;
+				this.mesh.push(a,a);
+				this.mesh.push(b,a);
+
+				this.mesh.push(b,b);
+				this.mesh.push(a,a);
+				this.mesh.push(b,b);
+				this.mesh.push(a,b);
+			}
+			
+			this.drawtype = this.TRIANGLES
+			
+			this.color = function(){
+				//return "blue";
+				var col =  pal.pal2(
+							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
+							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
+			
+				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5;
+				return mix(mix(mesh.color1, mesh.color1, noise), col, 1.0-view.bufferloaded);
+				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
+				
+			}
+		}
+		
+	});
+	
 	
 	define.class(this,"landtile", "$ui/view", function(){
 		this.is = tilebasemixin;
@@ -1055,8 +1116,24 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			}
 		}
 		
+		for(var x = 0;x<this.tilewidth;x++){
+			
+			
+			for(var y = 0;y<this.tileheight;y++){
+				var building = this.buildingtile({tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				this.tilestoupdate.push(building);
+				res3d.push(building);
+			}
+		}
+		
 		var dist = 2.5
-		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, view({bg:0, rotate:vec3(0,0.1,0)},res3d)));
+		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, 
+		
+			view({bg:0, rotate:vec3(0,0.1,0)},
+				res3d
+				)
+			
+			));
 		return res;
 	}
 })

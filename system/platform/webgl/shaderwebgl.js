@@ -254,6 +254,7 @@ define.class('$system/base/shader', function(require, exports){
 			if(!texture.createGLTexture) texture = TEXTURE_VALUE = root.Texture.fromStub(texture)
 			gltex = texture.createGLTexture(gl, TEXTURE_ID, TEXTURE_INFO)
 			if(!gltex) return 0
+			gltex.updateid = texture.updateid
 		}
 		else{
 			gl.activeTexture(TEXTUREGL_ID) // gl.TEXTURE0 + TEXTURE_ID
