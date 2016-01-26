@@ -5,9 +5,17 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	
 	this.attributes = {
 		latlong:vec2(52.3608307,   4.8626387),
-		zoomlevel: 9
+		centerx: 0, 
+		centery: 0,
+		zoomlevel: 15
 	}
 	
+	
+	function createHash (x, y, z){
+			return x + "_" + y + "_" + z;
+	}
+
+		
 	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	
@@ -484,35 +492,39 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			centerx: 0,
 			centery: 0,
 			latlong: vec2(52.3608307,   4.8626387),
-			zoomlevel: 9,
+			zoomlevel: 15,
 			callbacktarget: {}
 		}
 		
-		this.setCenterLatLng = function(lat, lng, zoom){	
+		this.setCenterLatLng = function(lat, lng, zoom, time){	
 			zoom = Math.floor(zoom);
 			var llm = geo.latLngToMeters(lat, lng)
 			var tvm = geo.tileForMeters(llm[0], llm[1], zoom);
-			this.setCenter(tvm.x, tvm.y, zoom);
+			this.setCenter(tvm.x, tvm.y, zoom, time);
 		}
 		
-		this.setCenter = function(x,y,z){
-			this.centerx = x;
-			this.centery = y;
-			this.centerz = z;
+		this.setCenter = function(x,y,z, time){
 			
-			for(var xx = -3; xx < 3; xx++){
-				for(var yy = -3; yy < 3; yy++){			
-					this.addToQueue(x + xx,y + yy,z);	
-				}
-			}					
+			if (!time || time == 0)
+			{
+				this.centerx = x;
+				this.centery = y;
+				this.centerz = z;
+				
+				for(var xx = 0; xx < 10; xx++){
+					for(var yy = 0; yy < 10; yy++){			
+						this.addToQueue(x + xx,y + yy,z);	
+					}
+				}					
+			}
+			else{
+				
+			}
 		}
 		
-		this.createHash = function(x, y, z){
-			return x + "_" + y + "_" + z;
-		}
 
 		this.addToQueue = function(x, y, z){		
-			var hash = this.createHash(x, y, z);
+			var hash = createHash(x, y, z);
 			if (this.loadqueuehash[hash]) return; // already queued for load.
 			if (this.loadedblocks[hash]) return; // already loaded.
 			
@@ -522,7 +534,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 
 		this.processLoadedBlock = function(x, y, z, data){
-			var hash = this.createHash(x,y,z);
+			var hash = createHash(x,y,z);
 			this.loadedblocks[hash] = {x:x, y:y, z:z, blockdata:data};
 		}
 		
@@ -530,7 +542,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			if (this.currentRequest) {
 				
 				var r = this.currentRequest;
-				var hash = this.createHash(r.x, r.y, r.z);
+				var hash = createHash(r.x, r.y, r.z);
 				this.loadedblocks[hash] = this.currentRequest
 				this.loadqueuehash[hash] =  undefined;
 				this.currentRequest = undefined;
@@ -652,9 +664,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);	
 							}
 							Rset.push(B);
-						KindSet[B.kind] = true;
-						
-						
+						KindSet[B.kind] = true;							
 					}		
 					
 					for (var i = 0;i<this.thedata.objects.transit.geometries.length;i++){
@@ -681,7 +691,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				r.landVertexBuffer = buildAreaPolygonVertexBuffer(r.landuses);
 					//for(var i in KindSet){console.log(i)};
 		
-				var hash = this.createHash(r.x, r.y, r.z);
+				var hash = createHash(r.x, r.y, r.z);
 				
 				this.loadedblocks[hash] = this.currentRequest
 				this.loadqueuehash[hash] =  undefined;
@@ -693,7 +703,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			}
 		}
-			
+		
+		this.getBlockByHash = function(hash){
+			//console.log(hash);
+			return this.loadedblocks[hash];
+		}
 			
 		
 		this.updateLoadQueue = function(){
@@ -739,7 +753,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			var c = this.cities[n2];
 			if (c){
-				this.setCenterLatLng(c[0], c[1], zoom);
+				this.setCenterLatLng(c[0], c[1], zoom,0);
 			}			
 			else{
 				console.log("city not found:", name);
@@ -768,14 +782,14 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	})
 	
 	this.atDraw = function(){
-		this.updateroads();
-		this.setTimeout(this.updateroads, 10);
+		this.updateTiles();
+		this.setTimeout(this.updateTiles, 10);
 	}
 	
 	this.init = function(){
-		this.dataset = this.mapdataset({callbacktarget: this});
+		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
 		
-		this.setTimeout(this.updateroads, 10);
+		this.setTimeout(this.updateTiles, 10);
 	}
 	
 	define.class(this,"tile", "$ui/view", function(){
@@ -784,7 +798,54 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			trans: vec2(0),
 			coord: vec2(0),
 			centerpos: vec2(4,3),
-			tilearea:vec2(10,6)
+			tilearea:vec2(10,6),
+			zoomlevel: 15,
+			bufferloaded: 0.0
+		}
+		this.lastpos = vec2(0);
+		
+		this.init = function(){
+			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
+			
+			
+		}
+	
+		this.checknewpos = function(){
+			var newpos = 	vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
+			if (this.lastpos[0] != newpos[0] || this.lastpos[1] != newpos[1]){
+				this.lastpos = newpos;
+				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
+				this.bufferloaded = 0;
+				this.queued  = 0;
+				this.loadbuffer()
+			//	console.log(this.tilehash);
+			}else{
+				if (this.bufferloaded == 0) this.loadbuffer();
+			}
+
+		}
+
+		this.loadbuffer = function(){
+			var md = this.find("mapdata");
+			if (md){
+				var bl = md.getBlockByHash(this.tilehash);
+				if (bl){
+					this.bufferloaded = 1;
+				}
+				else{
+					if (this.queued == 0){
+						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
+						this.queued  = 1;
+					}
+				}
+			}
+		}
+		this.onzoomlevel = function(){
+			this.checknewpos();
+		}
+		this.oncoord = function(){
+			this.checknewpos();
+		
 		}
 		
 		this.bg = function(){
@@ -812,9 +873,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.color = function(){
 				//return "blue";
-				return pal.pal2((sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
-						(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2))
-				);
+				var col =  pal.pal2(
+							(sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
+							(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2)));
+				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 1.0);
+				
 			}
 		}
 		
@@ -826,7 +889,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	this.clearcolor = "black"
 	this.time = 0;
 	
-	this.updateroads = function(){
+	this.updateTiles = function(){
+		if (!this.dataset) return;
+		this.centerx = this.dataset.centerx;
+		this.centery = this.dataset.centery;
+		this.zoomlevel = this.dataset.zoomlevel;
 		//console.log(".");
 		//this.time+= (1.0/60.0)  *0.002;
 		for(var a = 0;a<this.roadtiles.length;a++){
@@ -842,7 +909,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			var rs = this.testtiles[a];
 			for(var b = 0;b<rs.length;b++){
 				var rt = rs[b];
-				rt.coord = vec2(Math.sin(this.time*0.2)*15, Math.sin(this.time*1.12*0.1)*5 );
+				
+				rt.coord = vec2(this.centerx, this.centery);
+				//rt.zoomlevel = this.zoomlevel;
 				rt.redraw();
 			}
 		}
@@ -856,10 +925,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
 		var res3d = []
 		
-		var tilewidth = 10;
-		var tileheight = 8;
+		var tilewidth = Math.ceil(this.layout.width/ 128);
+		var tileheight = Math.ceil(this.layout.height/ 128);;
 		var tilearea = vec2(tilewidth, tileheight)
-		
+		console.log("tile area", tilearea);
 		for(var x = 0;x<tilewidth;x++){
 			
 			line = [];
@@ -884,7 +953,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.roadtiles.push(line);
 
 		}
-		var dist = 0.9
+		var dist = 3.9
 		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
 		return res;
 	}
