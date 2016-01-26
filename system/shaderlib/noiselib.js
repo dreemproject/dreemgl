@@ -25,7 +25,11 @@ define(function(require, exports){
 	exports.snoise2 = function(x, y){
 		return snoise2v(vec2(x,y,z))
 	}
-
+	
+	exports.cheapnoise = function(inp){
+		return fract(sin(dot(inp.xy ,vec2(12.9898,78.233))) * 43758.5453);
+	}
+	
 	exports.noise2d = 
 	exports.s2d =
 	exports.snoise2v = function(v){

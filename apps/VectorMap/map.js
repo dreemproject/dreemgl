@@ -17,12 +17,12 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 
 		
 	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"#40d020", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"blue", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+//	var landcolor1 ={water:"#40a0ff"};
 	
-				var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
-			var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-			var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
-
+	var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
+	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
+	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 			
 	var landoffsets = {
 		retail:27, 
@@ -173,16 +173,16 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		return mesh;
 	}
 	
-	function buildAreaPolygonVertexBuffer(areas){
+	function buildAreaPolygonVertexBuffer(areas, targetmesh){
 		//console.log(areas);
-		var mesh = LandVertexStruct.array();
+		var mesh = targetmesh?targetmesh: LandVertexStruct.array();
 		
 		for(var i = 0;i<areas.length;i++){
 			var off = 0;
 			var land = areas[i];
 			
-			var color1 = vec4("black");
-			var color2 = vec4("black");
+			var color1 = vec4(1,0,1,1);
+			var color2 = vec4(1,0,1,1);
 			
 			if (landcolor1[land.kind]) color1 = landcolor1[land.kind];else UnhandledKindSet[land.kind] = true;
 			if (landcolor2[land.kind]) color2 = landcolor2[land.kind];else UnhandledKindSet[land.kind] = true;
@@ -520,9 +520,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.centerx = x;
 				this.centery = y;
 				this.zoomlevel = z;
-				for(var xx = 0; xx < 10; xx++){
-					for(var yy = 0; yy < 10; yy++){			
-			//			this.addToQueue(x + xx,y + yy,z);	
+				for(var xx = -5; xx < 5; xx++){
+					for(var yy = -5; yy < 5; yy++){			
+						this.addToQueue(x + xx,y + yy,z);	
 					}
 				}					
 			}
@@ -558,7 +558,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.currentRequest = undefined;
 				this.cleanLoadedBlocks();
 				this.updateLoadQueue();
-	//			this.find("tiledmap").datasource = this;
 			}		
 		}
 		
@@ -573,13 +572,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var dz = (lb.z - this.zoomlevel)*25;
 				var dist  = dx*dx + dy*dy + dz*dz;
 				if (dist > 5*5*5*5) {
-					console.log("deleting block");
 					delete this.loadedblocks[keys[i]];
-					
 				}
 			}
-			
-		//	this.find("tiledmap").datasource = this;		
 		}
 		
 		this.loadstring = function(str){
@@ -697,17 +692,19 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				}
 			
 				var r = this.currentRequest;
-				
-
 				r.buildings = Bset;
 				r.roads = Rset;
+				
 				r.waters = Wset;
 				r.earths = Eset;
 				r.landuses = Lset;
 				r.roadVertexBuffer = buildRoadPolygonVertexBuffer(r.roads);
 				r.buildingVertexBuffer = buildBuildingVertexBuffer(r.buildings);
-				r.landVertexBuffer = buildAreaPolygonVertexBuffer(Allset);
-					//for(var i in KindSet){console.log(i)};
+				
+				var landmesh = buildAreaPolygonVertexBuffer(Eset);
+				buildAreaPolygonVertexBuffer(Lset, landmesh);
+				buildAreaPolygonVertexBuffer(Wset, landmesh);
+				r.landVertexBuffer = landmesh;
 		
 				var hash = createHash(r.x, r.y, r.z);
 				
@@ -906,7 +903,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.position = function(){		
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-				var pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
+				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
 				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				r.w -= mesh.pos.z*0.01;
 				
@@ -935,8 +932,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var col =  pal.pal2(
 							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
 							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
-							return mix(mesh.color1*vec4(1,1,1,0.95), col, 1.0-view.bufferloaded);
-				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
+			
+				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5;
+				return mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
+				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
 		}
@@ -1027,8 +1026,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
 		var res3d = []
 		
-		this.tilewidth = Math.ceil(this.layout.width/ 256);
-		this.tileheight = Math.ceil(this.layout.height/ 256);;
+		var div = 400
+		this.tilewidth = Math.ceil(this.layout.width/ div);
+		this.tileheight = Math.ceil(this.layout.height/ div);;
 		
 		//this.tilewidth = 1;
 		//this.tileheight = 1;
@@ -1055,8 +1055,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			}
 		}
 		
-		var dist = 1.9
-		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
+		var dist = 2.5
+		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, view({bg:0, rotate:vec3(0,0.1,0)},res3d)));
 		return res;
 	}
 })
