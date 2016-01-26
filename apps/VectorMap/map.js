@@ -16,7 +16,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 
 		
-	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"#40d020", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	
 				var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
@@ -795,8 +795,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//this.simulateLoaded();
 			}.bind(this), 50);
 		
-			//this.gotoCity("amsterdam", 16);
-			this.setCenter(33656/2,21534/2, 16)
+			this.gotoCity("amsterdam", 8);
+			//this.setCenter(33656/2,21534/2, 16)
 			
 		}
 	})
@@ -812,8 +812,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.setTimeout(this.updateTiles, 10);
 	}
 	
-	define.class(this,"landtile", "$ui/view", function(){
-		
+	
+	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
 			trans: vec2(0),
 			coord: vec2(0),
@@ -825,10 +825,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.lastpos = vec2(0);
 		
 		this.init = function(){
-			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
-			
-			
+			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);		
 		}
+		
 		this.setpos = function(newcoord, newzoom){
 			this.zoomlevel = newzoom;
 			this.coord = newcoord;
@@ -857,7 +856,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				if (bl){
 					this.bufferloaded = 1;
 			//		console.log(bl.landVertexBuffer);
-					this.bgshader.mesh = bl.landVertexBuffer
+					this.loadBufferFromTile(bl);
 					console.log(bl.x, bl.y, bl.z);
 				}
 				else{
@@ -877,9 +876,23 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		}
 		this.tilesize = TileSize;
+		
+	})
+	
+	var tileshadermixin = define.class(Object, function(){
+		
+	})
+	
+	define.class(this,"landtile", "$ui/view", function(){
+		this.is = tilebasemixin;
+		this.loadBufferFromTile = function(tile){
+			this.bgshader.mesh = tile.landVertexBuffer;					
+		}
+		
 		this.bg = function(){
+			
 			this.position = function(){		
-			preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+				preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				idxpos = preidxpos
 				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
 				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y-1)/2.0;
@@ -904,8 +917,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh.push(a,a);
 				this.mesh.push(b,b);
 				this.mesh.push(a,b);
-
-			
 			}
 			
 			this.drawtype = this.TRIANGLES
@@ -923,93 +934,31 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 	});
 	
-	define.class(this,"roadtile", "$ui/view", function(){
-		
-		this.attributes = {
-			trans: vec2(0),
-			coord: vec2(0),
-			centerpos: vec2(4,3),
-			tilearea:vec2(10,6),
-			zoomlevel: 16,
-			bufferloaded: 0.0
-		}
-		this.lastpos = vec2(0);
-		
-		this.init = function(){
-			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
-			
-			
-		}
-		this.setpos = function(newcoord, newzoom){
-			this.zoomlevel = newzoom;
-			this.coord = newcoord;
-			this.checknewpos();
-		}
 	
-		this.checknewpos = function(){
-			var newpos = 	vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
-			if (this.lastpos[0] != newpos[0] || this.lastpos[1] != newpos[1]){
-				this.lastpos = newpos;
-				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
-				this.bufferloaded = 0;
-				this.queued  = 0;
-				this.loadbuffer()
-				console.log(this.tilehash);
-			}else{
-				if (this.bufferloaded == 0) this.loadbuffer();
-			}
-
+	define.class(this,"roadtile", "$ui/view", function(){
+		this.is = tilebasemixin;
+		this.loadBufferFromTile = function(tile){
+			this.bgshader.mesh = tile.roadVertexBuffer;					
 		}
-
-		this.loadbuffer = function(){
-			var md = this.find("mapdata");
-			if (md){
-				var bl = md.getBlockByHash(this.tilehash);
-				if (bl){
-					this.bufferloaded = 1;
-			//		console.log(bl.landVertexBuffer);
-					this.bgshader.mesh = bl.roadVertexBuffer
-					console.log(bl.x, bl.y, bl.z);
-				}
-				else{
-					if (this.queued == 0){
-						this.bgshader.update();
-						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
-						this.queued  = 1;
-					}
-				}
-			}
-		}
-		this.onzoomlevel = function(){
-			this.checknewpos();
-		}
-		this.oncoord = function(){
-			this.checknewpos();
-		
-		}
-		this.tilesize = TileSize;
 		this.bg = function(){
+			
 			this.position = function(){		
-			
-			
+						
 				var possrc = mesh.pos.xy + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
-			//	var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
-		//		res.w += mesh.pos.z;
-		//		return res
 				
-				
-			preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+				preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				idxpos = preidxpos
 				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
 				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y-1)/2.0;
 			
 				var pos = vec2(1,-1)*possrc.xy + idxpos * view.tilesize;
 				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
-//				r.w += 
 				r.w += mesh.pos.z;
 				return r;
 			}
+			
 			this.vertexstruct = RoadVertexStruct;
+			
 			this.mesh =  this.vertexstruct.array();
 			
 			this.update = function(){
@@ -1023,8 +972,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh.push(a,a);
 				this.mesh.push(b,b);
 				this.mesh.push(a,b);
-
-			
+		
 			}
 			
 			this.drawtype = this.TRIANGLES
@@ -1043,7 +991,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	});
 
 	
-	this.bgcolor = vec4(1,1,1,1);
+	this.bgcolor = vec4(0.1,.1,.1,1);
 	this.flex = 1;
 	this.clearcolor = "black"
 	this.time = 0;
@@ -1075,35 +1023,35 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
 		var res3d = []
 		
-		var tilewidth = Math.ceil(this.layout.width/ 256);
-		var tileheight = Math.ceil(this.layout.height/ 256);;
+		this.tilewidth = Math.ceil(this.layout.width/ 256);
+		this.tileheight = Math.ceil(this.layout.height/ 256);;
 		
 		//tilewidth = 1;
 		//tileheight = 1;
 		
-		var tilearea = vec2(tilewidth, tileheight)
+		var tilearea = vec2(this.tilewidth, this.tileheight)
 		console.log("tile area", tilearea);
-		for(var x = 0;x<tilewidth;x++){
+		for(var x = 0;x<this.tilewidth;x++){
 			
 			
-			for(var y = 0;y<tileheight;y++){
+			for(var y = 0;y<this.tileheight;y++){
 				var land = this.landtile({tilearea:tilearea, trans:vec2( x,y)});
 				this.tilestoupdate.push(land);
 				res3d.push(land);
 			}
 		}
 
-		for(var x = 0;x<tilewidth;x++){
+		for(var x = 0;x<this.tilewidth;x++){
 			
 			
-			for(var y = 0;y<tileheight;y++){
+			for(var y = 0;y<this.tileheight;y++){
 				var road = this.roadtile({tilearea:tilearea, trans:vec2( x,y)});
 				this.tilestoupdate.push(road);
 				res3d.push(road);
 			}
 		}
 		
-		var dist = 3.9
+		var dist = 1.9
 		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
 		return res;
 	}
