@@ -274,20 +274,63 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n120" name="n120">120</a></strong>
 <a href="#n121" name="n121">121</a>
 <a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
 </pre></td>
   <td class="code"><pre><span class="comment">//Pure JS based composition</span>
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$server$</span>, fileio, dataset, <span class="predefined">$ui$</span>, screen, view, splitcontainer, treeview, label, <span class="predefined">$widgets$</span>, docviewer, jsviewer){
-<span class="comment">// internal, Inline documentation and example code viewer</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, treeview,  cadgrid, splitcontainer, screen, view, label, button, <span class="predefined">$widgets$</span>, propviewer, colorpicker, <span class="predefined">$$</span>, flowgraph){        
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>,fileio){
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, fileio){
                 <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
                 <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-                <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>
 
+                <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>
+                <span class="local-variable">this</span>.rootdirectory = <span class="string"><span class="delimiter">'</span><span class="content">$compositions</span><span class="delimiter">'</span></span>
+
+                <span class="local-variable">this</span>.<span class="function">saveComposition</span> = <span class="keyword">function</span>(name, data){
+                        fs.writeFile(define.expandVariables(name)+<span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">define.class(&quot;$server/composition&quot;,</span><span class="delimiter">'</span></span>+data+<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>)
+                }
+
+                <span class="local-variable">this</span>.<span class="function">newComposition</span> = <span class="keyword">function</span>(name){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">new composition creation requested:</span><span class="delimiter">&quot;</span></span>, name)
+                        <span class="comment">// todo: create folder in default composition path</span>
+                        <span class="comment">// todo: create default index.js using options from options.</span>
+                        <span class="comment">// todo: if things go wrong, return false</span>
+                        <span class="keyword">var</span> path = define.expandVariables(<span class="local-variable">this</span>.rootdirectory)+<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+name
+                        <span class="keyword">var</span> file = path +<span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>;
+                        <span class="keyword">try</span>{
+                                fs.mkdirSync(path)
+                        }<span class="keyword">catch</span>(e){}
+
+                        fs.writeFileSync(file,
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">define.class('$server/composition',function(){</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">        this.render = function(){ return [</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">        ]}</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">})</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">return</span>  <span class="local-variable">this</span>.rootdirectory + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + name
+                }
+
+                <span class="local-variable">this</span>.<span class="function">getCompositionList</span> = <span class="keyword">function</span>(){
+                        
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+                        
+                        <span class="keyword">var</span> pathset = [<span class="string"><span class="delimiter">&quot;</span><span class="content">compositions</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$compositions</span><span class="delimiter">'</span></span>]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, [])
+                        ret.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">compositions</span><span class="delimiter">&quot;</span></span>
+                        root.children.push(ret)
+                        <span class="keyword">return</span> root
+
+                        <span class="keyword">return</span> [];
+                }
+                
                 <span class="keyword">function</span> <span class="function">readRecurDir</span>(base, inname, ignoreset){
                         <span class="keyword">var</span> local = path.join(base, inname)
                         <span class="keyword">var</span> dir = fs.readdirSync(local)
-                        <span class="keyword">var</span> out = {<span class="key">name</span>:inname, <span class="key">collapsed</span>:<span class="integer">1</span>, <span class="key">children</span>:[]}
+                        <span class="keyword">var</span> out = {<span class="key">isfolder</span>:<span class="predefined-constant">true</span>, <span class="key">name</span>:inname, <span class="key">collapsed</span>:<span class="integer">1</span>, <span class="key">children</span>:[]}
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; dir.length;i++){
                                 <span class="keyword">var</span> name = dir[i]
                                 <span class="keyword">var</span> mypath = path.join(local, name)
@@ -308,15 +351,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         out.children.push(readRecurDir(local, name, ignoreset))
                                 }
                                 <span class="keyword">else</span>{
-                                        out.children.push({<span class="key">name</span>:name, <span class="key">size</span>:stat.size})
+                                        out.children.push({<span class="key">name</span>:name, <span class="key">isfolder</span>:<span class="predefined-constant">false</span>, <span class="key">size</span>:stat.size})
                                 }
                         }
                         <span class="keyword">return</span> out
                 }
 
+                <span class="comment">// recursively read the flowgraph related class library</span>
+                <span class="local-variable">this</span>.<span class="function">readFlowLibrary</span> = <span class="keyword">function</span>(ignoreset){
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+                        
+                        <span class="keyword">var</span> pathset = [<span class="string"><span class="delimiter">&quot;</span><span class="content">flow</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$flow</span><span class="delimiter">'</span></span>]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, [])
+                        ret.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">flow</span><span class="delimiter">&quot;</span></span>
+                        root.children.push(ret)
+                        <span class="keyword">return</span> root
+                        
+                }
+                
                 <span class="comment">// recursively read all directories starting from a base path</span>
-                <span class="local-variable">this</span>.<span class="function">readAllPaths</span> = <span class="keyword">function</span>(ignoreset                 <span class="comment">// files and directories to ignore while recursively expanding</span>
-
+                <span class="local-variable">this</span>.<span class="function">readAllPaths</span> = <span class="keyword">function</span>(ignoreset <span class="comment">//files and directories to ignore while recursively expanding</span>
                 ){
                         <span class="comment">// lets read all paths.</span>
                         <span class="comment">// lets read the directory and return it</span>
@@ -337,65 +391,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         })
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){                
                 <span class="keyword">return</span> [
-                <span class="local-variable">this</span>.fileio(),
-                screen({
-                        <span class="function">init</span>:<span class="keyword">function</span>(){
-                                <span class="comment">// lets load the entire directory structure</span>
-                                <span class="local-variable">this</span>.rpc.fileio.readAllPaths([<span class="string"><span class="delimiter">'</span><span class="content">resources</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">server.js</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">resources</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">cache</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">@/</span><span class="char">\\</span><span class="content">.</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">.git</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">.gitignore</span><span class="delimiter">'</span></span>]).then(<span class="keyword">function</span>(result){
-                                        <span class="keyword">var</span> filetree = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">filetree</span><span class="delimiter">'</span></span>)
-                                        <span class="keyword">var</span> tree = result.value
-                                        tree.name = <span class="string"><span class="delimiter">'</span><span class="content">Documentation</span><span class="delimiter">'</span></span>
-                                        tree.collapsed = <span class="predefined-constant">false</span>
-                                        <span class="comment">// lets make a dataset</span>
-                                        <span class="local-variable">this</span>.model = filetree.dataset = dataset(tree)
-                                }.bind(<span class="local-variable">this</span>))
-                                
-                        }},
-                        splitcontainer({<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>}
-                                ,view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: <span class="integer">0</span>,<span class="key">flex</span>: <span class="float">0.2</span>}
-                                        ,view({<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#343434</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> ,<span class="key">padding</span>: <span class="integer">14</span>},
-                                                label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DreemGL</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">fontsize</span>: <span class="integer">35</span> })
-                                        )
-                                        ,treeview({
-                                                <span class="function">postLayout</span>:<span class="keyword">function</span>(){
-                                                },
-                                                <span class="function">init</span>:<span class="keyword">function</span>(){
-                                                        <span class="keyword">var</span> dataset = <span class="local-variable">this</span>.screen.model
-                                                        <span class="keyword">if</span>(dataset) <span class="local-variable">this</span>.dataset = dataset
-                                                },
-                                                <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">filetree</span><span class="delimiter">'</span></span>, 
-                                                <span class="key">flex</span>: <span class="integer">1</span>, 
-                                                <span class="function">select</span>: <span class="keyword">function</span>(sel){
-                                                        <span class="keyword">if</span>(sel.type === <span class="string"><span class="delimiter">'</span><span class="content">setter</span><span class="delimiter">'</span></span>) <span class="reserved">debugger</span>
-                                                        <span class="comment">// we have to grab the last path set and concatenate a path</span>
-                                                        <span class="keyword">var</span> path = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = sel.path.length - <span class="integer">1</span>; i &gt;= <span class="integer">1</span>; i--){
-                                                                path = sel.path[i].name + (path !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>? <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + path: <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                                                        }
-                                                        <span class="local-variable">this</span>.screen.locationhash = {<span class="key">path</span>:<span class="string"><span class="delimiter">'</span><span class="content">$root/</span><span class="delimiter">'</span></span> + path};
-                                                }
-                                        })
-                                )
-                                ,docviewer({<span class="key">flex</span>:<span class="integer">1</span>,
-                                        <span class="key">classconstr</span>: Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>}),
-                                        <span class="function">init</span>:<span class="keyword">function</span>(){
-                                                <span class="local-variable">this</span>.screen.<span class="function">locationhash</span> = <span class="keyword">function</span>(event){
-                                                <span class="comment">//        debugger</span>
-                                                        <span class="keyword">if</span>(event.value.path) require.async(event.value.path).then(<span class="keyword">function</span>(module){
-                                                                <span class="local-variable">this</span>.classconstr = module
-                                                        }.bind(<span class="local-variable">this</span>))
-                                                }.bind(<span class="local-variable">this</span>)
-                                                <span class="comment">//this.screen.locationhash = this.screen.locationhash</span>
-                                        },
-                                        <span class="key">minsize</span>:vec2(<span class="integer">400</span>,<span class="integer">400</span>),
-                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
-                                <span class="comment">//        overflow:'scroll'</span>
-                                })
+                        <span class="local-variable">this</span>.fileio(),
+                        screen({
+                                <span class="key">bg</span>:<span class="integer">0</span>,
+                                <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>),
+                                <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>, 
+                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">style</span>:{
+                                        <span class="predefined">$</span>:{
+                                                <span class="key">fontsize</span>:<span class="integer">12</span>
+                                        }
+                                }},
+                                flowgraph()
                         )
-                )
-        ]}
+                ]                
+        }
 })</pre></td>
 </tr></table>
 
