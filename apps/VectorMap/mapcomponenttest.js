@@ -11,9 +11,9 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, v
 						,view({bg:0, flex:0.2, overflow:"scroll" },	
 							noisegrid({padding:20}
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bg:0})
-								,button({text:"Amsterdam",click:function(){this.find("themap").gotoCity(this.text,15);}, margin:20})
-								,button({text:"Seoul",click:function(){this.find("themap").gotoCity(this.text,15);}, margin:20})
-								,button({text:"San Francisco",click:function(){this.find("themap").gotoCity(this.text,15);}, margin:20})
+								,button({text:"Amsterdam",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
+								,button({text:"Seoul",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
+								,button({text:"San Francisco",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
 							)
 						)
 

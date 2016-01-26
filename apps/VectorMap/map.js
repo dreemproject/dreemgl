@@ -2,12 +2,12 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 {		
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};	
-	var TileSize = 1024.0;
+	var TileSize = 1024.0 ;
 	this.attributes = {
 		latlong:vec2(52.3608307,   4.8626387),
 		centerx: 0, 
 		centery: 0,
-		zoomlevel: 15
+		zoomlevel: 16
 	}
 	
 	
@@ -19,6 +19,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"lime", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"lime", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"green", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"yellow", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	
+				var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
+			var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
+			var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
+
+			
 	var landoffsets = {
 		retail:27, 
 		tower:26, 
@@ -37,7 +42,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		residential:-13, 
 		footway:-12, 
 		pedestrian:-11,
-		water:-5,
+		water:-50,
 		pedestrian:-9, 
 		parking:-8, 
 		park:-7, 
@@ -197,6 +202,114 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 
 	function buildRoadPolygonVertexBuffer(roads){
+		var mesh = RoadVertexStruct.array();
+		var z = 10;
+		for (var i = 0;i<roads.length;i++){							
+					
+					
+	//						console.log(z);
+					var R = roads[i];
+					//console.log(R);
+					var linewidth = 3;
+					var color = vec4("gray") ;
+					if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];
+					if (roadcolors[R.kind]) color = vec4(roadcolors[R.kind]);
+					var markcolor = color;
+					if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
+				
+				//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
+					
+					for(var rr = 0;rr<R.arcs.length;rr++){
+						var currentarc = R.arcs[rr]
+						if (currentarc.length == 1){
+							continue
+						}
+						//	console.log(R, currentarc, currentarc.length, currentarc[0].length);
+						
+						//console.log(R, currentarc);
+						//continue;
+						var A0 = currentarc[0];
+						var A1 = vec2(currentarc[1][0]+A0[0],currentarc[1][1]+A0[1]) ;
+						
+						//mesh.push(A0[0], A0[1], this.view.color);
+						var nx = A0[0];
+						var ny = A0[1];
+						
+						var odx = A1[0]-A0[0];
+						var ody = A1[1]-A0[1];
+						
+						var predelta = vec2.normalize(vec2(odx, ody));
+						var presdelta = vec2.rotate(predelta, 3.1415/2.0);
+					
+					
+					
+						var dist = 0;
+						var dist2 = 0;
+						var lastsdelta = vec2(0,0);
+					//	color = vec4("blue");
+						mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
+						mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
+
+						mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+
+						mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+						mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
+
+						//mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
+						mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
+
+
+					//	color = vec4(0,0,0.03,0.1)
+					var lastdelta = vec2(0);
+						for(var a = 1;a<currentarc.length;a++){					
+							var A =currentarc[a];
+							
+							var tnx = nx + A[0];
+							var tny = ny + A[1];
+							var predelt = vec2( tnx - nx, tny - ny);
+							var delta = vec2.normalize(predelt);
+							var sdelta = vec2.rotate(delta, PI/2);
+					
+							var dist2 = dist +  vec2.len(predelt);
+							
+							if (a>1){
+								mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
+								mesh.push(nx,ny,z, color, 1, dist,linewidth,sdelta, markcolor);
+								mesh.push(nx,ny,z, color, -1, dist,linewidth,sdelta, markcolor);
+								
+								mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
+								mesh.push(nx,ny,z, color,-1, dist,linewidth,sdelta, markcolor);
+								mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
+									
+							}
+							//color = vec4(0,1,0,0.2)
+							mesh.push( nx, ny,z,color, 1, dist ,linewidth, sdelta, markcolor);
+							mesh.push( nx, ny,z,color,-1, dist ,linewidth, sdelta, markcolor);
+							mesh.push(tnx,tny,z,color, 1, dist2,linewidth, sdelta, markcolor);
+							
+							mesh.push(nx,ny,z,color,-1, dist,linewidth, sdelta, markcolor);
+							mesh.push(tnx,tny,z,color,1,dist2,linewidth, sdelta, markcolor);
+							mesh.push(tnx,tny,z,color,-1, dist2,linewidth, sdelta, markcolor);
+							
+							lastsdelta = vec2(sdelta[0], sdelta[1]);
+							dist = dist2;									
+							nx = tnx;
+							ny = tny;
+							lastdelta = delta;
+						}
+						//color = vec4("red");
+						mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
+						mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
+						mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+
+						mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+						mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, -0.5, dist+linewidth*0.5,linewidth,lastsdelta, markcolor);
+						mesh.push(nx,ny, z,color, -1, dist,linewidth,presdelta, markcolor);
+
+					}
+				}
+				
+		return mesh;
 		
 	}
 
@@ -343,7 +456,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			zoomscale: 2.0
 		}
 		this.bg = function(){		
-			this.vertexstruct =  RoadVertexStruct
+			this.vertexstruct =  RoadVertexStruct;
 			
 			this.mesh = this.vertexstruct.array();
 			
@@ -361,110 +474,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh = this.vertexstruct.array();
 				var 	z = 0.1;
 
-				for (var i = 0;i<this.view.roads.length;i++){							
-					
-					
-	//						console.log(z);
-					var R = this.view.roads[i];
-					//console.log(R);
-					var linewidth = 3;
-					var color = vec4("gray") ;
-					if (this.widths[R.kind]) linewidth = this.widths[R.kind];
-					if (this.colors[R.kind]) color = vec4(this.colors[R.kind]);
-					var markcolor = color;
-					if (this.markcolors[R.kind]) markcolor = vec4(this.markcolors[R.kind]);
 				
-				//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
-					
-					for(var rr = 0;rr<R.arcs.length;rr++){
-						var currentarc = R.arcs[rr]
-						if (currentarc.length == 1){
-							continue
-						}
-						//	console.log(R, currentarc, currentarc.length, currentarc[0].length);
-						
-						//console.log(R, currentarc);
-						//continue;
-						var A0 = currentarc[0];
-						var A1 = vec2(currentarc[1][0]+A0[0],currentarc[1][1]+A0[1]) ;
-						
-						//this.mesh.push(A0[0], A0[1], this.view.color);
-						var nx = A0[0];
-						var ny = A0[1];
-						
-						var odx = A1[0]-A0[0];
-						var ody = A1[1]-A0[1];
-						
-						var predelta = vec2.normalize(vec2(odx, ody));
-						var presdelta = vec2.rotate(predelta, 3.1415/2.0);
-					
-					
-					
-						var dist = 0;
-						var dist2 = 0;
-						var lastsdelta = vec2(0,0);
-					//	color = vec4("blue");
-						this.mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
-						this.mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
-
-						this.mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
-
-						this.mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
-						this.mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
-
-						//this.mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
-						this.mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
-
-
-					//	color = vec4(0,0,0.03,0.1)
-					var lastdelta = vec2(0);
-						for(var a = 1;a<currentarc.length;a++){					
-							var A =currentarc[a];
-							
-							var tnx = nx + A[0];
-							var tny = ny + A[1];
-							var predelt = vec2( tnx - nx, tny - ny);
-							var delta = vec2.normalize(predelt);
-							var sdelta = vec2.rotate(delta, PI/2);
-					
-							var dist2 = dist +  vec2.len(predelt);
-							
-							if (a>1){
-								this.mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-								this.mesh.push(nx,ny,z, color, 1, dist,linewidth,sdelta, markcolor);
-								this.mesh.push(nx,ny,z, color, -1, dist,linewidth,sdelta, markcolor);
-								
-								this.mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-								this.mesh.push(nx,ny,z, color,-1, dist,linewidth,sdelta, markcolor);
-								this.mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
-									
-							}
-							//color = vec4(0,1,0,0.2)
-							this.mesh.push( nx, ny,z,color, 1, dist ,linewidth, sdelta, markcolor);
-							this.mesh.push( nx, ny,z,color,-1, dist ,linewidth, sdelta, markcolor);
-							this.mesh.push(tnx,tny,z,color, 1, dist2,linewidth, sdelta, markcolor);
-							
-							this.mesh.push(nx,ny,z,color,-1, dist,linewidth, sdelta, markcolor);
-							this.mesh.push(tnx,tny,z,color,1,dist2,linewidth, sdelta, markcolor);
-							this.mesh.push(tnx,tny,z,color,-1, dist2,linewidth, sdelta, markcolor);
-							
-							lastsdelta = vec2(sdelta[0], sdelta[1]);
-							dist = dist2;									
-							nx = tnx;
-							ny = tny;
-							lastdelta = delta;
-						}
-						//color = vec4("red");
-						this.mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-						this.mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
-						this.mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
-
-						this.mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
-						this.mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, -0.5, dist+linewidth*0.5,linewidth,lastsdelta, markcolor);
-						this.mesh.push(nx,ny, z,color, -1, dist,linewidth,presdelta, markcolor);
-
-					}
-				}
 			}
 			
 			this.position = function(){					
@@ -499,8 +509,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.setCenterLatLng = function(lat, lng, zoom, time){	
 			zoom = Math.floor(zoom);
 			var llm = geo.latLngToMeters(lat, lng)
-			var tvm = geo.tileForMeters(llm[0], llm[1], zoom);
-			this.setCenter(tvm.x, tvm.y, zoom, time);
+			var tvm = geo.tileForMeters(llm[0], llm[1], zoom );
+			console.log("SETTING TO!!!", tvm, zoom);
+			this.setCenter(tvm.x , tvm.y , zoom, time);
 		}
 		
 		this.setCenter = function(x,y,z, time){
@@ -510,10 +521,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.centerx = x;
 				this.centery = y;
 				this.centerz = z;
-				
+				this.zoomlevel = z;
 				for(var xx = 0; xx < 10; xx++){
 					for(var yy = 0; yy < 10; yy++){			
-						this.addToQueue(x + xx,y + yy,z);	
+			//			this.addToQueue(x + xx,y + yy,z);	
 					}
 				}					
 			}
@@ -572,18 +583,17 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		this.loadstring = function(str){
 			if (this.currentRequest) {
-				
-				try{
-					this.thedata = JSON.parse(str);	
-				}
-				catch(e){
-					console.log(e, str);
-				}
 					var Bset = [];
 					var Rset = [];
 					var Wset = [];
 					var Eset = [];
 					var Lset = [];
+					var Allset = [];
+				
+				
+				try{
+					this.thedata = JSON.parse(str);	
+				
 					
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
@@ -631,6 +641,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						}
 						else{
 							Wset.push(B);
+							Allset.push(B);
 						}
 					}
 					
@@ -643,6 +654,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						}
 						KindSet[B.kind] = true;
 						Eset.push(B);
+						Allset.push(B);
 					}
 					
 					for (var i = 0;i<this.thedata.objects.landuse.geometries.length;i++){
@@ -655,6 +667,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						}
 						KindSet[B.kind] = true;
 						Lset.push(B);
+						Allset.push(B);
 					}
 					
 					for (var i = 0;i<this.thedata.objects.roads.geometries.length;i++){
@@ -677,7 +690,14 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						KindSet[B.kind] = true;
 						//Rset.push(B);
 					}
+					}
 					
+						catch(e){
+					console.log(e, str);
+					var r = this.currentRequest;
+					console.log(" while loading ", r.x, r.y, r.z);
+				}
+			
 				var r = this.currentRequest;
 				
 
@@ -688,7 +708,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				r.landuses = Lset;
 				r.roadVertexBuffer = buildRoadPolygonVertexBuffer(r.roads);
 				r.buildingVertexBuffer = buildBuildingVertexBuffer(r.buildings);
-				r.landVertexBuffer = buildAreaPolygonVertexBuffer(r.earths);
+				r.landVertexBuffer = buildAreaPolygonVertexBuffer(Allset);
 					//for(var i in KindSet){console.log(i)};
 		
 				var hash = createHash(r.x, r.y, r.z);
@@ -698,9 +718,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.currentRequest = undefined;
 				this.cleanLoadedBlocks();
 				this.updateLoadQueue();
-				
-				
-			
 			}
 		}
 		
@@ -713,8 +730,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.updateLoadQueue = function(){
 			
 			if (this.currentRequest) return; // already loading something...
-			
+			//console.log("queuelen: " , this.loadqueue.length);
 			if (this.loadqueue.length > 0){
+			//	console.log("queuelen: " , this.loadqueue.length);
 				var zscalar = 1;
 				
 				// sort queue on distance to cursor
@@ -753,7 +771,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			var c = this.cities[n2];
 			if (c){
-				this.setCenterLatLng(c[0], c[1], zoom,0);
+				this.setCenterLatLng(c[1], c[0], zoom,0);
 			}			
 			else{
 				console.log("city not found:", name);
@@ -777,7 +795,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//this.simulateLoaded();
 			}.bind(this), 50);
 		
-			this.setCenterLatLng(this.latlong[0], this.latlong[1], this.zoomlevel);			
+			//this.gotoCity("amsterdam", 16);
+			this.setCenter(33656/2,21534/2, 16)
+			
 		}
 	})
 	
@@ -792,14 +812,14 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.setTimeout(this.updateTiles, 10);
 	}
 	
-	define.class(this,"tile", "$ui/view", function(){
+	define.class(this,"landtile", "$ui/view", function(){
 		
 		this.attributes = {
 			trans: vec2(0),
 			coord: vec2(0),
 			centerpos: vec2(4,3),
 			tilearea:vec2(10,6),
-			zoomlevel: 15,
+			zoomlevel: 16,
 			bufferloaded: 0.0
 		}
 		this.lastpos = vec2(0);
@@ -808,6 +828,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
 			
 			
+		}
+		this.setpos = function(newcoord, newzoom){
+			this.zoomlevel = newzoom;
+			this.coord = newcoord;
+			this.checknewpos();
 		}
 	
 		this.checknewpos = function(){
@@ -818,7 +843,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.bufferloaded = 0;
 				this.queued  = 0;
 				this.loadbuffer()
-			//	console.log(this.tilehash);
+				console.log(this.tilehash);
 			}else{
 				if (this.bufferloaded == 0) this.loadbuffer();
 			}
@@ -831,11 +856,13 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var bl = md.getBlockByHash(this.tilehash);
 				if (bl){
 					this.bufferloaded = 1;
-					console.log(bl);
+			//		console.log(bl.landVertexBuffer);
 					this.bgshader.mesh = bl.landVertexBuffer
+					console.log(bl.x, bl.y, bl.z);
 				}
 				else{
 					if (this.queued == 0){
+						this.bgshader.update();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
 						this.queued  = 1;
 					}
@@ -852,25 +879,35 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.tilesize = TileSize;
 		this.bg = function(){
 			this.position = function(){		
-			preidxpos = ( view.coord.xy +  view.trans.xy );;
+			preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				idxpos = preidxpos
 				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
-				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y+1)/2.0;
+				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y-1)/2.0;
 			
-				var pos = mesh.pos.xy + idxpos * view.tilesize;
+				var pos = vec2(1,-1)*mesh.pos.xy + idxpos * view.tilesize;
 				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				r.w -= mesh.pos.z*0.01;
+				
 				return r;
 			}
 			
 			this.mesh =  LandVertexStruct.array();
-			this.mesh.push(0,0);
-			this.mesh.push(TileSize,0);
+			
+			this.update = function(){
+				this.mesh =  LandVertexStruct.array();
+				var a = TileSize / 4;
+				var b = TileSize - a;
+				this.mesh.push(a,a);
+				this.mesh.push(b,a);
 
-			this.mesh.push(TileSize,TileSize);
-			this.mesh.push(0,0);
-			this.mesh.push(TileSize,TileSize);
-			this.mesh.push(0,TileSize);
+				this.mesh.push(b,b);
+				this.mesh.push(a,a);
+				this.mesh.push(b,b);
+				this.mesh.push(a,b);
 
+			
+			}
+			
 			this.drawtype = this.TRIANGLES
 			
 			this.color = function(){
@@ -878,15 +915,135 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var col =  pal.pal2(
 							(sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
 							(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2)));
-				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 1.0);
+							return mix(mesh.color1*vec4(1,1,1,0.95), col, 1.0-view.bufferloaded);
+				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
 		}
 		
 	});
 	
+	define.class(this,"roadtile", "$ui/view", function(){
+		
+		this.attributes = {
+			trans: vec2(0),
+			coord: vec2(0),
+			centerpos: vec2(4,3),
+			tilearea:vec2(10,6),
+			zoomlevel: 16,
+			bufferloaded: 0.0
+		}
+		this.lastpos = vec2(0);
+		
+		this.init = function(){
+			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
+			
+			
+		}
+		this.setpos = function(newcoord, newzoom){
+			this.zoomlevel = newzoom;
+			this.coord = newcoord;
+			this.checknewpos();
+		}
 	
-	this.bgcolor = vec4(0,0,0,1);
+		this.checknewpos = function(){
+			var newpos = 	vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
+			if (this.lastpos[0] != newpos[0] || this.lastpos[1] != newpos[1]){
+				this.lastpos = newpos;
+				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
+				this.bufferloaded = 0;
+				this.queued  = 0;
+				this.loadbuffer()
+				console.log(this.tilehash);
+			}else{
+				if (this.bufferloaded == 0) this.loadbuffer();
+			}
+
+		}
+
+		this.loadbuffer = function(){
+			var md = this.find("mapdata");
+			if (md){
+				var bl = md.getBlockByHash(this.tilehash);
+				if (bl){
+					this.bufferloaded = 1;
+			//		console.log(bl.landVertexBuffer);
+					this.bgshader.mesh = bl.roadVertexBuffer
+					console.log(bl.x, bl.y, bl.z);
+				}
+				else{
+					if (this.queued == 0){
+						this.bgshader.update();
+						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
+						this.queued  = 1;
+					}
+				}
+			}
+		}
+		this.onzoomlevel = function(){
+			this.checknewpos();
+		}
+		this.oncoord = function(){
+			this.checknewpos();
+		
+		}
+		this.tilesize = TileSize;
+		this.bg = function(){
+			this.position = function(){		
+			
+			
+				var possrc = mesh.pos.xy + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
+			//	var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
+		//		res.w += mesh.pos.z;
+		//		return res
+				
+				
+			preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+				idxpos = preidxpos
+				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
+				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y-1)/2.0;
+			
+				var pos = vec2(1,-1)*possrc.xy + idxpos * view.tilesize;
+				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+//				r.w += 
+				r.w += mesh.pos.z;
+				return r;
+			}
+			this.vertexstruct = RoadVertexStruct;
+			this.mesh =  this.vertexstruct.array();
+			
+			this.update = function(){
+				this.mesh =  this.vertexstruct.array();
+				var a = TileSize / 4;
+				var b = TileSize - a;
+				this.mesh.push(a,a);
+				this.mesh.push(b,a);
+
+				this.mesh.push(b,b);
+				this.mesh.push(a,a);
+				this.mesh.push(b,b);
+				this.mesh.push(a,b);
+
+			
+			}
+			
+			this.drawtype = this.TRIANGLES
+			
+			this.color = function(){
+				//return "blue";
+				var col =  pal.pal2(
+							(sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
+							(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2)));
+							return mix(mesh.color*vec4(1,1,1,0.8), col, 1.0-view.bufferloaded);
+				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
+				
+			}
+		}
+		
+	});
+
+	
+	this.bgcolor = vec4(1,1,1,1);
 	this.flex = 1;
 	this.clearcolor = "black"
 	this.time = 0;
@@ -895,66 +1052,57 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		if (!this.dataset) return;
 		this.centerx = this.dataset.centerx;
 		this.centery = this.dataset.centery;
+		
+		//console.log(this.centerx, this.centery, this.zoomlevel);
 		this.zoomlevel = this.dataset.zoomlevel;
 		//console.log(".");
 		//this.time+= (1.0/60.0)  *0.002;
-		for(var a = 0;a<this.roadtiles.length;a++){
-			var rs = this.roadtiles[a];
-			for(var b = 0;b<rs.length;b++){
-				var rt = rs[b];
-				rt.trans = vec2(Math.sin(this.time)*5, 0);
+		for(var a = 0;a<this.tilestoupdate.length;a++){
+			var rt = this.tilestoupdate[a];
+				//rt.trans = vec2(Math.sin(this.time)*5, 0);
+				rt.setpos(vec2(this.centerx, this.centery), this.zoomlevel);
 				rt.redraw();
-			}
+			
 		}
 		
-		for(var a = 0;a<this.testtiles.length;a++){
-			var rs = this.testtiles[a];
-			for(var b = 0;b<rs.length;b++){
-				var rt = rs[b];
-				
-				rt.coord = vec2(this.centerx, this.centery);
-				//rt.zoomlevel = this.zoomlevel;
-				rt.redraw();
-			}
-		}
+		
 	}
 	
 	this.render = function(){
-		this.testtiles = [];
-		this.roadtiles = []
+		this.tilestoupdate = [];
 		
 		var res = [this.dataset];
 		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
 		var res3d = []
 		
-		var tilewidth = Math.ceil(this.layout.width/ 128);
-		var tileheight = Math.ceil(this.layout.height/ 128);;
+		var tilewidth = Math.ceil(this.layout.width/ 256);
+		var tileheight = Math.ceil(this.layout.height/ 256);;
+		
+		//tilewidth = 1;
+		//tileheight = 1;
+		
 		var tilearea = vec2(tilewidth, tileheight)
 		console.log("tile area", tilearea);
 		for(var x = 0;x<tilewidth;x++){
 			
-			line = [];
 			
 			for(var y = 0;y<tileheight;y++){
-				var t = this.tile({tilearea:tilearea, trans:vec2( x,y)});
-				line.push(t);
-				res3d.push(t);
+				var land = this.landtile({tilearea:tilearea, trans:vec2( x,y)});
+				this.tilestoupdate.push(land);
+				res3d.push(land);
 			}
-			this.testtiles.push(line);
 		}
+
 		for(var x = 0;x<tilewidth;x++){
 			
-			line = [];
 			
 			for(var y = 0;y<tileheight;y++){
-				var r = this.road({tilearea:tilearea,centerx: this.dataset.centerx, centery: this.dataset.centery});
-				line.push(r);
-				res3d.push(r)
+				var road = this.roadtile({tilearea:tilearea, trans:vec2( x,y)});
+				this.tilestoupdate.push(road);
+				res3d.push(road);
 			}
-			//console.log(line);
-			this.roadtiles.push(line);
-
 		}
+		
 		var dist = 3.9
 		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
 		return res;
