@@ -118,7 +118,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		for(var i = 0; i < triangles.length; i++){
 			idx = triangles[i]
-			verts.push(vec2(flatverts[idx * 2], flatverts[idx * 2 + 1]))
+			verts.push([flatverts[idx * 2], flatverts[idx * 2 + 1]])
 		}
 
 		return verts
@@ -126,7 +126,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 
 	
 	function buildBuildingVertexBuffer(buildings){
-		var mesh = BuildingVertexStruct.array();
+		var mesh = BuildingVertexStruct.array(buildings.length * 30);
 		
 		for(var i = 0;i<buildings.length;i++){
 			var building = buildings[i];
@@ -135,41 +135,45 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			var isofac = 0 
 			var isox = (theH*0.5)*isofac
 			var isoy = (theH)*isofac
+			var bid = building.id;
 				
 			if (building.arcs)
 			for(var j = 0;j<building.arcs.length;j++){
 				var arc = building.arcs[j];
+				
 				var tris = arctotriangles(arc);
-				var A1 = vec2(arc[0][0], arc[0][1])
+				var A1 = [arc[0][0], arc[0][1]]
 				var OA1 = A1;
 				var c = 0.3;
 				for(var a = 1;a<arc.length+1;a++)
 				{
 					var ca = arc[a%arc.length];
 					
-					var A2 = vec2(A1[0] + ca[0], A1[1] + ca[1]);
+					var A2 = [A1[0] + ca[0], A1[1] + ca[1]];
 					if (a  == arc.length){
 						A2[1] -= OA1[1];
 						A2[0] -= OA1[0];
 					}
 					
 					c = 0.4 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
-					
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,building.id);
-					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,building.id);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,building.id);
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,building.id);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,building.id);
-					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,building.id);
+					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid);
+					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,bid);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid);
+					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid);
+					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,bid);
 					A1 = A2;
 			
 				}
 				c = 0.4
 				for(var a = 0;a<tris.length;a++){
-					mesh.push(tris[a][0]+isox,tris[a][1]+isoy,theH, c,c,c, 1, i,building.id);
+					var atri = tris[a];
+					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c,c,c, 1, i,bid);
 				}
 			}							
 		}
+		//if (!window.teller) window.teller = 0;
+		//window.teller += mesh.length * 40;
 		return mesh;
 	}
 	
@@ -578,6 +582,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		this.loadstring = function(str){
+		//	if (!window.teller) window.teller = 0;
+		//	window.teller += str.length;
+			
 			if (this.currentRequest) {
 					var Bset = [];
 					var Rset = [];
