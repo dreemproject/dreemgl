@@ -766,16 +766,16 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.setCenterLatLng(this.latlong[0], this.latlong[1], this.zoomlevel);			
 		}
 	})
+	
 	this.atDraw = function(){
 		this.updateroads();
 		this.setTimeout(this.updateroads, 10);
 	}
+	
 	this.init = function(){
 		this.dataset = this.mapdataset({callbacktarget: this});
 		
 		this.setTimeout(this.updateroads, 10);
-		
-			
 	}
 	
 	define.class(this,"tile", "$ui/view", function(){
@@ -789,7 +789,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		this.bg = function(){
 			this.position = function(){		
-				idxpos = (view.trans.xy + view.coord.xy);
+			preidxpos = ( view.coord.xy +  view.trans.xy );;
+				idxpos = preidxpos
 				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
 				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y+1)/2.0;
 			
@@ -810,7 +811,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.drawtype = this.TRIANGLES
 			
 			this.color = function(){
-				return pal.pal3(sin(floor(idxpos.x)*0.2) + sin(floor(idxpos.y)*0.3));
+				//return "blue";
+				return pal.pal2((sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
+						(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2))
+				);
 			}
 		}
 		
@@ -838,7 +842,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			var rs = this.testtiles[a];
 			for(var b = 0;b<rs.length;b++){
 				var rt = rs[b];
-				rt.coord = vec2(Math.sin(this.time*0.2)*5, Math.sin(this.time*1.12*0.1)*5 );
+				rt.coord = vec2(Math.sin(this.time*0.2)*15, Math.sin(this.time*1.12*0.1)*5 );
 				rt.redraw();
 			}
 		}
@@ -881,7 +885,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 
 		}
 		var dist = 0.9
-		res.push(view({flex: 1,viewport: "3d",farplane: 20000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
+		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, res3d));
 		return res;
 	}
 })
