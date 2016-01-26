@@ -2731,8 +2731,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// Determines the background color that should be drawn at a given position.</span>
-        <span class="comment">// Defaults to bgcolor.</span>
-        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(pos){
+        <span class="comment">// Returns a vec4 color value, defaults to bgcolor.</span>
+        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(pos <span class="comment">/*vec2*/</span>){
                 <span class="keyword">return</span> bgcolor
         }
 

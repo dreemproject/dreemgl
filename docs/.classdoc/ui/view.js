@@ -329,6 +329,7 @@
 /**
  * @method bgcolorfn
  * Determines the background color that should be drawn at a given position.
- * Defaults to bgcolor.
+ * Returns a vec4 color value, defaults to bgcolor.
  * @param pos
+ * vec2
  */

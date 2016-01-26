@@ -60,6 +60,13 @@
  * Second gradient color for the button background in pressed state
  */
 /**
+ * @method bgcolorfn
+ * Set the background
+ * vec2 pos: position
+ * return;
+ * @param pos
+ */
+/**
  * @method statehover
  * the hover state when someone hovers over the button
  */

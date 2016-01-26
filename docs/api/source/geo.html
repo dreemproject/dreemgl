@@ -306,6 +306,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n152" name="n152">152</a>
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
 </pre></td>
   <td class="code"><pre><span class="comment">// ported to dreemgl from: https://github.com/tangrams/tangram/blob/master/src/geo.js </span>
 <span class="comment">// original license text:</span>
@@ -421,9 +425,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">latLngToMeters</span> = <span class="keyword">function</span>(x, y) {
                 y = <span class="local-variable">this</span>.wrapLng(y + <span class="integer">360</span>)
                 <span class="comment">// Latitude</span>
-                <span class="keyword">var</span> t = Math.tan(((y*Math.PI/<span class="integer">360</span>) + Math.PI/<span class="integer">2</span>)/<span class="integer">2</span>);
-                y = Math.log(t) / Math.PI;
+                <span class="comment">//var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);</span>
+                
+                y = Math.log(Math.tan(y*Math.PI/<span class="integer">360</span> + Math.PI/<span class="integer">4</span>)) / Math.PI;
                 y *= <span class="local-variable">this</span>.half_circumference_meters;
+        
+        <span class="comment">//        y = Math.log(t) / Math.PI;</span>
+                <span class="comment">//y *= this.half_circumference_meters;</span>
                 
                 <span class="comment">// Longitude</span>
                 x *= <span class="local-variable">this</span>.half_circumference_meters / <span class="integer">180</span>;

@@ -3366,6 +3366,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n3212" name="n3212">3212</a>
 <a href="#n3213" name="n3213">3213</a>
 <a href="#n3214" name="n3214">3214</a>
+<a href="#n3215" name="n3215">3215</a>
+<a href="#n3216" name="n3216">3216</a>
+<a href="#n3217" name="n3217">3217</a>
+<a href="#n3218" name="n3218">3218</a>
+<a href="#n3219" name="n3219">3219</a>
+<strong><a href="#n3220" name="n3220">3220</a></strong>
+<a href="#n3221" name="n3221">3221</a>
+<a href="#n3222" name="n3222">3222</a>
+<a href="#n3223" name="n3223">3223</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -3567,12 +3576,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// alright parsing templating/interpolations.</span>
         <span class="local-variable">this</span>.parenStack
 
-        exports.<span class="function">parse</span> = <span class="keyword">function</span>(inpt){
+        exports.<span class="function">parse</span> = <span class="keyword">function</span>(inpt, debug){
                 <span class="keyword">var</span> parser = <span class="keyword">new</span> <span class="local-variable">this</span>()
-                <span class="keyword">return</span> parser.parse(inpt)
+                <span class="keyword">return</span> parser.parse(inpt, debug)
         }
 
-        <span class="local-variable">this</span>.<span class="function">parse</span> = <span class="keyword">function</span>(inpt) {
+        <span class="local-variable">this</span>.<span class="function">parse</span> = <span class="keyword">function</span>(inpt, debug) {
+                <span class="local-variable">this</span>.debug = debug
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.parser_cache){
                         <span class="keyword">var</span> cache = <span class="local-variable">this</span>.parser_cache[inpt]
                         <span class="keyword">if</span>(cache) <span class="keyword">return</span> cache
@@ -3693,7 +3703,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Some keywords are treated as regular operators. `in` sometimes</span>
         <span class="comment">// (when parsing `for`) needs to be tested against specifically, so</span>
         <span class="comment">// we assign a variable name to it for quick comparing.</span>
-
         <span class="local-variable">this</span>._in = {<span class="key">keyword</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">in</span><span class="delimiter">&quot;</span></span>, <span class="key">preIdent</span>:<span class="local-variable">this</span>._name, <span class="key">binop</span>: <span class="integer">7</span>, <span class="key">beforeExpr</span>: <span class="predefined-constant">true</span>}
         <span class="local-variable">this</span>._of = {<span class="key">keyword</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">of</span><span class="delimiter">&quot;</span></span>, <span class="key">preIdent</span>:<span class="local-variable">this</span>._name, <span class="key">binop</span>: <span class="integer">7</span>, <span class="key">beforeExpr</span>: <span class="predefined-constant">true</span>}
 
@@ -3807,10 +3816,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.compareTo(cat)
                         }
                         f += <span class="string"><span class="delimiter">&quot;</span><span class="content">}</span><span class="delimiter">&quot;</span></span>
+                        <span class="comment">// Otherwise, simply generate a flat `switch` statement.</span>
 
-                <span class="comment">// Otherwise, simply generate a flat `switch` statement.</span>
-
-                } <span class="keyword">else</span> {
+                } 
+                <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.compareTo(words)
                 }
                 <span class="keyword">return</span> <span class="keyword">new</span> Function(<span class="string"><span class="delimiter">&quot;</span><span class="content">str</span><span class="delimiter">&quot;</span></span>, f)
@@ -3887,7 +3896,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">return</span> <span class="predefined-constant">true</span>
                 }
         }
-
 
         exports.isIdentifierStart = 
         <span class="local-variable">this</span>.<span class="function">isIdentifierStart</span> = <span class="keyword">function</span>(code) {
@@ -5010,7 +5018,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }
                         }
                 }
-                <span class="keyword">if</span>(out.length) node.cm1 = out
+                <span class="keyword">if</span>(out.length){
+                         node.cm1 = out
+                 }
         }
         <span class="comment">// this is called at a } we run to it then splice and leave that for the next layer up</span>
         <span class="local-variable">this</span>.<span class="function">commentTail</span> = <span class="keyword">function</span>(node, tail){
@@ -6163,12 +6173,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">parseCall</span> = <span class="keyword">function</span>(base){
                 <span class="keyword">if</span>( <span class="local-variable">this</span>.lastSkippedNewlines ) <span class="keyword">return</span> base
-                <span class="keyword">var</span> probe = <span class="local-variable">this</span>.probe_flag
-                <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._parenL)
                 <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNodeFrom(base)
+                <span class="keyword">var</span> probe = <span class="local-variable">this</span>.probe_flag
+
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.storeComments) <span class="local-variable">this</span>.commentHead(node)
+
+                <span class="local-variable">this</span>.eat(<span class="local-variable">this</span>._parenL)
                 <span class="keyword">if</span>(probe) node.store = <span class="integer">8</span>
                 node.fn = base
-                node.args = <span class="local-variable">this</span>.parseExprList(<span class="local-variable">this</span>._parenR, <span class="predefined-constant">false</span>)
+                node.args = <span class="local-variable">this</span>.parseExprList(<span class="local-variable">this</span>._parenR, <span class="predefined-constant">true</span>, <span class="predefined-constant">true</span>)
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.storeComments) <span class="local-variable">this</span>.commentTail(node, <span class="local-variable">this</span>._parenR)
+
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.debug) console.log(node)
                 <span class="keyword">return</span> <span class="local-variable">this</span>.parseSubscripts(<span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>))
         }
 
@@ -6527,6 +6543,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// nothing in between them to be parsed as `null` (which is needed</span>
         <span class="comment">// for array literals).</span>
 
+        <span class="comment">//this.parseExprList(this._bracketR, true, true)</span>
+
         <span class="local-variable">this</span>.<span class="function">parseExprList</span> = <span class="keyword">function</span>(close, allowTrailingComma, allowEmpty) {
                 <span class="keyword">var</span> elts = [], first = <span class="predefined-constant">true</span>
                 <span class="keyword">while</span> (!<span class="local-variable">this</span>.eat(close)) {
@@ -6535,7 +6553,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="keyword">if</span> (!first) {
                                 <span class="local-variable">this</span>.canInjectComma( <span class="local-variable">this</span>.tokType ) || <span class="local-variable">this</span>.expect(<span class="local-variable">this</span>._comma)
-                                <span class="keyword">if</span> (allowTrailingComma &amp;&amp; <span class="local-variable">this</span>.allowTrailingCommas &amp;&amp; <span class="local-variable">this</span>.eat(close)) <span class="keyword">break</span>
+                                <span class="keyword">if</span> (allowTrailingComma &amp;&amp; <span class="local-variable">this</span>.allowTrailingCommas &amp;&amp; <span class="local-variable">this</span>.eat(close))<span class="keyword">break</span>
                         } <span class="keyword">else</span> first = <span class="predefined-constant">false</span>
                         <span class="keyword">if</span> (allowEmpty &amp;&amp; <span class="local-variable">this</span>.tokType === <span class="local-variable">this</span>._comma) elts.push(<span class="predefined-constant">null</span>)
                         <span class="keyword">else</span>{

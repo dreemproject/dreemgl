@@ -340,6 +340,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n186" name="n186">186</a>
 <a href="#n187" name="n187">187</a>
 <a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -442,7 +445,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_ascii.glf</span><span class="delimiter">'</span></span>)
                 }
         }
-
+        
+        <span class="comment">// Set the background </span>
+        <span class="comment">// vec2 pos: position</span>
+        <span class="comment">// return; </span>
         <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(pos){
                 <span class="keyword">return</span> mix(col1, col2, pos.y)
         }

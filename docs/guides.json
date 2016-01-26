@@ -1,0 +1,25 @@
+[
+  {
+    "title": "Dreem Guides",
+    "items": [
+      {
+        "name": "dreem_in_10_part1",
+        "url": "guides/dreem_in_10",
+        "title": "Dreem in 10 - Part 1",
+        "description": "This guide gets developers with JavaScript experience up and running writing their first Dreem applications."
+      },
+      {
+        "name": "flexbox",
+        "url": "guides/flexbox",
+        "title": "Flexbox Layout in Dreem",
+        "description": "Introduction to the Flexbox based layout system in Dreem."
+      },
+      {
+        "name": "appendix",
+        "url": "guides/appendix",
+        "title": "DreemGL Appendix",
+        "description": "The DreemGL Appendix"
+      }
+    ]
+  }
+]
