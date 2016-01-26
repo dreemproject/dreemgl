@@ -2,7 +2,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 {		
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};	
-	
+	var TileSize = 1024.0;
 	this.attributes = {
 		latlong:vec2(52.3608307,   4.8626387),
 		centerx: 0, 
@@ -688,7 +688,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				r.landuses = Lset;
 				r.roadVertexBuffer = buildRoadPolygonVertexBuffer(r.roads);
 				r.buildingVertexBuffer = buildBuildingVertexBuffer(r.buildings);
-				r.landVertexBuffer = buildAreaPolygonVertexBuffer(r.landuses);
+				r.landVertexBuffer = buildAreaPolygonVertexBuffer(r.earths);
 					//for(var i in KindSet){console.log(i)};
 		
 				var hash = createHash(r.x, r.y, r.z);
@@ -831,6 +831,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var bl = md.getBlockByHash(this.tilehash);
 				if (bl){
 					this.bufferloaded = 1;
+					console.log(bl);
+					this.bgshader.mesh = bl.landVertexBuffer
 				}
 				else{
 					if (this.queued == 0){
@@ -847,7 +849,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.checknewpos();
 		
 		}
-		
+		this.tilesize = TileSize;
 		this.bg = function(){
 			this.position = function(){		
 			preidxpos = ( view.coord.xy +  view.trans.xy );;
@@ -855,19 +857,19 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
 				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y+1)/2.0;
 			
-				var pos = mesh.xy + idxpos * 256.0;
+				var pos = mesh.pos.xy + idxpos * view.tilesize;
 				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				return r;
 			}
 			
-			this.mesh = vec2.array();
+			this.mesh =  LandVertexStruct.array();
 			this.mesh.push(0,0);
-			this.mesh.push(256,0);
+			this.mesh.push(TileSize,0);
 
-			this.mesh.push(256,256);
+			this.mesh.push(TileSize,TileSize);
 			this.mesh.push(0,0);
-			this.mesh.push(256,256);
-			this.mesh.push(0,256);
+			this.mesh.push(TileSize,TileSize);
+			this.mesh.push(0,TileSize);
 
 			this.drawtype = this.TRIANGLES
 			
