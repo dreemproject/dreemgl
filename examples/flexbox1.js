@@ -11,7 +11,7 @@ define.class("$server/composition",
 			return [
 				screen(
 					{name: 'default', clearcolor: 'black'},
-					/* boxes with flexdirection row / horizontal layout */
+					// boxes with flexdirection row / horizontal layout 
 					view({
 							bgcolor: vec4(.2,.3,.3,1.0),
 							padding: vec4(5)
