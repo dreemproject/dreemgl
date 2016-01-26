@@ -510,7 +510,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			zoom = Math.floor(zoom);
 			var llm = geo.latLngToMeters(lat, lng)
 			var tvm = geo.tileForMeters(llm[0], llm[1], zoom );
-			console.log("SETTING TO!!!", tvm, zoom);
 			this.setCenter(tvm.x , tvm.y , zoom, time);
 		}
 		
@@ -520,7 +519,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			{
 				this.centerx = x;
 				this.centery = y;
-				this.centerz = z;
 				this.zoomlevel = z;
 				for(var xx = 0; xx < 10; xx++){
 					for(var yy = 0; yy < 10; yy++){			
@@ -529,7 +527,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				}					
 			}
 			else{
-				
+				console.log("todo: set up animation");
+				debugger;
 			}
 		}
 		
@@ -565,16 +564,18 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		this.cleanLoadedBlocks = function(){
 			var keys = Object.keys(this.loadedblocks);
-			
+			if (keys.length < 150) return;
 			for(var i =0 ;i<keys.length;i++)
 			{
 				var lb = this.loadedblocks[keys[i]]
 				var dx = lb.x - this.centerx;
 				var dy = lb.y - this.centery;
-				var dz = (lb.z - this.centerz)*5;
+				var dz = (lb.z - this.zoomlevel)*25;
 				var dist  = dx*dx + dy*dy + dz*dz;
-				if (dist > 5*5*5) {
+				if (dist > 5*5*5*5) {
+					console.log("deleting block");
 					delete this.loadedblocks[keys[i]];
+					
 				}
 			}
 			
@@ -611,7 +612,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					for (var i = 0;i<this.thedata.objects.water.geometries.length;i++){
 						var Bb = this.thedata.objects.water.geometries[i];
 						var B = {arcs:[], kind:"water" };
-						//console.log(Bb);
 						if(Bb.arcs)
 							if (Bb.type == "MultiLineString"){
 								var arc = [];
@@ -622,21 +622,19 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 									arc.push(x,y);
 									for(var l = 1;l<sourcearc.length;l++)
 									{
-//										console.log(l, sourcearc[l]);
 										x+= sourcearc[l][0];
 										y+= sourcearc[l][1];
 										arc.push(x,y);
-	//									arc.push(sourcearc[l]);
 									}
 								}
 								B.arcs.push(arc);
 							}
 							else
 							for(var k = 0; k < Bb.arcs.length;k++){
-								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
-							
+								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);							
 						}
 						if (Bb.type == "LineString" ){
+							// uncomment to get waterworks added as roads.
 							//Rset.push(B);
 						}
 						else{
@@ -690,9 +688,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						KindSet[B.kind] = true;
 						//Rset.push(B);
 					}
-					}
+				}
 					
-						catch(e){
+				catch(e){
 					console.log(e, str);
 					var r = this.currentRequest;
 					console.log(" while loading ", r.x, r.y, r.z);
@@ -795,7 +793,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//this.simulateLoaded();
 			}.bind(this), 50);
 		
-			this.gotoCity("amsterdam", 8);
+			this.gotoCity("amsterdam", 16);
 			//this.setCenter(33656/2,21534/2, 16)
 			
 		}
@@ -820,29 +818,43 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			centerpos: vec2(4,3),
 			tilearea:vec2(10,6),
 			zoomlevel: 16,
-			bufferloaded: 0.0
+			bufferloaded: 0.0,
+			tiletrans: vec2(0)
 		}
+		
 		this.lastpos = vec2(0);
 		
-		this.init = function(){
-			this.lastpos = vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);		
+		this.calctilepos = function(){
+			var x = this.coord[0] + this.trans[0];
+			var y = this.coord[1] + this.trans[1];
+			return [x,y,this.zoomlevel];
 		}
 		
-		this.setpos = function(newcoord, newzoom){
+		this.init = function(){
+			
+			var R = this.calctilepos();
+			
+			this.lastpos = vec3(R[0], R[1], R[2]);		
+		}
+		
+		this.setpos = function(newcoord, newzoom, frac){
+			this.tiletrans = frac;
 			this.zoomlevel = newzoom;
 			this.coord = newcoord;
 			this.checknewpos();
 		}
 	
 		this.checknewpos = function(){
-			var newpos = 	vec3(Math.floor(this.coord[0] + this.trans[0]), Math.floor(this.coord[1] + this.trans[1]), this.zoomlevel);
+			var R = this.calctilepos();
+			
+			var newpos = 	vec3(R[0], R[1], R[2]);		
 			if (this.lastpos[0] != newpos[0] || this.lastpos[1] != newpos[1]){
 				this.lastpos = newpos;
 				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
 				this.bufferloaded = 0;
 				this.queued  = 0;
 				this.loadbuffer()
-				console.log(this.tilehash);
+				
 			}else{
 				if (this.bufferloaded == 0) this.loadbuffer();
 			}
@@ -855,9 +867,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var bl = md.getBlockByHash(this.tilehash);
 				if (bl){
 					this.bufferloaded = 1;
-			//		console.log(bl.landVertexBuffer);
+			
 					this.loadBufferFromTile(bl);
-					console.log(bl.x, bl.y, bl.z);
+					
 				}
 				else{
 					if (this.queued == 0){
@@ -892,12 +904,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.bg = function(){
 			
 			this.position = function(){		
-				preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-				idxpos = preidxpos
-				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
-				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y-1)/2.0;
-			
-				var pos = vec2(1,-1)*mesh.pos.xy + idxpos * view.tilesize;
+				
+				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+				var pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
 				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				r.w -= mesh.pos.z*0.01;
 				
@@ -924,8 +933,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.color = function(){
 				//return "blue";
 				var col =  pal.pal2(
-							(sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
-							(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2)));
+							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
+							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
 							return mix(mesh.color1*vec4(1,1,1,0.95), col, 1.0-view.bufferloaded);
 				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
@@ -946,12 +955,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						
 				var possrc = mesh.pos.xy + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
 				
-				preidxpos = ( vec2(view.coord.x, view.coord.y) +  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-				idxpos = preidxpos
-				idxpos.x = mod(idxpos.x+10000.0,view.tilearea.x) - (view.tilearea.x+1)/2.0;
-				idxpos.y = mod(idxpos.y+10000.0,view.tilearea.y)-  (view.tilearea.y-1)/2.0;
+				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 			
-				var pos = vec2(1,-1)*possrc.xy + idxpos * view.tilesize;
+			
+			
+				var pos = vec2(1,-1)*possrc.xy + (idxpos + view.tiletrans) * view.tilesize;
 				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				r.w += mesh.pos.z;
 				return r;
@@ -980,14 +988,13 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.color = function(){
 				//return "blue";
 				var col =  pal.pal2(
-							(sin((preidxpos.x - idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
-							(0.5 + 0.5*sin((preidxpos.y - idxpos.y + view.trans.y)*0.2)));
+							(sin(( idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
+							(0.5 + 0.5*sin(( idxpos.y + view.trans.y)*0.2)));
 							return mix(mesh.color*vec4(1,1,1,0.8), col, 1.0-view.bufferloaded);
 				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
-		}
-		
+		}	
 	});
 
 	
@@ -1000,20 +1007,17 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		if (!this.dataset) return;
 		this.centerx = this.dataset.centerx;
 		this.centery = this.dataset.centery;
-		
+		var centervec = vec2(this.centerx, this.centery);
+		var frac = vec2(this.centerx - Math.floor(this.centerx), this.centery - Math.floor(this.centery))
 		//console.log(this.centerx, this.centery, this.zoomlevel);
 		this.zoomlevel = this.dataset.zoomlevel;
-		//console.log(".");
-		//this.time+= (1.0/60.0)  *0.002;
+
 		for(var a = 0;a<this.tilestoupdate.length;a++){
 			var rt = this.tilestoupdate[a];
 				//rt.trans = vec2(Math.sin(this.time)*5, 0);
-				rt.setpos(vec2(this.centerx, this.centery), this.zoomlevel);
+				rt.setpos(centervec, this.zoomlevel, frac);
 				rt.redraw();
-			
 		}
-		
-		
 	}
 	
 	this.render = function(){
@@ -1026,8 +1030,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.tilewidth = Math.ceil(this.layout.width/ 256);
 		this.tileheight = Math.ceil(this.layout.height/ 256);;
 		
-		//tilewidth = 1;
-		//tileheight = 1;
+		//this.tilewidth = 1;
+		//this.tileheight = 1;
 		
 		var tilearea = vec2(this.tilewidth, this.tileheight)
 		console.log("tile area", tilearea);
@@ -1035,7 +1039,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var land = this.landtile({tilearea:tilearea, trans:vec2( x,y)});
+				var land = this.landtile({tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
 				this.tilestoupdate.push(land);
 				res3d.push(land);
 			}
@@ -1045,7 +1049,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var road = this.roadtile({tilearea:tilearea, trans:vec2( x,y)});
+				var road = this.roadtile({tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
 				this.tilestoupdate.push(road);
 				res3d.push(road);
 			}
