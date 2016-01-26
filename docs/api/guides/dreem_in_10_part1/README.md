@@ -69,7 +69,7 @@ To test if everything is working fine, open the following URL for the *shadertes
 <a href="http://localhost:2000/examples/shadertest" target="_blank">http://localhost:2000/examples/shadertest</a>
 
 You should be seeing an animated shape rendering a shaders, similar to the image below:
-<img src="../../images/shadertest.png" width="500"/>
+<img src="./img/shadertest.png" width="500"/>
 
 There are a number of command line flags for the server, the most important ones being the `-port` and the `-path` flags: ds
 

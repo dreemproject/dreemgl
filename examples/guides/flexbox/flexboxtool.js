@@ -5,7 +5,7 @@
 
 // Flexbox flexdirection example.
 define.class("$server/composition",
-	function ($ui$, screen, view, label, speakergrid, $$$, utility$newradiogroup) {
+	function ($ui$, screen, view, label, speakergrid, $examples$guides$, utility$newradiogroup) {
 
 		this.attributes = {
 			flexcontainer: null 	// reference to flex container view
