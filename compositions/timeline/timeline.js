@@ -1,25 +1,70 @@
 define.class('$ui/label', function (require, $ui$, view) {
 
+	this.flexdirection = 'row'
+	this.flex = 1
+
 	this.attributes = {
 		hoverid: -1,
 		zoom: 1
 	}
 
-
 	this.hardrect = function(){
-		this.mytex = require('$resources/textures/hex_tiles.png')
 		this.color = function(){
-			return vec4(mytex.sample(uv).rr, 0, 1)
+			var col = vec4()
+			var fill = vec4(0.98, 0.98, 0.98, 1)
+
+			var zoom = view.zoom
+			// var zoom = 1.0
+			var days = uv.x * zoom
+
+			var pattern = 1.0;
+
+			if (zoom * 24 > 1200.0) {
+				pattern = days / 7
+				fill = vec4(0.9, 0.9, 0.9, 1)
+			} else if (zoom * 24 > 200.0) {
+				pattern = days * 24 / 24.0
+				fill = vec4(0.95, 0.95, 0.95, 1)
+			} else if (zoom * 24 > 100.0) {
+				pattern = days * 24 / 12
+			} else if (zoom * 24 > 50.0) {
+				pattern = days * 24 / 6
+			} else if (zoom * 24 > 25.0) {
+				pattern = days * 24 / 3
+			} else if (zoom * 24 > 14.0) {
+				pattern = days * 24 / 2
+			} else {
+				pattern = days * 24
+			}
+
+			if (math.odd(pattern - mod(pattern, 1.0))) {
+				col = fill
+			} else {
+				col = mix(fill, 'white', pow(zoom / 365, 0.05))
+			}
+
+			return col
 		}
+	}
+	this.hardrect = true
+	this.bg = false
+
+
+	this.oninit = function () {
+		this.animate = function () {
+			requestAnimationFrame(window._animate);
+			this.zoom = 1 + (0.5 * Math.sin(Date.now() / 2000) * 365 + 365 / 2)
+		}.bind(this);
+		if (!window._animate) {
+			window._animate = this.animate.bind(this);
+			window._animate();
+		}
+		window._animate = this.animate.bind(this);
 	}
 
 	this.onpointerhover = function(e){
 		this.hoverid = this.last_pick_id
 	}
-
-	this.hardrect = true
-	this.bg = false
-
 	this.typeface = function(){
 		this.draworder = 5
 		this.update = function(){
@@ -49,11 +94,8 @@ define.class('$ui/label', function (require, $ui$, view) {
 			this.mesh = mesh
 		}
 	}
+
 	this.pickrange = 512;
-
-	this.flexdirection = 'row'
-	this.flex = 1
-
 	define.class(this, 'eventrects', this.Shader, function(){
 		this.updateorder = 0
 		this.draworder = 5
@@ -69,8 +111,8 @@ define.class('$ui/label', function (require, $ui$, view) {
 
 			var mesh = this.mesh = vertstruct.array();
 			for(var i = 1; i <= 512; i++) {
-				var w = random() * 10 + 5
-				var h = random() * 10 + 5
+				var w = random() * 100 + 5
+				var h = random() * 100 + 5
 				var x = random() * 500 + 50
 				var y = random() * 500 + 50
 				mesh.pushQuad(
@@ -81,8 +123,6 @@ define.class('$ui/label', function (require, $ui$, view) {
 				)
 			}
 		}
-
-
 		this.position = function(){
 			return vec4(mesh.pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
