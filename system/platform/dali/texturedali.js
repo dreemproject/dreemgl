@@ -13,6 +13,13 @@ function DaliImage(path)
 
 
 define.class('$system/base/texture', function(exports, require){
+
+	// The layout of texturedali.js closely follows texturewebgl.js.
+	//
+	// Future work includes supporting off-screen framebuffers to draw a set
+	// of actors. Partial support is already present in the form of DaliLayer.
+	// A texture can be created as the output of rendering a layer.
+
 	var Texture = exports
 
 	Texture.GlobalId = 0

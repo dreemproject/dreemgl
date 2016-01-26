@@ -5,6 +5,11 @@
 
 
 define.class(function(require, baseclass){
+
+	// The layout of drawpassdali.js very closely follows drawpasswebgl.js.
+	// Pretty much all DALi functionality is found in other files, meaning that
+	// most drawpass functionality can be moved to a base class.
+
 	// internal, drawing
 	var Shader = require('./shaderdali')
 
@@ -48,7 +53,7 @@ define.class(function(require, baseclass){
 	}
 
 	this.allocDrawTarget = function(width, height, view, drawtarget, passid){
-//console.log('allocDrawTarget', width, height, drawtarget, passid);
+		//console.log('allocDrawTarget', width, height, drawtarget, passid);
 		width = floor(width)
 		height = floor(height)
 		var Texture = this.device.Texture
@@ -253,6 +258,10 @@ define.class(function(require, baseclass){
 					for(var j = 0; j < shaders.length; j++){
 						var shader = shaders[j]
 
+						if(view._viewport === '3d'){
+							shader.depth_test = 'src_depth <= dst_depth'
+						}
+
 						shader.pickguid = pickguid
 						if(!shader.visible) continue
 						if(draw.pickalpha !== undefined)shader.pickalpha = draw.pickalpha
@@ -288,7 +297,7 @@ define.class(function(require, baseclass){
 
 	this.drawBlend = function(draw){
 		if(!draw.drawpass.color_buffer){
-			console.error("Null color_buffer detected")
+			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?")
 		}
 		else {
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
@@ -307,7 +316,7 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.drawNormal = function(draw, matrices){
+	this.drawNormal = function(draw, view, matrices){
 		draw.updateShaders()
 		var count = 0
 		// alright lets iterate the shaders and call em
@@ -315,11 +324,14 @@ define.class(function(require, baseclass){
 		for(var j = 0; j < shaders.length; j++){
 			// lets draw em
 			var shader = shaders[j]
+			if(view._viewport === '3d'){
+				shader.depth_test = 'src_depth < dst_depth'
+			}
+
 			if(shader.pickonly || !shader.visible) continue // was pick only
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
-
 			count++
 			shader.drawArrays(this.device)
 		}
@@ -347,8 +359,6 @@ define.class(function(require, baseclass){
 		this.device.bindFramebuffer(this.color_buffer || null)
 
 		if(layout.width === 0 || layout.height === 0) return false
-
-		device.clear(view._clearcolor)
 
 		var hastime = false
 		var zoom = view._zoom
@@ -401,7 +411,7 @@ define.class(function(require, baseclass){
 					this.drawBlend(draw)
 				}
 				else{
-					count += this.drawNormal(draw, matrices)
+					count += this.drawNormal(draw, view, matrices)
 				}
 
 

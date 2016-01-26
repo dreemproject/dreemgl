@@ -6,6 +6,12 @@
 
 define.class('$system/base/shader', function(require, exports){
 
+	// The layout of shaderdali.js closely follows shaderwebgl.js.
+	// Some code is commented out, such as pick shader support. 
+	//
+	// Future refactoring can move some DALi functionality to dali-specific
+	// classes, including dali.Sampler support.
+
 	var gltypes = require('$system/base/gltypes')
 
 	exports.Texture =
@@ -52,7 +58,8 @@ define.class('$system/base/shader', function(require, exports){
 		//if(shader) return this.dalishader
 
 		if (!shader) {
-			// shader is a hash of compiled information and dali objects
+			// shader is a hash of compiled information and dali objects.
+            // In webgl this object comes from gl.createProgram().
 			shader = {
 				object_type: '(compiled_shader_data)'
 

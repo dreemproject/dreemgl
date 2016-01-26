@@ -6,7 +6,23 @@
 
 define.class(function(require, exports){
 
-	//internal, HACK to simulate gl (during dev)
+	// The layout of devicedali.js closely follows devicewebgl.js. Some of
+	// the functionality in the platform-specific classes can be moved to the
+	// base class.
+
+	// During development of the dali platform, Much of the gl code from the 
+	// webgl platform has been retained. This makes the merging of webgl changes
+	// to dali much easier. At some point, the gl specific code can be removed
+	// because the gl.* functionality are empty stubs. You will find gl calls
+	// in devicedali.js, shaderdali.js, texturedali.js, and drawpassdali.js
+	//
+	// You will also find some gl-specific code in the base classes, such as
+	// gltypes.js and shader.js. Fortunately, most of the webgl-specific code
+	// is never accessed by the dali runtime, and the gl stubs are sufficient.
+	// The presence of gl-specific code in the base classes will be resolved
+	// by a future refactoring/cleanup step.
+
+	// gl.* stubs
 	gl = {
 	getUniformLocation: function() {}
 	,getAttribLocation: function() {}
@@ -82,7 +98,7 @@ define.class(function(require, exports){
 		this.anim_redraws = []
 		this.doPick = this.doPick.bind(this)
 
-		//TODO Use setTimeout for animation until dali animation ready (DALI)
+		// Use setTimeout for animation until native-DALi animation supported.
 		this.time = 0;
 		this.animFrame = function(time){
 			//console.log('animFrame', time);
@@ -129,7 +145,7 @@ define.class(function(require, exports){
 	}
 
 	this.initResize = function(){
-		// Get size of stage
+		// Get size of stage from DaliApi.
 		var size = this.DaliApi.dali.stage.getSize();
 		var dpi = this.DaliApi.dali.stage.getDpi();
 
@@ -139,10 +155,9 @@ define.class(function(require, exports){
 
 		//console.log('initResize size ', size, dpi);
 
-		//HACK to emulate gl (to avoid javascript errors)
+		//Emulate gl (to avoid javascript errors)
 		this.gl = gl;
 
-		//TODO Use real values
 		this.main_frame = {ratio: this.ratio, size: vec2(this.width, this.height)}
 		this.size = vec2(this.width, this.height);
 	}
@@ -169,7 +184,7 @@ define.class(function(require, exports){
 		if(this.anim_req) return
 		this.anim_req = true
 
-		//TODO
+		// Reset the time, and restart the display.
 		this.time = 0
         setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
 	}
@@ -184,7 +199,9 @@ define.class(function(require, exports){
 		this.gl.viewport(0, 0, frame.size[0], frame.size[1])
 
 		// Set the layer to use (root layer if frame.dali_layer doesn't exist)
-		//TODO When layers are used, use framebuffers to render them.
+		// This functionality is currently disabled, and all actors/layers are
+		// added to the root layer. 
+		// When layers are used, use framebuffers to render them.
 		//this.DaliApi.setLayer(frame.dali_layer);
 	}
 
@@ -358,7 +375,7 @@ define.class(function(require, exports){
 				var draw = this.drawpass_list[i]
 				draw.drawpass.poolDrawTargets()
 				draw.layout_dirty = true
-				draw.draw_dirth = 3
+				draw.draw_dirty = 3
 			}
 			this.drawpass_list = []
 			this.layout_list = []
