@@ -182,35 +182,89 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n28" name="n28">28</a>
 <a href="#n29" name="n29">29</a>
 <strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (background) {
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
+
+        <span class="local-variable">this</span>.text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">format</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">24</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">zoom</span>: <span class="integer">1</span>,
-                <span class="key">maxzoom</span>: <span class="integer">365</span>
+                <span class="key">hoverid</span>: -<span class="integer">1</span>,
+                <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)
         }
 
-        <span class="comment">// TODO need a way to externally set attribute without triggering render function.</span>
-        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> () {
-                <span class="local-variable">this</span>.<span class="function">animate</span> = <span class="keyword">function</span> () {
-                        requestAnimationFrame(window._animate);
-                        <span class="local-variable">this</span>.zoom = <span class="integer">365</span> / (<span class="integer">1</span> + (<span class="float">0.5</span> * Math.sin(Date.now() / <span class="integer">5000</span>) * <span class="integer">365</span> + <span class="integer">365</span> / <span class="integer">2</span>))
-                }.bind(<span class="local-variable">this</span>);
-                <span class="keyword">if</span> (!window._animate) {
-                        window._animate = <span class="local-variable">this</span>.animate.bind(<span class="local-variable">this</span>);
-                        window._animate();
+        <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.hoverid = <span class="local-variable">this</span>.last_pick_id
+        }
+
+        <span class="local-variable">this</span>.pickrange = <span class="integer">1024</span>;
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">eventrects</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="keyword">var</span> vertstruct = define.struct({
+                        <span class="key">pos</span>: vec2,
+                        <span class="key">uv</span>: vec2,
+                        <span class="key">id</span>: <span class="reserved">float</span>
+                })
+                <span class="local-variable">this</span>.mesh = vertstruct.array()
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
+                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vertstruct.array();
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt;= <span class="integer">1024</span>; i++) {
+                                <span class="keyword">var</span> w = <span class="integer">0</span>
+                                <span class="keyword">var</span> h = <span class="integer">1</span>
+                                <span class="keyword">var</span> x = floor(random() * <span class="integer">365</span> * <span class="integer">24</span>) / <span class="integer">24</span>
+                                <span class="keyword">var</span> y = <span class="integer">0</span>
+                                mesh.pushQuad(
+                                        x   ,y    , <span class="integer">0</span>, <span class="integer">0</span>, i,
+                                        x+w , y   , <span class="integer">1</span>, <span class="integer">0</span>, i,
+                                        x   , y+h , <span class="integer">0</span>, <span class="integer">1</span>, i,
+                                        x+w ,y+h  , <span class="integer">1</span>, <span class="integer">1</span>, i
+                                )
+                        }
                 }
-                window._animate = <span class="local-variable">this</span>.animate.bind(<span class="local-variable">this</span>);
-        }
+                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> pos = mesh.pos
+                        pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
+                        <span class="keyword">var</span> w = mesh.uv.x * min(max(<span class="integer">100</span> / view.zoom, <span class="float">1.0</span>), <span class="float">50.0</span>)
+                        pos = pos + vec2(w, <span class="float">0.0</span>)
+                        <span class="keyword">return</span> vec4(pos, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                }
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        PickGuid = mesh.id
+                        <span class="keyword">if</span> (view.hoverid == mesh.id) {
+                                <span class="keyword">return</span> vec4(<span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">0</span>, <span class="integer">1</span>)
+                        }
+                        <span class="keyword">return</span> vec4(<span class="float">0.5</span>, <span class="float">0.5</span>, <span class="float">0.5</span>, <span class="integer">1</span>)
+                }
+        })
+        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.eventrects
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        background({
-                                <span class="key">format</span>: <span class="local-variable">this</span>.format
-                        })
-                ]
-        }
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {}
 
 })
 </pre></td>

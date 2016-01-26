@@ -30,7 +30,7 @@ define.class(function(require, exports){
 		}
 
 		var p = constructor
-		
+
 		// build parent chain
 		while(p) {
 			if (p.prototype) {
@@ -45,7 +45,7 @@ define.class(function(require, exports){
 				p = null;
 			}
 		}
-		
+
 		class_doc.class_name = proto.constructor.name
 
 		if (!this.Parser) {
@@ -71,16 +71,16 @@ define.class(function(require, exports){
 				if (com === 1){
 					if(last1 === true){
 						break
-					} 
+					}
 					else {
 						last1 = true
 					}
-				} 
+				}
 				else {
 					last1 = false
 					res.push(com)
 				}
-			}		
+			}
 			return res
 		}
 
@@ -93,18 +93,18 @@ define.class(function(require, exports){
 				if (com === 1){
 					if(last1 === true){
 						break
-					} 
+					}
 					else {
 						last1 = true
 					}
-				} 
+				}
 				else {
 					last1 = false
 					res.unshift(com.trim())
 				}
 			}
 			return res
-		}		
+		}
 		var body_steps = class_body.body.steps
 
 		if(!body_steps[0]) return class_doc
@@ -119,7 +119,7 @@ define.class(function(require, exports){
 			}
 		}
 
-		for (var i = 0; i < body_steps.length; i++) {				
+		for (var i = 0; i < body_steps.length; i++) {
 			var step = body_steps[i]
 
 			if(step.type === 'Assign'){
@@ -150,7 +150,7 @@ define.class(function(require, exports){
 						}
 					}
 				}
-				if(step.left.type === 'Key' && step.left.object.type === 'Key' && step.left.object.object.type === 'This' && 
+				if(step.left.type === 'Key' && step.left.object.type === 'Key' && step.left.object.object.type === 'This' &&
 					step.left.object.key.name === 'constructor' && step.left.key.name === 'examples' && step.right.type === 'Object'){
 					for(var j = 0; j < step.right.keys.length; j++){
 						var key = step.right.keys[j]
@@ -169,23 +169,23 @@ define.class(function(require, exports){
 					var stepleft = step.left
 					var method = {name:stepleft.key.name, params:[]};
 					var stepright = step.right;
-					
+
 					method.body_text = grabFirstCommentAbove(step.cmu)
-					
+
 					for(var p in stepright.params){
 						var param = stepright.params[p]
 						var paramname = param.id.name
 						var paramtag = '<' + paramname + '>'
 
 						var pbody_text = []
-						
-						//if (param.cm1) {
-						//	for (var k = 0; k < param.cm1.length;k++) {
-						//		if (param.cm1[k] != 1) {
-						//			pbody_text.push(param.cm1[k])
-						//		}
-						//	}
-						//}
+
+						if (param.cm1) {
+							for (var k = 0; k < param.cm1.length;k++) {
+								if (param.cm1[k] != 1) {
+									pbody_text.push(param.cm1[k])
+								}
+							}
+						}
 
 						param = {name: paramname, body_text: pbody_text};
 
@@ -202,7 +202,7 @@ define.class(function(require, exports){
 						method.params.push(param)
 						method.body_text = remaining
 					}
-					class_doc.methods.push(method)			
+					class_doc.methods.push(method)
 				}
 			}
 			else if (step.type ==="Call"){
@@ -214,7 +214,7 @@ define.class(function(require, exports){
 							newclass.class_name = innerclassname;
 							newclass.body_text = grabFirstCommentAbove(step.cmu)
 							class_doc.inner_classes.push(newclass)
-						} 
+						}
 					}
 				}
 			}
