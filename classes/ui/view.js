@@ -9,7 +9,7 @@ define.class('$system/base/node', function(require){
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
-
+	var Texture = this.Texture = Shader.Texture
 	var view = this.constructor
 
 	this.attributes = {
