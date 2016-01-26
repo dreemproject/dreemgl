@@ -14,6 +14,8 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, v
 								,button({text:"Amsterdam",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
 								,button({text:"Seoul",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
 								,button({text:"San Francisco",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
+								,button({text:"GoldenGatePark",click:function(){this.find("themap").gotoCity("sanfrancisco_goldengatepark",15);}, margin:20})
+								
 							)
 						)
 

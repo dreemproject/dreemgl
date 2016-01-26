@@ -23,7 +23,7 @@ define.class(function(view, label){
 	this.bgcolorfn = function(a){
 			
 			var dist2 = vec2(0.5,1.0) - a.xy;
-			var N = noise.noise2d(gl_FragCoord.xy*0.8)*0.3;
+			var N = noise.cheapnoise(gl_FragCoord.xy*0.08)*0.3;
 			return mix(glowcolor, edgecolor, N+ 1.0-length(a.y));
 		}
 		
