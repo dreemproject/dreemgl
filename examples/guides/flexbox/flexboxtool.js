@@ -5,7 +5,7 @@
 
 // Flexbox flexdirection example.
 define.class("$server/composition",
-	function ($ui$, screen, view, label, speakergrid, $$$, utility$newradiogroup) {
+	function ($ui$, screen, view, label, speakergrid, $$, newradiogroup) {
 
 		this.attributes = {
 			flexcontainer: null 	// reference to flex container view
@@ -86,7 +86,7 @@ define.class("$server/composition",
 									bg:0
 								}
 
-								,utility$newradiogroup(
+								,newradiogroup(
 									{
 										title: "container width",
 										fontsize: 16,
@@ -101,7 +101,7 @@ define.class("$server/composition",
 									}
 								)
 
-								,utility$newradiogroup(
+								,newradiogroup(
 									{
 										title: "flexdirection",
 										fontsize: 16,
@@ -116,7 +116,7 @@ define.class("$server/composition",
 									}
 								)
 
-								,utility$newradiogroup(
+								,newradiogroup(
 									{
 										title: "justifycontent",
 										fontsize: 18,
@@ -132,7 +132,7 @@ define.class("$server/composition",
 									}
 								)
 
-								,utility$newradiogroup(
+								,newradiogroup(
 									{
 										title: "alignitems",
 										fontsize: 12,
@@ -148,7 +148,7 @@ define.class("$server/composition",
 								)
 
 
-								,utility$newradiogroup(
+								,newradiogroup(
 									{
 										title: "flexwrap",
 										fontsize: 12,
@@ -174,8 +174,8 @@ define.class("$server/composition",
 
 							label(
 								{
-									text: "flexcontainer settings",
-									fontsize: 29,
+									text: "Child #1",
+									fontsize: 22,
 									fontstyle: 'bold',
 									margin:5,
 									padding:6,
@@ -192,7 +192,7 @@ define.class("$server/composition",
 									padding:6,
 									bg:0
 								}
-								,utility$newradiogroup(
+								,newradiogroup(
 									{
 										title: "flexwrap",
 										fontsize: 18,
@@ -252,7 +252,9 @@ define.class("$server/composition",
 											h: 80,
 											padding: 20,
 											bgcolor: 'airforceblueraf'},
-										view({w:40, h:40, bgcolor: 'gray'})
+										view({w:40, h:40, bgcolor: 'gray'},
+											label({text: 'Hello', fgcolor: 'black', fontsize: '16'})
+										)
 									),
 									view(
 										{
