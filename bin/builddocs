@@ -6,9 +6,10 @@ DOCS_DIR="$ROOT_DIR/docs"
 CLASSDOC_DIR="$DOCS_DIR/.classdoc"
 API_DOCS_DIR="$DOCS_DIR/api"
 SRC_DOCS_DIR="$DOCS_DIR/api/source"
+GUIDES_JSON=$DOCS_DIR/guides.json
 
-DOCS_TITLE="Dreem API documentation"
-COPYRIGHT="Copyright (c) 2014-2016 Teem2 LLC"
+DOCS_TITLE="DreemGL API documentation"
+COPYRIGHT="Copyright (c) 2015-2016 Teem"
 
 TYPENAMES="typeless,int32,float32,vec2,vec3,vec4,Enum"
 
@@ -20,7 +21,7 @@ rm -rf "$CLASSDOC_DIR"
 node $ROOT_DIR/server.js -jsduckgen
 
 echo "Building docs..."
-jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES"
+jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES" --guides $GUIDES_JSON --guides-toc-level=3
 
 echo "Building source docs..."
 

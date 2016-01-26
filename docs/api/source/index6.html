@@ -177,7 +177,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$examples$</span>, <span class="predefined">$$</span>, omdb) {
 
@@ -191,10 +190,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="function">render</span>:<span class="keyword">function</span>(){
                     <span class="keyword">var</span> views = [];
                     <span class="keyword">if</span> (<span class="local-variable">this</span>.movielist) {
-                            console.log(<span class="local-variable">this</span>.movielist)
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.movielist.length; i++) {
                             <span class="keyword">var</span> movie = <span class="local-variable">this</span>.movielist[i];
-                            <span class="keyword">if</span> (movie &amp;&amp; movie.Poster &amp;&amp; movie.Poster.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>)) {
+                            <span class="keyword">if</span> (movie.Poster &amp;&amp; movie.Poster.startsWith(<span class="string"><span class="delimiter">'</span><span class="content">http</span><span class="delimiter">'</span></span>)) {
                                 views.push(view({<span class="key">bgimage</span>:movie.Poster}))
                             }
                         }

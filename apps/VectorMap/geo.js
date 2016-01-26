@@ -112,9 +112,13 @@ define.class(function(require, $server$, service){
 	this.latLngToMeters = function(x, y) {
 		y = this.wrapLng(y + 360)
 		// Latitude
-		var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);
-		y = Math.log(t) / Math.PI;
+		//var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);
+		
+		y = Math.log(Math.tan(y*Math.PI/360 + Math.PI/4)) / Math.PI;
 		y *= this.half_circumference_meters;
+	
+	//	y = Math.log(t) / Math.PI;
+		//y *= this.half_circumference_meters;
 		
 		// Longitude
 		x *= this.half_circumference_meters / 180;

@@ -799,23 +799,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = <span class="local-variable">this</span>.drawpass_list.length; i &lt; len; i++){
                         <span class="keyword">var</span> last = i === len - <span class="integer">1</span>
-                        <span class="keyword">var</span> skip = <span class="predefined-constant">false</span>
+                        <span class="comment">//var skip = false</span>
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.drawpass_list[i]
 
                         <span class="comment">// little hack to dont use rtt if you only use a single view</span>
-                        <span class="keyword">if</span>(view.parent == <span class="local-variable">this</span>.screen &amp;&amp; view.flex ==<span class="integer">1</span> &amp;&amp; <span class="local-variable">this</span>.screen.children.length ===<span class="integer">1</span>){
-                                skip = last = <span class="predefined-constant">true</span>
-                        }
+                        <span class="comment">//if(view.parent == this.screen &amp;&amp; view.flex ==1 &amp;&amp; this.screen.children.length ===1){</span>
+                        <span class="comment">//        skip = last = true</span>
+                        <span class="comment">//}</span>
                         <span class="comment">// lets set up glscissor on last</span>
                         <span class="comment">// and then read the goddamn pixel</span>
                         <span class="keyword">if</span>(last || view.draw_dirty &amp; <span class="integer">2</span>){
                                 view.draw_dirty &amp;= <span class="integer">1</span>
                                 view.drawpass.drawPick(last, i + <span class="integer">1</span>, x, y, <span class="local-variable">this</span>.debug_pick)
                         }
-                        <span class="keyword">if</span>(skip){
-                                <span class="local-variable">this</span>.screen.draw_dirty &amp;= <span class="integer">1</span>
-                                <span class="keyword">break</span>
-                        }
+                        <span class="comment">//if(skip){</span>
+                        <span class="comment">//        this.screen.draw_dirty &amp;= 1</span>
+                        <span class="comment">//        break</span>
+                        <span class="comment">//}</span>
                 }
                 <span class="comment">// now lets read the pixel under the mouse</span>
                 <span class="keyword">var</span> pick_resolve = <span class="local-variable">this</span>.pick_resolve
@@ -902,11 +902,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = <span class="local-variable">this</span>.drawpass_list.length; i &lt; len; i++){
 
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.drawpass_list[i]
-                        <span class="keyword">var</span> skip = <span class="predefined-constant">false</span>
+                        <span class="comment">//var skip = false</span>
                         <span class="keyword">var</span> last = i === len - <span class="integer">1</span>
-                        <span class="keyword">if</span>(view.parent == <span class="local-variable">this</span>.screen &amp;&amp; view.flex == <span class="integer">1</span> &amp;&amp; <span class="local-variable">this</span>.screen.children.length ===<span class="integer">1</span>){
-                                skip = last = <span class="predefined-constant">true</span>
-                        }
+                        <span class="comment">//if(view.parent == this.screen &amp;&amp; view.flex == 1 &amp;&amp; this.screen.children.length ===1){</span>
+                        <span class="comment">//        skip = last = true</span>
+                        <span class="comment">//}</span>
 
                         <span class="keyword">if</span>(view.draw_dirty &amp; <span class="integer">1</span> || last){
 
@@ -921,11 +921,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }
                         }
 
-                        <span class="keyword">if</span>(skip){
-                                <span class="local-variable">this</span>.screen.drawpass.calculateDrawMatrices(<span class="predefined-constant">false</span>, <span class="local-variable">this</span>.screen.drawpass.colormatrices);
-                                <span class="local-variable">this</span>.screen.draw_dirty &amp;= <span class="integer">2</span>
-                                <span class="keyword">break</span>
-                        }
+                        <span class="comment">//if(skip){</span>
+                        <span class="comment">//        this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);</span>
+                        <span class="comment">//        this.screen.draw_dirty &amp;= 2</span>
+                        <span class="comment">//        break</span>
+                        <span class="comment">//}</span>
                 }
 
                 <span class="keyword">if</span>(anim_redraw.length){

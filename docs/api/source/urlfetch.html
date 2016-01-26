@@ -178,17 +178,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
                 <span class="local-variable">this</span>.<span class="function">grabmap</span> = <span class="keyword">function</span>(x,y,z){
+                        console.log(x,y,z);
                         
                         <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>);
                         <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
                         <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
+                        
                         <span class="keyword">if</span> (fs.existsSync(cachedname)){
                                 <span class="keyword">return</span> fs.readFileSync(cachedname).toString()
                         }
                         
                         <span class="keyword">var</span> fileurl = <span class="string"><span class="delimiter">&quot;</span><span class="content">http://vector.mapzen.com/osm/all/</span><span class="delimiter">&quot;</span></span>+z+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>+x+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">.topojson?api_key=vector-tiles-Qpvj7U4</span><span class="delimiter">&quot;</span></span> 
-                        
-                        
                         <span class="keyword">var</span> P = define.deferPromise()
 
                         nodehttp.get(fileurl).then(<span class="keyword">function</span>(v){

@@ -164,19 +164,49 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n10" name="n10">10</a></strong>
 <a href="#n11" name="n11">11</a>
 <a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, label){
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>},
-                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello world!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="function">bgcolorfn</span>: <span class="keyword">function</span>(pos) {
-                  <span class="comment">// gradient</span>
-                  <span class="keyword">return</span> vec4(mix(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>, pos.x));
-          }})
-                        )
-                ];
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$blending/blend</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$blending$</span>, mixer, blurv, blurh){
+
+        <span class="local-variable">this</span>.hblend = define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$blending/blend</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
+                <span class="comment">// so we have one output, the size we can specify</span>
+                <span class="local-variable">this</span>.size = vec2(<span class="float">0.5</span>, <span class="float">0.5</span>) <span class="comment">// take on the size of the framebuffer</span>
+                <span class="comment">// we can have multiple input that are named</span>
+                <span class="local-variable">this</span>.<span class="function">blendfn</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> v1 = input.sample(pos.xy)
+                }
+        })
+
+        <span class="local-variable">this</span>.vblend = define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$blending/blend</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
+                <span class="comment">// so we have one output, the size we can specify</span>
+                <span class="local-variable">this</span>.size = vec2(<span class="float">0.5</span>, <span class="float">0.5</span>) <span class="comment">// take on the size of the framebuffer</span>
+                <span class="comment">// we can have multiple input that are named</span>
+                <span class="local-variable">this</span>.<span class="function">blendfn</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> v1 = input.sample(pos.xy)
+                }
+        })
+
+        <span class="local-variable">this</span>.<span class="function">blending</span> = <span class="keyword">function</span>(){
+                <span class="keyword">return</span> <span class="local-variable">this</span>.hblend({
+                        <span class="key">input</span>:<span class="local-variable">this</span>.vblend({
+                        })
+                })
         }
-});</pre></td>
+})</pre></td>
 </tr></table>
 
 </body>

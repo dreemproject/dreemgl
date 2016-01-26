@@ -198,12 +198,13 @@ define.class(function(require, exports){
 	// alright parsing templating/interpolations.
 	this.parenStack
 
-	exports.parse = function(inpt){
+	exports.parse = function(inpt, debug){
 		var parser = new this()
-		return parser.parse(inpt)
+		return parser.parse(inpt, debug)
 	}
 
-	this.parse = function(inpt) {
+	this.parse = function(inpt, debug) {
+		this.debug = debug
 		if(this.parser_cache){
 			var cache = this.parser_cache[inpt]
 			if(cache) return cache
@@ -324,7 +325,6 @@ define.class(function(require, exports){
 	// Some keywords are treated as regular operators. `in` sometimes
 	// (when parsing `for`) needs to be tested against specifically, so
 	// we assign a variable name to it for quick comparing.
-
 	this._in = {keyword: "in", preIdent:this._name, binop: 7, beforeExpr: true}
 	this._of = {keyword: "of", preIdent:this._name, binop: 7, beforeExpr: true}
 
@@ -438,10 +438,10 @@ define.class(function(require, exports){
 				this.compareTo(cat)
 			}
 			f += "}"
+			// Otherwise, simply generate a flat `switch` statement.
 
-		// Otherwise, simply generate a flat `switch` statement.
-
-		} else {
+		} 
+		else {
 			this.compareTo(words)
 		}
 		return new Function("str", f)
@@ -518,7 +518,6 @@ define.class(function(require, exports){
 			return true
 		}
 	}
-
 
 	exports.isIdentifierStart = 
 	this.isIdentifierStart = function(code) {
@@ -1641,7 +1640,9 @@ define.class(function(require, exports){
 				}
 			}
 		}
-		if(out.length) node.cm1 = out
+		if(out.length){
+		 	node.cm1 = out
+		 }
 	}
 	// this is called at a } we run to it then splice and leave that for the next layer up
 	this.commentTail = function(node, tail){
@@ -2794,12 +2795,18 @@ define.class(function(require, exports){
 
 	this.parseCall = function(base){
 		if( this.lastSkippedNewlines ) return base
-		var probe = this.probe_flag
-		this.eat(this._parenL)
 		var node = this.startNodeFrom(base)
+		var probe = this.probe_flag
+
+		if(this.storeComments) this.commentHead(node)
+
+		this.eat(this._parenL)
 		if(probe) node.store = 8
 		node.fn = base
-		node.args = this.parseExprList(this._parenR, false)
+		node.args = this.parseExprList(this._parenR, true, true)
+		if(this.storeComments) this.commentTail(node, this._parenR)
+
+		if(this.debug) console.log(node)
 		return this.parseSubscripts(this.finishNode(node, "Call"))
 	}
 
@@ -3158,6 +3165,8 @@ define.class(function(require, exports){
 	// nothing in between them to be parsed as `null` (which is needed
 	// for array literals).
 
+	//this.parseExprList(this._bracketR, true, true)
+
 	this.parseExprList = function(close, allowTrailingComma, allowEmpty) {
 		var elts = [], first = true
 		while (!this.eat(close)) {
@@ -3166,7 +3175,7 @@ define.class(function(require, exports){
 			}
 			if (!first) {
 				this.canInjectComma( this.tokType ) || this.expect(this._comma)
-				if (allowTrailingComma && this.allowTrailingCommas && this.eat(close)) break
+				if (allowTrailingComma && this.allowTrailingCommas && this.eat(close))break
 			} else first = false
 			if (allowEmpty && this.tokType === this._comma) elts.push(null)
 			else{

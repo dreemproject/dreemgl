@@ -4,6 +4,6 @@
  * this widget controls 
  */
 /**
- * @attribute {String} target
+ * @attribute {String} [target="undefined"]
  * the target view to control with this
  */

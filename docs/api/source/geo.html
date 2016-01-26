@@ -306,6 +306,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n152" name="n152">152</a>
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
 </pre></td>
   <td class="code"><pre><span class="comment">// ported to dreemgl from: https://github.com/tangrams/tangram/blob/master/src/geo.js </span>
 <span class="comment">// original license text:</span>
@@ -419,46 +423,50 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
           Convert lat-lng to mercator meters
         */</span>
         <span class="local-variable">this</span>.<span class="function">latLngToMeters</span> = <span class="keyword">function</span>(x, y) {
-
+                y = <span class="local-variable">this</span>.wrapLng(y + <span class="integer">360</span>)
                 <span class="comment">// Latitude</span>
+                <span class="comment">//var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);</span>
+                
                 y = Math.log(Math.tan(y*Math.PI/<span class="integer">360</span> + Math.PI/<span class="integer">4</span>)) / Math.PI;
                 y *= <span class="local-variable">this</span>.half_circumference_meters;
-
+        
+        <span class="comment">//        y = Math.log(t) / Math.PI;</span>
+                <span class="comment">//y *= this.half_circumference_meters;</span>
+                
                 <span class="comment">// Longitude</span>
                 x *= <span class="local-variable">this</span>.half_circumference_meters / <span class="integer">180</span>;
-
                 <span class="keyword">return</span> [x, y];
-        };
+        }
 
         <span class="local-variable">this</span>.<span class="function">wrapLng</span> = <span class="keyword">function</span>(x) {
                 <span class="keyword">if</span> (x &gt; <span class="integer">180</span> || x &lt; -<span class="integer">180</span>) {
                         x = ((x + <span class="integer">180</span>) % <span class="integer">360</span> + <span class="integer">360</span>) % <span class="integer">360</span> - <span class="integer">180</span>;
                 }
                 <span class="keyword">return</span> x;
-        };
+        }
 
-        <span class="comment">// Run an in-place transform function on each cooordinate in a GeoJSON geometry</span>
-        <span class="local-variable">this</span>.<span class="function">transformGeometry</span> = <span class="keyword">function</span> (geometry, transform) {
-                <span class="keyword">if</span> (geometry == <span class="predefined-constant">null</span>) {
-                        <span class="keyword">return</span>; <span class="comment">// skip if missing geometry (valid GeoJSON)</span>
+        <span class="comment">/*// Run an in-place transform function on each cooordinate in a GeoJSON geometry
+        this.transformGeometry = function (geometry, transform) {
+                if (geometry == null) {
+                        return; // skip if missing geometry (valid GeoJSON)
                 }
 
-                <span class="keyword">if</span> (geometry.type === <span class="string"><span class="delimiter">'</span><span class="content">Point</span><span class="delimiter">'</span></span>) {
+                if (geometry.type === 'Point') {
                         transform(geometry.coordinates);
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span> (geometry.type === <span class="string"><span class="delimiter">'</span><span class="content">LineString</span><span class="delimiter">'</span></span> || geometry.type === <span class="string"><span class="delimiter">'</span><span class="content">MultiPoint</span><span class="delimiter">'</span></span>) {
+                else if (geometry.type === 'LineString' || geometry.type === 'MultiPoint') {
                         geometry.coordinates.forEach(transform);
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span> (geometry.type === <span class="string"><span class="delimiter">'</span><span class="content">Polygon</span><span class="delimiter">'</span></span> || geometry.type === <span class="string"><span class="delimiter">'</span><span class="content">MultiLineString</span><span class="delimiter">'</span></span>) {
+                else if (geometry.type === 'Polygon' || geometry.type === 'MultiLineString') {
                         geometry.coordinates.forEach(coordinates =&gt; coordinates.forEach(transform));
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span> (geometry.type === <span class="string"><span class="delimiter">'</span><span class="content">MultiPolygon</span><span class="delimiter">'</span></span>) {
+                else if (geometry.type === 'MultiPolygon') {
                         geometry.coordinates.forEach(polygon =&gt; {
                                 polygon.forEach(coordinates =&gt; coordinates.forEach(transform));
                         });
                 }
-                <span class="comment">// TODO: support GeometryCollection</span>
-        };
+                // TODO: support GeometryCollection
+        };*/</span>
 
 })</pre></td>
 </tr></table>
