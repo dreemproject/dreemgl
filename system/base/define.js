@@ -474,7 +474,7 @@
 				fnname = (body.classname || body.name)
 			}
 			else if(module){
-				 fnname = define.fileBase(module.filename).replace(/\./g,'_')//.replace(/\.js/g,'').replace(/\./g,'_').replace(/\//g,'_')
+				 fnname = define.fileBase(module.filename).replace(/\.|\-/g,'_')//.replace(/\.js/g,'').replace(/\./g,'_').replace(/\//g,'_')
 			}
 			else{
 				// lets make an fnname based on our callstack
@@ -483,7 +483,7 @@
 					fnname = 'extend'
 					if(baseclass && baseclass.prototype.constructor) fnname += '_' + baseclass.prototype.constructor.name
 				}
-				else fnname = origin[1].replace(/\.js/g,'').replace(/\./g,'_').replace(/\//g,'_') + '_' + origin[2]
+				else fnname = origin[1].replace(/\.js/g,'').replace(/\.|\-/g,'_').replace(/\//g,'_') + '_' + origin[2]
 			}
 			var code = 'return ' + MyConstructor.toString().replace(/MyConstructor/g, fnname)
 			var Constructor = new Function(code)()
