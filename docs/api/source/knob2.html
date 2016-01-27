@@ -334,14 +334,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n180" name="n180">180</a></strong>
 <a href="#n181" name="n181">181</a>
 <a href="#n182" name="n182">182</a>
-<a href="#n183" name="n183">183</a>
-<a href="#n184" name="n184">184</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view, textbox, label,button ){
         <span class="comment">// Simple knob: a dial with a value</span>
@@ -360,19 +357,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">innerradius</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">30</span>}),
                 <span class="key">offset</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">8</span>})
         }
-        <span class="local-variable">this</span>.minwidth = <span class="integer">50</span>;
-        <span class="local-variable">this</span>.minheight = <span class="integer">50</span>;
+
+        <span class="local-variable">this</span>.minwidth = <span class="integer">50</span>
+        <span class="local-variable">this</span>.minheight = <span class="integer">50</span>
                 
         <span class="local-variable">this</span>.<span class="function">atMatrix</span> = <span class="keyword">function</span>(){
                 <span class="comment">//console.log(&quot; l!&quot;, this.layout);</span>
-                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).width = <span class="local-variable">this</span>.layout.width;
-                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).height = <span class="local-variable">this</span>.layout.width;
-                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).relayout();
-                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).redraw();
-                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedialbg</span><span class="delimiter">&quot;</span></span>).width = <span class="local-variable">this</span>.layout.width;
-                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedialbg</span><span class="delimiter">&quot;</span></span>).height = <span class="local-variable">this</span>.layout.width;
-                <span class="comment">//        this.findChild(&quot;thedialbg&quot;).relayout();</span>
-                <span class="comment">//this.findChild(&quot;thedialbg&quot;).redraw();</span>
+                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).width = <span class="local-variable">this</span>.layout.width
+                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).height = <span class="local-variable">this</span>.layout.width
+                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).relayout()
+                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>).redraw()
+                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedialbg</span><span class="delimiter">&quot;</span></span>).width = <span class="local-variable">this</span>.layout.width
+                <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedialbg</span><span class="delimiter">&quot;</span></span>).height = <span class="local-variable">this</span>.layout.width
         }
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">dial</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
@@ -436,7 +432,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.tabstop = <span class="integer">0</span>;
         
         <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span><span class="comment">//{pick_only:true};</span>
-        <span class="local-variable">this</span>.fgcolor=<span class="string"><span class="delimiter">&quot;</span><span class="content">#101010</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#101010</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>
 
         <span class="local-variable">this</span>.<span class="function">value</span> = <span class="keyword">function</span>(){        
@@ -461,15 +457,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">checkandset</span> = <span class="keyword">function</span>(newval){
-                <span class="keyword">if</span> (isNaN(newval)) newval = <span class="integer">0</span>;                
+                <span class="keyword">if</span> (isNaN(newval)) newval = <span class="integer">0</span>
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.maxvalue!=<span class="predefined-constant">undefined</span> &amp;&amp; newval &gt; <span class="local-variable">this</span>.maxvalue) newval = <span class="local-variable">this</span>.maxvalue;
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.minvalue!=<span class="predefined-constant">undefined</span> &amp;&amp; newval &lt; <span class="local-variable">this</span>.minvalue) newval = <span class="local-variable">this</span>.minvalue;                
                 <span class="local-variable">this</span>.value = newval;
                 
-                <span class="keyword">var</span> td = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>);                
+                <span class="keyword">var</span> td = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (td) {
-                        td._start = <span class="local-variable">this</span>.calcstart();
-                        td.redraw();
+                        td._start = <span class="local-variable">this</span>.calcstart()
+                        td.redraw()
                 }
         }
         

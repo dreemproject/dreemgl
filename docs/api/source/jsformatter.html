@@ -999,6 +999,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n845" name="n845">845</a>
 <a href="#n846" name="n846">846</a>
 <a href="#n847" name="n847">847</a>
+<a href="#n848" name="n848">848</a>
+<a href="#n849" name="n849">849</a>
+<strong><a href="#n850" name="n850">850</a></strong>
+<a href="#n851" name="n851">851</a>
+<a href="#n852" name="n852">852</a>
+<a href="#n853" name="n853">853</a>
+<a href="#n854" name="n854">854</a>
+<a href="#n855" name="n855">855</a>
+<a href="#n856" name="n856">856</a>
+<a href="#n857" name="n857">857</a>
+<a href="#n858" name="n858">858</a>
+<a href="#n859" name="n859">859</a>
+<strong><a href="#n860" name="n860">860</a></strong>
+<a href="#n861" name="n861">861</a>
+<a href="#n862" name="n862">862</a>
+<a href="#n863" name="n863">863</a>
+<a href="#n864" name="n864">864</a>
+<a href="#n865" name="n865">865</a>
+<a href="#n866" name="n866">866</a>
+<a href="#n867" name="n867">867</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
         
@@ -1115,7 +1135,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.<span class="function">expand</span> = <span class="keyword">function</span>(n, arg){
                 <span class="keyword">if</span>(n){
                         <span class="keyword">if</span>(!<span class="local-variable">this</span>[n.type]) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">type </span><span class="delimiter">'</span></span>+n.type+<span class="string"><span class="delimiter">'</span><span class="content"> not in codeview</span><span class="delimiter">'</span></span>)
-                        <span class="keyword">else</span> <span class="local-variable">this</span>[n.type](n, arg)
+                        <span class="keyword">else</span> <span class="keyword">return</span> <span class="local-variable">this</span>[n.type](n, arg)
                 }
         }
 
@@ -1177,6 +1197,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 <span class="local-variable">this</span>.indent = old_indent
                 <span class="local-variable">this</span>.bracketR(exports._Array, mygroup)
+                <span class="keyword">return</span> has_newlines
         }
 
         <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(n, indent){<span class="comment">//: { keys:3 },</span>
@@ -1184,7 +1205,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.braceL(exports._Object, mygroup)
                 <span class="comment">// allright so</span>
                 <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
+
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.cm1)) has_newlines = <span class="predefined-constant">true</span>
+
+                <span class="comment">//console.log(has_newlines, n)</span>
+
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
                 <span class="local-variable">this</span>.indent++
 
@@ -1218,6 +1243,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="local-variable">this</span>.indent = old_indent
                 <span class="local-variable">this</span>.braceR(exports._Object, mygroup)
+
+                <span class="keyword">return</span> has_newlines
         }
 
         <span class="local-variable">this</span>.<span class="function">Index</span> = <span class="keyword">function</span>(n){<span class="comment">//: { object:1, index:1 },</span>
@@ -1667,36 +1694,49 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="local-variable">this</span>.parenR(exports._Call, mygroup)
                 }
                 <span class="keyword">else</span> <span class="local-variable">this</span>.expand(n.fn)
+
                 mygroup = <span class="local-variable">this</span>.group++
+
                 <span class="local-variable">this</span>.parenL(exports._Call, mygroup)
 
-                <span class="comment">// if we get an argument with newlines</span>
+                <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.cm1)) has_newlines = <span class="predefined-constant">true</span>
+                <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
                 <span class="local-variable">this</span>.indent++
-                <span class="keyword">var</span> line = <span class="local-variable">this</span>.line
+
+                <span class="comment">// cleanup hack</span>
+                
+                <span class="comment">// lets check if it has a newline</span>
+                <span class="keyword">var</span> first_is_obj
+                <span class="keyword">if</span>(n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span> || n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Array</span><span class="delimiter">'</span></span>){
+                        first_is_obj = <span class="predefined-constant">true</span>
+                        <span class="keyword">if</span>(n.args.length === <span class="integer">1</span>) <span class="local-variable">this</span>.indent--
+                }
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.args.length; i++){
-                        <span class="keyword">if</span>(i){
-                                <span class="local-variable">this</span>.comma(exports._Call), <span class="local-variable">this</span>.space()
-                                <span class="keyword">if</span>(line !== <span class="local-variable">this</span>.line){
-                                        <span class="local-variable">this</span>.newline()
-                                        <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
-                                }
-                        }
                         <span class="keyword">var</span> arg = n.args[i]
-                        <span class="keyword">if</span>(arg.type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span>){
-                                <span class="local-variable">this</span>.indent--
-                                <span class="local-variable">this</span>.expand(arg, i &lt; n.args.length - <span class="integer">1</span>?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>)
-                                <span class="local-variable">this</span>.indent++
+
+                        <span class="local-variable">this</span>.comments(arg.cmu)
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
+                        <span class="keyword">var</span> has_nl = <span class="local-variable">this</span>.expand(arg)
+
+                        <span class="comment">// check wether to switch to has_newlines</span>
+                        <span class="keyword">if</span>(i === <span class="integer">0</span> &amp;&amp; first_is_obj &amp;&amp; !has_newlines){
+                                has_newlines = has_nl
                         }
-                        <span class="keyword">else</span>{
-                                <span class="local-variable">this</span>.expand(arg)
-                        }
+
+                        <span class="keyword">if</span>(i &lt; n.args.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Call, <span class="local-variable">this</span>.group++)
+                        <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(arg.cmr))
+                                <span class="local-variable">this</span>.newline()
                 }
-                <span class="local-variable">this</span>.indent--
-                <span class="keyword">if</span>(line !== <span class="local-variable">this</span>.line &amp;&amp; <span class="local-variable">this</span>.lastCharCode() !== <span class="integer">125</span>){
-                        <span class="local-variable">this</span>.newline()
-                        <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
-                }
+                <span class="keyword">if</span>(has_newlines &amp;&amp; <span class="local-variable">this</span>.comments(n.cm2)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent - <span class="integer">1</span>)
+                
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(old_indent)
+
+                <span class="local-variable">this</span>.indent = old_indent
                 <span class="local-variable">this</span>.parenR(exports._Call, mygroup)
+
+                <span class="keyword">return</span> has_newlines
         }
 
         exports.types = {

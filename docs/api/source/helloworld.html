@@ -164,19 +164,28 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n10" name="n10">10</a></strong>
 <a href="#n11" name="n11">11</a>
 <a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, label){
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>},
-                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello world!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="function">bgcolorfn</span>: <span class="keyword">function</span>(pos) {
-                  <span class="comment">// gradient</span>
-                  <span class="keyword">return</span> vec4(mix(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>, pos.x));
-          }})
-                        )
-                ];
-        }
-});</pre></td>
+  <td class="code"><pre><span class="comment">/*Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,
+  <span class="keyword">function</span> (
+    <span class="comment">// imports from classes/ui folder</span>
+    <span class="predefined">$ui$</span>, screen
+  ) {
+    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+      <span class="keyword">var</span> s = screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>,<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>});
+      <span class="keyword">return</span>[s];
+    };
+  }
+);
+</pre></td>
 </tr></table>
 
 </body>

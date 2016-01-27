@@ -1,14 +1,37 @@
-define.class('$ui/view', function (require, $ui$, view) {
-
-	this.flexdirection = 'row'
-	this.flex = 1
+define.class('$ui/view', function (background) {
 
 	this.attributes = {
-		zoom: Config({type: Number,  value: 1})
+		format: Config({type: Enum('12','24'),  value: "24"}),
+		zoom: 1,
+		maxzoom: 365
 	}
 
-	this.render = function() { return [
+	// TODO need a way to externally set attribute without triggering render function.
+	// this.oninit = function () {
+	// 	this.animate = function () {
+	// 		requestAnimationFrame(window._animate);
+	// 		this.zoom = 365 / (1 + (0.5 * Math.sin(Date.now() / 5000) * 365 + 365 / 2))
+	// 	}.bind(this);
+	// 	if (!window._animate) {
+	// 		window._animate = this.animate.bind(this);
+	// 		window._animate();
+	// 	}
+	// 	window._animate = this.animate.bind(this);
+	// }
 
-	]}
+	this.atDraw = function(){
+		this.zoom = 365 / (1 + (0.5 * Math.sin(Date.now() / 5000) * 365 + 365 / 2))
+		this.setTimeout(function(){
+			this.redraw()
+		}.bind(this), 0)
+	}
+
+	this.render = function() {
+		return [
+			background({
+				format: this.format
+			})
+		]
+	}
 
 })

@@ -180,8 +180,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service) {
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/service</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$system$server$</span>, nodehttp) {
 
     <span class="comment">// internal, Base API URL</span>
     <span class="local-variable">this</span>.apiurl = <span class="string"><span class="delimiter">&quot;</span><span class="content">http://www.omdbapi.com/?s=</span><span class="delimiter">&quot;</span></span>;
@@ -193,20 +203,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="key">results</span>: []
     };
 
-    <span class="local-variable">this</span>.<span class="function">onkeyword</span> = <span class="keyword">function</span> (event) {
-        <span class="keyword">var</span> keyword = event.value;
-        <span class="keyword">var</span> request = require(<span class="string"><span class="delimiter">'</span><span class="content">request</span><span class="delimiter">'</span></span>);
-        <span class="keyword">if</span> (keyword &amp;&amp; request) {
-            request(<span class="local-variable">this</span>.apiurl + keyword.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">[^a-z0-9_-]</span><span class="delimiter">/</span><span class="modifier">ig</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">+</span><span class="delimiter">'</span></span>), (<span class="keyword">function</span> (error, response, body) {
-                <span class="keyword">if</span> (!error &amp;&amp; response.statusCode == <span class="integer">200</span>) {
-                    <span class="keyword">var</span> res = JSON.parse(body);
-                    <span class="local-variable">this</span>.results = res[<span class="string"><span class="delimiter">&quot;</span><span class="content">Search</span><span class="delimiter">&quot;</span></span>];
-                }
-            }).bind(<span class="local-variable">this</span>))
-        } <span class="keyword">else</span> <span class="keyword">if</span> (!request) {
-            console.log(<span class="string"><span class="delimiter">'</span><span class="content">WARNING: if &quot;request&quot; is missing, please cd to &quot;./examples/guide/&quot; and run &quot;npm install&quot;</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> libexists = require(<span class="string"><span class="delimiter">'</span><span class="content">url</span><span class="delimiter">'</span></span>);
+        <span class="keyword">if</span> (libexists) {
+                <span class="local-variable">this</span>.<span class="function">onkeyword</span> = <span class="keyword">function</span> (event) {
+                        <span class="keyword">var</span> self = <span class="local-variable">this</span>;
+                        <span class="keyword">var</span> keyword = event.value;
+
+                        <span class="keyword">if</span> (keyword) {
+                                <span class="keyword">var</span> url = <span class="local-variable">this</span>.apiurl + keyword.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">[^a-z0-9_-]</span><span class="delimiter">/</span><span class="modifier">ig</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">+</span><span class="delimiter">'</span></span>);
+                                <span class="keyword">if</span> (url) {
+                                        nodehttp.get(url).then(<span class="keyword">function</span>(resp) {
+                                                <span class="keyword">var</span> res = JSON.parse(resp);
+                                                self.results = res[<span class="string"><span class="delimiter">&quot;</span><span class="content">Search</span><span class="delimiter">&quot;</span></span>];
+                                        }, <span class="keyword">function</span>(err) {
+                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">ERROR with OMDB Search:</span><span class="delimiter">'</span></span>, err);
+                                                self.results = [];
+                                        });
+                                } <span class="keyword">else</span> {
+                                        self.results = [];
+                                }
+                        }
+                };
         }
-    };
+
+
 
 });
 </pre></td>

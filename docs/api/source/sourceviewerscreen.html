@@ -178,51 +178,33 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/*Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
+<span class="comment">// Screen used for displaying the source code of a class, used by the docsourceviewer composition.</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/screen</span><span class="delimiter">&quot;</span></span>,
+  <span class="keyword">function</span> (
+    <span class="predefined">$widgets$</span>, jsviewer
+  ) {
 
-<span class="comment">/**
- * @class DaliImage
- * DaliImage represents a image loaded in dali, like how window.Image represents
- * an image loaded in the browser.
- *
- * Dali handles image loading inside the api, so this encapsulates the image
- * string.
- */</span>
+    <span class="local-variable">this</span>.attributes = {
+      <span class="key">sourcecode</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">// NO SOURCE CODE LOADED!</span><span class="delimiter">&quot;</span></span>}),
+    };
 
-<span class="keyword">function</span> <span class="function">DaliImage</span>(path) 
-{
-console.trace(<span class="string"><span class="delimiter">'</span><span class="content">DALIIMAGE CTOR</span><span class="delimiter">'</span></span>, path);
-        <span class="local-variable">this</span>.path = path;
-}
+    <span class="local-variable">this</span>.<span class="function">sourcecode</span> = <span class="keyword">function</span>() {
+      <span class="local-variable">this</span>.children[<span class="integer">0</span>].source = <span class="local-variable">this</span>.sourcecode;
+    }
 
-
-<span class="comment">//define.class(function(require, exports){</span>
-<span class="comment">//</span>
-<span class="comment">//        /**</span>
-<span class="comment">//         * @method constructor</span>
-<span class="comment">//         * Create a DaliImage object by specifying the image path (optional)</span>
-<span class="comment">//         * @param {string} path Path to the image</span>
-<span class="comment">//         */</span>
-<span class="comment">//        this.atConstructor = function(path) {</span>
-<span class="comment">//                this.path = path;</span>
-<span class="comment">//        }</span>
-<span class="comment">//</span>
-<span class="comment">//});</span>
-
+    <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
+    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+      <span class="keyword">return</span>[
+        jsviewer({ <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>,  <span class="key">source</span>: <span class="local-variable">this</span>.sourcecode, <span class="key">fontsize</span>: <span class="integer">12</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#212121</span><span class="delimiter">&quot;</span></span>, <span class="key">multiline</span>: <span class="predefined-constant">false</span>}),
+      ];
+    }
+  });
 </pre></td>
 </tr></table>
 

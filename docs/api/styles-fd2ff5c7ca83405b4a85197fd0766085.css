@@ -94,11 +94,48 @@
           }
 
 .signature .required { background-color: #484848 }
+        .signature .singleton {
+          background-color: transparent;
+          color: #929292;
+        }
+
 .signature .static { background-color: #484848 }
         .template-box {
           text-align: center;
           background-color: #eee;
         }
+              #center-container h1.icon-singleton .class-source-link {
+                  background: url(class-icons/singleton-large.png) no-repeat 0 -5px; }
+              #treecontainer .x-grid-cell-inner .icon-singleton {
+                  background: url(class-icons/singleton.png) no-repeat; }
+              #search-dropdown .icon-singleton {
+                  background: url(class-icons/singleton.png) no-repeat; }
+              #search-dropdown .icon-singleton-redirect {
+                  background: url(class-icons/singleton-redirect.png) no-repeat; }
+              .doctabs .icon-singleton {
+                  background: url(class-icons/singleton.png) no-repeat; }
+
+              #center-container h1.icon-component .class-source-link {
+                  background: url(class-icons/component-large.png) no-repeat 0 -5px; }
+              #treecontainer .x-grid-cell-inner .icon-component {
+                  background: url(class-icons/component.png) no-repeat; }
+              #search-dropdown .icon-component {
+                  background: url(class-icons/component.png) no-repeat; }
+              #search-dropdown .icon-component-redirect {
+                  background: url(class-icons/component-redirect.png) no-repeat; }
+              .doctabs .icon-component {
+                  background: url(class-icons/component.png) no-repeat; }
+
+              #center-container h1.icon-class .class-source-link {
+                  background: url(class-icons/class-large.png) no-repeat 0 -5px; }
+              #treecontainer .x-grid-cell-inner .icon-class {
+                  background: url(class-icons/class.png) no-repeat; }
+              #search-dropdown .icon-class {
+                  background: url(class-icons/class.png) no-repeat; }
+              #search-dropdown .icon-class-redirect {
+                  background: url(class-icons/class-redirect.png) no-repeat; }
+              .doctabs .icon-class {
+                  background: url(class-icons/class.png) no-repeat; }
 #search-dropdown .icon-attribute { background-image: url(member-icons/attribute.png); background-repeat: no-repeat; }
 .members .members-section .icon-attribute { background-image: url(member-icons/attribute.png); background-repeat: no-repeat; }
 .members .comments-section .icon-attribute { background-image: url(member-icons/attribute.png); background-repeat: no-repeat; }

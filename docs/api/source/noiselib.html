@@ -505,6 +505,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n351" name="n351">351</a>
 <a href="#n352" name="n352">352</a>
 <a href="#n353" name="n353">353</a>
+<a href="#n354" name="n354">354</a>
+<a href="#n355" name="n355">355</a>
+<a href="#n356" name="n356">356</a>
+<a href="#n357" name="n357">357</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -533,7 +537,11 @@ define(<span class="keyword">function</span>(require, exports){
         exports.<span class="function">snoise2</span> = <span class="keyword">function</span>(x, y){
                 <span class="keyword">return</span> snoise2v(vec2(x,y,z))
         }
-
+        
+        exports.<span class="function">cheapnoise</span> = <span class="keyword">function</span>(inp){
+                <span class="keyword">return</span> fract(sin(dot(inp.xy ,vec2(<span class="float">12.9898</span>,<span class="float">78.233</span>))) * <span class="float">43758.5453</span>);
+        }
+        
         exports.noise2d = 
         exports.s2d =
         exports.<span class="function">snoise2v</span> = <span class="keyword">function</span>(v){

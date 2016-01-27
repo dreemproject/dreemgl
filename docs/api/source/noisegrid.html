@@ -172,27 +172,47 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n18" name="n18">18</a>
 <a href="#n19" name="n19">19</a>
 <strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view, button){
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> [
-                        screen({<span class="key">clearcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>},
-                                view({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">viewbg</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#CBD6D9</span><span class="delimiter">&quot;</span></span>, <span class="function">init</span>: <span class="keyword">function</span>() {
-      <span class="local-variable">this</span>.margin = <span class="integer">20</span>;
-    }, <span class="key">attributes</span>: {<span class="key">attr</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">val</span><span class="delimiter">&quot;</span></span>}), <span class="key">margin</span>: Config({<span class="key">listeners</span>: [<span class="keyword">function</span>(margin) {
-      console.log(<span class="string"><span class="delimiter">'</span><span class="content">onmargin</span><span class="delimiter">'</span></span>, margin.value);
-      <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>;
-    }]})}},
-                                        button({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Foo</span><span class="delimiter">&quot;</span></span>, <span class="key">attributes</span>: {<span class="key">click</span>: Config({<span class="key">listeners</span>: [<span class="keyword">function</span>() {
-        console.log(<span class="string"><span class="delimiter">'</span><span class="content">onclick</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>);
-        <span class="local-variable">this</span>.parent.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>;
-        <span class="local-variable">this</span>.parent.fontfamily = <span class="string"><span class="delimiter">'</span><span class="content">leaguegothic</span><span class="delimiter">'</span></span>
-      }]})}})
-                                )
-                        )
-                ];
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(view, label){
+
+        <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.alignitem = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.alignself = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>
+        
+        <span class="local-variable">this</span>.attributes = {
+                <span class="key">holecolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">glowcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">edgecolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5b5b5b</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>})
         }
-});</pre></td>
+        
+        <span class="comment">//this.bgcolor = vec4(&quot;white&quot;)</span>
+
+        <span class="comment">// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.</span>
+        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(a){
+                        
+                        <span class="keyword">var</span> dist2 = vec2(<span class="float">0.5</span>,<span class="float">1.0</span>) - a.xy;
+                        <span class="keyword">var</span> N = noise.noise2d(gl_FragCoord.xy*<span class="float">0.8</span>)*<span class="float">0.3</span>;
+                        <span class="keyword">return</span> mix(glowcolor, edgecolor, N+ <span class="float">1.0</span>-length(a.y));
+                }
+                
+})</pre></td>
 </tr></table>
 
 </body>

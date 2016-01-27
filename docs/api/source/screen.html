@@ -900,7 +900,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n746" name="n746">746</a>
 <a href="#n747" name="n747">747</a>
 <a href="#n748" name="n748">748</a>
-<a href="#n749" name="n749">749</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
    You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
@@ -915,7 +914,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> Animate = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/animate</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments</span>
+                <span class="comment">// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments</span>
                 <span class="key">locationhash</span>: Config({<span class="key">type</span>:Object, <span class="key">value</span>:{}}),
                 <span class="comment">// when the browser comes out of standby it fires wakup event</span>
                 <span class="key">wakeup</span>: Config({<span class="key">type</span>:Event}),
@@ -933,7 +932,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">globalmouserightup</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalmousewheelx</span>: Config({<span class="key">type</span>:Event}),
                 <span class="key">globalmousewheely</span>: Config({<span class="key">type</span>:Event}),
-                <span class="comment">//</span>
                 <span class="key">status</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
         }
 
@@ -991,7 +989,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.remapmatrix = mat4();
         <span class="local-variable">this</span>.invertedmousecoords = vec2();
 
-        <span class="comment">// display a classic &quot;rightclick&quot; or &quot;dropdown&quot; menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.</span>
+        <span class="comment">// internal, display a classic &quot;rightclick&quot; or &quot;dropdown&quot; menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.</span>
         <span class="local-variable">this</span>.<span class="function">contextMenu</span> = <span class="keyword">function</span>(commands, x,y){
 
                 <span class="keyword">if</span> (!y) y = <span class="local-variable">this</span>.pointer._y;
@@ -1046,7 +1044,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">dropshadowradius</span>: <span class="integer">20</span>,
                                 <span class="key">dropshadowoffset</span>:vec2(<span class="integer">9</span>,<span class="integer">9</span>),
                                 <span class="key">borderradius</span>:<span class="integer">7</span>,
-                                <span class="function">blur</span>:<span class="keyword">function</span>(){
+                                <span class="function">miss</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
                                 },
                                 <span class="function">init</span>:<span class="keyword">function</span>(){
@@ -1054,7 +1052,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">pos</span>:[x,y],
                                 <span class="key">size</span>:[<span class="integer">300</span>,<span class="predefined-constant">NaN</span>],<span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
                         }, res)
-                }.bind(<span class="local-variable">this</span>)).then(<span class="keyword">function</span>(result){
+                }).then(<span class="keyword">function</span>(result){
 
                 })
         };
@@ -1088,7 +1086,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> vec2(<span class="local-variable">this</span>.pointer._x, <span class="local-variable">this</span>.pointer._y);
         }
 
-        <span class="comment">// internal: remap the mouse to a view node</span>
+        <span class="comment">// internal, remap the mouse to a view node</span>
         <span class="local-variable">this</span>.<span class="function">remapMouse</span> = <span class="keyword">function</span>(node, dbg){
 
                 <span class="keyword">var</span> parentlist = []
@@ -1292,7 +1290,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.pointer_capture = <span class="predefined-constant">undefined</span>
         }
 
-        <span class="comment">// bind all keyboard/pointer inputs for delegating it into the view tree</span>
+        <span class="comment">// internal, bind all keyboard/pointer inputs for delegating it into the view tree</span>
         <span class="local-variable">this</span>.<span class="function">bindInputs</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.keyboard.<span class="function">down</span> = <span class="keyword">function</span>(v){
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalkeydown</span><span class="delimiter">'</span></span>, v)
@@ -1331,7 +1329,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>.pointer_view = view;
                                         view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerstart</span><span class="delimiter">'</span></span>, e);
                                         <span class="comment">// TODO(aki): DEPRICATE! reverse compatibitity with mouseleftdown</span>
-                                        {
+                                        <span class="comment">// {</span>
                                                 <span class="comment">// lets give this thing focus</span>
                                                 <span class="keyword">if</span> (e.value[<span class="integer">0</span>].button === <span class="predefined-constant">undefined</span> || e.value[<span class="integer">0</span>].button === <span class="integer">1</span>) {
                                                         <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(view)){
@@ -1339,10 +1337,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftdown</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view)})
                                                         }
                                                         <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.modal){
-                                                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">blur</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
+                                                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">miss</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
                                                         }
                                                 }
-                                        }
+                                        <span class="comment">// }</span>
                                 }
                         }.bind(<span class="local-variable">this</span>))
                 }.bind(<span class="local-variable">this</span>);
@@ -1352,10 +1350,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_view){
                                 <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermove</span><span class="delimiter">'</span></span>, e)
                                 <span class="comment">//TODO(aki): DEPRICATE</span>
-                                {
+                                <span class="comment">// {</span>
                                         <span class="local-variable">this</span>.pointer_view.computeCursor()
                                         <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
-                                }
+                                <span class="comment">// }</span>
                         }
                 }.bind(<span class="local-variable">this</span>);
 
@@ -1365,7 +1363,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span> (view){
                                         view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerend</span><span class="delimiter">'</span></span>, e);
                                         <span class="comment">// TODO(aki): DEPRICATE</span>
-                                        {
+                                        <span class="comment">// {</span>
                                                 <span class="keyword">if</span> (e.value[<span class="integer">0</span>].button === <span class="predefined-constant">undefined</span> || e.value[<span class="integer">0</span>].button === <span class="integer">1</span>) {
                                                         view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftup</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view), <span class="key">isover</span>:<span class="local-variable">this</span>.pointer_view === view})
                                                         <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_view !== view){
@@ -1380,7 +1378,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
                                                         }
                                                 }
-                                        }
+                                        <span class="comment">// }</span>
                                         <span class="local-variable">this</span>.pointer_view = view
                                 }
                         }.bind(<span class="local-variable">this</span>))
@@ -1392,8 +1390,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span>(view){
                                         view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointertap</span><span class="delimiter">'</span></span>, e);
                                 }
-                        }.bind(<span class="local-variable">this</span>))
-                }.bind(<span class="local-variable">this</span>);
+                        })
+                };
 
                 <span class="comment">// Event handler for pointer `hover` event. Picks a view, sets it as `pointer_view` and emits `pointerhover` event.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">hover</span> = <span class="keyword">function</span>(e){
@@ -1402,7 +1400,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span>(view){
                                         view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerhover</span><span class="delimiter">'</span></span>, e);
                                         <span class="comment">// TODO(aki): DEPRICATE! reverse compatibitity with mouse</span>
-                                        {
+                                        <span class="comment">// {</span>
                                                 view.computeCursor()
                                                 view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view)})
                                                 <span class="comment">// lets check the debug click</span>
@@ -1422,14 +1420,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="keyword">if</span>(<span class="local-variable">this</span>.pointer_over) <span class="local-variable">this</span>.pointer_over.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseover</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_over)})
                                                 }
                                                 <span class="local-variable">this</span>.last_over_pick_guid = view.last_pick_id
-                                        }
+                                        <span class="comment">// }</span>
                                         <span class="local-variable">this</span>.pointer_view = view
                                 }
                         }.bind(<span class="local-variable">this</span>))
                 }.bind(<span class="local-variable">this</span>);
 
                 <span class="comment">// TODO(aki): DEPRICATE</span>
-                {
+                <span class="comment">// {</span>
                         <span class="local-variable">this</span>.pointer.<span class="function">wheelx</span> = <span class="keyword">function</span>(){
                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">globalmousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheelx, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.pointer_capture) <span class="local-variable">this</span>.pointer_capture.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousewheelx</span><span class="delimiter">'</span></span>, {<span class="key">wheel</span>:<span class="local-variable">this</span>.pointer.wheelx,<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>), <span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_capture)})
@@ -1448,7 +1446,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>.pointer_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mousezoom</span><span class="delimiter">'</span></span>, {<span class="key">zoom</span>:<span class="local-variable">this</span>.pointer.zoom, <span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(<span class="local-variable">this</span>.pointer_view)})
                                 }
                         }.bind(<span class="local-variable">this</span>)
-                }
+                <span class="comment">// }</span>
         }
 
         <span class="comment">// set the focus to a view node</span>
@@ -1461,7 +1459,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// focus the next view from view</span>
+        <span class="comment">// internal, focus the next view from view</span>
         <span class="local-variable">this</span>.<span class="function">focusNext</span> = <span class="keyword">function</span>(view){
                 <span class="comment">// continue the childwalk.</span>
                 <span class="keyword">var</span> screen = <span class="local-variable">this</span>, found
@@ -1485,7 +1483,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// focus the previous view from view</span>
+        <span class="comment">// internal, focus the previous view from view</span>
         <span class="local-variable">this</span>.<span class="function">focusPrev</span> = <span class="keyword">function</span>(view){
                 <span class="keyword">var</span> screen = <span class="local-variable">this</span>, last
                 <span class="keyword">function</span> <span class="function">findprev</span>(node, find){
@@ -1511,7 +1509,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// Modal handling</span>
 
-        <span class="comment">// check if a view is in the modal chain</span>
+        <span class="comment">// internal, check if a view is in the modal chain</span>
         <span class="local-variable">this</span>.<span class="function">inModalChain</span> = <span class="keyword">function</span>(view){
                 <span class="keyword">if</span>(!view) <span class="keyword">return</span> <span class="predefined-constant">false</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.modal_stack.length) <span class="keyword">return</span> <span class="predefined-constant">true</span>
@@ -1617,7 +1615,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="comment">// called when something renders</span>
+        <span class="comment">// internal, called when something renders</span>
         <span class="local-variable">this</span>.<span class="function">atRender</span> = <span class="keyword">function</span>(){
                 <span class="comment">// lets add a debugview</span>
                 <span class="comment">//this.children.push(debugview({}))</span>

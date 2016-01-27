@@ -1,4 +1,4 @@
-/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -79,11 +79,11 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 	
 	this.render =function(){
 		if (this.icon && this.icon.length > 0) return [
-			icon({icon:this.icon, alignself:"center", fgcolor:wire("this.parent.bordercolor") })
+			icon({icon:this.icon, alignself:"center", alignself:'stretch', fgcolor:wire("this.parent.bordercolor") })
 		]
 	
 		if (this.triangle) return [
-			this.triangledisp({name:"thetri", bgcolor:wire("this.bordercolor") })
+			this.triangledisp({name:"thetri", alignself:'stretch',bgcolor:wire("this.bordercolor") })
 		]
 		return []
 	}	

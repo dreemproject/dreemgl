@@ -1851,7 +1851,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// align items to either start, center, end or stretch them</span>
                 <span class="key">alignitems</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">layout</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">flex-end</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// overrides the parents alignitems with our own preference</span>
-                <span class="key">alignself</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">layout</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">flex-end</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">alignself</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">layout</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">flex-end</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// item positioning, if absolute it steps 'outside' the normal flex layout</span>
                 <span class="key">position</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">layout</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>:  Enum(<span class="string"><span class="delimiter">'</span><span class="content">relative</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>), <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span> }),
 
@@ -1879,7 +1879,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// the up vector of the camera (which way is up for the camera). Only useful on a viewport:'3D'</span>
                 <span class="key">up</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,<span class="key">type</span>: vec3, <span class="key">value</span>: vec3(<span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>)}),
 
-                <span class="comment">// the current time which can be used in shaders to create continous animations</span>
+                <span class="comment">// internal, the current time which can be used in shaders to create continous animations</span>
                 <span class="key">time</span>:Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="integer">0</span>}),
 
                 <span class="comment">// fired when the mouse doubleclicks</span>
@@ -1942,18 +1942,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="string"><span class="delimiter">'</span><span class="content">col-resize</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">row-resize</span><span class="delimiter">'</span></span>,
                         <span class="string"><span class="delimiter">'</span><span class="content">vertical-text</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">context-menu</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">no-drop</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">not-allowed</span><span class="delimiter">'</span></span>,
                         <span class="string"><span class="delimiter">'</span><span class="content">alias</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">cell</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">copy</span><span class="delimiter">'</span></span>
-                ), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>}),
+                ), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>})
         }
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.<span class="reserved">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
 
         <span class="local-variable">this</span>.onvisible = <span class="local-variable">this</span>.oncamera = <span class="local-variable">this</span>.onlookat = <span class="local-variable">this</span>.<span class="function">onup</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.redraw();
+                <span class="local-variable">this</span>.redraw()
         }
 
         <span class="comment">// the number of pick ID's to reserve for this view.</span>
-        <span class="local-variable">this</span>.pickrange = <span class="integer">1</span>;
+        <span class="local-variable">this</span>.pickrange = <span class="integer">1</span>
 
         <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">true</span>
         <span class="comment">// the local matrix</span>
@@ -1982,7 +1982,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// turn off rpc proxy generation for this prototype level</span>
         <span class="local-variable">this</span>.rpcproxy = <span class="predefined-constant">false</span>
 
-        <span class="local-variable">this</span>.<span class="function">ondropshadowradius</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">ondropshadowradius</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.dropshadowopacity &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>;
                 }<span class="keyword">else</span>{
@@ -1991,11 +1991,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// internal, listen to switch the shaders when borderradius changes</span>
-        <span class="local-variable">this</span>.<span class="function">onborderradius</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">onborderradius</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
 
-        <span class="local-variable">this</span>.<span class="function">onborderwidth</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">onborderwidth</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
 
@@ -2284,7 +2284,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(node.parent) id += node.parent.children.indexOf(node)
                         node = node.parent
                 }
-                <span class="keyword">return</span> <span class="local-variable">this</span>.viewguid = id
+                <span class="local-variable">this</span>.viewguid = id
+                <span class="keyword">return</span> id
         }
 
         <span class="comment">// internal, this gets called by the render engine</span>
@@ -2482,7 +2483,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(bailbound) <span class="keyword">return</span>
 
                 <span class="keyword">var</span> matrix_changed = parent_changed
-                <span class="keyword">if</span> (parentviewport == <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){<span class="comment">// &amp;&amp; !this._mode ){</span>
+                <span class="keyword">if</span> (parentviewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){<span class="comment">// &amp;&amp; !this._mode ){</span>
                         matrix_changed = <span class="predefined-constant">true</span>
                         mat4.TSRT2(<span class="local-variable">this</span>.anchor, <span class="local-variable">this</span>.scale, <span class="local-variable">this</span>.rotate, <span class="local-variable">this</span>.pos, <span class="local-variable">this</span>.modelmatrix);
                 }
@@ -2492,7 +2493,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(layout){
                                 <span class="comment">//console.log(this.matrix_dirty)</span>
                                 <span class="keyword">var</span> ml = <span class="local-variable">this</span>.matrix_layout
-                                <span class="keyword">if</span>(!ml || ml.left != layout.left || ml.top !== layout.top ||
+                                <span class="keyword">if</span>(!ml || ml.left !== layout.left || ml.top !== layout.top ||
                                         ml.width !== layout.width || ml.height !== layout.height){
                                         <span class="local-variable">this</span>.matrix_layout = {
                                                 <span class="key">left</span>:layout.left,
@@ -2605,6 +2606,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// scan down and skip overflow something.</span>
 
         <span class="local-variable">this</span>.<span class="function">relayout</span> = <span class="keyword">function</span>(shallow){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.layout_dirty) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.layout_dirty = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.redraw()
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.parent_viewport) <span class="local-variable">this</span>.parent_viewport.relayoutRecur()
@@ -2729,8 +2731,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="comment">// Determines the background color that should be drawn at a given position.</span>
-        <span class="comment">// Defaults to bgcolor.</span>
-        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(pos){
+        <span class="comment">// Returns a vec4 color value, defaults to bgcolor.</span>
+        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(pos <span class="comment">/*vec2*/</span>){
                 <span class="keyword">return</span> bgcolor
         }
 
@@ -3111,8 +3113,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> scale1 = ((borderradius[<span class="integer">1</span>]-borderwidth[<span class="integer">0</span>]))/Math.max(<span class="float">0.01</span>, borderradius[<span class="integer">1</span>])
                         <span class="keyword">var</span> scale2 = ((borderradius[<span class="integer">2</span>]-borderwidth[<span class="integer">0</span>]))/Math.max(<span class="float">0.01</span>, borderradius[<span class="integer">2</span>])
                         <span class="keyword">var</span> scale3 = ((borderradius[<span class="integer">3</span>]-borderwidth[<span class="integer">0</span>]))/Math.max(<span class="float">0.01</span>, borderradius[<span class="integer">3</span>])
-
-                        <span class="keyword">var</span> pidiv = <span class="integer">20</span>
 
                         <span class="keyword">var</span> divbase = <span class="float">0.45</span>
                         <span class="keyword">var</span> pidiv1 = Math.floor(Math.max(<span class="integer">2</span>, divbase* PI * borderradius[<span class="integer">0</span>]))

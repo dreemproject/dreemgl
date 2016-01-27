@@ -166,19 +166,51 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n12" name="n12">12</a>
 <a href="#n13" name="n13">13</a>
 <a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
-
-        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.flex = <span class="integer">1</span>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (background) {
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number,  <span class="key">value</span>: <span class="integer">1</span>})
+                <span class="key">format</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">24</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">zoom</span>: <span class="integer">1</span>,
+                <span class="key">maxzoom</span>: <span class="integer">365</span>
         }
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
+        <span class="comment">// TODO need a way to externally set attribute without triggering render function.</span>
+        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> () {
+                <span class="local-variable">this</span>.<span class="function">animate</span> = <span class="keyword">function</span> () {
+                        requestAnimationFrame(window._animate);
+                        <span class="local-variable">this</span>.zoom = <span class="integer">365</span> / (<span class="integer">1</span> + (<span class="float">0.5</span> * Math.sin(Date.now() / <span class="integer">5000</span>) * <span class="integer">365</span> + <span class="integer">365</span> / <span class="integer">2</span>))
+                }.bind(<span class="local-variable">this</span>);
+                <span class="keyword">if</span> (!window._animate) {
+                        window._animate = <span class="local-variable">this</span>.animate.bind(<span class="local-variable">this</span>);
+                        window._animate();
+                }
+                window._animate = <span class="local-variable">this</span>.animate.bind(<span class="local-variable">this</span>);
+        }
 
-        ]}
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        background({
+                                <span class="key">format</span>: <span class="local-variable">this</span>.format
+                        })
+                ]
+        }
 
 })
 </pre></td>

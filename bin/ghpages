@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+BIN_DIR="$(dirname $0)"
+ROOT_DIR="$BIN_DIR/.."
+
+BRANCH=$(ruby -e '(branch = %x{git branch 2> /dev/null}[/\* (.+)$/, 1]) and print "#{branch}"')
+
+ARG="$1"
+REPO="${ARG:=$BRANCH}"
+
+echo "Sync gh-pages with origin/$REPO"
+
+cd "$ROOT_DIR"
+
+git stash
+git fetch
+git co gh-pages
+git reset --hard origin/$REPO
+git push origin gh-pages -f
+git co $BRANCH
+git stash pop

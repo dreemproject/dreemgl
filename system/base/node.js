@@ -3,10 +3,8 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, constructor){
+define.class(function(require){
 	// Node class provides attributes for events and values, propertybinding and constructor semantics
-
-	var Node = constructor
 
 	var OneJSParser =  require('$system/parse/onejsparser')
 	var WiredWalker = require('$system/parse/wiredwalker')
@@ -67,7 +65,7 @@ define.class(function(require, constructor){
 
 	// internal, called by the constructor
 	this.initFromConstructorArgs = function(args){
-		var off = 0
+		// var off = 0
 		for(var i = 0; i < args.length; i++){
 			var arg = args[i]
 			if(typeof arg === 'object' && Object.getPrototypeOf(arg) === Object.prototype){
@@ -82,7 +80,7 @@ define.class(function(require, constructor){
 				continue
 			}
 			if(typeof arg === 'string' && i === 0){
-				off = 1
+				// off = 1
 				this.name = arg
 				continue
 			}
@@ -92,7 +90,7 @@ define.class(function(require, constructor){
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
 				this.constructor_children.push(arg)
-				var name = arg.name
+				// var name = arg.name
 				//if(name !== undefined && !(name in this)) this[name] = arg
 			}
 		}
@@ -124,7 +122,7 @@ define.class(function(require, constructor){
 	this.mixin = function(){
 		for(var i = 0; i < arguments.length; i++){
 			var obj = arguments[i]
-			if(typeof obj == 'function') obj = obj.prototype
+			if(typeof obj === 'function') obj = obj.prototype
 			for(var key in obj){
 				// copy over getters and setters
 				if(obj.__lookupGetter__(key) || obj.__lookupSetter__(key)){
@@ -138,37 +136,39 @@ define.class(function(require, constructor){
 		}
 	}
 
-	// internal, Finds a child node by name.
-	this.findChild = function(name, ignore, nocache){
-		if(!nocache){
-			if(!this.find_cache) this.find_cache = {}
-			var child = this.find_cache[name]
-			if(child && !child.destroyed) return child
-		}
-
-		// ok so first we go down all children
+	// internal, used by find and findChild
+	this._findChild = function(name, ignore){
 		if(this === ignore) return
 		if(this.name === name){
-			if(!nocache) this.find_cache[name] = this
 			return this
 		}
-		if(this.children) for(var i = 0; i < this.children.length; i ++){
-			var child = this.children[i]
-			if(child === ignore) continue
-			var ret = child.findChild(name, undefined, true)
-			if(ret !== undefined){
-				if(!nocache) this.find_cache[name] = ret
-				return ret
+		if(this.children) {
+			for(var i = 0; i < this.children.length; i ++){
+				var child = this.children[i]
+				if(child === ignore) continue
+				var ret = child._findChild(name, ignore)
+				if(ret !== undefined){
+					return ret
+				}
 			}
 		}
 	}
 
-	// Finds a node by name. Looks up the .name property or the name of the constructor (class name) by default.
-	this.find = function(name, ignore){
-		child = this.findChild(name)
+	// Finds a child node by name.
+	this.findChild = function(name){
+		if(!this.find_cache) this.find_cache = {}
+		var child = this.find_cache[name]
+		if(child && !child.destroyed) return child
+		child = this.find_cache[name] = this._findChild(name)
+		return child
+	}
+
+	// Finds a parent node by name.
+	this.find = function(name){
+		var child = this.findChild(name)
 		var node = this
 		while(child === undefined && node.parent){
-			child = node.parent.findChild(name, node, true)
+			child = node.parent._findChild(name, node)
 			node = node.parent
 		}
 		this.find_cache[name] = child
@@ -630,7 +630,6 @@ define.class(function(require, constructor){
 		var value_key = '_' + key
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
-		var wiredfn_key = '_wiredfn_' + key
 		var animinit_key = '_animinit_' + key
 		//var config_key = '_config_' + key
 		var get_key = '_get_' + key
@@ -874,7 +873,10 @@ define.class(function(require, constructor){
 	this.connectWires = function(initarray, depth){
 
 		var immediate = false
-		if(!initarray) initarray = [], immediate = true
+		if(!initarray) {
+			initarray = []
+			immediate = true
+		}
 
 		if(this._wiredfns){
 			for(var key in this._wiredfns){

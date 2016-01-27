@@ -11,7 +11,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	var Animate = require('$system/base/animate')
 
 	this.attributes = {
-		// the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
+		// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
 		locationhash: Config({type:Object, value:{}}),
 		// when the browser comes out of standby it fires wakup event
 		wakeup: Config({type:Event}),
@@ -29,7 +29,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		globalmouserightup: Config({type:Event}),
 		globalmousewheelx: Config({type:Event}),
 		globalmousewheely: Config({type:Event}),
-		//
 		status:""
 	}
 
@@ -87,7 +86,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	this.remapmatrix = mat4();
 	this.invertedmousecoords = vec2();
 
-	// display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.
+	// internal, display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.
 	this.contextMenu = function(commands, x,y){
 
 		if (!y) y = this.pointer._y;
@@ -142,7 +141,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				dropshadowradius: 20,
 				dropshadowoffset:vec2(9,9),
 				borderradius:7,
-				blur:function(){
+				miss:function(){
 					this.screen.closeModal(false)
 				},
 				init:function(){
@@ -150,7 +149,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				pos:[x,y],
 				size:[300,NaN],position:'absolute'
 			}, res)
-		}.bind(this)).then(function(result){
+		}).then(function(result){
 
 		})
 	};
@@ -184,7 +183,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		return vec2(this.pointer._x, this.pointer._y);
 	}
 
-	// internal: remap the mouse to a view node
+	// internal, remap the mouse to a view node
 	this.remapMouse = function(node, dbg){
 
 		var parentlist = []
@@ -388,7 +387,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		this.pointer_capture = undefined
 	}
 
-	// bind all keyboard/pointer inputs for delegating it into the view tree
+	// internal, bind all keyboard/pointer inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){
 			this.emit('globalkeydown', v)
@@ -427,7 +426,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 					this.pointer_view = view;
 					view.emitUpward('pointerstart', e);
 					// TODO(aki): DEPRICATE! reverse compatibitity with mouseleftdown
-					{
+					// {
 						// lets give this thing focus
 						if (e.value[0].button === undefined || e.value[0].button === 1) {
 							if(this.inModalChain(view)){
@@ -435,10 +434,10 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 								view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(view)})
 							}
 							else if(this.modal){
-								this.modal.emitUpward('blur', {global:this.globalMouse(this)})
+								this.modal.emitUpward('miss', {global:this.globalMouse(this)})
 							}
 						}
-					}
+					// }
 				}
 			}.bind(this))
 		}.bind(this);
@@ -448,10 +447,10 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			if (this.pointer_view){
 				this.pointer_view.emitUpward('pointermove', e)
 				//TODO(aki): DEPRICATE
-				{
+				// {
 					this.pointer_view.computeCursor()
 					this.pointer_view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(this.pointer_view)})
-				}
+				// }
 			}
 		}.bind(this);
 
@@ -461,7 +460,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				if (view){
 					view.emitUpward('pointerend', e);
 					// TODO(aki): DEPRICATE
-					{
+					// {
 						if (e.value[0].button === undefined || e.value[0].button === 1) {
 							view.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(view), isover:this.pointer_view === view})
 							if (this.pointer_view !== view){
@@ -476,7 +475,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 								this.pointer_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
 							}
 						}
-					}
+					// }
 					this.pointer_view = view
 				}
 			}.bind(this))
@@ -488,8 +487,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				if(view){
 					view.emitUpward('pointertap', e);
 				}
-			}.bind(this))
-		}.bind(this);
+			})
+		};
 
 		// Event handler for pointer `hover` event. Picks a view, sets it as `pointer_view` and emits `pointerhover` event.
 		this.pointer.hover = function(e){
@@ -498,7 +497,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				if(view){
 					view.emitUpward('pointerhover', e);
 					// TODO(aki): DEPRICATE! reverse compatibitity with mouse
-					{
+					// {
 						view.computeCursor()
 						view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
 						// lets check the debug click
@@ -518,14 +517,14 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 							if(this.pointer_over) this.pointer_over.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_over)})
 						}
 						this.last_over_pick_guid = view.last_pick_id
-					}
+					// }
 					this.pointer_view = view
 				}
 			}.bind(this))
 		}.bind(this);
 
 		// TODO(aki): DEPRICATE
-		{
+		// {
 			this.pointer.wheelx = function(){
 				this.emit('globalmousewheelx', {wheel:this.pointer.wheelx, global:this.globalMouse(this)})
 				if (this.pointer_capture) this.pointer_capture.emitUpward('mousewheelx', {wheel:this.pointer.wheelx,global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
@@ -544,7 +543,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 					this.pointer_view.emitUpward('mousezoom', {zoom:this.pointer.zoom, global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
 				}
 			}.bind(this)
-		}
+		// }
 	}
 
 	// set the focus to a view node
@@ -557,7 +556,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}
 	}
 
-	// focus the next view from view
+	// internal, focus the next view from view
 	this.focusNext = function(view){
 		// continue the childwalk.
 		var screen = this, found
@@ -581,7 +580,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}
 	}
 
-	// focus the previous view from view
+	// internal, focus the previous view from view
 	this.focusPrev = function(view){
 		var screen = this, last
 		function findprev(node, find){
@@ -607,7 +606,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 
 	// Modal handling
 
-	// check if a view is in the modal chain
+	// internal, check if a view is in the modal chain
 	this.inModalChain = function(view){
 		if(!view) return false
 		if(!this.modal_stack.length) return true
@@ -713,7 +712,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}
 	}
 
-	// called when something renders
+	// internal, called when something renders
 	this.atRender = function(){
 		// lets add a debugview
 		//this.children.push(debugview({}))

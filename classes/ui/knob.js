@@ -1,8 +1,7 @@
-/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung. 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-
 
 define.class(function(require,$ui$, view, textbox, label,button ){
 	// Simple knob: a dial with a value
@@ -21,19 +20,18 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		innerradius: Config({type:float, value: 30}),
 		offset: Config({type:float, value:8})
 	}
-	this.minwidth = 50;
-	this.minheight = 50;
+
+	this.minwidth = 50
+	this.minheight = 50
 		
 	this.atMatrix = function(){
 		//console.log(" l!", this.layout);
-		this.findChild("thedial").width = this.layout.width;
-		this.findChild("thedial").height = this.layout.width;
-		this.findChild("thedial").relayout();
-		this.findChild("thedial").redraw();
-		this.findChild("thedialbg").width = this.layout.width;
-		this.findChild("thedialbg").height = this.layout.width;
-		//	this.findChild("thedialbg").relayout();
-		//this.findChild("thedialbg").redraw();
+		this.findChild("thedial").width = this.layout.width
+		this.findChild("thedial").height = this.layout.width
+		this.findChild("thedial").relayout()
+		this.findChild("thedial").redraw()
+		this.findChild("thedialbg").width = this.layout.width
+		this.findChild("thedialbg").height = this.layout.width
 	}
 
 	define.class(this, "dial", function($ui$, view){
@@ -97,7 +95,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.tabstop = 0;
 	
 	this.bg = false//{pick_only:true};
-	this.fgcolor="#101010"
+	this.fgcolor = "#101010"
 	this.bgcolor = "red"
 
 	this.value = function(){	
@@ -122,15 +120,15 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 
 	this.checkandset = function(newval){
-		if (isNaN(newval)) newval = 0;		
+		if (isNaN(newval)) newval = 0
 		if (this.maxvalue!=undefined && newval > this.maxvalue) newval = this.maxvalue;
 		if (this.minvalue!=undefined && newval < this.minvalue) newval = this.minvalue;		
 		this.value = newval;
 		
-		var td = this.findChild("thedial");		
+		var td = this.findChild("thedial")
 		if (td) {
-			td._start = this.calcstart();
-			td.redraw();
+			td._start = this.calcstart()
+			td.redraw()
 		}
 	}
 	

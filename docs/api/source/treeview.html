@@ -407,16 +407,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n253" name="n253">253</a>
 <a href="#n254" name="n254">254</a>
 <a href="#n255" name="n255">255</a>
-<a href="#n256" name="n256">256</a>
-<a href="#n257" name="n257">257</a>
-<a href="#n258" name="n258">258</a>
-<a href="#n259" name="n259">259</a>
-<strong><a href="#n260" name="n260">260</a></strong>
-<a href="#n261" name="n261">261</a>
-<a href="#n262" name="n262">262</a>
-<a href="#n263" name="n263">263</a>
-<a href="#n264" name="n264">264</a>
-<a href="#n265" name="n265">265</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -440,19 +430,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// The fold button is a very very flat button. </span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">foldbutton</span><span class="delimiter">'</span></span>, button, <span class="keyword">function</span>(){
-
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
         <span class="comment">//        this.borderradius = 0;</span>
                 <span class="local-variable">this</span>.padding =  <span class="integer">0</span>
                 <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>
                 <span class="local-variable">this</span>.labelactivecolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303000</span><span class="delimiter">&quot;</span></span>)
-
-                <span class="local-variable">this</span>.buttoncolor1 =  <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.buttoncolor2 =<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.buttoncolor1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.buttoncolor2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.pressedcolor1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.pressedcolor2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.hovercolor1 =   <span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.hovercolor2 =   <span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.hovercolor1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.hovercolor2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.borderradius = <span class="integer">0</span>
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>
@@ -490,12 +478,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.haschildren?<span class="local-variable">this</span>.outer.foldbutton({
                                         <span class="key">icon</span>:<span class="local-variable">this</span>.folded? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>, 
                                         <span class="key">padding</span>: <span class="integer">2</span>, 
-                                        <span class="key">bg</span>:<span class="integer">0</span>,
                                         <span class="key">click</span>: <span class="local-variable">this</span>.toggleclick
                                 }):[], 
                                 <span class="comment">//flatbutton({icon:this.folded?&quot;arrow-right&quot;:&quot;arrow-down&quot;,padding: 2, click: this.toggleclick}),</span>
                                 <span class="local-variable">this</span>.outer.foldbutton({
-                                        <span class="key">bg</span>:<span class="integer">0</span>,
                                         <span class="key">text</span>: <span class="local-variable">this</span>.text, 
                                         <span class="function">click</span>:<span class="keyword">function</span>(){
                                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">select</span><span class="delimiter">'</span></span>,{<span class="key">node</span>:<span class="local-variable">this</span>})
@@ -581,36 +567,31 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ];
                                         
                                         
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.item.collapsed == <span class="predefined-constant">false</span>)
-                        {
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.item.children)
-                                {
-                                        
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.item.collapsed == <span class="predefined-constant">false</span>){
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.item.children){
                                         <span class="keyword">var</span> childrenarray = <span class="local-variable">this</span>.item.children.map(<span class="keyword">function</span>(m, i, thearray){<span class="keyword">return</span> [
-                                                                        <span class="local-variable">this</span>.outer.treeline({<span class="key">last</span>:(i == thearray.length-<span class="integer">1</span>)?<span class="integer">1</span>:<span class="integer">0</span>, <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>,<span class="key">abg</span>:{
-                                                                                        <span class="function">color</span>:<span class="keyword">function</span>(){
-                                                                                                        <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>;
-                                                                                                }
-                                                                                        }, 
-                                                                                        <span class="key">padding</span>:<span class="integer">0</span>, 
-                                                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> },
-                                                                                        view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>:<span class="integer">14</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,<span class="function">init</span>:<span class="keyword">function</span>(){
-                                                                                        <span class="comment">//        console.log(this.size)</span>
-                                                                                        } , 
-                                                                                        <span class="function">layout</span>:<span class="keyword">function</span>(){
-                                                                                                <span class="comment">//console.log(this.layout)</span>
-                                                                                        }}),
-                                                                                <span class="local-variable">this</span>.outer.treeitem({<span class="key">item</span>: m})                                                                                
-                                                                        )
-                                                                        ]}.bind(<span class="local-variable">this</span>));
-                                                                        
+                                                <span class="local-variable">this</span>.outer.treeline({<span class="key">last</span>:(i == thearray.length-<span class="integer">1</span>)?<span class="integer">1</span>:<span class="integer">0</span>, <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>,<span class="key">abg</span>:{
+                                                        <span class="function">color</span>:<span class="keyword">function</span>(){
+                                                                <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>;
+                                                        }}, 
+                                                        <span class="key">padding</span>:<span class="integer">0</span>, 
+                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> },
+                                                        view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>:<span class="integer">14</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,<span class="function">init</span>:<span class="keyword">function</span>(){
+                                                                <span class="comment">// console.log(this.size)</span>
+                                                        },
+                                                        <span class="function">layout</span>:<span class="keyword">function</span>(){
+                                                                <span class="comment">//console.log(this.layout)</span>
+                                                        }}),
+                                                <span class="local-variable">this</span>.outer.treeitem({<span class="key">item</span>: m})
+                                        )
+                                        ]}.bind(<span class="local-variable">this</span>));
                                         res.push(view({
                                                                 <span class="key">bg</span>:<span class="integer">0</span>, 
                                                                 <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> , 
                                                                 <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
                                                         },
                                                         childrenarray
-                                                        )
+                                                )
                                         );
                                 }
                         }
@@ -635,7 +616,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span> 
                 <span class="local-variable">this</span>.bg = {
                         <span class="function">color</span>: <span class="keyword">function</span>(){
-                                
                                 <span class="keyword">var</span> pos = mesh.xy * vec2(view.layout.width, view.layout.height)
                                 <span class="keyword">var</span> center = <span class="integer">16</span>
                                 <span class="keyword">var</span> left = <span class="integer">7</span>
