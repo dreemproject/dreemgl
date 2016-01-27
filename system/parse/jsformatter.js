@@ -175,6 +175,7 @@ define.class(function(require, exports){
 
 		this.indent = old_indent
 		this.bracketR(exports._Array, mygroup)
+		return has_newlines
 	}
 
 	this.Object = function(n, indent){//: { keys:3 },
@@ -685,7 +686,7 @@ define.class(function(require, exports){
 		
 		// lets check if it has a newline
 		var first_is_obj
-		if(n.args[0].type === 'Object'){
+		if(n.args[0].type === 'Object' || n.args[0].type === 'Array'){
 			first_is_obj = true
 			if(n.args.length === 1) this.indent--
 		}
@@ -698,8 +699,7 @@ define.class(function(require, exports){
 			var has_nl = this.expand(arg)
 
 			// check wether to switch to has_newlines
-			if(i === 0 && first_is_obj){
-				console.log(has_nl)
+			if(i === 0 && first_is_obj && !has_newlines){
 				has_newlines = has_nl
 			}
 

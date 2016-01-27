@@ -199,54 +199,74 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n45" name="n45">45</a>
 <a href="#n46" name="n46">46</a>
 <a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.  You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,  software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-<span class="comment">/**  * Guide helper class for Dreem source code into markdown based guide  */</span> define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, screen, <span class="predefined">$$</span>, sourceviewerscreen) {
-  <span class="local-variable">this</span>.src = <span class="string"><span class="delimiter">'</span><span class="content">var x = 100</span><span class="delimiter">'</span></span>;
-  define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (<span class="predefined">$server$</span>, fileio) {
-    <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>);
-    <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
-    <span class="local-variable">this</span>.attributes = {
-      <span class="key">sourcecode</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">// NO SOURCE CODE LOADED!</span><span class="delimiter">&quot;</span></span>, <span class="key">flow</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>}),
-      <span class="key">sourceFile</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>})
-    };
-    <span class="local-variable">this</span>.<span class="function">readSourceFile</span> = <span class="keyword">function</span> (theFile) {
-      <span class="keyword">var</span> basepath = (define.expandVariables(define.classPath(<span class="local-variable">this</span>)));
-      <span class="keyword">try</span> {
-        <span class="local-variable">this</span>.sourcecode = fs.readFileSync(basepath + theFile);
-        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">src=</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.sourcecode);
-      } <span class="keyword">catch</span> (e) {
-        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Error loading file: </span><span class="delimiter">'</span></span> + theFile);
-      }
-      <span class="keyword">return</span> src;
-    };
-  }).bind(<span class="local-variable">this</span>);
-  <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span> () {
-    <span class="keyword">if</span> (<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
-      <span class="keyword">if</span> (window.location.hash) {
-        <span class="keyword">var</span> values = window.location.hash.substring(<span class="integer">1</span>).split(<span class="string"><span class="delimiter">&quot;</span><span class="content">=</span><span class="delimiter">&quot;</span></span>);
-        <span class="keyword">if</span> (values[<span class="integer">0</span>] == <span class="string"><span class="delimiter">'</span><span class="content">file</span><span class="delimiter">'</span></span>) {
-          <span class="local-variable">this</span>.sourceFile = values[<span class="integer">1</span>];
-          console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">sourceFile=</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.sourceFile);
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
+
+        <span class="local-variable">this</span>.text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+
+        <span class="local-variable">this</span>.attributes = {
+                <span class="key">hoverid</span>: -<span class="integer">1</span>,
+                <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)
         }
-      }
-      <span class="keyword">if</span> (<span class="local-variable">this</span>.sourceFile = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) {
-        console.warn(<span class="string"><span class="delimiter">&quot;</span><span class="content">No source file specificied! Please specify source file name through hash, e.g. #file=somefile.js</span><span class="delimiter">&quot;</span></span>)
-      }
-    }
-  };
-  <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span> () {
-    console.log(<span class="local-variable">this</span>.sourceFile);
-    <span class="keyword">return</span> [<span class="local-variable">this</span>.fileio({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">fileloader</span><span class="delimiter">'</span></span>}), sourceviewerscreen({
-      <span class="key">sourcecode</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">rpc.fileloader.sourcecode</span><span class="delimiter">'</span></span>),
-      <span class="function">init</span>: <span class="keyword">function</span> () {
-        console.log(<span class="local-variable">this</span>.out);
-        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">now: window=</span><span class="delimiter">&quot;</span></span> + window + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span>);
-        <span class="local-variable">this</span>.rpc.fileloader.readSourceFile(<span class="local-variable">this</span>.sourceFile);
-      }.bind(<span class="local-variable">this</span>)
-    })];
-  }
-});<span class="error"> </span>
+
+        <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(e){
+                <span class="local-variable">this</span>.hoverid = <span class="local-variable">this</span>.last_pick_id
+        }
+
+        <span class="local-variable">this</span>.pickrange = <span class="integer">1024</span>;
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">eventrects</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="keyword">var</span> vertstruct = define.struct({
+                        <span class="key">pos</span>: vec2,
+                        <span class="key">uv</span>: vec2,
+                        <span class="key">id</span>: <span class="reserved">float</span>
+                })
+                <span class="local-variable">this</span>.mesh = vertstruct.array()
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
+                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vertstruct.array();
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt;= <span class="integer">1024</span>; i++) {
+                                <span class="keyword">var</span> w = <span class="integer">0</span>
+                                <span class="keyword">var</span> h = <span class="integer">1</span>
+                                <span class="keyword">var</span> x = floor(random() * <span class="integer">365</span> * <span class="integer">24</span>) / <span class="integer">24</span>
+                                <span class="keyword">var</span> y = <span class="integer">0</span>
+                                mesh.pushQuad(
+                                        x   ,y    , <span class="integer">0</span>, <span class="integer">0</span>, i,
+                                        x+w , y   , <span class="integer">1</span>, <span class="integer">0</span>, i,
+                                        x   , y+h , <span class="integer">0</span>, <span class="integer">1</span>, i,
+                                        x+w ,y+h  , <span class="integer">1</span>, <span class="integer">1</span>, i
+                                )
+                        }
+                }
+                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> pos = mesh.pos
+                        pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
+                        <span class="keyword">var</span> w = mesh.uv.x * min(max(<span class="integer">100</span> / view.zoom, <span class="float">1.0</span>), <span class="float">50.0</span>)
+                        pos = pos + vec2(w, <span class="float">0.0</span>)
+                        <span class="keyword">return</span> vec4(pos, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                }
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        PickGuid = mesh.id
+                        <span class="keyword">if</span> (view.hoverid == mesh.id) {
+                                <span class="keyword">return</span> vec4(<span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">0</span>, <span class="integer">1</span>)
+                        }
+                        <span class="keyword">return</span> vec4(<span class="float">0.5</span>, <span class="float">0.5</span>, <span class="float">0.5</span>, <span class="integer">1</span>)
+                }
+        })
+        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.eventrects
+
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {}
+
+})
 </pre></td>
 </tr></table>
 
