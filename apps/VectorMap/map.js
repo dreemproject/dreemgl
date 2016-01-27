@@ -17,7 +17,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 
 		
 	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"#40d020", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"#40d030", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
-	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"blue", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#f0ffff",pedestrian:"yellow", parking:"lightgray", park:"darkgreen", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
+	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"blue", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#000080",pedestrian:"yellow", parking:"lightgray", park:"darkgreen", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	//var landcolor1 ={water:"#40a0ff",park:"darkgreen", grass:"white" };
 	
 	var roadwidths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
@@ -651,7 +651,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			tilearea:vec2(10,6),
 			zoomlevel: 16,
 			bufferloaded: 0.0,
-			tiletrans: vec2(0)
+			tiletrans: vec2(0),
+			fog: vec4("lightblue")
+			
 		}
 		
 		this.lastpos = vec2(0);
@@ -743,10 +745,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
-				var r = vec4(pos.x, -mesh.pos.z, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				respos = vec4(pos.x, -mesh.pos.z, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				//r.w += 0.002;
 				
-				return r;
+				return respos;
 			}
 			
 			this.mesh =  BuildingVertexStruct.array();
@@ -772,8 +774,12 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
 							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
 			
-				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5;
-				return mix(mix(mesh.color1, mesh.color1, noise), col, 1.0-view.bufferloaded);
+				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5 
+				var prefog = mix(mix(mesh.color1, mesh.color1, noise), col, 1.0-view.bufferloaded)
+				prefog.xyz *= max(0.4, min(1.0, (mesh.pos.z*0.01)+0.4));
+				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
+				zdist *= zdist;
+				return mix(prefog, view.fog, zdist);
 				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
@@ -794,10 +800,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
-				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
-				r.w -= mesh.pos.z*0.01;
+				 respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				respos.w -= mesh.pos.z*0.01;
 				
-				return r;
+				return respos;
 			}
 			
 			this.mesh =  LandVertexStruct.array();
@@ -824,7 +830,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
 			
 				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5;
-				return mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
+				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
+				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
+				zdist *= zdist;
+				return mix(prefog, view.fog, zdist);
+				
 				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
@@ -849,9 +859,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 				var pos = vec2(1,-1)*possrc.xy + (idxpos + view.tiletrans) * view.tilesize;
-				var r = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
-				r.w += mesh.pos.z;
-				return r;
+				 respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				respos.w += mesh.pos.z;
+				return respos;
 			}
 			
 			this.vertexstruct = RoadVertexStruct;
@@ -879,15 +889,21 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var col =  pal.pal2(
 							(sin(( idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
 							(0.5 + 0.5*sin(( idxpos.y + view.trans.y)*0.2)));
-							return mix(mesh.color*vec4(1,1,1,0.8), col, 1.0-view.bufferloaded);
-				return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
+				var prefog = mix(mesh.color*vec4(1,1,1,0.8), col, 1.0-view.bufferloaded);
+				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
+				
+				
+				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
+				zdist *= zdist;
+				return mix(prefog, view.fog, zdist);
+				
 				
 			}
 		}	
 	});
 
 	
-	this.bgcolor = vec4(0.1,.1,.1,1);
+	this.bgcolor = vec4("lightblue");
 	this.flex = 1;
 	this.clearcolor = "black"
 	this.time = 0;
@@ -955,8 +971,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			}
 		}
 		
-		var dist = 2.5
-		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:2000,farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, 
+		var dist = 1.5
+		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,camera:vec3(0,-1400 * dist,1000 * dist), fov: 20, up: vec3(0,1,0)}, 
 		
 			view({bg:0, rotate:vec3(0,0.1,0)},
 				res3d
