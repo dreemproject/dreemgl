@@ -14,9 +14,9 @@ define.class(function(require, $ui$view){
 	
 	this.mouseleftdown = function(event){
 
-		this.bgcolor = vec4("gray")
-
+		this.bgcolor = vec4("gray")	
 		var t = this.find(this.target)
+		if (!t) console.log("target not found", this.target);
 		if (t){
 
 			this.clickstart = event.local

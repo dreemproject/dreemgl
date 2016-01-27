@@ -316,182 +316,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		return mesh;
 		
 	}
-
-	define.class(this, "building", function($ui$, view){
-		
-		this.attributes = {
-			buildings: [],
-			scalefactor: 1.0,
-			currentbuilding: -1,
-			currentbuildingid: -1,
-			vertexbuffer: []
-		}
-
-		this.boundscheck = false
-		
-		this.onbuildings = function(){
-			this.pickrange = this.buildings.length
-			//console.log("setting pickrange:", this.pickrange);
-		}
-		
-		this.mouseout = function(){
-			this.currentbuilding = -1;
-			this.currentbuildingid = -1;
-		}
-
-		this.mouseover =  function(){
-			var building = this.buildings[this.last_pick_id]
-			this.currentbuilding = this.last_pick_id
-			if(building){
-				this.currentbuildingid = building.id;
-				console.log(this.currentbuildingid, building.id, building);
-				
-				var text = "Building"
-				//console.log(building);
-				if(building.kind) text += " " + building.kind
-				if(building.name) text += " " + building.name
-				if(building.street) text += " " + building.street
-				if(building.housenumber) text += " " + building.housenumber
-				this.screen.status = text
-			}
-			else {
-				this.currentbuildingid = -1;
-			
-				console.log(this.last_pick_id)
-			}
-		}
-		
-		this.bg = function(){
-			
-			this.vertexstruct =  BuildingVertexStruct;
-
-			this.mesh = this.vertexstruct.array();
-			this.color = function(){
-
-				PickGuid = mesh.id;
-				if (abs(view.currentbuilding - mesh.id)<0.2) return vec4(mesh.color1.x, 0, 0, 1);
-				if (abs(view.currentbuildingid - mesh.buildingid)<0.2) return vec4(mesh.color1.x * 0.8, 0, 0, 1);
-				//return pal.pal1(mesh.pos.z/300.-0.1*view.time +mesh.id/100.) * mesh.color
-				return mesh.color1;
-			}
 	
-			this.update = function(){
-				this.mesh = this.view.vertexbuffer;
-				
-				
-			}
-			
-			this.position = function(){					
-				return vec4(mesh.pos.x, 1000-mesh.pos.y, mesh.pos.z, 1) * view.totalmatrix * view.viewmatrix
-			}
-			
-			this.drawtype = this.TRIANGLES
-			this.linewidth = 4
-		
-		}
-	})
-				
-	define.class(this, "land", function($ui$, view){
-		this.boundscheck = false
-		
-		this.attributes = {
-			lands:[],
-			currentland: -1,
-			vertexbuffer: []
-		}
-		
-		this.mouseover =  function(evt){
-			//console.log(this.last_pick_id)
-			this.currentland = this.last_pick_id ;
-			var text = "Land: " + this.lands[this.last_pick_id ].kind;
-			this.screen.status = text;				
-		}	
-		
-		this.mouseout = function(){
-			this.currentland = -1;
-		}
-		
-		this.onlands = function(){
-			this.pickrange = this.lands.length;
-		}
-		
-		this.bg = function(){
-						
-			
-			this.vertexstruct =  LandVertexStruct;
-			
-			
-			this.mesh = this.vertexstruct.array();
-			
-			this.color = function(){						
-				var xy = vec2(mesh.pos.xy)*0.2
-				//var n1 = (noise.noise2d(xy))*0.25 + 0.25;
-				//var n2 = 0.8*noise.noise2d(xy*2.3)
-				var themix = 0.5
-				PickGuid = mesh.id
-				if (abs(view.currentland - mesh.id)<0.2) return "red";
-				//mod(mesh.id, 256.)
-				//PickGuid.y = floor(mesh.id/256.)
-				return mix(mesh.color1, mesh.color2,themix);						
-			}
-	
-			this.update = function(){
-				this.mesh = this.view.vertexbuffer;
-				
-			}
-			
-			this.position = function(){					
-				var r = vec4(mesh.pos.x, 1000-mesh.pos.y, 0, 1) * view.totalmatrix * view.viewmatrix;
-				r.w -= mesh.pos.z*0.01;
-				return r
-			}
-				
-			this.drawtype = this.TRIANGLES
-			this.linewidth = 4
-		}
-	})
-	
-	define.class(this, "road", function($ui$, view){
-		this.boundscheck = false;
-		
-		this.attributes = {					
-			roads:[],
-			zoomlevel: 16,
-			zoomscale: 2.0
-		}
-		this.bg = function(){		
-			this.vertexstruct =  RoadVertexStruct;
-			
-			this.mesh = this.vertexstruct.array();
-			
-			this.color = function(){
-				if (abs(mesh.side) > 0.85) return mix("black", mesh.color, 0.8)
-				return mesh.color;
-			}
-			
-			this.widths = {water:20, path:2,ferry:4, "rail" : 4, "minor_road": 8, "major_road" : 12, path: 3, highway:12}
-			this.colors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-			this.markcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
-		
-			this.update = function(){
-				//console.log("updating");
-				this.mesh = this.vertexstruct.array();
-				var 	z = 0.1;
-
-				
-			}
-			
-			this.position = function(){					
-				var pos = mesh.pos.xy + mesh.sidevec * mesh.side * view.zoomscale*mesh.linewidth*0.5;
-				var res = vec4(pos.x, 1000-pos.y, 0, 1.0) * view.totalmatrix * view.viewmatrix;
-				res.w += mesh.pos.z;
-				return res
-			}
-			
-			this.drawtype = this.TRIANGLES
-			this.linewidth = 4;				
-		}
-	})
 		
 	define.class(this, "mapdataset", "$system/base/node", function( $$, geo)
 	{
@@ -783,6 +608,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.init = function(){
 			
 			this.cities = {
+				   manhattan: [40.7072121, -74.0067985],
 				   amsterdam: [52.3608307,   4.8626387],
 				sanfrancisco: [37.6509102,-122.4889338],
 			//	sanfrancisco: [37.8838923,-122.3398295],
@@ -799,7 +625,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//this.simulateLoaded();
 			}.bind(this), 50);
 		
-			this.gotoCity("amsterdam", 16);
+			this.gotoCity("manhattan", 16);
 			//this.setCenter(33656/2,21534/2, 16)
 			
 		}
@@ -859,6 +685,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
 				this.bufferloaded = 0;
 				this.queued  = 0;
+				this.redraw();
 				this.loadbuffer()
 				
 			}else{
@@ -875,11 +702,13 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					this.bufferloaded = 1;
 			
 					this.loadBufferFromTile(bl);
+					this.redraw();
 					
 				}
 				else{
 					if (this.queued == 0){
 						this.bgshader.update();
+						//this.redraw();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
 						this.queued  = 1;
 					}
@@ -914,8 +743,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
-				var r = vec4(pos.x, -mesh.pos.z*10, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
-				r.w += 0.2;
+				var r = vec4(pos.x, -mesh.pos.z, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				//r.w += 0.002;
 				
 				return r;
 			}
@@ -1127,7 +956,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		var dist = 2.5
-		res.push(view({flex: 1,viewport: "3d",farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, 
+		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:2000,farplane: 40000,camera:vec3(0,-1400 * dist,1000 * dist), fov: 30, up: vec3(0,1,0)}, 
 		
 			view({bg:0, rotate:vec3(0,0.1,0)},
 				res3d

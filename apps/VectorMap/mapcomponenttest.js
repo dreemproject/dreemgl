@@ -1,4 +1,4 @@
-define.class('$server/composition', function (require,  $server$, fileio,$ui$, view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote){
+define.class('$server/composition', function (require,  $server$, fileio,$ui$, view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
 	this.render = function(){
 		return [
 			urlfetch({name:"urlfetch"}),
@@ -15,7 +15,8 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, v
 								,button({text:"Seoul",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
 								,button({text:"San Francisco",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
 								,button({text:"GoldenGatePark",click:function(){this.find("themap").gotoCity("sanfrancisco_goldengatepark",15);}, margin:20})
-								
+																,ballrotate({name:"ballrotate1", width:100, height:100, target:"mapinside"})
+
 							)
 						)
 
@@ -24,6 +25,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, v
 								,map({
 										name: "themap"
 								})
+				
 							)
 						)
 					)
