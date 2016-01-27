@@ -182,7 +182,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 
 				// lets let everyone know a new screen joined, for what its worth
 				this.bus.broadcast({type:'connectScreen', name:msg.name, index:index}, socket)
-
 				// and send the OK back to the screen
 				socket.send({type:'connectScreenOK', attributes:this.server_attributes, index:index})
 			}

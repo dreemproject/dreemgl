@@ -101,7 +101,6 @@ define.class(function(require){
 	this.default_composition = null
 
 	this.getComposition = function(file){
-
 		// lets find the composition either in define.COMPOSITIONS
 		if(!this.compositions[file]) this.compositions[file] = new CompositionServer(this.args, file, this)
 		return this.compositions[file]
@@ -112,7 +111,7 @@ define.class(function(require){
 		var sock = new NodeWebSocket(req, sock, head)
 		sock.url = req.url
 		var mypath = req.url.slice(1)
-		if(mypath) this.getComposition('$' + mypath).busserver.addWebSocket(sock)
+		if(mypath) this.getComposition('$' + decodeURIComponent(mypath)).busserver.addWebSocket(sock)
 		else this.busserver.addWebSocket(sock)
 	}
 
@@ -182,7 +181,7 @@ define.class(function(require){
 		var reqquery = requrl.split('?')
 
 		// ok if we are a /single fetch
-		var file = this.mapPath(reqquery[0])
+		var file = decodeURIComponent(this.mapPath(reqquery[0]))
 
 		var urlext = define.fileExt(reqquery[0])
 		// write .dre to .dre.js files
@@ -216,8 +215,9 @@ define.class(function(require){
 		}
 
 		var fileext = define.fileExt(file)
+
 		if(!fileext || fileext === 'dre'){
-			var composition = this.getComposition('$'+reqquery[0].slice(1))
+			var composition = this.getComposition('$'+decodeURIComponent(reqquery[0].slice(1)))
 			if(composition) return composition.request(req, res)
 		}
 

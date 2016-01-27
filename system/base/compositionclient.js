@@ -69,7 +69,7 @@ define.class('./compositionbase', function(require, baseclass){
 		Render.process(this.screen, previous && previous.screen)
 		
 		if(typeof document !== 'undefined' && this.screen.title !== undefined) document.title = this.screen.title 
-			
+	
 		this.screen.device.redraw()
 
 		this.rendered = true
