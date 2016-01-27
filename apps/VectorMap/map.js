@@ -903,7 +903,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	});
 
 	
-	this.bgcolor = vec4("lightblue");
+	this.bgcolor = vec4("#101030");
 	this.flex = 1;
 	this.clearcolor = "black"
 	this.time = 0;
@@ -945,7 +945,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var land = this.landtile({tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				var land = this.landtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
 				this.tilestoupdate.push(land);
 				res3d.push(land);
 			}
@@ -955,7 +955,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var road = this.roadtile({tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				var road = this.roadtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
 				this.tilestoupdate.push(road);
 				res3d.push(road);
 			}
@@ -965,7 +965,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var building = this.buildingtile({tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				var building = this.buildingtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
 				this.tilestoupdate.push(building);
 				res3d.push(building);
 			}
