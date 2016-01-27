@@ -1,8 +1,25 @@
 define.class('$server/composition', function (require,  $server$, fileio,$ui$, view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
+	
+	this.places= [
+	{text:"Amsterdam", place: "amsterdam", zoomlevel: 16},
+	{text:"Seoul", place: "seoul", zoomlevel: 16},
+	{text:"SF", place: "sanfrancisco", zoomlevel: 16},
+	{text:"NY - Manhattan", place: "manhattan", zoomlevel: 16},
+	{text:"SF - Golden Gate Park", place: "sanfrancisco_goldengatepark", zoomlevel: 16},
+	]
 	this.render = function(){
+		
+		var Buttons = [];
+		for(var i = 0;i<this.places.length;i++){
+			var p = this.places[i];
+			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel);}, margin:4}))
+								
+		}
 		return [
 			urlfetch({name:"urlfetch"}),
 			screen({name:"index"
+				,style:{$:{fontsize:12}}
+			
 					,acceleromove: function(x,y,z){console.log("moving:" , x,y,z);}
 					,acceleropan: function(x,y,z){console.log("panning:", x,y,z);}
 				}
@@ -11,13 +28,11 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, v
 						,view({bg:0, flex:0.2, overflow:"scroll" },	
 							noisegrid({padding:20}
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bg:0})
-								,button({text:"Amsterdam",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
-								,button({text:"Seoul",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
-								,button({text:"San Francisco",click:function(){this.find("themap").gotoCity(this.text,16);}, margin:20})
-								,button({text:"GoldenGatePark",click:function(){this.find("themap").gotoCity("sanfrancisco_goldengatepark",15);}, margin:20})
-								,button({text:"New York",click:function(){this.find("themap").gotoCity("manhattan",15);}, margin:20})
-																,ballrotate({name:"ballrotate1", width:100, height:100, target:"mapinside"})
-
+								,Buttons
+								,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
+								,label({text:"Rotation control",margin: 10,fontsize:12,  bg:0})
+								,ballrotate({name:"ballrotate1", height:100, target:"mapinside"})
+								)
 							)
 						)
 
