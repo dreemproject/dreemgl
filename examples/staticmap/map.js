@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function() {
-// View that visualizes the output from google map's static map api
+// internal, View that visualizes the output from google map's static map api
 
     this.attributes = {
       //Google Maps API key
@@ -29,7 +29,6 @@ define.class('$ui/view', function() {
       mapurl:wire("this.endpoint + 'key=' + this.apikey + '&center=' + encodeURIComponent(this.location) + '&maptype=' + this.maptype + '&scale=' + this.mapscale + '&zoom=' + this.mapzoom + '&size=' + this.width + 'x' + this.height + '&format=' + this.format"),
       bgimage:wire("this.mapurl")
     };
-
 });
 
 
