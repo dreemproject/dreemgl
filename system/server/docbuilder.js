@@ -177,12 +177,12 @@ define.class(function(require){
 
 			if (class_doc.examples && class_doc.examples.length) {
 				var url = 'http://localhost:2000/apps/docs/example#path=$root/' + class_doc.sourcePath;
-				var s = "border-radius:7px;border-style:dashed;border-width:thin;"
+				var s = "border:0;";
 				var w = 900;
-				var h = 500;
-				output.push(' * ')
-				output.push(' * <iframe style="' + s + 'width:' + w + 'px;height:' + h + 'px" src="' + url + '"></iframe>')
-				output.push(' * ')
+				var h = 300 * class_doc.examples.length;
+				output.push(' * ');
+				output.push(' * <iframe style="' + s + 'width:' + w + 'px;height:' + h + 'px" src="' + url + '"></iframe>');
+				output.push(' * ');
 			}
 
 			output.push(' */');

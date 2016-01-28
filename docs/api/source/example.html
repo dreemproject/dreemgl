@@ -206,6 +206,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n52" name="n52">52</a>
 <a href="#n53" name="n53">53</a>
 <a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
 </pre></td>
   <td class="code"><pre><span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$server$</span>, fileio, dataset, <span class="predefined">$ui$</span>, screen, view, splitcontainer, treeview, label, <span class="predefined">$widgets$</span>, docviewer, jsviewer){
@@ -215,9 +220,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> [
                         screen(
                                 view({
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#eee</span><span class="delimiter">'</span></span>,
+                                        <span class="key">padding</span>:<span class="integer">10</span>,
                                         <span class="key">flex</span>:<span class="integer">1</span>,
                                         <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
-                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>,
                                         <span class="key">classconstr</span>: Config({<span class="key">type</span>:Function, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
                                         <span class="function">init</span>:<span class="keyword">function</span>() {
                                                 <span class="local-variable">this</span>.screen.<span class="function">locationhash</span> = <span class="keyword">function</span>(event){
@@ -230,6 +236,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         }
                                                 }.bind(<span class="local-variable">this</span>)
                                         },
+                                        <span class="key">wrapcode</span>:<span class="predefined-constant">true</span>,
                                         <span class="function">render</span>:<span class="keyword">function</span>() {
                                                 <span class="keyword">var</span> res = [];
 
@@ -239,19 +246,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">if</span> (class_doc &amp;&amp; class_doc.examples) {
                                                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt; class_doc.examples.length;i++){
                                                                 <span class="keyword">var</span> example = class_doc.examples[i];
-                                                                res.push(label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#666</span><span class="delimiter">'</span></span>, <span class="key">text</span>:example.name}));
+                                                                res.push(label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#333</span><span class="delimiter">'</span></span>, <span class="key">text</span>:example.name + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>}));
                                                                 res.push(
-                                                                        view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>},
-                                                                                view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">borderwidth</span>: <span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>},
-                                                                                        label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#888</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Code</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>)}),
-                                                                                        jsviewer({<span class="key">wrap</span>:<span class="predefined-constant">true</span>, <span class="key">source</span>:example.examplefunc.toString(), <span class="key">fontsize</span>: <span class="integer">12</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>, <span class="key">multiline</span>: <span class="predefined-constant">true</span>})
+                                                                        view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>},
+                                                                                view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">padding</span>:<span class="integer">7</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>},
+                                                                                        label({<span class="key">flex</span>:<span class="integer">0</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#888</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Code</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>:<span class="integer">12</span>, <span class="key">margin</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">5</span>)}),
+                                                                                        jsviewer({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">wrap</span>:<span class="local-variable">this</span>.wrapcode, <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>, <span class="key">source</span>:example.examplefunc.toString(), <span class="key">fontsize</span>:<span class="integer">12</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>, <span class="key">multiline</span>: <span class="predefined-constant">true</span>})
                                                                                 ),
-                                                                                view({<span class="key">bg</span>:<span class="integer">1</span>, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">borderwidth</span>: <span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
-                                                                                        label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#888</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Live demo</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>)}),
-                                                                                        example.examplefunc()
+                                                                                view({<span class="key">flex</span>:<span class="float">1.5</span>, <span class="key">padding</span>:<span class="integer">7</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>},
+                                                                                        label({<span class="key">flex</span>:<span class="integer">0</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#888</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Live demo</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>:<span class="integer">12</span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">5</span>)}),
+                                                                                        view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>}, example.examplefunc())
                                                                                 )
                                                                         )
                                                                 );
+                                                                <span class="keyword">if</span> (i &lt; class_doc.examples.length - <span class="integer">1</span>) {
+                                                                        res.push(view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#999</span><span class="delimiter">'</span></span>, <span class="key">height</span>:<span class="integer">1</span>, <span class="key">margin</span>:vec4(<span class="integer">0</span>, <span class="integer">10</span>, <span class="integer">0</span>, <span class="integer">10</span>)}))
+                                                                }
                                                         }
                                                 }
 
@@ -260,7 +270,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 })
                         )
                 ]}
-})
+});
 </pre></td>
 </tr></table>
 

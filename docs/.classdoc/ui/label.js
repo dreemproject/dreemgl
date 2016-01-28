@@ -3,7 +3,7 @@
  * @extends view
  * A simple UI label for displaying text
  * 
- * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/ui/label.js"></iframe>
+ * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/label.js"></iframe>
  * 
  */
 /**

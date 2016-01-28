@@ -451,6 +451,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n297" name="n297">297</a>
 <a href="#n298" name="n298">298</a>
 <a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/*Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -459,7 +461,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 <span class="comment">// Flexbox flexdirection example.</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,
-        <span class="keyword">function</span> (<span class="predefined">$ui$</span>, screen, view, label, speakergrid, <span class="predefined">$examples$guides$</span>, <span class="predefined">utility$newradiogroup</span>) {
+        <span class="keyword">function</span> (<span class="predefined">$ui$</span>, screen, view, label, speakergrid, <span class="predefined">$$</span>, newradiogroup) {
 
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">flexcontainer</span>: <span class="predefined-constant">null</span>         <span class="comment">// reference to flex container view</span>
@@ -540,7 +542,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         <span class="key">bg</span>:<span class="integer">0</span>
                                                                 }
 
-                                                                ,<span class="predefined">utility$newradiogroup</span>(
+                                                                ,newradiogroup(
                                                                         {
                                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">container width</span><span class="delimiter">&quot;</span></span>,
                                                                                 <span class="key">fontsize</span>: <span class="integer">16</span>,
@@ -555,7 +557,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         }
                                                                 )
 
-                                                                ,<span class="predefined">utility$newradiogroup</span>(
+                                                                ,newradiogroup(
                                                                         {
                                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flexdirection</span><span class="delimiter">&quot;</span></span>,
                                                                                 <span class="key">fontsize</span>: <span class="integer">16</span>,
@@ -570,7 +572,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         }
                                                                 )
 
-                                                                ,<span class="predefined">utility$newradiogroup</span>(
+                                                                ,newradiogroup(
                                                                         {
                                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">justifycontent</span><span class="delimiter">&quot;</span></span>,
                                                                                 <span class="key">fontsize</span>: <span class="integer">18</span>,
@@ -586,7 +588,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         }
                                                                 )
 
-                                                                ,<span class="predefined">utility$newradiogroup</span>(
+                                                                ,newradiogroup(
                                                                         {
                                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">alignitems</span><span class="delimiter">&quot;</span></span>,
                                                                                 <span class="key">fontsize</span>: <span class="integer">12</span>,
@@ -602,7 +604,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 )
 
 
-                                                                ,<span class="predefined">utility$newradiogroup</span>(
+                                                                ,newradiogroup(
                                                                         {
                                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flexwrap</span><span class="delimiter">&quot;</span></span>,
                                                                                 <span class="key">fontsize</span>: <span class="integer">12</span>,
@@ -628,8 +630,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                                         label(
                                                                 {
-                                                                        <span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flexcontainer settings</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">fontsize</span>: <span class="integer">29</span>,
+                                                                        <span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Child #1</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">fontsize</span>: <span class="integer">22</span>,
                                                                         <span class="key">fontstyle</span>: <span class="string"><span class="delimiter">'</span><span class="content">bold</span><span class="delimiter">'</span></span>,
                                                                         <span class="key">margin</span>:<span class="integer">5</span>,
                                                                         <span class="key">padding</span>:<span class="integer">6</span>,
@@ -646,7 +648,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         <span class="key">padding</span>:<span class="integer">6</span>,
                                                                         <span class="key">bg</span>:<span class="integer">0</span>
                                                                 }
-                                                                ,<span class="predefined">utility$newradiogroup</span>(
+                                                                ,newradiogroup(
                                                                         {
                                                                                 <span class="key">title</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flexwrap</span><span class="delimiter">&quot;</span></span>,
                                                                                 <span class="key">fontsize</span>: <span class="integer">18</span>,
@@ -706,7 +708,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                                         <span class="key">h</span>: <span class="integer">80</span>,
                                                                                         <span class="key">padding</span>: <span class="integer">20</span>,
                                                                                         <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">airforceblueraf</span><span class="delimiter">'</span></span>},
-                                                                                view({<span class="key">w</span>:<span class="integer">40</span>, <span class="key">h</span>:<span class="integer">40</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>})
+                                                                                view({<span class="key">w</span>:<span class="integer">40</span>, <span class="key">h</span>:<span class="integer">40</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>},
+                                                                                        label({<span class="key">text</span>: <span class="string"><span class="delimiter">'</span><span class="content">Hello</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>, <span class="key">fontsize</span>: <span class="string"><span class="delimiter">'</span><span class="content">16</span><span class="delimiter">'</span></span>})
+                                                                                )
                                                                         ),
                                                                         view(
                                                                                 {

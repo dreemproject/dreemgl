@@ -3,7 +3,7 @@
  * @extends view
  * Simple toggle button: a rectangle with a textlabel and an icon
  * 
- * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/ui/checkbox.js"></iframe>
+ * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/checkbox.js"></iframe>
  * 
  */
 /**

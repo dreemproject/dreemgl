@@ -237,17 +237,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n83" name="n83">83</a>
 <a href="#n84" name="n84">84</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>,  <span class="keyword">function</span>(view, label){
-        <span class="comment">// The CADGrid class provides a simple way to fill a frame with a classic engineering grid. </span>
+        <span class="comment">// The CADGrid class provides a simple way to fill a frame with a classic engineering grid.</span>
         <span class="comment">// todo:</span>
         <span class="comment">// - support zooming with incremental subdivision lines</span>
-        <span class="comment">// - link up to </span>
+        <span class="comment">// - link up to</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">majorevery</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>,<span class="key">minvalue</span>:<span class="integer">1</span>, <span class="key">value</span>:<span class="integer">5</span>}),
@@ -260,12 +260,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">alignitem</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">alignself</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">gridsize</span> = <span class="keyword">function</span>(){}
-        
+
         <span class="local-variable">this</span>.minorsize = <span class="integer">10</span>
         <span class="local-variable">this</span>.majorsize = <span class="integer">100</span>
-        
+
         <span class="local-variable">this</span>.<span class="function">calcsizes</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.minorsize = <span class="local-variable">this</span>.gridsize  *<span class="local-variable">this</span>.majorevery* Math.pow(<span class="local-variable">this</span>.majorevery , Math.ceil(Math.log(<span class="local-variable">this</span>.zoom )/Math.log(<span class="local-variable">this</span>.majorevery )))
                 <span class="local-variable">this</span>.majorsize = <span class="local-variable">this</span>.minorsize * <span class="local-variable">this</span>.majorevery
@@ -284,30 +284,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.bg = {
                 <span class="function">position</span>:<span class="keyword">function</span>(){
                         <span class="comment">// do something here with view.scrollmatrix</span>
-                        
+
                         pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-                        
+
                         majthres = <span class="float">1.0</span>/view.majorsize * view.zoom
                         minthres = <span class="float">1.0</span>/view.minorsize * view.zoom
                         uv = mesh.xy * view.zoom;
                         uv += vec2(view.scroll.x/view.layout.width,view.scroll.y/view.layout.height);
                         <span class="keyword">return</span> vec4(pos, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
-                        
+
                 },
                 <span class="function">grid</span>: <span class="keyword">function</span>(a){
                         <span class="keyword">var</span> horizmaj = mod(a.x ,view.majorsize)/view.majorsize;
                         <span class="keyword">var</span> vertmaj =  mod(a.y , view.majorsize)/view.majorsize;
-                        
+
                         <span class="keyword">var</span> horizmin = mod(a.x ,view.minorsize)/view.minorsize;
                         <span class="keyword">var</span> vertmin = mod(a.y ,view.minorsize)/view.minorsize;
-                        
+
                         <span class="keyword">var</span> major = min(horizmaj , vertmaj);
                         <span class="keyword">var</span> minor = min(horizmin , vertmin);
-                        
+
                         <span class="keyword">var</span> res = view.bgcolor;
                         res = mix(res, view.minorline,<span class="float">1.0</span>- smoothstep(<span class="integer">0</span>.,minthres/<span class="integer">2</span>., minor)*smoothstep(minthres*<span class="float">1.5</span>, minthres*<span class="integer">2</span>,minor));
                         res = mix(res, view.majorline,<span class="float">1.0</span>- smoothstep(<span class="integer">0</span>.,majthres/<span class="integer">2</span>., major)*smoothstep(majthres*<span class="float">1.5</span>, majthres*<span class="integer">2</span>,major));
-                        
+
                         <span class="keyword">return</span> res;
                 },
                 <span class="function">color</span>:<span class="keyword">function</span>(){
@@ -318,9 +318,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> cadgrid = <span class="local-variable">this</span>.constructor
         <span class="comment">// Minimal usage example:</span>
         <span class="local-variable">this</span>.constructor.examples = {
-                <span class="function">Usage</span>:<span class="keyword">function</span>(){<span class="keyword">return</span> cadgrid({<span class="key">width</span>:<span class="integer">200</span>,<span class="key">height</span>:<span class="integer">200</span>})}
+                <span class="function">Usage</span>:<span class="keyword">function</span>(){<span class="keyword">return</span> cadgrid({<span class="key">width</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.width</span><span class="delimiter">'</span></span>),<span class="key">height</span>:<span class="integer">200</span>})}
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

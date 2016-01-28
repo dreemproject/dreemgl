@@ -557,7 +557,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.default_composition = <span class="predefined-constant">null</span>
 
         <span class="local-variable">this</span>.<span class="function">getComposition</span> = <span class="keyword">function</span>(file){
-
                 <span class="comment">// lets find the composition either in define.COMPOSITIONS</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.compositions[file]) <span class="local-variable">this</span>.compositions[file] = <span class="keyword">new</span> CompositionServer(<span class="local-variable">this</span>.args, file, <span class="local-variable">this</span>)
                 <span class="keyword">return</span> <span class="local-variable">this</span>.compositions[file]
@@ -568,7 +567,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> sock = <span class="keyword">new</span> NodeWebSocket(req, sock, head)
                 sock.url = req.url
                 <span class="keyword">var</span> mypath = req.url.slice(<span class="integer">1</span>)
-                <span class="keyword">if</span>(mypath) <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + mypath).busserver.addWebSocket(sock)
+                <span class="keyword">if</span>(mypath) <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + decodeURIComponent(mypath)).busserver.addWebSocket(sock)
                 <span class="keyword">else</span> <span class="local-variable">this</span>.busserver.addWebSocket(sock)
         }
 
@@ -638,7 +637,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> reqquery = requrl.split(<span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span>)
 
                 <span class="comment">// ok if we are a /single fetch</span>
-                <span class="keyword">var</span> file = <span class="local-variable">this</span>.mapPath(reqquery[<span class="integer">0</span>])
+                <span class="keyword">var</span> file = decodeURIComponent(<span class="local-variable">this</span>.mapPath(reqquery[<span class="integer">0</span>]))
 
                 <span class="keyword">var</span> urlext = define.fileExt(reqquery[<span class="integer">0</span>])
                 <span class="comment">// write .dre to .dre.js files</span>
@@ -672,8 +671,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">var</span> fileext = define.fileExt(file)
+
                 <span class="keyword">if</span>(!fileext || fileext === <span class="string"><span class="delimiter">'</span><span class="content">dre</span><span class="delimiter">'</span></span>){
-                        <span class="keyword">var</span> composition = <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+reqquery[<span class="integer">0</span>].slice(<span class="integer">1</span>))
+                        <span class="keyword">var</span> composition = <span class="local-variable">this</span>.getComposition(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+decodeURIComponent(reqquery[<span class="integer">0</span>].slice(<span class="integer">1</span>)))
                         <span class="keyword">if</span>(composition) <span class="keyword">return</span> composition.request(req, res)
                 }
 

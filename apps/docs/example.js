@@ -6,9 +6,10 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 		return [
 			screen(
 				view({
+					bgcolor:'#eee',
+					padding:10,
 					flex:1,
 					flexdirection:'column',
-					bgcolor:'white',
 					classconstr: Config({type:Function, persist:true}),
 					init:function() {
 						this.screen.locationhash = function(event){
@@ -21,6 +22,7 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 							}
 						}.bind(this)
 					},
+					wrapcode:true,
 					render:function() {
 						var res = [];
 
@@ -30,19 +32,22 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 						if (class_doc && class_doc.examples) {
 							for (var i = 0;i< class_doc.examples.length;i++){
 								var example = class_doc.examples[i];
-								res.push(label({fgcolor:'#666', text:example.name}));
+								res.push(label({fgcolor:'#333', text:example.name + ':', bgcolor:'transparent'}));
 								res.push(
-									view({flexdirection:"row", flex:1},
-										view({bg:0, flex: 1, borderwidth: 1, flexdirection:"column", bgcolor:"#f0f0f0"},
-											label({fgcolor:"#888", bg:0, text:"Code", margin:vec4(10)}),
-											jsviewer({wrap:true, source:example.examplefunc.toString(), fontsize: 12, bgcolor:"#000030", multiline: true})
+									view({flexdirection:'row', flex:1, bgcolor:'transparent'},
+										view({flex:1, padding:7, flexdirection:"column", bgcolor:"transparent"},
+											label({flex:0, fgcolor:'#888', bgcolor:'transparent', text:"Code", fontsize:12, margin:vec4(0,0,0,5)}),
+											jsviewer({flex:1, wrap:this.wrapcode, overflow:'scroll', source:example.examplefunc.toString(), fontsize:12, bgcolor:"#000030", multiline: true})
 										),
-										view({bg:1, flex: 1, borderwidth: 1, flexdirection:"column"},
-											label({fgcolor:"#888", bg:0, text:"Live demo", margin:vec4(10)}),
-											example.examplefunc()
+										view({flex:1.5, padding:7, flexdirection:"column", bgcolor:"transparent"},
+											label({flex:0, fgcolor:'#888', bgcolor:'transparent', text:"Live demo", fontsize:12, margin:vec4(10,0,0,5)}),
+											view({flex:1, flexdirection:"column", margin:vec4(10,0,0,0), bgcolor:'transparent'}, example.examplefunc())
 										)
 									)
 								);
+								if (i < class_doc.examples.length - 1) {
+									res.push(view({bgcolor:'#999', height:1, margin:vec4(0, 10, 0, 10)}))
+								}
 							}
 						}
 
@@ -51,4 +56,4 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 				})
 			)
 		]}
-})
+});
