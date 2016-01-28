@@ -380,13 +380,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n226" name="n226">226</a>
 <a href="#n227" name="n227">227</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">./compositionbase</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, baseclass){
-        <span class="comment">// Composition base class</span>
+        <span class="comment">// internal, Composition base class</span>
 
         <span class="keyword">var</span> RpcProxy = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/rpcproxy</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> RpcHub = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/rpchub</span><span class="delimiter">'</span></span>)
@@ -414,7 +414,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.createBus()
                         <span class="comment">// create the rpc object</span>
                         <span class="local-variable">this</span>.rpc = <span class="keyword">new</span> RpcHub(<span class="local-variable">this</span>)
-                } 
+                }
                 <span class="local-variable">this</span>.bindBusEvents()
 
                 <span class="local-variable">this</span>.renderComposition()
@@ -449,9 +449,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">//this.screen.teem = this</span>
 
                 Render.process(<span class="local-variable">this</span>.screen, previous &amp;&amp; previous.screen)
-                
-                <span class="keyword">if</span>(<span class="keyword">typeof</span> document !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.screen.title !== <span class="predefined-constant">undefined</span>) document.title = <span class="local-variable">this</span>.screen.title 
-        
+
+                <span class="keyword">if</span>(<span class="keyword">typeof</span> document !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.screen.title !== <span class="predefined-constant">undefined</span>) document.title = <span class="local-variable">this</span>.screen.title
+
                 <span class="local-variable">this</span>.screen.device.redraw()
 
                 <span class="local-variable">this</span>.rendered = <span class="predefined-constant">true</span>
@@ -478,7 +478,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="local-variable">this</span>.bus.send({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">connectScreen</span><span class="delimiter">'</span></span>, <span class="key">name</span>:<span class="local-variable">this</span>.screenname})
                                         }
                                 }
-                        }  
+                        }
                         <span class="comment">/*
                         else if(msg.type == 'webrtcOffer'){
                                 if(msg.index != this.index &amp;&amp; this.webrtc_offer){ // we got a webrtcOffer
@@ -562,7 +562,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 obj.atAttributeSet = attrset
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(msg.type == <span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>){
-                                <span class="comment">// someone is calling a method on us. </span>
+                                <span class="comment">// someone is calling a method on us.</span>
                                 method = <span class="local-variable">this</span>.screen[msg.method]
                                 <span class="keyword">if</span>(!method){
                                         <span class="keyword">return</span> console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Invalid rpc method</span><span class="delimiter">&quot;</span></span> + msg.method)
@@ -606,7 +606,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 console.log.apply(console, args)
         }
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

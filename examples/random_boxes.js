@@ -7,6 +7,7 @@
 // view is clicked.
 
 define.class(function($server$, composition, $ui$, screen, view){
+	//internal
 
   // Create N random views
   this.rviews = function(n) {

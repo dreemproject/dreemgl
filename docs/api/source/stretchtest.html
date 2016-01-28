@@ -178,12 +178,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
 <a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">//Pure JS based composition</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+<span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> <span class="function">test</span>(require, <span class="predefined">$ui$</span>, label, screen, view, <span class="predefined">$widgets$</span>, jsviewer){
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                 screen({<span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>), <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>},
-                        view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>}, 
+                        view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},
                                 view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">2</span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>},
                                         view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>:<span class="integer">2</span>, <span class="key">width</span>:<span class="integer">20</span>})
                                         ,view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>:<span class="integer">2</span>,  <span class="key">width</span>:<span class="integer">20</span>})
@@ -200,11 +210,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         )
                                 ),
                                 view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>:<span class="integer">2</span>,  <span class="key">flex</span>:<span class="integer">1</span>})
-                                
+
                         )
                 )
         ]}
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -6,7 +6,7 @@
 // Flexbox flexdirection example.
 define.class("$server/composition",
 	function ($ui$, screen, view) {
-		// Create a single screen with background color 'green'
+		// internal, Create a single screen with background color 'green'
 		this.render = function () {
 			return [
 				screen(

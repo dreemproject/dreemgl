@@ -173,26 +173,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n19" name="n19">19</a>
 <strong><a href="#n20" name="n20">20</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/*Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-   
+
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$$</span>, dialog, <span class="predefined">$ui$</span>, textbox,view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton, <span class="predefined">$widgets$</span>, markdown){
 
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">0.5</span>);
-        
+
         <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
                 <span class="keyword">return</span> dialog({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">About Flowgraph</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>},
                         view({<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">20</span> },
-                                markdown({<span class="key">fontcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">10</span>,<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content"># About Flowgraph!</span><span class="char">\n</span><span class="content">This text needs to be written..</span><span class="delimiter">&quot;</span></span>}), 
-                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>   }, 
+                                markdown({<span class="key">fontcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">10</span>,<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content"># About Flowgraph!</span><span class="char">\n</span><span class="content">This text needs to be written..</span><span class="delimiter">&quot;</span></span>}),
+                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>   },
                                         button({<span class="key">padding</span>:<span class="integer">10</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Close</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>, <span class="function">click</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">true</span>);} })
                                  )
                         )
-                );                
+                );
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

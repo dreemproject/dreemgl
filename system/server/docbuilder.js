@@ -142,7 +142,7 @@ define.class(function(require){
 
     this.printJSDuck = function(class_doc, parentclass) {
         var i, j, str, firstline;
-        var internal = 'internal,';
+        var internal = 'internal';
         var output = [];
 
         if (!class_doc) {

@@ -5,7 +5,7 @@
 
 
 define.class('$ui/screen', function(require, $ui$, screen, cadgrid, view){
-// An Album will display a simple list of image urls, or objects with `.image` url properties.
+// internal, An Album will display a simple list of image urls, or objects with `.image` url properties.
 
     this.attributes = {
 

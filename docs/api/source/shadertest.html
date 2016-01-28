@@ -222,16 +222,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n68" name="n68">68</a>
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">//Pure JS based composition</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+<span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, view){
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                         screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>)},
                                 view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>, <span class="key">borderradius</span>:<span class="integer">20</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">padding</span>:<span class="integer">30</span>},
-                                        <span class="comment">/*label({text:'Live shader coding', 
+                                        <span class="comment">/*label({text:'Live shader coding',
                                                 font:{
                                                         moddist:function(pos, dist){
-                                                                //view.fgcolor = 
+                                                                //view.fgcolor =
                                                                 //         pal.pal1()
 
                                                                 return dist + 2.*demo.kali2d(pos.xy, 10, vec2(-0.65,-0.5+0.1*sin(view.time))).x
@@ -269,7 +279,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                                                 <span class="comment">// circles</span>
                                                                 <span class="comment">// we have a rectangle</span>
-                                                                
+
                                                                 <span class="keyword">var</span> t = view.time
                                                                 <span class="keyword">var</span> field = <span class="reserved">float</span>(<span class="integer">0</span>)
                                                                 <span class="keyword">var</span> p = mesh.xy * vec2(view.layout.width, view.layout.height) + vec2(-<span class="integer">300</span>,-<span class="integer">300</span>)

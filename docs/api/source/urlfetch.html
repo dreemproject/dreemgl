@@ -176,6 +176,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n22" name="n22">22</a>
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
                 <span class="local-variable">this</span>.<span class="function">grabmap</span> = <span class="keyword">function</span>(x,y,z){
@@ -186,7 +192,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         
                         <span class="keyword">if</span> (fs.existsSync(cachedname)){
                                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Serving map from cache:</span><span class="delimiter">&quot;</span></span>,x,y,z);
-                                <span class="keyword">return</span> fs.readFileSync(cachedname).toString()
+                                <span class="keyword">var</span> data = fs.readFileSync(cachedname).toString();
+                                <span class="keyword">if</span> (data.slice(<span class="integer">0</span>, <span class="integer">100</span>).indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;?xml</span><span class="delimiter">&quot;</span></span>)&lt;<span class="integer">0</span>)
+                                {
+                                        <span class="comment">//console.log(data.slice(0,1000));</span>
+                                        <span class="keyword">return</span> data;
+                                }
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cached slice has an error... loading again</span><span class="delimiter">&quot;</span></span>);
                         }
                         
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Serving map through mapzen proxy:</span><span class="delimiter">&quot;</span></span>,x,y,z);

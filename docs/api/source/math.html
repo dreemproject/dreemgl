@@ -2207,9 +2207,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2053" name="n2053">2053</a>
 <a href="#n2054" name="n2054">2054</a>
 <a href="#n2055" name="n2055">2055</a>
+<a href="#n2056" name="n2056">2056</a>
+<a href="#n2057" name="n2057">2057</a>
+<a href="#n2058" name="n2058">2058</a>
+<a href="#n2059" name="n2059">2059</a>
+<strong><a href="#n2060" name="n2060">2060</a></strong>
+<a href="#n2061" name="n2061">2061</a>
+<a href="#n2062" name="n2062">2062</a>
+<a href="#n2063" name="n2063">2063</a>
+<a href="#n2064" name="n2064">2064</a>
 </pre></td>
-  <td class="code"><pre>define(<span class="keyword">function</span>(require, exports){
-        
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define(<span class="keyword">function</span>(require, exports){
+
         <span class="comment">// provide all the apis on our math types</span>
 
         <span class="keyword">var</span> vectorParser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/vectorparser</span><span class="delimiter">'</span></span>)
@@ -2331,7 +2345,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.mul = 
+        vec2.mul =
         vec2.<span class="function">vec2_mul_vec2</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] * b[<span class="integer">0</span>]
@@ -2339,7 +2353,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.add = 
+        vec2.add =
         vec2.<span class="function">vec2_add_vec2</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] + b[<span class="integer">0</span>]
@@ -2355,7 +2369,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.div = 
+        vec2.div =
         vec2.<span class="function">vec2_div_vec2</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] / b[<span class="integer">0</span>]
@@ -2363,7 +2377,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.mul_mat2 = 
+        vec2.mul_mat2 =
         vec2.<span class="function">vec2_mul_mat2</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = m[<span class="integer">0</span>] * v[<span class="integer">0</span>] + m[<span class="integer">2</span>] * v[<span class="integer">1</span>]
@@ -2371,7 +2385,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.mul_mat3 = 
+        vec2.mul_mat3 =
         vec2.<span class="function">vec2_mul_mat3</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = m[<span class="integer">0</span>] * v[<span class="integer">0</span>] + m[<span class="integer">2</span>] * v[<span class="integer">1</span>] + m[<span class="integer">4</span>]
@@ -2379,22 +2393,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.mul_mat4 = 
+        vec2.mul_mat4 =
         vec2.<span class="function">vec2_mul_mat4</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = m[<span class="integer">0</span>] * v[<span class="integer">0</span>] + m[<span class="integer">4</span>] * v[<span class="integer">1</span>] + m[<span class="integer">12</span>]
                 o[<span class="integer">1</span>] = m[<span class="integer">1</span>] * v[<span class="integer">0</span>] + m[<span class="integer">5</span>] * v[<span class="integer">1</span>] + m[<span class="integer">13</span>]
                 <span class="keyword">return</span> o
         }
-        vec2.mul_mat4_t = 
+        vec2.mul_mat4_t =
         vec2.<span class="function">vec2_mul_mat4_t</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = m[<span class="integer">0</span>] * v[<span class="integer">0</span>] + m[<span class="integer">1</span>] * v[<span class="integer">1</span>] + m[<span class="integer">3</span>]
                 o[<span class="integer">1</span>] = m[<span class="integer">4</span>] * v[<span class="integer">0</span>] + m[<span class="integer">5</span>] * v[<span class="integer">1</span>] + m[<span class="integer">7</span>]
                 <span class="keyword">return</span> o
         }
-        
-        vec2.mul_float32 = 
+
+        vec2.mul_float32 =
         vec2.<span class="function">vec2_mul_float32</span> = <span class="keyword">function</span>(v, f, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = v[<span class="integer">0</span>] * f
@@ -2408,14 +2422,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">1</span>] = a[<span class="integer">1</span>] &lt; b[<span class="integer">1</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         vec2.<span class="function">lessThanEqual</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = exports.bvec2()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &lt;= b[<span class="integer">0</span>]
                 o[<span class="integer">1</span>] = a[<span class="integer">1</span>] &lt;= b[<span class="integer">1</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         vec2.<span class="function">greaterThan</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = exports.bvec2()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &gt; b[<span class="integer">0</span>]
@@ -2454,24 +2468,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> y = a[<span class="integer">0</span>];
                 o[<span class="integer">0</span>] = x;
                 o[<span class="integer">1</span>] = y;
-                <span class="keyword">return</span> o;        
+                <span class="keyword">return</span> o;
         }
-        
+
         vec2.<span class="function">rotate</span> = <span class="keyword">function</span>(a, ang, o){
                 <span class="keyword">if</span>(!o) o = vec2()
 
                 <span class="keyword">var</span> sa = Math.sin(ang);
                 <span class="keyword">var</span> ca = Math.cos(ang);
-        
+
                 o = vec2(ca*a[<span class="integer">0</span>] - sa * a[<span class="integer">1</span>],sa*a[<span class="integer">0</span>] + ca * a[<span class="integer">1</span>])
-                                
-                        
-                <span class="keyword">return</span> o;        
-                                                
+
+
+                <span class="keyword">return</span> o;
+
         }
-        
-        vecApi(vec3)        
-        
+
+        vecApi(vec3)
+
         vec3.<span class="function">intersectplane</span> = <span class="keyword">function</span>(origin, direction, normal, dist) {
                 <span class="keyword">var</span> denom = vec3.dot(direction, normal)
                 <span class="keyword">if</span> (denom !== <span class="integer">0</span>) {
@@ -2479,16 +2493,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">if</span> (t &lt; <span class="integer">0</span>) {
                                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">t = 0?</span><span class="delimiter">&quot;</span></span>)
                                 <span class="keyword">return</span> <span class="predefined-constant">null</span>
-                        }                        
+                        }
                         <span class="keyword">var</span> diradd = vec3.vec3_mul_float(direction, t);
                         <span class="keyword">var</span> res = vec3.add(origin, diradd);
 <span class="comment">//                        console.log(origin, direction, t,diradd, res);</span>
                         <span class="keyword">return</span> res;
-                } 
+                }
                 <span class="keyword">else</span> {
                         <span class="keyword">if</span> (vec3.dot(normal, origin) + dist === <span class="integer">0</span>) {
                                 <span class="keyword">return</span> origin
-                        } 
+                        }
                         <span class="keyword">else</span> {
                                 <span class="keyword">return</span> <span class="predefined-constant">null</span>
                         }
@@ -2502,7 +2516,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="comment">//        console.log(a,b);</span>
                 <span class="keyword">return</span> a[<span class="integer">0</span>] * b[<span class="integer">0</span>] + a[<span class="integer">1</span>] * b[<span class="integer">1</span>] + a[<span class="integer">2</span>] * b[<span class="integer">2</span>];
         }
-        
+
         vec3.<span class="function">fromString</span> = <span class="keyword">function</span>(color){
                 <span class="keyword">var</span> o = <span class="local-variable">this</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span> === vec3) o = vec3()
@@ -2520,7 +2534,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.mul = 
+        vec3.mul =
         vec3.<span class="function">vec3_mul_vec3</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec3()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] * b[<span class="integer">0</span>]
@@ -2529,7 +2543,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.mulfloat = 
+        vec3.mulfloat =
         vec3.<span class="function">vec3_mul_float</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec3()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] * b
@@ -2538,7 +2552,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.add = 
+        vec3.add =
         vec3.<span class="function">vec3_add_vec3</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec3()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] + b[<span class="integer">0</span>]
@@ -2556,7 +2570,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.div = 
+        vec3.div =
         vec3.<span class="function">vec3_div_vec3</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec3()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] / b[<span class="integer">0</span>]
@@ -2565,7 +2579,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.mul_mat3 = 
+        vec3.mul_mat3 =
         vec3.<span class="function">vec3_mul_mat3</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec3()
                 o[<span class="integer">0</span>] = v[<span class="integer">0</span>] * m[<span class="integer">0</span>] + v[<span class="integer">1</span>] * m[<span class="integer">1</span>] + v[<span class="integer">2</span>] * m[<span class="integer">2</span>]
@@ -2574,10 +2588,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.mul_mat4 = 
+        vec3.mul_mat4 =
         vec3.<span class="function">vec3_mul_mat4</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec3()
-                <span class="keyword">var</span> vx = v[<span class="integer">0</span>], vy = v[<span class="integer">1</span>], vz = v[<span class="integer">2</span>], vw = 
+                <span class="keyword">var</span> vx = v[<span class="integer">0</span>], vy = v[<span class="integer">1</span>], vz = v[<span class="integer">2</span>], vw =
                         m[<span class="integer">12</span>] * vx + m[<span class="integer">13</span>] * vy + m[<span class="integer">14</span>] * vz + m[<span class="integer">15</span>]
                 vw = vw || <span class="float">1.0</span>
                 o[<span class="integer">0</span>] = (m[<span class="integer">0</span>] * vx + m[<span class="integer">1</span>] * vy + m[<span class="integer">2</span>] * vz + m[<span class="integer">3</span>]) / vw
@@ -2586,7 +2600,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec2.mul_mat4 = 
+        vec2.mul_mat4 =
         vec2.<span class="function">vec2_mul_mat4</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec2()
                 o[<span class="integer">0</span>] = m[<span class="integer">0</span>] * v[<span class="integer">0</span>] + m[<span class="integer">1</span>] * v[<span class="integer">1</span>] + m[<span class="integer">3</span>]
@@ -2594,20 +2608,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec3.mul_mat4_minor = 
+        vec3.mul_mat4_minor =
         vec3.<span class="function">vec3_mul_mat4_minor</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec3()
                 <span class="keyword">var</span> vx = v[<span class="integer">0</span>], vy = v[<span class="integer">1</span>], vz = v[<span class="integer">2</span>]
                 o[<span class="integer">0</span>] = vx * m[<span class="integer">0</span>] + vy * m[<span class="integer">1</span>] + vz * m[<span class="integer">2</span>]
                 o[<span class="integer">1</span>] = vx * m[<span class="integer">4</span>] + vy * m[<span class="integer">5</span>] + vz * m[<span class="integer">6</span>]
-                o[<span class="integer">2</span>] = vx * m[<span class="integer">8</span>] + vy * m[<span class="integer">9</span>] + vz * m[<span class="integer">10</span>]                        
+                o[<span class="integer">2</span>] = vx * m[<span class="integer">8</span>] + vy * m[<span class="integer">9</span>] + vz * m[<span class="integer">10</span>]
                 <span class="keyword">return</span> o
         }
 
-        vec3.cross = 
+        vec3.cross =
         vec3.<span class="function">vec3_cross_vec3</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec3()
-                <span class="keyword">var</span> ax = a[<span class="integer">0</span>], ay = a[<span class="integer">1</span>], az = a[<span class="integer">2</span>] 
+                <span class="keyword">var</span> ax = a[<span class="integer">0</span>], ay = a[<span class="integer">1</span>], az = a[<span class="integer">2</span>]
                 <span class="keyword">var</span> bx = b[<span class="integer">0</span>], by = b[<span class="integer">1</span>], bz = b[<span class="integer">2</span>]
                 o[<span class="integer">0</span>] = ay * bz - az * by
                 o[<span class="integer">1</span>] = az * bx - ax * bz
@@ -2622,7 +2636,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">2</span>] = a[<span class="integer">2</span>] &lt; b[<span class="integer">2</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         vec3.<span class="function">lessThanEqual</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = exports.bvec3()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &lt;= b[<span class="integer">0</span>]
@@ -2630,7 +2644,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">2</span>] = a[<span class="integer">2</span>] &lt;= b[<span class="integer">2</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         vec3.<span class="function">greaterThan</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = exports.bvec3()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &gt; b[<span class="integer">0</span>]
@@ -2672,7 +2686,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         vec4.<span class="function">dot</span> = <span class="keyword">function</span>(a,b){
                 <span class="keyword">return</span> a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
         }
-        
+        vec4.<span class="function">desaturate</span> = <span class="keyword">function</span>(incolor, amt){
+                <span class="keyword">if</span> (!amt) amt = <span class="float">1.0</span>
+                <span class="keyword">var</span> hsv = vec4.toHSV(incolor);
+                <span class="keyword">return</span> vec4.fromHSV(hsv[<span class="integer">0</span>], hsv[<span class="integer">1</span>] * (<span class="float">1.0</span>-amt), hsv[<span class="integer">2</span>]);
+        }
         vec4.<span class="function">contrastcolor</span> = <span class="keyword">function</span>(incolor){
                 <span class="keyword">var</span> hsl = vec4.toHSV(incolor);
                 <span class="keyword">var</span> l = <span class="integer">0</span>;
@@ -2689,8 +2707,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="keyword">return</span>        vec4.fromHSV(<span class="integer">0</span>,<span class="integer">0</span>,l,<span class="integer">1</span>);
         }
-        
-        <span class="comment">// converts standard vec4 color in to HSL space (not to be confused with HSV space!) </span>
+
+        <span class="comment">// converts standard vec4 color in to HSL space (not to be confused with HSV space!)</span>
         vec4.<span class="function">toHSL</span> = <span class="keyword">function</span>(inp){
                 <span class="keyword">var</span> max = Math.max(inp[<span class="integer">0</span>], inp[<span class="integer">1</span>], inp[<span class="integer">2</span>]), min = Math.min(inp[<span class="integer">0</span>], inp[<span class="integer">1</span>], inp[<span class="integer">2</span>]);
                 <span class="keyword">var</span> h, s, l = (max + min) / <span class="integer">2</span>;
@@ -2703,16 +2721,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> d = max - min;
                         s = l &gt; <span class="float">0.5</span> ? d / (<span class="integer">2</span> - max - min) : d / (max + min);
                         <span class="keyword">if</span> (max == inp[<span class="integer">0</span>]){
-                                        h = (g - b) / d + (g &lt; b ? <span class="integer">6</span> : <span class="integer">0</span>); 
+                                        h = (g - b) / d + (g &lt; b ? <span class="integer">6</span> : <span class="integer">0</span>);
                         }
                         <span class="keyword">else</span>{
                                 <span class="keyword">if</span> (max == inp[<span class="integer">1</span>]){
-                                        
-                                h = (b - r) / d + <span class="integer">2</span>; 
+
+                                h = (b - r) / d + <span class="integer">2</span>;
                                 }
                                 <span class="keyword">else</span>{
-                                
-                                 h = (r - g) / d + <span class="integer">4</span>; 
+
+                                 h = (r - g) / d + <span class="integer">4</span>;
                                 }
                         }
                         h /= <span class="integer">6</span>;
@@ -2724,13 +2742,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="comment">// h/s/l/a = [0..1] range.</span>
         vec4.<span class="function">fromHSL</span> = <span class="keyword">function</span>(h,s,l,a,o){
                 <span class="keyword">if</span>(!o) o = vec4()
-                        
+
                 <span class="keyword">var</span> r, g, b;
 
                 <span class="keyword">if</span>(s == <span class="integer">0</span>){
                         r = g = b = l; <span class="comment">// achromatic</span>
                 }<span class="keyword">else</span>{
-                        <span class="keyword">var</span> 
+                        <span class="keyword">var</span>
                         <span class="function">hue2rgb</span> = <span class="keyword">function</span> <span class="function">hue2rgb</span>(p, q, t){
                                 <span class="keyword">if</span>(t &lt; <span class="integer">0</span>) {
                                         t += <span class="integer">1</span>;
@@ -2738,13 +2756,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">else</span> {
                                         <span class="keyword">if</span>(t &gt; <span class="integer">1</span>) t -= <span class="integer">1</span>;
                                 }
-                                
+
                                 <span class="keyword">if</span>(t &lt; <span class="integer">1</span>/<span class="integer">6</span>) <span class="keyword">return</span> p + (q - p) * <span class="integer">6</span> * t;
                                 <span class="keyword">if</span>(t &lt; <span class="integer">1</span>/<span class="integer">2</span>) <span class="keyword">return</span> q;
                                 <span class="keyword">if</span>(t &lt; <span class="integer">2</span>/<span class="integer">3</span>) <span class="keyword">return</span> p + (q - p) * (<span class="integer">2</span>/<span class="integer">3</span> - t) * <span class="integer">6</span>;
                                 <span class="keyword">return</span> p;
                         }
-                        
+
 
                         <span class="keyword">var</span> q = l &lt; <span class="float">0.5</span> ? l * (<span class="integer">1</span> + s) : l + s - l * s;
                         <span class="keyword">var</span> p = <span class="integer">2</span> * l - q;
@@ -2756,14 +2774,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">1</span>] = g;
                 o[<span class="integer">2</span>] = b;
                 o[<span class="integer">3</span>] = a !== <span class="predefined-constant">undefined</span>?a: <span class="float">1.0</span>
-                
+
                 <span class="keyword">return</span> o;
         }
-        
-        <span class="comment">// converts standard vec4 color in to HSL space (not to be confused with HSV space!) </span>
+
+        <span class="comment">// converts standard vec4 color in to HSL space (not to be confused with HSV space!)</span>
         vec4.<span class="function">toHSV</span> = <span class="keyword">function</span>(inp){
-        
-        
+
+
     <span class="keyword">var</span> r = inp[<span class="integer">0</span>];
     <span class="keyword">var</span> g = inp[<span class="integer">1</span>];
     <span class="keyword">var</span> b = inp[<span class="integer">2</span>];
@@ -2788,8 +2806,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">//    return { h: h, s: s, v: v };</span>
 
 
-        
-        
+
+
                 <span class="keyword">return</span> [h, s, v, inp[<span class="integer">3</span>]];;
         }
 
@@ -2797,12 +2815,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="comment">// h/s/l/a = [0..1] range.</span>
         vec4.<span class="function">fromHSV</span> = <span class="keyword">function</span>(h,s,v,a,o){
                 <span class="keyword">if</span>(!o) o = vec4()
-                        
+
                 h *= <span class="integer">360</span>;
                 <span class="keyword">if</span> (h &lt; <span class="integer">0</span>) h+=<span class="integer">360</span>;
 
                 <span class="keyword">var</span> r = <span class="float">0.0</span>;
-                <span class="keyword">var</span> g = <span class="float">0.0</span>;        
+                <span class="keyword">var</span> g = <span class="float">0.0</span>;
                 <span class="keyword">var</span> b = <span class="float">0.0</span>;
 
                 <span class="keyword">if</span>(s == <span class="float">0.0</span>){
@@ -2825,10 +2843,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">2</span>] = b;
                 o[<span class="integer">3</span>] = a !== <span class="predefined-constant">undefined</span>? a: <span class="float">1.0</span>
                 <span class="keyword">return</span> o;
-                
+
         }
 
-        
+
         vec4.<span class="function">equals</span> = <span class="keyword">function</span>(a,b)
         {
                 <span class="keyword">if</span> (a[<span class="integer">0</span>] != b[<span class="integer">0</span>]) <span class="keyword">return</span> <span class="predefined-constant">false</span>;
@@ -2855,7 +2873,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec4.mul = 
+        vec4.mul =
         vec4.<span class="function">vec4_mul_vec4</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec4()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] * b[<span class="integer">0</span>]
@@ -2865,7 +2883,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec4.mul_float32 = 
+        vec4.mul_float32 =
         vec4.<span class="function">vec4_mul_float32</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec4()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] * b
@@ -2880,11 +2898,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] * b
                 o[<span class="integer">1</span>] = a[<span class="integer">1</span>] * b
                 o[<span class="integer">2</span>] = a[<span class="integer">2</span>] * b
-                o[<span class="integer">3</span>] = a[<span class="integer">3</span>] 
+                o[<span class="integer">3</span>] = a[<span class="integer">3</span>]
                 <span class="keyword">return</span> o
         }
 
-        vec4.add = 
+        vec4.add =
         vec4.<span class="function">vec4_add_vec4</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec4()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] + b[<span class="integer">0</span>]
@@ -2904,7 +2922,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec4.div = 
+        vec4.div =
         vec4.<span class="function">vec4_div_vec4</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = vec4()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] / b[<span class="integer">0</span>]
@@ -2914,7 +2932,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        vec4.mul_mat4 = 
+        vec4.mul_mat4 =
         vec4.<span class="function">vec4_mul_mat4</span> = <span class="keyword">function</span>(v, m, o){
                 <span class="keyword">if</span>(!o) o = vec4()
                 <span class="keyword">var</span> vx = v[<span class="integer">0</span>], vy = v[<span class="integer">1</span>], vz = v[<span class="integer">2</span>], vw = v[<span class="integer">3</span>]
@@ -2925,8 +2943,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        
-        vec4.mul_quat = 
+
+        vec4.mul_quat =
         vec4.<span class="function">vec4_mul_quat</span> = <span class="keyword">function</span>(v, q, o){
                 <span class="keyword">if</span>(!o) o = vec4()
                 <span class="keyword">var</span> vx = v[<span class="integer">0</span>], vy = v[<span class="integer">1</span>], vz = v[<span class="integer">2</span>],
@@ -2952,7 +2970,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">3</span>] = a[<span class="integer">3</span>] &lt; b[<span class="integer">3</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         vec4.<span class="function">lessThanEqual</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = exports.bvec4()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &lt;= b[<span class="integer">0</span>]
@@ -2961,13 +2979,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">3</span>] = a[<span class="integer">3</span>] &lt;= b[<span class="integer">3</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         vec4.<span class="function">greaterThan</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = exports.bvec4()
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &gt; b[<span class="integer">0</span>]
                 o[<span class="integer">1</span>] = a[<span class="integer">1</span>] &gt; b[<span class="integer">1</span>]
                 o[<span class="integer">2</span>] = a[<span class="integer">2</span>] &gt; b[<span class="integer">2</span>]
-                o[<span class="integer">3</span>] = a[<span class="integer">3</span>] &gt; b[<span class="integer">3</span>]                
+                o[<span class="integer">3</span>] = a[<span class="integer">3</span>] &gt; b[<span class="integer">3</span>]
                 <span class="keyword">return</span> o
         }
 
@@ -2976,7 +2994,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">0</span>] = a[<span class="integer">0</span>] &gt;= b[<span class="integer">0</span>]
                 o[<span class="integer">1</span>] = a[<span class="integer">1</span>] &gt;= b[<span class="integer">1</span>]
                 o[<span class="integer">2</span>] = a[<span class="integer">2</span>] &gt;= b[<span class="integer">2</span>]
-                o[<span class="integer">3</span>] = a[<span class="integer">3</span>] &gt;= b[<span class="integer">3</span>]        
+                o[<span class="integer">3</span>] = a[<span class="integer">3</span>] &gt;= b[<span class="integer">3</span>]
                 <span class="keyword">return</span> o
         }
 
@@ -3091,7 +3109,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         sinom  = sin(omega)
                         scale0 = sin((<span class="float">1.0</span> - f) * omega) / sinom
                         scale1 = sin(f * omega) / sinom
-                } 
+                }
                 <span class="keyword">else</span> { <span class="comment">// linear interpolate if very close</span>
                         scale0 = <span class="float">1.0</span> - f
                         scale1 = f
@@ -3132,7 +3150,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         w = <span class="float">0.5</span> * r
                         r = <span class="float">0.5</span>/r  <span class="comment">// 1/(4w)</span>
                         x = (m[<span class="integer">5</span>]-m[<span class="integer">7</span>])*r, y = (m[<span class="integer">6</span>]-m[<span class="integer">2</span>])*r, z = (m[<span class="integer">1</span>]-m[<span class="integer">3</span>])*r
-                } 
+                }
                 <span class="keyword">else</span> {
                         <span class="comment">// |w| &lt;= 1/2</span>
                         <span class="keyword">var</span> i = <span class="integer">0</span>
@@ -3140,7 +3158,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">if</span> ( m[<span class="integer">8</span>] &gt; m[i*<span class="integer">3</span>+i] ) i = <span class="integer">2</span>
                         <span class="keyword">var</span> j = (i+<span class="integer">1</span>)%<span class="integer">3</span>
                         <span class="keyword">var</span> k = (i+<span class="integer">2</span>)%<span class="integer">3</span>
-                        
+
                         r = sqrt(m[i*<span class="integer">3</span>+i]-m[j*<span class="integer">3</span>+j]-m[k*<span class="integer">3</span>+k] + <span class="float">1.0</span>)
                         o[i] = <span class="float">0.5</span> * r
                         r = <span class="float">0.5</span> / r
@@ -3173,12 +3191,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         mat2.<span class="function">rotate</span> = <span class="keyword">function</span>(a, angle, o){
                 <span class="keyword">if</span>(!o) o = mat2()
-                <span class="keyword">var</span> a00 = a[<span class="integer">0</span>], a01 = a[<span class="integer">1</span>], 
+                <span class="keyword">var</span> a00 = a[<span class="integer">0</span>], a01 = a[<span class="integer">1</span>],
                     a10 = a[<span class="integer">2</span>], a11 = a[<span class="integer">3</span>],
                     s = sin(angle), c = cos(angle)
                 o[<span class="integer">0</span>] = a00 * c + a10 * s
                 o[<span class="integer">1</span>] = a01 * c + a11 * s
-                o[<span class="integer">2</span>] = a00 * -s + a10 * c 
+                o[<span class="integer">2</span>] = a00 * -s + a10 * c
                 o[<span class="integer">3</span>] = a01 * -s + a11 * c
                 <span class="keyword">return</span> o
         }
@@ -3206,12 +3224,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         mat2.<span class="function">outerProduct</span> = <span class="keyword">function</span>(c, r){
                 <span class="keyword">if</span>(!o) o = mat2()
                 o[<span class="integer">0</span>] = c[<span class="integer">0</span>] * r[<span class="integer">0</span>]
-                o[<span class="integer">1</span>] = c[<span class="integer">0</span>] * r[<span class="integer">1</span>] 
-                o[<span class="integer">2</span>] = c[<span class="integer">1</span>] * r[<span class="integer">0</span>] 
+                o[<span class="integer">1</span>] = c[<span class="integer">0</span>] * r[<span class="integer">1</span>]
+                o[<span class="integer">2</span>] = c[<span class="integer">1</span>] * r[<span class="integer">0</span>]
                 o[<span class="integer">3</span>] = c[<span class="integer">1</span>] * r[<span class="integer">1</span>]
                 <span class="keyword">return</span> o
         }
-        
+
         matApi(mat3)
 
         mat3.<span class="function">identity</span> = <span class="keyword">function</span>(o){
@@ -3281,12 +3299,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         }
 
         mat3.<span class="function">determinant</span> = <span class="keyword">function</span>(a){
-                <span class="keyword">return</span> a[<span class="integer">0</span>] * (a[<span class="integer">8</span>] * a[<span class="integer">4</span>] - a[<span class="integer">5</span>] * a[<span class="integer">7</span>]) + 
-                        a[<span class="integer">1</span>] * (-a[<span class="integer">8</span>] * a[<span class="integer">3</span>] + a[<span class="integer">5</span>] * a[<span class="integer">6</span>]) + 
+                <span class="keyword">return</span> a[<span class="integer">0</span>] * (a[<span class="integer">8</span>] * a[<span class="integer">4</span>] - a[<span class="integer">5</span>] * a[<span class="integer">7</span>]) +
+                        a[<span class="integer">1</span>] * (-a[<span class="integer">8</span>] * a[<span class="integer">3</span>] + a[<span class="integer">5</span>] * a[<span class="integer">6</span>]) +
                         a[<span class="integer">2</span>] * (a[<span class="integer">7</span>] * a[<span class="integer">3</span>] - a[<span class="integer">4</span>] * a[<span class="integer">6</span>])
         }
 
-        mat3.mul = 
+        mat3.mul =
         mat3.<span class="function">mat3_mul_mat3</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = mat3()
                 <span class="keyword">var</span> a00 = a[<span class="integer">0</span>], a01 = a[<span class="integer">1</span>], a02 = a[<span class="integer">2</span>],
@@ -3324,7 +3342,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">7</span>] = x * a01 + y * a11 + a21
                 o[<span class="integer">8</span>] = x * a02 + y * a12 + a22
                 <span class="keyword">return</span> o
-        }        
+        }
 
         mat3.<span class="function">rotate</span> = <span class="keyword">function</span>(a, angle, o){
                 <span class="keyword">if</span>(!o) o = mat3()
@@ -3357,8 +3375,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         zx = z * x2, zy = z * y2, zz = z * z2,
                         wx = w * x2, wy = w * y2, wz = w * z2
 
-                o[<span class="integer">0</span>] = <span class="integer">1</span> - yy - zz, o[<span class="integer">1</span>] = yx + wz,     o[<span class="integer">2</span>] = zx - wy,     
-                o[<span class="integer">3</span>] = yx - wz,     o[<span class="integer">4</span>] = <span class="integer">1</span> - xx - zz, o[<span class="integer">5</span>] = zy + wx,     
+                o[<span class="integer">0</span>] = <span class="integer">1</span> - yy - zz, o[<span class="integer">1</span>] = yx + wz,     o[<span class="integer">2</span>] = zx - wy,
+                o[<span class="integer">3</span>] = yx - wz,     o[<span class="integer">4</span>] = <span class="integer">1</span> - xx - zz, o[<span class="integer">5</span>] = zy + wx,
                 o[<span class="integer">6</span>] = zx + wy,     o[<span class="integer">7</span>] = zy - wx,     o[<span class="integer">8</span>] = <span class="integer">1</span> - xx - yy
                 <span class="keyword">return</span> o
         }
@@ -3378,7 +3396,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32,
                         det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-                <span class="keyword">if</span> (!det) <span class="keyword">return</span> <span class="predefined-constant">null</span> 
+                <span class="keyword">if</span> (!det) <span class="keyword">return</span> <span class="predefined-constant">null</span>
                 det = <span class="float">1.0</span> / det
 
                 o[<span class="integer">0</span>] = (a11 * b11 - a12 * b10 + a13 * b09) * det
@@ -3394,10 +3412,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">8</span>] = (a30 * b04 - a31 * b02 + a33 * b00) * det
                 <span class="keyword">return</span> o
         }
-        
+
         mat3.<span class="function">outerProduct</span> = <span class="keyword">function</span>(c, r){
                 <span class="keyword">if</span>(!o) o = mat3()
-                o[<span class="integer">0</span>] = c[<span class="integer">0</span>] * r[<span class="integer">0</span>], m01 = c[<span class="integer">0</span>] * r[<span class="integer">1</span>], m02 = c[<span class="integer">0</span>] * r[<span class="integer">2</span>] 
+                o[<span class="integer">0</span>] = c[<span class="integer">0</span>] * r[<span class="integer">0</span>], m01 = c[<span class="integer">0</span>] * r[<span class="integer">1</span>], m02 = c[<span class="integer">0</span>] * r[<span class="integer">2</span>]
                 o[<span class="integer">1</span>] = c[<span class="integer">1</span>] * r[<span class="integer">0</span>], m11 = c[<span class="integer">1</span>] * r[<span class="integer">1</span>], m12 = c[<span class="integer">1</span>] * r[<span class="integer">2</span>]
                 o[<span class="integer">2</span>] = c[<span class="integer">2</span>] * r[<span class="integer">0</span>], m21 = c[<span class="integer">2</span>] * r[<span class="integer">1</span>], m22 = c[<span class="integer">2</span>] * r[<span class="integer">2</span>]
                 <span class="keyword">return</span> o
@@ -3412,13 +3430,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                          r +=(Array(<span class="integer">6</span>).join(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>) +  Math.round(d[i+<span class="integer">1</span>]*<span class="integer">1000</span>)/<span class="integer">1000</span>).slice(-<span class="integer">6</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span>;
                          r += (Array(<span class="integer">6</span>).join(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>) + Math.round(d[i+<span class="integer">2</span>]*<span class="integer">1000</span>)/<span class="integer">1000</span>).slice(-<span class="integer">6</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span>;
                          r += (Array(<span class="integer">6</span>).join(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>) + Math.round(d[i+<span class="integer">3</span>]*<span class="integer">1000</span>)/<span class="integer">1000</span>).slice(-<span class="integer">6</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">  </span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">if</span> (!inline){ 
+                        <span class="keyword">if</span> (!inline){
                                 console.log(r); r = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
                         }
                 }
                 <span class="keyword">if</span> (inline) console.log(r);
         }
-        
+
         mat4.<span class="function">identity</span> = <span class="keyword">function</span>(o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 o[<span class="integer">0</span>] = <span class="integer">1</span>, o[<span class="integer">1</span>] = <span class="integer">0</span>, o[<span class="integer">2</span>] = <span class="integer">0</span>, o[<span class="integer">3</span>] = <span class="integer">0</span>,
@@ -3427,11 +3445,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">12</span>]= <span class="integer">0</span>, o[<span class="integer">13</span>]= <span class="integer">0</span>, o[<span class="integer">14</span>]= <span class="integer">0</span>, o[<span class="integer">15</span>]= <span class="integer">1</span>
                 <span class="keyword">return</span> o
         }
-        
+
         mat4.<span class="function">isIdentity</span> = <span class="keyword">function</span>(o){
-                <span class="keyword">return</span> o[<span class="integer">0</span>] == <span class="integer">1</span> &amp;&amp; o[<span class="integer">1</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">2</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">3</span>] == <span class="integer">0</span> &amp;&amp; 
-                o[<span class="integer">4</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">5</span>] == <span class="integer">1</span> &amp;&amp; o[<span class="integer">6</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">7</span>] == <span class="integer">0</span> &amp;&amp; 
-                o[<span class="integer">8</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">9</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">10</span>]== <span class="integer">1</span> &amp;&amp; o[<span class="integer">11</span>]== <span class="integer">0</span> &amp;&amp; 
+                <span class="keyword">return</span> o[<span class="integer">0</span>] == <span class="integer">1</span> &amp;&amp; o[<span class="integer">1</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">2</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">3</span>] == <span class="integer">0</span> &amp;&amp;
+                o[<span class="integer">4</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">5</span>] == <span class="integer">1</span> &amp;&amp; o[<span class="integer">6</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">7</span>] == <span class="integer">0</span> &amp;&amp;
+                o[<span class="integer">8</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">9</span>] == <span class="integer">0</span> &amp;&amp; o[<span class="integer">10</span>]== <span class="integer">1</span> &amp;&amp; o[<span class="integer">11</span>]== <span class="integer">0</span> &amp;&amp;
                 o[<span class="integer">12</span>]== <span class="integer">0</span> &amp;&amp; o[<span class="integer">13</span>]== <span class="integer">0</span> &amp;&amp; o[<span class="integer">14</span>]== <span class="integer">0</span> &amp;&amp; o[<span class="integer">15</span>]== <span class="integer">1</span>
         }
 
@@ -3450,7 +3468,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32,
                         det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-                <span class="keyword">if</span> (!det) <span class="keyword">return</span> <span class="predefined-constant">null</span> 
+                <span class="keyword">if</span> (!det) <span class="keyword">return</span> <span class="predefined-constant">null</span>
                 det = <span class="float">1.0</span> / det
 
                 o[<span class="integer">0</span>] = (a11 * b11 - a12 * b10 + a13 * b09) * det
@@ -3467,7 +3485,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">15</span>] = <span class="float">1.0</span>;
                 <span class="keyword">return</span> o
         }
-        
+
         mat4.<span class="function">T2</span> = <span class="keyword">function</span>(t, o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 o[<span class="integer">0</span>] = <span class="integer">1</span>, o[<span class="integer">1</span>] = <span class="integer">0</span>, o[<span class="integer">2</span>] = <span class="integer">0</span>, o[<span class="integer">3</span>] = t[<span class="integer">0</span>],
@@ -3562,7 +3580,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> o
         }
 
-        
+
         mat4.<span class="function">RT2</span> = <span class="keyword">function</span>(r, t, o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 <span class="keyword">var</span> cx = Math.cos(r[<span class="integer">0</span>]), cy = Math.cos(r[<span class="integer">1</span>]), cz = Math.cos(r[<span class="integer">2</span>])
@@ -3629,7 +3647,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
                 o[<span class="integer">0</span>] = mx*(cy * cz + sx * sy * sz),  o[<span class="integer">1</span>] = my*(-sz*cy+cz*sx*sy),  o[<span class="integer">2</span>] = mz*(sy*cx),     o[<span class="integer">3</span>] = t2x + (o[<span class="integer">0</span>]*t1x + o[<span class="integer">1</span>]*t1y + o[<span class="integer">2</span>]*t1z)
                 o[<span class="integer">4</span>] = mx*(sz * cx),                 o[<span class="integer">5</span>] = my*(cx*cz),            o[<span class="integer">6</span>] = mz*(-sx),       o[<span class="integer">7</span>] = t2y + (o[<span class="integer">4</span>]*t1x + o[<span class="integer">5</span>]*t1y + o[<span class="integer">6</span>]*t1z)
-                o[<span class="integer">8</span>] = mx*(-sy * cz + cy * sx * sz), o[<span class="integer">9</span>] = my*(sy*sz+cy*sx*cz),   o[<span class="integer">10</span>] = mz*(cx * cy),   o[<span class="integer">11</span>] = t2z + (o[<span class="integer">8</span>]*t1x + o[<span class="integer">9</span>]*t1y + o[<span class="integer">10</span>]*t1z)        
+                o[<span class="integer">8</span>] = mx*(-sy * cz + cy * sx * sz), o[<span class="integer">9</span>] = my*(sy*sz+cy*sx*cz),   o[<span class="integer">10</span>] = mz*(cx * cy),   o[<span class="integer">11</span>] = t2z + (o[<span class="integer">8</span>]*t1x + o[<span class="integer">9</span>]*t1y + o[<span class="integer">10</span>]*t1z)
                 o[<span class="integer">13</span>] = <span class="integer">0</span>,                       o[<span class="integer">13</span>] = <span class="integer">0</span>,                o[<span class="integer">14</span>] = <span class="integer">0</span>,         o[<span class="integer">15</span>] = <span class="integer">1</span>
                 <span class="keyword">return</span> o
         }
@@ -3644,7 +3662,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
                 o[<span class="integer">0</span>] = mx*(cy * cz + sx * sy * sz),  o[<span class="integer">1</span>] = my*(-sz*cy+cz*sx*sy),  o[<span class="integer">2</span>] = mz*(sy*cx),     o[<span class="integer">3</span>] = t2x + (o[<span class="integer">0</span>]*t1x + o[<span class="integer">1</span>]*t1y + o[<span class="integer">2</span>]*t1z)
                 o[<span class="integer">4</span>] = mx*(sz * cx),                 o[<span class="integer">5</span>] = my*(cx*cz),            o[<span class="integer">6</span>] = mz*(-sx),       o[<span class="integer">7</span>] = t2y + (o[<span class="integer">4</span>]*t1x + o[<span class="integer">5</span>]*t1y + o[<span class="integer">6</span>]*t1z)
-                o[<span class="integer">8</span>] = mx*(-sy * cz + cy * sx * sz), o[<span class="integer">9</span>] = my*(sy*sz+cy*sx*cz),   o[<span class="integer">10</span>] = mz*(cx * cy),   o[<span class="integer">11</span>] = t2z + (o[<span class="integer">8</span>]*t1x + o[<span class="integer">9</span>]*t1y + o[<span class="integer">10</span>]*t1z)        
+                o[<span class="integer">8</span>] = mx*(-sy * cz + cy * sx * sz), o[<span class="integer">9</span>] = my*(sy*sz+cy*sx*cz),   o[<span class="integer">10</span>] = mz*(cx * cy),   o[<span class="integer">11</span>] = t2z + (o[<span class="integer">8</span>]*t1x + o[<span class="integer">9</span>]*t1y + o[<span class="integer">10</span>]*t1z)
                 o[<span class="integer">13</span>] = <span class="integer">0</span>,                       o[<span class="integer">13</span>] = <span class="integer">0</span>,                o[<span class="integer">14</span>] = <span class="integer">0</span>,         o[<span class="integer">15</span>] = <span class="integer">1</span>
                 <span class="keyword">return</span> o
         }
@@ -3656,7 +3674,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         o[<span class="integer">1</span>] = a[<span class="integer">4</span>], o[<span class="integer">2</span>] = a[<span class="integer">8</span>], o[<span class="integer">3</span>] = a[<span class="integer">12</span>],o[<span class="integer">4</span>] = a01
                         o[<span class="integer">6</span>] = a[<span class="integer">9</span>], o[<span class="integer">7</span>] = a[<span class="integer">13</span>],o[<span class="integer">8</span>] = a02,  o[<span class="integer">9</span>] = a12
                         o[<span class="integer">11</span>]= a[<span class="integer">14</span>], o[<span class="integer">12</span>]= a03,   o[<span class="integer">13</span>] = a13,  o[<span class="integer">14</span>]= a23
-                } 
+                }
                 <span class="keyword">else</span> {
                         o[<span class="integer">0</span>] = a[<span class="integer">0</span>], o[<span class="integer">1</span>] = a[<span class="integer">4</span>], o[<span class="integer">2</span>] = a[<span class="integer">8</span>], o[<span class="integer">3</span>] = a[<span class="integer">12</span>]
                         o[<span class="integer">4</span>] = a[<span class="integer">1</span>], o[<span class="integer">5</span>] = a[<span class="integer">5</span>], o[<span class="integer">6</span>] = a[<span class="integer">9</span>], o[<span class="integer">7</span>] = a[<span class="integer">13</span>]
@@ -3683,7 +3701,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         d = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-                <span class="keyword">if</span> (!d) <span class="keyword">return</span> mat4.identity() 
+                <span class="keyword">if</span> (!d) <span class="keyword">return</span> mat4.identity()
                 d = <span class="float">1.0</span> / d
 
                 o[<span class="integer">0</span>]  = (a11 * b11 - a12 * b10 + a13 * b09) * d
@@ -3732,7 +3750,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         }
 
         <span class="comment">// multiply matrix a with vector or matrix V</span>
-        mat4.mul = 
+        mat4.mul =
         mat4.<span class="function">mat4_mul_mat4</span> = <span class="keyword">function</span>(a, b, o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 <span class="keyword">var</span> a00 = a[<span class="integer">0</span>], a01 = a[<span class="integer">1</span>], a02 = a[<span class="integer">2</span>], a03 = a[<span class="integer">3</span>],
@@ -3792,7 +3810,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         o[<span class="integer">13</span>] = a[<span class="integer">1</span>] * x + a[<span class="integer">5</span>] * y + a[<span class="integer">9</span>] * z + a[<span class="integer">13</span>]
                         o[<span class="integer">14</span>] = a[<span class="integer">2</span>] * x + a[<span class="integer">6</span>] * y + a[<span class="integer">10</span>] * z + a[<span class="integer">14</span>]
                         o[<span class="integer">15</span>] = a[<span class="integer">3</span>] * x + a[<span class="integer">7</span>] * y + a[<span class="integer">11</span>] * z + a[<span class="integer">15</span>]
-                } 
+                }
                 <span class="keyword">else</span> {
                         a00 = a[<span class="integer">0</span>], a01 = a[<span class="integer">1</span>], a02 = a[<span class="integer">2</span>], a03 = a[<span class="integer">3</span>]
                         a10 = a[<span class="integer">4</span>], a11 = a[<span class="integer">5</span>], a12 = a[<span class="integer">6</span>], a13 = a[<span class="integer">7</span>]
@@ -3821,11 +3839,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">0</span>] = v[<span class="integer">0</span>];
                 o[<span class="integer">5</span>] = v[<span class="integer">1</span>];
                 o[<span class="integer">10</span>] = v[<span class="integer">2</span>];
-                o[<span class="integer">15</span>] = <span class="integer">1</span>;                
+                o[<span class="integer">15</span>] = <span class="integer">1</span>;
                 <span class="keyword">return</span> o;
-                
+
         }
-        
+
         mat4.<span class="function">translatematrix</span> = <span class="keyword">function</span>(v, o)
         {
                 <span class="keyword">if</span>(!o) {
@@ -3837,9 +3855,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">3</span>] = v[<span class="integer">0</span>];
                 o[<span class="integer">7</span>] = v[<span class="integer">1</span>];
                 o[<span class="integer">11</span>] = v[<span class="integer">2</span>];
-                o[<span class="integer">15</span>] = <span class="integer">1</span>;                
+                o[<span class="integer">15</span>] = <span class="integer">1</span>;
                 <span class="keyword">return</span> o;
-                
+
         }
 
 
@@ -3860,8 +3878,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(!o) o = mat4()
                 <span class="keyword">var</span> x = v[<span class="integer">0</span>], y = v[<span class="integer">1</span>], z = v[<span class="integer">2</span>],
                         len = Math.sqrt(x * x + y * y + z * z),
-                        s = Math.sin(angle), 
-                        c = Math.cos(angle), 
+                        s = Math.sin(angle),
+                        c = Math.cos(angle),
                         t = <span class="integer">1</span> - c,
 
                 len = <span class="integer">1</span> / len
@@ -3992,7 +4010,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 o[<span class="integer">12</span>] = <span class="integer">0</span>,           o[<span class="integer">13</span>] = <span class="integer">0</span>,           o[<span class="integer">14</span>] = <span class="integer">0</span>,            o[<span class="integer">15</span>] = <span class="integer">1</span>
                 <span class="keyword">return</span> o
         }
-        
+
         <span class="comment">// Create matrix from left/right/bottom/top/near/far</span>
         mat4.<span class="function">fustrum</span> = <span class="keyword">function</span>(L, R, T, B, N, F, o){
                 <span class="keyword">if</span>(!o) o = mat4()
@@ -4008,32 +4026,32 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         mat4.<span class="function">perspective</span> = <span class="keyword">function</span>(FY, A, N, F, o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 <span class="keyword">var</span> f = <span class="float">1.0</span> / Math.tan(FY / <span class="integer">2</span>), nf = <span class="integer">1</span> / (N - F)
-                
+
                 o[<span class="integer">0</span>] = f / A, o[<span class="integer">4</span>] = <span class="integer">0</span>,  o[<span class="integer">8</span>] = <span class="integer">0</span>,                 o[<span class="integer">12</span>] = <span class="integer">0</span>
                 o[<span class="integer">1</span>] = <span class="integer">0</span>,     o[<span class="integer">5</span>] = f,  o[<span class="integer">9</span>] = <span class="integer">0</span>,                 o[<span class="integer">13</span>] = <span class="integer">0</span>
                 o[<span class="integer">2</span>] = <span class="integer">0</span>,     o[<span class="integer">6</span>] = <span class="integer">0</span>,  o[<span class="integer">10</span>] = (F + N) * nf,      o[<span class="integer">14</span>] = -<span class="integer">1</span>
                 o[<span class="integer">3</span>] = <span class="integer">0</span>,     o[<span class="integer">7</span>] = <span class="integer">0</span>,  o[<span class="integer">11</span>] = (<span class="integer">2</span> * F * N) * nf,  o[<span class="integer">15</span>] = <span class="integer">0</span>
                 <span class="keyword">return</span> o
         }
- 
+
         <span class="comment">// Create orthogonal proj matrix with Left/Right/Bottom/Top/Near/Far</span>
         mat4.<span class="function">ortho</span> = <span class="keyword">function</span>(L, R, T, B, N, F, o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 <span class="keyword">var</span> lr = <span class="integer">1</span> / (L - R), bt = <span class="integer">1</span> / (B - T), nf = <span class="integer">1</span> / (N - F)
-                o[<span class="integer">0</span>] = -<span class="integer">2</span> * lr,      o[<span class="integer">4</span>] = <span class="integer">0</span>,            o[<span class="integer">8</span>] = <span class="integer">0</span>,            o[<span class="integer">12</span>] = <span class="integer">0</span> 
-                o[<span class="integer">1</span>] = <span class="integer">0</span>,            o[<span class="integer">5</span>] = -<span class="integer">2</span> * bt,      o[<span class="integer">9</span>] = <span class="integer">0</span>,            o[<span class="integer">13</span>] = <span class="integer">0</span> 
+                o[<span class="integer">0</span>] = -<span class="integer">2</span> * lr,      o[<span class="integer">4</span>] = <span class="integer">0</span>,            o[<span class="integer">8</span>] = <span class="integer">0</span>,            o[<span class="integer">12</span>] = <span class="integer">0</span>
+                o[<span class="integer">1</span>] = <span class="integer">0</span>,            o[<span class="integer">5</span>] = -<span class="integer">2</span> * bt,      o[<span class="integer">9</span>] = <span class="integer">0</span>,            o[<span class="integer">13</span>] = <span class="integer">0</span>
                 o[<span class="integer">2</span>] = <span class="integer">0</span>,            o[<span class="integer">6</span>] = <span class="integer">0</span>,            o[<span class="integer">10</span>] = <span class="integer">2</span> * nf,       o[<span class="integer">14</span>] = <span class="integer">0</span>
                 o[<span class="integer">3</span>] = (L + R) * lr, o[<span class="integer">7</span>] = (T + B) * bt, o[<span class="integer">11</span>] = (F + N) * nf, o[<span class="integer">15</span>] = <span class="integer">1</span>
                 <span class="keyword">return</span> o
         }
 
-        <span class="comment">// Create look at matrix with Eye, LookAt, and Up vectors </span>
+        <span class="comment">// Create look at matrix with Eye, LookAt, and Up vectors</span>
         mat4.<span class="function">lookAt</span> = <span class="keyword">function</span>(eye, look, up, o){
                 <span class="keyword">if</span>(!o) o = mat4()
                 <span class="keyword">var</span> x0, x1, x2, y0, y1, y2, z0, z1, z2, len,
-                        ex = eye[<span class="integer">0</span>], ux = up[<span class="integer">0</span>], lx = look[<span class="integer">0</span>], 
+                        ex = eye[<span class="integer">0</span>], ux = up[<span class="integer">0</span>], lx = look[<span class="integer">0</span>],
                         ey = eye[<span class="integer">1</span>], uy = up[<span class="integer">1</span>], ly = look[<span class="integer">1</span>],
-                        ez = eye[<span class="integer">2</span>], uz = up[<span class="integer">2</span>], lz = look[<span class="integer">2</span>]                
+                        ez = eye[<span class="integer">2</span>], uz = up[<span class="integer">2</span>], lz = look[<span class="integer">2</span>]
 
                 <span class="keyword">if</span> (Math.abs(ex - lx) &lt; <span class="float">0.000001</span> &amp;&amp;
                         Math.abs(ey - ly) &lt; <span class="float">0.000001</span> &amp;&amp;
@@ -4057,11 +4075,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span> (!len)  y0 = <span class="integer">0</span>, y1 = <span class="integer">0</span>, y2 = <span class="integer">0</span>
                 <span class="keyword">else</span> len = <span class="integer">1</span> / len, y0 *= len, y1 *= len, y2 *= len
 
-                
+
                 o[<span class="integer">0</span>] = x0, o[<span class="integer">4</span>] = y0,  o[<span class="integer">8</span>] = z0,  o[<span class="integer">12</span>] = <span class="integer">0</span>
                 o[<span class="integer">1</span>] = x1, o[<span class="integer">5</span>] = y1,  o[<span class="integer">9</span>] = z1,  o[<span class="integer">13</span>] = <span class="integer">0</span>
                 o[<span class="integer">2</span>] = x2, o[<span class="integer">6</span>] = y2, o[<span class="integer">10</span>] = z2,  o[<span class="integer">14</span>] = <span class="integer">0</span>
-                
+
                 o[<span class="integer">3</span>] =  -(x0 * ex + x1 * ey + x2 * ez)
                 o[<span class="integer">7</span>] =  -(y0 * ex + y1 * ey + y2 * ez)
                 o[<span class="integer">11</span>] = -(z0 * ex + z1 * ey + z2 * ez)
@@ -4071,10 +4089,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         mat4.<span class="function">outerProduct</span> = <span class="keyword">function</span>(c, r, o){
                 <span class="keyword">if</span>(!o) o = mat4()
-                o[<span class="integer">0</span>] = c[<span class="integer">0</span>] * r[<span class="integer">0</span>], o[<span class="integer">1</span>] = c[<span class="integer">0</span>] * r[<span class="integer">1</span>], o[<span class="integer">2</span>] = c[<span class="integer">0</span>] * r[<span class="integer">2</span>], o[<span class="integer">3</span>] = c[<span class="integer">0</span>] * r[<span class="integer">3</span>] 
+                o[<span class="integer">0</span>] = c[<span class="integer">0</span>] * r[<span class="integer">0</span>], o[<span class="integer">1</span>] = c[<span class="integer">0</span>] * r[<span class="integer">1</span>], o[<span class="integer">2</span>] = c[<span class="integer">0</span>] * r[<span class="integer">2</span>], o[<span class="integer">3</span>] = c[<span class="integer">0</span>] * r[<span class="integer">3</span>]
                 o[<span class="integer">4</span>] = c[<span class="integer">1</span>] * r[<span class="integer">0</span>], o[<span class="integer">5</span>] = c[<span class="integer">1</span>] * r[<span class="integer">1</span>], o[<span class="integer">6</span>] = c[<span class="integer">1</span>] * r[<span class="integer">2</span>], o[<span class="integer">7</span>] = c[<span class="integer">1</span>] * r[<span class="integer">3</span>]
                 o[<span class="integer">8</span>] = c[<span class="integer">2</span>] * r[<span class="integer">0</span>], o[<span class="integer">9</span>] = c[<span class="integer">2</span>] * r[<span class="integer">1</span>], o[<span class="integer">10</span>] = c[<span class="integer">2</span>] * r[<span class="integer">2</span>], o[<span class="integer">11</span>] = c[<span class="integer">2</span>] * r[<span class="integer">3</span>]
-                o[<span class="integer">12</span>] = c[<span class="integer">3</span>] * r[<span class="integer">0</span>], o[<span class="integer">13</span>] = c[<span class="integer">3</span>] * r[<span class="integer">1</span>], o[<span class="integer">14</span>] = c[<span class="integer">3</span>] * r[<span class="integer">2</span>], o[<span class="integer">15</span>] = c[<span class="integer">3</span>] * r[<span class="integer">3</span>] 
+                o[<span class="integer">12</span>] = c[<span class="integer">3</span>] * r[<span class="integer">0</span>], o[<span class="integer">13</span>] = c[<span class="integer">3</span>] * r[<span class="integer">1</span>], o[<span class="integer">14</span>] = c[<span class="integer">3</span>] * r[<span class="integer">2</span>], o[<span class="integer">15</span>] = c[<span class="integer">3</span>] * r[<span class="integer">3</span>]
                 <span class="keyword">return</span> o
         }
 
@@ -4092,7 +4110,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         ease.inoutquart = function(t){ return (t</span><span class="delimiter">/</span></span>=<span class="float">0.5</span>) &lt; <span class="integer">1</span>. ? <span class="float">0.5</span>*t*t*t*t : -<span class="float">0.5</span> * ((t-=<span class="integer">2</span>.)*t*t*t - <span class="integer">2</span>.) }
         ease.<span class="function">inquint</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> t*t*t*t*t }
         ease.<span class="function">outquint</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> ((t=t-<span class="integer">1</span>.)*t*t*t*t + <span class="integer">1</span>.) }
-        ease.<span class="function">inoutquint</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> (t/=<span class="float">0.5</span>) &lt; <span class="integer">1</span>. ? <span class="float">0.5</span>*t*t*t*t*t : <span class="float">0.5</span>*((t-=<span class="integer">2</span>.)*t*t*t*t + <span class="integer">2</span>.) }        
+        ease.<span class="function">inoutquint</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> (t/=<span class="float">0.5</span>) &lt; <span class="integer">1</span>. ? <span class="float">0.5</span>*t*t*t*t*t : <span class="float">0.5</span>*((t-=<span class="integer">2</span>.)*t*t*t*t + <span class="integer">2</span>.) }
         ease.<span class="function">insine</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> -cos(t * (PI/<span class="integer">2</span>.)) + <span class="integer">1</span>. }
         ease.<span class="function">outsine</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> sin(t * (PI/<span class="integer">2</span>.)) }
         ease.<span class="function">inoutsine</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> -<span class="float">0.5</span> * (cos(PI*t) - <span class="integer">1</span>.) }
@@ -4104,8 +4122,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         ease.<span class="function">inoutexpo</span> = <span class="keyword">function</span>(t){
                 <span class="keyword">if</span> (t==<span class="integer">0</span>.) <span class="keyword">return</span> <span class="integer">0</span>.
                 <span class="keyword">if</span> (t==<span class="integer">1</span>.) <span class="keyword">return</span> <span class="integer">1</span>.
-                <span class="keyword">if</span> ((t/=<span class="float">0.5</span>) &lt; <span class="integer">1</span>.) <span class="keyword">return</span> <span class="float">0.5</span> * pow(<span class="integer">2</span>., <span class="integer">10</span>. * (t - <span class="integer">1</span>.)) 
-                <span class="keyword">return</span> <span class="float">0.5</span> * (-pow(<span class="integer">2</span>., -<span class="integer">10</span>. * --t) + <span class="integer">2</span>.) 
+                <span class="keyword">if</span> ((t/=<span class="float">0.5</span>) &lt; <span class="integer">1</span>.) <span class="keyword">return</span> <span class="float">0.5</span> * pow(<span class="integer">2</span>., <span class="integer">10</span>. * (t - <span class="integer">1</span>.))
+                <span class="keyword">return</span> <span class="float">0.5</span> * (-pow(<span class="integer">2</span>., -<span class="integer">10</span>. * --t) + <span class="integer">2</span>.)
         }
 
         ease.<span class="function">inelastic</span> = <span class="keyword">function</span>(t){
@@ -4115,7 +4133,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span> (!p) p=<span class="float">0.3</span>
                 <span class="keyword">if</span> (a &lt; <span class="integer">1</span>.) { a=<span class="integer">1</span>.; <span class="keyword">var</span> s=p/<span class="integer">4</span>. }
                 <span class="keyword">else</span> <span class="keyword">var</span> s = p/(<span class="integer">2</span>.*PI) * asin(<span class="integer">1</span>.<span class="regexp"><span class="delimiter">/</span><span class="content">a)
-                return -(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)</span><span class="delimiter">/</span></span>p )) 
+                return -(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)</span><span class="delimiter">/</span></span>p ))
         }
 
         ease.<span class="function">outelastic</span> = <span class="keyword">function</span>(t){
@@ -4125,7 +4143,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span> (!p) p=<span class="integer">1</span>.*<span class="float">0.3</span>
                 <span class="keyword">if</span> (a &lt; <span class="integer">1</span>.) { a=<span class="integer">1</span>.; <span class="keyword">var</span> s=p/<span class="integer">4</span>.; }
                 <span class="keyword">else</span> <span class="keyword">var</span> s = p/(<span class="integer">2</span>.*PI) * asin (<span class="integer">1</span>.<span class="regexp"><span class="delimiter">/</span><span class="content">a)
-                return a*pow(2.,-10.*t) * sin( (t*1.-s)*(2.*PI)</span><span class="delimiter">/</span></span>p ) + <span class="integer">1</span>. 
+                return a*pow(2.,-10.*t) * sin( (t*1.-s)*(2.*PI)</span><span class="delimiter">/</span></span>p ) + <span class="integer">1</span>.
         }
 
         ease.<span class="function">inoutelastic</span> = <span class="keyword">function</span>(t){
@@ -4135,7 +4153,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span> (!p) p=(<span class="float">0.3</span>*<span class="float">1.5</span>)
                 <span class="keyword">if</span> (a &lt; <span class="integer">1</span>.) { a=<span class="integer">1</span>.; <span class="keyword">var</span> s=p/<span class="integer">4</span>.; }
                 <span class="keyword">else</span> <span class="keyword">var</span> s = p/(<span class="integer">2</span>.*PI) * asin (<span class="integer">1</span>.<span class="regexp"><span class="delimiter">/</span><span class="content">a)
-                if (t &lt; 1.) return -.5*(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)</span><span class="delimiter">/</span></span>p )) 
+                if (t &lt; 1.) return -.5*(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)</span><span class="delimiter">/</span></span>p ))
                 <span class="keyword">return</span> a*pow(<span class="integer">2</span>.,-<span class="integer">10</span>.*(t-=<span class="integer">1</span>.)) * sin( (t*<span class="integer">1</span>.-s)*(<span class="integer">2</span>.*PI)/p )*<span class="float">0.5</span> + <span class="integer">1</span>.
         }
 
@@ -4143,24 +4161,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         ease.<span class="function">outback</span> = <span class="keyword">function</span>(t){ <span class="keyword">var</span> s = <span class="float">1.70158</span>; <span class="keyword">return</span> ((t=t/<span class="integer">1</span>-<span class="integer">1</span>)*t*((s+<span class="integer">1</span>)*t + s) + <span class="integer">1</span>) }
         ease.<span class="function">inoutback</span> = <span class="keyword">function</span>(t){
                 <span class="keyword">var</span> s = <span class="float">1.70158</span>
-                <span class="keyword">if</span> ((t/=<span class="float">0.5</span>) &lt; <span class="integer">1</span>.) <span class="keyword">return</span> <span class="float">0.5</span>*(t*t*(((s*=(<span class="float">1.525</span>))+<span class="integer">1</span>.)*t - s)) 
-                <span class="keyword">return</span> <span class="float">0.5</span>*((t-=<span class="integer">2</span>.)*t*(((s*=(<span class="float">1.525</span>))+<span class="integer">1</span>.)*t + s) + <span class="integer">2</span>.) 
+                <span class="keyword">if</span> ((t/=<span class="float">0.5</span>) &lt; <span class="integer">1</span>.) <span class="keyword">return</span> <span class="float">0.5</span>*(t*t*(((s*=(<span class="float">1.525</span>))+<span class="integer">1</span>.)*t - s))
+                <span class="keyword">return</span> <span class="float">0.5</span>*((t-=<span class="integer">2</span>.)*t*(((s*=(<span class="float">1.525</span>))+<span class="integer">1</span>.)*t + s) + <span class="integer">2</span>.)
         }
 
         ease.<span class="function">inbounce</span> = <span class="keyword">function</span>(t){
-                <span class="keyword">return</span> <span class="integer">1</span>. - ease.outbounce(<span class="integer">1</span>.-t) 
+                <span class="keyword">return</span> <span class="integer">1</span>. - ease.outbounce(<span class="integer">1</span>.-t)
         }
 
         ease.<span class="function">outbounce</span> = <span class="keyword">function</span>(t){
-                <span class="keyword">if</span> (t &lt; (<span class="integer">1</span>.<span class="regexp"><span class="delimiter">/</span><span class="content">2.75)) return (7.5625*t*t) 
-                else if (t &lt; (2.</span><span class="delimiter">/</span></span><span class="float">2.75</span>)) <span class="keyword">return</span> (<span class="float">7.5625</span>*(t-=(<span class="float">1.5</span>/<span class="float">2.75</span>))*t + <span class="float">0.75</span>) 
-                <span class="keyword">else</span> <span class="keyword">if</span> (t &lt; (<span class="float">2.5</span>/<span class="float">2.75</span>)) <span class="keyword">return</span> (<span class="float">7.5625</span>*(t-=(<span class="float">2.25</span>/<span class="float">2.75</span>))*t + <span class="float">0.9375</span>) 
-                <span class="keyword">return</span> (<span class="float">7.5625</span>*(t-=(<span class="float">2.625</span>/<span class="float">2.75</span>))*t + <span class="float">.984375</span>) 
+                <span class="keyword">if</span> (t &lt; (<span class="integer">1</span>.<span class="regexp"><span class="delimiter">/</span><span class="content">2.75)) return (7.5625*t*t)
+                else if (t &lt; (2.</span><span class="delimiter">/</span></span><span class="float">2.75</span>)) <span class="keyword">return</span> (<span class="float">7.5625</span>*(t-=(<span class="float">1.5</span>/<span class="float">2.75</span>))*t + <span class="float">0.75</span>)
+                <span class="keyword">else</span> <span class="keyword">if</span> (t &lt; (<span class="float">2.5</span>/<span class="float">2.75</span>)) <span class="keyword">return</span> (<span class="float">7.5625</span>*(t-=(<span class="float">2.25</span>/<span class="float">2.75</span>))*t + <span class="float">0.9375</span>)
+                <span class="keyword">return</span> (<span class="float">7.5625</span>*(t-=(<span class="float">2.625</span>/<span class="float">2.75</span>))*t + <span class="float">.984375</span>)
         }
 
         ease.<span class="function">inoutbounce</span> = <span class="keyword">function</span>(t){
-                <span class="keyword">if</span> (t &lt; <span class="float">0.5</span>) <span class="keyword">return</span> ease.inbounce (t*<span class="integer">2</span>.) * <span class="float">0.5</span> 
-                <span class="keyword">return</span> ease.outbounce (t*<span class="integer">2</span>.-<span class="integer">1</span>.) * <span class="float">0.5</span> + <span class="float">0.5</span> 
+                <span class="keyword">if</span> (t &lt; <span class="float">0.5</span>) <span class="keyword">return</span> ease.inbounce (t*<span class="integer">2</span>.) * <span class="float">0.5</span>
+                <span class="keyword">return</span> ease.outbounce (t*<span class="integer">2</span>.-<span class="integer">1</span>.) * <span class="float">0.5</span> + <span class="float">0.5</span>
         }
 
         ease.<span class="function">quad</span> = <span class="keyword">function</span>(t){ <span class="keyword">return</span> ease.outquad(t)}
@@ -4205,12 +4223,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 x2 = bezierCurveX(t2) - x
                                 <span class="keyword">if</span>(Math.abs(x2) &lt; b.epsilon) <span class="keyword">return</span> t2
                                 d2 = bezierCurveDX(t2)
-                                <span class="keyword">if</span>(Math.abs(d2) &lt; <span class="float">1e-6</span>) <span class="keyword">break</span> 
+                                <span class="keyword">if</span>(Math.abs(d2) &lt; <span class="float">1e-6</span>) <span class="keyword">break</span>
                                 t2 = t2 - x2 / d2
                         }
                         <span class="comment">// Fall back to the bisection method for reliability.</span>
                         t0 = <span class="float">0.0</span>
-                        t1 = <span class="float">1.0</span> 
+                        t1 = <span class="float">1.0</span>
                         t2 = x
                         <span class="keyword">if</span>(t2 &lt; t0) <span class="keyword">return</span> t0
                         <span class="keyword">if</span>(t2 &gt; t1) <span class="keyword">return</span> t1
@@ -4245,13 +4263,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
                 }
 
-                <span class="keyword">var</span> Xi = <span class="integer">0</span> <span class="comment">// we go from 0 </span>
+                <span class="keyword">var</span> Xi = <span class="integer">0</span> <span class="comment">// we go from 0</span>
                 <span class="keyword">var</span> Xf = <span class="integer">1</span> <span class="comment">// to 1 , as we are an motion function</span>
                 <span class="keyword">var</span> Xo = Xi - di <span class="comment">// as per email</span>
                 <span class="keyword">var</span> Xn = Xf + df <span class="comment">// here too</span>
                 <span class="comment">// compute the constant</span>
                 <span class="keyword">var</span> K = ((Xo - Xf) * (Xi - Xn)) / ((Xo - Xi) * (Xf - Xn))
-                
+
                 <span class="keyword">return</span> <span class="keyword">function</span>(t){
                         <span class="comment">// seems to be 1.20001</span>
                         <span class="keyword">var</span> Kt = Math.pow(K, t)
@@ -4262,7 +4280,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="reserved">float</span>.ease = ease
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

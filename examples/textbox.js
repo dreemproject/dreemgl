@@ -5,6 +5,8 @@
 
 //Pure JS based composition
 define.class('$server/composition',function($ui$, screen, view, textbox, button, label){
+	// internal
+
 
 	// what if we do this
 	this.style = {

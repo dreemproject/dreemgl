@@ -165,13 +165,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n11" name="n11">11</a>
 <a href="#n12" name="n12">12</a>
 <a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
 
         <span class="local-variable">this</span>.<span class="function">wave</span> = <span class="keyword">function</span>(pos, x, y){
                 <span class="keyword">return</span> sin(pos.x*x*<span class="integer">8</span>) + sin(pos.y*y*<span class="integer">8</span>)
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">stripe</span> = <span class="keyword">function</span>(pos, amount, spacing){
                 <span class="keyword">var</span> stripex = (floor(mod((pos.x )* spacing  + <span class="float">0.05</span>,<span class="float">1.0</span>) *amount ) / amount) &lt; <span class="float">0.1</span>?<span class="float">1.0</span>:<span class="float">0.0</span>;
                 <span class="keyword">var</span> stripey = (floor(mod((pos.y  )*spacing + <span class="float">0.05</span>, <span class="float">1.0</span>)*amount ) / amount) &lt; <span class="float">0.1</span>?<span class="float">1.0</span>:<span class="float">0.0</span>;
