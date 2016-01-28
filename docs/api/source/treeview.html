@@ -407,9 +407,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n253" name="n253">253</a>
 <a href="#n254" name="n254">254</a>
 <a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
@@ -422,13 +430,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// the current selected value</span>
                 <span class="key">select</span>: Config({<span class="key">type</span>:Event})
         }
-        
+
         <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#3b3b3b</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.boundscheck = <span class="predefined-constant">true</span>
         <span class="local-variable">this</span>.viewport = <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.overflow =<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
 
-        <span class="comment">// The fold button is a very very flat button. </span>
+        <span class="comment">// The fold button is a very very flat button.</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">foldbutton</span><span class="delimiter">'</span></span>, button, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
         <span class="comment">//        this.borderradius = 0;</span>
@@ -446,7 +454,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>
-                <span class="comment">//this.alignself = &quot;flex-start&quot;         </span>
+                <span class="comment">//this.alignself = &quot;flex-start&quot;</span>
         })
 
         <span class="comment">// newitemheading combines a few foldbuttons in to a full &quot;item&quot; in the tree</span>
@@ -472,17 +480,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.margin = <span class="integer">2</span>
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>
                 <span class="comment">//this.alignself = &quot;flex-start&quot;</span>
-                
+
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="keyword">return</span> [
                                 <span class="local-variable">this</span>.haschildren?<span class="local-variable">this</span>.outer.foldbutton({
-                                        <span class="key">icon</span>:<span class="local-variable">this</span>.folded? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>, 
-                                        <span class="key">padding</span>: <span class="integer">2</span>, 
+                                        <span class="key">icon</span>:<span class="local-variable">this</span>.folded? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">padding</span>: <span class="integer">2</span>,
                                         <span class="key">click</span>: <span class="local-variable">this</span>.toggleclick
-                                }):[], 
+                                }):[],
                                 <span class="comment">//flatbutton({icon:this.folded?&quot;arrow-right&quot;:&quot;arrow-down&quot;,padding: 2, click: this.toggleclick}),</span>
                                 <span class="local-variable">this</span>.outer.foldbutton({
-                                        <span class="key">text</span>: <span class="local-variable">this</span>.text, 
+                                        <span class="key">text</span>: <span class="local-variable">this</span>.text,
                                         <span class="function">click</span>:<span class="keyword">function</span>(){
                                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">select</span><span class="delimiter">'</span></span>,{<span class="key">node</span>:<span class="local-variable">this</span>})
                                         }.bind(<span class="local-variable">this</span>)
@@ -490,7 +498,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ];
                 }
         });
-        
+
         <span class="comment">// the treeitem subclass contains 3 controls: a newitemheading, a set of treelines and an optional set of children treeitems in case the current node is expanded</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">treeitem</span><span class="delimiter">'</span></span>, view, <span class="keyword">function</span>(){
 
@@ -518,7 +526,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//this.reLayout();</span>
                         <span class="comment">//this.setDirty(true)</span>
                 }
-                
+
                 <span class="comment">// build path for the current treeitem and call the outer selectclick handler</span>
                 <span class="local-variable">this</span>.<span class="function">processSelect</span> = <span class="keyword">function</span>(value){
 
@@ -538,43 +546,43 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="local-variable">this</span>.outer.emit(<span class="string"><span class="delimiter">'</span><span class="content">select</span><span class="delimiter">'</span></span>, {<span class="key">item</span>:<span class="local-variable">this</span>.item, <span class="key">path</span>:path})
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.item){
                                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.item.collapsed) <span class="local-variable">this</span>.item.collapsed = <span class="predefined-constant">false</span>
                         }
                         <span class="comment">//        this.text = this.item.name;</span>
                 }
-                
+
                 <span class="local-variable">this</span>.count = <span class="integer">0</span>;
-                
+
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
                 <span class="comment">//this.width = 1;</span>
-        
+
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="comment">//debugger;</span>
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.item) <span class="keyword">return</span> [label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>})];
                         <span class="comment">//this.collapsed;</span>
                         <span class="keyword">var</span> res = [
                                 <span class="local-variable">this</span>.outer.newitemheading({
-                                                <span class="key">haschildren</span>: <span class="local-variable">this</span>.item.children &amp;&amp; <span class="local-variable">this</span>.item.children.length, 
-                                                <span class="key">folded</span>: <span class="local-variable">this</span>.item.collapsed, 
-                                                <span class="key">toggleclick</span>: <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>), 
+                                                <span class="key">haschildren</span>: <span class="local-variable">this</span>.item.children &amp;&amp; <span class="local-variable">this</span>.item.children.length,
+                                                <span class="key">folded</span>: <span class="local-variable">this</span>.item.collapsed,
+                                                <span class="key">toggleclick</span>: <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>),
                                                 <span class="key">select</span>: <span class="local-variable">this</span>.processSelect.bind(<span class="local-variable">this</span>),
                                                 <span class="key">text</span>:<span class="local-variable">this</span>.item.name,
                                                 <span class="key">id</span>:<span class="local-variable">this</span>.item.id
                                         })
                         ];
-                                        
-                                        
+
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.item.collapsed == <span class="predefined-constant">false</span>){
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.item.children){
                                         <span class="keyword">var</span> childrenarray = <span class="local-variable">this</span>.item.children.map(<span class="keyword">function</span>(m, i, thearray){<span class="keyword">return</span> [
                                                 <span class="local-variable">this</span>.outer.treeline({<span class="key">last</span>:(i == thearray.length-<span class="integer">1</span>)?<span class="integer">1</span>:<span class="integer">0</span>, <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>,<span class="key">abg</span>:{
                                                         <span class="function">color</span>:<span class="keyword">function</span>(){
                                                                 <span class="keyword">return</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>;
-                                                        }}, 
-                                                        <span class="key">padding</span>:<span class="integer">0</span>, 
+                                                        }},
+                                                        <span class="key">padding</span>:<span class="integer">0</span>,
                                                         <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> },
                                                         view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">width</span>:<span class="integer">14</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,<span class="function">init</span>:<span class="keyword">function</span>(){
                                                                 <span class="comment">// console.log(this.size)</span>
@@ -586,8 +594,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         )
                                         ]}.bind(<span class="local-variable">this</span>));
                                         res.push(view({
-                                                                <span class="key">bg</span>:<span class="integer">0</span>, 
-                                                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> , 
+                                                                <span class="key">bg</span>:<span class="integer">0</span>,
+                                                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> ,
                                                                 <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
                                                         },
                                                         childrenarray
@@ -596,24 +604,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                         }
                         <span class="keyword">return</span> res;
-                        
+
                 }
         })
-        
+
         <span class="comment">// subclass to render the gridlines of the tree</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">treeline</span><span class="delimiter">'</span></span>, view, <span class="keyword">function</span>(){
                 <span class="comment">//this.bgcolor = vec4(&quot;red&quot;);</span>
                 <span class="comment">//this.flex = 1</span>
                 <span class="local-variable">this</span>.last = <span class="integer">0</span>
-                
+
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.constructor_children;
                 }
                 <span class="local-variable">this</span>.alignself = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>;
-                
+
                 <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>)
-                
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span> 
+
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.bg = {
                         <span class="function">color</span>: <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> pos = mesh.xy * vec2(view.layout.width, view.layout.height)
@@ -633,9 +641,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         })
-        
+
         <span class="local-variable">this</span>.clipping = <span class="predefined-constant">true</span>
-        
+
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>
 <span class="comment">//        this.flex = 1</span>
 
@@ -644,25 +652,34 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// the renderfunction for the treeview recursively expands using treeitem subclasses.</span>
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="comment">//var data;</span>
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>.dataset) <span class="keyword">return</span>
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.atBuildTree) <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.atBuildTree(<span class="local-variable">this</span>.dataset.data)
-                <span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.dataset.data
+
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.data) {
+                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.dataset) <span class="keyword">return</span>
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.atBuildTree) <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.atBuildTree(<span class="local-variable">this</span>.dataset.data)
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.dataset.data
+                        }
+                }
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.data) {
+                        <span class="keyword">return</span>
                 }
 
                 <span class="keyword">return</span> [<span class="local-variable">this</span>.treeitem({<span class="key">item</span>:<span class="local-variable">this</span>.data})]
         }
 
-        
+
         <span class="keyword">var</span> treeview = <span class="local-variable">this</span>.constructor;
-        
+
         <span class="comment">// Basic usage of the treeview control.</span>
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [treeview({<span class="key">dataset</span>:{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">root</span><span class="delimiter">&quot;</span></span>, <span class="key">children</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">child1</span><span class="delimiter">&quot;</span></span>}]}})]
+                        <span class="keyword">var</span> data = {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">root</span><span class="delimiter">&quot;</span></span>, <span class="key">children</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">child1</span><span class="delimiter">&quot;</span></span>, <span class="key">children</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">subchild1</span><span class="delimiter">&quot;</span></span>}, {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">subchild2</span><span class="delimiter">&quot;</span></span>}]}, {<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">child2</span><span class="delimiter">&quot;</span></span>}]};
+
+                        <span class="keyword">return</span> [treeview({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">data</span>:data})]
                 }
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

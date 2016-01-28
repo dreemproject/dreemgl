@@ -294,15 +294,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n140" name="n140">140</a></strong>
 <a href="#n141" name="n141">141</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
 
-        <span class="comment">// Slide viewer is an automatic slide viewer that turns child nodes into slides</span>
+        <span class="comment">// internal, Slide viewer is an automatic slide viewer that turns child nodes into slides</span>
         <span class="comment">// use attributes named 'slidetitle' on a child to set the slide title1</span>
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// the width of a slide</span>
@@ -362,7 +362,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }),
                                 view({
                                         <span class="key">flex</span>:<span class="integer">1</span>,
-                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>, 
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">padding</span>:vec4(<span class="integer">10</span>)
                                         },
                                         <span class="local-variable">this</span>.constructor_children,
@@ -376,7 +376,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(event.mark) <span class="keyword">return</span>
                 <span class="comment">// set the scroll from the page</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._page &lt; <span class="integer">0</span>) <span class="local-variable">this</span>._page = <span class="integer">0</span>
-                <span class="keyword">var</span> len = <span class="local-variable">this</span>.constructor_children.length 
+                <span class="keyword">var</span> len = <span class="local-variable">this</span>.constructor_children.length
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._page &gt; len - <span class="integer">1</span>) <span class="local-variable">this</span>._page = len - <span class="integer">1</span>
 
                 <span class="local-variable">this</span>.scroll = vec2(<span class="local-variable">this</span>.page * (<span class="local-variable">this</span>.slidewidth + <span class="local-variable">this</span>.slidemargin * <span class="integer">2</span>), <span class="integer">0</span>)
@@ -434,7 +434,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }, item)
                 }.bind(<span class="local-variable">this</span>))
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>
