@@ -835,7 +835,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					var r = this.currentRequest;
 					console.log(" while loading ", r.x, r.y, r.z);
 				}
-			
+				this.thedata = undefined;
 				var r = this.currentRequest;
 				r.buildings = Bset;
 				r.roads = Rset;
@@ -975,9 +975,12 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 1000.0,
-			fogend: 5000.
+			fogend: 5000.,
 			
 		}
+		this.frameswaited = 0;
+		this.bufferloadbool = false
+			
 		
 		this.mouseleftdown = function(){
 			this.find("mapdata").setCenter(this.lastpos[0], this.lastpos[1], this.zoomlevel,1);
@@ -986,8 +989,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.lastpos = vec2(0);
 		
 		this.calctilepos = function(){
-			var x = this.coord[0] + this.trans[0];
-			var y = this.coord[1] + this.trans[1];
+			var x = Math.floor( this.coord[0] + this.trans[0]);
+			var y = Math.floor(this.coord[1] + this.trans[1]);
 			return [x,y,this.zoomlevel];
 		}
 		
@@ -1013,12 +1016,15 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.lastpos = newpos;
 				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
 				this.bufferloaded = 0;
+				this.frameswaited = 0;
+				this.bufferloadbool = false;
 				this.queued  = 0;
 				this.redraw();
+				
 				this.loadbuffer()
 				
 			}else{
-				if (this.bufferloaded == 0) this.loadbuffer();
+				if (this.bufferloadbool == false) this.loadbuffer();
 			}
 
 		}
@@ -1029,11 +1035,17 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var bl = md.getBlockByHash(this.tilehash);
 				
 				if (bl){
-					this.bufferloaded = 1;//Animate({1:{value:1.0, motion:"inoutquad"}});			
+				if (this.frameswaited == 0) {
+						this.bufferloaded = 1.0
+					} else{
+					this.bufferloaded = Animate({1:{value:1.0, motion:"inoutquad"}});	
+					}
+					this.bufferloadbool = true;					
 					this.loadBufferFromTile(bl);
 					this.redraw();				
 				}
 				else{
+					this.frameswaited++;
 					if (this.queued == 0){
 						this.bgshader.update();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
@@ -1070,7 +1082,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
-				respos = vec4(pos.x, -mesh.pos.z, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				respos = vec4(pos.x, -mesh.pos.z * view.bufferloaded, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				//r.w += 0.002;
 				
 				return respos;
