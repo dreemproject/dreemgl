@@ -9,6 +9,8 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 	{text:"SF-10", place: "sanfrancisco", zoomlevel: 10},
 	{text:"NY - Manhattan", place: "manhattan", zoomlevel: 16},
 	{text:"SF - Golden Gate Park", place: "sanfrancisco_goldengatepark", zoomlevel: 17},
+		{text:"SZ - Huaqiang Bei", place: "shenzhen_hqb", zoomlevel: 16},
+		{text:"HongKong", place: "hongkong", zoomlevel: 16}
 	]
 	this.render = function(){
 		

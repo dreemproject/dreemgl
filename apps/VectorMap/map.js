@@ -298,13 +298,17 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		},
 		default:
 		{
-			color1:vec4('red'),
+			color1:vec4('white'),
 			color2:vec4('blue')
 		}
 		
 	}
 	
-	
+	for (var a in mapstyle){
+		var st = mapstyle[a];
+		if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
+		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
+	}
 	this.attributes = {
 		latlong:vec2(52.3608307,   4.8626387),
 		centerx: 0, 
@@ -349,7 +353,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 	
 	this.mouseleftup = function(){
-		console.log("up!");
 		this.mousemove = function(){};
 	}
 	
@@ -506,8 +509,12 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					//console.log(R);
 					var linewidth = 3;
 					var color = vec4("gray") ;
+					
+					var st = mapstyle[R.kind];
+					if (!st) st = mapstyle["default"];
 					if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
-					if (roadcolors[R.kind]) color = vec4(roadcolors[R.kind]);else UnhandledKindSet[R.kind] = "road" ;
+					
+					if (st.roadcolor) color = st.roadcolor;else UnhandledKindSet[R.kind] = "road" ;
 					var markcolor = color;
 					if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
 				
@@ -633,7 +640,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		this.setCenter = function(x,y,z, time){
-			console.log("moving to ",x,y,z);
 			if (!time || time == 0)
 			{
 				this.centerpos = vec2(x,y)
@@ -714,16 +720,16 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					var Eset = [];
 					var Lset = [];
 					var Allset = [];
-				
+					var Places = [];
 				
 				try{
 					this.thedata = JSON.parse(str);	
 				
-					
+					//console.log(this.thedata.objects);
 					for (var i = 0;i<this.thedata.objects.buildings.geometries.length;i++){
 						var Bb = this.thedata.objects.buildings.geometries[i];
 					//	console.log(Bb.properties);
-						var B = {id:Bb.properties.id,h:Bb.properties.height?Bb.properties.height:3.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
+						var B = {id:Bb.properties.id,h:Bb.properties.height?Bb.properties.height:30.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
 							if (Bb.arcs){
 								for(var k = 0;k<Bb.arcs.length;k++){
 								B.arcs.push(this.thedata.arcs[Bb.arcs[k]]);
@@ -732,7 +738,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						KindSet[B.kind] = true;
 						Bset.push(B);
 					}
-					
+					for (var i = 0;i<this.thedata.objects.places.geometries.length;i++){
+						var Bb = this.thedata.objects.water.geometries[i];
+						
+						//console.log(Bb.properties.kind, Bb.type, Bb.properties.name);
+					}
 					for (var i = 0;i<this.thedata.objects.water.geometries.length;i++){
 						var Bb = this.thedata.objects.water.geometries[i];
 						var B = {arcs:[], kind:"water" };
@@ -923,7 +933,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			//	sanfrancisco: [37.8838923,-122.3398295],
 				sanfrancisco_goldengatepark:[37.7677892,-122.4853213],
 					   seoul: [37.5275421, 126.9748078],
-					   seoel: [37.5275421, 126.9748078]
+					   seoel: [37.5275421, 126.9748078],
+					   shenzhen_hqb:[22.5402897,114.0846914],
+					   hongkong:[22.2854084,114.1600463]
 			}
 			
 			this.theinterval = this.setInterval(function(){
@@ -961,7 +973,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			zoomlevel: 16,
 			bufferloaded: 0.0,
 			tiletrans: vec2(0),
-			fog: vec4("lightblue")
+			fog: vec4("lightblue"),
+			fogstart: 1000.0,
+			fogend: 5000.
 			
 		}
 		
@@ -1015,7 +1029,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var bl = md.getBlockByHash(this.tilehash);
 				
 				if (bl){
-					this.bufferloaded = Animate({1:{value:1.0, motion:"inoutquad"}});			
+					this.bufferloaded = 1;//Animate({1:{value:1.0, motion:"inoutquad"}});			
 					this.loadBufferFromTile(bl);
 					this.redraw();				
 				}
@@ -1076,9 +1090,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5 
 				var prefog = mix(mesh.color1, mesh.color1, noise)
-				prefog.xyz *= max(0.0, min(1.0, ((mesh.pos.z - mesh.height)*0.001)+0.4));
-				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
-				zdist *= zdist;
+				prefog.xyz *= 0.6 + 0.4*max(0.0, min(1.0, ((mesh.pos.z - mesh.height)*0.001)+0.4));
+				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
+				//zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
 				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
@@ -1089,10 +1103,15 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	
 	
 	define.class(this,"landtile", "$ui/view", function(){
+		this.attributes = {bufferloaded:0.0}
+	
 		this.is = tilebasemixin;
+		
 		this.loadBufferFromTile = function(tile){
 			this.bgshader.mesh = tile.landVertexBuffer;					
 		}
+		
+		
 		
 		
 		this.bg = function(){
@@ -1130,7 +1149,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
-				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
+				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
 				
@@ -1159,7 +1178,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 				var pos = vec2(1,-1)*possrc.xy + (idxpos - view.tiletrans) * view.tilesize;
 				 respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
-				respos.w += mesh.pos.z;
+				respos.w += mesh.pos.z*0.1;
 				return respos;
 			}
 			
@@ -1190,7 +1209,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 				
-				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
+				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
 				
@@ -1234,8 +1253,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 		
-		//this.tilewidth = 1;
-		//this.tileheight = 1;
+		this.tilewidth = 5;
+		this.tileheight = 5;
 		
 		var tilearea = vec2(this.tilewidth, this.tileheight)
 		console.log("tile area", tilearea);
@@ -1270,7 +1289,11 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		var dist = 2.5
-		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,camera:vec3(0,-1400 * dist,1000 * dist), fov: 40, up: vec3(0,1,0)}, 
+		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
+		
+		camera:vec3(0,-1000 * dist,1000 * dist), fov: 40, up: vec3(0,1,0)
+		,lookat:vec3(0,0,0)
+		}, 
 		
 			view({bg:0, rotate:vec3(0,0.1,0)},
 				res3d

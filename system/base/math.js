@@ -467,7 +467,11 @@ define(function(require, exports){
 	vec4.dot = function(a,b){
 		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	}
-
+	vec4.desaturate = function(incolor, amt){
+		if (!amt) amt = 1.0
+		var hsv = vec4.toHSV(incolor);
+		return vec4.fromHSV(hsv[0], hsv[1] * (1.0-amt), hsv[2]);
+	}
 	vec4.contrastcolor = function(incolor){
 		var hsl = vec4.toHSV(incolor);
 		var l = 0;
