@@ -33,7 +33,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true};
 	
 	
-	var typemap = {
+	var mapstyle = {
 		ferry:{
 			roadcolor: vec4(0.6784313917160034,0.8470588326454163,0.9019607901573181,1),
 		},
@@ -316,22 +316,22 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		
 		
-		var typemapstring = "var typemap = {\n";
+		var mapstylestring = "var mapstyle = {\n";
 		for(var i in KindSet){
-			typemapstring += "\t" + i + ":{\n";
-			if (landoffsets[i]) typemapstring += "\t\toffset:" + landoffsets[i]+ ",\n "
-			if (landcolor1[i]) typemapstring += "\t\tcolor1: vec4(" + vec4(landcolor1[i])+ "),\n "
-			if (landcolor2[i]) typemapstring += "\t\tcolor2: vec4(" + vec4(landcolor2[i])+ "),\n "
-			if (roadcolors[i]) typemapstring += "\t\troadcolor: vec4(" + vec4(roadcolors[i])+ "),\n "
-			typemapstring +="\t},\n";
+			mapstylestring += "\t" + i + ":{\n";
+			if (landoffsets[i]) mapstylestring += "\t\toffset:" + landoffsets[i]+ ",\n "
+			if (landcolor1[i]) mapstylestring += "\t\tcolor1: vec4(" + vec4(landcolor1[i])+ "),\n "
+			if (landcolor2[i]) mapstylestring += "\t\tcolor2: vec4(" + vec4(landcolor2[i])+ "),\n "
+			if (roadcolors[i]) mapstylestring += "\t\troadcolor: vec4(" + vec4(roadcolors[i])+ "),\n "
+			mapstylestring +="\t},\n";
 	//		console.log("Handled:", i);
 		}
 		for(var i in UnhandledKindSet){
 			console.log("Unhandled:" , i, UnhandledKindSet[i]);
 			}
-		typemapstring += "\tdefault:\n\t{\n\t\tcolor1:vec4('red')\n\t}\n}";
+		mapstylestring += "\tdefault:\n\t{\n\t\tcolor1:vec4('red')\n\t}\n}";
 		
-		console.log(typemapstring);
+		console.log(mapstylestring);
 	}
 	
 	
@@ -476,8 +476,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			var color1 = vec4(1,0,1,1);
 			var color2 = vec4(1,0,1,1);
-			var t = typemap[land.kind];
-			if (!t) t = typemap["default"];
+			var t = mapstyle[land.kind];
+			if (!t) t = mapstyle["default"];
 			if (t.color1) color1 = t.color1;else UnhandledKindSet[land.kind] = "land - no color1";
 			if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = "land - no color2 ";
 			if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = "land - no offset"
@@ -1013,17 +1013,15 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			var md = this.find("mapdata");
 			if (md){
 				var bl = md.getBlockByHash(this.tilehash);
+				
 				if (bl){
-					this.bufferloaded = 1;
-			
+					this.bufferloaded = Animate({1:{value:1.0, motion:"inoutquad"}});			
 					this.loadBufferFromTile(bl);
-					this.redraw();
-					
+					this.redraw();				
 				}
 				else{
 					if (this.queued == 0){
 						this.bgshader.update();
-						//this.redraw();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
 						this.queued  = 1;
 					}
@@ -1103,7 +1101,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
-				 respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
+				respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				respos.w -= mesh.pos.z*0.01;
 				
 				return respos;
@@ -1113,7 +1111,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.update = function(){
 				this.mesh =  LandVertexStruct.array();
-				var a = TileSize / 4;
+				var a = TileSize *0.05;
 				var b = TileSize - a;
 				this.mesh.push(a,a);
 				this.mesh.push(b,a);
@@ -1128,7 +1126,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.color = function(){
 				//return "blue";
-				var col =  vec4("blue" );
+				var col =  vec4("#202050");
 				
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
@@ -1188,10 +1186,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.color = function(){
 				//return "blue";
-				var col =  pal.pal2(
-							(sin(( idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
-							(0.5 + 0.5*sin(( idxpos.y + view.trans.y)*0.2)));
-				var prefog = mix(mesh.color*vec4(1,1,1,0.8), col, 1.0-view.bufferloaded);
+				var prefog = mix(mesh.color, vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 				
