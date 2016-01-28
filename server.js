@@ -93,7 +93,8 @@ function main(){
 		'compositions':'$root/compositions',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
-		'docs':'$root/docs'
+		'docs':'$root/docs',
+		'test':'$root/test'
 	}
 	if(args['-nomoni']){
 		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]

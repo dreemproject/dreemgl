@@ -127,6 +127,8 @@ define.class(function(exports){
 			new_child.parent_viewport = new_version.parent_viewport
 			new_children[i] = render(new_child, old_child, state, childreuse)
 		}
+		
+		if(new_version.atChildrenRendered) new_version.atChildrenRendered()
 
 		if(old_children) for(;i < old_children.length;i++){
 			var child = old_children[i]
