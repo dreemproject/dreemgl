@@ -664,6 +664,10 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 		}
 		
+		this.mouseleftdown = function(){
+			this.find("mapdata").setCenter(this.lastpos[0], this.lastpos[1], this.zoomlevel,1);
+		}
+	
 		this.lastpos = vec2(0);
 		
 		this.calctilepos = function(){
@@ -763,30 +767,16 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.update = function(){
 				this.mesh =  BuildingVertexStruct.array();
-				var a = TileSize / 4;
-				var b = TileSize - a;
 				
-				
-				
-				this.mesh.push(a,a);
-				this.mesh.push(b,a);
-				this.mesh.push(b,b);
-				
-				this.mesh.push(a,a);
-				this.mesh.push(b,b);
-				this.mesh.push(a,b);
 			}
 			
 			this.drawtype = this.TRIANGLES
 			
 			this.color = function(){
 				//return "blue";
-				var col =  pal.pal2(
-							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
-							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
 			
 				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5 
-				var prefog = mix(mix(mesh.color1, mesh.color1, noise), col, 1.0-view.bufferloaded)
+				var prefog = mix(mesh.color1, mesh.color1, noise)
 				prefog.xyz *= max(0.0, min(1.0, ((mesh.pos.z - mesh.height)*0.001)+0.4));
 				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
 				zdist *= zdist;
@@ -805,9 +795,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.bgshader.mesh = tile.landVertexBuffer;					
 		}
 		
-		this.mouseleftdown = function(){
-			this.find("mapdata").setCenter(this.lastpos[0], this.lastpos[1], this.zoomlevel,1);
-		}
 		
 		this.bg = function(){
 			
@@ -825,7 +812,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.update = function(){
 				this.mesh =  LandVertexStruct.array();
-				/*var a = TileSize / 4;
+				var a = TileSize / 4;
 				var b = TileSize - a;
 				this.mesh.push(a,a);
 				this.mesh.push(b,a);
@@ -833,7 +820,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh.push(b,b);
 				this.mesh.push(a,a);
 				this.mesh.push(b,b);
-				this.mesh.push(a,b);*/
+				this.mesh.push(a,b);
 			}
 			
 			this.drawtype = this.TRIANGLES
@@ -844,7 +831,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
 							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
 			
-				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5;
+				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
 				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
 				zdist *= zdist;
