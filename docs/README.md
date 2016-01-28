@@ -29,8 +29,12 @@ A guide for extending DreemGL with new services, devices and other components.
 
 * [DreemGL
   Appendix](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/appendix/README.md)
-  The DreemGL Appendix provides reference information for constants.
+  A reference appendix containing information for constants.
 
 
 ## DALI Documentation
+* [Getting Started](https://github.com/dreemproject/dreemgl/blob/master/docs/dali/dali_getting_started.md)
+A guide describing the prerequisties and how to run DreemGL applications in DALI.
 
+* [Debugging Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/dali/dali_debugging.md)
+A guide to debugging DALI applications.
