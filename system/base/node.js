@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-efine.class(function(require){
+define.class(function(require){
 	// Node class provides attributes for events and values, propertybinding and constructor semantics
 
 	var OneJSParser =  require('$system/parse/onejsparser')
