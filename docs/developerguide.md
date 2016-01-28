@@ -7,18 +7,18 @@ runtimes written in JavaScript. An overview of the framework is shown
 here:
 
 ![Architecture Image]
-(https://raw.githubusercontent.com/teem2/dreemgl/dev/docs/images/architecture.png)
+(https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png)
 
 
 ## Views
 
-[view.js](https://github.com/teem2/dreemgl/blob/dev/system/base/view.js) is the baseclass of all visible items on screen.  It contains
+[view.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/view.js) is the baseclass of all visible items on screen.  It contains
 all attributes that are used by the render system to layout, and draw
 a view. A **view** has a set of 'children' on this.children and a set of
 **shaders** that it iterates over to draw them.
 
 So if you look in
-[system/platform/webgl/devicewebgl.js](https://github.com/teem2/dreemgl/blob/dev/system/platform/webgl/devicewebgl.js),
+[system/platform/webgl/devicewebgl.js](https://github.com/dreemproject/dreemgl/blob/dev/system/platform/webgl/devicewebgl.js),
 you will see the main `drawpass`. The `doColor` method loops over the
 set of views that need layout, meaning the ones that need their
 matrices set up, and then loops over the surfaces to draw them. To do
@@ -46,7 +46,7 @@ very large datasets.
 When the UI initializes, it calls `render` on the composition,
 returning a tree. Then, the UI finds the screen it wants to show, and
 then it calls `Render.process` (see
-[system/base/render.js](https://github.com/teem2/dreemgl/blob/dev/system/base/render.js))
+[system/base/render.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/render.js))
 on that screen.
 
 This will emit the `init` event on the screen, and call the `render`
@@ -55,7 +55,7 @@ recursively get `render` on itself called to determine its children.
 
 *So how do render functions know when to re-render themselves?*
 If you look at
-[system/base/render.js](https://github.com/teem2/dreemgl/blob/dev/system/base/render.js),
+[system/base/render.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/render.js),
 you will see that DreemGL 'watches' all the attribute getters on the
 object it calls `render` on.
 
@@ -99,24 +99,24 @@ specific scopes.
 `this.attributes={propname:Config({value:10})`
 
 ### Creating Attributes
-To create attributes, define a magical attribute setter as shown in [node.js](https://github.com/teem2/dreemgl/blob/dev/system/base/node.js).
+To create attributes, define a magical attribute setter as shown in [node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js).
 
 `this.attributes = {}` is actually a function call. Using setters as
 init calls allows DreemGL to create nested json and assign them to
 classes all at once: `{attributes:{}}`
 
 Again, all of these things are defined in
-[node.js](https://github.com/teem2/dreemgl/blob/dev/system/base/node.js).
+[node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js).
 
 ### Listening to Changes
 
 Attributes can listen to changes, as they are implemented with an
 underlying getter/setter (see
-[system/base/node.js](https://github.com/teem2/dreemgl/blob/dev/system/base/node.js)).
+[system/base/node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js)).
 
 Attributes can be assigned 'listeners' which you can see, for example,
 in `borderradius` in
-[view.js](https://github.com/teem2/dreemgl/blob/dev/system/base/view.js).
+[view.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/view.js).
 
 The reason DreemGL uses these setters is that there is a very clean json mapping like so:
 
@@ -171,7 +171,7 @@ the need for declaring/creating attributes.
 Event flow follows the inheritance structure of
 the class. Base classes get their listeners called first as you can
 see in the implementation of
-[node.js](https://github.com/teem2/dreemgl/blob/dev/system/base/node.js).
+[node.js](https://github.com/dreemproject/dreemgl/blob/dev/system/base/node.js).
 
 ## Shaders
 Each view contains several shaders (such as `bg`, `border`) which can be assigned
@@ -206,11 +206,11 @@ this.mesh.push(pos, color, id)
 ````
 
 Builtin `structs` use the same mechanism, e.g. `vec2()` is really an instance of `define.struct`, see
-[system/base/define.js](https://github.com/teem2/dreemgl/blob/master/system/base/define.js).
+[system/base/define.js](https://github.com/dreemproject/dreemgl/blob/master/system/base/define.js).
 
 ### How does the shader compiler work?
 The shader compiler lives on a baseclass of all the shaders, at
-[system/base/shader.js](https://github.com/teem2/dreemgl/blob/master/system/base/shader.js).
+[system/base/shader.js](https://github.com/dreemproject/dreemgl/blob/master/system/base/shader.js).
 Every time you extend a shader class it will run the js code-compiler
 to generate a pixel/vertexshader from that shader class with a hook.
 So, every level of the shader prototype chain has a fully-generated

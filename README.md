@@ -1,9 +1,9 @@
 # Dreem GL
 
-DreemGL is an open source JS webGL and DALi (Dynamic Animation Library; a cross-platform 3D UI Toolkit) prototyping framework with 
+DreemGL is an open source JS webGL and DALi (Dynamic Animation Library; a cross-platform 3D UI Toolkit) prototyping framework with
 shader styling and render functions.
 ![Architecture Image]
-(https://raw.githubusercontent.com/teem2/dreemgl/dev/docs/images/architecture.png)
+(https://raw.githubusercontent.com/dreemproject/dreemgl/dev/docs/images/architecture.png)
 
 ## Start DreemGL
 To start DreemGL type:
@@ -16,8 +16,8 @@ To view the Intro presentation, click here:
 
 To try livecoding a shader open this:
 
-[http://127.0.0.1:2000/examples/rendertest](http://127.0.0.1:2000/examples/rendertest) and open 
-[examples/rendertest.js](examples/rendertest.js) in your editor and start typing away and saving, reload should 
+[http://127.0.0.1:2000/examples/rendertest](http://127.0.0.1:2000/examples/rendertest) and open
+[examples/rendertest.js](examples/rendertest.js) in your editor and start typing away and saving, reload should
 be live.
 
 As the server starts, it also shows other local IP's its listening on (for trying it on your phone)
@@ -41,7 +41,7 @@ The default path symbols are:
 Adding a path is done using the commandline
 node server.js -path mylib:../mydir mylib2:../mydir2
 
-## Classes 
+## Classes
 classes are defined in a single file, using the following syntax:
 ```
 define.class('$ui/view', function(require, exports, $ui$, label){
@@ -66,9 +66,9 @@ require is simply the local instance of require if needed for normal requires.
 
 After the baseclass and dependencies, you can define attributes on a dreemclass.
 
-## Attributes 
+## Attributes
 
-Attributes are properties that can be wired to other properties, and have a type. 
+Attributes are properties that can be wired to other properties, and have a type.
 
 The way to create them in a class is to assign an object to this.attributes. The setter of 'attributes' will handle creating all the attributes on the class for you. Types of attributes are automatically inferred if assigned with a plain value, but can also be configured using a Config({meta:'hello'}) object. Assigning a Config object to any existing attribute also refines its settings.
 Options for the config attribute are:
@@ -121,7 +121,7 @@ It is also possible to use addListener, this adds a list of listeners which are 
 this is exceedingly rare
 ```
 this.addListener('attr', function(event){
-	
+
 })
 ```
 
@@ -133,7 +133,7 @@ Styles are supported using the 'style' property that can live on 4 levels:
 - class
 - nestedclass
 
-These levels are also inherited in that order. 
+These levels are also inherited in that order.
 Styles allow subclassing of classes used in the render function of the class on which the properties are set. The subclassing is done using a matching syntax
 There are no limitations what you can put in a style since its an actual subclass.
 
@@ -157,5 +157,5 @@ this.style = {
 Have fun!
 
 ## License
-This software is licensed under the  Apache License, Version 2.0. You will find the terms in the file named 
+This software is licensed under the  Apache License, Version 2.0. You will find the terms in the file named
 ["LICENSE.md"](LICENSE.md) in this directory.

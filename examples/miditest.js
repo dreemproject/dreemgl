@@ -1,8 +1,13 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 //Pure JS based composition
 define.class('$server/composition', function(require, $ui$, screen, view){
 
 	var arpeggiator = define.class(function($ui$, view, label){
-		
+
 		var midiAttributes = require('$system/platform/$platform/midi$platform').midiAttributes
 
 		this.fwd = true
@@ -13,7 +18,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 		this.delta = 0
 		this.shift = 0
 		this.volume = 127;
-	
+
 		this.message = function(msg){
 			if(this.fwd) this.out.message = msg
 		}
@@ -23,7 +28,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 			this.delta = msg.key - 60
 			this.last_note = -1
 		}
-		
+
 		this.controlchange = function(msg){
 			this.slide = msg.value
 		}
@@ -159,7 +164,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 
 	this.render = function(){ return [
 		screen({clearcolor:vec4('black'), init:function(){
-			console.log('here')	
+			console.log('here')
 		}},
 			arpeggiator({
 				arp2:function(l, m, n, o, p){

@@ -1,3 +1,4 @@
+
 <screen clearcolor="white">
   <label text="Hello world!" fgcolor="black"></label>
 </screen>

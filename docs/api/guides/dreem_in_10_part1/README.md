@@ -45,10 +45,10 @@ DreemGL applications using the WebGL runtime can be run with the following opera
 
 ### Installing Dreem
 For now, the best way to install DreemGL on your computer is to check out the source code from Github, using the following URL:
-https://github.com/teem2/dreemgl
+https://github.com/dreemproject/dreemgl
 
 This is the link to the master branch of Dreem, which should be stable. The branch which is used for development is the DreemGL dev branch:
-https://github.com/teem2/dreemgl/tree/dev
+https://github.com/dreemproject/dreemgl/tree/dev
 
 *Please do not use the dev branch for development, unless you are using a specific feature, which is not available in master, yet. There will be many breaking changes for existing compositions going into a dev branch!*
 

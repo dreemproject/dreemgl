@@ -22,7 +22,7 @@ There is a default folder hard coded into the Dreem
 | dalilib | Optional | Path to the dali/nodejs library. Default = ```/home/dali/teem/src/dreemgl/Release/dali```
 
 ### Running the STAP demo
-To run the STAP demo, clone both repositories, the [DreemGL dali_dev branch](https://github.com/teem2/dreemgl/tree/dev), and the STAP demo. Then create a symbolic link to STAP/dreemgl/tvdemo inside the examples folder.
+To run the STAP demo, clone both repositories, the [DreemGL dali_dev branch](https://github.com/dreemproject/dreemgl/tree/dev), and the STAP demo. Then create a symbolic link to STAP/dreemgl/tvdemo inside the examples folder.
 
 ```
 ├──  dreemgl     (dali_dev branch)
@@ -38,4 +38,4 @@ Then launch the DreemGL DALi application using this command (while replacing the
 node server.js -width 1920 -height 1080 -dalilib "/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali" -dali
  examples/tvdemo
  ```
- 
+

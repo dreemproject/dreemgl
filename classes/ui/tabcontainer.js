@@ -1,14 +1,16 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
+
 // ruler class
 
 define.class('$ui/view', function(view, button, label){
 	// Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
 
 	this.attributes = {
-		// The currently active tab. 
+		// The currently active tab.
 		activetab: Config({type: int, value: 0}),
 		// the color of the tab
 		color: Config({type: vec4, value: vec4("#404050")}),
@@ -18,11 +20,11 @@ define.class('$ui/view', function(view, button, label){
 		activecolor: Config({type: vec4, value: vec4("#7070a0")})
 	}
 
-	// The currently active tab. 
+	// The currently active tab.
 	//this.persists("activetab")
-	
+
 	this.flex = 1;
-	
+
 	this.buttoncolor1= vec4("#b0b0b0")
 	this.buttoncolor2= vec4("#c0c0c0")
 	this.hovercolor1= vec4("#8080c0")
@@ -35,22 +37,22 @@ define.class('$ui/view', function(view, button, label){
 		this.marginleft = 6
 		this.borderwidth = 0
 	})
-	
+
 	var tabbuttonprox = this.tabbutton;
 	this.flexwrap= "wrap"
 	this.flexdirection = "column"
 	this.position = "relative"
 	this.flexdirection = "column"
-	
-	this.render = function(){		
+
+	this.render = function(){
 		var myparent = this;
-		if (this.constructor_children.length > 1){		
+		if (this.constructor_children.length > 1){
 			this.bar =[ view({flexdirection:"row", bgcolor: "#f0f0f0", borderwidth:1, cornerradius: 0, bordercolor: "#c0c0c0"  },this.constructor_children.map(
 				function(m,id)
-					{						
+					{
 							return tabbuttonprox({tabid: id, tabdebug:m.tabdebug, target: myparent, text: m.tabname, icon: m.tabicon? m.tabicon:"", click: function(){this.target.activetab = this.tabid}});
-					})), view({flex: 1, borderwidth: 2,cornerradius: 0,  bordercolor: "#b0b0b0" ,padding: 4, alignself: "stretch"}, this.constructor_children[this.activetab])];			
-			return this.bar;						
+					})), view({flex: 1, borderwidth: 2,cornerradius: 0,  bordercolor: "#b0b0b0" ,padding: 4, alignself: "stretch"}, this.constructor_children[this.activetab])];
+			return this.bar;
 		}else{
 			return [];// this.constructor_children;
 		}

@@ -1,13 +1,18 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class('$server/composition', function(require,
-	$ui$, screen, view, button, label, 
-	$behaviors$, draggable, 
-	$3d$, teapot, ballrotate, 
+	$ui$, screen, view, button, label,
+	$behaviors$, draggable,
+	$3d$, teapot, ballrotate,
 	$widgets$, docviewer, jsviewer, slideviewer){
 	// internal, Live coding presentation docs!
 	this.attributes = {
 		test:vec4('red')
 	}
-	
+
 	this.mymethod = function(){}
 
 	this.render = function render(){
@@ -31,14 +36,14 @@ define.class('$server/composition', function(require,
 					scroll: Config({persist:true}),
 					},
 					view({
-						bgcolor:"transparent", 
+						bgcolor:"transparent",
 						flex:1,
 						slidetitle:'DreemGL Introduction'
 						},
 						ballrotate({name:"ballrotate1", position:"absolute",width:100, height:100, target:"teapot1"})
 						,view({
 							flex:1,
-							name:"teapot1", 
+							name:"teapot1",
 							clearcolor: 'rgba(255,255,255,0)',
 							viewport: '3d',
 							bg:0,
@@ -46,14 +51,14 @@ define.class('$server/composition', function(require,
 						},
 						teapot({
 							detail:6,
-							pos:[0,0,-0.5], 
-							rotate:[-.6*PI,PI,0], 
-							radius:0.8, 
+							pos:[0,0,-0.5],
+							rotate:[-.6*PI,PI,0],
+							radius:0.8,
 							size:vec3(0.5)
 						}),
 						0),
 					0),
-					
+
 					view({
 						slidetitle:'This composition'
 						,flex:1
@@ -64,8 +69,8 @@ define.class('$server/composition', function(require,
 							overflow:'scroll',
 							flex:1,
 							margin:vec4(10),
-							source:render.toString(), 
-							padding:vec4(4), 
+							source:render.toString(),
+							padding:vec4(4),
 							fontsize: 14,
 							multiline: true
 						}),
@@ -75,15 +80,15 @@ define.class('$server/composition', function(require,
 						flex:1 , bgcolor:"transparent"
 						},
 						view({
-							left:100, 
+							left:100,
 							top:100,
-							width:800, 
-							height:450, 
+							width:800,
+							height:450,
 							bgimage: require('./graph.png')
 						})
 					),
 					view({
-						bgcolor:"transparent", 
+						bgcolor:"transparent",
 						flex:1,
 						slidetitle:'Using shaders to style'
 						},
@@ -101,9 +106,9 @@ define.class('$server/composition', function(require,
 										detail:6,
 										position:'absolute',
 										value: Config({
-											type:float, 
-											value:0, 
-											duration:0.5, 
+											type:float,
+											value:0,
+											duration:0.5,
 											motion:float.ease.bounce
 										}),
 										mouseover:function(){
@@ -117,14 +122,14 @@ define.class('$server/composition', function(require,
 											patterns: require('./shaderpatterns').prototype,
 											color:function(){
 											//	return 'red'
-												return vec4( patterns.wave(mesh.uv, i*.1 + 
-													view.value * 10., i*.1 + view.value * 10. ) * 
+												return vec4( patterns.wave(mesh.uv, i*.1 +
+													view.value * 10., i*.1 + view.value * 10. ) *
 													pal.pal1(i*.1).xyz, 1.)
 											//
-											//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.) 
+											//return vec4( patterns.stripe(mesh.uv, 10., i*.1 + view.value * 10.) * pal.pal1(i*0.1).xyz, 1.)
 											}
 										},
-										rotate:[-.6*PI,PI,0], 
+										rotate:[-.6*PI,PI,0],
 										pos:[floor(i/4)*6-10,(i%4)*6-10,-10]
 									})
 								)
@@ -155,15 +160,15 @@ define.class('$server/composition', function(require,
 											return mix('red', 'orange', abs(sin(uv.y*10.+value)))
 										}
 									}
-								}.toString(), 
-								padding:vec4(4), 
-								fontsize: 14, 
+								}.toString(),
+								padding:vec4(4),
+								fontsize: 14,
 								multiline: true
 							}),
 							view({
 								flex:1,
 								padding:4,
-								margin:10, 
+								margin:10,
 								cornerradius:0,
 								bg:{
 									value:1,
@@ -185,9 +190,9 @@ define.class('$server/composition', function(require,
 							overflow:'scroll',
 							flex:1,
 							margin:vec4(10),
-							source: require('../rpcremote').module.factory.body.toString(), 
-							padding:vec4(4), 
-							fontsize: 14, 
+							source: require('../rpcremote').module.factory.body.toString(),
+							padding:vec4(4),
+							fontsize: 14,
 							multiline: true
 						})
 					),

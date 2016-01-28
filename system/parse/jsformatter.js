@@ -1,5 +1,10 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class(function(require, exports){
-	
+
 	var Parser = require('$system/parse/onejsparser')
 
 	exports.walk = function(ast, textbuf, add){
@@ -130,7 +135,7 @@ define.class(function(require, exports){
 
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 		if(n.kind === undefined){
-			var str 
+			var str
 			if(typeof n.value === 'string'){
 				if(n.value.indexOf('"')!==-1) str = "'" + n.value + "'"
 				else str = '"' + n.value + '"'
@@ -145,7 +150,7 @@ define.class(function(require, exports){
 		else
 			this.add(n.raw!==undefined?n.raw:''+n.value, this.group++, exports._Value)
 	}
-	
+
 	this.This = function(n){//: { },
 		this.add('this', this.group++, exports._This, exports._Keyword)
 	}
@@ -170,7 +175,7 @@ define.class(function(require, exports){
 				this.newline()
 		}
 		if(has_newlines && this.comments(n.cm2)) this.tab(this.indent - 1)
-		
+
 		if(this.lastIsNewline()) this.tab(old_indent)
 
 		this.indent = old_indent
@@ -244,11 +249,11 @@ define.class(function(require, exports){
 		}
 		this.expand(n.key)
 	}
-	
+
 	this.Block = function(n, skipbrace){//:{ steps:2 },
 		var mygroup = this.group++
 		var old_indent = 0
-	
+
 		if(!skipbrace){
 			this.braceL(exports._Block, mygroup)
 			old_indent = this.indent
@@ -266,7 +271,7 @@ define.class(function(require, exports){
 			// if we have comments above, insert them
 			this.comments(step.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
-			
+
 
 			this.expand(step)
 			this.comments(step.cmr, ' ')
@@ -321,7 +326,7 @@ define.class(function(require, exports){
 		if(n.else){
 			// we have to end the if expression properly
 			if(!this.comments(n.cm1,' ')) this.newline()
-			
+
 			if(this.lastIsNewline()) this.tab(this.indent)
 
 			this.keyword('else', exports._If)
@@ -515,7 +520,7 @@ define.class(function(require, exports){
 		//else Keyword('function', _Function)
 		var mygroup = this.group++
 		this.parenL(exports._Function, mygroup)
-	
+
 		if(n.params) for(var i = 0; i < n.params.length; i++){
 			if(i){
 				this.comma(exports._Function), this.space()
@@ -523,7 +528,7 @@ define.class(function(require, exports){
 
 			this.expand(n.params[i])
 		}
-	
+
 		if(n.rest){
 			if(i) this.comma(exports._Function), this.space()
 			this.expand(n.rest)
@@ -683,7 +688,7 @@ define.class(function(require, exports){
 		this.indent++
 
 		// cleanup hack
-		
+
 		// lets check if it has a newline
 		var first_is_obj
 		if(n.args[0].type === 'Object' || n.args[0].type === 'Array'){
@@ -708,7 +713,7 @@ define.class(function(require, exports){
 				this.newline()
 		}
 		if(has_newlines && this.comments(n.cm2)) this.tab(this.indent - 1)
-		
+
 		if(this.lastIsNewline()) this.tab(old_indent)
 
 		this.indent = old_indent

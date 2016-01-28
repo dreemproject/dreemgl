@@ -1,3 +1,8 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class(function(require){
 
 	var parse = new (require('$system/parse/onejsparser'))()
@@ -11,8 +16,8 @@ define.class(function(require){
 	}
 
 	Object.defineProperty(this, 'lo', {
-		get:function(){ 
-			return this.end > this.start? this.start: this.end 
+		get:function(){
+			return this.end > this.start? this.start: this.end
 		},
 		set: function(v){
 			if(this.end > this.start) this.start = v
@@ -21,8 +26,8 @@ define.class(function(require){
 	})
 
 	Object.defineProperty(this, 'hi', {
-		get: function(){ 
-			return this.end > this.start? this.end: this.start 
+		get: function(){
+			return this.end > this.start? this.end: this.start
 		},
 		set: function(v){
 			if(this.end > this.start) this.end = v
@@ -40,7 +45,7 @@ define.class(function(require){
 		this.end = this.end - 1
 		if(this.end < 0) this.end = 0
 		if(!only_end) this.start = this.end
-		// 
+		//
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
 
@@ -71,12 +76,12 @@ define.class(function(require){
 
 	this.moveTo = function(x, y, only_end){
 		var off = this.editor.textbuf.offsetFromPos(x, y)
-		
+
 		if(off<0){
 			if(off === -4 || off === -3) off = this.editor.textbuf.lengthQuad()
 			else off = 0
 		}
-		var change = this.end != off 
+		var change = this.end != off
 		this.end = off
 		if(!only_end) change = this.start != this.end || change, this.start = this.end
 		var r = this.editor.textbuf.cursorRect(off)
@@ -128,7 +133,7 @@ define.class(function(require){
 	this.deleteRange = function(from, to){
 		this.editor.addUndoInsert(from, to)
 		this.editor.textbuf.removeText(from, to)
-		
+
 		this.cursorset.delta -= to - from
 		this.start = this.end = from
 
@@ -163,7 +168,7 @@ define.class(function(require){
 		this.end = this.editor.scanRightWord(this.hi)
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
-	
+
 	this.selectLine = function(){
 		this.start = this.editor.scanLeftLine(this.lo)
 		this.end = this.editor.scanRightLine(this.hi) + 1
@@ -207,14 +212,14 @@ define.class(function(require){
 				}
 			}
 		}
-		
+
 		if(this.lo == 0) return
 		this.editor.addUndoInsert(this.lo -1, this.hi)
 		this.editor.textbuf.removeText(this.lo - 1, this.hi)
 		this.cursorset.delta -= this.span
 		this.editor.forkRedo()
 		this.start = this.end = this.lo - 1
-		this.max = this.editor.textbuf.cursorRect(this.end).x			
+		this.max = this.editor.textbuf.cursorRect(this.end).x
 
 		this.editor.textChanged()
 	}
@@ -237,7 +242,7 @@ define.class(function(require){
 			var len =  this.editor.textbuf.insertText(this.lo, text)
 			this.cursorset.delta += len
 			this.editor.addUndoDelete(this.lo, this.lo + len)
-		}	
+		}
 		this.editor.forkRedo()
 		this.start = this.end = this.lo + text.length + cdelta
 		this.max = this.editor.textbuf.cursorRect(this.end).x

@@ -1,5 +1,10 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define(function(require, exports){
-	
+
 	// provide all the apis on our math types
 
 	var vectorParser = require('$system/parse/vectorparser')
@@ -121,7 +126,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.mul = 
+	vec2.mul =
 	vec2.vec2_mul_vec2 = function(a, b, o){
 		if(!o) o = vec2()
 		o[0] = a[0] * b[0]
@@ -129,7 +134,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.add = 
+	vec2.add =
 	vec2.vec2_add_vec2 = function(a, b, o){
 		if(!o) o = vec2()
 		o[0] = a[0] + b[0]
@@ -145,7 +150,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.div = 
+	vec2.div =
 	vec2.vec2_div_vec2 = function(a, b, o){
 		if(!o) o = vec2()
 		o[0] = a[0] / b[0]
@@ -153,7 +158,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.mul_mat2 = 
+	vec2.mul_mat2 =
 	vec2.vec2_mul_mat2 = function(v, m, o){
 		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[2] * v[1]
@@ -161,7 +166,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.mul_mat3 = 
+	vec2.mul_mat3 =
 	vec2.vec2_mul_mat3 = function(v, m, o){
 		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[2] * v[1] + m[4]
@@ -169,22 +174,22 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.mul_mat4 = 
+	vec2.mul_mat4 =
 	vec2.vec2_mul_mat4 = function(v, m, o){
 		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[4] * v[1] + m[12]
 		o[1] = m[1] * v[0] + m[5] * v[1] + m[13]
 		return o
 	}
-	vec2.mul_mat4_t = 
+	vec2.mul_mat4_t =
 	vec2.vec2_mul_mat4_t = function(v, m, o){
 		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[1] * v[1] + m[3]
 		o[1] = m[4] * v[0] + m[5] * v[1] + m[7]
 		return o
 	}
-	
-	vec2.mul_float32 = 
+
+	vec2.mul_float32 =
 	vec2.vec2_mul_float32 = function(v, f, o){
 		if(!o) o = vec2()
 		o[0] = v[0] * f
@@ -198,14 +203,14 @@ define(function(require, exports){
 		o[1] = a[1] < b[1]
 		return o
 	}
-	
+
 	vec2.lessThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] <= b[0]
 		o[1] = a[1] <= b[1]
 		return o
 	}
-	
+
 	vec2.greaterThan = function(a, b, o){
 		if(!o) o = exports.bvec2()
 		o[0] = a[0] > b[0]
@@ -244,24 +249,24 @@ define(function(require, exports){
 		var y = a[0];
 		o[0] = x;
 		o[1] = y;
-		return o;	
+		return o;
 	}
-	
+
 	vec2.rotate = function(a, ang, o){
 		if(!o) o = vec2()
 
 		var sa = Math.sin(ang);
 		var ca = Math.cos(ang);
-	
+
 		o = vec2(ca*a[0] - sa * a[1],sa*a[0] + ca * a[1])
-				
-			
-		return o;	
-						
+
+
+		return o;
+
 	}
-	
-	vecApi(vec3)	
-	
+
+	vecApi(vec3)
+
 	vec3.intersectplane = function(origin, direction, normal, dist) {
 		var denom = vec3.dot(direction, normal)
 		if (denom !== 0) {
@@ -269,16 +274,16 @@ define(function(require, exports){
 			if (t < 0) {
 				console.log("t = 0?")
 				return null
-			}			
+			}
 			var diradd = vec3.vec3_mul_float(direction, t);
 			var res = vec3.add(origin, diradd);
 //			console.log(origin, direction, t,diradd, res);
 			return res;
-		} 
+		}
 		else {
 			if (vec3.dot(normal, origin) + dist === 0) {
 				return origin
-			} 
+			}
 			else {
 				return null
 			}
@@ -292,7 +297,7 @@ define(function(require, exports){
 	//	console.log(a,b);
 		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 	}
-	
+
 	vec3.fromString = function(color){
 		var o = this
 		if(this === vec3) o = vec3()
@@ -310,7 +315,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.mul = 
+	vec3.mul =
 	vec3.vec3_mul_vec3 = function(a, b, o){
 		if(!o) o = vec3()
 		o[0] = a[0] * b[0]
@@ -319,7 +324,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.mulfloat = 
+	vec3.mulfloat =
 	vec3.vec3_mul_float = function(a, b, o){
 		if(!o) o = vec3()
 		o[0] = a[0] * b
@@ -328,7 +333,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.add = 
+	vec3.add =
 	vec3.vec3_add_vec3 = function(a, b, o){
 		if(!o) o = vec3()
 		o[0] = a[0] + b[0]
@@ -346,7 +351,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.div = 
+	vec3.div =
 	vec3.vec3_div_vec3 = function(a, b, o){
 		if(!o) o = vec3()
 		o[0] = a[0] / b[0]
@@ -355,7 +360,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.mul_mat3 = 
+	vec3.mul_mat3 =
 	vec3.vec3_mul_mat3 = function(v, m, o){
 		if(!o) o = vec3()
 		o[0] = v[0] * m[0] + v[1] * m[1] + v[2] * m[2]
@@ -364,10 +369,10 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.mul_mat4 = 
+	vec3.mul_mat4 =
 	vec3.vec3_mul_mat4 = function(v, m, o){
 		if(!o) o = vec3()
-		var vx = v[0], vy = v[1], vz = v[2], vw = 
+		var vx = v[0], vy = v[1], vz = v[2], vw =
 			m[12] * vx + m[13] * vy + m[14] * vz + m[15]
 		vw = vw || 1.0
 		o[0] = (m[0] * vx + m[1] * vy + m[2] * vz + m[3]) / vw
@@ -376,7 +381,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec2.mul_mat4 = 
+	vec2.mul_mat4 =
 	vec2.vec2_mul_mat4 = function(v, m, o){
 		if(!o) o = vec2()
 		o[0] = m[0] * v[0] + m[1] * v[1] + m[3]
@@ -384,20 +389,20 @@ define(function(require, exports){
 		return o
 	}
 
-	vec3.mul_mat4_minor = 
+	vec3.mul_mat4_minor =
 	vec3.vec3_mul_mat4_minor = function(v, m, o){
 		if(!o) o = vec3()
 		var vx = v[0], vy = v[1], vz = v[2]
 		o[0] = vx * m[0] + vy * m[1] + vz * m[2]
 		o[1] = vx * m[4] + vy * m[5] + vz * m[6]
-		o[2] = vx * m[8] + vy * m[9] + vz * m[10]			
+		o[2] = vx * m[8] + vy * m[9] + vz * m[10]
 		return o
 	}
 
-	vec3.cross = 
+	vec3.cross =
 	vec3.vec3_cross_vec3 = function(a, b, o){
 		if(!o) o = vec3()
-		var ax = a[0], ay = a[1], az = a[2] 
+		var ax = a[0], ay = a[1], az = a[2]
 		var bx = b[0], by = b[1], bz = b[2]
 		o[0] = ay * bz - az * by
 		o[1] = az * bx - ax * bz
@@ -412,7 +417,7 @@ define(function(require, exports){
 		o[2] = a[2] < b[2]
 		return o
 	}
-	
+
 	vec3.lessThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] <= b[0]
@@ -420,7 +425,7 @@ define(function(require, exports){
 		o[2] = a[2] <= b[2]
 		return o
 	}
-	
+
 	vec3.greaterThan = function(a, b, o){
 		if(!o) o = exports.bvec3()
 		o[0] = a[0] > b[0]
@@ -462,7 +467,7 @@ define(function(require, exports){
 	vec4.dot = function(a,b){
 		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	}
-	
+
 	vec4.contrastcolor = function(incolor){
 		var hsl = vec4.toHSV(incolor);
 		var l = 0;
@@ -479,8 +484,8 @@ define(function(require, exports){
 		}
 		return	vec4.fromHSV(0,0,l,1);
 	}
-	
-	// converts standard vec4 color in to HSL space (not to be confused with HSV space!) 
+
+	// converts standard vec4 color in to HSL space (not to be confused with HSV space!)
 	vec4.toHSL = function(inp){
 		var max = Math.max(inp[0], inp[1], inp[2]), min = Math.min(inp[0], inp[1], inp[2]);
 		var h, s, l = (max + min) / 2;
@@ -493,16 +498,16 @@ define(function(require, exports){
 			var d = max - min;
 			s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 			if (max == inp[0]){
-					h = (g - b) / d + (g < b ? 6 : 0); 
+					h = (g - b) / d + (g < b ? 6 : 0);
 			}
 			else{
 				if (max == inp[1]){
-					
-				h = (b - r) / d + 2; 
+
+				h = (b - r) / d + 2;
 				}
 				else{
-				
-				 h = (r - g) / d + 4; 
+
+				 h = (r - g) / d + 4;
 				}
 			}
 			h /= 6;
@@ -514,13 +519,13 @@ define(function(require, exports){
 	// h/s/l/a = [0..1] range.
 	vec4.fromHSL = function(h,s,l,a,o){
 		if(!o) o = vec4()
-			
+
 		var r, g, b;
 
 		if(s == 0){
 			r = g = b = l; // achromatic
 		}else{
-			var 
+			var
 			hue2rgb = function hue2rgb(p, q, t){
 				if(t < 0) {
 					t += 1;
@@ -528,13 +533,13 @@ define(function(require, exports){
 				else {
 					if(t > 1) t -= 1;
 				}
-				
+
 				if(t < 1/6) return p + (q - p) * 6 * t;
 				if(t < 1/2) return q;
 				if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
 				return p;
 			}
-			
+
 
 			var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
 			var p = 2 * l - q;
@@ -546,14 +551,14 @@ define(function(require, exports){
 		o[1] = g;
 		o[2] = b;
 		o[3] = a !== undefined?a: 1.0
-		
+
 		return o;
 	}
-	
-	// converts standard vec4 color in to HSL space (not to be confused with HSV space!) 
+
+	// converts standard vec4 color in to HSL space (not to be confused with HSV space!)
 	vec4.toHSV = function(inp){
-	
-	
+
+
     var r = inp[0];
     var g = inp[1];
     var b = inp[2];
@@ -578,8 +583,8 @@ define(function(require, exports){
 //    return { h: h, s: s, v: v };
 
 
-	
-	
+
+
 		return [h, s, v, inp[3]];;
 	}
 
@@ -587,12 +592,12 @@ define(function(require, exports){
 	// h/s/l/a = [0..1] range.
 	vec4.fromHSV = function(h,s,v,a,o){
 		if(!o) o = vec4()
-			
+
 		h *= 360;
 		if (h < 0) h+=360;
 
 		var r = 0.0;
-		var g = 0.0;	
+		var g = 0.0;
 		var b = 0.0;
 
 		if(s == 0.0){
@@ -615,10 +620,10 @@ define(function(require, exports){
 		o[2] = b;
 		o[3] = a !== undefined? a: 1.0
 		return o;
-		
+
 	}
 
-	
+
 	vec4.equals = function(a,b)
 	{
 		if (a[0] != b[0]) return false;
@@ -645,7 +650,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec4.mul = 
+	vec4.mul =
 	vec4.vec4_mul_vec4 = function(a, b, o){
 		if(!o) o = vec4()
 		o[0] = a[0] * b[0]
@@ -655,7 +660,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec4.mul_float32 = 
+	vec4.mul_float32 =
 	vec4.vec4_mul_float32 = function(a, b, o){
 		if(!o) o = vec4()
 		o[0] = a[0] * b
@@ -670,11 +675,11 @@ define(function(require, exports){
 		o[0] = a[0] * b
 		o[1] = a[1] * b
 		o[2] = a[2] * b
-		o[3] = a[3] 
+		o[3] = a[3]
 		return o
 	}
 
-	vec4.add = 
+	vec4.add =
 	vec4.vec4_add_vec4 = function(a, b, o){
 		if(!o) o = vec4()
 		o[0] = a[0] + b[0]
@@ -694,7 +699,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec4.div = 
+	vec4.div =
 	vec4.vec4_div_vec4 = function(a, b, o){
 		if(!o) o = vec4()
 		o[0] = a[0] / b[0]
@@ -704,7 +709,7 @@ define(function(require, exports){
 		return o
 	}
 
-	vec4.mul_mat4 = 
+	vec4.mul_mat4 =
 	vec4.vec4_mul_mat4 = function(v, m, o){
 		if(!o) o = vec4()
 		var vx = v[0], vy = v[1], vz = v[2], vw = v[3]
@@ -715,8 +720,8 @@ define(function(require, exports){
 		return o
 	}
 
-	
-	vec4.mul_quat = 
+
+	vec4.mul_quat =
 	vec4.vec4_mul_quat = function(v, q, o){
 		if(!o) o = vec4()
 		var vx = v[0], vy = v[1], vz = v[2],
@@ -742,7 +747,7 @@ define(function(require, exports){
 		o[3] = a[3] < b[3]
 		return o
 	}
-	
+
 	vec4.lessThanEqual = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] <= b[0]
@@ -751,13 +756,13 @@ define(function(require, exports){
 		o[3] = a[3] <= b[3]
 		return o
 	}
-	
+
 	vec4.greaterThan = function(a, b, o){
 		if(!o) o = exports.bvec4()
 		o[0] = a[0] > b[0]
 		o[1] = a[1] > b[1]
 		o[2] = a[2] > b[2]
-		o[3] = a[3] > b[3]		
+		o[3] = a[3] > b[3]
 		return o
 	}
 
@@ -766,7 +771,7 @@ define(function(require, exports){
 		o[0] = a[0] >= b[0]
 		o[1] = a[1] >= b[1]
 		o[2] = a[2] >= b[2]
-		o[3] = a[3] >= b[3]	
+		o[3] = a[3] >= b[3]
 		return o
 	}
 
@@ -881,7 +886,7 @@ define(function(require, exports){
 			sinom  = sin(omega)
 			scale0 = sin((1.0 - f) * omega) / sinom
 			scale1 = sin(f * omega) / sinom
-		} 
+		}
 		else { // linear interpolate if very close
 			scale0 = 1.0 - f
 			scale1 = f
@@ -922,7 +927,7 @@ define(function(require, exports){
 			w = 0.5 * r
 			r = 0.5/r  // 1/(4w)
 			x = (m[5]-m[7])*r, y = (m[6]-m[2])*r, z = (m[1]-m[3])*r
-		} 
+		}
 		else {
 			// |w| <= 1/2
 			var i = 0
@@ -930,7 +935,7 @@ define(function(require, exports){
 			if ( m[8] > m[i*3+i] ) i = 2
 			var j = (i+1)%3
 			var k = (i+2)%3
-			
+
 			r = sqrt(m[i*3+i]-m[j*3+j]-m[k*3+k] + 1.0)
 			o[i] = 0.5 * r
 			r = 0.5 / r
@@ -963,12 +968,12 @@ define(function(require, exports){
 
 	mat2.rotate = function(a, angle, o){
 		if(!o) o = mat2()
-		var a00 = a[0], a01 = a[1], 
+		var a00 = a[0], a01 = a[1],
 		    a10 = a[2], a11 = a[3],
 		    s = sin(angle), c = cos(angle)
 		o[0] = a00 * c + a10 * s
 		o[1] = a01 * c + a11 * s
-		o[2] = a00 * -s + a10 * c 
+		o[2] = a00 * -s + a10 * c
 		o[3] = a01 * -s + a11 * c
 		return o
 	}
@@ -996,12 +1001,12 @@ define(function(require, exports){
 	mat2.outerProduct = function(c, r){
 		if(!o) o = mat2()
 		o[0] = c[0] * r[0]
-		o[1] = c[0] * r[1] 
-		o[2] = c[1] * r[0] 
+		o[1] = c[0] * r[1]
+		o[2] = c[1] * r[0]
 		o[3] = c[1] * r[1]
 		return o
 	}
-	
+
 	matApi(mat3)
 
 	mat3.identity = function(o){
@@ -1071,12 +1076,12 @@ define(function(require, exports){
 	}
 
 	mat3.determinant = function(a){
-		return a[0] * (a[8] * a[4] - a[5] * a[7]) + 
-			a[1] * (-a[8] * a[3] + a[5] * a[6]) + 
+		return a[0] * (a[8] * a[4] - a[5] * a[7]) +
+			a[1] * (-a[8] * a[3] + a[5] * a[6]) +
 			a[2] * (a[7] * a[3] - a[4] * a[6])
 	}
 
-	mat3.mul = 
+	mat3.mul =
 	mat3.mat3_mul_mat3 = function(a, b, o){
 		if(!o) o = mat3()
 		var a00 = a[0], a01 = a[1], a02 = a[2],
@@ -1114,7 +1119,7 @@ define(function(require, exports){
 		o[7] = x * a01 + y * a11 + a21
 		o[8] = x * a02 + y * a12 + a22
 		return o
-	}	
+	}
 
 	mat3.rotate = function(a, angle, o){
 		if(!o) o = mat3()
@@ -1147,8 +1152,8 @@ define(function(require, exports){
 			zx = z * x2, zy = z * y2, zz = z * z2,
 			wx = w * x2, wy = w * y2, wz = w * z2
 
-		o[0] = 1 - yy - zz, o[1] = yx + wz,     o[2] = zx - wy,     
-		o[3] = yx - wz,     o[4] = 1 - xx - zz, o[5] = zy + wx,     
+		o[0] = 1 - yy - zz, o[1] = yx + wz,     o[2] = zx - wy,
+		o[3] = yx - wz,     o[4] = 1 - xx - zz, o[5] = zy + wx,
 		o[6] = zx + wy,     o[7] = zy - wx,     o[8] = 1 - xx - yy
 		return o
 	}
@@ -1168,7 +1173,7 @@ define(function(require, exports){
 			b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32,
 			det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-		if (!det) return null 
+		if (!det) return null
 		det = 1.0 / det
 
 		o[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det
@@ -1184,10 +1189,10 @@ define(function(require, exports){
 		o[8] = (a30 * b04 - a31 * b02 + a33 * b00) * det
 		return o
 	}
-	
+
 	mat3.outerProduct = function(c, r){
 		if(!o) o = mat3()
-		o[0] = c[0] * r[0], m01 = c[0] * r[1], m02 = c[0] * r[2] 
+		o[0] = c[0] * r[0], m01 = c[0] * r[1], m02 = c[0] * r[2]
 		o[1] = c[1] * r[0], m11 = c[1] * r[1], m12 = c[1] * r[2]
 		o[2] = c[2] * r[0], m21 = c[2] * r[1], m22 = c[2] * r[2]
 		return o
@@ -1202,13 +1207,13 @@ define(function(require, exports){
 			 r +=(Array(6).join(' ') +  Math.round(d[i+1]*1000)/1000).slice(-6) + ", ";
 			 r += (Array(6).join(' ') + Math.round(d[i+2]*1000)/1000).slice(-6) + ", ";
 			 r += (Array(6).join(' ') + Math.round(d[i+3]*1000)/1000).slice(-6) + "  ";
-			if (!inline){ 
+			if (!inline){
 				console.log(r); r = "";
 			}
 		}
 		if (inline) console.log(r);
 	}
-	
+
 	mat4.identity = function(o){
 		if(!o) o = mat4()
 		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = 0,
@@ -1217,11 +1222,11 @@ define(function(require, exports){
 		o[12]= 0, o[13]= 0, o[14]= 0, o[15]= 1
 		return o
 	}
-	
+
 	mat4.isIdentity = function(o){
-		return o[0] == 1 && o[1] == 0 && o[2] == 0 && o[3] == 0 && 
-		o[4] == 0 && o[5] == 1 && o[6] == 0 && o[7] == 0 && 
-		o[8] == 0 && o[9] == 0 && o[10]== 1 && o[11]== 0 && 
+		return o[0] == 1 && o[1] == 0 && o[2] == 0 && o[3] == 0 &&
+		o[4] == 0 && o[5] == 1 && o[6] == 0 && o[7] == 0 &&
+		o[8] == 0 && o[9] == 0 && o[10]== 1 && o[11]== 0 &&
 		o[12]== 0 && o[13]== 0 && o[14]== 0 && o[15]== 1
 	}
 
@@ -1240,7 +1245,7 @@ define(function(require, exports){
 			b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32,
 			det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-		if (!det) return null 
+		if (!det) return null
 		det = 1.0 / det
 
 		o[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det
@@ -1257,7 +1262,7 @@ define(function(require, exports){
 		o[15] = 1.0;
 		return o
 	}
-	
+
 	mat4.T2 = function(t, o){
 		if(!o) o = mat4()
 		o[0] = 1, o[1] = 0, o[2] = 0, o[3] = t[0],
@@ -1352,7 +1357,7 @@ define(function(require, exports){
 		return o
 	}
 
-	
+
 	mat4.RT2 = function(r, t, o){
 		if(!o) o = mat4()
 		var cx = Math.cos(r[0]), cy = Math.cos(r[1]), cz = Math.cos(r[2])
@@ -1419,7 +1424,7 @@ define(function(require, exports){
 		var sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
 		o[0] = mx*(cy * cz + sx * sy * sz),  o[1] = my*(-sz*cy+cz*sx*sy),  o[2] = mz*(sy*cx),     o[3] = t2x + (o[0]*t1x + o[1]*t1y + o[2]*t1z)
 		o[4] = mx*(sz * cx),                 o[5] = my*(cx*cz),            o[6] = mz*(-sx),       o[7] = t2y + (o[4]*t1x + o[5]*t1y + o[6]*t1z)
-		o[8] = mx*(-sy * cz + cy * sx * sz), o[9] = my*(sy*sz+cy*sx*cz),   o[10] = mz*(cx * cy),   o[11] = t2z + (o[8]*t1x + o[9]*t1y + o[10]*t1z)	
+		o[8] = mx*(-sy * cz + cy * sx * sz), o[9] = my*(sy*sz+cy*sx*cz),   o[10] = mz*(cx * cy),   o[11] = t2z + (o[8]*t1x + o[9]*t1y + o[10]*t1z)
 		o[13] = 0,                       o[13] = 0,                o[14] = 0,         o[15] = 1
 		return o
 	}
@@ -1434,7 +1439,7 @@ define(function(require, exports){
 		var sx = Math.sin(rx), sy = Math.sin(ry), sz = Math.sin(rz)
 		o[0] = mx*(cy * cz + sx * sy * sz),  o[1] = my*(-sz*cy+cz*sx*sy),  o[2] = mz*(sy*cx),     o[3] = t2x + (o[0]*t1x + o[1]*t1y + o[2]*t1z)
 		o[4] = mx*(sz * cx),                 o[5] = my*(cx*cz),            o[6] = mz*(-sx),       o[7] = t2y + (o[4]*t1x + o[5]*t1y + o[6]*t1z)
-		o[8] = mx*(-sy * cz + cy * sx * sz), o[9] = my*(sy*sz+cy*sx*cz),   o[10] = mz*(cx * cy),   o[11] = t2z + (o[8]*t1x + o[9]*t1y + o[10]*t1z)	
+		o[8] = mx*(-sy * cz + cy * sx * sz), o[9] = my*(sy*sz+cy*sx*cz),   o[10] = mz*(cx * cy),   o[11] = t2z + (o[8]*t1x + o[9]*t1y + o[10]*t1z)
 		o[13] = 0,                       o[13] = 0,                o[14] = 0,         o[15] = 1
 		return o
 	}
@@ -1446,7 +1451,7 @@ define(function(require, exports){
 			o[1] = a[4], o[2] = a[8], o[3] = a[12],o[4] = a01
 			o[6] = a[9], o[7] = a[13],o[8] = a02,  o[9] = a12
 			o[11]= a[14], o[12]= a03,   o[13] = a13,  o[14]= a23
-		} 
+		}
 		else {
 			o[0] = a[0], o[1] = a[4], o[2] = a[8], o[3] = a[12]
 			o[4] = a[1], o[5] = a[5], o[6] = a[9], o[7] = a[13]
@@ -1473,7 +1478,7 @@ define(function(require, exports){
 
 			d = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 
-		if (!d) return mat4.identity() 
+		if (!d) return mat4.identity()
 		d = 1.0 / d
 
 		o[0]  = (a11 * b11 - a12 * b10 + a13 * b09) * d
@@ -1522,7 +1527,7 @@ define(function(require, exports){
 	}
 
 	// multiply matrix a with vector or matrix V
-	mat4.mul = 
+	mat4.mul =
 	mat4.mat4_mul_mat4 = function(a, b, o){
 		if(!o) o = mat4()
 		var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3],
@@ -1582,7 +1587,7 @@ define(function(require, exports){
 			o[13] = a[1] * x + a[5] * y + a[9] * z + a[13]
 			o[14] = a[2] * x + a[6] * y + a[10] * z + a[14]
 			o[15] = a[3] * x + a[7] * y + a[11] * z + a[15]
-		} 
+		}
 		else {
 			a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3]
 			a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7]
@@ -1611,11 +1616,11 @@ define(function(require, exports){
 		o[0] = v[0];
 		o[5] = v[1];
 		o[10] = v[2];
-		o[15] = 1;		
+		o[15] = 1;
 		return o;
-		
+
 	}
-	
+
 	mat4.translatematrix = function(v, o)
 	{
 		if(!o) {
@@ -1627,9 +1632,9 @@ define(function(require, exports){
 		o[3] = v[0];
 		o[7] = v[1];
 		o[11] = v[2];
-		o[15] = 1;		
+		o[15] = 1;
 		return o;
-		
+
 	}
 
 
@@ -1650,8 +1655,8 @@ define(function(require, exports){
 		if(!o) o = mat4()
 		var x = v[0], y = v[1], z = v[2],
 			len = Math.sqrt(x * x + y * y + z * z),
-			s = Math.sin(angle), 
-			c = Math.cos(angle), 
+			s = Math.sin(angle),
+			c = Math.cos(angle),
 			t = 1 - c,
 
 		len = 1 / len
@@ -1782,7 +1787,7 @@ define(function(require, exports){
 		o[12] = 0,           o[13] = 0,           o[14] = 0,            o[15] = 1
 		return o
 	}
-	
+
 	// Create matrix from left/right/bottom/top/near/far
 	mat4.fustrum = function(L, R, T, B, N, F, o){
 		if(!o) o = mat4()
@@ -1798,32 +1803,32 @@ define(function(require, exports){
 	mat4.perspective = function(FY, A, N, F, o){
 		if(!o) o = mat4()
 		var f = 1.0 / Math.tan(FY / 2), nf = 1 / (N - F)
-		
+
 		o[0] = f / A, o[4] = 0,  o[8] = 0,                 o[12] = 0
 		o[1] = 0,     o[5] = f,  o[9] = 0,                 o[13] = 0
 		o[2] = 0,     o[6] = 0,  o[10] = (F + N) * nf,      o[14] = -1
 		o[3] = 0,     o[7] = 0,  o[11] = (2 * F * N) * nf,  o[15] = 0
 		return o
 	}
- 
+
 	// Create orthogonal proj matrix with Left/Right/Bottom/Top/Near/Far
 	mat4.ortho = function(L, R, T, B, N, F, o){
 		if(!o) o = mat4()
 		var lr = 1 / (L - R), bt = 1 / (B - T), nf = 1 / (N - F)
-		o[0] = -2 * lr,      o[4] = 0,            o[8] = 0,            o[12] = 0 
-		o[1] = 0,            o[5] = -2 * bt,      o[9] = 0,            o[13] = 0 
+		o[0] = -2 * lr,      o[4] = 0,            o[8] = 0,            o[12] = 0
+		o[1] = 0,            o[5] = -2 * bt,      o[9] = 0,            o[13] = 0
 		o[2] = 0,            o[6] = 0,            o[10] = 2 * nf,       o[14] = 0
 		o[3] = (L + R) * lr, o[7] = (T + B) * bt, o[11] = (F + N) * nf, o[15] = 1
 		return o
 	}
 
-	// Create look at matrix with Eye, LookAt, and Up vectors 
+	// Create look at matrix with Eye, LookAt, and Up vectors
 	mat4.lookAt = function(eye, look, up, o){
 		if(!o) o = mat4()
 		var x0, x1, x2, y0, y1, y2, z0, z1, z2, len,
-			ex = eye[0], ux = up[0], lx = look[0], 
+			ex = eye[0], ux = up[0], lx = look[0],
 			ey = eye[1], uy = up[1], ly = look[1],
-			ez = eye[2], uz = up[2], lz = look[2]		
+			ez = eye[2], uz = up[2], lz = look[2]
 
 		if (Math.abs(ex - lx) < 0.000001 &&
 			Math.abs(ey - ly) < 0.000001 &&
@@ -1847,11 +1852,11 @@ define(function(require, exports){
 		if (!len)  y0 = 0, y1 = 0, y2 = 0
 		else len = 1 / len, y0 *= len, y1 *= len, y2 *= len
 
-		
+
 		o[0] = x0, o[4] = y0,  o[8] = z0,  o[12] = 0
 		o[1] = x1, o[5] = y1,  o[9] = z1,  o[13] = 0
 		o[2] = x2, o[6] = y2, o[10] = z2,  o[14] = 0
-		
+
 		o[3] =  -(x0 * ex + x1 * ey + x2 * ez)
 		o[7] =  -(y0 * ex + y1 * ey + y2 * ez)
 		o[11] = -(z0 * ex + z1 * ey + z2 * ez)
@@ -1861,10 +1866,10 @@ define(function(require, exports){
 
 	mat4.outerProduct = function(c, r, o){
 		if(!o) o = mat4()
-		o[0] = c[0] * r[0], o[1] = c[0] * r[1], o[2] = c[0] * r[2], o[3] = c[0] * r[3] 
+		o[0] = c[0] * r[0], o[1] = c[0] * r[1], o[2] = c[0] * r[2], o[3] = c[0] * r[3]
 		o[4] = c[1] * r[0], o[5] = c[1] * r[1], o[6] = c[1] * r[2], o[7] = c[1] * r[3]
 		o[8] = c[2] * r[0], o[9] = c[2] * r[1], o[10] = c[2] * r[2], o[11] = c[2] * r[3]
-		o[12] = c[3] * r[0], o[13] = c[3] * r[1], o[14] = c[3] * r[2], o[15] = c[3] * r[3] 
+		o[12] = c[3] * r[0], o[13] = c[3] * r[1], o[14] = c[3] * r[2], o[15] = c[3] * r[3]
 		return o
 	}
 
@@ -1882,7 +1887,7 @@ define(function(require, exports){
 	ease.inoutquart = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t : -0.5 * ((t-=2.)*t*t*t - 2.) }
 	ease.inquint = function(t){ return t*t*t*t*t }
 	ease.outquint = function(t){ return ((t=t-1.)*t*t*t*t + 1.) }
-	ease.inoutquint = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t*t : 0.5*((t-=2.)*t*t*t*t + 2.) }	
+	ease.inoutquint = function(t){ return (t/=0.5) < 1. ? 0.5*t*t*t*t*t : 0.5*((t-=2.)*t*t*t*t + 2.) }
 	ease.insine = function(t){ return -cos(t * (PI/2.)) + 1. }
 	ease.outsine = function(t){ return sin(t * (PI/2.)) }
 	ease.inoutsine = function(t){ return -0.5 * (cos(PI*t) - 1.) }
@@ -1894,8 +1899,8 @@ define(function(require, exports){
 	ease.inoutexpo = function(t){
 		if (t==0.) return 0.
 		if (t==1.) return 1.
-		if ((t/=0.5) < 1.) return 0.5 * pow(2., 10. * (t - 1.)) 
-		return 0.5 * (-pow(2., -10. * --t) + 2.) 
+		if ((t/=0.5) < 1.) return 0.5 * pow(2., 10. * (t - 1.))
+		return 0.5 * (-pow(2., -10. * --t) + 2.)
 	}
 
 	ease.inelastic = function(t){
@@ -1905,7 +1910,7 @@ define(function(require, exports){
 		if (!p) p=0.3
 		if (a < 1.) { a=1.; var s=p/4. }
 		else var s = p/(2.*PI) * asin(1./a)
-		return -(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p )) 
+		return -(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p ))
 	}
 
 	ease.outelastic = function(t){
@@ -1915,7 +1920,7 @@ define(function(require, exports){
 		if (!p) p=1.*0.3
 		if (a < 1.) { a=1.; var s=p/4.; }
 		else var s = p/(2.*PI) * asin (1./a)
-		return a*pow(2.,-10.*t) * sin( (t*1.-s)*(2.*PI)/p ) + 1. 
+		return a*pow(2.,-10.*t) * sin( (t*1.-s)*(2.*PI)/p ) + 1.
 	}
 
 	ease.inoutelastic = function(t){
@@ -1925,7 +1930,7 @@ define(function(require, exports){
 		if (!p) p=(0.3*1.5)
 		if (a < 1.) { a=1.; var s=p/4.; }
 		else var s = p/(2.*PI) * asin (1./a)
-		if (t < 1.) return -.5*(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p )) 
+		if (t < 1.) return -.5*(a*pow(2.,10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p ))
 		return a*pow(2.,-10.*(t-=1.)) * sin( (t*1.-s)*(2.*PI)/p )*0.5 + 1.
 	}
 
@@ -1933,24 +1938,24 @@ define(function(require, exports){
 	ease.outback = function(t){ var s = 1.70158; return ((t=t/1-1)*t*((s+1)*t + s) + 1) }
 	ease.inoutback = function(t){
 		var s = 1.70158
-		if ((t/=0.5) < 1.) return 0.5*(t*t*(((s*=(1.525))+1.)*t - s)) 
-		return 0.5*((t-=2.)*t*(((s*=(1.525))+1.)*t + s) + 2.) 
+		if ((t/=0.5) < 1.) return 0.5*(t*t*(((s*=(1.525))+1.)*t - s))
+		return 0.5*((t-=2.)*t*(((s*=(1.525))+1.)*t + s) + 2.)
 	}
 
 	ease.inbounce = function(t){
-		return 1. - ease.outbounce(1.-t) 
+		return 1. - ease.outbounce(1.-t)
 	}
 
 	ease.outbounce = function(t){
-		if (t < (1./2.75)) return (7.5625*t*t) 
-		else if (t < (2./2.75)) return (7.5625*(t-=(1.5/2.75))*t + 0.75) 
-		else if (t < (2.5/2.75)) return (7.5625*(t-=(2.25/2.75))*t + 0.9375) 
-		return (7.5625*(t-=(2.625/2.75))*t + .984375) 
+		if (t < (1./2.75)) return (7.5625*t*t)
+		else if (t < (2./2.75)) return (7.5625*(t-=(1.5/2.75))*t + 0.75)
+		else if (t < (2.5/2.75)) return (7.5625*(t-=(2.25/2.75))*t + 0.9375)
+		return (7.5625*(t-=(2.625/2.75))*t + .984375)
 	}
 
 	ease.inoutbounce = function(t){
-		if (t < 0.5) return ease.inbounce (t*2.) * 0.5 
-		return ease.outbounce (t*2.-1.) * 0.5 + 0.5 
+		if (t < 0.5) return ease.inbounce (t*2.) * 0.5
+		return ease.outbounce (t*2.-1.) * 0.5 + 0.5
 	}
 
 	ease.quad = function(t){ return ease.outquad(t)}
@@ -1995,12 +2000,12 @@ define(function(require, exports){
 				x2 = bezierCurveX(t2) - x
 				if(Math.abs(x2) < b.epsilon) return t2
 				d2 = bezierCurveDX(t2)
-				if(Math.abs(d2) < 1e-6) break 
+				if(Math.abs(d2) < 1e-6) break
 				t2 = t2 - x2 / d2
 			}
 			// Fall back to the bisection method for reliability.
 			t0 = 0.0
-			t1 = 1.0 
+			t1 = 1.0
 			t2 = x
 			if(t2 < t0) return t0
 			if(t2 > t1) return t1
@@ -2035,13 +2040,13 @@ define(function(require, exports){
 			}
 		}
 
-		var Xi = 0 // we go from 0 
+		var Xi = 0 // we go from 0
 		var Xf = 1 // to 1 , as we are an motion function
 		var Xo = Xi - di // as per email
 		var Xn = Xf + df // here too
 		// compute the constant
 		var K = ((Xo - Xf) * (Xi - Xn)) / ((Xo - Xi) * (Xf - Xn))
-		
+
 		return function(t){
 			// seems to be 1.20001
 			var Kt = Math.pow(K, t)

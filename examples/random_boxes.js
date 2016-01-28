@@ -1,7 +1,10 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 // Randomly display squares in a parent view. Move each view when the parent
 // view is clicked.
-
-
 
 define.class(function($server$, composition, $ui$, screen, view){
 
@@ -32,7 +35,7 @@ define.class(function($server$, composition, $ui$, screen, view){
     //this.changepos();
   }
 
-  this.render = function(){ 
+  this.render = function(){
     var views = [
       screen({name:'default', clearcolor:'#484230'},
              view({name: 'top', size: vec2(500,500), bgcolor: vec4('gray'), onmouseleftdown: this.mousedown}
@@ -59,7 +62,7 @@ rcolor = function() {
   var color = vec4(Math.random(), Math.random(), Math.random(), 1);
   return color;
 }
-  
+
 // Return a random position
 rpos = function() {
   var pos = vec3(random(450), random(450), 0);
