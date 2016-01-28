@@ -3,19 +3,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	var KindSet = this.KindSet = {};
 	var UnhandledKindSet = this.UnhandledKindSet = {};	
 	var TileSize = 1024.0 ;
-	this.attributes = {
-		latlong:vec2(52.3608307,   4.8626387),
-		centerx: 0, 
-		centery: 0,
-		zoomlevel: 16
-	}
-	
-	
-	function createHash (x, y, z){
-			return x + "_" + y + "_" + z;
-	}
 
-		
+	
 	var landcolor1 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"white",library:"white",common:"white", sports_centre:"red", bridge:"gray", university:"red", breakwater:"blue", playground:"lime",forest:"darkgreen",pitch:"lime", grass:"#40d020", village_green:"green", garden:"green",residential:"gray" , footway:"gray", pedestrian:"gray", water:"#40a0ff",pedestrian:"lightgray", parking:"gray", park:"#40d030", earth:"lime", pier:"#404040", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	var landcolor2 = {farm:vec4(1,1,0.1,1), retail:vec4(0,0,1,0.5), tower:"gray", library:"gray", common:"gray", sports_centre:"white", bridge:"white", university:"black", breakwater:"blue", playground:"red", forest:"black",pitch:"green", grass:"green", village_green:"green", garden:"#40d080", residential:"lightgray" , footway:"yellow", pedestrian:"blue",water:"#000080",pedestrian:"yellow", parking:"lightgray", park:"darkgreen", earth:"green", pier:"gray", "rail" : vec4("purple"), "minor_road": vec4("orange"), "major_road" : vec4("red"), highway:vec4("black")}
 	//var landcolor1 ={water:"#40a0ff",park:"darkgreen", grass:"white" };
@@ -52,6 +41,45 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		minor_road:-55, 
 		major_road :-55, highway:-55
 	}
+	
+	
+	
+	
+	this.attributes = {
+		latlong:vec2(52.3608307,   4.8626387),
+		centerx: 0, 
+		centery: 0,
+		zoomlevel: 16
+	}
+	
+	this.dumpkindset = function(){
+		
+		
+		
+		var typemapstring = "var typemap = {\n";
+		for(var i in KindSet){
+			typemapstring += "\t" + i + ":{\n";
+			if (landoffsets[i]) typemapstring += "\t\toffset:" + landoffsets[i]+ ",\n "
+			if (landcolor1[i]) typemapstring += "\t\tcolor1: vec4(" + vec4(landcolor1[i])+ "),\n "
+			if (landcolor2[i]) typemapstring += "\t\tcolor2: vec4(" + vec4(landcolor2[i])+ "),\n "
+			if (roadcolors[i]) typemapstring += "\t\troadcolor: vec4(" + vec4(roadcolors[i])+ "),\n "
+			typemapstring +="\t},\n";
+	//		console.log("Handled:", i);
+		}
+		for(var i in UnhandledKindSet){
+			console.log("Unhandled:" , i, UnhandledKindSet[i]);
+			}
+		typemapstring += "\tdefault:\n\t{\n\t\tcolor1:vec4('red')\n\t}\n}";
+		
+		console.log(typemapstring);
+	}
+	
+	
+	
+	function createHash (x, y, z){
+			return x + "_" + y + "_" + z;
+	}
+
 	
 	this.mouseleftdown = function(){
 		console.log("mousedown");		
@@ -189,8 +217,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			var color1 = vec4(1,0,1,1);
 			var color2 = vec4(1,0,1,1);
 			
-			if (landcolor1[land.kind]) color1 = landcolor1[land.kind];else UnhandledKindSet[land.kind] = true;
-			if (landcolor2[land.kind]) color2 = landcolor2[land.kind];else UnhandledKindSet[land.kind] = true;
+			if (landcolor1[land.kind]) color1 = landcolor1[land.kind];else UnhandledKindSet[land.kind] = "land";
+			if (landcolor2[land.kind]) color2 = landcolor2[land.kind];else UnhandledKindSet[land.kind] = "land";
 			if (landoffsets[land.kind]) off = landoffsets[land.kind];
 			
 			if (land.arcs){
@@ -217,8 +245,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					//console.log(R);
 					var linewidth = 3;
 					var color = vec4("gray") ;
-					if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];
-					if (roadcolors[R.kind]) color = vec4(roadcolors[R.kind]);
+					if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
+					if (roadcolors[R.kind]) color = vec4(roadcolors[R.kind]);else UnhandledKindSet[R.kind] = "road" ;
 					var markcolor = color;
 					if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
 				
@@ -557,7 +585,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		this.getBlockByHash = function(hash){
-			//console.log(hash);
 			return this.loadedblocks[hash];
 		}
 			
@@ -575,7 +602,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					var q = this.loadqueue[i];
 					var dx = this.centerpos[0] - q.x;
 					var dy = this.centerpos[1] - q.y;
-					var dz = (this.centerz - q.z)*zscalar;
+					var dz = (this.zoomlevel - q.z)*zscalar;
+				//	console.log(dx,dy,dz);
 					q.dist = dx * dx + dy * dy + dz * dz;
 				}
 				
@@ -585,6 +613,12 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					return 0;
 				});
 				
+				//console.log(this.loadqueue);
+				//var queuedist = ""
+				//for (var i = 0;i<this.loadqueue.length;i++){
+				//	queuedist += this.loadqueue[i].dist + " ";
+				//}
+				//console.log(queuedist);
 				var R =	this.currentRequest = this.loadqueue.pop(); 
 				this.rpc.urlfetch.grabmap(R.x, R.y, R.z).then(function(result){
 					this.loadstring(result.value)
@@ -633,7 +667,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				//this.simulateLoaded();
 			}.bind(this), 50);
 		
-			this.gotoCity("manhattan", 16);
+			this.gotoCity("Amsterdam", 10);
 			//this.setCenter(33656/2,21534/2, 16)
 			
 		}
@@ -827,10 +861,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.color = function(){
 				//return "blue";
-				var col =  pal.pal2(
-							(sin((idxpos.x + view.trans.x)*0.2)*0.5+0.5) * 
-							(0.5 + 0.5*sin((idxpos.y + view.trans.y)*0.2)));
-			
+				var col =  vec4("blue" );
+				
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
 				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));

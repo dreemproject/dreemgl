@@ -36,7 +36,9 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 								,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
 								,label({text:"Rotation control",margin: 10,fontsize:12,  bg:0})
 								,ballrotate({name:"ballrotate1", height:100, target:"mapinside"})
+			
 								)
+								,button({ text:"Used Tile types",click:function(){this.find("themap").dumpkindset();}, margin:4})
 							)
 						)
 
