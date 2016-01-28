@@ -2,6 +2,9 @@
  * @class foldcontainer
  * @extends view
  * The foldcontainer shows/hides all its children when the top bar is clicked
+ * 
+ * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/ui/foldcontainer.js"></iframe>
+ * 
  */
 /**
  * @attribute {boolean} [collapsed="undefined"]

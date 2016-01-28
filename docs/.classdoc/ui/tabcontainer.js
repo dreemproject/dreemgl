@@ -2,6 +2,9 @@
  * @class tabcontainer
  * @extends view
  * Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
+ * 
+ * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/ui/tabcontainer.js"></iframe>
+ * 
  */
 /**
  * @attribute {int32} [activetab="undefined"]

@@ -2,6 +2,9 @@
  * @class splitcontainer
  * @extends view
  * Splitcontainer adds dragbars between nodes to make all the nodes resizable.
+ * 
+ * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/ui/splitcontainer.js"></iframe>
+ * 
  */
 /**
  * @attribute {Enum} [direction="vertical"]

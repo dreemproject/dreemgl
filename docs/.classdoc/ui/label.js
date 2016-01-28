@@ -2,6 +2,9 @@
  * @class label
  * @extends view
  * A simple UI label for displaying text
+ * 
+ * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/ui/label.js"></iframe>
+ * 
  */
 /**
  * @attribute {vec4} [fgcolor="1,1,1,1"]

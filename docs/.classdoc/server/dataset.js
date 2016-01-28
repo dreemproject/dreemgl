@@ -4,6 +4,9 @@
  * The dataset class allows you to share a single "document" between various parts of your application.
  * The dataset provides undo/redo functionality by serializing its contents to a JSON string.
  * To modify a dataset you need to use the "fork" method. The fork method saves the current instance to the undo stack, calls back to your code and then notifies all objects that have this dataset instance bound to them to update themselves.
+ * 
+ * <iframe style="border-radius:7px;border-style:dashed;border-width:thin;width:900px;height:500px" src="http://localhost:2000/apps/docs/example#path=$root/server/dataset.js"></iframe>
+ * 
  */
 /**
  * @method fork

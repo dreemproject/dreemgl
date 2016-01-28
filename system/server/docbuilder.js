@@ -47,6 +47,7 @@ define.class(function(require){
             var expandedPath = define.expandVariables('$' + path);
             var module = require(expandedPath)
             var class_doc = this.parseDoc(module)
+			class_doc.sourcePath = path;
             var out = this.printJSDuck(class_doc).join('\n');
             if (out) {
                 this.writeToPath(path, out);
@@ -148,6 +149,8 @@ define.class(function(require){
             return output;
         }
 
+		var exampleFunctions = {};
+
         if (class_doc.body_text && class_doc.body_text.length) {
             firstline = class_doc.body_text[0]
             if (firstline && firstline.startsWith(internal)) {
@@ -172,7 +175,17 @@ define.class(function(require){
                 }
             }
 
-            output.push(' */');
+			if (class_doc.examples && class_doc.examples.length) {
+				var url = 'http://localhost:2000/apps/docs/example#path=$root/' + class_doc.sourcePath;
+				var s = "border-radius:7px;border-style:dashed;border-width:thin;"
+				var w = 900;
+				var h = 500;
+				output.push(' * ')
+				output.push(' * <iframe style="' + s + 'width:' + w + 'px;height:' + h + 'px" src="' + url + '"></iframe>')
+				output.push(' * ')
+			}
+
+			output.push(' */');
             var attrs = [];
             if (class_doc.attributes) {
                 for (i=0; i < class_doc.attributes.length; i++) {
@@ -293,14 +306,13 @@ define.class(function(require){
             //        output = output.concat(this.printJSDuck(inner, classname));
             //    }
             //}
-            if (class_doc.examples && class_doc.examples.length) {
-                console.log('EXAMPLES', class_doc.examples)
-            }
             if (class_doc.state_attributes && class_doc.state_attributes.length) {
                 console.log('STATE', class_doc.state_attributes)
             }
 
         }
+
+		console.log(output.join('\n'))
 
         return output;
 
