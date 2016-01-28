@@ -1,5 +1,5 @@
 //Pure JS based composition
-define.class('$server/composition', function(require, $server$, fileio, dataset, $ui$, screen, view, splitcontainer, treeview, label, $widgets$, docviewer, jsviewer){
+define.class('$server/composition', function(require, $ui$, screen, view, label, $widgets$, jsviewer){
 // internal, Inline example viewer.  Used by jsduck iframe.
 
 	this.render = function(){
