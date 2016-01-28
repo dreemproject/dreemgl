@@ -75,7 +75,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		pos:vec3,
 		color1:vec4, 
 		id: float,
-		buildingid: float
+		buildingid: float,
+		height: float
 	})
 	
 	var RoadVertexStruct = define.struct({		
@@ -155,20 +156,20 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 						A2[0] -= OA1[0];
 					}
 					
-					c = 0.4 + 0.3 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid);
-					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,bid);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid);
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid);
-					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,bid);
+					c = 0.8 + 0.2 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
+					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid,theH);
+					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,bid,theH);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid,theH);
+					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid,theH);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid,theH);
+					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,bid,theH);
 					A1 = A2;
 			
 				}
-				c = 0.4
+				c = 1.0
 				for(var a = 0;a<tris.length;a++){
 					var atri = tris[a];
-					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c,c,c, 1, i,bid);
+					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c,c,c, 1, i,bid,theH);
 				}
 			}							
 		}
@@ -318,7 +319,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	}
 	
 		
-	define.class(this, "mapdataset", "$system/base/node", function( $$, geo)
+	define.class(this, "mapdataset", "$ui/view", function( $$, geo)
 	{
 		this.requestPending = false;
 		this.loadqueue = [];
@@ -328,8 +329,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		var geo = this.geo = geo();
 		
 		this.attributes = {
-			centerx: 0,
-			centery: 0,
+			centerpos: vec2(0),
+			
 			latlong: vec2(52.3608307,   4.8626387),
 			zoomlevel: 15,
 			callbacktarget: {}
@@ -343,21 +344,28 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		}
 		
 		this.setCenter = function(x,y,z, time){
-			
+			console.log("moving to ",x,y,z);
 			if (!time || time == 0)
 			{
-				this.centerx = x;
-				this.centery = y;
+				this.centerpos = vec2(x,y)
 				this.zoomlevel = z;
 				for(var xx = -5; xx < 5; xx++){
 					for(var yy = -5; yy < 5; yy++){			
-						this.addToQueue(x + xx,y + yy,z);	
+				//		this.addToQueue(x + xx,y + yy,z);	
 					}
 				}					
 			}
 			else{
-				console.log("todo: set up animation");
-				debugger;
+				
+				var anim = {}
+				anim[1] = {motion:"inoutquad", value:vec2(x,y)};
+				this.centerpos = Animate(anim);
+				
+				
+				
+				this.zoomlevel = z;
+				
+				//debugger;
 			}
 		}
 		
@@ -396,8 +404,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			for(var i =0 ;i<keys.length;i++)
 			{
 				var lb = this.loadedblocks[keys[i]]
-				var dx = lb.x - this.centerx;
-				var dy = lb.y - this.centery;
+				var dx = lb.x - this.centerpos[0];
+				var dy = lb.y - this.centerpos[1];
 				var dz = (lb.z - this.zoomlevel)*25;
 				var dist  = dx*dx + dy*dy + dz*dz;
 				if (dist > 5*5*5*5) {
@@ -565,8 +573,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				// sort queue on distance to cursor
 				for (var i = 0;i<this.loadqueue.length;i++){
 					var q = this.loadqueue[i];
-					var dx = this.centerx - q.x;
-					var dy = this.centery - q.y;
+					var dx = this.centerpos[0] - q.x;
+					var dy = this.centerpos[1] - q.y;
 					var dz = (this.centerz - q.z)*zscalar;
 					q.dist = dx * dx + dy * dy + dz * dz;
 				}
@@ -674,7 +682,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		this.setpos = function(newcoord, newzoom, frac){
 			this.tiletrans = frac;
 			this.zoomlevel = newzoom;
-			this.coord = newcoord;
+			this.coord = vec2(Math.floor(newcoord[0]), Math.floor(newcoord[1]));
 			this.checknewpos();
 		}
 	
@@ -744,7 +752,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.position = function(){		
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
+				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
 				respos = vec4(pos.x, -mesh.pos.z, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				//r.w += 0.002;
 				
@@ -757,10 +765,13 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh =  BuildingVertexStruct.array();
 				var a = TileSize / 4;
 				var b = TileSize - a;
+				
+				
+				
 				this.mesh.push(a,a);
 				this.mesh.push(b,a);
-
 				this.mesh.push(b,b);
+				
 				this.mesh.push(a,a);
 				this.mesh.push(b,b);
 				this.mesh.push(a,b);
@@ -776,7 +787,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5 
 				var prefog = mix(mix(mesh.color1, mesh.color1, noise), col, 1.0-view.bufferloaded)
-				prefog.xyz *= max(0.4, min(1.0, (mesh.pos.z*0.01)+0.4));
+				prefog.xyz *= max(0.0, min(1.0, ((mesh.pos.z - mesh.height)*0.001)+0.4));
 				var zdist = max(0.,min(1.,(respos.z-1000.)/4000.));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
@@ -794,12 +805,16 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.bgshader.mesh = tile.landVertexBuffer;					
 		}
 		
+		this.mouseleftdown = function(){
+			this.find("mapdata").setCenter(this.lastpos[0], this.lastpos[1], this.zoomlevel,1);
+		}
+		
 		this.bg = function(){
 			
 			this.position = function(){		
 				
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-				pos = vec2(1,-1)*mesh.pos.xy + (idxpos + view.tiletrans)* view.tilesize;
+				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
 				 respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				respos.w -= mesh.pos.z*0.01;
 				
@@ -810,7 +825,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.update = function(){
 				this.mesh =  LandVertexStruct.array();
-				var a = TileSize / 4;
+				/*var a = TileSize / 4;
 				var b = TileSize - a;
 				this.mesh.push(a,a);
 				this.mesh.push(b,a);
@@ -818,7 +833,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh.push(b,b);
 				this.mesh.push(a,a);
 				this.mesh.push(b,b);
-				this.mesh.push(a,b);
+				this.mesh.push(a,b);*/
 			}
 			
 			this.drawtype = this.TRIANGLES
@@ -858,7 +873,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			
-				var pos = vec2(1,-1)*possrc.xy + (idxpos + view.tiletrans) * view.tilesize;
+				var pos = vec2(1,-1)*possrc.xy + (idxpos - view.tiletrans) * view.tilesize;
 				 respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				respos.w += mesh.pos.z;
 				return respos;
@@ -870,7 +885,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			this.update = function(){
 				this.mesh =  this.vertexstruct.array();
-				var a = TileSize / 4;
+				
+				/*var a = TileSize / 4;
 				var b = TileSize - a;
 				this.mesh.push(a,a);
 				this.mesh.push(b,a);
@@ -878,7 +894,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh.push(b,b);
 				this.mesh.push(a,a);
 				this.mesh.push(b,b);
-				this.mesh.push(a,b);
+				this.mesh.push(a,b);*/
 		
 			}
 			
@@ -910,17 +926,18 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	
 	this.updateTiles = function(){
 		if (!this.dataset) return;
-		this.centerx = this.dataset.centerx;
-		this.centery = this.dataset.centery;
+		this.centerx = this.dataset.centerpos[0];
+		this.centery = this.dataset.centerpos[1];
 		var centervec = vec2(this.centerx, this.centery);
 		var frac = vec2(this.centerx - Math.floor(this.centerx), this.centery - Math.floor(this.centery))
+		var floorvec = vec2(Math.floor(this.centerx), Math.floor(this.centery));
 		//console.log(this.centerx, this.centery, this.zoomlevel);
 		this.zoomlevel = this.dataset.zoomlevel;
 
 		for(var a = 0;a<this.tilestoupdate.length;a++){
 			var rt = this.tilestoupdate[a];
 				//rt.trans = vec2(Math.sin(this.time)*5, 0);
-				rt.setpos(centervec, this.zoomlevel, frac);
+				rt.setpos(floorvec, this.zoomlevel, frac);
 				rt.redraw();
 		}
 	}
@@ -971,8 +988,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			}
 		}
 		
-		var dist = 1.5
-		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,camera:vec3(0,-1400 * dist,1000 * dist), fov: 20, up: vec3(0,1,0)}, 
+		var dist = 2.5
+		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,camera:vec3(0,-1400 * dist,1000 * dist), fov: 40, up: vec3(0,1,0)}, 
 		
 			view({bg:0, rotate:vec3(0,0.1,0)},
 				res3d

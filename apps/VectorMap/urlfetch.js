@@ -7,7 +7,13 @@ define.class(function(require, $server$, service){
 			
 			if (fs.existsSync(cachedname)){
 				console.log("Serving map from cache:",x,y,z);
-				return fs.readFileSync(cachedname).toString()
+				var data = fs.readFileSync(cachedname).toString();
+				if (data.slice(0, 100).indexOf("<?xml")<0)
+				{
+					//console.log(data.slice(0,1000));
+					return data;
+				}
+				console.log("Cached slice has an error... loading again");
 			}
 			
 			console.log("Serving map through mapzen proxy:",x,y,z);

@@ -1,11 +1,14 @@
-define.class('$server/composition', function (require,  $server$, fileio,$ui$, view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
+define.class('$server/composition', function (require,  $server$, fileio,$ui$, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
 	
 	this.places= [
 	{text:"Amsterdam", place: "amsterdam", zoomlevel: 16},
+	{text:"Amsterdam-17", place: "amsterdam", zoomlevel: 17},
+	{text:"Amsterdam-10", place: "amsterdam", zoomlevel: 10},
 	{text:"Seoul", place: "seoul", zoomlevel: 16},
 	{text:"SF", place: "sanfrancisco", zoomlevel: 16},
+	{text:"SF-10", place: "sanfrancisco", zoomlevel: 10},
 	{text:"NY - Manhattan", place: "manhattan", zoomlevel: 16},
-	{text:"SF - Golden Gate Park", place: "sanfrancisco_goldengatepark", zoomlevel: 16},
+	{text:"SF - Golden Gate Park", place: "sanfrancisco_goldengatepark", zoomlevel: 17},
 	]
 	this.render = function(){
 		
@@ -28,6 +31,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, v
 						,view({bg:0, flex:0.2, overflow:"scroll" },	
 							noisegrid({padding:20}
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bg:0})
+								,numberbox({value:16, onvalue:function(){}.bind(this), name:"numberbox", minvalue:0, stepvalue:1, maxvalue:18})
 								,Buttons
 								,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
 								,label({text:"Rotation control",margin: 10,fontsize:12,  bg:0})
