@@ -40,11 +40,11 @@ define.class('$server/composition', function(require, $ui$, screen, view, label,
 								res.push(label({fgcolor:'#333', text:example.name + ':', bgcolor:'transparent'}));
 								res.push(
 									view({flexdirection:'row', flex:1, bgcolor:'transparent'},
-										view({flex:1, padding:7, flexdirection:"column", bgcolor:"transparent"},
+										view({flex:1.5, padding:7, flexdirection:"column", bgcolor:"transparent"},
 											label({flex:0, fgcolor:'#888', bgcolor:'transparent', text:"Code", fontsize:12, margin:vec4(0,0,0,5)}),
 											jsviewer({flex:1, wrap:this.wrapcode, overflow:'scroll', source:example.examplefunc.toString(), fontsize:12, bgcolor:"#000030", multiline: true})
 										),
-										view({flex:1.5, padding:7, flexdirection:"column", bgcolor:"transparent"},
+										view({flex:1, padding:7, flexdirection:"column", bgcolor:"transparent"},
 											label({flex:0, fgcolor:'#888', bgcolor:'transparent', text:"Live demo", fontsize:12, margin:vec4(10,0,0,5)}),
 											view({flex:1, flexdirection:"column", alignitems:'flex-start', margin:vec4(10,0,0,0), bgcolor:'#eee', overflow:'scroll'}, example.examplefunc())
 										)

@@ -178,9 +178,9 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 			this.dial({name:"thedialbg", position:"absolute",x:this.width/2, y:this.height/2, start: PI/4, end: 2*PI-PI/4 ,bgcolor:"#304050", outerradius:this.outerradius, innerradius:this.innerradius })
 			,this.dial({name:"thedial", position:"absolute", start: PI/4, end: 2*PI-PI/4 , bgcolor:"#a0b0c0",outerradius:this.outerradius - this.offset, innerradius:this.innerradius + this.offset})
 		)]
-	}
+	};
 
-	var knob = this.constructor
+	var knob = this.constructor;
 	this.constructor.examples = {
 		Usage: function(){
 			return [
@@ -192,4 +192,4 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		}
 	}
 
-})
+});

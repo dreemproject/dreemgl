@@ -528,13 +528,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.dial({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thedialbg</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">x</span>:<span class="local-variable">this</span>.width/<span class="integer">2</span>, <span class="key">y</span>:<span class="local-variable">this</span>.height/<span class="integer">2</span>, <span class="key">start</span>: PI/<span class="integer">4</span>, <span class="key">end</span>: <span class="integer">2</span>*PI-PI/<span class="integer">4</span> ,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#304050</span><span class="delimiter">&quot;</span></span>, <span class="key">outerradius</span>:<span class="local-variable">this</span>.outerradius, <span class="key">innerradius</span>:<span class="local-variable">this</span>.innerradius })
                         ,<span class="local-variable">this</span>.dial({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thedial</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">start</span>: PI/<span class="integer">4</span>, <span class="key">end</span>: <span class="integer">2</span>*PI-PI/<span class="integer">4</span> , <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a0b0c0</span><span class="delimiter">&quot;</span></span>,<span class="key">outerradius</span>:<span class="local-variable">this</span>.outerradius - <span class="local-variable">this</span>.offset, <span class="key">innerradius</span>:<span class="local-variable">this</span>.innerradius + <span class="local-variable">this</span>.offset})
                 )]
-        }
+        };
 
-        <span class="keyword">var</span> knob = <span class="local-variable">this</span>.constructor
+        <span class="keyword">var</span> knob = <span class="local-variable">this</span>.constructor;
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>: <span class="keyword">function</span>(){
                         <span class="keyword">return</span> [
-                                knob({
+                                knob({<span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>,
                                         <span class="key">innerradius</span>:<span class="integer">70</span>,
                                         <span class="key">outerradius</span>: <span class="integer">190</span>,
                                         <span class="key">bgcolor</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>)})
@@ -542,7 +542,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-})
+});
 </pre></td>
 </tr></table>
 
