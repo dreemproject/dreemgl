@@ -23,6 +23,10 @@
  * Gradient color 2
  */
 /**
+ * @attribute {vec4} [inactivecolor="0.9333333373069763,0.9333333373069763,0.9333333373069763,1"]
+ * Color of the inactive icon
+ */
+/**
  * @attribute {vec4} [textcolor="0.250980406999588,0.250980406999588,0.250980406999588,1"]
  * Color of the label text in neutral state
  */

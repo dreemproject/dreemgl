@@ -277,44 +277,71 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n123" name="n123">123</a>
 <a href="#n124" name="n124">124</a>
 <a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(icon){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(icon, label){
         <span class="comment">// Simple toggle button: a rectangle with a textlabel and an icon</span>
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// The label for the button</span>
                 <span class="key">text</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
 
+                <span class="key">icon</span>: Config({<span class="key">type</span>: String, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>}),
+
                 <span class="comment">// Font size in device-pixels.</span>
                 <span class="key">fontsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">14</span>}),
-                        
-                <span class="comment">// Gradient color 1        </span>
+
+                <span class="comment">// Gradient color 1</span>
                 <span class="key">col1</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">duration</span>: <span class="float">1.0</span>}),
                 <span class="comment">// Gradient color 2</span>
                 <span class="key">col2</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">duration</span>: <span class="float">1.0</span>}),
 
-                <span class="comment">// Color of the label text in neutral state        </span>
+                <span class="comment">// Color of the inactive icon</span>
+                <span class="key">inactivecolor</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#eee</span><span class="delimiter">&quot;</span></span>)}),
+
+                <span class="comment">// Color of the label text in neutral state</span>
                 <span class="key">textcolor</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>)}),
-                
-                <span class="comment">// Color of the label text in pressed-down state                        </span>
+
+                <span class="comment">// Color of the label text in pressed-down state</span>
                 <span class="key">textactivecolor</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>)}),
-                
+
                 <span class="comment">// First gradient color for the button background in neutral state</span>
                 <span class="key">buttoncolor1</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#fffff0</span><span class="delimiter">&quot;</span></span>)}),
-                <span class="comment">// Second gradient color for the button background in neutral state        </span>
+                <span class="comment">// Second gradient color for the button background in neutral state</span>
                 <span class="key">buttoncolor2</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffff</span><span class="delimiter">&quot;</span></span>)}),
-                
+
                 <span class="comment">// First gradient color for the button background in hovered state</span>
                 <span class="key">hovercolor1</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>)}),
                 <span class="comment">// Second gradient color for the button background in hovered state</span>
                 <span class="key">hovercolor2</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f8f8f8</span><span class="delimiter">&quot;</span></span>)}),
-                
+
                 <span class="comment">// First gradient color for the button background in pressed state</span>
                 <span class="key">pressedcolor1</span>: Config({<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0f0</span><span class="delimiter">&quot;</span></span>)}),
                 <span class="comment">// Second gradient color for the button background in pressed state</span>
@@ -324,8 +351,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">click</span>:Config({<span class="key">type</span>:Event}),
                 <span class="key">value</span>:Config({<span class="key">type</span>:Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
 
-                <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#202020</span><span class="delimiter">'</span></span>,
-                <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>,
+                <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#eee</span><span class="delimiter">'</span></span>,
+                <span class="key">fgcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>),
                 <span class="key">buttonres</span>: {},
                 <span class="key">padding</span>: <span class="integer">8</span>,
                 <span class="key">borderradius</span>: <span class="integer">3</span>,
@@ -341,7 +368,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">onclick</span> = <span class="keyword">function</span>(){                
+        <span class="local-variable">this</span>.<span class="function">onclick</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.value  = <span class="local-variable">this</span>.value?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>;
         }
 
@@ -385,24 +412,42 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                <span class="keyword">return</span> [
-                        icon({<span class="key">fgcolor</span>:<span class="local-variable">this</span>.value? <span class="local-variable">this</span>.fgcolor: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>), <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>})
-                ]
+                <span class="keyword">var</span> cb = [];
+
+                cb.push(icon({
+                        <span class="key">fgcolor</span>:(<span class="local-variable">this</span>.value ? <span class="local-variable">this</span>.fgcolor : <span class="local-variable">this</span>.inactivecolor),
+                        <span class="key">icon</span>: <span class="local-variable">this</span>.icon
+                }));
+
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.text) {
+                        cb.push(label({
+                                <span class="key">bg</span>:<span class="integer">0</span>,
+                                <span class="key">padding</span>:vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
+                                <span class="key">text</span>:<span class="local-variable">this</span>.text,
+                                <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
+                                <span class="key">fgcolor</span>:(<span class="local-variable">this</span>.value ? <span class="local-variable">this</span>.textactivecolor : <span class="local-variable">this</span>.textcolor)
+                        }))
+                }
+
+                <span class="keyword">return</span> cb;
         }
 
-        <span class="comment">// Basic usage of the button.        </span>
+        <span class="comment">// Basic usage of the button.</span>
         <span class="keyword">var</span> checkbox = <span class="local-variable">this</span>.constructor
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
                         <span class="keyword">return</span> [
-                                checkbox({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Press me!</span><span class="delimiter">&quot;</span></span>})
-                                ,checkbox({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Colored!</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">labelcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>  })
+                                checkbox({<span class="key">value</span>:<span class="predefined-constant">true</span>})
+                                ,checkbox({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Colored!</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>, <span class="key">textcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>  })
                                 ,checkbox({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">With an icon!</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span> })
                         ]
                 }
-        }        
-})</pre></td>
+        }
+})
+</pre></td>
 </tr></table>
 
 </body>
