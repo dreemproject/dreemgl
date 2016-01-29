@@ -39,11 +39,10 @@ define.class('$server/composition', function($ui$, screen, view, menubar, button
 						position:"relative",margin:0,flex:1}))
 					),
 					view({bg:false, flex:1, alignitems:"center", justifycontent:"center" },
-					button({text:"Open a menu!", alignself:"center", click:function(){
-					this.screen.contextMenu([{name:"Peekaboo!"},{name:"Submenu", commands:[{name:"I am in a submenu!"}]}])
+					button({text:"Open a menu!", alignself:"center", click:function(e){
+						this.screen.contextMenu([{name:"Peekaboo!"},{name:"Submenu", commands:[{name:"I am in a submenu!"}]}], e.value[0].x, e.value[0].y)
 					} })))
 				)
 		)
 	]}
 })
-

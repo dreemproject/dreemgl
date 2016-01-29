@@ -132,32 +132,26 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		}
 	}
 
-	this.updatevalue = function(p){
-		var l = p.local;
-		this.checkandset(this.basevalue + (Math.floor((this.lasty - l[1] )/10) -  Math.floor((this.lastx - l[0] )/2))*this.stepvalue);
+	this.updatevalue = function(delta){
+		this.checkandset(this.basevalue - (Math.floor(delta[1]/10) -  Math.floor(delta[0]/2))*this.stepvalue);
 	}
 
-	this.mouseleftdown = function(p){
+	this.pointerstart = function(event){
 		this.bordercolor = this.draggingbordercolor
-		this.lasty = p.local[1]
-		this.lastx = p.local[0]
-
 		this.checkandset(this.value)
 		this.basevalue = this.value
-
-		this.mousemove = function(p){
-			this.updatevalue(p)
-		}.bind(this)
 	}
 
-	this.mouseleftup = function(p){
+	this.pointermove = function(event){
+		this.updatevalue(event.value[0].delta)
+	}
+
+	this.pointerend = function(event){
 		if (this._focus) {
 			this.bordercolor = this.focusbordercolor
-		}
-		else {
+		} else {
 			this.bordercolor = this.neutralbordercolor
 		}
-		this.mousemove = function(){}
 	}
 
 	//this.bgcolor = "#f0f0f0";
@@ -191,5 +185,4 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 			]
 		}
 	}
-
-});
+})

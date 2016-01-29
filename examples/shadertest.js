@@ -23,10 +23,10 @@ define.class(function($server$, composition, $ui$, screen, view){
 					view({
 						mycolor:Config({value:vec4('red'), motion:'linear', duration:1})
 						,
-						mouseleftdown:function(){
+						pointerstart:function(){
 							this.mycolor = 'yellow'
 						},
-						mouseleftup:function(){
+						pointerend:function(){
 							this.mycolor = 'red'
 						},
 						flex:1,

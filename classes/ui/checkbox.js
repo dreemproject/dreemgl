@@ -99,13 +99,12 @@ define.class('$ui/view', function(icon, label){
 		this.statenormal()
 	}
 
-	this.mouseover = function(){this.statehover()}
-	this.mouseout = function(){this.statenormal()}
-	this.mouseleftdown = function(){this.stateclick()}
-	this.mouseleftup = function(event){
-		// lets check if its over the button
+	this.pointerover = function(){this.statehover()}
+	this.pointerout = function(){this.statenormal()}
+	this.pointerstart = function(){this.stateclick()}
+	this.pointerend = function(event){
 		this.statenormal()
-		if(event.isover){
+		if (event.isover){
 			this.emit('click',event)
 		}
 	}

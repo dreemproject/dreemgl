@@ -10,7 +10,7 @@ define.class("$server/composition",function(module, $server$, service, $ui$, scr
 	this.render = function() {
 		return [
 			xypad({name:"xypad0", flowdata:{x:41, y:354}}),
-			shaderviz({name:"shaderviz", flowdata:{x:445, y:109}, shaderpos:wire("this.rpc.xypad0.mousepos")})
+			shaderviz({name:"shaderviz", flowdata:{x:445, y:109}, shaderpos:wire("this.rpc.xypad0.pointerpos")})
 		]
 	}
 }

@@ -24,24 +24,17 @@ define.class(function($server$, composition, $ui$, screen, cadgrid, view){
 		screen({name:'default', clearcolor:vec4('black')},
 			cadgrid({
 				flex:1,
-				onmouseleftdown:function(event){
+				pointermove:function(event){
 					var select = this.find('selectorrect')
 					select.visible = true
-					var start = select.pos = event.local
-					select.size = vec2(0)
-					this.onmousemove = function(event){
-						select.size = vec2(event.local[0] - start[0], event.local[1] - start[1])
-					}
-					this.onmouseleftup = function(){
-						this.onmousemove = undefined
-						this.onmouseleftup = undefined
-						select.visible = false
-					}
+					select.pos = vec2(event.value[0].min[0], event.value[0].min[1])
+					select.size = vec2(event.value[0].max[0] - event.value[0].min[0], event.value[0].max[1] - event.value[0].min[1])
 				},
+				pointerend:function(event){
+					this.find('selectorrect').visible = false
+				}
 				},
-				this.selectorrect({
-
-				})
+				this.selectorrect()
 			)
 		)
 	]}

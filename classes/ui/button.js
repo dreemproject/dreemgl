@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -16,34 +16,34 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		// Font size in device-pixels.
 		fontsize: Config({type: float, value: 14, meta:"fontsize"}),
-		
-		// Gradient color 1	
+
+		// Gradient color 1
 		col1: Config({meta:"color", type:vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
-		
+
 		// Gradient color 2
 		col2: Config({meta:"color", type: vec4, value: vec4("#272727"), duration: 0.1, motion:"linear"}),
 
-		// Color of the label text in neutral state	
+		// Color of the label text in neutral state
 		textcolor: Config({meta:"color", type: vec4, value: vec4("white")}),
 
-		// Color of the label text in pressed-down state	
+		// Color of the label text in pressed-down state
 		textactivecolor: Config({meta:"color", type: vec4, value: vec4("white")}),
-		
+
 		// First gradient color for the button background in neutral state
 		buttoncolor1: Config({meta:"color", type: vec4, value: vec4("#636363")}),
-		
-		// Second gradient color for the button background in neutral state	
+
+		// Second gradient color for the button background in neutral state
 		buttoncolor2: Config({meta:"color", type: vec4, value: vec4("#636363")}),
-		
+
 		// First gradient color for the button background in hovered state
 		hovercolor1: Config({meta:"color", type: vec4, value: vec4("#c5c5c5")}),
-		
+
 		// Second gradient color for the button background in hovered state
 		hovercolor2: Config({meta:"color", type: vec4, value: vec4("#797979")}),
-		
+
 		// First gradient color for the button background in pressed state
 		pressedcolor1: Config({meta:"color", type: vec4, value: vec4("#707070")}),
-		
+
 		// Second gradient color for the button background in pressed state
 		pressedcolor2: Config({meta:"color", type: vec4, value: vec4("#707070")}),
 
@@ -51,10 +51,10 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		internalmargin: Config({meta:"ltrb", type: vec4, value: vec4(0,0,0,0)}),
 
 		// fires when button is clicked
-		click: Config({type:Event}), 
-		
+		click: Config({type:Event}),
+
 		bold: true,
-		enabled: true, 
+		enabled: true,
 		defaultbutton: false,
 
 		bgcolor: '#636363',
@@ -64,25 +64,25 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		borderwidth: 2,
 		margin: 0,
 		bordercolor: vec4("#636363"),
-		
+
 		alignitems: "flex-start",
-		justifycontent: "flex-start" 
+		justifycontent: "flex-start"
 	}
-	
+
 	this.style = {
 		icon:{
-			alignself:"center", 
+			alignself:"center",
 			fgcolor:  Config({motion:'linear', duration:0.1})
 		},
 		label:{
 			subpixel:false,
-			alignself:"center", 
+			alignself:"center",
 			position: "relative",
 			bg: 0
 		},
 		view_wrap:{
-			bg:false, 
-			alignitems:"center", 
+			bg:false,
+			alignitems:"center",
 			flexdirection:"row",
 			justifycontent:"center"
 		}
@@ -90,7 +90,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 	//this.buttonres = {};
 	this.font = require('$resources/fonts/opensans_bold_ascii.glf')
-	
+
 	this.onbold = function(){
 		if (this.bold) {
 			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
@@ -99,10 +99,10 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 		}
 	}
-	
-	// Set the background 
+
+	// Set the background
 	// vec2 pos: position
-	// return; 
+	// return;
 	this.bgcolorfn = function(pos){
 		return mix(col1, col2, pos.y)
 	}
@@ -137,28 +137,32 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.statenormal(true)
 	}
 
-	this.mouseover = function(){
+	this.pointerover = function(){
+		this._isover = true
 		this.statehover()
 	}
-
-	this.mouseout = function(){this.statenormal()}
-	this.mouseleftdown = function(){this.stateclick()}
-	this.mouseleftup = function(event){
-		// lets check if its over the button
+	this.pointerout = function(){
+		this._isover = false
 		this.statenormal()
-		if(event.isover){
+	}
+	this.pointerstart = function(){
+		this.stateclick()
+	}
+	this.pointerend = function(event){
+		this.statenormal()
+		if (event.value[0].isover){
 			this.emit('click',event)
 		}
 	}
 
-	this.render = function(){		
+	this.render = function(){
 		var res = []
 		this.buttonres = undefined
 		this.iconres = undefined
-		
+
 		if (this.icon && this.icon.length > 0){
 			this.iconres = icon({
-				fgcolor:this.textcolor, 
+				fgcolor:this.textcolor,
 				fontsize: this.fontsize,
 				icon: this.icon
 			})
@@ -167,15 +171,15 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		if (this.text && this.text.length > 0){
 			this.buttonres = label({
-				marginleft:this.iconres?4:0, 
-				bgcolor:this.bgcolor, 
+				marginleft:this.iconres?4:0,
+				bgcolor:this.bgcolor,
 				fontsize: this.fontsize,
 				fgcolor:this.textcolor,
 				text: this.text
 			})
 			res.push(this.buttonres)
 		}
-		
+
 		return view({class:'wrap',margin:this.internalmargin},res)
 	}
 
@@ -189,5 +193,5 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 				button({text:"With an icon!", icon:"flask" })
 			]
 		}
-	}	
+	}
 })

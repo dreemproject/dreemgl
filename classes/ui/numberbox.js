@@ -93,32 +93,22 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		this.checkandset(this.value - this.stepvalue);
 	}
 
-	this.updatevalue = function(p){
-		var l = p.local;
-		this.checkandset(this.basevalue + (Math.floor((this.lasty - l[1] )/10) -  Math.floor((this.lastx - l[0] )/2))*this.stepvalue);
-	}
-
-	this.mouseleftdown = function(p){
+	this.pointerstart = function(){
 		this.bordercolor = this.draggingbordercolor
-		this.lasty = p.local[1];
-		this.lastx = p.local[0];
-
-		this.checkandset(this.value);
-		this.basevalue = this.value;
-
-		this.mousemove = function(p){
-			this.updatevalue(p);
-		}.bind(this);
+		this.checkandset(this.value)
+		this.basevalue = this.value
 	}
 
-	this.mouseleftup = function(p){
+	this.pointermove = function(event){
+		this.checkandset(this.basevalue + (Math.floor(event.value[0].delta[0] / 2) - Math.floor(event.value[0].delta[1] / 10)) * this.stepvalue)
+	}
+
+	this.pointerend = function(){
 		if (this._focus) {
 			this.bordercolor = this.focusbordercolor
-		}
-		else{
+		} else {
 			this.bordercolor = this.neutralbordercolor
 		}
-		this.mousemove = function(){}
 	}
 
 	this.justifycontent = "space-around"

@@ -13,14 +13,14 @@ define.class("$ui/button", function() {
         controller:Config({type:Object})
     };
 
-    this.mouseleftdown = function() {
+    this.pointerstart = function() {
         console.log('press', this.value);
         if (this.controller && this.controller.press) {
             this.controller.press(this.value)
         }
     };
 
-    this.mouseleftup = function() {
+    this.pointerend = function() {
         console.log('unpress', this.value);
         if (this.controller && this.controller.unpress) {
             this.controller.unpress(this.value)

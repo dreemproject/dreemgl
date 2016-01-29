@@ -10,67 +10,43 @@ define.class(function(require, $ui$button){
 	this.attributes = {
 		// the target view to control with this
 		target: Config({type:string, value:""})
-	}	
+	}
 	this.icon = "arrows"
 	this.justifycontent = "center"
 	this.alignitems = "center"
 	this.fontsize = 20;
-	this.mouseleftdown = function(event){
 
-		//this.bgcolor = vec4("gray")
+	this.pointermove = function(event){
+		var movement = event.value[0].movement
+
 		var t = this.find(this.target)
-		if (!t) console.log("target not found", this.target);
-		if (t){
 
-			this.clickstart = event.local
-			this.mousemove = function(event){
-				var a = event.local
+		this.camera_start = vec3.sub(t._camera, t._lookat)
+		var M4 = mat4.invert(t.viewmatrix)
+		var screenup = vec3.normalize(vec3.vec3_mul_mat4(vec3(0,1,0), M4));
 
-				var t = this.find(this.target)
+		var M1 = mat4.identity()
+		var M2 = mat4.rotate(M1, movement[0] * 0.01, t._up)
 
-				var dx = a[0] - this.clickstart[0]
-				var dy = a[1] - this.clickstart[1]
+		var axis = vec3.normalize(vec3.cross(this.camera_start, t._up))
+		var M3 = mat4.rotate(M2, movement[1] * 0.01, axis)
 
-				this.camera_start = vec3.sub(t._camera, t._lookat)
-				var M4 = mat4.invert(t.viewmatrix)
-				// console.log(M4);
-				var screenup = vec3.normalize(vec3.vec3_mul_mat4(vec3(0,1,0), M4));
-				// var M = mat4.R(0,-dy*0.01,-dx*0.01);
-				// console.log("screenup:", screenup);
+		var Rot = vec3.vec3_mul_mat4(this.camera_start, M3)
+		var Res = vec3.add(Rot, t._lookat)
 
-				var M1 = mat4.identity()
-				var M2 = mat4.rotate(M1, dx * 0.01, t._up)
-
-				var axis = vec3.normalize(vec3.cross(this.camera_start, t._up))
-				var M3 = mat4.rotate(M2, dy * 0.01, axis)
-
-				var Rot = vec3.vec3_mul_mat4(this.camera_start, M3)
-				var Res = vec3.add(Rot, t._lookat)
-
-				t._camera = Res
-				t.redraw()
-				
-
-				this.clickstart = a;
-				this.camera_start = vec3.sub(t._camera, t._lookat );
-			}.bind(this);
-		}
-		else{console.log("target not found!", this.target)}
+		t._camera = Res
+		t.redraw()
 	}
 
-	this.mouseleftup = function(){
-		this.mousemove = function(){};
-	}
-	
 	var rotator = this.constructor
 	// Basic usage of the button.
 	this.constructor.examples = {
 		Usage:function(){
 			return [
 				rotator({target:"someview", width:100, height:100})
-				
+
 			]
 		}
-	}	
-	
+	}
+
 })
