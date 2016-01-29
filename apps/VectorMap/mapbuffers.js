@@ -593,35 +593,44 @@ define.class(function(require, $server$, service){
 		var Lset = [];
 		var Allset = [];
 		var Places = [];
-
+		var Sarcs= sourcedata.arcs;
 
 		//console.log(objects);
 		var objects = sourcedata.objects;
-		for (var i = 0;i<objects.buildings.geometries.length;i++){
-			var Bb = objects.buildings.geometries[i];
+		var BuildingGeoms = objects.buildings.geometries
+		for (var i = 0;i<BuildingGeoms.length;i++){
+			var Bb = BuildingGeoms[i];
 		//	console.log(Bb.properties);
-			var B = {id:Bb.properties.id,h:Bb.properties.height?Bb.properties.height:30.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
-				if (Bb.arcs){
-					for(var k = 0;k<Bb.arcs.length;k++){
-					B.arcs.push(sourcedata.arcs[Bb.arcs[k]]);
+			var Barcs = Bb.arcs;
+			if (Barcs){
+				var B = {id:Bb.properties.id,h:Bb.properties.height?Bb.properties.height:30.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
+				var Tarcs = B.arcs;
+				for(var k = 0;k<Bb.arcs.length;k++){
+					Tarcs.push(Sarcs[Barcs[k]]);
 				}
+				KindSet[B.kind] = true;
+				Bset.push(B);
 			}
-			KindSet[B.kind] = true;
-			Bset.push(B);
 		}
-		for (var i = 0;i<objects.places.geometries.length;i++){
-			var Bb = objects.water.geometries[i];
+		var PlacesGeoms = objects.places.geometries; 
+		for (var i = 0;i<PlacesGeoms.length;i++){
+			var Bb = PlacesGeoms[i];
 			
 			//console.log(Bb.properties.kind, Bb.type, Bb.properties.name);
 		}
-		for (var i = 0;i<objects.water.geometries.length;i++){
-			var Bb = objects.water.geometries[i];
-			var B = {arcs:[], kind:"water" };
-			if(Bb.arcs)
+		var WaterGeoms = objects.water.geometries;
+		for (var i = 0;i<WaterGeoms.length;i++){
+			var Bb = WaterGeoms[i];
+			var Barcs = Bb.arcs;
+			
+			if(Barcs)
+			{
+				var B = {arcs:[], kind:"water" };
+				var Tarcs = B.arcs;
 				if (Bb.type == "MultiLineString"){
 					var arc = [];
-					for(var k = 0;k<Bb.arcs.length;k++){
-						var sourcearc = sourcedata.arcs[Bb.arcs[k]];
+					for(var k = 0;k<Barcs.length;k++){
+						var sourcearc = Sarcs[Barcs[k]];
 						var x = sourcearc[0][0];
 						var y = sourcearc[0][1];
 						arc.push(x,y);
@@ -632,46 +641,51 @@ define.class(function(require, $server$, service){
 							arc.push(x,y);
 						}
 					}
-					B.arcs.push(arc);
+					Tarcs.push(arc);
 				}
-				else
-				for(var k = 0; k < Bb.arcs.length;k++){
-					B.arcs.push(sourcedata.arcs[Bb.arcs[k]]);							
-			}
-			if (Bb.type == "LineString" ){
+				else{
+					for(var k = 0; k < Bb.arcs.length;k++){
+						Tarcs.push(Sarcs[Bb.arcs[k]]);	
+					}					
+				}
+				if (Bb.type == "LineString" ){
 				// uncomment to get waterworks added as roads.
 				//Rset.push(B);
-			}
-			else{
-				Wset.push(B);
-				Allset.push(B);
+				}
+				else{
+					Wset.push(B);
+					Allset.push(B);
+				}
 			}
 		}
-		
-		for (var i = 0;i<objects.earth.geometries.length;i++){
-			var Bb = objects.earth.geometries[i];
+		var EarthGeoms = objects.earth.geometries;
+		for (var i = 0;i<EarthGeoms.length;i++){
+			var Bb = EarthGeoms[i];
 			var B = {arcs:[], kind:"earth"};
-				for(var k = 0;k<Bb.arcs.length;k++){
-					B.arcs.push(sourcedata.arcs[Bb.arcs[k]]);
-				
+			var Tarcs = B.arcs;
+			var Barcs = Bb.arcs;
+			
+			for(var k = 0;k<Barcs.length;k++){
+				Tarcs.push(Sarcs[Barcs[k]]);
 			}
+			
 			KindSet[B.kind] = true;
 			Eset.push(B);
 			Allset.push(B);
 		}
 		
-		for (var i = 0;i<objects.landuse.geometries.length;i++){
-			var Bb = objects.landuse.geometries[i];
+		var LandUseGeoms = objects.landuse.geometries
+		for (var i = 0;i<LandUseGeoms.length;i++){
+			var Bb = LandUseGeoms[i];
 			var B = {arcs:[], kind:Bb.properties.kind, name:Bb.properties.name};
-
-			if (!this.ignoreuse[B.kind])
+			var Barcs = Bb.arcs
+			var Tarcs = B.arcs;
+				
+			if (!this.ignoreuse[B.kind] && Barcs)
 			{
-					
-				if (Bb.arcs)
 							
-				for(var k = 0;k<Bb.arcs.length;k++){
-						B.arcs.push(sourcedata.arcs[Bb.arcs[k]]);
-					
+				for(var k = 0;k<Barcs.length;k++){
+					Tarcs.push(Sarcs[Barcs[k]]);				
 				}
 				KindSet[B.kind] = true;
 				Lset.push(B);
@@ -681,24 +695,26 @@ define.class(function(require, $server$, service){
 		
 		for (var i = 0;i<objects.roads.geometries.length;i++){
 			var Bb = objects.roads.geometries[i];
-			var B = { arcs:[], kind: Bb.properties.kind};						
-				for(var k = 0;k<Bb.arcs.length;k++){
-					B.arcs.push(sourcedata.arcs[Bb.arcs[k]]);	
-				}
-				Rset.push(B);
+			var B = { arcs:[], kind: Bb.properties.kind};		
+			var Barcs = Bb.arcs;			
+			for(var k = 0;k<Barcs.length;k++){
+				B.arcs.push(Sarcs[Barcs[k]]);	
+			}
+			Rset.push(B);
 			KindSet[B.kind] = true;							
 		}		
 		
+		/*  Skip transits for now.. 
 		for (var i = 0;i<objects.transit.geometries.length;i++){
 			var Bb = objects.transit.geometries[i];
 			var B = { arcs:[]};
 			
 			for(var k = 0;k<Bb.arcs.length;k++){
-				B.arcs.push(sourcedata.arcs[Bb.arcs[k]]);	
+				B.arcs.push(Sarcs[Bb.arcs[k]]);	
 			}
 			KindSet[B.kind] = true;
 			//Rset.push(B);
-		}
+		}*/
 		
 		
 		target.buildings = Bset;

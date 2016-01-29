@@ -21,12 +21,12 @@ define.class(function(require, $server$, service){
 			var cachedname = define.expandVariables(define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json");
 			var cachedbuffername = define.expandVariables(define.classPath(this) + "tilecache/BUFFER_" + x +"_"+y+"_" + z+".json");
 			
-			var generatebuffer = fs.existsSync(cachedbuffername)?false:true;
+			var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;
 			
 			if (fs.existsSync(cachedname)){
 				console.log("Serving map from cache:",x,y,z);
 				var data = fs.readFileSync(cachedname).toString();
-				if (generatebuffer) this.generatebuffer(cachedbuffername, data);
+				//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);
 				
 				// small error check... mapzen returns html/xml pages for all its errors
 				if (data.slice(0, 100).indexOf("<?xml")<0){					
@@ -35,15 +35,23 @@ define.class(function(require, $server$, service){
 				console.log("Cached slice has an error... loading again");
 			}
 			
-			console.log("Serving map through mapzen proxy:",x,y,z);
+			console.log("Serving map through mapzen proxy:",x,y,z,"..." );
 			var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".topojson?api_key=vector-tiles-Qpvj7U4" 
 			var P = define.deferPromise()
 
-			nodehttp.get(fileurl).then(function(v){
-				fs.writeFileSync(cachedname, v);	
-				if (generatebuffer) this.generatebuffer(cachedbuffername, v);
+			nodehttp.get(fileurl).then(function(data){
+				fs.writeFileSync(cachedname, data);	
+				if (data.slice(0, 100).indexOf("<?xml")<0){					
+					console.log("Saved to cache: ",x,y,z,"!" );
+					//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, v);
 				
-				P.resolve(v);
+					P.resolve(data);
+						
+				}
+				else{
+					console.log("Mapzen returned error:" , data);
+					P.resolve("<?xml>" + error);
+				}
 			})
 			
 			return P;
