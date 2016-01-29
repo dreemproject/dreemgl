@@ -1,5 +1,6 @@
 # Dali - Getting Started
 
+
 ## Prerequisites
  * Ubuntu 14.04 with DALi 1.1.15 or later.
  * Odroid XU3 with Tizen 3.0, custom DDK from DALi UK, DALI 1.1.15 or later.
