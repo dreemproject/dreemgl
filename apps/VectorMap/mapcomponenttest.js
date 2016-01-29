@@ -25,7 +25,11 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 			screen({name:"index"
 				,style:{$:{fontsize:12}}
 			
-					,acceleromove: function(x,y,z){console.log("moving:" , x,y,z);}
+					,acceleromove: function(x,y,z){
+						//console.log("moving:" , x,y,z);
+						var d = 1000/5.0;
+						this.find("mapinside").camera = Animate({0.5:vec3(x*d, y*d, z*d)});
+					}
 					,acceleropan: function(x,y,z){console.log("panning:", x,y,z);}
 				}
 				,view({flex: 1, bgcolor: "#5b5b5b"}

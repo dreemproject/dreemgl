@@ -86,9 +86,17 @@ define.class('$system/base/node', function(require, $ui$, label){
 	var dataset = this.constructor
 	this.constructor.examples = {
 		Usage:function(){
-			var a = dataset({something:1});
-			a.fork(function(data){data.something = "a value"; })
-			return label({text:a.data.something});
+			var results = [];
+
+			var dset = dataset({something:1});
+
+			results.push(label({fgcolor:'green', text:'Value before fork is: ' + dset.data.something}));
+
+			dset.fork(function(data){ data.something = "some new value"; });
+
+			results.push(label({fgcolor:'red', text:'Current value is: ' + dset.data.something}));
+
+			return results;
 		}
 	}
 

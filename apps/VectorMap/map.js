@@ -307,7 +307,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	for (var a in mapstyle){
 		var st = mapstyle[a];
 		if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
-		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
+		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.24);
 	}
 	this.attributes = {
 		latlong:vec2(52.3608307,   4.8626387),

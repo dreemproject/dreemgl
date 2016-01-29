@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -20,7 +20,7 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.markercolor = this.markerunfocus
-	
+
 	define.class(this, 'cursors', require('$system/typeface/cursorshader.js'), function(){
 		this.updateorder = 5
 		this.draworder = 6
@@ -39,7 +39,7 @@ define.class(function(require, $ui$, label){
 	})
 	this.cursors = true
 	this.tabstop = 0
-	
+
 	define.class(this, 'markers', require('$system/typeface/markershader.js'), function(){
 		this.updateorder = 6
 		this.draworder = 4
@@ -53,7 +53,7 @@ define.class(function(require, $ui$, label){
 			if(view.cursorset.fusing) view.cursorset.fuse()
 			for(var list = view.cursorset.list, i = 0; i < list.length; i++){
 				var cursor = list[i]
-				
+
 				var start = cursor.start, end = cursor.end
 				if(start !== end){
 					var markers = this.vertexstruct.getMarkersFromText(view.textbuf, start, end, 0)
@@ -68,7 +68,7 @@ define.class(function(require, $ui$, label){
 	})
 	this.markers = true
 	this.measure_with_cursor = true
-	
+
 	this.focus = function(){
 		if(this._focus){
 			this.cursorsshader.visible = this.readonly?false:true
@@ -92,7 +92,7 @@ define.class(function(require, $ui$, label){
 		this.value = Mark(string)
 		this.relayout()
 	}
-	
+
 	this.value = function(event){
 		if(event.mark) return
 		this.text = this.value
@@ -111,4 +111,13 @@ define.class(function(require, $ui$, label){
 		this.initEditImpl()
 		this.text = this.value
 	}
+
+	var textbox = this.constructor;
+	// Basic usage of the treeview control.
+	this.constructor.examples = {
+		Usage:function(){
+			return [textbox({alignself:'flex-start', value:"Text can be input here", fgcolor:'#333', borderwidth:1, bordercolor:'black', padding:5})]
+		}
+	}
+
 })

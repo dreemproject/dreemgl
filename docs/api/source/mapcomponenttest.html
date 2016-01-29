@@ -214,6 +214,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
 <a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require,  <span class="predefined">$server$</span>, fileio,<span class="predefined">$ui$</span>, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid,button, <span class="predefined">$$</span>, map, urlfetch, acceleroremote,<span class="predefined">$3d$</span>, ballrotate){
         
@@ -242,7 +246,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         screen({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>
                                 ,<span class="key">style</span>:{<span class="predefined">$</span>:{<span class="key">fontsize</span>:<span class="integer">12</span>}}
                         
-                                        ,<span class="function">acceleromove</span>: <span class="keyword">function</span>(x,y,z){console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">moving:</span><span class="delimiter">&quot;</span></span> , x,y,z);}
+                                        ,<span class="function">acceleromove</span>: <span class="keyword">function</span>(x,y,z){
+                                                <span class="comment">//console.log(&quot;moving:&quot; , x,y,z);</span>
+                                                <span class="keyword">var</span> d = <span class="integer">1000</span>/<span class="float">5.0</span>;
+                                                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>).camera = Animate({<span class="float">0.5</span>:vec3(x*d, y*d, z*d)});
+                                        }
                                         ,<span class="function">acceleropan</span>: <span class="keyword">function</span>(x,y,z){console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">panning:</span><span class="delimiter">&quot;</span></span>, x,y,z);}
                                 }
                                 ,view({<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#5b5b5b</span><span class="delimiter">&quot;</span></span>}

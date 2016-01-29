@@ -247,6 +247,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n93" name="n93">93</a>
 <a href="#n94" name="n94">94</a>
 <a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -336,9 +344,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> dataset = <span class="local-variable">this</span>.constructor
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">var</span> a = dataset({<span class="key">something</span>:<span class="integer">1</span>});
-                        a.fork(<span class="keyword">function</span>(data){data.something = <span class="string"><span class="delimiter">&quot;</span><span class="content">a value</span><span class="delimiter">&quot;</span></span>; })
-                        <span class="keyword">return</span> label({<span class="key">text</span>:a.data.something});
+                        <span class="keyword">var</span> results = [];
+
+                        <span class="keyword">var</span> dset = dataset({<span class="key">something</span>:<span class="integer">1</span>});
+
+                        results.push(label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Value before fork is: </span><span class="delimiter">'</span></span> + dset.data.something}));
+
+                        dset.fork(<span class="keyword">function</span>(data){ data.something = <span class="string"><span class="delimiter">&quot;</span><span class="content">some new value</span><span class="delimiter">&quot;</span></span>; });
+
+                        results.push(label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Current value is: </span><span class="delimiter">'</span></span> + dset.data.something}));
+
+                        <span class="keyword">return</span> results;
                 }
         }
 

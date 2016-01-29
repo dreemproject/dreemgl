@@ -1513,4 +1513,14 @@ define.class('$system/base/node', function(require){
 			noscroll:true
 		}
 	})
+
+	// Basic usage of the splitcontainer
+	this.constructor.examples = {
+		Usage:function(){ return [
+			view({margin:10, width:50, height:50, bgcolor:'red'}),
+			view({width:50, height:50, bgcolor:'green', bordercolor:'pink', borderwidth:10, borderradius:7}),
+			view({x:30, y:10, width:50, height:50, bgcolor:'blue'})
+		]}
+	}
+
 })

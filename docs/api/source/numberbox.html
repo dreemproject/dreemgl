@@ -296,16 +296,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n142" name="n142">142</a>
 <a href="#n143" name="n143">143</a>
 <a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view, textbox, label,button ){
         <span class="comment">// Simple numberbox: a number with a plus and a minus button</span>
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">value</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">0</span>}),
                 <span class="key">minvalue</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="predefined-constant">undefined</span>}),
@@ -314,36 +324,36 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">bordercolor</span>: Config({<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">easeout</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>:<span class="float">0.1</span>, <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#262626</span><span class="delimiter">&quot;</span></span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span> }),
                 <span class="key">draggingbordercolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">focusbordercolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#606060</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">decimals</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">0</span>}), 
+                <span class="key">decimals</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">0</span>}),
                 <span class="comment">// Font size in device-pixels.</span>
-                <span class="key">fontsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">14</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">fontsize</span><span class="delimiter">&quot;</span></span> }),                
+                <span class="key">fontsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">14</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">fontsize</span><span class="delimiter">&quot;</span></span> }),
                 <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>})
         }
-        
+
         <span class="local-variable">this</span>.tabstop = <span class="integer">0</span>;
         <span class="local-variable">this</span>.bordercolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#262626</span><span class="delimiter">&quot;</span></span> ;
         <span class="local-variable">this</span>.borderradius = <span class="integer">4</span>;
         <span class="local-variable">this</span>.borderwidth = <span class="integer">2</span>;
         <span class="local-variable">this</span>.fgcolor=<span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>;
-        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
 
-        <span class="local-variable">this</span>.alignself = <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.alignself = <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>;
-        <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>;        
-        
+        <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>;
+
         <span class="local-variable">this</span>.<span class="function">onvalue</span> = <span class="keyword">function</span>(){
-                
+
                 <span class="keyword">var</span> expo = Math.pow(<span class="integer">10</span>, <span class="local-variable">this</span>.decimals);
                 <span class="local-variable">this</span>.value = Math.round(<span class="local-variable">this</span>.value * expo) / expo;
-                
-                
+
+
                 <span class="keyword">var</span> tn = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thenumber</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (tn) {
                         tn.text = <span class="local-variable">this</span>._value.toString();
                         <span class="local-variable">this</span>.relayout();
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">keydownUparrow</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.value + <span class="local-variable">this</span>.stepvalue);}
         <span class="local-variable">this</span>.<span class="function">keydownDownarrow</span> =<span class="keyword">function</span>(){<span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.value - <span class="local-variable">this</span>.stepvalue);}
         <span class="local-variable">this</span>.<span class="function">keydownRightarrow</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.value + <span class="local-variable">this</span>.stepvalue*<span class="integer">100</span>);}
@@ -357,12 +367,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.neutralbordercolor = <span class="local-variable">this</span>.bordercolor;
         }
-        
-        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){                        
+
+        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
                 console.log(v);
                         <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">focus</span> = <span class="keyword">function</span>(newfocus){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._focus){
                         <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor;
@@ -371,13 +381,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.neutralbordercolor;
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">checkandset</span> = <span class="keyword">function</span>(newval){
-                
-                <span class="keyword">if</span> (isNaN(newval)) newval = <span class="integer">0</span>;                
-                
+
+                <span class="keyword">if</span> (isNaN(newval)) newval = <span class="integer">0</span>;
+
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.maxvalue!=<span class="predefined-constant">undefined</span> &amp;&amp; newval &gt; <span class="local-variable">this</span>.maxvalue) newval = <span class="local-variable">this</span>.maxvalue;
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.minvalue!=<span class="predefined-constant">undefined</span> &amp;&amp; newval &lt; <span class="local-variable">this</span>.minvalue) newval = <span class="local-variable">this</span>.minvalue;                
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.minvalue!=<span class="predefined-constant">undefined</span> &amp;&amp; newval &lt; <span class="local-variable">this</span>.minvalue) newval = <span class="local-variable">this</span>.minvalue;
                 <span class="keyword">var</span> expo = Math.pow(<span class="integer">10</span>, <span class="local-variable">this</span>.decimals);
                 <span class="local-variable">this</span>.value = Math.round(newval * expo) / expo;
                 nb = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thenumber</span><span class="delimiter">&quot;</span></span>);
@@ -387,29 +397,29 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">upclick</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.value + <span class="local-variable">this</span>.stepvalue);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">downclick</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.value - <span class="local-variable">this</span>.stepvalue);
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">updatevalue</span> = <span class="keyword">function</span>(p){
                 <span class="keyword">var</span> l = p.local;
-                <span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.basevalue + (Math.floor((<span class="local-variable">this</span>.lasty - l[<span class="integer">1</span>] )/<span class="integer">10</span>) -  Math.floor((<span class="local-variable">this</span>.lastx - l[<span class="integer">0</span>] )/<span class="integer">2</span>))*<span class="local-variable">this</span>.stepvalue);        
+                <span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.basevalue + (Math.floor((<span class="local-variable">this</span>.lasty - l[<span class="integer">1</span>] )/<span class="integer">10</span>) -  Math.floor((<span class="local-variable">this</span>.lastx - l[<span class="integer">0</span>] )/<span class="integer">2</span>))*<span class="local-variable">this</span>.stepvalue);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(p){
                 <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.draggingbordercolor
                 <span class="local-variable">this</span>.lasty = p.local[<span class="integer">1</span>];
                 <span class="local-variable">this</span>.lastx = p.local[<span class="integer">0</span>];
-                
+
                 <span class="local-variable">this</span>.checkandset(<span class="local-variable">this</span>.value);
                 <span class="local-variable">this</span>.basevalue = <span class="local-variable">this</span>.value;
 
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(p){                        
+                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(p){
                         <span class="local-variable">this</span>.updatevalue(p);
                 }.bind(<span class="local-variable">this</span>);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(p){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._focus) {
                         <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor
@@ -419,11 +429,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){}
         }
-        
+
         <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">space-around</span><span class="delimiter">&quot;</span></span>
-                
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                
+
                 <span class="keyword">var</span> res = [];
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.title &amp;&amp; <span class="local-variable">this</span>.title.length &gt; <span class="integer">0</span>){
@@ -433,14 +443,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 )
                         )
                 }
-                
+
                 res.push(button({<span class="key">margin</span>:vec4(<span class="integer">4</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">0</span>),<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor,<span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor,<span class="key">borderwidth</span>:<span class="integer">0</span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-left</span><span class="delimiter">&quot;</span></span>,  <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> , <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize*(<span class="integer">2</span>/<span class="integer">3</span>),  <span class="key">padding</span>:<span class="integer">4</span>, <span class="key">borderradius</span>:<span class="integer">0</span>, <span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.downclick()}.bind(<span class="local-variable">this</span>)}));
                 res.push(label({<span class="key">margin</span>:vec4(<span class="integer">4</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">0</span>),<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">0</span>,  <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thenumber</span><span class="delimiter">&quot;</span></span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="local-variable">this</span>._value.toString(),<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor, <span class="key">bg</span>:<span class="integer">0</span>}))
                 res.push(button({<span class="key">margin</span>:vec4(<span class="integer">4</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">0</span>),<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor,<span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor,<span class="key">borderwidth</span>:<span class="integer">0</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>,<span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize*(<span class="integer">2</span>/<span class="integer">3</span>),  <span class="key">padding</span>:<span class="integer">4</span>, <span class="key">borderradius</span>:<span class="integer">0</span>, <span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.upclick()}.bind(<span class="local-variable">this</span>)}))
-                <span class="keyword">return</span> res;        
-                
+                <span class="keyword">return</span> res;
+
         }
-})</pre></td>
+
+        <span class="keyword">var</span> numberbox = <span class="local-variable">this</span>.constructor;
+        <span class="local-variable">this</span>.constructor.examples = {
+                <span class="function">Usage</span>: <span class="keyword">function</span>(){
+                        <span class="keyword">return</span> [
+                                numberbox({<span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>})
+                        ]
+                }
+        }
+
+});
+</pre></td>
 </tr></table>
 
 </body>
