@@ -8,9 +8,14 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 	{text:"SF", place: "sanfrancisco", zoomlevel: 16},
 	{text:"SF-10", place: "sanfrancisco", zoomlevel: 10},
 	{text:"NY - Manhattan", place: "manhattan", zoomlevel: 16},
+	{text:"NY - Manhattan 14", place: "manhattan", zoomlevel: 14},
+	{text:"NY - Manhattan 12", place: "manhattan", zoomlevel: 12},
+	{text:"NY - Manhattan 11", place: "manhattan", zoomlevel: 11},
+	{text:"NY - Manhattan 10", place: "manhattan", zoomlevel: 10},
 	{text:"SF - Golden Gate Park", place: "sanfrancisco_goldengatepark", zoomlevel: 17},
 		{text:"SZ - Huaqiang Bei", place: "shenzhen_hqb", zoomlevel: 16},
-		{text:"HongKong", place: "hongkong", zoomlevel: 16}
+		{text:"HongKong", place: "hongkong", zoomlevel: 10},
+		{text:"Sydney", place: "sydney", zoomlevel: 10}
 	]
 	this.render = function(){
 		

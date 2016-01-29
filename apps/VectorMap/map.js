@@ -133,26 +133,27 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			if (this.currentRequest) {
 				
+				var r = this.currentRequest;	
+				var hash = createHash(r.x, r.y, r.z);
+				
+				this.currentRequest = undefined;
+				this.cleanLoadedBlocks();
+				this.updateLoadQueue();
+				
 				try{
-					this.thedata = JSON.parse(str);	
-					BufferGen.build(this.currentRequest, this.thedata);
+					var thedata = JSON.parse(str);	
+					BufferGen.build(r, thedata);
+					//BufferGen.buildempty(r, thedata);
 	
 					
 				}					
 				catch(e){
 					console.log(e);
-					var r = this.currentRequest;
 					console.log(" while loading ", r.x, r.y, r.z);
 				}
-				this.thedata = undefined;
-				var r = this.currentRequest;	
-				var hash = createHash(r.x, r.y, r.z);
 				
-				this.loadedblocks[hash] = this.currentRequest
-				this.loadqueuehash[hash] =  undefined;
-				this.currentRequest = undefined;
-				this.cleanLoadedBlocks();
-				this.updateLoadQueue();
+				this.loadedblocks[hash] = r
+				this.loadqueuehash[hash] = undefined;			
 			}
 		}
 		
@@ -230,7 +231,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					   seoul: [37.5275421, 126.9748078],
 					   seoel: [37.5275421, 126.9748078],
 					   shenzhen_hqb:[22.5402897,114.0846914],
-					   hongkong:[22.2854084,114.1600463]
+					   hongkong:[22.2854084,114.1600463],
+					   sydney:[-33.8466226,151.2277997]
 			}
 			
 			this.theinterval = this.setInterval(function(){
@@ -242,6 +244,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			}.bind(this), 50);
 		
 			this.gotoCity("Amsterdam", 10);
+			
+			this.rpc.urlfetch.sessionstart();
 			//this.setCenter(33656/2,21534/2, 16)
 			
 		}
@@ -303,39 +307,37 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			this.checknewpos();
 		}
 	
-		this.checknewpos = function(){
+		this.checknewpos = function(time){
 			var R = this.calctilepos();
 			
 			var newpos = 	vec3(R[0], R[1], R[2]);		
-			if (this.lastpos[0] != newpos[0] || this.lastpos[1] != newpos[1]){
+			if (this.lastpos[0] != newpos[0] || this.lastpos[1] != newpos[1] || this.lastpos[2] != newpos[2]){
 				this.lastpos = newpos;
 				this.tilehash = createHash(this.lastpos[0], this.lastpos[1], this.zoomlevel);
 				this.bufferloaded = 0;
 				this.frameswaited = 0;
 				this.bufferloadbool = false;
 				this.queued  = 0;
-				this.redraw();
-				
-				this.loadbuffer()
-				
+				this.redraw();				
+				this.loadbuffer(time)
 			}else{
-				if (this.bufferloadbool == false) this.loadbuffer();
+				if (this.bufferloadbool == false) this.loadbuffer(time);else this.bl.lasttime = time;
 			}
 		}
 
 		this.loadbuffer = function(){
-			var md = this.find("mapdata");
+			md = this.find("mapdata");
 			if (md){
-				var bl = md.getBlockByHash(this.tilehash);
+				this.bl = md.getBlockByHash(this.tilehash);
 				
-				if (bl){
-				if (this.frameswaited == 0) {
+				if (this.bl){
+				if (this.frameswaited == 0 ) {
 						this.bufferloaded = 1.0
 					} else{
 					this.bufferloaded = Animate({1:{value:1.0, motion:"inoutquad"}});	
 					}
 					this.bufferloadbool = true;					
-					this.loadBufferFromTile(bl);
+					this.loadBufferFromTile(this.bl);
 					this.redraw();				
 				}
 				else{
@@ -400,7 +402,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				//zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
-				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
 		}
@@ -409,8 +410,7 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 	
 	
 	define.class(this,"landtile", "$ui/view", function(){
-		this.attributes = {bufferloaded:0.0}
-	
+		
 		this.is = tilebasemixin;
 		
 		this.loadBufferFromTile = function(tile){
@@ -438,13 +438,15 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				this.mesh =  BufferGen.LandVertexStruct.array();
 				var a = BufferGen.TileSize *0.05;
 				var b = BufferGen.TileSize - a;
-				this.mesh.push(a,a);
-				this.mesh.push(b,a);
-
-				this.mesh.push(b,b);
-				this.mesh.push(a,a);
-				this.mesh.push(b,b);
-				this.mesh.push(a,b);
+				var col =  vec4("#202050");
+				
+				this.mesh.push(a,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
+				this.mesh.push(b,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
+                                    
+				this.mesh.push(b,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
+				this.mesh.push(a,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
+				this.mesh.push(b,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
+				this.mesh.push(a,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 			}
 			
 			this.drawtype = this.TRIANGLES
@@ -459,7 +461,6 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
 				
-				//return vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				
 			}
 		}

@@ -31,7 +31,7 @@ define.class(function(require, $server$, service){
 		meadow:false, nature_reserve:false, park:false, parking:true, 
 		pedestrian:true, 
 		pitch:true, 
-		place_of_worship:true, playground:true, quarry:true, railway:true, recreation_ground:true, residential:true, retail:true, 
+		place_of_worship:true, playground:true, quarry:true, railway:true, recreation_ground:false, residential:false, retail:true, 
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true};
 	
 	
@@ -309,7 +309,7 @@ define.class(function(require, $server$, service){
 	for (var a in this.mapstyle){
 		var st = this.mapstyle[a];
 		if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
-		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.24);
+		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
 	}
 	
 	this.dumpkindset = function(){
