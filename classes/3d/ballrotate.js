@@ -4,17 +4,20 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$view){
+define.class(function(require, $ui$button){
 	//internal, this widget controls
 
 	this.attributes = {
 		// the target view to control with this
 		target: Config({type:string, value:""})
-	}
-
+	}	
+	this.icon = "arrows"
+	this.justifycontent = "center"
+	this.alignitems = "center"
+	this.fontsize = 20;
 	this.mouseleftdown = function(event){
 
-		this.bgcolor = vec4("gray")
+		//this.bgcolor = vec4("gray")
 		var t = this.find(this.target)
 		if (!t) console.log("target not found", this.target);
 		if (t){
@@ -46,8 +49,7 @@ define.class(function(require, $ui$view){
 
 				t._camera = Res
 				t.redraw()
-				//this.target.updateLookAtMatrix();
-				//this.target.setDirty();
+				
 
 				this.clickstart = a;
 				this.camera_start = vec3.sub(t._camera, t._lookat );
@@ -59,4 +61,16 @@ define.class(function(require, $ui$view){
 	this.mouseleftup = function(){
 		this.mousemove = function(){};
 	}
+	
+	var rotator = this.constructor
+	// Basic usage of the button.
+	this.constructor.examples = {
+		Usage:function(){
+			return [
+				rotator({target:"someview", width:100, height:100})
+				
+			]
+		}
+	}	
+	
 })
