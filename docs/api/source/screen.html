@@ -1044,7 +1044,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">dropshadowradius</span>: <span class="integer">20</span>,
                                 <span class="key">dropshadowoffset</span>:vec2(<span class="integer">9</span>,<span class="integer">9</span>),
                                 <span class="key">borderradius</span>:<span class="integer">7</span>,
-                                <span class="function">miss</span>:<span class="keyword">function</span>(){
+                                <span class="function">onfocuslost</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
                                 },
                                 <span class="function">init</span>:<span class="keyword">function</span>(){
@@ -1337,7 +1337,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">mouseleftdown</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>),<span class="key">local</span>:<span class="local-variable">this</span>.remapMouse(view)})
                                                         }
                                                         <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.modal){
-                                                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">miss</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
+                                                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">focuslost</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
                                                         }
                                                 }
                                         <span class="comment">// }</span>

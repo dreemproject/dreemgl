@@ -23,7 +23,7 @@
  * Gradient color 2
  */
 /**
- * @attribute {vec4} [inactivecolor="0.9333333373069763,0.9333333373069763,0.9333333373069763,1"]
+ * @attribute {vec4} [inactivecolor="0.7333333492279053,0.7333333492279053,0.7333333492279053,1"]
  * Color of the inactive icon
  */
 /**

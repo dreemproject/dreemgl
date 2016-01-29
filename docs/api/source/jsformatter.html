@@ -1718,7 +1718,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">// lets check if it has a newline</span>
                 <span class="keyword">var</span> first_is_obj
-                <span class="keyword">if</span>(n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span> || n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Array</span><span class="delimiter">'</span></span>){
+                <span class="keyword">if</span>(n.args.length&gt;<span class="integer">0</span> &amp;&amp; (n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span> || n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Array</span><span class="delimiter">'</span></span>)){
                         first_is_obj = <span class="predefined-constant">true</span>
                         <span class="keyword">if</span>(n.args.length === <span class="integer">1</span>) <span class="local-variable">this</span>.indent--
                 }
