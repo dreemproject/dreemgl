@@ -1,13 +1,13 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class( function(require, label){	
+define.class( function(require, label){
 
 	// The icon class provides an easy way to access most of the commonly used web icons. Look at the FontAwesome cheat sheet to see what can be used.
-	
+
 	this.attributes = {
 		// The icon to be used. Look at the FontAwesome cheat sheet to see the available options. Icons do not need to specify their 'fa-' prefix -> use 'gears' instead of 'fa-gears'.
 		icon: Config({type:String, value:'wrench'})
@@ -16,16 +16,16 @@ define.class( function(require, label){
 	this.oninit = function(){
 		this.text = table[this.icon]
 	}
-	
+
 	this.onicon = function(){
 		this.text = table[this.icon]
 	}
-	
+
 	this.bg = undefined
 
 	this.font = require('$resources/fonts/fontawesome.glf')
 
-	// the font awesome 
+	// the font awesome
 	var table = {
 		'undefined':'',
 		'500px':'\uf26e',
@@ -706,14 +706,13 @@ define.class( function(require, label){
 
 	var icon = this.constructor
 	this.constructor.examples = {
-		// Basic usage
-		BasicUsage: function(){
+		Usage: function(){
 			return [
-				icon({icon:"flask", fontsize: 50, fgcolor: "red"})
-				,icon({icon:"youtube", fontsize: 50, fgcolor: "green"})
-				,icon({icon:"gears", fontsize: 50, fgcolor: "yellow"})
-				,icon({icon:"twitter", fontsize: 50, fgcolor: "blue"})
+				icon({icon:"flask", fontsize: 30, fgcolor: "red"})
+				,icon({icon:"youtube", fontsize: 30, fgcolor: "green"})
+				,icon({icon:"gears", fontsize: 30, fgcolor: "yellow"})
+				,icon({icon:"twitter", fontsize: 30, fgcolor: "blue"})
 			]
 		}
-	}	
+	}
 })
