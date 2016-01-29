@@ -5,8 +5,9 @@
 
 define.class('$ui/view', function (require, $ui$, screen, view, label) {
 
-	this.flex = 1;
-	this.bgcolor = 'gray';
+	this.flex = 1
+	this.bgcolor = 'gray'
+	this.margin = 50
 
 	this.attributes = {
 		start: Config({type: Array,  value: []}),
@@ -17,37 +18,38 @@ define.class('$ui/view', function (require, $ui$, screen, view, label) {
 	}
 
 	this.oninit = function () {
-		this.onpointerstart = function(event) {
-			this.start = event.value;
-		}.bind(this);
+		this.pointerstart = function(event) {
+			this.start = event.value
+		}.bind(this)
 
-		this.onpointermove = function(event) {
-			this.move = event.value;
-		}.bind(this);
+		this.pointermove = function(event) {
+			this.move = event.value
+		}.bind(this)
 
-		this.onpointerend = function(event) {
-			this.end = event.value;
-		}.bind(this);
+		this.pointerend = function(event) {
+			this.end = event.value
+		}.bind(this)
 
-		this.onpointerhover = function(event) {
-			this.hover = event.value;
-		}.bind(this);
+		this.pointerhover = function(event) {
+			this.hover = event.value
+		}.bind(this)
 
-		this.onpointertap = function(event) {
-			this.tap = event.value;
-		}.bind(this);
+		this.pointertap = function(event) {
+			this.tap = event.value
+		}.bind(this)
 	}
 
 	this.renderLabels = function (type, color) {
-		var markers = [];
+		var markers = []
 		for (var i = 0;i < this[type].length; i++) {
+			var pos = this.globalToLocal(this[type][i].position)
 			markers.push(label({
 				text: i,
 				icon: 'play',
 				position: 'absolute',
 				bgcolor: 'transparent',
-				left: this[type][i].x,
-				top: this[type][i].y,
+				left: pos[0],
+				top: pos[1],
 				fgcolor: color,
 				bordercolor: color,
 				borderradius: 0,
@@ -61,9 +63,9 @@ define.class('$ui/view', function (require, $ui$, screen, view, label) {
 				position: 'relative',
 				top: -22,
 				left: -12
-			})));
+			})))
 		}
-		return markers;
+		return markers
 	}
 
 	this.render = function() {
@@ -73,7 +75,7 @@ define.class('$ui/view', function (require, $ui$, screen, view, label) {
 			this.renderLabels('move', 'green'),
 			this.renderLabels('end', 'blue'),
 			this.renderLabels('tap', 'cyan')
-		];
-	};
+		]
+	}
 
-});
+})
