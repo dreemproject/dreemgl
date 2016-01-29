@@ -691,7 +691,7 @@ define.class(function(require, exports){
 
 		// lets check if it has a newline
 		var first_is_obj
-		if(n.args[0].type === 'Object' || n.args[0].type === 'Array'){
+		if(n.args.length>0 && (n.args[0].type === 'Object' || n.args[0].type === 'Array')){
 			first_is_obj = true
 			if(n.args.length === 1) this.indent--
 		}
