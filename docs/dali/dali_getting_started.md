@@ -20,3 +20,4 @@ There is a default folder hard coded into the Dreem
 | name    | Optional | Window name to display |
 | dali    | Required | Location of the dreemgl application to run. This can be the name of a directory containing the application, or the name of a single javascript file (without the ```.js``` suffix)
 | dalilib | Optional | Path to the dali/nodejs library. Default = ```/home/dali/teem/src/dreemgl/Release/dali```
+
