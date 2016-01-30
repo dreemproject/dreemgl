@@ -7,7 +7,7 @@
 // ruler class
 
 define.class('$ui/view', function(view, button, label){
-	// Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
+	// internal, Creates a tabcontrol - 1 tab for each instance-child. Each instance-child can provide a title and an icon property which will be used in the activation button for the tab.
 
 	this.attributes = {
 		// The currently active tab.

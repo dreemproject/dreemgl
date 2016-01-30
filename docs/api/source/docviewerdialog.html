@@ -178,15 +178,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$$</span>, dialog, <span class="predefined">$ui$</span>, textbox,view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton, <span class="predefined">$widgets$</span>, docviewer){
 
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">0.5</span>);
-        <span class="local-variable">this</span>.flexdirection =<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.flexdirection =<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Docviewer</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">some bodytext here...</span><span class="delimiter">&quot;</span></span>
@@ -196,13 +196,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> dialog({<span class="key">title</span>:<span class="local-variable">this</span>.title, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>},
                         view({<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">20</span> },
                         <span class="comment">//docviewer({classconstr:textbox, fontcolor:&quot;white&quot;, bg:false}),</span>
-                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>   }, 
+                                view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>   },
                                         button({<span class="key">padding</span>:<span class="integer">10</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Close</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check</span><span class="delimiter">&quot;</span></span>, <span class="function">click</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">true</span>);} })
                                  )
                         )
-                );                
+                );
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

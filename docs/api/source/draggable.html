@@ -165,28 +165,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n11" name="n11">11</a>
 <a href="#n12" name="n12">12</a>
 <a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -194,34 +172,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
-
-        <span class="comment">// internal, alright what does a draggable do?... well</span>
-        <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">var</span> start = event.local
-                <span class="keyword">var</span> startx = <span class="local-variable">this</span>.pos[<span class="integer">0</span>];
-                <span class="keyword">var</span> starty = <span class="local-variable">this</span>.pos[<span class="integer">1</span>];
-
-                <span class="keyword">var</span> startposition = <span class="local-variable">this</span>.parent.localMouse();
-                <span class="comment">// ok we start dragging a rectangle</span>
-                <span class="comment">// how does that work?</span>
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(event){
-
-                        p = <span class="local-variable">this</span>.parent.localMouse()
-                        <span class="keyword">var</span> dx = p[<span class="integer">0</span>] - startposition[<span class="integer">0</span>];
-                        <span class="keyword">var</span> dy = p[<span class="integer">1</span>] - startposition[<span class="integer">1</span>];
-                        <span class="local-variable">this</span>.pos = [startx  + dx, starty + dy]
-                        <span class="comment">//origin[0] += delta[0], origin[1] += delta[1]</span>
-                }
+        <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(event){
+                <span class="local-variable">this</span>._dragstart = vec2(<span class="local-variable">this</span>.pos[<span class="integer">0</span>], <span class="local-variable">this</span>.pos[<span class="integer">1</span>])
         }
-
-        <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){}
+        <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+                <span class="local-variable">this</span>.pos = vec2(<span class="local-variable">this</span>._dragstart[<span class="integer">0</span>] + event.value[<span class="integer">0</span>].delta[<span class="integer">0</span>], <span class="local-variable">this</span>._dragstart[<span class="integer">1</span>] + event.value[<span class="integer">0</span>].delta[<span class="integer">1</span>])
         }
-
-        <span class="comment">// it waits for leftmousedown</span>
-        <span class="comment">// then moves itself till leftmouseup</span>
-        <span class="comment">// and make it do pointer instead</span>
-
 })
 </pre></td>
 </tr></table>

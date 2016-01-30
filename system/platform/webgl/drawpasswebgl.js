@@ -92,17 +92,17 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.calculateDrawMatrices = function(isroot, storage, mousex, mousey){
+	this.calculateDrawMatrices = function(isroot, storage, pointerx, pointery){
 		var view = this.view
 		var scroll = view._scroll
 		var layout = view._layout
 
 		if(view._viewport === '2d'){
-			if(isroot && mousex !== undefined){
+			if(isroot && pointerx !== undefined){
 				var sizel = 0
 				var sizer = 1
-				mat4.ortho(scroll[0] + mousex - sizel, scroll[0] + mousex + sizer, scroll[1] + mousey - sizer,  scroll[1] + mousey + sizel, -100, 100, storage.viewmatrix)
-				mat4.ortho(mousex - sizel, mousex + sizer, mousey - sizer, mousey + sizel, -100, 100, storage.noscrollmatrix)
+				mat4.ortho(scroll[0] + pointerx - sizel, scroll[0] + pointerx + sizer, scroll[1] + pointery - sizer,  scroll[1] + pointery + sizel, -100, 100, storage.viewmatrix)
+				mat4.ortho(pointerx - sizel, pointerx + sizer, pointery - sizer, pointery + sizel, -100, 100, storage.noscrollmatrix)
 			}
 			else{
 				var zoom = view._zoom
@@ -170,7 +170,7 @@ define.class(function(require, baseclass){
 		return next
 	}
 
-	this.drawPick = function(isroot, passid, mousex, mousey, debug){
+	this.drawPick = function(isroot, passid, pointerx, pointery, debug){
 		var view = this.view
 		var device = this.device
 		var layout = view._layout
@@ -192,7 +192,7 @@ define.class(function(require, baseclass){
 		device.clear(0,0,0,0)
 
 		var matrices = this.pickmatrices
-		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
+		this.calculateDrawMatrices(isroot, matrices, debug?undefined:pointerx, pointery)
 		// calculate the colormatrices too
 		//if(!this.colormatrices.initialized){
 		//	this.calculateDrawMatrices(isroot, this.colormatrices)

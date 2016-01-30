@@ -253,10 +253,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         view({
                                                 <span class="key">mycolor</span>:Config({<span class="key">value</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>), <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">linear</span><span class="delimiter">'</span></span>, <span class="key">duration</span>:<span class="integer">1</span>})
                                                 ,
-                                                <span class="function">mouseleftdown</span>:<span class="keyword">function</span>(){
+                                                <span class="function">pointerstart</span>:<span class="keyword">function</span>(){
                                                         <span class="local-variable">this</span>.mycolor = <span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>
                                                 },
-                                                <span class="function">mouseleftup</span>:<span class="keyword">function</span>(){
+                                                <span class="function">pointerend</span>:<span class="keyword">function</span>(){
                                                         <span class="local-variable">this</span>.mycolor = <span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>
                                                 },
                                                 <span class="key">flex</span>:<span class="integer">1</span>,

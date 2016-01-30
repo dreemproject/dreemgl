@@ -6,6 +6,7 @@
 define.class("../webgl/devicewebgl", function(require, exports){
 
 	this.Keyboard = require('./keyboardnodegl')
+	// TODO(aki): replace mouse with pointer
 	this.Mouse = require('./mousenodegl')
 
 	// require embedded classes

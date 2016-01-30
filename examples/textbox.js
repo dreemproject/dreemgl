@@ -7,7 +7,6 @@
 define.class('$server/composition',function($ui$, screen, view, textbox, button, label){
 	// internal
 
-
 	// what if we do this
 	this.style = {
 		label:{
@@ -23,21 +22,21 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
  	// we inherit the _style object and copy over props.
 
  	// we look up textbox in _style
-  	// this._classes[name]
-
+  // this._classes[name]
 
 	this.render = function(){ return [
 		screen({clearcolor:'#484230', flexdirection:'row'},
 			textbox({value:"T1", bgcolor:'red'}),
 			textbox({value:"T2", bgcolor:'orange'}),
 			button({text:'test'}),
-			label({fgcolor:'red', mouseleftdown:function(){
+			label({fgcolor:'red', pointerstart:function(){
 				// lets open a modal dialog
 				this.screen.openModal(function(){return [
 					view({
-						miss:function(){
-							this.screen.closeModal(false)
-						},
+						// TODO(aki): fix modal menus
+						// miss:function(){
+						// 	this.screen.closeModal(false)
+						// },
 						init:function(){
 							console.log('here')
 						},

@@ -510,27 +510,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n356" name="n356">356</a>
 <a href="#n357" name="n357">357</a>
 <a href="#n358" name="n358">358</a>
-<a href="#n359" name="n359">359</a>
-<strong><a href="#n360" name="n360">360</a></strong>
-<a href="#n361" name="n361">361</a>
-<a href="#n362" name="n362">362</a>
-<a href="#n363" name="n363">363</a>
-<a href="#n364" name="n364">364</a>
-<a href="#n365" name="n365">365</a>
-<a href="#n366" name="n366">366</a>
-<a href="#n367" name="n367">367</a>
-<a href="#n368" name="n368">368</a>
-<a href="#n369" name="n369">369</a>
-<strong><a href="#n370" name="n370">370</a></strong>
-<a href="#n371" name="n371">371</a>
-<a href="#n372" name="n372">372</a>
-<a href="#n373" name="n373">373</a>
-<a href="#n374" name="n374">374</a>
-<a href="#n375" name="n375">375</a>
-<a href="#n376" name="n376">376</a>
-<a href="#n377" name="n377">377</a>
-<a href="#n378" name="n378">378</a>
-<a href="#n379" name="n379">379</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -710,69 +689,51 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.pos = vec2(x,y);
         }
 
-        <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(p){
+        <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(event){
                 <span class="comment">//this.moveToFront()</span>
                 <span class="keyword">var</span> props = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (props) props.target = <span class="local-variable">this</span>.name;
-
                 <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; !fg.inSelection(<span class="local-variable">this</span>)){
                         fg.clearSelection();
                 }
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; fg.inSelection(<span class="local-variable">this</span>)){
                         fg.removeFromSelection(<span class="local-variable">this</span>);
                         fg.updateSelectedItems();
-
                         <span class="keyword">return</span>;
                 }
                 fg.setActiveBlock(<span class="local-variable">this</span>);
                 fg.updateSelectedItems();
-
-
-                <span class="local-variable">this</span>.startposition = <span class="local-variable">this</span>.parent.localMouse();
                 fg.setupSelectionMove();
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(evt){
-                        <span class="keyword">var</span> p = <span class="local-variable">this</span>.parent.localMouse()
-                        <span class="keyword">var</span> dx = p[<span class="integer">0</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">0</span>];
-                        <span class="keyword">var</span> dy = p[<span class="integer">1</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">1</span>];
-
-                        <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-
-                        fg.moveSelected(dx, dy, <span class="predefined-constant">false</span>);
-
-
-                }.bind(<span class="local-variable">this</span>);
         }
 
-        <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(p){
-                <span class="keyword">var</span> p = <span class="local-variable">this</span>.parent.localMouse()
+        <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+                <span class="keyword">var</span> delta = event.value[<span class="integer">0</span>].delta
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(delta[<span class="integer">0</span>], delta[<span class="integer">1</span>], <span class="predefined-constant">false</span>);
+        }
+
+        <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">var</span> x = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">0</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap;
                 <span class="keyword">var</span> y = Math.floor(<span class="local-variable">this</span>.pos[<span class="integer">1</span>]/<span class="local-variable">this</span>.snap)*<span class="local-variable">this</span>.snap;
-                <span class="keyword">var</span> dx = p[<span class="integer">0</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">0</span>];
-                <span class="keyword">var</span> dy = p[<span class="integer">1</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">1</span>];
-
                 <span class="local-variable">this</span>.pos = vec2(x,y);
+                <span class="keyword">var</span> delta = event.value[<span class="integer">0</span>].delta
                 <span class="local-variable">this</span>.redraw();
                 <span class="local-variable">this</span>.relayout();
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(dx,dy,<span class="predefined-constant">true</span>)
-
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){};
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(delta[<span class="integer">0</span>], delta[<span class="integer">1</span>], <span class="predefined-constant">true</span>);
         }
 
         <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
 
-        <span class="local-variable">this</span>.<span class="function">mouseover</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>;
-                <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext;
-                <span class="local-variable">this</span>.updatecolor();
+        <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>
+                <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext
+                <span class="local-variable">this</span>.updatecolor()
         }
 
-        <span class="local-variable">this</span>.<span class="function">mouseout</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
-                <span class="local-variable">this</span>.updatecolor();
+        <span class="local-variable">this</span>.<span class="function">pointerout</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>
+                <span class="local-variable">this</span>.updatecolor()
         }
-
 
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
 
@@ -794,21 +755,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>
 
-                <span class="local-variable">this</span>.<span class="function">clicked</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.<span class="function">tapped</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>)
                         fg.setConnectionEndpoint(bl.name, <span class="local-variable">this</span>.name)
                 }
 
-                <span class="local-variable">this</span>.<span class="function">mouseover</span>  = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext;
+                <span class="local-variable">this</span>.<span class="function">pointerover</span>  = <span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext
                 }
-
 
                 <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.hovertext = <span class="string"><span class="delimiter">&quot;</span><span class="content">Input </span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.title+ (<span class="local-variable">this</span>.type?(<span class="string"><span class="delimiter">&quot;</span><span class="content">: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.type):<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">return</span> [
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="function">mouseleftdown</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.clicked();}.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}),
+                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}),
                                 label({<span class="key">marginleft</span>:<span class="integer">5</span>, <span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.title), <span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
@@ -822,18 +782,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
 
-                <span class="local-variable">this</span>.<span class="function">mouseover</span>  = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext;
+                <span class="local-variable">this</span>.<span class="function">pointerover</span>  = <span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.screen.status = <span class="local-variable">this</span>.hovertext
                 }
-                <span class="local-variable">this</span>.<span class="function">clicked</span> = <span class="keyword">function</span>(){
+
+                <span class="local-variable">this</span>.<span class="function">tapped</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span>        bl = <span class="local-variable">this</span>.parent.parent.parent;
                         <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
                         fg.setConnectionStartpoint(bl.name, <span class="local-variable">this</span>.name);
                 }
 
-                <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
-
-                }
                 <span class="local-variable">this</span>.marginbottom = <span class="integer">4</span>;
 
                 <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
@@ -841,7 +799,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="keyword">return</span> [
                                 label({<span class="key">text</span>:uppercaseFirst(<span class="local-variable">this</span>.name), <span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">marginright</span>: <span class="integer">5</span>}),
-                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor, <span class="function">mouseleftdown</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.clicked();}.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
+                                ballbutton({<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>: <span class="local-variable">this</span>.bgcolor, <span class="key">click</span>: <span class="local-variable">this</span>.tapped.bind(<span class="local-variable">this</span>), <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
         })
@@ -864,12 +822,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> res;
         }
 
-        <span class="local-variable">this</span>.<span class="function">renameBlock</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">renameBlock</span> = <span class="keyword">function</span>(e){
                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){
                         <span class="keyword">return</span> renameblockdialog({<span class="key">oldname</span>:<span class="local-variable">this</span>.name, <span class="key">width</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">0</span>],<span class="key">height</span>:<span class="local-variable">this</span>.screen.size[<span class="integer">1</span>],
                                 <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">x</span>:<span class="local-variable">this</span>.screen.pointer._x,
-                                <span class="key">y</span>:<span class="local-variable">this</span>.screen.pointer._y + <span class="integer">20</span>,
+                                <span class="key">x</span>: e.value[<span class="integer">0</span>].x,
+                                <span class="key">y</span>: e.value[<span class="integer">0</span>].y + <span class="integer">20</span>,
                                 <span class="function">blur</span>:<span class="keyword">function</span>(){
                                         <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
 
@@ -893,9 +851,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">header</span><span class="delimiter">'</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
                                 ,view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }
                                         ,label({<span class="key">text</span>:<span class="local-variable">this</span>.title,<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">head</span><span class="delimiter">'</span></span>})
-                                        ,button({<span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">pencil</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.renameBlock();}.bind(<span class="local-variable">this</span>)})
+                                        ,button({<span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">pencil</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(e){<span class="local-variable">this</span>.renameBlock(e);}.bind(<span class="local-variable">this</span>)})
                                 )
-                                ,button({<span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.removeBlock();}.bind(<span class="local-variable">this</span>)})
+                                ,button({<span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">header</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remove</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(e){<span class="local-variable">this</span>.removeBlock(e);}.bind(<span class="local-variable">this</span>)})
                         )
                         ,view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>},
                                 view({<span class="key">bgimage</span>:require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./placeholder.png</span><span class="delimiter">&quot;</span></span>) })

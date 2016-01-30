@@ -211,7 +211,7 @@ define.class(function(require, exports){
 			//	break
 			//}
 		}
-		// now lets read the pixel under the mouse
+		// now lets read the pixel under the pointer
 		var pick_resolve = this.pick_resolve
 		this.pick_resolve = []
 
@@ -240,16 +240,17 @@ define.class(function(require, exports){
 		}
 	}
 
-	this.pickScreen = function(x, y){
+	this.pickScreen = function(pos, immediate){
 		// promise based pickray rendering
 		return new Promise(function(resolve, reject){
 			this.pick_resolve.push(resolve)
-			this.pick_x = x
-			this.pick_y = y
-			if(!this.pick_timer){
+			this.pick_x = pos[0]
+			this.pick_y = pos[1]
+			if (immediate) {
+				this.doPick()
+			} else if (!this.pick_timer){
 				this.pick_timer = setTimeout(this.doPick, 0)
 			}
-			//this.doPick()
 		}.bind(this))
 	}
 

@@ -352,98 +352,86 @@ define.class('$ui/view', function(require,
 	this.updateZoom = function(z){
 	}
 
-	this.gridClick = function(p, origin){
+	this.gridDrag = function(event){
+		var cg = this.find("centralconstructiongrid")
+		var fg = this.find("flowgraph")
+		var sq = this.findChild("selectorrect")
+		var min = cg.globalToLocal(event.value[0].min)
+		var max = cg.globalToLocal(event.value[0].max)
 
-		this.cancelConnection()
-		var cg= this.find("centralconstructiongrid")
+		if(sq){
+			sq.visible = true;
+			sq.redraw();
+			sq.pos = vec2(min[0],min[1]);
+			sq.size = vec3(max[0]-min[0], max[1]-min[1], 1);
+			fg.dragselectset = [];
+			for(var a in fg.allblocks){
+				var bl = fg.allblocks[a];
 
-		origin.startselectposition = cg.localMouse()
-		this.startDragSelect()
+				cx = bl.pos[0] + bl.layout.width/2;
+				cy = bl.pos[1] + bl.layout.height/2;
 
-		origin.mousemove = function(){
-			var cg= this.find("centralconstructiongrid")
-			var np = cg.localMouse()
-			var fg = this.find("flowgraph")
-			var sq = this.findChild("selectorrect")
-			if(sq){
-				var sx = Math.min(this.startselectposition[0], np[0])
-				var sy = Math.min(this.startselectposition[1], np[1])
-				var ex = Math.max(this.startselectposition[0], np[0])
-				var ey = Math.max(this.startselectposition[1], np[1])
-
-				sq.visible = true;
-				sq.redraw();
-
-				sq.pos = vec2(sx,sy);
-				sq.size = vec3(ex-sx, ey-sy, 1);
-				fg.dragselectset = [];
-				for(var a in fg.allblocks){
-					var bl = fg.allblocks[a];
-
-					cx = bl.pos[0] + bl.layout.width/2;
-					cy = bl.pos[1] + bl.layout.height/2;
-
-					if (cx >= sx && cx <= ex && cy >= sy && cy <=ey) {
+				if (cx >= min[0] && cx <= max[0] && cy >= min[1] && cy <=max[1]) {
+					bl.inselection = 1;
+					fg.dragselectset.push(bl);
+				}
+				else{
+					if (fg.originalselection.indexOf(bl) >-1)
+					{
 						bl.inselection = 1;
-						fg.dragselectset.push(bl);
 					}
 					else{
-						if (fg.originalselection.indexOf(bl) >-1)
-						{
-							bl.inselection = 1;
-						}
-						else{
-							bl.inselection = 0;
-						}
+						bl.inselection = 0;
 					}
 				}
-				for(var a in fg.allconnections){
-					var con = fg.allconnections[a];
+			}
+			for(var a in fg.allconnections){
+				var con = fg.allconnections[a];
 
 
-					ax = con.frompos[0];
-					ay = con.frompos[1];
+				ax = con.frompos[0];
+				ay = con.frompos[1];
 
-					bx = con.topos[0];
-					by = con.topos[1];
+				bx = con.topos[0];
+				by = con.topos[1];
 
 
-					cx = (ax+bx)/2;
-					cy = (ay+by)/2;
+				cx = (ax+bx)/2;
+				cy = (ay+by)/2;
 
-					if ( (ax >= sx && ax <= ex && ay >= sy && ay <=ey)
-							||
-						(bx >= sx && bx <= ex && by >= sy && by <=ey)
+				if ( (ax >= min[0] && ax <= max[0] && ay >= min[1] && ay <=max[1])
 						||
-						(cx >= sx && cx <= ex && cy >= sy && cy <=ey)
-						)
-					 {
+					(bx >= min[0] && bx <= max[0] && by >= min[1] && by <=max[1])
+					||
+					(cx >= min[0] && cx <= max[0] && cy >= min[1] && cy <=max[1])
+					)
+				 {
+					con.inselection = 1;
+					fg.dragselectset.push(con);
+				}
+				else{
+					if (fg.originalselection.indexOf(con) >-1)
+					{
 						con.inselection = 1;
-						fg.dragselectset.push(con);
 					}
 					else{
-						if (fg.originalselection.indexOf(con) >-1)
-						{
-							con.inselection = 1;
-						}
-						else{
-							con.inselection = 0;
-						}
+						con.inselection = 0;
 					}
 				}
 			}
 		}
-
-		origin.mouseleftup = function(){
-			var sq = this.findChild("selectorrect");
-			if (sq){
-				sq.visible = false;
-				sq.redraw();
-			}
-			fg = this.find("flowgraph");
-			fg.commitdragselect();
-			this.mousemove = function(){};
+	}
+	this.gridDragStart = function(){
+		this.cancelConnection()
+		this.startDragSelect()
+	}
+	this.gridDragEnd = function(){
+		var sq = this.findChild("selectorrect");
+		if (sq){
+			sq.visible = false;
+			sq.redraw();
 		}
+		this.find("flowgraph").commitdragselect()
 	}
 
 	this.makeNewConnection = function(){
@@ -474,7 +462,6 @@ define.class('$ui/view', function(require,
 		var connectingconnection = this.find("openconnector");
 		if (connectingconnection && connectingconnection.visible)
 		{
-			this.screen.globalmousemove = function(){};
 			connectingconnection.from = undefined;
 			connectingconnection.fromoutput  = undefined;
 			connectingconnection.to = undefined;
@@ -485,7 +472,7 @@ define.class('$ui/view', function(require,
 		}
 	}
 
-	this.setupConnectionMouseMove = function(){
+	this.setupConnectionPointerMove = function(){
 		console.log("setting up new connection drag...");
 
 		var connectingconnection = this.find("openconnector");
@@ -518,10 +505,6 @@ define.class('$ui/view', function(require,
 				}
 			}
 			connectingconnection.calculateposition();
-			this.screen.globalmousemove = function(){
-				connectingconnection.calculateposition();
-				connectingconnection.redraw();
-			}
 		}
 	}
 
@@ -532,7 +515,7 @@ define.class('$ui/view', function(require,
 			this.makeNewConnection();
 		}
 		else{
-			this.setupConnectionMouseMove();
+			this.setupConnectionPointerMove();
 		}
 	}
 
@@ -543,7 +526,7 @@ define.class('$ui/view', function(require,
 			this.makeNewConnection();
 		}
 		else{
-			this.setupConnectionMouseMove();
+			this.setupConnectionPointerMove();
 		}
 	}
 
@@ -768,7 +751,11 @@ define.class('$ui/view', function(require,
 					)
 				)
 				,splitcontainer({flexdirection:"column", direction:"horizontal"}
-					,cadgrid({name:"centralconstructiongrid", mouseleftdown: function(p){this.gridClick(p, this.find('centralconstructiongrid'));}.bind(this),overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
+					,cadgrid({name:"centralconstructiongrid",
+							pointerstart: this.gridDragStart.bind(this),
+							pointermove: this.gridDrag.bind(this),
+							pointerend: this.gridDragEnd.bind(this),
+							overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
 						,view({name:"underlayer", bg:0}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 						)
@@ -834,5 +821,3 @@ define.class('$ui/view', function(require,
 		];
 	}
 });
-
-

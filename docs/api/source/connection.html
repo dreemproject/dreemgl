@@ -492,32 +492,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n338" name="n338">338</a>
 <a href="#n339" name="n339">339</a>
 <strong><a href="#n340" name="n340">340</a></strong>
-<a href="#n341" name="n341">341</a>
-<a href="#n342" name="n342">342</a>
-<a href="#n343" name="n343">343</a>
-<a href="#n344" name="n344">344</a>
-<a href="#n345" name="n345">345</a>
-<a href="#n346" name="n346">346</a>
-<a href="#n347" name="n347">347</a>
-<a href="#n348" name="n348">348</a>
-<a href="#n349" name="n349">349</a>
-<strong><a href="#n350" name="n350">350</a></strong>
-<a href="#n351" name="n351">351</a>
-<a href="#n352" name="n352">352</a>
-<a href="#n353" name="n353">353</a>
-<a href="#n354" name="n354">354</a>
-<a href="#n355" name="n355">355</a>
-<a href="#n356" name="n356">356</a>
-<a href="#n357" name="n357">357</a>
-<a href="#n358" name="n358">358</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton){
-                                
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">from</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">to</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
@@ -534,38 +516,38 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">centralcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>),<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>: <span class="float">0.1</span>}),
                 <span class="key">inselection</span> : Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
                 <span class="key">hasball</span>: <span class="predefined-constant">true</span>
-        
+
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">B1</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> t * t * t; }
         <span class="local-variable">this</span>.<span class="function">B2</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * t * (<span class="integer">1</span> - t); }
         <span class="local-variable">this</span>.<span class="function">B3</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
         <span class="local-variable">this</span>.<span class="function">B4</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
 
-        <span class="local-variable">this</span>.<span class="function">bezier</span> = <span class="keyword">function</span>(percent,C1,C2,C3,C4) {                
-                
+        <span class="local-variable">this</span>.<span class="function">bezier</span> = <span class="keyword">function</span>(percent,C1,C2,C3,C4) {
+
                 <span class="keyword">var</span> b1 = <span class="local-variable">this</span>.B1(percent);
                 <span class="keyword">var</span> b2 = <span class="local-variable">this</span>.B2(percent);
                 <span class="keyword">var</span> b3 = <span class="local-variable">this</span>.B3(percent);
                 <span class="keyword">var</span> b4 = <span class="local-variable">this</span>.B4(percent);
-                
-                <span class="comment">//return </span>
+
+                <span class="comment">//return</span>
                 <span class="keyword">var</span> A1 = vec2.vec2_mul_float32(C1, b1 )
                 <span class="keyword">var</span> A2 = vec2.vec2_mul_float32(C2, b2 )
                 <span class="keyword">var</span> A3 = vec2.vec2_mul_float32(C3, b3 )
                 <span class="keyword">var</span> A4 = vec2.vec2_mul_float32(C4, b4 )
 
-                <span class="keyword">return</span> vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));                        
+                <span class="keyword">return</span> vec2.add(A1, vec2.add(A2, vec2.add(A3, A4)));
         }
-                
+
         <span class="local-variable">this</span>.noboundscheck = <span class="predefined-constant">true</span>
-        
-        <span class="local-variable">this</span>.<span class="function">oninselection</span> = <span class="keyword">function</span>(){        
-                <span class="keyword">if</span> (<span class="local-variable">this</span>._inselection == <span class="integer">1</span>) <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor;<span class="keyword">else</span> <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.neutralbordercolor;                
+
+        <span class="local-variable">this</span>.<span class="function">oninselection</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._inselection == <span class="integer">1</span>) <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.focusbordercolor;<span class="keyword">else</span> <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.neutralbordercolor;
                 <span class="local-variable">this</span>.redraw();
                 <span class="local-variable">this</span>.updatecolor ();
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">destroy</span> = <span class="keyword">function</span>(){
                 fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (fg){
@@ -573,33 +555,33 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (index &gt; -<span class="integer">1</span>) fg.allconnections.splice(index, <span class="integer">1</span>);
                 }
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.neutralcolor1 = <span class="local-variable">this</span>.color1;
                 <span class="local-variable">this</span>.neutralcolor2 = <span class="local-variable">this</span>.color2;
-                <span class="local-variable">this</span>.neutralcolor = 
+                <span class="local-variable">this</span>.neutralcolor =
                 <span class="local-variable">this</span>.neutrallinewidth = <span class="local-variable">this</span>.linewidth;
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).allconnections.push(<span class="local-variable">this</span>);        
-                
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).allconnections.push(<span class="local-variable">this</span>);
+
                 <span class="local-variable">this</span>.updatecount = <span class="integer">0</span>;
 
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">keydownDelete</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).removeConnection(<span class="local-variable">this</span>);
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">keydownHandler</span> = <span class="keyword">function</span>(name){
                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">connection handles key:</span><span class="delimiter">&quot;</span></span>, name);
         }
-        
-        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){                        
+
+        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
                 <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
         }
 
         <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
-        
-        <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(){        
+
+        <span class="local-variable">this</span>.<span class="function">updatecolor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.inselection) {
                         <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.focussedcolor;
                         <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.focussedcolor;
@@ -609,7 +591,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.over){
                                 <span class="local-variable">this</span>.color1 = <span class="local-variable">this</span>.hoveredcolor;
                                 <span class="local-variable">this</span>.color2 = <span class="local-variable">this</span>.hoveredcolor;
-                                
+
                                 <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.hoveredwidth;
                         }
                         <span class="keyword">else</span>{
@@ -618,108 +600,95 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.linewidth = <span class="local-variable">this</span>.neutrallinewidth;
                         }
                 }
-                
+
                 <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);;
                                 <span class="keyword">var</span> H = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>);
-                
+
                 <span class="keyword">if</span> (H){
                         H.bordercolor = <span class="local-variable">this</span>.centralcolor;
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">focus</span> =<span class="keyword">function</span>(){
         }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(){
+
+        <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-                        
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; !fg.inSelection(<span class="local-variable">this</span>)){
                         fg.clearSelection();
                 }
-        
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.screen.keyboard.shift &amp;&amp; fg.inSelection(<span class="local-variable">this</span>)){
                         fg.removeFromSelection(<span class="local-variable">this</span>);
                         fg.updateSelectedItems();
-        
                         <span class="keyword">return</span>;
                 }
-                
                 fg.setActiveConnection(<span class="local-variable">this</span>);
                 fg.updateSelectedItems();
-                
-                <span class="local-variable">this</span>.startposition = <span class="local-variable">this</span>.parent.localMouse();
                 fg.setupSelectionMove();
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(evt){
-                        p = <span class="local-variable">this</span>.parent.localMouse()
-                        <span class="keyword">var</span> dx = p[<span class="integer">0</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">0</span>];
-                        <span class="keyword">var</span> dy = p[<span class="integer">1</span>] - <span class="local-variable">this</span>.startposition[<span class="integer">1</span>];
-        
-                        <span class="keyword">var</span>        fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
-                        fg.moveSelected(dx,dy);
-                }.bind(<span class="local-variable">this</span>);
-        }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(p){        
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){};
         }
 
-        <span class="local-variable">this</span>.<span class="function">mouseover</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>;
-                <span class="local-variable">this</span>.updatecolor();
+        <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+                <span class="keyword">var</span> delta = event.value[<span class="integer">0</span>].delta
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(delta[<span class="integer">0</span>], delta[<span class="integer">0</span>]);
         }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseout</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>;
-                <span class="local-variable">this</span>.updatecolor();
+
+        <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.over = <span class="predefined-constant">true</span>
+                <span class="local-variable">this</span>.updatecolor()
         }
-        
-        <span class="local-variable">this</span>.<span class="function">updateMove</span> = <span class="keyword">function</span>(){                        
+
+        <span class="local-variable">this</span>.<span class="function">pointerout</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.over = <span class="predefined-constant">false</span>
+                <span class="local-variable">this</span>.updatecolor()
         }
-        
-        <span class="local-variable">this</span>.<span class="function">setupMove</span> = <span class="keyword">function</span>(){                
+
+        <span class="local-variable">this</span>.<span class="function">updateMove</span> = <span class="keyword">function</span>(){
         }
-        
+
+        <span class="local-variable">this</span>.<span class="function">setupMove</span> = <span class="keyword">function</span>(){
+        }
+
         <span class="local-variable">this</span>.frompos= vec2(<span class="integer">0</span>,<span class="integer">0</span>);
         <span class="local-variable">this</span>.topos= vec2(<span class="integer">0</span>,<span class="integer">100</span>);
-        
-        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#00ffff</span><span class="delimiter">&quot;</span></span> 
-        
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">connectionshader</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.Shader,<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){        
+
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#00ffff</span><span class="delimiter">&quot;</span></span>
+
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">connectionshader</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.Shader,<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
                 <span class="local-variable">this</span>.mesh = vec2.array()
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="integer">100</span>;i++){
                         <span class="local-variable">this</span>.mesh.push([i/<span class="float">100.0</span>,-<span class="float">0.5</span>])
                         <span class="local-variable">this</span>.mesh.push([i/<span class="float">100.0</span>, <span class="float">0.5</span>])
                 }
-                                        
+
                 <span class="local-variable">this</span>.drawtype = <span class="local-variable">this</span>.TRIANGLE_STRIP
-                
+
                 <span class="local-variable">this</span>.<span class="function">B1</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> t * t * t; }
                 <span class="local-variable">this</span>.<span class="function">B2</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * t * (<span class="integer">1</span> - t); }
                 <span class="local-variable">this</span>.<span class="function">B3</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
                 <span class="local-variable">this</span>.<span class="function">B4</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
 
-                <span class="local-variable">this</span>.<span class="function">bezier</span> = <span class="keyword">function</span>(percent,C1,C2,C3,C4) {                                        
+                <span class="local-variable">this</span>.<span class="function">bezier</span> = <span class="keyword">function</span>(percent,C1,C2,C3,C4) {
                         <span class="keyword">var</span> b1 = B1(percent);
                         <span class="keyword">var</span> b2 = B2(percent);
                         <span class="keyword">var</span> b3 = B3(percent);
-                        <span class="keyword">var</span> b4 = B4(percent);                        
-                        <span class="keyword">return</span> C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;                
+                        <span class="keyword">var</span> b4 = B4(percent);
+                        <span class="keyword">return</span> C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;
                 }
 
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> a = mesh.x;
                         <span class="keyword">var</span> a2 = mesh.x+<span class="float">0.001</span>;
                         <span class="keyword">var</span> b = mesh.y * view.linewidth;
-                        
+
                         <span class="keyword">var</span> ddp = view.topos - view.frompos;
-                        
+
                         <span class="keyword">var</span> curve = min(<span class="integer">100</span>.,length(ddp)/<span class="integer">2</span>);
                         posA = <span class="local-variable">this</span>.bezier(a, view.frompos, view.frompos + vec2(curve,<span class="integer">0</span>), view.topos - vec2(curve,<span class="integer">0</span>), view.topos);
                         posB = <span class="local-variable">this</span>.bezier(a2, view.frompos, view.frompos + vec2(curve,<span class="integer">0</span>), view.topos - vec2(curve,<span class="integer">0</span>), view.topos);
-                        
+
                         <span class="keyword">var</span> dp = normalize(posB - posA);
-                        
+
                         <span class="keyword">var</span> rev = vec2(-dp.y, dp.x);
                         posA += rev * b;
                         <span class="comment">//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)</span>
@@ -731,66 +700,66 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> a= <span class="float">1.0</span> - pow(abs(mesh.y*<span class="float">2.0</span>), <span class="float">2.5</span>);
                         <span class="keyword">return</span> vec4(vec3(<span class="float">0.01</span>) + mix(view.color1.xyz,view.color2.xyz, mesh.x)*<span class="float">1.1</span>,a);
                         <span class="keyword">return</span> vec4(view.bgcolor.xyz,a);
-                }        
-        }) 
-        
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">glowconnectionshader</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.Shader,<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){        
+                }
+        })
+
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">glowconnectionshader</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.Shader,<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
                 <span class="local-variable">this</span>.mesh = vec2.array()
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="integer">100</span>;i++){
                         <span class="local-variable">this</span>.mesh.push([i/<span class="float">100.0</span>,-<span class="float">0.5</span>])
                         <span class="local-variable">this</span>.mesh.push([i/<span class="float">100.0</span>, <span class="float">0.5</span>])
                 }
-                                        
+
                 <span class="local-variable">this</span>.drawtype = <span class="local-variable">this</span>.TRIANGLE_STRIP
-                
+
                 <span class="local-variable">this</span>.<span class="function">B1</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> t * t * t; }
                 <span class="local-variable">this</span>.<span class="function">B2</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * t * (<span class="integer">1</span> - t); }
                 <span class="local-variable">this</span>.<span class="function">B3</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> <span class="integer">3</span> * t * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
                 <span class="local-variable">this</span>.<span class="function">B4</span> = <span class="keyword">function</span> (t) { <span class="keyword">return</span> (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t) * (<span class="integer">1</span> - t); }
 
-                <span class="local-variable">this</span>.<span class="function">bezier</span> = <span class="keyword">function</span>(percent,C1,C2,C3,C4) {                
+                <span class="local-variable">this</span>.<span class="function">bezier</span> = <span class="keyword">function</span>(percent,C1,C2,C3,C4) {
                         <span class="keyword">var</span> b1 = B1(percent);
                         <span class="keyword">var</span> b2 = B2(percent);
                         <span class="keyword">var</span> b3 = B3(percent);
                         <span class="keyword">var</span> b4 = B4(percent);
-                        <span class="keyword">return</span> C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;                
+                        <span class="keyword">return</span> C1* b1 + C2 * b2 + C3 * b3 + C4 * b4;
                 }
-                        
+
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> a = mesh.x;
                         <span class="keyword">var</span> a2 = mesh.x+<span class="float">0.001</span>;
                         <span class="keyword">var</span> b = mesh.y * view.glowlinewidth;
-                        
+
                         <span class="keyword">var</span> ddp = view.topos - view.frompos;
-                        
+
                         <span class="keyword">var</span> curve = min(<span class="integer">100</span>.,length(ddp)/<span class="integer">2</span>);
                         posA = <span class="local-variable">this</span>.bezier(a, view.frompos, view.frompos + vec2(curve,<span class="integer">0</span>), view.topos - vec2(curve,<span class="integer">0</span>), view.topos);
                         posB = <span class="local-variable">this</span>.bezier(a2, view.frompos, view.frompos + vec2(curve,<span class="integer">0</span>), view.topos - vec2(curve,<span class="integer">0</span>), view.topos);
-                        
+
                         <span class="keyword">var</span> dp = normalize(posB - posA);
-                        
+
                         <span class="keyword">var</span> rev = vec2(-dp.y, dp.x);
                         posA += rev * b;
                         <span class="comment">//pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)</span>
                         <span class="keyword">return</span> vec4(posA, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                 }
                 <span class="comment">//this.color_blend = 'src_alpha * src_color + dst_color'</span>
-  
+
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                         <span class="comment">//return 'red'</span>
                         <span class="keyword">var</span> a= <span class="float">1.0</span>-pow(abs(mesh.y*<span class="float">2.0</span>), <span class="float">2.5</span>);
                         <span class="keyword">return</span> vec4(mix(view.color1.xyz,view.color2.xyz, mesh.x),a*<span class="float">0.3</span>);
                         <span class="keyword">return</span> vec4(vec3(<span class="float">0.0</span>) + view.bgcolor.xyz*<span class="float">1.0</span>,a);
-                }        
-        }) 
+                }
+        })
 
         <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.connectionshader;
         <span class="local-variable">this</span>.glowconnectionshader = <span class="integer">1</span>;
         <span class="local-variable">this</span>.<span class="function">calculateposition</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> F = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>._from);
                 <span class="keyword">var</span> T = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>._to);
-                
+
                 <span class="keyword">var</span> color2 = <span class="predefined-constant">undefined</span>;
                 <span class="keyword">var</span> color1 = <span class="predefined-constant">undefined</span>;
                 <span class="keyword">if</span> (F){
@@ -804,50 +773,45 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.neutralcolor1 = <span class="local-variable">this</span>.bgcolor = out.bgcolor;
                         }
                         <span class="local-variable">this</span>.frompos = vec2(F._pos[<span class="integer">0</span>]+ F._layout.width-<span class="integer">3</span>,F._pos[<span class="integer">1</span>]+yoff)
+                } <span class="keyword">else</span> {
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> no F:</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>._from);
                 }
-                <span class="keyword">else</span>{
-                        <span class="comment">//console.log(&quot; no F:&quot;, this._from);</span>
-                        <span class="comment">//this.frompos = vec2(200,100);</span>
-                        <span class="local-variable">this</span>.frompos = <span class="local-variable">this</span>.localMouse();;
-                }
-                
+
                 <span class="keyword">if</span> (T){
                         <span class="keyword">var</span> inp = T.findChild(<span class="local-variable">this</span>._toinput);
                         <span class="keyword">var</span> yoff = <span class="integer">0</span>;
                         <span class="keyword">if</span> (inp) {
                                 color1 = inp.bgcolor;
-                                
+
                                 yoff += inp.layout.top;
                                 yoff += inp.parent.layout.top;
                                 yoff += inp.parent.parent.layout.top + <span class="integer">10</span>;
                                 <span class="keyword">if</span> (!F) <span class="local-variable">this</span>.neutralcolor2 = <span class="local-variable">this</span>.bgcolor = inp.bgcolor;
-                
+
                         }
-                        
+
                         <span class="local-variable">this</span>.topos = vec2(T._pos[<span class="integer">0</span>],T._pos[<span class="integer">1</span>]+yoff)
+                } <span class="keyword">else</span> {
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> no T</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>._to);
                 }
-                <span class="keyword">else</span>{
-                <span class="comment">//        console.log(&quot; no T&quot;, this._to);</span>
-                        <span class="local-variable">this</span>.topos = <span class="local-variable">this</span>.localMouse();;
-                }
-                
-                
+
+
                 <span class="keyword">if</span> (color1 &amp;&amp; !color2) color2 = color1;<span class="keyword">else</span> <span class="keyword">if</span> (color2 &amp;&amp; !color1) color1 = color2;
                 <span class="keyword">if</span> (color1) <span class="local-variable">this</span>.neutralcolor1 = <span class="local-variable">this</span>.color1 = Mark(color1, !<span class="local-variable">this</span>.updatecount);
                 <span class="keyword">if</span> (color2) <span class="local-variable">this</span>.neutralcolor2 = <span class="local-variable">this</span>.color2 = Mark(color2, !<span class="local-variable">this</span>.updatecount);
                 <span class="local-variable">this</span>.centralcolor = Mark(mix(<span class="local-variable">this</span>.color1, <span class="local-variable">this</span>.color2, <span class="float">0.5</span>), !<span class="local-variable">this</span>.updatecount);;
                 <span class="local-variable">this</span>.updatecount++;
-                
+
                 <span class="keyword">var</span> H = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">handle</span><span class="delimiter">&quot;</span></span>);
-                
+
                 <span class="keyword">if</span> (H){
                         H.bordercolor = <span class="local-variable">this</span>.centralcolor;
                         H.pos = vec2((<span class="local-variable">this</span>.frompos[<span class="integer">0</span>] + <span class="local-variable">this</span>.topos[<span class="integer">0</span>])*<span class="float">0.5</span> - <span class="integer">12</span>,(<span class="local-variable">this</span>.frompos[<span class="integer">1</span>] + <span class="local-variable">this</span>.topos[<span class="integer">1</span>])*<span class="float">0.5</span> - <span class="integer">12</span>);
-                        
+
                         <span class="keyword">var</span> ddp = vec2.sub(<span class="local-variable">this</span>.topos, <span class="local-variable">this</span>.frompos);
                         <span class="comment">//console.log(ddp);</span>
                         <span class="keyword">var</span> curve = min(<span class="integer">100</span>.,vec2.len(ddp)/<span class="integer">2</span>);
-                        
+
                                         <span class="keyword">var</span> F2 = vec2.add(<span class="local-variable">this</span>.frompos, vec2(curve,<span class="integer">0</span>));
                                         <span class="keyword">var</span> T2 = vec2.add(<span class="local-variable">this</span>.topos, vec2(-curve,<span class="integer">0</span>));
                         <span class="keyword">var</span> A1 = <span class="local-variable">this</span>.bezier(<span class="float">0.49</span>, <span class="local-variable">this</span>.frompos, F2,T2, <span class="local-variable">this</span>.topos);
@@ -855,8 +819,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> delta = vec2.sub(A1, A2);
                         <span class="keyword">var</span> angle = Math.atan2(delta[<span class="integer">1</span>], delta[<span class="integer">0</span>]);
                         H.triangleangle = angle;
-                        
-                
+
+
                 }
         }
 
