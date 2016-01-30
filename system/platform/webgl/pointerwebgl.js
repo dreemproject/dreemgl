@@ -3,13 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-// pointer class
-
 define.class('$system/base/pointer', function (require, exports){
-
-	this.ratio = 0
-
-	this.activedown = 0
 
 	this.tapspeed = 150
 	this.tapdist = 5
@@ -30,213 +24,166 @@ define.class('$system/base/pointer', function (require, exports){
 	})
 
 	this.atConstructor = function(device){
+
 		this.device = device
-		if (this.ratio == 0) this.ratio = window.devicePixelRatio
 
-		// TODO(aki): DEPRICATE (moved from mousewebgl.js)
-		// allright we need to figure out how we send back the mouse events to the worker
-		// are we going to send a vec2? or something else
-		document.addEventListener('click', function(e){
-			this.click = 1
-		}.bind(this))
-		document.addEventListener('blur', function(e){
-			this.blurred = 1
-		}.bind(this))
-		document.addEventListener('dblclick', function(e){
-			this.dblclick = 1
-		}.bind(this))
-		var click_count = 0
-		this.resetClicker = function(){
-			click_count = 0
+		var getMousePointerData = function (event) {
+			return [{
+				x: event.pageX,
+				y: event.pageY,
+				movementx: event.movementX,
+				movementy: event.movementY,
+				button: event.button === 0 ? 1 : event.button === 1 ? 3 : 2,
+				shift: event.shiftKey,
+				alt: event.altKey,
+				ctrl: event.ctrlKey,
+				meta: event.metaKey,
+				// TODO(aki): test on Firefox and implement polyfils if necessary.
+				wheelx: event.deltaX,
+				wheely: event.deltaY,
+				touch: false,
+				event: event
+			}]
 		}
 
-		// Sets the start attribute/event.
-		this.setstart = function(touchList) {
-
-			// TODO(aki): DEPRICATE (moved from mousewebgl.js)
-			var e = touchList[0].e;
-			this.activedown++;
-			if(this.last_click !== undefined && e.t - this.last_click < this.clickspeed){
-				click_count ++
-			}
-			else click_count = 1
-			this.last_click = e.t
-			this.clicker = click_count
-			this.x = e.pageX
-			this.y = e.pageY
-			if(e.button === 0 ) this.cancapture = 1, this.left = 1, this.leftdown = 1
-			if(e.button === 1 ) this.cancapture = 3, this.middle = 1
-			if(e.button === 2 ) this.cancapture = 2, this.right = 1, this.rightdown = 1
-			this.down = {
-				x: e.pageX,
-				y: e.pageY,
-				button: e.button === 0 ? 1 : e.button === 1 ? 3 : 2,
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey
-			}
-			//
-
-			// TODO(aki): consider moving to screen.
-			if(!('ontouchstart' in window)){
-				this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
-			}
-			if (device.keyboard) device.keyboard.checkSpecialKeys(touchList[0].e)
-
-			var pointers = []
-			for (var i = 0; i < touchList.length; i++) {
-				pointers.push({
-					x: touchList[i].x,
-					y: touchList[i].y,
-					t: touchList[i].t,
-					button: touchList[i].button,
-					shift: touchList[i].shiftKey,
-					alt: touchList[i].altKey,
-					ctrl: touchList[i].ctrlKey,
-					meta: touchList[i].metaKey
+		var getTouchPointerData = function (event) {
+			var array = []
+			// TOD(aki): make multitouch
+			for (var i = 0; i < event.changedTouches.length; i++) {
+				array.push({
+					// TODO: verify movement
+					x: event.changedTouches[i].pageX,
+					y: event.changedTouches[i].pageY,
+					movementx: event.changedTouches[i].movementX,
+					movementy: event.changedTouches[i].movementY,
+					button: 1,
+					shift: event.shiftKey,
+					alt: event.altKey,
+					ctrl: event.ctrlKey,
+					meta: event.metaKey,
+					touch: true,
+					event: event
 				})
 			}
-			this.start = pointers
+			return array
 		}
 
-		// Sets the move attribute/event.
-		this.setmove = function(touchList) {
-
-			// TODO(aki): DEPRICATE (moved from mousewebgl.js)
-			var e = touchList[0].e;
-			this._pagex = e.pageX
-			this._pagey = e.pageY
-			this.x = e.pageX
-			this.y = e.pageY
-			this.move = {
-				x: e.pageX,
-				y: e.pageY,
-				button: e.button === 0 ? 1 : e.button === 1 ? 3 : 2,
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey
+		// Internal: emits `start` event.
+		// Sets `pointer.view` by screen picking witht the first pointer.
+		this.setstart = function(pointerlist) {
+			var pointers = []
+			for (var i = 0; i < pointerlist.length; i++) {
+				pointers.push(this.calcPointer(pointerlist[i]))
 			}
-			//
+			this.device.pickScreen(pointers[0].position, true).then(function(view){
+				// TODO(aki): Handle views better with multi-touch
+				this.view = view
+				if (view) {
+					this.start = pointers
+					if(!('ontouchstart' in window)){
+						this.device.keyboard.pointerMove(pointers[0].position)
+						if (device.keyboard) device.keyboard.checkSpecialKeys(pointerlist[0].event)
+					}
+				}
+			}.bind(this))
+		}
 
-			// TODO(aki): consider moving to screen.
-			// TODO(aki): make sure this functions with touch (no buttons)
-			// lets move our textarea only if right mouse is down
-			if (touchList[0].button == 2){
-				if(!('ontouchstart' in window)){
-					this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
+		// Internal: emits `move` event.
+		this.setmove = function(pointerlist) {
+			if (this.view) {
+				var pointers = []
+				for (var i = 0; i < pointerlist.length; i++) {
+					pointers.push(this.calcPointer(pointerlist[i], this._start[i]))
+				}
+				this.move = pointers
+				// lets move our textarea only if right mouse is down
+				if (pointerlist[0].button == 2){
+					if(!('ontouchstart' in window)){
+						this.device.keyboard.pointerMove(pointerlist[0].position)
+					}
 				}
 			}
-
-			var pointers = []
-			for (var i = 0; i < touchList.length; i++) {
-				pointers.push({
-					x: touchList[i].x,
-					y: touchList[i].y,
-					t: touchList[i].t,
-					dx: touchList[i].x - this._start[i].x,
-					dy: touchList[i].y - this._start[i].y,
-					dt: touchList[i].t - this._start[i].t,
-					button: touchList[i].button,
-					shift: touchList[i].shiftKey,
-					alt: touchList[i].altKey,
-					ctrl: touchList[i].ctrlKey,
-					meta: touchList[i].metaKey
-				})
-			}
-			this.move = pointers
 		}
 
-		// Sets the end attribute/event. Also sets tap attribute/event if conditions are met.
-		this.setend = function(touchList) {
-
-			// TODO(aki): DEPRICATE (moved from mousewebgl.js)
-			var e = touchList[0].e;
-			this.activedown--;
-			this.x = e.pageX
-			this.y = e.pageY
-			this.cancapture = 0
-			if (e.button === 0) this.left = 0, this.leftup = 1
-			if (e.button === 1) this.middle = 0
-			if (e.button === 2) this.right = 0, this.rightup = 1
-			this.up = {
-				x:e.pageX,
-				y:e.pageY,
-				button: e.button === 0?1:e.button === 1?3:2,
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey
-			}
-			//
-
-			// TODO(aki): consider moving to screen.
-			if(!('ontouchstart' in window)){
-				this.device.keyboard.mouseMove(touchList[0].x, touchList[0].y)
-			}
-			if (device.keyboard) device.keyboard.checkSpecialKeys(touchList[0].e)
-
-			var pointers = []
-			var taps = []
-			for (var i = 0; i < touchList.length; i++) {
-				var pointer = {
-					x: touchList[i].x,
-					y: touchList[i].y,
-					t: touchList[i].t,
-					dx: touchList[i].x - this._start[i].x,
-					dy: touchList[i].y - this._start[i].y,
-					dt: touchList[i].t - this._start[i].t,
-					button: touchList[i].button,
-					shift: touchList[i].shiftKey,
-					alt: touchList[i].altKey,
-					ctrl: touchList[i].ctrlKey,
-					meta: touchList[i].metaKey
+		// Internal: emits `end` event.
+		// Emits `tap` event if conditions are met.
+		this.setend = function(pointerlist) {
+			if (this.view) {
+				var pointers = []
+				var taps = []
+				for (var i = 0; i < pointerlist.length; i++) {
+					var pointer = this.calcPointer(pointerlist[i], this._start[i])
+					pointers.push(pointer)
+					if (pointer.dt < this.tapspeed &&
+						abs(pointer.delta[0]) < this.tapdist &&
+						abs(pointer.delta[1]) < this.tapdist){
+							taps.push(pointer)
+					}
 				}
-				pointers.push(pointer)
-				if (pointer.dt < this.tapspeed &&
-					abs(pointer.dx) < this.tapdist &&
-					abs(pointer.dy) < this.tapdist){
-						taps.push(pointer)
-				}
-			}
-			this.end = pointers
-			if (taps.length > 0) {
-				this.tap = taps;
+				this.device.pickScreen(pointers[0].position, true).then(function(view){
+					pointers[0].isover = this.view === view
+					// TODO(aki): figure out how to do this immediately
+					this.end = pointers
+					if (taps.length > 0) {
+						this.tap = taps
+					}
+					if(!('ontouchstart' in window)){
+						this.device.keyboard.pointerMove(pointers[0].position)
+						if (device.keyboard) device.keyboard.checkSpecialKeys(pointerlist[0].event)
+					}
+				}.bind(this))
 			}
 		}
 
-		// Sets the hover attribute/event.
-		this.sethover = function(touchList) {
+		// Internal: emits `hover` event.
+		// Emits `over` and `out` events if conditions are met.
+		// Sets `pointer.view` by screen picking witht the first pointer.
+		this.sethover = function(pointerlist) {
 			var pointers = []
-			for (var i = 0; i < touchList.length; i++) {
-				pointers.push({
-					x: touchList[i].x,
-					y: touchList[i].y,
-					t: touchList[i].t,
-					shift: touchList[i].shiftKey,
-					alt: touchList[i].altKey,
-					ctrl: touchList[i].ctrlKey,
-					meta: touchList[i].metaKey
-				})
+			for (var i = 0; i < pointerlist.length; i++) {
+				pointers.push(this.calcPointer(pointerlist[i]))
 			}
-			this.hover = pointers
+			this.device.pickScreen(pointers[0].position).then(function(view){
+				if (this.view !== view) {
+					if (this.view) this.out = pointers
+					this.view = view
+					if (view) this.over = pointers
+				}
+				if (this.view) {
+					this.hover = pointers
+				}
+			}.bind(this))
 		}
 
-		// Handler for `mousedown` event starts `mousemove` listening.
+		// Internal: emits `out` event.
+		// This is only used by touchend event to clear "over" states.
+		// Resets `pointer.view`.
+		this.setout = function(pointerlist) {
+			var pointers = []
+			for (var i = 0; i < pointerlist.length; i++) {
+				pointers.push(this.calcPointer(pointerlist[i]))
+			}
+			if (this.view) {
+				this._over = undefined
+				this.out = pointers
+			}
+		}
+
+		// Internal: emits `wheel` event.
+		this.setwheel = function(pointerlist) {
+			var pointers = []
+			for (var i = 0; i < pointerlist.length; i++) {
+				pointers.push(this.calcPointer(pointerlist[i]))
+			}
+			if (this.view) {
+				this.wheel = this.calcPointer(pointers)
+			}
+		}
+
+		// Internal: handler for `mousedown` event starts `mousemove` listening.
 		this.mousedown = function(e){
 			e.preventDefault()
-			this.setstart([{
-				x: e.pageX,
-				y: e.pageY,
-				t: Date.now(),
-				button: e.button === 0 ? 1 : e.button === 1 ? 3 : 2,
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey,
-				e: e
-			}])
+			this.setstart(getMousePointerData(e))
 			window.addEventListener('mousemove', this._mousemove)
 			window.addEventListener('mouseup', this._mouseup)
 			window.removeEventListener('mousemove', this._mousehover)
@@ -244,122 +191,60 @@ define.class('$system/base/pointer', function (require, exports){
 
 		window.addEventListener('mousedown', this.mousedown.bind(this))
 
-		// Handler for `mousemove` event.
+		// Internal: handler for `mousemove` event.
 		this.mousemove = function(e){
 			e.preventDefault()
-			this.setmove([{
-				x: e.pageX,
-				y: e.pageY,
-				t: Date.now(),
-				button: e.button === 0 ? 1 : e.button === 1 ? 3 : 2,
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey,
-				e: e
-			}])
+			this.setmove(getMousePointerData(e))
 		}
 		this._mousemove = this.mousemove.bind(this)
 
-		// Handler for `mousedown` event stops `mousemove` listening.
+		// Internal: handler for `mousedown` event stops `mousemove` listening.
 		this.mouseup = function(e){
 			e.preventDefault()
-			this.setend([{
-				x: e.pageX,
-				y: e.pageY,
-				t: Date.now(),
-				button: e.button === 0 ? 1 : e.button === 1 ? 3 : 2,
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey,
-				e: e
-			}])
+			this.setend(getMousePointerData(e))
 			window.removeEventListener('mousemove', this._mousemove)
 			window.removeEventListener('mouseup', this._mouseup)
 			window.addEventListener('mousemove', this._mousehover)
 		}
 		this._mouseup = this.mouseup.bind(this)
 
-		// Handler for `mousemove` for the purpose of hover tracking.
+		// Internal: handler for `mousemove` for the purpose of hover tracking.
 		this.mousehover = function(e){
 			e.preventDefault()
-			this.sethover([{
-				x: e.pageX,
-				y: e.pageY,
-				t: Date.now(),
-				shift: e.shiftKey,
-				alt: e.altKey,
-				ctrl: e.ctrlKey,
-				meta: e.metaKey,
-				e: e
-			}])
+			this.sethover(getMousePointerData(e))
 		}
 		this._mousehover = this.mousehover.bind(this)
 		window.addEventListener('mousemove', this._mousehover)
 
-		// Handler for `touchstart` event.
+		// Internal: handler for `touchstart` event.
 		this.touchstart = function(e){
 			e.preventDefault()
-			// TODO(aki): currently uses single touch. Implement multi-touch!
-			var pointers = [{
-				x: e.touches[0].pageX,
-				y: e.touches[0].pageY,
-				t: Date.now(),
-				e: e
-			}]
-			this.setstart(pointers)
+			this.setstart(getTouchPointerData(e))
+			this.sethover(getTouchPointerData(e))
 		}
 		window.addEventListener('touchstart', this.touchstart.bind(this))
 
-		// Handler for `touchmove` event.
+		// Internal: handler for `touchmove` event.
 		this.touchmove = function(e){
 			e.preventDefault()
-			// TODO(aki): currently uses single touch. Implement multi-touch!
-			var pointers = [{
-				x: e.touches[0].pageX,
-				y: e.touches[0].pageY,
-				t: Date.now(),
-				e: e
-			}]
-			this.setmove(pointers)
+			this.setmove(getTouchPointerData(e))
 		}
 		window.addEventListener('touchmove', this.touchmove.bind(this))
 
-		// Handler for `touchend` event.
+		// Internal: handler for `touchend` event.
 		this.touchend = function(e){
-			e.preventDefault()
-			// TODO(aki): currently uses single touch. Implement multi-touch!
-			var pointers = [{
-				x: e.changedTouches[0].pageX,
-				y: e.changedTouches[0].pageY,
-				t: Date.now(),
-				e: e
-			}]
-			this.setend(pointers)
+			this.setend(getTouchPointerData(e))
+			this.setout(getTouchPointerData(e))
 		}
 		window.addEventListener('touchend', this.touchend.bind(this))
 		// TODO(aki): make sure that binding to leave/cancel doesent break UX.
 		window.addEventListener('touchcancel', this.touchend.bind(this))
 		window.addEventListener('touchleave', this.touchend.bind(this))
 
-		// Handler for `wheel` event. Sets the wheel or zoom attribute/event.
+		// Internal: handler for `wheel` event. Sets the wheel or zoom attribute/event.
 		this.wheelmove = function(e){
-			// TODO(aki): test on Firefox and implement polyfils if necessary.
 			e.preventDefault()
-			if (e.ctrlKey || e.metaKey){
-				this.zoom = e.wheelDelta / 120 // TODO(aki): DEPRICATE
-			} else {
-				// TODO(aki): DEPRICATE (moved from mouse.js)
-				this.wheelx = e.deltaX
-				this.wheely = e.deltaY
-				//
-				this.wheel = {
-					x: e.deltaX,
-					y: e.deltaY,
-					e: e
-				}
-			}
+			this.setwheel(getMousePointerData(e))
 		}
 		document.addEventListener('wheel', this.wheelmove.bind(this))
 	}

@@ -204,7 +204,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n50" name="n50">50</a></strong>
 <a href="#n51" name="n51">51</a>
 <a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -214,7 +213,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>,<span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, textbox, button, label){
         <span class="comment">// internal</span>
-
 
         <span class="comment">// what if we do this</span>
         <span class="local-variable">this</span>.style = {
@@ -231,21 +229,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
          <span class="comment">// we inherit the _style object and copy over props.</span>
 
          <span class="comment">// we look up textbox in _style</span>
-          <span class="comment">// this._classes[name]</span>
-
+  <span class="comment">// this._classes[name]</span>
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                 screen({<span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#484230</span><span class="delimiter">'</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>},
                         textbox({<span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">T1</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>}),
                         textbox({<span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">T2</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">orange</span><span class="delimiter">'</span></span>}),
                         button({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">test</span><span class="delimiter">'</span></span>}),
-                        label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>, <span class="function">mouseleftdown</span>:<span class="keyword">function</span>(){
+                        label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>, <span class="function">pointerstart</span>:<span class="keyword">function</span>(){
                                 <span class="comment">// lets open a modal dialog</span>
                                 <span class="local-variable">this</span>.screen.openModal(<span class="keyword">function</span>(){<span class="keyword">return</span> [
                                         view({
-                                                <span class="function">miss</span>:<span class="keyword">function</span>(){
-                                                        <span class="local-variable">this</span>.screen.closeModal(<span class="predefined-constant">false</span>)
-                                                },
+                                                <span class="comment">// TODO(aki): fix modal menus</span>
+                                                <span class="comment">// miss:function(){</span>
+                                                <span class="comment">//         this.screen.closeModal(false)</span>
+                                                <span class="comment">// },</span>
                                                 <span class="function">init</span>:<span class="keyword">function</span>(){
                                                         console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>)
                                                 },

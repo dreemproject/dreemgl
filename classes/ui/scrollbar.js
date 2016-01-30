@@ -1,33 +1,33 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function($ui$, view){
-	
+
 	this.attributes = {
 		// Color of the draggable part of the scrollbar
 		draggercolor: Config({type: vec4, value: vec4("#808080")}),
 
 		// Color of the draggable part of the scrollbar
 		draggerradius: Config({type: float, value: 3}),
-		
-		// Color when the mouse is hovering over the draggable part of the scrollbar
+
+		// Color when the pointer is hovering over the draggable part of the scrollbar
 		hovercolor: Config({type: vec4, value: vec4("#707070")}),
-		
+
 		// Color of the draggable part of the scrollbar while actively scrolling
 		activecolor: Config({type: vec4, value: vec4("#808080")}),
-		
-		// Is this a horizontal or a vertical scrollbar? 
+
+		// Is this a horizontal or a vertical scrollbar?
 		vertical: Config({type: Boolean, value: true}),
-		
+
 		// Current value of the scrollbar. Ranges from 0 to total - page
 		value: Config({type:float, value:0}),
-		
+
 		// Page size, in total
 		page: Config({type:float, value:0}),
 
-		// total size. 
+		// total size.
 		total: Config({type:float, value:0}),
 
 		// set animation on bgcolor
@@ -77,82 +77,36 @@ define.class(function($ui$, view){
 		}
 	}
 
-	//this.borderwidth = 0
 	this.margin = 1
-	//this.bordercolor = vec4("#303030")
-	
-	this.pressed = 0
-	this.hovered = 0
-		
-		
+
 	this.vertical = function(){
 		if (this.vertical){
 			this.cursor = "ns-resize";
 		}else{
 			this.cursor = "ew-resize";
-			
 		}
 	}
-	
-	this.mouseover  = function(){
-	}
-	
-	this.mouseout = function(){
-	}
-	
-	this.mouseleftdown = function(event){
-		var start = event.local
-		
-		// detect if we clicked not on the button
+
+	this.pointermove = function(event){
+		var page = this.page / this.total
+		var delta = event.value[0].delta
 		if(this.vertical){
-			var p = start[1] / this.layout.height
+			var p = delta[1] / this.layout.height
 		}
 		else{
-			var p = start[0] / this.layout.width
+			var p = delta[0] / this.layout.width
 		}
-		
-		var offset = this.value / this.total
-		
-		var page = this.page / this.total
-		
-		if(p < offset){
-			var value = clamp(p - 0.5 * page, 0, 1.-page) * this.total
-			if(value != this.value){
-				this.value = value
-			}
+		var value = clamp(p, 0, 1.-page) * this.total
+		if(value != this.value){
+			this.value = value
 		}
-		else if (p > offset + page){
-			var value = clamp(p - 0.5*page, 0, 1.-page) * this.total
-			if(value != this.value){
-				this.value = value
-			}
-		}
-		var start_offset = offset//this.offset / this.total
-		this.mousemove = function(event){
-			var pos = event.local
-			if(this.vertical){
-				var p = start_offset + (pos[1] - start[1]) / this.layout.height
-			}
-			else{
-				var p = start_offset + (pos[0] - start[0]) / this.layout.width
-			}
-			var value = clamp(p, 0, 1.-page) * this.total
-			if(value != this.value){
-				this.value = value
-			}
-		}
-	}
-	
-	this.mouseleftup = function(){
-		this.mousemove = function(){}
 	}
 
 	this.drawcount = 0;
 
-
 	this.constructor.examples = {
 		Usage:function(){
-			return [scrollbar({vertical: false, height: 20, total: 1, page: 0.2, offset: 0.5})]		
+			return [scrollbar({vertical: false, height: 20, total: 1, page: 0.2, offset: 0.5})]
 		}
 	}
 })

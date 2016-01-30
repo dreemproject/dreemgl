@@ -231,7 +231,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">mobile</span><span class="delimiter">'</span></span>,
                 <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">10</span>,<span class="key">y</span>:<span class="integer">10</span>},
                 <span class="comment">// make an exportable attribute to something internal</span>
-                <span class="key">mousepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.main.pos</span><span class="delimiter">'</span></span>)
+                <span class="key">pointerpos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.main.pos</span><span class="delimiter">'</span></span>)
                 },
                 view({
                         <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>,
@@ -243,7 +243,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         screen({
                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">remote</span><span class="delimiter">'</span></span>,
                 <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">30</span>,<span class="key">y</span>:<span class="octal">00</span>},
-                <span class="key">movepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.mobile.mousepos</span><span class="delimiter">'</span></span>)
+                <span class="key">movepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.mobile.pointerpos</span><span class="delimiter">'</span></span>)
                 },
                 view({
                         <span class="key">size</span>: vec2(<span class="integer">200</span>, <span class="integer">200</span>),

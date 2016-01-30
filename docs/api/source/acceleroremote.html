@@ -203,54 +203,55 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n49" name="n49">49</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view,label, button, noisegrid,speakergrid, <span class="predefined">$$</span>, geo, urlfetch)
-{                
+{
         <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">target</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span> 
+                <span class="key">target</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>
         }
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){        
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> [
-                        speakergrid({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">padding</span>: <span class="integer">70</span>},noisegrid({<span class="key">padding</span>:<span class="integer">20</span>,<span class="key">borderradius</span>: <span class="integer">20</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}, 
-                        
+                        speakergrid({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">padding</span>: <span class="integer">70</span>},noisegrid({<span class="key">padding</span>:<span class="integer">20</span>,<span class="key">borderradius</span>: <span class="integer">20</span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
+
                                 view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>}
                                         ,label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thelabel</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>})
-                                        ,button({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">arrows</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">10</span>, <span class="key">padding</span>:<span class="integer">20</span>, <span class="function">mouseleftdown</span> : <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="content">Move</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>), <span class="function">mouseleftup</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>)})
-                                        ,button({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">video-camera</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">10</span>, <span class="key">padding</span>:<span class="integer">20</span>, <span class="function">mouseleftdown</span> : <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pan</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>), <span class="function">mouseleftup</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>)})
+                                        ,button({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">arrows</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">10</span>, <span class="key">padding</span>:<span class="integer">20</span>, <span class="function">pointerstart</span> : <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="content">Move</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>), <span class="function">pointerend</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>)})
+                                        ,button({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">video-camera</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">10</span>, <span class="key">padding</span>:<span class="integer">20</span>, <span class="function">pointerstart</span> : <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pan</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>), <span class="function">pointerend</span>: <span class="keyword">function</span>(){<span class="local-variable">this</span>.setAccelTarget(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);}.bind(<span class="local-variable">this</span>)})
                                 )
                         )
                         )
                 ]
         };
-        
+
         <span class="local-variable">this</span>.<span class="function">setAccelTarget</span> = <span class="keyword">function</span>(target){
                 <span class="local-variable">this</span>.acceltarget = target;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">setAccel</span> = <span class="keyword">function</span>(x,y,z){
                 <span class="comment">//        this.find(&quot;thelabel&quot;).text = x + &quot;_&quot; + y + &quot;_&quot; + z;</span>
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.acceltarget == <span class="string"><span class="delimiter">&quot;</span><span class="content">Move</span><span class="delimiter">&quot;</span></span>){
                         <span class="local-variable">this</span>.rpc[<span class="local-variable">this</span>.target].acceleromove(x,y,z);
-                        
-                }                
+
+                }
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.acceltarget == <span class="string"><span class="delimiter">&quot;</span><span class="content">Pan</span><span class="delimiter">&quot;</span></span>){
                         <span class="local-variable">this</span>.rpc[<span class="local-variable">this</span>.target].acceleropan(x,y,z);
-                }                
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>()
         {
                 <span class="local-variable">this</span>.acceltarget = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                window.<span class="function">ondevicemotion</span> = <span class="keyword">function</span>(event) {  
-                        <span class="keyword">var</span> ax = event.accelerationIncludingGravity.x;  
-                        <span class="keyword">var</span> ay = event.accelerationIncludingGravity.y;  
-                        <span class="keyword">var</span> az = event.accelerationIncludingGravity.z;  
-                        
+                window.<span class="function">ondevicemotion</span> = <span class="keyword">function</span>(event) {
+                        <span class="keyword">var</span> ax = event.accelerationIncludingGravity.x;
+                        <span class="keyword">var</span> ay = event.accelerationIncludingGravity.y;
+                        <span class="keyword">var</span> az = event.accelerationIncludingGravity.z;
+
                         <span class="local-variable">this</span>.setAccel(ax,ay,az);
-                        
+
                 }.bind(<span class="local-variable">this</span>)
-        }        
-}  
-)</pre></td>
+        }
+}
+)
+</pre></td>
 </tr></table>
 
 </body>

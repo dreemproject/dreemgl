@@ -25,7 +25,7 @@ define.class('$server/composition', function(
 		name:'mobile',
 		flowdata:{x:10,y:10},
 		// make an exportable attribute to something internal
-		mousepos: wire('this.main.pos')
+		pointerpos: wire('this.main.pos')
 		},
 		view({
 			name:'main',
@@ -37,7 +37,7 @@ define.class('$server/composition', function(
 	screen({
 		name:'remote',
 		flowdata:{x:30,y:00},
-		movepos: wire('this.rpc.mobile.mousepos')
+		movepos: wire('this.rpc.mobile.pointerpos')
 		},
 		view({
 			size: vec2(200, 200),

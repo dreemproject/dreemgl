@@ -111,10 +111,10 @@ define.class('$server/composition', function(require,
 											duration:0.5,
 											motion:float.ease.bounce
 										}),
-										mouseover:function(){
+										pointerover:function(){
 											this.value = 1
 										},
-										mouseout:function(){
+										pointerout:function(){
 											this.value = 0
 										},
 										bg:{

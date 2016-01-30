@@ -264,83 +264,37 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n110" name="n110">110</a></strong>
 <a href="#n111" name="n111">111</a>
 <a href="#n112" name="n112">112</a>
-<a href="#n113" name="n113">113</a>
-<a href="#n114" name="n114">114</a>
-<a href="#n115" name="n115">115</a>
-<a href="#n116" name="n116">116</a>
-<a href="#n117" name="n117">117</a>
-<a href="#n118" name="n118">118</a>
-<a href="#n119" name="n119">119</a>
-<strong><a href="#n120" name="n120">120</a></strong>
-<a href="#n121" name="n121">121</a>
-<a href="#n122" name="n122">122</a>
-<a href="#n123" name="n123">123</a>
-<a href="#n124" name="n124">124</a>
-<a href="#n125" name="n125">125</a>
-<a href="#n126" name="n126">126</a>
-<a href="#n127" name="n127">127</a>
-<a href="#n128" name="n128">128</a>
-<a href="#n129" name="n129">129</a>
-<strong><a href="#n130" name="n130">130</a></strong>
-<a href="#n131" name="n131">131</a>
-<a href="#n132" name="n132">132</a>
-<a href="#n133" name="n133">133</a>
-<a href="#n134" name="n134">134</a>
-<a href="#n135" name="n135">135</a>
-<a href="#n136" name="n136">136</a>
-<a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
-<strong><a href="#n140" name="n140">140</a></strong>
-<a href="#n141" name="n141">141</a>
-<a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
-<a href="#n144" name="n144">144</a>
-<a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
-<a href="#n149" name="n149">149</a>
-<strong><a href="#n150" name="n150">150</a></strong>
-<a href="#n151" name="n151">151</a>
-<a href="#n152" name="n152">152</a>
-<a href="#n153" name="n153">153</a>
-<a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
-<a href="#n158" name="n158">158</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// Color of the draggable part of the scrollbar</span>
                 <span class="key">draggercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>)}),
 
                 <span class="comment">// Color of the draggable part of the scrollbar</span>
                 <span class="key">draggerradius</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">3</span>}),
-                
-                <span class="comment">// Color when the mouse is hovering over the draggable part of the scrollbar</span>
+
+                <span class="comment">// Color when the pointer is hovering over the draggable part of the scrollbar</span>
                 <span class="key">hovercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>)}),
-                
+
                 <span class="comment">// Color of the draggable part of the scrollbar while actively scrolling</span>
                 <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>)}),
-                
-                <span class="comment">// Is this a horizontal or a vertical scrollbar? </span>
+
+                <span class="comment">// Is this a horizontal or a vertical scrollbar?</span>
                 <span class="key">vertical</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">true</span>}),
-                
+
                 <span class="comment">// Current value of the scrollbar. Ranges from 0 to total - page</span>
                 <span class="key">value</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
-                
+
                 <span class="comment">// Page size, in total</span>
                 <span class="key">page</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
 
-                <span class="comment">// total size. </span>
+                <span class="comment">// total size.</span>
                 <span class="key">total</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
 
                 <span class="comment">// set animation on bgcolor</span>
@@ -390,85 +344,40 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">//this.borderwidth = 0</span>
         <span class="local-variable">this</span>.margin = <span class="integer">1</span>
-        <span class="comment">//this.bordercolor = vec4(&quot;#303030&quot;)</span>
-        
-        <span class="local-variable">this</span>.pressed = <span class="integer">0</span>
-        <span class="local-variable">this</span>.hovered = <span class="integer">0</span>
-                
-                
+
         <span class="local-variable">this</span>.<span class="function">vertical</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
                         <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">ns-resize</span><span class="delimiter">&quot;</span></span>;
                 }<span class="keyword">else</span>{
                         <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">ew-resize</span><span class="delimiter">&quot;</span></span>;
-                        
                 }
         }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseover</span>  = <span class="keyword">function</span>(){
-        }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseout</span> = <span class="keyword">function</span>(){
-        }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">var</span> start = event.local
-                
-                <span class="comment">// detect if we clicked not on the button</span>
+
+        <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+                <span class="keyword">var</span> page = <span class="local-variable">this</span>.page / <span class="local-variable">this</span>.total
+                <span class="keyword">var</span> delta = event.value[<span class="integer">0</span>].delta
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.vertical){
-                        <span class="keyword">var</span> p = start[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.height
+                        <span class="keyword">var</span> p = delta[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.height
                 }
                 <span class="keyword">else</span>{
-                        <span class="keyword">var</span> p = start[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width
+                        <span class="keyword">var</span> p = delta[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width
                 }
-                
-                <span class="keyword">var</span> offset = <span class="local-variable">this</span>.value / <span class="local-variable">this</span>.total
-                
-                <span class="keyword">var</span> page = <span class="local-variable">this</span>.page / <span class="local-variable">this</span>.total
-                
-                <span class="keyword">if</span>(p &lt; offset){
-                        <span class="keyword">var</span> value = clamp(p - <span class="float">0.5</span> * page, <span class="integer">0</span>, <span class="integer">1</span>.-page) * <span class="local-variable">this</span>.total
-                        <span class="keyword">if</span>(value != <span class="local-variable">this</span>.value){
-                                <span class="local-variable">this</span>.value = value
-                        }
+                <span class="keyword">var</span> value = clamp(p, <span class="integer">0</span>, <span class="integer">1</span>.-page) * <span class="local-variable">this</span>.total
+                <span class="keyword">if</span>(value != <span class="local-variable">this</span>.value){
+                        <span class="local-variable">this</span>.value = value
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span> (p &gt; offset + page){
-                        <span class="keyword">var</span> value = clamp(p - <span class="float">0.5</span>*page, <span class="integer">0</span>, <span class="integer">1</span>.-page) * <span class="local-variable">this</span>.total
-                        <span class="keyword">if</span>(value != <span class="local-variable">this</span>.value){
-                                <span class="local-variable">this</span>.value = value
-                        }
-                }
-                <span class="keyword">var</span> start_offset = offset<span class="comment">//this.offset / this.total</span>
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(event){
-                        <span class="keyword">var</span> pos = event.local
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.vertical){
-                                <span class="keyword">var</span> p = start_offset + (pos[<span class="integer">1</span>] - start[<span class="integer">1</span>]) / <span class="local-variable">this</span>.layout.height
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="keyword">var</span> p = start_offset + (pos[<span class="integer">0</span>] - start[<span class="integer">0</span>]) / <span class="local-variable">this</span>.layout.width
-                        }
-                        <span class="keyword">var</span> value = clamp(p, <span class="integer">0</span>, <span class="integer">1</span>.-page) * <span class="local-variable">this</span>.total
-                        <span class="keyword">if</span>(value != <span class="local-variable">this</span>.value){
-                                <span class="local-variable">this</span>.value = value
-                        }
-                }
-        }
-        
-        <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){}
         }
 
         <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>;
 
-
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [scrollbar({<span class="key">vertical</span>: <span class="predefined-constant">false</span>, <span class="key">height</span>: <span class="integer">20</span>, <span class="key">total</span>: <span class="integer">1</span>, <span class="key">page</span>: <span class="float">0.2</span>, <span class="key">offset</span>: <span class="float">0.5</span>})]                
+                        <span class="keyword">return</span> [scrollbar({<span class="key">vertical</span>: <span class="predefined-constant">false</span>, <span class="key">height</span>: <span class="integer">20</span>, <span class="key">total</span>: <span class="integer">1</span>, <span class="key">page</span>: <span class="float">0.2</span>, <span class="key">offset</span>: <span class="float">0.5</span>})]
                 }
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

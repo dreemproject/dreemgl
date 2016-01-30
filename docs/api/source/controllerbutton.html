@@ -198,14 +198,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="key">controller</span>:Config({<span class="key">type</span>:Object})
     };
 
-    <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>() {
+    <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>() {
         console.log(<span class="string"><span class="delimiter">'</span><span class="content">press</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.value);
         <span class="keyword">if</span> (<span class="local-variable">this</span>.controller &amp;&amp; <span class="local-variable">this</span>.controller.press) {
             <span class="local-variable">this</span>.controller.press(<span class="local-variable">this</span>.value)
         }
     };
 
-    <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>() {
+    <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>() {
         console.log(<span class="string"><span class="delimiter">'</span><span class="content">unpress</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.value);
         <span class="keyword">if</span> (<span class="local-variable">this</span>.controller &amp;&amp; <span class="local-variable">this</span>.controller.unpress) {
             <span class="local-variable">this</span>.controller.unpress(<span class="local-variable">this</span>.value)

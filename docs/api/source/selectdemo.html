@@ -193,13 +193,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n39" name="n39">39</a>
 <strong><a href="#n40" name="n40">40</a></strong>
 <a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -227,24 +220,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>)},
                         cadgrid({
                                 <span class="key">flex</span>:<span class="integer">1</span>,
-                                <span class="function">onmouseleftdown</span>:<span class="keyword">function</span>(event){
+                                <span class="function">pointermove</span>:<span class="keyword">function</span>(event){
                                         <span class="keyword">var</span> select = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>)
                                         select.visible = <span class="predefined-constant">true</span>
-                                        <span class="keyword">var</span> start = select.pos = event.local
-                                        select.size = vec2(<span class="integer">0</span>)
-                                        <span class="local-variable">this</span>.<span class="function">onmousemove</span> = <span class="keyword">function</span>(event){
-                                                select.size = vec2(event.local[<span class="integer">0</span>] - start[<span class="integer">0</span>], event.local[<span class="integer">1</span>] - start[<span class="integer">1</span>])
-                                        }
-                                        <span class="local-variable">this</span>.<span class="function">onmouseleftup</span> = <span class="keyword">function</span>(){
-                                                <span class="local-variable">this</span>.onmousemove = <span class="predefined-constant">undefined</span>
-                                                <span class="local-variable">this</span>.onmouseleftup = <span class="predefined-constant">undefined</span>
-                                                select.visible = <span class="predefined-constant">false</span>
-                                        }
+                                        select.pos = vec2(event.value[<span class="integer">0</span>].min[<span class="integer">0</span>], event.value[<span class="integer">0</span>].min[<span class="integer">1</span>])
+                                        select.size = vec2(event.value[<span class="integer">0</span>].max[<span class="integer">0</span>] - event.value[<span class="integer">0</span>].min[<span class="integer">0</span>], event.value[<span class="integer">0</span>].max[<span class="integer">1</span>] - event.value[<span class="integer">0</span>].min[<span class="integer">1</span>])
                                 },
+                                <span class="function">pointerend</span>:<span class="keyword">function</span>(event){
+                                        <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>).visible = <span class="predefined-constant">false</span>
+                                }
                                 },
-                                <span class="local-variable">this</span>.selectorrect({
-
-                                })
+                                <span class="local-variable">this</span>.selectorrect()
                         )
                 )
         ]}

@@ -231,6 +231,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n77" name="n77">77</a>
 <a href="#n78" name="n78">78</a>
 <a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -239,8 +241,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, screen, view, label) {
 
-        <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
-        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>;
+        <span class="local-variable">this</span>.flex = <span class="integer">1</span>
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.margin = <span class="integer">50</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">start</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
@@ -251,37 +254,38 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> () {
-                <span class="local-variable">this</span>.<span class="function">onpointerstart</span> = <span class="keyword">function</span>(event) {
-                        <span class="local-variable">this</span>.start = event.value;
-                }.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(event) {
+                        <span class="local-variable">this</span>.start = event.value
+                }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.<span class="function">onpointermove</span> = <span class="keyword">function</span>(event) {
-                        <span class="local-variable">this</span>.move = event.value;
-                }.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event) {
+                        <span class="local-variable">this</span>.move = event.value
+                }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(event) {
-                        <span class="local-variable">this</span>.end = event.value;
-                }.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event) {
+                        <span class="local-variable">this</span>.end = event.value
+                }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(event) {
-                        <span class="local-variable">this</span>.hover = event.value;
-                }.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.<span class="function">pointerhover</span> = <span class="keyword">function</span>(event) {
+                        <span class="local-variable">this</span>.hover = event.value
+                }.bind(<span class="local-variable">this</span>)
 
-                <span class="local-variable">this</span>.<span class="function">onpointertap</span> = <span class="keyword">function</span>(event) {
-                        <span class="local-variable">this</span>.tap = event.value;
-                }.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.<span class="function">pointertap</span> = <span class="keyword">function</span>(event) {
+                        <span class="local-variable">this</span>.tap = event.value
+                }.bind(<span class="local-variable">this</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">renderLabels</span> = <span class="keyword">function</span> (type, color) {
-                <span class="keyword">var</span> markers = [];
+                <span class="keyword">var</span> markers = []
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="local-variable">this</span>[type].length; i++) {
+                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(<span class="local-variable">this</span>[type][i].position)
                         markers.push(label({
                                 <span class="key">text</span>: i,
                                 <span class="key">icon</span>: <span class="string"><span class="delimiter">'</span><span class="content">play</span><span class="delimiter">'</span></span>,
                                 <span class="key">position</span>: <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
                                 <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>,
-                                <span class="key">left</span>: <span class="local-variable">this</span>[type][i].x,
-                                <span class="key">top</span>: <span class="local-variable">this</span>[type][i].y,
+                                <span class="key">left</span>: pos[<span class="integer">0</span>],
+                                <span class="key">top</span>: pos[<span class="integer">1</span>],
                                 <span class="key">fgcolor</span>: color,
                                 <span class="key">bordercolor</span>: color,
                                 <span class="key">borderradius</span>: <span class="integer">0</span>,
@@ -295,9 +299,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">position</span>: <span class="string"><span class="delimiter">'</span><span class="content">relative</span><span class="delimiter">'</span></span>,
                                 <span class="key">top</span>: -<span class="integer">22</span>,
                                 <span class="key">left</span>: -<span class="integer">12</span>
-                        })));
+                        })))
                 }
-                <span class="keyword">return</span> markers;
+                <span class="keyword">return</span> markers
         }
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
@@ -307,10 +311,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.renderLabels(<span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>),
                         <span class="local-variable">this</span>.renderLabels(<span class="string"><span class="delimiter">'</span><span class="content">end</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>),
                         <span class="local-variable">this</span>.renderLabels(<span class="string"><span class="delimiter">'</span><span class="content">tap</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">cyan</span><span class="delimiter">'</span></span>)
-                ];
-        };
+                ]
+        }
 
-});
+})
 </pre></td>
 </tr></table>
 

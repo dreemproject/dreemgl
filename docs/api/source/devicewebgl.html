@@ -601,6 +601,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n447" name="n447">447</a>
 <a href="#n448" name="n448">448</a>
 <a href="#n449" name="n449">449</a>
+<strong><a href="#n450" name="n450">450</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -815,7 +816,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//        break</span>
                         <span class="comment">//}</span>
                 }
-                <span class="comment">// now lets read the pixel under the mouse</span>
+                <span class="comment">// now lets read the pixel under the pointer</span>
                 <span class="keyword">var</span> pick_resolve = <span class="local-variable">this</span>.pick_resolve
                 <span class="local-variable">this</span>.pick_resolve = []
 
@@ -844,16 +845,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">pickScreen</span> = <span class="keyword">function</span>(x, y){
+        <span class="local-variable">this</span>.<span class="function">pickScreen</span> = <span class="keyword">function</span>(pos, immediate){
                 <span class="comment">// promise based pickray rendering</span>
                 <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
                         <span class="local-variable">this</span>.pick_resolve.push(resolve)
-                        <span class="local-variable">this</span>.pick_x = x
-                        <span class="local-variable">this</span>.pick_y = y
-                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.pick_timer){
+                        <span class="local-variable">this</span>.pick_x = pos[<span class="integer">0</span>]
+                        <span class="local-variable">this</span>.pick_y = pos[<span class="integer">1</span>]
+                        <span class="keyword">if</span> (immediate) {
+                                <span class="local-variable">this</span>.doPick()
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="local-variable">this</span>.pick_timer){
                                 <span class="local-variable">this</span>.pick_timer = setTimeout(<span class="local-variable">this</span>.doPick, <span class="integer">0</span>)
                         }
-                        <span class="comment">//this.doPick()</span>
                 }.bind(<span class="local-variable">this</span>))
         }
 
