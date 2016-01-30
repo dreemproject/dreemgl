@@ -345,12 +345,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		return false
 	}
 
-	// close the current modal window
-	this.closeModal = function(value){
-		if(this.modal && this.modal.resolve)
-			return this.modal.resolve(value)
-	}
-
 	// open a modal window from object like so: this.openModal( view({size:[100,100]}))
 	this.closeModal = function(value){
 		// lets close the modal window
