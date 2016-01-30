@@ -48,7 +48,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 		// compute output name
 		var outname
 
-		if(basename || state.basename) outname = basename + state.basename + "_DOT_" + name
+		if(basename) outname = basename + "_DOT_" + name
 		else outname = name
 
 		// uniform
@@ -110,7 +110,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 				obj = context[name] = Texture.fromImage(obj)
 			}
 			node.infer = {fn_t:'object', object:obj}
-			if(state.basename) return state.basename + '_DOT_' + outname
+			//if(state.basename) return state.basename + '_DOT_' + outname
 			return outname
 		}
 		if(typeof obj === 'string' || typeof obj === 'function'){
@@ -182,7 +182,8 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 		}
 		// gl functions
 		// resolve on context
-		var res = this.resolveContext(node, state.context, name, '', state)
+		var res = this.resolveContext(node, state.context, name, state.basename, state)
+
 		if(res !== undefined) return res
 
 		var varying = state.varyings[name]
@@ -238,6 +239,8 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 		if(infer.fn_t === 'object'){
 			// lets switch context and expand id
 			var ret =  this.resolveContext(node, infer.object, key, obj, state)
+			//if(key === 'bgcolor')console.log(ret)
+			//if(ret === 'view_DOT_layoutview_DOT_width') console.log(key, obj, state.basename)
 			if(ret === undefined){
 				console.log(infer.object, state)
 				throw new Error('Cannot resolve ' + obj + '.' + key + ' in ' + state.callname + '(...)\n' + state.source)
