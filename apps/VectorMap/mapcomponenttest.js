@@ -15,7 +15,9 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 	{text:"SF - Golden Gate Park", place: "sanfrancisco_goldengatepark", zoomlevel: 17},
 		{text:"SZ - Huaqiang Bei", place: "shenzhen_hqb", zoomlevel: 16},
 		{text:"HongKong", place: "hongkong", zoomlevel: 10},
-		{text:"Sydney", place: "sydney", zoomlevel: 10}
+		{text:"Sydney", place: "sydney", zoomlevel: 10},
+		{text:"London", place: "london", zoomlevel: 13},
+		{text:"London 15", place: "london", zoomlevel: 15}
 	]
 	this.render = function(){
 		
@@ -56,7 +58,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 						,view({bg:0, flex:0.8}, 
 							noisegrid({ padding: 0, flex:1}
 								,map({
-										name: "themap"
+									name: "themap"
 								})
 				
 							)
@@ -64,8 +66,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 					)
 				)
 			)
-			,screen({name:"acceleroremote"},acceleroremote({target:"index"}))
-			
+			,screen({name:"acceleroremote"},acceleroremote({target:"index"}))			
 		];
 	}
 })

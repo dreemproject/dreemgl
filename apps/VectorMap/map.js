@@ -232,7 +232,8 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 					   seoel: [37.5275421, 126.9748078],
 					   shenzhen_hqb:[22.5402897,114.0846914],
 					   hongkong:[22.2854084,114.1600463],
-					   sydney:[-33.8466226,151.2277997]
+					   sydney:[-33.8466226,151.2277997],
+					   london:[51.5091502,-0.1471011]
 			}
 			
 			this.theinterval = this.setInterval(function(){
@@ -565,11 +566,14 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 		
 		var tilearea = vec2(this.tilewidth, this.tileheight)
 		console.log("tile area", tilearea);
+		
 		for(var x = 0;x<this.tilewidth;x++){
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var land = this.landtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				var tx = Math.floor(x-(this.tilewidth-1)/2);
+				var ty = Math.floor(y-(this.tileheight-1)/2)
+				var land = this.landtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
 				this.tilestoupdate.push(land);
 				res3d.push(land);
 			}
@@ -579,7 +583,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var road = this.roadtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				var tx = Math.floor(x-(this.tilewidth-1)/2);
+				var ty = Math.floor(y-(this.tileheight-1)/2)
+				var road = this.roadtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
 				this.tilestoupdate.push(road);
 				res3d.push(road);
 			}
@@ -589,7 +595,9 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 			
 			
 			for(var y = 0;y<this.tileheight;y++){
-				var building = this.buildingtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(Math.floor(x-(this.tilewidth-1)/2),Math.floor(y-(this.tileheight-1)/2))});
+				var tx = Math.floor(x-(this.tilewidth-1)/2);
+				var ty = Math.floor(y-(this.tileheight-1)/2)
+				var building = this.buildingtile({fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
 				this.tilestoupdate.push(building);
 				res3d.push(building);
 			}
