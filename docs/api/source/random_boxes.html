@@ -216,15 +216,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n62" name="n62">62</a>
 <a href="#n63" name="n63">63</a>
 <a href="#n64" name="n64">64</a>
-<a href="#n65" name="n65">65</a>
-<a href="#n66" name="n66">66</a>
-<a href="#n67" name="n67">67</a>
-<a href="#n68" name="n68">68</a>
-<a href="#n69" name="n69">69</a>
-<strong><a href="#n70" name="n70">70</a></strong>
-<a href="#n71" name="n71">71</a>
-<a href="#n72" name="n72">72</a>
-<a href="#n73" name="n73">73</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -237,68 +228,59 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, view){
         <span class="comment">//internal</span>
 
-  <span class="comment">// Create N random views</span>
-  <span class="local-variable">this</span>.<span class="function">rviews</span> = <span class="keyword">function</span>(n) {
-    <span class="comment">// Create dynamic squares (location and color)</span>
-    <span class="keyword">var</span> dynviews = [];
-    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;n; i++) {
-      <span class="keyword">var</span> v = view({
-        <span class="key">pos</span>: rpos()
-        ,<span class="key">size</span>: vec2(<span class="integer">50</span>, <span class="integer">50</span>)
-        ,<span class="key">bgcolor</span>: rcolor()
-        ,<span class="key">position</span>: <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
-      })
-      <span class="comment">// console.log(v.pos);</span>
-      dynviews.push(v);
-    }
+        <span class="comment">// Create N random views</span>
+        <span class="local-variable">this</span>.<span class="function">rviews</span> = <span class="keyword">function</span>(n) {
+                <span class="comment">// Create dynamic squares (location and color)</span>
+                <span class="keyword">var</span> dynviews = [];
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;n; i++) {
+                        <span class="keyword">var</span> v = view({
+                                <span class="key">pos</span>: rpos(),
+                                <span class="key">size</span>: vec2(<span class="integer">50</span>, <span class="integer">50</span>),
+                                <span class="key">bgcolor</span>: rcolor(),
+                                <span class="key">position</span>: <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
+                        })
+                        dynviews.push(v);
+                }
+                <span class="keyword">return</span> dynviews;
+        }
 
-    <span class="keyword">return</span> dynviews;
-  }
+        <span class="comment">// When the pointer taps, change the location of each view</span>
+        <span class="local-variable">this</span>.<span class="function">updatePositions</span> = <span class="keyword">function</span>(event){
+                <span class="comment">// Rewrite the positions of the views</span>
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;<span class="local-variable">this</span>.children.length; i++) {
+                        <span class="local-variable">this</span>.children[i].pos = rpos();
+                }
+        }
 
-  <span class="comment">// When the mouse is clicked, change the location of each view</span>
-  <span class="local-variable">this</span>.<span class="function">mousedown</span> = <span class="keyword">function</span>(event){
-    <span class="comment">// Rewrite the positions of the views</span>
-    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;<span class="local-variable">this</span>.children.length; i++) {
-      <span class="local-variable">this</span>.children[i].pos = rpos();
-    }
-    <span class="comment">//this.changepos();</span>
-  }
-
-  <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-    <span class="keyword">var</span> views = [
-      screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#484230</span><span class="delimiter">'</span></span>},
-             view({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">top</span><span class="delimiter">'</span></span>, <span class="key">size</span>: vec2(<span class="integer">500</span>,<span class="integer">500</span>), <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>), <span class="key">onmouseleftdown</span>: <span class="local-variable">this</span>.mousedown}
-                  ,<span class="local-variable">this</span>.rviews(<span class="integer">50</span>))
-            )
-    ];
-
-    <span class="keyword">return</span> views
-  }
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> views = [
+                screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#484230</span><span class="delimiter">'</span></span>},
+                         view({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">top</span><span class="delimiter">'</span></span>, <span class="key">size</span>: vec2(<span class="integer">500</span>,<span class="integer">500</span>), <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>), <span class="key">pointertap</span>: <span class="local-variable">this</span>.updatePositions},
+                         <span class="local-variable">this</span>.rviews(<span class="integer">50</span>))
+                        )
+                ];
+                <span class="keyword">return</span> views
+        }
 })
-
-
-
 <span class="comment">// Helper functions</span>
 
 <span class="comment">// Return random[0,max)</span>
 <span class="function">random</span> = <span class="keyword">function</span>(max) {
-  <span class="keyword">var</span> rand = Math.floor(Math.random() * max);
-  <span class="keyword">return</span> rand;
+        <span class="keyword">var</span> rand = Math.floor(Math.random() * max);
+        <span class="keyword">return</span> rand;
 }
 
 <span class="comment">// Return random color</span>
 <span class="function">rcolor</span> = <span class="keyword">function</span>() {
-  <span class="keyword">var</span> color = vec4(Math.random(), Math.random(), Math.random(), <span class="integer">1</span>);
-  <span class="keyword">return</span> color;
+        <span class="keyword">var</span> color = vec4(Math.random(), Math.random(), Math.random(), <span class="integer">1</span>);
+        <span class="keyword">return</span> color;
 }
 
 <span class="comment">// Return a random position</span>
 <span class="function">rpos</span> = <span class="keyword">function</span>() {
-  <span class="keyword">var</span> pos = vec3(random(<span class="integer">450</span>), random(<span class="integer">450</span>), <span class="integer">0</span>);
-  <span class="keyword">return</span> pos;
+        <span class="keyword">var</span> pos = vec3(random(<span class="integer">450</span>), random(<span class="integer">450</span>), <span class="integer">0</span>);
+        <span class="keyword">return</span> pos;
 }
-
-
 </pre></td>
 </tr></table>
 

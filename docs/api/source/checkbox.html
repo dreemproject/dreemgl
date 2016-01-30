@@ -298,7 +298,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n144" name="n144">144</a>
 <a href="#n145" name="n145">145</a>
 <a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -401,13 +400,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.statenormal()
         }
 
-        <span class="local-variable">this</span>.<span class="function">mouseover</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.statehover()}
-        <span class="local-variable">this</span>.<span class="function">mouseout</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.statenormal()}
-        <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.stateclick()}
-        <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(event){
-                <span class="comment">// lets check if its over the button</span>
+        <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.statehover()}
+        <span class="local-variable">this</span>.<span class="function">pointerout</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.statenormal()}
+        <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(){<span class="local-variable">this</span>.stateclick()}
+        <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.statenormal()
-                <span class="keyword">if</span>(event.isover){
+                <span class="keyword">if</span> (event.isover){
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">click</span><span class="delimiter">'</span></span>,event)
                 }
         }

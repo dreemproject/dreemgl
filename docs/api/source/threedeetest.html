@@ -327,9 +327,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n173" name="n173">173</a>
 <a href="#n174" name="n174">174</a>
 <a href="#n175" name="n175">175</a>
-<a href="#n176" name="n176">176</a>
-<a href="#n177" name="n177">177</a>
-<a href="#n178" name="n178">178</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -337,9 +334,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 <span class="comment">//Pure JS based composition</span>
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, splitcontainer, label, button, <span class="predefined">$3d$</span>, cube, sphere, plane, <span class="predefined">$widgets$</span>, colorpicker){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, view, splitcontainer, label, button, <span class="predefined">$3d$</span>, cube, sphere, plane){
 
-        <span class="keyword">var</span> mousedebug = define.<span class="reserved">class</span>(<span class="keyword">function</span> <span class="function">mousedebug</span>(<span class="predefined">$ui$view</span>){
+        <span class="keyword">var</span> pointerdebug = define.<span class="reserved">class</span>(<span class="keyword">function</span> <span class="function">pointerdebug</span>(<span class="predefined">$ui$view</span>){
 
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">buttoncolor1</span>: {<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#9090b0</span><span class="delimiter">&quot;</span></span>)},
@@ -347,7 +344,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.bg  = {
-                        <span class="key">mousepos</span>: vec2(<span class="integer">0</span>),
+                        <span class="key">pointerpos</span>: vec2(<span class="integer">0</span>),
                         <span class="key">gridcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffff</span><span class="delimiter">&quot;</span></span>),
                         <span class="function">grid</span>:<span class="keyword">function</span>(a){
                                 <span class="keyword">if</span> (floor(mod(a.x ,<span class="integer">50</span>. )) == <span class="integer">0</span>. ||floor(mod(a.y ,<span class="integer">50</span>. )) == <span class="integer">0</span>.)        {
@@ -362,8 +359,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">borderwidth</span>: <span class="integer">1</span>,
                         <span class="key">cornerradius</span>: <span class="integer">14</span>,
                         <span class="function">color</span>: <span class="keyword">function</span>(){
-                                <span class="keyword">var</span> dx = abs(pos.x - mousepos.x)
-                                <span class="keyword">var</span> dy = abs(pos.y - mousepos.y)
+                                <span class="keyword">var</span> dx = abs(pos.x - pointerpos.x)
+                                <span class="keyword">var</span> dy = abs(pos.y - pointerpos.y)
                                 <span class="keyword">var</span> mindist = min(dx, dy)
                                 <span class="keyword">var</span> a = pos.xy
                                 <span class="keyword">return</span> mix(grid(a), mix(vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.8</span>,<span class="integer">1</span>),vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),clamp((<span class="integer">1</span>.-mindist)*<span class="float">1.0</span>, <span class="integer">0</span>.,<span class="integer">1</span>. )),clamp((<span class="integer">1</span>.-mindist/<span class="float">5.0</span>)*<span class="float">1.0</span>, <span class="integer">0</span>.,<span class="integer">1</span>. )/<span class="integer">2</span>.)
@@ -374,13 +371,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> [view({<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">darkgray</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">this is a small text that will contain the cursor after move</span><span class="delimiter">&quot;</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span> ,<span class="key">width</span>: <span class="integer">10</span>})]
                 }
 
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(event){
-                        <span class="keyword">var</span> a = event.local
-                <span class="comment">//        console.log(&quot;mousecoord coming in:&quot;, a);</span>
-                        <span class="local-variable">this</span>.bgshader.mousepos = vec2(a[<span class="integer">0</span>],a[<span class="integer">1</span>])
+                <span class="comment">// TODO(aki): fix in 3D view</span>
+                <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.globalToLocal(event.value[<span class="integer">0</span>].position)
+                        <span class="local-variable">this</span>.bgshader.pointerpos = vec2(a[<span class="integer">0</span>],a[<span class="integer">1</span>])
                         <span class="local-variable">this</span>.redraw()
-                        <span class="comment">//this.screen.addDirtyNode(this);</span>
-
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.children.length &gt; <span class="integer">0</span>){
                                 <span class="local-variable">this</span>.children[<span class="integer">0</span>].text = Math.round(a[<span class="integer">0</span>]) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + Math.round(a[<span class="integer">1</span>]);
                                 <span class="local-variable">this</span>.children[<span class="integer">0</span>].pos = vec2(a[<span class="integer">0</span>],a[<span class="integer">1</span>])
@@ -418,8 +413,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         cam.fov = <span class="integer">90</span>;
                                                 }
                                         }),
-                                        mousedebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
-                                        <span class="comment">//colorpicker({})</span>
+                                        pointerdebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
                                 ),
                                 view({
                                         <span class="function">init</span>:<span class="keyword">function</span>(){
@@ -448,7 +442,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         ,sphere({<span class="key">pos</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">2</span>), <span class="key">radius</span>:<span class="float">0.5</span>})
 
                                         ,view({<span class="key">viewport</span>:<span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">pixelratio</span>:<span class="integer">2</span>, <span class="key">scale</span>: vec3(<span class="float">0.01</span>, -<span class="float">0.01</span>, <span class="float">0.01</span>), <span class="key">pos</span>:vec3(<span class="integer">0</span>,<span class="integer">2</span>,<span class="integer">0</span>), <span class="key">rotate</span>:vec3(PI/<span class="integer">2</span>,<span class="integer">0</span>, <span class="integer">0</span>)}
-                                                ,mousedebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
+                                                ,pointerdebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
                                         )
 
                                         ,view({<span class="key">viewport</span>:<span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>, <span class="key">pixelratio</span>:<span class="integer">2</span>, <span class="key">scale</span>: vec3(<span class="float">0.01</span>, -<span class="float">0.01</span>, <span class="float">0.01</span>), <span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>, <span class="integer">0</span>)}
@@ -459,7 +453,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         cam.fov = <span class="integer">30</span>;
                                                         }
                                                 }),
-                                                mousedebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>}),
+                                                pointerdebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>}),
                                                 button({
                                                         <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Far</span><span class="delimiter">&quot;</span></span>,
                                                         <span class="function">click</span>:<span class="keyword">function</span>(){
@@ -468,7 +462,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 cam.fov = <span class="integer">90</span>;
                                                         }
                                                 }),
-                                                mousedebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>}),
+                                                pointerdebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>}),
                                                 button({
                                                         <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Left</span><span class="delimiter">&quot;</span></span>,
                                                         <span class="function">click</span>:<span class="keyword">function</span>(){
@@ -486,7 +480,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         cam.fov = <span class="integer">30</span>;
                                                         }
                                                 })
-                                                ,mousedebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
+                                                ,pointerdebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
                                                 ,button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="function">click</span>:<span class="keyword">function</span>(){
                                                         <span class="keyword">var</span> cam = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">theview</span><span class="delimiter">&quot;</span></span>);
                                                         cam.camera = vec3(<span class="integer">3</span>,<span class="integer">3</span>,-<span class="integer">4</span>);
@@ -494,7 +488,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         }
 
                                                 })
-                                                ,mousedebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
+                                                ,pointerdebug({<span class="key">width</span>:<span class="integer">100</span>, <span class="key">height</span>:<span class="integer">100</span>})
                                                 ,button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>, <span class="function">click</span>:<span class="keyword">function</span>(){
                                                         <span class="keyword">var</span> cam = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">theview</span><span class="delimiter">&quot;</span></span>);
                                                         cam.camera = vec3(-<span class="integer">3</span>,<span class="integer">3</span>,-<span class="integer">3</span>);

@@ -200,7 +200,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n46" name="n46">46</a>
 <a href="#n47" name="n47">47</a>
 <a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -243,14 +242,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>:<span class="integer">0</span>,<span class="key">flex</span>:<span class="integer">1</span>}))
                                         ),
                                         view({<span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> },
-                                        button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Open a menu!</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="function">click</span>:<span class="keyword">function</span>(){
-                                        <span class="local-variable">this</span>.screen.contextMenu([{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Peekaboo!</span><span class="delimiter">&quot;</span></span>},{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Submenu</span><span class="delimiter">&quot;</span></span>, <span class="key">commands</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">I am in a submenu!</span><span class="delimiter">&quot;</span></span>}]}])
+                                        button({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Open a menu!</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="function">click</span>:<span class="keyword">function</span>(e){
+                                                <span class="local-variable">this</span>.screen.contextMenu([{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Peekaboo!</span><span class="delimiter">&quot;</span></span>},{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Submenu</span><span class="delimiter">&quot;</span></span>, <span class="key">commands</span>:[{<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">I am in a submenu!</span><span class="delimiter">&quot;</span></span>}]}], e.value[<span class="integer">0</span>].x, e.value[<span class="integer">0</span>].y)
                                         } })))
                                 )
                 )
         ]}
 })
-
 </pre></td>
 </tr></table>
 

@@ -326,8 +326,10 @@
  * tabstop, sorted by number
  */
 /**
- * @method localMouse
- * returns the mouse position in local coordinates
+ * @method globalToLocal
+ * Internal: remap the x and y coordinates to local space
+ * @param value
+ * @param dbg
  */
 /**
  * @method bgcolorfn

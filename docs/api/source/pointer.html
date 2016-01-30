@@ -191,6 +191,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
+<a href="#n44" name="n44">44</a>
+<a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -200,36 +217,53 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/node</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){}
 
+        <span class="comment">// Pointer emits events that unify mouse and touch interactions.</span>
+        <span class="comment">// Mouse interactions will always return an array of pointers of length == 1.</span>
         <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// event api</span>
+                <span class="comment">// fires when pointer is pressed down.</span>
                 <span class="key">start</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when pointer is pressed and moved (dragged).</span>
                 <span class="key">move</span>:Config({<span class="key">type</span>:Event}),
-                <span class="key">hover</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when pointer is released.</span>
                 <span class="key">end</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when pointer is pressed and released quickly.</span>
                 <span class="key">tap</span>:Config({<span class="key">type</span>:Event}),
-                <span class="key">wheel</span>:Config({<span class="key">type</span>:Event}),
-
-                <span class="comment">// TODO(aki): DEPRICATE (moved from mouse.js)</span>
-                <span class="comment">// event api</span>
-                <span class="key">down</span>:Config({<span class="key">type</span>:Event}),
-                <span class="key">up</span>: Config({<span class="key">type</span>:Event}),
-                <span class="key">x</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>}),
-                <span class="key">y</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>}),
-                <span class="key">left</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">middle</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">right</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">click</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">blurred</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">dblclick</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">clicker</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">leftdown</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">leftup</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">rightdown</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">rightup</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">wheelx</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">wheely</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>}),
-                <span class="key">zoom</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>})
+                <span class="comment">// fires when pointer moved without being pressed.</span>
+                <span class="key">hover</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when pointer enters an element.</span>
+                <span class="key">over</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when pointer leaves an element.</span>
+                <span class="key">out</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when mouse wheel is used.</span>
+                <span class="key">wheel</span>:Config({<span class="key">type</span>:Event})
         }
+
+        <span class="comment">// Returns pointer object with calculated deltas, min and max</span>
+        <span class="keyword">var</span> <span class="function">Pointer</span> = <span class="keyword">function</span>(event, refpointer) {
+                <span class="local-variable">this</span>.position = vec2(event.x, event.y)
+                <span class="local-variable">this</span>.movement = vec2(event.movementx, event.movementy)
+                <span class="local-variable">this</span>.button = event.button
+                <span class="local-variable">this</span>.shift = event.shift
+                <span class="local-variable">this</span>.alt = event.alt
+                <span class="local-variable">this</span>.ctrl = event.ctrl
+                <span class="local-variable">this</span>.meta = event.meta
+                <span class="local-variable">this</span>.t = Date.now()
+
+                <span class="keyword">if</span> (refpointer) {
+                        <span class="local-variable">this</span>.delta = vec2(<span class="local-variable">this</span>.position[<span class="integer">0</span>] - refpointer.position[<span class="integer">0</span>], <span class="local-variable">this</span>.position[<span class="integer">1</span>] - refpointer.position[<span class="integer">1</span>])
+                        <span class="local-variable">this</span>.min = vec2(min(<span class="local-variable">this</span>.position[<span class="integer">0</span>], refpointer.position[<span class="integer">0</span>]), min(<span class="local-variable">this</span>.position[<span class="integer">1</span>], refpointer.position[<span class="integer">1</span>]))
+                        <span class="local-variable">this</span>.max = vec2(max(<span class="local-variable">this</span>.position[<span class="integer">0</span>], refpointer.position[<span class="integer">0</span>]), max(<span class="local-variable">this</span>.position[<span class="integer">1</span>], refpointer.position[<span class="integer">1</span>]))
+                        <span class="local-variable">this</span>.dt = <span class="local-variable">this</span>.t - refpointer.t
+                }
+                <span class="keyword">if</span> (event.wheelx !== <span class="predefined-constant">undefined</span>) <span class="local-variable">this</span>.wheelx = event.wheelx
+                <span class="keyword">if</span> (event.wheely !== <span class="predefined-constant">undefined</span>) <span class="local-variable">this</span>.wheely = event.wheely
+        }
+
+        <span class="comment">// Internal API to access Pointer constructor.</span>
+        <span class="local-variable">this</span>.<span class="function">calcPointer</span> = <span class="keyword">function</span> (event, refpointer) {
+                <span class="keyword">return</span> <span class="keyword">new</span> Pointer(event, refpointer)
+        }
+
 })
 </pre></td>
 </tr></table>

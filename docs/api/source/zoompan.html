@@ -372,7 +372,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> <span class="function">vectormap</span>(require,  <span class="predefined">$server$</span>, fileio,<span class="predefined">$ui$</span>, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, <span class="predefined">$widgets$</span>, colorpicker,  jsviewer, radiogroup, <span class="predefined">$3d$</span>, ballrotate, <span class="predefined">$$</span>, urlfetch, geo, map){
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tiledmap</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view)
-        {                
+        {
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="comment">//console.log(&quot;rendering!&quot;);</span>
                         <span class="keyword">var</span> res = [];
@@ -383,60 +383,60 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
                         <span class="keyword">return</span> res;
                 }
-                
+
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">centerx</span>:   Config({<span class="key">value</span>:<span class="integer">0</span>}),
                         <span class="key">centery</span>:   Config({<span class="key">value</span>:<span class="integer">0</span>}),
                         <span class="key">zoomlevel</span>: Config({<span class="key">value</span>:<span class="integer">4</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>:<span class="float">1.7</span>}),
                         <span class="key">levels</span>: [],
                         <span class="key">blocksize</span>: <span class="integer">150</span>,
-                        <span class="key">dataset</span>: {}                                
+                        <span class="key">dataset</span>: {}
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">oncenterx</span> = <span class="keyword">function</span>(){
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.dataset){
-                                
-                                <span class="local-variable">this</span>.datasource.setCenter(Math.floor(<span class="local-variable">this</span>.centerx),Math.floor(<span class="local-variable">this</span>.centery),Math.floor(<span class="local-variable">this</span>.zoomlevel));                
-                
+
+                                <span class="local-variable">this</span>.datasource.setCenter(Math.floor(<span class="local-variable">this</span>.centerx),Math.floor(<span class="local-variable">this</span>.centery),Math.floor(<span class="local-variable">this</span>.zoomlevel));
+
                         }
                 }
 
                 <span class="local-variable">this</span>.<span class="function">oncentery</span> = <span class="keyword">function</span>(){
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.dataset){
-                                
-                                <span class="local-variable">this</span>.datasource.setCenter(Math.floor(<span class="local-variable">this</span>.centerx),Math.floor(<span class="local-variable">this</span>.centery),Math.floor(<span class="local-variable">this</span>.zoomlevel));                
-                
+
+                                <span class="local-variable">this</span>.datasource.setCenter(Math.floor(<span class="local-variable">this</span>.centerx),Math.floor(<span class="local-variable">this</span>.centery),Math.floor(<span class="local-variable">this</span>.zoomlevel));
+
                         }
                 }
-        
+
                 <span class="local-variable">this</span>.<span class="function">keydownLeftarrow</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.centerx --;
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">keydownRightarrow</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.centerx ++;
                 }
-                
-                <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){        
-                        <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);                                        
+
+                <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
+                        <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
                 }
 
                 <span class="local-variable">this</span>.<span class="function">bg</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){                
-                                <span class="keyword">var</span> dist = abs(view.zoomlevel - mesh.id );        
+                        <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                                <span class="keyword">var</span> dist = abs(view.zoomlevel - mesh.id );
                                 <span class="keyword">if</span> (dist &gt; <span class="float">1.0</span>) dist = <span class="float">1.0</span>;
                                 <span class="keyword">return</span> vec4(vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>).xyz*(<span class="float">1.0</span>-dist), <span class="float">1.0</span>);
                         }
 
                         <span class="local-variable">this</span>.color_blend = <span class="string"><span class="delimiter">'</span><span class="content">src_alpha * src_color + dst_color</span><span class="delimiter">'</span></span>
-  
-                        <span class="local-variable">this</span>.vertexstruct =  define.struct({                
+
+                        <span class="local-variable">this</span>.vertexstruct =  define.struct({
                                 <span class="key">pos</span>:vec3,
                                 <span class="key">id</span>: <span class="reserved">float</span>
                         })
 
                         <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.vertexstruct.array(<span class="integer">10000</span>);
-                        
+
                         <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh ;
                                 mesh.length = <span class="integer">0</span>;
@@ -445,102 +445,102 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">var</span> w = <span class="integer">100</span>;
                                 <span class="keyword">var</span> h = <span class="integer">200</span>;
                                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view;
-                                
+
                                 <span class="keyword">var</span> low = Math.max(<span class="integer">0</span>, Math.floor(view.zoomlevel-<span class="integer">1</span>));
                                 <span class="keyword">var</span> high = Math.min(view.levels.length, Math.ceil(view.zoomlevel + <span class="integer">1</span>));
-                                
+
                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = low ;i&lt;high;i++){
                                         w = h = Math.pow(<span class="integer">2</span>,i-<span class="local-variable">this</span>.view.zoomlevel-<span class="integer">0</span>) * <span class="local-variable">this</span>.view.blocksize;
                                         <span class="keyword">var</span> bw = (Math.ceil(<span class="local-variable">this</span>.view.layout.width / (w)));
                                         <span class="keyword">var</span> bh = (Math.ceil(<span class="local-variable">this</span>.view.layout.height /(h)));
-                                        
+
                                         <span class="keyword">var</span> sx = Math.floor(view.centerx) ;
                                         <span class="keyword">var</span> sy = Math.floor(view.centery) ;
 
                                         <span class="keyword">var</span> ex = sx + bw+<span class="integer">1</span>;
                                         <span class="keyword">var</span> ey = sy + bw+<span class="integer">1</span>;
-                                        
+
                                         <span class="keyword">for</span>(<span class="keyword">var</span> xx = sx;xx&lt;ex;xx++){
                                                 <span class="keyword">for</span>(<span class="keyword">var</span> yy = sy;yy&lt;ey;yy++){
                                                         <span class="keyword">var</span> x = w * xx ;
                                                         <span class="keyword">var</span> y = h * yy;
-                                                        
+
                                                         mesh.push(x,y,<span class="integer">0</span>, i);
                                                         mesh.push(x+w,y,<span class="integer">0</span>, i);
-                                                        
+
                                                         mesh.push(x+w,y,<span class="integer">0</span>, i);
                                                         mesh.push(x+w,y+h,<span class="integer">0</span>, i);
-                                                        
+
                                                         mesh.push(x+w,y+h,<span class="integer">0</span>, i);
                                                         mesh.push(x,y+h,<span class="integer">0</span>, i);
-                                                        
+
                                                         mesh.push(x,y+h,<span class="integer">0</span>, i);
                                                         mesh.push(x,y,<span class="integer">0</span>, i);
                                                 }
                                         }
                                 }
                         }
-                        
-                        <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){                
 
-                                <span class="keyword">var</span> xy = mesh.pos.xy;                
-                                xy -= vec2(view.centerx, view.centery)*view.blocksize  ;                        
+                        <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
+
+                                <span class="keyword">var</span> xy = mesh.pos.xy;
+                                xy -= vec2(view.centerx, view.centery)*view.blocksize  ;
                                         <span class="keyword">var</span> r = vec4(xy, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix;
                                         <span class="keyword">return</span> r
                         }
-                        
+
                         <span class="local-variable">this</span>.drawtype = <span class="local-variable">this</span>.LINES
                 };
-                
-                <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
-                <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span> 
-                
-                <span class="local-variable">this</span>.<span class="function">moveTo</span> = <span class="keyword">function</span>(x,y,z){        
 
-                        <span class="comment">//this.datasource.setCenter(x,y,z);                </span>
+                <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
+                <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>
+
+                <span class="local-variable">this</span>.<span class="function">moveTo</span> = <span class="keyword">function</span>(x,y,z){
+
+                        <span class="comment">//this.datasource.setCenter(x,y,z);</span>
                         <span class="keyword">var</span> dist = vec2((x?x:<span class="local-variable">this</span>.centerx) - <span class="local-variable">this</span>.centerx,(y?y:<span class="local-variable">this</span>.centery) - <span class="local-variable">this</span>.centery);
                         <span class="keyword">var</span> l = vec2.len(dist);
                         <span class="keyword">var</span> totaltime = Math.max(<span class="integer">1</span>.,Math.min(<span class="integer">10</span>, l*<span class="float">0.3</span>));
-                        <span class="keyword">var</span> halftime = totaltime / <span class="integer">2</span>;        
-                        
+                        <span class="keyword">var</span> halftime = totaltime / <span class="integer">2</span>;
+
                         <span class="keyword">if</span> (x !== <span class="predefined-constant">undefined</span>) {
                                 <span class="keyword">var</span> xanim = {}
                                 xanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:x};
                         }
-                        
+
                         <span class="keyword">if</span> (y !== <span class="predefined-constant">undefined</span>) {
                                 <span class="keyword">var</span> yanim = {}
                                 yanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:y};
                                 <span class="local-variable">this</span>.centerx = Animate(xanim);
                                 <span class="local-variable">this</span>.centery = Animate(yanim);
                         }
-                        
+
                         <span class="keyword">if</span> (z !== <span class="predefined-constant">undefined</span>) {
                                 <span class="keyword">var</span> zanim = {}
-                                <span class="keyword">if</span> ( z &lt; <span class="local-variable">this</span>.zoomlevel){                                        
+                                <span class="keyword">if</span> ( z &lt; <span class="local-variable">this</span>.zoomlevel){
                                         zanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:z};
                                 }
                                 <span class="keyword">else</span> {
                                         zanim[halftime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">outquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.zoomlevel-<span class="float">0.4</span>};
                                         zanim[totaltime] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:z};
                                 }
-                                <span class="local-variable">this</span>.zoomlevel = Animate(zanim);                
+                                <span class="local-variable">this</span>.zoomlevel = Animate(zanim);
                         }
 
                 }
-                
-        
+
+
                 <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
-                        
+
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="integer">18</span>;i++){
                                 <span class="local-variable">this</span>.levels[i] = {}
-                        }                        
-                }                
+                        }
+                }
         })
-        
+
         <span class="local-variable">this</span>.<span class="function">renderbuttongrid</span> = <span class="keyword">function</span>(z){
                                 res = [];
-                                
+
                                 <span class="keyword">for</span> (<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="integer">10</span>;y+=<span class="integer">2</span>){
                                         <span class="keyword">var</span> R = [];
                                 <span class="keyword">for</span> (<span class="keyword">var</span> x = <span class="integer">0</span>;x&lt;<span class="integer">10</span>;x+=<span class="integer">2</span>){
@@ -552,24 +552,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">return</span> res;
                         }
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                
+
                 <span class="keyword">return</span> [
                         urlfetch({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">urlfetch</span><span class="delimiter">&quot;</span></span>}),
                         screen({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>, <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>), <span class="function">moveTo</span>:<span class="keyword">function</span>(x,y,z){
                                 <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">tiledmap</span><span class="delimiter">&quot;</span></span>).moveTo(x,y,z)
-                        }}                
+                        }}
                                 ,mapdata =<span class="local-variable">this</span>.map()
 
-                                ,<span class="local-variable">this</span>.tiledmap({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tiledmap</span><span class="delimiter">&quot;</span></span>, <span class="key">datasource</span>: mapdata})                                
-                        ) 
-                        
+                                ,<span class="local-variable">this</span>.tiledmap({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tiledmap</span><span class="delimiter">&quot;</span></span>, <span class="key">datasource</span>: mapdata})
+                        )
+
                 ,screen({
-                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remote</span><span class="delimiter">&quot;</span></span>, 
+                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">remote</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">style</span>:{<span class="predefined">$</span>:{<span class="key">fontsize</span>:<span class="integer">12</span>}},
                         <span class="function">init</span>:<span class="keyword">function</span>(){
                                 console.log(<span class="local-variable">this</span>.rpc.index)
                         },
-                        
+
                         <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">darkgray</span><span class="delimiter">'</span></span>), <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">hidden</span><span class="delimiter">'</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">VectorMap remote</span><span class="delimiter">&quot;</span></span> },
                         speakergrid({<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> }, view({<span class="key">width</span>:<span class="integer">300</span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}
                                 ,label({<span class="key">fontsize</span>:<span class="integer">40</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Zoompan</span><span class="delimiter">&quot;</span></span> , <span class="key">bg</span>:<span class="integer">0</span>})

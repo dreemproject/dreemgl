@@ -228,16 +228,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n74" name="n74">74</a>
 <a href="#n75" name="n75">75</a>
 <a href="#n76" name="n76">76</a>
-<a href="#n77" name="n77">77</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-<span class="comment">// Mouse class</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/keyboard</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, exports){
-        
+
         <span class="local-variable">this</span>.toKey = { <span class="comment">// slap a usable name on keys</span>
                 <span class="integer">8</span>:<span class="string"><span class="delimiter">'</span><span class="content">backspace</span><span class="delimiter">'</span></span>,<span class="integer">9</span>:<span class="string"><span class="delimiter">'</span><span class="content">tab</span><span class="delimiter">'</span></span>,<span class="integer">13</span>:<span class="string"><span class="delimiter">'</span><span class="content">enter</span><span class="delimiter">'</span></span>,<span class="integer">340</span>:<span class="string"><span class="delimiter">'</span><span class="content">shift</span><span class="delimiter">'</span></span>,<span class="integer">344</span>:<span class="string"><span class="delimiter">'</span><span class="content">shift</span><span class="delimiter">'</span></span>,<span class="integer">341</span>:<span class="string"><span class="delimiter">'</span><span class="content">ctrl</span><span class="delimiter">'</span></span>,<span class="integer">345</span>:<span class="string"><span class="delimiter">'</span><span class="content">ctrl</span><span class="delimiter">'</span></span>,<span class="integer">342</span>:<span class="string"><span class="delimiter">'</span><span class="content">alt</span><span class="delimiter">'</span></span>,<span class="integer">346</span>:<span class="string"><span class="delimiter">'</span><span class="content">alt</span><span class="delimiter">'</span></span>,
                 <span class="integer">19</span>:<span class="string"><span class="delimiter">'</span><span class="content">pause</span><span class="delimiter">'</span></span>,<span class="integer">20</span>:<span class="string"><span class="delimiter">'</span><span class="content">caps</span><span class="delimiter">'</span></span>,<span class="integer">27</span>:<span class="string"><span class="delimiter">'</span><span class="content">escape</span><span class="delimiter">'</span></span>,
@@ -274,7 +272,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(device){
                 <span class="keyword">var</span> document = device.document
 
-                
+
                 document.on(<span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(e){
                         <span class="keyword">var</span> code = e.which&gt;<span class="integer">255</span>?e.which:e.keyCode
                         <span class="keyword">var</span> keyname = <span class="local-variable">this</span>.toKey[ code ]
@@ -285,7 +283,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">name</span>: keyname
                         }
                         msg[msg.name] = <span class="integer">1</span>
-                        
+
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">down</span><span class="delimiter">'</span></span>, msg)
                 }.bind(<span class="local-variable">this</span>))
 
@@ -300,7 +298,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">name</span>: keyname
                         }
                         msg[msg.name] = <span class="integer">1</span>
-                        
+
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">up</span><span class="delimiter">'</span></span>, msg)
 
                 }.bind(<span class="local-variable">this</span>))
