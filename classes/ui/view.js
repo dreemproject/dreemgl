@@ -9,7 +9,6 @@ define.class('$system/base/node', function(require){
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
-	var Texture = this.Texture = Shader.Texture
 	var view = this.constructor
 
 	this.attributes = {
@@ -521,7 +520,7 @@ define.class('$system/base/node', function(require){
 
 	// internal, called at every frame draw
 	this.atDraw = function(){
-		if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
+		// if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
 	}
 
 	// internal, sorts the shaders

@@ -6,7 +6,6 @@
 define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
 
-	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Animate = require('$system/base/animate')
 
@@ -32,7 +31,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	this.atConstructor = function(){
 	}
 
-	this.oninit = function (previous) {
+	this.oninit = function () {
 		// ok. lets bind inputs
 		this.modal_stack = []
 		this.focus_view = undefined
