@@ -215,8 +215,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			this.pointer.view.emitUpward('pointerstart', e)
 			// lets give this thing focus
 			this.pointer.view.computeCursor()
-			if(this.inModalChain(view)){
-				this.setFocus(view)
+			if(this.inModalChain(this.pointer.view)){
+				this.setFocus(this.pointer.view)
 			} else if(this.modal){
 				this.modal.emitUpward('focuslost', {global:this.globalMouse(this)})
 			}
