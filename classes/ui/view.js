@@ -622,36 +622,17 @@ define.class('$system/base/node', function(require){
 	}
 
 	// Internal: remap the x and y coordinates to local space
-	this.globalToLocal = function(value, dbg){
-		//TODO(aki): clean this up. Simplify.
+	this.globalToLocal = function(value){
+		//TODO(aki): Simplify.
 		var sx = this.screen.device.main_frame.size[0]  / this.screen.device.ratio
 		var sy = this.screen.device.main_frame.size[1]  / this.screen.device.ratio
 		var mx = value[0] / (sx / 2) - 1.0
 		var my = -1 * (value[1] / (sy / 2) - 1.0)
 
-		var parentlist = []
-		var view = this
-		var ip = view.parent
-
+		var parentlist = [], ip = this.parent
 		while (ip){
 			if (ip._viewport || !ip.parent) parentlist.push(ip)
 			ip = ip.parent
-		}
-		var logging = false
-		if (dbg) {
-			logging = true
-		}
-
-		if (logging) {
-			console.log(view.constructor.name)
-			console.log(view.layout);
-		}
-		if (logging){
-			var	parentdesc = "Parentchain: "
-			for(var i =parentlist.length-1;i>=0;i--) {
-				parentdesc += parentlist[i].constructor.name + "("+parentlist[i]._viewport+") "
-			}
-			console.log(parentdesc)
 		}
 
 		var raystart = vec3(mx,my,-100)
@@ -663,7 +644,6 @@ define.class('$system/base/node', function(require){
 		var scaletemp = mat4.scalematrix([1,1,1])
 		var transtemp2 = mat4.translatematrix([-1,-1,0])
 
-		if (logging)  console.log(parentlist.length-1, raystart, "pointercoords in GL space")
 		var lastmode = "2d"
 
 		this.remapmatrix = mat4.identity()
@@ -671,7 +651,7 @@ define.class('$system/base/node', function(require){
 		for(var i = parentlist.length - 1; i >= 0; i--) {
 			var P = parentlist[i]
 			var newmode = P.parent? P._viewport:"2d"
-			if (logging) console.log(i, "logging for ", newmode, raystart, P.parent);
+
 			if (P.parent) {
 
 				var MM = P._viewport? P.viewportmatrix: P.totalmatrix
@@ -681,9 +661,6 @@ define.class('$system/base/node', function(require){
 
 				// 3d to layer transition -> do a raypick.
 				if (lastmode == "3d") {
-
-					if (logging) console.log(i, lastrayafteradjust, "performing raypick on previous clipspace coordinates" )
-
 					var startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 0, lastviewmatrix, lastprojection)
 					var endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 1, lastviewmatrix, lastprojection)
 
@@ -693,17 +670,13 @@ define.class('$system/base/node', function(require){
 					var R = vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
 					if (!R)	{
 						raystart = vec3(0.5,0.5,0)
-					}
-					else {
+					} else {
 						R = vec3.mul_mat4(R, P.viewportmatrix)
-						if (logging) console.log(i, R, "intersectpoint")
 						raystart = R
 					}
 				}
 
 				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
-
-				if (logging)  console.log(i, "LAYOUT", P.layout.width, P.layout.height);
 
 				mat4.scalematrix([P.layout.width/2,P.layout.height/2,1000/2], scaletemp)
 				mat4.invert(scaletemp, this.remapmatrix)
@@ -712,50 +685,27 @@ define.class('$system/base/node', function(require){
 				raystart = vec3.mul_mat4(raystart, transtemp2)
 
 				lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
-				lastprojection = P.drawpass.colormatrices.perspectivematrix;
-				lastviewmatrix = P.drawpass.colormatrices.lookatmatrix;
+				lastprojection = P.colormatrices.perspectivematrix;
+				lastviewmatrix = P.colormatrices.lookatmatrix;
 				camerapos = P._camera;
 
-				if (logging){
-					if (lastprojection) mat4.debug(lastprojection);
-				if (lastviewmatrix) 	mat4.debug(lastviewmatrix);
-					console.log(i, raystart, "coordinates after adjusting for layoutwidth/height", P._viewport);
-				}
+			}
 
+			if(i == 0 && this.noscroll){
+				mat4.invert(P.colormatrices.noscrollmatrix, this.remapmatrix)
+			}	else {
+				mat4.invert(P.colormatrices.viewmatrix, this.remapmatrix)
 			}
-			if(i == 0 && view.noscroll){
-				if (logging)
-				{
-					console.log("i==0, noscroll!");
-				}
-				mat4.invert(P.drawpass.colormatrices.noscrollmatrix, this.remapmatrix)
-			}
-			else {
-				if (logging){
-					console.log(i, "noscroll = false -  using regular viewmatrix!");
-					mat4.debug(P.drawpass.colormatrices.viewmatrix);
-				}
-				mat4.invert(P.drawpass.colormatrices.viewmatrix, this.remapmatrix)
 
-			}
-			if (logging) mat4.debug(this.remapmatrix);
 			raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 
 			lastmode = newmode
 		}
-		if (logging) console.log(view._viewport, view.viewportmatrix, view.totalmatrix);
-		var MM = view._viewport?view.viewportmatrix: view.totalmatrix
+
+		var MM = this._viewport?this.viewportmatrix: this.totalmatrix
 		mat4.invert(MM, this.remapmatrix)
 		raystart = vec3.mul_mat4(raystart, this.remapmatrix)
 		rayend = vec3.mul_mat4(rayend, this.remapmatrix)
-
-		if (lastmode == "3d"){
-			if (logging)  console.log("last mode was 3d..")
-		}
-		if (logging) {
-			console.log(" ", raystart, "final transform using own worldmodel")
-		}
-
 
 		return vec2(raystart.x, raystart.y)
 	}
@@ -861,24 +811,24 @@ define.class('$system/base/node', function(require){
 				}
 			}
 
-			//TODO
-			this.pointerzoom = function(event){
-				var zoom = event.value.zoom
-				var lastzoom = this._zoom
-				var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
-				this.zoom = newzoom
-
-				var pos = this.globalToLocal(event.value[0].position)
-
-				var shiftx = pos[0] * lastzoom - pos[0] * this._zoom
-				var shifty = pos[1] * lastzoom - pos[1] * this._zoom
-
-				this.hscrollbar.value = clamp(this.hscrollbar._value + shiftx, 0, this.hscrollbar._total - this.hscrollbar._page)
-				this.vscrollbar.value = clamp(this.vscrollbar._value + shifty, 0, this.vscrollbar._total - this.vscrollbar._page)
-
-				this.updateScrollbars()
-				this.redraw()
-			}
+			// //TODO
+			// this.pointerzoom = function(event){
+			// 	var zoom = event.value.zoom
+			// 	var lastzoom = this._zoom
+			// 	var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
+			// 	this.zoom = newzoom
+			//
+			// 	var pos = this.globalToLocal(event.value[0].position)
+			//
+			// 	var shiftx = pos[0] * lastzoom - pos[0] * this._zoom
+			// 	var shifty = pos[1] * lastzoom - pos[1] * this._zoom
+			//
+			// 	this.hscrollbar.value = clamp(this.hscrollbar._value + shiftx, 0, this.hscrollbar._total - this.hscrollbar._page)
+			// 	this.vscrollbar.value = clamp(this.vscrollbar._value + shifty, 0, this.vscrollbar._total - this.vscrollbar._page)
+			//
+			// 	this.updateScrollbars()
+			// 	this.redraw()
+			// }
 		}
 	}
 
