@@ -41,8 +41,8 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 				}
 				,view({flex: 1, bgcolor: "#5b5b5b"}
 					,splitcontainer({bgcolor: "green"}
-						,view({bg:0, flex:0.2, overflow:"scroll" },
-							noisegrid({padding:20}
+						,view({bg:0, flex:0.2,flexwrap:"nowrap"},
+							noisegrid({padding:20, flexwrap:"nowrap", overflow:"scroll"}
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bg:0})
 								,numberbox({value:16, onvalue:function(){}.bind(this), name:"numberbox", minvalue:0, stepvalue:1, maxvalue:18})
 								,Buttons
