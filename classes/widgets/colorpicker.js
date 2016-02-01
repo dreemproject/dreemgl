@@ -150,7 +150,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	}
 
 	define.class(this, "customslider", function($ui$,view){
-
+		
 		this.attributes = {
 
 			// hsv color for the left side
@@ -188,7 +188,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			// total size.
 			total: Config({type:float, value:255+25}),
 
-
 			// set animation on bgcolor
 			bgcolor: Config({duration: 1.0})
 		}
@@ -205,7 +204,13 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 
 		var mesh = vec2.array()
 		mesh.pushQuad(0,0,0,1,1,0,1,1)
+		this.borderwidth = 0
+		this.margin = 1
+		this.bordercolor = vec4("#303060")
+		this.pressed = 0
+		this.hovered = 0
 
+		
 		this.bg = {
 			offset: 0,
 			page: 0.3,
@@ -238,13 +243,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				return vec4(mesh.x * view.layout.width, mesh.y * view.layout.height, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
 		}
-
-		this.borderwidth = 0
-		this.margin = 1
-		this.bordercolor = vec4("#303060")
-		this.pressed = 0
-		this.hovered = 0
-
+		this.bg = true;
+		
 		// TODO(aki): fix slider and use pointer events
 		// most of the logic below is unnecessary because pointer events include deltas.
 		// this.pointerstart = function(event){
@@ -287,6 +287,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		// 	}
 		// }
 
+		
+		//this.height = 10;
+		//this.width = 100;
+		//this.flex = 1;
+		
 		this.drawcount = 0;
 	})
 
@@ -323,6 +328,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		}
 
 		this.bg = function(){
+			this.draworder = 1;
+			
 			this.vertexstruct =  define.struct({
 				p:float,
 				side: float
@@ -369,7 +376,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		};
 
 		define.class(this, 'fg', this.Shader, function(){
-
+			this.draworder = 2;
 			this.vertexstruct = define.struct({
 				p:vec2,
 			})
@@ -412,8 +419,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			}
 
 		})
-
-		this.fg = 2;
+		this.fg = true;
 
 	})
 
@@ -580,7 +586,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 					,this.colorcirclecontrol({position:"absolute",width:200, height:200})
 					,this.squareview({basehue:this.basehue, position:"absolute"})
 				)
-				,view({bg:0, flexdirection:"column"}
+				,view({bg:0, flexdirection:"column", flex:1, width:280}
 					,this.customslider({name:"rslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})
 					,this.customslider({name:"gslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5), offset:function(v){this.outer.setGreen(v.value/255)}})
 					,this.customslider({name:"bslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})

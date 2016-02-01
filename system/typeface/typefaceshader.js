@@ -20,7 +20,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	// lets define a custom struct and subclass the array
 	this.textgeom = define.struct({
-		pos:vec3,
+		pos:vec4,
 		tex:vec2,
 		tag:vec4,
 	}).extend(function(exports, self){
@@ -178,24 +178,25 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var y1 = this.add_y - fontsize * info.min_y
 			var y2 = this.add_y - fontsize * info.max_y
 			var italic = this.italic_ness * info.height * fontsize
-
+			var cz = 0;
 			if(this.font.baked){
 				this.pushQuad(
-					x1, y1, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
-					x2, y1, fontsize, info.tmax_x, info.tmin_y, unicode, m1, m2, m3,
-					x1 + italic, y2, fontsize, info.tmin_x, info.tmax_y, unicode, m1, m2, m3,
-					x2 + italic, y2, fontsize, info.tmax_x, info.tmax_y, unicode, m1, m2, m3
+					x1, y1, cz, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
+					x2, y1, cz, fontsize, info.tmax_x, info.tmin_y, unicode, m1, m2, m3,
+					x1 + italic, y2, cz, fontsize, info.tmin_x, info.tmax_y, unicode, m1, m2, m3,
+					x2 + italic, y2, cz, fontsize, info.tmax_x, info.tmax_y, unicode, m1, m2, m3
 				)
 			}
 			else {
 				var gx = ((info.atlas_x<<6) | info.nominal_w)<<1
 				var gy = ((info.atlas_y<<6) | info.nominal_h)<<1
 
+
 				this.pushQuad(
-					x1, y1, fontsize, gx, gy, unicode, m1, m2, m3,
-					x2, y1, fontsize, gx|1, gy, unicode, m1, m2, m3,
-					x1 + italic, y2, fontsize, gx, gy|1, unicode, m1, m2, m3,
-					x2 + italic, y2, fontsize, gx|1, gy|1, unicode, m1, m2, m3
+					x1, y1, cz, fontsize, gx, gy, unicode, m1, m2, m3,
+					x2, y1, cz, fontsize, gx|1, gy, unicode, m1, m2, m3,
+					x1 + italic, y2, cz,fontsize, gx, gy|1, unicode, m1, m2, m3,
+					x2 + italic, y2, cz, fontsize, gx|1, gy|1, unicode, m1, m2, m3
 				)
 			}
 			this.add_x += info.advance * fontsize
@@ -208,11 +209,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var text_h = 0
 			var length = this.lengthQuad()
 			for(var i = 0; i < length; i++){
-				var o = i  * 6 * 9
+				var o = i  * 6 * 10
 				var x1 = this.array[o]
 				var y1 = this.array[o + 1]
-				var fontsize = this.array[o + 2]
-				var unicode = this.array[o + 5]
+				var fontsize = this.array[o + 3]
+				var unicode = this.array[o + 6]
 				var info = this.font .glyphs[unicode]
 				var add_x = x1 - fontsize * info.min_x + (unicode === 10?0:info.advance * fontsize)
 				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.line_spacing
@@ -263,8 +264,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var info = this.font.glyphs[this.charCodeAt(off)]
 			if(isNaN(off))debugger
 			var coords = {
-				x: this.array[off * 6 * 9 + 0] - this.fontsize * info.min_x,
-				y: this.array[off * 6 * 9 + 1] + this.fontsize * info.min_y,
+				x: this.array[off * 6 * 10 + 0] - this.fontsize * info.min_x,
+				y: this.array[off * 6 * 10 + 1] + this.fontsize * info.min_y,
 				w: info.advance * this.fontsize,
 				h: this.line_height
 			}
@@ -272,11 +273,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		this.char_tl_x = function(off){
-			return this.array[off * 6 * 9 + 0]
+			return this.array[off * 6 * 10 + 0]
 		}
 
 		this.char_tr_x = function(off){
-			return this.array[off * 6 * 9 + 0 + 9]
+			return this.array[off * 6 * 10 + 0 + 10]
 		}
 
 		this.offsetFromPos = function(x, y){
@@ -289,13 +290,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var char_code = this.charCodeAt(o)
 				var info = this.font.glyphs[char_code]
 
-				var y2 = this.array[o * 6 * 9 + 1] + this.fontsize * info.min_y + this.fontsize * this.cursor_sink
+				var y2 = this.array[o * 6 * 10 + 1] + this.fontsize * info.min_y + this.fontsize * this.cursor_sink
 				var y1 = y2 - this.line_height
 
 
 				if(y>=y1 && y<=y2){
-					var tl_x = this.array[o * 6 * 9 + 0]
-					var tr_x = this.array[o * 6 * 9 + 0 + 9]
+					var tl_x = this.array[o * 6 * 10 + 0]
+					var tr_x = this.array[o * 6 * 10 + 0 + 10]
 					var hx = (tl_x+tr_x)/2
 
 					// lets debug paint these 2
@@ -339,7 +340,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		this.charCodeAt = function(off){
-			return this.array[off * 6 * 9 + 5]
+			return this.array[off * 6 * 10 + 6]
 		}
 
 		this.serializeText = function(start, end){
@@ -355,10 +356,10 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var out = vec4.array(end - start)
 			for(var i = start; i < end; i++){
 				out.push(
-					this.array[i * 6 * 9 + 5],
-					this.array[i * 6 * 9 + 6],
-					this.array[i * 6 * 9 + 7],
-					this.array[i * 6 * 9 + 8])
+					this.array[i * 6 * 10 + 6],
+					this.array[i * 6 * 10 + 7],
+					this.array[i * 6 * 10 + 8],
+					this.array[i * 6 * 10 + 9])
 			}
 			return out
 		}
@@ -413,8 +414,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var matrix = view.totalmatrix  * view.viewmatrix
 
 		// compute the main position and one rectgle atan fontsize for the pixelscale
-		var pos1 = vec4(mesh.pos.xy + mesh.shift , 0, 1) * matrix
-		var pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.z), 0, 1) * matrix
+		var pos1 = vec4(mesh.pos.xy + mesh.shift , mesh.pos.z, 1) * matrix
+		var pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.w), mesh.pos.z, 1) * matrix
 
 		// compute the pixelscaling used in the pixelshader AA
 		var pixsize = view.screen.device.frame.size
