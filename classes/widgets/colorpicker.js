@@ -40,7 +40,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	}
 
 	this.updatecontrol = function(name, val){
-		var c = this.find(name);
+		var c = this.findChild(name);
 		if (c){
 			c.currentcolor = this.value;
 			c.contrastcolor = this.contrastcolor;
@@ -55,7 +55,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	}
 
 	this.updatelabel = function(name, val){
-		var c = this.find(name);
+		var c = this.findChild(name);
 		if (c) c.value = val;
 		//else console.log("not found", name);
 	}
@@ -509,6 +509,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			}
 
 		})
+		
 		this.fg = true
 
 		define.class(this, 'bg', this.Shader, function(){
@@ -586,7 +587,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 					,this.colorcirclecontrol({position:"absolute",width:200, height:200})
 					,this.squareview({basehue:this.basehue, position:"absolute"})
 				)
-				,view({bg:0, flexdirection:"column", flex:1, width:280}
+				,view({bg:0, flexdirection:"column",  width:280}
 					,this.customslider({name:"rslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})
 					,this.customslider({name:"gslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5), offset:function(v){this.outer.setGreen(v.value/255)}})
 					,this.customslider({name:"bslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})
