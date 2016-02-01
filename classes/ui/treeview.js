@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -12,13 +12,13 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		// the current selected value
 		select: Config({type:Event})
 	}
-	
+
 	this.bgcolor = '#3b3b3b'
 	this.boundscheck = true
 	this.viewport = '2d'
 	this.overflow ='scroll'
 
-	// The fold button is a very very flat button. 
+	// The fold button is a very very flat button.
 	define.class(this, 'foldbutton', button, function(){
 		this.borderwidth = 0
 	//	this.borderradius = 0;
@@ -36,7 +36,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.fgcolor = "#d0d0d0"
 		this.bgcolor = "white";
 		this.margin = 0
-		//this.alignself = "flex-start" 	
+		//this.alignself = "flex-start"
 	})
 
 	// newitemheading combines a few foldbuttons in to a full "item" in the tree
@@ -62,17 +62,17 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.margin = 2
 		this.bgcolor = "transparent"
 		//this.alignself = "flex-start"
-		
+
 		this.render = function(){
 			return [
 				this.haschildren?this.outer.foldbutton({
-					icon:this.folded? "chevron-right":"chevron-down", 
-					padding: 2, 
+					icon:this.folded? "chevron-right":"chevron-down",
+					padding: 2,
 					click: this.toggleclick
-				}):[], 
+				}):[],
 				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
 				this.outer.foldbutton({
-					text: this.text, 
+					text: this.text,
 					click:function(){
 						this.emit('select',{node:this})
 					}.bind(this)
@@ -80,7 +80,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			];
 		}
 	});
-	
+
 	// the treeitem subclass contains 3 controls: a newitemheading, a set of treelines and an optional set of children treeitems in case the current node is expanded
 	define.class(this, 'treeitem', view, function(){
 
@@ -108,7 +108,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			//this.reLayout();
 			//this.setDirty(true)
 		}
-		
+
 		// build path for the current treeitem and call the outer selectclick handler
 		this.processSelect = function(value){
 
@@ -128,43 +128,43 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 
 			this.outer.emit('select', {item:this.item, path:path})
 		}
-		
+
 		this.atConstructor = function(){
 			if (this.item){
 				if (!this.item.collapsed) this.item.collapsed = false
 			}
 			//	this.text = this.item.name;
 		}
-		
+
 		this.count = 0;
-		
+
 		this.flexdirection = "column";
 		//this.width = 1;
-	
+
 		this.render = function(){
 			//debugger;
 			if (!this.item) return [label({text:""})];
 			//this.collapsed;
 			var res = [
 				this.outer.newitemheading({
-						haschildren: this.item.children && this.item.children.length, 
-						folded: this.item.collapsed, 
-						toggleclick: this.toggle.bind(this), 
+						haschildren: this.item.children && this.item.children.length,
+						folded: this.item.collapsed,
+						toggleclick: this.toggle.bind(this),
 						select: this.processSelect.bind(this),
 						text:this.item.name,
 						id:this.item.id
 					})
 			];
-					
-					
+
+
 			if (this.item.collapsed == false){
 				if (this.item.children){
 					var childrenarray = this.item.children.map(function(m, i, thearray){return [
 						this.outer.treeline({last:(i == thearray.length-1)?1:0, flexwrap:"nowrap",abg:{
 							color:function(){
 								return "yellow";
-							}}, 
-							padding:0, 
+							}},
+							padding:0,
 							flexdirection:"row" },
 							view({bgcolor:"blue", width:14, alignself:"stretch",init:function(){
 								// console.log(this.size)
@@ -176,8 +176,8 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 					)
 					]}.bind(this));
 					res.push(view({
-								bg:0, 
-								flexdirection:"column" , 
+								bg:0,
+								flexdirection:"column" ,
 								flexwrap:"nowrap"
 							},
 							childrenarray
@@ -186,24 +186,24 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 				}
 			}
 			return res;
-			
+
 		}
 	})
-	
+
 	// subclass to render the gridlines of the tree
 	define.class(this, 'treeline', view, function(){
 		//this.bgcolor = vec4("red");
 		//this.flex = 1
 		this.last = 0
-		
+
 		this.render = function(){
 			return this.constructor_children;
 		}
 		this.alignself = "stretch";
-		
+
 		this.fgcolor = vec4("#808080")
-		
-		this.bgcolor = "#3b3b3b" 
+
+		this.bgcolor = "#3b3b3b"
 		this.bg = {
 			color: function(){
 				var pos = mesh.xy * vec2(view.layout.width, view.layout.height)
@@ -223,9 +223,9 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			}
 		}
 	})
-	
+
 	this.clipping = true
-	
+
 	this.flexdirection = "row"
 //	this.flex = 1
 
@@ -234,22 +234,30 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 	// the renderfunction for the treeview recursively expands using treeitem subclasses.
 	this.render = function(){
 		//var data;
-		if(!this.dataset) return
-		if (this.atBuildTree) this.data = this.atBuildTree(this.dataset.data)
-		else{
-			this.data = this.dataset.data
+
+		if (!this.data) {
+			if(!this.dataset) return
+			if (this.atBuildTree) this.data = this.atBuildTree(this.dataset.data)
+			else{
+				this.data = this.dataset.data
+			}
+		}
+		if (!this.data) {
+			return
 		}
 
 		return [this.treeitem({item:this.data})]
 	}
 
-	
+
 	var treeview = this.constructor;
-	
+
 	// Basic usage of the treeview control.
 	this.constructor.examples = {
 		Usage:function(){
-			return [treeview({dataset:{name:"root", children:[{name:"child1"}]}})]
+			var data = {name:"root", children:[{name:"child1", children:[{name:"subchild1"}, {name:"subchild2"}]}, {name:"child2"}]};
+
+			return [treeview({flex:1, data:data})]
 		}
 	}
 })

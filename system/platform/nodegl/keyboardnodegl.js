@@ -1,11 +1,10 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-// Mouse class
 
 define.class('$system/base/keyboard', function (require, exports){
-	
+
 	this.toKey = { // slap a usable name on keys
 		8:'backspace',9:'tab',13:'enter',340:'shift',344:'shift',341:'ctrl',345:'ctrl',342:'alt',346:'alt',
 		19:'pause',20:'caps',27:'escape',
@@ -42,7 +41,7 @@ define.class('$system/base/keyboard', function (require, exports){
 	this.atConstructor = function(device){
 		var document = device.document
 
-		
+
 		document.on('keydown', function(e){
 			var code = e.which>255?e.which:e.keyCode
 			var keyname = this.toKey[ code ]
@@ -53,7 +52,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				name: keyname
 			}
 			msg[msg.name] = 1
-			
+
 			this.emit('down', msg)
 		}.bind(this))
 
@@ -68,7 +67,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				name: keyname
 			}
 			msg[msg.name] = 1
-			
+
 			this.emit('up', msg)
 
 		}.bind(this))

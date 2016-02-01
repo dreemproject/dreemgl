@@ -870,18 +870,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n716" name="n716">716</a>
 <a href="#n717" name="n717">717</a>
 <a href="#n718" name="n718">718</a>
-<a href="#n719" name="n719">719</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Sprite class</span>
 
-define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, label){        
+define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, label){
 
         <span class="comment">// The icon class provides an easy way to access most of the commonly used web icons. Look at the FontAwesome cheat sheet to see what can be used.</span>
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// The icon to be used. Look at the FontAwesome cheat sheet to see the available options. Icons do not need to specify their 'fa-' prefix -&gt; use 'gears' instead of 'fa-gears'.</span>
                 <span class="key">icon</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">wrench</span><span class="delimiter">'</span></span>})
@@ -890,16 +889,16 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
         <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.text = table[<span class="local-variable">this</span>.icon]
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">onicon</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.text = table[<span class="local-variable">this</span>.icon]
         }
-        
+
         <span class="local-variable">this</span>.bg = <span class="predefined-constant">undefined</span>
 
         <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/fontawesome.glf</span><span class="delimiter">'</span></span>)
 
-        <span class="comment">// the font awesome </span>
+        <span class="comment">// the font awesome</span>
         <span class="keyword">var</span> table = {
                 <span class="key"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
                 <span class="key"><span class="delimiter">'</span><span class="content">500px</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">\uf26e</span><span class="delimiter">'</span></span>,
@@ -1580,16 +1579,15 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
 
         <span class="keyword">var</span> icon = <span class="local-variable">this</span>.constructor
         <span class="local-variable">this</span>.constructor.examples = {
-                <span class="comment">// Basic usage</span>
-                <span class="function">BasicUsage</span>: <span class="keyword">function</span>(){
+                <span class="function">Usage</span>: <span class="keyword">function</span>(){
                         <span class="keyword">return</span> [
-                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">50</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>})
-                                ,icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">youtube</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">50</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>})
-                                ,icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gears</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">50</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>})
-                                ,icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">twitter</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">50</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>})
+                                icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">30</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>})
+                                ,icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">youtube</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">30</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>})
+                                ,icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gears</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">30</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>})
+                                ,icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">twitter</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">30</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>})
                         ]
                 }
-        }        
+        }
 })
 </pre></td>
 </tr></table>

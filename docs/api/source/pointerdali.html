@@ -333,188 +333,330 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n179" name="n179">179</a>
 <strong><a href="#n180" name="n180">180</a></strong>
 <a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
+<a href="#n235" name="n235">235</a>
+<a href="#n236" name="n236">236</a>
+<a href="#n237" name="n237">237</a>
+<a href="#n238" name="n238">238</a>
+<a href="#n239" name="n239">239</a>
+<strong><a href="#n240" name="n240">240</a></strong>
+<a href="#n241" name="n241">241</a>
+<a href="#n242" name="n242">242</a>
+<a href="#n243" name="n243">243</a>
+<a href="#n244" name="n244">244</a>
+<a href="#n245" name="n245">245</a>
+<a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
+<a href="#n248" name="n248">248</a>
+<a href="#n249" name="n249">249</a>
+<strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-<span class="comment">// Mouse class</span>
+   define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/pointer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, exports){
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/pointer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, exports){
+           <span class="local-variable">this</span>.tapspeed = <span class="integer">150</span>
+           <span class="local-variable">this</span>.tapdist = <span class="integer">5</span>
 
-        <span class="local-variable">this</span>.tapspeed = <span class="integer">150</span>;
+           <span class="local-variable">this</span>._cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>
+           <span class="local-variable">this</span>._tooltip = <span class="string"><span class="delimiter">'</span><span class="content">Application</span><span class="delimiter">'</span></span>
 
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(device){
+           Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursor</span><span class="delimiter">'</span></span>, {
+                   <span class="function">get</span>:<span class="keyword">function</span>(){
+                           <span class="keyword">return</span> <span class="local-variable">this</span>._cursor
+                   },
+                   <span class="function">set</span>:<span class="keyword">function</span>(value){
+                           <span class="local-variable">this</span>._cursor = value
+                           <span class="keyword">if</span> (value === <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>) value = <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
+                           <span class="local-variable">this</span>.device.keyboard.textarea.style.cursor =
+                           document.body.style.cursor = value
+                   }
+           })
 
-                <span class="comment">// Sets the start attribute/event.</span>
-                <span class="local-variable">this</span>.<span class="function">setstart</span> = <span class="keyword">function</span>(touchList) {
-                        <span class="keyword">var</span> pointers = []
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; touchList.length; i++) {
-                                pointers.push({
-                                        <span class="key">x</span>: touchList[i].x,
-                                        <span class="key">y</span>: touchList[i].y,
-                                        <span class="key">dx</span>: <span class="integer">0</span>,
-                                        <span class="key">dy</span>: <span class="integer">0</span>,
-                                        <span class="key">t</span>: touchList[i].t
-                                })
-                        }
-                        <span class="local-variable">this</span>.start = pointers
-                }
+           <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(device){
 
-                <span class="comment">// Sets the move attribute/event.</span>
-                <span class="local-variable">this</span>.<span class="function">setmove</span> = <span class="keyword">function</span>(touchList) {
-                        <span class="keyword">var</span> pointers = []
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; touchList.length; i++) {
-                                pointers.push({
-                                        <span class="key">x</span>: touchList[i].x,
-                                        <span class="key">y</span>: touchList[i].y,
-                                        <span class="key">dx</span>: <span class="local-variable">this</span>._start[i].x - touchList[i].x,
-                                        <span class="key">dy</span>: <span class="local-variable">this</span>._start[i].y - touchList[i].y,
-                                        <span class="key">t</span>: touchList[i].t
-                                })
-                        }
-                        <span class="local-variable">this</span>.move = pointers
-                }
+                   <span class="local-variable">this</span>.device = device
 
-                <span class="comment">// Sets the end attribute/event. Also sets tap attribute/event if conditions are met.</span>
-                <span class="local-variable">this</span>.<span class="function">setend</span> = <span class="keyword">function</span>(touchList) {
-                        <span class="keyword">var</span> pointers = []
-                        <span class="keyword">var</span> taps = []
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; touchList.length; i++) {
-                                pointers.push({
-                                        <span class="key">x</span>: touchList[i].x,
-                                        <span class="key">y</span>: touchList[i].y,
-                                        <span class="key">dx</span>: <span class="local-variable">this</span>._start[i].x - touchList[i].x,
-                                        <span class="key">dy</span>: <span class="local-variable">this</span>._start[i].y - touchList[i].y,
-                                        <span class="key">t</span>: touchList[i].t
-                                })
-                                <span class="comment">// TODO(aki): also check minimal distance for taps.</span>
-                                <span class="keyword">if</span> (touchList[i].t - <span class="local-variable">this</span>._start[i].t &lt; <span class="local-variable">this</span>.tapspeed){
-                                        taps.push({
-                                                <span class="key">x</span>: touchList[i].x,
-                                                <span class="key">y</span>: touchList[i].y,
-                                                <span class="key">t</span>: touchList[i].t
-                                        })
-                                }
-                        }
-                        <span class="local-variable">this</span>.end = pointers
-                        <span class="keyword">if</span> (taps.length &gt; <span class="integer">0</span>) {
-                                <span class="local-variable">this</span>.tap = taps;
-                        }
-                }
+                   <span class="keyword">var</span> <span class="function">getMousePointerData</span> = <span class="keyword">function</span> (event) {
+                           <span class="keyword">return</span> [{
+                                   <span class="key">x</span>: event.pageX,
+                                   <span class="key">y</span>: event.pageY,
+                                   <span class="key">movementx</span>: event.movementX,
+                                   <span class="key">movementy</span>: event.movementY,
+                                   <span class="key">button</span>: event.button === <span class="integer">0</span> ? <span class="integer">1</span> : event.button === <span class="integer">1</span> ? <span class="integer">3</span> : <span class="integer">2</span>,
+                                   <span class="key">shift</span>: event.shiftKey,
+                                   <span class="key">alt</span>: event.altKey,
+                                   <span class="key">ctrl</span>: event.ctrlKey,
+                                   <span class="key">meta</span>: event.metaKey,
+                                   <span class="comment">// TODO(aki): test on Firefox and implement polyfils if necessary.</span>
+                                   <span class="key">wheelx</span>: event.deltaX,
+                                   <span class="key">wheely</span>: event.deltaY,
+                                   <span class="key">touch</span>: <span class="predefined-constant">false</span>,
+                                   <span class="key">event</span>: event
+                           }]
+                   }
 
-                <span class="comment">// Sets the hover attribute/event.</span>
-                <span class="local-variable">this</span>.<span class="function">sethover</span> = <span class="keyword">function</span>(touchList) {
-                        <span class="keyword">var</span> pointers = []
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; touchList.length; i++) {
-                                pointers.push({
-                                        <span class="key">x</span>: touchList[i].x,
-                                        <span class="key">y</span>: touchList[i].y,
-                                        <span class="key">dx</span>: <span class="integer">0</span>,
-                                        <span class="key">dy</span>: <span class="integer">0</span>,
-                                        <span class="key">t</span>: touchList[i].t
-                                })
-                        }
-                        <span class="local-variable">this</span>.hover = pointers
-                }
+                   <span class="keyword">var</span> <span class="function">getTouchPointerData</span> = <span class="keyword">function</span> (event) {
+                           <span class="keyword">var</span> array = []
+                           <span class="comment">// TOD(aki): make multitouch</span>
+                           <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; event.changedTouches.length; i++) {
+                                   array.push({
+                                           <span class="comment">// TODO: verify movement</span>
+                                           <span class="key">x</span>: event.changedTouches[i].pageX,
+                                           <span class="key">y</span>: event.changedTouches[i].pageY,
+                                           <span class="key">movementx</span>: event.changedTouches[i].movementX,
+                                           <span class="key">movementy</span>: event.changedTouches[i].movementY,
+                                           <span class="key">button</span>: <span class="integer">1</span>,
+                                           <span class="key">shift</span>: event.shiftKey,
+                                           <span class="key">alt</span>: event.altKey,
+                                           <span class="key">ctrl</span>: event.ctrlKey,
+                                           <span class="key">meta</span>: event.metaKey,
+                                           <span class="key">touch</span>: <span class="predefined-constant">true</span>,
+                                           <span class="key">event</span>: event
+                                   })
+                           }
+                           <span class="keyword">return</span> array
+                   }
 
-                <span class="comment">// Handler for `mousedown` event starts `mousemove` listening.</span>
-                <span class="local-variable">this</span>.<span class="function">mousedown</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="local-variable">this</span>.setstart([{
-                                <span class="key">x</span>: e.pageX,
-                                <span class="key">y</span>: e.pageY,
-                                <span class="key">t</span>: Date.now()
-                        }])
-                        <span class="comment">//window.addEventListener('mousemove', this._mousemove)</span>
-                        <span class="comment">//window.addEventListener('mouseup', this._mouseup)</span>
-                        <span class="comment">//window.removeEventListener('mousemove', this._mousehover)</span>
-                }
+                   <span class="comment">// Internal: emits `start` event.</span>
+                   <span class="comment">// Sets `pointer.view` by screen picking witht the first pointer.</span>
+                   <span class="local-variable">this</span>.<span class="function">setstart</span> = <span class="keyword">function</span>(pointerlist) {
+                           <span class="keyword">var</span> pointers = []
+                           <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
+                                   pointers.push(<span class="local-variable">this</span>.calcPointer(pointerlist[i]))
+                           }
+                           <span class="local-variable">this</span>.device.pickScreen(pointers[<span class="integer">0</span>].position, <span class="predefined-constant">true</span>).then(<span class="keyword">function</span>(view){
+                                   <span class="comment">// TODO(aki): Handle views better with multi-touch</span>
+                                   <span class="local-variable">this</span>.view = view
+                                   <span class="keyword">if</span> (view) {
+                                           <span class="local-variable">this</span>.start = pointers
+                                           <span class="keyword">if</span>(!(<span class="string"><span class="delimiter">'</span><span class="content">ontouchstart</span><span class="delimiter">'</span></span> <span class="keyword">in</span> window)){
+                                                   <span class="local-variable">this</span>.device.keyboard.pointerMove(pointers[<span class="integer">0</span>].position)
+                                                   <span class="keyword">if</span> (device.keyboard) device.keyboard.checkSpecialKeys(pointerlist[<span class="integer">0</span>].event)
+                                           }
+                                   }
+                           }.bind(<span class="local-variable">this</span>))
+                   }
 
-                <span class="comment">//window.addEventListener('mousedown', this.mousedown.bind(this))</span>
+                   <span class="comment">// Internal: emits `move` event.</span>
+                   <span class="local-variable">this</span>.<span class="function">setmove</span> = <span class="keyword">function</span>(pointerlist) {
+                           <span class="keyword">if</span> (<span class="local-variable">this</span>.view) {
+                                   <span class="keyword">var</span> pointers = []
+                                   <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
+                                           pointers.push(<span class="local-variable">this</span>.calcPointer(pointerlist[i], <span class="local-variable">this</span>._start[i]))
+                                   }
+                                   <span class="local-variable">this</span>.move = pointers
+                                   <span class="comment">// lets move our textarea only if right mouse is down</span>
+                                   <span class="keyword">if</span> (pointerlist[<span class="integer">0</span>].button == <span class="integer">2</span>){
+                                           <span class="keyword">if</span>(!(<span class="string"><span class="delimiter">'</span><span class="content">ontouchstart</span><span class="delimiter">'</span></span> <span class="keyword">in</span> window)){
+                                                   <span class="local-variable">this</span>.device.keyboard.pointerMove(pointerlist[<span class="integer">0</span>].position)
+                                           }
+                                   }
+                           }
+                   }
 
-                <span class="comment">// Handler for `mousemove` event.</span>
-                <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="local-variable">this</span>.setmove([{
-                                <span class="key">x</span>: e.pageX,
-                                <span class="key">y</span>: e.pageY,
-                                <span class="key">t</span>: Date.now()
-                        }])
-                }
-                <span class="local-variable">this</span>._mousemove = <span class="local-variable">this</span>.mousemove.bind(<span class="local-variable">this</span>)
+                   <span class="comment">// Internal: emits `end` event.</span>
+                   <span class="comment">// Emits `tap` event if conditions are met.</span>
+                   <span class="local-variable">this</span>.<span class="function">setend</span> = <span class="keyword">function</span>(pointerlist) {
+                           <span class="keyword">if</span> (<span class="local-variable">this</span>.view) {
+                                   <span class="keyword">var</span> pointers = []
+                                   <span class="keyword">var</span> taps = []
+                                   <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
+                                           <span class="keyword">var</span> pointer = <span class="local-variable">this</span>.calcPointer(pointerlist[i], <span class="local-variable">this</span>._start[i])
+                                           pointers.push(pointer)
+                                           <span class="keyword">if</span> (pointer.dt &lt; <span class="local-variable">this</span>.tapspeed &amp;&amp;
+                                                   abs(pointer.delta[<span class="integer">0</span>]) &lt; <span class="local-variable">this</span>.tapdist &amp;&amp;
+                                                   abs(pointer.delta[<span class="integer">1</span>]) &lt; <span class="local-variable">this</span>.tapdist){
+                                                           taps.push(pointer)
+                                           }
+                                   }
+                                   <span class="local-variable">this</span>.device.pickScreen(pointers[<span class="integer">0</span>].position, <span class="predefined-constant">true</span>).then(<span class="keyword">function</span>(view){
+                                           pointers[<span class="integer">0</span>].isover = <span class="local-variable">this</span>.view === view
+                                           <span class="comment">// TODO(aki): figure out how to do this immediately</span>
+                                           <span class="local-variable">this</span>.end = pointers
+                                           <span class="keyword">if</span> (taps.length &gt; <span class="integer">0</span>) {
+                                                   <span class="local-variable">this</span>.tap = taps
+                                           }
+                                           <span class="keyword">if</span>(!(<span class="string"><span class="delimiter">'</span><span class="content">ontouchstart</span><span class="delimiter">'</span></span> <span class="keyword">in</span> window)){
+                                                   <span class="local-variable">this</span>.device.keyboard.pointerMove(pointers[<span class="integer">0</span>].position)
+                                                   <span class="keyword">if</span> (device.keyboard) device.keyboard.checkSpecialKeys(pointerlist[<span class="integer">0</span>].event)
+                                           }
+                                   }.bind(<span class="local-variable">this</span>))
+                           }
+                   }
 
-                <span class="comment">// Handler for `mousedown` event stops `mousemove` listening.</span>
-                <span class="local-variable">this</span>.<span class="function">mouseup</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="local-variable">this</span>.setend([{
-                                <span class="key">x</span>: e.pageX,
-                                <span class="key">y</span>: e.pageY,
-                                <span class="key">t</span>: Date.now()
-                        }])
-                        <span class="comment">//window.removeEventListener('mousemove', this._mousemove)</span>
-                        <span class="comment">//window.removeEventListener('mouseup', this._mouseup)</span>
-                        <span class="comment">//window.addEventListener('mousemove', this._mousehover)</span>
-                }
-                <span class="local-variable">this</span>._mouseup = <span class="local-variable">this</span>.mouseup.bind(<span class="local-variable">this</span>)
+                   <span class="comment">// Internal: emits `hover` event.</span>
+                   <span class="comment">// Emits `over` and `out` events if conditions are met.</span>
+                   <span class="comment">// Sets `pointer.view` by screen picking witht the first pointer.</span>
+                   <span class="local-variable">this</span>.<span class="function">sethover</span> = <span class="keyword">function</span>(pointerlist) {
+                           <span class="keyword">var</span> pointers = []
+                           <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
+                                   pointers.push(<span class="local-variable">this</span>.calcPointer(pointerlist[i]))
+                           }
+                           <span class="local-variable">this</span>.device.pickScreen(pointers[<span class="integer">0</span>].position).then(<span class="keyword">function</span>(view){
+                                   <span class="keyword">if</span> (<span class="local-variable">this</span>.view !== view) {
+                                           <span class="keyword">if</span> (<span class="local-variable">this</span>.view) <span class="local-variable">this</span>.out = pointers
+                                           <span class="local-variable">this</span>.view = view
+                                           <span class="keyword">if</span> (view) <span class="local-variable">this</span>.over = pointers
+                                   }
+                                   <span class="keyword">if</span> (<span class="local-variable">this</span>.view) {
+                                           <span class="local-variable">this</span>.hover = pointers
+                                   }
+                           }.bind(<span class="local-variable">this</span>))
+                   }
 
-                <span class="comment">// Handler for `mousemove` for the purpose of hover tracking.</span>
-                <span class="local-variable">this</span>.<span class="function">mousehover</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="local-variable">this</span>.sethover([{
-                                <span class="key">x</span>: e.pageX,
-                                <span class="key">y</span>: e.pageY,
-                                <span class="key">t</span>: Date.now()
-                        }])
-                }
-                <span class="local-variable">this</span>._mousehover = <span class="local-variable">this</span>.mousehover.bind(<span class="local-variable">this</span>)
-                <span class="comment">//window.addEventListener('mousemove', this._mousehover)</span>
+                   <span class="comment">// Internal: emits `out` event.</span>
+                   <span class="comment">// This is only used by touchend event to clear &quot;over&quot; states.</span>
+                   <span class="comment">// Resets `pointer.view`.</span>
+                   <span class="local-variable">this</span>.<span class="function">setout</span> = <span class="keyword">function</span>(pointerlist) {
+                           <span class="keyword">var</span> pointers = []
+                           <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
+                                   pointers.push(<span class="local-variable">this</span>.calcPointer(pointerlist[i]))
+                           }
+                           <span class="keyword">if</span> (<span class="local-variable">this</span>.view) {
+                                   <span class="local-variable">this</span>._over = <span class="predefined-constant">undefined</span>
+                                   <span class="local-variable">this</span>.out = pointers
+                           }
+                   }
 
-                <span class="comment">// Handler for `touchstart` event.</span>
-                <span class="local-variable">this</span>.<span class="function">touchstart</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="comment">// TODO(aki): currently uses single touch. Implement multi-touch!</span>
-                        <span class="keyword">var</span> pointers = [{
-                                <span class="key">x</span>: e.touches[<span class="integer">0</span>].pageX,
-                                <span class="key">y</span>: e.touches[<span class="integer">0</span>].pageY,
-                                <span class="key">t</span>: Date.now()
-                        }]
-                        <span class="local-variable">this</span>.setstart(pointers)
-                }
-                <span class="comment">//window.addEventListener('touchstart', this.touchstart.bind(this))</span>
+                   <span class="comment">// Internal: emits `wheel` event.</span>
+                   <span class="local-variable">this</span>.<span class="function">setwheel</span> = <span class="keyword">function</span>(pointerlist) {
+                           <span class="keyword">var</span> pointers = []
+                           <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
+                                   pointers.push(<span class="local-variable">this</span>.calcPointer(pointerlist[i]))
+                           }
+                           <span class="keyword">if</span> (<span class="local-variable">this</span>.view) {
+                                   <span class="local-variable">this</span>.wheel = <span class="local-variable">this</span>.calcPointer(pointers)
+                           }
+                   }
 
-                <span class="comment">// Handler for `touchmove` event.</span>
-                <span class="local-variable">this</span>.<span class="function">touchmove</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="comment">// TODO(aki): currently uses single touch. Implement multi-touch!</span>
-                        <span class="keyword">var</span> pointers = [{
-                                <span class="key">x</span>: e.touches[<span class="integer">0</span>].pageX,
-                                <span class="key">y</span>: e.touches[<span class="integer">0</span>].pageY,
-                                <span class="key">t</span>: Date.now()
-                        }]
-                        <span class="local-variable">this</span>.setmove(pointers)
-                }
-                <span class="comment">//window.addEventListener('touchmove', this.touchmove.bind(this))</span>
+                   <span class="comment">// Internal: handler for `mousedown` event starts `mousemove` listening.</span>
+                   <span class="local-variable">this</span>.<span class="function">mousedown</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.setstart(getMousePointerData(e))
+                   <span class="comment">//         window.addEventListener('mousemove', this._mousemove)</span>
+                   <span class="comment">//         window.addEventListener('mouseup', this._mouseup)</span>
+                   <span class="comment">//         window.removeEventListener('mousemove', this._mousehover)</span>
+                   }
 
-                <span class="comment">// Handler for `touchend` event.</span>
-                <span class="local-variable">this</span>.<span class="function">touchend</span> = <span class="keyword">function</span>(e){
-                        e.preventDefault()
-                        <span class="comment">// TODO(aki): currently uses single touch. Implement multi-touch!</span>
-                        <span class="keyword">var</span> pointers = [{
-                                <span class="key">x</span>: e.changedTouches[<span class="integer">0</span>].pageX,
-                                <span class="key">y</span>: e.changedTouches[<span class="integer">0</span>].pageY,
-                                <span class="key">t</span>: Date.now()
-                        }]
-                        <span class="local-variable">this</span>.setend(pointers)
-                }
-                <span class="comment">//window.addEventListener('touchend', this.touchend.bind(this))</span>
-                <span class="comment">//window.addEventListener('touchcancel', this.touchend.bind(this))</span>
-                <span class="comment">//window.addEventListener('touchleave', this.touchend.bind(this))</span>
+           <span class="comment">//         window.addEventListener('mousedown', this.mousedown.bind(this))</span>
 
-        }
+                   <span class="comment">// Internal: handler for `mousemove` event.</span>
+                   <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.setmove(getMousePointerData(e))
+                   }
+                   <span class="local-variable">this</span>._mousemove = <span class="local-variable">this</span>.mousemove.bind(<span class="local-variable">this</span>)
 
-})
+                   <span class="comment">// Internal: handler for `mousedown` event stops `mousemove` listening.</span>
+                   <span class="local-variable">this</span>.<span class="function">mouseup</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.setend(getMousePointerData(e))
+                   <span class="comment">//         window.removeEventListener('mousemove', this._mousemove)</span>
+                   <span class="comment">//         window.removeEventListener('mouseup', this._mouseup)</span>
+                   <span class="comment">//         window.addEventListener('mousemove', this._mousehover)</span>
+                   }
+                   <span class="local-variable">this</span>._mouseup = <span class="local-variable">this</span>.mouseup.bind(<span class="local-variable">this</span>)
+
+                   <span class="comment">// Internal: handler for `mousemove` for the purpose of hover tracking.</span>
+                   <span class="local-variable">this</span>.<span class="function">mousehover</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.sethover(getMousePointerData(e))
+                   }
+                   <span class="local-variable">this</span>._mousehover = <span class="local-variable">this</span>.mousehover.bind(<span class="local-variable">this</span>)
+           <span class="comment">//         window.addEventListener('mousemove', this._mousehover)</span>
+
+                   <span class="comment">// Internal: handler for `touchstart` event.</span>
+                   <span class="local-variable">this</span>.<span class="function">touchstart</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.setstart(getTouchPointerData(e))
+                           <span class="local-variable">this</span>.sethover(getTouchPointerData(e))
+                   }
+           <span class="comment">//         window.addEventListener('touchstart', this.touchstart.bind(this))</span>
+
+                   <span class="comment">// Internal: handler for `touchmove` event.</span>
+                   <span class="local-variable">this</span>.<span class="function">touchmove</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.setmove(getTouchPointerData(e))
+                   }
+           <span class="comment">//         window.addEventListener('touchmove', this.touchmove.bind(this))</span>
+
+                   <span class="comment">// Internal: handler for `touchend` event.</span>
+                   <span class="local-variable">this</span>.<span class="function">touchend</span> = <span class="keyword">function</span>(e){
+                           <span class="local-variable">this</span>.setend(getTouchPointerData(e))
+                           <span class="local-variable">this</span>.setout(getTouchPointerData(e))
+                   }
+           <span class="comment">//         window.addEventListener('touchend', this.touchend.bind(this))</span>
+                   <span class="comment">// TODO(aki): make sure that binding to leave/cancel doesent break UX.</span>
+           <span class="comment">//         window.addEventListener('touchcancel', this.touchend.bind(this))</span>
+           <span class="comment">//         window.addEventListener('touchleave', this.touchend.bind(this))</span>
+
+                   <span class="comment">// Internal: handler for `wheel` event. Sets the wheel or zoom attribute/event.</span>
+                   <span class="local-variable">this</span>.<span class="function">wheelmove</span> = <span class="keyword">function</span>(e){
+                           e.preventDefault()
+                           <span class="local-variable">this</span>.setwheel(getMousePointerData(e))
+                   }
+           <span class="comment">//         document.addEventListener('wheel', this.wheelmove.bind(this))</span>
+           }
+
+   })
 </pre></td>
 </tr></table>
 

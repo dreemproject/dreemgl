@@ -2,6 +2,9 @@
  * @class view
  * @extends node
  * Base UI view object
+ * 
+ * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/view.js"></iframe>
+ * 
  */
 /**
  * @attribute {boolean} [visible="true"]
@@ -323,8 +326,10 @@
  * tabstop, sorted by number
  */
 /**
- * @method localMouse
- * returns the mouse position in local coordinates
+ * @method globalToLocal
+ * Internal: remap the x and y coordinates to local space
+ * @param value
+ * @param dbg
  */
 /**
  * @method bgcolorfn

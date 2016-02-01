@@ -186,15 +186,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>() {
-<span class="comment">// View that visualizes the output from google map's static map api</span>
+<span class="comment">// internal, View that visualizes the output from google map's static map api</span>
 
     <span class="local-variable">this</span>.attributes = {
       <span class="comment">//Google Maps API key</span>
@@ -219,7 +218,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
       <span class="key">mapurl</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.endpoint + 'key=' + this.apikey + '&amp;center=' + encodeURIComponent(this.location) + '&amp;maptype=' + this.maptype + '&amp;scale=' + this.mapscale + '&amp;zoom=' + this.mapzoom + '&amp;size=' + this.width + 'x' + this.height + '&amp;format=' + this.format</span><span class="delimiter">&quot;</span></span>),
       <span class="key">bgimage</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.mapurl</span><span class="delimiter">&quot;</span></span>)
     };
-
 });
 
 

@@ -356,255 +356,209 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n202" name="n202">202</a>
 <a href="#n203" name="n203">203</a>
 <a href="#n204" name="n204">204</a>
-<a href="#n205" name="n205">205</a>
-<a href="#n206" name="n206">206</a>
-<a href="#n207" name="n207">207</a>
-<a href="#n208" name="n208">208</a>
-<a href="#n209" name="n209">209</a>
-<strong><a href="#n210" name="n210">210</a></strong>
-<a href="#n211" name="n211">211</a>
-<a href="#n212" name="n212">212</a>
-<a href="#n213" name="n213">213</a>
-<a href="#n214" name="n214">214</a>
-<a href="#n215" name="n215">215</a>
-<a href="#n216" name="n216">216</a>
-<a href="#n217" name="n217">217</a>
-<a href="#n218" name="n218">218</a>
-<a href="#n219" name="n219">219</a>
-<strong><a href="#n220" name="n220">220</a></strong>
-<a href="#n221" name="n221">221</a>
-<a href="#n222" name="n222">222</a>
-<a href="#n223" name="n223">223</a>
-<a href="#n224" name="n224">224</a>
-<a href="#n225" name="n225">225</a>
-<a href="#n226" name="n226">226</a>
-<a href="#n227" name="n227">227</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
+ define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
+         <span class="comment">// Splitcontainer adds dragbars between nodes to make all the nodes resizable.</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
-        <span class="comment">// Splitcontainer adds dragbars between nodes to make all the nodes resizable.</span>
+         <span class="comment">// should the splitter bars be introduced horizontally or vertically?</span>
+         <span class="local-variable">this</span>.attributes = {
+                 <span class="comment">// wether the splitcontainer is vertical or not</span>
+                 <span class="key">direction</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>}),
+                 <span class="comment">// set the width (or height) of the splitter bar</span>
+                 <span class="key">splitsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">8</span>}),
+                 <span class="comment">// the minimum size of a child controlled by the splitter</span>
+                 <span class="key">minimalchildsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">20</span>}),
+                 <span class="comment">// the color of the splitter bar</span>
+                 <span class="key">splittercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#484848</span><span class="delimiter">&quot;</span></span>)}),
+                 <span class="comment">// color of splitter bar on hover</span>
+                 <span class="key">hovercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>)}),
+                 <span class="comment">// color of the splitter bar when dragging it</span>
+                 <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#7070a0</span><span class="delimiter">&quot;</span></span>)})
+         }
 
-        <span class="comment">// should the splitter bars be introduced horizontally or vertically?</span>
-        <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// wether the splitcontainer is vertical or not</span>
-                <span class="key">direction</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>}),
-                <span class="comment">// set the width (or height) of the splitter bar</span>
-                <span class="key">splitsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">8</span>}),
-                <span class="comment">// the minimum size of a child controlled by the splitter</span>
-                <span class="key">minimalchildsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">20</span>}),
-                <span class="comment">// the color of the splitter bar</span>
-                <span class="key">splittercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#484848</span><span class="delimiter">&quot;</span></span>)}),
-                <span class="comment">// color of splitter bar on hover</span>
-                <span class="key">hovercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>)}),
-                <span class="comment">// color of the splitter bar when dragging it</span>
-                <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#7070a0</span><span class="delimiter">&quot;</span></span>)})
-        }
+         <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span>;
+         <span class="local-variable">this</span>.flex = <span class="float">1.0</span>
+         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>;
+         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>
+         <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
+         <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303060</span><span class="delimiter">&quot;</span></span>)
 
-        <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span>;
-        <span class="local-variable">this</span>.flex = <span class="float">1.0</span>
-        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>;
-        <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>
-        <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
-        <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303060</span><span class="delimiter">&quot;</span></span>)
+         <span class="local-variable">this</span>.<span class="function">direction</span> = <span class="keyword">function</span>(){
+                 <span class="local-variable">this</span>.flexdirection = <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>?<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> ;
 
-        <span class="local-variable">this</span>.<span class="function">direction</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.flexdirection = <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>?<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> ;
+                 }
 
-                }
+         <span class="comment">// the visual class that defines the draggable bar between the resizable children</span>
+         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">splitter</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(view){
 
-        <span class="comment">// the visual class that defines the draggable bar between the resizable children</span>
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">splitter</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(view){
+                 <span class="local-variable">this</span>.attributes = {
+                         <span class="key">firstnode</span>: Config({<span class="key">type</span>: <span class="reserved">int</span>, <span class="key">value</span>: <span class="integer">0</span>})
+                 }
 
-                <span class="local-variable">this</span>.attributes = {
-                        <span class="key">firstnode</span>: Config({<span class="key">type</span>: <span class="reserved">int</span>, <span class="key">value</span>: <span class="integer">0</span>})
-                }
+                 <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>);
+                 <span class="local-variable">this</span>.alignitem = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>;
+                 <span class="local-variable">this</span>.borderradius = <span class="integer">3</span>;
+                 <span class="local-variable">this</span>.attributes = {
+                         <span class="key">vertical</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
+                         <span class="key">splitsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">6</span>}),
+                         <span class="key">splittercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404050</span><span class="delimiter">&quot;</span></span>)}),
+                         <span class="key">hovercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f050a0</span><span class="delimiter">&quot;</span></span>)}),
+                         <span class="key">bgcolor</span>: Config({<span class="key">duration</span>:<span class="float">0.1</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>}),
+                         <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#7070a0</span><span class="delimiter">&quot;</span></span>)})
+                 }
+                 <span class="local-variable">this</span>.flex = <span class="integer">0</span>
+                 <span class="local-variable">this</span>.neutralcolor = <span class="local-variable">this</span>.bgcolor;
 
-                <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>);
-                <span class="local-variable">this</span>.alignitem = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>;
-                <span class="local-variable">this</span>.borderradius = <span class="integer">3</span>;
-                <span class="local-variable">this</span>.attributes = {
-                        <span class="key">vertical</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
-                        <span class="key">splitsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">6</span>}),
-                        <span class="key">splittercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404050</span><span class="delimiter">&quot;</span></span>)}),
-                        <span class="key">hovercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f050a0</span><span class="delimiter">&quot;</span></span>)}),
-                        <span class="key">bgcolor</span>: Config({<span class="key">duration</span>:<span class="float">0.1</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>}),
-                        <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#7070a0</span><span class="delimiter">&quot;</span></span>)})
-                }
-                <span class="local-variable">this</span>.flex = <span class="integer">0</span>
-                <span class="local-variable">this</span>.neutralcolor = <span class="local-variable">this</span>.bgcolor;
-                <span class="local-variable">this</span>.<span class="function">mouseover</span>  = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.bgcolor = <span class="local-variable">this</span>.hovercolor;
-                }
+    <span class="local-variable">this</span>.<span class="function">pointerover</span>  = <span class="keyword">function</span>(){
+                         <span class="local-variable">this</span>.bgcolor = <span class="local-variable">this</span>.hovercolor;
+                 }
+                 <span class="local-variable">this</span>.<span class="function">pointerout</span>  = <span class="keyword">function</span>(){
+                         <span class="local-variable">this</span>.bgcolor = <span class="local-variable">this</span>.neutralcolor;
+                 }
 
-                <span class="local-variable">this</span>.<span class="function">mouseout</span>  = <span class="keyword">function</span>(){
-                        <span class="comment">//this.setDirty(true);</span>
-                        <span class="local-variable">this</span>.bgcolor = <span class="local-variable">this</span>.neutralcolor;
-                }
+                 <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(){
+                         <span class="local-variable">this</span>._flexstart = {
+                                 <span class="key">left</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].flex,
+                                 <span class="key">right</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].flex,
 
-                <span class="local-variable">this</span>.<span class="function">mouseleftdown</span> = <span class="keyword">function</span>(event){
-                        <span class="keyword">var</span> pos = event.local
-                        <span class="keyword">var</span> dragstart = <span class="local-variable">this</span>.parent.localMouse()
+                                 <span class="key">leftwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.width,
+                                 <span class="key">leftheight</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.height,
 
-                        <span class="local-variable">this</span>.pressed++
-                        <span class="comment">//var dragstart = {x: this.screen.pointer.x, y:this.screen.pointer.y}</span>
+                                 <span class="key">rightwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].layout.width,
+                                 <span class="key">rightheight</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].layout.height
+                         }
+                 }
 
-                        <span class="keyword">var</span> flexstart = {
-                                <span class="key">left</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].flex,
-                                <span class="key">right</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].flex,
+    <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+      <span class="keyword">var</span> leftnode = <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode]
+      <span class="keyword">var</span> rightnode = <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode + <span class="integer">2</span>]
 
-                                <span class="key">leftwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.width,
-                                <span class="key">leftheight</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode].layout.height,
+      <span class="keyword">var</span> f1 = <span class="local-variable">this</span>._flexstart.left
+      <span class="keyword">var</span> f2 = <span class="local-variable">this</span>._flexstart.right
 
-                                <span class="key">rightwidth</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].layout.width,
-                                <span class="key">rightheight</span>: <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode+<span class="integer">2</span>].layout.height
-                        }
+      <span class="keyword">var</span> totf = f1 + f2
 
-                        <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(event){
-                                <span class="keyword">var</span> pos = event.local
-                                <span class="keyword">var</span> dragnow = <span class="local-variable">this</span>.parent.localMouse()
-                                <span class="keyword">var</span> dx = dragnow[<span class="integer">0</span>] - dragstart[<span class="integer">0</span>]
-                                <span class="keyword">var</span> dy = dragnow[<span class="integer">1</span>] - dragstart[<span class="integer">1</span>]
+      <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
+        <span class="keyword">var</span> h1 = <span class="local-variable">this</span>._flexstart.leftheight
+        <span class="keyword">var</span> h2 = <span class="local-variable">this</span>._flexstart.rightheight
 
-                                <span class="keyword">var</span> leftnode = <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode]
-                                <span class="keyword">var</span> rightnode = <span class="local-variable">this</span>.parent.children[<span class="local-variable">this</span>.firstnode + <span class="integer">2</span>]
+        <span class="keyword">var</span> hadd = h1 + h2
+        h1 += event.value[<span class="integer">0</span>].delta[<span class="integer">1</span>]
+        h2 -= event.value[<span class="integer">0</span>].delta[<span class="integer">1</span>]
+        <span class="keyword">if</span> (h1 &lt; <span class="local-variable">this</span>.parent.minimalchildsize || h2 &lt; <span class="local-variable">this</span>.parent.minimalchildsize) <span class="keyword">return</span>
+        <span class="keyword">var</span> f1n = h1 / (hadd)
+        <span class="keyword">var</span> f2n = h2 / (hadd)
+        leftnode.flex = f1n * totf
+        rightnode.flex = f2n* totf
+      } <span class="keyword">else</span> {
+        <span class="keyword">var</span> w1 = <span class="local-variable">this</span>._flexstart.leftwidth
+        <span class="keyword">var</span> w2 = <span class="local-variable">this</span>._flexstart.rightwidth
 
-                                <span class="keyword">var</span> f1 = flexstart.left
-                                <span class="keyword">var</span> f2 = flexstart.right
+        <span class="keyword">var</span> wadd = w1 + w2
+        w1 += event.value[<span class="integer">0</span>].delta[<span class="integer">0</span>]
+        w2 -= event.value[<span class="integer">0</span>].delta[<span class="integer">0</span>]
+        <span class="keyword">if</span> (w1 &lt; <span class="local-variable">this</span>.parent.minimalchildsize || w2 &lt; <span class="local-variable">this</span>.parent.minimalchildsize) <span class="keyword">return</span>
+        <span class="keyword">var</span> f1n = w1 / (wadd)
+        <span class="keyword">var</span> f2n = w2 / (wadd)
+        leftnode.flex = f1n * totf
+        rightnode.flex = f2n * totf
+      }
+      <span class="local-variable">this</span>.parent.redraw()
+      <span class="comment">// lets trigger layout dirty...</span>
+      <span class="comment">/*
+      leftnode.setDirty(true);
+      leftnode.reLayout();
+      rightnode.reLayout();
+      rightnode.setDirty(true);
+      */</span>
+    }
+                 <span class="comment">/*
+                 this.atDraw = function(){
+                         if (this.hovered &gt; 0){
+                                 if (this.pressed &gt; 0){
+                                         this.bg_shader.color1 = this.activecolor;
+                                 }else{
+                                         this.bg_shader.color1 = this.hovercolor;
+                                 }
+                         }else{
+                                 this.bg_shader.color1 = this.splittercolor;
+                         }
+                 }
+                 */</span>
+                 <span class="local-variable">this</span>.bg = {
+                         <span class="function">acolor</span>: <span class="keyword">function</span>(){
 
-                                <span class="keyword">var</span> totf = f1 + f2
+                                 <span class="keyword">if</span> (view.vertical )
+                                 {
+                                         <span class="keyword">var</span> yy = mesh.y*view.layout.height;
+                                         <span class="keyword">var</span> ymix = yy&lt;<span class="float">1.0</span>? <span class="integer">1</span>.: ((yy&gt;view.layout.height-<span class="float">1.0</span>)?<span class="integer">1</span>.:<span class="float">0.0</span>)
+                                         <span class="keyword">return</span> mix(view.bgcolor, <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, ymix);
+                                 }
+                                 <span class="keyword">var</span> xx = mesh.x*view.layout.width;
+                                 <span class="keyword">var</span> xmix = xx&lt;<span class="float">1.0</span>? <span class="integer">1</span>.: ((xx&gt;view.layout.width-<span class="float">1.0</span>)?<span class="integer">1</span>.:<span class="float">0.0</span>)
+                                 <span class="keyword">return</span> mix(view.bgcolor, <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,xmix);
+                         }
+                 }
+                 <span class="local-variable">this</span>.<span class="function">vertical</span> = <span class="keyword">function</span>(){
+                         <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
+                                 <span class="local-variable">this</span>.height = <span class="local-variable">this</span>.splitsize
+                                 <span class="local-variable">this</span>.width = <span class="predefined-constant">NaN</span>
+                         }
+                         <span class="keyword">else</span>{
+                                 <span class="local-variable">this</span>.width = <span class="local-variable">this</span>.splitsize
+                                 <span class="local-variable">this</span>.height = <span class="predefined-constant">NaN</span>
+                         }
+                 }
+         })
 
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
-                                        <span class="keyword">var</span> h1 = flexstart.leftheight
-                                        <span class="keyword">var</span> h2 = flexstart.rightheight
+         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                 <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children.length &gt; <span class="integer">1</span>){
+                         <span class="keyword">var</span> children = []
+                         children.push(view({<span class="key">bg</span>:<span class="integer">0</span>,<span class="key">clipping</span>: <span class="predefined-constant">true</span>, <span class="key">flex</span>: <span class="local-variable">this</span>.constructor_children[<span class="integer">0</span>].flex},<span class="local-variable">this</span>.constructor_children[<span class="integer">0</span>]));
 
-                                        <span class="keyword">var</span> hadd = h1 + h2
-                                        h1 += dy
-                                        h2 -= dy
-                                        <span class="keyword">if</span> (h1 &lt; <span class="local-variable">this</span>.parent.minimalchildsize || h2 &lt; <span class="local-variable">this</span>.parent.minimalchildsize) <span class="keyword">return</span>
-                                        <span class="keyword">var</span> f1n = h1 / (hadd)
-                                        <span class="keyword">var</span> f2n = h2 / (hadd)
-                                        leftnode.flex = f1n * totf
-                                        rightnode.flex = f2n* totf
-                                }
-                                <span class="keyword">else</span>{
-                                        <span class="keyword">var</span> w1 = flexstart.leftwidth
-                                        <span class="keyword">var</span> w2 = flexstart.rightwidth
+                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; <span class="local-variable">this</span>.constructor_children.length; i++){
 
-                                        <span class="keyword">var</span> wadd = w1 + w2
-                                        w1 += dx
-                                        w2 -= dx
-                                        <span class="keyword">if</span> (w1 &lt; <span class="local-variable">this</span>.parent.minimalchildsize || w2 &lt; <span class="local-variable">this</span>.parent.minimalchildsize) <span class="keyword">return</span>
-                                        <span class="keyword">var</span> f1n = w1 / (wadd)
-                                        <span class="keyword">var</span> f2n = w2 / (wadd)
-                                        leftnode.flex = f1n * totf
-                                        rightnode.flex = f2n * totf
-                                }
-                                <span class="local-variable">this</span>.parent.redraw()
-                                <span class="comment">// lets trigger layout dirty...</span>
-                                <span class="comment">/*
-                                leftnode.setDirty(true);
-                                leftnode.reLayout();
-                                rightnode.reLayout();
-                                rightnode.setDirty(true);
-                                this.setDirty(true);
-                                */</span>
-                        }.bind(<span class="local-variable">this</span>)
+                                 children.push( <span class="local-variable">this</span>.splitter({
+                                         <span class="key">vertical</span>: <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>,
+                                         <span class="key">cursor</span>: <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>?<span class="string"><span class="delimiter">'</span><span class="content">ns-resize</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>,
+                                         <span class="key">firstnode</span>: (i-<span class="integer">1</span>)*<span class="integer">2</span>,
+                                         <span class="key">splitsize</span>: <span class="local-variable">this</span>.splitsize,
+                                         <span class="key">splittercolor</span>: <span class="local-variable">this</span>.splittercolor,
+                                         <span class="key">hovercolor</span>: <span class="local-variable">this</span>.hovercolor,
+                                         <span class="key">activecolor</span>: <span class="local-variable">this</span>.activecolor
+                                 }))
 
-                        <span class="comment">//this.setDirty(true);</span>
-                }
+                                 children.push(view({
+                                         <span class="key">bg</span>:<span class="predefined-constant">false</span>,
+                                         <span class="key">clipping</span>: <span class="predefined-constant">true</span>,
+                                         <span class="key">flex</span>: <span class="local-variable">this</span>.constructor_children[i].flex
+                                 },<span class="local-variable">this</span>.constructor_children[i]))
 
-                <span class="local-variable">this</span>.<span class="function">mouseleftup</span> = <span class="keyword">function</span>(){
-                        <span class="comment">//this.pressed--;</span>
-                        <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(){};
-                        <span class="comment">//this.setDirty(true);</span>
-                }
-                <span class="comment">/*
-                this.atDraw = function(){
-                        if (this.hovered &gt; 0){
-                                if (this.pressed &gt; 0){
-                                        this.bg_shader.color1 = this.activecolor;
-                                }else{
-                                        this.bg_shader.color1 = this.hovercolor;
-                                }
-                        }else{
-                                this.bg_shader.color1 = this.splittercolor;
-                        }
-                }
-                */</span>
-                <span class="local-variable">this</span>.bg = {
-                        <span class="function">acolor</span>: <span class="keyword">function</span>(){
+                         }
+                         <span class="keyword">return</span> children
+                 }
+                 <span class="keyword">else</span> {
+                         <span class="keyword">return</span> <span class="local-variable">this</span>.constructor_children;
+                 }
+         }
 
-                                <span class="keyword">if</span> (view.vertical )
-                                {
-                                        <span class="keyword">var</span> yy = mesh.y*view.layout.height;
-                                        <span class="keyword">var</span> ymix = yy&lt;<span class="float">1.0</span>? <span class="integer">1</span>.: ((yy&gt;view.layout.height-<span class="float">1.0</span>)?<span class="integer">1</span>.:<span class="float">0.0</span>)
-                                        <span class="keyword">return</span> mix(view.bgcolor, <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, ymix);
-                                }
-                                <span class="keyword">var</span> xx = mesh.x*view.layout.width;
-                                <span class="keyword">var</span> xmix = xx&lt;<span class="float">1.0</span>? <span class="integer">1</span>.: ((xx&gt;view.layout.width-<span class="float">1.0</span>)?<span class="integer">1</span>.:<span class="float">0.0</span>)
-                                <span class="keyword">return</span> mix(view.bgcolor, <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,xmix);
-                        }
-                }
-                <span class="local-variable">this</span>.<span class="function">vertical</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
-                                <span class="local-variable">this</span>.height = <span class="local-variable">this</span>.splitsize
-                                <span class="local-variable">this</span>.width = <span class="predefined-constant">NaN</span>
-                        }
-                        <span class="keyword">else</span>{
-                                <span class="local-variable">this</span>.width = <span class="local-variable">this</span>.splitsize
-                                <span class="local-variable">this</span>.height = <span class="predefined-constant">NaN</span>
-                        }
-                }
-        })
+         <span class="keyword">var</span> splitcontainer = <span class="local-variable">this</span>.constructor
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children.length &gt; <span class="integer">1</span>){
-                        <span class="keyword">var</span> children = []
-                        children.push(view({<span class="key">bg</span>:<span class="integer">0</span>,<span class="key">clipping</span>: <span class="predefined-constant">true</span>, <span class="key">flex</span>: <span class="local-variable">this</span>.constructor_children[<span class="integer">0</span>].flex},<span class="local-variable">this</span>.constructor_children[<span class="integer">0</span>]));
-
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; <span class="local-variable">this</span>.constructor_children.length; i++){
-
-                                children.push( <span class="local-variable">this</span>.splitter({
-                                        <span class="key">vertical</span>: <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">cursor</span>: <span class="local-variable">this</span>.direction==<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>?<span class="string"><span class="delimiter">'</span><span class="content">ns-resize</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">ew-resize</span><span class="delimiter">'</span></span>,
-                                        <span class="key">firstnode</span>: (i-<span class="integer">1</span>)*<span class="integer">2</span>,
-                                        <span class="key">splitsize</span>: <span class="local-variable">this</span>.splitsize,
-                                        <span class="key">splittercolor</span>: <span class="local-variable">this</span>.splittercolor,
-                                        <span class="key">hovercolor</span>: <span class="local-variable">this</span>.hovercolor,
-                                        <span class="key">activecolor</span>: <span class="local-variable">this</span>.activecolor
-                                }))
-
-                                children.push(view({
-                                        <span class="key">bg</span>:<span class="predefined-constant">false</span>,
-                                        <span class="key">clipping</span>: <span class="predefined-constant">true</span>,
-                                        <span class="key">flex</span>: <span class="local-variable">this</span>.constructor_children[i].flex
-                                },<span class="local-variable">this</span>.constructor_children[i]))
-
-                        }
-                        <span class="keyword">return</span> children
-                }
-                <span class="keyword">else</span> {
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.constructor_children;
-                }
-        }
-
-        <span class="keyword">var</span> splitcontainer = <span class="local-variable">this</span>.constructor
-
-        <span class="comment">// Basic usage of the splitcontainer</span>
-        <span class="local-variable">this</span>.constructor.examples = {
-                <span class="function">Usage</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> [
-                        splitcontainer({<span class="key">vertical</span>: <span class="predefined-constant">false</span>, <span class="key">margin</span>: <span class="integer">4</span>, <span class="key">flex</span>: <span class="float">1.0</span>, <span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">darkblue</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: vec4(<span class="integer">2</span>) },
-                        label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> , <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="integer">2</span>})
-                        ,label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> ,<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="integer">2</span>})
-                        ,label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> , <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">2</span>})
-                        ,label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">D</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> , <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">2</span>})
-                )]}
-        }
+         <span class="comment">// Basic usage of the splitcontainer</span>
+         <span class="local-variable">this</span>.constructor.examples = {
+                 <span class="function">Usage</span>:<span class="keyword">function</span>(){ <span class="keyword">return</span> [
+                         splitcontainer({<span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>, <span class="key">vertical</span>: <span class="predefined-constant">false</span>, <span class="key">margin</span>: <span class="integer">4</span>, <span class="key">flex</span>: <span class="float">1.0</span>, <span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">darkblue</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: vec4(<span class="integer">2</span>) },
+                         label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">A</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> , <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="integer">2</span>})
+                         ,label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> ,<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: <span class="integer">2</span>})
+                         ,label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">C</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> , <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">2</span>})
+                         ,label({<span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">fontsize</span>: <span class="integer">26</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">D</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span> ,<span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> , <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">2</span>})
+                 )]}
+         }
 
 })
 </pre></td>

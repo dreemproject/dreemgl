@@ -341,12 +341,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n187" name="n187">187</a>
 <a href="#n188" name="n188">188</a>
 <a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">//Pure JS based composition</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+<span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view){
 
         <span class="keyword">var</span> arpeggiator = define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
-                
+
                 <span class="keyword">var</span> midiAttributes = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/midi$platform</span><span class="delimiter">'</span></span>).midiAttributes
 
                 <span class="local-variable">this</span>.fwd = <span class="predefined-constant">true</span>
@@ -357,7 +367,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.delta = <span class="integer">0</span>
                 <span class="local-variable">this</span>.shift = <span class="integer">0</span>
                 <span class="local-variable">this</span>.volume = <span class="integer">127</span>;
-        
+
                 <span class="local-variable">this</span>.<span class="function">message</span> = <span class="keyword">function</span>(msg){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.fwd) <span class="local-variable">this</span>.out.message = msg
                 }
@@ -367,7 +377,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.delta = msg.key - <span class="integer">60</span>
                         <span class="local-variable">this</span>.last_note = -<span class="integer">1</span>
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">controlchange</span> = <span class="keyword">function</span>(msg){
                         <span class="local-variable">this</span>.slide = msg.value
                 }
@@ -503,7 +513,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                 screen({<span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>), <span class="function">init</span>:<span class="keyword">function</span>(){
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>)        
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>)
                 }},
                         arpeggiator({
                                 <span class="function">arp2</span>:<span class="keyword">function</span>(l, m, n, o, p){
@@ -530,7 +540,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         })
                 )
         ]}
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

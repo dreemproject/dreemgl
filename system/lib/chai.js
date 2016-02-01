@@ -4796,4 +4796,4 @@ if (typeof exports == "object") {
 } else {
   (this || window)["chai"] = require("chai");
 }
-})()
+})

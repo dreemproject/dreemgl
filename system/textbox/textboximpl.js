@@ -1,3 +1,8 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.mixin(function(require){
 
 	var CursorSet = require('./cursorset')
@@ -21,7 +26,7 @@ define.mixin(function(require){
 		}
 		var coord = this.textbuf.charCoords(max(cursor0.start - 1,0))
 		var v2 = vec2.mul_mat4(vec2(coord.x - 0.5*coord.w, coord.y - 0.5 *coord.h), this.totalmatrix)
-		this.screen.keyboard.mouseMove(floor(v2[0]), floor(v2[1]))
+		this.screen.keyboard.pointerMove(vec2(floor(v2[0]), floor(v2[1])))
 	}
 
 	this.addUndoInsert = function(start, end, stack){
@@ -248,76 +253,61 @@ define.mixin(function(require){
 		}
 	}
 
-	this.mouseleftup = function(){
+
+	this.onpointerstart = function (event) {
+		var pointer = event.value[0]
+		var pos = this.globalToLocal(pointer.position)
+
+		// var clone = []
+		// var cursor
+
+		this.cursorset.fusing = false
+		// TODO(aki): fix alt and meta selection
+		if (pointer.alt){
+			// if (pointer.leftmeta || pointer.rightmeta) clone = this.cursorset.list
+			this.cursorset.rectSelect(pos[0], pos[1], pos[0], pos[1], clone)
+		} else if (pointer.meta){
+			// cursor = this.cursorset.addCursor()
+			// // in that case what we need to
+			// cursor.moveTo(pos[0], pos[1])
+			// // lets make it select the word
+			// if (pointer.clicker == 2) cursor.selectWord()
+			// if (pointer.clicker == 3) cursor.selectLine()
+			// this.cursorset.update()
+		} else {
+			this.cursorset.fusing = true
+			this.cursorset.moveTo(pos[0], pos[1])
+			// TODO(aki): implement clicker in pointer
+			if (pointer.clicker == 2) this.cursorset.selectWord()
+			if (pointer.clicker == 3) this.cursorset.selectLine()
+		}
+		this.doCursor()
+	}
+
+	this.onpointermove = function (event) {
+		var pointer = event.value[0]
+		var pos = this.globalToLocal(pointer.position)
+		var min = this.globalToLocal(pointer.min)
+		var max = this.globalToLocal(pointer.max)
+
+		if (pointer.alt){
+			// console.log(min[0], min[1], max[0], max[1])
+			// this.cursorset.rectSelect(min[0], min[1], max[0], max[1], clone)
+		} else if (pointer.meta){
+			// cursor.moveTo(pos[0], pos[1], true)
+			// this.cursorset.update()
+		} else {
+			this.cursorset.moveTo(pos[0], pos[1], true)
+		}
+		this.doCursor()
+	}
+
+	this.onpointerend = function (event) {
 		this.cursorset.fusing = true
 		this.cursorset.update()
 		// we are done. serialize to clipboard
 		this.doCursor()
 		this.selectionToClipboard()
-		this.onmousemove = function(){}
-	}
-
-	this.mouseleftdown = function(event){
-		var start = event.local
-		var keyboard = this.screen.keyboard
-		var mouse = this.screen.pointer
-		//console.log(mouse.clicker)
-		if(keyboard.alt){
-			var clone
-			if(keyboard.leftmeta || keyboard.rightmeta) clone = this.cursorset.list
-			else clone = []
-
-			this.cursorset.rectSelect(start[0], start[1], start[0], start[1], clone)
-			this.cursorset.fusing = false
-			this.doCursor()
-			this.mousemove = function(pos){
-				this.cursorset.rectSelect(start[0], start[1], pos[0], pos[1], clone)
-				this.doCursor()
-			}
-		}
-		else if(keyboard.meta ){
-			var cursor = this.cursorset.addCursor()
-			// in that case what we need to
-			this.cursorset.fusing = false
-			cursor.moveTo(start[0], start[1])
-			// lets make it select the word
-
-			if(mouse.clicker == 2) cursor.selectWord()
-			else if(mouse.clicker == 3){
-				cursor.selectLine()
-				mouse.resetClicker()
-			}
-
-			this.cursorset.update()
-			this.doCursor()
-
-			this.mousemove = function(event){
-				var pos = event.local
-				// move
-				cursor.moveTo(pos[0], pos[1], true)
-				this.cursorset.update()
-				this.doCursor()
-			}
-		}
-		// normal selection
-		else{
-			// in that case what we need to
-			this.cursorset.fusing = true
-
-			this.cursorset.moveTo(start[0], start[1])
-
-			if(mouse.clicker == 2) this.cursorset.selectWord()
-			else if(mouse.clicker == 3){
-				this.cursorset.selectLine()
-				mouse.resetClicker()
-			}
-			this.doCursor()
-			this.mousemove = function(event){
-				var pos = event.local
-				this.cursorset.moveTo(pos[0], pos[1], true)
-				this.doCursor()
-			}
-		}
 	}
 
 	// alright so. undo.

@@ -1,13 +1,13 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class(function(require, $ui$, view, label, button, scrollbar, textbox, numberbox){
-	
+
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
-		
+
 	this.attributes =  {
 		// the value of the colorpicker, a color
 		value: Config({type: vec4, value: "white", meta:"color", rerender:false}),
@@ -36,11 +36,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	this.contrastcolor = vec4("black");
 
 	this.internalbordercolor= function(){
-		this.bordercolor = this.internalbordercolor		
+		this.bordercolor = this.internalbordercolor
 	}
 
 	this.updatecontrol = function(name, val){
-		var c = this.find(name);
+		var c = this.findChild(name);
 		if (c){
 			c.currentcolor = this.value;
 			c.contrastcolor = this.contrastcolor;
@@ -49,30 +49,30 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			c.baseval = this.baseval;
 			newoff = val * (255);
 			if (newoff < 0) newoff += 256;
-			
+
 			c._offset = newoff
 		}
 	}
-	
+
 	this.updatelabel = function(name, val){
-		var c = this.find(name);
+		var c = this.findChild(name);
 		if (c) c.value = val;
 		//else console.log("not found", name);
 	}
-	
+
 	this.numbertohex = function(num){
 		if (num < 16){
 			return "0"+ (Math.round(num).toString(16));
 		}
 		return Math.round(num).toString(16);
 	}
-	
+
 	this.buildhexnumber = function(vector){
-		return  "" + this.numbertohex(vector[0]*255) 
-			+ this.numbertohex(vector[1]*255) 
+		return  "" + this.numbertohex(vector[0]*255)
+			+ this.numbertohex(vector[1]*255)
 			+ this.numbertohex(vector[2]*255);
 	}
-	
+
 	this.updateallcontrols = function(){
 		this.updatecontrol("hsvider", this.basehue);
 		this.updatecontrol("sslider", this.basesat);
@@ -80,9 +80,9 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.updatecontrol("rslider", this.value[0]);
 		this.updatecontrol("gslider", this.value[1]);
 		this.updatecontrol("bslider", this.value[2]);
-		this.updatecontrol("squareview", this.basehue);		
-		this.updatecontrol("colorcirclecontrol", this.basehue);		
-	
+		this.updatecontrol("squareview", this.basehue);
+		this.updatecontrol("colorcirclecontrol", this.basehue);
+
 		this.updatelabel("texth", Math.round(this.basehue * 360));
 		this.updatelabel("texts", Math.round(this.basesat * 100));
 		this.updatelabel("textv", Math.round(this.baseval * 100));
@@ -94,101 +94,99 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		var t = this.buildhexnumber(this.value);
 		this.updatelabel("hexcolor", t);
 	}
-	
+
 	this.value = function(){
-		this.createHSVFromColor();		
+		this.createHSVFromColor();
 		this.contrastcolor = vec4.fromHSV(0, 0, 1 - this.baseval * (1 - this.basesat*0.5),1)
 		this.updateallcontrols();
 	}
-	
+
 	this.createColorFromHSV = function(){
-		this._value = vec4.fromHSV(this.basehue, this.basesat, this.baseval);		
+		this._value = vec4.fromHSV(this.basehue, this.basesat, this.baseval);
 		if (this.valuechange) this.valuechange(this._value);
 	}
 
 	this.createHSVFromColor = function(){
 		var res = vec4.toHSV(this.value);
-		this.basehue = res[0];		
-		this.basesat = res[1];		
-		this.baseval  = res[2];		
+		this.basehue = res[0];
+		this.basesat = res[1];
+		this.baseval  = res[2];
 	}
-	
+
 	this.setRed = function(r){
 		this.value[0] = r;
 		this.createHSVFromColor();
-		this.updateallcontrols();	
+		this.updateallcontrols();
 	}
-	
+
 	this.setGreen = function(g){
 		this.value[1] = g;
 		this.createHSVFromColor();
-		this.updateallcontrols();	
+		this.updateallcontrols();
 	}
 
 	this.setBlue = function(b){
 		this.value[2] = b;
 		this.createHSVFromColor();
-		this.updateallcontrols();	
+		this.updateallcontrols();
 	}
 
 	this.setHueBase = function(h){
 		this.basehue = h;
-		this.createColorFromHSV(); 	
-		this.updateallcontrols();		
+		this.createColorFromHSV();
+		this.updateallcontrols();
 	}
-	
+
 	this.setSatBase = function(s){
 		this.basesat = s;
-		this.createColorFromHSV(); 	
-		this.updateallcontrols();		
+		this.createColorFromHSV();
+		this.updateallcontrols();
 	}
-	
+
 	this.setLumBase = function(s){
 		this.baseval  = s;
-		this.createColorFromHSV(); 	
-		this.updateallcontrols();		
-	}	
-	
+		this.createColorFromHSV();
+		this.updateallcontrols();
+	}
+
 	define.class(this, "customslider", function($ui$,view){
 		
-		
 		this.attributes = {
-				
+
 			// hsv color for the left side
 			hsvfrom:Config({type:vec3, value: vec3(0,1,0.5)}),
 
 			// hsv color for the right side
 			hsvto:Config({type:vec3, value: vec3(1,1,0.5)}),
 			hsvhueadd:Config({type:float, value:0}),
-			
+
 			basehue:Config({type:float, value: 0}),
 			currentcolor: Config({type:vec4, value: vec4("red")}),
 			contrastcolor: Config({type:vec4, value: vec4("white")}),
-			
+
 			// Color of the draggable part of the scrollbar
 			draggercolor: Config({type: vec4, value: vec4(1,1,1,0.8)}),
 
 			// Color of the draggable part of the scrollbar
 			draggerradius: Config({type: float, value: 3}),
-			
-			// Color when the mouse is hovering over the draggable part of the scrollbar
+
+			// Color when the pointer is hovering over the draggable part of the scrollbar
 			hovercolor: Config({type: vec4, value: vec4("#8080c0")}),
-			
+
 			// Color of the draggable part of the scrollbar while actively scrolling
 			activecolor: Config({type: vec4, value: vec4("#8080c0")}),
-			
-			// Is this a horizontal or a vertical scrollbar? 
+
+			// Is this a horizontal or a vertical scrollbar?
 			vertical: Config({type: Boolean, value: false}),
-			
+
 			// Current start offset of the scrollbar. Ranges from 0 to total - page
 			offset: Config({type:float, value:0}),
-			
+
 			// Page size, in total
 			page: Config({type:float, value:25}),
 
-			// total size. 
+			// total size.
 			total: Config({type:float, value:255+25}),
-
 
 			// set animation on bgcolor
 			bgcolor: Config({duration: 1.0})
@@ -206,17 +204,23 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 
 		var mesh = vec2.array()
 		mesh.pushQuad(0,0,0,1,1,0,1,1)
+		this.borderwidth = 0
+		this.margin = 1
+		this.bordercolor = vec4("#303060")
+		this.pressed = 0
+		this.hovered = 0
 
+		
 		this.bg = {
 			offset: 0,
 			page: 0.3,
-		
+
 			color: function(){
 				// we have a rectangle
 				var hsvamix = vec4(mix(view.hsvfrom, view.hsvto, mesh.x), 1.0)
 				hsvamix.r += view.hsvhueadd * view.basehue;
 				var bg =  colorlib.hsva(hsvamix);
-			
+
 				var rel = vec2(mesh.x*view.layout.width, mesh.y*view.layout.height)
 				var offset = view.offset / view.total
 				var page = view.page / view.total
@@ -239,67 +243,59 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				return vec4(mesh.x * view.layout.width, mesh.y * view.layout.height, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
 		}
+		this.bg = true;
+		
+		// TODO(aki): fix slider and use pointer events
+		// most of the logic below is unnecessary because pointer events include deltas.
+		// this.pointerstart = function(event){
+		// 	var start = this.globalToLocal(event.value[0].position)
+		// 	// detect if we clicked not on the button
+		// 	if(this.vertical){
+		// 		var p = start[1] / this.layout.height
+		// 	}
+		// 	else{
+		// 		var p = start[0] / this.layout.width
+		// 	}
+		// 	var offset = this.offset / this.total
+		// 	var page = this.page / this.total
+		// 	var start_offset  = 0;
+		// 	if(p < offset){
+		// 		var value = clamp(p - 0.5 * page, 0, 1.-page) * this.total
+		// 		if(value != this.offset){
+		// 			this.offset = value
+		// 		}
+		// 	}
+		// 	else if (p > offset + page){
+		// 		var value = clamp(p - 0.5*page, 0, 1.-page) * this.total
+		// 		if(value != this.offset){
+		// 			this.offset = value
+		// 		}
+		// 	}
+		// 	 start_offset = offset//this.offset / this.total
+		// }
+		// this.pointermove = function(event){
+		// 	var pos = this.globalToLocal(event.value[0].position)
+		// 	if(this.vertical){
+		// 		var p = start_offset + (pos[1] - start[1]) / this.layout.height
+		// 	}
+		// 	else{
+		// 		var p = start_offset + (pos[0] - start[0]) / this.layout.width
+		// 	}
+		// 	var value = clamp(p, 0, 1.-page) * this.total
+		// 	if(value != this.offset){
+		// 		this.offset = value
+		// 	}
+		// }
 
-		this.borderwidth = 0
-		this.margin = 1
-		this.bordercolor = vec4("#303060")		
-		this.pressed = 0
-		this.hovered = 0
-			
-		this.mouseover  = function(){
-		}
 		
-		this.mouseout = function(){
-		}
+		//this.height = 10;
+		//this.width = 100;
+		//this.flex = 1;
 		
-		this.mouseleftdown = function(event){
-			var start = event.local
-			// detect if we clicked not on the button
-			if(this.vertical){
-				var p = start[1] / this.layout.height
-			}
-			else{
-				var p = start[0] / this.layout.width
-			}
-			var offset = this.offset / this.total
-			var page = this.page / this.total
-			var start_offset  = 0;
-			if(p < offset){
-				var value = clamp(p - 0.5 * page, 0, 1.-page) * this.total
-				if(value != this.offset){
-					this.offset = value
-				}
-			}
-			else if (p > offset + page){
-				var value = clamp(p - 0.5*page, 0, 1.-page) * this.total
-				if(value != this.offset){
-					this.offset = value
-				}
-			}
-			 start_offset = offset//this.offset / this.total
-			this.mousemove = function(event){
-				var pos = event.local
-				if(this.vertical){
-					var p = start_offset + (pos[1] - start[1]) / this.layout.height
-				}
-				else{
-					var p = start_offset + (pos[0] - start[0]) / this.layout.width
-				}
-				var value = clamp(p, 0, 1.-page) * this.total
-				if(value != this.offset){
-					this.offset = value
-				}
-			}
-		}
-		
-		this.mouseleftup = function(){
-			this.mousemove = function(){}
-		}
-
 		this.drawcount = 0;
 	})
 
-	
+
 	define.class(this, 'colorcirclecontrol', function($ui$view){
 		this.name = 'colorcirclecontrol'
 		this.width = 200;
@@ -313,55 +309,34 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			currentcolor: Config({type:vec4, value:"white"}),
 			contrastcolor: Config({type:vec4, value: vec4("white")}),
 			draggersize: Config({type:float, value: 8}),
-			
 		}
-		
-		this.overcount = 0;
-		
-		this.updatehue = function(mousepos){
-				var dx = mousepos[0] - this.layout.width/2;
-				var dy = mousepos[1] - this.layout.height/2;
-				dx /= this.layout.width/2;
-				dy /= this.layout.height/2;
-				var angle = Math.atan2(dy,dx);
-				
-				this.outer.setHueBase(-angle/ 6.283+ 0.25);
+
+		this.updatehue = function(pos){
+			var dx = pos[0] - this.layout.width/2;
+			var dy = pos[1] - this.layout.height/2;
+			dx /= this.layout.width/2;
+			dy /= this.layout.height/2;
+			var angle = Math.atan2(dy,dx);
+			this.outer.setHueBase(-angle/ 6.283+ 0.25);
 		}
-		
-		this.mouseleftdown = function(event){
-			
-			this.updatehue(event.local);
-			
-			this.mousemove = function(event){
-				this.updatehue(event.local);
-			};
-		}
-		
-		this.mouseleftup = function(){
-			this.mousemove = function(){};
-		}
-		
-		this.mouseout = function(){
-			this.overcount--;
-			if (this.overcount < 0) this.overcount = 0;
-			if (this.overcount == 0) this.hover = 0;
-			if (this.overcount == 0) this.redraw();
-		}
-		
-		this.mouseover = function(){
-			if (this.overcount == 0) this.hover = 1;
-			this.overcount++;
+
+		this.pointermove = function(event){
+			var a = this.globalToLocal(event.value[0].position)
+			console.log(a, event.value[0].position)
+			this.updatehue(a);
 			this.redraw();
 		}
 
 		this.bg = function(){
-			this.vertexstruct =  define.struct({		
+			this.draworder = 1;
+			
+			this.vertexstruct =  define.struct({
 				p:float,
 				side: float
 			})
 			this.mesh = this.vertexstruct.array();
 			this.drawtype = this.TRIANGLE_STRIP
-				
+
 			this.position = function(){
 				uv = vec2(sin(mesh.p), cos(mesh.p))*(1-view.ringwidth + view.ringwidth*mesh.side);
 				off = mesh.p / 6.283
@@ -369,24 +344,21 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				pos = vec2(view.layout.width/2 + rad * uv.x, view.layout.height/2 + rad * uv.y)
 				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
-			
+
 			this.color = function(){
-				
+
 				var f =  sin(mesh.side*3.1415);
 				var edge = 1-pow(f,.50);
 				var aaedge = pow(f,0.2);
 				//return vec4(view.hover, edge,0,1);
-				
 				var color = colorlib.hsva(vec4(off, 1, 1, 1));
-				
-				
-				
+
 				var edgecolor = vec4(1,1,1,1);
 				var mixed = mix(color, edgecolor, view.hover*edge);
 				mixed.a *= aaedge;
 				return mixed;
 			}
-			
+
 			this.update = function(){
 				var view = this.view
 				var width = view.layout?view.layout.width:view.width
@@ -401,12 +373,12 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 					this.mesh.push(i*6.283/(cnt-1), 1);
 				}
 			}
-		};	
-		
-		define.class(this, 'fg', this.Shader, function(){
+		};
 
-			this.vertexstruct = define.struct({		
-				p:vec2,			
+		define.class(this, 'fg', this.Shader, function(){
+			this.draworder = 2;
+			this.vertexstruct = define.struct({
+				p:vec2,
 			})
 
 			this.mesh = this.vertexstruct.array()
@@ -427,40 +399,35 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				this.mesh.push( 1, 1);
 				this.mesh.push(-1, 1);
 			}
-			
+
 			this.position = function(){
-				
+
 				var huepos = vec2(sin(view.basehue * PI * 2 + mesh.p.x*.1),
-							   cos(view.basehue* PI * 2 + mesh.p.x*.1)) * (mesh.p.y*0.15 + 0.85) * 100;
-			
+					cos(view.basehue* PI * 2 + mesh.p.x*.1)) * (mesh.p.y*0.15 + 0.85) * 100;
 				pos = vec2(min(view.layout.width, view.layout.height))/2.0  ;
 				pos += huepos;
-
 				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
-			
-				
+
 			this.color = function(){
 				var D = abs(mesh.p.x);
 				var alpha = vec4(view.contrastcolor.xyz,0);
 				return mix(view.currentcolor, mix(view.contrastcolor, alpha, smoothstep(0.9, 1.0, D)), smoothstep(0.6, 1.0, D));
-				//if (D<0.7) return view.currentcolor; 			
+				//if (D<0.7) return view.currentcolor;
 				//if (D<1.0) return view.contrastcolor;
-				
 				//return vec4(1.,1.,1.,0.);
 			}
-		
+
 		})
-		
-		this.fg = 2;
-	
+		this.fg = true;
+
 	})
-	
+
 	define.class(this, 'squareview', function($ui$view){
 		this.name = 'squareview'
 		this.width = 200;
 		this.height = 200;
-		
+
 		this.attributes = {
 			basehue: Config({type:float, value:0.7}),
 			basesat: Config({type:float, value:0.7}),
@@ -470,10 +437,10 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			draggersize: Config({type:float, value: 8}),
 			hover: Config({type:float, motion:"linear", duration:0.1, value:1})
 		}
-				
-		this.updatecolorfrommouse =  function(p){
-			var p2 = vec2(p.local[0] - this.layout.width/2, p.local[1] - this.layout.height/2);
-			
+
+		this.updatecolorfrompointer =  function(p){
+			var p2 = vec2(p[0] - this.layout.width/2, p[1] - this.layout.height/2);
+
 			var satpos = vec2(Math.sin(this.basehue * PI * 2 + PI/4), Math.cos(this.basehue* PI * 2  + PI/4));
 			var valpos = vec2(Math.sin(this.basehue * PI * 2 + PI/4 + PI/2), Math.cos(this.basehue* PI * 2  + PI/4  + PI/2));
 			var sidelen = Math.sqrt((140*140)/2);
@@ -483,29 +450,22 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			val = Math.max(0, Math.min(1, val));
 			this.basesat = sat;
 			this.baseval = val;
-			this.outer.setSatBase(sat);			
+			this.outer.setSatBase(sat);
 			this.outer.setLumBase(val);
 		}
-		
-		this.mouseleftdown = function(p){
-			this.updatecolorfrommouse(p);
-			
-			this.mousemove = function(p){
-				this.updatecolorfrommouse(p);		
-			}
+
+		this.pointermove = function(event){
+			var p = this.globalToLocal(event.value[0].position)
+			this.updatecolorfrompointer(p);
 		}
-		
-		this.mouseleftup = function(){
-			this.mousemove = function(){}
-		}
-		
+
 		define.class(this, 'fg', this.Shader, function(){
 			this.draworder = 5
 
-			this.vertexstruct = define.struct({		
-				p:vec2,			
+			this.vertexstruct = define.struct({
+				p:vec2,
 			})
-			
+
 			this.mesh = this.vertexstruct.array()
 			this.update = function(){
 				var view = this.view
@@ -523,45 +483,46 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				this.mesh.push( 1, 1);
 				this.mesh.push(-1, 1);
 			}
-			
+
 			this.position = function(){
-				
+
 				huepos = vec2(sin(view.basehue * PI * 2), cos(view.basehue* PI * 2)) * 0.7 * 100;
 
 				var satdir =  vec2(sin((view.basehue - 1./4.) * PI * 2. ), cos((view.basehue - 1./4.)* PI * 2.)) * 0.7 * 100.0;
 				var valdir = vec2(sin((view.basehue - 3./4.) * PI * 2.), cos((view.basehue - 3./4.)* PI * 2.)) * 0.7 * 100.0;
-				
+
 				huepos += (satdir - huepos   )* (1-view.basesat)  + (valdir - huepos ) * (1 - view.baseval);
-			
+
 				pos = vec2(min(view.layout.width, view.layout.height))/2  + mesh.p * view.draggersize;
 				pos += huepos;
 
 				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
-			
-				
+
+
 			this.color = function(){
 				var D = sqrt(dot(mesh.p, mesh.p));
-				if (D<0.7) return view.currentcolor; 			
+				if (D<0.7) return view.currentcolor;
 				if (D<1.0) return view.contrastcolor;
-				
+
 				return vec4(1.,1.,1.,0.);
 			}
-		
+
 		})
-		this.fg = true
 		
+		this.fg = true
+
 		define.class(this, 'bg', this.Shader, function(){
 			this.draworder = 1
 			this.vertexstruct = define.struct({
-				p:float,			
+				p:float,
 				hsvoff: vec3,
 				center: float
 			})
-			
+
 			this.mesh = this.vertexstruct.array()
 			this.drawtype = this.TRIANGLES
-		
+
 			this.position = function(){
 				off = mesh.p / 6.283
 				var rad = min(view.layout.width, view.layout.height)/2;
@@ -569,20 +530,20 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				pos = vec2(view.layout.width/2 + rad * uv.x, view.layout.height/2 + rad * uv.y)
 				return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 			}
-			
+
 			this.color = function(){
-				
+
 				var edge = 1-pow(mesh.center,1.);
-				var aaedge = pow(mesh.center,2.0);				
+				var aaedge = pow(mesh.center,2.0);
 				var hsv = vec3(view.basehue,1,1) + mesh.hsvoff;
-			
+
 				var color = colorlib.hsva(vec4(hsv, 1));;
 				var edgecolor = vec4(1,1,1,1);
 				var mixed = mix(color, edgecolor, view.hover*edge);
 				//mixed.a *= aaedge;
 				return color;
 			}
-			
+
 			this.update = function(){
 				var view = this.view
 				var width = view.layout?view.layout.width:view.width
@@ -595,15 +556,15 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				this.mesh.push(view.basehue,       vec3( 0, 0, 0),1);
 				this.mesh.push(view.basehue + 1/4, vec3( 0,0,-1),1);
 				this.mesh.push(view.basehue + 2/4, vec3( 0,-1,-1),1);
-				
+
 				this.mesh.push(view.basehue,       vec3( 0, 0, 0),1);
 				this.mesh.push(view.basehue + 2/4, vec3( 0, -1,-1),1);
 				this.mesh.push(view.basehue + 3/4, vec3( 0, -1, 0),1);
-				
-			}				
-		})	
+
+			}
+		})
 	})
-	
+
 	define.class(this, 'colorarea', function($ui$view){
 		this.bg ={
 			color:function(){
@@ -611,22 +572,22 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				}
 			};
 		this.width = 100;
-		this.height = 100;		
+		this.height = 100;
 	})
-	
+
 	this.layout = function(){
 		this.value = this.value
 	}
 
 	this.render = function(){
 		return [
-			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"}				
+			view({flexdirection:"column", flex:1,alignitems:"center", justifycontent:"center", bgcolor:"transparent"}
 				,view({margin:10, bg:0, position:"relative", alignself:"center"}
 					,view({bg:0, width:200, height:200, padding:3})
 					,this.colorcirclecontrol({position:"absolute",width:200, height:200})
 					,this.squareview({basehue:this.basehue, position:"absolute"})
 				)
-				,view({bg:0, flexdirection:"column"}
+				,view({bg:0, flexdirection:"column",  width:280}
 					,this.customslider({name:"rslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0,1,0), hsvto:vec3(0,1,0.5), offset:function(v){this.outer.setRed(v.value/255)}})
 					,this.customslider({name:"gslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.33,1,0), hsvto:vec3(0.333,1,0.5), offset:function(v){this.outer.setGreen(v.value/255)}})
 					,this.customslider({name:"bslider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.666,1,0), hsvto:vec3(0.666,1,0.5), offset:function(v){this.outer.setBlue(v.value/255)}})
@@ -634,7 +595,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 						,view({flex:1, bg:0},numberbox({title:"R", flex:1, minvalue:0, maxvalue:255, name:"textr",value:"100", fontsize:this.fontsize}))
 						,view({flex:1, bg:0},numberbox({title:"G", flex:1, minvalue:0, maxvalue:255, name:"textg",value:"100", fontsize:this.fontsize}))
 						,view({flex:1, bg:0},numberbox({title:"B", flex:1, minvalue:0, maxvalue:255, name:"textb",value:"100", fontsize:this.fontsize}))
-						
+
 					)
 					,this.customslider({name:"hsvider",height: this.sliderheight, flex:1, hsvfrom:vec3(0.0,this.basesat,this.baseval), hsvto:vec3(1,this.basesat,this.baseval), offset:function(v){this.outer.setHueBase(v.value/255)}})
 					,this.customslider({name:"sslider",height: this.sliderheight, flex:1, hsvhueadd: 1, hsvfrom:vec3(0,0,this.baseval), hsvto:vec3(0,1,this.baseval), offset:function(v){this.outer.setSatBase(v.value/255)}})
@@ -642,11 +603,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 					,view({bg:0}
 						,view({flex:1, bg:0},numberbox({title:"H", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texth",value:"100"}))
 						,view({flex:1, bg:0},numberbox({title:"S", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"texts",value:"300"}))
-						,view({flex:1, bg:0},numberbox({title:"V", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"textv",value:"100"}))						
+						,view({flex:1, bg:0},numberbox({title:"V", flex:1, minvalue:0, maxvalue:100,fontsize:this.fontsize,name:"textv",value:"100"}))
 					)
 				)
-			)			
-			
+			)
+
 			,view({ bg:0,justifycontent:"flex-end", flexdirection:"row", alignitems:"flex-end"}
 				,view({ bg:0,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}
 					,view({flex:1, bg:0,alignitems:"flex-end",justifycontent:"flex-end"}
@@ -658,8 +619,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 						,textbox({name:"texta", bg:0,  margin:vec4(0,5,0,0), value:"128",  fgcolor:this.contrastcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
 					)
 				)
-			)				
+			)
 		]
-		
+
 	}
 })

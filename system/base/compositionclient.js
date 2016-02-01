@@ -1,10 +1,10 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('./compositionbase', function(require, baseclass){
-	// Composition base class
+	// internal, Composition base class
 
 	var RpcProxy = require('$system/rpc/rpcproxy')
 	var RpcHub = require('$system/rpc/rpchub')
@@ -32,7 +32,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.createBus()
 			// create the rpc object
 			this.rpc = new RpcHub(this)
-		} 
+		}
 		this.bindBusEvents()
 
 		this.renderComposition()
@@ -67,9 +67,9 @@ define.class('./compositionbase', function(require, baseclass){
 		//this.screen.teem = this
 
 		Render.process(this.screen, previous && previous.screen)
-		
-		if(typeof document !== 'undefined' && this.screen.title !== undefined) document.title = this.screen.title 
-			
+
+		if(typeof document !== 'undefined' && this.screen.title !== undefined) document.title = this.screen.title
+
 		this.screen.device.redraw()
 
 		this.rendered = true
@@ -96,7 +96,7 @@ define.class('./compositionbase', function(require, baseclass){
 						this.bus.send({type:'connectScreen', name:this.screenname})
 					}
 				}
-			}  
+			}
 			/*
 			else if(msg.type == 'webrtcOffer'){
 				if(msg.index != this.index && this.webrtc_offer){ // we got a webrtcOffer
@@ -180,7 +180,7 @@ define.class('./compositionbase', function(require, baseclass){
 				obj.atAttributeSet = attrset
 			}
 			else if(msg.type == 'method'){
-				// someone is calling a method on us. 
+				// someone is calling a method on us.
 				method = this.screen[msg.method]
 				if(!method){
 					return console.log("Invalid rpc method" + msg.method)

@@ -1,12 +1,11 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
 
-	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Animate = require('$system/base/animate')
 
@@ -15,20 +14,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		locationhash: Config({type:Object, value:{}}),
 		// when the browser comes out of standby it fires wakup event
 		wakeup: Config({type:Event}),
-
-		// TODO(aki): DEPRICATE
-		// globally hookable input events
-		globalkeyup: Config({type:Event}),
-		globalkeydown: Config({type:Event}),
-		globalkeypress: Config({type:Event}),
-		globalkeypaste: Config({type:Event}),
-		globalmousemove: Config({type:Event}),
-		globalmouseleftdown: Config({type:Event}),
-		globalmouseleftup: Config({type:Event}),
-		globalmouserightdown: Config({type:Event}),
-		globalmouserightup: Config({type:Event}),
-		globalmousewheelx: Config({type:Event}),
-		globalmousewheely: Config({type:Event}),
 		status:""
 	}
 
@@ -46,22 +31,18 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	this.atConstructor = function(){
 	}
 
-	this.oninit = function (previous) {
+	this.oninit = function () {
 		// ok. lets bind inputs
 		this.modal_stack = []
 		this.focus_view = undefined
-		// this.pointer_view = undefined
-		this.pointer_view = undefined
-		// this.pointer_capture = undefined
 		this.keyboard = this.device.keyboard
-		// this.pointer = this.device.mouse
 		this.pointer = this.device.pointer
 		this.midi = this.device.midi
 		this.bindInputs()
 	}
 
 	this.defaultKeyboardHandler = function(target, v, prefix){
-		if (!prefix) prefix = "";
+		if (!prefix) prefix = ""
 
 		var keyboard = this.screen.keyboard
 		keyboard.textarea.focus()
@@ -83,29 +64,21 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}
 	}
 
-	this.remapmatrix = mat4();
-	this.invertedmousecoords = vec2();
-
-	// internal, display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last mouse coordinates will be substituted instead.
+	// TODO(aki): move menu into a configurable component.
+	// internal, display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last pointer coordinates will be substituted instead.
 	this.contextMenu = function(commands, x,y){
-
-		if (!y) y = this.pointer._y;
-		if (!x) x = this.pointer._x;
-
-		// TODO(aki): move menu into a configurable component.
-
 		this.openModal(function(){
-			var res = [];
+			var res = []
 			for(var a in commands){
-				var c = commands[a];
-				//console.log("menucommand: ", c);
-				var act = c.clickaction;
+				var c = commands[a]
+				//console.log("menucommand: ", c)
+				var act = c.clickaction
 				if (!act && c.commands){
 					act = function(){
-						console.log("opening submenu?");
-						console.log(this.constructor.name, this.layout);
-						this.screen.contextMenu(this.commands, this.layout.absx + this.layout.width, this.layout.absy);
-						return true;
+						console.log("opening submenu?")
+						console.log(this.constructor.name, this.layout)
+						this.screen.contextMenu(this.commands, this.layout.absx + this.layout.width, this.layout.absy)
+						return true
 					}
 				}
 				res.push(
@@ -126,9 +99,9 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 						clickaction: act,
 						commands: c.commands,
 						click:function(){
-							var close = false;
+							var close = false
 							if(this.clickaction) close = this.clickaction()
-							if (!close) this.screen.closeModal(true);
+							if (!close) this.screen.closeModal(true)
 						}
 					})
 				)
@@ -141,7 +114,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 				dropshadowradius: 20,
 				dropshadowoffset:vec2(9,9),
 				borderradius:7,
-				miss:function(){
+				onfocuslost:function(){
 					this.screen.closeModal(false)
 				},
 				init:function(){
@@ -152,190 +125,11 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}).then(function(result){
 
 		})
-	};
-
-	function UnProject(glx, gly, glz, modelview, projection){
-		var inv = vec4()
-
-		var A = mat4.mat4_mul_mat4(modelview, projection)
-		var m = mat4.invert(A)
-
-		inv[0] = glx
-		inv[1] = gly
-		inv[2] = 2.0 * glz - 1.0
-		inv[3] = 1.0
-
-		out = vec4.vec4_mul_mat4(inv, m)
-
-		// divide by W to perform perspective!
-		out[0] /= out[3]
-		out[1] /= out[3]
-		out[2] /= out[3]
-
-		return vec3(out)
 	}
 
-	this.globalMouse = function(node){
-		var sx = this.device.main_frame.size[0]  / this.device.ratio
-		var sy = this.device.main_frame.size[1]  / this.device.ratio
-		var mx = this.pointer._x/(sx/2) - 1.0
-		var my = -1 * (this.pointer._y/(sy/2) - 1.0)
-		return vec2(this.pointer._x, this.pointer._y);
-	}
-
-	// internal, remap the mouse to a view node
-	this.remapMouse = function(node, dbg){
-
-		var parentlist = []
-		var ip = node.parent
-
-		var sx = this.device.main_frame.size[0]  / this.device.ratio
-		var sy = this.device.main_frame.size[1]  / this.device.ratio
-		var mx = this.pointer._x/(sx/2) - 1.0
-		var my = -1 * (this.pointer._y/(sy/2) - 1.0)
-
-		while (ip){
-			if (ip._viewport || !ip.parent) parentlist.push(ip)
-			ip = ip.parent
-		}
-		var logging = false
-		if (dbg)
-		{
-			logging = true;
-		}
-
-		if (logging)
-		{
-			//console.clear()
-			console.log(node.constructor.name)
-			console.log(node.layout);
-
-		}
-		if (logging){
-			var	parentdesc = "Parentchain: "
-			for(var i =parentlist.length-1;i>=0;i--) {
-				parentdesc += parentlist[i].constructor.name + "("+parentlist[i]._viewport+") "
-			}
-			console.log(parentdesc)
-		}
-
-		var raystart = vec3(mx,my,-100)
-		var rayend   = vec3(mx,my,100)
-		var lastrayafteradjust = vec3(mx,my,-100)
-		var lastprojection = mat4.identity()
-		var lastviewmatrix = mat4.identity()
-		var camerapos = vec3(0)
-		var scaletemp = mat4.scalematrix([1,1,1])
-		var transtemp2 = mat4.translatematrix([-1,-1,0])
-
-		if (logging)  console.log(parentlist.length-1, raystart, "mousecoords in GL space")
-		var lastmode = "2d"
-
-		for(var i = parentlist.length - 1; i >= 0; i--) {
-			var P = parentlist[i]
-
-			var newmode = P.parent? P._viewport:"2d"
-			if (logging) console.log(i, "logging for ", newmode, raystart, P.parent);
-			if (P.parent) {
-
-				var MM = P._viewport? P.viewportmatrix: P.totalmatrix
-
-				if (!P.viewportmatrix) console.log(i, "whaaa" )
-				mat4.invert(P.viewportmatrix, this.remapmatrix)
-
-				if (lastmode == "3d") { // 3d to layer transition -> do a raypick.
-
-					if (logging) console.log(i, lastrayafteradjust, "performing raypick on previous clipspace coordinates" )
-
-					var startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 0, lastviewmatrix, lastprojection)
-					var endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 1, lastviewmatrix, lastprojection)
-
-					camlocal = vec3.mul_mat4(camerapos, this.remapmatrix)
-					endlocal = vec3.mul_mat4(endv, this.remapmatrix)
-
-					var R = vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
-					if (!R)	{
-						raystart = vec3(0.5,0.5,0)
-					}
-					else {
-						R = vec3.mul_mat4(R, P.viewportmatrix)
-						if (logging) console.log(i, R, "intersectpoint")
-						raystart = R
-					}
-				}
-
-				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
-
-				// console.log(i, ressofar, "viewportmatrix");
-
-				if (logging)  console.log(i, "LAYOUT", P.layout.width, P.layout.height);
-
-				mat4.scalematrix([P.layout.width/2,P.layout.height/2,1000/2], scaletemp)
-				mat4.invert(scaletemp, this.remapmatrix)
-
-				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
-				// console.log(i, ressofar, "scalematrix");
-
-				raystart = vec3.mul_mat4(raystart, transtemp2)
-
-				lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
-				lastprojection = P.drawpass.colormatrices.perspectivematrix;
-				lastviewmatrix = P.drawpass.colormatrices.lookatmatrix;
-				camerapos = P._camera;
-
-				if (logging){
-					if (lastprojection) mat4.debug(lastprojection);
-				if (lastviewmatrix) 	mat4.debug(lastviewmatrix);
-					console.log(i, raystart, "coordinates after adjusting for layoutwidth/height", P._viewport);
-				}
-
-
-
-			}
-			if(i == 0 && node.noscroll){
-				if (logging)
-				{
-					console.log("i==0, noscroll!");
-				}
-				mat4.invert(P.drawpass.colormatrices.noscrollmatrix, this.remapmatrix)
-			}
-			else {
-				if (logging){
-					console.log(i, "noscroll = false -  using regular viewmatrix!");
-					mat4.debug(P.drawpass.colormatrices.viewmatrix);
-				}
-				mat4.invert(P.drawpass.colormatrices.viewmatrix, this.remapmatrix)
-
-			}
-			if (logging) mat4.debug(this.remapmatrix);
-			raystart = vec3.mul_mat4(raystart, this.remapmatrix)
-
-			lastmode = newmode
-			// console.log(i, raystart, "last");
-		}
-		if (logging) console.log(node._viewport, node.viewportmatrix, node.totalmatrix);
-		var MM = node._viewport?node.viewportmatrix: node.totalmatrix
-		mat4.invert(MM, this.remapmatrix)
-		raystart = vec3.mul_mat4(raystart, this.remapmatrix)
-		rayend = vec3.mul_mat4(rayend, this.remapmatrix)
-
-		if (lastmode == "3d"){
-			if (logging)  console.log("last mode was 3d..")
-		}
-		if (logging)
-		{
-		//	mat4.debug(MM);
-			console.log(" ", raystart, "final transform using own worldmodel")
-		}
-
-		// console.log("_", ressofar, "result");
-
-		return vec2(raystart.x, raystart.y)
-	}
-
-	// pick a view at the mouse coordinate and console.log its structure
-	this.debugPick = function(){
-		this.device.pickScreen(this.pointer.x, this.pointer.y).then(function(msg){
+	// pick a view at the pointer coordinate and console.log its structure
+	this.debugPick = function(x, y){
+		this.device.pickScreen(x, y).then(function(msg){
 			var view = msg.view
 			if(this.last_debug_view === view) return
 			this.last_debug_view = view
@@ -383,10 +177,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		}.bind(this))
 	}
 
-	this.releaseCapture = function(){
-		this.pointer_capture = undefined
-	}
-
 	// internal, bind all keyboard/pointer inputs for delegating it into the view tree
 	this.bindInputs = function(){
 		this.keyboard.down = function(v){
@@ -419,131 +209,62 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			this.focus_view.emitUpward('keypaste', v)
 		}.bind(this)
 
-		// Event handler for pointer `start` event. Picks a view, sets it as `pointer_view` and emits `pointerstart` event.
+		// Event handler for `pointer.start` event.
+		// Emits `pointerstart` event from `pointer.view` and computes the cursor.
 		this.pointer.start = function(e){
-			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
-				if(view){
-					this.pointer_view = view;
-					view.emitUpward('pointerstart', e);
-					// TODO(aki): DEPRICATE! reverse compatibitity with mouseleftdown
-					// {
-						// lets give this thing focus
-						if (e.value[0].button === undefined || e.value[0].button === 1) {
-							if(this.inModalChain(view)){
-								this.setFocus(view)
-								view.emitUpward('mouseleftdown', {global:this.globalMouse(this),local:this.remapMouse(view)})
-							}
-							else if(this.modal){
-								this.modal.emitUpward('miss', {global:this.globalMouse(this)})
-							}
-						}
-					// }
-				}
-			}.bind(this))
-		}.bind(this);
-
-		// Event handler for pointer `move` event. Emits `pointermove` event from `pointer_view`.
-		this.pointer.move = function(e){
-			if (this.pointer_view){
-				this.pointer_view.emitUpward('pointermove', e)
-				//TODO(aki): DEPRICATE
-				// {
-					this.pointer_view.computeCursor()
-					this.pointer_view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(this.pointer_view)})
-				// }
+			this.pointer.view.emitUpward('pointerstart', e)
+			// lets give this thing focus
+			this.pointer.view.computeCursor()
+			if(this.inModalChain(this.pointer.view)){
+				this.setFocus(this.pointer.view)
+			} else if(this.modal){
+				this.modal.emitUpward('focuslost', {global:this.globalMouse(this)})
 			}
-		}.bind(this);
+		}.bind(this)
 
-		// Event handler for pointer `end` event. Emits `pointerend` event `pointer_view`.
+		// Event handler for `pointer.move` event.
+		// Emits `pointermove` event from `pointer.view`.
+		this.pointer.move = function(e){
+			this.pointer.view.emitUpward('pointermove', e)
+		}.bind(this)
+
+		// Event handler for `pointer.end` event.
+		// Emits `pointerend` event `pointer.view` and computes the cursor.
 		this.pointer.end = function(e){
-			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
-				if (view){
-					view.emitUpward('pointerend', e);
-					// TODO(aki): DEPRICATE
-					// {
-						if (e.value[0].button === undefined || e.value[0].button === 1) {
-							view.emitUpward('mouseleftup', {global:this.globalMouse(this),local:this.remapMouse(view), isover:this.pointer_view === view})
-							if (this.pointer_view !== view){
-								if (this.pointer_view) {
-									this.pointer_view.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
-								}
-								var pos = this.remapMouse(view)
-								view.computeCursor()
-								view.emitUpward('mouseover', {local: pos})
-								view.emitUpward('mousemove', {local: pos})
-							} else if (this.pointer_view) {
-								this.pointer_view.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
-							}
-						}
-					// }
-					this.pointer_view = view
-				}
-			}.bind(this))
-		}.bind(this);
+			this.pointer.view.emitUpward('pointerend', e)
+			this.pointer.view.computeCursor()
+		}.bind(this)
 
-		// Event handler for pointer `tap` event. Picks a view, sets it as `pointer_view` and emits `pointertap` event.
+		// Event handler for `pointer.tap` event.
+		// Emits `pointertap` event from `pointer.view`.
 		this.pointer.tap = function(e){
-			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
-				if(view){
-					view.emitUpward('pointertap', e);
-				}
-			})
-		};
+			this.pointer.view.emitUpward('pointertap', e)
+		}.bind(this)
 
-		// Event handler for pointer `hover` event. Picks a view, sets it as `pointer_view` and emits `pointerhover` event.
+		// Event handler for `pointer.hover` event.
+		// Emits `pointerhover` event `pointer.view` and computes the cursor.
 		this.pointer.hover = function(e){
-			// TODO(aki): screen picking is expensive for continuous events like hover. Conseder optimizing.
-			this.device.pickScreen(e.value[0].x, e.value[0].y).then(function(view){
-				if(view){
-					view.emitUpward('pointerhover', e);
-					// TODO(aki): DEPRICATE! reverse compatibitity with mouse
-					// {
-						view.computeCursor()
-						view.emitUpward('mousemove', {global:this.globalMouse(this), local:this.remapMouse(view)})
-						// lets check the debug click
-						if(this.keyboard.alt && this.keyboard.shift){
-							return this.debugPick()
-						} else this.last_debug_view = undefined
-						// ok so. lets query the renderer for the view thats under the mouse
-						if(!this.inModalChain(view)){
-							this.pointer_view = view
-							return
-						}
-						// lets find the mouseover or mousemove view
-						var mo_view = view && view.findEmitUpward('mouseover')
-						if(this.pointer_over !== mo_view || mo_view && this.last_over_pick_id !== mo_view.last_pick_id){
-							if(this.pointer_over) this.pointer_over.emitUpward('mouseout', {local:this.remapMouse(this.pointer_over)})
-							this.pointer_over = mo_view
-							if(this.pointer_over) this.pointer_over.emitUpward('mouseover', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_over)})
-						}
-						this.last_over_pick_guid = view.last_pick_id
-					// }
-					this.pointer_view = view
-				}
-			}.bind(this))
-		}.bind(this);
+			this.pointer.view.emitUpward('pointerhover', e)
+			this.pointer.view.computeCursor()
+		}.bind(this)
 
-		// TODO(aki): DEPRICATE
-		// {
-			this.pointer.wheelx = function(){
-				this.emit('globalmousewheelx', {wheel:this.pointer.wheelx, global:this.globalMouse(this)})
-				if (this.pointer_capture) this.pointer_capture.emitUpward('mousewheelx', {wheel:this.pointer.wheelx,global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
-				else if(this.inModalChain(this.pointer_view)) this.pointer_view.emitUpward('mousewheelx', {wheel:this.pointer.wheelx, global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
-			}.bind(this)
-			this.pointer.wheely = function(){
-				this.emit('globalmousewheely', {wheel:this.pointer.wheely, global:this.globalMouse(this)})
-				if (this.pointer_capture) this.pointer_capture.emitUpward('mousewheely', {wheel:this.pointer.wheely,global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
-				else if(this.pointer_view && this.inModalChain(this.pointer_view) ){
-					this.pointer_view.emitUpward('mousewheely', {wheel:this.pointer.wheely, global:this.globalMouse(this), local:this.remapMouse(this.pointer_view)})
-				}
-			}.bind(this)
-			this.pointer.zoom = function(){
-				if (this.pointer_capture) this.pointer_capture.emitUpward('mousezoom', {zoom:this.pointer.zoom, global:this.globalMouse(this), local:this.remapMouse(this.pointer_capture)})
-				else if(this.pointer_view && this.inModalChain(this.pointer_view)){
-					this.pointer_view.emitUpward('mousezoom', {zoom:this.pointer.zoom, global:this.globalMouse(this),local:this.remapMouse(this.pointer_view)})
-				}
-			}.bind(this)
-		// }
+		// Event handler for `pointer.over` event.
+		// Emits `pointerover` event from `pointer.view`.
+		this.pointer.over = function(e){
+			this.pointer.view.emitUpward('pointerover', e)
+		}.bind(this)
+
+		// Event handler for `pointer.out` event.
+		// Emits `pointerout` event from `pointer.view`.
+		this.pointer.out = function(e){
+			this.pointer.view.emitUpward('pointerout', e)
+		}.bind(this)
+
+		// Event handler for `pointer.wheel` event.
+		// Emits `pointerwheel` event from `pointer.view`.
+		this.pointer.wheel = function(e){
+			this.pointer.view.emitUpward('pointerwheel', e)
+		}.bind(this)
 	}
 
 	// set the focus to a view node
@@ -623,19 +344,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		return false
 	}
 
-	// close the current modal window
-	this.closeModal = function(value){
-		if(this.modal && this.modal.resolve)
-			return this.modal.resolve(value)
-	}
-
-	this.releaseCapture = function(){
-		if(this.pointer_capture){
-			this.pointer_capture.emitUpward('mouseout', {global:this.globalMouse(this),local:this.remapMouse(this.pointer_capture)})
-			this.pointer_capture = undefined
-		}
-	}
-
 	// open a modal window from object like so: this.openModal( view({size:[100,100]}))
 	this.closeModal = function(value){
 		// lets close the modal window
@@ -658,9 +366,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 
 	this.openModal = function(render){
 		return new Promise(function(resolve, reject){
-
-			this.releaseCapture()
-
 			// wrap our render function in a temporary view
 			var vroot = view()
 			// set up stuff

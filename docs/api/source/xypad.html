@@ -186,39 +186,40 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n32" name="n32">32</a>
 <a href="#n33" name="n33">33</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/screen</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, cadgrid, view, <span class="predefined">$behaviors$</span>, draggable){
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">mousepos</span>: Config({<span class="key">type</span>:vec2, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>})
+                <span class="key">pointerpos</span>: Config({<span class="key">type</span>:vec2, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>})
         }
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){        
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> cadgrid({
-                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>, 
-                        <span class="key">majorline</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>, 
-                        <span class="key">minorline</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#002030</span><span class="delimiter">&quot;</span></span> 
+                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">majorline</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">minorline</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#002030</span><span class="delimiter">&quot;</span></span>
                         },
                         view({
                                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>,
                                 <span class="key">size</span>: vec2(<span class="integer">100</span>, <span class="integer">100</span>),
-                                <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">#006070</span><span class="delimiter">'</span></span>),                
+                                <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">#006070</span><span class="delimiter">'</span></span>),
                                 <span class="key">borderradius</span>: <span class="integer">40</span>,
                                 <span class="key">borderwidth</span>:<span class="integer">10</span>,
                                 <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
                                 <span class="key">is</span>: draggable(),
                                 <span class="key">pos</span>:Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>}),
                                 <span class="function">onpos</span>: <span class="keyword">function</span>(){
-                                        <span class="local-variable">this</span>.mousepos = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">main</span><span class="delimiter">&quot;</span></span>).pos ;
+                                        <span class="local-variable">this</span>.pointerpos = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">main</span><span class="delimiter">&quot;</span></span>).pos ;
                                 }.bind(<span class="local-variable">this</span>)
                         })
                 )
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

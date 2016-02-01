@@ -1,8 +1,7 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, exports){
 
@@ -212,7 +211,7 @@ define.class(function(require, exports){
 			//	break
 			//}
 		}
-		// now lets read the pixel under the mouse
+		// now lets read the pixel under the pointer
 		var pick_resolve = this.pick_resolve
 		this.pick_resolve = []
 
@@ -241,16 +240,17 @@ define.class(function(require, exports){
 		}
 	}
 
-	this.pickScreen = function(x, y){
+	this.pickScreen = function(pos, immediate){
 		// promise based pickray rendering
 		return new Promise(function(resolve, reject){
 			this.pick_resolve.push(resolve)
-			this.pick_x = x
-			this.pick_y = y
-			if(!this.pick_timer){
+			this.pick_x = pos[0]
+			this.pick_y = pos[1]
+			if (immediate) {
+				this.doPick()
+			} else if (!this.pick_timer){
 				this.pick_timer = setTimeout(this.doPick, 0)
 			}
-			//this.doPick()
 		}.bind(this))
 	}
 

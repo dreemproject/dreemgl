@@ -218,8 +218,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n64" name="n64">64</a>
 <a href="#n65" name="n65">65</a>
 <a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, view){
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, view){
   <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
       screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#484230</span><span class="delimiter">'</span></span>},
              view({
@@ -227,7 +237,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                ,<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>
                ,<span class="key">flex</span>:<span class="integer">1</span>
              },
-                  
+
                   <span class="comment">// red box inside green box</span>
                   view({<span class="key">size</span>: vec2(<span class="integer">200</span>,<span class="integer">200</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#808080</span><span class="delimiter">'</span></span>
                         ,<span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>)
@@ -235,7 +245,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         ,<span class="key">borderwidth</span>:<span class="integer">10</span>
                         ,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>}
                       )
-                  
+
                   <span class="comment">// green box, red box</span>
                   ,view({<span class="key">size</span>: vec2(<span class="integer">200</span>,<span class="integer">200</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#909090</span><span class="delimiter">'</span></span>
                         ,<span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>)
@@ -243,7 +253,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         ,<span class="key">borderwidth</span>:<span class="integer">10</span>
                          ,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>}
                        )
-                  
+
                   <span class="comment">// red box, green box</span>
                   ,view({<span class="key">size</span>: vec2(<span class="integer">200</span>,<span class="integer">200</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#a0a0a0a0</span><span class="delimiter">'</span></span>
                         ,<span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>)
@@ -251,7 +261,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         ,<span class="key">borderwidth</span>:<span class="integer">10</span>
                          ,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>}
                        )
-                  
+
                   <span class="comment">// green box above red box</span>
                   ,view({<span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">size</span>: vec2(<span class="integer">200</span>,<span class="integer">200</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#b0b0b0</span><span class="delimiter">'</span></span>
                         ,<span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>)
@@ -259,7 +269,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         ,<span class="key">borderwidth</span>:<span class="integer">10</span>
                          ,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>}
                        )
-                  
+
                   <span class="comment">// red box above green box</span>
                   ,view({<span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">size</span>: vec2(<span class="integer">200</span>,<span class="integer">200</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#c0c0c0c0</span><span class="delimiter">'</span></span>
                         ,<span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>)
@@ -267,7 +277,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         ,<span class="key">borderwidth</span>:<span class="integer">10</span>
                          ,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>}
                        )
-                  
+
                   <span class="comment">// green box, box box diagonal</span>
                   ,view({<span class="key">size</span>: vec2(<span class="integer">200</span>,<span class="integer">200</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">#d0d0d0</span><span class="delimiter">'</span></span>
                         ,<span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>)
@@ -275,15 +285,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         ,<span class="key">borderwidth</span>:<span class="integer">10</span>
                          ,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#505050</span><span class="delimiter">'</span></span>}
                       )
-                        
+
 
                  )
             )
-      
+
   ]}
-  
-  
-  
+
+
+
 })
 </pre></td>
 </tr></table>

@@ -1,4 +1,4 @@
-/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
@@ -229,7 +229,7 @@ function convertToVec4(hex){
 
 function createColorTable() {
 	var content = "<table>" +
-		"<header><th>Color name</th><th>Color</th><th>HEX</th><th>RGBA CSS value</th><th>vec4</th></header>\n";
+		"<tr><th>Color name</th><th>Color</th><th>HEX</th><th>RGBA CSS value</th><th>vec4</th></tr>\n";
 
 	for (var k in color_wikipedia) {
 		var hexColor = color_wikipedia[ k].toUpperCase();

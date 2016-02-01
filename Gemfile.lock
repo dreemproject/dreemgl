@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    dimensions (1.2.0)
+    jsduck (6.0.0beta)
+      dimensions (~> 1.2.0)
+      json (~> 1.8.0)
+      parallel (~> 0.7.1)
+      rdiscount (~> 2.1.6)
+      rkelly-remix (~> 0.0.4)
+      sass (~> 3.2.0)
+    json (1.8.3)
+    parallel (0.7.1)
+    rdiscount (2.1.8)
+    rkelly-remix (0.0.7)
+    sass (3.2.19)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  jsduck (>= 6.0.0.beta)
+
+BUNDLED WITH
+   1.11.2

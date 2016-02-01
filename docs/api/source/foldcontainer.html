@@ -330,8 +330,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n176" name="n176">176</a>
 <a href="#n177" name="n177">177</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// ruler class</span>
@@ -363,20 +363,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// Function to change the open/closed state. Used by the click handler of the clickablebar.</span>
         <span class="local-variable">this</span>.<span class="function">toggle</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.collapsed = !<span class="local-variable">this</span>.collapsed;                
+                <span class="local-variable">this</span>.collapsed = !<span class="local-variable">this</span>.collapsed;
         }
 
-        <span class="comment">// subclass to lay out the clickable portion of the folding container </span>
+        <span class="comment">// subclass to lay out the clickable portion of the folding container</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">clickablebar</span><span class="delimiter">'</span></span>, view, <span class="keyword">function</span>(){
-                
-                <span class="local-variable">this</span>.<span class="function">bggradient</span> = <span class="keyword">function</span>(a,b){        
+
+                <span class="local-variable">this</span>.<span class="function">bggradient</span> = <span class="keyword">function</span>(a,b){
                         <span class="keyword">var</span> fill = mix(col1, col2,  (a.y)/<span class="float">0.8</span>);
                         <span class="keyword">return</span> fill;
                 }
 
-                <span class="comment">// default click-handler - when not bound this write &quot;nothing happens&quot; to the console. </span>
+                <span class="comment">// default click-handler - when not bound this write &quot;nothing happens&quot; to the console.</span>
                 <span class="local-variable">this</span>.<span class="function">toggle</span> = <span class="keyword">function</span>(){console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">nothing happens</span><span class="delimiter">&quot;</span></span>)}
-                
+
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">title</span>: Config({<span class="key">type</span>:String}),
                         <span class="key">icon</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
@@ -387,14 +387,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>;
 
                 <span class="local-variable">this</span>.bg = {
-                        <span class="function">color</span>: <span class="keyword">function</span>(){        
+                        <span class="function">color</span>: <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> fill = mix(view.col1, view.col2,  (mesh.y)/<span class="float">0.8</span>)
                                 <span class="keyword">return</span> fill;
-                        }                        
+                        }
                 }
 
                 <span class="local-variable">this</span>.padding = <span class="integer">3</span>
-                <span class="local-variable">this</span>.justifycontent=  <span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span> 
+                <span class="local-variable">this</span>.justifycontent=  <span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.flex = <span class="integer">1</span>
 
@@ -403,7 +403,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> res = []
 
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.icon)res.push(icon({<span class="key">fontsize</span>:<span class="local-variable">this</span>.outer.fontsize, <span class="key">icon</span>:<span class="local-variable">this</span>.icon, <span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor) }));
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.title) res.push(label({<span class="key">font</span>: require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_bold_ascii.glf</span><span class="delimiter">'</span></span>),<span class="key">marginleft</span>:<span class="integer">5</span>,<span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor), <span class="key">fontsize</span>: <span class="local-variable">this</span>.outer.fontsize, <span class="key">text</span>:<span class="local-variable">this</span>.title, <span class="key">bg</span>:<span class="integer">0</span> }));                                        
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.title) res.push(label({<span class="key">font</span>: require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_bold_ascii.glf</span><span class="delimiter">'</span></span>),<span class="key">marginleft</span>:<span class="integer">5</span>,<span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor), <span class="key">fontsize</span>: <span class="local-variable">this</span>.outer.fontsize, <span class="key">text</span>:<span class="local-variable">this</span>.title, <span class="key">bg</span>:<span class="integer">0</span> }));
                         <span class="keyword">var</span> res2 = [view({<span class="key">bg</span>:<span class="integer">0</span>},res), icon({<span class="key">fontsize</span>:<span class="local-variable">this</span>.outer.fontsize,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="local-variable">this</span>.collapsed? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor) })]
                         <span class="keyword">return</span> res2;
                 }
@@ -417,8 +417,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">else</span>{
                                 <span class="local-variable">this</span>.col2 = <span class="local-variable">this</span>.col1;
                         }
-                }                        
-                
+                }
+
                 <span class="local-variable">this</span>.<span class="function">stateover</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.col1 = Mark(vec4.vec4_mul_float32_rgb(vec4(<span class="local-variable">this</span>.parent.basecolor), <span class="float">1.2</span>))
                         <span class="keyword">if</span> (<span class="local-variable">this</span>._autogradient){
@@ -432,7 +432,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">stateclick</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.col1 = vec4.vec4_mul_float32(vec4(<span class="local-variable">this</span>.parent.basecolor), <span class="float">1.3</span>)
                         <span class="keyword">if</span> (<span class="local-variable">this</span>._autogradient){
-
                                 <span class="local-variable">this</span>.col2 = vec4.vec4_mul_float32(vec4(<span class="local-variable">this</span>.parent.basecolor), <span class="float">1.0</span>)
                         }
                         <span class="keyword">else</span>{
@@ -440,18 +439,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                         <span class="local-variable">this</span>.outer.toggle()
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">layout</span>  = <span class="keyword">function</span>(){<span class="local-variable">this</span>.statedefault();};
                 <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
                         <span class="comment">//        console.log(&quot;HERE&quot;,this.bgcolor)</span>
                         <span class="local-variable">this</span>.statedefault(<span class="predefined-constant">true</span>)
                 }
-                <span class="local-variable">this</span>.mouseover = <span class="local-variable">this</span>.stateover
-                <span class="local-variable">this</span>.mouseout = <span class="local-variable">this</span>.statedefault
-                <span class="local-variable">this</span>.mouseleftdown = <span class="local-variable">this</span>.stateclick
-                <span class="local-variable">this</span>.mouseleftup = <span class="local-variable">this</span>.statedefault
+
+                <span class="local-variable">this</span>.pointerover = <span class="local-variable">this</span>.stateover
+                <span class="local-variable">this</span>.pointerout = <span class="local-variable">this</span>.statedefault
+                <span class="local-variable">this</span>.pointerstart = <span class="local-variable">this</span>.stateclick
+                <span class="local-variable">this</span>.pointerend = <span class="local-variable">this</span>.statedefault
         })
-        
+
         <span class="comment">// the main container view</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">containerview</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(view){
                 <span class="local-variable">this</span>.bg = {
@@ -464,49 +464,50 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.margin = vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>
         })
-        
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                
+
                 <span class="local-variable">this</span>.bar = <span class="local-variable">this</span>.clickablebar({
                         <span class="key">bgcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3c3c3c</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">borderwidth</span>: <span class="local-variable">this</span>.borderwidth, 
+                        <span class="key">borderwidth</span>: <span class="local-variable">this</span>.borderwidth,
                         <span class="key">bordercolor</span>: <span class="local-variable">this</span>.bordercolor,
-                        <span class="key">icon</span>: <span class="local-variable">this</span>.icon?<span class="local-variable">this</span>.icon:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, 
+                        <span class="key">icon</span>: <span class="local-variable">this</span>.icon?<span class="local-variable">this</span>.icon:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">title</span>: <span class="local-variable">this</span>.title,
                         <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
                         <span class="key">collapsed</span>: <span class="local-variable">this</span>.collapsed
                 });
-                
-                <span class="local-variable">this</span>.bar.click = <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>);
+
+                <span class="local-variable">this</span>.bar.pointertap = <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>);
                 <span class="keyword">var</span> res = [<span class="local-variable">this</span>.bar];
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.collapsed == <span class="predefined-constant">false</span>) {
                         <span class="local-variable">this</span>.container = <span class="local-variable">this</span>.containerview({
-                                <span class="key">bgcolor</span>: <span class="local-variable">this</span>.basecolor, 
-                                <span class="key">borderwidth</span>: <span class="local-variable">this</span>.borderwidth, 
-                                <span class="key">bordercolor</span>:<span class="local-variable">this</span>.bordercolor,  
+                                <span class="key">bgcolor</span>: <span class="local-variable">this</span>.basecolor,
+                                <span class="key">borderwidth</span>: <span class="local-variable">this</span>.borderwidth,
+                                <span class="key">bordercolor</span>:<span class="local-variable">this</span>.bordercolor,
 
                         },
-                        <span class="local-variable">this</span>.constructor_children) 
+                        <span class="local-variable">this</span>.constructor_children)
                         res.push(<span class="local-variable">this</span>.container)
                 }
                 <span class="local-variable">this</span>.children = [];
-                
+
                 <span class="keyword">return</span> res;
         }
-        
+
         <span class="keyword">var</span> foldcontainer = <span class="local-variable">this</span>.constructor;
 
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">BasicExample</span>:<span class="keyword">function</span>(){
                         <span class="keyword">return</span> [
-                                foldcontainer({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folding thing</span><span class="delimiter">&quot;</span></span>, <span class="key">basecolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#90c0f0</span><span class="delimiter">&quot;</span></span> } ,                                        
+                                foldcontainer({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folding thing</span><span class="delimiter">&quot;</span></span>, <span class="key">basecolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#90c0f0</span><span class="delimiter">&quot;</span></span> } ,
                                         label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">I can be folded away!</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>) })
                                 )
                         ]
                 }
         }
-});</pre></td>
+});
+</pre></td>
 </tr></table>
 
 </body>

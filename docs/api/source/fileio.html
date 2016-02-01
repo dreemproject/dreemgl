@@ -219,11 +219,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n65" name="n65">65</a>
 <a href="#n66" name="n66">66</a>
 <a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, service){
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, service){
         <span class="comment">// The fileio class provides an easy RPC mechanism to load/create/save/enumerate files and directories. The fileio instance should live on the server part of the composition.</span>
         <span class="comment">// do not ever put this in a web-facing composition as it has no security features</span>
-        
+
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">fileio</span><span class="delimiter">&quot;</span></span>
 
         <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>)
@@ -262,7 +272,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
         <span class="comment">// &lt;data&gt; The data to write</span>
         <span class="local-variable">this</span>.<span class="function">writefile</span> = <span class="keyword">function</span>(name, data){
-                
+
                 <span class="keyword">try</span>{
                         console.log(name);
                         <span class="keyword">var</span> fullname = define.expandVariables( name);
@@ -286,7 +296,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
                 <span class="comment">// lets do a query</span>
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

@@ -462,10 +462,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n308" name="n308">308</a>
 <a href="#n309" name="n309">309</a>
 <strong><a href="#n310" name="n310">310</a></strong>
+<a href="#n311" name="n311">311</a>
+<a href="#n312" name="n312">312</a>
+<a href="#n313" name="n313">313</a>
+<a href="#n314" name="n314">314</a>
+<a href="#n315" name="n315">315</a>
+<a href="#n316" name="n316">316</a>
+<a href="#n317" name="n317">317</a>
+<a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
@@ -512,6 +524,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
             <span class="keyword">var</span> expandedPath = define.expandVariables(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span> + path);
             <span class="keyword">var</span> module = require(expandedPath)
             <span class="keyword">var</span> class_doc = <span class="local-variable">this</span>.parseDoc(module)
+                        class_doc.sourcePath = path;
             <span class="keyword">var</span> out = <span class="local-variable">this</span>.printJSDuck(class_doc).join(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>);
             <span class="keyword">if</span> (out) {
                 <span class="local-variable">this</span>.writeToPath(path, out);
@@ -606,12 +619,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
     <span class="local-variable">this</span>.<span class="function">printJSDuck</span> = <span class="keyword">function</span>(class_doc, parentclass) {
         <span class="keyword">var</span> i, j, str, firstline;
-        <span class="keyword">var</span> internal = <span class="string"><span class="delimiter">'</span><span class="content">internal,</span><span class="delimiter">'</span></span>;
+        <span class="keyword">var</span> internal = <span class="string"><span class="delimiter">'</span><span class="content">internal</span><span class="delimiter">'</span></span>;
         <span class="keyword">var</span> output = [];
 
         <span class="keyword">if</span> (!class_doc) {
             <span class="keyword">return</span> output;
         }
+
+                <span class="keyword">var</span> exampleFunctions = {};
 
         <span class="keyword">if</span> (class_doc.body_text &amp;&amp; class_doc.body_text.length) {
             firstline = class_doc.body_text[<span class="integer">0</span>]
@@ -637,7 +652,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
             }
 
-            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">if</span> (class_doc.examples &amp;&amp; class_doc.examples.length) {
+                                <span class="keyword">var</span> url = <span class="string"><span class="delimiter">'</span><span class="content">http://localhost:2000/apps/docs/example#path=$root/</span><span class="delimiter">'</span></span> + class_doc.sourcePath;
+                                <span class="keyword">var</span> s = <span class="string"><span class="delimiter">&quot;</span><span class="content">border:0;</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">var</span> w = <span class="integer">900</span>;
+                                <span class="keyword">var</span> h = <span class="integer">300</span> * class_doc.examples.length;
+                                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span>);
+                                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * &lt;iframe style=&quot;</span><span class="delimiter">'</span></span> + s + <span class="string"><span class="delimiter">'</span><span class="content">width:</span><span class="delimiter">'</span></span> + w + <span class="string"><span class="delimiter">'</span><span class="content">px;height:</span><span class="delimiter">'</span></span> + h + <span class="string"><span class="delimiter">'</span><span class="content">px&quot; src=&quot;</span><span class="delimiter">'</span></span> + url + <span class="string"><span class="delimiter">'</span><span class="content">&quot;&gt;&lt;/iframe&gt;</span><span class="delimiter">'</span></span>);
+                                output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span>);
+                        }
+
+                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
             <span class="keyword">var</span> attrs = [];
             <span class="keyword">if</span> (class_doc.attributes) {
                 <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.attributes.length; i++) {
@@ -758,14 +783,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
             <span class="comment">//        output = output.concat(this.printJSDuck(inner, classname));</span>
             <span class="comment">//    }</span>
             <span class="comment">//}</span>
-            <span class="keyword">if</span> (class_doc.examples &amp;&amp; class_doc.examples.length) {
-                console.log(<span class="string"><span class="delimiter">'</span><span class="content">EXAMPLES</span><span class="delimiter">'</span></span>, class_doc.examples)
-            }
             <span class="keyword">if</span> (class_doc.state_attributes &amp;&amp; class_doc.state_attributes.length) {
                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">STATE</span><span class="delimiter">'</span></span>, class_doc.state_attributes)
             }
 
         }
+
+                console.log(output.join(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>))
 
         <span class="keyword">return</span> output;
 

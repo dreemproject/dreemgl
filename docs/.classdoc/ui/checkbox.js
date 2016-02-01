@@ -2,6 +2,9 @@
  * @class checkbox
  * @extends view
  * Simple toggle button: a rectangle with a textlabel and an icon
+ * 
+ * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/checkbox.js"></iframe>
+ * 
  */
 /**
  * @attribute {String} [text="undefined"]
@@ -18,6 +21,10 @@
 /**
  * @attribute {vec4} [col2="0.250980406999588,0.250980406999588,0.250980406999588,1"]
  * Gradient color 2
+ */
+/**
+ * @attribute {vec4} [inactivecolor="0.7333333492279053,0.7333333492279053,0.7333333492279053,1"]
+ * Color of the inactive icon
  */
 /**
  * @attribute {vec4} [textcolor="0.250980406999588,0.250980406999588,0.250980406999588,1"]

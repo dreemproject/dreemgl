@@ -396,13 +396,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n242" name="n242">242</a>
 <a href="#n243" name="n243">243</a>
 <a href="#n244" name="n244">244</a>
-<a href="#n245" name="n245">245</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-<span class="comment">// Mouse class</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 */</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/keyboard</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, exports){
 
@@ -479,19 +475,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">shift</span>:<span class="local-variable">this</span>._shift,
                                 <span class="key">meta</span>: <span class="local-variable">this</span>._meta,
                                 <span class="key">ctrl</span>: <span class="local-variable">this</span>._ctrl,
-                                <span class="key">alt</span>: <span class="local-variable">this</span>._alt                                
+                                <span class="key">alt</span>: <span class="local-variable">this</span>._alt
                         }
 
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">down</span><span class="delimiter">'</span></span>, msg)
 
-                        <span class="keyword">if</span>( (<span class="local-variable">this</span>._ctrl  || <span class="local-variable">this</span>._meta) &amp;&amp; <span class="local-variable">this</span>._y || 
-                                <span class="local-variable">this</span>._tab || 
+                        <span class="keyword">if</span>( (<span class="local-variable">this</span>._ctrl  || <span class="local-variable">this</span>._meta) &amp;&amp; <span class="local-variable">this</span>._y ||
+                                <span class="local-variable">this</span>._tab ||
                                 <span class="local-variable">this</span>._leftarrow ||
                                 <span class="local-variable">this</span>._rightarrow ||
-                                <span class="local-variable">this</span>._uparrow || 
+                                <span class="local-variable">this</span>._uparrow ||
                                 <span class="local-variable">this</span>._downarrow){
                                 <span class="keyword">if</span>(e.preventDefault) e.preventDefault()
-                        }                        
+                        }
 
                         is_keyboard_cut = <span class="predefined-constant">false</span>
                         is_keyboard_all = <span class="predefined-constant">false</span>
@@ -523,7 +519,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">up</span><span class="delimiter">'</span></span>, msg)
 
                 }.bind(<span class="local-variable">this</span>)
-                <span class="comment">//window.addEventListener('keyup', </span>
+                <span class="comment">//window.addEventListener('keyup',</span>
                 <span class="comment">//window.addEventListener('keypress',</span>
                 <span class="keyword">var</span> <span class="function">keypress</span> = <span class="keyword">function</span>(e){
                         <span class="keyword">if</span>(e.metaKey || e.altKey || e.ctrlKey) <span class="keyword">return</span>
@@ -540,20 +536,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         e.preventDefault()
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">// lets output a css</span>
-                
-                <span class="local-variable">this</span>.<span class="function">mouseMove</span> = <span class="keyword">function</span>(x, y){
+
+                <span class="local-variable">this</span>.<span class="function">pointerMove</span> = <span class="keyword">function</span>(pos){
                         <span class="local-variable">this</span>.textarea.focus()
-                        <span class="local-variable">this</span>.textarea.style.left = x - parseFloat(<span class="local-variable">this</span>.textarea.style.width) * <span class="float">0.5</span>
-                        <span class="local-variable">this</span>.textarea.style.top = y - parseFloat(<span class="local-variable">this</span>.textarea.style.height) * <span class="float">0.5</span>
+                        <span class="local-variable">this</span>.textarea.style.left = pos[<span class="integer">0</span>] - parseFloat(<span class="local-variable">this</span>.textarea.style.width) * <span class="float">0.5</span>
+                        <span class="local-variable">this</span>.textarea.style.top = pos[<span class="integer">1</span>] - parseFloat(<span class="local-variable">this</span>.textarea.style.height) * <span class="float">0.5</span>
                 }
 
                 <span class="local-variable">this</span>.textarea = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">textarea</span><span class="delimiter">'</span></span>)
                 <span class="local-variable">this</span>.textarea.style.width = <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.textarea.style.height = <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.textarea.style.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
+                <span class="comment">// this.textarea.style.pointerEvents = 'none'</span>
+                <span class="comment">// this.textarea.style.display = 'none'</span>
                 <span class="comment">//this.textarea.style.background = 'red'</span>
                 <span class="local-variable">this</span>.textarea.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">autocomplete</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">off</span><span class="delimiter">&quot;</span></span>)
-                <span class="local-variable">this</span>.textarea.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">autocorrect</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">off</span><span class="delimiter">&quot;</span></span>) 
+                <span class="local-variable">this</span>.textarea.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">autocorrect</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">off</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.textarea.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">autocapitalize</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">off</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.textarea.setAttribute(<span class="string"><span class="delimiter">'</span><span class="content">spellcheck</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">false</span><span class="delimiter">&quot;</span></span>)
 

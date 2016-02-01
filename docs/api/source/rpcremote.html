@@ -198,11 +198,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
 <a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">//Pure JS based composition</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+<span class="comment">//Pure JS based composition</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(
         <span class="predefined">$server$</span>, service,
-        <span class="predefined">$ui$</span>, screen, view, 
+        <span class="predefined">$ui$</span>, screen, view,
         <span class="predefined">$behaviors$</span>, draggable){ <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
 
         service({
@@ -221,7 +231,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">mobile</span><span class="delimiter">'</span></span>,
                 <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">10</span>,<span class="key">y</span>:<span class="integer">10</span>},
                 <span class="comment">// make an exportable attribute to something internal</span>
-                <span class="key">mousepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.main.pos</span><span class="delimiter">'</span></span>)
+                <span class="key">pointerpos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.main.pos</span><span class="delimiter">'</span></span>)
                 },
                 view({
                         <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>,
@@ -233,7 +243,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         screen({
                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">remote</span><span class="delimiter">'</span></span>,
                 <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">30</span>,<span class="key">y</span>:<span class="octal">00</span>},
-                <span class="key">movepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.mobile.mousepos</span><span class="delimiter">'</span></span>)
+                <span class="key">movepos</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.mobile.pointerpos</span><span class="delimiter">'</span></span>)
                 },
                 view({
                         <span class="key">size</span>: vec2(<span class="integer">200</span>, <span class="integer">200</span>),
@@ -244,7 +254,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 })
         )
-]}})</pre></td>
+]}})
+</pre></td>
 </tr></table>
 
 </body>

@@ -1,6 +1,6 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
- You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
- software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
@@ -47,6 +47,7 @@ define.class(function(require){
             var expandedPath = define.expandVariables('$' + path);
             var module = require(expandedPath)
             var class_doc = this.parseDoc(module)
+			class_doc.sourcePath = path;
             var out = this.printJSDuck(class_doc).join('\n');
             if (out) {
                 this.writeToPath(path, out);
@@ -141,12 +142,14 @@ define.class(function(require){
 
     this.printJSDuck = function(class_doc, parentclass) {
         var i, j, str, firstline;
-        var internal = 'internal,';
+        var internal = 'internal';
         var output = [];
 
         if (!class_doc) {
             return output;
         }
+
+		var exampleFunctions = {};
 
         if (class_doc.body_text && class_doc.body_text.length) {
             firstline = class_doc.body_text[0]
@@ -172,7 +175,17 @@ define.class(function(require){
                 }
             }
 
-            output.push(' */');
+			if (class_doc.examples && class_doc.examples.length) {
+				var url = 'http://localhost:2000/apps/docs/example#path=$root/' + class_doc.sourcePath;
+				var s = "border:0;";
+				var w = 900;
+				var h = 300 * class_doc.examples.length;
+				output.push(' * ');
+				output.push(' * <iframe style="' + s + 'width:' + w + 'px;height:' + h + 'px" src="' + url + '"></iframe>');
+				output.push(' * ');
+			}
+
+			output.push(' */');
             var attrs = [];
             if (class_doc.attributes) {
                 for (i=0; i < class_doc.attributes.length; i++) {
@@ -293,14 +306,13 @@ define.class(function(require){
             //        output = output.concat(this.printJSDuck(inner, classname));
             //    }
             //}
-            if (class_doc.examples && class_doc.examples.length) {
-                console.log('EXAMPLES', class_doc.examples)
-            }
             if (class_doc.state_attributes && class_doc.state_attributes.length) {
                 console.log('STATE', class_doc.state_attributes)
             }
 
         }
+
+		console.log(output.join('\n'))
 
         return output;
 

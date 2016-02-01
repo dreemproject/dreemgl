@@ -576,13 +576,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n422" name="n422">422</a>
 <a href="#n423" name="n423">423</a>
 <a href="#n424" name="n424">424</a>
-<a href="#n425" name="n425">425</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, baseclass){
         <span class="comment">// internal, drawing</span>
@@ -673,17 +671,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">calculateDrawMatrices</span> = <span class="keyword">function</span>(isroot, storage, mousex, mousey){
+        <span class="local-variable">this</span>.<span class="function">calculateDrawMatrices</span> = <span class="keyword">function</span>(isroot, storage, pointerx, pointery){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                 <span class="keyword">var</span> scroll = view._scroll
                 <span class="keyword">var</span> layout = view._layout
 
                 <span class="keyword">if</span>(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>){
-                        <span class="keyword">if</span>(isroot &amp;&amp; mousex !== <span class="predefined-constant">undefined</span>){
+                        <span class="keyword">if</span>(isroot &amp;&amp; pointerx !== <span class="predefined-constant">undefined</span>){
                                 <span class="keyword">var</span> sizel = <span class="integer">0</span>
                                 <span class="keyword">var</span> sizer = <span class="integer">1</span>
-                                mat4.ortho(scroll[<span class="integer">0</span>] + mousex - sizel, scroll[<span class="integer">0</span>] + mousex + sizer, scroll[<span class="integer">1</span>] + mousey - sizer,  scroll[<span class="integer">1</span>] + mousey + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.viewmatrix)
-                                mat4.ortho(mousex - sizel, mousex + sizer, mousey - sizer, mousey + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.noscrollmatrix)
+                                mat4.ortho(scroll[<span class="integer">0</span>] + pointerx - sizel, scroll[<span class="integer">0</span>] + pointerx + sizer, scroll[<span class="integer">1</span>] + pointery - sizer,  scroll[<span class="integer">1</span>] + pointery + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.viewmatrix)
+                                mat4.ortho(pointerx - sizel, pointerx + sizer, pointery - sizer, pointery + sizel, -<span class="integer">100</span>, <span class="integer">100</span>, storage.noscrollmatrix)
                         }
                         <span class="keyword">else</span>{
                                 <span class="keyword">var</span> zoom = view._zoom
@@ -751,7 +749,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> next
         }
 
-        <span class="local-variable">this</span>.<span class="function">drawPick</span> = <span class="keyword">function</span>(isroot, passid, mousex, mousey, debug){
+        <span class="local-variable">this</span>.<span class="function">drawPick</span> = <span class="keyword">function</span>(isroot, passid, pointerx, pointery, debug){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                 <span class="keyword">var</span> device = <span class="local-variable">this</span>.device
                 <span class="keyword">var</span> layout = view._layout
@@ -773,7 +771,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 device.clear(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
 
                 <span class="keyword">var</span> matrices = <span class="local-variable">this</span>.pickmatrices
-                <span class="local-variable">this</span>.calculateDrawMatrices(isroot, matrices, debug?<span class="predefined-constant">undefined</span>:mousex, mousey)
+                <span class="local-variable">this</span>.calculateDrawMatrices(isroot, matrices, debug?<span class="predefined-constant">undefined</span>:pointerx, pointery)
                 <span class="comment">// calculate the colormatrices too</span>
                 <span class="comment">//if(!this.colormatrices.initialized){</span>
                 <span class="comment">//        this.calculateDrawMatrices(isroot, this.colormatrices)</span>

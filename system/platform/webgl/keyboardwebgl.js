@@ -1,8 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-// Mouse class
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 */
 
 define.class('$system/base/keyboard', function (require, exports){
 
@@ -79,19 +76,19 @@ define.class('$system/base/keyboard', function (require, exports){
 				shift:this._shift,
 				meta: this._meta,
 				ctrl: this._ctrl,
-				alt: this._alt				
+				alt: this._alt
 			}
 
 			this.emit('down', msg)
 
-			if( (this._ctrl  || this._meta) && this._y || 
-				this._tab || 
+			if( (this._ctrl  || this._meta) && this._y ||
+				this._tab ||
 				this._leftarrow ||
 				this._rightarrow ||
-				this._uparrow || 
+				this._uparrow ||
 				this._downarrow){
 				if(e.preventDefault) e.preventDefault()
-			}			
+			}
 
 			is_keyboard_cut = false
 			is_keyboard_all = false
@@ -123,7 +120,7 @@ define.class('$system/base/keyboard', function (require, exports){
 			this.emit('up', msg)
 
 		}.bind(this)
-		//window.addEventListener('keyup', 
+		//window.addEventListener('keyup',
 		//window.addEventListener('keypress',
 		var keypress = function(e){
 			if(e.metaKey || e.altKey || e.ctrlKey) return
@@ -140,20 +137,22 @@ define.class('$system/base/keyboard', function (require, exports){
 			e.preventDefault()
 		}.bind(this)
 		// lets output a css
-		
-		this.mouseMove = function(x, y){
+
+		this.pointerMove = function(pos){
 			this.textarea.focus()
-			this.textarea.style.left = x - parseFloat(this.textarea.style.width) * 0.5
-			this.textarea.style.top = y - parseFloat(this.textarea.style.height) * 0.5
+			this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
+			this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
 		}
 
 		this.textarea = document.createElement('textarea')
 		this.textarea.style.width = '1'
 		this.textarea.style.height = '1'
 		this.textarea.style.position = 'absolute'
+		// this.textarea.style.pointerEvents = 'none'
+		// this.textarea.style.display = 'none'
 		//this.textarea.style.background = 'red'
 		this.textarea.setAttribute('autocomplete',"off")
-		this.textarea.setAttribute('autocorrect',"off") 
+		this.textarea.setAttribute('autocorrect',"off")
 		this.textarea.setAttribute('autocapitalize',"off")
 		this.textarea.setAttribute('spellcheck',"false")
 

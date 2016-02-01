@@ -1,7 +1,7 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton, renameblockdialog){
 
@@ -176,69 +176,51 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.pos = vec2(x,y);
 	}
 
-	this.mouseleftdown = function(p){
+	this.pointerstart = function(event){
 		//this.moveToFront()
 		var props = this.find("mainproperties");
 		if (props) props.target = this.name;
-
 		var	fg = this.find("flowgraph");
-
 		if (!this.screen.keyboard.shift && !fg.inSelection(this)){
 			fg.clearSelection();
 		}
 		if (this.screen.keyboard.shift && fg.inSelection(this)){
 			fg.removeFromSelection(this);
 			fg.updateSelectedItems();
-
 			return;
 		}
 		fg.setActiveBlock(this);
 		fg.updateSelectedItems();
-
-
-		this.startposition = this.parent.localMouse();
 		fg.setupSelectionMove();
-		this.mousemove = function(evt){
-			var p = this.parent.localMouse()
-			var dx = p[0] - this.startposition[0];
-			var dy = p[1] - this.startposition[1];
-
-			var	fg = this.find("flowgraph");
-
-			fg.moveSelected(dx, dy, false);
-
-
-		}.bind(this);
 	}
 
-	this.mouseleftup = function(p){
-		var p = this.parent.localMouse()
+	this.pointermove = function(event){
+		var delta = event.value[0].delta
+		this.find("flowgraph").moveSelected(delta[0], delta[1], false);
+	}
+
+	this.pointerend = function(event){
 		var x = Math.floor(this.pos[0]/this.snap)*this.snap;
 		var y = Math.floor(this.pos[1]/this.snap)*this.snap;
-		var dx = p[0] - this.startposition[0];
-		var dy = p[1] - this.startposition[1];
-
 		this.pos = vec2(x,y);
+		var delta = event.value[0].delta
 		this.redraw();
 		this.relayout();
-		this.find("flowgraph").moveSelected(dx,dy,true)
-
-		this.mousemove = function(){};
+		this.find("flowgraph").moveSelected(delta[0], delta[1], true);
 	}
 
 	this.over = false;
 
-	this.mouseover = function(){
-		this.over = true;
-		this.screen.status = this.hovertext;
-		this.updatecolor();
+	this.pointerover = function(){
+		this.over = true
+		this.screen.status = this.hovertext
+		this.updatecolor()
 	}
 
-	this.mouseout = function(){
-		this.over = false;
-		this.updatecolor();
+	this.pointerout = function(){
+		this.over = false
+		this.updatecolor()
 	}
-
 
 	this.flexdirection = "column"
 
@@ -260,21 +242,20 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 		this.marginbottom = 4
 
-		this.clicked = function(){
+		this.tapped = function(){
 			var	bl = this.parent.parent.parent
 			var	fg = this.find("flowgraph")
 			fg.setConnectionEndpoint(bl.name, this.name)
 		}
 
-		this.mouseover  = function(){
-			this.screen.status = this.hovertext;
+		this.pointerover  = function(){
+			this.screen.status = this.hovertext
 		}
-
 
 		this.render =function(){
 			this.hovertext = "Input " + this.title+ (this.type?(": "+ this.type):"");
 			return [
-				ballbutton({borderwidth:2, bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"}),
+				ballbutton({borderwidth:2, bgcolor:this.bgcolor, click: this.tapped.bind(this), alignself:"center"}),
 				label({marginleft:5, text:uppercaseFirst(this.title), bg:false, alignself:"center"})
 			]
 		}
@@ -288,18 +269,16 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			type:""
 		}
 
-		this.mouseover  = function(){
-			this.screen.status = this.hovertext;
+		this.pointerover  = function(){
+			this.screen.status = this.hovertext
 		}
-		this.clicked = function(){
+
+		this.tapped = function(){
 			var	bl = this.parent.parent.parent;
 			var	fg = this.find("flowgraph");
 			fg.setConnectionStartpoint(bl.name, this.name);
 		}
 
-		this.init = function(){
-
-		}
 		this.marginbottom = 4;
 
 		this.render =function(){
@@ -307,7 +286,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 			return [
 				label({text:uppercaseFirst(this.name), bg:false, alignself:"center", marginright: 5}),
-				ballbutton({borderwidth:2, bgcolor:this.bgcolor, mouseleftdown:function(){this.clicked();}.bind(this), alignself:"center"})
+				ballbutton({borderwidth:2, bgcolor: this.bgcolor, click: this.tapped.bind(this), alignself:"center"})
 			]
 		}
 	})
@@ -330,12 +309,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		return res;
 	}
 
-	this.renameBlock = function(){
+	this.renameBlock = function(e){
 		this.screen.openModal(function(){
 			return renameblockdialog({oldname:this.name, width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				x:this.screen.pointer._x,
-				y:this.screen.pointer._y + 20,
+				x: e.value[0].x,
+				y: e.value[0].y + 20,
 				blur:function(){
 					this.screen.closeModal(false)
 
@@ -359,9 +338,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			view({class:'header',alignitems:"center" }
 				,view({bg:0, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
-					,button({class:"header", icon:"pencil",click:function(){this.renameBlock();}.bind(this)})
+					,button({class:"header", icon:"pencil",click:function(e){this.renameBlock(e);}.bind(this)})
 				)
-				,button({class:"header", icon:"remove",click:function(){this.removeBlock();}.bind(this)})
+				,button({class:"header", icon:"remove",click:function(e){this.removeBlock(e);}.bind(this)})
 			)
 			,view({class:'main'},
 				view({bgimage:require("./placeholder.png") })

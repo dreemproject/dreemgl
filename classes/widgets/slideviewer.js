@@ -1,12 +1,12 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class(function($ui$, view, label){
 
-	// Slide viewer is an automatic slide viewer that turns child nodes into slides
+	// internal, Slide viewer is an automatic slide viewer that turns child nodes into slides
 	// use attributes named 'slidetitle' on a child to set the slide title1
 	this.attributes = {
 		// the width of a slide
@@ -66,7 +66,7 @@ define.class(function($ui$, view, label){
 				}),
 				view({
 					flex:1,
-					bgcolor:"transparent", 
+					bgcolor:"transparent",
 					padding:vec4(10)
 					},
 					this.constructor_children,
@@ -80,7 +80,7 @@ define.class(function($ui$, view, label){
 		if(event.mark) return
 		// set the scroll from the page
 		if(this._page < 0) this._page = 0
-		var len = this.constructor_children.length 
+		var len = this.constructor_children.length
 		if(this._page > len - 1) this._page = len - 1
 
 		this.scroll = vec2(this.page * (this.slidewidth + this.slidemargin * 2), 0)

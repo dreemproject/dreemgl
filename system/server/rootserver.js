@@ -1,7 +1,7 @@
-/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require){
 // Teem server
@@ -101,7 +101,6 @@ define.class(function(require){
 	this.default_composition = null
 
 	this.getComposition = function(file){
-
 		// lets find the composition either in define.COMPOSITIONS
 		if(!this.compositions[file]) this.compositions[file] = new CompositionServer(this.args, file, this)
 		return this.compositions[file]
@@ -112,7 +111,7 @@ define.class(function(require){
 		var sock = new NodeWebSocket(req, sock, head)
 		sock.url = req.url
 		var mypath = req.url.slice(1)
-		if(mypath) this.getComposition('$' + mypath).busserver.addWebSocket(sock)
+		if(mypath) this.getComposition('$' + decodeURIComponent(mypath)).busserver.addWebSocket(sock)
 		else this.busserver.addWebSocket(sock)
 	}
 
@@ -182,7 +181,7 @@ define.class(function(require){
 		var reqquery = requrl.split('?')
 
 		// ok if we are a /single fetch
-		var file = this.mapPath(reqquery[0])
+		var file = decodeURIComponent(this.mapPath(reqquery[0]))
 
 		var urlext = define.fileExt(reqquery[0])
 		// write .dre to .dre.js files
@@ -216,8 +215,9 @@ define.class(function(require){
 		}
 
 		var fileext = define.fileExt(file)
+
 		if(!fileext || fileext === 'dre'){
-			var composition = this.getComposition('$'+reqquery[0].slice(1))
+			var composition = this.getComposition('$'+decodeURIComponent(reqquery[0].slice(1)))
 			if(composition) return composition.request(req, res)
 		}
 

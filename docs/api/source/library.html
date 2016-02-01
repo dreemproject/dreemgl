@@ -272,18 +272,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n118" name="n118">118</a>
 <a href="#n119" name="n119">119</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, label, button, <span class="predefined">$$</span>, ballbutton){
-        
+
         <span class="keyword">function</span> <span class="function">uppercaseFirst</span> (inp) {
                 <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp;
                 <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>);
         }
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">classlibclass</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label, icon){
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">classdesc</span>: Config({<span class="key">type</span>:Object, <span class="key">value</span>: <span class="predefined-constant">undefined</span>}),
@@ -291,14 +291,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">col2</span>: Config({<span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#454545</span><span class="delimiter">&quot;</span></span>), <span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">linear</span><span class="delimiter">&quot;</span></span>, <span class="key">duration</span>:<span class="float">0.2</span>}),
                         <span class="key">folder</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
-                
+
                 <span class="local-variable">this</span>.bg = {
                         <span class="function">color</span>: <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> fill = mix(view.col1, view.col2,  (mesh.y)/<span class="float">0.8</span>)
                                 <span class="keyword">return</span> fill;
-                        }                        
+                        }
                 }
-                
+
                 console.log(<span class="local-variable">this</span>.name)
                 <span class="local-variable">this</span>.bg = <span class="integer">1</span>
                 <span class="local-variable">this</span>.margin = vec4(<span class="integer">2</span>,<span class="integer">2</span>,<span class="integer">2</span>,<span class="integer">0</span>)
@@ -307,7 +307,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">addBlock</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> fg = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">if</span> (fg){
-                                
+
                                 fg.addBlock(<span class="local-variable">this</span>.folder,<span class="local-variable">this</span>.classdesc.name.substr(<span class="integer">0</span>,<span class="local-variable">this</span>.classdesc.name.length-<span class="integer">3</span> ));
                         }
                 }
@@ -324,25 +324,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="comment">//,</span>
                                 view({<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bg</span>:<span class="predefined-constant">false</span>},
                                         label({<span class="key">text</span>:<span class="local-variable">this</span>.classdesc.name.substr(<span class="integer">0</span>,<span class="local-variable">this</span>.classdesc.name.length-<span class="integer">3</span> ), <span class="key">margin</span>:<span class="integer">3</span>,<span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flex</span>:<span class="integer">1</span>})
-                                        ,button({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">plus</span><span class="delimiter">&quot;</span></span>, <span class="function">mouseover</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.doHover();}.bind(<span class="local-variable">this</span>),<span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.addBlock()}.bind(<span class="local-variable">this</span>)})
+                                        ,button({<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">plus</span><span class="delimiter">&quot;</span></span>, <span class="key">pointerhover</span>: <span class="local-variable">this</span>.doHover.bind(<span class="local-variable">this</span>),<span class="key">click</span>: <span class="local-variable">this</span>.addBlock.bind(<span class="local-variable">this</span>)})
                                 )
                         ]
                 }
         })
 
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">libraryfolder</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, foldcontainer){
-                
+
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">dataset</span>:Config({<span class="key">type</span>:Object}),
                         <span class="key">parentfolder</span> : <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
                 }
-                
-                <span class="local-variable">this</span>.flexwrap  = <span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>                 
-                <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> 
+
+                <span class="local-variable">this</span>.flexwrap  = <span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>
-                
+
                 <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
                         <span class="keyword">var</span> data = <span class="local-variable">this</span>.dataset
 
@@ -351,7 +351,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//console.log(this.dataset);</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">0</span>;a&lt;data.children.length;a++){
                                 <span class="keyword">var</span> ds = data.children[a];
-                                
+
                                 <span class="keyword">if</span> (ds.isfolder){
                                         <span class="keyword">if</span> (ds.children &amp;&amp; ds.children.length &gt; <span class="integer">0</span>){
                                                 res.push(<span class="local-variable">this</span>.outer.libraryfolder({<span class="key">marginleft</span>:<span class="integer">10</span>,<span class="key">parentfolder</span>: ((<span class="local-variable">this</span>.parentfolder &amp;&amp; <span class="local-variable">this</span>.parentfolder.length&gt;<span class="integer">0</span>)?<span class="local-variable">this</span>.parentfolder+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)+data.name, <span class="key">dataset</span>: ds, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor}));
@@ -359,21 +359,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                                         <span class="keyword">else</span>{
                                         res.push(<span class="local-variable">this</span>.outer.classlibclass({<span class="key">marginleft</span>:<span class="integer">20</span>,<span class="key">classdesc</span>: ds,<span class="key">folder</span>:((<span class="local-variable">this</span>.parentfolder &amp;&amp; <span class="local-variable">this</span>.parentfolder.length&gt;<span class="integer">0</span>)?<span class="local-variable">this</span>.parentfolder+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)+data.name, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor}));
-                                
+
                                 }
                         }
-                        
+
                         <span class="keyword">return</span> foldcontainer({<span class="key">title</span>:data.name, <span class="key">basecolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>),<span class="key">padding</span>:<span class="integer">0</span>,<span class="key">bordercolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>),<span class="key">icon</span>:<span class="predefined-constant">undefined</span>},view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flex</span>:<span class="integer">1</span>,<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>},res));
                 }
         })
-        
+
         <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">dataset</span>:{},
 <span class="comment">//                        fontsize:Config({type:float, meta:&quot;fontsize&quot;, value: 15})</span>
         }
-        <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span> 
-        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
@@ -382,11 +382,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> res = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> a  <span class="keyword">in</span> data.children){
                         <span class="keyword">var</span> ds = data.children[a];
-                        <span class="keyword">if</span> (ds.children &amp;&amp; ds.children.length &gt; <span class="integer">0</span>){                        
+                        <span class="keyword">if</span> (ds.children &amp;&amp; ds.children.length &gt; <span class="integer">0</span>){
                                         res.push(<span class="local-variable">this</span>.libraryfolder({<span class="key">dataset</span>: ds, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor}));
                                 }
                         }
-                
+
                 <span class="keyword">return</span> res;
         }
 

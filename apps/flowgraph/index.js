@@ -1,5 +1,10 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 //Pure JS based composition
-define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){	
+define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker, $$, flowgraph){
 
 	define.class(this, 'fileio', function($server$, fileio){
 		var path = require('path')
@@ -32,9 +37,9 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 		}
 
 		this.getCompositionList = function(){
-			
+
 			var root = {collapsed:0, children:[]}
-			
+
 			var pathset = ["compositions"];
 			var ret = readRecurDir(define.expandVariables(define['$compositions']), '', [])
 			ret.name = "compositions"
@@ -43,7 +48,7 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 
 			return [];
 		}
-		
+
 		function readRecurDir(base, inname, ignoreset){
 			var local = path.join(base, inname)
 			var dir = fs.readdirSync(local)
@@ -77,15 +82,15 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 		// recursively read the flowgraph related class library
 		this.readFlowLibrary = function(ignoreset){
 			var root = {collapsed:0, children:[]}
-			
+
 			var pathset = ["flow"];
 			var ret = readRecurDir(define.expandVariables(define['$flow']), '', [])
 			ret.name = "flow"
 			root.children.push(ret)
 			return root
-			
+
 		}
-		
+
 		// recursively read all directories starting from a base path
 		this.readAllPaths = function(ignoreset //files and directories to ignore while recursively expanding
 		){
@@ -108,13 +113,13 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 		}
 	})
 
-	this.render = function(){		
+	this.render = function(){
 		return [
 			this.fileio(),
 			screen({
 				bg:0,
 				clearcolor:vec4('black'),
-				flexwrap:"nowrap", 
+				flexwrap:"nowrap",
 				flexdirection:"row",
 				style:{
 					$:{
@@ -123,6 +128,6 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 				}},
 				flowgraph()
 			)
-		]		
+		]
 	}
 })

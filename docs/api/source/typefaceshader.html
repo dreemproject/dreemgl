@@ -1157,13 +1157,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1003" name="n1003">1003</a>
 <a href="#n1004" name="n1004">1004</a>
 <a href="#n1005" name="n1005">1005</a>
+<a href="#n1006" name="n1006">1006</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/shader$platform</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, exports, baseclass){
+        <span class="comment">//internal</span>
 
         <span class="comment">// the font</span>
         <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_ascii.glf</span><span class="delimiter">'</span></span>)
@@ -1173,7 +1175,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.color = <span class="string"><span class="delimiter">&quot;</span><span class="content">glyphy_pixel()</span><span class="delimiter">&quot;</span></span>
 
         <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>)
-        
+
         <span class="comment">// forward ref of things we need on view</span>
         <span class="local-variable">this</span>.view = {<span class="key">_totalmatrix</span>:mat4(), <span class="key">_viewmatrix</span>:mat4(), <span class="key">_fgcolor</span>:vec4(), <span class="key">_bgcolor</span>:vec4(), <span class="key">_opacity</span>:<span class="float">1.0</span>, <span class="key">screen</span>:{<span class="key">device</span>:{<span class="key">frame</span>:{<span class="key">size</span>:vec2()}}}}
 
@@ -1183,7 +1185,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">tex</span>:vec2,
                 <span class="key">tag</span>:vec4,
         }).extend(<span class="keyword">function</span>(exports, self){
-                
+
                 <span class="local-variable">this</span>.align = <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.start_x = <span class="integer">0</span>
                 <span class="local-variable">this</span>.start_y = <span class="integer">0</span>
@@ -1196,10 +1198,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.fontsize = <span class="integer">10</span>
                 <span class="local-variable">this</span>.line_spacing = <span class="float">1.3</span>
                 <span class="local-variable">this</span>.italic_ness = <span class="integer">0</span>
-                <span class="comment">// defines the line </span>
+                <span class="comment">// defines the line</span>
                 <span class="local-variable">this</span>.cursor_spacing = <span class="float">1.3</span>
                 <span class="local-variable">this</span>.cursor_sink = <span class="float">0.32</span>
-                
+
                 <span class="local-variable">this</span>.scaling = <span class="integer">0</span>
                 <span class="local-variable">this</span>.distance = <span class="integer">0</span>
 
@@ -1210,21 +1212,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.debug = <span class="predefined-constant">false</span>
                 <span class="local-variable">this</span>.contrast = <span class="float">1.4</span>
                 <span class="local-variable">this</span>.outline_thickness = <span class="integer">4</span><span class="comment">//:device.ratio</span>
-                
+
                 <span class="local-variable">this</span>.subpixel_off = <span class="float">1.0115</span>
                 <span class="local-variable">this</span>.subpixel_distance = <span class="integer">3</span>.
-                
+
                 <span class="local-variable">this</span>.bgcolor = vec3(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>)
                 <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>)
-                
+
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">line_height</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
                 })
-                
+
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">min_y</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
                 })
-                
+
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">block_y</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.add_y - <span class="local-variable">this</span>.line_height + <span class="local-variable">this</span>.cursor_sink * <span class="local-variable">this</span>.fontsize
                 })
@@ -1237,7 +1239,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> <span class="local-variable">this</span>.text_h + <span class="local-variable">this</span>.cursor_sink * <span class="local-variable">this</span>.fontsize
                 })
 
-                
+
                 <span class="local-variable">this</span>.<span class="function">clear</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.text_w = <span class="integer">0</span>
                         <span class="local-variable">this</span>.text_h = <span class="integer">0</span>
@@ -1248,7 +1250,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">measurestring</span> = <span class="keyword">function</span>(string){
                         <span class="keyword">var</span> res = {<span class="key">w</span>:<span class="integer">0</span>, <span class="key">h</span>:<span class="integer">0</span>};
                         <span class="keyword">if</span> (!string || string.length == <span class="integer">0</span>) <span class="keyword">return</span> res;
-                        
+
                         <span class="keyword">var</span> length = string.length
                         <span class="comment">// alright lets convert some text babeh!</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; length; i++){
@@ -1257,20 +1259,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span>(!info) info = <span class="local-variable">this</span>.font.glyphs[<span class="integer">32</span>]
                                 res.w += info.advance * <span class="local-variable">this</span>.fontsize
                         }
-                        
+
                         <span class="keyword">return</span> res;
                 }
 
                 <span class="local-variable">this</span>.<span class="function">addWithinWidth</span> = <span class="keyword">function</span>(string, maxwidth, indent, m1, m2, m3){
-                        
+
                         <span class="keyword">if</span> (!indent)  indent = <span class="integer">0</span>;
                         <span class="keyword">var</span> words = string.split(<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>);
                         <span class="keyword">var</span> lines = []
                         <span class="keyword">var</span> widths  = []
                         <span class="keyword">var</span> currentline = []
                         <span class="keyword">var</span> currentw = <span class="local-variable">this</span>.add_x;
-                        
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; words.length; i++) {                                        
+
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; words.length; i++) {
                                 <span class="keyword">var</span> s = <span class="local-variable">this</span>.measurestring(<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + words[i]);
                                 <span class="keyword">if</span> (currentw &gt; <span class="integer">0</span>) {
                                         <span class="keyword">if</span> (currentw + s.w &gt; maxwidth) {
@@ -1278,12 +1280,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 widths.push(currentw);
                                                 currentw = indent;
                                                 currentline = [];
-                                        }                                        
+                                        }
                                 }
                                 currentw+= s.w;
-                                currentline.push(words[i]);                                
+                                currentline.push(words[i]);
                         }
-                        
+
                         <span class="keyword">if</span> (currentline.length &gt; <span class="integer">0</span>) {
                                 lines.push(currentline);
                                 widths.push(currentw);
@@ -1293,19 +1295,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;lines.length;i++) {
                                         <span class="keyword">var</span> line = lines[i];
                                         <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;line.length;j++) <span class="local-variable">this</span>.add(line[j] + ((j&lt;line.length-<span class="integer">1</span>)?<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) , m1, m2, m3);
-                                        <span class="keyword">if</span> (i &lt; lines.length -<span class="integer">1</span>) 
+                                        <span class="keyword">if</span> (i &lt; lines.length -<span class="integer">1</span>)
                                         {
                                                 <span class="local-variable">this</span>.add_y += <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
                                                 <span class="local-variable">this</span>.add_x = indent;
                                         }
-                                } 
+                                }
                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.align === <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>) {
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;lines.length;i++) {
                                         <span class="local-variable">this</span>.add_x = maxwidth - widths[i];
                                         <span class="keyword">var</span> line = lines[i];
                                         <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;line.length;j++) <span class="local-variable">this</span>.add(line[j] + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>, m1, m2, m3);
                                         <span class="local-variable">this</span>.add_y += <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
-                                } 
+                                }
                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.align === <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>) {
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;lines.length;i++) {
                                         <span class="local-variable">this</span>.add_x = maxwidth/<span class="integer">2</span> - widths[i]/<span class="integer">2</span>;
@@ -1318,7 +1320,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>.add_x = <span class="integer">0</span>;
                                         <span class="keyword">var</span> line = lines[i];
                                         <span class="keyword">var</span> spacer = <span class="integer">0</span>;
-                                        
+
                                         <span class="keyword">if</span> (line.length &gt; <span class="integer">1</span>)  spacer = (maxwidth - widths[i])/ (line.length-<span class="integer">1</span>)
 
                                         <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;line.length;j++) {
@@ -1326,7 +1328,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="local-variable">this</span>.add_x += spacer;
                                         }
                                         <span class="local-variable">this</span>.add_y += <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
-                                } 
+                                }
                         }
                 }
 
@@ -1345,11 +1347,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         x1 + italic, y2, fontsize, info.tmin_x, info.tmax_y, unicode, m1, m2, m3,
                                         x2 + italic, y2, fontsize, info.tmax_x, info.tmax_y, unicode, m1, m2, m3
                                 )
-                        } 
+                        }
                         <span class="keyword">else</span> {
                                 <span class="keyword">var</span> gx = ((info.atlas_x&lt;&lt;<span class="integer">6</span>) | info.nominal_w)&lt;&lt;<span class="integer">1</span>
                                 <span class="keyword">var</span> gy = ((info.atlas_y&lt;&lt;<span class="integer">6</span>) | info.nominal_h)&lt;&lt;<span class="integer">1</span>
-                                
+
                                 <span class="local-variable">this</span>.pushQuad(
                                         x1, y1, fontsize, gx, gy, unicode, m1, m2, m3,
                                         x2, y1, fontsize, gx|<span class="integer">1</span>, gy, unicode, m1, m2, m3,
@@ -1402,7 +1404,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>.add_y += <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
                                 }
                         }
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.add_y &gt; <span class="local-variable">this</span>.text_h) <span class="local-variable">this</span>.text_h = <span class="local-variable">this</span>.add_y        
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.add_y &gt; <span class="local-variable">this</span>.text_h) <span class="local-variable">this</span>.text_h = <span class="local-variable">this</span>.add_y
                 }
 
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">char_count</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
@@ -1418,7 +1420,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">w</span>:<span class="integer">0</span>,
                                         <span class="key">h</span>:<span class="local-variable">this</span>.line_height
                                 }
-                        }                        
+                        }
                         <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[<span class="local-variable">this</span>.charCodeAt(off)]
                         <span class="keyword">if</span>(isNaN(off))<span class="reserved">debugger</span>
                         <span class="keyword">var</span> coords = {
@@ -1450,7 +1452,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                 <span class="keyword">var</span> y2 = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">1</span>] + <span class="local-variable">this</span>.fontsize * info.min_y + <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.cursor_sink
                                 <span class="keyword">var</span> y1 = y2 - <span class="local-variable">this</span>.line_height
-                                
+
 
                                 <span class="keyword">if</span>(y&gt;=y1 &amp;&amp; y&lt;=y2){
                                         <span class="keyword">var</span> tl_x = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">0</span>]
@@ -1461,12 +1463,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">if</span>(<span class="local-variable">this</span>.debug_mesh){
                                                 <span class="local-variable">this</span>.debug_mesh.length = <span class="integer">0</span>
                                                 <span class="local-variable">this</span>.debug_mesh.add(tl_x, y1, <span class="integer">3</span>, <span class="integer">3</span>, <span class="integer">0</span>.)
-                                                <span class="local-variable">this</span>.debug_mesh.add(tr_x, y2, <span class="integer">3</span>, <span class="integer">3</span>, <span class="integer">1</span>.)                                
-                                                <span class="local-variable">this</span>.debug_mesh.add(x, y, <span class="integer">3</span>, <span class="integer">3</span>, <span class="integer">2</span>.)                                
+                                                <span class="local-variable">this</span>.debug_mesh.add(tr_x, y2, <span class="integer">3</span>, <span class="integer">3</span>, <span class="integer">1</span>.)
+                                                <span class="local-variable">this</span>.debug_mesh.add(x, y, <span class="integer">3</span>, <span class="integer">3</span>, <span class="integer">2</span>.)
                                         }
-                                        
+
                                         <span class="keyword">if</span>(<span class="local-variable">this</span>.charCodeAt(o-<span class="integer">1</span>) == <span class="integer">10</span> &amp;&amp; x&lt; tl_x){
-                                                <span class="keyword">return</span> o 
+                                                <span class="keyword">return</span> o
                                         }
                                         <span class="keyword">if</span>(x &gt;= tl_x &amp;&amp; x &lt;= hx){
                                                 <span class="keyword">return</span> o
@@ -1528,7 +1530,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets set the length and start adding</span>
                         <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(off)
                         <span class="local-variable">this</span>.add_x = rect.x
-                        <span class="local-variable">this</span>.add_y = rect.y 
+                        <span class="local-variable">this</span>.add_y = rect.y
                         <span class="local-variable">this</span>.length = off * <span class="integer">6</span>
                         <span class="local-variable">this</span>.add(text)
                         <span class="local-variable">this</span>.add(str)
@@ -1555,7 +1557,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// this thing makes a new text array buffer</span>
         <span class="local-variable">this</span>.<span class="function">newText</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> buf = <span class="local-variable">this</span>.textgeom.array() 
+                <span class="keyword">var</span> buf = <span class="local-variable">this</span>.textgeom.array()
                 buf.font = <span class="local-variable">this</span>.font
                 buf.clear()
                 <span class="keyword">return</span> buf
@@ -1570,11 +1572,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">glyphy_compute_position</span> = <span class="keyword">function</span>(){
                 <span class="comment">// we want to compute a measure of scale relative to the actual pixels</span>
                 <span class="keyword">var</span> matrix = view.totalmatrix  * view.viewmatrix
-                
+
                 <span class="comment">// compute the main position and one rectgle atan fontsize for the pixelscale</span>
                 <span class="keyword">var</span> pos1 = vec4(mesh.pos.xy + mesh.shift , <span class="integer">0</span>, <span class="integer">1</span>) * matrix
                 <span class="keyword">var</span> pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.z), <span class="integer">0</span>, <span class="integer">1</span>) * matrix
-                
+
                 <span class="comment">// compute the pixelscaling used in the pixelshader AA</span>
                 <span class="keyword">var</span> pixsize = view.screen.device.frame.size
                 pixelscale = <span class="integer">1</span> / length(vec2(abs(pos2.x - pos1.x), abs(pos2.y - pos1.y)) * pixsize)
@@ -1591,7 +1593,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.GLYPHY_INFINITY = <span class="string"><span class="delimiter">'</span><span class="content">1e9</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.GLYPHY_EPSILON = <span class="string"><span class="delimiter">'</span><span class="content">1e-5</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.GLYPHY_MAX_NUM_ENDPOINTS = <span class="string"><span class="delimiter">'</span><span class="content">32</span><span class="delimiter">'</span></span>
-        
+
         <span class="local-variable">this</span>.<span class="function">paint</span> = <span class="keyword">function</span>(p, m, pixelscale){
                 <span class="keyword">if</span>(mesh.tag.x == <span class="integer">32</span>.) discard
                 <span class="keyword">return</span> vec4(-<span class="integer">1</span>.)
@@ -1690,25 +1692,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">glyphy_arc_wedge_signed_dist_shallow</span> = <span class="keyword">function</span>(a, p){
                 <span class="keyword">var</span> v = normalize(a.p1 - a.p0)
-                
+
                 <span class="keyword">var</span> line_d = dot(p - a.p0, glyphy_ortho(v))<span class="comment">// * .1abs on sin(time.sec+p.x)</span>
 
-                <span class="keyword">if</span>(a.d == <span class="integer">0</span>.) 
+                <span class="keyword">if</span>(a.d == <span class="integer">0</span>.)
                         <span class="keyword">return</span> line_d
                 <span class="keyword">var</span> d0 = dot((p - a.p0), v)
-                <span class="keyword">if</span>(d0 &lt; <span class="integer">0</span>.) 
-                        <span class="keyword">return</span> sign(line_d) * distance(p, a.p0) 
+                <span class="keyword">if</span>(d0 &lt; <span class="integer">0</span>.)
+                        <span class="keyword">return</span> sign(line_d) * distance(p, a.p0)
 
                 <span class="keyword">var</span> d1 = dot((a.p1 - p), v)
-                <span class="keyword">if</span>(d1 &lt; <span class="integer">0</span>.) 
+                <span class="keyword">if</span>(d1 &lt; <span class="integer">0</span>.)
                         <span class="keyword">return</span> sign(line_d) * distance(p, a.p1)
 
                 <span class="keyword">var</span> d2 = d0 * d1
-                <span class="keyword">var</span> r = <span class="integer">2</span>. * a.d * d2 
+                <span class="keyword">var</span> r = <span class="integer">2</span>. * a.d * d2
                 r = r / d2
-                <span class="keyword">if</span>(r * line_d &gt; <span class="integer">0</span>.) 
+                <span class="keyword">if</span>(r * line_d &gt; <span class="integer">0</span>.)
                         <span class="keyword">return</span> sign(line_d) * min(abs(line_d + r), min(distance(p, a.p0), distance(p, a.p1)))
-        
+
                 <span class="keyword">return</span> line_d + r
         }
 
@@ -1734,7 +1736,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">glyphy_arc_list_decode</span> = <span class="keyword">function</span>(v, nominal_size){
-                
+
                 <span class="keyword">var</span> l = glyphy_arc_list_t()
                 <span class="keyword">var</span> iv = glyphy_vec4_to_bytes(v)
 
@@ -1746,12 +1748,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(l.num_endpoints == <span class="integer">255</span>) {
                                 l.num_endpoints = <span class="integer">0</span>
                                 l.side = -<span class="integer">1</span>
-                        } 
+                        }
                         <span class="keyword">else</span> <span class="keyword">if</span>(l.num_endpoints == <span class="integer">0</span>){
                                 l.side = <span class="integer">1</span>
                         }
 
-                } 
+                }
                 <span class="keyword">else</span> { <span class="comment">/* single line encoded */</span>
                         l.num_endpoints = -<span class="integer">1</span>
                         l.line_distance = <span class="reserved">float</span>(((iv.r - <span class="integer">128</span>) * <span class="integer">256</span> + iv.g) - <span class="hex">0x4000</span>) / <span class="reserved">float</span>(<span class="hex">0x1FFF</span>)
@@ -1779,7 +1781,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(arc_list.num_endpoints == <span class="integer">0</span>) {
                         <span class="comment">/* far-away cell */</span>
                         <span class="keyword">return</span> GLYPHY_INFINITY * <span class="reserved">float</span>(arc_list.side)
-                } 
+                }
                 <span class="keyword">if</span>(arc_list.num_endpoints == -<span class="integer">1</span>) {
                         <span class="comment">/* single-line */</span>
                         <span class="keyword">var</span> angle = arc_list.line_angle <span class="comment">//+ 90.*time</span>
@@ -1792,32 +1794,32 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> closest_arc = glyphy_arc_t()
                 <span class="keyword">var</span> endpoint = glyphy_arc_endpoint_t()
                 <span class="keyword">var</span> endpoint_prev = glyphy_arc_endpoint_decode(glyphy_atlas_lookup(arc_list.offset, _atlas_pos), nominal_size)
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt; GLYPHY_MAX_NUM_ENDPOINTS; i++){
                         <span class="keyword">if</span>(i &gt;= arc_list.num_endpoints) {
                                 <span class="keyword">break</span>
                         }
 
                         endpoint = glyphy_arc_endpoint_decode(glyphy_atlas_lookup(arc_list.offset + i, _atlas_pos), nominal_size)
-                        
+
                         <span class="keyword">var</span> a = glyphy_arc_t(endpoint_prev.p, endpoint.p, endpoint.d)
                         a.p0 = endpoint_prev.p;
                         a.p1 = endpoint.p;
                         a.d = endpoint.d;
 
                         endpoint_prev = endpoint
-                        
+
                         <span class="keyword">if</span>(!glyphy_isinf(a.d)){
 
                                 <span class="keyword">if</span>(glyphy_arc_wedge_contains(a, p)) {
                                         <span class="keyword">var</span> sdist = glyphy_arc_wedge_signed_dist(a, p)
                                         <span class="keyword">var</span> udist = abs(sdist) * (<span class="integer">1</span>. - GLYPHY_EPSILON)
                                         <span class="keyword">if</span>(udist &lt;= min_dist) {
-                                                min_dist = udist 
-                                                
+                                                min_dist = udist
+
                                                 side = sdist &lt;= <span class="integer">0</span>. ? -<span class="integer">1</span>. : +<span class="integer">1</span>.
                                         }
-                                } 
+                                }
                                 <span class="keyword">else</span> {
                                         <span class="keyword">var</span> udist = min(distance(p, a.p0), distance(p, a.p1))
                                         <span class="keyword">if</span>(udist &lt; min_dist) {
@@ -1850,7 +1852,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> ext_dist = glyphy_arc_extended_dist(closest_arc, p)
                         side = sign(ext_dist)
                 }
-                
+
                 <span class="keyword">return</span> min_dist * side
         }
 
@@ -1859,7 +1861,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> side = <span class="reserved">float</span>(arc_list.side)
                 <span class="keyword">var</span> min_dist = GLYPHY_INFINITY
-                
+
                 <span class="keyword">if</span>(arc_list.num_endpoints == <span class="integer">0</span>){
                         <span class="keyword">return</span> min_dist
                 }
@@ -1905,12 +1907,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         this.glyphy_sdf_draw_subpixel_3tap = function(){
 
                 var pos = mesh.tex
-                
+
                 var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
                 var dpdy = dFdy(pos)
                 var m = length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2
                 // screenspace length
-                mesh.scaling = 500.*m 
+                mesh.scaling = 500.*m
                 var fin_alpha = 1.
                 var sub_delta = dpdx / mesh.subpixel_distance
                 var exit = paint(p, dpdx, dpdy, m)
@@ -1950,12 +1952,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         this.glyphy_sdf_draw_subpixel_5tap = function(){
 
                 var pos = mesh.tex
-                
+
                 var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
                 var dpdy = dFdy(pos)
                 var m = min(length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2, 0.03)
                 // screenspace length
-                mesh.scaling = 500.*m 
+                mesh.scaling = 500.*m
                 var fin_alpha = 1.
                 var sub_delta = dpdx / mesh.subpixel_distance
 
@@ -2006,10 +2008,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> m = pixelscale*<span class="float">0.4</span><span class="comment">//0.005</span>
                 <span class="comment">// screenspace length</span>
-                mesh.scaling = <span class="integer">500</span>. * m 
-                
+                mesh.scaling = <span class="integer">500</span>. * m
+
                 <span class="keyword">var</span> dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * <span class="float">0.003</span>
-                
+
                 <span class="keyword">var</span> exit = paint(pos,m, pixelscale)
                 <span class="keyword">if</span>(exit.a &gt;= <span class="integer">0</span>.){
                         <span class="keyword">return</span> exit
@@ -2029,19 +2031,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(dist &gt; <span class="integer">1</span>.){
                         discard
                 }
-                
+
                 <span class="comment">//return 'red'</span>
                 <span class="keyword">return</span> vec4(view.fgcolor.rgb, glyphy_antialias(-dist))
-                <span class="keyword">return</span> vec4(view.fgcolor.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x)) 
+                <span class="keyword">return</span> vec4(view.fgcolor.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
         }
 
         <span class="local-variable">this</span>.<span class="function">glyphy_sdf_draw_subpixel_aa</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> pos = mesh.tex
-                
+
                 <span class="keyword">var</span> m = pixelscale*<span class="float">.5</span><span class="comment">//0.005</span>
                 <span class="comment">// screenspace length</span>
-                mesh.scaling = <span class="integer">500</span>. * m 
-                
+                mesh.scaling = <span class="integer">500</span>. * m
+
                 <span class="keyword">var</span> sub_delta = vec2((pixelscale / mesh.subpixel_distance)*<span class="float">0.1</span>,<span class="integer">0</span>)
 
                 <span class="keyword">var</span> v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*<span class="integer">2</span>.))
@@ -2057,7 +2059,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 ) * <span class="float">0.001</span>
 
                 <span class="comment">//return 'red'</span>
-                
+
                 <span class="keyword">var</span> exit = paint(pos,m, pixelscale)
                 <span class="keyword">if</span>(exit.a &gt;= <span class="integer">0</span>.){
                         <span class="keyword">return</span> exit
@@ -2079,7 +2081,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> alpha = glyphy_antialias(-dist)
 
                 alpha = pow(alpha, mesh.gamma_adjust)
-                <span class="comment">//var max_alpha = max(max(alpha.r,alpha.g),alpha.b) </span>
+                <span class="comment">//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)</span>
                 <span class="comment">//if(max_alpha &gt;0.5) max_alpha = 1.</span>
                 <span class="comment">//return vec4(alpha.b&lt;0.?'yellow'.rgb:'blue'.rgb, 1)</span>
                 <span class="keyword">return</span> vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), view.opacity)<span class="comment">//max_alpha)</span>
@@ -2132,7 +2134,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 style(glyph)
 
-                dist -= mesh.boldness 
+                dist -= mesh.boldness
                 <span class="comment">//debug(mesh.distance)</span>
                 dist = dist / m * mesh.contrast
 
@@ -2143,13 +2145,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(dist &gt; <span class="integer">1</span>.){
                         discard
                 }
-                
+
                 <span class="keyword">var</span> alpha = glyphy_antialias(-dist)
-                
+
                 <span class="keyword">if</span>(mesh.gamma_adjust.r != <span class="integer">1</span>.){
                 <span class="comment">//        alpha = pow(alpha, 1. / mesh.gamma_adjust.r)</span>
                 }
-                
+
                 <span class="keyword">return</span> vec4(view.fgcolor.rgb, alpha * view.fgcolor.a * view.opacity)
         }
 
@@ -2162,7 +2164,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.glyphy_pixel = <span class="local-variable">this</span>.glyphy_sdf_draw
 
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

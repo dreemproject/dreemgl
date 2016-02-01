@@ -2,6 +2,9 @@
  * @class markdown
  * @extends view
  * Markdown display class - this element can display a small subset of the "markdown" syntax. See the SUPPORTED_MARKDOWN.md file in the docviewer for supported elements.
+ * 
+ * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/widgets/markdown.js"></iframe>
+ * 
  */
 /**
  * @attribute {Object} [body="[object Object]"]

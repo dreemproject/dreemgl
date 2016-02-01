@@ -1,8 +1,7 @@
-/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, baseclass){
 	// internal, drawing
@@ -100,17 +99,17 @@ define.class(function(require, baseclass){
 		}
 	}
 
-	this.calculateDrawMatrices = function(isroot, storage, mousex, mousey){
+	this.calculateDrawMatrices = function(isroot, storage, pointerx, pointery){
 		var view = this.view
 		var scroll = view._scroll
 		var layout = view._layout
 
 		if(view._viewport === '2d'){
-			if(isroot && mousex !== undefined){
+			if(isroot && pointerx !== undefined){
 				var sizel = 0
 				var sizer = 1
-				mat4.ortho(scroll[0] + mousex - sizel, scroll[0] + mousex + sizer, scroll[1] + mousey - sizer,  scroll[1] + mousey + sizel, -100, 100, storage.viewmatrix)
-				mat4.ortho( mousex - sizel, mousex + sizer, mousey - sizer, mousey + sizel, -100, 100, storage.noscrollmatrix)
+				mat4.ortho(scroll[0] + pointerx - sizel, scroll[0] + pointerx + sizer, scroll[1] + pointery - sizer,  scroll[1] + pointery + sizel, -100, 100, storage.viewmatrix)
+				mat4.ortho( pointerx - sizel, pointerx + sizer, pointery - sizer, pointery + sizel, -100, 100, storage.noscrollmatrix)
 			}
 			else{
 				var zoom = view._zoom
@@ -178,7 +177,7 @@ define.class(function(require, baseclass){
 		return next
 	}
 
-	this.drawPick = function(isroot, passid, mousex, mousey, debug){
+	this.drawPick = function(isroot, passid, pointerx, pointery, debug){
 		var view = this.view
 		var device = this.device
 		var layout = view._layout
@@ -200,7 +199,7 @@ define.class(function(require, baseclass){
 		device.clear(0,0,0,0)
 
 		var matrices = this.pickmatrices
-		this.calculateDrawMatrices(isroot, matrices, debug?undefined:mousex, mousey)
+		this.calculateDrawMatrices(isroot, matrices, debug?undefined:pointerx, pointery)
 		// calculate the colormatrices too
 		//if(!this.colormatrices.initialized){
 		//	this.calculateDrawMatrices(isroot, this.colormatrices)

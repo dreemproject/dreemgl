@@ -1,7 +1,7 @@
-/* Copyright 2015 Teem2 LLC. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
-   software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$system/base/node', function(require){
 // Base UI view object
@@ -9,7 +9,6 @@ define.class('$system/base/node', function(require){
 	var FlexLayout = require('$system/lib/layout')
 	var Render = require('$system/base/render')
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
-	var Texture = this.Texture = Shader.Texture
 	var view = this.constructor
 
 	this.attributes = {
@@ -211,28 +210,22 @@ define.class('$system/base/node', function(require){
 		// internal, the current time which can be used in shaders to create continous animations
 		time:Config({meta:"hidden", value:0}),
 
-		// fired when the mouse doubleclicks
-		mousedblclick: Config({type:Event}),
-		// fires when the mouse moves 'out' of the view. The event argument is the mouse position as {local:vec2}
-		mouseout: Config({type:Event}),
-		// fires when the mouse moves over the view. The event argument is the mouse position as {local:vec2}
-		mouseover: Config({type:Event}),
-		// fires when the mouse moves. The event argument is the mouse position as {local:vec2}
-		mousemove: Config({type:Event}),
-		// fires when the left mouse button is down. The event argument is the mouse position as {local:vec2}
-		mouseleftdown: Config({type:Event}),
-		// fires when the left mouse button is up. The event argument is the mouse position as {local:vec2}
-		mouseleftup: Config({type:Event}),
-		// fires when the right mouse button is down. The event argument is the mouse position as {local:vec2}
-		mouserightdown: Config({type:Event}),
-		// fires when the right mouse button is up. The event argument is the mouse position as {local:vec2}
-		mouserightup: Config({type:Event}),
-		// fires when the mouse wheels x coordinate changes, also for 2 finger scroll on mac. The event argument is {wheel:float, local:vec2}
-		mousewheelx: Config({type:Event}),
-		// fires when the mouse wheels y coordinate changes, alsof or 2 finger scroll on mac. The event argument is {wheel:float, local:vec2}
-		mousewheely: Config({type:Event}),
-		// fires when pinchzoom is used in chrome, or when meta-mouse wheel is used (under review). The event argument is the mouse position as {zoom:float, local:vec2}
-		mousezoom: Config({type:Event}),
+		// fires when pointer is pressed down.
+		pointerstart:Config({type:Event}),
+		// fires when pointer is pressed and moved (dragged).
+		pointermove:Config({type:Event}),
+		// fires when pointer is released.
+		pointerend:Config({type:Event}),
+		// fires when pointer is pressed and released quickly.
+		pointertap:Config({type:Event}),
+		// fires when pointer moved without being pressed.
+		pointerhover:Config({type:Event}),
+		// fires when pointer enters an element.
+		pointerover:Config({type:Event}),
+		// fires when pointer leaves an element.
+		pointerout:Config({type:Event}),
+		// fires when mouse wheel is used.
+		pointerwheel:Config({type:Event}),
 
 		// fires when a key goes to up. The event argument is {repeat:int, code:int, name:String}
 		keyup: Config({type:Event}),
@@ -295,6 +288,8 @@ define.class('$system/base/node', function(require){
 	this.viewportmatrix = mat4.identity()
 	// the normal matrix contains the transform without translate (for normals)
 	this.normalmatrix = mat4.identity()
+	// the remap matrix used to remap pointer vec2 to local space
+	this.remapmatrix = mat4();
 
 	// forward references for shaders
 	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
@@ -381,13 +376,6 @@ define.class('$system/base/node', function(require){
 				}
 			})
 		}
-	}
-
-	// returns the mouse position in local coordinates
-	this.localMouse = function(){
-		var ret = vec2(this.screen.remapMouse(this))
-	//	if(ret[0]<0) debugger
-		return ret
 	}
 
 	// draw dirty is a bitmask of 2 bits, the guid-dirty and the color-dirty
@@ -532,7 +520,7 @@ define.class('$system/base/node', function(require){
 
 	// internal, called at every frame draw
 	this.atDraw = function(){
-		if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
+		// if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
 	}
 
 	// internal, sorts the shaders
@@ -615,6 +603,111 @@ define.class('$system/base/node', function(require){
 		}
 		this.viewguid = id
 		return id
+	}
+
+	function UnProject(glx, gly, glz, modelview, projection){
+		var inv = vec4()
+		var A = mat4.mat4_mul_mat4(modelview, projection)
+		var m = mat4.invert(A)
+		inv[0] = glx
+		inv[1] = gly
+		inv[2] = 2.0 * glz - 1.0
+		inv[3] = 1.0
+		out = vec4.vec4_mul_mat4(inv, m)
+		// divide by W to perform perspective!
+		out[0] /= out[3]
+		out[1] /= out[3]
+		out[2] /= out[3]
+		return vec3(out)
+	}
+
+	// Internal: remap the x and y coordinates to local space
+	this.globalToLocal = function(value){
+		//TODO(aki): Simplify.
+		var sx = this.screen.device.main_frame.size[0]  / this.screen.device.ratio
+		var sy = this.screen.device.main_frame.size[1]  / this.screen.device.ratio
+		var mx = value[0] / (sx / 2) - 1.0
+		var my = -1 * (value[1] / (sy / 2) - 1.0)
+
+		var parentlist = [], ip = this.parent
+		while (ip){
+			if (ip._viewport || !ip.parent) parentlist.push(ip)
+			ip = ip.parent
+		}
+
+		var raystart = vec3(mx,my,-100)
+		var rayend   = vec3(mx,my,100)
+		var lastrayafteradjust = vec3(mx,my,-100)
+		var lastprojection = mat4.identity()
+		var lastviewmatrix = mat4.identity()
+		var camerapos = vec3(0)
+		var scaletemp = mat4.scalematrix([1,1,1])
+		var transtemp2 = mat4.translatematrix([-1,-1,0])
+
+		var lastmode = "2d"
+
+		this.remapmatrix = mat4.identity()
+
+		for(var i = parentlist.length - 1; i >= 0; i--) {
+			var P = parentlist[i]
+			var newmode = P.parent? P._viewport:"2d"
+
+			if (P.parent) {
+
+				var MM = P._viewport? P.viewportmatrix: P.totalmatrix
+
+				if (!P.viewportmatrix) console.log(i, "whaaa" )
+				mat4.invert(P.viewportmatrix, this.remapmatrix)
+
+				// 3d to layer transition -> do a raypick.
+				if (lastmode == "3d") {
+					var startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 0, lastviewmatrix, lastprojection)
+					var endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 1, lastviewmatrix, lastprojection)
+
+					camlocal = vec3.mul_mat4(camerapos, this.remapmatrix)
+					endlocal = vec3.mul_mat4(endv, this.remapmatrix)
+
+					var R = vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
+					if (!R)	{
+						raystart = vec3(0.5,0.5,0)
+					} else {
+						R = vec3.mul_mat4(R, P.viewportmatrix)
+						raystart = R
+					}
+				}
+
+				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
+
+				mat4.scalematrix([P.layout.width/2,P.layout.height/2,1000/2], scaletemp)
+				mat4.invert(scaletemp, this.remapmatrix)
+
+				raystart = vec3.mul_mat4(raystart, this.remapmatrix)
+				raystart = vec3.mul_mat4(raystart, transtemp2)
+
+				lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
+				lastprojection = P.colormatrices.perspectivematrix;
+				lastviewmatrix = P.colormatrices.lookatmatrix;
+				camerapos = P._camera;
+
+			}
+
+			if(i == 0 && this.noscroll){
+				mat4.invert(P.colormatrices.noscrollmatrix, this.remapmatrix)
+			}	else {
+				mat4.invert(P.colormatrices.viewmatrix, this.remapmatrix)
+			}
+
+			raystart = vec3.mul_mat4(raystart, this.remapmatrix)
+
+			lastmode = newmode
+		}
+
+		var MM = this._viewport?this.viewportmatrix: this.totalmatrix
+		mat4.invert(MM, this.remapmatrix)
+		raystart = vec3.mul_mat4(raystart, this.remapmatrix)
+		rayend = vec3.mul_mat4(rayend, this.remapmatrix)
+
+		return vec2(raystart.x, raystart.y)
 	}
 
 	// internal, this gets called by the render engine
@@ -709,37 +802,33 @@ define.class('$system/base/node', function(require){
 			if(this.hscrollbar) this.hscrollbar.value = Mark(this._scroll[0])
 			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
 
-			this.mousewheelx = function(event){
-				var wheel = event.wheel
-				if(this.hscrollbar._visible){
-					this.hscrollbar.value = clamp(this.hscrollbar._value + wheel, 0, this.hscrollbar._total - this.hscrollbar._page)
-				}
-			}
-
-			this.mousewheely = function(event){
-				var wheel = event.wheel
+			this.pointerwheel = function(event){
 				if(this.vscrollbar._visible){
-					this.vscrollbar.value = clamp(this.vscrollbar._value + wheel, 0, this.vscrollbar._total - this.vscrollbar._page)
+					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value.wheely, 0, this.vscrollbar._total - this.vscrollbar._page)
+				}
+				if(this.hscrollbar._visible){
+					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value.wheelx, 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
 
-			this.mousezoom = function(event){
-				var zoom = event.zoom
-				var lastzoom = this._zoom
-				var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
-				this.zoom = newzoom
-
-				var pos = this.localMouse()
-
-				var shiftx = pos[0] * lastzoom - pos[0] * this._zoom
-				var shifty = pos[1] * lastzoom - pos[1] * this._zoom
-
-				this.hscrollbar.value = clamp(this.hscrollbar._value + shiftx, 0, this.hscrollbar._total - this.hscrollbar._page)
-				this.vscrollbar.value = clamp(this.vscrollbar._value + shifty, 0, this.vscrollbar._total - this.vscrollbar._page)
-
-				this.updateScrollbars()
-				this.redraw()
-			}
+			// //TODO
+			// this.pointerzoom = function(event){
+			// 	var zoom = event.value.zoom
+			// 	var lastzoom = this._zoom
+			// 	var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
+			// 	this.zoom = newzoom
+			//
+			// 	var pos = this.globalToLocal(event.value[0].position)
+			//
+			// 	var shiftx = pos[0] * lastzoom - pos[0] * this._zoom
+			// 	var shifty = pos[1] * lastzoom - pos[1] * this._zoom
+			//
+			// 	this.hscrollbar.value = clamp(this.hscrollbar._value + shiftx, 0, this.hscrollbar._total - this.hscrollbar._page)
+			// 	this.vscrollbar.value = clamp(this.vscrollbar._value + shifty, 0, this.vscrollbar._total - this.vscrollbar._page)
+			//
+			// 	this.updateScrollbars()
+			// 	this.redraw()
+			// }
 		}
 	}
 
@@ -1513,4 +1602,14 @@ define.class('$system/base/node', function(require){
 			noscroll:true
 		}
 	})
+
+	// Basic usage of the splitcontainer
+	this.constructor.examples = {
+		Usage:function(){ return [
+			view({margin:10, width:50, height:50, bgcolor:'red'}),
+			view({width:50, height:50, bgcolor:'green', bordercolor:'pink', borderwidth:10, borderradius:7}),
+			view({x:30, y:10, width:50, height:50, bgcolor:'blue'})
+		]}
+	}
+
 })

@@ -2,6 +2,9 @@
  * @class textbox
  * @extends label
  * Text input field
+ * 
+ * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/textbox.js"></iframe>
+ * 
  */
 /**
  * @attribute {vec4} [cursorcolor="NaN,NaN,NaN,NaN"]

@@ -266,9 +266,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n112" name="n112">112</a>
 <a href="#n113" name="n113">113</a>
 <a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); Dreem is a collaboration between Teem &amp; Samsung Electronics, sponsored by Samsung. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
@@ -289,7 +298,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerunfocus
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursors</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">$system/typeface/cursorshader.js</span><span class="delimiter">'</span></span>), <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateorder = <span class="integer">5</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">6</span>
@@ -308,7 +317,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         })
         <span class="local-variable">this</span>.cursors = <span class="predefined-constant">true</span>
         <span class="local-variable">this</span>.tabstop = <span class="integer">0</span>
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">markers</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">$system/typeface/markershader.js</span><span class="delimiter">'</span></span>), <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateorder = <span class="integer">6</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">4</span>
@@ -322,7 +331,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span>(view.cursorset.fusing) view.cursorset.fuse()
                         <span class="keyword">for</span>(<span class="keyword">var</span> list = view.cursorset.list, i = <span class="integer">0</span>; i &lt; list.length; i++){
                                 <span class="keyword">var</span> cursor = list[i]
-                                
+
                                 <span class="keyword">var</span> start = cursor.start, end = cursor.end
                                 <span class="keyword">if</span>(start !== end){
                                         <span class="keyword">var</span> markers = <span class="local-variable">this</span>.vertexstruct.getMarkersFromText(view.textbuf, start, end, <span class="integer">0</span>)
@@ -337,7 +346,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         })
         <span class="local-variable">this</span>.markers = <span class="predefined-constant">true</span>
         <span class="local-variable">this</span>.measure_with_cursor = <span class="predefined-constant">true</span>
-        
+
         <span class="local-variable">this</span>.<span class="function">focus</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._focus){
                         <span class="local-variable">this</span>.cursorsshader.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>
@@ -361,7 +370,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.value = Mark(string)
                 <span class="local-variable">this</span>.relayout()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">value</span> = <span class="keyword">function</span>(event){
                 <span class="keyword">if</span>(event.mark) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.text = <span class="local-variable">this</span>.value
@@ -380,7 +389,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.initEditImpl()
                 <span class="local-variable">this</span>.text = <span class="local-variable">this</span>.value
         }
-})</pre></td>
+
+        <span class="keyword">var</span> textbox = <span class="local-variable">this</span>.constructor;
+        <span class="comment">// Basic usage of the treeview control.</span>
+        <span class="local-variable">this</span>.constructor.examples = {
+                <span class="function">Usage</span>:<span class="keyword">function</span>(){
+                        <span class="keyword">return</span> [textbox({<span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Text can be input here</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#333</span><span class="delimiter">'</span></span>, <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>, <span class="key">padding</span>:<span class="integer">5</span>})]
+                }
+        }
+
+})
+</pre></td>
 </tr></table>
 
 </body>

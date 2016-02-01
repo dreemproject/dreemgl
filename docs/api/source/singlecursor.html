@@ -407,8 +407,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n253" name="n253">253</a>
 <a href="#n254" name="n254">254</a>
 <a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
 
         <span class="keyword">var</span> parse = <span class="keyword">new</span> (require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>))()
 
@@ -421,8 +431,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         }
 
         Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">lo</span><span class="delimiter">'</span></span>, {
-                <span class="function">get</span>:<span class="keyword">function</span>(){ 
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.start? <span class="local-variable">this</span>.start: <span class="local-variable">this</span>.end 
+                <span class="function">get</span>:<span class="keyword">function</span>(){
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.start? <span class="local-variable">this</span>.start: <span class="local-variable">this</span>.end
                 },
                 <span class="function">set</span>: <span class="keyword">function</span>(v){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.start) <span class="local-variable">this</span>.start = v
@@ -431,8 +441,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         })
 
         Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">hi</span><span class="delimiter">'</span></span>, {
-                <span class="function">get</span>: <span class="keyword">function</span>(){ 
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.start? <span class="local-variable">this</span>.end: <span class="local-variable">this</span>.start 
+                <span class="function">get</span>: <span class="keyword">function</span>(){
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.start? <span class="local-variable">this</span>.end: <span class="local-variable">this</span>.start
                 },
                 <span class="function">set</span>: <span class="keyword">function</span>(v){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.start) <span class="local-variable">this</span>.end = v
@@ -450,7 +460,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.end - <span class="integer">1</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.end &lt; <span class="integer">0</span>) <span class="local-variable">this</span>.end = <span class="integer">0</span>
                 <span class="keyword">if</span>(!only_end) <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
-                <span class="comment">// </span>
+                <span class="comment">//</span>
                 <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
         }
 
@@ -481,12 +491,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="local-variable">this</span>.<span class="function">moveTo</span> = <span class="keyword">function</span>(x, y, only_end){
                 <span class="keyword">var</span> off = <span class="local-variable">this</span>.editor.textbuf.offsetFromPos(x, y)
-                
+
                 <span class="keyword">if</span>(off&lt;<span class="integer">0</span>){
                         <span class="keyword">if</span>(off === -<span class="integer">4</span> || off === -<span class="integer">3</span>) off = <span class="local-variable">this</span>.editor.textbuf.lengthQuad()
                         <span class="keyword">else</span> off = <span class="integer">0</span>
                 }
-                <span class="keyword">var</span> change = <span class="local-variable">this</span>.end != off 
+                <span class="keyword">var</span> change = <span class="local-variable">this</span>.end != off
                 <span class="local-variable">this</span>.end = off
                 <span class="keyword">if</span>(!only_end) change = <span class="local-variable">this</span>.start != <span class="local-variable">this</span>.end || change, <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
                 <span class="keyword">var</span> r = <span class="local-variable">this</span>.editor.textbuf.cursorRect(off)
@@ -538,7 +548,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.<span class="function">deleteRange</span> = <span class="keyword">function</span>(from, to){
                 <span class="local-variable">this</span>.editor.addUndoInsert(from, to)
                 <span class="local-variable">this</span>.editor.textbuf.removeText(from, to)
-                
+
                 <span class="local-variable">this</span>.cursorset.delta -= to - from
                 <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end = from
 
@@ -573,7 +583,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.scanRightWord(<span class="local-variable">this</span>.hi)
                 <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">selectLine</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.editor.scanLeftLine(<span class="local-variable">this</span>.lo)
                 <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.scanRightLine(<span class="local-variable">this</span>.hi) + <span class="integer">1</span>
@@ -617,14 +627,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }
                         }
                 }
-                
+
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.lo == <span class="integer">0</span>) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.editor.addUndoInsert(<span class="local-variable">this</span>.lo -<span class="integer">1</span>, <span class="local-variable">this</span>.hi)
                 <span class="local-variable">this</span>.editor.textbuf.removeText(<span class="local-variable">this</span>.lo - <span class="integer">1</span>, <span class="local-variable">this</span>.hi)
                 <span class="local-variable">this</span>.cursorset.delta -= <span class="local-variable">this</span>.span
                 <span class="local-variable">this</span>.editor.forkRedo()
                 <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.lo - <span class="integer">1</span>
-                <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x                        
+                <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
 
                 <span class="local-variable">this</span>.editor.textChanged()
         }
@@ -647,7 +657,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> len =  <span class="local-variable">this</span>.editor.textbuf.insertText(<span class="local-variable">this</span>.lo, text)
                         <span class="local-variable">this</span>.cursorset.delta += len
                         <span class="local-variable">this</span>.editor.addUndoDelete(<span class="local-variable">this</span>.lo, <span class="local-variable">this</span>.lo + len)
-                }        
+                }
                 <span class="local-variable">this</span>.editor.forkRedo()
                 <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.lo + text.length + cdelta
                 <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
@@ -662,7 +672,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.<span class="function">isCursor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> <span class="local-variable">this</span>.start === <span class="local-variable">this</span>.end
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>
