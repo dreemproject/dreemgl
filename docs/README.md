@@ -14,7 +14,7 @@ creating a report in [JIRA for DreemGL](https://dreem2.atlassian.net).
   Introduction to the Flebox-based layout system in DreemGL.
 
 * [DreemGL Developer's
-Guide](http://https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/README.md)
+Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/README.md)
   A technical guide meant for developer's building applications and
   extending DreemGL
 
