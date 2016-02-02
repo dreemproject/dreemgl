@@ -166,7 +166,7 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
 			var first = this._first.getById(previous.id)
-			var pointer = new Pointer(pointerlist[i], previous.id, first.view)
+			var pointer = new Pointer(pointerlist[i], previous.id, first.view, first)
 			this._move.setPointer(pointer)
 		}
 		this._move.forEachView(function(view, pointers) {
