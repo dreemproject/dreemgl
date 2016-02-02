@@ -224,13 +224,6 @@ console.log('*******************************************************************
 				var sampler = new headless.Sampler();
 				sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);
 				sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);
-				
-				if (HeadlessApi.emitcode) {
-					console.log('HEADLESSCODE: var sampler' + headlessmaterial.id + ' = new headless.Sampler();');
-					console.log('HEADLESSCODE: sampler' + headlessmaterial.id + '.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);');
-					console.log('HEADLESSCODE: sampler' + headlessmaterial.id + '.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);');
-				}		
-
 
 				//FIX
 				if (headlessmaterial) {
@@ -257,12 +250,6 @@ console.log('*******************************************************************
 						var sampler = new headless.Sampler();
 						sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);
 						sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);
-
-						if (HeadlessApi.emitcode) {
-							console.log('HEADLESSCODE: var sampler = new headless.Sampler();');
-							console.log('HEADLESSCODE: sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);');
-							console.log('HEADLESSCODE: sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);');
-						}		
 
 						var index = headlessmaterial.addTexture(texture.image, ti.loc, sampler);
 						gltex.texture_index = index;
@@ -505,14 +492,7 @@ console.log('*******************************************************************
 	}
 
 	// all draw types
-	exports.TRIANGLES = this.TRIANGLES = 0x4
-	exports.LINES = this.LINES = 0x1
-	exports.LINE_LOOP = this.LINE_LOOP = 0x2
-	exports.LINE_STRIP = this.LINE_STRIP = 0x3
-	exports.TRIANGLE_STRIP = this.TRIANGLE_STRIP = 0x5
-	exports.TRIANGLE_FAN = this.TRIANGLE_FAN = 0x6
-
-	this.drawtype = this.TRIANGLES
+	this.drawtype = HeadlessApi.Geometry.TRIANGLES
 	
 	// lets draw ourselves.
 	// A view (the this pointer) makes one call to drawArrays for each shader.

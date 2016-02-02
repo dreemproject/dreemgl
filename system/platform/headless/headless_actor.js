@@ -9,11 +9,6 @@
  * Simulate an actor (modeled from DALi platform).
  */
 
-/**
- * @property headlessactor
- * headless.Actor object
- */
-
 define.class(function(require, exports){
 	// internal, HeadlessApi is a static object to access the headless api
 	HeadlessApi = require('./headless_api')
@@ -61,16 +56,11 @@ define.class(function(require, exports){
 	this.addRenderer = function(renderer) {
 		this.headlessrenderer = renderer;
 
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + '.addRenderer(' + this.headlessrenderer.name() + ');');
-		}
-
 		// Add the actor to the stage
 		if (!this.onstage) {
 			HeadlessApi.addActor(this);
 			this.onstage = true;
 		}
-
 
 	}
 
@@ -81,12 +71,7 @@ define.class(function(require, exports){
 	 * @param {object} color 4 element array of [r,g,b,a]
 	 */
 	HeadlessApi.setColor = function(color) {
-		//TODO Is it faster if I cache the last value
 		this.headlessactor.color = color;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + '.color = ' + JSON.stringify(color) + ';');
-		}
 	}
 
 
@@ -146,16 +131,6 @@ define.class(function(require, exports){
 
 		this.props[key] = val;
 		this.property_cache[name] = hash;
-
-		if (HeadlessApi.emitcode) {
-			if (lasthash) {
-				console.log('HEADLESSCODE: ' + this.name() + '[\'' + key + '\'] = ' + JSON.stringify(val) + ';');
-			}
-			else {
-				console.log('HEADLESSCODE: ' + this.name() + '.registerAnimatableProperty(\'' + key + '\', ' + JSON.stringify(val) + ');');
-			}
-		}
-
 	}
 
 

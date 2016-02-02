@@ -9,6 +9,9 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var WebRTC = require('$system/rpc/webrtc')
 	var BusClient = require('$system/rpc/busclient')
 
+	HeadlessApi = require('./headless_api')
+
+
 	this.atConstructor = function(previous, parent){
 		//TODO
 		previous = null
@@ -32,7 +35,8 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	}
 
 	this.createBus = function(){
-		console.log('compositionheadless.createBus is NOT implemented');
+		if (HeadlessApi.verbose)
+			console.log('compositionheadless.createBus is NOT implemented');
 		this.bus = {
 			send: function() {}
 		};

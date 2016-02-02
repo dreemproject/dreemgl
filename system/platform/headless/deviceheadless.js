@@ -131,7 +131,8 @@ define.class(function(require, exports){
 	}
 
 	this.createContext = function(){
-		console.log('deviceheadless.createContext NOT implemented')
+		if (HeadlessApi.verbose)
+			console.log('deviceheadless.createContext NOT implemented')
 	}
 
 	this.initResize = function(){

@@ -36,12 +36,6 @@ define.class(function(require, exports){
 
 		this.id = ++HeadlessMaterial.GlobalId;
 		this.headlessshader = shader;
-
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var ' + this.name() + ' = new headless.Material(' + this.headlessshader.name() + ');');
-		}
-
 	}
 
 	/**
@@ -52,11 +46,6 @@ define.class(function(require, exports){
 	 * @param {object} sampler Headless.Sampler object
 	 */
 	this.addTexture = function(texture, name, sampler) {
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var texid = ' + this.name() + '.addTexture(texture' + texture.id + ', \'' + name + '\', sampler' + this.id + ');');
-		}
-
 		var tex = {texture: texture.image, name: name, sampler: sampler};
 		this.textures.push(tex);
 		return this.textures.length-1;
@@ -69,11 +58,6 @@ define.class(function(require, exports){
 	 * @param {number} index Index of texture to remove
 	 */
 	this.removeTexture = function(index) {
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + '.removeTexture(' + index + ');');
-		}
-
 		this.textures[index] = null;
 	}
 
@@ -89,10 +73,6 @@ define.class(function(require, exports){
 
 		this.props['blendmode'] = mode;
 		this.property_cache['blendmode'] = mode;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + '.setBlendMode(' + mode + ');');
-		}
 	}
 
 
@@ -111,10 +91,6 @@ define.class(function(require, exports){
 
 		this.props['blendequation'] = {equationRgb: equationRgb, equationAlpha: equationAlpha};
 		this.property_cache['blendequation'] = hash;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + '.setBlendEquation(' + equationRgb + ', ' + equationAlpha + ');');
-		}
 	}
 
 
@@ -135,10 +111,6 @@ define.class(function(require, exports){
 
 		this.props['blendfunc'] = {srcFactorRgb: srcFactorRgb, datFactorRgb: dstFactorRgb, srcFactorAlpha: srcFactorAlpha, dstFactorAlpha: dstFactorAlpha};
 		this.property_cache['blendfunc'] = hash;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + '.setBlendFunc(' + srcFactorRgb + ', ' + dstFactorRgb + ', ' + srcFactorAlpha + ', ' + dstFactorAlpha + ');');
-		}
 	}
 
 

@@ -58,10 +58,6 @@ define.class('$system/base/texture', function(exports, require){
 		//console.log('********** fromImage', img.getWidth(), img.getHeight());
 		tex.image = img
 
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var texture' + tex.id + ' = new headless.ResourceImage({url: \'' + fullpath + '\'});');
-		}		
-
 		return tex
 	}
 
@@ -96,27 +92,6 @@ define.class('$system/base/texture', function(exports, require){
 		tex.image = img;
 
 		Texture.Cache[texture_key] = tex;
-
-		if (HeadlessApi.emitcode) {
-			// Write font_<INDEX>.bin
-			var buffer = new Buffer(uint8);
-			fs.writeFile('font_' + tex.id + '.bin', buffer, 'binary', function(err) {
-				if (err) {
-					console.log('File ERROR', err);
-					throw err;
-				}
-				console.log('File Saved');
-			});
-
-			console.log('HEADLESSCODE: var texture' + tex.id + ';');
-			console.log('HEADLESSCODE: var fs = require(\'fs\');');
-			console.log('HEADLESSCODE: var texturedata' + tex.id + ' = fs.readFileSync(\'font_' + tex.id + '.bin\');');
-
-			console.log('HEADLESSCODE: var image_options' + tex.id + ' = {width: ' + w + ', height: ' + h + ', pixelFormat : headless.PIXEL_FORMAT_RGBA8888}');
-			console.log('HEADLESSCODE: var uint8_' + tex.id + ' = new Uint8Array(texturedata' + tex.id + ');');
-			console.log('HEADLESSCODE: var texture' + tex.id + ' = new headless.BufferImage(uint8_' + tex.id + ', image_options' + tex.id + ')');
-			tex.img = img;
-		}		
 
 		return tex
 	}

@@ -41,17 +41,6 @@ define.class(function(require, exports){
 		this.id = ++HeadlessShader.GlobalId;
 		this.vertexshader = vertexShader;
 		this.fragmentShader = fragmentShader;
-
-		if (HeadlessApi.emitcode) {
-			// Each line needs a separate HEADLESSCODE statement
-			vs = vs.replace(/\n/g, "\nHEADLESSCODE: ");
-			fs = fs.replace(/\n/g, "\nHEADLESSCODE: ");
-
-			console.log('HEADLESSCODE: var vertexShader' + this.id + ' = "' + vs + '"');
-			console.log('HEADLESSCODE: var fragmentShader' + this.id + ' = "' + fs + '"');
-			console.log('HEADLESSCODE: var shaderOptions' + this.id + ' = {vertexShader : vertexShader' + this.id + ', fragmentShader: fragmentShader' + this.id + ' };');
-		}
-
 	}
 
 		// Internal method to remove comments and empty lines from a shader. This

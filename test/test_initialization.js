@@ -40,6 +40,7 @@ define.class("$server/composition",
       });
 
       var s = screen({
+        name: 'default',
         atConstructor: function() {results.push('atConstructor screen');},
         init: function() {results.push('init screen');},
         render: function() {results.push('render screen'); return [v1, v2];},

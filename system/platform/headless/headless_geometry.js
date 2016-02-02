@@ -23,7 +23,7 @@ define.class(function(require, exports){
 	 * Create a headless.Geometry object, using triangles
 	 * You can access the headless.Geometry object as this.headlessgeometry
 	 * @param {number} drawtype Line drawing type. headless uses the same values
-	 *								 as webgl. The default is headless.GEOMETRY_TRIANGLES.
+	 *								 as webgl. The default is HeadlessApi.Geometry.TRIANGLES.
 	 */
 	this.atConstructor = function(drawtype) {
 		this.object_type = 'HeadlessGeometry'
@@ -36,13 +36,8 @@ define.class(function(require, exports){
 
 		this.id = ++HeadlessGeometry.GlobalId;
 
-		drawtype = drawtype || headless.GEOMETRY_TRIANGLES;
+		drawtype = drawtype || HeadlessApi.Geometry.TRIANGLES;
 		this.geometryType = drawtype;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var ' + this.name() + ' = new headless.Geometry();');
-			console.log('HEADLESSCODE: ' + this.name() + '.setGeometryType(' + drawtype + ');');
-		}
 	}
 
 
@@ -324,10 +319,6 @@ define.class(function(require, exports){
 			bufferindex = ret[1];
 			//index = this.headlessgeometry.addVertexBuffer(buffer);
 			index = 0;
-
-			if (HeadlessApi.emitcode) {
-				console.log('HEADLESSCODE: ' + this.name() + '.addVertexBuffer(buffer' + bufferindex + ')');
-			}
 
 			// Store the index so it can be removed later
 			this.vertex_buffers[name] = [format_hash, data_hash, index, buffer, bufferindex];

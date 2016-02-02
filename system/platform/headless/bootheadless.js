@@ -8,8 +8,6 @@
 
 define.class(function(require){
 
-	console.log('Loading bootheadless', define.$environment);
-
 	// composition_client references WebSocket
 	//WebSocket = require('$system/base/nodewebsocket')
 
@@ -35,9 +33,13 @@ define.class(function(require){
 		this.width = parseInt(args['-width']) || 1920;
 		this.height = parseInt(args['-height']) || 1080;
 		this.name = args['-name'] || 'dreemgl';
+		this.verbose = ('-verbose' in args);
 
 		// The duration (msec) of the test. 0 = render once and stop
 		this.duration = parseInt(args['-duration']) || 0;
+
+		if (this.verbose)
+			console.log('Loading environment', define.$environment);
 
 		this.args = args
 		this.compname = compname
@@ -97,12 +99,12 @@ define.class(function(require){
 	}
 
 	this.loadComposition = function(){
-		console.log("Reloading composition "+this.filename)
+		if (this.verbose)
+			console.log("Reloading composition "+this.filename)
 		require.clearCache()
 
 		this.HeadlessApi = require('./headless_api');
-		this.HeadlessApi.initialize(this.width, this.height, this.name, this.duration);
-
+		this.HeadlessApi.initialize({width: this.width, height: this.height, name: this.name, duration: this.duration, verbose: this.verbose});
 
 		var Composition = require(define.expandVariables(this.filename))
 		this.composition = new Composition(this.busserver, this.session)

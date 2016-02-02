@@ -32,9 +32,12 @@ define.class(function(exports){
   // Background color of the stage
   HeadlessApi.bgcolor = null;
 
-	// Set emitcode to true to emit headless code to the console. These lines
-	// are preceeded with HEADLESSCODE to make it easier to extract into a file.
-	HeadlessApi.emitcode = false;
+  // Verbose mode controls additional output
+  HeadlessApi.verbose = false;
+
+  // Geometry types (same values as webgl)
+	exports.Geometry = {POINTS:0x0,LINES:0x1,LINE_LOOP:0x2,LINE_STRIP:0x3,TRIANGLES:0x4,TRIANGLE_STRIP:0x5,TRIANGLE_FAN:0x6};
+
 
 	// Create all actors on a layer to ignore depth test.
 	// (From Nick: When using this mode any ordering would be with respect to
@@ -45,7 +48,7 @@ define.class(function(exports){
 	// currentlayer is never set, the root layer (HeadlessApi.rootlayer) is used.
 	// Actors are added in order so the normal order of execution is:
 	//   - Create a HeadlessLayer object,
-    //   - Call HeadlessApi.setLayer to make this layer the current layer
+  //   - Call HeadlessApi.setLayer to make this layer the current layer
 	//   - Add actors using HeadlessApi.addActor. This will use the current layer
 	//     if none was specified.
 	//   - Repeat the above process. You can reset the current layer by
@@ -88,60 +91,31 @@ define.class(function(exports){
 	 * @method initialize
 	 * Static method to initialize and create the headless stage. This method is
 	 * called when headless starts running.
-	 * @param {number} width Width of stage
-	 * @param {number} height Height of stage
-	 * @param {string} name Name of stage
-	 * @param {number} duration Duration of test (msec). Default=0 (one iteration)
+	 * @param {Hash} Settings
+   *   width Width of stage
+	 *   height Height of stage
+	 *   name Name of stage
+	 *   duration Duration of test (msec). Default=0 (one iteration)
+   *   verbose true to generate additional output
 	 */
-	HeadlessApi.initialize = function(width, height, name, duration) {
+	HeadlessApi.initialize = function(settings) {
 		HeadlessLayer = require('./headless_layer')
 
-		var window= {
-			x:0,
-			y:0,
-			width:width,
-			height: height,
-			transparent: false,
-			name: name
-		};
-
-		var viewMode={
-			'stereoscopic-mode':'mono',
-			'stereo-base': 65
-		};
-
-		var options= {
-			'window': window,
-			'view-mode': viewMode,
-		}
-
-
-		HeadlessApi.size = {x:width, y:height};
-		HeadlessApi.duration = duration;
+		HeadlessApi.size = {x:settings.width, y:settings.height};
+		HeadlessApi.duration = settings.duration;
+		HeadlessApi.name = settings.name;
+		HeadlessApi.verbose = settings.verbose;
           
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var window= {x:0, y:0, width:' + width + ', height:' + height + ', transparent: false, name: \'' + name + '\'};');
-
-			console.log('HEADLESSCODE: var viewMode={\'stereoscopic-mode\':\'mono\', \'stereo-base\': 65};');
-
-			console.log('HEADLESSCODE: var options= {\'window\': window, \'view-mode\': viewMode}');
-		}
-
 		try {
-			// Create a top-level 2D layer to the stage. 
-			HeadlessApi.rootlayer = HeadlessApi.currentlayer = new HeadlessLayer(null, width, height);
+			// Create a top-level layer to the stage. 
+			HeadlessApi.rootlayer = HeadlessApi.currentlayer = new HeadlessLayer(null, settings.width, settings.height);
 			HeadlessApi.stage.push(HeadlessApi.rootlayer);
-
-			if (HeadlessApi.emitcode) {
-				console.log('HEADLESSCODE: headless.stage.add(' + HeadlessApi.rootlayer.name() + ');');
-			}
-
 		}
 		catch (e) {
 			console.error('Failed to load headless');
 			console.log(e.stack);
 		}
-    }
+  }
 
 
 	/**
@@ -150,7 +124,8 @@ define.class(function(exports){
 	 * (see the duration argument on the command line)
 	 */
 	HeadlessApi.terminate = function() {
-		console.log('Terminate');
+		if (HeadlessApi.verbose)
+			console.log('Terminate');
 		
 		// TODO Dump the object state if enabled
 
@@ -218,11 +193,6 @@ define.class(function(exports){
 	 */
 	HeadlessApi.setBackgroundColor = function(color) {
 		HeadlessApi.bgcolor = color;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: headless.stage.setBackgroundColor(' + JSON.stringify(color) + ');');
-		}
-
 	}
 
 
@@ -262,10 +232,6 @@ define.class(function(exports){
 
 		HeadlessApi.BufferId += 1;
 
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var buffer' + HeadlessApi.BufferId + ' = new headless.PropertyBuffer(' + JSON.stringify(format) + ', ' + nrecs + ')');			
-		}
-
 		// Write data to the buffer
 		//console.log('numberItems', nrecs, data.length);
 		HeadlessApi.writeHeadlessBuffer(buffer, HeadlessApi.BufferId, data);
@@ -290,13 +256,6 @@ define.class(function(exports){
 		var dataArray = new Float32Array(data.length);
 		dataArray.set(data);
 		buffer.data = dataArray;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: var data' + bufferid + ' = ' + JSON.stringify(data));
-			console.log('HEADLESSCODE: var dataArray' + bufferid + ' = new Float32Array(data' + bufferid + '.length);');
-			console.log('HEADLESSCODE: dataArray' + bufferid + '.set(data' + bufferid + ');');
-			console.log('HEADLESSCODE: buffer' + bufferid + '.setData(dataArray' + bufferid + ')');
-		}
 
 		return buffer;
 	}

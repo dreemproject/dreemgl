@@ -25,7 +25,7 @@ define.class(function(require, exports){
 	/**
 	 * @method constructor
 	 * Create a headless.Renderer object by specifying a geometry and material
-	 * @param {object} geometry HeadlessShader object
+	 * @param {object} geometry HeadlessGeometry object
 	 * @param {object} material HeadlessMaterial object
 	 * You can access the headless.Renderer object as this.headlessrenderer
 	 */
@@ -39,12 +39,6 @@ define.class(function(require, exports){
 		this.headlessmaterial = material;
 		HeadlessRenderer.DepthIndex += 5;
 		this.depthindex = HeadlessRenderer.DepthIndex;
-
-		if (HeadlessApi.emitcode) {
-			console.log('HEADLESSCODE: ' + this.name() + ' = new headless.Renderer(' + this.headlessgeometry.name() + ', ' + this.headlessmaterial.name() + ');');
-			console.log('HEADLESSCODE: ' + this.name() + '.depthIndex = ' + HeadlessRenderer.DepthIndex + ';');
-		}
-
 	}
 
 	this.name = function() {
