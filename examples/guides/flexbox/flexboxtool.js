@@ -5,10 +5,14 @@
 
 // Flexbox flexdirection example.
 define.class("$server/composition",
-	function ($ui$, screen, view, label, speakergrid, $$, newradiogroup) {
+	function ($ui$, screen, view, label, speakergrid, $widgets$, radiogroup, $$, flexboxtoolitem) {
+
+		this.examplewidth = 860;
 
 		this.attributes = {
-			flexcontainer: null 	// reference to flex container view
+			flexcontainer: null, 		// reference to flex container view
+			selectedChild: null,		// the currently selected child of the flexcontainer
+			childInfoLabel: null		// reference to label object orange box title
 		};
 
 		var containeroptions = {
@@ -19,59 +23,83 @@ define.class("$server/composition",
 		};
 
 		var childoptions = {
-			alignSelf: ["auto","flex-start","flex-end","center","baseline","stretch"]
+			alignSelf: ["(none)","flex-start","flex-end","center","stretch"]
 		};
 
 		this.setContainerWidth = function (newWidth) {
 			if (this.flexcontainer != null) {
-				console.log("Setting flexcontainer width to " + newWidth);
 				this.flexcontainer.width = newWidth;
+			}
+		};
+
+		this.setContainerHeight = function (newHeight) {
+			if (this.flexcontainer != null) {
+				if (newHeight === 'auto') {
+					this.flex = 1;
+				} else {
+					this.flex = 0;
+				}
+				this.flexcontainer.height = newHeight;
+				this.flexcontainer.doLayout();
 			}
 		};
 
 		this.applyContainerStyle = function (stylename, value) {
 			if (this.flexcontainer != null) {
-				console.log("Setting flexcontainer " + stylename + " to " + value);
 				this.flexcontainer[stylename] = value;
 			}
 		};
 
-		// Create a single screen with background color 'green'
+		this.selectedChild = function() {
+			console.warn("selected child: this.selectedChild=" + this.selectedChild);
+			if (this.selectedChild != null) {
+				// this.childLabel = "child with name='' selected!";
+				this.childInfoLabel.text = "Selected child: " + this.selectedChild.name;
+			}
+		};
+
+		this.setChildAlignself = function(value) {
+			if (this.selectedChild != null) {
+				if (value == '(none)') value = '';
+				this.selectedChild.alignself = value;
+			}
+		};
+
 		this.render = function () {
 			var composition = this;
 			return [
 				screen(
 					{
 						name: 'default',
-						clearcolor: 'battleshipgrey'
+						clearcolor: 'yankeesblue'
 					},
 
 					/* Two boxes at the top with controls */
 					view(
 						{
+							w:this.composition.examplewidth,
+							h: 240,
+							clip: true,
 							bgcolor: 'darkgrayx11',
-							borderradius: vec4(10),
 							flexdirection:"row",
-						  margin: 10,
-							padding: vec4(10)
+							padding: vec4(5)
 						},
 
 
-						/* Left box: flex container controls */
+						/* Left box: flexcontainer settings */
 						view(
 							{
-								flex:.5,
+								flex:.6,
 								bgcolor: 'cadet',
-								flexdirection: 'column',
+								flexdirection: 'column'
 							},
 
 								label(
 									{
 										text: "flexcontainer settings",
-										fontsize: 29,
-										fontstyle: 'bold',
-										margin:5,
-										padding:6,
+										fontsize: 16,
+										bold: true,
+										paddingleft:6,
 										bgcolor: 0,
 										fgcolor: 'white'
 									}
@@ -81,45 +109,57 @@ define.class("$server/composition",
 								{
 									flexdirection:"column",
 									bgcolor:"gray",
-									margin:5,
 									padding:6,
 									bg:0
-								}
+								},
 
-								,newradiogroup(
+								radiogroup(
 									{
 										title: "container width",
-										fontsize: 16,
-										values: ["auto", 400, 600, 900],
+										fontsize: 11,
+										values: ["auto", 400, 600, 750],
 										init: function() {
-											this.currentvalue = 'row';
+											this.currentvalue = 'auto';
 										},
 										currentvalue: function() {
-											console.log("currentvalue=" + this.currentvalue);
-											composition.setContainerWidth(this.currentvalue)
+											composition.setContainerWidth(this.currentvalue);
 										}
 									}
-								)
+								),
 
-								,newradiogroup(
+								radiogroup(
+									{
+										title: "container height",
+										fontsize: 11,
+										values: ["auto", 400, 600],
+										init: function() {
+											this.currentvalue = '600';
+										},
+										currentvalue: function() {
+											composition.setContainerHeight(this.currentvalue);
+										}
+									}
+								),
+
+								radiogroup(
 									{
 										title: "flexdirection",
-										fontsize: 16,
+										fontsize: 11,
 										values: containeroptions.flexDirection,
 										init: function() {
 											this.currentvalue = 'row';
 										},
 										currentvalue: function() {
 											console.log("currentvalue=" + this.currentvalue);
-											composition.applyContainerStyle('flexdirection', this.currentvalue)
+											composition.applyContainerStyle('flexdirection', this.currentvalue);
 										}
 									}
-								)
+								),
 
-								,newradiogroup(
+								radiogroup(
 									{
 										title: "justifycontent",
-										fontsize: 18,
+										fontsize: 11,
 										currentvalue: containeroptions.justifyContent[0],
 										values: containeroptions.justifyContent,
 										init: function() {
@@ -127,31 +167,31 @@ define.class("$server/composition",
 										},
 										currentvalue: function() {
 											console.log("currentvalue=" + this.currentvalue);
-											composition.applyContainerStyle('justifycontent', this.currentvalue)
+											composition.applyContainerStyle('justifycontent', this.currentvalue);
 										}
 									}
-								)
+								),
 
-								,newradiogroup(
+								radiogroup(
 									{
 										title: "alignitems",
-										fontsize: 12,
+										fontsize: 11,
 										currentvalue: containeroptions.alignItems[0],
 										values: containeroptions.alignItems,
 										init: function() {
 											this.currentvalue = this.values[0];
 										},
 										currentvalue: function() {
-											composition.applyContainerStyle('alignitems', this.currentvalue)
+											composition.applyContainerStyle('alignitems', this.currentvalue);
 										}
 									}
-								)
+								),
 
 
-								,newradiogroup(
+								radiogroup(
 									{
 										title: "flexwrap",
-										fontsize: 12,
+										fontsize: 11,
 										values: containeroptions.flexWrap,
 										init: function() {
 											this.currentvalue = 'wrap';
@@ -164,23 +204,27 @@ define.class("$server/composition",
 
 							)
 						),
+
+						// blue box for selected child and instructions.
 						view(
 							{
 								flex:.5,
-								bgcolor: 'cadet',
-								flexdirection: 'column',
+								bgcolor: 'onyx',
+								flexdirection: 'column'
 							},
-
 
 							label(
 								{
-									text: "Child #1",
-									fontsize: 22,
-									fontstyle: 'bold',
-									margin:5,
-									padding:6,
+									name: 'childLabel',
+									text: null,
+									fontsize: 16,
+									bold: true,
+									paddingleft:6,
 									bgcolor: 0,
-									fgcolor: 'white'
+									fgcolor: 'white',
+									init: function() {
+										composition.childInfoLabel = this;
+									}
 								}
 							),
 
@@ -191,21 +235,37 @@ define.class("$server/composition",
 									margin:5,
 									padding:6,
 									bg:0
-								}
-								,newradiogroup(
+								},
+								radiogroup(
 									{
-										title: "flexwrap",
-										fontsize: 18,
-										values: containeroptions.flexWrap,
+										title: "alignself",
+										fontsize: 11,
+										values: childoptions.alignSelf,
 										init: function() {
-											this.currentvalue = 'wrap';
+											this.currentvalue = '(none)';
 										},
 										currentvalue: function() {
-											composition.applyContainerStyle('flexwrap', this.currentvalue)
+											composition.setChildAlignself(this.currentvalue)
 										}
 									}
+								),
+								label(
+									{
+										text: "Instructions:\n" +
+											"The controls on the left side let you control the container\n" +
+											"element (grey view colored boxes). Click child to select it.\n" +
+										  "For the child, the selectable value is the \"alignself\" property.\n" +
+										  "Selecting \"stretch\" has no effect, since we are using\n" +
+										  "explicit width and height values for the children.\n" +
+										  "When selecting \"auto\" for the container width, the width will\n" +
+										  "be 100% of the parent view (flex=1), height value of \"auto\"\n" +
+										  "scales to content height (which depends on layout settings).",
+										fontsize: 12,
+										bgcolor: 0,
+										fgcolor: 'white',
+										multiline: true
+									}
 								)
-
 
 							)
 						)
@@ -214,84 +274,69 @@ define.class("$server/composition",
 					/* Boxes which are controlled by layout */
 					view(
 						{
-							flex:1,
+							w:this.composition.examplewidth,
 							flexdirection: "column",
-							margin: 10,
-							padding: vec4(10),
-							borderradius: vec4(10),
-							bg:'cadet'
-						}
-						,view(
+							margintop: 10,
+							padding: vec4(5),
+							bgcolor: 'blackbean'
+						},
+						view(
 							{
 								flex: 1,
 								flexdirection: "column",
-								bgcolor: 'cadet',
-								w: 800
+								bgcolor: 'onyx'
 							},
 
+
+								// flex container element
 								view(
 									{
 										name: 'flexcontainer',
-										flex: 1,
-										bgcolor: 'avocado',
+										h: 600,
+										bgcolor: 'darkmediumgray',
 										init:function() {
 											composition.flexcontainer = this;
-										},
-										flexdirection:function() {
-											console.log("Changed to " + this.flexdirection);
-										},
-										alignself:function() {
-											console.log("Changed to " + this.flexdirection);
 										}
 									},
 
 									// The views which are controled by the flexbox container
-									view(
+									flexboxtoolitem(
 										{
-											w: 80,
-											h: 80,
-											padding: 20,
-											bgcolor: 'airforceblueraf'},
-										view({w:40, h:40, bgcolor: 'gray'},
-											label({text: 'Hello', fgcolor: 'black', fontsize: '16'})
-										)
+											name: 'c1',
+											bgcolor: 'viridiangreen',
+											init: function() {
+												composition.selectedChild = this;
+											}
+										}
 									),
-									view(
+									flexboxtoolitem(
 										{
-											w: 80,
-											h: 80,
-											padding: 20,
-											bgcolor: 'amaranth'},
-										view({w:40, h:40, bgcolor: 'gray'})
+											name: 'c2',
+											bgcolor: 'amber'
+										}
 									),
-									view(
+									flexboxtoolitem(
 										{
-											w: 80,
-											h: 80,
-											padding: 20,
-											bgcolor: 'amber'},
-										view({w:40, h:40, bgcolor: 'gray'})
+											name: 'c3',
+											bgcolor: 'britishracinggreen'
+										}
 									),
-									view(
+									flexboxtoolitem(
 										{
-											w: 80,
-											h: 80,
-											padding: 20,
-											bgcolor: 'britishracinggreen'},
-										view({w:40, h:40, bgcolor: 'gray'})
+											name: 'c4',
+											bgcolor: 'sandybrown'
+										}
 									),
-									view(
+									flexboxtoolitem(
 										{
-											w: 80,
-											h: 80,
-											padding: 20,
-											bgcolor: 'almond'},
-										view({w:40, h:40, bgcolor: 'gray'})
+											name: 'c5',
+											bgcolor: 'alizarincrimson'
+										}
 									)
 
-								)
 							)
 						)
+					)
 
 				) // screen
 
