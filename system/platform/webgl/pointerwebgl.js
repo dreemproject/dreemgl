@@ -36,8 +36,7 @@ define.class('$system/base/pointer', function (require, exports){
 				alt: event.altKey,
 				ctrl: event.ctrlKey,
 				meta: event.metaKey,
-				wheelx: event.deltaX,
-				wheely: event.deltaY,
+				wheel: vec2(event.deltaX, event.deltaY),
 				touch: false
 			}]
 		}.bind(this)

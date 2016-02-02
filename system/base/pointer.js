@@ -117,8 +117,7 @@ define.class('$system/base/node', function(){
 			this.max = vec2(max(this.position[0], refpointer.position[0]), max(this.position[1], refpointer.position[1]))
 			this.dt = this.t - refpointer.t
 		}
-		if (pointer.wheelx !== undefined) this.wheelx = pointer.wheelx
-		if (pointer.wheely !== undefined) this.wheely = pointer.wheely
+		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
 	}
 
 	this.attributes = {
@@ -244,12 +243,10 @@ define.class('$system/base/node', function(){
 	// Internal: emits `wheel` event.
 	this.setwheel = function(pointerlist) {
 		this._wheel.length = 0
-		for (var i = 0; i < pointerlist.length; i++) {
-			this.device.pickScreen(pointerlist[i].position, function(view){
-				var pointer = new Pointer(pointerlist[0], 0, view)
-				this._wheel.setPointer(pointer)
-			}.bind(this), true)
-		}
+		this.device.pickScreen(pointerlist[0].position, function(view){
+			var pointer = new Pointer(pointerlist[0], 0, view)
+			this._wheel.setPointer(pointer)
+		}.bind(this), true)
 		this._wheel.forEachView(function(view, pointers) {
 			this.emit('wheel', {view: view, pointers: pointers})
 		}.bind(this))
