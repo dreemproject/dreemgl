@@ -15,8 +15,11 @@ define.class('$server/composition', function($ui$, screen) {
 				start: Config({type: Array,  value: []}),
 				move: Config({type: Array,  value: []}),
 				end: Config({type: Array,  value: []}),
+				tap: Config({type: Array,  value: []}),
 				hover: Config({type: Array,  value: []}),
-				tap: Config({type: Array,  value: []})
+				over: Config({type: Array,  value: []}),
+				out: Config({type: Array,  value: []}),
+				wheel: Config({type: Array,  value: []})
 			}
 
 			this.oninit = function () {
@@ -32,12 +35,24 @@ define.class('$server/composition', function($ui$, screen) {
 					this.end = event.value
 				}.bind(this)
 
+				this.pointertap = function(event) {
+					this.tap = event.value
+				}.bind(this)
+
 				this.pointerhover = function(event) {
 					this.hover = event.value
 				}.bind(this)
 
-				this.pointertap = function(event) {
-					this.tap = event.value
+				this.pointerover = function(event) {
+					this.over = event.value
+				}.bind(this)
+
+				this.pointerout = function(event) {
+					this.out = event.value
+				}.bind(this)
+
+				this.pointerwheel = function(event) {
+					this.wheel = event.value
 				}.bind(this)
 			}
 
@@ -46,11 +61,11 @@ define.class('$server/composition', function($ui$, screen) {
 				for (var i = 0;i < this[type].length; i++) {
 					var pos = this.globalToLocal(this[type][i].position)
 					markers.push(label({
-						text: i,
+						text: this[type][i].id,
 						icon: 'play',
 						position: 'absolute',
 						bgcolor: 'transparent',
-						left: 100 + pos[0],
+						left: pos[0],
 						top: pos[1],
 						fgcolor: color,
 						bordercolor: color,
@@ -72,11 +87,14 @@ define.class('$server/composition', function($ui$, screen) {
 
 			this.render = function() {
 				return [
-					this.renderLabels('hover', 'white'),
 					this.renderLabels('start', 'red'),
 					this.renderLabels('move', 'green'),
 					this.renderLabels('end', 'blue'),
-					this.renderLabels('tap', 'cyan')
+					this.renderLabels('tap', 'cyan'),
+					this.renderLabels('hover', 'white'),
+					this.renderLabels('over', 'yellow'),
+					this.renderLabels('out', 'brown'),
+					this.renderLabels('wheel', 'black')
 				]
 			}
 
