@@ -225,37 +225,49 @@ define.class(function(require){
 		}
 	}
 
-	// emit an event for an attribute key. the order
-	this.emit = function(key, event){
-		var on_key = 'on' + key
-		var listen_key = '_listen_' + key
+	this.emit = function(key, ievent){
+		var event = ievent || {}
+
 		var lock_key = '_lock_' + key
 
 		if(this[lock_key]) return
 
 		this[lock_key] = true
 		try{
-			var proto = this
-			var stack
-
-			while(on_key in proto){
-				if(proto.hasOwnProperty(on_key)) (stack || (stack = [])).push(proto[on_key])
-				proto = Object.getPrototypeOf(proto)
+			if(!this.__lookupSetter__(key)){
+				var fn = this[key]
+				if(typeof fn === 'function'){
+					fn.call(this, event)
+				}
+				return
 			}
 
-			if(stack !== undefined) for(var j = stack.length - 1; j >=0; j--){
-				stack[j].call(this, event)
-			}
+			var on_key = 'on' + key
+			var listen_key = '_listen_' + key
 
 			var proto = this
-			while(listen_key in proto){
+
+			// called after the onclicks, in reverse order (parent on up)
+			var finals
+			while(on_key in proto || listen_key in proto){
+				if(proto.hasOwnProperty(on_key)){
+					proto[on_key].call(this, event, event.value)
+					if(event.stop) return
+					if(event.final) finals = finals || [], finals.push(event.final)
+				}
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
-					for(var j = 0; j < listeners.length; j++){
-						listeners[j].call(this, event)
+					for(var j = listeners.length - 1; j >= 0; j--){
+						listeners[j].call(this, event, event.value)
+						if(event.stop) return
+						if(event.final) finals = finals || [], finals.push(event.final)
 					}
 				}
 				proto = Object.getPrototypeOf(proto)
+			}
+			if(finals) for(var i = finals.length - 1; i >=0; i--){
+				finals[i].call(this, event, event.value)
+				if(event.stop) return
 			}
 		}
 		finally{
@@ -265,11 +277,6 @@ define.class(function(require){
 
 	// add a listener to an attribute
 	this.addListener = function(key, cb){
-		// if something isnt an attribute, make it one
-		if(!this.__lookupSetter__(key)){
-			this.defineAttribute(key, this[key], true)
-		}
-
 		var listen_key = '_listen_' + key
 		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
@@ -433,7 +440,6 @@ define.class(function(require){
 
 		//var found = cache[cacheid]
 		//if(found) return found
-
 		var style = this._style.lookup(name, propobj)
 
 		// find the base class
@@ -479,7 +485,7 @@ define.class(function(require){
 			}
 		}
 	})
-/*
+
 	// define listeners {attrname:function(){}}
 	Object.defineProperty(this, 'listeners', {
 		get:function(){
@@ -491,7 +497,7 @@ define.class(function(require){
 			}
 		}
 	})
-
+	/*
 	// define setters {attrname:function(){}}
 	Object.defineProperty(this, 'setters', {
 		get:function(){
@@ -643,7 +649,10 @@ define.class(function(require){
 			var type = config.type
 			if(typeof init_value === 'function'){
 				if(init_value.is_wired) this.setWiredAttribute(key, init_value)
-				else if(type !== Function) this[on_key] = init_value
+				else if(type !== Function){
+					//this.addListener(on_key, init_value)
+					this[on_key] = init_value
+				}
 				else this[value_key] = init_value
 			}
 			else{
@@ -675,6 +684,7 @@ define.class(function(require){
 				if(typeof value === 'function'){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
+						//this.addListener(on_key, value)
 						this[on_key] = value
 						return
 					}
@@ -739,6 +749,7 @@ define.class(function(require){
 				if(typeof value === 'function'){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
+						//this.addListener(on_key, value)
 						this[on_key] = value
 						return
 					}

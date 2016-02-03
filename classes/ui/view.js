@@ -15,7 +15,7 @@ define.class('$system/base/node', function(require){
 		// wether to draw it
 		visible: true,
 
-		drawtarget: Config({type:Enum('both','pick','color')}),
+		drawtarget: Config({type:Enum('both','pick','color'), value:'both'}),
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
 		pos: Config({type:vec3, value:vec3(0,0,0),meta:"xyz"}),
@@ -395,7 +395,7 @@ define.class('$system/base/node', function(require){
 	this.matrix_dirty = true
 
 	// internal, initialization of a view
-	this.oninit = function(prev){
+	this.atViewInit = function(prev){
 
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}

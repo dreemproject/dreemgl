@@ -8,6 +8,25 @@
 
 define.class(function($server$, composition, $ui$, screen, view){
 	//internal
+// Helper functions
+
+	// Return random[0,max)
+	function random(max) {
+		var rand = Math.floor(Math.random() * max);
+		return rand;
+	}
+
+	// Return random color
+	function rcolor() {
+		var color = vec4(Math.random(), Math.random(), Math.random(), 1);
+		return color;
+	}
+
+	// Return a random position
+	function rpos() {
+		var pos = vec3(random(450), random(450), 0);
+		return pos;
+	}
 
 	// Create N random views
 	this.rviews = function(n) {
@@ -43,22 +62,4 @@ define.class(function($server$, composition, $ui$, screen, view){
 		return views
 	}
 })
-// Helper functions
 
-// Return random[0,max)
-random = function(max) {
-	var rand = Math.floor(Math.random() * max);
-	return rand;
-}
-
-// Return random color
-rcolor = function() {
-	var color = vec4(Math.random(), Math.random(), Math.random(), 1);
-	return color;
-}
-
-// Return a random position
-rpos = function() {
-	var pos = vec3(random(450), random(450), 0);
-	return pos;
-}
