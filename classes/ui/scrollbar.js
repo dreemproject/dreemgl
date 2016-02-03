@@ -91,9 +91,9 @@ define.class(function($ui$, view){
 		var offset = this.value / this.total
 		var page = this.page / this.total
 		if (this.vertical){
-			var p = offset + event.value.movement[1] / this.layout.height
+			var p = offset + event.movement[1] / this.layout.height
 		} else {
-			var p = offset + event.value.movement[0] / this.layout.width
+			var p = offset + event.movement[0] / this.layout.width
 		}
 		var value = clamp(p, 0, 1 - page) * this.total
 		if(value != this.value){

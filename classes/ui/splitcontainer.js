@@ -89,8 +89,8 @@
         var h2 = this._flexstart.rightheight
 
         var hadd = h1 + h2
-        h1 += event.value.delta[1]
-        h2 -= event.value.delta[1]
+        h1 += event.delta[1]
+        h2 -= event.delta[1]
         if (h1 < this.parent.minimalchildsize || h2 < this.parent.minimalchildsize) return
         var f1n = h1 / (hadd)
         var f2n = h2 / (hadd)
@@ -101,8 +101,8 @@
         var w2 = this._flexstart.rightwidth
 
         var wadd = w1 + w2
-        w1 += event.value.delta[0]
-        w2 -= event.value.delta[0]
+        w1 += event.delta[0]
+        w2 -= event.delta[0]
         if (w1 < this.parent.minimalchildsize || w2 < this.parent.minimalchildsize) return
         var f1n = w1 / (wadd)
         var f2n = w2 / (wadd)

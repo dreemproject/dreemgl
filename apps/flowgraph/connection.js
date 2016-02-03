@@ -133,7 +133,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.pointermove = function(event){
-		this.find("flowgraph").moveSelected(event.value.delta[0], event.value.delta[0]);
+		this.find("flowgraph").moveSelected(event.delta[0], event.delta[0]);
 	}
 
 	this.pointerover = function(){

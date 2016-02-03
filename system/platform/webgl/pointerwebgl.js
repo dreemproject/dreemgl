@@ -29,6 +29,7 @@ define.class('$system/base/pointer', function (require, exports){
 		// Internal: creates pointer array with a single pointer from mouse event data.
 		var mouseToPointers = function (event) {
 			return [{
+				value: vec2(event.pageX, event.pageY),
 				position: vec2(event.pageX, event.pageY),
 				button: event.button === 0 ? 1 : event.button === 1 ? 3 : 2,
 				shift: event.shiftKey,
@@ -45,6 +46,7 @@ define.class('$system/base/pointer', function (require, exports){
 			var array = []
 			for (var i = 0; i < event.changedTouches.length; i++) {
 				array.push({
+					value: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
 					position: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
 					button: 1,
 					shift: event.shiftKey,

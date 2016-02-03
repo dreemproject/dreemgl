@@ -811,14 +811,14 @@ define.class('$system/base/node', function(require){
 
 			this.pointerwheel = function(event){
 				if(this.vscrollbar._visible){
-					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
+					this.vscrollbar.value = clamp(this.vscrollbar._value + event.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
 				if(this.hscrollbar._visible){
-					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
+					this.hscrollbar.value = clamp(this.hscrollbar._value + event.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
 
-			// //TODO
+			//TODO(aki): implement zoom
 			// this.pointerzoom = function(event){
 			// 	var zoom = event.value.zoom
 			// 	var lastzoom = this._zoom

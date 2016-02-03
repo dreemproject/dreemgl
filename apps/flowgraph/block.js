@@ -195,7 +195,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.pointermove = function(event){
-		this.find("flowgraph").moveSelected(event.value.delta[0], event.value.delta[1], false);
+		this.find("flowgraph").moveSelected(event.delta[0], event.delta[1], false);
 	}
 
 	this.pointerend = function(event){
@@ -204,7 +204,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.pos = vec2(x,y);
 		this.redraw();
 		this.relayout();
-		this.find("flowgraph").moveSelected(event.value.delta[0], event.value.delta[1], true);
+		this.find("flowgraph").moveSelected(event.delta[0], event.delta[1], true);
 	}
 
 	this.over = false;

@@ -103,6 +103,7 @@ define.class('$system/base/node', function(){
 	var Pointer = function(pointer, id, view) {
 		this.id = id
 		this.view = view
+		this.value = pointer.value
 		this.position = pointer.position
 		this.button = pointer.button
 		this.shift = pointer.shift
@@ -266,6 +267,7 @@ define.class('$system/base/node', function(){
 		this._wheel.length = 0
 		this.device.pickScreen(pointerlist[0].position, function(view){
 			var pointer = new Pointer(pointerlist[0], 0, view)
+			pointer.value = pointer.wheel
 			this._wheel.setPointer(pointer)
 		}.bind(this), true)
 		this.emitPointerList(this._wheel, 'wheel')

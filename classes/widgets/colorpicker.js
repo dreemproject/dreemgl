@@ -248,7 +248,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		// TODO(aki): fix slider and use pointer events
 		// most of the logic below is unnecessary because pointer events include deltas.
 		// this.pointerstart = function(event){
-		// 	var start = this.globalToLocal(event.value.position)
+		// 	var start = this.globalToLocal(event.position)
 		// 	// detect if we clicked not on the button
 		// 	if(this.vertical){
 		// 		var p = start[1] / this.layout.height
@@ -274,7 +274,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		// 	 start_offset = offset//this.offset / this.total
 		// }
 		// this.pointermove = function(event){
-		// 	var pos = this.globalToLocal(event.value.position)
+		// 	var pos = this.globalToLocal(event.position)
 		// 	if(this.vertical){
 		// 		var p = start_offset + (pos[1] - start[1]) / this.layout.height
 		// 	}
@@ -321,8 +321,8 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		}
 
 		this.pointermove = function(event){
-			var a = this.globalToLocal(event.value.position)
-			console.log(a, event.value.position)
+			var a = this.globalToLocal(event.position)
+			console.log(a, event.position)
 			this.updatehue(a);
 			this.redraw();
 		}
@@ -455,7 +455,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		}
 
 		this.pointermove = function(event){
-			var p = this.globalToLocal(event.value.position)
+			var p = this.globalToLocal(event.position)
 			this.updatecolorfrompointer(p);
 		}
 

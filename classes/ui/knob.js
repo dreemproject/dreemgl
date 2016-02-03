@@ -143,7 +143,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 
 	this.pointermove = function(event){
-		this.updatevalue(event.value.delta)
+		this.updatevalue(event.delta)
 	}
 
 	this.pointerend = function(event){

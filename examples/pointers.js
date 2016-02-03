@@ -24,35 +24,35 @@ define.class('$server/composition', function($ui$, screen) {
 
 			this.oninit = function () {
 				this.pointerstart = function(event) {
-					this.start = event.value
+					this.start = event
 				}.bind(this)
 
 				this.pointermove = function(event) {
-					this.move = event.value
+					this.move = event
 				}.bind(this)
 
 				this.pointerend = function(event) {
-					this.end = event.value
+					this.end = event
 				}.bind(this)
 
 				this.pointertap = function(event) {
-					this.tap = event.value
+					this.tap = event
 				}.bind(this)
 
 				this.pointerhover = function(event) {
-					this.hover = event.value
+					this.hover = event
 				}.bind(this)
 
 				this.pointerover = function(event) {
-					this.over = event.value
+					this.over = event
 				}.bind(this)
 
 				this.pointerout = function(event) {
-					this.out = event.value
+					this.out = event
 				}.bind(this)
 
 				this.pointerwheel = function(event) {
-					this.wheel = event.value
+					this.wheel = event
 				}.bind(this)
 			}
 
