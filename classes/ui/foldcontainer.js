@@ -116,7 +116,10 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		this.pointerover = this.stateover
 		this.pointerout = this.statedefault
-		this.pointerstart = this.stateclick
+		this.pointerstart = function(ev){
+			this.stateclick()
+			console.log(ev)
+		}
 		this.pointerend = this.statedefault
 	})
 
@@ -145,7 +148,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			collapsed: this.collapsed
 		});
 
-		this.bar.pointertap = this.toggle.bind(this);
+		//this.bar.pointertap = this.toggle.bind(this);
 		var res = [this.bar];
 
 		if (this.collapsed == false) {

@@ -177,7 +177,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(search, browser) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$$</span>, search, browser) {
 
     <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
         search({
@@ -186,7 +186,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }),
         browser({
             <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">main</span><span class="delimiter">'</span></span>,
-            <span class="key">term</span>:<span class="string"><span class="delimiter">'</span><span class="content">Aliens</span><span class="delimiter">'</span></span>,
+            <span class="key">term</span>:<span class="string"><span class="delimiter">'</span><span class="content">Cats</span><span class="delimiter">'</span></span>,
             <span class="key">movies</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.omdb.results</span><span class="delimiter">'</span></span>)
         })
     ] }

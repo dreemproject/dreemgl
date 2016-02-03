@@ -140,7 +140,7 @@ define.class(function(require){
 			'      main:["$system/base/math", "' + boot + '"],\n'+
 			'      atMain:function(require, modules){\n'+
 			'        define.endLoader()\n'+
-			'		 define.global(require(modules[0]))\n'+
+			'		 require(modules[0])\n'+
 			'		 var Composition = require(modules[1])\n'+
 			'        define.rootComposition = new Composition(define.rootComposition)\n'+
 			'      },\n'+

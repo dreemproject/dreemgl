@@ -12,8 +12,10 @@ define.class('$system/base/node', function(require){
 	var view = this.constructor
 
 	this.attributes = {
-		// a simple boolean to turn visibility of a node on or off
-		visible: Config({type:boolean, value: true}),
+		// wether to draw it
+		visible: true,
+
+		drawtarget: Config({type:Enum('both','pick','color')}),
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
 		pos: Config({type:vec3, value:vec3(0,0,0),meta:"xyz"}),
@@ -37,7 +39,7 @@ define.class('$system/base/node', function(require){
 		// alias for the x component of corner
 		right: Config({alias:'corner', index:0}),
 		// alias for  y component of corner
-		bottom: Config({alias:'corner',index:1}),
+		bottom: Config({alias:'corner', index:1}),
 		// alias for z component of corner
 		rear: Config({alias:'corner', index:2}),
 
@@ -235,6 +237,7 @@ define.class('$system/base/node', function(require){
 		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
+		
 		// fires when this view loses focus
 		blur: Config({type:Event}),
 
@@ -804,10 +807,10 @@ define.class('$system/base/node', function(require){
 
 			this.pointerwheel = function(event){
 				if(this.vscrollbar._visible){
-					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value.wheely, 0, this.vscrollbar._total - this.vscrollbar._page)
+					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value[0].wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
 				if(this.hscrollbar._visible){
-					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value.wheelx, 0, this.hscrollbar._total - this.hscrollbar._page)
+					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value[0].wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
 

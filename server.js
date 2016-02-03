@@ -1,13 +1,13 @@
 /* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+	 You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+	 either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 // Dreem/Dali server
 require = require('./system/base/define') // support define.js modules
 
 // load up math core and make it global
-define.global(require('$system/base/math'))
+require('$system/base/math')
 
 if(process.argv.indexOf('-nomoni') != -1){
 	define.atRequire = function(filename){
@@ -101,7 +101,7 @@ function main(){
 		for(var i = 0; i < paths.length; i++){
 			if(!paths[i]) continue
 			var parts = paths[i].split(':')
-			var mypath =  parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
+			var mypath =	parts[1].charAt(0) === '/'? parts[1]: define.joinPath(define.$root, parts[1])
 			console.log('Mapping '+parts[0]+' to ' + mypath)
 			define.paths[parts[0]] = mypath
 		}
@@ -134,15 +134,36 @@ function main(){
 
 			new GitSync(args)
 		}
-		else if(args['-dali']){
-            // Place the dali/nodejs package at the root of dreemgl
+		else if(args['-headless']){
+				var composition = args['-headless'];
+				define.$platform = 'headless'
+				define.$environment = 'headless' // Otherwise it is nodejs
 
-		    var composition = args['-dali'];
-		    if (composition === true)
+			//TODO
+			// Store the path from the root to the specified directory.
+			// There is a mismatch between headless and dreem server.
+			var index = composition.lastIndexOf('/');
+			define.$example = (index >= 0) ? composition.substring(0,index+1) : './'
+			try {
+				// The images are relative to ths specified directory
+				if (fs.statSync(composition).isDirectory())
+					define.$example = './' + composition + '/'
+			}
+			catch (e) {
+			}
+
+			var BootHeadless = require('$system/platform/headless/bootheadless')
+			new BootHeadless(args, composition);
+		}
+		else if(args['-dali']){
+			// Place the dali/nodejs package at the root of dreemgl
+
+				var composition = args['-dali'];
+				if (composition === true)
 			composition = 'examples/rendertest'
 
-		    define.$platform = 'dali'
-		    define.$environment = 'dali' // Otherwise it is nodejs
+				define.$platform = 'dali'
+				define.$environment = 'dali' // Otherwise it is nodejs
 
 			//TODO
 			// Store the path from the root to the specified directory.
@@ -157,8 +178,8 @@ function main(){
 			catch (e) {
 			}
 
-		    var BootDali = require('$system/platform/dali/bootdali')
-		    new BootDali(args, composition);
+				var BootDali = require('$system/platform/dali/bootdali')
+				new BootDali(args, composition);
 		}
 		else if(args['-test']){
 			require('$system/server/test.js')

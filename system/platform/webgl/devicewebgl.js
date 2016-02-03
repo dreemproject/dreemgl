@@ -183,7 +183,7 @@ define.class(function(require, exports){
 		return buf
 	}
 
-	this.doPick = function(){
+	this.doPick = function(resolve){
 		this.pick_timer = 0
 		var x = this.pick_x, y = this.pick_y
 
@@ -235,23 +235,34 @@ define.class(function(require, exports){
 			view = view.parent
 		}
 
-		for(var i = 0; i < pick_resolve.length; i++){
-			pick_resolve[i](view)
+		if (resolve) {
+			resolve(view)
+		} else {
+			for (var i = 0; i < pick_resolve.length; i++){
+				pick_resolve[i](view)
+			}
 		}
 	}
 
-	this.pickScreen = function(pos, immediate){
-		// promise based pickray rendering
-		return new Promise(function(resolve, reject){
-			this.pick_resolve.push(resolve)
-			this.pick_x = pos[0]
-			this.pick_y = pos[1]
-			if (immediate) {
-				this.doPick()
-			} else if (!this.pick_timer){
-				this.pick_timer = setTimeout(this.doPick, 0)
-			}
-		}.bind(this))
+	this.pickScreen = function(pos, resolve, immediate){
+		this.pick_x = pos[0]
+		this.pick_y = pos[1]
+
+		if (immediate) {
+			this.doPick(resolve)
+			return
+		}
+
+		var callback = function () {
+			this.doPick(resolve)
+			delete this.pick_timer
+		}.bind(this)
+
+		if (!this.pick_timer || this.pick_timer.time !== this.last_time) {
+			window.clearTimeout(this.pick_timer)
+			this.pick_timer = setTimeout(callback, 0)
+			this.pick_timer.time = this.last_time
+		}
 	}
 
 	this.doColor = function(time){

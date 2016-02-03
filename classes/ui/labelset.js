@@ -79,12 +79,12 @@ define.class(function(require, $ui$, view){
 			for (var i = 0;i<view.labels.length;i++){
 				mesh.start_x = view.padding[0]
 				mesh.start_y = mesh.line_height + view.padding[1]
-				var l = view.labels[l];
+				var l = view.labels[i];
 				if (l.multiline){
-					mesh.addWithinWidth(l.text, maxwidth? maxwidth: this.layout.width)					
+					mesh.addWithinWidthAtPos(l.text, l.pos, maxwidth? maxwidth: this.layout.width)					
 				}
 				else{
-					mesh.add(l.text,0 ,0 ,0)
+					mesh.addAtPos(l.text,l.pos, 0 ,0 ,0)
 				}
 			}
 			

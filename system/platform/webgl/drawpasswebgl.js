@@ -348,9 +348,9 @@ define.class(function(require, baseclass){
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
 		view.colormatrices = matrices
-
+		
 		gl.disable(gl.SCISSOR_TEST)
-
+		
 		if(isroot){
 			/*
 			if(clipview){

@@ -58,7 +58,7 @@ define.class('$system/base/node',function(require){
 	this.renderComposition = function(){
 		// we have to render the RPC bus
 		Render.process(this, undefined, undefined, false, true)
-
+		
 		//this.children = this.render()
 
 		this.names = {}
@@ -66,10 +66,9 @@ define.class('$system/base/node',function(require){
 		for(var i = 0; i < this.children.length; i++){
 			// ok so as soon as we are stubbed, we need to proxify the object
 			var child = this.children[i]
-
 			if(!child.createRpcProxy) continue
 			// add the proxy to the rpc object
-			var name = child.name// || child.constructor.name
+			var name = child.name // || child.constructor.name
 			this.rpc[name] = child.createRpcProxy(this.rpc)
 			this.names[name] = child
 		}

@@ -191,6 +191,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n37" name="n37">37</a>
 <a href="#n38" name="n38">38</a>
 <a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -221,11 +223,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         view(
             { <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span> },
-            textbox({ <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>, <span class="key">width</span>:<span class="integer">300</span>, <span class="key">height</span>:<span class="integer">30</span>, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">Aliens</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>}),
-            button({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Search</span><span class="delimiter">'</span></span>, <span class="key">width</span>:<span class="integer">90</span>, <span class="function">click</span>:<span class="keyword">function</span>() {
-                <span class="comment">// sets the term on our screen, this should fire the server thing</span>
-                <span class="local-variable">this</span>.screen.term = <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>).value;
-            }}),
+            view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>},
+                                textbox({ <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">Cats</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>, <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#666</span><span class="delimiter">'</span></span>}),
+                                button({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Search</span><span class="delimiter">'</span></span>, <span class="function">click</span>:<span class="keyword">function</span>() {
+                                        <span class="comment">// sets the term on our screen, this should fire the server thing</span>
+                                        <span class="local-variable">this</span>.screen.term = <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>).value;
+                                }})
+                        ),
             view(<span class="local-variable">this</span>.renderMovies())
         )
     ] }

@@ -21,6 +21,9 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 	]
 	this.render = function(){
 
+		
+		
+		
 		var Buttons = [];
 		for(var i = 0;i<this.places.length;i++){
 			var p = this.places[i];

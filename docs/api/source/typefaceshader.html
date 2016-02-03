@@ -1158,6 +1158,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1004" name="n1004">1004</a>
 <a href="#n1005" name="n1005">1005</a>
 <a href="#n1006" name="n1006">1006</a>
+<a href="#n1007" name="n1007">1007</a>
+<a href="#n1008" name="n1008">1008</a>
+<a href="#n1009" name="n1009">1009</a>
+<strong><a href="#n1010" name="n1010">1010</a></strong>
+<a href="#n1011" name="n1011">1011</a>
+<a href="#n1012" name="n1012">1012</a>
+<a href="#n1013" name="n1013">1013</a>
+<a href="#n1014" name="n1014">1014</a>
+<a href="#n1015" name="n1015">1015</a>
+<a href="#n1016" name="n1016">1016</a>
+<a href="#n1017" name="n1017">1017</a>
+<a href="#n1018" name="n1018">1018</a>
+<a href="#n1019" name="n1019">1019</a>
+<strong><a href="#n1020" name="n1020">1020</a></strong>
+<a href="#n1021" name="n1021">1021</a>
+<a href="#n1022" name="n1022">1022</a>
+<a href="#n1023" name="n1023">1023</a>
+<a href="#n1024" name="n1024">1024</a>
+<a href="#n1025" name="n1025">1025</a>
+<a href="#n1026" name="n1026">1026</a>
+<a href="#n1027" name="n1027">1027</a>
+<a href="#n1028" name="n1028">1028</a>
+<a href="#n1029" name="n1029">1029</a>
+<strong><a href="#n1030" name="n1030">1030</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1181,7 +1205,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// lets define a custom struct and subclass the array</span>
         <span class="local-variable">this</span>.textgeom = define.struct({
-                <span class="key">pos</span>:vec3,
+                <span class="key">pos</span>:vec4,
                 <span class="key">tex</span>:vec2,
                 <span class="key">tag</span>:vec4,
         }).extend(<span class="keyword">function</span>(exports, self){
@@ -1238,7 +1262,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">bound_h</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.text_h + <span class="local-variable">this</span>.cursor_sink * <span class="local-variable">this</span>.fontsize
                 })
-
 
                 <span class="local-variable">this</span>.<span class="function">clear</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.text_w = <span class="integer">0</span>
@@ -1339,24 +1362,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> y1 = <span class="local-variable">this</span>.add_y - fontsize * info.min_y
                         <span class="keyword">var</span> y2 = <span class="local-variable">this</span>.add_y - fontsize * info.max_y
                         <span class="keyword">var</span> italic = <span class="local-variable">this</span>.italic_ness * info.height * fontsize
-
+                        <span class="keyword">var</span> cz = <span class="local-variable">this</span>.add_z ? <span class="local-variable">this</span>.add_z:<span class="integer">0</span>;
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.font.baked){
                                 <span class="local-variable">this</span>.pushQuad(
-                                        x1, y1, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
-                                        x2, y1, fontsize, info.tmax_x, info.tmin_y, unicode, m1, m2, m3,
-                                        x1 + italic, y2, fontsize, info.tmin_x, info.tmax_y, unicode, m1, m2, m3,
-                                        x2 + italic, y2, fontsize, info.tmax_x, info.tmax_y, unicode, m1, m2, m3
+                                        x1, y1, cz, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
+                                        x2, y1, cz, fontsize, info.tmax_x, info.tmin_y, unicode, m1, m2, m3,
+                                        x1 + italic, y2, cz, fontsize, info.tmin_x, info.tmax_y, unicode, m1, m2, m3,
+                                        x2 + italic, y2, cz, fontsize, info.tmax_x, info.tmax_y, unicode, m1, m2, m3
                                 )
                         }
                         <span class="keyword">else</span> {
                                 <span class="keyword">var</span> gx = ((info.atlas_x&lt;&lt;<span class="integer">6</span>) | info.nominal_w)&lt;&lt;<span class="integer">1</span>
                                 <span class="keyword">var</span> gy = ((info.atlas_y&lt;&lt;<span class="integer">6</span>) | info.nominal_h)&lt;&lt;<span class="integer">1</span>
 
+
                                 <span class="local-variable">this</span>.pushQuad(
-                                        x1, y1, fontsize, gx, gy, unicode, m1, m2, m3,
-                                        x2, y1, fontsize, gx|<span class="integer">1</span>, gy, unicode, m1, m2, m3,
-                                        x1 + italic, y2, fontsize, gx, gy|<span class="integer">1</span>, unicode, m1, m2, m3,
-                                        x2 + italic, y2, fontsize, gx|<span class="integer">1</span>, gy|<span class="integer">1</span>, unicode, m1, m2, m3
+                                        x1, y1, cz, fontsize, gx, gy, unicode, m1, m2, m3,
+                                        x2, y1, cz, fontsize, gx|<span class="integer">1</span>, gy, unicode, m1, m2, m3,
+                                        x1 + italic, y2, cz,fontsize, gx, gy|<span class="integer">1</span>, unicode, m1, m2, m3,
+                                        x2 + italic, y2, cz, fontsize, gx|<span class="integer">1</span>, gy|<span class="integer">1</span>, unicode, m1, m2, m3
                                 )
                         }
                         <span class="local-variable">this</span>.add_x += info.advance * fontsize
@@ -1369,11 +1393,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> text_h = <span class="integer">0</span>
                         <span class="keyword">var</span> length = <span class="local-variable">this</span>.lengthQuad()
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; length; i++){
-                                <span class="keyword">var</span> o = i  * <span class="integer">6</span> * <span class="integer">9</span>
+                                <span class="keyword">var</span> o = i  * <span class="integer">6</span> * <span class="integer">10</span>
                                 <span class="keyword">var</span> x1 = <span class="local-variable">this</span>.array[o]
                                 <span class="keyword">var</span> y1 = <span class="local-variable">this</span>.array[o + <span class="integer">1</span>]
-                                <span class="keyword">var</span> fontsize = <span class="local-variable">this</span>.array[o + <span class="integer">2</span>]
-                                <span class="keyword">var</span> unicode = <span class="local-variable">this</span>.array[o + <span class="integer">5</span>]
+                                <span class="keyword">var</span> fontsize = <span class="local-variable">this</span>.array[o + <span class="integer">3</span>]
+                                <span class="keyword">var</span> unicode = <span class="local-variable">this</span>.array[o + <span class="integer">6</span>]
                                 <span class="keyword">var</span> info = <span class="local-variable">this</span>.font .glyphs[unicode]
                                 <span class="keyword">var</span> add_x = x1 - fontsize * info.min_x + (unicode === <span class="integer">10</span>?<span class="integer">0</span>:info.advance * fontsize)
                                 <span class="keyword">var</span> add_y = y1 + fontsize * info.min_x <span class="comment">//+ this.fontsize * this.line_spacing</span>
@@ -1407,6 +1431,30 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.add_y &gt; <span class="local-variable">this</span>.text_h) <span class="local-variable">this</span>.text_h = <span class="local-variable">this</span>.add_y
                 }
 
+                <span class="comment">// lets add some strings</span>
+                <span class="local-variable">this</span>.<span class="function">addAtPos</span> = <span class="keyword">function</span>(string, pos, m1, m2, m3){
+                        <span class="keyword">var</span> length = string.length
+                        
+                        <span class="local-variable">this</span>.add_x = pos[<span class="integer">0</span>];
+                        <span class="local-variable">this</span>.add_y = pos[<span class="integer">1</span>];
+                        <span class="local-variable">this</span>.add_z = pos[<span class="integer">2</span>];
+                        
+                        <span class="comment">// alright lets convert some text babeh!</span>
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; length; i++){
+                                <span class="keyword">var</span> unicode = string.struct? string.array[i * <span class="integer">4</span>]: string.charCodeAt(i)
+                                <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[unicode]
+                                <span class="keyword">if</span>(!info) info = <span class="local-variable">this</span>.font.glyphs[<span class="integer">32</span>]
+                                <span class="comment">// lets add some vertices</span>
+                                <span class="local-variable">this</span>.addGlyph(info, unicode, m1, m2, m3)
+                                <span class="keyword">if</span>(unicode == <span class="integer">10</span>){ <span class="comment">// newline</span>
+                                        <span class="local-variable">this</span>.add_x = <span class="local-variable">this</span>.start_x
+                                        <span class="local-variable">this</span>.add_y += <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
+                                }
+                        }
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.add_y &gt; <span class="local-variable">this</span>.text_h) <span class="local-variable">this</span>.text_h = <span class="local-variable">this</span>.add_y
+                }
+
+                
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">char_count</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.lengthQuad()
                 })
@@ -1424,8 +1472,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[<span class="local-variable">this</span>.charCodeAt(off)]
                         <span class="keyword">if</span>(isNaN(off))<span class="reserved">debugger</span>
                         <span class="keyword">var</span> coords = {
-                                <span class="key">x</span>: <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">0</span>] - <span class="local-variable">this</span>.fontsize * info.min_x,
-                                <span class="key">y</span>: <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">1</span>] + <span class="local-variable">this</span>.fontsize * info.min_y,
+                                <span class="key">x</span>: <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span>] - <span class="local-variable">this</span>.fontsize * info.min_x,
+                                <span class="key">y</span>: <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">1</span>] + <span class="local-variable">this</span>.fontsize * info.min_y,
                                 <span class="key">w</span>: info.advance * <span class="local-variable">this</span>.fontsize,
                                 <span class="key">h</span>: <span class="local-variable">this</span>.line_height
                         }
@@ -1433,11 +1481,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">char_tl_x</span> = <span class="keyword">function</span>(off){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">0</span>]
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span>]
                 }
 
                 <span class="local-variable">this</span>.<span class="function">char_tr_x</span> = <span class="keyword">function</span>(off){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">0</span> + <span class="integer">9</span>]
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span> + <span class="integer">10</span>]
                 }
 
                 <span class="local-variable">this</span>.<span class="function">offsetFromPos</span> = <span class="keyword">function</span>(x, y){
@@ -1450,13 +1498,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> char_code = <span class="local-variable">this</span>.charCodeAt(o)
                                 <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[char_code]
 
-                                <span class="keyword">var</span> y2 = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">1</span>] + <span class="local-variable">this</span>.fontsize * info.min_y + <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.cursor_sink
+                                <span class="keyword">var</span> y2 = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">1</span>] + <span class="local-variable">this</span>.fontsize * info.min_y + <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.cursor_sink
                                 <span class="keyword">var</span> y1 = y2 - <span class="local-variable">this</span>.line_height
 
 
                                 <span class="keyword">if</span>(y&gt;=y1 &amp;&amp; y&lt;=y2){
-                                        <span class="keyword">var</span> tl_x = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">0</span>]
-                                        <span class="keyword">var</span> tr_x = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">0</span> + <span class="integer">9</span>]
+                                        <span class="keyword">var</span> tl_x = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span>]
+                                        <span class="keyword">var</span> tr_x = <span class="local-variable">this</span>.array[o * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span> + <span class="integer">10</span>]
                                         <span class="keyword">var</span> hx = (tl_x+tr_x)/<span class="integer">2</span>
 
                                         <span class="comment">// lets debug paint these 2</span>
@@ -1500,7 +1548,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">charCodeAt</span> = <span class="keyword">function</span>(off){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">5</span>]
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">6</span>]
                 }
 
                 <span class="local-variable">this</span>.<span class="function">serializeText</span> = <span class="keyword">function</span>(start, end){
@@ -1516,10 +1564,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> out = vec4.array(end - start)
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = start; i &lt; end; i++){
                                 out.push(
-                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">5</span>],
-                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">6</span>],
-                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">7</span>],
-                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">9</span> + <span class="integer">8</span>])
+                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">6</span>],
+                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">7</span>],
+                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">8</span>],
+                                        <span class="local-variable">this</span>.array[i * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">9</span>])
                         }
                         <span class="keyword">return</span> out
                 }
@@ -1574,8 +1622,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> matrix = view.totalmatrix  * view.viewmatrix
 
                 <span class="comment">// compute the main position and one rectgle atan fontsize for the pixelscale</span>
-                <span class="keyword">var</span> pos1 = vec4(mesh.pos.xy + mesh.shift , <span class="integer">0</span>, <span class="integer">1</span>) * matrix
-                <span class="keyword">var</span> pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.z), <span class="integer">0</span>, <span class="integer">1</span>) * matrix
+                <span class="keyword">var</span> pos1 = vec4(mesh.pos.xy + mesh.shift , mesh.pos.z, <span class="integer">1</span>) * matrix
+                <span class="keyword">var</span> pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.w), mesh.pos.z, <span class="integer">1</span>) * matrix
 
                 <span class="comment">// compute the pixelscaling used in the pixelshader AA</span>
                 <span class="keyword">var</span> pixsize = view.screen.device.frame.size

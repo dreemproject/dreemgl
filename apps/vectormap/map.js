@@ -1,4 +1,4 @@
-define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
+define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, urlfetch)
 {
 
 	var BufferGen = require("./mapbuffers")();
@@ -602,7 +602,17 @@ define.class("$ui/view", function(require,$ui$, view,label, $$, geo, urlfetch)
 				res3d.push(building);
 			}
 		}
-
+		
+		this.thelabels = [];
+		for (var i =0 ;i<1000;i++){
+			var l = {text:"Label " + i.toString(), pos:vec3(Math.random()*10000 - 5000,Math.random()*100,Math.random()*10000-5000)}
+			this.thelabels.push(l);
+		}
+//		for(var x = 0;x<this.tilewidth;x++){
+	//		for(var y = 0;y<this.tileheight;y++){
+				res3d.push(labelset({fontsize:30,labels:this.thelabels, bg:0, pos:vec3(0,-100	,0),rotate:vec3(0,0,0)}));
+			//}
+		//}
 		var dist = 2.5
 		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
 

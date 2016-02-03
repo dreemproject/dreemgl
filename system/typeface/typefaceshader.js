@@ -78,7 +78,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return this.text_h + this.cursor_sink * this.fontsize
 		})
 
-
 		this.clear = function(){
 			this.text_w = 0
 			this.text_h = 0
@@ -178,7 +177,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var y1 = this.add_y - fontsize * info.min_y
 			var y2 = this.add_y - fontsize * info.max_y
 			var italic = this.italic_ness * info.height * fontsize
-			var cz = 0;
+			var cz = this.add_z ? this.add_z:0;
 			if(this.font.baked){
 				this.pushQuad(
 					x1, y1, cz, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
@@ -247,6 +246,30 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			if(this.add_y > this.text_h) this.text_h = this.add_y
 		}
 
+		// lets add some strings
+		this.addAtPos = function(string, pos, m1, m2, m3){
+			var length = string.length
+			
+			this.add_x = pos[0];
+			this.add_y = pos[1];
+			this.add_z = pos[2];
+			
+			// alright lets convert some text babeh!
+			for(var i = 0; i < length; i++){
+				var unicode = string.struct? string.array[i * 4]: string.charCodeAt(i)
+				var info = this.font.glyphs[unicode]
+				if(!info) info = this.font.glyphs[32]
+				// lets add some vertices
+				this.addGlyph(info, unicode, m1, m2, m3)
+				if(unicode == 10){ // newline
+					this.add_x = this.start_x
+					this.add_y += this.fontsize * this.line_spacing
+				}
+			}
+			if(this.add_y > this.text_h) this.text_h = this.add_y
+		}
+
+		
 		this.__defineGetter__('char_count', function(){
 			return this.lengthQuad()
 		})

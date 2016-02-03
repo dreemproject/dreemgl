@@ -209,61 +209,75 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			this.focus_view.emitUpward('keypaste', v)
 		}.bind(this)
 
+
 		// Event handler for `pointer.start` event.
 		// Emits `pointerstart` event from `pointer.view` and computes the cursor.
 		this.pointer.start = function(e){
-			this.pointer.view.emitUpward('pointerstart', e)
-			// lets give this thing focus
-			this.pointer.view.computeCursor()
-			if(this.inModalChain(this.pointer.view)){
-				this.setFocus(this.pointer.view)
-			} else if(this.modal){
-				this.modal.emitUpward('focuslost', {global:this.globalMouse(this)})
+			e.view.emitUpward('pointerstart', {value: e.pointers})
+			e.view.computeCursor()
+			//
+			if (!e.pointers[0].touch) {
+				this.keyboard.pointerMove(e.pointers[0].position)
+				this.keyboard.checkSpecialKeys(e.pointers[0])
+			}
+			// TODO(aki): build model menu components
+			if(this.inModalChain(e.view)){
+				this.setFocus(e.view)
+			} else if (this.modal){
+				this.modal.emitUpward('focuslost', {global: e.pointers[0].position})
 			}
 		}.bind(this)
 
 		// Event handler for `pointer.move` event.
 		// Emits `pointermove` event from `pointer.view`.
 		this.pointer.move = function(e){
-			this.pointer.view.emitUpward('pointermove', e)
+			e.view.emitUpward('pointermove', {value: e.pointers})
+			if (!e.pointers[0].touch && e.pointers[0].button == 2){
+				this.device.keyboard.pointerMove(e.pointers[0].position)
+			}
 		}.bind(this)
 
 		// Event handler for `pointer.end` event.
 		// Emits `pointerend` event `pointer.view` and computes the cursor.
 		this.pointer.end = function(e){
-			this.pointer.view.emitUpward('pointerend', e)
-			this.pointer.view.computeCursor()
+			e.view.emitUpward('pointerend', {value: e.pointers})
+			e.view.computeCursor()
+
+			if (!e.pointers[0].touch) {
+				this.keyboard.pointerMove(e.pointers[0].position)
+				this.keyboard.checkSpecialKeys(e.pointers[0])
+			}
 		}.bind(this)
 
 		// Event handler for `pointer.tap` event.
 		// Emits `pointertap` event from `pointer.view`.
 		this.pointer.tap = function(e){
-			this.pointer.view.emitUpward('pointertap', e)
+			e.view.emitUpward('pointertap', {value: e.pointers})
 		}.bind(this)
 
 		// Event handler for `pointer.hover` event.
 		// Emits `pointerhover` event `pointer.view` and computes the cursor.
 		this.pointer.hover = function(e){
-			this.pointer.view.emitUpward('pointerhover', e)
-			this.pointer.view.computeCursor()
+			e.view.emitUpward('pointerhover', {value: e.pointers})
+			e.view.computeCursor()
 		}.bind(this)
 
 		// Event handler for `pointer.over` event.
 		// Emits `pointerover` event from `pointer.view`.
 		this.pointer.over = function(e){
-			this.pointer.view.emitUpward('pointerover', e)
+			e.view.emitUpward('pointerover', {value: e.pointers})
 		}.bind(this)
 
 		// Event handler for `pointer.out` event.
 		// Emits `pointerout` event from `pointer.view`.
 		this.pointer.out = function(e){
-			this.pointer.view.emitUpward('pointerout', e)
+			e.view.emitUpward('pointerout', {value: e.pointers})
 		}.bind(this)
 
 		// Event handler for `pointer.wheel` event.
 		// Emits `pointerwheel` event from `pointer.view`.
 		this.pointer.wheel = function(e){
-			this.pointer.view.emitUpward('pointerwheel', e)
+			e.view.emitUpward('pointerwheel', {value: e.pointers})
 		}.bind(this)
 	}
 
