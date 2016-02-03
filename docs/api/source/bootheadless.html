@@ -306,9 +306,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n152" name="n152">152</a>
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
          Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
          either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
@@ -316,6 +318,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// node server is running on the same machine where headless is running.</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require){
+        <span class="comment">//internal</span>
+
 
         <span class="comment">// composition_client references WebSocket</span>
         <span class="comment">//WebSocket = require('$system/base/nodewebsocket')</span>
@@ -363,7 +367,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.slow_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">200</span>)
                 <span class="local-variable">this</span>.fast_watcher = <span class="keyword">new</span> FileWatcher(<span class="integer">10</span>)
 
-                <span class="local-variable">this</span>.fast_watcher.atChange = 
+                <span class="local-variable">this</span>.fast_watcher.atChange =
                         <span class="local-variable">this</span>.slow_watcher.<span class="function">atChange</span> = <span class="keyword">function</span>(){
                                 <span class="comment">// lets reload this app</span>
                                 <span class="local-variable">this</span>.reload()
@@ -422,7 +426,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">reload</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.destroy()
 
-                <span class="comment">// lets fill </span>
+                <span class="comment">// lets fill</span>
                 require.clearCache()
 
                 <span class="comment">// lets see if our composition is a dir or a jsfile</span>
@@ -446,7 +450,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="local-variable">this</span>.screenname = <span class="local-variable">this</span>.compname;
-                
+
                 <span class="comment">// Reaching here indicates the path does not exist</span>
                 console.log(<span class="string"><span class="delimiter">'</span><span class="content">bootheadless.reload: Unable to load</span><span class="delimiter">'</span></span>, jsname);
 }
