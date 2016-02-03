@@ -10,7 +10,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 	var OneJSParser =  require('$system/parse/onejsparser')
 	var OneJSGen = require('$system/parse/onejsgen.js')
 	var Texture = require('$system/platform/$platform/texture$platform')
-	var vectorParser = require('$system/parse/vectorparser')
+	//var vectorParser = require('$system/parse/vectorparser')
 	var onejsparser = new OneJSParser()
 	onejsparser.parser_cache = {}
 
@@ -728,7 +728,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 				return ''
 			}
 			// parseColor it
-			var color = vectorParser.parseVec4(node.value)
+			var color = vec4.parse(node.value)
 			node.infer = vec4
 			return 'vec4(' + color[0]+','+color[1]+','+color[2]+','+color[3]+')'
 		}

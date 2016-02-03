@@ -158,14 +158,14 @@
 		if(type === 'glf') return define.parseGLF(blob)
 		return blob
 	}
-
+/*
 	define.global = function(object){
-		var glob = typeof process !== 'undefined'? global: window
+		var glob = typeof process !== 'undefined'? global: typeof window !=='undefined'? window: self
 		for(var key in object){
 			glob[key] = object[key]
 		}
 	}
-
+*/
 	// returns a class dir you can use, has / appended already
 	define.classPath = function(cls){
 		if(cls.prototype) cls = cls.prototype
@@ -1040,8 +1040,7 @@
 
 
 
-
-	else (function(){ // nodeJS implementation
+	else if(typeof process !== 'undefined')(function(){ // nodeJS implementation
 		module.exports = global.define = define
 
 		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
@@ -1384,6 +1383,25 @@
 	})()
 
 
+
+
+
+
+	// Worker
+
+
+
+
+
+
+
+	else{
+		self.define = define
+
+		define.define = function(body){
+			console.log('here')
+		}
+	}
 
 
 
@@ -1759,7 +1777,7 @@
 		for(var key in obj){
 			var prop = obj[key]
 			if(typeof prop == 'object'){
-				if(stack.indexOf(prop)!= -1) return false // circular
+				if(stack.indexOf(prop) != -1) return false // circular
 				if(!define.isSafeJSON(prop, stack)) return false
 			}
 			else if(typeof prop == 'function') return false
@@ -1768,6 +1786,7 @@
 		stack.pop()
 		return true
 	}
+
 
 	define.struct.array_type = {}
 	function structArray(self){
@@ -2228,13 +2247,19 @@
 
 			for(var i = 0; i < matchset.length; i++) matchset[i] = enumCanon(matchset[i])
 				
-			function Enum(value){				
+			function Enum(value){
+				var index = -1
 				if(typeof value !== 'string'){
-					value = String(value)
-				//	console.error('Enum not string' + value, origset.join('|'))
-				//	return types[0]
+					if(typeof value === 'number'){
+						index = value
+					}
+					else if(typeof value === 'boolean'){
+						if(value) index = 1
+						else index = 0
+					}
+					else index = matchset.indexOf(enumCanon(value))
 				}
-				var index = matchset.indexOf(enumCanon(value))
+				else index = matchset.indexOf(enumCanon(value))
 
 				if(index === -1){
 					console.error('Invalid enum value: "' + value + '" ' + origset.join('|'))
@@ -2393,8 +2418,8 @@
 			return obj
 		}
 	}
-	defineGlobals(typeof process !== 'undefined'? global: window)
 
+	defineGlobals(typeof process !== 'undefined'? global: typeof window !== 'undefined'? window: self)
 
 	// store the types on define
 	define.typeToString = function(type){
