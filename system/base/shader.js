@@ -76,11 +76,13 @@ define.class(function(require, exports){
 		//	'precision ' + this.precision + ' int;'
 
 		//var ret = ''
-		for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
-			var ext = exts[i]
-			if(gltypes.extensions[ext] === 1)
-				ret += '\n#extension GL_' + ext + ' : enable'
-		}
+		//for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
+		//	var ext = exts[i]
+	//		if(gltypes.extensions[ext] === 1)
+	//			ret += '\n#extension GL_' + ext + ' : enable'
+	//	}
+		ret += '\n#extension GL_OES_standard_derivatives : enable'
+	
 		return ret + '\n'
 	}
 

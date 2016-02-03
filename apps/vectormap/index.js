@@ -46,6 +46,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 					,splitcontainer({bgcolor: "green"}
 						,view({bg:0, flex:0.2,flexwrap:"nowrap"},
 							noisegrid({padding:20, flexwrap:"nowrap", overflow:"scroll"}
+					,label({outline:true, fontsize: 130, outline_thickness: 10, text:"outline test", bg:0})
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bg:0})
 								,numberbox({value:16, onvalue:function(){}.bind(this), name:"numberbox", minvalue:0, stepvalue:1, maxvalue:18})
 								,Buttons

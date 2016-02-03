@@ -260,7 +260,7 @@ define.class(function(require, $server$, service){
 			color2: vec4(0,0,1,1),
 		},
 		water:{
-			offset:-20,
+			offset:0,
 			color1: vec4(0,0,1,1),
 			color2: vec4(0,0,1,1),
 		},
@@ -306,11 +306,13 @@ define.class(function(require, $server$, service){
 		
 	}
 	
+	if (false){
+	
 	for (var a in this.mapstyle){
 		var st = this.mapstyle[a];
 		if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
 		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
-	}
+	}}
 	
 	this.dumpkindset = function(){
 		
@@ -474,9 +476,7 @@ define.class(function(require, $server$, service){
 		for (var i = 0;i<roads.length;i++){							
 					
 					
-	//						console.log(z);
 					var R = roads[i];
-					//console.log(R);
 					var linewidth = 3;
 					var color = vec4("gray") ;
 					
@@ -495,9 +495,6 @@ define.class(function(require, $server$, service){
 						if (currentarc.length == 1){
 							continue
 						}
-						//	console.log(R, currentarc, currentarc.length, currentarc[0].length);
-						
-						//console.log(R, currentarc);
 						//continue;
 						var A0 = currentarc[0];
 						var A1 = vec2(currentarc[1][0]+A0[0],currentarc[1][1]+A0[1]) ;
@@ -591,16 +588,15 @@ define.class(function(require, $server$, service){
 		var Wset = [];
 		var Eset = [];
 		var Lset = [];
+		var Labels = [];
 		var Allset = [];
 		var Places = [];
 		var Sarcs= sourcedata.arcs;
 
-		//console.log(objects);
 		var objects = sourcedata.objects;
 		var BuildingGeoms = objects.buildings.geometries
 		for (var i = 0;i<BuildingGeoms.length;i++){
 			var Bb = BuildingGeoms[i];
-		//	console.log(Bb.properties);
 			var Barcs = Bb.arcs;
 			if (Barcs){
 				var B = {id:Bb.properties.id,h:Bb.properties.height?Bb.properties.height:30.0,kind:Bb.properties.kind, name:Bb.properties.name, street: Bb.properties["addr_street"], housenumber: Bb.properties.addr_housenumber, arcs:[]};
@@ -615,8 +611,18 @@ define.class(function(require, $server$, service){
 		var PlacesGeoms = objects.places.geometries; 
 		for (var i = 0;i<PlacesGeoms.length;i++){
 			var Bb = PlacesGeoms[i];
+			if (Bb.type =="Point")
+			{
+				var x = Bb.coordinates[0];;
+				var y = Bb.coordinates[1];;
+				
+				Labels.push({x:x, y:y, kind:Bb.properties.kind, name: Bb.properties.name, scalerank: Bb.properties.scalerank})		
+//				console.log(Bb.properties.kind, Bb.properties);
+			}
+			else{
+				console.log(Bb);
+			}
 			
-			//console.log(Bb.properties.kind, Bb.type, Bb.properties.name);
 		}
 		var WaterGeoms = objects.water.geometries;
 		for (var i = 0;i<WaterGeoms.length;i++){
@@ -719,7 +725,7 @@ define.class(function(require, $server$, service){
 		
 		target.buildings = Bset;
 		target.roads = Rset;
-		
+		target.Labels = Labels;
 		target.waters = Wset;
 		target.earths = Eset;
 		target.landuses = Lset;

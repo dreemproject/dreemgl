@@ -10,7 +10,10 @@ define.class(function(require, $ui$, view){
 
 	var TypeFace = require('$system/typeface/typefaceshader')
 
-	this.bgcolor = vec4("transparent")
+	this.bgcolor = vec4("transparent")	
+	this.textpositionfn = function(pos) {return pos;}; 
+	this.polygonoffset = 0.0;
+	
 	
 	this.attributes = {
 		// the text color
@@ -34,7 +37,10 @@ define.class(function(require, $ui$, view){
 		// Alignment of the bodytext.
 		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"}),
 		bold: false,
-
+		outline: true,
+		outline_thickness: 0.0,
+		outline_color: vec4("black"),
+		
 		bgcolor: vec4("white")
 	}
 	
@@ -47,6 +53,14 @@ define.class(function(require, $ui$, view){
 		else{
 			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 		}
+	}
+	
+	this.textstyle = function(style, pos, tag){
+		style.fgcolor = "white";
+		style.outlinecolor = "black" ;
+		style.outline_thickness = 120.0;
+		style.outline = true;
+		//return vec4(tag.yzw, 1.0);
 	}
 	
 	// the normal font 
@@ -70,22 +84,32 @@ define.class(function(require, $ui$, view){
 			mesh.fontsize = view.fontsize
 			mesh.boldness = view.boldness
 			mesh.add_y = mesh.line_height
-
+			mesh.outline = view.outline;
+			mesh.outline_thickness = view.outline_thickness;
+			console.log(mesh.outline_thickness );
 			mesh.align = view.align
 			mesh.start_x = view.padding[0]
 			mesh.start_y = mesh.line_height + view.padding[1]
 			mesh.clear()
 			
+			
 			for (var i = 0;i<view.labels.length;i++){
 				mesh.start_x = view.padding[0]
 				mesh.start_y = mesh.line_height + view.padding[1]
+				
 				var l = view.labels[i];
+				var r = 0, g = 0, b = 0;
+				if (l.fontsize) mesh.fontsize = l.fontsize;
+				if (l.outline) mesh.outline = l.outline;
+				if (l.color){ r = l.color[0], g = l.color[1], b = l.color[2]};
 				if (l.multiline){
 					mesh.addWithinWidthAtPos(l.text, l.pos, maxwidth? maxwidth: this.layout.width)					
 				}
 				else{
-					mesh.addAtPos(l.text,l.pos, 0 ,0 ,0)
+					mesh.addAtPos(l.text,l.pos, r ,g ,b)
 				}
+				mesh.fontsize = view.fontsize;
+				mesh.outline = view.outline;
 			}
 			
 			if(view.measure_with_cursor){
@@ -112,6 +136,7 @@ define.class(function(require, $ui$, view){
 	// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel
 	define.class(this, 'typeface', this.typefacenormal, function(){
 	})
+	
 	this.typeface = true
 
 	this.selectShader = function(){

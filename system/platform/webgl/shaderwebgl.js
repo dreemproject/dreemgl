@@ -271,6 +271,7 @@ define.class('$system/base/shader', function(require, exports){
 		var lastbuf
 		ATTRLOC_START
 		var buf = ATTRLOC_BUF
+		if (!buf) return 0;
 		if(lastbuf !== buf){
 			lastbuf = buf
 			if(buf.length > len) len = buf.length
