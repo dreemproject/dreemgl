@@ -812,9 +812,9 @@ define.class('$ui/view', function(require,
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.35},
   palette({name:'components', flex:1, bgcolor:"#4e4e4e", items:{Views:[
-	  {classname:'view',  label:'View',  image:'$root/apps/flowgraph/view.png'},
-	  {classname:'label', label:'Text',  text:'Aa'},
-	  {classname:'icon',  label:'Image', icon:'image'}
+	  {classname:'view',  label:'View',  icon:'clone', desc:'A rectangular view'},
+	  {classname:'label', label:'Text',  text:'Aa',    desc:'A text label'},
+	  {classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}
   ]} }))
 ,dockpanel({title:"Properties", viewport:"2D"},
   propviewer({flex:2,name:"mainproperties", target:"components", flex:1, overflow:"scroll"})

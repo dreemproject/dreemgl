@@ -25,13 +25,68 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			// The display mode.  `compact` mode displays all the items as compact icons in a grid in multiple columns.
 			// `detail` mode displays items as a list in a single column, with extended description.
 			mode:Config({type:Enum('compact', 'detail'), value:'compact'}),
-			onmode:function () {
+
+			// Items to display in this panel.
+			items:Config({type:Array, value:[]}),
+
+			dividercolor: '#999',
+			dividermargin: 10,
+
+    		onmode:function () {
 				if (this.mode == 'compact') {
 					this.flexdirection = 'row';
 				} else {
 					this.flexdirection = 'column';
 				}
 			}
+		};
+
+		this.render = function () {
+			var views = [];
+
+			for (var i=0; i < this.items.length;i++) {
+				var itemdef = this.items[i];
+
+				var item = this.outer.panelitem(itemdef);
+
+				if (this.mode == 'detail') {
+
+					var labels = [];
+
+					if (item.label) {
+						labels.push(label({text:item.label, bold:true, bgcolor:'transparent', margintop:15}));
+					}
+
+					var desc = item.description || item.desc;
+					if (desc) {
+						labels.push(label({text:desc, bgcolor:'transparent'}));
+					}
+
+					var detail = view({
+						flexdirection:'row',
+						alignitems:'stretch',
+
+						bgcolor:'transparent',
+						borderbottomwidth:(i < this.items.length - 1 ? 1 : 0),
+						bordercolor:this.dividercolor,
+						marginbottom:this.dividermargin
+					},
+						item,
+						view({
+							bgcolor:'transparent',
+							marginleft:this.dividermargin,
+							flexdirection:'column'
+						}, labels));
+
+					views.push(detail);
+
+				} else {
+					views.push(item);
+				}
+
+			}
+
+			return views;
 		}
 	});
 
@@ -94,18 +149,22 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "panellabel", label, function() {
-		this.bg = 0;
+		this.bgcolor = 'transparent';
 		this.fgcolor = '#e4e4e4';
+		this.padding = 0;
+		this.margin = 0;
 	});
 
 	define.class(this, "panelicon", icon, function() {
 		this.bgcolor = 'transparent';
 		this.fgcolor = '#e4e4e4';
 		this.align = 'center';
+		this.padding = 0;
+		this.margin = 0;
 	});
 
 	define.class(this, "panelitem", view, function() {
-		this.bg = 0;
+		this.bgcolor = 'transparent';
 
 		this.flexdirection = 'column';
 
@@ -169,18 +228,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 	});
 
-	this.buildPanel = function(items) {
-		var views = [];
-		for (var i=0;i<items.length;i++) {
-			var item = items[i];
-			views.push(this.panelitem(item));
-		}
-		return this.panel(views);
-	};
-
 	this.render = function() {
 		if (Array.isArray(this.items)) {
-			return this.buildPanel(this.items);
+			return this.panel({items:this.items});
 		}
 
 		var views = [];
@@ -192,12 +242,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 		for (var section in this.items) {
 
 			var items = this.items[section];
-			var panel = this.buildPanel(items);
+			var pan = this.panel({items:items});
 
-			var divider = this.divider({text:section, panel:panel});
+			var divider = this.divider({text:section, panel:pan});
 
 			views.push(divider);
-			views.push(panel)
+			views.push(pan)
 		}
 
 		return views;
