@@ -15,6 +15,12 @@
         "description": "Introduction to the Flexbox based layout system in Dreem."
       },
       {
+        "name": "components",
+        "url": "guides/components",
+        "title": "Extending DreemGL",
+        "description": "Adding DreemGL Components"
+      },
+      {
         "name": "appendix",
         "url": "guides/appendix",
         "title": "DreemGL Appendix",

@@ -975,6 +975,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n821" name="n821">821</a>
 <a href="#n822" name="n822">822</a>
 <a href="#n823" name="n823">823</a>
+<a href="#n824" name="n824">824</a>
+<a href="#n825" name="n825">825</a>
+<a href="#n826" name="n826">826</a>
+<a href="#n827" name="n827">827</a>
+<a href="#n828" name="n828">828</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
         You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -984,7 +989,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require,
                 <span class="predefined">$ui$</span>, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
                 <span class="predefined">$widgets$</span>, propviewer,searchbox, jseditor,
-                <span class="predefined">$server$</span>, sourceset, dataset, <span class="predefined">$$</span>, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
+                <span class="predefined">$server$</span>, sourceset, dataset,
+                <span class="predefined">$$</span>, palette, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">flowgraph</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.flex = <span class="integer">1</span>
@@ -1786,11 +1792,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         )
                                         ,jseditor({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">jsviewer</span><span class="delimiter">'</span></span>, <span class="key">sourceset</span>:<span class="local-variable">this</span>.sourceset, <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="float">0.4</span>})
                                 )
-
-
 ,splitcontainer({<span class="key">flex</span>:<span class="float">0.5</span>,<span class="key">direction</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span>}
-,dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span>}
-,propviewer({<span class="key">flex</span>:<span class="integer">2</span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})
+,dockpanel({<span class="key">alignitems</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>, <span class="key">aligncontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Components</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">0.25</span>},
+  palette({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>, <span class="key">items</span>:{<span class="key">Views</span>:[
+          {<span class="key">classname</span>:<span class="string"><span class="delimiter">'</span><span class="content">view</span><span class="delimiter">'</span></span>, <span class="key">image</span>:<span class="string"><span class="delimiter">'</span><span class="content">view.png</span><span class="delimiter">'</span></span>, <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">View</span><span class="delimiter">'</span></span>},
+          {<span class="key">classname</span>:<span class="string"><span class="delimiter">'</span><span class="content">label</span><span class="delimiter">'</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Aa</span><span class="delimiter">'</span></span>, <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Text</span><span class="delimiter">'</span></span>},
+          {<span class="key">classname</span>:<span class="string"><span class="delimiter">'</span><span class="content">icon</span><span class="delimiter">'</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">file-image</span><span class="delimiter">'</span></span>, <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Image</span><span class="delimiter">'</span></span>}
+  ]} }))
+,dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span>},
+  propviewer({<span class="key">flex</span>:<span class="integer">2</span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">centralconstructiongrid</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})
 )
 )
 

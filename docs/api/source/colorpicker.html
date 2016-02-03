@@ -771,6 +771,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n617" name="n617">617</a>
 <a href="#n618" name="n618">618</a>
 <a href="#n619" name="n619">619</a>
+<strong><a href="#n620" name="n620">620</a></strong>
+<a href="#n621" name="n621">621</a>
+<a href="#n622" name="n622">622</a>
+<a href="#n623" name="n623">623</a>
+<a href="#n624" name="n624">624</a>
+<a href="#n625" name="n625">625</a>
+<a href="#n626" name="n626">626</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -814,7 +821,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">updatecontrol</span> = <span class="keyword">function</span>(name, val){
-                <span class="keyword">var</span> c = <span class="local-variable">this</span>.find(name);
+                <span class="keyword">var</span> c = <span class="local-variable">this</span>.findChild(name);
                 <span class="keyword">if</span> (c){
                         c.currentcolor = <span class="local-variable">this</span>.value;
                         c.contrastcolor = <span class="local-variable">this</span>.contrastcolor;
@@ -829,7 +836,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">updatelabel</span> = <span class="keyword">function</span>(name, val){
-                <span class="keyword">var</span> c = <span class="local-variable">this</span>.find(name);
+                <span class="keyword">var</span> c = <span class="local-variable">this</span>.findChild(name);
                 <span class="keyword">if</span> (c) c.value = val;
                 <span class="comment">//else console.log(&quot;not found&quot;, name);</span>
         }
@@ -924,7 +931,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">customslider</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>,view){
-
+                
                 <span class="local-variable">this</span>.attributes = {
 
                         <span class="comment">// hsv color for the left side</span>
@@ -962,7 +969,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">// total size.</span>
                         <span class="key">total</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">255</span>+<span class="integer">25</span>}),
 
-
                         <span class="comment">// set animation on bgcolor</span>
                         <span class="key">bgcolor</span>: Config({<span class="key">duration</span>: <span class="float">1.0</span>})
                 }
@@ -979,7 +985,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">var</span> mesh = vec2.array()
                 mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>)
+                <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
+                <span class="local-variable">this</span>.margin = <span class="integer">1</span>
+                <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303060</span><span class="delimiter">&quot;</span></span>)
+                <span class="local-variable">this</span>.pressed = <span class="integer">0</span>
+                <span class="local-variable">this</span>.hovered = <span class="integer">0</span>
 
+                
                 <span class="local-variable">this</span>.bg = {
                         <span class="key">offset</span>: <span class="integer">0</span>,
                         <span class="key">page</span>: <span class="float">0.3</span>,
@@ -1012,13 +1024,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">return</span> vec4(mesh.x * view.layout.width, mesh.y * view.layout.height, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                         }
                 }
-
-                <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
-                <span class="local-variable">this</span>.margin = <span class="integer">1</span>
-                <span class="local-variable">this</span>.bordercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303060</span><span class="delimiter">&quot;</span></span>)
-                <span class="local-variable">this</span>.pressed = <span class="integer">0</span>
-                <span class="local-variable">this</span>.hovered = <span class="integer">0</span>
-
+                <span class="local-variable">this</span>.bg = <span class="predefined-constant">true</span>;
+                
                 <span class="comment">// TODO(aki): fix slider and use pointer events</span>
                 <span class="comment">// most of the logic below is unnecessary because pointer events include deltas.</span>
                 <span class="comment">// this.pointerstart = function(event){</span>
@@ -1061,6 +1068,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">//         }</span>
                 <span class="comment">// }</span>
 
+                
+                <span class="comment">//this.height = 10;</span>
+                <span class="comment">//this.width = 100;</span>
+                <span class="comment">//this.flex = 1;</span>
+                
                 <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>;
         })
 
@@ -1097,6 +1109,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="local-variable">this</span>.<span class="function">bg</span> = <span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.draworder = <span class="integer">1</span>;
+                        
                         <span class="local-variable">this</span>.vertexstruct =  define.struct({
                                 <span class="key">p</span>:<span class="reserved">float</span>,
                                 <span class="key">side</span>: <span class="reserved">float</span>
@@ -1143,7 +1157,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 };
 
                 define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fg</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
-
+                        <span class="local-variable">this</span>.draworder = <span class="integer">2</span>;
                         <span class="local-variable">this</span>.vertexstruct = define.struct({
                                 <span class="key">p</span>:vec2,
                         })
@@ -1186,8 +1200,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
 
                 })
-
-                <span class="local-variable">this</span>.fg = <span class="integer">2</span>;
+                <span class="local-variable">this</span>.fg = <span class="predefined-constant">true</span>;
 
         })
 
@@ -1277,6 +1290,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
 
                 })
+                
                 <span class="local-variable">this</span>.fg = <span class="predefined-constant">true</span>
 
                 define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">bg</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
@@ -1354,7 +1368,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         ,<span class="local-variable">this</span>.colorcirclecontrol({<span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,<span class="key">width</span>:<span class="integer">200</span>, <span class="key">height</span>:<span class="integer">200</span>})
                                         ,<span class="local-variable">this</span>.squareview({<span class="key">basehue</span>:<span class="local-variable">this</span>.basehue, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>})
                                 )
-                                ,view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>}
+                                ,view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>,  <span class="key">width</span>:<span class="integer">280</span>}
                                         ,<span class="local-variable">this</span>.customslider({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">rslider</span><span class="delimiter">&quot;</span></span>,<span class="key">height</span>: <span class="local-variable">this</span>.sliderheight, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">hsvfrom</span>:vec3(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="key">hsvto</span>:vec3(<span class="integer">0</span>,<span class="integer">1</span>,<span class="float">0.5</span>), <span class="function">offset</span>:<span class="keyword">function</span>(v){<span class="local-variable">this</span>.outer.setRed(v.value/<span class="integer">255</span>)}})
                                         ,<span class="local-variable">this</span>.customslider({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gslider</span><span class="delimiter">&quot;</span></span>,<span class="key">height</span>: <span class="local-variable">this</span>.sliderheight, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">hsvfrom</span>:vec3(<span class="float">0.33</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="key">hsvto</span>:vec3(<span class="float">0.333</span>,<span class="integer">1</span>,<span class="float">0.5</span>), <span class="function">offset</span>:<span class="keyword">function</span>(v){<span class="local-variable">this</span>.outer.setGreen(v.value/<span class="integer">255</span>)}})
                                         ,<span class="local-variable">this</span>.customslider({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">bslider</span><span class="delimiter">&quot;</span></span>,<span class="key">height</span>: <span class="local-variable">this</span>.sliderheight, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">hsvfrom</span>:vec3(<span class="float">0.666</span>,<span class="integer">1</span>,<span class="integer">0</span>), <span class="key">hsvto</span>:vec3(<span class="float">0.666</span>,<span class="integer">1</span>,<span class="float">0.5</span>), <span class="function">offset</span>:<span class="keyword">function</span>(v){<span class="local-variable">this</span>.outer.setBlue(v.value/<span class="integer">255</span>)}})

@@ -606,6 +606,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n452" name="n452">452</a>
 <a href="#n453" name="n453">453</a>
 <a href="#n454" name="n454">454</a>
+<a href="#n455" name="n455">455</a>
+<a href="#n456" name="n456">456</a>
+<a href="#n457" name="n457">457</a>
+<a href="#n458" name="n458">458</a>
+<a href="#n459" name="n459">459</a>
+<strong><a href="#n460" name="n460">460</a></strong>
+<a href="#n461" name="n461">461</a>
+<a href="#n462" name="n462">462</a>
+<a href="#n463" name="n463">463</a>
+<a href="#n464" name="n464">464</a>
+<a href="#n465" name="n465">465</a>
+<a href="#n466" name="n466">466</a>
+<a href="#n467" name="n467">467</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -615,7 +628,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, button, view, menubutton) {
 <span class="comment">// Screens are the root of a view hierarchy, typically mapping to a physical device.</span>
 
-        <span class="keyword">var</span> FlexLayout = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/lib/layout</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/render</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Animate = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/animate</span><span class="delimiter">'</span></span>)
 
@@ -641,7 +653,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
         }
 
-        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> (previous) {
+        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> () {
                 <span class="comment">// ok. lets bind inputs</span>
                 <span class="local-variable">this</span>.modal_stack = []
                 <span class="local-variable">this</span>.focus_view = <span class="predefined-constant">undefined</span>
@@ -819,61 +831,75 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.focus_view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">keypaste</span><span class="delimiter">'</span></span>, v)
                 }.bind(<span class="local-variable">this</span>)
 
+
                 <span class="comment">// Event handler for `pointer.start` event.</span>
                 <span class="comment">// Emits `pointerstart` event from `pointer.view` and computes the cursor.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">start</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerstart</span><span class="delimiter">'</span></span>, e)
-                        <span class="comment">// lets give this thing focus</span>
-                        <span class="local-variable">this</span>.pointer.view.computeCursor()
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(view)){
-                                <span class="local-variable">this</span>.setFocus(view)
-                        } <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.modal){
-                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">focuslost</span><span class="delimiter">'</span></span>, {<span class="key">global</span>:<span class="local-variable">this</span>.globalMouse(<span class="local-variable">this</span>)})
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerstart</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
+                        e.view.computeCursor()
+                        <span class="comment">//</span>
+                        <span class="keyword">if</span> (!e.pointers[<span class="integer">0</span>].touch) {
+                                <span class="local-variable">this</span>.keyboard.pointerMove(e.pointers[<span class="integer">0</span>].position)
+                                <span class="local-variable">this</span>.keyboard.checkSpecialKeys(e.pointers[<span class="integer">0</span>])
+                        }
+                        <span class="comment">// TODO(aki): build model menu components</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.inModalChain(e.view)){
+                                <span class="local-variable">this</span>.setFocus(e.view)
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.modal){
+                                <span class="local-variable">this</span>.modal.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">focuslost</span><span class="delimiter">'</span></span>, {<span class="key">global</span>: e.pointers[<span class="integer">0</span>].position})
                         }
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.move` event.</span>
                 <span class="comment">// Emits `pointermove` event from `pointer.view`.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">move</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermove</span><span class="delimiter">'</span></span>, e)
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointermove</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
+                        <span class="keyword">if</span> (!e.pointers[<span class="integer">0</span>].touch &amp;&amp; e.pointers[<span class="integer">0</span>].button == <span class="integer">2</span>){
+                                <span class="local-variable">this</span>.device.keyboard.pointerMove(e.pointers[<span class="integer">0</span>].position)
+                        }
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.end` event.</span>
                 <span class="comment">// Emits `pointerend` event `pointer.view` and computes the cursor.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">end</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerend</span><span class="delimiter">'</span></span>, e)
-                        <span class="local-variable">this</span>.pointer.view.computeCursor()
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerend</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
+                        e.view.computeCursor()
+
+                        <span class="keyword">if</span> (!e.pointers[<span class="integer">0</span>].touch) {
+                                <span class="local-variable">this</span>.keyboard.pointerMove(e.pointers[<span class="integer">0</span>].position)
+                                <span class="local-variable">this</span>.keyboard.checkSpecialKeys(e.pointers[<span class="integer">0</span>])
+                        }
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.tap` event.</span>
                 <span class="comment">// Emits `pointertap` event from `pointer.view`.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">tap</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointertap</span><span class="delimiter">'</span></span>, e)
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointertap</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.hover` event.</span>
                 <span class="comment">// Emits `pointerhover` event `pointer.view` and computes the cursor.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">hover</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerhover</span><span class="delimiter">'</span></span>, e)
-                        <span class="local-variable">this</span>.pointer.view.computeCursor()
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerhover</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
+                        e.view.computeCursor()
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.over` event.</span>
                 <span class="comment">// Emits `pointerover` event from `pointer.view`.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">over</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerover</span><span class="delimiter">'</span></span>, e)
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerover</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.out` event.</span>
                 <span class="comment">// Emits `pointerout` event from `pointer.view`.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">out</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerout</span><span class="delimiter">'</span></span>, e)
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerout</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="comment">// Event handler for `pointer.wheel` event.</span>
                 <span class="comment">// Emits `pointerwheel` event from `pointer.view`.</span>
                 <span class="local-variable">this</span>.pointer.<span class="function">wheel</span> = <span class="keyword">function</span>(e){
-                        <span class="local-variable">this</span>.pointer.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerwheel</span><span class="delimiter">'</span></span>, e)
+                        e.view.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">pointerwheel</span><span class="delimiter">'</span></span>, {<span class="key">value</span>: e.pointers})
                 }.bind(<span class="local-variable">this</span>)
         }
 
