@@ -277,6 +277,9 @@ define.class(function(require){
 
 	// add a listener to an attribute
 	this.addListener = function(key, cb){
+		if(!this.__lookupSetter__(key)){
+			this.defineAttribute(key, this[key], true)
+		}
 		var listen_key = '_listen_' + key
 		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []

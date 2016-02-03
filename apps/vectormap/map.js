@@ -289,9 +289,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		//	console.log(ev.value[0]);
 			
 		}
+		
 		this.onpointermove = function(ev){
 		//	console.log(ev.value[0]);
-			console.log("whaa" , this.host.globalToLocal(ev.value[0].position));
+		console.log(ev);
+			console.log("whaa" , this.host.globalToLocal(ev.position));
 		}
 		
 		this.pointertap = function(){
@@ -488,8 +490,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.outline = true;
 		this.outline_thickness = 4;
 		this.is = tilebasemixin;
-		this.textpositionfn = function(pos){
-			
+
+		this.textpositionfn = function(pos){			
 			idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 			rpos = vec2(1,-1)*pos.xz + (idxpos - this.tiletrans)* this.tilesize;
 			return vec3(rpos.x, 0, rpos.y+pos.y);
@@ -624,8 +626,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 
-		this.tilewidth = 1;
-		this.tileheight = 1;
+		this.tilewidth = 5;
+		this.tileheight = 5;
 
 		var tilearea = vec2(this.tilewidth, this.tileheight)
 		//console.log("tile area", tilearea);
