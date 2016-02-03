@@ -214,12 +214,16 @@ define.class('$system/base/node', function(require){
 
 		// fires when pointer is pressed down.
 		pointerstart:Config({type:Event}),
+		pointermultistart:Config({type:Event}),
 		// fires when pointer is pressed and moved (dragged).
 		pointermove:Config({type:Event}),
+		pointermultimove:Config({type:Event}),
 		// fires when pointer is released.
 		pointerend:Config({type:Event}),
+		pointermultiend:Config({type:Event}),
 		// fires when pointer is pressed and released quickly.
 		pointertap:Config({type:Event}),
+		pointermultitap:Config({type:Event}),
 		// fires when pointer moved without being pressed.
 		pointerhover:Config({type:Event}),
 		// fires when pointer enters an element.
@@ -237,7 +241,7 @@ define.class('$system/base/node', function(require){
 		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
-		
+
 		// fires when this view loses focus
 		blur: Config({type:Event}),
 
@@ -807,10 +811,10 @@ define.class('$system/base/node', function(require){
 
 			this.pointerwheel = function(event){
 				if(this.vscrollbar._visible){
-					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value[0].wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
+					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
 				if(this.hscrollbar._visible){
-					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value[0].wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
+					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
 
@@ -821,7 +825,7 @@ define.class('$system/base/node', function(require){
 			// 	var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
 			// 	this.zoom = newzoom
 			//
-			// 	var pos = this.globalToLocal(event.value[0].position)
+			// 	var pos = this.globalToLocal(event.value.position)
 			//
 			// 	var shiftx = pos[0] * lastzoom - pos[0] * this._zoom
 			// 	var shifty = pos[1] * lastzoom - pos[1] * this._zoom

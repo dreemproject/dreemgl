@@ -12,14 +12,14 @@ define.class('$server/composition', function($ui$, screen) {
 			this.margin = 50
 
 			this.attributes = {
-				start: Config({type: Array,  value: []}),
-				move: Config({type: Array,  value: []}),
-				end: Config({type: Array,  value: []}),
-				tap: Config({type: Array,  value: []}),
-				hover: Config({type: Array,  value: []}),
-				over: Config({type: Array,  value: []}),
-				out: Config({type: Array,  value: []}),
-				wheel: Config({type: Array,  value: []})
+				start: null,
+				move: null,
+				end: null,
+				tap: null,
+				hover: null,
+				over: null,
+				out: null,
+				wheel: null
 			}
 
 			this.oninit = function () {
@@ -58,10 +58,11 @@ define.class('$server/composition', function($ui$, screen) {
 
 			this.renderLabels = function (type, color) {
 				var markers = []
-				for (var i = 0;i < this[type].length; i++) {
-					var pos = this.globalToLocal(this[type][i].position)
+				this[type]
+				if (this[type]) {
+					var pos = this.globalToLocal(this[type].position)
 					markers.push(label({
-						text: this[type][i].id,
+						text: this[type].id,
 						icon: 'play',
 						position: 'absolute',
 						bgcolor: 'transparent',
