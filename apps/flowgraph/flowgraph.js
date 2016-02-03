@@ -5,9 +5,9 @@
 
 define.class('$ui/view', function(require,
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
-		$widgets$, propviewer,searchbox, jseditor,
+		$widgets$, palette, propviewer, searchbox, jseditor,
 		$server$, sourceset, dataset,
-		$$, palette, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
+		$$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
@@ -810,11 +810,11 @@ define.class('$ui/view', function(require,
 					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 ,splitcontainer({flex:0.5,direction:"horizontal"}
-,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.25},
+,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.35},
   palette({flex:1, bgcolor:"#4e4e4e", items:{Views:[
-	  {classname:'view', image:'view.png', label:'View'},
+	  {classname:'view', image:'$root/apps/flowgraph/view.png', label:'View'},
 	  {classname:'label', text:'Aa', label:'Text'},
-	  {classname:'icon', icon:'file-image', label:'Image'}
+	  {classname:'icon', icon:'image', label:'Image'}
   ]} }))
 ,dockpanel({title:"Properties", viewport:"2D"},
   propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})

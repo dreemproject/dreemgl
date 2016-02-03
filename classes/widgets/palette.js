@@ -10,10 +10,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label){
 
 		// The items to render into the palette.  This is either an array of components, or an Object where
 		// every key:value pair is a Section Name : components-array pair.
-		items:Config({type:Object}),
-
-		//size of the icons in the palatte
-		iconsize: 50
+		items:Config({type:Object})
 	};
 
 	this.flexdirection = 'column';
@@ -21,14 +18,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, label){
 	this.overflow = 'scroll';
 
 	define.class(this, "panel", view, function() {
-		this.bgcolor = 'transparent';
+		this.bg = 0;
 		this.padding = vec4(20,10,20,10);
 		this.justifycontent = 'space-around';
-		this.alignitems = 'center';
 	});
 
 	define.class(this, "divider", label, function() {
-		this.bgcolor = 'transparent';
 		this.bg = 0;
 		this.fontsize = 12;
 		this.margin = vec4(5,5,5,0);
@@ -40,49 +35,88 @@ define.class('$ui/view', function(require, $ui$, view, icon, label){
 	define.class(this, "panelview", view, function() {
 		this.bgcolor = 'transparent';
 	});
+
 	define.class(this, "panellabel", label, function() {
-		this.bgcolor = 'transparent';
-		this.fgcolor = '#e4e4e4'
-	});
-	define.class(this, "panelicon", icon, function() {
-		this.bgcolor = 'transparent';
-		this.fgcolor = '#e4e4e4'
+		this.bg = 0;
+		this.fgcolor = '#e4e4e4';
 	});
 
-	this.buildItem = function(item) {
-		var args = {
-			bgcolor:'transparent',
+	define.class(this, "panelicon", icon, function() {
+		this.bgcolor = 'transparent';
+		this.fgcolor = '#e4e4e4';
+		this.align = 'center';
+	});
+
+	define.class(this, "panelitem", view, function() {
+		this.bg = 0;
+
+		this.flexdirection = 'column';
+
+		this.attributes = {
+			text:Config({type:String}),
+			image:Config({type:String}),
+			icon:Config({type:String}),
+			label:Config({type:String}),
+			iconfontsize: 40,
+			hovercolor:'white',
+			hover:false,
 			pointerover:function() {
-				console.log('over')
+				this.hover = true;
+			},
+			pointerout:function() {
+				this.hover = false;
 			}
 		};
 
-		var clas = this.panelview;
+		this.render = function() {
+			var views = [];
 
-		if (item.image) {
-			args.bgimage = '$root/apps/flowgraph/' + item.image
+			var args = {
+				bgcolor:'transparent'
+			};
+
+			var clas = this.outer.panelview;
+
+			if (this.image) {
+				args.bgimage = this.image;
+			}
+
+			if (this.bgimage) {
+				args.bgimage = this.bgimage;
+			}
+
+			if (this.text) {
+				clas = this.outer.panellabel;
+				args.fontsize = this.iconfontsize;
+				args.text = this.text;
+			}
+
+			if (this.icon) {
+				clas = this.outer.panelicon;
+				args.fontsize = this.iconfontsize;
+				args.icon = this.icon;
+			}
+
+			if (this.hover) {
+				args.fgcolor = this.hovercolor;
+			}
+
+			views.push(clas(args));
+
+			//if (this.hover) {
+			//	views.push(label({text:this.label, bg:0}))
+			//}
+
+			return views;
 		}
 
-		if (item.text) {
-			clas = this.panellabel;
-			args.fontsize = this.iconsize;
-			args.text = item.text;
-		}
-
-		if (item.icon) {
-			clas = this.panelicon;
-			args.fontsize = this.iconsize;
-			args.icon = item.icon;
-		}
-
-		return clas(args)
-	};
+	});
 
 	this.buildPanel = function(items) {
 		var views = [];
 		for (var i=0;i<items.length;i++) {
 			var item = items[i];
-			views.push(this.buildItem(item));
+			views.push(this.panelitem(item));
 		}
 		return this.panel(views);
 	};
