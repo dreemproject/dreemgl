@@ -925,7 +925,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> OneJSParser =  require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> OneJSGen = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsgen.js</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Texture = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/platform/$platform/texture$platform</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> vectorParser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/vectorparser</span><span class="delimiter">'</span></span>)
+        <span class="comment">//var vectorParser = require('$system/parse/vectorparser')</span>
         <span class="keyword">var</span> onejsparser = <span class="keyword">new</span> OneJSParser()
         onejsparser.parser_cache = {}
 
@@ -1643,7 +1643,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                         }
                         <span class="comment">// parseColor it</span>
-                        <span class="keyword">var</span> color = vectorParser.parseVec4(node.value)
+                        <span class="keyword">var</span> color = vec4.parse(node.value)
                         node.infer = vec4
                         <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">vec4(</span><span class="delimiter">'</span></span> + color[<span class="integer">0</span>]+<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>+color[<span class="integer">1</span>]+<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>+color[<span class="integer">2</span>]+<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>+color[<span class="integer">3</span>]+<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
                 }

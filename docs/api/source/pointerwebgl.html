@@ -277,8 +277,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n123" name="n123">123</a>
 <a href="#n124" name="n124">124</a>
 <a href="#n125" name="n125">125</a>
-<a href="#n126" name="n126">126</a>
-<a href="#n127" name="n127">127</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -312,7 +310,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> <span class="function">mouseToPointers</span> = <span class="keyword">function</span> (event) {
                         <span class="keyword">return</span> [{
                                 <span class="key">position</span>: vec2(event.pageX, event.pageY),
-                                <span class="key">movement</span>: vec2(event.movementX, event.movementY),
                                 <span class="key">button</span>: event.button === <span class="integer">0</span> ? <span class="integer">1</span> : event.button === <span class="integer">1</span> ? <span class="integer">3</span> : <span class="integer">2</span>,
                                 <span class="key">shift</span>: event.shiftKey,
                                 <span class="key">alt</span>: event.altKey,
@@ -329,7 +326,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; event.changedTouches.length; i++) {
                                 array.push({
                                         <span class="key">position</span>: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
-                                        <span class="key">movement</span>: vec2(event.changedTouches[i].movementX, event.changedTouches[i].movementY),
                                         <span class="key">button</span>: <span class="integer">1</span>,
                                         <span class="key">shift</span>: event.shiftKey,
                                         <span class="key">alt</span>: event.altKey,

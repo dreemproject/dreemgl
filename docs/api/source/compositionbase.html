@@ -228,7 +228,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n74" name="n74">74</a>
 <a href="#n75" name="n75">75</a>
 <a href="#n76" name="n76">76</a>
-<a href="#n77" name="n77">77</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -290,7 +289,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">renderComposition</span> = <span class="keyword">function</span>(){
                 <span class="comment">// we have to render the RPC bus</span>
                 Render.process(<span class="local-variable">this</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">false</span>, <span class="predefined-constant">true</span>)
-
+                
                 <span class="comment">//this.children = this.render()</span>
 
                 <span class="local-variable">this</span>.names = {}
@@ -298,10 +297,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.children.length; i++){
                         <span class="comment">// ok so as soon as we are stubbed, we need to proxify the object</span>
                         <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
-
                         <span class="keyword">if</span>(!child.createRpcProxy) <span class="keyword">continue</span>
                         <span class="comment">// add the proxy to the rpc object</span>
-                        <span class="keyword">var</span> name = child.name<span class="comment">// || child.constructor.name</span>
+                        <span class="keyword">var</span> name = child.name <span class="comment">// || child.constructor.name</span>
                         <span class="local-variable">this</span>.rpc[name] = child.createRpcProxy(<span class="local-variable">this</span>.rpc)
                         <span class="local-variable">this</span>.names[name] = child
                 }

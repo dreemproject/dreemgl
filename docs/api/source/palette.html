@@ -265,6 +265,40 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n111" name="n111">111</a>
 <a href="#n112" name="n112">112</a>
 <a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -278,10 +312,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// The items to render into the palette.  This is either an array of components, or an Object where</span>
                 <span class="comment">// every key:value pair is a Section Name : components-array pair.</span>
-                <span class="key">items</span>:Config({<span class="key">type</span>:Object}),
-
-                <span class="comment">//size of the icons in the palatte</span>
-                <span class="key">iconsize</span>: <span class="integer">50</span>
+                <span class="key">items</span>:Config({<span class="key">type</span>:Object})
         };
 
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>;
@@ -289,14 +320,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>;
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panel</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.bg = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.padding = vec4(<span class="integer">20</span>,<span class="integer">10</span>,<span class="integer">20</span>,<span class="integer">10</span>);
                 <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">'</span><span class="content">space-around</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>;
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">divider</span><span class="delimiter">&quot;</span></span>, label, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.bg = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.fontsize = <span class="integer">12</span>;
                 <span class="local-variable">this</span>.margin = vec4(<span class="integer">5</span>,<span class="integer">5</span>,<span class="integer">5</span>,<span class="integer">0</span>);
@@ -308,49 +337,88 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelview</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
         });
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panellabel</span><span class="delimiter">&quot;</span></span>, label, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>
-        });
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelicon</span><span class="delimiter">&quot;</span></span>, icon, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>
+                <span class="local-variable">this</span>.bg = <span class="integer">0</span>;
+                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>;
         });
 
-        <span class="local-variable">this</span>.<span class="function">buildItem</span> = <span class="keyword">function</span>(item) {
-                <span class="keyword">var</span> args = {
-                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>,
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelicon</span><span class="delimiter">&quot;</span></span>, icon, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.align = <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>;
+        });
+
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelitem</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bg = <span class="integer">0</span>;
+
+                <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>;
+
+                <span class="local-variable">this</span>.attributes = {
+                        <span class="key">text</span>:Config({<span class="key">type</span>:String}),
+                        <span class="key">image</span>:Config({<span class="key">type</span>:String}),
+                        <span class="key">icon</span>:Config({<span class="key">type</span>:String}),
+                        <span class="key">label</span>:Config({<span class="key">type</span>:String}),
+                        <span class="key">iconfontsize</span>: <span class="integer">40</span>,
+                        <span class="key">hovercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>,
+                        <span class="key">hover</span>:<span class="predefined-constant">false</span>,
                         <span class="function">pointerover</span>:<span class="keyword">function</span>() {
-                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">over</span><span class="delimiter">'</span></span>)
+                                <span class="local-variable">this</span>.hover = <span class="predefined-constant">true</span>;
+                        },
+                        <span class="function">pointerout</span>:<span class="keyword">function</span>() {
+                                <span class="local-variable">this</span>.hover = <span class="predefined-constant">false</span>;
                         }
                 };
 
-                <span class="keyword">var</span> clas = <span class="local-variable">this</span>.panelview;
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                        <span class="keyword">var</span> views = [];
 
-                <span class="keyword">if</span> (item.image) {
-                        args.bgimage = <span class="string"><span class="delimiter">'</span><span class="content">$root/apps/flowgraph/</span><span class="delimiter">'</span></span> + item.image
+                        <span class="keyword">var</span> args = {
+                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>
+                        };
+
+                        <span class="keyword">var</span> clas = <span class="local-variable">this</span>.outer.panelview;
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.image) {
+                                args.bgimage = <span class="local-variable">this</span>.image;
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.bgimage) {
+                                args.bgimage = <span class="local-variable">this</span>.bgimage;
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.text) {
+                                clas = <span class="local-variable">this</span>.outer.panellabel;
+                                args.fontsize = <span class="local-variable">this</span>.iconfontsize;
+                                args.text = <span class="local-variable">this</span>.text;
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.icon) {
+                                clas = <span class="local-variable">this</span>.outer.panelicon;
+                                args.fontsize = <span class="local-variable">this</span>.iconfontsize;
+                                args.icon = <span class="local-variable">this</span>.icon;
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.hover) {
+                                args.fgcolor = <span class="local-variable">this</span>.hovercolor;
+                        }
+
+                        views.push(clas(args));
+
+                        <span class="comment">//if (this.hover) {</span>
+                        <span class="comment">//        views.push(label({text:this.label, bg:0}))</span>
+                        <span class="comment">//}</span>
+
+                        <span class="keyword">return</span> views;
                 }
 
-                <span class="keyword">if</span> (item.text) {
-                        clas = <span class="local-variable">this</span>.panellabel;
-                        args.fontsize = <span class="local-variable">this</span>.iconsize;
-                        args.text = item.text;
-                }
-
-                <span class="keyword">if</span> (item.icon) {
-                        clas = <span class="local-variable">this</span>.panelicon;
-                        args.fontsize = <span class="local-variable">this</span>.iconsize;
-                        args.icon = item.icon;
-                }
-
-                <span class="keyword">return</span> clas(args)
-        };
+        });
 
         <span class="local-variable">this</span>.<span class="function">buildPanel</span> = <span class="keyword">function</span>(items) {
                 <span class="keyword">var</span> views = [];
                 <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;items.length;i++) {
                         <span class="keyword">var</span> item = items[i];
-                        views.push(<span class="local-variable">this</span>.buildItem(item));
+                        views.push(<span class="local-variable">this</span>.panelitem(item));
                 }
                 <span class="keyword">return</span> <span class="local-variable">this</span>.panel(views);
         };

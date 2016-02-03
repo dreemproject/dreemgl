@@ -329,6 +329,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n175" name="n175">175</a>
 <a href="#n176" name="n176">176</a>
 <a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -448,7 +451,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.pointerover = <span class="local-variable">this</span>.stateover
                 <span class="local-variable">this</span>.pointerout = <span class="local-variable">this</span>.statedefault
-                <span class="local-variable">this</span>.pointerstart = <span class="local-variable">this</span>.stateclick
+                <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(ev){
+                        <span class="local-variable">this</span>.stateclick()
+                        console.log(ev)
+                }
                 <span class="local-variable">this</span>.pointerend = <span class="local-variable">this</span>.statedefault
         })
 
@@ -477,7 +483,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">collapsed</span>: <span class="local-variable">this</span>.collapsed
                 });
 
-                <span class="local-variable">this</span>.bar.pointertap = <span class="local-variable">this</span>.toggle.bind(<span class="local-variable">this</span>);
+                <span class="comment">//this.bar.pointertap = this.toggle.bind(this);</span>
                 <span class="keyword">var</span> res = [<span class="local-variable">this</span>.bar];
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.collapsed == <span class="predefined-constant">false</span>) {

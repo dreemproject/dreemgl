@@ -1767,6 +1767,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1613" name="n1613">1613</a>
 <a href="#n1614" name="n1614">1614</a>
 <a href="#n1615" name="n1615">1615</a>
+<a href="#n1616" name="n1616">1616</a>
+<a href="#n1617" name="n1617">1617</a>
+<a href="#n1618" name="n1618">1618</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1782,8 +1785,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> view = <span class="local-variable">this</span>.constructor
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// a simple boolean to turn visibility of a node on or off</span>
-                <span class="key">visible</span>: Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>: <span class="predefined-constant">true</span>}),
+                <span class="comment">// wether to draw it</span>
+                <span class="key">visible</span>: <span class="predefined-constant">true</span>,
+
+                <span class="key">drawtarget</span>: Config({<span class="key">type</span>:Enum(<span class="string"><span class="delimiter">'</span><span class="content">both</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>)}),
 
                 <span class="comment">// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.</span>
                 <span class="key">pos</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xyz</span><span class="delimiter">&quot;</span></span>}),
@@ -1807,7 +1812,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// alias for the x component of corner</span>
                 <span class="key">right</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
                 <span class="comment">// alias for  y component of corner</span>
-                <span class="key">bottom</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>,<span class="key">index</span>:<span class="integer">1</span>}),
+                <span class="key">bottom</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
                 <span class="comment">// alias for z component of corner</span>
                 <span class="key">rear</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
@@ -2005,6 +2010,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">keypress</span>: Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when someone pastes data into the view. The event argument is {text:string}</span>
                 <span class="key">keypaste</span>: Config({<span class="key">type</span>:Event}),
+                
                 <span class="comment">// fires when this view loses focus</span>
                 <span class="key">blur</span>: Config({<span class="key">type</span>:Event}),
 

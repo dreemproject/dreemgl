@@ -407,6 +407,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n253" name="n253">253</a>
 <a href="#n254" name="n254">254</a>
 <a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -509,11 +516,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// Internal: Returns pointer object.</span>
         <span class="comment">// It calculats deltas, min and max is reference pointer is provided.</span>
-        <span class="keyword">var</span> <span class="function">Pointer</span> = <span class="keyword">function</span>(pointer, id, view, refpointer) {
+        <span class="keyword">var</span> <span class="function">Pointer</span> = <span class="keyword">function</span>(pointer, id, view) {
                 <span class="local-variable">this</span>.id = id
                 <span class="local-variable">this</span>.view = view
                 <span class="local-variable">this</span>.position = pointer.position
-                <span class="local-variable">this</span>.movement = pointer.movement
                 <span class="local-variable">this</span>.button = pointer.button
                 <span class="local-variable">this</span>.shift = pointer.shift
                 <span class="local-variable">this</span>.alt = pointer.alt
@@ -521,13 +527,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.meta = pointer.meta
                 <span class="local-variable">this</span>.touch = pointer.touch
                 <span class="local-variable">this</span>.t = Date.now()
-                <span class="keyword">if</span> (refpointer) {
-                        <span class="local-variable">this</span>.delta = vec2(<span class="local-variable">this</span>.position[<span class="integer">0</span>] - refpointer.position[<span class="integer">0</span>], <span class="local-variable">this</span>.position[<span class="integer">1</span>] - refpointer.position[<span class="integer">1</span>])
-                        <span class="local-variable">this</span>.min = vec2(min(<span class="local-variable">this</span>.position[<span class="integer">0</span>], refpointer.position[<span class="integer">0</span>]), min(<span class="local-variable">this</span>.position[<span class="integer">1</span>], refpointer.position[<span class="integer">1</span>]))
-                        <span class="local-variable">this</span>.max = vec2(max(<span class="local-variable">this</span>.position[<span class="integer">0</span>], refpointer.position[<span class="integer">0</span>]), max(<span class="local-variable">this</span>.position[<span class="integer">1</span>], refpointer.position[<span class="integer">1</span>]))
-                        <span class="local-variable">this</span>.dt = <span class="local-variable">this</span>.t - refpointer.t
-                }
                 <span class="keyword">if</span> (pointer.wheel !== <span class="predefined-constant">undefined</span>) <span class="local-variable">this</span>.wheel = pointer.wheel
+        }
+
+        Pointer.prototype.<span class="function">addDelta</span> = <span class="keyword">function</span>(refpointer) {
+                <span class="local-variable">this</span>.delta = vec2(<span class="local-variable">this</span>.position[<span class="integer">0</span>] - refpointer.position[<span class="integer">0</span>], <span class="local-variable">this</span>.position[<span class="integer">1</span>] - refpointer.position[<span class="integer">1</span>])
+                <span class="local-variable">this</span>.min = vec2(min(<span class="local-variable">this</span>.position[<span class="integer">0</span>], refpointer.position[<span class="integer">0</span>]), min(<span class="local-variable">this</span>.position[<span class="integer">1</span>], refpointer.position[<span class="integer">1</span>]))
+                <span class="local-variable">this</span>.max = vec2(max(<span class="local-variable">this</span>.position[<span class="integer">0</span>], refpointer.position[<span class="integer">0</span>]), max(<span class="local-variable">this</span>.position[<span class="integer">1</span>], refpointer.position[<span class="integer">1</span>]))
+                <span class="local-variable">this</span>.dt = <span class="local-variable">this</span>.t - refpointer.t
+        }
+
+        Pointer.prototype.<span class="function">addMovement</span> = <span class="keyword">function</span>(refpointer) {
+                <span class="local-variable">this</span>.movement = vec2(<span class="local-variable">this</span>.position[<span class="integer">0</span>] - refpointer.position[<span class="integer">0</span>], <span class="local-variable">this</span>.position[<span class="integer">1</span>] - refpointer.position[<span class="integer">1</span>])
         }
 
         <span class="local-variable">this</span>.attributes = {
@@ -575,7 +586,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
                         <span class="keyword">var</span> previous = <span class="local-variable">this</span>._move.getClosest(pointerlist[i])
                         <span class="keyword">var</span> first = <span class="local-variable">this</span>._first.getById(previous.id)
-                        <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], previous.id, first.view, first)
+                        <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], previous.id, first.view)
+                        pointer.addDelta(first)
+                        pointer.addMovement(previous || first)
                         <span class="local-variable">this</span>._move.setPointer(pointer)
                 }
                 <span class="local-variable">this</span>._move.forEachView(<span class="keyword">function</span>(view, pointers) {
@@ -592,7 +605,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.device.pickScreen(pointerlist[i].position, <span class="keyword">function</span>(view){
                                 <span class="keyword">var</span> previous = <span class="local-variable">this</span>._move.getClosest(pointerlist[i])
                                 <span class="keyword">var</span> first = <span class="local-variable">this</span>._first.getById(previous.id)
-                                <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], previous.id, first.view, first)
+                                <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], previous.id, first.view)
+                                pointer.addDelta(first)
                                 pointer.isover = pointer.view === view
                                 <span class="local-variable">this</span>._end.setPointer(pointer)
                                 <span class="local-variable">this</span>._first.removePointer(first)

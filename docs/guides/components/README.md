@@ -170,7 +170,7 @@ And finally, the `index.js` wires all the components together:
 ### Usage
     
 Individual DreemGL classes can include inline usage examples directly in thier codebase.  To add inline examples, 
-attach them to `this.constructor` as an attribute names `examples`.  For example:
+attach them to `this.constructor` as an attribute named `examples`.  For example:
 
     	var example = this.constructor;    	
     	this.constructor.examples = {
