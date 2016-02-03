@@ -355,15 +355,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
+                <span class="keyword">var</span> offset = <span class="local-variable">this</span>.value / <span class="local-variable">this</span>.total
                 <span class="keyword">var</span> page = <span class="local-variable">this</span>.page / <span class="local-variable">this</span>.total
-                <span class="keyword">var</span> delta = event.value[<span class="integer">0</span>].delta
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.vertical){
-                        <span class="keyword">var</span> p = delta[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.height
+                <span class="keyword">var</span> movement = event.value[<span class="integer">0</span>].movement
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
+                        <span class="keyword">var</span> p = offset + movement[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.height
+                } <span class="keyword">else</span> {
+                        <span class="keyword">var</span> p = offset + movement[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width
                 }
-                <span class="keyword">else</span>{
-                        <span class="keyword">var</span> p = delta[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width
-                }
-                <span class="keyword">var</span> value = clamp(p, <span class="integer">0</span>, <span class="integer">1</span>.-page) * <span class="local-variable">this</span>.total
+                <span class="keyword">var</span> value = clamp(p, <span class="integer">0</span>, <span class="integer">1</span> - page) * <span class="local-variable">this</span>.total
                 <span class="keyword">if</span>(value != <span class="local-variable">this</span>.value){
                         <span class="local-variable">this</span>.value = value
                 }
