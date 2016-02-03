@@ -64,9 +64,7 @@ define.class('$system/base/node', function(){
 	PointerList.prototype.setPointer = function (pointer) {
 		for (var i = this.length; i--;) {
 			if (this[i].id === pointer.id) {
-				for (var key in pointer) {
-					this[i][key] = pointer[key]
-				}
+				this.splice(i, 1, new Pointer(pointer, pointer.id, pointer.view))
 				return
 			}
 		}
@@ -111,6 +109,10 @@ define.class('$system/base/node', function(){
 		this.ctrl = pointer.ctrl
 		this.meta = pointer.meta
 		this.touch = pointer.touch
+		this.delta = pointer.delta
+		this.min = pointer.min
+		this.max = pointer.max
+		this.dt = pointer.dt
 		this.t = Date.now()
 		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
 	}
@@ -216,8 +218,8 @@ define.class('$system/base/node', function(){
 				pointer.setClicker(this._clickerstash)
 				pointer.isover = pointer.view === view
 				this._first.removePointer(first)
-				this._move.removePointer(pointer)
 				this._end.setPointer(pointer)
+				this._move.removePointer(pointer)
 				if (pointer.dt < TAPSPEED && vec2.len(pointer.delta) < TAPDIST){
 					this._tap.setPointer(pointer)
 				}
