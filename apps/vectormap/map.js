@@ -292,7 +292,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		
 		this.onpointermove = function(ev){
 		//	console.log(ev.value[0]);
-		console.log(ev);
+			//console.log(ev);
 			console.log("whaa" , this.host.globalToLocal(ev.position));
 		}
 		
@@ -501,9 +501,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var LabelSource = tile.Labels;
 			var thelabels = [];
 			var rankfontsizes = {
-				0:10, 
-				1:10, 
-				2:10,
+				0:40, 
+				1:30, 
+				2:20,
 				3:10,
 				4:10,
 				5:10, 
