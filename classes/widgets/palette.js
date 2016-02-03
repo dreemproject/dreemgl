@@ -15,6 +15,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 		// The items to render into the palette.  This is either an array of components, or an Object where
 		// every key:value pair is a Section Name : components-array pair.
 		items:Config({type:Object})
+
 	};
 
 	define.class(this, "panel", view, function() {
@@ -48,6 +49,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 				var itemdef = this.items[i];
 
 				var item = this.outer.panelitem(itemdef);
+
+				item.panel = this;
 
 				if (this.mode == 'detail') {
 
@@ -107,7 +110,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			if (this.text) {
 				views.push(label({
 					fgcolor:this.bordercolor,
-					bg:0,
+					bgcolor:NaN,
 					text:this.text,
 					fontsize:this.fontsize
 				}));
@@ -181,6 +184,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			},
 			pointerout:function() {
 				this.hover = false;
+			},
+			pointerstart:function() {
+				this.find('mainproperties').target = this.panel ? this.panel : this;
 			}
 		};
 
