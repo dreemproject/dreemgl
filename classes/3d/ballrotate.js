@@ -17,8 +17,6 @@ define.class(function(require, $ui$button){
 	this.fontsize = 20;
 
 	this.pointermove = function(event){
-		var movement = event.value[0].movement
-
 		var t = this.find(this.target)
 
 		this.camera_start = vec3.sub(t._camera, t._lookat)
@@ -26,10 +24,10 @@ define.class(function(require, $ui$button){
 		var screenup = vec3.normalize(vec3.vec3_mul_mat4(vec3(0,1,0), M4));
 
 		var M1 = mat4.identity()
-		var M2 = mat4.rotate(M1, movement[0] * 0.01, t._up)
+		var M2 = mat4.rotate(M1, event.value.movement[0] * 0.01, t._up)
 
 		var axis = vec3.normalize(vec3.cross(this.camera_start, t._up))
-		var M3 = mat4.rotate(M2, movement[1] * 0.01, axis)
+		var M3 = mat4.rotate(M2, event.value.movement[1] * 0.01, axis)
 
 		var Rot = vec3.vec3_mul_mat4(this.camera_start, M3)
 		var Res = vec3.add(Rot, t._lookat)

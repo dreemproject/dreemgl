@@ -150,7 +150,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 	}
 
 	define.class(this, "customslider", function($ui$,view){
-		
+
 		this.attributes = {
 
 			// hsv color for the left side
@@ -210,7 +210,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		this.pressed = 0
 		this.hovered = 0
 
-		
+
 		this.bg = {
 			offset: 0,
 			page: 0.3,
@@ -244,11 +244,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			}
 		}
 		this.bg = true;
-		
+
 		// TODO(aki): fix slider and use pointer events
 		// most of the logic below is unnecessary because pointer events include deltas.
 		// this.pointerstart = function(event){
-		// 	var start = this.globalToLocal(event.value[0].position)
+		// 	var start = this.globalToLocal(event.value.position)
 		// 	// detect if we clicked not on the button
 		// 	if(this.vertical){
 		// 		var p = start[1] / this.layout.height
@@ -274,7 +274,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		// 	 start_offset = offset//this.offset / this.total
 		// }
 		// this.pointermove = function(event){
-		// 	var pos = this.globalToLocal(event.value[0].position)
+		// 	var pos = this.globalToLocal(event.value.position)
 		// 	if(this.vertical){
 		// 		var p = start_offset + (pos[1] - start[1]) / this.layout.height
 		// 	}
@@ -287,11 +287,11 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		// 	}
 		// }
 
-		
+
 		//this.height = 10;
 		//this.width = 100;
 		//this.flex = 1;
-		
+
 		this.drawcount = 0;
 	})
 
@@ -321,15 +321,15 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		}
 
 		this.pointermove = function(event){
-			var a = this.globalToLocal(event.value[0].position)
-			console.log(a, event.value[0].position)
+			var a = this.globalToLocal(event.value.position)
+			console.log(a, event.value.position)
 			this.updatehue(a);
 			this.redraw();
 		}
 
 		this.bg = function(){
 			this.draworder = 1;
-			
+
 			this.vertexstruct =  define.struct({
 				p:float,
 				side: float
@@ -455,7 +455,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		}
 
 		this.pointermove = function(event){
-			var p = this.globalToLocal(event.value[0].position)
+			var p = this.globalToLocal(event.value.position)
 			this.updatecolorfrompointer(p);
 		}
 
@@ -509,7 +509,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 			}
 
 		})
-		
+
 		this.fg = true
 
 		define.class(this, 'bg', this.Shader, function(){

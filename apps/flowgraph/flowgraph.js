@@ -357,8 +357,8 @@ define.class('$ui/view', function(require,
 		var cg = this.find("centralconstructiongrid")
 		var fg = this.find("flowgraph")
 		var sq = this.findChild("selectorrect")
-		var min = cg.globalToLocal(event.value[0].min)
-		var max = cg.globalToLocal(event.value[0].max)
+		var min = cg.globalToLocal(event.value.min)
+		var max = cg.globalToLocal(event.value.max)
 
 		if(sq){
 			sq.visible = true;

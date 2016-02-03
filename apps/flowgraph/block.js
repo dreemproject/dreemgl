@@ -195,18 +195,16 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.pointermove = function(event){
-		var delta = event.value[0].delta
-		this.find("flowgraph").moveSelected(delta[0], delta[1], false);
+		this.find("flowgraph").moveSelected(event.value.delta[0], event.value.delta[1], false);
 	}
 
 	this.pointerend = function(event){
 		var x = Math.floor(this.pos[0]/this.snap)*this.snap;
 		var y = Math.floor(this.pos[1]/this.snap)*this.snap;
 		this.pos = vec2(x,y);
-		var delta = event.value[0].delta
 		this.redraw();
 		this.relayout();
-		this.find("flowgraph").moveSelected(delta[0], delta[1], true);
+		this.find("flowgraph").moveSelected(event.value.delta[0], event.value.delta[1], true);
 	}
 
 	this.over = false;
@@ -313,8 +311,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.screen.openModal(function(){
 			return renameblockdialog({oldname:this.name, width:this.screen.size[0],height:this.screen.size[1],
 				position:"absolute",
-				x: e.value[0].x,
-				y: e.value[0].y + 20,
+				x: e.value.x,
+				y: e.value.y + 20,
 				blur:function(){
 					this.screen.closeModal(false)
 
