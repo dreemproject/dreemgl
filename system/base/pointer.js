@@ -113,6 +113,7 @@ define.class('$system/base/node', function(){
 		this.min = pointer.min
 		this.max = pointer.max
 		this.dt = pointer.dt
+		this.movement = pointer.movement
 		this.t = Date.now()
 		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
 	}
