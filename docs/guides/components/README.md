@@ -115,11 +115,13 @@ in the next section.
 
 ## Including Examples and Usage
 
+### Examples 
+
 In addition to a `REAMDE.md` DreemGL components often provide one or more example compositions.  Including an `index.js` 
 composition with some simple examples and usage information is usually a good practice, as these will immediately be 
 available to anyone browing to your component's root directory.
 
-For this guide one screen (see `./examples/guides/components/browser.js`) gathers user input and displays the list of 
+For this guide one screen gathers user input (see `./examples/guides/components/browser.js`) and displays the list of 
 movies (as `movie` objects) returned by the web service:
 
     define.class('$ui/screen', function($ui$, view, button, label, $$, movie) {
@@ -164,6 +166,30 @@ And finally, the `index.js` wires all the components together:
             })
         ] }
     });
+    
+### Usage
+    
+Individual DreemGL classes can include inline usage examples directly in thier codebase.  To add inline examples, 
+attach them to `this.constructor` as an attribute names `examples`.  For example:
+
+    	var example = this.constructor;    	
+    	this.constructor.examples = {
+    	  // Basic Usage
+    		Usage:function(){
+    			return [
+    				example({some:'attributes'})
+    			]
+    		},
+    		// Some other use case
+    		Exmaple:function(){
+    			return [
+    				example({some:[{other:'example'}]})
+    			]
+    		}    		
+    	}
+
+    
+    
 
 ## Working with screen &lt;&mdash;&gt; server RPC
 
@@ -175,9 +201,9 @@ and `this.rpc.screenName.attributeOrMethodName` for screen objects.
 
 Attributes can be get and set like so:
 
-    this.rpc.browser.someAttribute = "value"
+    this.rpc.object.someAttribute = "value"
 
-    console.log("My value is", this.rpc.browser.someAttribute);
+    console.log("My value is", this.rpc.object.someAttribute);
 
 ### Methods
 
