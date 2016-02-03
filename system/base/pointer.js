@@ -99,11 +99,10 @@ define.class('$system/base/node', function(){
 
 	// Internal: Returns pointer object.
 	// It calculats deltas, min and max is reference pointer is provided.
-	var Pointer = function(pointer, id, view, refpointer) {
+	var Pointer = function(pointer, id, view) {
 		this.id = id
 		this.view = view
 		this.position = pointer.position
-		this.movement = pointer.movement
 		this.button = pointer.button
 		this.shift = pointer.shift
 		this.alt = pointer.alt
@@ -111,13 +110,18 @@ define.class('$system/base/node', function(){
 		this.meta = pointer.meta
 		this.touch = pointer.touch
 		this.t = Date.now()
-		if (refpointer) {
-			this.delta = vec2(this.position[0] - refpointer.position[0], this.position[1] - refpointer.position[1])
-			this.min = vec2(min(this.position[0], refpointer.position[0]), min(this.position[1], refpointer.position[1]))
-			this.max = vec2(max(this.position[0], refpointer.position[0]), max(this.position[1], refpointer.position[1]))
-			this.dt = this.t - refpointer.t
-		}
 		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
+	}
+
+	Pointer.prototype.addDelta = function(refpointer) {
+		this.delta = vec2(this.position[0] - refpointer.position[0], this.position[1] - refpointer.position[1])
+		this.min = vec2(min(this.position[0], refpointer.position[0]), min(this.position[1], refpointer.position[1]))
+		this.max = vec2(max(this.position[0], refpointer.position[0]), max(this.position[1], refpointer.position[1]))
+		this.dt = this.t - refpointer.t
+	}
+
+	Pointer.prototype.addMovement = function(refpointer) {
+		this.movement = vec2(this.position[0] - refpointer.position[0], this.position[1] - refpointer.position[1])
 	}
 
 	this.attributes = {
@@ -165,7 +169,9 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
 			var first = this._first.getById(previous.id)
-			var pointer = new Pointer(pointerlist[i], previous.id, first.view, first)
+			var pointer = new Pointer(pointerlist[i], previous.id, first.view)
+			pointer.addDelta(first)
+			pointer.addMovement(previous || first)
 			this._move.setPointer(pointer)
 		}
 		this._move.forEachView(function(view, pointers) {
@@ -182,7 +188,8 @@ define.class('$system/base/node', function(){
 			this.device.pickScreen(pointerlist[i].position, function(view){
 				var previous = this._move.getClosest(pointerlist[i])
 				var first = this._first.getById(previous.id)
-				var pointer = new Pointer(pointerlist[i], previous.id, first.view, first)
+				var pointer = new Pointer(pointerlist[i], previous.id, first.view)
+				pointer.addDelta(first)
 				pointer.isover = pointer.view === view
 				this._end.setPointer(pointer)
 				this._first.removePointer(first)
