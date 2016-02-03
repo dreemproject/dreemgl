@@ -23,7 +23,7 @@ define.class(function(view, label){
 	this.bgcolor = vec4("white")
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
-	this.bg = {
+	this.hardrect = {
 		grid: function(a){
 			
 			return view.bgcolor;

@@ -13,7 +13,7 @@ define.class(function(require, shape3d){
 		detail: Config({type:float, value:10})
 	}
 
-	this.bg = {
+	this.shape3d = {
 		update:function(){
 			var view = this.view
 			this.mesh = this.vertexstruct.array();

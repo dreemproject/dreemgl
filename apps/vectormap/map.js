@@ -358,7 +358,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				else{
 					this.frameswaited++;
 					if (this.queued == 0){
-						if (this.bgshader && this.bgshader.update) this.bgshader.update();
+						if (this.shaders.hardrect && this.shaders.hardrect.update) this.shaders.hardrect.update();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
 						this.queued  = 1;
 					}
@@ -387,10 +387,10 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	define.class(this,"buildingtile", "$ui/view", function(){
 		this.is = tilebasemixin;
 		this.loadBufferFromTile = function(tile){
-			this.bgshader.mesh = tile.buildingVertexBuffer;
+			this.shaders.hardrect.mesh = tile.buildingVertexBuffer;
 		}
 
-		this.bg = function(){
+		this.hardrect = function(){
 
 			this.position = function(){
 
@@ -432,13 +432,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.is = tilebasemixin;
 
 		this.loadBufferFromTile = function(tile){
-			this.bgshader.mesh = tile.landVertexBuffer;
+			this.shaders.hardrect.mesh = tile.landVertexBuffer;
 		}
 
 
 
 
-		this.bg = function(){
+		this.hardrect = function(){
 
 			this.position = function(){
 
@@ -526,7 +526,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 		
 		this.position = "absolute"
-		this.bg = false;
+		this.bgcolor = NaN;
 		//this.fontsize = 140;
 		this.align ="center" 
 		this.render =function(){
@@ -537,9 +537,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	define.class(this,"roadtile", "$ui/view", function(){
 		this.is = tilebasemixin;
 		this.loadBufferFromTile = function(tile){
-			this.bgshader.mesh = tile.roadVertexBuffer;
+			this.shaders.hardrect.mesh = tile.roadVertexBuffer;
 		}
-		this.bg = function(){
+		this.hardrect = function(){
 
 			this.position = function(){
 
@@ -619,7 +619,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.tilestoupdate = [];
 
 		var res = [this.dataset];
-		//res.push(label({bg:0, text:"I am a map" }),this.dataset)
 		var res3d = []
 
 		var div = 400
@@ -661,20 +660,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				res3d.push(building);
 			}
 		}
-		
-		
-		
-		
-		for(var x = 0;x<this.tilewidth;x++){
-			for(var y = 0;y<this.tileheight;y++){
-				var tx = Math.floor(x-(this.tilewidth-1)/2);
-				var ty = Math.floor(y-(this.tileheight-1)/2)
-				var labels = this.labeltile({host:this, outline_thickness: 2,fontsize: 70,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
-				this.tilestoupdate.push(labels);
-				res3d.push(labels);
-			}
-		}
-		
 	
 		var dist = 2.5
 		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
@@ -683,7 +668,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		,lookat:vec3(0,0,0)
 		},
 
-			view({bg:0, rotate:vec3(0,0.1,0)},
+			view({bgcolor:NaN, rotate:vec3(0,0.1,0)},
 				res3d
 				)
 

@@ -49,7 +49,7 @@ define.class(function($ui$, view){
 	var mesh = vec2.array()
 	mesh.pushQuad(0,0,0,1,1,0,1,1)
 
-	this.bg = {
+	this.hardrect = {
 		draggercolor: vec4(),
 		offset: 0,
 		page: 0.3,

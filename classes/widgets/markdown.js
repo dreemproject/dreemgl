@@ -60,7 +60,7 @@ define.class(function($ui$, view, label){
 				// default text
 			}
 			
-			res.push(label({fgcolor: this.fontcolor, bg:false, margin: Margin, text: L, fontsize: fontsize, multiline: true, align: this.align}));
+			res.push(label({fgcolor: this.fontcolor, bgcolor:NaN, margin: Margin, text: L, fontsize: fontsize, multiline: true, align: this.align}));
 		}
 		
 		return res;

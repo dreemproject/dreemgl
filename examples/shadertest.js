@@ -30,7 +30,7 @@ define.class(function($server$, composition, $ui$, screen, view){
 							this.mycolor = 'red'
 						},
 						flex:1,
-						bg:{
+						hardrect:{
 							dump:1,
 							color:function(){
 								//return vec4(0,1,0,1)

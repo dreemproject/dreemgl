@@ -154,8 +154,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 	this.frompos= vec2(0,0);
 	this.topos= vec2(0,100);
-
-	this.bgcolor = "#00ffff"
+	this.bgcolor = NaN
 
 	define.class(this, "connectionshader", this.Shader,function($ui$, view){
 		this.mesh = vec2.array()
@@ -257,9 +256,10 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			return vec4(vec3(0.0) + view.bgcolor.xyz*1.0,a);
 		}
 	})
+	// turn on the shaders
+	this.connectionshader = true
+	this.glowconnectionshader = true
 
-	this.bg = this.connectionshader;
-	this.glowconnectionshader = 1;
 	this.calculateposition = function(){
 		var F = this.find(this._from);
 		var T = this.find(this._to);

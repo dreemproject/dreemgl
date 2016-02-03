@@ -42,7 +42,7 @@ define.class('$ui/view',  function(view, label){
 
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
-	this.bg = {
+	this.hardrect = {
 		position:function(){
 			// do something here with view.scrollmatrix
 

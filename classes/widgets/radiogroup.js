@@ -24,7 +24,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 		if (this.title && this.title.length > 0){
 			res.push(
 			view({bgcolor:this.bordercolor, margin:0,borderradius:vec4(4,1,1,4), padding:4},
-				label({name:"thetitle", margin:vec4(5,0,5,0),align:"right",  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
+				label({name:"thetitle", margin:vec4(5,0,5,0),align:"right",  bgcolor:NaN,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
 				)
 			)
 		}
@@ -48,7 +48,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 						label({
 								font: require('$resources/fonts/opensans_bold_ascii.glf'),
 								text:(v&&v.trim().length > 0)?v:"undefined",
-								bg:0,
+								bgcolor:NaN,
 								margin: vec4(5,0,5,0),
 								fgcolor:this.fgcolor,
 								fontsize:this.fontsize

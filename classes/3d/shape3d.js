@@ -5,7 +5,7 @@
 
 define.class(function(require, $ui$, view){
 
-	define.class(this, 'bg', this.Shader, function(){
+	define.class(this, 'shape3d', this.Shader, function(){
 		this.draworder = 0
 		
 		this.depth_test = 'src_depth < dst_depth'
@@ -33,5 +33,6 @@ define.class(function(require, $ui$, view){
 			var tn = normalize(transnorm.xyz);
 			return vec4(tn*0.5+0.5,1.0);		
 		}
-	})		
+	})
+	this.shape3d = true	
 })

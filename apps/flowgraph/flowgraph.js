@@ -757,10 +757,10 @@ define.class('$ui/view', function(require,
 							pointermove: this.gridDrag.bind(this),
 							pointerend: this.gridDragEnd.bind(this),
 							overflow:"scroll" ,bgcolor: "#4e4e4e",gridsize:5,majorevery:5,  majorline:"#575757", minorline:"#484848", zoom:function(){this.updateZoom(this.zoom)}.bind(this)}
-						,view({name:"underlayer", bg:0}
+						,view({name:"underlayer", bgcolor:NaN}
 							,view({name:"groupbg",visible:false, bgcolor: vec4(1,1,1,0.08) , borderradius:8, borderwidth:0, bordercolor:vec4(0,0,0.5,0.9),position:"absolute", flexdirection:"column"})
 						)
-						,view({name:"connectionlayer", bg:false, dataset: this.sourceset, render:function(){
+						,view({name:"connectionlayer", bgcolor:NaN, dataset: this.sourceset, render:function(){
 							return this.renderConnections();
 						}.bind(this)}
 						/*
@@ -771,8 +771,8 @@ define.class('$ui/view', function(require,
 							,connection({from:"c", fromoutput:"output 1", to:"d", toinput:"input 1" })
 							,connection({from:"a", fromoutput:"output 2", to:"c", toinput:"input 2" })
 						*/)
-						,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
-						,view({name:"blocklayer", bg:0,  dataset: this.sourceset, render:function(){
+						,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
+						,view({name:"blocklayer", bgcolor:NaN,  dataset: this.sourceset, render:function(){
 							return this.renderBlocks();
 						}.bind(this)}
 						/*	,block({name:"phone", title:"Phone", x:200, y:20})
@@ -787,24 +787,24 @@ define.class('$ui/view', function(require,
 							,block({name:"f", title:"block F", x:550, y:700})
 						*/)
 
-						,view({name:"popuplayer", bg:false},
+						,view({name:"popuplayer", bgcolor:NaN},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
-								label({text:"Connection", bg:0, margin:4})
-								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0 })
+								label({text:"Connection", bgcolor:NaN, margin:4})
+								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-								label({text:"Block", bg:0, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+								label({text:"Block", bgcolor:NaN, margin:4})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 
 							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
-								label({text:"Group", bg:0, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bg:0})
+								label({text:"Group", bgcolor:NaN, margin:4})
+								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,this.selectorrect({name:"selectorrect"})
-							,view({bg:false}, connection({name:"openconnector", hasball: false, visible:false}))
+							,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
 					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})

@@ -17,7 +17,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		status:""
 	}
 
-	this.bg = false
+	this.bgcolor = NaN
 
 	this.rpcproxy = false
 	this.viewport = '2d'

@@ -120,13 +120,13 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		if (this.title && this.title.length > 0){
 			res.push(
 			view({alignitems:"center", justifycontent:"center", bgcolor:this.bordercolor,bordercolor:this.bordercolor , margin:0,borderradius:vec4(1,1,1,1),borderwidth:1,  padding:0},
-				label({name:"thetitle", align:"right", alignself:"center", margin:vec4(5,0,5,0),  bg:0,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
+				label({name:"thetitle", align:"right", alignself:"center", margin:vec4(5,0,5,0),  bgcolor:NaN,text:this.title,flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor})
 				)
 			)
 		}
 
 		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left",  buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",text:"" , fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.downclick()}.bind(this)}));
-		res.push(label({margin:vec4(4,0,4,0),alignself:"center", padding:0,  name:"thenumber", align:"right", text:this._value.toString(),flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bg:0}))
+		res.push(label({margin:vec4(4,0,4,0),alignself:"center", padding:0,  name:"thenumber", align:"right", text:this._value.toString(),flex:1, fontsize: this.fontsize, fgcolor:this.fgcolor, bgcolor:NaN}))
 		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}))
 		return res;
 

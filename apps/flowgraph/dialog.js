@@ -26,7 +26,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, button, scro
 	this.render = function(){
 		return [
 				view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
-					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
+					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:5, text:this.title, bgcolor:NaN, fontsize:this.fontsize, fgcolor: "white" })
 				),
 				view({padding:2, bgcolor:"#707070"})
 				

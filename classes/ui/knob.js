@@ -53,7 +53,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 		//	console.log(this._width);
 		}
 
-		this.bg = function(){
+		this.hardrect = function(){
 			this.mesh = vec2.array();
 
 			for(var i=0;i<101;i++){
@@ -94,7 +94,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.neutralbordercolor = this.bordercolor;
 	this.tabstop = 0;
 
-	this.bg = false//{pick_only:true};
+	this.bgcolor = NaN//{pick_only:true};
 	this.fgcolor = "#101010"
 	this.bgcolor = "red"
 
@@ -164,8 +164,8 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.alignitems = "center";
 	this.borderwidth = 2;
 
-	this.bg = {pickonly:true};
-
+	this.drawtarget = 'pick'
+	
 	this.render = function(){
 		return [
 		view({minwidth: this.outerradius,minheight: this.outerradius, bg:0},

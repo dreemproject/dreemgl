@@ -25,15 +25,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.mainwidth = 250;
 
 	this.style = {
-		label_head:{bg:false,margin:vec4(6,3,4,0), bold:true},
+		label_head:{bgcolor:NaN,margin:vec4(6,3,4,0), bold:true},
 		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
-		view_header:{width:this.mainwidth, bg:0, flex:1, justifycontent:"space-between"},
+		view_header:{width:this.mainwidth, bgcolor:NaN, flex:1, justifycontent:"space-between"},
 
 		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},
-		view_between1:{bg:false, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
-		view_between2:{bg:false, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
-		view_head:{bg:false, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
-		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bg:0, justifycontent:"space-between"}
+		view_between1:{bgcolor:NaN, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
+		view_between2:{bgcolor:NaN, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
+		view_head:{bgcolor:NaN, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},
+		view_addbuttons:{flexdirection:"row", position:"absolute",alignitems:"stretch",width:140, bgcolor:NaN, justifycontent:"space-between"}
 	}
 
 	this.attributes = {
@@ -230,7 +230,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	define.class(this, "inputbutton", function($ui$, view, label){
-		this.bg = {pickonly:true}
+		this.drawtarget = 'pick'
 
 		this.attributes = {
 			name:"thing",
@@ -254,13 +254,14 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			this.hovertext = "Input " + this.title+ (this.type?(": "+ this.type):"");
 			return [
 				ballbutton({borderwidth:2, bgcolor:this.bgcolor, click: this.tapped.bind(this), alignself:"center"}),
-				label({marginleft:5, text:uppercaseFirst(this.title), bg:false, alignself:"center"})
+				label({marginleft:5, text:uppercaseFirst(this.title), bgcolor:NaN, alignself:"center"})
 			]
 		}
 	})
 
 	define.class(this, "outputbutton", function($ui$, view, label){
-		this.bg = {pickonly:true};
+		this.drawtarget = 'pick'
+
 		this.attributes = {
 			name:"thing",
 			title:"thing",
@@ -283,7 +284,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				this.hovertext = "Output " + this.title+ (this.type?(": "+ this.type):"");
 
 			return [
-				label({text:uppercaseFirst(this.name), bg:false, alignself:"center", marginright: 5}),
+				label({text:uppercaseFirst(this.name), bgcolor:NaN, alignself:"center", marginright: 5}),
 				ballbutton({borderwidth:2, bgcolor: this.bgcolor, click: this.tapped.bind(this), alignself:"center"})
 			]
 		}
@@ -334,7 +335,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.render = function(){
 		return [
 			view({class:'header',alignitems:"center" }
-				,view({bg:0, justifycontent:"center", alignitems:"center" }
+				,view({bgcolor:NaN, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
 					,button({class:"header", icon:"pencil",click:function(e){this.renameBlock(e);}.bind(this)})
 				)

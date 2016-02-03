@@ -46,7 +46,7 @@ define.class(function($ui$, view, label){
 
 		this.render = function(){
 			return view({
-					bg:{
+					hardrect:{
 						color:function(){
 							return vec4(1- mesh.y*0.4, 1- mesh.y*0.4,1- mesh.y*0.2,1)
 						}
@@ -59,7 +59,7 @@ define.class(function($ui$, view, label){
 				label({
 					margin:[10,10,10,10],
 					fgcolor:'black',
-					bg:0,
+					bgcolor:NaN,
 					fontsize:50,
 					alignself:'center',
 					text:this.title

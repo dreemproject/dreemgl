@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon, treeview, cadgrid, label, button, $$, ballbutton){
-	this.bg = 0;
+	this.bgcolor = NaN
 	this.attributes = {
 		oldname:""
 	}
@@ -13,7 +13,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 	this.alignitems = "flex-start";
 	this.render =function(){
 		return [
-			view({bg:0}, view({
+			view({bgcolor:NaN}, view({
 					flexdirection:"column",
 					padding:20,
 					bgcolor: vec4("#505050"),

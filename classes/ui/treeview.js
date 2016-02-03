@@ -177,7 +177,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 					)
 					]}.bind(this));
 					res.push(view({
-								bg:0,
+								bgcolor:NaN,
 								flexdirection:"column" ,
 								flexwrap:"nowrap"
 							},
@@ -205,7 +205,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.fgcolor = vec4("#808080")
 
 		this.bgcolor = "#3b3b3b"
-		this.bg = {
+		this.hardrect = {
 			color: function(){
 				var pos = mesh.xy * vec2(view.layout.width, view.layout.height)
 				var center = 16

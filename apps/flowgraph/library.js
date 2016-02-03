@@ -18,15 +18,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			folder:""
 		}
 
-		this.bg = {
+		this.hardrect = {
 			color: function(){
 				var fill = mix(view.col1, view.col2,  (mesh.y)/0.8)
 				return fill;
 			}
 		}
 
-		console.log(this.name)
-		this.bg = 1
 		this.margin = vec4(2,2,2,0)
 		this.justifycontent = "flex-start"
 		this.alignitems = "center"
@@ -48,8 +46,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				//	,icon({icon:"cube", fgcolor:this.fgcolor,margin:0,alignself:"center", fontsize:20})
 				//)
 				//,
-				view({justifycontent:"space-between", flex:1, bg:false},
-					label({text:this.classdesc.name.substr(0,this.classdesc.name.length-3 ), margin:3,fgcolor:this.fgcolor, bg:0, flex:1})
+				view({justifycontent:"space-between", flex:1, bgcolor:NaN},
+					label({text:this.classdesc.name.substr(0,this.classdesc.name.length-3 ), margin:3,fgcolor:this.fgcolor, bgcolor:NaN, flex:1})
 					,button({icon:"plus", pointerhover: this.doHover.bind(this),click: this.addBlock.bind(this)})
 				)
 			]
@@ -89,7 +87,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				}
 			}
 
-			return foldcontainer({title:data.name, basecolor:vec4("#3b3b3b"),padding:0,bordercolor:vec4("#3b3b3b"),icon:undefined},view({bg:0, flex:1,flexdirection:"column"},res));
+			return foldcontainer({title:data.name, basecolor:vec4("#3b3b3b"),padding:0,bordercolor:vec4("#3b3b3b"),icon:undefined},view({bgcolor:NaN, flex:1,flexdirection:"column"},res));
 		}
 	})
 

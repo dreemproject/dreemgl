@@ -143,13 +143,14 @@ define.class(function(require, $ui$, view){
 	}
 
 	this.measure = function(width){
-		if(this.typefaceshader.update_dirty){
-			this.typefaceshader.update()
-			this.typefaceshader.update_dirty = true
+		var shader = this.shaders.typeface
+		if(shader.update_dirty){
+			shader.update()
+			shader.update_dirty = true
 		}
 		return {
-			width: this.measured_width = this.typefaceshader.mesh.bound_w, 
-			height: this.measured_height =this.typefaceshader.mesh.bound_h 
+			width: this.measured_width = shader.mesh.bound_w, 
+			height: this.measured_height = shader.mesh.bound_h 
 		};
 	}
 

@@ -66,11 +66,15 @@ define.class('$ui/view', function(icon, label){
 		}
 	}
 
-	//this.bg = {
-	//	color: function(){
-	//		return mix(view.col1, view.col2, (uv.y)/0.8)
-	//	}
-	//}
+	this.onclick = function(){
+		this.value  = this.value?false:true;
+	}
+
+	this.hardrect = {
+		color: function(){
+			return mix(view.col1, view.col2, (uv.y)/0.8)
+		}
+	}
 
 	// the hover state when someone hovers over the button
 	this.statehover = function(){

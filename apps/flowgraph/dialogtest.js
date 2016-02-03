@@ -11,7 +11,7 @@ define.class('$server/composition', function(require, $ui$,treeview,  speakergri
 	this.render = function(){
 		return [
 			screen({
-				bg:0,
+				bgcolor:NaN,
 				clearcolor:vec4('blue'),
 				flexwrap:"nowrap",
 				flexdirection:"row",

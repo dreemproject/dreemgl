@@ -117,7 +117,6 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 		return [
 			this.fileio(),
 			screen({
-				bg:0,
 				clearcolor:vec4('black'),
 				flexwrap:"nowrap",
 				flexdirection:"row",

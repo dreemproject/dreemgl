@@ -20,28 +20,30 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		}})
 	};
 
-	this.bg = {
-		color:function(){
+	this.hardrect = {
+		color:function(){								
 			var col1 = vec3("#3b3b3b");
 			var col2=vec3("#3b3b3b");
 			return vec4(mix(col1, col2, 1.0-pow(abs(uv.y),4.0) ),1.0)
 		}
-	};
+	}
+	
+	this.margin = 0
+	this.padding = 0
+	this.border = 0
+	this.flexdirection = "row"
+	this.flex = 1
+	this.bordercolor = "gray"
+	this.fgcolor = "#c0c0c0"
 
-	this.margin = 0;
-	this.padding = 0;
-	this.border = 0;
-	this.flexdirection = "row";
-	this.flex = 1;
-	this.bordercolor = "gray";
-	this.fgcolor = "#c0c0c0";
-
+	// lets have the style parameterized by self and self props
+	// these things are memo-ized on our class
 	this.wrap = function(node, hasownlabel){
 		if (hasownlabel === undefined) hasownlabel = false
 		if (hasownlabel) return [node];
 
 		return [
-			label({bgcolor:NaN, margin:4, fontsize:this.fontsize, flex: 0.2, text:this.propertyname, bg:0, fgcolor:this.fgcolor}),
+			label({bgcolor:NaN, margin:4, fontsize:this.fontsize, flex: 0.2, text:this.propertyname, bgcolor:NaN, fgcolor:this.fgcolor}),
 			node
 		]
 	};
@@ -54,7 +56,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"circle", collapsed:true
 		},
 		view_colorview:{
-			bg:0,width:300, flexdirection:"column"
+			bgcolor:NaN,width:300, flexdirection:"column"
 		},
 		numberbox_vec4:{
 			flex:1,decimals:3, stepvalue:0.01, margin:2
@@ -116,7 +118,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 				t4 = "bottom";
 			}
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					numberbox({title:t1, class:'vec4', value:this.value[0]}),
 					numberbox({title:t2, class:'vec4', value:this.value[1]}),
 					numberbox({title:t3, class:'vec4', value:this.value[2]}),
@@ -138,7 +140,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 			}
 
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					numberbox({title:t1, class:'vec3', value:this.value[0]}),
 					numberbox({title:t2, class:'vec3', value:this.value[1]}),
 					numberbox({title:t3, class:'vec3', value:this.value[2]})
@@ -148,7 +150,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		if (typename =="vec2"){
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					numberbox({class:'vec2', value:this.value[0],margin:2}),
 					numberbox({class:'vec2', value:this.value[1],margin:2})
 				)
@@ -157,7 +159,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		if (typename =="FloatLike"){
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					numberbox({class:'floatlike', minvalue: this.property.minvalue, maxvalue: this.property.maxvalue,  value:this.value})
 				)
 			)
@@ -165,7 +167,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		if (typename =="IntLike"){
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					numberbox({flex:1, minvalue: this.property.minvalue, maxvalue: this.property.maxvalue, fontsize:this.fontsize, value:this.value, stepvalue:1, margin:2})
 				)
 			)
@@ -173,7 +175,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		if (typename =="String"){
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#d0d0d0",bgcolor:"#505050", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				)
 			)
@@ -181,7 +183,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		if (typename =="Boolean" || typename=="BoolLike"){
 			return this.wrap(
-				view({bg:0},
+				view({bgcolor:NaN},
 					checkbox({flex:1, fgcolor:"white", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
 				)
 			)
@@ -189,19 +191,19 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		if (typename == "Object" && meta == "font") {
 			return this.wrap(
-				label({fontsize: this.fontsize, margin:4,text:"FONT PICKER!", bg:0, fgcolor:this.fgcolor})
+				label({fontsize: this.fontsize, margin:4,text:"FONT PICKER!", bgcolor:NaN, fgcolor:this.fgcolor})
 			)
 		}
 
 		if (typename == "Object" && meta == "texture") {
 			return this.wrap(
-				label({fontsize: this.fontsize, margin:4,text:"IMAGE PICKER!", bg:0, fgcolor:this.fgcolor})
+				label({fontsize: this.fontsize, margin:4,text:"IMAGE PICKER!", bgcolor:NaN, fgcolor:this.fgcolor})
 			)
 		}
 
 		if (!this.property) return [];
 		//console.log(this.property);
-		return this.wrap(label({margin:4,text:typename + " " + meta, bg:0, fgcolor:this.fgcolor}))
+		return this.wrap(label({margin:4,text:typename + " " + meta, bgcolor:NaN, fgcolor:this.fgcolor}))
 	}
 
 })

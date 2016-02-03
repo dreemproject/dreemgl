@@ -32,7 +32,7 @@ define.class('$server/composition', function(require,
 					overflow:'scroll',
 					slideheight:800,
 					bgcolor:'black',
-					bg:0,
+					bgcolor:NaN,
 					scroll: Config({persist:true}),
 					},
 					view({
@@ -46,7 +46,7 @@ define.class('$server/composition', function(require,
 							name: "teapot1",
 							clearcolor: 'rgba(255,255,255,0)',
 							viewport: '3d',
-							bg:0,
+							bgcolor:NaN,
 							camera: vec3(0,0,8)
 						},
 						teapot({
@@ -97,7 +97,7 @@ define.class('$server/composition', function(require,
 							clearcolor: 'rgba(255,255,255,0)',
 							viewport: '3d',
 							count:16,
-							bg:0,
+							bgcolor:NaN,
 							camera: vec3(0,0,18),
 							render: function(){
 								var ret = []
@@ -117,7 +117,7 @@ define.class('$server/composition', function(require,
 										pointerout:function(){
 											this.value = 0
 										},
-										bg:{
+										shape3d:{
 											i:i,
 											patterns: require('./shaderpatterns').prototype,
 											color:function(){
@@ -170,9 +170,9 @@ define.class('$server/composition', function(require,
 								padding:4,
 								margin:10,
 								cornerradius:0,
-								bg:{
+								hardrect:{
 									value:1,
-									dump:1,
+									//dump:1,
 									color:function(){
 										return mix('blue', 'yellow', abs(sin(mesh.y*10.+value)))
 									}

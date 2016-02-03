@@ -11,7 +11,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 	this.borderwidth = 1
 	this.borderradius = 1
 	this.margin = 0
-	this.bg = 0
+	this.bgcolor = NaN
 	this.alignitems = "stretch"
 	this.bordercolor = vec4("#c0c0c0")
 	this.padding = 0
@@ -54,7 +54,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		}
 		this.position = "relative";
 
-		this.bg = {
+		this.hardrect = {
 			color: function(){
 				var fill = mix(view.col1, view.col2,  (mesh.y)/0.8)
 				return fill;
@@ -71,8 +71,8 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			var res = []
 
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
-			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bg:0 }));
-			var res2 = [view({bg:0},res), icon({fontsize:this.outer.fontsize,alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
+			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bgcolor:NaN }));
+			var res2 = [view({bgcolor:NaN},res), icon({fontsize:this.outer.fontsize,alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
 			return res2;
 		}
 
@@ -125,12 +125,12 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 	// the main container view
 	define.class(this, 'containerview', function(view){
-		this.bg = {
+		this.hardrect = {
 			color:function(){
 				return mix(view.bgcolor*1.7, vec4("white"), (mesh.y/8))
 			}
 		};
-		this.bg = 0;
+		this.bgcolor = NaN;
 		this.padding = vec4(0,0,0,0),
 		this.margin = vec4(0,0,0,0),
 		this.position = "relative"

@@ -12,7 +12,7 @@ define.class(function(require, shape3d){
 		detail: vec2(40,40)
 	}
 
-	this.bg = {
+	this.shape3d = {
 		update:function(){
 			var view = this.view
 			this.mesh = this.vertexstruct.array();

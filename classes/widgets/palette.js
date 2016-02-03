@@ -19,7 +19,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	};
 
 	define.class(this, "panel", view, function() {
-		this.bg = 0;
+		this.bgcolor = NaN
 		this.padding = vec4(20,10,20,10);
 		this.justifycontent = 'space-between';
 		this.attributes = {

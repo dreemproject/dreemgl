@@ -26,7 +26,7 @@ define.class(function(require,$ui$, button, textbox, label,button , view){
 			res.push(this.buttonres);
 		}
 		
-		return view({bg:false,margin:this.internalmargin, alignitems:"center", flexdirection:"row",justifycontent:"center"},res);
+		return view({bgcolor:NaN,margin:this.internalmargin, alignitems:"center", flexdirection:"row",justifycontent:"center"},res);
 	
 		
 	}

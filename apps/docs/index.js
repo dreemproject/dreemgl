@@ -84,7 +84,7 @@ define.class('$server/composition', function(require, $server$, fileio, dataset,
 			splitcontainer({bgcolor: "black", flex:1}
 				,view({flexdirection:"column", padding: 0,flex: 0.2}
 					,view({alignitems:"center", bgcolor:"#343434", flexdirection:"row" ,padding: 14},
-						label({text:"DreemGL", fgcolor:"white", bg:0, fontsize: 35 })
+						label({text:"DreemGL", fgcolor:"white", bgcolor:NaN, fontsize: 35 })
 					)
 					,treeview({
 						postLayout:function(){

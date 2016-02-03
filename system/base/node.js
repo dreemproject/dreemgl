@@ -251,14 +251,14 @@ define.class(function(require){
 			var finals
 			while(on_key in proto || listen_key in proto){
 				if(proto.hasOwnProperty(on_key)){
-					proto[on_key].call(this, event, event.value)
+					proto[on_key].call(this, event, event.value, this)
 					if(event.stop) return
 					if(event.final) finals = finals || [], finals.push(event.final)
 				}
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
 					for(var j = listeners.length - 1; j >= 0; j--){
-						listeners[j].call(this, event, event.value)
+						listeners[j].call(this, event, event.value, this)
 						if(event.stop) return
 						if(event.final) finals = finals || [], finals.push(event.final)
 					}
@@ -266,7 +266,7 @@ define.class(function(require){
 				proto = Object.getPrototypeOf(proto)
 			}
 			if(finals) for(var i = finals.length - 1; i >=0; i--){
-				finals[i].call(this, event, event.value)
+				finals[i].call(this, event, event.value, this)
 				if(event.stop) return
 			}
 		}

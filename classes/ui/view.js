@@ -44,7 +44,7 @@ define.class('$system/base/node', function(require){
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:"style", type:vec4, value: vec4('white'), meta:"color"}),
+		bgcolor: Config({group:"style", type:vec4, value: vec4('NaN'), meta:"color"}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
@@ -329,34 +329,49 @@ define.class('$system/base/node', function(require){
 	this.onborderwidth = function(){
 		this.setBorderShaders()
 	}
+	
+	this.onbgcolor = function(){
+		this.setBorderShaders()
+	}
 
 	this.setBorderShaders = function(){
 		var radius = this._borderradius
 		//var value = event.value
-		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
-			// this switches the bg shader to the rounded one
-			this.bg = this.roundedrect
-			this.border = this.roundedborder
-		}
-		else {
-			this.bg = this.hardrect
-			this.border = this.hardborder
-		}
+		var border_on = true
 		var width = this._borderwidth
 		if(width[0] === 0 && width[1] === 0 && width[2] === 0 && width[3] === 0){
-			this.border = false
+			border_on = false
 		}
 		else{
-			this.border = true
+			border_on = true
+		}
+
+		var bg_on = isNaN(this._bgcolor[0])? false: true
+
+		if(this._viewport === '3d') border_on = false, bg_on = false
+	
+		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
+			// this switches the bg shader to the rounded one
+			this.bgshader_name = 'roundedrectshader'
+			this.bordershader_name = 'roundedbordershader'
+			this.roundedrect = bg_on
+			this.roundedborder = border_on
+			this.hardrect = false
+			this.hardborder = false
+		}
+		else {
+			this.bgshader_name = 'hardrectshader'
+			this.bordershader_name = 'hardbordershader'
+			this.hardrect = bg_on
+			this.hardborder = border_on
+			this.roundedrect = false
+			this.roundedborder = false
 		}
 	}
 
 	// internal, listen to the viewport to turn off our background and border shaders when 3D
 	this.onviewport = function(event){
-		if(event.value === '3d'){
-			this.bg = false
-			this.border = false
-		}
+		this.setBorderShaders()
 	}
 
 	// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set
@@ -418,17 +433,20 @@ define.class('$system/base/node', function(require){
 
 		if(this._bgimage || this._wiredfn_bgimage){
 			// set the bg shader
-			this.bg = this.hardimage
+			this.hardrect = false
+			this.hardimage = true
 		}
 		// create shaders
-
+		this.shaders = {}
 		for(var key in this.shader_enable){
 			var enable = this.shader_enable[key]
 			if(!enable) continue
 			var shader = this[key]
 			if(shader){
-				var shname = key + 'shader'
-				var prevshader = prev && prev[shname]
+				//var shname = key + 'shader'
+				//console.log(shname)
+
+				var prevshader = prev && prev.shaders && prev.shaders[key]
 				var shobj
 				// ok so instead of comparing constructor, lets compare the computational result
 //				if(prevshader && prevshader.constructor !== shader) console.log(shader)
@@ -452,8 +470,9 @@ define.class('$system/base/node', function(require){
 				else{
 					shobj = new shader(this)
 				}
-				this[shname] = shobj
-				shobj.shadername = shname
+				//this[shname] = shobj
+				shobj.shadername = key
+				this.shaders[key] = shobj
 				this.shader_list.push(shobj)
 			}
 		}
@@ -467,13 +486,21 @@ define.class('$system/base/node', function(require){
 		//}
 
 		if(this._viewport){
-			if(this.bgshader) this.bgshader.noscroll = true
-			if(this.bordershader) this.bordershader.noscroll = true
-			this.viewportblendshader = new this.viewportblend(this)
+			for(var key in this.shaders){
+				this.shaders[key].noscroll = true
+			}
+			this.shaders.viewportblend = new this.viewportblend(this)
 		}
 
 		this.sortShaders()
 	}
+
+	Object.defineProperty(this, 'bg', {
+		get:function(){},
+		set:function(){
+			console.error('bg property depricated, please use bgcolor:NaN to turn off background shader, and subclass via bgcolorfn or hardrect/roundedrect specifically')
+		}
+	})
 
 	this.onbgimage = function(){
 		if(this.initialized){
@@ -490,7 +517,7 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.setBgImage = function(image){
-		var img = this.bgshader.texture = Shader.Texture.fromImage(image);
+		var img = this.shaders.hardimage.texture = Shader.Texture.fromImage(image);
 		if(isNaN(this._size[0])){
 			this._size = img.size
 			this.relayout()
@@ -532,13 +559,13 @@ define.class('$system/base/node', function(require){
 
 	// internal, sorts the shaders
 	this.sortShaders = function(){
-
+		var shaders = this.shaders
 		this.shader_draw_list = this.shader_list.slice(0).sort(function(a, b){
-			return this[a.shadername].draworder > this[b.shadername].draworder
+			return shaders[a.shadername].draworder > this[b.shadername].draworder
 		}.bind(this))
 
 		this.shader_update_list = this.shader_list.slice(0).sort(function(a, b){
-			return this[a.shadername].updateorder > this[b.shadername].updateorder
+			return shaders[a.shadername].updateorder > this[b.shadername].updateorder
 		}.bind(this))
 		//console.log(this.shader_draw_list)
 	}
@@ -1181,18 +1208,6 @@ define.class('$system/base/node', function(require){
 		this.relayout()
 	}
 
-	// standard bg is undecided
-	define.class(this, 'bg', this.Shader, function(){
-		this.updateorder = 0
-	})
-	this.bg = true
-
-	// standard border is undecided too
-	define.class(this, 'border', this.Shader, function(){
-		this.updateorder = 0
-	})
-	this.border = false
-
 	define.class(this, 'hardrect', this.Shader, function(){
 		this.updateorder = 0
 		this.draworder = 0
@@ -1208,7 +1223,7 @@ define.class('$system/base/node', function(require){
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
-	this.hardrect = false
+	this.hardrect = true
 
 	this.bordercolorfn = function(pos){
 		return bordercolor
@@ -1252,9 +1267,6 @@ define.class('$system/base/node', function(require){
 			return vec4(col.rgb, col.a * view.opacity);
 		}
 	})
-	this.hardborder = false
-	// make rect the default bg shader
-	this.bg = this.hardrect
 
 	// hard edged bgimage shader
 	define.class(this, 'hardimage', this.hardrect, function(){
@@ -1266,7 +1278,6 @@ define.class('$system/base/node', function(require){
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
-	this.hardimage = false
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
@@ -1348,9 +1359,6 @@ define.class('$system/base/node', function(require){
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 	})
-	this.roundedrect = false
-
-
 
 	// rounded rect shader class
 	define.class(this, 'shadowrect', this.Shader, function(){
@@ -1461,8 +1469,6 @@ define.class('$system/base/node', function(require){
 		}
 	})
 
-	this.shadowrect = false
-
 	this.dropshadowopacity = function(){
 		if (this.dropshadowopacity> 0){
 			this.shadowrect = true;
@@ -1508,7 +1514,6 @@ define.class('$system/base/node', function(require){
 			return vec4(col.rgb, col.a * view.opacity)
 		}
 	})
-	this.viewportblend = false
 
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){
@@ -1601,11 +1606,10 @@ define.class('$system/base/node', function(require){
 			//Object.getPrototypeOf(this).atExtend.call(this)
 	//	}
 	})
-	this.roundedborder = false
 
 	// lets pull in the scrollbar on the view
 	define.class(this, 'scrollbar', require('$ui/scrollbar'),function(){
-		this.bg = {
+		this.hardrect = {
 			noscroll:true
 		}
 	})

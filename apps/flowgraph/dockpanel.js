@@ -20,7 +20,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label){
 		return [
 			view({bgcolor:"#585858",borderradius:0, bordercolor:"transparent" , borderwidth:0, margin:0, padding:vec4(0)},
 				view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
-					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bg:0, fontsize:this.fontsize, fgcolor: "white" })
+					label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bgcolor:NaN, fontsize:this.fontsize, fgcolor: "white" })
 				)
 			)
 			,this.constructor_children

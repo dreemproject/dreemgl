@@ -39,7 +39,7 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 	define.class(this, "triangledisp", view, function(){
 		this.attributes = {angle: 0, radius:8}
 
-		this.bg = function(){
+		this.hardrect = function(){
 			this.mesh = vec3.array()
 			this.mesh.push(0,0,0)
 			this.mesh.push((PI*2)/3,0,0)

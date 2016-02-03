@@ -78,10 +78,10 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			subpixel:false,
 			alignself:"center",
 			position: "relative",
-			bg: 0
+			bgcolor:NaN
 		},
 		view_wrap:{
-			bg:false,
+			bgcolor:NaN,
 			alignitems:"center",
 			flexdirection:"row",
 			justifycontent:"center"
@@ -146,6 +146,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.statenormal()
 	}
 	this.pointerstart = function(){
+
 		this.stateclick()
 	}
 	this.pointerend = function(event){
@@ -172,7 +173,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		if (this.text && this.text.length > 0){
 			this.buttonres = label({
 				marginleft:this.iconres?4:0,
-				bgcolor:this.bgcolor,
+				//bgcolor:this.bgcolor,
 				fontsize: this.fontsize,
 				fgcolor:this.textcolor,
 				text: this.text

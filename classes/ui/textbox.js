@@ -71,11 +71,11 @@ define.class(function(require, $ui$, label){
 
 	this.focus = function(){
 		if(this._focus){
-			this.cursorsshader.visible = this.readonly?false:true
+			this.shaders.cursors.visible = this.readonly?false:true
 			this.markercolor = this.markerfocus
 		}
 		else{
-			this.cursorsshader.visible = this.readonly?true:false
+			this.shaders.cursors.visible = this.readonly?true:false
 			this.markercolor = this.markerunfocus
 		}
 		this.redraw()
@@ -83,7 +83,7 @@ define.class(function(require, $ui$, label){
 
 	Object.defineProperty(this, 'textbuf', {
 		get:function(){
-			return this.typefaceshader.mesh
+			return this.shaders.typeface.mesh
 		}
 	})
 
@@ -101,12 +101,12 @@ define.class(function(require, $ui$, label){
 	}
 
 	this.cursorsChanged = function(){
-		this.cursorsshader.reupdate()
-		this.markersshader.reupdate()
+		this.shaders.cursors.reupdate()
+		this.shaders.markers.reupdate()
 	}
 
 	this.init = function(){
-		this.cursorsshader.visible = false
+		this.shaders.cursors.visible = false
 		if(isNaN(this._cursorcolor[0])) this._cursorcolor = this.fgcolor
 		this.initEditImpl()
 		this.text = this.value

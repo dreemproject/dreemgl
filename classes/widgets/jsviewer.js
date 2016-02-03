@@ -21,7 +21,6 @@ define.class('$ui/textbox', function(require){
 
 	this.readonly = true
 
-	this.bg = 1
 	this.fontsize = 14
 	this.subpixel = true
 

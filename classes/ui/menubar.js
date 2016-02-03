@@ -57,17 +57,17 @@ define.class( function(require, $ui$, view, label, menubutton){
 
 		var labelres = []
 		if (this.errortext && this.errortext.length > 0 && this.errortext !== "undefined"){
-			labelres.push(label({margin:vec4(13,0,0,0), text:"ERROR", bold:true, fgcolor: "#e05f21", alignself:"center", bg:false}));
-			labelres.push(label({margin:vec4(3,0,3,0), text:this.errortext, fgcolor: "#e05f21", alignself:"center", bg:false}));
+			labelres.push(label({margin:vec4(13,0,0,0), text:"ERROR", bold:true, fgcolor: "#e05f21", alignself:"center", bgcolor:NaN}));
+			labelres.push(label({margin:vec4(3,0,3,0), text:this.errortext, fgcolor: "#e05f21", alignself:"center", bgcolor:NaN}));
 		}
 		if (this.infotext && this.infotext.length > 0 && this.infotext !== "undefined"){
-			labelres.push(label({margin:vec4(13,0,0,0), text:"INFO",  bold:true, fgcolor: "white", alignself:"center", bg:false}));
-			labelres.push(label({margin:vec4(3,0,3,0),text:this.infotext, fgcolor: "white", alignself:"center", bg:false}));
+			labelres.push(label({margin:vec4(13,0,0,0), text:"INFO",  bold:true, fgcolor: "white", alignself:"center", bgcolor:NaN}));
+			labelres.push(label({margin:vec4(3,0,3,0),text:this.infotext, fgcolor: "white", alignself:"center", bgcolor:NaN}));
 		}
 		if (this.statustext && this.statustext.length > 0 && this.statustext !== "undefined"){
-			labelres.push(label({margin:vec4(13,0,4,0),text:this.statustext, fgcolor: "#d0d0d0", alignself:"center", bg:false}));
+			labelres.push(label({margin:vec4(13,0,4,0),text:this.statustext, fgcolor: "#d0d0d0", alignself:"center", bgcolor:NaN}));
 		}
-		return view({bg:false, flex:1, justifycontent:"space-between" }, view({bg:false,alignself:"center"},mres), view({bg:false,alignself:"center"},labelres));
+		return view({bgcolor:NaN, flex:1, justifycontent:"space-between" }, view({bgcolor:NaN,alignself:"center"},mres), view({bgcolor:NaN,alignself:"center"},labelres));
 	}
 	
 })
