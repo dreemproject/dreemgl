@@ -811,13 +811,13 @@ define.class('$ui/view', function(require,
 				)
 ,splitcontainer({flex:0.5,direction:"horizontal"}
 ,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.35},
-  palette({flex:1, bgcolor:"#4e4e4e", items:{Views:[
+  palette({name:'components', flex:1, bgcolor:"#4e4e4e", items:{Views:[
 	  {classname:'view',  label:'View',  image:'$root/apps/flowgraph/view.png'},
 	  {classname:'label', label:'Text',  text:'Aa'},
 	  {classname:'icon',  label:'Image', icon:'image'}
   ]} }))
 ,dockpanel({title:"Properties", viewport:"2D"},
-  propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})
+  propviewer({flex:2,name:"mainproperties", target:"components", flex:1, overflow:"scroll"})
 )
 )
 

@@ -3,8 +3,12 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, label){
+define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 // internal, A palatte is a container view with drag-dropable components
+
+	this.flexdirection = 'column';
+	this.alignitems = 'stretch';
+	this.overflow = 'scroll';
 
 	this.attributes = {
 
@@ -13,23 +17,76 @@ define.class('$ui/view', function(require, $ui$, view, icon, label){
 		items:Config({type:Object})
 	};
 
-	this.flexdirection = 'column';
-	this.alignitems = 'stretch';
-	this.overflow = 'scroll';
-
 	define.class(this, "panel", view, function() {
 		this.bg = 0;
 		this.padding = vec4(20,10,20,10);
-		this.justifycontent = 'space-around';
+		this.justifycontent = 'space-between';
+		this.attributes = {
+			// The display mode.  `compact` mode displays all the items as compact icons in a grid in multiple columns.
+			// `detail` mode displays items as a list in a single column, with extended description.
+			mode:Config({type:Enum('compact', 'detail'), value:'compact'}),
+			onmode:function () {
+				if (this.mode == 'compact') {
+					this.flexdirection = 'row';
+				} else {
+					this.flexdirection = 'column';
+				}
+			}
+		}
 	});
 
-	define.class(this, "divider", label, function() {
-		this.bg = 0;
-		this.fontsize = 12;
-		this.margin = vec4(5,5,5,0);
+	define.class(this, "divider", view, function() {
+		this.justifycontent = 'space-between';
+		this.bgcolor = 'transparent';
+		this.margin = vec4(5,5,10,0);
 		this.borderbottomwidth = 1;
 		this.paddingbottom = 3;
 		this.bordercolor = '#999';
+		this.attributes = {
+			fontsize:12,
+			text:Config({type:String}),
+			panel: Config({type:Object})
+		};
+		this.render = function() {
+			var views = [];
+			if (this.text) {
+				views.push(label({
+					fgcolor:this.bordercolor,
+					bg:0,
+					text:this.text,
+					fontsize:this.fontsize
+				}));
+			}
+			if (this.panel) {
+				var icn;
+				if (this.panel.mode == 'compact') {
+					icn = 'list';
+				} else {
+					icn = 'th-large';
+				}
+
+				var self = this;
+
+				views.push(checkbox({
+					bgcolor:'transparent',
+					fgcolor:this.bordercolor,
+					border:0,
+					padding:0,
+					margin:0,
+					icon:icn,
+					onvalue:function(ev) {
+						if (ev.value) {
+							self.panel.mode = 'detail';
+							this.icon = 'th-large';
+						} else {
+							self.panel.mode = 'compact';
+							this.icon = 'list';
+						}
+					}
+				}))
+			}
+			return views;
+		}
 	});
 
 	define.class(this, "panelview", view, function() {
@@ -134,11 +191,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, label){
 
 		for (var section in this.items) {
 
-			views.push(this.divider({text:section}));
-
 			var items = this.items[section];
+			var panel = this.buildPanel(items);
 
-			views.push(this.buildPanel(items))
+			var divider = this.divider({text:section, panel:panel});
+
+			views.push(divider);
+			views.push(panel)
 		}
 
 		return views;
