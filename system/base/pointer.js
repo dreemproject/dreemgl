@@ -64,11 +64,11 @@ define.class('$system/base/node', function(){
 	PointerList.prototype.setPointer = function (pointer) {
 		for (var i = this.length; i--;) {
 			if (this[i].id === pointer.id) {
-				this.splice(i, 1, pointer)
+				this.splice(i, 1, new Pointer(pointer, pointer.id, pointer.view))
 				return
 			}
 		}
-		this.push(pointer)
+		this.push(new Pointer(pointer, pointer.id, pointer.view))
 		this.sort(function(a, b) {
 			if (a.id < b.id) return -1
 			if (a.id > b.id) return 1
@@ -76,11 +76,10 @@ define.class('$system/base/node', function(){
 		})
 	}
 
-	/* Internal: Iterates over all views associated with the pointer list and
-	*  and calls specified callback with the view and filtered pointers as arguments
-	*/
+	// Internal: Iterates over all views associated with the pointer list and
+	// calls specified callback with the view and filtered pointers as arguments
 	PointerList.prototype.forEachView = function (callback) {
-		views = []
+		var views = []
 		for (var i = 0; i < this.length; i++) {
 			if (this[i].view && views.indexOf(this[i].view) == -1) {
 				views.push(this[i].view)
@@ -99,31 +98,49 @@ define.class('$system/base/node', function(){
 
 	// Internal: Returns pointer object.
 	// It calculats deltas, min and max is reference pointer is provided.
-	var Pointer = function(pointer, id, view, refpointer) {
+	var Pointer = function(pointer, id, view) {
 		this.id = id
 		this.view = view
+		this.value = pointer.value
 		this.position = pointer.position
-		this.movement = pointer.movement
 		this.button = pointer.button
 		this.shift = pointer.shift
 		this.alt = pointer.alt
 		this.ctrl = pointer.ctrl
 		this.meta = pointer.meta
 		this.touch = pointer.touch
+		this.delta = pointer.delta
+		this.min = pointer.min
+		this.max = pointer.max
+		this.dt = pointer.dt
 		this.t = Date.now()
-		if (refpointer) {
-			this.delta = vec2(this.position[0] - refpointer.position[0], this.position[1] - refpointer.position[1])
-			this.min = vec2(min(this.position[0], refpointer.position[0]), min(this.position[1], refpointer.position[1]))
-			this.max = vec2(max(this.position[0], refpointer.position[0]), max(this.position[1], refpointer.position[1]))
-			this.dt = this.t - refpointer.t
-		}
 		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
 	}
 
-	this.attributes = {
-		// List of pointers that are catured.
-		first:Config({type: Array, value: new PointerList()}),
+	Pointer.prototype.addDelta = function(refpointer) {
+		this.delta = vec2(this.position[0] - refpointer.position[0], this.position[1] - refpointer.position[1])
+		this.min = vec2(min(this.position[0], refpointer.position[0]), min(this.position[1], refpointer.position[1]))
+		this.max = vec2(max(this.position[0], refpointer.position[0]), max(this.position[1], refpointer.position[1]))
+		this.dt = this.t - refpointer.t
+	}
 
+	Pointer.prototype.addMovement = function(refpointer) {
+		this.movement = vec2(this.position[0] - refpointer.position[0], this.position[1] - refpointer.position[1])
+	}
+
+	// Adds click count to pointer
+	Pointer.prototype.setClicker = function(list) {
+		this.clicker = 0
+		for (var i = 0; i < list.length; i++) {
+			if (this.t - list[i].t < TAPSPEED * (i + 1)) this.clicker += 1
+		}
+	}
+
+
+	// TODO(aki): initialize per instance
+	this.attributes = {
+		// List of pointers that are captured.
+		first:Config({type: Array, value: new PointerList()}),
 		// List of pointers at the moment of capture.
 		start:Config({type: Array, value: new PointerList()}),
 		// List of captured pointers while moving.
@@ -139,7 +156,19 @@ define.class('$system/base/node', function(){
 		// List of pointers that exited a view.
 		out:Config({type: Array, value: new PointerList()}),
 		// List of pointers that emitted wheel event (should apply only to mouse).
-		wheel:Config({type: Array, value: new PointerList()})
+		wheel:Config({type: Array, value: new PointerList()}),
+		// list of previous taps
+		clickerstash:Config({type: Array, value: []})
+	}
+
+	this.emitPointerList = function(pointerlist, eventname) {
+		pointerlist.forEachView(function(view, pointers) {
+			pointers.forEach(function(pointer) {
+				// delete pointer.view
+				this.emit(eventname, {view: view, pointer: pointer})
+			}.bind(this))
+			this.emit(eventname, {view: view, pointers: pointers})
+		}.bind(this))
 	}
 
 	// Internal: emits `start` event.
@@ -149,15 +178,17 @@ define.class('$system/base/node', function(){
 			this.device.pickScreen(pointerlist[i].position, function(view){
 				var id = this._first.getAvailableId()
 				var pointer = new Pointer(pointerlist[i], id, view)
+				// Add pointer to clicker stash for counting
+				this._clickerstash.unshift(pointer)
+				this._clickerstash.length = min(this._clickerstash.length, 5)
+				pointer.setClicker(this._clickerstash)
+				// set pointer lists
 				this._start.setPointer(pointer)
 				this._first.setPointer(pointer)
 				this._move.setPointer(pointer)
 			}.bind(this), true)
 		}
-
-		this._start.forEachView(function(view, pointers) {
-			this.emit('start', {view: view, pointers: pointers})
-		}.bind(this))
+		this.emitPointerList(this._start, 'start')
 	}
 
 	// Internal: emits `move` event.
@@ -165,12 +196,12 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
 			var first = this._first.getById(previous.id)
-			var pointer = new Pointer(pointerlist[i], previous.id, first.view, first)
+			var pointer = new Pointer(pointerlist[i], previous.id, first.view)
+			pointer.addDelta(first)
+			pointer.addMovement(previous || first)
 			this._move.setPointer(pointer)
 		}
-		this._move.forEachView(function(view, pointers) {
-			this.emit('move', {view: view, pointers: pointers})
-		}.bind(this))
+		this.emitPointerList(this._move, 'move')
 	}
 
 	// Internal: emits `end` event.
@@ -182,22 +213,21 @@ define.class('$system/base/node', function(){
 			this.device.pickScreen(pointerlist[i].position, function(view){
 				var previous = this._move.getClosest(pointerlist[i])
 				var first = this._first.getById(previous.id)
-				var pointer = new Pointer(pointerlist[i], previous.id, first.view, first)
+				var pointer = new Pointer(pointerlist[i], previous.id, first.view)
+				pointer.addDelta(first)
+				pointer.setClicker(this._clickerstash)
 				pointer.isover = pointer.view === view
-				this._end.setPointer(pointer)
 				this._first.removePointer(first)
+				this._end.setPointer(pointer)
 				this._move.removePointer(pointer)
 				if (pointer.dt < TAPSPEED && vec2.len(pointer.delta) < TAPDIST){
 					this._tap.setPointer(pointer)
 				}
+
 			}.bind(this), true)
 		}
-		this._end.forEachView(function(view, pointers) {
-			this.emit('end', {view: view, pointers: pointers})
-		}.bind(this))
-		this._tap.forEachView(function(view, pointers) {
-			this.emit('tap', {view: view, pointers: pointers})
-		}.bind(this))
+		this.emitPointerList(this._end, 'end')
+		this.emitPointerList(this._tap, 'tap')
 	}
 
 	// Internal: emits `hover` event.
@@ -206,6 +236,7 @@ define.class('$system/base/node', function(){
 		this._out.length = 0
 		this.device.pickScreen(pointerlist[0].position, function(view){
 			var previous = this._hover.getById(0)
+			if (previous) previous = new Pointer(previous, 0, previous.view)
 			var pointer = new Pointer(pointerlist[0], 0, view)
 			this._hover.setPointer(pointer)
 
@@ -218,16 +249,9 @@ define.class('$system/base/node', function(){
 					this._out.setPointer(previous)
 				}
 			}
-
-			this._hover.forEachView(function(view, pointers) {
-				this.emit('hover', {view: view, pointers: pointers})
-			}.bind(this))
-			this._over.forEachView(function(view, pointers) {
-				this.emit('over', {view: view, pointers: pointers})
-			}.bind(this))
-			this._out.forEachView(function(view, pointers) {
-				this.emit('out', {view: view, pointers: pointers})
-			}.bind(this))
+			this.emitPointerList(this._hover, 'hover')
+			this.emitPointerList(this._over, 'over')
+			this.emitPointerList(this._out, 'out')
 		}.bind(this))
 	}
 
@@ -245,11 +269,10 @@ define.class('$system/base/node', function(){
 		this._wheel.length = 0
 		this.device.pickScreen(pointerlist[0].position, function(view){
 			var pointer = new Pointer(pointerlist[0], 0, view)
+			pointer.value = pointer.wheel
 			this._wheel.setPointer(pointer)
 		}.bind(this), true)
-		this._wheel.forEachView(function(view, pointers) {
-			this.emit('wheel', {view: view, pointers: pointers})
-		}.bind(this))
+		this.emitPointerList(this._wheel, 'wheel')
 	}
 
 })

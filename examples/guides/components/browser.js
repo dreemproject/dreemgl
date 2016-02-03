@@ -27,11 +27,13 @@ define.class(function($ui$, screen, view, button, textbox, $$, movie) {
 
         view(
             { flexdirection:'column', flex:1, overflow:'scroll' },
-            textbox({ name:'search', width:300, height:30, value:'Aliens', fgcolor:'black'}),
-            button({text:'Search', width:90, click:function() {
-                // sets the term on our screen, this should fire the server thing
-                this.screen.term = this.parent.find('search').value;
-            }}),
+            view({flexdirection:'row'},
+				textbox({ name:'search', value:'Cats', fgcolor:'black', borderwidth:1, bordercolor:'#666'}),
+				button({text:'Search', click:function() {
+					// sets the term on our screen, this should fire the server thing
+					this.screen.term = this.parent.find('search').value;
+				}})
+			),
             view(this.renderMovies())
         )
     ] }

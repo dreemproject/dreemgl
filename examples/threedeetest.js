@@ -43,7 +43,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 
 		// TODO(aki): fix in 3D view
 		this.pointermove = function(event){
-			var a = this.globalToLocal(event.value[0].position)
+			var a = this.globalToLocal(event.position)
 			this.bgshader.pointerpos = vec2(a[0],a[1])
 			this.redraw()
 			if (this.children.length > 0){

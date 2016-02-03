@@ -8,7 +8,7 @@
  */
 /**
  * @attribute {boolean} [visible="true"]
- * a simple boolean to turn visibility of a node on or off
+ * wether to draw it
  */
 /**
  * @attribute {vec3} [pos="0,0,0"]
@@ -329,7 +329,6 @@
  * @method globalToLocal
  * Internal: remap the x and y coordinates to local space
  * @param value
- * @param dbg
  */
 /**
  * @method bgcolorfn

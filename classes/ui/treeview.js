@@ -21,6 +21,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 	// The fold button is a very very flat button.
 	define.class(this, 'foldbutton', button, function(){
 		this.borderwidth = 0
+		
 	//	this.borderradius = 0;
 		this.padding =  0
 		this.pickalpha = -1
@@ -34,7 +35,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.borderradius = 0
 		this.borderwidth = 0
 		this.fgcolor = "#d0d0d0"
-		this.bgcolor = "white";
+		this.bgcolor = "3b3b3b";
 		this.margin = 0
 		//this.alignself = "flex-start"
 	})

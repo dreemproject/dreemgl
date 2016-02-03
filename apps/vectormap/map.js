@@ -498,7 +498,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.loadBufferFromTile = function(tile) {			
 			var LabelSource = tile.Labels;
 			var thelabels = [];
-			var ranks = {
+			var rankfontsizes = {
 				0:10, 
 				1:10, 
 				2:10,
@@ -513,18 +513,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var l = LabelSource[i];
 				var f = 2;
 				if (l.scalerank !== undefined){
-					f = ranks[l.scalerank];
+					f = rankfontsizes[l.scalerank];
 					//f+= l.scalerank?(100/l.scalerank):0;
 				}
-				var la = {text:l.name,fontsize:f,outline:true, color:vec4("black"), pos:vec3(l.x, -10,l.y)}
-				thelabels.push(la);
 				var l2 = {text:l.name,fontsize:f,outline:false, color:vec4("white"), pos:vec3(l.x, -11,l.y)};
 				thelabels.push(l2);
-				//var l3 = {text:l.name,fontsize:f, pos:vec3(l.x, -10,l.y)}
-//				var l3 = {text:l.name,fontsize:f,outline: false, color:vec4("white"),  pos:vec3(l.x, -10,l.y)}
-			//	thelabels.push(l3);
 			}
-			console.log(ranks);
+			//console.log(ranks);
 			this.labels = thelabels;
 		}
 		

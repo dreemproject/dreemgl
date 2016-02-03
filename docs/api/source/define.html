@@ -2838,6 +2838,31 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2684" name="n2684">2684</a>
 <a href="#n2685" name="n2685">2685</a>
 <a href="#n2686" name="n2686">2686</a>
+<a href="#n2687" name="n2687">2687</a>
+<a href="#n2688" name="n2688">2688</a>
+<a href="#n2689" name="n2689">2689</a>
+<strong><a href="#n2690" name="n2690">2690</a></strong>
+<a href="#n2691" name="n2691">2691</a>
+<a href="#n2692" name="n2692">2692</a>
+<a href="#n2693" name="n2693">2693</a>
+<a href="#n2694" name="n2694">2694</a>
+<a href="#n2695" name="n2695">2695</a>
+<a href="#n2696" name="n2696">2696</a>
+<a href="#n2697" name="n2697">2697</a>
+<a href="#n2698" name="n2698">2698</a>
+<a href="#n2699" name="n2699">2699</a>
+<strong><a href="#n2700" name="n2700">2700</a></strong>
+<a href="#n2701" name="n2701">2701</a>
+<a href="#n2702" name="n2702">2702</a>
+<a href="#n2703" name="n2703">2703</a>
+<a href="#n2704" name="n2704">2704</a>
+<a href="#n2705" name="n2705">2705</a>
+<a href="#n2706" name="n2706">2706</a>
+<a href="#n2707" name="n2707">2707</a>
+<a href="#n2708" name="n2708">2708</a>
+<a href="#n2709" name="n2709">2709</a>
+<strong><a href="#n2710" name="n2710">2710</a></strong>
+<a href="#n2711" name="n2711">2711</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -2999,14 +3024,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(type === <span class="string"><span class="delimiter">'</span><span class="content">glf</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> define.parseGLF(blob)
                 <span class="keyword">return</span> blob
         }
-
-        define.<span class="function">global</span> = <span class="keyword">function</span>(object){
-                <span class="keyword">var</span> glob = <span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>? global: window
-                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> object){
+<span class="comment">/*
+        define.global = function(object){
+                var glob = typeof process !== 'undefined'? global: typeof window !=='undefined'? window: self
+                for(var key in object){
                         glob[key] = object[key]
                 }
         }
-
+*/</span>
         <span class="comment">// returns a class dir you can use, has / appended already</span>
         define.<span class="function">classPath</span> = <span class="keyword">function</span>(cls){
                 <span class="keyword">if</span>(cls.prototype) cls = cls.prototype
@@ -3881,8 +3906,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
 
-
-        <span class="keyword">else</span> (<span class="keyword">function</span>(){ <span class="comment">// nodeJS implementation</span>
+        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)(<span class="keyword">function</span>(){ <span class="comment">// nodeJS implementation</span>
                 module.exports = global.define = define
 
                 define.<span class="predefined">$root</span> = define.filePath(process.mainModule.filename.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\\</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>))
@@ -4225,6 +4249,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         })()
 
 
+
+
+
+
+        <span class="comment">// Worker</span>
+
+
+
+
+
+
+
+        <span class="keyword">else</span>{
+                self.define = define
+
+                define.<span class="function">define</span> = <span class="keyword">function</span>(body){
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>)
+                }
+        }
 
 
 
@@ -4600,7 +4643,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj){
                         <span class="keyword">var</span> prop = obj[key]
                         <span class="keyword">if</span>(<span class="keyword">typeof</span> prop == <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>){
-                                <span class="keyword">if</span>(stack.indexOf(prop)!= -<span class="integer">1</span>) <span class="keyword">return</span> <span class="predefined-constant">false</span> <span class="comment">// circular</span>
+                                <span class="keyword">if</span>(stack.indexOf(prop) != -<span class="integer">1</span>) <span class="keyword">return</span> <span class="predefined-constant">false</span> <span class="comment">// circular</span>
                                 <span class="keyword">if</span>(!define.isSafeJSON(prop, stack)) <span class="keyword">return</span> <span class="predefined-constant">false</span>
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> prop == <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> <span class="predefined-constant">false</span>
@@ -4609,6 +4652,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 stack.pop()
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
+
 
         define.struct.array_type = {}
         <span class="keyword">function</span> <span class="function">structArray</span>(self){
@@ -5069,13 +5113,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; matchset.length; i++) matchset[i] = enumCanon(matchset[i])
                                 
-                        <span class="keyword">function</span> <span class="function">Enum</span>(value){                                
+                        <span class="keyword">function</span> <span class="function">Enum</span>(value){
+                                <span class="keyword">var</span> index = -<span class="integer">1</span>
                                 <span class="keyword">if</span>(<span class="keyword">typeof</span> value !== <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
-                                        value = String(value)
-                                <span class="comment">//        console.error('Enum not string' + value, origset.join('|'))</span>
-                                <span class="comment">//        return types[0]</span>
+                                        <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>){
+                                                index = value
+                                        }
+                                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
+                                                <span class="keyword">if</span>(value) index = <span class="integer">1</span>
+                                                <span class="keyword">else</span> index = <span class="integer">0</span>
+                                        }
+                                        <span class="keyword">else</span> index = matchset.indexOf(enumCanon(value))
                                 }
-                                <span class="keyword">var</span> index = matchset.indexOf(enumCanon(value))
+                                <span class="keyword">else</span> index = matchset.indexOf(enumCanon(value))
 
                                 <span class="keyword">if</span>(index === -<span class="integer">1</span>){
                                         console.error(<span class="string"><span class="delimiter">'</span><span class="content">Invalid enum value: &quot;</span><span class="delimiter">'</span></span> + value + <span class="string"><span class="delimiter">'</span><span class="content">&quot; </span><span class="delimiter">'</span></span> + origset.join(<span class="string"><span class="delimiter">'</span><span class="content">|</span><span class="delimiter">'</span></span>))
@@ -5234,8 +5284,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">return</span> obj
                 }
         }
-        defineGlobals(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>? global: window)
 
+        defineGlobals(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>? global: <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>? window: self)
 
         <span class="comment">// store the types on define</span>
         define.<span class="function">typeToString</span> = <span class="keyword">function</span>(type){

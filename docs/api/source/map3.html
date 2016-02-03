@@ -764,8 +764,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n610" name="n610">610</a></strong>
 <a href="#n611" name="n611">611</a>
 <a href="#n612" name="n612">612</a>
+<a href="#n613" name="n613">613</a>
+<a href="#n614" name="n614">614</a>
+<a href="#n615" name="n615">615</a>
+<a href="#n616" name="n616">616</a>
+<a href="#n617" name="n617">617</a>
+<a href="#n618" name="n618">618</a>
+<a href="#n619" name="n619">619</a>
+<strong><a href="#n620" name="n620">620</a></strong>
+<a href="#n621" name="n621">621</a>
+<a href="#n622" name="n622">622</a>
+<a href="#n623" name="n623">623</a>
+<a href="#n624" name="n624">624</a>
+<a href="#n625" name="n625">625</a>
+<a href="#n626" name="n626">626</a>
+<a href="#n627" name="n627">627</a>
+<a href="#n628" name="n628">628</a>
+<a href="#n629" name="n629">629</a>
+<strong><a href="#n630" name="n630">630</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view,label, <span class="predefined">$$</span>, geo, urlfetch)
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view,label, labelset, <span class="predefined">$$</span>, geo, urlfetch)
 {
 
         <span class="keyword">var</span> BufferGen = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./mapbuffers</span><span class="delimiter">&quot;</span></span>)();
@@ -999,7 +1017,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                            <span class="key">seoel</span>: [<span class="float">37.5275421</span>, <span class="float">126.9748078</span>],
                                            <span class="key">shenzhen_hqb</span>:[<span class="float">22.5402897</span>,<span class="float">114.0846914</span>],
                                            <span class="key">hongkong</span>:[<span class="float">22.2854084</span>,<span class="float">114.1600463</span>],
-                                           <span class="key">sydney</span>:[-<span class="float">33.8466226</span>,<span class="float">151.2277997</span>]
+                                           <span class="key">sydney</span>:[-<span class="float">33.8466226</span>,<span class="float">151.2277997</span>],
+                                           <span class="key">london</span>:[<span class="float">51.5091502</span>,-<span class="float">0.1471011</span>]
                         }
 
                         <span class="local-variable">this</span>.theinterval = <span class="local-variable">this</span>.setInterval(<span class="keyword">function</span>(){
@@ -1332,11 +1351,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 <span class="keyword">var</span> tilearea = vec2(<span class="local-variable">this</span>.tilewidth, <span class="local-variable">this</span>.tileheight)
                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">tile area</span><span class="delimiter">&quot;</span></span>, tilearea);
+                
                 <span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="integer">0</span>;x&lt;<span class="local-variable">this</span>.tilewidth;x++){
 
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="local-variable">this</span>.tileheight;y++){
-                                <span class="keyword">var</span> land = <span class="local-variable">this</span>.landtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>),Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>))});
+                                <span class="keyword">var</span> tx = Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>);
+                                <span class="keyword">var</span> ty = Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>)
+                                <span class="keyword">var</span> land = <span class="local-variable">this</span>.landtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
                                 <span class="local-variable">this</span>.tilestoupdate.push(land);
                                 res3d.push(land);
                         }
@@ -1346,7 +1368,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="local-variable">this</span>.tileheight;y++){
-                                <span class="keyword">var</span> road = <span class="local-variable">this</span>.roadtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>),Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>))});
+                                <span class="keyword">var</span> tx = Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>);
+                                <span class="keyword">var</span> ty = Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>)
+                                <span class="keyword">var</span> road = <span class="local-variable">this</span>.roadtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
                                 <span class="local-variable">this</span>.tilestoupdate.push(road);
                                 res3d.push(road);
                         }
@@ -1356,12 +1380,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="local-variable">this</span>.tileheight;y++){
-                                <span class="keyword">var</span> building = <span class="local-variable">this</span>.buildingtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>),Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>))});
+                                <span class="keyword">var</span> tx = Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>);
+                                <span class="keyword">var</span> ty = Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>)
+                                <span class="keyword">var</span> building = <span class="local-variable">this</span>.buildingtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
                                 <span class="local-variable">this</span>.tilestoupdate.push(building);
                                 res3d.push(building);
                         }
                 }
-
+                
+                <span class="local-variable">this</span>.thelabels = [];
+                <span class="keyword">for</span> (<span class="keyword">var</span> i =<span class="integer">0</span> ;i&lt;<span class="integer">1000</span>;i++){
+                        <span class="keyword">var</span> l = {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Label </span><span class="delimiter">&quot;</span></span> + i.toString(), <span class="key">pos</span>:vec3(Math.random()*<span class="integer">10000</span> - <span class="integer">5000</span>,Math.random()*<span class="integer">100</span>,Math.random()*<span class="integer">10000</span>-<span class="integer">5000</span>)}
+                        <span class="local-variable">this</span>.thelabels.push(l);
+                }
+<span class="comment">//                for(var x = 0;x&lt;this.tilewidth;x++){</span>
+        <span class="comment">//                for(var y = 0;y&lt;this.tileheight;y++){</span>
+                                res3d.push(labelset({<span class="key">fontsize</span>:<span class="integer">30</span>,<span class="key">labels</span>:<span class="local-variable">this</span>.thelabels, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">pos</span>:vec3(<span class="integer">0</span>,-<span class="integer">100</span>        ,<span class="integer">0</span>),<span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)}));
+                        <span class="comment">//}</span>
+                <span class="comment">//}</span>
                 <span class="keyword">var</span> dist = <span class="float">2.5</span>
                 res.push(view({<span class="key">flex</span>: <span class="integer">1</span>,<span class="key">viewport</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>, <span class="key">nearplane</span>:<span class="integer">100</span>*dist,<span class="key">farplane</span>: <span class="integer">40000</span>*dist,
 

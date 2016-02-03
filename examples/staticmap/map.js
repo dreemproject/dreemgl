@@ -4,31 +4,39 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function() {
-// internal, View that visualizes the output from google map's static map api
+// internal, View that visualizes the output from Google Map's static map api
 
     this.attributes = {
-      //Google Maps API key
-      apikey:   "AIzaSyDL5stf137yu1GJpVzU2tlCFE0ssgaC9R0",
 
-      //Location for center of map, can be anything Google Maps understands
+      // Google Maps API key
+      apikey:   "",
+
+      // Location for center of map, can be anything Google Maps understands
       location: "Seocho-gu, Seoul, South Korea",
 
-      //Image format (jpg, png, etc.)
-      format:"jpg",
+      // Image format (jpg, png, etc.)
+      format:   "jpg",
 
-      //Map type (of roadmap,satellite,terrain,hybrid)
-      maptype:"roadmap",
+      // Map type (of roadmap,satellite,terrain,hybrid)
+      maptype:  "roadmap",
 
-      //Map devicee scale //1, 2 (or 4)
+      // Map device scale //1, 2 (or 4)
       mapscale:2,
 
-      //Map zoom level 0 ~ 21+ (0 is whole earth, 21 is street level)
+      // Map zoom level 0 ~ 21+ (0 is whole earth, 21 is street level)
       mapzoom:14,
 
-      endpoint: "https://maps.googleapis.com/maps/api/staticmap?",
-      mapurl:wire("this.endpoint + 'key=' + this.apikey + '&center=' + encodeURIComponent(this.location) + '&maptype=' + this.maptype + '&scale=' + this.mapscale + '&zoom=' + this.mapzoom + '&size=' + this.width + 'x' + this.height + '&format=' + this.format"),
-      bgimage:wire("this.mapurl")
+	  // Google Static Map's endpoint
+      endpoint: "http://maps.googleapis.com/maps/api/staticmap",
+
+      bgimage:wire("this.mapurl()")
     };
+
+	this.mapurl = function () {
+		return this.endpoint + '?key=' + this.apikey + '&center=' + encodeURIComponent(this.location) + '&maptype=' + this.maptype + '&scale=' + this.mapscale + '&zoom=' + this.mapzoom + '&size=' + this.width + 'x' + this.height + '&format=' + this.format
+	}
+
+
 });
 
 

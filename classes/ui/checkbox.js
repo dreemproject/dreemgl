@@ -66,15 +66,11 @@ define.class('$ui/view', function(icon, label){
 		}
 	}
 
-	this.onclick = function(){
-		this.value  = this.value?false:true;
-	}
-
-	this.bg = {
-		color: function(){
-			return mix(view.col1, view.col2, (uv.y)/0.8)
-		}
-	}
+	//this.bg = {
+	//	color: function(){
+	//		return mix(view.col1, view.col2, (uv.y)/0.8)
+	//	}
+	//}
 
 	// the hover state when someone hovers over the button
 	this.statehover = function(){
@@ -93,6 +89,8 @@ define.class('$ui/view', function(icon, label){
 		//this.animate({col1:{0:vec4('red'),3:vec4('green')}})
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
+
+		this.value  = this.value?false:true;
 	}
 
 	this.init = function(){

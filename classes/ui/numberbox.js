@@ -100,7 +100,7 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	}
 
 	this.pointermove = function(event){
-		this.checkandset(this.basevalue + (Math.floor(event.value[0].delta[0] / 2) - Math.floor(event.value[0].delta[1] / 10)) * this.stepvalue)
+		this.checkandset(this.basevalue + (Math.floor(event.delta[0] / 2) - Math.floor(event.delta[1] / 10)) * this.stepvalue)
 	}
 
 	this.pointerend = function(){

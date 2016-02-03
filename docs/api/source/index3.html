@@ -212,7 +212,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, <span class="predefined">$examples$guide$search</span>, <span class="predefined">$widgets$</span>, slideviewer, <span class="predefined">$$</span>, devices, syntax, index, <span class="predefined">slides$intro</span>, <span class="predefined">slides$syntax</span>, <span class="predefined">slides$paths</span>, <span class="predefined">slides$internal</span>, <span class="predefined">slides$external</span>, <span class="predefined">slides$api</span>, <span class="predefined">slides$resources</span>){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, <span class="predefined">$examples$guides$components$</span>, search, <span class="predefined">$widgets$</span>, slideviewer, <span class="predefined">$$</span>, devices, syntax, index, <span class="predefined">slides$intro</span>, <span class="predefined">slides$syntax</span>, <span class="predefined">slides$paths</span>, <span class="predefined">slides$internal</span>, <span class="predefined">slides$external</span>, <span class="predefined">slides$api</span>, <span class="predefined">slides$resources</span>){
 
         <span class="keyword">function</span> <span class="function">getSource</span>(obj) {
                 <span class="keyword">return</span> obj.module.factory.body.toString();
@@ -222,7 +222,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">return</span> [
                         <span class="comment">// `examples/guide/search.js` is used here</span>
-                        <span class="predefined">$examples$guide$search</span>({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>, <span class="key">keyword</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Aliens</span><span class="delimiter">&quot;</span></span>}),
+                        search({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>, <span class="key">keyword</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Aliens</span><span class="delimiter">&quot;</span></span>}),
                         screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">desktop</span><span class="delimiter">'</span></span>},
                                 slideviewer({ <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">slides</span><span class="delimiter">'</span></span>,
                                                 <span class="key">slide</span>:{
@@ -245,7 +245,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="predefined">slides$internal</span>({
                                                 <span class="key">flex</span>: <span class="integer">1</span>,
                                                 <span class="key">movies</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.search.results</span><span class="delimiter">'</span></span>),
-                                                <span class="key">searchCode</span>:getSource(<span class="predefined">$examples$guide$search</span>),
+                                                <span class="key">searchCode</span>:getSource(search),
                                                 <span class="key">compositionCode</span>:getSource(index)
                                         }),
                                         <span class="predefined">slides$external</span>({

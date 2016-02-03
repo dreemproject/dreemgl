@@ -5,9 +5,9 @@
 
 define.class('$ui/view', function(require,
 		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
-		$widgets$, propviewer,searchbox, jseditor,
+		$widgets$, palette, propviewer, searchbox, jseditor,
 		$server$, sourceset, dataset,
-		$$, palette, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
+		$$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
 
 	this.name = 'flowgraph'
 	this.flex = 1
@@ -357,8 +357,8 @@ define.class('$ui/view', function(require,
 		var cg = this.find("centralconstructiongrid")
 		var fg = this.find("flowgraph")
 		var sq = this.findChild("selectorrect")
-		var min = cg.globalToLocal(event.value[0].min)
-		var max = cg.globalToLocal(event.value[0].max)
+		var min = cg.globalToLocal(event.min)
+		var max = cg.globalToLocal(event.max)
 
 		if(sq){
 			sq.visible = true;
@@ -810,14 +810,14 @@ define.class('$ui/view', function(require,
 					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 ,splitcontainer({flex:0.5,direction:"horizontal"}
-,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.25},
-  palette({flex:1, bgcolor:"#4e4e4e", items:{Views:[
-	  {classname:'view', image:'view.png', label:'View'},
-	  {classname:'label', text:'Aa', label:'Text'},
-	  {classname:'icon', icon:'file-image', label:'Image'}
+,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.35},
+  palette({name:'components', flex:1, bgcolor:"#4e4e4e", items:{Views:[
+	  {classname:'view',  label:'View',  icon:'clone', desc:'A rectangular view'},
+	  {classname:'label', label:'Text',  text:'Aa',    desc:'A text label'},
+	  {classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}
   ]} }))
 ,dockpanel({title:"Properties", viewport:"2D"},
-  propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})
+  propviewer({flex:2,name:"mainproperties", target:"components", flex:1, overflow:"scroll"})
 )
 )
 

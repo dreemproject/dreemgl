@@ -12,19 +12,17 @@ define.class(function(view, label){
 	this.alignself = "stretch"
 	
 	this.attributes = {
-		holecolor: Config({type:vec4, value:vec4("#202020"), meta:"color"}),
 		glowcolor: Config({type:vec4, value:vec4("#404040"), meta:"color"}),
 		edgecolor: Config({type:vec4, value:vec4("#5b5b5b"), meta:"color"})
 	}
 	
 	//this.bgcolor = vec4("white")
 
-	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.
-	this.bgcolorfn = function(a){
-			
-			var dist2 = vec2(0.5,1.0) - a.xy;
-			var N = noise.cheapnoise(gl_FragCoord.xy*0.08)*0.3;
-			return mix(glowcolor, edgecolor, N+ 1.0-length(a.y));
-		}
-		
+	// Noisegrid shader - uses a slight gradient with minute noise to prevent banding.
+	this.bgcolorfn = function(a){			
+		var dist2 = vec2(0.5,1.0) - a.xy;
+		var N = noise.cheapnoise(gl_FragCoord.xy*0.08)*0.3;
+		return mix(glowcolor, edgecolor, N+ 1.0-length(a.y));
+	}
+	
 })

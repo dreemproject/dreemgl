@@ -1,47 +1,128 @@
 <!---
-   Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); Dreem is a collaboration between Teem & Samsung Electronics, sponsored by Samsung.
+   Copyright 2015-2016 Teem. Licensed under the Apache License, Version 2.0 (the "License"); #
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+   This guide is based on the guide "Using CSS flexible boxes" by Mozilla Developer Network
+   https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes
 -->
 
-# Flexbox Layout in Dreem
-*Flexible Box Layout* or *Flexbox* is the latest layout model coming to CSS3, an upcoming W3C standard. The new flex layout allows elements within a container to be arranged in a way fitting to the screen or device that it is being viewed on. The Dreem implementation of Flexbox is based on [Facebook's open source css-layout library](https://github.com/facebook/css-layout).
+# CSS3 Flexible Box or flexbox
+The [CSS3 Flexible Box](https://www.w3.org/TR/css3-flexbox/), or *flexbox*, is a layout mode providing for the arrangement of elements (children of a container element) such that the elements behave predictably when the UI layout must accommodate different screen sizes and different display devices. CSS3 Flexible Box is a W3C standard (working draft). For many applications, the flexible box model provides an improvement over the block model in that it does not use floats, nor do the flex container's margins collapse with the margins of its contents.
 
-While Dreem uses the Facebook css-layout JavaScript library, the attribute names use a slightly different naming scheme. While in Facebook's CSS layout implementation attribute use camel-case spelling, in Dreem all attribute name are lower case, e.g. `marginleft` instead or `marginLeft`. For the values, the *hyphen* has been removed, so it's `flexstart` instead of `flex-start`.
+Many designers will find the *flexbox* model easier to use than the traditional CSS box model. Child elements in a *flexbox* can be laid out in any direction and can have flexible dimensions to adapt to the display space. Positioning child elements is thus much easier, and complex layouts can be achieved more simply and with cleaner code, as the display order of the elements is independent of their order in the source code. This independence intentionally affects only the visual rendering, leaving speech order and navigation based on the source order.
 
-## Supported attribute
+## Flexible boxes concept
+The defining aspect of the flex layout is the ability to alter its items' width and/or height to best fill the available space on any display device. A flex container expands items to fill available free space, or shrinks them to prevent overflow.
 
-Name | Value
-----:|------
-w, width, h, height | positive number
-minwidth, minheight | positive number
-maxwidth, maxheight | positive number
-left, right, top, bottom | number
-margin | vec4
-marginleft, marginright, margintop, marginbottom | typeless
-paddding | vec4 (left, top, right, bottom); can be assigned a single value to set them all at once.
-paddingleft, paddingright, paddingtop, paddingbottom | positive number
-borderwidth, borderleftwidth, borderrightwidth, bordertopwidth, borderbottomwidth | positive number
-flexdirection | 'column', 'row'
-justifycontent | 'flex-start', 'center', 'flex-end', 'space-between', 'space-around'
-alignitems, alignself | 'flex-start', 'center', 'flex-end', 'stretch'
-flex | positive number
-flexwrap | 'wrap', 'nowrap'
-position | 'relative', 'absolute'
+The *flexbox* layout algorithm is direction-agnostic as opposed to the block layout, which is vertically-biased, or the inline layout, which is horizontally-biased. While the block layout works well for pages, it lacks sufficient definition to support application components that have to change orientation, resize, stretch, or shrink as the user agent changes, flips from vertical to horizontal, and so forth.
 
-### The Flexbox stanard
-Flexbox is a W3C
-The main idea is to give each container - in Dreem a view - the ability to alter its items width and height to best fill the available space, which is a very useful feature for multi-screen experiences with different screen resolutions. A Flexbox container expands items to fill available free space, or shrinks them to prevent overflow.
+## Flexible boxes vocabulary
+While a discussion of flexible boxes is liberated from terms like horizontal/inline axis and vertical/block axis, it requires a new terminology to properly describe the model. Consider the following diagram when reviewing the vocabulary items below. It shows a flex container that has a flex-direction of row, meaning that the flex items follow each other horizontally across the main axis according to the established writing mode, the direction in which the element's text flows, in this case left-to-right.
 
-Opposed to regular layouts (block layouts with vertical arrangement, and inline with horizontal arrangement), the Flexbox layout is direction agnostic. For applications with their different requirements (change of orientation, resizing, dynamically updating a )
-Most importantly, the flexbox layout is direction-agnostic as opposed to the regular layouts (block which is vertically-based and inline which is horizontally-based). While those work well for pages, they lack flexibility (no pun intended) to support large or complex applications (especially when it comes to orientation changing, resizing, stretching, shrinking, etc.).
+<img src="../images/flexbox-diagram.png" width="500" height="341"></img>
 
-<iframe style="width:850px; height:800px" src="http://localhost:2000/examples/guides/flexbox/flexboxtool"></iframe>
+### Flex container
+The parent element in which flex items are contained. A flex container is defined using the flex or inline-flex values of the display property.
+Flex item
+Each child of a flex container becomes a flex item. Text directly contained in a flex container is wrapped in an anonymous flex item.
+
+### Axes
+Every flexible box layout follows two axes. The main axis is the axis along which the flex items follow each other. The cross axis is the axis perpendicular to the main axis.
+
+ - The **flexdirection** property establishes the main axis.
+ - The **justifycontent** property defines how flex items are laid out along the main axis on the current line.
+ - The **alignitems** property defines the default for how flex items are laid out along the cross axis on the current line.
+ - The **alignself** property defines how a single flex item is aligned on the cross axis, and overrides the default established by align-items.
+
+### Directions
+The **main start/main** end and **cross start/cross** end sides of the flex container describe the origin and terminus of the flow of flex items. They follow the main axis and cross axis of the flex container in the vector established by the writing-mode (left-to-right, right-to-left, etc.).
+
+Flex items can be laid out on either a single line or on several lines according to the flex-wrap property, which controls the direction of the cross axis and the direction in which new lines are stacked.
+
+### Dimensions
+The flex items' agnostic equivalents of height and width are main size and cross size, which respectively follow the main axis and cross axis of the flex container.
+
+The minheight and minwidth properties initial value is 0.
+
+# DreemGL's *flexbox* implementation
+The DreemGL implementation of *flexbox* is based on [Facebook's open source css-layout library](https://github.com/facebook/css-layout).
+
+While DreemGL uses the Facebook css-layout JavaScript library, the attribute names use a slightly different naming scheme. In Facebook's *flexbox* implementation attribute use camel-case spelling, in DreemGL all attribute name are lower case, e.g. `marginleft` instead or `marginLeft`. For the values, the *hyphen* has been removed, so it's `flexstart` instead of `flex-start`.
+
+## Supported attributes
+
+<table style="border: 1px solid darkgrey">
+	<tr>
+	  <th style="align: left">Attribute name</th>
+	  <th>Type / Value</th>
+	</tr>
+	<tr>
+	  <td>w, width, h, height</td>
+	  <td>positive number</td>
+	</tr>
+	<tr>
+	  <td>minwidth, minheight</td>
+	  <td>positive number</td>
+	</tr>
+	<tr>
+	  <td>maxwidth, maxheight</td>
+	  <td>positive number</td>
+	</tr>
+	<tr>
+	  <td>left, right, top, bottom</td>
+	  <td>number</td>
+	</tr>
+	<tr>
+	  <td>margin</td><td>vec4</td>
+	</tr>
+	<tr>
+	  <td>marginleft, marginright, margintop, marginbottom</td>
+	  <td>typeless</td>
+	</tr>
+	<tr>
+	  <td>paddding</td>
+	  <td>vec4 (left, top, right, bottom); can be assigned a single value to set them all at once.</td>
+	</tr>
+	<tr>
+	  <td>paddingleft, paddingright, paddingtop, paddingbottom</td><td>positive number</td>
+	</tr>
+	<tr>
+	  <td>borderwidth, borderleftwidth, borderrightwidth, bordertopwidth, borderbottomwidth</td>
+	  <td>positive number</td>
+	</tr>
+	<tr>
+	  <td>flexdirection</td>
+	  <td>'column', 'row'</td>
+	</tr>
+	<tr>
+	  <td>justifycontent</td>
+	  <td>'flex-start', 'center', 'flex-end', 'space-between', 'space-around'</td>
+	</tr>
+	<tr>
+	  <td>alignitems, alignself</td>
+	  <td>'flex-start', 'center', 'flex-end', 'stretch'</td>
+	</tr>
+	<tr>
+	  <td>flex</td>
+	  <td>positive number</td>
+	</tr>
+	<tr>
+	  <td>flexwrap</td>
+	  <td>'wrap', 'nowrap'</td>
+	</tr>
+	<tr>
+	  <td>position</td>
+	  <td>'relative', 'absolute'</td>
+	</tr>
+</table>
+
+<iframe style="width:864px; height:864px" src="/examples/guides/flexbox/flexboxtool"></iframe>
 
 ## The *flexdirection* attribute
 The default layout applied to a view's children is the `flexdirection='column'`. In this examples we have two views as direct children of screen, and each of them has 10 childviews.
 
-<iframe style="width:600px; height:240px" src="http://localhost:2000/examples/guides/flexbox/flexbox1"></iframe>
+<iframe style="width:600px; height:240px" src="/examples/guides/flexbox/flexbox1"></iframe>
 
-<iframe style="width:850px; height:240px" src="http://localhost:2000/examples/guides/docsourceviewer#file=flexbox/flexbox1.js"></iframe>
+<iframe style="width:850px; height:240px" src="/examples/guides/docsourceviewer#file=flexbox/flexbox1.js"></iframe>

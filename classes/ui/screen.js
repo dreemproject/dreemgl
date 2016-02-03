@@ -213,71 +213,92 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Event handler for `pointer.start` event.
 		// Emits `pointerstart` event from `pointer.view` and computes the cursor.
 		this.pointer.start = function(e){
-			e.view.emitUpward('pointerstart', {value: e.pointers})
-			e.view.computeCursor()
-			//
-			if (!e.pointers[0].touch) {
-				this.keyboard.pointerMove(e.pointers[0].position)
-				this.keyboard.checkSpecialKeys(e.pointers[0])
-			}
-			// TODO(aki): build model menu components
-			if(this.inModalChain(e.view)){
-				this.setFocus(e.view)
-			} else if (this.modal){
-				this.modal.emitUpward('focuslost', {global: e.pointers[0].position})
+			if (e.pointer) {
+				e.view.emitUpward('pointerstart', e.pointer)
+				e.view.computeCursor()
+				if (!e.pointer.touch) {
+					this.keyboard.pointerMove(e.pointer.position)
+					this.keyboard.checkSpecialKeys(e.pointer)
+				}
+				if(this.inModalChain(e.view)){
+					this.setFocus(e.view)
+				} else if (this.modal){
+					this.modal.emitUpward('focuslost', {global: e.pointer.position})
+				}
+			} else if (e.pointers) {
+				e.view.emitUpward('pointermultistart', e.pointers)
 			}
 		}.bind(this)
 
 		// Event handler for `pointer.move` event.
 		// Emits `pointermove` event from `pointer.view`.
 		this.pointer.move = function(e){
-			e.view.emitUpward('pointermove', {value: e.pointers})
-			if (!e.pointers[0].touch && e.pointers[0].button == 2){
-				this.device.keyboard.pointerMove(e.pointers[0].position)
+			if (e.pointer) {
+				e.view.emitUpward('pointermove', e.pointer)
+				if (!e.pointer.touch && e.pointer.button == 2){
+					this.device.keyboard.pointerMove(e.pointer.position)
+				}
+			} else if (e.pointers) {
+				e.view.emitUpward('pointermultimove', e.pointers)
 			}
 		}.bind(this)
 
 		// Event handler for `pointer.end` event.
 		// Emits `pointerend` event `pointer.view` and computes the cursor.
 		this.pointer.end = function(e){
-			e.view.emitUpward('pointerend', {value: e.pointers})
-			e.view.computeCursor()
-
-			if (!e.pointers[0].touch) {
-				this.keyboard.pointerMove(e.pointers[0].position)
-				this.keyboard.checkSpecialKeys(e.pointers[0])
+			if (e.pointer) {
+				e.view.emitUpward('pointerend', e.pointer)
+				e.view.computeCursor()
+				if (!e.pointer.touch) {
+					this.keyboard.pointerMove(e.pointer.position)
+					this.keyboard.checkSpecialKeys(e.pointer)
+				}
+			} else if (e.pointers) {
+				e.view.emitUpward('pointermultiend', e.pointers)
 			}
 		}.bind(this)
 
 		// Event handler for `pointer.tap` event.
 		// Emits `pointertap` event from `pointer.view`.
 		this.pointer.tap = function(e){
-			e.view.emitUpward('pointertap', {value: e.pointers})
+			if (e.pointer) {
+				e.view.emitUpward('pointertap', e.pointer)
+			} else if (e.pointers) {
+				e.view.emitUpward('pointermultimove', e.pointers)
+			}
 		}.bind(this)
 
 		// Event handler for `pointer.hover` event.
 		// Emits `pointerhover` event `pointer.view` and computes the cursor.
 		this.pointer.hover = function(e){
-			e.view.emitUpward('pointerhover', {value: e.pointers})
-			e.view.computeCursor()
+			if (e.pointer) {
+				e.view.emitUpward('pointerhover', e.pointer)
+				e.view.computeCursor()
+			}
 		}.bind(this)
 
 		// Event handler for `pointer.over` event.
 		// Emits `pointerover` event from `pointer.view`.
 		this.pointer.over = function(e){
-			e.view.emitUpward('pointerover', {value: e.pointers})
+			if (e.pointer) {
+				e.view.emitUpward('pointerover', e.pointer)
+			}
 		}.bind(this)
 
 		// Event handler for `pointer.out` event.
 		// Emits `pointerout` event from `pointer.view`.
 		this.pointer.out = function(e){
-			e.view.emitUpward('pointerout', {value: e.pointers})
+			if (e.pointer) {
+				e.view.emitUpward('pointerout', e.pointer)
+			}
 		}.bind(this)
 
 		// Event handler for `pointer.wheel` event.
 		// Emits `pointerwheel` event from `pointer.view`.
 		this.pointer.wheel = function(e){
-			e.view.emitUpward('pointerwheel', {value: e.pointers})
+			if (e.pointer) {
+				e.view.emitUpward('pointerwheel', e.pointer)
+			}
 		}.bind(this)
 	}
 

@@ -7,7 +7,7 @@
 require = require('./system/base/define') // support define.js modules
 
 // load up math core and make it global
-define.global(require('$system/base/math'))
+require('$system/base/math')
 
 if(process.argv.indexOf('-nomoni') != -1){
 	define.atRequire = function(filename){

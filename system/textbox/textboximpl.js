@@ -255,7 +255,7 @@ define.mixin(function(require){
 
 
 	this.onpointerstart = function (event) {
-		var pointer = event.value[0]
+		var pointer = event.value
 		var pos = this.globalToLocal(pointer.position)
 
 		// var clone = []
@@ -267,13 +267,13 @@ define.mixin(function(require){
 			// if (pointer.leftmeta || pointer.rightmeta) clone = this.cursorset.list
 			this.cursorset.rectSelect(pos[0], pos[1], pos[0], pos[1], clone)
 		} else if (pointer.meta){
-			// cursor = this.cursorset.addCursor()
-			// // in that case what we need to
-			// cursor.moveTo(pos[0], pos[1])
-			// // lets make it select the word
-			// if (pointer.clicker == 2) cursor.selectWord()
-			// if (pointer.clicker == 3) cursor.selectLine()
-			// this.cursorset.update()
+			cursor = this.cursorset.addCursor()
+			// in that case what we need to
+			cursor.moveTo(pos[0], pos[1])
+			// lets make it select the word
+			if (pointer.clicker == 2) cursor.selectWord()
+			if (pointer.clicker == 3) cursor.selectLine()
+			this.cursorset.update()
 		} else {
 			this.cursorset.fusing = true
 			this.cursorset.moveTo(pos[0], pos[1])
@@ -285,7 +285,7 @@ define.mixin(function(require){
 	}
 
 	this.onpointermove = function (event) {
-		var pointer = event.value[0]
+		var pointer = event.value
 		var pos = this.globalToLocal(pointer.position)
 		var min = this.globalToLocal(pointer.min)
 		var max = this.globalToLocal(pointer.max)

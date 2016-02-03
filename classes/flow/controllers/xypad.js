@@ -25,7 +25,7 @@ define.class('$ui/screen', function(require, $ui$, cadgrid, view, $behaviors$, d
 				is: draggable(),
 				pos:Config({persist:true}),
 				onpos: function(){
-					this.pointerpos = this.find("main").pos ;
+					this.pointerpos = this.find("main").pos
 				}.bind(this)
 			})
 		)

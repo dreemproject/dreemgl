@@ -86,7 +86,6 @@ define.class(function(require, $ui$, view){
 			mesh.add_y = mesh.line_height
 			mesh.outline = view.outline;
 			mesh.outline_thickness = view.outline_thickness;
-			console.log(mesh.outline_thickness );
 			mesh.align = view.align
 			mesh.start_x = view.padding[0]
 			mesh.start_y = mesh.line_height + view.padding[1]

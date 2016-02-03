@@ -27,8 +27,8 @@ define.class(function($server$, composition, $ui$, screen, cadgrid, view){
 				pointermove:function(event){
 					var select = this.find('selectorrect')
 					select.visible = true
-					select.pos = vec2(event.value[0].min[0], event.value[0].min[1])
-					select.size = vec2(event.value[0].max[0] - event.value[0].min[0], event.value[0].max[1] - event.value[0].min[1])
+					select.pos = vec2(event.min[0], event.min[1])
+					select.size = vec2(event.max[0] - event.min[0], event.max[1] - event.min[1])
 				},
 				pointerend:function(event){
 					this.find('selectorrect').visible = false

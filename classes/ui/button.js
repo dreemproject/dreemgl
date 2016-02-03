@@ -150,7 +150,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 	}
 	this.pointerend = function(event){
 		this.statenormal()
-		if (event.value[0].isover){
+		if (event.isover){
 			this.emit('click',event)
 		}
 	}

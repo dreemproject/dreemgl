@@ -88,15 +88,14 @@ define.class(function($ui$, view){
 	}
 
 	this.pointermove = function(event){
+		var offset = this.value / this.total
 		var page = this.page / this.total
-		var delta = event.value[0].delta
-		if(this.vertical){
-			var p = delta[1] / this.layout.height
+		if (this.vertical){
+			var p = offset + event.movement[1] / this.layout.height
+		} else {
+			var p = offset + event.movement[0] / this.layout.width
 		}
-		else{
-			var p = delta[0] / this.layout.width
-		}
-		var value = clamp(p, 0, 1.-page) * this.total
+		var value = clamp(p, 0, 1 - page) * this.total
 		if(value != this.value){
 			this.value = value
 		}

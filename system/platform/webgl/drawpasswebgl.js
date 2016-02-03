@@ -156,9 +156,9 @@ define.class(function(require, baseclass){
 		return true
 	}
 
-	this.nextItem = function(draw){
+	this.nextItem = function(draw, nottype){
 		var view = this.view
-		var next = (draw === view || (!draw._viewport && draw._visible))  && draw.children[0], next_index = 0
+		var next = (draw === view || (!draw._viewport && draw._visible && draw._drawtarget !== nottype))  && draw.children[0], next_index = 0
 		while(!next){ // skip to parent next
 			if(draw === view) break
 			next_index = draw.draw_index + 1
@@ -208,7 +208,7 @@ define.class(function(require, baseclass){
 			draw.draw_dirty &= 1
 
 			pick_id+= draw.pickrange;
-			if(!draw._visible || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._drawtarget==='color' || draw._first_draw_pick && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_pick = 1
@@ -258,7 +258,7 @@ define.class(function(require, baseclass){
 					}
 				}
 			}
-			draw = this.nextItem(draw)
+			draw = this.nextItem(draw, 'color')
 		}
 	}
 
@@ -348,9 +348,9 @@ define.class(function(require, baseclass){
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
 		view.colormatrices = matrices
-
+		
 		gl.disable(gl.SCISSOR_TEST)
-
+		
 		if(isroot){
 			/*
 			if(clipview){
@@ -376,7 +376,7 @@ define.class(function(require, baseclass){
 			//}
 			//for(var dl = this.draw_list, i = 0; i < dl.length; i++){
 			//	var draw = dl[i]
-			if(!draw._visible || draw._first_draw_color && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
+			if(!draw._visible || draw._drawtarget==='pick' || draw._first_draw_color && view._viewport === '2d' && draw.boundscheck && !isInBounds2D(view, draw)){ // do early out check using bounding boxes
 			}
 			else{
 				draw._first_draw_color = 1
@@ -401,7 +401,7 @@ define.class(function(require, baseclass){
 					this.debugrect.drawArrays(this.device)
 				}
 			}
-			draw = this.nextItem(draw)
+			draw = this.nextItem(draw, 'pick')
 		}
 		//console.log(count)
 		return hastime

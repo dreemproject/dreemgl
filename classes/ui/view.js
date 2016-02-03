@@ -12,8 +12,10 @@ define.class('$system/base/node', function(require){
 	var view = this.constructor
 
 	this.attributes = {
-		// a simple boolean to turn visibility of a node on or off
-		visible: Config({type:boolean, value: true}),
+		// wether to draw it
+		visible: true,
+
+		drawtarget: Config({type:Enum('both','pick','color'), value:'both'}),
 
 		// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.
 		pos: Config({type:vec3, value:vec3(0,0,0),meta:"xyz"}),
@@ -37,7 +39,7 @@ define.class('$system/base/node', function(require){
 		// alias for the x component of corner
 		right: Config({alias:'corner', index:0}),
 		// alias for  y component of corner
-		bottom: Config({alias:'corner',index:1}),
+		bottom: Config({alias:'corner', index:1}),
 		// alias for z component of corner
 		rear: Config({alias:'corner', index:2}),
 
@@ -212,12 +214,16 @@ define.class('$system/base/node', function(require){
 
 		// fires when pointer is pressed down.
 		pointerstart:Config({type:Event}),
+		pointermultistart:Config({type:Event}),
 		// fires when pointer is pressed and moved (dragged).
 		pointermove:Config({type:Event}),
+		pointermultimove:Config({type:Event}),
 		// fires when pointer is released.
 		pointerend:Config({type:Event}),
+		pointermultiend:Config({type:Event}),
 		// fires when pointer is pressed and released quickly.
 		pointertap:Config({type:Event}),
+		pointermultitap:Config({type:Event}),
 		// fires when pointer moved without being pressed.
 		pointerhover:Config({type:Event}),
 		// fires when pointer enters an element.
@@ -235,6 +241,7 @@ define.class('$system/base/node', function(require){
 		keypress: Config({type:Event}),
 		// fires when someone pastes data into the view. The event argument is {text:string}
 		keypaste: Config({type:Event}),
+
 		// fires when this view loses focus
 		blur: Config({type:Event}),
 
@@ -388,7 +395,7 @@ define.class('$system/base/node', function(require){
 	this.matrix_dirty = true
 
 	// internal, initialization of a view
-	this.oninit = function(prev){
+	this.atViewInit = function(prev){
 
 		this.anims = {}
 		//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
@@ -804,21 +811,21 @@ define.class('$system/base/node', function(require){
 
 			this.pointerwheel = function(event){
 				if(this.vscrollbar._visible){
-					this.vscrollbar.value = clamp(this.vscrollbar._value + event.value[0].wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
+					this.vscrollbar.value = clamp(this.vscrollbar._value + event.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
 				if(this.hscrollbar._visible){
-					this.hscrollbar.value = clamp(this.hscrollbar._value + event.value[0].wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
+					this.hscrollbar.value = clamp(this.hscrollbar._value + event.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
 
-			// //TODO
+			//TODO(aki): implement zoom
 			// this.pointerzoom = function(event){
 			// 	var zoom = event.value.zoom
 			// 	var lastzoom = this._zoom
 			// 	var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)
 			// 	this.zoom = newzoom
 			//
-			// 	var pos = this.globalToLocal(event.value[0].position)
+			// 	var pos = this.globalToLocal(event.value.position)
 			//
 			// 	var shiftx = pos[0] * lastzoom - pos[0] * this._zoom
 			// 	var shifty = pos[1] * lastzoom - pos[1] * this._zoom
