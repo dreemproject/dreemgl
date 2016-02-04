@@ -50,7 +50,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 			return vec4(0.5, 0.5, 0.5, 1)
 		}
 	})
-	this.bg = this.eventrects
+	this.hardrect = this.eventrects
 
 	this.render = function() {}
 
