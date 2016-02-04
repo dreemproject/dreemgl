@@ -263,8 +263,6 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		this.pointer.tap = function(e){
 			if (e.pointer) {
 				e.view.emitUpward('pointertap', e.pointer)
-			} else if (e.pointers) {
-				e.view.emitUpward('pointermultimove', e.pointers)
 			}
 		}.bind(this)
 

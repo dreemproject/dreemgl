@@ -223,7 +223,6 @@ define.class('$system/base/node', function(require){
 		pointermultiend:Config({type:Event}),
 		// fires when pointer is pressed and released quickly.
 		pointertap:Config({type:Event}),
-		pointermultitap:Config({type:Event}),
 		// fires when pointer moved without being pressed.
 		pointerhover:Config({type:Event}),
 		// fires when pointer enters an element.

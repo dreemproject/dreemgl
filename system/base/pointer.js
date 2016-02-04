@@ -109,11 +109,11 @@ define.class('$system/base/node', function(){
 		this.ctrl = pointer.ctrl
 		this.meta = pointer.meta
 		this.touch = pointer.touch
-		this.delta = pointer.delta
-		this.min = pointer.min
-		this.max = pointer.max
-		this.dt = pointer.dt
-		this.movement = pointer.movement
+		this.delta = pointer.delta || vec2()
+		this.min = pointer.min || vec2()
+		this.max = pointer.max || vec2()
+		this.dt = pointer.dt || 0
+		this.movement = pointer.movement || vec2()
 		this.isover = pointer.isover
 		this.pick = pointer.pick
 		this.t = Date.now()
@@ -180,7 +180,7 @@ define.class('$system/base/node', function(){
 		// scan for handoff hooks on in flight pointers
 		for (var i = 0; i < this._start.length; i++) {
 			var start = this._start[i]
-			
+
 			if(start.atHandOver){
 				var id = start.atHandOver(pointerlist)
 				if(id >= 0){
@@ -204,7 +204,7 @@ define.class('$system/base/node', function(){
 			this._first.setPointer(pointer)
 			this._move.setPointer(pointer)
 		}.bind(this)
-		
+
 		for (var i = 0; i < pointerlist.length; i++) {
 			// if a pointer is handoffed use that view instead
 			if(pointerlist[i].handovered) pick(pointerlist[i].handovered)
@@ -233,7 +233,6 @@ define.class('$system/base/node', function(){
 				}
 				if(start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
-
 			this._move.setPointer(pointer)
 		}
 		this.emitPointerList(this._move, 'move')
@@ -255,7 +254,7 @@ define.class('$system/base/node', function(){
 			this.device.pickScreen(pointerlist[i].position, function(view){
 				var previous = this._move.getClosest(pointerlist[i])
 				var first = this._first.getById(previous.id)
-			
+
 				var pointer = new Pointer(pointerlist[i], previous.id, first.view)
 				pointer.addDelta(first)
 				pointer.setClicker(this._clickerstash)

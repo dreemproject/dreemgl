@@ -4,6 +4,7 @@ define.class('$ui/label', function (events, $ui$, view) {
 	this.position = 'absolute'
 	this.bgcolor = NaN
 	this.fgcolor = 'black'
+	this.drawtarget = 'color'
 
 	this.attributes = {
 		format: Config({type: Number, value: wire('this.parent.format')}),
@@ -25,9 +26,9 @@ define.class('$ui/label', function (events, $ui$, view) {
 			var w = view.parent.layout.width
 			var h = view.parent.layout.height
 
-			var mw = w / 11.774193548387096 * 365 / zoom;
-			var dw = w / zoom;
-			var hw = w / 24 / zoom;
+			var mw = w / 11.774193548387096 * 365 / zoom
+			var dw = w / zoom
+			var hw = w / 24 / zoom
 
 			var mesh = this.newText()
 			if (view.font) mesh.font = view.font
@@ -45,7 +46,7 @@ define.class('$ui/label', function (events, $ui$, view) {
 					if (x > w) break
 					mesh.add_x = x
 					mesh.add_y = 24 - 5
-					mesh.add(MONTHS[i],0 ,0 ,0)
+					mesh.add(MONTHS[i % 12],0 ,0 ,0)
 				}
 			}
 
