@@ -72,7 +72,8 @@ define.class('$server/composition', function($ui$, screen) {
 						bordercolor: color,
 						borderradius: 0,
 						borderwidth: vec4(1,0,1,0),
-						padding: vec4(10,0,0,0)
+						padding: vec4(10,0,0,0),
+						drawtarget: 'color'
 					}, label({
 						text: type,
 						fgcolor: color,
@@ -80,7 +81,8 @@ define.class('$server/composition', function($ui$, screen) {
 						fontsize: 12,
 						position: 'relative',
 						top: -22,
-						left: -12
+						left: -12,
+						drawtarget: 'color'
 					})))
 				}
 				return markers
