@@ -1778,6 +1778,61 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1624" name="n1624">1624</a>
 <a href="#n1625" name="n1625">1625</a>
 <a href="#n1626" name="n1626">1626</a>
+<a href="#n1627" name="n1627">1627</a>
+<a href="#n1628" name="n1628">1628</a>
+<a href="#n1629" name="n1629">1629</a>
+<strong><a href="#n1630" name="n1630">1630</a></strong>
+<a href="#n1631" name="n1631">1631</a>
+<a href="#n1632" name="n1632">1632</a>
+<a href="#n1633" name="n1633">1633</a>
+<a href="#n1634" name="n1634">1634</a>
+<a href="#n1635" name="n1635">1635</a>
+<a href="#n1636" name="n1636">1636</a>
+<a href="#n1637" name="n1637">1637</a>
+<a href="#n1638" name="n1638">1638</a>
+<a href="#n1639" name="n1639">1639</a>
+<strong><a href="#n1640" name="n1640">1640</a></strong>
+<a href="#n1641" name="n1641">1641</a>
+<a href="#n1642" name="n1642">1642</a>
+<a href="#n1643" name="n1643">1643</a>
+<a href="#n1644" name="n1644">1644</a>
+<a href="#n1645" name="n1645">1645</a>
+<a href="#n1646" name="n1646">1646</a>
+<a href="#n1647" name="n1647">1647</a>
+<a href="#n1648" name="n1648">1648</a>
+<a href="#n1649" name="n1649">1649</a>
+<strong><a href="#n1650" name="n1650">1650</a></strong>
+<a href="#n1651" name="n1651">1651</a>
+<a href="#n1652" name="n1652">1652</a>
+<a href="#n1653" name="n1653">1653</a>
+<a href="#n1654" name="n1654">1654</a>
+<a href="#n1655" name="n1655">1655</a>
+<a href="#n1656" name="n1656">1656</a>
+<a href="#n1657" name="n1657">1657</a>
+<a href="#n1658" name="n1658">1658</a>
+<a href="#n1659" name="n1659">1659</a>
+<strong><a href="#n1660" name="n1660">1660</a></strong>
+<a href="#n1661" name="n1661">1661</a>
+<a href="#n1662" name="n1662">1662</a>
+<a href="#n1663" name="n1663">1663</a>
+<a href="#n1664" name="n1664">1664</a>
+<a href="#n1665" name="n1665">1665</a>
+<a href="#n1666" name="n1666">1666</a>
+<a href="#n1667" name="n1667">1667</a>
+<a href="#n1668" name="n1668">1668</a>
+<a href="#n1669" name="n1669">1669</a>
+<strong><a href="#n1670" name="n1670">1670</a></strong>
+<a href="#n1671" name="n1671">1671</a>
+<a href="#n1672" name="n1672">1672</a>
+<a href="#n1673" name="n1673">1673</a>
+<a href="#n1674" name="n1674">1674</a>
+<a href="#n1675" name="n1675">1675</a>
+<a href="#n1676" name="n1676">1676</a>
+<a href="#n1677" name="n1677">1677</a>
+<a href="#n1678" name="n1678">1678</a>
+<a href="#n1679" name="n1679">1679</a>
+<strong><a href="#n1680" name="n1680">1680</a></strong>
+<a href="#n1681" name="n1681">1681</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -2014,6 +2069,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// fires when mouse wheel is used.</span>
                 <span class="key">pointerwheel</span>:Config({<span class="key">type</span>:Event}),
 
+                <span class="comment">// fires when a drag drop item enters</span>
+                <span class="key">dragover</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when a drag drop item moves</span>
+                <span class="key">dragmove</span>:Config({<span class="key">type</span>:Event}),
+                <span class="comment">// fires when a drag drop item leaves</span>
+                <span class="key">dragout</span>:Config({<span class="key">type</span>:Event}),
+
                 <span class="comment">// fires when a key goes to up. The event argument is {repeat:int, code:int, name:String}</span>
                 <span class="key">keyup</span>: Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when a key goes to down. The event argument is {repeat:int, code:int, name:String}</span>
@@ -2097,7 +2159,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">ondropshadowradius</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.dropshadowopacity &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>;
-                }<span class="keyword">else</span>{
+                }
+                <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">false</span>;
                 }
         }
@@ -2268,7 +2331,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport){
                         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shaders){
-                                <span class="local-variable">this</span>.shaders[key].noscroll = <span class="predefined-constant">true</span>
+                                <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders[key]
+                                <span class="keyword">if</span>(shader.dont_scroll_as_viewport){
+                                        <span class="local-variable">this</span>.shaders[key].noscroll = <span class="predefined-constant">true</span>
+                                }
                         }
                         <span class="local-variable">this</span>.shaders.viewportblend = <span class="keyword">new</span> <span class="local-variable">this</span>.viewportblend(<span class="local-variable">this</span>)
                 }
@@ -2560,6 +2626,45 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
+        <span class="comment">// starts a drag view via render function</span>
+        <span class="local-variable">this</span>.<span class="function">startDrag</span> = <span class="keyword">function</span>(pointerevent, render){
+                <span class="keyword">var</span> dragview = <span class="local-variable">this</span>.screen.openOverlay(render)
+
+                <span class="keyword">if</span>(!dragview.atDragMove){
+                        dragview.<span class="function">atDragMove</span> = <span class="keyword">function</span>(position){
+                                <span class="local-variable">this</span>.x = position[<span class="integer">0</span>] - <span class="local-variable">this</span>.width*<span class="float">0.5</span>
+                                <span class="local-variable">this</span>.y = position[<span class="integer">1</span>] - <span class="local-variable">this</span>.height*<span class="float">0.5</span>
+                        }
+                }
+
+                <span class="comment">// make sure we pick the screen in pointermove</span>
+                pointerevent.pickview = <span class="predefined-constant">true</span>
+                dragview.atDragMove(pointerevent.value)
+
+                <span class="keyword">var</span> lastdrag
+                <span class="local-variable">this</span>.<span class="function">onpointermove</span> = <span class="keyword">function</span>(event){
+                        dragview.atDragMove(event.value)
+                        <span class="comment">// lets send dragenter/leave events</span>
+                        <span class="keyword">var</span> newdrag = event.pick
+
+                        <span class="keyword">if</span>(!dragview.isDropTarget(newdrag)) newdrag = <span class="predefined-constant">undefined</span>
+
+                        <span class="keyword">if</span>(lastdrag !== newdrag){
+                                <span class="keyword">if</span>(lastdrag) lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
+                                <span class="keyword">if</span>(newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragover</span><span class="delimiter">'</span></span>,{})
+                                lastdrag = newdrag
+                        }
+                        <span class="keyword">if</span>(newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragmove</span><span class="delimiter">'</span></span>, event)
+                }
+                <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.onpointermove = <span class="predefined-constant">undefined</span>
+                        dragview.closeOverlay()
+                        <span class="keyword">if</span>(lastdrag){
+                                lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
+                                dragview.atDrop(lastdrag)
+                        }
+                }
+        }
 
         <span class="comment">// internal, decide to inject scrollbars into our childarray</span>
         <span class="local-variable">this</span>.<span class="function">atRender</span> = <span class="keyword">function</span>(){
@@ -2992,6 +3097,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">hardrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
+                <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.mesh = vec2.array()
                 <span class="local-variable">this</span>.mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>)
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
@@ -3014,6 +3120,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">1</span>
                 <span class="local-variable">this</span>.mesh = vec2.array();
+                <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
 
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
@@ -3051,6 +3158,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// hard edged bgimage shader</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">hardimage</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.hardrect, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
@@ -3062,6 +3170,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// rounded rect shader class</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.vertexstruct = define.struct({
@@ -3298,6 +3407,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// rounded corner border shader</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedborder</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">1</span>
                 <span class="local-variable">this</span>.updateorder = <span class="integer">1</span>
                 <span class="local-variable">this</span>.vertexstruct = define.struct({

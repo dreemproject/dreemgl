@@ -330,6 +330,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n176" name="n176">176</a>
 <a href="#n177" name="n177">177</a>
 <a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -358,6 +363,59 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">true</span>
 
         <span class="keyword">var</span> font = <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii.glf</span><span class="delimiter">'</span></span>)
+
+        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> JSFormatter.types){
+                <span class="local-variable">this</span>[key] = String(JSFormatter.types[key])
+        }
+
+        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, pos, tag){
+
+                <span class="keyword">var</span> group = tag.y
+                <span class="keyword">var</span> type = <span class="reserved">int</span>(tag.z / <span class="integer">65536</span>.)
+                <span class="keyword">var</span> sub = <span class="reserved">int</span>(mod(tag.z / <span class="integer">256</span>., <span class="integer">256</span>.))
+                <span class="keyword">var</span> part = <span class="reserved">int</span>(mod(tag.z, <span class="integer">256</span>.))
+                <span class="keyword">var</span> unicode = <span class="reserved">int</span>(tag.x)
+                
+                <span class="keyword">if</span>(unicode == <span class="integer">10</span> || unicode == <span class="integer">32</span> || unicode == <span class="integer">9</span>) discard
+                <span class="keyword">if</span>(sub == _Paren || sub == _Brace || sub == _Bracket){
+                        <span class="keyword">if</span>(sub == _Paren){
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Bracket){
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ccc</span><span class="delimiter">&quot;</span></span>
+                        }
+                        <span class="keyword">else</span>{
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                        }
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Operator){
+                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(type == _Id){
+                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                        <span class="keyword">if</span>(sub == _Color){
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">pink</span><span class="delimiter">&quot;</span></span>
+                        }
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(type == _Value){
+                        <span class="keyword">if</span>(sub == _String){
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#0f0</span><span class="delimiter">&quot;</span></span>
+                        }
+                        <span class="keyword">else</span>{
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">aero</span><span class="delimiter">&quot;</span></span>
+                        }
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(type == _Comment){
+                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#777</span><span class="delimiter">&quot;</span></span>
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(type == _This){
+                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff7fe1</span><span class="delimiter">&quot;</span></span>
+                }<span class="keyword">else</span>{
+                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
+                }
+                <span class="comment">//if(type&gt;7)mesh.outline = true</span>
+        }
+
 
         <span class="comment">// extend the font shader</span>
         <span class="local-variable">this</span>.<span class="function">typeface</span> = <span class="keyword">function</span>(){
@@ -419,54 +477,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">return</span> vec4(<span class="integer">0</span>)
                         }
                         <span class="keyword">return</span> vec4(-<span class="integer">1</span>.)
-                }
-
-                <span class="local-variable">this</span>.<span class="function">style</span> = <span class="keyword">function</span>(pos){
-
-                        <span class="keyword">var</span> group = mesh.tag.y
-                        <span class="keyword">var</span> type = <span class="reserved">int</span>(mesh.tag.z / <span class="integer">65536</span>.)
-                        <span class="keyword">var</span> sub = <span class="reserved">int</span>(mod(mesh.tag.z / <span class="integer">256</span>., <span class="integer">256</span>.))
-                        <span class="keyword">var</span> part = <span class="reserved">int</span>(mod(mesh.tag.z, <span class="integer">256</span>.))
-                        <span class="keyword">var</span> unicode = <span class="reserved">int</span>(mesh.tag.x)
-                        
-                        <span class="keyword">if</span>(unicode == <span class="integer">10</span> || unicode == <span class="integer">32</span> || unicode == <span class="integer">9</span>) discard
-                        <span class="keyword">if</span>(sub == _Paren || sub == _Brace || sub == _Bracket){
-                                <span class="keyword">if</span>(sub == _Paren){
-                                        view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                                }
-                                <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Bracket){
-                                        view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ccc</span><span class="delimiter">&quot;</span></span>
-                                }
-                                <span class="keyword">else</span>{
-                                        view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                                }
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Operator){
-                                view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(type == _Id){
-                                view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                                <span class="keyword">if</span>(sub == _Color){
-                                        view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">pink</span><span class="delimiter">&quot;</span></span>
-                                }
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(type == _Value){
-                                <span class="keyword">if</span>(sub == _String){
-                                        view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#0f0</span><span class="delimiter">&quot;</span></span>
-                                }
-                                <span class="keyword">else</span>{
-                                        view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">aero</span><span class="delimiter">&quot;</span></span>
-                                }
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(type == _Comment){
-                                view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#777</span><span class="delimiter">&quot;</span></span>
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(type == _This){
-                                view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff7fe1</span><span class="delimiter">&quot;</span></span>
-                        }<span class="keyword">else</span>{
-                                view.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
-                        }
-                        <span class="comment">//if(type&gt;7)mesh.outline = true</span>
                 }
 
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){

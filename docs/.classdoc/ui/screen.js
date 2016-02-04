@@ -27,3 +27,8 @@
  * open a modal window from object like so: this.openModal( view({size:[100,100]}))
  * @param value
  */
+/**
+ * @method openOverlay
+ * open an overlay
+ * @param render
+ */

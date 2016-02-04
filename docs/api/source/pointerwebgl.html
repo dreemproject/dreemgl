@@ -279,6 +279,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n125" name="n125">125</a>
 <a href="#n126" name="n126">126</a>
 <a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -348,6 +352,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousehover)
+                        <span class="comment">// Hack to capture mouse up outside iframe</span>
+                        <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousedown</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.mousedown.bind(<span class="local-variable">this</span>))
 
@@ -365,6 +371,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousehover)
+                        <span class="comment">// Hack to capture mouse up outside iframe</span>
+                        <span class="keyword">if</span> (parent.window) parent.window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                 }
                 <span class="local-variable">this</span>._mouseup = <span class="local-variable">this</span>.mouseup.bind(<span class="local-variable">this</span>)
 

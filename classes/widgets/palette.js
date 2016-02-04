@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
-// internal, A palatte is a container view with drag-dropable components
+// A palatte is a container view with drag-dropable components
 
 	this.flexdirection = 'column';
 	this.alignitems = 'stretch';
@@ -14,8 +14,18 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 		// The items to render into the palette.  This is either an array of components, or an Object where
 		// every key:value pair is a Section Name : components-array pair.
-		items:Config({type:Object, meta:'hidden'})
+		// Each component is an Object with `label` and `desc` properties, in addition to one of
+		// `image`, `icon`, or `text` properties.  `image` is the url or file path to an image, icon is the
+		// FontAwesome icon identifier, and `text` is simply some printed text.
+		items:Config({type:Object, meta:'hidden'}),
 
+		// Function to call globally when testing if a palette item can be dropped onto another view.
+		// This can also be defined on the individual components to override behavior.
+		dropTest:Config({type:Function}),
+
+		// Function to call globally when dropping a palette item onto a view.
+		// This can also be defined on the individual components to override behavior.
+		drop:Config({type:Function})
 	};
 
 	define.class(this, "panel", view, function() {
@@ -167,8 +177,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "panelitem", view, function() {
-		this.bgcolor = 'transparent';
 
+		this.bgcolor = 'transparent';
 		this.flexdirection = 'column';
 
 		this.attributes = {
@@ -185,17 +195,54 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			pointerout:function() {
 				this.hover = false;
 			},
-			pointerstart:function() {
-				this.find('mainproperties').target = this.panel ? this.panel : this;
+			pointerstart:function(event) {
+				this.startDrag(event, function() {
+
+					var pitem = this;
+					return this.buildClas({
+
+						drawtarget:'color',
+
+						position:'absolute',
+
+						bgcolor:'transparent',
+
+						width:this.iconfontsize,
+						height:this.iconfontsize * 2,
+
+						isDropTarget:function(v) {
+							var droptest = true;
+							if (pitem.dropTest) {
+								droptest = pitem.dropTest(v);
+							} else if (this.outer && this.outer.dropTest) {
+								droptest = this.outer.dropTest(v, pitem);
+							}
+
+							if(!v || !droptest) {
+								this.screen.pointer.cursor = 'no-drop';
+								return false
+							}
+							this.screen.pointer.cursor = 'copy';
+							return true
+						},
+
+						atDrop:function(v){
+							if (pitem.drop) {
+								pitem.drop(v);
+							} else if (this.outer && this.outer.drop) {
+								this.outer.drop(v, pitem);
+							}
+						}
+					})
+				}.bind(this))
 			}
 		};
 
-		this.render = function() {
-			var views = [];
+		this.buildClas = function(args) {
 
-			var args = {
-				bgcolor:'transparent'
-			};
+			if (!args) {
+				args = {bgcolor:'transparent'}
+			}
 
 			var clas = this.outer.panelview;
 
@@ -223,7 +270,13 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 				args.fgcolor = this.hovercolor;
 			}
 
-			views.push(clas(args));
+			return clas(args);
+		};
+
+		this.render = function() {
+			var views = [];
+
+			views.push(this.buildClas());
 
 			//if (this.hover) {
 			//	views.push(label({text:this.label, bg:0}))
@@ -258,5 +311,40 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 		return views;
 	}
+
+	var palette = this.constructor;
+	this.constructor.examples = {
+		Usage:function() {
+			return palette({
+				width:300,
+				bgcolor:"#4e4e4e",
+				items:{Views:[
+					{label:'Flask',  icon:'flask', desc:'A flask icon'},
+					{label:'File',
+						icon:'file',
+						desc:'A file',
+						drop:function(v) {
+							console.log('file dropped using own drop method onto', v)
+						}
+					},
+					{label:'Text',
+						text:'Aa',
+						desc:'A text label',
+						dropTest:function(v) {
+							return false;
+						}
+					}]
+				},
+				dropTest:function(v, item) {
+					console.log('test', item, 'againt', v);
+					return true;
+				},
+				drop:function(v, item) {
+					console.log('dropped', item, 'onto', v);
+				}
+			})
+		}
+	}
+
 
 });

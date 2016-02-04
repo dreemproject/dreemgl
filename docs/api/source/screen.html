@@ -640,6 +640,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n486" name="n486">486</a>
 <a href="#n487" name="n487">487</a>
 <a href="#n488" name="n488">488</a>
+<a href="#n489" name="n489">489</a>
+<strong><a href="#n490" name="n490">490</a></strong>
+<a href="#n491" name="n491">491</a>
+<a href="#n492" name="n492">492</a>
+<a href="#n493" name="n493">493</a>
+<a href="#n494" name="n494">494</a>
+<a href="#n495" name="n495">495</a>
+<a href="#n496" name="n496">496</a>
+<a href="#n497" name="n497">497</a>
+<a href="#n498" name="n498">498</a>
+<a href="#n499" name="n499">499</a>
+<strong><a href="#n500" name="n500">500</a></strong>
+<a href="#n501" name="n501">501</a>
+<a href="#n502" name="n502">502</a>
+<a href="#n503" name="n503">503</a>
+<a href="#n504" name="n504">504</a>
+<a href="#n505" name="n505">505</a>
+<a href="#n506" name="n506">506</a>
+<a href="#n507" name="n507">507</a>
+<a href="#n508" name="n508">508</a>
+<a href="#n509" name="n509">509</a>
+<strong><a href="#n510" name="n510">510</a></strong>
+<a href="#n511" name="n511">511</a>
+<a href="#n512" name="n512">512</a>
+<a href="#n513" name="n513">513</a>
+<a href="#n514" name="n514">514</a>
+<a href="#n515" name="n515">515</a>
+<a href="#n516" name="n516">516</a>
+<a href="#n517" name="n517">517</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1043,7 +1072,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">openModal</span> = <span class="keyword">function</span>(render){
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                <span class="keyword">var</span> prom = <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
                         <span class="comment">// wrap our render function in a temporary view</span>
                         <span class="keyword">var</span> vroot = view()
                         <span class="comment">// set up stuff</span>
@@ -1066,6 +1095,35 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets cause a relayout</span>
                         <span class="local-variable">this</span>.relayout()
                 }.bind(<span class="local-variable">this</span>))
+                <span class="keyword">return</span> prom
+        }
+
+        <span class="comment">// open an overlay</span>
+        <span class="local-variable">this</span>.<span class="function">openOverlay</span> = <span class="keyword">function</span>(render){
+                <span class="keyword">var</span> vroot = view()
+                <span class="comment">// set up stuff</span>
+                vroot.render = render
+                vroot.parent = <span class="local-variable">this</span>
+                vroot.screen = <span class="local-variable">this</span>
+                vroot.rpc = <span class="local-variable">this</span>.rpc
+                vroot.parent_viewport = <span class="local-variable">this</span>
+                <span class="comment">// render it</span>
+                Render.process(vroot, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
+
+                <span class="keyword">var</span> mychild = vroot.children[<span class="integer">0</span>]
+                <span class="comment">//console.log(mychild)</span>
+                <span class="local-variable">this</span>.children.push(mychild)
+                mychild.parent = <span class="local-variable">this</span>
+                <span class="local-variable">this</span>.relayout()
+                <span class="comment">// close function</span>
+                mychild.<span class="function">closeOverlay</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> idx = <span class="local-variable">this</span>.parent.children.indexOf(<span class="local-variable">this</span>)
+                        <span class="keyword">if</span>(idx == -<span class="integer">1</span>) <span class="keyword">return</span>
+                        <span class="local-variable">this</span>.parent.children.splice(idx, <span class="integer">1</span>)
+                        <span class="local-variable">this</span>.parent.relayout()
+                }
+
+                <span class="keyword">return</span> mychild
         }
 
         <span class="comment">// animation</span>

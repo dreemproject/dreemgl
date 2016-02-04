@@ -331,6 +331,12 @@
  * @param value
  */
 /**
+ * @method startDrag
+ * starts a drag view via render function
+ * @param pointerevent
+ * @param render
+ */
+/**
  * @method bgcolorfn
  * Determines the background color that should be drawn at a given position.
  * Returns a vec4 color value, defaults to bgcolor.
