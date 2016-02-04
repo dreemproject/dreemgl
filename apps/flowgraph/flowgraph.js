@@ -325,6 +325,7 @@ define.class('$ui/view', function(require,
 			require.async(event.value.composition).then(function(result){
 
 				this.sourceset.parse(result)
+				console.log('>>', this.sourceset.ast)
 
 				// write it back to disk
 				this.sourceset.onchange = function(){
@@ -578,11 +579,15 @@ define.class('$ui/view', function(require,
 		for(var i = 0;i<this.sourceset.data.children.length;i++){
 			var node = this.sourceset.data.children[i];
 			// block({name:"e", title:"block E", x:450, y:600})
+			var fd = node.flowdata;
+			if (!fd) {
+				fd = {x:0, y:0}
+			}
 			res.push(
 				block({
-					flowdata:node.flowdata,
-					pos:vec3(node.flowdata.x,
-					node.flowdata.y,0),
+					flowdata:fd,
+					pos:vec3(fd.x,
+					fd.y,0),
 					name:node.name,
 					title:uppercaseFirst(node.classname + ': ' + node.name),
 					inputs:node.inputs,
