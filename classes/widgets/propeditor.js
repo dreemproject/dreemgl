@@ -19,7 +19,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 				t = this.find(t);
 			}
 			if (t && this.propertyname) {
-				console.log('Set "', this.propertyname, '" to "', val, typeof(val), '" on: ', t);
+				// console.log('Set "', this.propertyname, '" to "', val, typeof(val), '" on: ', t);
 				t[this.propertyname] = val;
 			}
 		}})
@@ -88,9 +88,10 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 					class:'color',
 					basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)
 				}, view({class:'color_view'},
-					colorpicker({value:this.value,onvalue:function(ev,val,o){
-						console.log('>s>', ev, val, o)
-					}})));
+					colorpicker({
+						value:this.value,
+						valuechange:function(val){this.callback(val);}.bind(this)
+					})));
 
 			} else {
 				var t1 = "";
