@@ -256,10 +256,8 @@ define.mixin(function(require){
 
 	this.onpointerstart = function (event) {
 		var pos = this.globalToLocal(event.position)
-
-		// var clone = []
-		// var cursor
-
+		// TODO(aki): consider doing in globalToLocal by default
+		pos = vec2.add(pos, this.scroll)
 		this.cursorset.fusing = false
 		// TODO(aki): fix alt and meta selection
 		if (event.alt){
@@ -287,7 +285,9 @@ define.mixin(function(require){
 		var pos = this.globalToLocal(event.position)
 		var min = this.globalToLocal(event.min)
 		var max = this.globalToLocal(event.max)
-
+		pos = vec2.add(pos, this.scroll)
+		min = vec2.add(min, this.scroll)
+		max = vec2.add(max, this.scroll)
 		if (event.alt){
 			// console.log(min[0], min[1], max[0], max[1])
 			// this.cursorset.rectSelect(min[0], min[1], max[0], max[1], clone)
