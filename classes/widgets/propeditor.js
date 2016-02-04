@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, button, scrollbar,textbox, numberbox,$widgets$, colorpicker, radiogroup){
+define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, button, scrollbar, textbox, numberbox, $widgets$, colorpicker, radiogroup){
 // internal
 
 	this.attributes = {
@@ -13,6 +13,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		value:Config({type:Object}),
 		propertyname:Config({type:String,value:""}),
 		fontsize: Config({type:float, value: 13}),
+		showunknown:Config({type:bool, value: false}),
 		callback:Config({type:Function, value:function(val) {
 			var t = this.target;
 			if (typeof(t) === 'string') {
@@ -45,22 +46,22 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		radiogroup:{
 			margin:vec4(2,0,2,5)
 		},
-		foldconainer_color:{
+		$_color:{
 			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"circle", collapsed:true
 		},
-		view_colorview:{
+		$_colorview:{
 			bgcolor:NaN,width:300, flexdirection:"column"
 		},
-		numberbox_vec4:{
+		$_vec4:{
 			flex:1,decimals:3, stepvalue:0.01, margin:2
 		},
-		numberbox_vec3:{
+		$_vec3:{
 			flex:1, decimals:3, stepvalue:0.01, margin:2
 		},
-		numberbox_vec2:{
+		$_vec2:{
 			 flex:1, decimals:3, stepvalue:0.01
 		},
-		numberbox_floatlike:{
+		$_floatlike:{
 			decimals:3, stepvalue:0.01, margin:2, flex:1
 		}
 	};
@@ -75,9 +76,10 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		if (typename =="Enum"){
 
 			editor = radiogroup({
+				margin:vec4(2,0,2,5),
 				values:this.property.type.values,
 				currentvalue:this.value,
-				oncurrentvalue:function(ev,val) {this.callback(val)}.bind(this)
+				oncurrentvalue:function(ev,val) {this.callback(val);}.bind(this)
 			});
 
 		} else if (typename =="vec4"){
@@ -86,6 +88,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 				editor = foldcontainer({
 					class:'color',
+					icon:'circle',
 					basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)
 				}, view({class:'color_view'},
 					colorpicker({
@@ -141,7 +144,12 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		} else if (typename =="FloatLike" || typename =="float32"){
 			editor = view({bgcolor:NaN},
-				       numberbox({class:'floatlike', minvalue: this.property.minvalue, maxvalue: this.property.maxvalue,  value:this.value}));
+				       numberbox({class:'floatlike',
+						   minvalue: this.property.minvalue,
+						   maxvalue: this.property.maxvalue,
+						   value:this.value,
+						   onvalue:function(ev,v) {this.callback(v)}.bind(this)
+					   }));
 
 		} else if (typename =="IntLike" || typename =="int32"){
 			editor = view({bgcolor:NaN},
@@ -169,10 +177,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 						borderwidth:1,
 						bordercolor:"gray",
 						margin:2,
-						onvalue: function(ev,v,o) {
-							console.log('got change value', ev, v, o)
-							this.callback(v)
-						}.bind(this)
+						onvalue: function(ev,v,o) {this.callback(v);}.bind(this)
 					})
 
 			);
@@ -181,6 +186,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 			editor = checkbox({
 				flex:0,
 				fgcolor:"white",
+				textcolor:this.fgcolor,
 				bgcolor:NaN,
 				value:this.value,
 				padding:4,
@@ -192,13 +198,13 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 			});
 
 		} else if (typename == "Object" && meta == "font") {
-			editor = label({fontsize: this.fontsize, margin:4,text:"FONT PICKER!", bgcolor:NaN, fgcolor:this.fgcolor});
+			editor = checkbox({icon:'circle', fontsize: this.fontsize, margin:4, text:"[FONT PICKER]", bgcolor:NaN, textcolor:this.fgcolor, borderwidth:0});
 
 		} else if (typename == "Object" && meta == "texture") {
-			editor = label({fontsize: this.fontsize, margin:4,text:"IMAGE PICKER!", bgcolor:NaN, fgcolor:this.fgcolor});
+			editor = checkbox({icon:'circle', fontsize: this.fontsize, margin:4, text:"[IMAGE PICKER]", bgcolor:NaN, textcolor:this.fgcolor, borderwidth:0});
 
 		} else {
-			if (!this.property) {
+			if (!this.showunknown || !this.property) {
 				return [];
 			}
 			console.log('UNKNOWN PROPERTY TYPE NAME', typename);

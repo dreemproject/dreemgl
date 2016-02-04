@@ -21,8 +21,8 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		// The current state of the foldcontainer. false = open, Ttue = closed.
 		collapsed: Config({type:boolean, value: false, persist:true}),
 		// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
-		icon: 'times',
-		title: 'folding thing',
+		icon: Config({type:String}),
+		title: Config({type:String, value:''}),
 		// The main color from which the foldcontainer will build some gradients.
 		basecolor: Config({type:vec4, value: vec4("#8080c0")}),
 		fontsize: Config({type:float, value: 12}),

@@ -8,6 +8,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 
 	this.attributes = {
 		target:Config({type:Object, value:""}),
+		showunknown:Config({type:boolean, value:false})
 	}
 
 	this.borderwidth = 0;
@@ -66,7 +67,14 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var key = keys[i];
 				var thevalue = c["_"+key];
 				var attr = c._attributes[key];
-				groupcontent.push(propeditor({target:this.target, value:thevalue, property:attr, propertyname: key, fontsize:this.fontsize}))
+				groupcontent.push(propeditor({
+					target:this.target,
+					value:thevalue,
+					property:attr,
+					propertyname: key,
+					fontsize:this.fontsize,
+					showunknown:this.showunknown
+				}))
 			}
 
 			res.push(
