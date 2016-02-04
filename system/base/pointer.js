@@ -223,7 +223,6 @@ define.class('$system/base/node', function(){
 			var pointer = new Pointer(pointerlist[i], previous.id, first.view)
 			pointer.addDelta(first)
 			pointer.addMovement(previous || first)
-			// ok so if our p
 
 			// emit event hooks
 			if(start){
@@ -267,7 +266,6 @@ define.class('$system/base/node', function(){
 				if (pointer.dt < TAPSPEED && vec2.len(pointer.delta) < TAPDIST){
 					this._tap.setPointer(pointer)
 				}
-
 			}.bind(this), true)
 
 		}

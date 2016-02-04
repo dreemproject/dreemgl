@@ -66,6 +66,8 @@ define.class('$system/base/pointer', function (require, exports){
 			window.addEventListener('mousemove', this._mousemove)
 			window.addEventListener('mouseup', this._mouseup)
 			window.removeEventListener('mousemove', this._mousehover)
+			// Hack to capture mouse up outside iframe
+			if (parent.window) parent.window.addEventListener('mouseup', this._mouseup)
 		}
 		window.addEventListener('mousedown', this.mousedown.bind(this))
 
@@ -83,6 +85,8 @@ define.class('$system/base/pointer', function (require, exports){
 			window.removeEventListener('mousemove', this._mousemove)
 			window.removeEventListener('mouseup', this._mouseup)
 			window.addEventListener('mousemove', this._mousehover)
+			// Hack to capture mouse up outside iframe
+			if (parent.window) parent.window.removeEventListener('mouseup', this._mouseup)
 		}
 		this._mouseup = this.mouseup.bind(this)
 
