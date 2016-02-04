@@ -115,6 +115,7 @@ define.class('$system/base/node', function(){
 		this.dt = pointer.dt
 		this.movement = pointer.movement
 		this.isover = pointer.isover
+		this.pick = pointer.pick
 		this.t = Date.now()
 		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
 	}
@@ -197,10 +198,20 @@ define.class('$system/base/node', function(){
 	this.setmove = function(pointerlist) {
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
+			var start = this._start.getById(previous.id)
 			var first = this._first.getById(previous.id)
+
 			var pointer = new Pointer(pointerlist[i], previous.id, first.view)
 			pointer.addDelta(first)
 			pointer.addMovement(previous || first)
+			// ok so if our p
+
+			if(start && start.pickview){
+				this.device.pickScreen(pointerlist[i].position, function(view){
+					pointer.pick = view
+				}.bind(this), true)
+			}
+
 			this._move.setPointer(pointer)
 		}
 		this.emitPointerList(this._move, 'move')

@@ -11,7 +11,6 @@ define.class( function(require, $ui$, view, label, menubutton){
 	//this.dropshadowradius = 20;
 	//this.dropshadowopacity = 0.3;
 	//this.dropshadowhardness = 0;
-	
 	this.attributes = {
 		errortext:"",
 		infotext: "",

@@ -400,7 +400,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 	}
 
 	this.openModal = function(render){
-		return new Promise(function(resolve, reject){
+		var prom = new Promise(function(resolve, reject){
 			// wrap our render function in a temporary view
 			var vroot = view()
 			// set up stuff
@@ -423,6 +423,35 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			// lets cause a relayout
 			this.relayout()
 		}.bind(this))
+		return prom
+	}
+
+	// open an overlay
+	this.openOverlay = function(render){
+		var vroot = view()
+		// set up stuff
+		vroot.render = render
+		vroot.parent = this
+		vroot.screen = this
+		vroot.rpc = this.rpc
+		vroot.parent_viewport = this
+		// render it
+		Render.process(vroot, undefined, undefined, true)
+
+		var mychild = vroot.children[0]
+		//console.log(mychild)
+		this.children.push(mychild)
+		mychild.parent = this
+		this.relayout()
+		// close function
+		mychild.closeOverlay = function(){
+			var idx = this.parent.children.indexOf(this)
+			if(idx == -1) return
+			this.parent.children.splice(idx, 1)
+			this.parent.relayout()
+		}
+
+		return mychild
 	}
 
 	// animation

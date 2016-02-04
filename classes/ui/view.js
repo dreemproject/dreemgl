@@ -233,6 +233,13 @@ define.class('$system/base/node', function(require){
 		// fires when mouse wheel is used.
 		pointerwheel:Config({type:Event}),
 
+		// fires when a drag drop item enters
+		dragover:Config({type:Event}),
+		// fires when a drag drop item moves
+		dragmove:Config({type:Event}),
+		// fires when a drag drop item leaves
+		dragout:Config({type:Event}),
+
 		// fires when a key goes to up. The event argument is {repeat:int, code:int, name:String}
 		keyup: Config({type:Event}),
 		// fires when a key goes to down. The event argument is {repeat:int, code:int, name:String}
@@ -316,7 +323,8 @@ define.class('$system/base/node', function(require){
 	this.ondropshadowradius = function(){
 		if (this.dropshadowopacity > 0){
 			this.shadowrect = true;
-		}else{
+		}
+		else {
 			this.shadowrect = false;
 		}
 	}
@@ -779,6 +787,45 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
+	// starts a drag view via render function
+	this.startDrag = function(pointerevent, render){
+		var dragview = this.screen.openOverlay(render)
+
+		if(!dragview.atDragMove){
+			dragview.atDragMove = function(position){
+				this.x = position[0] - this.width*0.5
+				this.y = position[1] - this.height*0.5
+			}
+		}
+
+		// make sure we pick the screen in pointermove
+		pointerevent.pickview = true
+		dragview.atDragMove(pointerevent.value)
+
+		var lastdrag
+		this.onpointermove = function(event){
+			dragview.atDragMove(event.value)
+			// lets send dragenter/leave events
+			var newdrag = event.pick
+
+			if(!dragview.isDropTarget(newdrag)) newdrag = undefined
+
+			if(lastdrag !== newdrag){
+				if(lastdrag) lastdrag.emitUpward('dragout',{})
+				if(newdrag) newdrag.emitUpward('dragover',{})
+				lastdrag = newdrag
+			}
+			if(newdrag) newdrag.emitUpward('dragmove', event)
+		}
+		this.onpointerend = function(){
+			this.onpointermove = undefined
+			dragview.closeOverlay()
+			if(lastdrag){
+				lastdrag.emitUpward('dragout',{})
+				dragview.atDrop(lastdrag)
+			}
+		}
+	}
 
 	// internal, decide to inject scrollbars into our childarray
 	this.atRender = function(){

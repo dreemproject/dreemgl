@@ -255,45 +255,43 @@ define.mixin(function(require){
 
 
 	this.onpointerstart = function (event) {
-		var pointer = event.value
-		var pos = this.globalToLocal(pointer.position)
+		var pos = this.globalToLocal(event.position)
 
 		// var clone = []
 		// var cursor
 
 		this.cursorset.fusing = false
 		// TODO(aki): fix alt and meta selection
-		if (pointer.alt){
+		if (event.alt){
 			// if (pointer.leftmeta || pointer.rightmeta) clone = this.cursorset.list
 			this.cursorset.rectSelect(pos[0], pos[1], pos[0], pos[1], clone)
-		} else if (pointer.meta){
+		} else if (event.meta){
 			cursor = this.cursorset.addCursor()
 			// in that case what we need to
 			cursor.moveTo(pos[0], pos[1])
 			// lets make it select the word
-			if (pointer.clicker == 2) cursor.selectWord()
-			if (pointer.clicker == 3) cursor.selectLine()
+			if (event.clicker == 2) cursor.selectWord()
+			if (event.clicker == 3) cursor.selectLine()
 			this.cursorset.update()
 		} else {
 			this.cursorset.fusing = true
 			this.cursorset.moveTo(pos[0], pos[1])
 			// TODO(aki): implement clicker in pointer
-			if (pointer.clicker == 2) this.cursorset.selectWord()
-			if (pointer.clicker == 3) this.cursorset.selectLine()
+			if (event.clicker == 2) this.cursorset.selectWord()
+			if (event.clicker == 3) this.cursorset.selectLine()
 		}
 		this.doCursor()
 	}
 
 	this.onpointermove = function (event) {
-		var pointer = event.value
-		var pos = this.globalToLocal(pointer.position)
-		var min = this.globalToLocal(pointer.min)
-		var max = this.globalToLocal(pointer.max)
+		var pos = this.globalToLocal(event.position)
+		var min = this.globalToLocal(event.min)
+		var max = this.globalToLocal(event.max)
 
-		if (pointer.alt){
+		if (event.alt){
 			// console.log(min[0], min[1], max[0], max[1])
 			// this.cursorset.rectSelect(min[0], min[1], max[0], max[1], clone)
-		} else if (pointer.meta){
+		} else if (event.meta){
 			// cursor.moveTo(pos[0], pos[1], true)
 			// this.cursorset.update()
 		} else {

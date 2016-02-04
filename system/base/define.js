@@ -956,7 +956,9 @@
 		// boot up using the MAIN property
 		if(define.main){
 			define.loadAsync(define.main, 'main').then(function(){
-				if(define.atMain) define.atMain(define.require, define.main)
+				if(define.atMain) setTimeout(function(){
+					define.atMain(define.require, define.main)
+				},0)
 			}, function(exc){
 				if(define.atException) define.atException(exc)
 				else{
