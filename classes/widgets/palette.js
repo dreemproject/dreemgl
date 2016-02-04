@@ -30,7 +30,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			// Items to display in this panel.
 			items:Config({type:Array, value:[]}),
 
-			dividercolor: '#999',
+			dividercolor: Config({type:vec4, meta:"color", value:"#999"}),
 			dividermargin: 10,
 
     		onmode:function () {

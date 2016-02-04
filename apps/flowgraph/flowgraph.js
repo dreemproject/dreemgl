@@ -817,7 +817,7 @@ define.class('$ui/view', function(require,
 	  {classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}
   ]} }))
 ,dockpanel({title:"Properties", viewport:"2D"},
-  propviewer({flex:2,name:"mainproperties", target:"components", flex:1, overflow:"scroll"})
+  propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})
 )
 )
 

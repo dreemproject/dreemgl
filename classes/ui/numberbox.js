@@ -32,10 +32,10 @@ define.class(function(require,$ui$, view, textbox, label, button){
 	this.justifycontent = "center";
 	this.alignitems = "center";
 
-	this.onvalue = function(){
+	this.onvalue = function() {
 
 		var expo = Math.pow(10, this.decimals);
-		this.value = Math.round(this.value * expo) / expo;
+		this._value = Math.round(this.value * expo) / expo;
 
 
 		var tn = this.findChild("thenumber");
@@ -60,8 +60,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 	}
 
 	this.keydown = function(v){
-		console.log(v);
-			this.screen.defaultKeyboardHandler(this, v);
+		this.screen.defaultKeyboardHandler(this, v);
 	}
 
 	this.focus = function(newfocus){
@@ -111,7 +110,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 		}
 	}
 
-	this.justifycontent = "space-around"
+	this.justifycontent = "space-around";
 
 	this.render = function(){
 

@@ -14,9 +14,13 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 		propertyname:Config({type:String,value:""}),
 		fontsize: Config({type:float, value: 13}),
 		callback:Config({type:Function, value:function(val) {
-			if (this.target && this.propertyname) {
-				console.log('Set "', this.propertyname, '" to "', val, '" on: ', this.target);
-				this.target[this.propertyname] = val;
+			var t = this.target;
+			if (typeof(t) === 'string') {
+				t = this.find(t);
+			}
+			if (t && this.propertyname) {
+				console.log('Set "', this.propertyname, '" to "', val, typeof(val), '" on: ', t);
+				t[this.propertyname] = val;
 			}
 		}})
 	};
@@ -140,11 +144,35 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 
 		} else if (typename =="IntLike" || typename =="int32"){
 			editor = view({bgcolor:NaN},
-					numberbox({flex:1, minvalue: this.property.minvalue, maxvalue: this.property.maxvalue, fontsize:this.fontsize, value:this.value, stepvalue:1, margin:2}));
+					numberbox({
+						flex:1,
+						minvalue:this.property.minvalue,
+						maxvalue:this.property.maxvalue,
+						fontsize:this.fontsize,
+						value:this.value,
+						stepvalue:1,
+						margin:2,
+						onvalue:function(ev,v) {this.callback(v)}.bind(this)
+					}));
 
-		} else if (typename =="String"){
+		} else if (typename == "String" || typeof(typename) === "undefined"){
 			editor = view({bgcolor:NaN},
-					textbox({flex:1, fontsize:this.fontsize, fgcolor:"#d0d0d0",bgcolor:"#505050", value:this.value,padding:4, borderradius:0, borderwidth:1, bordercolor:"gray", margin:2})
+					textbox({
+						flex:1,
+						fontsize:this.fontsize,
+						fgcolor:"#d0d0d0",
+						bgcolor:"#505050",
+						value:this.value ? this.value : '',
+						padding:4,
+						borderradius:0,
+						borderwidth:1,
+						bordercolor:"gray",
+						margin:2,
+						onvalue: function(ev,v,o) {
+							console.log('got change value', ev, v, o)
+							this.callback(v)
+						}.bind(this)
+					})
 
 			);
 		} else if (typename =="Boolean" || typename=="BoolLike" || typename=="boolean") {
@@ -176,10 +204,13 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer,  label, butto
 			editor = label({margin:4, text:typename + " " + meta, bgcolor:NaN, fgcolor:this.fgcolor});
 		}
 
-		return [
-			label({bgcolor:NaN, margin:4, fontsize:this.fontsize, flex: 0.2, text:this.propertyname, bgcolor:NaN, fgcolor:this.fgcolor}),
-			editor
-		]
+		if (!editor) {
+			return [];
+		}
+
+		var proplabel = label({bgcolor:NaN, margin:4, fontsize:this.fontsize, flex: 0.2, text:this.propertyname, bgcolor:NaN, fgcolor:this.fgcolor});
+
+		return [proplabel, editor];
 	}
 
 })
