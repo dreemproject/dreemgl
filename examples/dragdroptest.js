@@ -12,8 +12,10 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					name:'T0',
 					size:[300, 300],
 					bgcolor:'red',
+					// the onpointerstart event is where to start a drag and drop op
 					onpointerstart:function(event){
 						var outer = this
+						// startDrag needs a start pointer event and a render function to provide the dragging view
 						this.startDrag(event, function(){
 							return view({
 								drawtarget:'color',
@@ -21,9 +23,12 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 								position:'absolute',
 								bgcolor:vec4(1,0,1,0.5),
 								candrop:0.,
+								// little example hack of shader styled drag item
 								bgcolorfn:function(pos){
 									return mix('transparent','white',pow(1.0-2.*length(pos-.5),0.5)*abs(sin(8.*length(pos-.5)+8.*candrop*time)))
 								},
+								// called to check wether something is a drop target. Cursor/style management is your own
+								// if return true it will send dragover/dragout events to the underlying view
 								isDropTarget:function(view){
 									// negotiate with the target view wether its a drop target and set the cursor
 									if(!view || view === outer){
@@ -35,6 +40,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 									this.screen.pointer.cursor = 'copy'
 									return true
 								},
+								// called when the drop is made on a valid droptarget, no events are sent, its up to the implementor
 								atDrop:function(view){ 
 									// dropped on a view, make it do stuff
 									console.log("Dropped on"+view.name)
@@ -45,11 +51,17 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					}
 				}),
 				view({
+					// called when the drag origin thinks we are a droptarget
 					dragover:function(){
 						this.bordercolor = 'yellow'
 					},
+					// called when the drag leaves our space
 					dragout:function(){
 						this.bordercolor = 'blue'
+					},
+					// called as the drag item moves over us for extra fancy effects if needed
+					dragmove:function(event){
+
 					},
 					dropthingy:-1,
 					borderwidth:2,
