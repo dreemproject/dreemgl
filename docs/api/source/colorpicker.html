@@ -782,6 +782,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n628" name="n628">628</a>
 <a href="#n629" name="n629">629</a>
 <strong><a href="#n630" name="n630">630</a></strong>
+<a href="#n631" name="n631">631</a>
+<a href="#n632" name="n632">632</a>
+<a href="#n633" name="n633">633</a>
+<a href="#n634" name="n634">634</a>
+<a href="#n635" name="n635">635</a>
+<a href="#n636" name="n636">636</a>
+<a href="#n637" name="n637">637</a>
+<a href="#n638" name="n638">638</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -806,7 +814,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">basesat</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="float">0.8</span>, <span class="key">readonly</span>:<span class="predefined-constant">true</span>, <span class="key">rerender</span>:<span class="predefined-constant">false</span>}),
                 <span class="comment">// read-only, the value (HSV)</span>
                 <span class="key">baseval</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="float">0.5</span>, <span class="key">readonly</span>:<span class="predefined-constant">true</span>, <span class="key">rerender</span>:<span class="predefined-constant">false</span>}),
-                <span class="key">sliderheight</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">15</span>})
+                <span class="key">sliderheight</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">15</span>}),
         }
 
         <span class="local-variable">this</span>.basehue = <span class="float">0.5</span>;
@@ -1401,7 +1409,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 ,view({ <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">2</span>,<span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">borderradius</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="local-variable">this</span>.internalbordercolor,<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">padding</span>:<span class="integer">1</span>}
                                         ,view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>}
                                                 ,label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,  <span class="key">margin</span>:vec4(<span class="integer">10</span>,<span class="integer">5</span>,<span class="integer">0</span>,<span class="integer">0</span>),<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.contrastcolor, <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize})
-                                                ,textbox({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hexcolor</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">margin</span>:vec4(<span class="integer">0</span>,<span class="integer">5</span>,<span class="integer">0</span>,<span class="integer">0</span>), <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ff00ff</span><span class="delimiter">&quot;</span></span>,  <span class="key">fgcolor</span>:<span class="local-variable">this</span>.contrastcolor, <span class="key">padding</span>:vec4(<span class="integer">20</span>,<span class="integer">2</span>,<span class="integer">2</span>,<span class="integer">2</span>), <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize})
+                                                ,textbox({
+                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hexcolor</span><span class="delimiter">&quot;</span></span>,
+                                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
+                                                        <span class="key">margin</span>:vec4(<span class="integer">0</span>,<span class="integer">5</span>,<span class="integer">0</span>,<span class="integer">0</span>),
+                                                        <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ff00ff</span><span class="delimiter">&quot;</span></span>,
+                                                        <span class="key">fgcolor</span>:<span class="local-variable">this</span>.contrastcolor,
+                                                        <span class="key">padding</span>:vec4(<span class="integer">20</span>,<span class="integer">2</span>,<span class="integer">2</span>,<span class="integer">2</span>),
+                                                        <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize
+                                                })
                                         )
                                         ,view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>}
                                                 ,label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,  <span class="key">margin</span>:vec4(<span class="integer">10</span>,<span class="integer">5</span>,<span class="integer">0</span>,<span class="integer">0</span>),<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>,  <span class="key">fgcolor</span>:<span class="local-variable">this</span>.contrastcolor, <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize})

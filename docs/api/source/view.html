@@ -1865,18 +1865,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// alias for the x component of percentsize</span>
                 <span class="key">percentwidth</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
                 <span class="comment">// alias for the y component of percentsize</span>
-                <span class="key">percentheight</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
+                <span class="key">percentheight</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
                 <span class="comment">// alias for the z component of percentsize</span>
-                <span class="key">percentdepth</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
+                <span class="key">percentdepth</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentsize</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="key">percentpos</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="predefined-constant">NaN</span>)}),
 
                 <span class="comment">// internal, percentage widths/heights</span>
                 <span class="key">percentx</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">0</span>}),
                 <span class="comment">// internal, percentage widths/heights</span>
-                <span class="key">percenty</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
+                <span class="key">percenty</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">1</span>}),
                 <span class="comment">// internal, percentage widths/heights</span>
-                <span class="key">percentz</span>: Config({<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
+                <span class="key">percentz</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">percentpos</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)</span>
                 <span class="key">pixelratio</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>:<span class="predefined-constant">NaN</span>}),
@@ -2110,7 +2110,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">onborderwidth</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">onbgcolor</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
@@ -2130,7 +2130,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> bg_on = isNaN(<span class="local-variable">this</span>._bgcolor[<span class="integer">0</span>])? <span class="predefined-constant">false</span>: <span class="predefined-constant">true</span>
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>) border_on = <span class="predefined-constant">false</span>, bg_on = <span class="predefined-constant">false</span>
-        
+
                 <span class="keyword">if</span>(radius[<span class="integer">0</span>] !== <span class="integer">0</span> || radius[<span class="integer">1</span>] !== <span class="integer">0</span> || radius[<span class="integer">2</span>] !== <span class="integer">0</span> || radius[<span class="integer">3</span>] !== <span class="integer">0</span>){
                         <span class="comment">// this switches the bg shader to the rounded one</span>
                         <span class="local-variable">this</span>.bgshader_name = <span class="string"><span class="delimiter">'</span><span class="content">roundedrectshader</span><span class="delimiter">'</span></span>

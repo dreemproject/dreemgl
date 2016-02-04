@@ -11,7 +11,7 @@
  * The current state of the foldcontainer. false = open, Ttue = closed.
  */
 /**
- * @attribute {String} [icon="times"]
+ * @attribute {String} [icon="undefined"]
  * The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.
  */
 /**

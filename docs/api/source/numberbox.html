@@ -307,7 +307,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
 <a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -343,10 +342,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>;
         <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>;
 
-        <span class="local-variable">this</span>.<span class="function">onvalue</span> = <span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">onvalue</span> = <span class="keyword">function</span>() {
 
                 <span class="keyword">var</span> expo = Math.pow(<span class="integer">10</span>, <span class="local-variable">this</span>.decimals);
-                <span class="local-variable">this</span>.value = Math.round(<span class="local-variable">this</span>.value * expo) / expo;
+                <span class="local-variable">this</span>._value = Math.round(<span class="local-variable">this</span>.value * expo) / expo;
 
 
                 <span class="keyword">var</span> tn = <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">&quot;</span><span class="content">thenumber</span><span class="delimiter">&quot;</span></span>);
@@ -371,8 +370,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(v){
-                console.log(v);
-                        <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
+                <span class="local-variable">this</span>.screen.defaultKeyboardHandler(<span class="local-variable">this</span>, v);
         }
 
         <span class="local-variable">this</span>.<span class="function">focus</span> = <span class="keyword">function</span>(newfocus){
@@ -422,7 +420,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">space-around</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">space-around</span><span class="delimiter">&quot;</span></span>;
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
 

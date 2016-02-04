@@ -356,8 +356,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// The current state of the foldcontainer. false = open, Ttue = closed.</span>
                 <span class="key">collapsed</span>: Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>: <span class="predefined-constant">false</span>, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
                 <span class="comment">// The icon to use in the top left of the foldcontainer. See the FontAwesome cheatsheet for acceptable icon names.</span>
-                <span class="key">icon</span>: <span class="string"><span class="delimiter">'</span><span class="content">times</span><span class="delimiter">'</span></span>,
-                <span class="key">title</span>: <span class="string"><span class="delimiter">'</span><span class="content">folding thing</span><span class="delimiter">'</span></span>,
+                <span class="key">icon</span>: Config({<span class="key">type</span>:String}),
+                <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>}),
                 <span class="comment">// The main color from which the foldcontainer will build some gradients.</span>
                 <span class="key">basecolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#8080c0</span><span class="delimiter">&quot;</span></span>)}),
                 <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">12</span>}),
