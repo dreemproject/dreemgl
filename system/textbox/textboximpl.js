@@ -256,6 +256,14 @@ define.mixin(function(require){
 
 	this.onpointerstart = function (event) {
 		var pointer = event.value
+
+		if (typeof(pointer.position) === 'undefined') {
+			// TODO: why is pointer.position undefined?
+			console.error('// TODO: find out how did pointer.position become undefined here?')
+			return;
+		}
+
+
 		var pos = this.globalToLocal(pointer.position)
 
 		// var clone = []

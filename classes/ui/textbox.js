@@ -17,6 +17,7 @@ define.class(function(require, $ui$, label){
 		value: Config({type:String, value:""}),
 		readonly:false,
 		focusselect:true,
+		multiline:true
 	}
 
 	this.markercolor = this.markerunfocus

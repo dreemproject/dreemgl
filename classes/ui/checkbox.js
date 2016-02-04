@@ -123,7 +123,7 @@ define.class('$ui/view', function(icon, label){
 
 		if (this.text) {
 			cb.push(label({
-				bg:0,
+				bgcolor:NaN,
 				padding:vec4(10,0,0,0),
 				text:this.text,
 				fontsize:this.fontsize,
