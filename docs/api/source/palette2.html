@@ -263,118 +263,120 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n109" name="n109">109</a>
 <strong><a href="#n110" name="n110">110</a></strong>
 <a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, icon, label){
+<span class="comment">// internal, A palatte is a container view with drag-dropable components</span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// Color of the draggable part of the scrollbar</span>
-                <span class="key">draggercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>)}),
 
-                <span class="comment">// Color of the draggable part of the scrollbar</span>
-                <span class="key">draggerradius</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">3</span>}),
+                <span class="comment">// The items to render into the palette.  This is either an array of components, or an Object where</span>
+                <span class="comment">// every key:value pair is a Section Name : components-array pair.</span>
+                <span class="key">items</span>:Config({<span class="key">type</span>:Object}),
 
-                <span class="comment">// Color when the pointer is hovering over the draggable part of the scrollbar</span>
-                <span class="key">hovercolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#707070</span><span class="delimiter">&quot;</span></span>)}),
+                <span class="comment">//size of the icons in the palatte</span>
+                <span class="key">iconsize</span>: <span class="integer">50</span>
+        };
 
-                <span class="comment">// Color of the draggable part of the scrollbar while actively scrolling</span>
-                <span class="key">activecolor</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>)}),
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>;
+        <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>;
+        <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>;
 
-                <span class="comment">// Is this a horizontal or a vertical scrollbar?</span>
-                <span class="key">vertical</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>: <span class="predefined-constant">true</span>}),
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panel</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.padding = vec4(<span class="integer">20</span>,<span class="integer">10</span>,<span class="integer">20</span>,<span class="integer">10</span>);
+                <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">'</span><span class="content">space-around</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>;
+        });
 
-                <span class="comment">// Current value of the scrollbar. Ranges from 0 to total - page</span>
-                <span class="key">value</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">divider</span><span class="delimiter">&quot;</span></span>, label, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+                <span class="local-variable">this</span>.fontsize = <span class="integer">12</span>;
+                <span class="local-variable">this</span>.margin = vec4(<span class="integer">5</span>,<span class="integer">5</span>,<span class="integer">5</span>,<span class="integer">0</span>);
+                <span class="local-variable">this</span>.borderbottomwidth = <span class="integer">1</span>;
+                <span class="local-variable">this</span>.paddingbottom = <span class="integer">3</span>;
+                <span class="local-variable">this</span>.bordercolor = <span class="string"><span class="delimiter">'</span><span class="content">#999</span><span class="delimiter">'</span></span>;
+        });
 
-                <span class="comment">// Page size, in total</span>
-                <span class="key">page</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelview</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+        });
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panellabel</span><span class="delimiter">&quot;</span></span>, label, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>
+        });
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelicon</span><span class="delimiter">&quot;</span></span>, icon, <span class="keyword">function</span>() {
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>
+        });
 
-                <span class="comment">// total size.</span>
-                <span class="key">total</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">0</span>}),
-
-                <span class="comment">// set animation on bgcolor</span>
-                <span class="key">bgcolor</span>: Config({<span class="key">duration</span>: <span class="float">1.0</span>})
-        }
-
-        <span class="local-variable">this</span>.noscroll = <span class="predefined-constant">true</span>
-
-        <span class="keyword">var</span> scrollbar = <span class="local-variable">this</span>.constructor;
-
-        <span class="local-variable">this</span>.<span class="function">page</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.redraw()
-        }
-
-        <span class="local-variable">this</span>.<span class="function">offset</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.redraw()
-        }
-
-        <span class="keyword">var</span> mesh = vec2.array()
-        mesh.pushQuad(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>)
-
-        <span class="local-variable">this</span>.hardrect = {
-                <span class="key">draggercolor</span>: vec4(),
-                <span class="key">offset</span>: <span class="integer">0</span>,
-                <span class="key">page</span>: <span class="float">0.3</span>,
-                <span class="function">color</span>: <span class="keyword">function</span>(){
-                        <span class="comment">// we have a rectangle</span>
-                        <span class="keyword">var</span> rel = vec2(mesh.x*view.layout.width, mesh.y*view.layout.height)
-                        <span class="keyword">var</span> offset = view.value / view.total
-                        <span class="keyword">var</span> page = view.page / view.total
-                        <span class="keyword">var</span> edge = <span class="float">0.1</span><span class="comment">//min(length(vec2(length(dFdx(rel)), length(dFdy(rel)))) * SQRT_1_2, 0.001)</span>
-                        <span class="keyword">var</span> field = <span class="reserved">float</span>(<span class="integer">0</span>)
-                        <span class="keyword">if</span>(view.vertical){
-                                field = shape.roundbox(rel, <span class="float">0.05</span> * view.layout.width, offset*view.layout.height,<span class="float">.9</span>*view.layout.width, page*view.layout.height, view.draggerradius)
+        <span class="local-variable">this</span>.<span class="function">buildItem</span> = <span class="keyword">function</span>(item) {
+                <span class="keyword">var</span> args = {
+                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>,
+                        <span class="function">pointerover</span>:<span class="keyword">function</span>() {
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">over</span><span class="delimiter">'</span></span>)
                         }
-                        <span class="keyword">else</span>{
-                                field = shape.roundbox(rel, offset * view.layout.width, <span class="float">0.05</span>*view.layout.height,page*view.layout.width, <span class="float">.9</span>*view.layout.height, view.draggerradius)
-                        }
-                        <span class="keyword">var</span> fg = vec4(view.draggercolor.rgb, smoothstep(edge, -edge, field)*view.draggercolor.a)
-                        <span class="keyword">var</span> bg = vec4(<span class="integer">0</span>.,<span class="integer">0</span>.,<span class="integer">0</span>.,<span class="float">0.05</span>)
-                        <span class="keyword">return</span> mix(bg.rgba, fg.rgba, fg.a)
-                },
-                <span class="key">mesh</span>: mesh,
-                <span class="function">update</span>:<span class="keyword">function</span>(){},
-                <span class="function">position</span>: <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> vec4(mesh.x * view.layout.width, mesh.y * view.layout.height, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
+                };
+
+                <span class="keyword">var</span> clas = <span class="local-variable">this</span>.panelview;
+
+                <span class="keyword">if</span> (item.image) {
+                        args.bgimage = <span class="string"><span class="delimiter">'</span><span class="content">$root/apps/flowgraph/</span><span class="delimiter">'</span></span> + item.image
                 }
+
+                <span class="keyword">if</span> (item.text) {
+                        clas = <span class="local-variable">this</span>.panellabel;
+                        args.fontsize = <span class="local-variable">this</span>.iconsize;
+                        args.text = item.text;
+                }
+
+                <span class="keyword">if</span> (item.icon) {
+                        clas = <span class="local-variable">this</span>.panelicon;
+                        args.fontsize = <span class="local-variable">this</span>.iconsize;
+                        args.icon = item.icon;
+                }
+
+                <span class="keyword">return</span> clas(args)
+        };
+
+        <span class="local-variable">this</span>.<span class="function">buildPanel</span> = <span class="keyword">function</span>(items) {
+                <span class="keyword">var</span> views = [];
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;items.length;i++) {
+                        <span class="keyword">var</span> item = items[i];
+                        views.push(<span class="local-variable">this</span>.buildItem(item));
+                }
+                <span class="keyword">return</span> <span class="local-variable">this</span>.panel(views);
+        };
+
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">if</span> (Array.isArray(<span class="local-variable">this</span>.items)) {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.buildPanel(<span class="local-variable">this</span>.items);
+                }
+
+                <span class="keyword">var</span> views = [];
+
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.items) {
+                        <span class="keyword">return</span> views;
+                }
+
+                <span class="keyword">for</span> (<span class="keyword">var</span> section <span class="keyword">in</span> <span class="local-variable">this</span>.items) {
+
+                        views.push(<span class="local-variable">this</span>.divider({<span class="key">text</span>:section}));
+
+                        <span class="keyword">var</span> items = <span class="local-variable">this</span>.items[section];
+
+                        views.push(<span class="local-variable">this</span>.buildPanel(items))
+                }
+
+                <span class="keyword">return</span> views;
         }
 
-        <span class="local-variable">this</span>.margin = <span class="integer">1</span>
-
-        <span class="local-variable">this</span>.<span class="function">vertical</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
-                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">ns-resize</span><span class="delimiter">&quot;</span></span>;
-                }<span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">ew-resize</span><span class="delimiter">&quot;</span></span>;
-                }
-        }
-
-        <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">var</span> offset = <span class="local-variable">this</span>.value / <span class="local-variable">this</span>.total
-                <span class="keyword">var</span> page = <span class="local-variable">this</span>.page / <span class="local-variable">this</span>.total
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.vertical){
-                        <span class="keyword">var</span> p = offset + event.movement[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.height
-                } <span class="keyword">else</span> {
-                        <span class="keyword">var</span> p = offset + event.movement[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width
-                }
-                <span class="keyword">var</span> value = clamp(p, <span class="integer">0</span>, <span class="integer">1</span> - page) * <span class="local-variable">this</span>.total
-                <span class="keyword">if</span>(value != <span class="local-variable">this</span>.value){
-                        <span class="local-variable">this</span>.value = value
-                }
-        }
-
-        <span class="local-variable">this</span>.drawcount = <span class="integer">0</span>;
-
-        <span class="local-variable">this</span>.constructor.examples = {
-                <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [scrollbar({<span class="key">vertical</span>: <span class="predefined-constant">false</span>, <span class="key">height</span>: <span class="integer">20</span>, <span class="key">total</span>: <span class="integer">1</span>, <span class="key">page</span>: <span class="float">0.2</span>, <span class="key">offset</span>: <span class="float">0.5</span>})]
-                }
-        }
-})
+});
 </pre></td>
 </tr></table>
 

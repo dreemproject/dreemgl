@@ -735,9 +735,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="predefined-constant">true</span>
         }
 
-        <span class="local-variable">this</span>.<span class="function">nextItem</span> = <span class="keyword">function</span>(draw){
+        <span class="local-variable">this</span>.<span class="function">nextItem</span> = <span class="keyword">function</span>(draw, nottype){
                 <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
-                <span class="keyword">var</span> next = (draw === view || (!draw._viewport &amp;&amp; draw._visible))  &amp;&amp; draw.children[<span class="integer">0</span>], next_index = <span class="integer">0</span>
+                <span class="keyword">var</span> next = (draw === view || (!draw._viewport &amp;&amp; draw._visible &amp;&amp; draw._drawtarget !== nottype))  &amp;&amp; draw.children[<span class="integer">0</span>], next_index = <span class="integer">0</span>
                 <span class="keyword">while</span>(!next){ <span class="comment">// skip to parent next</span>
                         <span class="keyword">if</span>(draw === view) <span class="keyword">break</span>
                         next_index = draw.draw_index + <span class="integer">1</span>
@@ -787,7 +787,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         draw.draw_dirty &amp;= <span class="integer">1</span>
 
                         pick_id+= draw.pickrange;
-                        <span class="keyword">if</span>(!draw._visible || draw._first_draw_pick &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
+                        <span class="keyword">if</span>(!draw._visible || draw._drawtarget===<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span> || draw._first_draw_pick &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
                         }
                         <span class="keyword">else</span>{
                                 draw._first_draw_pick = <span class="integer">1</span>
@@ -803,7 +803,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span>(draw._viewport &amp;&amp; draw.drawpass !== <span class="local-variable">this</span> &amp;&amp; draw.drawpass.pick_buffer){
                                         <span class="comment">// ok so the pick pass needs the alpha from the color buffer</span>
                                         <span class="comment">// and then hard forward the color</span>
-                                        <span class="keyword">var</span> blendshader = draw.viewportblendshader
+                                        <span class="keyword">var</span> blendshader = draw.shaders.viewportblend
                                         <span class="keyword">if</span> (view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                                                 <span class="comment">// dont do this!</span>
                                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
@@ -837,7 +837,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         }
                                 }
                         }
-                        draw = <span class="local-variable">this</span>.nextItem(draw)
+                        draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>)
                 }
         }
 
@@ -865,7 +865,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span> {
                         <span class="comment">// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data</span>
                         <span class="comment">// lets render the view as a layer</span>
-                        <span class="keyword">var</span> blendshader = draw.viewportblendshader
+                        <span class="keyword">var</span> blendshader = draw.shaders.viewportblend
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
                         }
@@ -955,7 +955,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//}</span>
                         <span class="comment">//for(var dl = this.draw_list, i = 0; i &lt; dl.length; i++){</span>
                         <span class="comment">//        var draw = dl[i]</span>
-                        <span class="keyword">if</span>(!draw._visible || draw._first_draw_color &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
+                        <span class="keyword">if</span>(!draw._visible || draw._drawtarget===<span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span> || draw._first_draw_color &amp;&amp; view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span> &amp;&amp; draw.boundscheck &amp;&amp; !isInBounds2D(view, draw)){ <span class="comment">// do early out check using bounding boxes</span>
                         }
                         <span class="keyword">else</span>{
                                 draw._first_draw_color = <span class="integer">1</span>
@@ -980,7 +980,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="local-variable">this</span>.debugrect.drawArrays(<span class="local-variable">this</span>.device)
                                 }
                         }
-                        draw = <span class="local-variable">this</span>.nextItem(draw)
+                        draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>)
                 }
                 <span class="comment">//console.log(count)</span>
                 <span class="keyword">return</span> hastime

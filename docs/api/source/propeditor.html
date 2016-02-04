@@ -337,52 +337,38 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n183" name="n183">183</a>
 <a href="#n184" name="n184">184</a>
 <a href="#n185" name="n185">185</a>
-<a href="#n186" name="n186">186</a>
-<a href="#n187" name="n187">187</a>
-<a href="#n188" name="n188">188</a>
-<a href="#n189" name="n189">189</a>
-<strong><a href="#n190" name="n190">190</a></strong>
-<a href="#n191" name="n191">191</a>
-<a href="#n192" name="n192">192</a>
-<a href="#n193" name="n193">193</a>
-<a href="#n194" name="n194">194</a>
-<a href="#n195" name="n195">195</a>
-<a href="#n196" name="n196">196</a>
-<a href="#n197" name="n197">197</a>
-<a href="#n198" name="n198">198</a>
-<a href="#n199" name="n199">199</a>
-<strong><a href="#n200" name="n200">200</a></strong>
-<a href="#n201" name="n201">201</a>
-<a href="#n202" name="n202">202</a>
-<a href="#n203" name="n203">203</a>
-<a href="#n204" name="n204">204</a>
-<a href="#n205" name="n205">205</a>
-<a href="#n206" name="n206">206</a>
-<a href="#n207" name="n207">207</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, checkbox,foldcontainer,  label, button, scrollbar,textbox, numberbox,<span class="predefined">$widgets$</span>, colorpicker, radiogroup){
+<span class="comment">// internal</span>
+
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">target</span>:Config({<span class="key">type</span>:String,<span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">target</span>:Config({<span class="key">type</span>:Object}),
                 <span class="key">property</span>:Config({<span class="key">type</span>:Object}),
                 <span class="key">value</span>:Config({<span class="key">type</span>:Object}),
                 <span class="key">propertyname</span>:Config({<span class="key">type</span>:String,<span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">13</span>})
-        }
-        
-        <span class="local-variable">this</span>.bg = {
-                <span class="function">color</span>:<span class="keyword">function</span>(){                                                                
+                <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">13</span>}),
+                <span class="key">callback</span>:Config({<span class="key">type</span>:Function, <span class="function">value</span>:<span class="keyword">function</span>(val) {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.target &amp;&amp; <span class="local-variable">this</span>.propertyname) {
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Set &quot;</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.propertyname, <span class="string"><span class="delimiter">'</span><span class="content">&quot; to &quot;</span><span class="delimiter">'</span></span>, val, <span class="string"><span class="delimiter">'</span><span class="content">&quot; on: </span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.target);
+                                <span class="local-variable">this</span>.target[<span class="local-variable">this</span>.propertyname] = val;
+                        }
+                }})
+        };
+
+        <span class="local-variable">this</span>.hardrect = {
+                <span class="function">color</span>:<span class="keyword">function</span>(){
                         <span class="keyword">var</span> col1 = vec3(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">var</span> col2=vec3(<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">return</span> vec4(mix(col1, col2, <span class="float">1.0</span>-pow(abs(uv.y),<span class="float">4.0</span>) ),<span class="float">1.0</span>)
                 }
-        };
-        
+        }
+
         <span class="local-variable">this</span>.margin = <span class="integer">0</span>
         <span class="local-variable">this</span>.padding = <span class="integer">0</span>
         <span class="local-variable">this</span>.border = <span class="integer">0</span>
@@ -391,28 +377,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.bordercolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#c0c0c0</span><span class="delimiter">&quot;</span></span>
 
-        <span class="comment">// lets have the style parameterized by self and self props</span>
-        <span class="comment">// these things are memo-ized on our class</span>
-        <span class="local-variable">this</span>.<span class="function">style</span> = <span class="keyword">function</span>(context){
-                <span class="keyword">return</span> {
-                        <span class="key">label</span>:{
-                                <span class="key">bg</span>: <span class="integer">0</span>,
-                                <span class="key">margin</span>: <span class="integer">4</span>,
-                                <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
-                        },
-                }
-        }
-
-        <span class="local-variable">this</span>.<span class="function">wrap</span> = <span class="keyword">function</span>(node, hasownlabel){
-                <span class="keyword">if</span> (hasownlabel === <span class="predefined-constant">undefined</span>) hasownlabel = <span class="predefined-constant">false</span>                
-                <span class="keyword">if</span> (hasownlabel) <span class="keyword">return</span> [node];
-                
-                <span class="keyword">return</span> [
-                        label({<span class="key">bg</span>:<span class="integer">0</span>,<span class="key">margin</span>:<span class="integer">4</span>, <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize, <span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">text</span>:<span class="local-variable">this</span>.propertyname, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor })
-                        ,node
-                ]        
-        }
-        
         <span class="local-variable">this</span>.style = {
                 <span class="key">radiogroup</span>:{
                         <span class="key">margin</span>:vec4(<span class="integer">2</span>,<span class="integer">0</span>,<span class="integer">2</span>,<span class="integer">5</span>)
@@ -421,7 +385,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                          <span class="key">width</span>:<span class="integer">302</span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">colorpicker</span><span class="delimiter">&quot;</span></span>,  <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#383838</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">circle</span><span class="delimiter">&quot;</span></span>, <span class="key">collapsed</span>:<span class="predefined-constant">true</span>
                 },
                 <span class="key">view_colorview</span>:{
-                        <span class="key">bg</span>:<span class="integer">0</span>,<span class="key">width</span>:<span class="integer">300</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>                        
+                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">width</span>:<span class="integer">300</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
                 },
                 <span class="key">numberbox_vec4</span>:{
                         <span class="key">flex</span>:<span class="integer">1</span>,<span class="key">decimals</span>:<span class="integer">3</span>, <span class="key">stepvalue</span>:<span class="float">0.01</span>, <span class="key">margin</span>:<span class="integer">2</span>
@@ -430,65 +394,67 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">decimals</span>:<span class="integer">3</span>, <span class="key">stepvalue</span>:<span class="float">0.01</span>, <span class="key">margin</span>:<span class="integer">2</span>
                 },
                 <span class="key">numberbox_vec2</span>:{
-                         <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">decimals</span>:<span class="integer">3</span>, <span class="key">stepvalue</span>:<span class="float">0.01</span>,
+                         <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">decimals</span>:<span class="integer">3</span>, <span class="key">stepvalue</span>:<span class="float">0.01</span>
                 },
                 <span class="key">numberbox_floatlike</span>:{
-                        <span class="key">decimals</span>:<span class="integer">3</span>, <span class="key">stepvalue</span>:<span class="float">0.01</span>, <span class="key">margin</span>:<span class="integer">2</span>, <span class="key">flex</span>:<span class="integer">1</span>, 
+                        <span class="key">decimals</span>:<span class="integer">3</span>, <span class="key">stepvalue</span>:<span class="float">0.01</span>, <span class="key">margin</span>:<span class="integer">2</span>, <span class="key">flex</span>:<span class="integer">1</span>
                 }
-        }
+        };
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                
-                <span class="keyword">var</span> typename = <span class="local-variable">this</span>.property.type?<span class="local-variable">this</span>.property.type.name:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                <span class="keyword">var</span> meta = (<span class="local-variable">this</span>.property.meta)?<span class="local-variable">this</span>.property.meta:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                
+
+                <span class="keyword">var</span> typename = <span class="local-variable">this</span>.property.type ? <span class="local-variable">this</span>.property.type.name : <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+                <span class="keyword">var</span> meta = <span class="local-variable">this</span>.property.meta ? <span class="local-variable">this</span>.property.meta : <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+
+                <span class="keyword">var</span> editor;
+
                 <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">Enum</span><span class="delimiter">&quot;</span></span>){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(radiogroup({
-                                <span class="key">title</span>:<span class="local-variable">this</span>.propertyname,<span class="key">values</span>:<span class="local-variable">this</span>.property.type.values, <span class="key">currentvalue</span>: <span class="local-variable">this</span>.value}), <span class="predefined-constant">true</span>);
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4</span><span class="delimiter">&quot;</span></span>){
-                
+
+                        editor = radiogroup({
+                                <span class="key">values</span>:<span class="local-variable">this</span>.property.type.values,
+                                <span class="key">currentvalue</span>:<span class="local-variable">this</span>.value,
+                                <span class="function">oncurrentvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val)}.bind(<span class="local-variable">this</span>)
+                        });
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4</span><span class="delimiter">&quot;</span></span>){
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.property.meta==<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>){
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(                                
-                                        foldcontainer({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>, <span class="key">basecolor</span>:vec4(<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="local-variable">this</span>.value[<span class="integer">2</span>],<span class="float">1.0</span>)},
-                                                view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color_view</span><span class="delimiter">'</span></span>},
-                                                        colorpicker({<span class="key">value</span>:<span class="local-variable">this</span>.value})
-                                                )
-                                        )
-                                )
+
+                                editor = foldcontainer({
+                                        <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>,
+                                        <span class="key">basecolor</span>:vec4(<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="local-variable">this</span>.value[<span class="integer">2</span>],<span class="float">1.0</span>)
+                                }, view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color_view</span><span class="delimiter">'</span></span>},
+                                        colorpicker({<span class="key">value</span>:<span class="local-variable">this</span>.value,<span class="function">onvalue</span>:<span class="keyword">function</span>(ev,val,o){
+                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">&gt;s&gt;</span><span class="delimiter">'</span></span>, ev, val, o)
+                                        }})));
+
+                        } <span class="keyword">else</span> {
+                                <span class="keyword">var</span> t1 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">var</span> t2 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">var</span> t3 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">var</span> t4 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.property.meta ==<span class="string"><span class="delimiter">&quot;</span><span class="content">tlbr</span><span class="delimiter">&quot;</span></span>)
+                                {
+                                        t1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>
+                                        t2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>;
+                                        t3 = <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>;
+                                        t4 = <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>
+                                }<span class="keyword">else</span>
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.property.meta ==<span class="string"><span class="delimiter">&quot;</span><span class="content">ltrb</span><span class="delimiter">&quot;</span></span>)
+                                {
+                                        t1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>;
+                                        t2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>
+                                        t3 = <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>
+                                        t4 = <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>;
+                                }
+                                editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
+                                                numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>]}),
+                                                numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>]}),
+                                                numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>]}),
+                                                numberbox({<span class="key">title</span>:t4, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">3</span>]}));
                         }
-                        
-                        <span class="keyword">var</span> t1 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">var</span> t2 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">var</span> t3 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">var</span> t4 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.property.meta ==<span class="string"><span class="delimiter">&quot;</span><span class="content">tlbr</span><span class="delimiter">&quot;</span></span>)
-                        {
-                                t1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>
-                                t2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>;
-                                t3 = <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>;
-                                t4 = <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span> 
-                        }<span class="keyword">else</span>
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.property.meta ==<span class="string"><span class="delimiter">&quot;</span><span class="content">ltrb</span><span class="delimiter">&quot;</span></span>)
-                        {
-                                t1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>;
-                                t2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>
-                                t3 = <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span> 
-                                t4 = <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>;
-                        }
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
-                                        numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>]}), 
-                                        numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>]}), 
-                                        numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>]}), 
-                                        numberbox({<span class="key">title</span>:t4, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">3</span>]})
-                                )
-                        );
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3</span><span class="delimiter">&quot;</span></span>){
-                        
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3</span><span class="delimiter">&quot;</span></span>){
+
                         <span class="keyword">var</span> t1 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
                         <span class="keyword">var</span> t2 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
                         <span class="keyword">var</span> t3 = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
@@ -496,77 +462,68 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 t1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">X</span><span class="delimiter">&quot;</span></span>
                                 t2 = <span class="string"><span class="delimiter">&quot;</span><span class="content">Y</span><span class="delimiter">&quot;</span></span>;
                                 t3 = <span class="string"><span class="delimiter">&quot;</span><span class="content">Z</span><span class="delimiter">&quot;</span></span>;
-                                
                         }
-                                
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
-                                        numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>]}), 
-                                        numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>]}), 
-                                        numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>]})
-                                )
-                        );
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2</span><span class="delimiter">&quot;</span></span>){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
-                                        numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="key">margin</span>:<span class="integer">2</span>}), 
-                                        numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="key">margin</span>:<span class="integer">2</span>})
-                                )
-                        );            
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">FloatLike</span><span class="delimiter">&quot;</span></span>){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
-                                        numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">floatlike</span><span class="delimiter">'</span></span>, <span class="key">minvalue</span>: <span class="local-variable">this</span>.property.minvalue, <span class="key">maxvalue</span>: <span class="local-variable">this</span>.property.maxvalue,  <span class="key">value</span>:<span class="local-variable">this</span>.value}) 
-                                )
-                        )
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">IntLike</span><span class="delimiter">&quot;</span></span>){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
-                                        numberbox({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">minvalue</span>: <span class="local-variable">this</span>.property.minvalue, <span class="key">maxvalue</span>: <span class="local-variable">this</span>.property.maxvalue, <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize, <span class="key">value</span>:<span class="local-variable">this</span>.value, <span class="key">stepvalue</span>:<span class="integer">1</span>, <span class="key">margin</span>:<span class="integer">2</span>}) 
-                                )
-                        )
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">String</span><span class="delimiter">&quot;</span></span>){                        
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
+
+                        editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
+                                           numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>]}),
+                                           numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>]}),
+                                       numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>]}));
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2</span><span class="delimiter">&quot;</span></span>){
+                        editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
+                                           numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="key">margin</span>:<span class="integer">2</span>}),
+                                           numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="key">margin</span>:<span class="integer">2</span>}));
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">FloatLike</span><span class="delimiter">&quot;</span></span> || typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">float32</span><span class="delimiter">&quot;</span></span>){
+                        editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
+                                       numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">floatlike</span><span class="delimiter">'</span></span>, <span class="key">minvalue</span>: <span class="local-variable">this</span>.property.minvalue, <span class="key">maxvalue</span>: <span class="local-variable">this</span>.property.maxvalue,  <span class="key">value</span>:<span class="local-variable">this</span>.value}));
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">IntLike</span><span class="delimiter">&quot;</span></span> || typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">int32</span><span class="delimiter">&quot;</span></span>){
+                        editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
+                                        numberbox({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">minvalue</span>: <span class="local-variable">this</span>.property.minvalue, <span class="key">maxvalue</span>: <span class="local-variable">this</span>.property.maxvalue, <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize, <span class="key">value</span>:<span class="local-variable">this</span>.value, <span class="key">stepvalue</span>:<span class="integer">1</span>, <span class="key">margin</span>:<span class="integer">2</span>}));
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">String</span><span class="delimiter">&quot;</span></span>){
+                        editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
                                         textbox({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value,<span class="key">padding</span>:<span class="integer">4</span>, <span class="key">borderradius</span>:<span class="integer">0</span>, <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">2</span>})
-                                ) 
-                        )
-                }
-                
-                <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">Boolean</span><span class="delimiter">&quot;</span></span> || typename==<span class="string"><span class="delimiter">&quot;</span><span class="content">BoolLike</span><span class="delimiter">&quot;</span></span>){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                view({<span class="key">bg</span>:<span class="integer">0</span>},
-                                        checkbox({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value,<span class="key">padding</span>:<span class="integer">4</span>, <span class="key">borderradius</span>:<span class="integer">0</span>, <span class="key">borderwidth</span>:<span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:<span class="integer">2</span>})
-                                ) 
-                        )
-                }
-                
-                <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta == <span class="string"><span class="delimiter">&quot;</span><span class="content">font</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                label({<span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">margin</span>:<span class="integer">4</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">FONT PICKER!</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor})
-                        )                        
+
+                        );
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">Boolean</span><span class="delimiter">&quot;</span></span> || typename==<span class="string"><span class="delimiter">&quot;</span><span class="content">BoolLike</span><span class="delimiter">&quot;</span></span> || typename==<span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span>) {
+
+                        editor = checkbox({
+                                <span class="key">flex</span>:<span class="integer">0</span>,
+                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
+                                <span class="key">value</span>:<span class="local-variable">this</span>.value,
+                                <span class="key">padding</span>:<span class="integer">4</span>,
+                                <span class="key">borderradius</span>:<span class="integer">0</span>,
+                                <span class="key">borderwidth</span>:<span class="integer">2</span>,
+                                <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#262626</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">margin</span>:<span class="integer">2</span>,
+                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val)}.bind(<span class="local-variable">this</span>)
+                        });
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta == <span class="string"><span class="delimiter">&quot;</span><span class="content">font</span><span class="delimiter">&quot;</span></span>) {
+                        editor = label({<span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">margin</span>:<span class="integer">4</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">FONT PICKER!</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor});
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta == <span class="string"><span class="delimiter">&quot;</span><span class="content">texture</span><span class="delimiter">&quot;</span></span>) {
+                        editor = label({<span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">margin</span>:<span class="integer">4</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">IMAGE PICKER!</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor});
+
+                } <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.property) {
+                                <span class="keyword">return</span> [];
+                        }
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">UNKNOWN PROPERTY TYPE NAME</span><span class="delimiter">'</span></span>, typename);
+                        editor = label({<span class="key">margin</span>:<span class="integer">4</span>, <span class="key">text</span>:typename + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + meta, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor});
                 }
 
-                <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta == <span class="string"><span class="delimiter">&quot;</span><span class="content">texture</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(
-                                label({<span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize, <span class="key">margin</span>:<span class="integer">4</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">IMAGE PICKER!</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor})
-                        )
-                }
-                
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>.property) <span class="keyword">return</span> [];
-                <span class="comment">//console.log(this.property);</span>
-                <span class="keyword">return</span> <span class="local-variable">this</span>.wrap(label({<span class="key">margin</span>:<span class="integer">4</span>,<span class="key">text</span>:typename + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + meta, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor}))
+                <span class="keyword">return</span> [
+                        label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">margin</span>:<span class="integer">4</span>, <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize, <span class="key">flex</span>: <span class="float">0.2</span>, <span class="key">text</span>:<span class="local-variable">this</span>.propertyname, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor}),
+                        editor
+                ]
         }
-        
-})</pre></td>
+
+})
+</pre></td>
 </tr></table>
 
 </body>

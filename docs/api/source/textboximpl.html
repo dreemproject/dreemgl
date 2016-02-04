@@ -628,6 +628,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n474" name="n474">474</a>
 <a href="#n475" name="n475">475</a>
 <a href="#n476" name="n476">476</a>
+<a href="#n477" name="n477">477</a>
+<a href="#n478" name="n478">478</a>
+<a href="#n479" name="n479">479</a>
+<strong><a href="#n480" name="n480">480</a></strong>
+<a href="#n481" name="n481">481</a>
+<a href="#n482" name="n482">482</a>
+<a href="#n483" name="n483">483</a>
+<a href="#n484" name="n484">484</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -886,7 +894,15 @@ define.mixin(<span class="keyword">function</span>(require){
 
 
         <span class="local-variable">this</span>.<span class="function">onpointerstart</span> = <span class="keyword">function</span> (event) {
-                <span class="keyword">var</span> pointer = event.value[<span class="integer">0</span>]
+                <span class="keyword">var</span> pointer = event.value
+
+                <span class="keyword">if</span> (<span class="keyword">typeof</span>(pointer.position) === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
+                        <span class="comment">// TODO: why is pointer.position undefined?</span>
+                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">// TODO: find out how did pointer.position become undefined here?</span><span class="delimiter">'</span></span>)
+                        <span class="keyword">return</span>;
+                }
+
+
                 <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(pointer.position)
 
                 <span class="comment">// var clone = []</span>
@@ -898,13 +914,13 @@ define.mixin(<span class="keyword">function</span>(require){
                         <span class="comment">// if (pointer.leftmeta || pointer.rightmeta) clone = this.cursorset.list</span>
                         <span class="local-variable">this</span>.cursorset.rectSelect(pos[<span class="integer">0</span>], pos[<span class="integer">1</span>], pos[<span class="integer">0</span>], pos[<span class="integer">1</span>], clone)
                 } <span class="keyword">else</span> <span class="keyword">if</span> (pointer.meta){
-                        <span class="comment">// cursor = this.cursorset.addCursor()</span>
-                        <span class="comment">// // in that case what we need to</span>
-                        <span class="comment">// cursor.moveTo(pos[0], pos[1])</span>
-                        <span class="comment">// // lets make it select the word</span>
-                        <span class="comment">// if (pointer.clicker == 2) cursor.selectWord()</span>
-                        <span class="comment">// if (pointer.clicker == 3) cursor.selectLine()</span>
-                        <span class="comment">// this.cursorset.update()</span>
+                        cursor = <span class="local-variable">this</span>.cursorset.addCursor()
+                        <span class="comment">// in that case what we need to</span>
+                        cursor.moveTo(pos[<span class="integer">0</span>], pos[<span class="integer">1</span>])
+                        <span class="comment">// lets make it select the word</span>
+                        <span class="keyword">if</span> (pointer.clicker == <span class="integer">2</span>) cursor.selectWord()
+                        <span class="keyword">if</span> (pointer.clicker == <span class="integer">3</span>) cursor.selectLine()
+                        <span class="local-variable">this</span>.cursorset.update()
                 } <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.cursorset.fusing = <span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.cursorset.moveTo(pos[<span class="integer">0</span>], pos[<span class="integer">1</span>])
@@ -916,7 +932,7 @@ define.mixin(<span class="keyword">function</span>(require){
         }
 
         <span class="local-variable">this</span>.<span class="function">onpointermove</span> = <span class="keyword">function</span> (event) {
-                <span class="keyword">var</span> pointer = event.value[<span class="integer">0</span>]
+                <span class="keyword">var</span> pointer = event.value
                 <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(pointer.position)
                 <span class="keyword">var</span> min = <span class="local-variable">this</span>.globalToLocal(pointer.min)
                 <span class="keyword">var</span> max = <span class="local-variable">this</span>.globalToLocal(pointer.max)

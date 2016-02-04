@@ -36,23 +36,7 @@ define.class(function ($ui$, view, label) {
 				margintop:0
 			}),
 			label({
-				text:'./examples/guide/README.md',
-				class:'small'
-			}),
-			label({
-				text:'+ Web Service Example (Sample Component)',
-				class:'large'
-			}),
-			label({
-				text:'https://github.com/teem2/teem-sample_component',
-				class:'small'
-			}),
-			label({
-				text:'+ IoT Example (Estimote Beacon)',
-				class:'large'
-			}),
-			label({
-				text:'https://github.com/teem2/teem-estimotebeacon',
+				text:'http://localhost:2000/docs/api/index.html#!/guide/components',
 				class:'small'
 			}),
 			label({

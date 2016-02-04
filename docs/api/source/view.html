@@ -1770,6 +1770,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1616" name="n1616">1616</a>
 <a href="#n1617" name="n1617">1617</a>
 <a href="#n1618" name="n1618">1618</a>
+<a href="#n1619" name="n1619">1619</a>
+<strong><a href="#n1620" name="n1620">1620</a></strong>
+<a href="#n1621" name="n1621">1621</a>
+<a href="#n1622" name="n1622">1622</a>
+<a href="#n1623" name="n1623">1623</a>
+<a href="#n1624" name="n1624">1624</a>
+<a href="#n1625" name="n1625">1625</a>
+<a href="#n1626" name="n1626">1626</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1788,7 +1796,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// wether to draw it</span>
                 <span class="key">visible</span>: <span class="predefined-constant">true</span>,
 
-                <span class="key">drawtarget</span>: Config({<span class="key">type</span>:Enum(<span class="string"><span class="delimiter">'</span><span class="content">both</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>)}),
+                <span class="key">drawtarget</span>: Config({<span class="key">type</span>:Enum(<span class="string"><span class="delimiter">'</span><span class="content">both</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">both</span><span class="delimiter">'</span></span>}),
 
                 <span class="comment">// pos(ition) of the view, relative to parent. For 2D only the first 2 components are used, for 3D all three.</span>
                 <span class="key">pos</span>: Config({<span class="key">type</span>:vec3, <span class="key">value</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),<span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xyz</span><span class="delimiter">&quot;</span></span>}),
@@ -1817,7 +1825,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">rear</span>: Config({<span class="key">alias</span>:<span class="string"><span class="delimiter">'</span><span class="content">corner</span><span class="delimiter">'</span></span>, <span class="key">index</span>:<span class="integer">2</span>}),
 
                 <span class="comment">// the background color of a view, referenced by various shaders</span>
-                <span class="key">bgcolor</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">bgcolor</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>, <span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">'</span><span class="content">NaN</span><span class="delimiter">'</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')</span>
                 <span class="key">bgimage</span>: Config({<span class="key">group</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">style</span><span class="delimiter">&quot;</span></span>,<span class="key">type</span>:Object, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">texture</span><span class="delimiter">&quot;</span></span>}),
                 <span class="comment">// the opacity of the image</span>
@@ -1987,12 +1995,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// fires when pointer is pressed down.</span>
                 <span class="key">pointerstart</span>:Config({<span class="key">type</span>:Event}),
+                <span class="key">pointermultistart</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer is pressed and moved (dragged).</span>
                 <span class="key">pointermove</span>:Config({<span class="key">type</span>:Event}),
+                <span class="key">pointermultimove</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer is released.</span>
                 <span class="key">pointerend</span>:Config({<span class="key">type</span>:Event}),
+                <span class="key">pointermultiend</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer is pressed and released quickly.</span>
                 <span class="key">pointertap</span>:Config({<span class="key">type</span>:Event}),
+                <span class="key">pointermultitap</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer moved without being pressed.</span>
                 <span class="key">pointerhover</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer enters an element.</span>
@@ -2010,7 +2022,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">keypress</span>: Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when someone pastes data into the view. The event argument is {text:string}</span>
                 <span class="key">keypaste</span>: Config({<span class="key">type</span>:Event}),
-                
+
                 <span class="comment">// fires when this view loses focus</span>
                 <span class="key">blur</span>: Config({<span class="key">type</span>:Event}),
 
@@ -2098,34 +2110,49 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">onborderwidth</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.setBorderShaders()
         }
+        
+        <span class="local-variable">this</span>.<span class="function">onbgcolor</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.setBorderShaders()
+        }
 
         <span class="local-variable">this</span>.<span class="function">setBorderShaders</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> radius = <span class="local-variable">this</span>._borderradius
                 <span class="comment">//var value = event.value</span>
-                <span class="keyword">if</span>(radius[<span class="integer">0</span>] !== <span class="integer">0</span> || radius[<span class="integer">1</span>] !== <span class="integer">0</span> || radius[<span class="integer">2</span>] !== <span class="integer">0</span> || radius[<span class="integer">3</span>] !== <span class="integer">0</span>){
-                        <span class="comment">// this switches the bg shader to the rounded one</span>
-                        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.roundedrect
-                        <span class="local-variable">this</span>.border = <span class="local-variable">this</span>.roundedborder
-                }
-                <span class="keyword">else</span> {
-                        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.hardrect
-                        <span class="local-variable">this</span>.border = <span class="local-variable">this</span>.hardborder
-                }
+                <span class="keyword">var</span> border_on = <span class="predefined-constant">true</span>
                 <span class="keyword">var</span> width = <span class="local-variable">this</span>._borderwidth
                 <span class="keyword">if</span>(width[<span class="integer">0</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">1</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">2</span>] === <span class="integer">0</span> &amp;&amp; width[<span class="integer">3</span>] === <span class="integer">0</span>){
-                        <span class="local-variable">this</span>.border = <span class="predefined-constant">false</span>
+                        border_on = <span class="predefined-constant">false</span>
                 }
                 <span class="keyword">else</span>{
-                        <span class="local-variable">this</span>.border = <span class="predefined-constant">true</span>
+                        border_on = <span class="predefined-constant">true</span>
+                }
+
+                <span class="keyword">var</span> bg_on = isNaN(<span class="local-variable">this</span>._bgcolor[<span class="integer">0</span>])? <span class="predefined-constant">false</span>: <span class="predefined-constant">true</span>
+
+                <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>) border_on = <span class="predefined-constant">false</span>, bg_on = <span class="predefined-constant">false</span>
+        
+                <span class="keyword">if</span>(radius[<span class="integer">0</span>] !== <span class="integer">0</span> || radius[<span class="integer">1</span>] !== <span class="integer">0</span> || radius[<span class="integer">2</span>] !== <span class="integer">0</span> || radius[<span class="integer">3</span>] !== <span class="integer">0</span>){
+                        <span class="comment">// this switches the bg shader to the rounded one</span>
+                        <span class="local-variable">this</span>.bgshader_name = <span class="string"><span class="delimiter">'</span><span class="content">roundedrectshader</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.bordershader_name = <span class="string"><span class="delimiter">'</span><span class="content">roundedbordershader</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.roundedrect = bg_on
+                        <span class="local-variable">this</span>.roundedborder = border_on
+                        <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.hardborder = <span class="predefined-constant">false</span>
+                }
+                <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.bgshader_name = <span class="string"><span class="delimiter">'</span><span class="content">hardrectshader</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.bordershader_name = <span class="string"><span class="delimiter">'</span><span class="content">hardbordershader</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.hardrect = bg_on
+                        <span class="local-variable">this</span>.hardborder = border_on
+                        <span class="local-variable">this</span>.roundedrect = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.roundedborder = <span class="predefined-constant">false</span>
                 }
         }
 
         <span class="comment">// internal, listen to the viewport to turn off our background and border shaders when 3D</span>
         <span class="local-variable">this</span>.<span class="function">onviewport</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">if</span>(event.value === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
-                        <span class="local-variable">this</span>.bg = <span class="predefined-constant">false</span>
-                        <span class="local-variable">this</span>.border = <span class="predefined-constant">false</span>
-                }
+                <span class="local-variable">this</span>.setBorderShaders()
         }
 
         <span class="comment">// internal, automatically turn a viewport:'2D' on when we  have an overflow (scrollbars) set</span>
@@ -2164,7 +2191,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.matrix_dirty = <span class="predefined-constant">true</span>
 
         <span class="comment">// internal, initialization of a view</span>
-        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(prev){
+        <span class="local-variable">this</span>.<span class="function">atViewInit</span> = <span class="keyword">function</span>(prev){
 
                 <span class="local-variable">this</span>.anims = {}
                 <span class="comment">//this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}</span>
@@ -2187,17 +2214,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage || <span class="local-variable">this</span>._wiredfn_bgimage){
                         <span class="comment">// set the bg shader</span>
-                        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.hardimage
+                        <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">true</span>
                 }
                 <span class="comment">// create shaders</span>
-
+                <span class="local-variable">this</span>.shaders = {}
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shader_enable){
                         <span class="keyword">var</span> enable = <span class="local-variable">this</span>.shader_enable[key]
                         <span class="keyword">if</span>(!enable) <span class="keyword">continue</span>
                         <span class="keyword">var</span> shader = <span class="local-variable">this</span>[key]
                         <span class="keyword">if</span>(shader){
-                                <span class="keyword">var</span> shname = key + <span class="string"><span class="delimiter">'</span><span class="content">shader</span><span class="delimiter">'</span></span>
-                                <span class="keyword">var</span> prevshader = prev &amp;&amp; prev[shname]
+                                <span class="comment">//var shname = key + 'shader'</span>
+                                <span class="comment">//console.log(shname)</span>
+
+                                <span class="keyword">var</span> prevshader = prev &amp;&amp; prev.shaders &amp;&amp; prev.shaders[key]
                                 <span class="keyword">var</span> shobj
                                 <span class="comment">// ok so instead of comparing constructor, lets compare the computational result</span>
 <span class="comment">//                                if(prevshader &amp;&amp; prevshader.constructor !== shader) console.log(shader)</span>
@@ -2221,8 +2251,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">else</span>{
                                         shobj = <span class="keyword">new</span> shader(<span class="local-variable">this</span>)
                                 }
-                                <span class="local-variable">this</span>[shname] = shobj
-                                shobj.shadername = shname
+                                <span class="comment">//this[shname] = shobj</span>
+                                shobj.shadername = key
+                                <span class="local-variable">this</span>.shaders[key] = shobj
                                 <span class="local-variable">this</span>.shader_list.push(shobj)
                         }
                 }
@@ -2236,13 +2267,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">//}</span>
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._viewport){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.bgshader) <span class="local-variable">this</span>.bgshader.noscroll = <span class="predefined-constant">true</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.bordershader) <span class="local-variable">this</span>.bordershader.noscroll = <span class="predefined-constant">true</span>
-                        <span class="local-variable">this</span>.viewportblendshader = <span class="keyword">new</span> <span class="local-variable">this</span>.viewportblend(<span class="local-variable">this</span>)
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shaders){
+                                <span class="local-variable">this</span>.shaders[key].noscroll = <span class="predefined-constant">true</span>
+                        }
+                        <span class="local-variable">this</span>.shaders.viewportblend = <span class="keyword">new</span> <span class="local-variable">this</span>.viewportblend(<span class="local-variable">this</span>)
                 }
 
                 <span class="local-variable">this</span>.sortShaders()
         }
+
+        Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">bg</span><span class="delimiter">'</span></span>, {
+                <span class="function">get</span>:<span class="keyword">function</span>(){},
+                <span class="function">set</span>:<span class="keyword">function</span>(){
+                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">bg property depricated, please use bgcolor:NaN to turn off background shader, and subclass via bgcolorfn or hardrect/roundedrect specifically</span><span class="delimiter">'</span></span>)
+                }
+        })
 
         <span class="local-variable">this</span>.<span class="function">onbgimage</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized){
@@ -2259,7 +2298,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">setBgImage</span> = <span class="keyword">function</span>(image){
-                <span class="keyword">var</span> img = <span class="local-variable">this</span>.bgshader.texture = Shader.Texture.fromImage(image);
+                <span class="keyword">var</span> img = <span class="local-variable">this</span>.shaders.hardimage.texture = Shader.Texture.fromImage(image);
                 <span class="keyword">if</span>(isNaN(<span class="local-variable">this</span>._size[<span class="integer">0</span>])){
                         <span class="local-variable">this</span>._size = img.size
                         <span class="local-variable">this</span>.relayout()
@@ -2301,13 +2340,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// internal, sorts the shaders</span>
         <span class="local-variable">this</span>.<span class="function">sortShaders</span> = <span class="keyword">function</span>(){
-
+                <span class="keyword">var</span> shaders = <span class="local-variable">this</span>.shaders
                 <span class="local-variable">this</span>.shader_draw_list = <span class="local-variable">this</span>.shader_list.slice(<span class="integer">0</span>).sort(<span class="keyword">function</span>(a, b){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>[a.shadername].draworder &gt; <span class="local-variable">this</span>[b.shadername].draworder
+                        <span class="keyword">return</span> shaders[a.shadername].draworder &gt; <span class="local-variable">this</span>[b.shadername].draworder
                 }.bind(<span class="local-variable">this</span>))
 
                 <span class="local-variable">this</span>.shader_update_list = <span class="local-variable">this</span>.shader_list.slice(<span class="integer">0</span>).sort(<span class="keyword">function</span>(a, b){
-                        <span class="keyword">return</span> <span class="local-variable">this</span>[a.shadername].updateorder &gt; <span class="local-variable">this</span>[b.shadername].updateorder
+                        <span class="keyword">return</span> shaders[a.shadername].updateorder &gt; <span class="local-variable">this</span>[b.shadername].updateorder
                 }.bind(<span class="local-variable">this</span>))
                 <span class="comment">//console.log(this.shader_draw_list)</span>
         }
@@ -2580,21 +2619,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="local-variable">this</span>.<span class="function">pointerwheel</span> = <span class="keyword">function</span>(event){
                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.vscrollbar._visible){
-                                        <span class="local-variable">this</span>.vscrollbar.value = clamp(<span class="local-variable">this</span>.vscrollbar._value + event.value[<span class="integer">0</span>].wheel[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.vscrollbar._total - <span class="local-variable">this</span>.vscrollbar._page)
+                                        <span class="local-variable">this</span>.vscrollbar.value = clamp(<span class="local-variable">this</span>.vscrollbar._value + event.wheel[<span class="integer">1</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.vscrollbar._total - <span class="local-variable">this</span>.vscrollbar._page)
                                 }
                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.hscrollbar._visible){
-                                        <span class="local-variable">this</span>.hscrollbar.value = clamp(<span class="local-variable">this</span>.hscrollbar._value + event.value[<span class="integer">0</span>].wheel[<span class="integer">0</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
+                                        <span class="local-variable">this</span>.hscrollbar.value = clamp(<span class="local-variable">this</span>.hscrollbar._value + event.wheel[<span class="integer">0</span>], <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
                                 }
                         }
 
-                        <span class="comment">// //TODO</span>
+                        <span class="comment">//TODO(aki): implement zoom</span>
                         <span class="comment">// this.pointerzoom = function(event){</span>
                         <span class="comment">//         var zoom = event.value.zoom</span>
                         <span class="comment">//         var lastzoom = this._zoom</span>
                         <span class="comment">//         var newzoom = clamp(lastzoom * (1+0.03 * zoom),0.01,10)</span>
                         <span class="comment">//         this.zoom = newzoom</span>
                         <span class="comment">//</span>
-                        <span class="comment">//         var pos = this.globalToLocal(event.value[0].position)</span>
+                        <span class="comment">//         var pos = this.globalToLocal(event.value.position)</span>
                         <span class="comment">//</span>
                         <span class="comment">//         var shiftx = pos[0] * lastzoom - pos[0] * this._zoom</span>
                         <span class="comment">//         var shifty = pos[1] * lastzoom - pos[1] * this._zoom</span>
@@ -2950,18 +2989,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.relayout()
         }
 
-        <span class="comment">// standard bg is undecided</span>
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">bg</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
-        })
-        <span class="local-variable">this</span>.bg = <span class="predefined-constant">true</span>
-
-        <span class="comment">// standard border is undecided too</span>
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">border</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
-        })
-        <span class="local-variable">this</span>.border = <span class="predefined-constant">false</span>
-
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">hardrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
                 <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
@@ -2977,7 +3004,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
                 }
         })
-        <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
+        <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.<span class="function">bordercolorfn</span> = <span class="keyword">function</span>(pos){
                 <span class="keyword">return</span> bordercolor
@@ -3021,9 +3048,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity);
                 }
         })
-        <span class="local-variable">this</span>.hardborder = <span class="predefined-constant">false</span>
-        <span class="comment">// make rect the default bg shader</span>
-        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.hardrect
 
         <span class="comment">// hard edged bgimage shader</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">hardimage</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.hardrect, <span class="keyword">function</span>(){
@@ -3035,7 +3059,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
                 }
         })
-        <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">false</span>
 
         <span class="comment">// rounded rect shader class</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
@@ -3117,9 +3140,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(sized.x, sized.y, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                 }
         })
-        <span class="local-variable">this</span>.roundedrect = <span class="predefined-constant">false</span>
-
-
 
         <span class="comment">// rounded rect shader class</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">shadowrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
@@ -3230,8 +3250,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         })
 
-        <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">false</span>
-
         <span class="local-variable">this</span>.<span class="function">dropshadowopacity</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.dropshadowopacity&gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.shadowrect = <span class="predefined-constant">true</span>;
@@ -3277,7 +3295,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
                 }
         })
-        <span class="local-variable">this</span>.viewportblend = <span class="predefined-constant">false</span>
 
         <span class="comment">// rounded corner border shader</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedborder</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
@@ -3370,11 +3387,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//Object.getPrototypeOf(this).atExtend.call(this)</span>
         <span class="comment">//        }</span>
         })
-        <span class="local-variable">this</span>.roundedborder = <span class="predefined-constant">false</span>
 
         <span class="comment">// lets pull in the scrollbar on the view</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">scrollbar</span><span class="delimiter">'</span></span>, require(<span class="string"><span class="delimiter">'</span><span class="content">$ui/scrollbar</span><span class="delimiter">'</span></span>),<span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.bg = {
+                <span class="local-variable">this</span>.hardrect = {
                         <span class="key">noscroll</span>:<span class="predefined-constant">true</span>
                 }
         })

@@ -373,7 +373,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// TODO(aki): fix in 3D view</span>
                 <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
-                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.globalToLocal(event.value[<span class="integer">0</span>].position)
+                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.globalToLocal(event.position)
                         <span class="local-variable">this</span>.bgshader.pointerpos = vec2(a[<span class="integer">0</span>],a[<span class="integer">1</span>])
                         <span class="local-variable">this</span>.redraw()
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.children.length &gt; <span class="integer">0</span>){

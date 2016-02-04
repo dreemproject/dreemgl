@@ -223,8 +223,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="function">pointermove</span>:<span class="keyword">function</span>(event){
                                         <span class="keyword">var</span> select = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>)
                                         select.visible = <span class="predefined-constant">true</span>
-                                        select.pos = vec2(event.value[<span class="integer">0</span>].min[<span class="integer">0</span>], event.value[<span class="integer">0</span>].min[<span class="integer">1</span>])
-                                        select.size = vec2(event.value[<span class="integer">0</span>].max[<span class="integer">0</span>] - event.value[<span class="integer">0</span>].min[<span class="integer">0</span>], event.value[<span class="integer">0</span>].max[<span class="integer">1</span>] - event.value[<span class="integer">0</span>].min[<span class="integer">1</span>])
+                                        select.pos = vec2(event.min[<span class="integer">0</span>], event.min[<span class="integer">1</span>])
+                                        select.size = vec2(event.max[<span class="integer">0</span>] - event.min[<span class="integer">0</span>], event.max[<span class="integer">1</span>] - event.min[<span class="integer">1</span>])
                                 },
                                 <span class="function">pointerend</span>:<span class="keyword">function</span>(event){
                                         <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>).visible = <span class="predefined-constant">false</span>

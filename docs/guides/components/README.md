@@ -217,10 +217,7 @@ All RPC method calls are promises that return with the result of the method, and
 
 When you have a physcial device or external service that cannot be integrated directly within the Dreem system itself,
 or if you otherwise need to send data into the system, you can interact directly with Dreem objects using the HTTP
-POST API methods.  An example of of an external component using the POST API can be found in the
-[Dreem GL branch](https://github.com/teem2/teem-estimotebeacon/tree/dreemgl) of the Dreem<->Estimote bridge
-repository.  In particular the [app.js](https://github.com/teem2/teem-estimotebeacon/blob/dreemgl/estimote_repeater/app.js#L83)
-POSTs the beacons it finds via AJAX.
+POST API methods.  
 
 ## Using POST API
 

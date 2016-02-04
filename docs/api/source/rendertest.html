@@ -268,7 +268,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">buttoncolor2</span>: Config({<span class="key">type</span>: vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#8080c0</span><span class="delimiter">&quot;</span></span>)})
                 }
 
-                <span class="local-variable">this</span>.bg  = {
+                <span class="local-variable">this</span>.hardrect  = {
                         <span class="key">pointerpos</span>: vec2(<span class="integer">0</span>),
                         <span class="key">gridcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffff</span><span class="delimiter">&quot;</span></span>),
                         <span class="function">grid</span>:<span class="keyword">function</span>(a){
@@ -297,8 +297,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">pointerhover</span> = <span class="keyword">function</span>(event){
-                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.globalToLocal(event.value[<span class="integer">0</span>].position)
-                        <span class="local-variable">this</span>.bgshader.pointerpos = vec2(a[<span class="integer">0</span>],a[<span class="integer">1</span>])
+                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.globalToLocal(event.position)
+                        <span class="local-variable">this</span>.shaders.hardrect.pointerpos = vec2(a[<span class="integer">0</span>],a[<span class="integer">1</span>])
                         <span class="local-variable">this</span>.redraw()
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.children.length &gt; <span class="integer">0</span>){
                                 <span class="local-variable">this</span>.children[<span class="integer">0</span>].text = Math.round(a[<span class="integer">0</span>]) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + Math.round(a[<span class="integer">1</span>]);

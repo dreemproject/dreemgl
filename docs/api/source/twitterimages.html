@@ -252,105 +252,115 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n98" name="n98">98</a>
 <a href="#n99" name="n99">99</a>
 <strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, foldcontainer, view, label, button, scrollbar, textbox,<span class="predefined">$widgets$</span>,propeditor){
+<span class="comment">// The server uses twitterlib to retrieve twitter images from the SF area.</span>
+<span class="comment">// You can either use the streaming interface (using their 1% firehose), or</span>
+<span class="comment">// retrieve recent images from the area.</span>
+<span class="comment">//</span>
+<span class="comment">// Live reloading causes some issues with the connection between the client</span>
+<span class="comment">// and server. I found it best to restart the server whenever the code is</span>
+<span class="comment">// modified.</span>
+<span class="comment">//</span>
+<span class="comment">// I don't think dreemgl supports something like 'background-size: contain' to</span>
+<span class="comment">// scale the image to the size.</span>
 
-        <span class="local-variable">this</span>.attributes = {
-                <span class="key">target</span>:Config({<span class="key">type</span>:Object, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-        }
 
-        <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>;
-        <span class="local-variable">this</span>.flexdirection= <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
-        <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
-        <span class="local-variable">this</span>.clearcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>);
-        <span class="local-variable">this</span>.padding = <span class="integer">0</span>
-        <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
-
-        <span class="local-variable">this</span>.<span class="function">uppercaseFirst</span> = <span class="keyword">function</span> (inp) {
-                <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp;
-                <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>);
-        }
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, service, <span class="predefined">$ui$</span>, screen, view, label, require){
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> c = <span class="local-variable">this</span>.target;
-                <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.target) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-                        c = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>.target);
-                        <span class="keyword">if</span> (!c) <span class="keyword">return</span> [];
+
+    <span class="comment">// Generate placeholder images (using the teem logo).</span>
+                <span class="keyword">var</span> dynviews = [];
+                <span class="keyword">var</span> nimages = <span class="integer">4</span>;
+    <span class="keyword">var</span> imagesize = vec2(<span class="integer">256</span>, <span class="integer">256</span>);
+                <span class="comment">// Display a default image for each view</span>
+                <span class="keyword">for</span> (<span class="keyword">var</span> n=<span class="integer">0</span>; n&lt;nimages; n++) {
+                        <span class="keyword">var</span> v1 = view({
+                                <span class="key">size</span>: imagesize
+                                ,<span class="key">bgimage</span>: <span class="string"><span class="delimiter">'</span><span class="content">http://teem.nu/wp-content/uploads/2015/11/TEEMlogo.png</span><span class="delimiter">'</span></span>
+                        })
+                        dynviews.push(v1);
                 }
 
-                <span class="keyword">var</span> res = [];
-                <span class="keyword">var</span> keysgroups = {};
+                <span class="keyword">var</span> views = [
+                        <span class="comment">// Server side service: twitterservice</span>
+                        service({
+                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">twitterservice</span><span class="delimiter">'</span></span>
 
-        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> c._attributes) {
-                        <span class="keyword">var</span> attr = c._attributes[key];
+                                <span class="comment">// Retrieve urls using the twitter streaming interface or the</span>
+                                <span class="comment">// search interface. If streaming is true, use the streaming interface.</span>
+                                <span class="comment">// Otherwise, use the search interface</span>
+                                <span class="comment">// If maxid is specified, it will be used for multi-page search</span>
+                                <span class="comment">// TODO maxid doesn't seem to work properly in the npm package</span>
+                                ,<span class="function">runtwitter</span>: <span class="keyword">function</span>(streaming, maxid) {
+                                        <span class="comment">//TODO $system doesn't work here</span>
+                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.twitter) {
+                                                <span class="comment">// Stop an already running stream</span>
+                                                <span class="keyword">delete</span> <span class="local-variable">this</span>.twitter;
+                                        }
+          <span class="keyword">var</span> TwitterLib = require(<span class="string"><span class="delimiter">'</span><span class="content">../system/lib/twitterlib</span><span class="delimiter">'</span></span>);
+          <span class="local-variable">this</span>.twitter = <span class="keyword">new</span> TwitterLib();
 
-                        <span class="keyword">var</span> typename = <span class="string"><span class="delimiter">&quot;</span><span class="content">NONE</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">var</span> meta = attr.meta;
+                                        <span class="comment">// The twitterlib returns an array of tweets, which contain the url.</span>
+                                        <span class="comment">// The maxid can be used when running another regular search.</span>
+                                        <span class="keyword">var</span> callback = (<span class="keyword">function</span>(tweets, maxid) {
+                                                <span class="keyword">var</span> urls = [];
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;tweets.length; i++) {
+                                                        <span class="keyword">var</span> tweet = tweets[i];
+                                                        <span class="keyword">var</span> media = tweet.entities.media
+                                                        <span class="keyword">if</span> (media) {
+                                                                <span class="keyword">var</span> url = media[<span class="integer">0</span>].media_url;
+                                                                urls.push(url);
+                                                        }
+                                                }
+                                                <span class="local-variable">this</span>.rpc.<span class="keyword">default</span>.imageupdate(urls, maxid);
+                                        }).bind(<span class="local-variable">this</span>);
 
-                        <span class="keyword">if</span> (attr.type) {
-                                typename = attr.type.name;
-                                <span class="keyword">if</span> (attr.type.meta) {
-                                        meta = attr.type.meta;
+          <span class="comment">// Start the streaming interface. images urls handles by callback</span>
+                                        <span class="keyword">if</span> (streaming)
+                                                <span class="local-variable">this</span>.twitter.streaming(callback);
+                                        <span class="keyword">else</span>
+                                                <span class="local-variable">this</span>.twitter.search(callback, {<span class="key">nresults</span>: <span class="integer">100</span>, <span class="key">maxid</span>: maxid});
+                                }
+
+                        }),
+
+
+                        screen({
+                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
+                                ,<span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
+                                ,<span class="key">viewindex</span>:<span class="integer">0</span>
+                                ,<span class="function">init</span>: <span class="keyword">function</span>() {
+                                        <span class="comment">// Call the server to start retrieving images</span>
+                                        <span class="keyword">var</span> use_streamer = <span class="predefined-constant">true</span>;
+                                        <span class="local-variable">this</span>.rpc.twitterservice.runtwitter(use_streamer);
+                                }
+
+                                <span class="comment">// Receive image urls from the server. These are displayed in sequence</span>
+                                ,<span class="function">imageupdate</span>: <span class="keyword">function</span>(urls, maxid) {
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;urls.length; i++) {
+                                                <span class="keyword">var</span> url = urls[i];
+                                                <span class="keyword">var</span> v = <span class="local-variable">this</span>.children[<span class="local-variable">this</span>.viewindex];
+                                                v.bgimage = url;
+                                                <span class="local-variable">this</span>.viewindex = (<span class="local-variable">this</span>.viewindex+<span class="integer">1</span>) % nimages;
+                                        }
                                 }
                         }
+                                           ,dynviews)
+                ];
 
-                        <span class="keyword">if</span> (key == <span class="string"><span class="delimiter">&quot;</span><span class="content">layout</span><span class="delimiter">&quot;</span></span>) {
-                                meta = <span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>;
-                        }
-
-                        <span class="keyword">if</span> (typename != <span class="string"><span class="delimiter">&quot;</span><span class="content">NONE</span><span class="delimiter">&quot;</span></span> &amp;&amp; typename != <span class="string"><span class="delimiter">&quot;</span><span class="content">Event</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta != <span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>) {
-                                <span class="keyword">if</span> (!keysgroups[attr.group]) keysgroups[attr.group] = [];
-                                keysgroups[attr.group].push(key);
-                        }
-                }
-
-                <span class="keyword">for</span>(<span class="keyword">var</span> group <span class="keyword">in</span> keysgroups){
-                        <span class="keyword">var</span> groupcontent = [];
-
-                        keys = keysgroups[group];
-
-                        keys.sort();
-
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span> ;i&lt;keys.length;i++){
-                                <span class="keyword">var</span> key = keys[i];
-                                <span class="keyword">var</span> thevalue = c[<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+key];
-                                <span class="keyword">var</span> attr = c._attributes[key];
-                                groupcontent.push(propeditor({<span class="key">target</span>:<span class="local-variable">this</span>.target, <span class="key">value</span>:thevalue, <span class="key">property</span>:attr, <span class="key">propertyname</span>: key, <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize}))
-                        }
-
-                        res.push(
-                                foldcontainer({
-                                                <span class="key">collapsed</span>: <span class="predefined-constant">true</span>,
-                                                <span class="key">basecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">autogradient</span>: <span class="predefined-constant">false</span>,
-                                                <span class="key">icon</span>:<span class="predefined-constant">undefined</span>,
-                                                <span class="key">title</span>: <span class="local-variable">this</span>.uppercaseFirst(group),
-                                                <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4f4f4f</span><span class="delimiter">&quot;</span></span>        ,
-                                                <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize
-                                        },
-                                        view({
-                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">flex</span>:<span class="integer">1</span>,
-                                                        <span class="key">margin</span>:<span class="integer">0</span>,
-                                                        <span class="key">padding</span>:<span class="integer">0</span>,
-                                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>
-                                                },
-                                                groupcontent
-                                        )
-                                )
-                        )
-
-                        res[res.length-<span class="integer">1</span>].<span class="function">collapsed</span> = <span class="keyword">function</span>(){
-                                window.mydbg = <span class="integer">1</span>
-                        }
-                }
-                <span class="keyword">return</span> res;
+                <span class="keyword">return</span> views
         }
 })
 </pre></td>

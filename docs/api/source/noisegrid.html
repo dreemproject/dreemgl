@@ -180,8 +180,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n26" name="n26">26</a>
 <a href="#n27" name="n27">27</a>
 <a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -197,21 +195,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.alignself = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>
         
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">holecolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">glowcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">edgecolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5b5b5b</span><span class="delimiter">&quot;</span></span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>})
         }
         
         <span class="comment">//this.bgcolor = vec4(&quot;white&quot;)</span>
 
-        <span class="comment">// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.</span>
-        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(a){
-                        
-                        <span class="keyword">var</span> dist2 = vec2(<span class="float">0.5</span>,<span class="float">1.0</span>) - a.xy;
-                        <span class="keyword">var</span> N = noise.cheapnoise(gl_FragCoord.xy*<span class="float">0.08</span>)*<span class="float">0.3</span>;
-                        <span class="keyword">return</span> mix(glowcolor, edgecolor, N+ <span class="float">1.0</span>-length(a.y));
-                }
-                
+        <span class="comment">// Noisegrid shader - uses a slight gradient with minute noise to prevent banding.</span>
+        <span class="local-variable">this</span>.<span class="function">bgcolorfn</span> = <span class="keyword">function</span>(a){                        
+                <span class="keyword">var</span> dist2 = vec2(<span class="float">0.5</span>,<span class="float">1.0</span>) - a.xy;
+                <span class="keyword">var</span> N = noise.cheapnoise(gl_FragCoord.xy*<span class="float">0.08</span>)*<span class="float">0.3</span>;
+                <span class="keyword">return</span> mix(glowcolor, edgecolor, N+ <span class="float">1.0</span>-length(a.y));
+        }
+        
 })</pre></td>
 </tr></table>
 

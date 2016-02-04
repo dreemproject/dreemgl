@@ -18,12 +18,6 @@
  * @param name
  */
 /**
- * @method emit
- * emit an event for an attribute key. the order
- * @param key
- * @param event
- */
-/**
  * @method addListener
  * add a listener to an attribute
  * @param key

@@ -782,6 +782,54 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n628" name="n628">628</a>
 <a href="#n629" name="n629">629</a>
 <strong><a href="#n630" name="n630">630</a></strong>
+<a href="#n631" name="n631">631</a>
+<a href="#n632" name="n632">632</a>
+<a href="#n633" name="n633">633</a>
+<a href="#n634" name="n634">634</a>
+<a href="#n635" name="n635">635</a>
+<a href="#n636" name="n636">636</a>
+<a href="#n637" name="n637">637</a>
+<a href="#n638" name="n638">638</a>
+<a href="#n639" name="n639">639</a>
+<strong><a href="#n640" name="n640">640</a></strong>
+<a href="#n641" name="n641">641</a>
+<a href="#n642" name="n642">642</a>
+<a href="#n643" name="n643">643</a>
+<a href="#n644" name="n644">644</a>
+<a href="#n645" name="n645">645</a>
+<a href="#n646" name="n646">646</a>
+<a href="#n647" name="n647">647</a>
+<a href="#n648" name="n648">648</a>
+<a href="#n649" name="n649">649</a>
+<strong><a href="#n650" name="n650">650</a></strong>
+<a href="#n651" name="n651">651</a>
+<a href="#n652" name="n652">652</a>
+<a href="#n653" name="n653">653</a>
+<a href="#n654" name="n654">654</a>
+<a href="#n655" name="n655">655</a>
+<a href="#n656" name="n656">656</a>
+<a href="#n657" name="n657">657</a>
+<a href="#n658" name="n658">658</a>
+<a href="#n659" name="n659">659</a>
+<strong><a href="#n660" name="n660">660</a></strong>
+<a href="#n661" name="n661">661</a>
+<a href="#n662" name="n662">662</a>
+<a href="#n663" name="n663">663</a>
+<a href="#n664" name="n664">664</a>
+<a href="#n665" name="n665">665</a>
+<a href="#n666" name="n666">666</a>
+<a href="#n667" name="n667">667</a>
+<a href="#n668" name="n668">668</a>
+<a href="#n669" name="n669">669</a>
+<strong><a href="#n670" name="n670">670</a></strong>
+<a href="#n671" name="n671">671</a>
+<a href="#n672" name="n672">672</a>
+<a href="#n673" name="n673">673</a>
+<a href="#n674" name="n674">674</a>
+<a href="#n675" name="n675">675</a>
+<a href="#n676" name="n676">676</a>
+<a href="#n677" name="n677">677</a>
+<a href="#n678" name="n678">678</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view,label, labelset, <span class="predefined">$$</span>, geo, urlfetch)
 {
@@ -1021,6 +1069,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                            <span class="key">london</span>:[<span class="float">51.5091502</span>,-<span class="float">0.1471011</span>]
                         }
 
+                        <span class="local-variable">this</span>.gotoCity(<span class="string"><span class="delimiter">&quot;</span><span class="content">Amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="integer">6</span>);
+
+                        
                         <span class="local-variable">this</span>.theinterval = <span class="local-variable">this</span>.setInterval(<span class="keyword">function</span>(){
                                 <span class="local-variable">this</span>.updateLoadQueue();
                         }.bind(<span class="local-variable">this</span>), <span class="integer">50</span>);
@@ -1029,8 +1080,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="comment">//this.simulateLoaded();</span>
                         }.bind(<span class="local-variable">this</span>), <span class="integer">50</span>);
 
-                        <span class="local-variable">this</span>.gotoCity(<span class="string"><span class="delimiter">&quot;</span><span class="content">Amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="integer">10</span>);
-
+                        
                         <span class="local-variable">this</span>.rpc.urlfetch.sessionstart();
                         <span class="comment">//this.setCenter(33656/2,21534/2, 16)</span>
 
@@ -1063,10 +1113,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">fogend</span>: <span class="integer">5000</span>.,
 
                 }
+                
 
                 <span class="local-variable">this</span>.frameswaited = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.bufferloadbool = <span class="predefined-constant">false</span>
 
+                <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(ev){
+                <span class="comment">//        console.log(ev.value[0]);</span>
+                        
+                }
+                
+                <span class="local-variable">this</span>.<span class="function">onpointermove</span> = <span class="keyword">function</span>(ev){
+                <span class="comment">//        console.log(ev.value[0]);</span>
+                        <span class="comment">//console.log(ev);</span>
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">whaa</span><span class="delimiter">&quot;</span></span> , <span class="local-variable">this</span>.host.globalToLocal(ev.position));
+                }
+                
                 <span class="local-variable">this</span>.<span class="function">pointertap</span> = <span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mapdata</span><span class="delimiter">&quot;</span></span>).setCenter(<span class="local-variable">this</span>.lastpos[<span class="integer">0</span>], <span class="local-variable">this</span>.lastpos[<span class="integer">1</span>], <span class="local-variable">this</span>.zoomlevel,<span class="integer">1</span>);
                 }
@@ -1129,21 +1191,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">else</span>{
                                         <span class="local-variable">this</span>.frameswaited++;
                                         <span class="keyword">if</span> (<span class="local-variable">this</span>.queued == <span class="integer">0</span>){
-                                                <span class="local-variable">this</span>.bgshader.update();
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.shaders.hardrect &amp;&amp; <span class="local-variable">this</span>.shaders.hardrect.update) <span class="local-variable">this</span>.shaders.hardrect.update();
                                                 md.addToQueue(<span class="local-variable">this</span>.lastpos[<span class="integer">0</span>], <span class="local-variable">this</span>.lastpos[<span class="integer">1</span>], <span class="local-variable">this</span>.lastpos[<span class="integer">2</span>]);
                                                 <span class="local-variable">this</span>.queued  = <span class="integer">1</span>;
                                         }
                                 }
                         }
                 }
+                
                 <span class="local-variable">this</span>.<span class="function">onzoomlevel</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.checknewpos();
+                <span class="comment">// this.checknewpos();</span>
                 }
+                
                 <span class="local-variable">this</span>.<span class="function">oncoord</span> = <span class="keyword">function</span>(){
-                        <span class="local-variable">this</span>.checknewpos();
-
+                <span class="comment">// this.checknewpos();</span>
                 }
                 <span class="local-variable">this</span>.tilesize = BufferGen.TileSize;
+                <span class="local-variable">this</span>.width = <span class="local-variable">this</span>.tilesize;
+                <span class="local-variable">this</span>.height = <span class="local-variable">this</span>.tilesize;
 
         })
 
@@ -1155,10 +1220,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">buildingtile</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.is = tilebasemixin;
                 <span class="local-variable">this</span>.<span class="function">loadBufferFromTile</span> = <span class="keyword">function</span>(tile){
-                        <span class="local-variable">this</span>.bgshader.mesh = tile.buildingVertexBuffer;
+                        <span class="local-variable">this</span>.shaders.hardrect.mesh = tile.buildingVertexBuffer;
                 }
 
-                <span class="local-variable">this</span>.<span class="function">bg</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
 
                         <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
 
@@ -1200,13 +1265,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.is = tilebasemixin;
 
                 <span class="local-variable">this</span>.<span class="function">loadBufferFromTile</span> = <span class="keyword">function</span>(tile){
-                        <span class="local-variable">this</span>.bgshader.mesh = tile.landVertexBuffer;
+                        <span class="local-variable">this</span>.shaders.hardrect.mesh = tile.landVertexBuffer;
                 }
 
 
 
 
-                <span class="local-variable">this</span>.<span class="function">bg</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
 
                         <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
 
@@ -1253,13 +1318,61 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         });
 
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">labeltile</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/labelset</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.polygonoffset = <span class="float">10.0</span>;
+                <span class="local-variable">this</span>.outline = <span class="predefined-constant">true</span>;
+                <span class="local-variable">this</span>.outline_thickness = <span class="integer">4</span>;
+                <span class="local-variable">this</span>.is = tilebasemixin;
 
+                <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos){                        
+                        idxpos = (  <span class="local-variable">this</span>.trans.xy*vec2(<span class="integer">1</span>,-<span class="integer">1</span>) ) * vec2(<span class="integer">1</span>,-<span class="integer">1</span>);;
+                        rpos = vec2(<span class="integer">1</span>,-<span class="integer">1</span>)*pos.xz + (idxpos - <span class="local-variable">this</span>.tiletrans)* <span class="local-variable">this</span>.tilesize;
+                        <span class="keyword">return</span> vec3(rpos.x, <span class="integer">0</span>, rpos.y+pos.y);
+                }
+                
+                <span class="local-variable">this</span>.<span class="function">loadBufferFromTile</span> = <span class="keyword">function</span>(tile) {                        
+                        <span class="keyword">var</span> LabelSource = tile.Labels;
+                        <span class="keyword">var</span> thelabels = [];
+                        <span class="keyword">var</span> rankfontsizes = {
+                                <span class="integer">0</span>:<span class="integer">40</span>, 
+                                <span class="integer">1</span>:<span class="integer">30</span>, 
+                                <span class="integer">2</span>:<span class="integer">20</span>,
+                                <span class="integer">3</span>:<span class="integer">10</span>,
+                                <span class="integer">4</span>:<span class="integer">10</span>,
+                                <span class="integer">5</span>:<span class="integer">10</span>, 
+                                <span class="integer">6</span>:<span class="integer">10</span>, 
+                                <span class="integer">7</span>:<span class="integer">10</span>
+                        }
+                        
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i =<span class="integer">0</span> ;i&lt;LabelSource.length;i++){
+                                <span class="keyword">var</span> l = LabelSource[i];
+                                <span class="keyword">var</span> f = <span class="integer">2</span>;
+                                <span class="keyword">if</span> (l.scalerank !== <span class="predefined-constant">undefined</span>){
+                                        f = rankfontsizes[l.scalerank];
+                                        <span class="comment">//f+= l.scalerank?(100/l.scalerank):0;</span>
+                                }
+                                <span class="keyword">var</span> l2 = {<span class="key">text</span>:l.name,<span class="key">fontsize</span>:f,<span class="key">outline</span>:<span class="predefined-constant">false</span>, <span class="key">color</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>), <span class="key">pos</span>:vec3(l.x, -<span class="integer">11</span>,l.y)};
+                                thelabels.push(l2);
+                        }
+                        <span class="comment">//console.log(ranks);</span>
+                        <span class="local-variable">this</span>.labels = thelabels;
+                }
+                
+                <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
+                <span class="comment">//this.fontsize = 140;</span>
+                <span class="local-variable">this</span>.align =<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span> 
+                <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
+                
+                }
+        })
+        
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">roadtile</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.is = tilebasemixin;
                 <span class="local-variable">this</span>.<span class="function">loadBufferFromTile</span> = <span class="keyword">function</span>(tile){
-                        <span class="local-variable">this</span>.bgshader.mesh = tile.roadVertexBuffer;
+                        <span class="local-variable">this</span>.shaders.hardrect.mesh = tile.roadVertexBuffer;
                 }
-                <span class="local-variable">this</span>.<span class="function">bg</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
 
                         <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
 
@@ -1339,7 +1452,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.tilestoupdate = [];
 
                 <span class="keyword">var</span> res = [<span class="local-variable">this</span>.dataset];
-                <span class="comment">//res.push(label({bg:0, text:&quot;I am a map&quot; }),this.dataset)</span>
                 <span class="keyword">var</span> res3d = []
 
                 <span class="keyword">var</span> div = <span class="integer">400</span>
@@ -1350,54 +1462,38 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.tileheight = <span class="integer">5</span>;
 
                 <span class="keyword">var</span> tilearea = vec2(<span class="local-variable">this</span>.tilewidth, <span class="local-variable">this</span>.tileheight)
-                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">tile area</span><span class="delimiter">&quot;</span></span>, tilearea);
+                <span class="comment">//console.log(&quot;tile area&quot;, tilearea);</span>
                 
                 <span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="integer">0</span>;x&lt;<span class="local-variable">this</span>.tilewidth;x++){
-
-
                         <span class="keyword">for</span>(<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="local-variable">this</span>.tileheight;y++){
                                 <span class="keyword">var</span> tx = Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>);
                                 <span class="keyword">var</span> ty = Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>)
-                                <span class="keyword">var</span> land = <span class="local-variable">this</span>.landtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
+                                <span class="keyword">var</span> land = <span class="local-variable">this</span>.landtile({<span class="key">host</span>:<span class="local-variable">this</span>, <span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
                                 <span class="local-variable">this</span>.tilestoupdate.push(land);
                                 res3d.push(land);
                         }
                 }
-
+                
                 <span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="integer">0</span>;x&lt;<span class="local-variable">this</span>.tilewidth;x++){
-
-
                         <span class="keyword">for</span>(<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="local-variable">this</span>.tileheight;y++){
                                 <span class="keyword">var</span> tx = Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>);
                                 <span class="keyword">var</span> ty = Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>)
-                                <span class="keyword">var</span> road = <span class="local-variable">this</span>.roadtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
+                                <span class="keyword">var</span> road = <span class="local-variable">this</span>.roadtile({<span class="key">host</span>:<span class="local-variable">this</span>, <span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
                                 <span class="local-variable">this</span>.tilestoupdate.push(road);
                                 res3d.push(road);
                         }
                 }
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> x = <span class="integer">0</span>;x&lt;<span class="local-variable">this</span>.tilewidth;x++){
-
-
                         <span class="keyword">for</span>(<span class="keyword">var</span> y = <span class="integer">0</span>;y&lt;<span class="local-variable">this</span>.tileheight;y++){
                                 <span class="keyword">var</span> tx = Math.floor(x-(<span class="local-variable">this</span>.tilewidth-<span class="integer">1</span>)/<span class="integer">2</span>);
                                 <span class="keyword">var</span> ty = Math.floor(y-(<span class="local-variable">this</span>.tileheight-<span class="integer">1</span>)/<span class="integer">2</span>)
-                                <span class="keyword">var</span> building = <span class="local-variable">this</span>.buildingtile({<span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
+                                <span class="keyword">var</span> building = <span class="local-variable">this</span>.buildingtile({<span class="key">host</span>:<span class="local-variable">this</span>, <span class="key">fog</span>:<span class="local-variable">this</span>.bgcolor, <span class="key">tilearea</span>:tilearea, <span class="key">trans</span>:vec2(tx,ty)});
                                 <span class="local-variable">this</span>.tilestoupdate.push(building);
                                 res3d.push(building);
                         }
                 }
-                
-                <span class="local-variable">this</span>.thelabels = [];
-                <span class="keyword">for</span> (<span class="keyword">var</span> i =<span class="integer">0</span> ;i&lt;<span class="integer">1000</span>;i++){
-                        <span class="keyword">var</span> l = {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Label </span><span class="delimiter">&quot;</span></span> + i.toString(), <span class="key">pos</span>:vec3(Math.random()*<span class="integer">10000</span> - <span class="integer">5000</span>,Math.random()*<span class="integer">100</span>,Math.random()*<span class="integer">10000</span>-<span class="integer">5000</span>)}
-                        <span class="local-variable">this</span>.thelabels.push(l);
-                }
-<span class="comment">//                for(var x = 0;x&lt;this.tilewidth;x++){</span>
-        <span class="comment">//                for(var y = 0;y&lt;this.tileheight;y++){</span>
-                                res3d.push(labelset({<span class="key">fontsize</span>:<span class="integer">30</span>,<span class="key">labels</span>:<span class="local-variable">this</span>.thelabels, <span class="key">bg</span>:<span class="integer">0</span>, <span class="key">pos</span>:vec3(<span class="integer">0</span>,-<span class="integer">100</span>        ,<span class="integer">0</span>),<span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)}));
-                        <span class="comment">//}</span>
-                <span class="comment">//}</span>
+        
                 <span class="keyword">var</span> dist = <span class="float">2.5</span>
                 res.push(view({<span class="key">flex</span>: <span class="integer">1</span>,<span class="key">viewport</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>, <span class="key">nearplane</span>:<span class="integer">100</span>*dist,<span class="key">farplane</span>: <span class="integer">40000</span>*dist,
 
@@ -1405,7 +1501,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 ,<span class="key">lookat</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
                 },
 
-                        view({<span class="key">bg</span>:<span class="integer">0</span>, <span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="float">0.1</span>,<span class="integer">0</span>)},
+                        view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="float">0.1</span>,<span class="integer">0</span>)},
                                 res3d
                                 )
 

@@ -342,7 +342,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="keyword">return</span> view({
-                                        <span class="key">bg</span>:{
+                                        <span class="key">hardrect</span>:{
                                                 <span class="function">color</span>:<span class="keyword">function</span>(){
                                                         <span class="keyword">return</span> vec4(<span class="integer">1</span>- mesh.y*<span class="float">0.4</span>, <span class="integer">1</span>- mesh.y*<span class="float">0.4</span>,<span class="integer">1</span>- mesh.y*<span class="float">0.2</span>,<span class="integer">1</span>)
                                                 }
@@ -355,7 +355,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 label({
                                         <span class="key">margin</span>:[<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">10</span>],
                                         <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>,
-                                        <span class="key">bg</span>:<span class="integer">0</span>,
+                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
                                         <span class="key">fontsize</span>:<span class="integer">50</span>,
                                         <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,
                                         <span class="key">text</span>:<span class="local-variable">this</span>.title

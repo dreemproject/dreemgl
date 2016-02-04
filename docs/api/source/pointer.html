@@ -414,6 +414,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n260" name="n260">260</a></strong>
 <a href="#n261" name="n261">261</a>
 <a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
+<a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
+<strong><a href="#n280" name="n280">280</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -481,11 +499,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         PointerList.prototype.<span class="function">setPointer</span> = <span class="keyword">function</span> (pointer) {
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="local-variable">this</span>.length; i--;) {
                         <span class="keyword">if</span> (<span class="local-variable">this</span>[i].id === pointer.id) {
-                                <span class="local-variable">this</span>.splice(i, <span class="integer">1</span>, pointer)
+                                <span class="local-variable">this</span>.splice(i, <span class="integer">1</span>, <span class="keyword">new</span> Pointer(pointer, pointer.id, pointer.view))
                                 <span class="keyword">return</span>
                         }
                 }
-                <span class="local-variable">this</span>.push(pointer)
+                <span class="local-variable">this</span>.push(<span class="keyword">new</span> Pointer(pointer, pointer.id, pointer.view))
                 <span class="local-variable">this</span>.sort(<span class="keyword">function</span>(a, b) {
                         <span class="keyword">if</span> (a.id &lt; b.id) <span class="keyword">return</span> -<span class="integer">1</span>
                         <span class="keyword">if</span> (a.id &gt; b.id) <span class="keyword">return</span> <span class="integer">1</span>
@@ -493,11 +511,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
         }
 
-        <span class="comment">/* Internal: Iterates over all views associated with the pointer list and
-        *  and calls specified callback with the view and filtered pointers as arguments
-        */</span>
+        <span class="comment">// Internal: Iterates over all views associated with the pointer list and</span>
+        <span class="comment">// calls specified callback with the view and filtered pointers as arguments</span>
         PointerList.prototype.<span class="function">forEachView</span> = <span class="keyword">function</span> (callback) {
-                views = []
+                <span class="keyword">var</span> views = []
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.length; i++) {
                         <span class="keyword">if</span> (<span class="local-variable">this</span>[i].view &amp;&amp; views.indexOf(<span class="local-variable">this</span>[i].view) == -<span class="integer">1</span>) {
                                 views.push(<span class="local-variable">this</span>[i].view)
@@ -519,6 +536,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> <span class="function">Pointer</span> = <span class="keyword">function</span>(pointer, id, view) {
                 <span class="local-variable">this</span>.id = id
                 <span class="local-variable">this</span>.view = view
+                <span class="local-variable">this</span>.value = pointer.value
                 <span class="local-variable">this</span>.position = pointer.position
                 <span class="local-variable">this</span>.button = pointer.button
                 <span class="local-variable">this</span>.shift = pointer.shift
@@ -526,6 +544,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.ctrl = pointer.ctrl
                 <span class="local-variable">this</span>.meta = pointer.meta
                 <span class="local-variable">this</span>.touch = pointer.touch
+                <span class="local-variable">this</span>.delta = pointer.delta
+                <span class="local-variable">this</span>.min = pointer.min
+                <span class="local-variable">this</span>.max = pointer.max
+                <span class="local-variable">this</span>.dt = pointer.dt
+                <span class="local-variable">this</span>.movement = pointer.movement
+                <span class="local-variable">this</span>.isover = pointer.isover
                 <span class="local-variable">this</span>.t = Date.now()
                 <span class="keyword">if</span> (pointer.wheel !== <span class="predefined-constant">undefined</span>) <span class="local-variable">this</span>.wheel = pointer.wheel
         }
@@ -541,10 +565,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.movement = vec2(<span class="local-variable">this</span>.position[<span class="integer">0</span>] - refpointer.position[<span class="integer">0</span>], <span class="local-variable">this</span>.position[<span class="integer">1</span>] - refpointer.position[<span class="integer">1</span>])
         }
 
-        <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// List of pointers that are catured.</span>
-                <span class="key">first</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: <span class="keyword">new</span> PointerList()}),
+        <span class="comment">// Adds click count to pointer</span>
+        Pointer.prototype.<span class="function">setClicker</span> = <span class="keyword">function</span>(list) {
+                <span class="local-variable">this</span>.clicker = <span class="integer">0</span>
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; list.length; i++) {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.t - list[i].t &lt; TAPSPEED * (i + <span class="integer">1</span>)) <span class="local-variable">this</span>.clicker += <span class="integer">1</span>
+                }
+        }
 
+
+        <span class="comment">// TODO(aki): initialize per instance</span>
+        <span class="local-variable">this</span>.attributes = {
+                <span class="comment">// List of pointers that are captured.</span>
+                <span class="key">first</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: <span class="keyword">new</span> PointerList()}),
                 <span class="comment">// List of pointers at the moment of capture.</span>
                 <span class="key">start</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: <span class="keyword">new</span> PointerList()}),
                 <span class="comment">// List of captured pointers while moving.</span>
@@ -560,7 +593,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// List of pointers that exited a view.</span>
                 <span class="key">out</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: <span class="keyword">new</span> PointerList()}),
                 <span class="comment">// List of pointers that emitted wheel event (should apply only to mouse).</span>
-                <span class="key">wheel</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: <span class="keyword">new</span> PointerList()})
+                <span class="key">wheel</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: <span class="keyword">new</span> PointerList()}),
+                <span class="comment">// list of previous taps</span>
+                <span class="key">clickerstash</span>:Config({<span class="key">type</span>: Array, <span class="key">value</span>: []})
+        }
+
+        <span class="local-variable">this</span>.<span class="function">emitPointerList</span> = <span class="keyword">function</span>(pointerlist, eventname) {
+                pointerlist.forEachView(<span class="keyword">function</span>(view, pointers) {
+                        pointers.forEach(<span class="keyword">function</span>(pointer) {
+                                <span class="comment">// delete pointer.view</span>
+                                <span class="local-variable">this</span>.emit(eventname, {<span class="key">view</span>: view, <span class="key">pointer</span>: pointer})
+                        }.bind(<span class="local-variable">this</span>))
+                        <span class="local-variable">this</span>.emit(eventname, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
+                }.bind(<span class="local-variable">this</span>))
         }
 
         <span class="comment">// Internal: emits `start` event.</span>
@@ -570,15 +615,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.device.pickScreen(pointerlist[i].position, <span class="keyword">function</span>(view){
                                 <span class="keyword">var</span> id = <span class="local-variable">this</span>._first.getAvailableId()
                                 <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], id, view)
+                                <span class="comment">// Add pointer to clicker stash for counting</span>
+                                <span class="local-variable">this</span>._clickerstash.unshift(pointer)
+                                <span class="local-variable">this</span>._clickerstash.length = min(<span class="local-variable">this</span>._clickerstash.length, <span class="integer">5</span>)
+                                pointer.setClicker(<span class="local-variable">this</span>._clickerstash)
+                                <span class="comment">// set pointer lists</span>
                                 <span class="local-variable">this</span>._start.setPointer(pointer)
                                 <span class="local-variable">this</span>._first.setPointer(pointer)
                                 <span class="local-variable">this</span>._move.setPointer(pointer)
                         }.bind(<span class="local-variable">this</span>), <span class="predefined-constant">true</span>)
                 }
-
-                <span class="local-variable">this</span>._start.forEachView(<span class="keyword">function</span>(view, pointers) {
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">start</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                }.bind(<span class="local-variable">this</span>))
+                <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._start, <span class="string"><span class="delimiter">'</span><span class="content">start</span><span class="delimiter">'</span></span>)
         }
 
         <span class="comment">// Internal: emits `move` event.</span>
@@ -591,9 +638,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         pointer.addMovement(previous || first)
                         <span class="local-variable">this</span>._move.setPointer(pointer)
                 }
-                <span class="local-variable">this</span>._move.forEachView(<span class="keyword">function</span>(view, pointers) {
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                }.bind(<span class="local-variable">this</span>))
+                <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._move, <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>)
         }
 
         <span class="comment">// Internal: emits `end` event.</span>
@@ -607,21 +652,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> first = <span class="local-variable">this</span>._first.getById(previous.id)
                                 <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], previous.id, first.view)
                                 pointer.addDelta(first)
+                                pointer.setClicker(<span class="local-variable">this</span>._clickerstash)
                                 pointer.isover = pointer.view === view
-                                <span class="local-variable">this</span>._end.setPointer(pointer)
                                 <span class="local-variable">this</span>._first.removePointer(first)
+                                <span class="local-variable">this</span>._end.setPointer(pointer)
                                 <span class="local-variable">this</span>._move.removePointer(pointer)
                                 <span class="keyword">if</span> (pointer.dt &lt; TAPSPEED &amp;&amp; vec2.len(pointer.delta) &lt; TAPDIST){
                                         <span class="local-variable">this</span>._tap.setPointer(pointer)
                                 }
+
                         }.bind(<span class="local-variable">this</span>), <span class="predefined-constant">true</span>)
                 }
-                <span class="local-variable">this</span>._end.forEachView(<span class="keyword">function</span>(view, pointers) {
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">end</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                }.bind(<span class="local-variable">this</span>))
-                <span class="local-variable">this</span>._tap.forEachView(<span class="keyword">function</span>(view, pointers) {
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">tap</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                }.bind(<span class="local-variable">this</span>))
+                <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._end, <span class="string"><span class="delimiter">'</span><span class="content">end</span><span class="delimiter">'</span></span>)
+                <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._tap, <span class="string"><span class="delimiter">'</span><span class="content">tap</span><span class="delimiter">'</span></span>)
         }
 
         <span class="comment">// Internal: emits `hover` event.</span>
@@ -630,6 +673,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._out.length = <span class="integer">0</span>
                 <span class="local-variable">this</span>.device.pickScreen(pointerlist[<span class="integer">0</span>].position, <span class="keyword">function</span>(view){
                         <span class="keyword">var</span> previous = <span class="local-variable">this</span>._hover.getById(<span class="integer">0</span>)
+                        <span class="keyword">if</span> (previous) previous = <span class="keyword">new</span> Pointer(previous, <span class="integer">0</span>, previous.view)
                         <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[<span class="integer">0</span>], <span class="integer">0</span>, view)
                         <span class="local-variable">this</span>._hover.setPointer(pointer)
 
@@ -642,16 +686,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="local-variable">this</span>._out.setPointer(previous)
                                 }
                         }
-
-                        <span class="local-variable">this</span>._hover.forEachView(<span class="keyword">function</span>(view, pointers) {
-                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">hover</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                        }.bind(<span class="local-variable">this</span>))
-                        <span class="local-variable">this</span>._over.forEachView(<span class="keyword">function</span>(view, pointers) {
-                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">over</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                        }.bind(<span class="local-variable">this</span>))
-                        <span class="local-variable">this</span>._out.forEachView(<span class="keyword">function</span>(view, pointers) {
-                                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">out</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                        }.bind(<span class="local-variable">this</span>))
+                        <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._hover, <span class="string"><span class="delimiter">'</span><span class="content">hover</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._over, <span class="string"><span class="delimiter">'</span><span class="content">over</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._out, <span class="string"><span class="delimiter">'</span><span class="content">out</span><span class="delimiter">'</span></span>)
                 }.bind(<span class="local-variable">this</span>))
         }
 
@@ -669,11 +706,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>._wheel.length = <span class="integer">0</span>
                 <span class="local-variable">this</span>.device.pickScreen(pointerlist[<span class="integer">0</span>].position, <span class="keyword">function</span>(view){
                         <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[<span class="integer">0</span>], <span class="integer">0</span>, view)
+                        pointer.value = pointer.wheel
                         <span class="local-variable">this</span>._wheel.setPointer(pointer)
                 }.bind(<span class="local-variable">this</span>), <span class="predefined-constant">true</span>)
-                <span class="local-variable">this</span>._wheel.forEachView(<span class="keyword">function</span>(view, pointers) {
-                        <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">wheel</span><span class="delimiter">'</span></span>, {<span class="key">view</span>: view, <span class="key">pointers</span>: pointers})
-                }.bind(<span class="local-variable">this</span>))
+                <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._wheel, <span class="string"><span class="delimiter">'</span><span class="content">wheel</span><span class="delimiter">'</span></span>)
         }
 
 })

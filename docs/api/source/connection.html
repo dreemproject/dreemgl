@@ -491,7 +491,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n337" name="n337">337</a>
 <a href="#n338" name="n338">338</a>
 <a href="#n339" name="n339">339</a>
-<strong><a href="#n340" name="n340">340</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -628,8 +627,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
-                <span class="keyword">var</span> delta = event.value[<span class="integer">0</span>].delta
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(delta[<span class="integer">0</span>], delta[<span class="integer">0</span>]);
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">flowgraph</span><span class="delimiter">&quot;</span></span>).moveSelected(event.delta[<span class="integer">0</span>], event.delta[<span class="integer">0</span>]);
         }
 
         <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(){
@@ -650,8 +648,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.frompos= vec2(<span class="integer">0</span>,<span class="integer">0</span>);
         <span class="local-variable">this</span>.topos= vec2(<span class="integer">0</span>,<span class="integer">100</span>);
-
-        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#00ffff</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">connectionshader</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">this</span>.Shader,<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
                 <span class="local-variable">this</span>.mesh = vec2.array()
@@ -753,9 +750,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(vec3(<span class="float">0.0</span>) + view.bgcolor.xyz*<span class="float">1.0</span>,a);
                 }
         })
+        <span class="comment">// turn on the shaders</span>
+        <span class="local-variable">this</span>.connectionshader = <span class="predefined-constant">true</span>
+        <span class="local-variable">this</span>.glowconnectionshader = <span class="predefined-constant">true</span>
 
-        <span class="local-variable">this</span>.bg = <span class="local-variable">this</span>.connectionshader;
-        <span class="local-variable">this</span>.glowconnectionshader = <span class="integer">1</span>;
         <span class="local-variable">this</span>.<span class="function">calculateposition</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> F = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>._from);
                 <span class="keyword">var</span> T = <span class="local-variable">this</span>.find(<span class="local-variable">this</span>._to);

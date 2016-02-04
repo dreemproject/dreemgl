@@ -263,6 +263,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n109" name="n109">109</a>
 <strong><a href="#n110" name="n110">110</a></strong>
 <a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -278,56 +279,57 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.margin = <span class="integer">50</span>
 
                         <span class="local-variable">this</span>.attributes = {
-                                <span class="key">start</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">move</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">end</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">tap</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">hover</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">over</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">out</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                                <span class="key">wheel</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []})
+                                <span class="key">start</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">move</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">end</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">tap</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">hover</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">over</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">out</span>: <span class="predefined-constant">null</span>,
+                                <span class="key">wheel</span>: <span class="predefined-constant">null</span>
                         }
 
                         <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> () {
                                 <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.start = event.value
+                                        <span class="local-variable">this</span>.start = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.move = event.value
+                                        <span class="local-variable">this</span>.move = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.end = event.value
+                                        <span class="local-variable">this</span>.end = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointertap</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.tap = event.value
+                                        <span class="local-variable">this</span>.tap = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointerhover</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.hover = event.value
+                                        <span class="local-variable">this</span>.hover = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointerover</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.over = event.value
+                                        <span class="local-variable">this</span>.over = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointerout</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.out = event.value
+                                        <span class="local-variable">this</span>.out = event
                                 }.bind(<span class="local-variable">this</span>)
 
                                 <span class="local-variable">this</span>.<span class="function">pointerwheel</span> = <span class="keyword">function</span>(event) {
-                                        <span class="local-variable">this</span>.wheel = event.value
+                                        <span class="local-variable">this</span>.wheel = event
                                 }.bind(<span class="local-variable">this</span>)
                         }
 
                         <span class="local-variable">this</span>.<span class="function">renderLabels</span> = <span class="keyword">function</span> (type, color) {
                                 <span class="keyword">var</span> markers = []
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; <span class="local-variable">this</span>[type].length; i++) {
-                                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(<span class="local-variable">this</span>[type][i].position)
+                                <span class="local-variable">this</span>[type]
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>[type]) {
+                                        <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(<span class="local-variable">this</span>[type].position)
                                         markers.push(label({
-                                                <span class="key">text</span>: <span class="local-variable">this</span>[type][i].id,
+                                                <span class="key">text</span>: <span class="local-variable">this</span>[type].id,
                                                 <span class="key">icon</span>: <span class="string"><span class="delimiter">'</span><span class="content">play</span><span class="delimiter">'</span></span>,
                                                 <span class="key">position</span>: <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
                                                 <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>,

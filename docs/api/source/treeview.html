@@ -415,6 +415,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n261" name="n261">261</a>
 <a href="#n262" name="n262">262</a>
 <a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -439,6 +440,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// The fold button is a very very flat button.</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">foldbutton</span><span class="delimiter">'</span></span>, button, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
+                
         <span class="comment">//        this.borderradius = 0;</span>
                 <span class="local-variable">this</span>.padding =  <span class="integer">0</span>
                 <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>
@@ -452,7 +454,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.borderradius = <span class="integer">0</span>
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">3b3b3b</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>
                 <span class="comment">//this.alignself = &quot;flex-start&quot;</span>
         })
@@ -594,7 +596,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         )
                                         ]}.bind(<span class="local-variable">this</span>));
                                         res.push(view({
-                                                                <span class="key">bg</span>:<span class="integer">0</span>,
+                                                                <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
                                                                 <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> ,
                                                                 <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
                                                         },
@@ -622,7 +624,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>)
 
                 <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.bg = {
+                <span class="local-variable">this</span>.hardrect = {
                         <span class="function">color</span>: <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> pos = mesh.xy * vec2(view.layout.width, view.layout.height)
                                 <span class="keyword">var</span> center = <span class="integer">16</span>
