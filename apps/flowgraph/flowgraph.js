@@ -820,12 +820,14 @@ define.class('$ui/view', function(require,
 								{classname:'label', label:'Text',  text:'Aa',    desc:'A text label' },
 								{classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}]
 							},
-							dropTest:function(ev, v, item) {
-								console.log('test if', item.label, 'can be dropped onto', v.name, '@', ev.position);
-								return true;
+							dropTest:function(ev, v, item, orig) {
+								var name = v && v.name ? v.name : 'unknown';
+								console.log('test if', item.label, 'from', orig.position, 'can be dropped onto', name, '@', ev.position);
+								return name === 'centralconstructiongrid';
 							},
 							drop:function(ev, v, item, orig) {
-								console.log('dropped', item.label, 'onto', v.name, '@', ev.position);
+								var name = v && v.name ? v.name : 'unknown';
+								console.log('dropped', item.label, 'from', orig.position, 'onto', name, '@', ev.position);
 							}
 						})
 					)

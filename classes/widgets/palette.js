@@ -21,7 +21,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 		// Function to call globally when testing if a palette item can be dropped onto another view.
 		// This can also be defined on the individual components to override behavior.
-		// The signature of the function should be function(event,view,item,origevent){}
+		// The signature of the function should be function(dropevent,view,item,origevent){}
 		dropTest:Config({type:Function}),
 
 		// Function to call globally when dropping a palette item onto a view.
