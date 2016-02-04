@@ -14,7 +14,7 @@ creating a report in [JIRA for DreemGL](https://dreem2.atlassian.net).
   Introduction to the Flebox-based layout system in DreemGL.
 
 * [DreemGL Developer's
-Guide](http://https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/README.md)
+Guide](https://github.com/dreemproject/dreemgl/tree/master/docs/developer_guide/README.md)
   A technical guide meant for developer's building applications and
   extending DreemGL
 
@@ -23,9 +23,8 @@ Guide](http://https://github.com/dreemproject/dreemgl/blob/master/docs/developer
   API reference documentation for all classes, methods,
   attributes.
 
-* [DreemGL IoT Guide to Adding Devices and Web
-  Services](https://github.com/dreemproject/dreemgl/blob/master/examples/guide/README.md)
-A guide for extending DreemGL with new services, devices and other components. 
+* [Extending DreemGL with New Components](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/components/README.md)
+A guide for extending DreemGL with new services, devices and other components. A live slide-show that demonstrates many of the same concepts in this guide can be found in the [/examples/extdemo](https://github.com/dreemproject/dreemgl/tree/master/examples/extdemo) directory.
 
 * [DreemGL
   Appendix](https://github.com/dreemproject/dreemgl/blob/master/docs/guides/appendix/README.md)
