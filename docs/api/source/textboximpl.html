@@ -885,10 +885,8 @@ define.mixin(<span class="keyword">function</span>(require){
 
         <span class="local-variable">this</span>.<span class="function">onpointerstart</span> = <span class="keyword">function</span> (event) {
                 <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(event.position)
-
-                <span class="comment">// var clone = []</span>
-                <span class="comment">// var cursor</span>
-
+                <span class="comment">// TODO(aki): consider doing in globalToLocal by default</span>
+                pos = vec2.add(pos, <span class="local-variable">this</span>.scroll)
                 <span class="local-variable">this</span>.cursorset.fusing = <span class="predefined-constant">false</span>
                 <span class="comment">// TODO(aki): fix alt and meta selection</span>
                 <span class="keyword">if</span> (event.alt){
@@ -916,7 +914,9 @@ define.mixin(<span class="keyword">function</span>(require){
                 <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(event.position)
                 <span class="keyword">var</span> min = <span class="local-variable">this</span>.globalToLocal(event.min)
                 <span class="keyword">var</span> max = <span class="local-variable">this</span>.globalToLocal(event.max)
-
+                pos = vec2.add(pos, <span class="local-variable">this</span>.scroll)
+                min = vec2.add(min, <span class="local-variable">this</span>.scroll)
+                max = vec2.add(max, <span class="local-variable">this</span>.scroll)
                 <span class="keyword">if</span> (event.alt){
                         <span class="comment">// console.log(min[0], min[1], max[0], max[1])</span>
                         <span class="comment">// this.cursorset.rectSelect(min[0], min[1], max[0], max[1], clone)</span>
