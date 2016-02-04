@@ -260,6 +260,28 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n106" name="n106">106</a>
 <a href="#n107" name="n107">107</a>
 <a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -267,24 +289,29 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, foldcontainer, view, label, button, scrollbar, textbox,<span class="predefined">$widgets$</span>,propeditor){
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, foldcontainer, view, label, button, scrollbar, textbox, <span class="predefined">$widgets$</span>, propeditor){
+<span class="comment">// The property viewer allows for the visual inspection and manipulation of properties on DreemGL objects</span>
 
         <span class="local-variable">this</span>.attributes = {
+
+                <span class="comment">// The target who's properties to view.  Can be either a DreemGL object or a named reference to one.</span>
                 <span class="key">target</span>:Config({<span class="key">type</span>:Object, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
+
+                <span class="comment">// Shows properties for unknown property types</span>
                 <span class="key">showunknown</span>:Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>})
-        }
+        };
 
         <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>;
         <span class="local-variable">this</span>.flexdirection= <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
         <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
         <span class="local-variable">this</span>.clearcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>);
-        <span class="local-variable">this</span>.padding = <span class="integer">0</span>
+        <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
 
         <span class="local-variable">this</span>.<span class="function">uppercaseFirst</span> = <span class="keyword">function</span> (inp) {
                 <span class="keyword">if</span> (!inp || inp.length == <span class="integer">0</span>) <span class="keyword">return</span> inp;
                 <span class="keyword">return</span> inp.charAt(<span class="integer">0</span>).toUpperCase() + inp.slice(<span class="integer">1</span>);
-        }
+        };
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> c = <span class="local-variable">this</span>.target;
@@ -360,15 +387,32 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 groupcontent
                                         )
                                 )
-                        )
+                        );
 
                         res[res.length-<span class="integer">1</span>].<span class="function">collapsed</span> = <span class="keyword">function</span>(){
                                 window.mydbg = <span class="integer">1</span>
                         }
                 }
                 <span class="keyword">return</span> res;
+        };
+
+        <span class="keyword">var</span> propviewer = <span class="local-variable">this</span>.constructor;
+
+        <span class="local-variable">this</span>.constructor.examples = {
+                <span class="function">Usage</span>: <span class="keyword">function</span> () {
+                        <span class="keyword">return</span> [
+                                label({<span class="key">height</span>:<span class="integer">30</span>, <span class="key">width</span>:<span class="integer">300</span>,
+                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inspectable</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Inspect me below!</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
+                                        <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">pink</span><span class="delimiter">'</span></span>,
+                                        <span class="key">borderwidth</span>:<span class="integer">3</span>}),
+                                propviewer({<span class="key">y</span>:<span class="integer">40</span>, <span class="key">width</span>:<span class="integer">300</span>, <span class="key">height</span>:<span class="integer">700</span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inspectable</span><span class="delimiter">&quot;</span></span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})
+                        ]
+                }
         }
-})
+
+});
 </pre></td>
 </tr></table>
 

@@ -4,24 +4,29 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$,propeditor){
+define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox, $widgets$, propeditor){
+// The property viewer allows for the visual inspection and manipulation of properties on DreemGL objects
 
 	this.attributes = {
+
+		// The target who's properties to view.  Can be either a DreemGL object or a named reference to one.
 		target:Config({type:Object, value:""}),
+
+		// Shows properties for unknown property types
 		showunknown:Config({type:boolean, value:false})
-	}
+	};
 
 	this.borderwidth = 0;
 	this.flexdirection= "column";
 	this.margin = 0;
 	this.clearcolor = vec4("#303030");
-	this.padding = 0
+	this.padding = 0;
 	this.bgcolor = NaN;
 
 	this.uppercaseFirst = function (inp) {
 		if (!inp || inp.length == 0) return inp;
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
-	}
+	};
 
 	this.render = function(){
 		var c = this.target;
@@ -97,12 +102,29 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 						groupcontent
 					)
 				)
-			)
+			);
 
 			res[res.length-1].collapsed = function(){
 				window.mydbg = 1
 			}
 		}
 		return res;
+	};
+
+	var propviewer = this.constructor;
+
+	this.constructor.examples = {
+		Usage: function () {
+			return [
+				label({height:30, width:300,
+					name:"inspectable",
+					text:"Inspect me below!",
+					fgcolor:'red',
+					bordercolor:'pink',
+					borderwidth:3}),
+				propviewer({y:40, width:300, height:700, target:"inspectable", overflow:"scroll"})
+			]
+		}
 	}
-})
+
+});

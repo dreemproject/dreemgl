@@ -4,6 +4,7 @@
  * A palatte is a container view with drag-dropable components
  * 
  * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/widgets/palette.js"></iframe>
+ * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/widgets/palette.js">open example in new tab &raquo;</a>
  * 
  */
 /**

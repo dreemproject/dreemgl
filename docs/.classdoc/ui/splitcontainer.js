@@ -4,6 +4,7 @@
  * Splitcontainer adds dragbars between nodes to make all the nodes resizable.
  * 
  * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/splitcontainer.js"></iframe>
+ * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/splitcontainer.js">open example in new tab &raquo;</a>
  * 
  */
 /**
