@@ -20,8 +20,8 @@ define.class('$ui/view',  function(view, label){
 		flexdirection: "column",
 		alignitems: "stretch",
 		alignself: "stretch",
-		minorsize:10,
-		majorsize:100
+		minorsize:Config({type:int, value:10, meta:'hidden'}),
+		majorsize:Config({type:int, value:100, meta:'hidden'})
 	}
 
 	this.onmajorevery = this.ongridsize = function(){
