@@ -176,7 +176,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>._dragstart = vec2(<span class="local-variable">this</span>.pos[<span class="integer">0</span>], <span class="local-variable">this</span>.pos[<span class="integer">1</span>])
         }
         <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(event){
-                <span class="local-variable">this</span>.pos = vec2(<span class="local-variable">this</span>._dragstart[<span class="integer">0</span>] + event.value[<span class="integer">0</span>].delta[<span class="integer">0</span>], <span class="local-variable">this</span>._dragstart[<span class="integer">1</span>] + event.value[<span class="integer">0</span>].delta[<span class="integer">1</span>])
+                <span class="local-variable">this</span>.pos = vec2(<span class="local-variable">this</span>._dragstart[<span class="integer">0</span>] + event.delta[<span class="integer">0</span>], <span class="local-variable">this</span>._dragstart[<span class="integer">1</span>] + event.delta[<span class="integer">1</span>])
         }
 })
 </pre></td>

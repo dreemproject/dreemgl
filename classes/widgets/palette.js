@@ -14,7 +14,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 		// The items to render into the palette.  This is either an array of components, or an Object where
 		// every key:value pair is a Section Name : components-array pair.
-		items:Config({type:Object})
+		items:Config({type:Object, meta:'hidden'})
 
 	};
 
@@ -30,7 +30,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			// Items to display in this panel.
 			items:Config({type:Array, value:[]}),
 
-			dividercolor: '#999',
+			dividercolor: Config({type:vec4, meta:"color", value:"#999"}),
 			dividermargin: 10,
 
     		onmode:function () {
@@ -128,7 +128,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 				views.push(checkbox({
 					bgcolor:'transparent',
 					fgcolor:this.bordercolor,
-					border:0,
+					borderwidth:0,
 					padding:0,
 					margin:0,
 					icon:icn,

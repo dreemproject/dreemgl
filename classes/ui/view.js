@@ -84,18 +84,18 @@ define.class('$system/base/node', function(require){
 		// alias for the x component of percentsize
 		percentwidth: Config({alias:'percentsize', index:0}),
 		// alias for the y component of percentsize
-		percentheight: Config({type:'percentsize', index:1}),
+		percentheight: Config({alias:'percentsize', index:1}),
 		// alias for the z component of percentsize
-		percentdepth: Config({type:'percentsize', index:2}),
+		percentdepth: Config({alias:'percentsize', index:2}),
 
 		percentpos: Config({type:vec3, value:vec3(NaN)}),
 
 		// internal, percentage widths/heights
 		percentx: Config({alias:'percentpos', index:0}),
 		// internal, percentage widths/heights
-		percenty: Config({type:'percentpos', index:1}),
+		percenty: Config({alias:'percentpos', index:1}),
 		// internal, percentage widths/heights
-		percentz: Config({type:'percentpos', index:2}),
+		percentz: Config({alias:'percentpos', index:2}),
 
 		// the pixelratio of a viewport. Allows scaling the texture buffer to arbitrary resolutions. Defaults to the system (low/high DPI)
 		pixelratio: Config({type: float, value:NaN}),
@@ -337,7 +337,7 @@ define.class('$system/base/node', function(require){
 	this.onborderwidth = function(){
 		this.setBorderShaders()
 	}
-	
+
 	this.onbgcolor = function(){
 		this.setBorderShaders()
 	}
@@ -357,7 +357,7 @@ define.class('$system/base/node', function(require){
 		var bg_on = isNaN(this._bgcolor[0])? false: true
 
 		if(this._viewport === '3d') border_on = false, bg_on = false
-	
+
 		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
 			// this switches the bg shader to the rounded one
 			this.bgshader_name = 'roundedrectshader'

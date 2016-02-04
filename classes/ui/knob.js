@@ -165,10 +165,10 @@ define.class(function(require,$ui$, view, textbox, label,button ){
 	this.borderwidth = 2;
 
 	this.drawtarget = 'pick'
-	
+
 	this.render = function(){
 		return [
-		view({minwidth: this.outerradius,minheight: this.outerradius, bg:0},
+		view({minwidth: this.outerradius,minheight: this.outerradius, bgcolor:NaN},
 			this.dial({name:"thedialbg", position:"absolute",x:this.width/2, y:this.height/2, start: PI/4, end: 2*PI-PI/4 ,bgcolor:"#304050", outerradius:this.outerradius, innerradius:this.innerradius })
 			,this.dial({name:"thedial", position:"absolute", start: PI/4, end: 2*PI-PI/4 , bgcolor:"#a0b0c0",outerradius:this.outerradius - this.offset, innerradius:this.innerradius + this.offset})
 		)]

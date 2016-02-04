@@ -8,6 +8,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 
 	this.attributes = {
 		target:Config({type:Object, value:""}),
+		showunknown:Config({type:boolean, value:false})
 	}
 
 	this.borderwidth = 0;
@@ -35,13 +36,21 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
         for (var key in c._attributes) {
 			var attr = c._attributes[key];
 
-			var typename = attr.type ? attr.type.name : "NONE";
+			var typename = "NONE";
+			var meta = attr.meta;
 
-			var meta = (attr.type && attr.type.meta) ? attr.type.meta : "";
+			if (attr.type) {
+				typename = attr.type.name;
+				if (attr.type.meta) {
+					meta = attr.type.meta;
+				}
+			}
+
 			if (key == "layout") {
 				meta = "hidden";
 			}
-			if (typename != "NONE" && typename != "Event" && meta != "hidden" ) {
+
+			if (typename != "NONE" && typename != "Event" && meta != "hidden") {
 				if (!keysgroups[attr.group]) keysgroups[attr.group] = [];
 				keysgroups[attr.group].push(key);
 			}
@@ -58,7 +67,14 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var key = keys[i];
 				var thevalue = c["_"+key];
 				var attr = c._attributes[key];
-				groupcontent.push(propeditor({target:this.target, value:thevalue, property:attr, propertyname: key, fontsize:this.fontsize}))
+				groupcontent.push(propeditor({
+					target:this.target,
+					value:thevalue,
+					property:attr,
+					propertyname: key,
+					fontsize:this.fontsize,
+					showunknown:this.showunknown
+				}))
 			}
 
 			res.push(

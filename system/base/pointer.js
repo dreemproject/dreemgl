@@ -252,7 +252,6 @@ define.class('$system/base/node', function(){
 			if (previous) previous = new Pointer(previous, 0, previous.view)
 			var pointer = new Pointer(pointerlist[0], 0, view)
 			this._hover.setPointer(pointer)
-
 			// TODO(aki): entering child view triggers out event. Consider adding pointer-events: 'none'
 			if (!previous || previous.view !== pointer.view) {
 				if (pointer.view) {
@@ -279,12 +278,22 @@ define.class('$system/base/node', function(){
 
 	// Internal: emits `wheel` event.
 	this.setwheel = function(pointerlist) {
-		this._wheel.length = 0
-		this.device.pickScreen(pointerlist[0].position, function(view){
-			var pointer = new Pointer(pointerlist[0], 0, view)
+		var dist = 0
+		// Hack to prevent screen picking when mouse is not moving
+		if (this._wheel[0]) {
+			dist = vec2.distance(pointerlist[0].position, this._wheel[0].position)
+		}
+		if (dist > 0 || !this._wheel[0]) {
+			this.device.pickScreen(pointerlist[0].position, function(view){
+				var pointer = new Pointer(pointerlist[0], 0, view)
+				pointer.value = pointer.wheel
+				this._wheel.setPointer(pointer)
+			}.bind(this), true)
+		} else {
+			var pointer = new Pointer(pointerlist[0], 0, this._wheel[0].view)
 			pointer.value = pointer.wheel
 			this._wheel.setPointer(pointer)
-		}.bind(this), true)
+		}
 		this.emitPointerList(this._wheel, 'wheel')
 	}
 

@@ -55,7 +55,7 @@
  * alias for z component of corner
  */
 /**
- * @attribute {vec4} [bgcolor="1,1,1,1"]
+ * @attribute {vec4} [bgcolor="0.9803921580314636,0.9058823585510254,0.7098039388656616,1"]
  * the background color of a view, referenced by various shaders
  */
 /**

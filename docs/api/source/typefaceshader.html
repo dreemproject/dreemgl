@@ -1182,6 +1182,46 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1028" name="n1028">1028</a>
 <a href="#n1029" name="n1029">1029</a>
 <strong><a href="#n1030" name="n1030">1030</a></strong>
+<a href="#n1031" name="n1031">1031</a>
+<a href="#n1032" name="n1032">1032</a>
+<a href="#n1033" name="n1033">1033</a>
+<a href="#n1034" name="n1034">1034</a>
+<a href="#n1035" name="n1035">1035</a>
+<a href="#n1036" name="n1036">1036</a>
+<a href="#n1037" name="n1037">1037</a>
+<a href="#n1038" name="n1038">1038</a>
+<a href="#n1039" name="n1039">1039</a>
+<strong><a href="#n1040" name="n1040">1040</a></strong>
+<a href="#n1041" name="n1041">1041</a>
+<a href="#n1042" name="n1042">1042</a>
+<a href="#n1043" name="n1043">1043</a>
+<a href="#n1044" name="n1044">1044</a>
+<a href="#n1045" name="n1045">1045</a>
+<a href="#n1046" name="n1046">1046</a>
+<a href="#n1047" name="n1047">1047</a>
+<a href="#n1048" name="n1048">1048</a>
+<a href="#n1049" name="n1049">1049</a>
+<strong><a href="#n1050" name="n1050">1050</a></strong>
+<a href="#n1051" name="n1051">1051</a>
+<a href="#n1052" name="n1052">1052</a>
+<a href="#n1053" name="n1053">1053</a>
+<a href="#n1054" name="n1054">1054</a>
+<a href="#n1055" name="n1055">1055</a>
+<a href="#n1056" name="n1056">1056</a>
+<a href="#n1057" name="n1057">1057</a>
+<a href="#n1058" name="n1058">1058</a>
+<a href="#n1059" name="n1059">1059</a>
+<strong><a href="#n1060" name="n1060">1060</a></strong>
+<a href="#n1061" name="n1061">1061</a>
+<a href="#n1062" name="n1062">1062</a>
+<a href="#n1063" name="n1063">1063</a>
+<a href="#n1064" name="n1064">1064</a>
+<a href="#n1065" name="n1065">1065</a>
+<a href="#n1066" name="n1066">1066</a>
+<a href="#n1067" name="n1067">1067</a>
+<a href="#n1068" name="n1068">1068</a>
+<a href="#n1069" name="n1069">1069</a>
+<strong><a href="#n1070" name="n1070">1070</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1201,7 +1241,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>)
 
         <span class="comment">// forward ref of things we need on view</span>
-        <span class="local-variable">this</span>.view = {<span class="key">_totalmatrix</span>:mat4(), <span class="key">_viewmatrix</span>:mat4(), <span class="key">_fgcolor</span>:vec4(), <span class="key">_bgcolor</span>:vec4(), <span class="key">_opacity</span>:<span class="float">1.0</span>, <span class="key">screen</span>:{<span class="key">device</span>:{<span class="key">frame</span>:{<span class="key">size</span>:vec2()}}}}
+        <span class="local-variable">this</span>.view = {
+                <span class="key">_totalmatrix</span>:mat4(), 
+                <span class="function">textstyle</span>: <span class="keyword">function</span>(fgcolor, pos, tag){<span class="keyword">return</span> fgcolor;},
+                <span class="function">textpositionfn</span>:<span class="keyword">function</span>(pos){<span class="keyword">return</span> pos;}, 
+                <span class="key">_viewmatrix</span>:mat4(), 
+                <span class="key">_polygonoffset</span>:<span class="float">0.0</span>, 
+                <span class="key">_fgcolor</span>:vec4(), 
+                <span class="key">_outline_color</span>:vec4(), 
+                <span class="key">_outline_thickness</span>:<span class="float">0.0</span>,
+                <span class="key">_outline</span>: <span class="predefined-constant">false</span>,
+                <span class="key">_bgcolor</span>:vec4(), 
+                <span class="key">_opacity</span>:<span class="float">1.0</span>, 
+                <span class="key">screen</span>:{
+                                <span class="key">device</span>:{
+                                        <span class="key">frame</span>:{
+                                                <span class="key">size</span>:vec2()
+                                        }
+                                }
+                        }
+        }
 
         <span class="comment">// lets define a custom struct and subclass the array</span>
         <span class="local-variable">this</span>.textgeom = define.struct({
@@ -1612,7 +1671,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">false</span>
-
+        
         <span class="local-variable">this</span>.<span class="function">glyphy_mesh_sdf</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> glyphy_compute_position()
         }
@@ -1620,15 +1679,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">glyphy_compute_position</span> = <span class="keyword">function</span>(){
                 <span class="comment">// we want to compute a measure of scale relative to the actual pixels</span>
                 <span class="keyword">var</span> matrix = view.totalmatrix  * view.viewmatrix
-
+                
+                
+                <span class="keyword">var</span> finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z));
+                <span class="keyword">var</span> finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z));
+                
                 <span class="comment">// compute the main position and one rectgle atan fontsize for the pixelscale</span>
-                <span class="keyword">var</span> pos1 = vec4(mesh.pos.xy + mesh.shift , mesh.pos.z, <span class="integer">1</span>) * matrix
-                <span class="keyword">var</span> pos2 = vec4(mesh.pos.xy + mesh.shift + vec2(mesh.pos.w), mesh.pos.z, <span class="integer">1</span>) * matrix
+                <span class="keyword">var</span> pos1 = vec4(finalpos1 , <span class="integer">1</span>) * matrix
+                <span class="keyword">var</span> pos2 = vec4(finalpos2,  <span class="integer">1</span>) * matrix
 
                 <span class="comment">// compute the pixelscaling used in the pixelshader AA</span>
                 <span class="keyword">var</span> pixsize = view.screen.device.frame.size
                 pixelscale = <span class="integer">1</span> / length(vec2(abs(pos2.x - pos1.x), abs(pos2.y - pos1.y)) * pixsize)
-
+                pos1.w += view.polygonoffset;
                 <span class="keyword">return</span> pos1
         }
 
@@ -1647,13 +1710,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> vec4(-<span class="integer">1</span>.)
         }
 
-        <span class="local-variable">this</span>.<span class="function">style</span> = <span class="keyword">function</span>(pos){
+        <span class="local-variable">this</span>.<span class="function">style</span> = <span class="keyword">function</span>(pos, tag){
         }
 
         <span class="local-variable">this</span>.<span class="function">moddist</span> = <span class="keyword">function</span>(pos, dist){
                 <span class="keyword">return</span> dist
         }
 
+        <span class="local-variable">this</span>.font_style_t = define.struct({
+                <span class="key">fgcolor</span>: vec4,
+                <span class="key">bgcolor</span>: vec4,
+                <span class="key">outlinecolor</span>: vec4,
+                <span class="key">outline_thickness</span>: <span class="reserved">float</span>,
+                <span class="key">outline</span>: bool
+        }, <span class="string"><span class="delimiter">&quot;</span><span class="content">font_style_t</span><span class="delimiter">&quot;</span></span>)
+        
         <span class="local-variable">this</span>.glyphy_arc_t = define.struct({
                 <span class="key">p0</span>:vec2,
                 <span class="key">p1</span>:vec2,
@@ -2026,7 +2097,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         v3+v4+v5
                 ) * 0.001
 
-                style(pos) // per pixel styling callback
+        //todo: fix up if this ever gets uncommented
+                view.textstyle(pos) // per pixel styling callback
 
                 distance -= mesh.boldness / 300.
                 distance = distance / m * mesh.contrast
@@ -2065,15 +2137,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> exit
                 }
 
-                style(pos)
+                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+
+                view.textstyle(style, pos, mesh.tag)
 
                 dist -= mesh.boldness / <span class="integer">300</span>.
                 dist = dist / m * mesh.contrast
 
                 dist = moddist(pos, dist)
 
-                <span class="keyword">if</span>(mesh.outline){
-                        dist = abs(dist) - mesh.outline_thickness
+                <span class="keyword">if</span>(style.outline){
+                        dist = abs(dist) - style.outline_thickness
                 }
 
                 <span class="keyword">if</span>(dist &gt; <span class="integer">1</span>.){
@@ -2081,8 +2155,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="comment">//return 'red'</span>
-                <span class="keyword">return</span> vec4(view.fgcolor.rgb, glyphy_antialias(-dist))
-                <span class="keyword">return</span> vec4(view.fgcolor.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
+                <span class="keyword">return</span> vec4(style.fgcolor.xyz, glyphy_antialias(-dist))
+                <span class="comment">//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">glyphy_sdf_draw_subpixel_aa</span> = <span class="keyword">function</span>(){
@@ -2113,8 +2187,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> exit
                 }
 
-                style(pos)
+                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
 
+                 view.textstyle(style, pos, mesh.tag)
+                
                 dist -= mesh.boldness / <span class="integer">300</span>.
                 dist = dist / m * mesh.contrast
 
@@ -2132,7 +2208,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)</span>
                 <span class="comment">//if(max_alpha &gt;0.5) max_alpha = 1.</span>
                 <span class="comment">//return vec4(alpha.b&lt;0.?'yellow'.rgb:'blue'.rgb, 1)</span>
-                <span class="keyword">return</span> vec4(mix(view.bgcolor.rgb, view.fgcolor.rgb, alpha.rgb), view.opacity)<span class="comment">//max_alpha)</span>
+                <span class="keyword">return</span> vec4(mix(view.bgcolor.rgb, style.fgcolor.rgb, alpha.rgb), view.opacity)<span class="comment">//max_alpha)</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">glyphy_sdf_lookup</span> = <span class="keyword">function</span>(pos){
@@ -2166,10 +2242,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> pos = glyph.xy
                 <span class="comment">/* isotropic antialiasing */</span>
-                <span class="comment">//var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark</span>
-                <span class="comment">//var dpdy = dFdy(pos)</span>
-                <span class="comment">//var m = length(vec2(length(dpdx), length(dpdy)))*SQRT_1_2//*0.1</span>
-                <span class="keyword">var</span> m = pixelscale*<span class="integer">100</span>.
+                <span class="keyword">var</span> dpdx = dFdx(pos) <span class="comment">// this should mark it pixel and redo the function with a new highmark</span>
+                <span class="keyword">var</span> dpdy = dFdy(pos)
+                <span class="keyword">var</span> m = length(vec2(length(dpdx), length(dpdy)))*SQRT_1_2<span class="comment">//*0.1</span>
+                <span class="comment">//var m = pixelscale*100.</span>
 
                 <span class="keyword">var</span> dist = glyphy_sdf(glyph.xy, nominal_size, atlas_pos) <span class="comment">//+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6</span>
 
@@ -2180,14 +2256,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(exit.a &gt;= <span class="integer">0</span>.){
                         <span class="keyword">return</span> exit
                 }
-                style(glyph)
+<span class="comment">//                style(glyph)</span>
+                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+                view.textstyle(style, pos, mesh.tag)
+
 
                 dist -= mesh.boldness
                 <span class="comment">//debug(mesh.distance)</span>
                 dist = dist / m * mesh.contrast
-
+                <span class="keyword">var</span> dist2 = dist;
                 <span class="keyword">if</span>(mesh.outline){
-                        dist = abs(dist) - (mesh.outline_thickness)
+                        dist2 = abs(dist) - (style.outline_thickness)
                 }
 
                 <span class="keyword">if</span>(dist &gt; <span class="integer">1</span>.){
@@ -2195,12 +2274,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="keyword">var</span> alpha = glyphy_antialias(-dist)
-
+                <span class="keyword">var</span> alpha2 = glyphy_antialias(-dist2)
+                
                 <span class="keyword">if</span>(mesh.gamma_adjust.r != <span class="integer">1</span>.){
                 <span class="comment">//        alpha = pow(alpha, 1. / mesh.gamma_adjust.r)</span>
                 }
 
-                <span class="keyword">return</span> vec4(view.fgcolor.rgb, alpha * view.fgcolor.a * view.opacity)
+                <span class="keyword">return</span> vec4(mix(style.fgcolor.rgb, style.outlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * style.fgcolor.a * view.opacity)
         }
 
         <span class="local-variable">this</span>.<span class="function">atExtend</span> = <span class="keyword">function</span>(){

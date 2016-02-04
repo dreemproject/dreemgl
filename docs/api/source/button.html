@@ -349,6 +349,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n195" name="n195">195</a>
 <a href="#n196" name="n196">196</a>
 <a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -430,10 +431,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">subpixel</span>:<span class="predefined-constant">false</span>,
                         <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">position</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">relative</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">bg</span>: <span class="integer">0</span>
+                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>
                 },
                 <span class="key">view_wrap</span>:{
-                        <span class="key">bg</span>:<span class="predefined-constant">false</span>,
+                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
                         <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>
@@ -498,11 +499,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.statenormal()
         }
         <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(){
+
                 <span class="local-variable">this</span>.stateclick()
         }
         <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.statenormal()
-                <span class="keyword">if</span> (event.value[<span class="integer">0</span>].isover){
+                <span class="keyword">if</span> (event.isover){
                         <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">click</span><span class="delimiter">'</span></span>,event)
                 }
         }
@@ -524,7 +526,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.text &amp;&amp; <span class="local-variable">this</span>.text.length &gt; <span class="integer">0</span>){
                         <span class="local-variable">this</span>.buttonres = label({
                                 <span class="key">marginleft</span>:<span class="local-variable">this</span>.iconres?<span class="integer">4</span>:<span class="integer">0</span>,
-                                <span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor,
+                                <span class="comment">//bgcolor:this.bgcolor,</span>
                                 <span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize,
                                 <span class="key">fgcolor</span>:<span class="local-variable">this</span>.textcolor,
                                 <span class="key">text</span>: <span class="local-variable">this</span>.text

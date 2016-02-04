@@ -1,7 +1,7 @@
-# Adding new Components
+# Extending DreemGL with New Components
 
 Extending DreemGL to communicate with and access IoT devices, web services and other external resources means creating 
-a DreemGL component.  This guide will demonstrate how to 
+a DreemGL component.
 
 ## Simple Web Service as a DreemGL Component
 
@@ -170,7 +170,7 @@ And finally, the `index.js` wires all the components together:
 ### Usage
     
 Individual DreemGL classes can include inline usage examples directly in thier codebase.  To add inline examples, 
-attach them to `this.constructor` as an attribute names `examples`.  For example:
+attach them to `this.constructor` as an attribute named `examples`.  For example:
 
     	var example = this.constructor;    	
     	this.constructor.examples = {
@@ -217,10 +217,7 @@ All RPC method calls are promises that return with the result of the method, and
 
 When you have a physcial device or external service that cannot be integrated directly within the Dreem system itself,
 or if you otherwise need to send data into the system, you can interact directly with Dreem objects using the HTTP
-POST API methods.  An example of of an external component using the POST API can be found in the
-[Dreem GL branch](https://github.com/teem2/teem-estimotebeacon/tree/dreemgl) of the Dreem<->Estimote bridge
-repository.  In particular the [app.js](https://github.com/teem2/teem-estimotebeacon/blob/dreemgl/estimote_repeater/app.js#L83)
-POSTs the beacons it finds via AJAX.
+POST API methods.  
 
 ## Using POST API
 

@@ -21,7 +21,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 		basesat: Config({type:float, value:0.8, readonly:true, rerender:false}),
 		// read-only, the value (HSV)
 		baseval: Config({type:float, value:0.5, readonly:true, rerender:false}),
-		sliderheight: Config({type: float, value:15})
+		sliderheight: Config({type: float, value:15}),
 	}
 
 	this.basehue = 0.5;
@@ -616,7 +616,15 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 				,view({ bgcolor:NaN,bgcolor:"transparent", margin:2,borderwidth:1, borderradius:1, bordercolor:this.internalbordercolor,flex:1, padding:1}
 					,view({flex:1, bgcolor:NaN,alignitems:"flex-end",justifycontent:"flex-end"}
 						,label({bgcolor:NaN,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"#", fgcolor:this.contrastcolor, fontsize: this.fontsize})
-						,textbox({name:"hexcolor", bgcolor:NaN, margin:vec4(0,5,0,0), value:"ff00ff",  fgcolor:this.contrastcolor, padding:vec4(20,2,2,2), fontsize: this.fontsize})
+						,textbox({
+							name:"hexcolor",
+							bgcolor:NaN,
+							margin:vec4(0,5,0,0),
+							value:"ff00ff",
+							fgcolor:this.contrastcolor,
+							padding:vec4(20,2,2,2),
+							fontsize: this.fontsize
+						})
 					)
 					,view({flex:1, bgcolor:NaN,alignitems:"flex-end",justifycontent:"flex-end"}
 						,label({bgcolor:NaN,fontsize:this.fontsize,  margin:vec4(10,5,0,0),text:"alpha",  fgcolor:this.contrastcolor, fontsize: this.fontsize})

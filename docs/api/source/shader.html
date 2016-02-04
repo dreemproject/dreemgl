@@ -901,6 +901,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n747" name="n747">747</a>
 <a href="#n748" name="n748">748</a>
 <a href="#n749" name="n749">749</a>
+<strong><a href="#n750" name="n750">750</a></strong>
+<a href="#n751" name="n751">751</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -980,11 +982,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">//        'precision ' + this.precision + ' int;'</span>
 
                 <span class="comment">//var ret = ''</span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, exts = <span class="local-variable">this</span>.extensions.split(<span class="string"><span class="delimiter">'</span><span class="content">|</span><span class="delimiter">'</span></span>); i&lt;exts.length; i++){
-                        <span class="keyword">var</span> ext = exts[i]
-                        <span class="keyword">if</span>(gltypes.extensions[ext] === <span class="integer">1</span>)
-                                ret += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">#extension GL_</span><span class="delimiter">'</span></span> + ext + <span class="string"><span class="delimiter">'</span><span class="content"> : enable</span><span class="delimiter">'</span></span>
-                }
+                <span class="comment">//for(var i = 0, exts = this.extensions.split('|'); i&lt;exts.length; i++){</span>
+                <span class="comment">//        var ext = exts[i]</span>
+        <span class="comment">//                if(gltypes.extensions[ext] === 1)</span>
+        <span class="comment">//                        ret += '\n#extension GL_' + ext + ' : enable'</span>
+        <span class="comment">//        }</span>
+                ret += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="delimiter">'</span></span>
+        
                 <span class="keyword">return</span> ret + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
         }
 

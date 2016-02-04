@@ -314,6 +314,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n160" name="n160">160</a></strong>
 <a href="#n161" name="n161">161</a>
 <a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -327,7 +351,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="keyword">var</span> TypeFace = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/typeface/typefaceshader</span><span class="delimiter">'</span></span>)
 
-        <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>)
+        <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>)        
+        <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos) {<span class="keyword">return</span> pos;}; 
+        <span class="local-variable">this</span>.polygonoffset = <span class="float">0.0</span>;
+        
         
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// the text color</span>
@@ -351,7 +378,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// Alignment of the bodytext.</span>
                 <span class="key">align</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">left</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">right</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">justify</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">bold</span>: <span class="predefined-constant">false</span>,
-
+                <span class="key">outline</span>: <span class="predefined-constant">true</span>,
+                <span class="key">outline_thickness</span>: <span class="float">0.0</span>,
+                <span class="key">outline_color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>),
+                
                 <span class="key">bgcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>)
         }
         
@@ -364,6 +394,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span>{
                         <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_regular_ascii.glf</span><span class="delimiter">'</span></span>)
                 }
+        }
+        
+        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, pos, tag){
+                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
+                style.outlinecolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span> ;
+                style.outline_thickness = <span class="float">120.0</span>;
+                style.outline = <span class="predefined-constant">true</span>;
+                <span class="comment">//return vec4(tag.yzw, 1.0);</span>
         }
         
         <span class="comment">// the normal font </span>
@@ -387,22 +425,31 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         mesh.fontsize = view.fontsize
                         mesh.boldness = view.boldness
                         mesh.add_y = mesh.line_height
-
+                        mesh.outline = view.outline;
+                        mesh.outline_thickness = view.outline_thickness;
                         mesh.align = view.align
                         mesh.start_x = view.padding[<span class="integer">0</span>]
                         mesh.start_y = mesh.line_height + view.padding[<span class="integer">1</span>]
                         mesh.clear()
                         
+                        
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;view.labels.length;i++){
                                 mesh.start_x = view.padding[<span class="integer">0</span>]
                                 mesh.start_y = mesh.line_height + view.padding[<span class="integer">1</span>]
+                                
                                 <span class="keyword">var</span> l = view.labels[i];
+                                <span class="keyword">var</span> r = <span class="integer">0</span>, g = <span class="integer">0</span>, b = <span class="integer">0</span>;
+                                <span class="keyword">if</span> (l.fontsize) mesh.fontsize = l.fontsize;
+                                <span class="keyword">if</span> (l.outline) mesh.outline = l.outline;
+                                <span class="keyword">if</span> (l.color){ r = l.color[<span class="integer">0</span>], g = l.color[<span class="integer">1</span>], b = l.color[<span class="integer">2</span>]};
                                 <span class="keyword">if</span> (l.multiline){
                                         mesh.addWithinWidthAtPos(l.text, l.pos, maxwidth? maxwidth: <span class="local-variable">this</span>.layout.width)                                        
                                 }
                                 <span class="keyword">else</span>{
-                                        mesh.addAtPos(l.text,l.pos, <span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
+                                        mesh.addAtPos(l.text,l.pos, r ,g ,b)
                                 }
+                                mesh.fontsize = view.fontsize;
+                                mesh.outline = view.outline;
                         }
                         
                         <span class="keyword">if</span>(view.measure_with_cursor){
@@ -429,6 +476,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// the font which is set to fontsubpixelaa and fontnormal depending on the value of subpixel</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">typeface</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.typefacenormal, <span class="keyword">function</span>(){
         })
+        
         <span class="local-variable">this</span>.typeface = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.<span class="function">selectShader</span> = <span class="keyword">function</span>(){
@@ -454,13 +502,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">measure</span> = <span class="keyword">function</span>(width){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.typefaceshader.update_dirty){
-                        <span class="local-variable">this</span>.typefaceshader.update()
-                        <span class="local-variable">this</span>.typefaceshader.update_dirty = <span class="predefined-constant">true</span>
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.shaders.typeface.update_dirty){
+                        <span class="local-variable">this</span>.shaders.typeface.update()
+                        <span class="local-variable">this</span>.shaders.typeface.update_dirty = <span class="predefined-constant">true</span>
                 }
                 <span class="keyword">return</span> {
-                        <span class="key">width</span>: <span class="local-variable">this</span>.measured_width = <span class="local-variable">this</span>.typefaceshader.mesh.bound_w, 
-                        <span class="key">height</span>: <span class="local-variable">this</span>.measured_height =<span class="local-variable">this</span>.typefaceshader.mesh.bound_h 
+                        <span class="key">width</span>: <span class="local-variable">this</span>.measured_width = <span class="local-variable">this</span>.shaders.typeface.mesh.bound_w, 
+                        <span class="key">height</span>: <span class="local-variable">this</span>.measured_height =<span class="local-variable">this</span>.shaders.typeface.mesh.bound_h 
                 };
         }
 

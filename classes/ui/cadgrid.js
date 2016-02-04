@@ -18,27 +18,28 @@ define.class('$ui/view',  function(view, label){
 		flex: 1,
 		bgcolor: vec4("white"),
 		flexdirection: "column",
-		alignitem: "stretch",
-		alignself: "stretch"
+		alignitems: "stretch",
+		alignself: "stretch",
+		minorsize:Config({type:int, value:10, meta:'hidden'}),
+		majorsize:Config({type:int, value:100, meta:'hidden'})
 	}
 
-	this.gridsize = function(){}
-
-	this.minorsize = 10
-	this.majorsize = 100
+	this.onmajorevery = this.ongridsize = function(){
+		this.calcsizes();
+	};
 
 	this.calcsizes = function(){
-		this.minorsize = this.gridsize  *this.majorevery* Math.pow(this.majorevery , Math.ceil(Math.log(this.zoom )/Math.log(this.majorevery )))
-		this.majorsize = this.minorsize * this.majorevery
-	}
+		this.minorsize = this.gridsize  * this.majorevery * Math.pow(this.majorevery, Math.ceil(Math.log(this.zoom) / Math.log(this.majorevery)));
+		this.majorsize = this.minorsize * this.majorevery;
+	};
 
 	this.oninit = function(){
 		this.calcsizes()
-	}
+	};
 
 	this.onzoom = function(){
 		this.calcsizes()
-	}
+	};
 
 
 	// CADGrid shader - uses various floored modulo functions to find out if either a major or minor gridline is being touched.

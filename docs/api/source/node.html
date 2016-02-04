@@ -1095,6 +1095,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n941" name="n941">941</a>
 <a href="#n942" name="n942">942</a>
 <a href="#n943" name="n943">943</a>
+<a href="#n944" name="n944">944</a>
+<a href="#n945" name="n945">945</a>
+<a href="#n946" name="n946">946</a>
+<a href="#n947" name="n947">947</a>
+<a href="#n948" name="n948">948</a>
+<a href="#n949" name="n949">949</a>
+<strong><a href="#n950" name="n950">950</a></strong>
+<a href="#n951" name="n951">951</a>
+<a href="#n952" name="n952">952</a>
+<a href="#n953" name="n953">953</a>
+<a href="#n954" name="n954">954</a>
+<a href="#n955" name="n955">955</a>
+<a href="#n956" name="n956">956</a>
+<a href="#n957" name="n957">957</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1323,37 +1337,49 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="comment">// emit an event for an attribute key. the order</span>
-        <span class="local-variable">this</span>.<span class="function">emit</span> = <span class="keyword">function</span>(key, event){
-                <span class="keyword">var</span> on_key = <span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span> + key
-                <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
+        <span class="local-variable">this</span>.<span class="function">emit</span> = <span class="keyword">function</span>(key, ievent){
+                <span class="keyword">var</span> event = ievent || {}
+
                 <span class="keyword">var</span> lock_key = <span class="string"><span class="delimiter">'</span><span class="content">_lock_</span><span class="delimiter">'</span></span> + key
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>[lock_key]) <span class="keyword">return</span>
 
                 <span class="local-variable">this</span>[lock_key] = <span class="predefined-constant">true</span>
                 <span class="keyword">try</span>{
-                        <span class="keyword">var</span> proto = <span class="local-variable">this</span>
-                        <span class="keyword">var</span> stack
-
-                        <span class="keyword">while</span>(on_key <span class="keyword">in</span> proto){
-                                <span class="keyword">if</span>(proto.hasOwnProperty(on_key)) (stack || (stack = [])).push(proto[on_key])
-                                proto = Object.getPrototypeOf(proto)
+                        <span class="keyword">if</span>(!<span class="local-variable">this</span>.__lookupSetter__(key)){
+                                <span class="keyword">var</span> fn = <span class="local-variable">this</span>[key]
+                                <span class="keyword">if</span>(<span class="keyword">typeof</span> fn === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>){
+                                        fn.call(<span class="local-variable">this</span>, event)
+                                }
+                                <span class="keyword">return</span>
                         }
 
-                        <span class="keyword">if</span>(stack !== <span class="predefined-constant">undefined</span>) <span class="keyword">for</span>(<span class="keyword">var</span> j = stack.length - <span class="integer">1</span>; j &gt;=<span class="integer">0</span>; j--){
-                                stack[j].call(<span class="local-variable">this</span>, event)
-                        }
+                        <span class="keyword">var</span> on_key = <span class="string"><span class="delimiter">'</span><span class="content">on</span><span class="delimiter">'</span></span> + key
+                        <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
 
                         <span class="keyword">var</span> proto = <span class="local-variable">this</span>
-                        <span class="keyword">while</span>(listen_key <span class="keyword">in</span> proto){
+
+                        <span class="comment">// called after the onclicks, in reverse order (parent on up)</span>
+                        <span class="keyword">var</span> finals
+                        <span class="keyword">while</span>(on_key <span class="keyword">in</span> proto || listen_key <span class="keyword">in</span> proto){
+                                <span class="keyword">if</span>(proto.hasOwnProperty(on_key)){
+                                        proto[on_key].call(<span class="local-variable">this</span>, event, event.value, <span class="local-variable">this</span>)
+                                        <span class="keyword">if</span>(event.stop) <span class="keyword">return</span>
+                                        <span class="keyword">if</span>(event.<span class="reserved">final</span>) finals = finals || [], finals.push(event.<span class="reserved">final</span>)
+                                }
                                 <span class="keyword">if</span>(proto.hasOwnProperty(listen_key)){
                                         <span class="keyword">var</span> listeners = proto[listen_key]
-                                        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; listeners.length; j++){
-                                                listeners[j].call(<span class="local-variable">this</span>, event)
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> j = listeners.length - <span class="integer">1</span>; j &gt;= <span class="integer">0</span>; j--){
+                                                listeners[j].call(<span class="local-variable">this</span>, event, event.value, <span class="local-variable">this</span>)
+                                                <span class="keyword">if</span>(event.stop) <span class="keyword">return</span>
+                                                <span class="keyword">if</span>(event.<span class="reserved">final</span>) finals = finals || [], finals.push(event.<span class="reserved">final</span>)
                                         }
                                 }
                                 proto = Object.getPrototypeOf(proto)
+                        }
+                        <span class="keyword">if</span>(finals) <span class="keyword">for</span>(<span class="keyword">var</span> i = finals.length - <span class="integer">1</span>; i &gt;=<span class="integer">0</span>; i--){
+                                finals[i].call(<span class="local-variable">this</span>, event, event.value, <span class="local-variable">this</span>)
+                                <span class="keyword">if</span>(event.stop) <span class="keyword">return</span>
                         }
                 }
                 <span class="keyword">finally</span>{
@@ -1363,11 +1389,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">// add a listener to an attribute</span>
         <span class="local-variable">this</span>.<span class="function">addListener</span> = <span class="keyword">function</span>(key, cb){
-                <span class="comment">// if something isnt an attribute, make it one</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.__lookupSetter__(key)){
                         <span class="local-variable">this</span>.defineAttribute(key, <span class="local-variable">this</span>[key], <span class="predefined-constant">true</span>)
                 }
-
                 <span class="keyword">var</span> listen_key = <span class="string"><span class="delimiter">'</span><span class="content">_listen_</span><span class="delimiter">'</span></span> + key
                 <span class="keyword">var</span> array
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(listen_key)) array = <span class="local-variable">this</span>[listen_key] = []
@@ -1531,7 +1555,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">//var found = cache[cacheid]</span>
                 <span class="comment">//if(found) return found</span>
-
                 <span class="keyword">var</span> style = <span class="local-variable">this</span>._style.lookup(name, propobj)
 
                 <span class="comment">// find the base class</span>
@@ -1577,19 +1600,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                 }
         })
-<span class="comment">/*
-        // define listeners {attrname:function(){}}
-        Object.defineProperty(this, 'listeners', {
-                get:function(){
-                        throw new Error(&quot;listeners can only be assigned to&quot;)
+
+        <span class="comment">// define listeners {attrname:function(){}}</span>
+        Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">listeners</span><span class="delimiter">'</span></span>, {
+                <span class="function">get</span>:<span class="keyword">function</span>(){
+                        <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">listeners can only be assigned to</span><span class="delimiter">&quot;</span></span>)
                 },
-                set:function(arg){
-                        for(var key in arg){
-                                this.addEventListener(key, arg[key])
+                <span class="function">set</span>:<span class="keyword">function</span>(arg){
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> arg){
+                                <span class="local-variable">this</span>.addEventListener(key, arg[key])
                         }
                 }
         })
-
+        <span class="comment">/*
         // define setters {attrname:function(){}}
         Object.defineProperty(this, 'setters', {
                 get:function(){
@@ -1741,7 +1764,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> type = config.type
                         <span class="keyword">if</span>(<span class="keyword">typeof</span> init_value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>){
                                 <span class="keyword">if</span>(init_value.is_wired) <span class="local-variable">this</span>.setWiredAttribute(key, init_value)
-                                <span class="keyword">else</span> <span class="keyword">if</span>(type !== Function) <span class="local-variable">this</span>[on_key] = init_value
+                                <span class="keyword">else</span> <span class="keyword">if</span>(type !== Function){
+                                        <span class="comment">//this.addListener(on_key, init_value)</span>
+                                        <span class="local-variable">this</span>[on_key] = init_value
+                                }
                                 <span class="keyword">else</span> <span class="local-variable">this</span>[value_key] = init_value
                         }
                         <span class="keyword">else</span>{
@@ -1773,6 +1799,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>){
                                         <span class="keyword">if</span>(value.is_wired) <span class="keyword">return</span> <span class="local-variable">this</span>.setWiredAttribute(key, value)
                                         <span class="keyword">if</span>(config.type !== Function){
+                                                <span class="comment">//this.addListener(on_key, value)</span>
                                                 <span class="local-variable">this</span>[on_key] = value
                                                 <span class="keyword">return</span>
                                         }
@@ -1837,6 +1864,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>){
                                         <span class="keyword">if</span>(value.is_wired) <span class="keyword">return</span> <span class="local-variable">this</span>.setWiredAttribute(key, value)
                                         <span class="keyword">if</span>(config.type !== Function){
+                                                <span class="comment">//this.addListener(on_key, value)</span>
                                                 <span class="local-variable">this</span>[on_key] = value
                                                 <span class="keyword">return</span>
                                         }

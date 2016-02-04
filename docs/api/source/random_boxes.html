@@ -216,6 +216,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n62" name="n62">62</a>
 <a href="#n63" name="n63">63</a>
 <a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -227,6 +228,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, view){
         <span class="comment">//internal</span>
+<span class="comment">// Helper functions</span>
+
+        <span class="comment">// Return random[0,max)</span>
+        <span class="keyword">function</span> <span class="function">random</span>(max) {
+                <span class="keyword">var</span> rand = Math.floor(Math.random() * max);
+                <span class="keyword">return</span> rand;
+        }
+
+        <span class="comment">// Return random color</span>
+        <span class="keyword">function</span> <span class="function">rcolor</span>() {
+                <span class="keyword">var</span> color = vec4(Math.random(), Math.random(), Math.random(), <span class="integer">1</span>);
+                <span class="keyword">return</span> color;
+        }
+
+        <span class="comment">// Return a random position</span>
+        <span class="keyword">function</span> <span class="function">rpos</span>() {
+                <span class="keyword">var</span> pos = vec3(random(<span class="integer">450</span>), random(<span class="integer">450</span>), <span class="integer">0</span>);
+                <span class="keyword">return</span> pos;
+        }
 
         <span class="comment">// Create N random views</span>
         <span class="local-variable">this</span>.<span class="function">rviews</span> = <span class="keyword">function</span>(n) {
@@ -262,25 +282,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> views
         }
 })
-<span class="comment">// Helper functions</span>
 
-<span class="comment">// Return random[0,max)</span>
-<span class="function">random</span> = <span class="keyword">function</span>(max) {
-        <span class="keyword">var</span> rand = Math.floor(Math.random() * max);
-        <span class="keyword">return</span> rand;
-}
-
-<span class="comment">// Return random color</span>
-<span class="function">rcolor</span> = <span class="keyword">function</span>() {
-        <span class="keyword">var</span> color = vec4(Math.random(), Math.random(), Math.random(), <span class="integer">1</span>);
-        <span class="keyword">return</span> color;
-}
-
-<span class="comment">// Return a random position</span>
-<span class="function">rpos</span> = <span class="keyword">function</span>() {
-        <span class="keyword">var</span> pos = vec3(random(<span class="integer">450</span>), random(<span class="integer">450</span>), <span class="integer">0</span>);
-        <span class="keyword">return</span> pos;
-}
 </pre></td>
 </tr></table>
 

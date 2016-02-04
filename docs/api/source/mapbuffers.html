@@ -888,6 +888,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n734" name="n734">734</a>
 <a href="#n735" name="n735">735</a>
 <a href="#n736" name="n736">736</a>
+<a href="#n737" name="n737">737</a>
+<a href="#n738" name="n738">738</a>
+<a href="#n739" name="n739">739</a>
+<strong><a href="#n740" name="n740">740</a></strong>
+<a href="#n741" name="n741">741</a>
+<a href="#n742" name="n742">742</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
         
@@ -1151,7 +1157,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">color2</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>),
                 },
                 <span class="key">water</span>:{
-                        <span class="key">offset</span>:-<span class="integer">20</span>,
+                        <span class="key">offset</span>:<span class="integer">0</span>,
                         <span class="key">color1</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>),
                         <span class="key">color2</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>),
                 },
@@ -1197,11 +1203,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 
         }
         
+        <span class="keyword">if</span> (<span class="predefined-constant">false</span>){
+        
         <span class="keyword">for</span> (<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.mapstyle){
                 <span class="keyword">var</span> st = <span class="local-variable">this</span>.mapstyle[a];
                 <span class="keyword">if</span> (st.color1) st.color1 = vec4.desaturate(st.color1,<span class="float">0.85</span>);
                 <span class="keyword">if</span> (st.color2) st.color2 = vec4.desaturate(st.color2,<span class="float">0.84</span>);
-        }
+        }}
         
         <span class="local-variable">this</span>.<span class="function">dumpkindset</span> = <span class="keyword">function</span>(){
                 
@@ -1365,9 +1373,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;roads.length;i++){                                                        
                                         
                                         
-        <span class="comment">//                                                console.log(z);</span>
                                         <span class="keyword">var</span> R = roads[i];
-                                        <span class="comment">//console.log(R);</span>
                                         <span class="keyword">var</span> linewidth = <span class="integer">3</span>;
                                         <span class="keyword">var</span> color = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>) ;
                                         
@@ -1386,9 +1392,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="keyword">if</span> (currentarc.length == <span class="integer">1</span>){
                                                         <span class="keyword">continue</span>
                                                 }
-                                                <span class="comment">//        console.log(R, currentarc, currentarc.length, currentarc[0].length);</span>
-                                                
-                                                <span class="comment">//console.log(R, currentarc);</span>
                                                 <span class="comment">//continue;</span>
                                                 <span class="keyword">var</span> A0 = currentarc[<span class="integer">0</span>];
                                                 <span class="keyword">var</span> A1 = vec2(currentarc[<span class="integer">1</span>][<span class="integer">0</span>]+A0[<span class="integer">0</span>],currentarc[<span class="integer">1</span>][<span class="integer">1</span>]+A0[<span class="integer">1</span>]) ;
@@ -1482,16 +1485,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> Wset = [];
                 <span class="keyword">var</span> Eset = [];
                 <span class="keyword">var</span> Lset = [];
+                <span class="keyword">var</span> Labels = [];
                 <span class="keyword">var</span> Allset = [];
                 <span class="keyword">var</span> Places = [];
                 <span class="keyword">var</span> Sarcs= sourcedata.arcs;
 
-                <span class="comment">//console.log(objects);</span>
                 <span class="keyword">var</span> objects = sourcedata.objects;
                 <span class="keyword">var</span> BuildingGeoms = objects.buildings.geometries
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;BuildingGeoms.length;i++){
                         <span class="keyword">var</span> Bb = BuildingGeoms[i];
-                <span class="comment">//        console.log(Bb.properties);</span>
                         <span class="keyword">var</span> Barcs = Bb.arcs;
                         <span class="keyword">if</span> (Barcs){
                                 <span class="keyword">var</span> B = {<span class="key">id</span>:Bb.properties.id,<span class="key">h</span>:Bb.properties.height?Bb.properties.height:<span class="float">30.0</span>,<span class="key">kind</span>:Bb.properties.kind, <span class="key">name</span>:Bb.properties.name, <span class="key">street</span>: Bb.properties[<span class="string"><span class="delimiter">&quot;</span><span class="content">addr_street</span><span class="delimiter">&quot;</span></span>], <span class="key">housenumber</span>: Bb.properties.addr_housenumber, <span class="key">arcs</span>:[]};
@@ -1506,8 +1508,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> PlacesGeoms = objects.places.geometries; 
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;PlacesGeoms.length;i++){
                         <span class="keyword">var</span> Bb = PlacesGeoms[i];
+                        <span class="keyword">if</span> (Bb.type ==<span class="string"><span class="delimiter">&quot;</span><span class="content">Point</span><span class="delimiter">&quot;</span></span>)
+                        {
+                                <span class="keyword">var</span> x = Bb.coordinates[<span class="integer">0</span>];;
+                                <span class="keyword">var</span> y = Bb.coordinates[<span class="integer">1</span>];;
+                                
+                                Labels.push({<span class="key">x</span>:x, <span class="key">y</span>:y, <span class="key">kind</span>:Bb.properties.kind, <span class="key">name</span>: Bb.properties.name, <span class="key">scalerank</span>: Bb.properties.scalerank})                
+<span class="comment">//                                console.log(Bb.properties.kind, Bb.properties);</span>
+                        }
+                        <span class="keyword">else</span>{
+                                console.log(Bb);
+                        }
                         
-                        <span class="comment">//console.log(Bb.properties.kind, Bb.type, Bb.properties.name);</span>
                 }
                 <span class="keyword">var</span> WaterGeoms = objects.water.geometries;
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;WaterGeoms.length;i++){
@@ -1610,7 +1622,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 
                 target.buildings = Bset;
                 target.roads = Rset;
-                
+                target.Labels = Labels;
                 target.waters = Wset;
                 target.earths = Eset;
                 target.landuses = Lset;

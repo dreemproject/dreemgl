@@ -308,6 +308,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n154" name="n154">154</a>
 <a href="#n155" name="n155">155</a>
 <a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -322,6 +335,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> TypeFace = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/typeface/typefaceshader</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>)
+        <span class="local-variable">this</span>.polygonoffset = <span class="float">0.0</span>;
+        
+        <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos) {<span class="keyword">return</span> pos;}; 
+        
+        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(fgcolor, pos, tag){
+                <span class="keyword">return</span> fgcolor;
+        }
         
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// the text color</span>
@@ -341,7 +361,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         
                 <span class="comment">// Should the text wrap around when its width has been reached?</span>
                 <span class="key">multiline</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span> }),
-
+                <span class="key">outline</span>: <span class="predefined-constant">false</span>,
+                <span class="key">outline_thickness</span>: <span class="float">0.6</span>,
+                <span class="key">outline_color</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>),
                 <span class="comment">// turn on subpixel aa, this requieres a bgcolor to be present</span>
                 <span class="key">subpixel</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
         
@@ -381,6 +403,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         mesh.fontsize = view.fontsize
                         mesh.boldness = view.boldness
+                        mesh.outline = view.outline;
+                        mesh.outline_thickness = view.outline_thickness;
+                        
                         mesh.add_y = mesh.line_height
 
                         mesh.align = view.align
@@ -442,13 +467,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">measure</span> = <span class="keyword">function</span>(width){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.typefaceshader.update_dirty){
-                        <span class="local-variable">this</span>.typefaceshader.update()
-                        <span class="local-variable">this</span>.typefaceshader.update_dirty = <span class="predefined-constant">true</span>
+                <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.typeface
+                <span class="keyword">if</span>(shader.update_dirty){
+                        shader.update()
+                        shader.update_dirty = <span class="predefined-constant">true</span>
                 }
                 <span class="keyword">return</span> {
-                        <span class="key">width</span>: <span class="local-variable">this</span>.measured_width = <span class="local-variable">this</span>.typefaceshader.mesh.bound_w, 
-                        <span class="key">height</span>: <span class="local-variable">this</span>.measured_height =<span class="local-variable">this</span>.typefaceshader.mesh.bound_h 
+                        <span class="key">width</span>: <span class="local-variable">this</span>.measured_width = shader.mesh.bound_w, 
+                        <span class="key">height</span>: <span class="local-variable">this</span>.measured_height = shader.mesh.bound_h 
                 };
         }
 
