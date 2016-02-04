@@ -181,11 +181,11 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < this._start.length; i++) {
 			var start = this._start[i]
 			
-			if(start.handoff){
-				var id = start.handoff(pointerlist)
+			if(start.handover){
+				var id = start.handover(pointerlist)
 				if(id >= 0){
 					// we got a handoff of a particular pointer
-					pointerlist[id].handoffed = start.view
+					pointerlist[id].handovered = start.view
 				}
 			}
 		}
@@ -207,7 +207,7 @@ define.class('$system/base/node', function(){
 		
 		for (var i = 0; i < pointerlist.length; i++) {
 			// if a pointer is handoffed use that view instead
-			if(pointerlist[i].handoffed) pick(pointerlist[i].handoffed)
+			if(pointerlist[i].handovered) pick(pointerlist[i].handovered)
 			else this.device.pickScreen(pointerlist[i].position, pick, true)
 		}
 		this.emitPointerList(this._start, 'start')
