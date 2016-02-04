@@ -274,7 +274,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 },
                                                                 <span class="comment">// called to check wether something is a drop target. Cursor/style management is your own</span>
                                                                 <span class="comment">// if return true it will send dragover/dragout events to the underlying view</span>
-                                                                <span class="function">isDropTarget</span>:<span class="keyword">function</span>(view){
+                                                                <span class="function">isDropTarget</span>:<span class="keyword">function</span>(view,ev){
                                                                         <span class="comment">// negotiate with the target view wether its a drop target and set the cursor</span>
                                                                         <span class="keyword">if</span>(!view || view === outer){
                                                                                 <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">'</span><span class="content">no-drop</span><span class="delimiter">'</span></span>
@@ -286,9 +286,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         <span class="keyword">return</span> <span class="predefined-constant">true</span>
                                                                 },
                                                                 <span class="comment">// called when the drop is made on a valid droptarget, no events are sent, its up to the implementor</span>
-                                                                <span class="function">atDrop</span>:<span class="keyword">function</span>(view){ 
+                                                                <span class="function">atDrop</span>:<span class="keyword">function</span>(view, event){
                                                                         <span class="comment">// dropped on a view, make it do stuff</span>
-                                                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Dropped on</span><span class="delimiter">&quot;</span></span>+view.name)
+                                                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Dropped on </span><span class="delimiter">&quot;</span></span>, view.name, <span class="string"><span class="delimiter">&quot;</span><span class="content">at</span><span class="delimiter">&quot;</span></span>, event.position)
                                                                 },
                                                                 <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>]
                                                         })

@@ -2647,7 +2647,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// lets send dragenter/leave events</span>
                         <span class="keyword">var</span> newdrag = event.pick
 
-                        <span class="keyword">if</span>(!dragview.isDropTarget(newdrag)) newdrag = <span class="predefined-constant">undefined</span>
+                        <span class="keyword">if</span>(!dragview.isDropTarget(newdrag,event)) newdrag = <span class="predefined-constant">undefined</span>
 
                         <span class="keyword">if</span>(lastdrag !== newdrag){
                                 <span class="keyword">if</span>(lastdrag) lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
@@ -2656,12 +2656,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                         <span class="keyword">if</span>(newdrag) newdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragmove</span><span class="delimiter">'</span></span>, event)
                 }
-                <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(event){
                         <span class="local-variable">this</span>.onpointermove = <span class="predefined-constant">undefined</span>
                         dragview.closeOverlay()
                         <span class="keyword">if</span>(lastdrag){
                                 lastdrag.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">dragout</span><span class="delimiter">'</span></span>,{})
-                                dragview.atDrop(lastdrag)
+                                dragview.atDrop(lastdrag, event)
                         }
                 }
         }
