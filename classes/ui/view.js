@@ -495,7 +495,10 @@ define.class('$system/base/node', function(require){
 
 		if(this._viewport){
 			for(var key in this.shaders){
-				this.shaders[key].noscroll = true
+				var shader = this.shaders[key]
+				if(shader.dont_scroll_as_viewport){
+					this.shaders[key].noscroll = true
+				}
 			}
 			this.shaders.viewportblend = new this.viewportblend(this)
 		}
@@ -1258,6 +1261,7 @@ define.class('$system/base/node', function(require){
 	define.class(this, 'hardrect', this.Shader, function(){
 		this.updateorder = 0
 		this.draworder = 0
+		this.dont_scroll_as_viewport = true
 		this.mesh = vec2.array()
 		this.mesh.pushQuad(0,0,1,0,0,1,1,1)
 		this.position = function(){
@@ -1280,6 +1284,7 @@ define.class('$system/base/node', function(require){
 		this.updateorder = 0
 		this.draworder = 1
 		this.mesh = vec2.array();
+		this.dont_scroll_as_viewport = true
 
 		this.update = function(){
 			var view = this.view
@@ -1317,6 +1322,7 @@ define.class('$system/base/node', function(require){
 
 	// hard edged bgimage shader
 	define.class(this, 'hardimage', this.hardrect, function(){
+		this.dont_scroll_as_viewport = true
 		this.updateorder = 0
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
@@ -1328,6 +1334,7 @@ define.class('$system/base/node', function(require){
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
+		this.dont_scroll_as_viewport = true
 		this.updateorder = 0
 		this.draworder = 0
 		this.vertexstruct = define.struct({
@@ -1564,6 +1571,7 @@ define.class('$system/base/node', function(require){
 
 	// rounded corner border shader
 	define.class(this, 'roundedborder', this.Shader, function(){
+		this.dont_scroll_as_viewport = true
 		this.draworder = 1
 		this.updateorder = 1
 		this.vertexstruct = define.struct({
