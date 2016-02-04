@@ -35,13 +35,21 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
         for (var key in c._attributes) {
 			var attr = c._attributes[key];
 
-			var typename = attr.type ? attr.type.name : "NONE";
+			var typename = "NONE";
+			var meta = attr.meta;
 
-			var meta = (attr.type && attr.type.meta) ? attr.type.meta : "";
+			if (attr.type) {
+				typename = attr.type.name;
+				if (attr.type.meta) {
+					meta = attr.type.meta;
+				}
+			}
+
 			if (key == "layout") {
 				meta = "hidden";
 			}
-			if (typename != "NONE" && typename != "Event" && meta != "hidden" ) {
+
+			if (typename != "NONE" && typename != "Event" && meta != "hidden") {
 				if (!keysgroups[attr.group]) keysgroups[attr.group] = [];
 				keysgroups[attr.group].push(key);
 			}
