@@ -176,20 +176,39 @@ define.class('$system/base/node', function(){
 
 	// Internal: emits `start` event.
 	this.setstart = function(pointerlist) {
+
+		// scan for handoff hooks on in flight pointers
+		for (var i = 0; i < this._start.length; i++) {
+			var start = this._start[i]
+			
+			if(start.handoff){
+				var id = start.handoff(pointerlist)
+				if(id >= 0){
+					// we got a handoff of a particular pointer
+					pointerlist[id].handoffed = start.view
+				}
+			}
+		}
+
 		this._start.length = 0
+
+		var pick = function(view){
+			var id = this._first.getAvailableId()
+			var pointer = new Pointer(pointerlist[i], id, view)
+			// Add pointer to clicker stash for counting
+			this._clickerstash.unshift(pointer)
+			this._clickerstash.length = min(this._clickerstash.length, 5)
+			pointer.setClicker(this._clickerstash)
+			// set pointer lists
+			this._start.setPointer(pointer)
+			this._first.setPointer(pointer)
+			this._move.setPointer(pointer)
+		}.bind(this)
+		
 		for (var i = 0; i < pointerlist.length; i++) {
-			this.device.pickScreen(pointerlist[i].position, function(view){
-				var id = this._first.getAvailableId()
-				var pointer = new Pointer(pointerlist[i], id, view)
-				// Add pointer to clicker stash for counting
-				this._clickerstash.unshift(pointer)
-				this._clickerstash.length = min(this._clickerstash.length, 5)
-				pointer.setClicker(this._clickerstash)
-				// set pointer lists
-				this._start.setPointer(pointer)
-				this._first.setPointer(pointer)
-				this._move.setPointer(pointer)
-			}.bind(this), true)
+			// if a pointer is handoffed use that view instead
+			if(pointerlist[i].handoffed) pick(pointerlist[i].handoffed)
+			else this.device.pickScreen(pointerlist[i].position, pick, true)
 		}
 		this.emitPointerList(this._start, 'start')
 	}
@@ -206,10 +225,14 @@ define.class('$system/base/node', function(){
 			pointer.addMovement(previous || first)
 			// ok so if our p
 
-			if(start && start.pickview){
-				this.device.pickScreen(pointerlist[i].position, function(view){
-					pointer.pick = view
-				}.bind(this), true)
+			// emit event hooks
+			if(start){
+				if(start.pickview){
+					this.device.pickScreen(pointerlist[i].position, function(view){
+						pointer.pick = view
+					}.bind(this), true)
+				}
+				if(start.move) start.move(pointerlist[i], pointerlist[i].value, start)
 			}
 
 			this._move.setPointer(pointer)
@@ -223,9 +246,17 @@ define.class('$system/base/node', function(){
 		this._end.length = 0
 		this._tap.length = 0
 		for (var i = 0; i < pointerlist.length; i++) {
+
+			// emit event hooks
+			var start = this._start.getById(this._move.getClosest(pointerlist[i]).id)
+			if(start){
+				if(start.end) start.end(pointerlist[i], pointerlist[i].value, start)
+			}
+
 			this.device.pickScreen(pointerlist[i].position, function(view){
 				var previous = this._move.getClosest(pointerlist[i])
 				var first = this._first.getById(previous.id)
+			
 				var pointer = new Pointer(pointerlist[i], previous.id, first.view)
 				pointer.addDelta(first)
 				pointer.setClicker(this._clickerstash)
@@ -238,7 +269,9 @@ define.class('$system/base/node', function(){
 				}
 
 			}.bind(this), true)
+
 		}
+
 		this.emitPointerList(this._end, 'end')
 		this.emitPointerList(this._tap, 'tap')
 	}
