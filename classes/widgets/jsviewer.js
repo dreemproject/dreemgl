@@ -26,6 +26,59 @@ define.class('$ui/textbox', function(require){
 
 	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
 
+	for(var key in JSFormatter.types){
+		this[key] = String(JSFormatter.types[key])
+	}
+
+	this.textstyle = function(style, pos, tag){
+
+		var group = tag.y
+		var type = int(tag.z / 65536.)
+		var sub = int(mod(tag.z / 256., 256.))
+		var part = int(mod(tag.z, 256.))
+		var unicode = int(tag.x)
+		
+		if(unicode == 10 || unicode == 32 || unicode == 9) discard
+		if(sub == _Paren || sub == _Brace || sub == _Bracket){
+			if(sub == _Paren){
+				style.fgcolor = "white"
+			}
+			else if(sub == _Bracket){
+				style.fgcolor = "#ccc"
+			}
+			else{
+				style.fgcolor = "white"
+			}
+		}
+		else if(sub == _Operator){
+			style.fgcolor = "#ff9d00"
+		}
+		else if(type == _Id){
+			style.fgcolor = "white"
+			if(sub == _Color){
+				style.fgcolor = "pink"
+			}
+		}
+		else if(type == _Value){
+			if(sub == _String){
+				style.fgcolor = "#0f0"
+			}
+			else{
+				style.fgcolor = "aero"
+			}
+		}
+		else if(type == _Comment){
+			style.fgcolor = "#777"
+		}
+		else if(type == _This){
+			style.fgcolor = "#ff7fe1"
+		}else{
+			style.fgcolor = "#ff9d00"
+		}
+		//if(type>7)mesh.outline = true
+	}
+
+
 	// extend the font shader
 	this.typeface = function(){
 		this.font = font
@@ -86,54 +139,6 @@ define.class('$ui/textbox', function(require){
 				return vec4(0)
 			}
 			return vec4(-1.)
-		}
-
-		this.style = function(pos){
-
-			var group = mesh.tag.y
-			var type = int(mesh.tag.z / 65536.)
-			var sub = int(mod(mesh.tag.z / 256., 256.))
-			var part = int(mod(mesh.tag.z, 256.))
-			var unicode = int(mesh.tag.x)
-			
-			if(unicode == 10 || unicode == 32 || unicode == 9) discard
-			if(sub == _Paren || sub == _Brace || sub == _Bracket){
-				if(sub == _Paren){
-					view.fgcolor = "white"
-				}
-				else if(sub == _Bracket){
-					view.fgcolor = "#ccc"
-				}
-				else{
-					view.fgcolor = "white"
-				}
-			}
-			else if(sub == _Operator){
-				view.fgcolor = "#ff9d00"
-			}
-			else if(type == _Id){
-				view.fgcolor = "white"
-				if(sub == _Color){
-					view.fgcolor = "pink"
-				}
-			}
-			else if(type == _Value){
-				if(sub == _String){
-					view.fgcolor = "#0f0"
-				}
-				else{
-					view.fgcolor = "aero"
-				}
-			}
-			else if(type == _Comment){
-				view.fgcolor = "#777"
-			}
-			else if(type == _This){
-				view.fgcolor = "#ff7fe1"
-			}else{
-				view.fgcolor = "#ff9d00"
-			}
-			//if(type>7)mesh.outline = true
 		}
 
 		this.update = function(){
