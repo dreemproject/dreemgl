@@ -29,7 +29,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 								},
 								// called to check wether something is a drop target. Cursor/style management is your own
 								// if return true it will send dragover/dragout events to the underlying view
-								isDropTarget:function(view){
+								isDropTarget:function(view,ev){
 									// negotiate with the target view wether its a drop target and set the cursor
 									if(!view || view === outer){
 										this.screen.pointer.cursor = 'no-drop'
@@ -41,9 +41,9 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 									return true
 								},
 								// called when the drop is made on a valid droptarget, no events are sent, its up to the implementor
-								atDrop:function(view){ 
+								atDrop:function(view, event){
 									// dropped on a view, make it do stuff
-									console.log("Dropped on"+view.name)
+									console.log("Dropped on ", view.name, "at", event.position)
 								},
 								size:[100,100]
 							})

@@ -820,12 +820,12 @@ define.class('$ui/view', function(require,
 								{classname:'label', label:'Text',  text:'Aa',    desc:'A text label' },
 								{classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}]
 							},
-							dropTest:function(v, item) {
-								console.log('test', item, v)
+							dropTest:function(ev, v, item) {
+								console.log('test if', item.label, 'can be dropped onto', v.name, '@', ev.position);
 								return true;
 							},
-							drop:function(v, item) {
-								console.log('dropped', item, 'onto', v);
+							drop:function(ev, v, item, orig) {
+								console.log('dropped', item.label, 'onto', v.name, '@', ev.position);
 							}
 						})
 					)

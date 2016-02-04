@@ -811,7 +811,7 @@ define.class('$system/base/node', function(require){
 			// lets send dragenter/leave events
 			var newdrag = event.pick
 
-			if(!dragview.isDropTarget(newdrag)) newdrag = undefined
+			if(!dragview.isDropTarget(newdrag,event)) newdrag = undefined
 
 			if(lastdrag !== newdrag){
 				if(lastdrag) lastdrag.emitUpward('dragout',{})
@@ -820,12 +820,12 @@ define.class('$system/base/node', function(require){
 			}
 			if(newdrag) newdrag.emitUpward('dragmove', event)
 		}
-		this.onpointerend = function(){
+		this.onpointerend = function(event){
 			this.onpointermove = undefined
 			dragview.closeOverlay()
 			if(lastdrag){
 				lastdrag.emitUpward('dragout',{})
-				dragview.atDrop(lastdrag)
+				dragview.atDrop(lastdrag, event)
 			}
 		}
 	}
