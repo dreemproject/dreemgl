@@ -20,7 +20,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				t = this.find(t);
 			}
 			if (t && this.propertyname) {
-				// console.log('Set "', this.propertyname, '" to "', val, typeof(val), '" on: ', t);
+				console.log('Set "', this.propertyname, '" to "', val, '" (', typeof(val), ') on: ', t);
 				t[this.propertyname] = val;
 			}
 		}})
@@ -32,15 +32,15 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			var col2=vec3("#3b3b3b");
 			return vec4(mix(col1, col2, 1.0-pow(abs(uv.y),4.0) ),1.0)
 		}
-	}
+	};
 
-	this.margin = 0
-	this.padding = 0
-	this.border = 0
-	this.flexdirection = "row"
-	this.flex = 1
-	this.bordercolor = "gray"
-	this.fgcolor = "#c0c0c0"
+	this.margin = 0;
+	this.padding = 0;
+	this.border = 0;
+	this.flexdirection = "row";
+	this.flex = 1;
+	this.bordercolor = "gray";
+	this.fgcolor = "#c0c0c0";
 
 	this.style = {
 		radiogroup:{
@@ -53,13 +53,13 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			bgcolor:NaN,width:300, flexdirection:"column"
 		},
 		$_vec4:{
-			flex:1,decimals:3, stepvalue:0.01, margin:2
+			flex:1, decimals:3, stepvalue:1.00, margin:2
 		},
 		$_vec3:{
-			flex:1, decimals:3, stepvalue:0.01, margin:2
+			flex:1, decimals:3, stepvalue:1.00, margin:2
 		},
 		$_vec2:{
-			 flex:1, decimals:3, stepvalue:0.01
+			 flex:1, decimals:3, stepvalue:1.00
 		},
 		$_floatlike:{
 			decimals:3, stepvalue:0.01, margin:2, flex:1
@@ -103,23 +103,33 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				var t4 = "";
 				if (this.property.meta =="tlbr")
 				{
-					t1 = "top"
+					t1 = "top";
 					t2 = "left";
 					t3 = "bottom";
 					t4 = "right"
-				}else
-				if (this.property.meta =="ltrb")
-				{
+				} else if (this.property.meta =="ltrb") {
 					t1 = "left";
-					t2 = "top"
-					t3 = "right"
+					t2 = "top";
+					t3 = "right";
 					t4 = "bottom";
 				}
 				editor = view({bgcolor:NaN},
-						numberbox({title:t1, class:'vec4', value:this.value[0]}),
-						numberbox({title:t2, class:'vec4', value:this.value[1]}),
-						numberbox({title:t3, class:'vec4', value:this.value[2]}),
-						numberbox({title:t4, class:'vec4', value:this.value[3]}));
+						numberbox({title:t1, class:'vec4', value:this.value[0], onvalue:function(ev,v,o){
+							this.value = vec4(v, this.value[1], this.value[2], this.value[3]);
+							this.callback(this.value);
+						}.bind(this)}),
+						numberbox({title:t2, class:'vec4', value:this.value[1], onvalue:function(ev,v,o){
+							this.value = vec4(this.value[0], v, this.value[2], this.value[3]);
+							this.callback(this.value);
+						}.bind(this)}),
+						numberbox({title:t3, class:'vec4', value:this.value[2], onvalue:function(ev,v,o){
+							this.value = vec4(this.value[0], this.value[1], v, this.value[3]);
+							this.callback(this.value);
+						}.bind(this)}),
+						numberbox({title:t4, class:'vec4', value:this.value[3], onvalue:function(ev,v,o){
+							this.value = vec4(this.value[0], this.value[1], this.value[2], v);
+							this.callback(this.value);
+						}.bind(this)}));
 			}
 		} else if (typename =="vec3"){
 
@@ -133,14 +143,29 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			}
 
 			editor = view({bgcolor:NaN},
-					   numberbox({title:t1, class:'vec3', value:this.value[0]}),
-					   numberbox({title:t2, class:'vec3', value:this.value[1]}),
-				       numberbox({title:t3, class:'vec3', value:this.value[2]}));
+					   numberbox({title:t1, class:'vec3', value:this.value[0], onvalue:function(ev,v,o){
+						   this.value = vec3(v, this.value[1], this.value[2]);
+						   this.callback(this.value);
+					   }.bind(this)}),
+					   numberbox({title:t2, class:'vec3', value:this.value[1], onvalue:function(ev,v,o){
+						   this.value = vec3(this.value[0], v, this.value[2]);
+						   this.callback(this.value);
+					   }.bind(this)}),
+				       numberbox({title:t3, class:'vec3', value:this.value[2], onvalue:function(ev,v,o){
+						   this.value = vec3(this.value[0], this.value[1], v);
+						   this.callback(this.value);
+					   }.bind(this)}));
 
 		} else if (typename =="vec2"){
 			editor = view({bgcolor:NaN},
-					   numberbox({class:'vec2', value:this.value[0],margin:2}),
-					   numberbox({class:'vec2', value:this.value[1],margin:2}));
+					   numberbox({class:'vec2', value:this.value[0],margin:2, onvalue:function(ev,v,o){
+						   this.value = vec2(v, this.value[1]);
+						   this.callback(this.value);
+					   }.bind(this)}),
+					   numberbox({class:'vec2', value:this.value[1],margin:2, onvalue:function(ev,v,o){
+						   this.value = vec2(this.value[0], v);
+						   this.callback(this.value);
+					   }.bind(this)}));
 
 		} else if (typename =="FloatLike" || typename =="float32"){
 			editor = view({bgcolor:NaN},
@@ -148,7 +173,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						   minvalue: this.property.minvalue,
 						   maxvalue: this.property.maxvalue,
 						   value:this.value,
-						   onvalue:function(ev,v) {this.callback(v)}.bind(this)
+						   onvalue:function(ev,v){this.callback(v);}.bind(this)
 					   }));
 
 		} else if (typename =="IntLike" || typename =="int32"){
@@ -161,7 +186,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						value:this.value,
 						stepvalue:1,
 						margin:2,
-						onvalue:function(ev,v) {this.callback(v)}.bind(this)
+						onvalue:function(ev,v){this.callback(v);}.bind(this)
 					}));
 
 		} else if (typename == "String" || typeof(typename) === "undefined"){
@@ -177,11 +202,11 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						borderwidth:1,
 						bordercolor:"gray",
 						margin:2,
-						onvalue: function(ev,v,o) {this.callback(v);}.bind(this)
+						onvalue: function(ev,v,o){this.callback(v);}.bind(this)
 					})
 
 			);
-		} else if (typename =="Boolean" || typename=="BoolLike" || typename=="boolean") {
+		} else if (typename == "Boolean" || typename == "BoolLike" || typename == "boolean" || typename == "bool") {
 
 			editor = checkbox({
 				flex:0,
