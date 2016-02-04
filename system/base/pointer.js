@@ -181,8 +181,8 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < this._start.length; i++) {
 			var start = this._start[i]
 			
-			if(start.handover){
-				var id = start.handover(pointerlist)
+			if(start.atHandOver){
+				var id = start.atHandOver(pointerlist)
 				if(id >= 0){
 					// we got a handoff of a particular pointer
 					pointerlist[id].handovered = start.view
@@ -232,7 +232,7 @@ define.class('$system/base/node', function(){
 						pointer.pick = view
 					}.bind(this), true)
 				}
-				if(start.move) start.move(pointerlist[i], pointerlist[i].value, start)
+				if(start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
 
 			this._move.setPointer(pointer)
@@ -250,7 +250,7 @@ define.class('$system/base/node', function(){
 			// emit event hooks
 			var start = this._start.getById(this._move.getClosest(pointerlist[i]).id)
 			if(start){
-				if(start.end) start.end(pointerlist[i], pointerlist[i].value, start)
+				if(start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
 			}
 
 			this.device.pickScreen(pointerlist[i].position, function(view){
