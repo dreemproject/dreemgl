@@ -749,6 +749,16 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				res3d.push(building);
 			}
 		}
+		
+		for(var x = 0;x<this.tilewidth;x++){
+			for(var y = 0;y<this.tileheight;y++){
+				var tx = Math.floor(x-(this.tilewidth-1)/2);
+				var ty = Math.floor(y-(this.tileheight-1)/2)
+				var building = this.labeltile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
+				this.tilestoupdate.push(building);
+				res3d.push(building);
+			}
+		}
 	
 		var dist = 2.5
 		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
