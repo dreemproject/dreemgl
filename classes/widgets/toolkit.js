@@ -8,7 +8,6 @@ define.class("$ui/splitcontainer", function(require,
 								  $widgets$, palette, propviewer){
 
 	this.name = "toolkit";
-	this.flex = 1;
 	this.clearcolor = "#565656";
 	this.bgcolor = "#565656";
 	this.flexdirection = "column";

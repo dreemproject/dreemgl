@@ -894,6 +894,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n740" name="n740">740</a></strong>
 <a href="#n741" name="n741">741</a>
 <a href="#n742" name="n742">742</a>
+<a href="#n743" name="n743">743</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
         
@@ -909,7 +910,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="keyword">var</span> roadcolors = {<span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>, <span class="key">ferry</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">rail</span><span class="delimiter">&quot;</span></span> : vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>), <span class="key"><span class="delimiter">&quot;</span><span class="content">minor_road</span><span class="delimiter">&quot;</span></span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>), <span class="key"><span class="delimiter">&quot;</span><span class="content">major_road</span><span class="delimiter">&quot;</span></span> : vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">highway</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>)}
         <span class="keyword">var</span> roadmarkcolors = {<span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, <span class="key">major_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">minor_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a0a0a0</span><span class="delimiter">&quot;</span></span>}
                         
-        <span class="local-variable">this</span>.ignoreuse = {
+        <span class="local-variable">this</span>.ignoreuse = {}
+        <span class="local-variable">this</span>.aignoreuse = {
                 <span class="key">allotments</span>:<span class="predefined-constant">true</span>, 
                 <span class="key">apron</span>:<span class="predefined-constant">true</span>, 
                 <span class="key">cemetery</span>:<span class="predefined-constant">true</span>, 

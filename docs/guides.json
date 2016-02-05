@@ -21,6 +21,12 @@
         "description": "Adding DreemGL Components"
       },
       {
+        "name": "toolkit",
+        "url": "guides/toolkit",
+        "title": "DreemGL Visual Toolkit",
+        "description": "Using the DreemGL Visual Toolkit"
+      },
+      {
         "name": "appendix",
         "url": "guides/appendix",
         "title": "DreemGL Appendix",
