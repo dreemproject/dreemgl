@@ -4,10 +4,8 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/splitcontainer", function(require,
-								  $ui$, view, label,
-								  $widgets$, palette, propviewer,
-								  $server$, sourceset, dataset,
-								  $$, dockpanel){
+								  $ui$, view, label, icon,
+								  $widgets$, palette, propviewer){
 
 	this.name = "toolkit";
 	this.flex = 1;
@@ -65,9 +63,34 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	};
 
+	define.class(this, 'panel', view, function(){
+		this.attributes = {
+			title: Config({type:String, value:"Untitled"}),
+			fontsize: Config({type:float, value:12, meta:"fontsize"})
+		}
+
+		this.padding = 0;
+		this.margin = 4;
+		this.borderradius =  vec4(10,10,1,1);
+		this.bgcolor = vec4("red");
+		this.flex = 1;
+		this.flexdirection ="column";
+
+		this.render = function(){
+			return [
+				view({bgcolor:"#585858",borderradius:0, bordercolor:"transparent" , borderwidth:0, margin:0, padding:vec4(0)},
+					view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
+						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bgcolor:NaN, fontsize:this.fontsize, fgcolor: "white" })
+					)
+				)
+				,this.constructor_children
+			];
+		}
+	});
+
 	this.render = function() {
 		return [
-			dockpanel({alignitems:"stretch", aligncontent:"stretch", title:"Components", viewport:"2D", flex:1},
+			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", viewport:"2D", flex:1},
 				palette({
 					name:"components",
 					flex:1,
@@ -136,7 +159,7 @@ define.class("$ui/splitcontainer", function(require,
 					}.bind(this)
 				})
 			),
-			dockpanel({title:"Properties", viewport:"2D", flex:2.5, visible:!!(this.inspect)},
+			this.panel({title:"Properties", viewport:"2D", flex:2.5, visible:!!(this.inspect)},
 				propviewer({name:"inspector", target:this.inspect, flex:1, overflow:"scroll"})
 			)
 		];

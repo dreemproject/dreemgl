@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $$, toolkit) {
+define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $widgets$, toolkit) {
 
 	this.render = function() {
 		return [
