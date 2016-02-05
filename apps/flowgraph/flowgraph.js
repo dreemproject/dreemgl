@@ -586,8 +586,7 @@ define.class('$ui/view', function(require,
 			res.push(
 				block({
 					flowdata:fd,
-					pos:vec3(fd.x,
-					fd.y,0),
+					pos:vec3(fd.x, fd.y, 0),
 					name:node.name,
 					title:uppercaseFirst(node.classname + ': ' + node.name),
 					inputs:node.inputs,
@@ -813,32 +812,6 @@ define.class('$ui/view', function(require,
 						)
 					)
 					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
-				)
-				,splitcontainer({flex:0.5,direction:"horizontal"}
-					,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.35},
-						palette({
-							name:'components',
-							flex:1,
-							bgcolor:"#4e4e4e",
-							items:{Views:[
-								{classname:'view',  label:'View',  icon:'clone', desc:'A rectangular view'},
-								{classname:'label', label:'Text',  text:'Aa',    desc:'A text label' },
-								{classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}]
-							},
-							dropTest:function(ev, v, item, orig) {
-								var name = v && v.name ? v.name : 'unknown';
-								console.log('test if', item.label, 'from', orig.position, 'can be dropped onto', name, '@', ev.position);
-								return name === 'centralconstructiongrid';
-							},
-							drop:function(ev, v, item, orig) {
-								var name = v && v.name ? v.name : 'unknown';
-								console.log('dropped', item.label, 'from', orig.position, 'onto', name, '@', ev.position);
-							}
-						})
-					)
-					,dockpanel({title:"Properties", viewport:"2D"},
-						propviewer({name:"mainproperties", target:"centralconstructiongrid", flex:2, overflow:"scroll"})
-					)
 				)
 			)
 		];
