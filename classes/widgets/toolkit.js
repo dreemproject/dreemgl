@@ -16,6 +16,37 @@ define.class("$ui/splitcontainer", function(require,
 		inspect:Config({type:Object})
 	};
 
+	this.init = function () {
+		var at = "";
+		var plist = {};
+		var main = this.screen.composition.seekASTNode({type:"Function"});
+		if (main && main.params) {
+			for (var i=0;i<main.params.length;i++) {
+				var param = main.params[i];
+				if (param && param.id && param.id.name) {
+					var name = param.id.name;
+					if (name.startsWith('$') && name.endsWith('$')) {
+						at = name;
+					} else {
+						if (!plist[at]) {
+							plist[at] = [];
+						}
+						plist[at].push(name)
+					}
+				}
+			}
+		}
+		// TODO: check that above plist has all the classes that we intend to use in this composition,
+		// if not, write missing values into the AST
+
+		this.screen.globalpointerstart = function(ev) {
+			var inspector = this.find('inspector');
+			if (inspector.target != ev.view && this.testView(ev.view)) {
+				inspector.target = ev.view
+			}
+		}.bind(this)
+	};
+
 	this.buildValueNode = function(name, value) {
 		var valnode = { type: "Value", value: value };
 
@@ -87,6 +118,16 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	});
 
+	this.testView = function(v) {
+		var ok = true;
+		var p = v;
+		while (p && ok) {
+			ok = p !== this && p.tooltarget !== false;
+			p = p.parent;
+		}
+		return ok;
+	};
+
 	this.render = function() {
 		return [
 			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", viewport:"2D", flex:1},
@@ -124,19 +165,9 @@ define.class("$ui/splitcontainer", function(require,
 						]
 					},
 					dropTest:function(ev, v, item, orig, dv) {
-						var name = v && v.name ? v.name : "unknown";
+						//var name = v && v.name ? v.name : "unknown";
 						//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
-
-                        var target = this;
-
-						var dropok = true;
-						var p = v;
-						while (p && dropok) {
-							dropok = p !== target && p.designtarget !== false;
-							p = p.parent;
-						}
-
-						return dropok;
+						return this.testView(v);
 					}.bind(this),
 					drop:function(ev, v, item, orig, dv) {
 						// var name = v && v.name ? v.name : "unknown";
