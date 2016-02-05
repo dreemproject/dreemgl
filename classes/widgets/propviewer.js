@@ -32,8 +32,9 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		var c = this.target;
 		if (typeof(this.target) === 'string') {
 			c = this.find(this.target);
-			if (!c) return [];
 		}
+
+		if (!c) return [];
 
 		var res = [];
 		var keysgroups = {};

@@ -16,7 +16,7 @@ define.class("$ui/splitcontainer", function(require,
 	this.flexdirection = "column";
 
 	this.attributes = {
-		target:Config({type:Object}),
+		inspect:Config({type:Object}),
 
 		source:Config({type:String}),
 
@@ -147,15 +147,12 @@ define.class("$ui/splitcontainer", function(require,
 						var name = v && v.name ? v.name : "unknown";
 						//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
 
-						var target = this.target;
-						if (target.name) {
-							target = target.name;
-						}
+                        var target = this;
 
-						var dropok = false;
+						var dropok = true;
 						var p = v;
-						while (p && !dropok) {
-							dropok = p.name === target;
+						while (p && dropok) {
+							dropok = p !== target && p.designtarget !== false;
 							p = p.parent;
 						}
 
@@ -205,7 +202,7 @@ define.class("$ui/splitcontainer", function(require,
 									]
 								});
 
-								console.log('Dropped onto node:', node)
+								console.log('Dropped onto node:', node);
 
 								this.writeAST();
 
@@ -214,8 +211,8 @@ define.class("$ui/splitcontainer", function(require,
 					}.bind(this)
 				})
 			),
-			dockpanel({title:"Properties", viewport:"2D", flex:2},
-				propviewer({name:"mainproperties", target:this.target, flex:1, overflow:"scroll"})
+			dockpanel({title:"Properties", viewport:"2D", flex:2.5, visible:!!(this.inspect)},
+				propviewer({name:"inspector", target:this.inspect, flex:1, overflow:"scroll"})
 			)
 		];
 	}

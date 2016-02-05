@@ -3,11 +3,9 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function(require,
-											 $ui$, screen, view, splitcontainer, cadgrid,
-                                             $$, designer){
+define.class('$server/composition', function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $$, designer) {
 
-	this.render = function(){
+	this.render = function() {
 		return [
 			screen(
 				splitcontainer(
@@ -21,12 +19,13 @@ define.class('$server/composition', function(require,
 							majorline:"#575757",
 							minorline:"#484848"
 						},
-						view({x:30, y:40, size:[100,100], bgcolor:'lightred'}),
+						view({x:30, y:40, size:[100,100], bgcolor:'lightred'}, icon({icon:'flask'})),
 						view({x:300, y:40, size:[200,200], bgcolor:'lightgreen'},
-							view({x:10, y:10, size:[100,100], bgcolor:'orange'})),
-						view({x:200, y:150, size:[100,100], bgcolor:'lightblue'})
+							view({x:10, y:10, size:[100,100], bgcolor:'orange'},
+								view({width:50, height:50, bgcolor:'purple', designtarget:false}))),
+						view({x:200, y:150, size:[100,100], bgcolor:'lightblue'}, label({text:'hello', bgcolor:NaN, fgcolor:'brown'}))
 					),
-					designer({target:"grid"})
+					designer({inspect:"grid"})
 				)
 			)
 		]
