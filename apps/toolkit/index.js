@@ -1,17 +1,15 @@
-define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $server$, service, $$, designer) {
-	
+define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $server$, service, $$, toolkit) {
+
 	define.class(this,'fileio',service,function() {
 			var path = require('path')
 			var fs = require('fs')
 			this.name = 'fileio'
 			this.saveComposition = function(data) {
-				fs.writeFile(
-					define.expandVariables('$root/apps/designer/index.js'),
-					'define.class("$server/composition",' + data + ')'
-				)
+				var module = this.outer.composition.constructor.module;
+				fs.writeFile(module.filename, 'define.class("$server/composition",' + data + ')')
 			}
-		})
-	
+		});
+
 	this.render = function() {
 		return [
 			this.fileio(),
@@ -36,10 +34,10 @@ define.class("$server/composition",function(require, $ui$, screen, view, icon, l
 						icon({height:50, width:50, fgcolor:'cornflower', icon:'flask'}),
 						icon({height:50, width:50, fgcolor:'cornflower', icon:'flask'})
 					),
-					designer({inspect:"grid"})
+					toolkit({inspect:"grid"})
 				)
 			)
 		]
 	}
-}
-)
+});
+

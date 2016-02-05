@@ -290,7 +290,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		var sx = vp.layout.width;
 		var sy = vp.layout.height;
-	console.log(sx,sy);
+	
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
 
@@ -323,55 +323,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		
 		var R = vec3.intersectplane(camerapos, end, vec3(0,1,0), 0)
 		if (!R) return null;
-		//console.log(camerapos, end, R);	
 		
-		this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
-		this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
+	//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
+	//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
 	
 	
-		
-		
-		
 		return R;
-		var remapmatrix = mat4.identity();
-		var scaletemp = mat4.scalematrix([1,1,1])
-		var transtemp2 = mat4.translatematrix([-1,-1,0])
-
 		
-		raystart = vec3.mul_mat4(raystart, remapmatrix)
-		
-		mat4.scalematrix([vp.layout.width/2,vp.layout.height/2,1000/2], scaletemp)
-		mat4.invert(scaletemp, remapmatrix)
-
-		raystart = vec3.mul_mat4(raystart, remapmatrix)
-		raystart = vec3.mul_mat4(raystart, transtemp2)
-
-		var lastrayafteradjust = vec3(raystart.x, raystart.y,-1);
-				
-				
-		//console.log(vp.colormatrices, vp.viewport);
-		var lastprojection = vp.colormatrices.perspectivematrix;
-		var lastviewmatrix = vp.colormatrices.lookatmatrix;
-		
-				
-		var startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 0, lastviewmatrix, lastprojection)
-		var endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 1, lastviewmatrix, lastprojection)
-		var	camerapos = vp._camera;
-
-		var camlocal = vec3.mul_mat4(camerapos, remapmatrix)
-		var endlocal = vec3.mul_mat4(endv, remapmatrix)
-
-		var R = vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
-		
-		if (!R)	{
-			raystart = vec3(0.5,0.5,0)
-		} else {
-			R = vec3.mul_mat4(R, vp.viewportmatrix)
-			raystart = R
-			console.log(R);
-			this.find("MARKER").pos = vec3(R[0],-200,-R[1]);
-			this.find("MARKER").text = this.find("MARKER").pos ;
-		}
 	}
 	this.dragging = false;
 	this.startvect = vec2(0);
@@ -380,7 +338,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		if (R){
 			this.startvect = vec2(R[0]/BufferGen.TileSize,R[2]/BufferGen.TileSize)
 			this.startcenter = vec2(this.centerx, this.centery);
-			console.log(this.startvect);
 		}
 	}
 	this.moveDrag = function(ev){
@@ -417,20 +374,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.bufferloadbool = false
 
 		this.onpointerend = function(ev){
-		//	console.log(ev.value[0]);
 			this.host.stopDrag();
 		}
+
 		this.onpointerstart = function(ev){
-	//		console.log("start" , this.host.globalToLocal(ev.position));
-		//	console.log("start", ev.position);
 			this.host.startDrag(ev);
-			
-			
 		}
+
 		this.onpointermove = function(ev){
-		//	console.log(ev.value[0]);
-//			console.log("move", ev.position);
-//			console.log("whaa" , this.host.globalToLocal(ev.position));
 			this.host.moveDrag(ev);
 		}
 		
@@ -807,8 +758,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		},
 
 			view({bgcolor:NaN},
-				res3d, 
-				label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
+				res3d
+				//,label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
 				)
 
 			));
