@@ -31,7 +31,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	};
 
 	define.class(this, "panel", view, function() {
-		this.bgcolor = NaN
+		this.bgcolor = 'transparent';
 		this.padding = vec4(20,10,20,10);
 		this.justifycontent = 'space-between';
 		this.attributes = {
@@ -122,7 +122,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			if (this.text) {
 				views.push(label({
 					fgcolor:this.bordercolor,
-					bgcolor:NaN,
+					bgcolor:"transparent",
 					text:this.text,
 					fontsize:this.fontsize
 				}));
@@ -138,7 +138,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 				var self = this;
 
 				views.push(checkbox({
-					bgcolor:"transparent",
+					bgcolor:this.outer.bgcolor,
 					fgcolor:this.bordercolor,
 					borderwidth:0,
 					padding:0,
@@ -160,28 +160,32 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "panelview", view, function() {
-		this.bgcolor = "transparent";
+		this.bgcolor = "white";
+		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panellabel", label, function() {
-		this.bgcolor = "transparent";
+		this.bgcolor = "white";
 		this.fgcolor = "#e4e4e4";
 		this.padding = 0;
 		this.margin = 0;
+		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panelicon", icon, function() {
-		this.bgcolor = 'transparent';
+		this.bgcolor = 'white';
 		this.fgcolor = '#e4e4e4';
 		this.align = 'center';
 		this.padding = 0;
 		this.margin = 0;
+		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panelitem", view, function() {
 
-		this.bgcolor = 'transparent';
+		this.bgcolor = 'white';
 		this.flexdirection = 'column';
+		this.hardrect = {pickonly:true};
 
 		this.attributes = {
 			text:Config({type:String}),

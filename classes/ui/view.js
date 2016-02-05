@@ -1548,6 +1548,25 @@ define.class('$system/base/node', function(require){
 		this.parent.redraw()
 	}
 
+	this.buildASTPath = function() {
+		var local = {
+			type:this.constructor.name
+		};
+
+		var path = [local];
+		if (this.parent) {
+			local.childindex = this.parent.children.indexOf(this);
+			local.constructor_index = this.parent.constructor_children.indexOf(this);
+
+			if (this.parent.buildASTPath) {
+				path = this.parent.buildASTPath();
+				path.push(local);
+			}
+		}
+
+		return path;
+	};
+
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10
