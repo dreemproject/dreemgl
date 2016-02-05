@@ -482,7 +482,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n328" name="n328">328</a>
 <a href="#n329" name="n329">329</a>
 <strong><a href="#n330" name="n330">330</a></strong>
-<a href="#n331" name="n331">331</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -595,11 +594,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.ctrl = pointer.ctrl
                 <span class="local-variable">this</span>.meta = pointer.meta
                 <span class="local-variable">this</span>.touch = pointer.touch
-                <span class="local-variable">this</span>.delta = pointer.delta
-                <span class="local-variable">this</span>.min = pointer.min
-                <span class="local-variable">this</span>.max = pointer.max
-                <span class="local-variable">this</span>.dt = pointer.dt
-                <span class="local-variable">this</span>.movement = pointer.movement
+                <span class="local-variable">this</span>.delta = pointer.delta || vec2()
+                <span class="local-variable">this</span>.min = pointer.min || vec2()
+                <span class="local-variable">this</span>.max = pointer.max || vec2()
+                <span class="local-variable">this</span>.dt = pointer.dt || <span class="integer">0</span>
+                <span class="local-variable">this</span>.movement = pointer.movement || vec2()
                 <span class="local-variable">this</span>.isover = pointer.isover
                 <span class="local-variable">this</span>.pick = pointer.pick
                 <span class="local-variable">this</span>.t = Date.now()
@@ -666,7 +665,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// scan for handoff hooks on in flight pointers</span>
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>._start.length; i++) {
                         <span class="keyword">var</span> start = <span class="local-variable">this</span>._start[i]
-                        
+
                         <span class="keyword">if</span>(start.atHandOver){
                                 <span class="keyword">var</span> id = start.atHandOver(pointerlist)
                                 <span class="keyword">if</span>(id &gt;= <span class="integer">0</span>){
@@ -690,7 +689,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>._first.setPointer(pointer)
                         <span class="local-variable">this</span>._move.setPointer(pointer)
                 }.bind(<span class="local-variable">this</span>)
-                
+
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
                         <span class="comment">// if a pointer is handoffed use that view instead</span>
                         <span class="keyword">if</span>(pointerlist[i].handovered) pick(pointerlist[i].handovered)
@@ -719,7 +718,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                                 <span class="keyword">if</span>(start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
                         }
-
                         <span class="local-variable">this</span>._move.setPointer(pointer)
                 }
                 <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._move, <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>)
@@ -741,7 +739,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.device.pickScreen(pointerlist[i].position, <span class="keyword">function</span>(view){
                                 <span class="keyword">var</span> previous = <span class="local-variable">this</span>._move.getClosest(pointerlist[i])
                                 <span class="keyword">var</span> first = <span class="local-variable">this</span>._first.getById(previous.id)
-                        
+
                                 <span class="keyword">var</span> pointer = <span class="keyword">new</span> Pointer(pointerlist[i], previous.id, first.view)
                                 pointer.addDelta(first)
                                 pointer.setClicker(<span class="local-variable">this</span>._clickerstash)

@@ -505,6 +505,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n351" name="n351">351</a>
 <a href="#n352" name="n352">352</a>
 <a href="#n353" name="n353">353</a>
+<a href="#n354" name="n354">354</a>
+<a href="#n355" name="n355">355</a>
+<a href="#n356" name="n356">356</a>
+<a href="#n357" name="n357">357</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -529,17 +533,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// Function to call globally when testing if a palette item can be dropped onto another view.</span>
                 <span class="comment">// This can also be defined on the individual components to override behavior.</span>
-                <span class="comment">// The signature of the function should be function(dropevent,view,item,origevent){}</span>
+                <span class="comment">// The signature of the function is function(dropevent,view,item,origevent,dropview){}</span>
                 <span class="key">dropTest</span>:Config({<span class="key">type</span>:Function}),
 
                 <span class="comment">// Function to call globally when dropping a palette item onto a view.</span>
                 <span class="comment">// This can also be defined on the individual components to override behavior.</span>
-                <span class="comment">// The signature of the function should be function(dropevent,view,item,origevent){}</span>
+                <span class="comment">// The signature of the function is function(dropevent,view,item,origevent,dropview){}</span>
                 <span class="key">drop</span>:Config({<span class="key">type</span>:Function})
         };
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panel</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.padding = vec4(<span class="integer">20</span>,<span class="integer">10</span>,<span class="integer">20</span>,<span class="integer">10</span>);
                 <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">'</span><span class="content">space-between</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.attributes = {
@@ -614,8 +618,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">divider</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">'</span><span class="content">space-between</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.justifycontent = <span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.margin = vec4(<span class="integer">5</span>,<span class="integer">5</span>,<span class="integer">10</span>,<span class="integer">0</span>);
                 <span class="local-variable">this</span>.borderbottomwidth = <span class="integer">1</span>;
                 <span class="local-variable">this</span>.paddingbottom = <span class="integer">3</span>;
@@ -630,23 +634,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.text) {
                                 views.push(label({
                                         <span class="key">fgcolor</span>:<span class="local-variable">this</span>.bordercolor,
-                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">text</span>:<span class="local-variable">this</span>.text,
                                         <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize
                                 }));
                         }
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.panel) {
                                 <span class="keyword">var</span> icn;
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.panel.mode == <span class="string"><span class="delimiter">'</span><span class="content">compact</span><span class="delimiter">'</span></span>) {
-                                        icn = <span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>;
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.panel.mode == <span class="string"><span class="delimiter">&quot;</span><span class="content">compact</span><span class="delimiter">&quot;</span></span>) {
+                                        icn = <span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>;
                                 } <span class="keyword">else</span> {
-                                        icn = <span class="string"><span class="delimiter">'</span><span class="content">th-large</span><span class="delimiter">'</span></span>;
+                                        icn = <span class="string"><span class="delimiter">&quot;</span><span class="content">th-large</span><span class="delimiter">&quot;</span></span>;
                                 }
 
                                 <span class="keyword">var</span> self = <span class="local-variable">this</span>;
 
                                 views.push(checkbox({
-                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>,
+                                        <span class="key">bgcolor</span>:<span class="local-variable">this</span>.outer.bgcolor,
                                         <span class="key">fgcolor</span>:<span class="local-variable">this</span>.bordercolor,
                                         <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                         <span class="key">padding</span>:<span class="integer">0</span>,
@@ -654,11 +658,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">icon</span>:icn,
                                         <span class="function">onvalue</span>:<span class="keyword">function</span>(ev) {
                                                 <span class="keyword">if</span> (ev.value) {
-                                                        self.panel.mode = <span class="string"><span class="delimiter">'</span><span class="content">detail</span><span class="delimiter">'</span></span>;
-                                                        <span class="local-variable">this</span>.icon = <span class="string"><span class="delimiter">'</span><span class="content">th-large</span><span class="delimiter">'</span></span>;
+                                                        self.panel.mode = <span class="string"><span class="delimiter">&quot;</span><span class="content">detail</span><span class="delimiter">&quot;</span></span>;
+                                                        <span class="local-variable">this</span>.icon = <span class="string"><span class="delimiter">&quot;</span><span class="content">th-large</span><span class="delimiter">&quot;</span></span>;
                                                 } <span class="keyword">else</span> {
-                                                        self.panel.mode = <span class="string"><span class="delimiter">'</span><span class="content">compact</span><span class="delimiter">'</span></span>;
-                                                        <span class="local-variable">this</span>.icon = <span class="string"><span class="delimiter">'</span><span class="content">list</span><span class="delimiter">'</span></span>;
+                                                        self.panel.mode = <span class="string"><span class="delimiter">&quot;</span><span class="content">compact</span><span class="delimiter">&quot;</span></span>;
+                                                        <span class="local-variable">this</span>.icon = <span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>;
                                                 }
                                         }
                                 }))
@@ -668,28 +672,32 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelview</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panellabel</span><span class="delimiter">&quot;</span></span>, label, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#e4e4e4</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
+                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelicon</span><span class="delimiter">&quot;</span></span>, icon, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#e4e4e4</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.align = <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
+                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">panelitem</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
 
-                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>;
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.hardrect = {<span class="key">pickonly</span>:<span class="predefined-constant">true</span>};
 
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">text</span>:Config({<span class="key">type</span>:String}),
@@ -723,9 +731,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="function">isDropTarget</span>:<span class="keyword">function</span>(v, ev) {
                                                         <span class="keyword">var</span> droptest = <span class="predefined-constant">true</span>;
                                                         <span class="keyword">if</span> (pitem.dropTest) {
-                                                                droptest = pitem.dropTest(ev, v, pitem, event);
+                                                                droptest = pitem.dropTest(ev, v, pitem, event, <span class="local-variable">this</span>);
                                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.outer &amp;&amp; <span class="local-variable">this</span>.outer.dropTest) {
-                                                                droptest = <span class="local-variable">this</span>.outer.dropTest(ev, v, pitem, event);
+                                                                droptest = <span class="local-variable">this</span>.outer.dropTest(ev, v, pitem, event, <span class="local-variable">this</span>);
                                                         }
 
                                                         <span class="keyword">if</span>(!v || !droptest) {
@@ -738,9 +746,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                                 <span class="function">atDrop</span>:<span class="keyword">function</span>(v, ev){
                                                         <span class="keyword">if</span> (pitem.drop) {
-                                                                pitem.drop(ev, v, pitem, event);
+                                                                pitem.drop(ev, v, pitem, event, <span class="local-variable">this</span>);
                                                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.outer &amp;&amp; <span class="local-variable">this</span>.outer.drop) {
-                                                                <span class="local-variable">this</span>.outer.drop(ev, v, pitem, event);
+                                                                <span class="local-variable">this</span>.outer.drop(ev, v, pitem, event, <span class="local-variable">this</span>);
                                                         }
                                                 }
                                         })

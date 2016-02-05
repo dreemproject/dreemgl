@@ -1833,6 +1833,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1679" name="n1679">1679</a>
 <strong><a href="#n1680" name="n1680">1680</a></strong>
 <a href="#n1681" name="n1681">1681</a>
+<a href="#n1682" name="n1682">1682</a>
+<a href="#n1683" name="n1683">1683</a>
+<a href="#n1684" name="n1684">1684</a>
+<a href="#n1685" name="n1685">1685</a>
+<a href="#n1686" name="n1686">1686</a>
+<a href="#n1687" name="n1687">1687</a>
+<a href="#n1688" name="n1688">1688</a>
+<a href="#n1689" name="n1689">1689</a>
+<strong><a href="#n1690" name="n1690">1690</a></strong>
+<a href="#n1691" name="n1691">1691</a>
+<a href="#n1692" name="n1692">1692</a>
+<a href="#n1693" name="n1693">1693</a>
+<a href="#n1694" name="n1694">1694</a>
+<a href="#n1695" name="n1695">1695</a>
+<a href="#n1696" name="n1696">1696</a>
+<a href="#n1697" name="n1697">1697</a>
+<a href="#n1698" name="n1698">1698</a>
+<a href="#n1699" name="n1699">1699</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -2059,7 +2077,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">pointermultiend</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer is pressed and released quickly.</span>
                 <span class="key">pointertap</span>:Config({<span class="key">type</span>:Event}),
-                <span class="key">pointermultitap</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer moved without being pressed.</span>
                 <span class="key">pointerhover</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// fires when pointer enters an element.</span>
@@ -3384,6 +3401,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.parent.children.unshift(<span class="local-variable">this</span>)
                 <span class="local-variable">this</span>.parent.redraw()
         }
+
+        <span class="local-variable">this</span>.<span class="function">buildASTPath</span> = <span class="keyword">function</span>() {
+                <span class="keyword">var</span> local = {
+                        <span class="key">type</span>:<span class="local-variable">this</span>.constructor.name
+                };
+
+                <span class="keyword">var</span> path = [local];
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent) {
+                        local.childindex = <span class="local-variable">this</span>.parent.children.indexOf(<span class="local-variable">this</span>);
+                        local.constructor_index = <span class="local-variable">this</span>.parent.constructor_children.indexOf(<span class="local-variable">this</span>);
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.parent.buildASTPath) {
+                                path = <span class="local-variable">this</span>.parent.buildASTPath();
+                                path.push(local);
+                        }
+                }
+
+                <span class="keyword">return</span> path;
+        };
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">viewportblend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.draworder = <span class="integer">10</span>
