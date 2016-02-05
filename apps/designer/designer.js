@@ -47,11 +47,14 @@ define.class("$ui/splitcontainer", function(require,
 		};
 
 		jsformatter.walk(this.ast, buf, function(str){
-			buf.char_count += str.length;
-			buf.out += str
+			if (str) {
+				buf.char_count += str.length;
+				buf.out += str
+			}
 		});
 
 		var source = buf.out;
+		console.log('source>', source)
 
 		this.rpc.fileio.saveComposition(source);
 
@@ -127,8 +130,50 @@ define.class("$ui/splitcontainer", function(require,
 
 	};
 
-	this.buildNode = function() {
+	this.buildValueNode = function(name, value) {
+		var valnode = { type: "Value", value: value };
 
+		if (typeof(value) === 'string') {
+			valnode.kind = 'string';
+			valnode.raw = "'" + value + "'";
+			valnode.multi = false;
+		} else if (typeof(value) === 'number') {
+			valnode.kind = 'num';
+			valnode.raw = value.toString();
+
+		} else {
+			console.log("what is a ", typeof(value))
+		}
+
+		return {
+			key: { type: "Id", name: name },
+			value: valnode
+		};
+	};
+
+	this.buildObjectNode = function(item) {
+		var keys = [];
+		for (var key in item.params) {
+			if (item.params.hasOwnProperty(key)) {
+				var value = item.params[key];
+				keys.push(this.buildValueNode(key, value))
+			}
+		}
+
+		return {
+			type: "Object",
+			keys: keys
+	    }
+	};
+
+	this.buildCallNode = function(item) {
+		return {
+			type: "Call",
+			fn: { type:"Id", name:item.classname },
+			args: [
+				this.buildObjectNode(item)
+			]
+		}
 	};
 
 	this.render = function() {
@@ -140,9 +185,31 @@ define.class("$ui/splitcontainer", function(require,
 					bgcolor:"#4e4e4e",
 					items:{
 						Views:[
-							{classname:"view",  label:"View",  icon:"clone", desc:"A rectangular view"},
-							{classname:"label", label:"Text",  text:"Aa",    desc:"A text label" },
-							{classname:"icon",  label:"Image", icon:"image", desc:"An image or icon"}
+							{label:"View",  icon:"clone", desc:"A rectangular view",
+								classname:"view",
+								params:{
+									height:150,
+									width:150,
+									bgcolor:'purple'
+								}
+							},
+							{label:"Text",  text:"Aa",    desc:"A text label",
+								classname:"label",
+								params:{
+									bgcolor:'transparent',
+									fgcolor:'lightgreen',
+									text:'Howdy!'
+								}
+							},
+							{label:"Image", icon:"image", desc:"An image or icon",
+								classname:"icon",
+								params:{
+									height:50,
+									width:50,
+									fgcolor:'cornflower',
+									icon:'flask'
+								}
+							}
 						]
 					},
 					dropTest:function(ev, v, item, orig, dv) {
@@ -161,7 +228,7 @@ define.class("$ui/splitcontainer", function(require,
 						return dropok;
 					}.bind(this),
 					drop:function(ev, v, item, orig, dv) {
-						var name = v && v.name ? v.name : "unknown";
+						// var name = v && v.name ? v.name : "unknown";
 						// console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
 
 						if (v) {
@@ -169,40 +236,18 @@ define.class("$ui/splitcontainer", function(require,
 							path = path.filter(function(a){ return a.constructor_index != -1});
 							var node = this.ast;
 							for (var i=0;i<path.length;i++) {
-								var item = path[i];
+								var pathitem = path[i];
 								var search = {
 									type:"Call",
-									name:item.type,
-									index:item.childindex
+									name:pathitem.type,
+									index:pathitem.childindex
 								};
 								node = this.seek(search, node);
 							}
 
 							if (node) {
 
-								node.args.push({
-									type: "Call",
-									fn: { type:"Id", name:"view" },
-									args: [
-										{
-											type:"Object",
-											keys: [
-												{
-													key:   { type:"Id", name:"width" },
-													value: { type:"Value", kind:"num", raw:"50", value:50 }
-												},
-												{
-													key:   { type:"Id", name:"height" },
-													value: { type:"Value", kind:"num", raw:"50", value:50 }
-												},
-												{
-													key:   { type:"Id", name:"bgcolor" },
-													value: { type:"Value", kind:"string", multi:false, raw:"'purple'", value:"purple" }
-												}
-											]
-										}
-									]
-								});
+								node.args.push(this.buildCallNode(item));
 
 								console.log('Dropped onto node:', node);
 
