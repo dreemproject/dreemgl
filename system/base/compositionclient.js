@@ -43,8 +43,14 @@ define.class('./compositionbase', function(require, baseclass){
 		}
 	});
 
-	this.writeAST = function () {
-		console.log('wb>', this.rpc)
+	this.commitAST = function () {
+		var msg = {
+			rpcid: 'this',
+			method: 'commit',
+			type: 'method',
+			args:[this.source]
+		};
+		this.rpc.host.callRpcMethod(msg);
 	};
 
 	this.seekASTNode = function(sought, at) {

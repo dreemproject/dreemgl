@@ -1,18 +1,7 @@
-define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $server$, service, $$, toolkit) {
-
-	define.class(this,'fileio',service,function() {
-			var path = require('path')
-			var fs = require('fs')
-			this.name = 'fileio'
-			this.saveComposition = function(data) {
-				var module = this.outer.composition.constructor.module;
-				fs.writeFile(module.filename, 'define.class("$server/composition",' + data + ')')
-			}
-		});
+define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $$, toolkit) {
 
 	this.render = function() {
 		return [
-			this.fileio(),
 			screen(
 				splitcontainer(
 					cadgrid({

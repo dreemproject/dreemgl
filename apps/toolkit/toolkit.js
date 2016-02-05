@@ -19,16 +19,6 @@ define.class("$ui/splitcontainer", function(require,
 		inspect:Config({type:Object})
 	};
 
-	this.writeAST = function() {
-
-		this.screen.composition.writeAST();
-		var source = this.screen.composition.source;
-		console.log("source>", source);
-
-		this.rpc.fileio.saveComposition(source);
-
-	};
-
 	this.buildValueNode = function(name, value) {
 		var valnode = { type: "Value", value: value };
 
@@ -137,9 +127,9 @@ define.class("$ui/splitcontainer", function(require,
 
 								node.args.push(this.buildCallNode(item));
 
-								console.log('Dropped onto node:', node);
+								// console.log('Dropped onto node:', node);
 
-								this.writeAST();
+								this.screen.composition.commitAST();
 
 							}
 						}
