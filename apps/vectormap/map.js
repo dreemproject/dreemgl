@@ -265,7 +265,61 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.setTimeout(this.updateTiles, 10);
 	}
 
+	function UnProject(glx, gly, glz, modelview, projection){
+		var inv = vec4()
+		var A = mat4.mat4_mul_mat4(modelview, projection)
+		var m = mat4.invert(A)
+		inv[0] = glx
+		inv[1] = gly
+		inv[2] = 2.0 * glz - 1.0
+		inv[3] = 1.0
+		out = vec4.vec4_mul_mat4(inv, m)
+		// divide by W to perform perspective!
+		out[0] /= out[3]
+		out[1] /= out[3]
+		out[2] /= out[3]
+		return vec3(out)
+	}
 
+	
+
+	this.projectonplane = function(coord){
+		console.log("hmm");
+		var vp = this.find("mapinside");
+		if (!vp) return;
+		
+
+		var sx = vp.layout.width;
+		var sy = vp.layout.height;
+	
+		var mx = coord[0] / (sx / 2) - 1.0
+		var my = -1 * (coord[1] / (sy / 2) - 1.0)
+
+		
+		var lastrayafteradjust = {x:mx,y:my};
+		//console.log(vp.colormatrices, vp.viewport);
+		var lastprojection = vp.colormatrices.perspectivematrix;
+		var lastviewmatrix = vp.colormatrices.lookatmatrix;
+				
+		var startv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 0, lastviewmatrix, lastprojection)
+		var endv = UnProject(lastrayafteradjust.x, lastrayafteradjust.y, 1, lastviewmatrix, lastprojection)
+		var	camerapos = vp._camera;
+
+		var camlocal = vec3.mul_mat4(camerapos, this.remapmatrix)
+		var endlocal = vec3.mul_mat4(endv, this.remapmatrix)
+
+		var R = vec3.intersectplane(camlocal, endlocal, vec3(0,0,-1), 0)
+		if (!R)	{
+			raystart = vec3(0.5,0.5,0)
+		} else {
+			R = vec3.mul_mat4(R, vp.viewportmatrix)
+			raystart = R
+		}
+		console.log(R);
+		this.find("MARKER").pos = vec3(R[0],-200,-R[1]);
+		this.find("MARKER").text = this.find("MARKER").pos ;
+	}
+	
 	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
 			trans: vec2(0),
@@ -277,7 +331,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 1000.0,
-			fogend: 5000.,
+			fogend: 5000.
 
 		}
 		
@@ -289,11 +343,17 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		//	console.log(ev.value[0]);
 			
 		}
-		
+		this.onpointerstart = function(ev){
+	//		console.log("start" , this.host.globalToLocal(ev.position));
+	console.log("start", ev.position);
+			this.host.projectonplane( this.host.globalToLocal(ev.position));
+			
+		}
 		this.onpointermove = function(ev){
 		//	console.log(ev.value[0]);
-			//console.log(ev);
-			console.log("whaa" , this.host.globalToLocal(ev.position));
+			console.log("move", ev.position);
+//			console.log("whaa" , this.host.globalToLocal(ev.position));
+			this.host.projectonplane( this.host.globalToLocal(ev.position));
 		}
 		
 		this.pointertap = function(){
@@ -669,7 +729,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		},
 
 			view({bgcolor:NaN, rotate:vec3(0,0.1,0)},
-				res3d
+				res3d, 
+				label({name:"MARKER", text:"MARKER", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
 				)
 
 			));

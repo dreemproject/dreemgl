@@ -17,7 +17,6 @@ define.class(function(require, $ui$button){
 	this.fontsize = 20;
 
 	this.onpointermove = function(event){
-		console.log(event)
 		var t = this.find(this.target)
 
 		this.camera_start = vec3.sub(t._camera, t._lookat)
