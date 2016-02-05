@@ -127,7 +127,7 @@ define.class("$ui/splitcontainer", function(require,
 
 								node.args.push(this.buildCallNode(item));
 
-								console.log('Dropped onto node:', node);
+								//console.log('Dropped onto node:', node);
 
 								this.screen.composition.commitAST();
 
