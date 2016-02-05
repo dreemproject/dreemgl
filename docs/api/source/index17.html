@@ -187,43 +187,54 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n33" name="n33">33</a>
 <a href="#n34" name="n34">34</a>
 <a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require,
-                                                                                         <span class="predefined">$ui$</span>, screen, view, splitcontainer, cadgrid,
-                                             <span class="predefined">$$</span>, designer){
-
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view, icon, label, splitcontainer, cadgrid, <span class="predefined">$server$</span>, service, <span class="predefined">$$</span>, designer) {
+        
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>,<span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>,service,<span class="keyword">function</span>() {
+                        <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
+                        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>
+                        <span class="local-variable">this</span>.<span class="function">saveComposition</span> = <span class="keyword">function</span>(data) {
+                                fs.writeFile(
+                                        define.expandVariables(<span class="string"><span class="delimiter">'</span><span class="content">$root/apps/designer/index.js</span><span class="delimiter">'</span></span>),
+                                        <span class="string"><span class="delimiter">'</span><span class="content">define.class(&quot;$server/composition&quot;,</span><span class="delimiter">'</span></span> + data + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
+                                )
+                        }
+                })
+        
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
+                        <span class="local-variable">this</span>.fileio(),
                         screen(
                                 splitcontainer(
                                         cadgrid({
-                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">flex</span>:<span class="integer">3</span>,
-                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">gridsize</span>:<span class="integer">5</span>,
-                                                        <span class="key">majorevery</span>:<span class="integer">5</span>,
-                                                        <span class="key">majorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#575757</span><span class="delimiter">&quot;</span></span>,
+                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>, 
+                                                        <span class="key">flex</span>:<span class="integer">3</span>, 
+                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>, 
+                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>, 
+                                                        <span class="key">gridsize</span>:<span class="integer">5</span>, 
+                                                        <span class="key">majorevery</span>:<span class="integer">5</span>, 
+                                                        <span class="key">majorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#575757</span><span class="delimiter">&quot;</span></span>, 
                                                         <span class="key">minorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#484848</span><span class="delimiter">&quot;</span></span>
                                                 },
-                                                view({<span class="key">x</span>:<span class="integer">30</span>, <span class="key">y</span>:<span class="integer">40</span>, <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightred</span><span class="delimiter">'</span></span>}),
-                                                view({<span class="key">x</span>:<span class="integer">300</span>, <span class="key">y</span>:<span class="integer">40</span>, <span class="key">size</span>:[<span class="integer">200</span>,<span class="integer">200</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightgreen</span><span class="delimiter">'</span></span>},
-                                                        view({<span class="key">x</span>:<span class="integer">10</span>, <span class="key">y</span>:<span class="integer">10</span>, <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">orange</span><span class="delimiter">'</span></span>})),
-                                                view({<span class="key">x</span>:<span class="integer">200</span>, <span class="key">y</span>:<span class="integer">150</span>, <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightblue</span><span class="delimiter">'</span></span>})
+                                                view({<span class="key">x</span>:<span class="integer">30</span>, <span class="key">y</span>:<span class="integer">40</span>, <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightred</span><span class="delimiter">'</span></span>},icon({<span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>}),view({<span class="key">width</span>:<span class="integer">50</span>, <span class="key">height</span>:<span class="integer">50</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>})),
+                                                view({<span class="key">x</span>:<span class="integer">300</span>, <span class="key">y</span>:<span class="integer">40</span>, <span class="key">size</span>:[<span class="integer">200</span>,<span class="integer">200</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightgreen</span><span class="delimiter">'</span></span>},view({<span class="key">x</span>:<span class="integer">10</span>, <span class="key">y</span>:<span class="integer">10</span>, <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">orange</span><span class="delimiter">'</span></span>},view({<span class="key">width</span>:<span class="integer">50</span>, <span class="key">height</span>:<span class="integer">50</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>, <span class="key">designtarget</span>:<span class="predefined-constant">false</span>}))),
+                                                view({<span class="key">x</span>:<span class="integer">200</span>, <span class="key">y</span>:<span class="integer">150</span>, <span class="key">size</span>:[<span class="integer">100</span>,<span class="integer">100</span>], <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightblue</span><span class="delimiter">'</span></span>},label({<span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">hello</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">brown</span><span class="delimiter">'</span></span>})),
+                                                view({<span class="key">width</span>:<span class="integer">50</span>, <span class="key">height</span>:<span class="integer">50</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>})
                                         ),
-                                        designer({<span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>})
+                                        designer({<span class="key">inspect</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>})
                                 )
                         )
                 ]
         }
-});
-
-</pre></td>
+}
+)</pre></td>
 </tr></table>
 
 </body>

@@ -51,7 +51,9 @@ define.class("$ui/splitcontainer", function(require,
 			buf.out += str
 		});
 
-		console.log('print', buf.out)
+		var source = buf.out;
+
+		this.rpc.fileio.saveComposition(source);
 
 	};
 

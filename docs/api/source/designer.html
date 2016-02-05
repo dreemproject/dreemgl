@@ -373,7 +373,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n219" name="n219">219</a>
 <strong><a href="#n220" name="n220">220</a></strong>
 <a href="#n221" name="n221">221</a>
-<a href="#n222" name="n222">222</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -393,7 +392,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">target</span>:Config({<span class="key">type</span>:Object}),
+                <span class="key">inspect</span>:Config({<span class="key">type</span>:Object}),
 
                 <span class="key">source</span>:Config({<span class="key">type</span>:String}),
 
@@ -428,7 +427,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         buf.out += str
                 });
 
-                console.log(<span class="string"><span class="delimiter">'</span><span class="content">print</span><span class="delimiter">'</span></span>, buf.out)
+                <span class="keyword">var</span> source = buf.out;
+
+                <span class="local-variable">this</span>.rpc.fileio.saveComposition(source);
 
         };
 
@@ -524,15 +525,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">var</span> name = v &amp;&amp; v.name ? v.name : <span class="string"><span class="delimiter">&quot;</span><span class="content">unknown</span><span class="delimiter">&quot;</span></span>;
                                                 <span class="comment">//console.log(&quot;test if&quot;, item.label, &quot;from&quot;, orig.position, &quot;can be dropped onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
 
-                                                <span class="keyword">var</span> target = <span class="local-variable">this</span>.target;
-                                                <span class="keyword">if</span> (target.name) {
-                                                        target = target.name;
-                                                }
+                        <span class="keyword">var</span> target = <span class="local-variable">this</span>;
 
-                                                <span class="keyword">var</span> dropok = <span class="predefined-constant">false</span>;
+                                                <span class="keyword">var</span> dropok = <span class="predefined-constant">true</span>;
                                                 <span class="keyword">var</span> p = v;
-                                                <span class="keyword">while</span> (p &amp;&amp; !dropok) {
-                                                        dropok = p.name === target;
+                                                <span class="keyword">while</span> (p &amp;&amp; dropok) {
+                                                        dropok = p !== target &amp;&amp; p.designtarget !== <span class="predefined-constant">false</span>;
                                                         p = p.parent;
                                                 }
 
@@ -582,7 +580,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                         ]
                                                                 });
 
-                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Dropped onto node:</span><span class="delimiter">'</span></span>, node)
+                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Dropped onto node:</span><span class="delimiter">'</span></span>, node);
 
                                                                 <span class="local-variable">this</span>.writeAST();
 
@@ -591,8 +589,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         }.bind(<span class="local-variable">this</span>)
                                 })
                         ),
-                        dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">2</span>},
-                                propviewer({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mainproperties</span><span class="delimiter">&quot;</span></span>, <span class="key">target</span>:<span class="local-variable">this</span>.target, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})
+                        dockpanel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">viewport</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">2D</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">2.5</span>, <span class="key">visible</span>:!!(<span class="local-variable">this</span>.inspect)},
+                                propviewer({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>, <span class="key">target</span>:<span class="local-variable">this</span>.inspect, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>})
                         )
                 ];
         }
