@@ -9,7 +9,7 @@ define.class("$ui/splitcontainer", function(require,
 								  $server$, sourceset, dataset,
 								  $$, dockpanel){
 
-	this.name = "designer";
+	this.name = "toolkit";
 	this.flex = 1;
 	this.clearcolor = "#565656";
 	this.bgcolor = "#565656";

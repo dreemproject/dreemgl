@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $server$, service, $$, designer) {
+define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $server$, service, $$, toolkit) {
 
 	define.class(this,'fileio',service,function() {
 			var path = require('path')
@@ -29,7 +29,7 @@ define.class("$server/composition",function(require, $ui$, screen, view, icon, l
 						view({x:300, y:40, size:[200,200], bgcolor:'lightgreen'},view({x:10, y:10, size:[100,100], bgcolor:'orange'},view({width:50, height:50, bgcolor:'purple', designtarget:false}))),
 						view({x:200, y:150, size:[100,100], bgcolor:'lightblue'},label({text:'hello', bgcolor:NaN, fgcolor:'brown'}))
 					),
-					designer({inspect:"grid"})
+					toolkit({inspect:"grid"})
 				)
 			)
 		]
