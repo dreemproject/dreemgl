@@ -5,12 +5,10 @@ define.class("$server/composition",function(require, $ui$, screen, view, icon, l
 			var fs = require('fs')
 			this.name = 'fileio'
 			this.saveComposition = function(data) {
-				fs.writeFile(
-					define.expandVariables('$root/apps/designer/index.js'),
-					'define.class("$server/composition",' + data + ')'
-				)
+				var module = this.outer.composition.constructor.module;
+				fs.writeFile(module.filename, 'define.class("$server/composition",' + data + ')')
 			}
-		})
+		});
 
 	this.render = function() {
 		return [
@@ -36,5 +34,4 @@ define.class("$server/composition",function(require, $ui$, screen, view, icon, l
 			)
 		]
 	}
-}
-)
+});
