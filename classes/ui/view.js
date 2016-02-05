@@ -1567,6 +1567,23 @@ define.class('$system/base/node', function(require){
 		return path;
 	};
 
+	this.getASTNode = function() {
+		var path = this.buildASTPath();
+		path = path.filter(function(a){ return a.constructor_index != -1});
+		var node = this.screen.composition.ast;
+		for (var i=0;i<path.length;i++) {
+			var pathitem = path[i];
+			var search = {
+				type:"Call",
+				name:pathitem.type,
+				index:pathitem.childindex
+			};
+			node = this.screen.composition.seekASTNode(search, node);
+		}
+
+		return node;
+	};
+
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10
