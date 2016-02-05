@@ -30,10 +30,8 @@ define.class("$ui/splitcontainer", function(require,
 	};
 
 	this.init = function() {
-		require.async("$root/apps/designer/index.js").then(function(result){
-			this.source = result.module.factory.body.toString()
-		}.bind(this))
-
+		this.source = this.screen.composition.constructor.module.factory.body.toString()
+		console.log("source>", this.source)
 	};
 
 	this.writeAST = function() {
@@ -54,7 +52,7 @@ define.class("$ui/splitcontainer", function(require,
 		});
 
 		var source = buf.out;
-		console.log('source>', source)
+		console.log("source>", source)
 
 		this.rpc.fileio.saveComposition(source);
 
