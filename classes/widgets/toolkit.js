@@ -140,8 +140,8 @@ define.class("$ui/splitcontainer", function(require,
 							{label:"View",  icon:"clone", desc:"A rectangular view",
 								classname:"view",
 								params:{
-									height:150,
-									width:150,
+									height:60,
+									width:60,
 									bgcolor:'purple'
 								}
 							},
@@ -156,8 +156,6 @@ define.class("$ui/splitcontainer", function(require,
 							{label:"Image", icon:"image", desc:"An image or icon",
 								classname:"icon",
 								params:{
-									height:50,
-									width:50,
 									fgcolor:'cornflower',
 									icon:'flask'
 								}

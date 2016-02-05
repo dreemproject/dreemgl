@@ -17,17 +17,17 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	// forward ref of things we need on view
 	this.view = {
-		_totalmatrix:mat4(), 
+		_totalmatrix:mat4(),
 		textstyle: function(fgcolor, pos, tag){return fgcolor;},
-		textpositionfn:function(pos){return pos;}, 
-		_viewmatrix:mat4(), 
-		_polygonoffset:0.0, 
-		_fgcolor:vec4(), 
-		_outline_color:vec4(), 
+		textpositionfn:function(pos){return pos;},
+		_viewmatrix:mat4(),
+		_polygonoffset:0.0,
+		_fgcolor:vec4(),
+		_outline_color:vec4(),
 		_outline_thickness:0.0,
 		_outline: false,
-		_bgcolor:vec4(), 
-		_opacity:1.0, 
+		_bgcolor:vec4(),
+		_opacity:1.0,
 		screen:{
 				device:{
 					frame:{
@@ -232,16 +232,19 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var y1 = this.array[o + 1]
 				var fontsize = this.array[o + 3]
 				var unicode = this.array[o + 6]
-				var info = this.font .glyphs[unicode]
-				var add_x = x1 - fontsize * info.min_x + (unicode === 10?0:info.advance * fontsize)
+				var info = this.font.glyphs[unicode]
+				if(!info) info = this.font.glyphs[32]
+				var add_x = x1 - fontsize * info.min_x + (unicode === 10 ? 0 : info.advance * fontsize)
 				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.line_spacing
 				if(add_x > text_w) text_w = add_x
 				if(add_y > text_h) text_h = add_y
 			}
 			if(with_cursor){
 				var info = this.font.glyphs[32]
-				text_w += info.advance * this.fontsize
-				if(!text_h) text_h = this.fontsize * this.line_spacing
+				if (info) {
+					text_w += info.advance * this.fontsize
+					if(!text_h) text_h = this.fontsize * this.line_spacing
+				}
 			}
 			this.text_w = text_w
 			this.text_h = text_h
@@ -268,11 +271,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// lets add some strings
 		this.addAtPos = function(string, pos, m1, m2, m3){
 			var length = string.length
-			
+
 			this.add_x = pos[0];
 			this.add_y = pos[1];
 			this.add_z = pos[2];
-			
+
 			// alright lets convert some text babeh!
 			for(var i = 0; i < length; i++){
 				var unicode = string.struct? string.array[i * 4]: string.charCodeAt(i)
@@ -288,7 +291,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			if(this.add_y > this.text_h) this.text_h = this.add_y
 		}
 
-		
+
 		this.__defineGetter__('char_count', function(){
 			return this.lengthQuad()
 		})
@@ -304,6 +307,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				}
 			}
 			var info = this.font.glyphs[this.charCodeAt(off)]
+			if(!info) info = this.font.glyphs[32]
 			if(isNaN(off))debugger
 			var coords = {
 				x: this.array[off * 6 * 10 + 0] - this.fontsize * info.min_x,
@@ -446,7 +450,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	}
 
 	this.subpixel = false
-	
+
 	this.glyphy_mesh_sdf = function(){
 		return glyphy_compute_position()
 	}
@@ -454,11 +458,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.glyphy_compute_position = function(){
 		// we want to compute a measure of scale relative to the actual pixels
 		var matrix = view.totalmatrix  * view.viewmatrix
-		
-		
+
+
 		var finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z));
 		var finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z));
-		
+
 		// compute the main position and one rectgle atan fontsize for the pixelscale
 		var pos1 = vec4(finalpos1 , 1) * matrix
 		var pos2 = vec4(finalpos2,  1) * matrix
@@ -499,7 +503,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		outline_thickness: float,
 		outline: bool
 	}, "font_style_t")
-	
+
 	this.glyphy_arc_t = define.struct({
 		p0:vec2,
 		p1:vec2,
@@ -965,7 +969,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
 
 		 view.textstyle(style, pos, mesh.tag)
-		
+
 		dist -= mesh.boldness / 300.
 		dist = dist / m * mesh.contrast
 
@@ -1050,7 +1054,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		var alpha = glyphy_antialias(-dist)
 		var alpha2 = glyphy_antialias(-dist2)
-		
+
 		if(mesh.gamma_adjust.r != 1.){
 		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
 		}
