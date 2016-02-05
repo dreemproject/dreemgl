@@ -36,6 +36,25 @@ define.class("$ui/splitcontainer", function(require,
 
 	};
 
+	this.writeAST = function() {
+
+		var jsformatter = require('$system/parse/jsformatter');
+
+		var buf = {
+			out:'',
+			charCodeAt: function(i){return this.out.charCodeAt(i)},
+			char_count:0
+		};
+
+		jsformatter.walk(this.ast, buf, function(str){
+			buf.char_count += str.length;
+			buf.out += str
+		});
+
+		console.log('print', buf.out)
+
+	};
+
 	this.seek = function(sought, at) {
 		if (!at) {
 			at = this.ast;
@@ -187,6 +206,9 @@ define.class("$ui/splitcontainer", function(require,
 								});
 
 								console.log('Dropped onto node:', node)
+
+								this.writeAST();
+
 							}
 						}
 					}.bind(this)
