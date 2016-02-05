@@ -1,0 +1,196 @@
+Undo/Redo Specification
+--------------------------------------------------------------------------------
+
+Undostack:
+  An undo stack provides a stack of undoables objects that encapsulate an
+  operation of some kind that can be done/undone. As undoables are done or 
+  undone a position in the stack is maintained.
+
+  Properties:
+    None that are public.
+
+  Events:
+    onchange: Fired when the location of the stack changes. The event is an 
+      object with a "type" property that indicates what caused the stack change.
+      Supported types are "reset", "do", "undo" and "redo". The do, undo and 
+      redo types also have an "undoable" property which is a reference to the 
+      undoable that caused the stack change.
+
+  Methods:
+    isUndoable()
+      Used to check if the stack can be undone or not. Possible reasons are:
+        1) The stack is empty.
+        2) The stack is at the first undoable and that undoable is already in
+           the undone state.
+        3) The undoable at the current stack location is not allowing undo to
+           be performed for some reason.
+        4) The stack is "busy" doing and undo/redo possible due to the 
+           asynchonous nature of an undo/redo operation.
+      @returns boolean
+
+    isRedoable()
+      Used to check if the stack can be redone or not. Possible reasons are:
+        1) The stack is empty.
+        2) The stack is at the last undoable and that undoable is already in
+           the done state.
+        3) The undoable at the current stack location is not allowing redo to
+           be performed for some reason.
+        4) The stack is "busy" doing and undo/redo possible due to the 
+           asynchonous nature of an undo/redo operation.
+      @returns boolean
+
+    getUndoDescription()
+      Gets a human readable description of the undoable that would be undone
+      if the undo method is called on the stack. If the stack is not undoable
+      a human readable description of why should be returned.
+      @returns string
+
+    getRedoDescription()
+      Gets a human readable description of the undoable that would be redone
+      if the redo method is called on the stack. If the stack is not redoable
+      a human readable description of why should be returned.
+      @returns string
+
+    do(undoable, callbackFunction, errorHandlerFunction)
+      Adds the undoable to this stack at the current location and immediately
+      does that undoable. Also removes and destroys any undoables that exist
+      at or after this location in the undo stack.
+      
+      If the attempt to do the undoable triggers an error the undoable will
+      have its undo method called and the undoable will not be added to the
+      undostack.
+
+      Undoables already in the "done" state will be rejected and the 
+      errorHandler (if provided) will be executed.
+
+      @param undoable: The undoable object to add.
+      @param callbackFunction: An optional argument that if provided will
+        be called when the provided undoable is succesfully done. The callback
+        is executed only once, not every time the undoable is redone. The
+        undoable is provided as the sole argument to the callback function.
+      @param errorHandlerFunction: An optional argument that if provided will
+        be called if an error occurs trying to do add or do the undoable. An
+        error object is provided as the sole argument to the 
+        errorHandlerFunction function.
+      @returns void
+
+    undo(callbackFunction, errorHandlerFunction)
+      Executes the undo method of the undoable at the current undo stack 
+      location.
+
+      If the attempt to undo the undoable triggers an error the errorHandler
+      (if provided) will be executed.
+
+      @param callbackFunction: An optional argument that if provided will
+        be called when the current undoable is succesfully undone. The callback
+        is executed only once, not every time the undoable is undone. The
+        undoable is provided as an argument to the callback.
+      @param errorHandlerFunction: An optional argument that if provided will
+        be called if an error occurs trying undo the undoable. An error object 
+        is provided as the sole argument to the errorHandlerFunction function.
+      @returns void
+
+    redo(callbackFunction, errorHandlerFunction)
+      Executes the redo method of the undoable at the current undo stack 
+      location.
+
+      If the attempt to redo the undoable triggers an error the errorHandler
+      (if provided) will be executed.
+
+      @param callbackFunction: An optional argument that if provided will
+        be called when the current undoable is succesfully redone. The callback
+        is executed only once, not every time the undoable is redone. The
+        undoable is provided as an argument to the callback.
+      @param errorHandlerFunction: An optional argument that if provided will
+        be called if an error occurs trying redo the undoable. An error object 
+        is provided as the sole argument to the errorHandlerFunction function.
+      @returns void
+
+Undoable:
+  An object that encapsulates doing and undoing an operation. Typically this
+  operation would be on a target object of some sort, but that is really
+  up to the specific implementation.
+
+  An undoable is in either the "done" or "undone" state. The "done"
+  state means the change has been applied and the "undone" state means
+  that it has not been applied. An undoable always starts out in the
+  undone state when it is created.
+
+  Typically an undoable will be added to an undostack and will be managed 
+  through that object.
+
+  Properties:
+    done:boolean Indicates if the undoable is done or not. The property can
+      probably be private.
+
+  Events:
+    None
+
+  Methods:
+    isUndoable()
+      Used to check if the undoable can be undone or not. Possible reasons are:
+        1) The undoable is not in the done state.
+        2) The undoable is "busy" doing undo/redo possible due to the 
+           asynchonous nature of an undo/redo operation.
+      @returns boolean
+
+    isRedoable()
+      Used to check if the undoable can be redone or not. Possible reasons are:
+        1) The undoable is not in the undone state.
+        2) The undoable is "busy" doing undo/redo possible due to the 
+           asynchonous nature of an undo/redo operation.
+      @returns boolean
+
+    getUndoDescription()
+      Gets a human readable description of the operation that would be
+      performed if the undo method was called. If the undoable is not undoable
+      a human readable description of why should be returned.
+      @returns string
+
+    getRedoDescription()
+      Gets a human readable description of the operation that would be
+      performed if the redo method was called. If the undoable is not redoable
+      a human readable description of why should be returned.
+      @returns string
+
+    undo(callbackFunction, errorHandlerFunction)
+      Rolls back this undoable if it is in the done state. Sets the "done"
+      attribute to false if successfull.
+
+      @param callbackFunction: An optional argument that if provided will
+        be called when the operation is succesfully completed. The callback
+        is executed only once, not every time the undoable is undone. The
+        undoable is provided as an argument to the callback.
+      @param errorHandlerFunction: An optional argument that if provided will
+        be called if an error occurs trying undo the undoable. An error object 
+        is provided as the sole argument to the errorHandlerFunction function.
+      @returns void
+
+    redo(callbackFunction, errorHandlerFunction)
+      Rolls forward this undoable if it is in the undone state. Sets the "done"
+      attribute to true if successfull.
+
+      @param callbackFunction: An optional argument that if provided will
+        be called when the operation is succesfully redone. The callback
+        is executed only once, not every time the undoable is redone. The
+        undoable is provided as an argument to the callback.
+      @param errorHandlerFunction: An optional argument that if provided will
+        be called if an error occurs trying redo the undoable. An error object 
+        is provided as the sole argument to the errorHandlerFunction function.
+      @returns void
+
+Open Issues:
+  1) Does it make sense to combine the callback and errorHandlerFunctions into
+     a single function where the first argument is a boolean indicating success
+     or failure?
+  2) Undoables should be "compound" thus allowing child undoables to be
+     added to them resulting in a tree of undoables that are all executed as
+     much like a transaction as possible.
+
+First Implementation:
+  The first implementation can probably drop all the callback function support
+  since that is really only necessary when dealing with asynchronous undoables.
+  
+  We also don't need to implement the actual undo/redo descriptions but can
+  instead have that part of the API return very generic descriptions like
+  "Undo Change" and "Redo Change".
