@@ -203,7 +203,7 @@ define.class("$ui/splitcontainer", function(require,
 				ev.view.cursor = 'arrow';
 			}
 
-		} else {
+		} else if (ev.view.tooltarget === false) {
 			ev.view.cursor = 'not-allowed';
 		}
 
@@ -220,18 +220,37 @@ define.class("$ui/splitcontainer", function(require,
 				console.log('AST', ev.view.getASTNode());
 			}
 
-			var op = this.edgeCursor(ev);
+			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-			if (op) {
-				console.log('do oper', op)
-			}
-
+			this.__resizecorner = this.edgeCursor(ev);
+			ev.view.cursor = "move"
 
 		}.bind(this);
 
+		this.screen.globalpointermove = function(ev) {
+
+			if (this.__resizecorner) {
+				console.log('resise', ev, this.__resizecorner);
+
+			} else if (this.testView(ev.view)) {
+				if (ev.view.position != "absolute") {
+					ev.view.position = "absolute";
+				}
+				ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				ev.view.y = ev.pointer.position.y - this.__startpos.y;
+			}
+
+		}.bind(this);
+
+		this.screen.globalpointerend = function(ev) {
+			ev.view.cursor = 'arrow';
+			//TODO write changes to AST, otherwise it won't save them
+		}.bind(this);
+
+
 		this.screen.globalpointerhover = function(ev) {
 			this.edgeCursor(ev)
-		}.bind(this)
+		}.bind(this);
 
 	};
 
