@@ -1,33 +1,30 @@
 define.class("$server/composition",function(require, $ui$, icon, label, view, screen, splitcontainer, cadgrid, $widgets$, toolkit) {
-
+	
 	this.render = function() {
 		return [
 			screen(
 				splitcontainer(
 					cadgrid({
-							name:"grid",
-							flex:3,
-							overflow:"scroll",
-							bgcolor:"#4e4e4e",
-							gridsize:10,
-							majorevery:5,
-							majorline:"#575757",
-							minorline:"#484848",
-							alignitems:'center',
-							alignself:'stretch',
-							flexdirection:'column',
-							justifycontent:'center'
+							name:"grid", 
+							flex:3, 
+							overflow:"scroll", 
+							bgcolor:"#4e4e4e", 
+							gridsize:10, 
+							majorevery:5, 
+							majorline:"#575757", 
+							minorline:"#484848", 
+							alignitems:'center', 
+							alignself:'stretch', 
+							flexdirection:'column', 
+							justifycontent:'center', 
+							x:0, 
+							y:0
 						},
-						view({tooltarget:false, height:160, width:160, bgcolor:vec4(0,0.065,0.3,1)}),
-						icon({fgcolor:'cornflower', icon:'flask'}),
-						icon({fgcolor:'cornflower', icon:'flask'}),
-						view({position:'absolute', height:60, width:60, bgcolor:'purple'}),
-						view({height:60, width:60, bgcolor:'purple'}),
-						label({bgcolor:'transparent', fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:925, y:175}),
-						view({height:60, width:60, bgcolor:'purple', position:'absolute', x:289, y:209}),
-						icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:642, y:79}),
-						icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:548, y:147}),
-						view({height:60, width:60, bgcolor:'purple', position:'absolute', x:454, y:118})
+						view({height:309, width:343, bgcolor:vec4(0,0.501960813999176,0.03174766153097153,1), position:'absolute', x:78.00003051757812, y:94.99983215332031}),
+						view({height:287, width:278, bgcolor:vec4(0,0.501960813999176,0.3736295700073242,1), position:'absolute', x:750.0001220703125, y:50}),
+						icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:788.0000305175781, y:394}),
+						view({height:196, width:147, bgcolor:'purple', position:'absolute', x:1061, y:300}),
+						view({height:354, width:275, bgcolor:vec4(0.9113264083862305,0.14734770357608795,0.9113264083862305,1), position:'absolute', x:452.00006103515625, y:214.99993896484375})
 					),
 					toolkit({inspect:"grid"})
 				)

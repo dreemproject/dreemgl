@@ -220,15 +220,22 @@ define.class("$ui/splitcontainer", function(require,
 				console.log('AST', ev.view.getASTNode());
 			}
 
-			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+			if (this.testView(ev.view)) {
+				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-			this.__originalsize = {
-				w:ev.view.width,
-				h:ev.view.height
-			};
+				this.__originalpos = {
+					x:ev.view.x,
+					y:ev.view.y
+				};
 
-			this.__resizecorner = this.edgeCursor(ev);
-			ev.view.cursor = "move"
+				this.__originalsize = {
+					w:ev.view.width,
+					h:ev.view.height
+				};
+
+				this.__resizecorner = this.edgeCursor(ev);
+				ev.view.cursor = "move"
+			}
 
 		}.bind(this);
 
@@ -243,19 +250,26 @@ define.class("$ui/splitcontainer", function(require,
 				} else if (this.__resizecorner === "right") {
 					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
 				} else if (this.__resizecorner === "top-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
 					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+				} else if (this.__resizecorner === "left") {
 					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
 				} else if (this.__resizecorner === "top") {
 					ev.view.y = ev.pointer.position.y - this.__startpos.y;
 					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
-				} else if (this.__resizecorner === "left") {
+				} else if (this.__resizecorner === "bottom-left") {
 					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+				} else if (this.__resizecorner === "top-right") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
 				}
-
-			} else if (this.testView(ev.view)) {
+			} else if (this.__startpos && this.testView(ev.view)) {
 				if (ev.view.position != "absolute") {
 					ev.view.position = "absolute";
 				}
@@ -266,17 +280,43 @@ define.class("$ui/splitcontainer", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
+			ev.view.cursor = 'arrow';
+			var commit = false;
 			if (this.__resizecorner) {
+				if (this.__resizecorner === "top-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+				} else if (this.__resizecorner === "top") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+				} else if (this.__resizecorner === "left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				} else if (this.__resizecorner === "bottom-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				}
 
-			} else {
-				ev.view.x = ev.pointer.position.x - this.__startpos.x;
-				ev.view.y = ev.pointer.position.y - this.__startpos.y;
-				ev.view.cursor = 'arrow';
+				this.setASTObjectProperty(ev.view, "position", "absolute");
+				this.setASTObjectProperty(ev.view, "x", ev.view.x);
+				this.setASTObjectProperty(ev.view, "y", ev.view.y);
+				this.setASTObjectProperty(ev.view, "width", ev.view.width);
+				this.setASTObjectProperty(ev.view, "height", ev.view.height, true)
+				commit = true;
+			} else if (this.__startpos && this.testView(ev.view)) {
+
+				this.setASTObjectProperty(ev.view, "x", ev.pointer.position.x - this.__startpos.x);
+				this.setASTObjectProperty(ev.view, "y", ev.view.y, ev.pointer.position.y - this.__startpos.y)
+
+				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
 			}
+
+			if (commit) {
+				console.log('commit')
+				this.screen.composition.commitAST();
+			}
+
 
 			//TODO write changes to AST, otherwise it won't save them
 
-			this.__startpos = this.__resizecorner = this.__originalsize = undefined;
+			this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
 
@@ -382,6 +422,37 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	};
 
+	this.setASTObjectProperty = function(v, name, value) {
+		v[name] = value;
+
+		var ast = v.seekASTNode({type:"Object", index:0});
+
+		var found;
+		if (ast && ast.keys) {
+			for (var i=0;i < ast.keys.length;i++) {
+				var prop = ast.keys[i];
+				if (prop && prop.key && prop.key.name && prop.key.name === name) {
+					found = prop;
+					break;
+				}
+			}
+			if (!found) {
+				found = this.buildKeyValueNode(name, value, "init");
+				ast.keys.push(found);
+			} else {
+				found.value = this.buildValueNode(value);
+			}
+		} else {
+			ast = t.getASTNode();
+			if (ast) {
+				var args = {};
+				args[name] = value;
+				var obj = this.buildObjectNode(args, 'init');
+				ast.args.splice(0,0,obj);
+			}
+		}
+	};
+
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
 			title: Config({type:String, value:"Untitled"}),
@@ -442,12 +513,12 @@ define.class("$ui/splitcontainer", function(require,
 							if (node) {
 								var params = JSON.parse(JSON.stringify(item.params));
 								params.position = 'absolute';
-								params.x = ev.position.x
-								params.y = ev.position.y
+								params.x = ev.position.x;
+								params.y = ev.position.y;
 
 								node.args.push(this.buildCallNode(item.classname, params));
 
-								//console.log('Dropped onto node:', node);
+								console.log('Dropped onto node:', node);
 
 								this.screen.composition.commitAST();
 
@@ -469,46 +540,11 @@ define.class("$ui/splitcontainer", function(require,
 						}
 
 						if (t && editor.propertyname) {
-							//console.log('Set "', editor.propertyname, '" to "', val, '" (', typeof(val), ') on: ', t);
-							t[editor.propertyname] = val;
-
-							var ast = t.seekASTNode({type:"Object", index:0});
-
-							var found;
-							if (ast && ast.keys) {
-								for (var i=0;i < ast.keys.length;i++) {
-									var prop = ast.keys[i];
-									if (prop && prop.key && prop.key.name && prop.key.name === editor.propertyname) {
-										found = prop;
-										break;
-									}
-								}
-								if (!found) {
-									found = this.buildKeyValueNode(editor.propertyname, val, "init");
-									ast.keys.push(found);
-								} else {
-									found.value = this.buildValueNode(val);
-								}
-							} else {
-								ast = t.getASTNode();
-								if (ast) {
-									var args = {};
-									args[editor.propertyname] = value;
-									var obj = this.buildObjectNode(args, 'init');
-									ast.args.splice(0,0,obj);
-								}
-							}
-
-							// this saves it back, but don't do this until the property editor can handle
-							// the reload without resetting itself
-							//		this.screen.composition.commitAST();
-
+							this.setASTObjectProperty(t, editor.propertyname, val);
 						}
-
-
 					}.bind(this)
 				})
 			)
 		];
-	}
+	};
 });
