@@ -60,7 +60,8 @@ define.class("$ui/splitcontainer", function(require,
 		var at = "";
 		var arglist = [];
 		var plist = {};
-		var main = this.screen.composition.seekASTNode({type:"Function"});
+		var main = this.screen.composition.seekASTNode({type:"Function", index:0});
+		console.log('AST', main);
 		if (main && main.params) {
 			for (var i=0;i<main.params.length;i++) {
 				var param = main.params[i];
@@ -128,6 +129,7 @@ define.class("$ui/splitcontainer", function(require,
 			var inspector = this.find('inspector');
 			if (inspector.target != ev.view && this.testView(ev.view)) {
 				inspector.target = ev.view
+				console.log('AST', ev.view.getASTNode());
 			}
 		}.bind(this)
 	};
@@ -150,32 +152,59 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	};
 
-	this.buildValueNode = function(name, value) {
-		var valnode = { type: "Value", value: value };
+	this.buildValueNode = function(value, kind) {
+		var valnode = {
+			type: "Value",
+			value: value,
+			kind: kind
+		};
+
+		if (!valnode.kind) {
+			if (typeof(value) === 'string') {
+				valnode.kind = 'string';
+			} else if (typeof(value) === 'number') {
+				valnode.kind = 'num';
+			} else if (value && value.length) {
+				return this.buildCallNode("vec" + value.length, value)
+			} else {
+//				valnode.kind = typeof(value);
+				console.log("??? what 'kind' is a ", typeof(value), value)
+			}
+		}
 
 		if (typeof(value) === 'string') {
-			valnode.kind = 'string';
 			valnode.raw = "'" + value + "'";
 			valnode.multi = false;
 		} else if (typeof(value) === 'number') {
-			valnode.kind = 'num';
 			valnode.raw = value.toString();
-		} else {
-			console.log("??? what is a ", typeof(value))
 		}
 
-		return {
-			key: this.buildIdNode(name),
-			value: valnode
-		};
+		return valnode;
+
 	};
 
-	this.buildObjectNode = function(item) {
+	this.buildKeyValueNode = function(name, value, kind) {
+		var kv = {
+			key: this.buildIdNode(name),
+			value: this.buildValueNode(value)
+		};
+
+		if (kind) {
+			kv.kind = kind;
+		}
+
+		return kv;
+	};
+
+	this.buildObjectNode = function(items, kind) {
 		var keys = [];
-		for (var key in item.params) {
-			if (item.params.hasOwnProperty(key)) {
-				var value = item.params[key];
-				keys.push(this.buildValueNode(key, value))
+
+		if (items) {
+			for (var key in items) {
+				if (items.hasOwnProperty(key)) {
+					var value = items[key];
+					keys.push(this.buildKeyValueNode(key, value, kind))
+				}
 			}
 		}
 
@@ -185,13 +214,22 @@ define.class("$ui/splitcontainer", function(require,
 	    }
 	};
 
-	this.buildCallNode = function(item) {
+	this.buildCallNode = function(name, items) {
+		var args = [];
+
+		if (items.length) {
+			for(var a = 0; a < items.length;a++) {
+				var value = items[a];
+				args.push(this.buildValueNode(value))
+			}
+		} else {
+			args.push(this.buildObjectNode(items))
+		}
+
 		return {
 			type: "Call",
-			fn: this.buildIdNode(item.classname),
-			args: [
-				this.buildObjectNode(item)
-			]
+			fn: this.buildIdNode(name),
+			args: args
 		}
 	};
 
@@ -214,8 +252,8 @@ define.class("$ui/splitcontainer", function(require,
 					view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
 						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bgcolor:NaN, fontsize:this.fontsize, fgcolor: "white" })
 					)
-				)
-				,this.constructor_children
+				),
+				this.constructor_children
 			];
 		}
 	});
@@ -252,7 +290,7 @@ define.class("$ui/splitcontainer", function(require,
 
 							if (node) {
 
-								node.args.push(this.buildCallNode(item));
+								node.args.push(this.buildCallNode(item.classname, item.params));
 
 								//console.log('Dropped onto node:', node);
 
@@ -264,7 +302,62 @@ define.class("$ui/splitcontainer", function(require,
 				})
 			),
 			this.panel({title:"Properties", viewport:"2D", flex:2.5, visible:!!(this.inspect)},
-				propviewer({name:"inspector", target:this.inspect, flex:1, overflow:"scroll"})
+				propviewer({
+					name:"inspector",
+					target:this.inspect,
+					flex:1,
+					overflow:"scroll",
+					callback:function(val, editor) {
+						var t = editor.target;
+						if (typeof(t) === 'string') {
+							t = editor.find(t);
+						}
+
+						if (t && editor.propertyname) {
+							//console.log('Set "', editor.propertyname, '" to "', val, '" (', typeof(val), ') on: ', t);
+							t[editor.propertyname] = val;
+
+							var ast = t.seekASTNode({type:"Object", index:0});
+
+							var found;
+							if (ast && ast.keys) {
+								for (var i=0;i < ast.keys.length;i++) {
+									var prop = ast.keys[i];
+									if (prop && prop.key && prop.key.name && prop.key.name === editor.propertyname) {
+										found = prop;
+										break;
+									}
+								}
+								if (!found) {
+									found = this.buildKeyValueNode(editor.propertyname, val, "init");
+									ast.keys.push(found);
+								} else {
+									found.value = this.buildValueNode(val);
+								}
+							} else {
+								ast = t.getASTNode();
+								if (ast) {
+									var args = {};
+									args[editor.propertyname] = value;
+									var obj = this.buildObjectNode(args, 'init');
+									ast.args.splice(0,0,obj);
+								}
+							}
+
+							if (!this.__commit) {
+								this.__commit = function() {
+									console.log('save');
+									this.screen.composition.commitAST();
+									this.__commit = undefined;
+								}.bind(this);
+								setTimeout(this.__commit, 500);
+							}
+
+						}
+
+
+					}.bind(this)
+				})
 			)
 		];
 	}

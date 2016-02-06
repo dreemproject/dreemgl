@@ -13,7 +13,10 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		target:Config({type:Object, value:""}),
 
 		// Shows properties for unknown property types
-		showunknown:Config({type:boolean, value:false})
+		showunknown:Config({type:boolean, value:false}),
+
+		// internal, Callback used by the property editor to actually set properties.
+		callback:Config({type:Function})
 	};
 
 	this.borderwidth = 0;
@@ -73,14 +76,19 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var key = keys[i];
 				var thevalue = c["_"+key];
 				var attr = c._attributes[key];
-				groupcontent.push(propeditor({
+				var props = {
 					target:this.target,
 					value:thevalue,
 					property:attr,
 					propertyname: key,
 					fontsize:this.fontsize,
 					showunknown:this.showunknown
-				}))
+				}
+
+				if (this.callback) {
+					props.callback = this.callback;
+				}
+				groupcontent.push(propeditor(props))
 			}
 
 			res.push(

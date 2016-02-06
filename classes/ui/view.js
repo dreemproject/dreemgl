@@ -1584,6 +1584,10 @@ define.class('$system/base/node', function(require){
 		return node;
 	};
 
+	this.seekASTNode = function(sought) {
+		return this.screen.composition.seekASTNode(sought, this.getASTNode());
+	};
+
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10

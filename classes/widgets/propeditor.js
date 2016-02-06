@@ -14,14 +14,14 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 		propertyname:Config({type:String,value:""}),
 		fontsize: Config({type:float, value: 13}),
 		showunknown:Config({type:bool, value: false}),
-		callback:Config({type:Function, value:function(val) {
-			var t = this.target;
+		callback:Config({type:Function, value:function(val, ed) {
+			var t = ed.target;
 			if (typeof(t) === 'string') {
-				t = this.find(t);
+				t = ed.find(t);
 			}
-			if (t && this.propertyname) {
-				console.log('Set "', this.propertyname, '" to "', val, '" (', typeof(val), ') on: ', t);
-				t[this.propertyname] = val;
+			if (t && ed.propertyname) {
+				// console.log('Set "', this.propertyname, '" to "', val, '" (', typeof(val), ') on: ', t);
+				t[ed.propertyname] = val;
 			}
 		}})
 	};
@@ -79,7 +79,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				margin:vec4(2,0,2,5),
 				values:this.property.type.values,
 				currentvalue:this.value,
-				oncurrentvalue:function(ev,val) {this.callback(val);}.bind(this)
+				oncurrentvalue:function(ev,val) {this.callback(val, this);}.bind(this)
 			});
 
 		} else if (typename =="vec4"){
@@ -93,7 +93,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				}, view({class:'color_view'},
 					colorpicker({
 						value:this.value,
-						valuechange:function(val){this.callback(val);}.bind(this)
+						valuechange:function(val){this.callback(val, this);}.bind(this)
 					})));
 
 			} else {
@@ -116,19 +116,19 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				editor = view({bgcolor:NaN},
 						numberbox({title:t1, class:'vec4', value:this.value[0], onvalue:function(ev,v,o){
 							this.value = vec4(v, this.value[1], this.value[2], this.value[3]);
-							this.callback(this.value);
+							this.callback(this.value, this);
 						}.bind(this)}),
 						numberbox({title:t2, class:'vec4', value:this.value[1], onvalue:function(ev,v,o){
 							this.value = vec4(this.value[0], v, this.value[2], this.value[3]);
-							this.callback(this.value);
+							this.callback(this.value, this);
 						}.bind(this)}),
 						numberbox({title:t3, class:'vec4', value:this.value[2], onvalue:function(ev,v,o){
 							this.value = vec4(this.value[0], this.value[1], v, this.value[3]);
-							this.callback(this.value);
+							this.callback(this.value, this);
 						}.bind(this)}),
 						numberbox({title:t4, class:'vec4', value:this.value[3], onvalue:function(ev,v,o){
 							this.value = vec4(this.value[0], this.value[1], this.value[2], v);
-							this.callback(this.value);
+							this.callback(this.value, this);
 						}.bind(this)}));
 			}
 		} else if (typename =="vec3"){
@@ -145,26 +145,26 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			editor = view({bgcolor:NaN},
 					   numberbox({title:t1, class:'vec3', value:this.value[0], onvalue:function(ev,v,o){
 						   this.value = vec3(v, this.value[1], this.value[2]);
-						   this.callback(this.value);
+						   this.callback(this.value, this);
 					   }.bind(this)}),
 					   numberbox({title:t2, class:'vec3', value:this.value[1], onvalue:function(ev,v,o){
 						   this.value = vec3(this.value[0], v, this.value[2]);
-						   this.callback(this.value);
+						   this.callback(this.value, this);
 					   }.bind(this)}),
 				       numberbox({title:t3, class:'vec3', value:this.value[2], onvalue:function(ev,v,o){
 						   this.value = vec3(this.value[0], this.value[1], v);
-						   this.callback(this.value);
+						   this.callback(this.value, this);
 					   }.bind(this)}));
 
 		} else if (typename =="vec2"){
 			editor = view({bgcolor:NaN},
 					   numberbox({class:'vec2', value:this.value[0],margin:2, onvalue:function(ev,v,o){
 						   this.value = vec2(v, this.value[1]);
-						   this.callback(this.value);
+						   this.callback(this.value, this);
 					   }.bind(this)}),
 					   numberbox({class:'vec2', value:this.value[1],margin:2, onvalue:function(ev,v,o){
 						   this.value = vec2(this.value[0], v);
-						   this.callback(this.value);
+						   this.callback(this.value, this);
 					   }.bind(this)}));
 
 		} else if (typename =="FloatLike" || typename =="float32"){
@@ -173,7 +173,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						   minvalue: this.property.minvalue,
 						   maxvalue: this.property.maxvalue,
 						   value:this.value,
-						   onvalue:function(ev,v){this.callback(v);}.bind(this)
+						   onvalue:function(ev,v){this.callback(v, this);}.bind(this)
 					   }));
 
 		} else if (typename =="IntLike" || typename =="int32"){
@@ -186,7 +186,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						value:this.value,
 						stepvalue:1,
 						margin:2,
-						onvalue:function(ev,v){this.callback(v);}.bind(this)
+						onvalue:function(ev,v){this.callback(v, this);}.bind(this)
 					}));
 
 		} else if (typename == "String" || typeof(typename) === "undefined"){
@@ -202,7 +202,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						borderwidth:1,
 						bordercolor:"gray",
 						margin:2,
-						onvalue: function(ev,v,o){this.callback(v);}.bind(this)
+						onvalue: function(ev,v,o){this.callback(v, this);}.bind(this)
 					})
 
 			);
@@ -219,7 +219,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				borderwidth:2,
 				bordercolor:"#262626",
 				margin:2,
-				onvalue:function(ev,val) {this.callback(val)}.bind(this)
+				onvalue:function(ev,val) {this.callback(val, this)}.bind(this)
 			});
 
 		} else if (typename == "Object" && meta == "font") {
@@ -245,4 +245,4 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 		return [proplabel, editor];
 	}
 
-})
+});
