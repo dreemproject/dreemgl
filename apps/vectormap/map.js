@@ -239,7 +239,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			//this.gotoCity("Amsterdam", 6);
 
-			this.setCenter(33,17,6);
+			this.setCenter(31,18,6);
 			this.theinterval = this.setInterval(function(){
 				this.updateLoadQueue();
 			}.bind(this), 50);
@@ -526,9 +526,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.shaders.hardrect.mesh = tile.landVertexBuffer;
 		}
 
-
-
-
 		this.hardrect = function(){
 
 			this.position = function(){
@@ -537,7 +534,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
 				respos = vec4(pos.x, 0, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				respos.w -= mesh.pos.z*0.01;
-
 				return respos;
 			}
 
@@ -560,6 +556,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.drawtype = this.TRIANGLES
 
+			this.depth_test = ""
+
 			this.color = function(){
 				//return "blue";
 				var col =  vec4("#202050");
@@ -569,11 +567,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
-
-
 			}
 		}
-
 	});
 
 	define.class(this,"labeltile", "$ui/labelset", function(){

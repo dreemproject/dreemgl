@@ -262,8 +262,8 @@ define.class(function(require, $server$, service){
 		},
 		water:{
 			offset:0,
-			color1: vec4(0,0,1,1),
-			color2: vec4(0,0,1,1),
+			color1: vec4(0,0,1,0.1),
+			color2: vec4(0,0,1,0.8),
 		},
 		building:{
 			color1:vec4("white"),
@@ -360,10 +360,11 @@ define.class(function(require, $server$, service){
 		id: float
 	})
 	
-	function arctotriangles(arc){
+	
+	
+	function arcToFlatVertices(arc, flatverts){
 		if (!arc) return []
-		var verts = []
-		var flatverts = []
+		if (!flatverts) flatverts = []
 		var A0 = arc[0]
 		var nx = A0[0]
 		var ny = A0[1]
@@ -379,6 +380,35 @@ define.class(function(require, $server$, service){
 			flatverts.push(ny)
 		}
 		
+		return flatverts;
+	}
+	
+	function polyToTriangles(poly){
+		if (!poly) return [];	
+			var verts = []
+	
+		var flatverts = arcToFlatVertices(poly.outline);
+		var holeindices = [];
+
+		for (var i =0 ;i<poly.holes.length;i++){
+			holeindices.push(flatverts.length/2);
+			arcToFlatVertices(poly.holes[i], flatverts);
+		}
+		var triangles = earcut(flatverts, holeindices)
+		
+		for(var i = 0; i < triangles.length; i++){
+			idx = triangles[i]
+			verts.push([flatverts[idx * 2], flatverts[idx * 2 + 1]])
+		}
+
+		return verts
+	}
+	
+	function arcToTriangles(arc){
+		if (!arc) return []
+		var verts = []
+		
+		var flatverts = arcToFlatVertices(arc);
 		var triangles = earcut(flatverts)
 		
 		for(var i = 0; i < triangles.length; i++){
@@ -406,7 +436,7 @@ define.class(function(require, $server$, service){
 			for(var j = 0;j<building.arcs.length;j++){
 				var arc = building.arcs[j];
 				
-				var tris = arctotriangles(arc);
+				var tris = arcToTriangles(arc);
 				var A1 = [arc[0][0], arc[0][1]]
 				var OA1 = A1;
 				var c = 0.3;
@@ -461,7 +491,16 @@ define.class(function(require, $server$, service){
 			if (land.arcs){
 				for(var j = 0;j<land.arcs.length;j++){
 					var arc = land.arcs[j];
-					var tris = arctotriangles(arc);
+					var tris = arcToTriangles(arc);
+					for(var a = 0;a<tris.length;a++){
+						mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
+					}
+				}
+			}
+			if (land.polygons){
+					for(var j = 0;j<land.polygons.length;j++){
+					var poly = land.polygons[j];
+					var tris = polyToTriangles(poly);
 					for(var a = 0;a<tris.length;a++){
 						mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
 					}
@@ -581,7 +620,76 @@ define.class(function(require, $server$, service){
 		return mesh;
 		
 	}
-
+	function DecodeAndAdd(Bb, TargetSet, SourceArcs, defaultkind){
+		var Barcs = Bb.arcs;
+		var Bprops = Bb.properties;
+		if (!Barcs) return ;	
+		var B = {arcs:[], polygons:[],kind:Bprops.kind?Bprops.kind:defaultkind };
+		if (Bprops.name) B.name = Bprops.name;
+		var Tarcs = B.arcs;
+		var Tpolies = B.polygons;
+		
+		
+		if (Bb.type == "MultiLineString"){
+			var arc = [];
+			for(var k = 0;k<Barcs.length;k++){
+				var sourcearc = SourceArcs[Barcs[k]];
+				var x = sourcearc[0][0];
+				var y = sourcearc[0][1];
+				arc.push(x,y);
+				for(var l = 1;l<sourcearc.length;l++)
+				{
+					x+= sourcearc[l][0];
+					y+= sourcearc[l][1];
+					arc.push(x,y);
+				}
+			}
+			Tarcs.push(arc);
+		}
+		else{
+			if (Bb.type == "MultiPolygon"){
+				
+				for(var k = 0; k < Bb.arcs.length;k++){
+					var L  = Bb.arcs[k].length;
+					var outlinearc = SourceArcs[Bb.arcs[k][0]];
+					var holes = [];
+						for (var m = 1;m<L;m++){
+							var holearc = SourceArcs[Bb.arcs[k][m]];
+							holes.push(holearc);	
+						}
+					Tpolies.push({outline: outlinearc, holes: holes});
+				}					
+			}
+			else{
+				if ( Bb.type == "Polygon"){
+					
+					var outlinearc = SourceArcs[Bb.arcs[0][0]];
+					var holes = [];
+					for(var k = 1; k < Bb.arcs.length;k++){
+						var L  = Bb.arcs[k].length;
+						var holearc = SourceArcs[Bb.arcs[k]];
+						holes.push(holearc);	
+					}					
+					Tpolies.push({outline: outlinearc, holes: holes});
+				}
+				else{
+					if (Bb.type == "LineString"){
+						for(var k = 0; k < Bb.arcs.length;k++){
+							Tarcs.push(SourceArcs[Bb.arcs[k]]);	
+						}					
+					}
+				}
+			}
+		}
+		if (Bb.type == "LineString" ){
+			// ignore linestrings stuck in things expected to be polygons.
+		}
+		else{
+			TargetSet.push(B);
+		}
+	
+				
+	}
 	this.build = function(target, sourcedata){
 		
 		var Bset = [];
@@ -628,99 +736,27 @@ define.class(function(require, $server$, service){
 		var WaterGeoms = objects.water.geometries;
 		for (var i = 0;i<WaterGeoms.length;i++){
 			var Bb = WaterGeoms[i];
-			var Barcs = Bb.arcs;
 			
-			if(Barcs)
-			{
-				var B = {arcs:[], kind:"water" };
-				var Tarcs = B.arcs;
-				
-				
-				if (Bb.type == "MultiLineString"){
-					var arc = [];
-					for(var k = 0;k<Barcs.length;k++){
-						var sourcearc = Sarcs[Barcs[k]];
-						var x = sourcearc[0][0];
-						var y = sourcearc[0][1];
-						arc.push(x,y);
-						for(var l = 1;l<sourcearc.length;l++)
-						{
-							x+= sourcearc[l][0];
-							y+= sourcearc[l][1];
-							arc.push(x,y);
-						}
-					}
-					Tarcs.push(arc);
-				}
-				else{
-					if (Bb.type == "MultiPolygon"){
-						
-						for(var k = 0; k < Bb.arcs.length;k++){
-							var L  = Bb.arcs[k].length;
-							if (L == 1){
-								var sourcearc = Sarcs[Bb.arcs[k]];
-								Tarcs.push(sourcearc);	
-							}
-							else{
-								for (var m = 0;m<L;m++){
-									var sourcearc = Sarcs[Bb.arcs[k][m]];
-									Tarcs.push(sourcearc);	
-								}
-							}
-						}					
-					}
-					else{
-						if (Bb.type == "LineString"){
-							for(var k = 0; k < Bb.arcs.length;k++){
-								Tarcs.push(Sarcs[Bb.arcs[k]]);	
-							}					
-						}
-					}
-				}
-				if (Bb.type == "LineString" ){
-				// uncomment to get waterworks added as roads.
-				//Rset.push(B);
-				}
-				else{
-					Wset.push(B);
-					Allset.push(B);
-				}
-			}
+			DecodeAndAdd(Bb, Wset, Sarcs, "water");
+			
+			
 		}
 		var EarthGeoms = objects.earth.geometries;
 		for (var i = 0;i<EarthGeoms.length;i++){
 			var Bb = EarthGeoms[i];
-			var B = {arcs:[], kind:"earth"};
-			var Tarcs = B.arcs;
-			var Barcs = Bb.arcs;
 			
-			for(var k = 0;k<Barcs.length;k++){
-				Tarcs.push(Sarcs[Barcs[k]]);
+			DecodeAndAdd(Bb, Eset, Sarcs, "earth" );
 			}
-			
-			KindSet[B.kind] = true;
-			Eset.push(B);
-			Allset.push(B);
-		}
 		
 		var LandUseGeoms = objects.landuse.geometries
 		for (var i = 0;i<LandUseGeoms.length;i++){
 			var Bb = LandUseGeoms[i];
-			var B = {arcs:[], kind:Bb.properties.kind, name:Bb.properties.name};
-			var Barcs = Bb.arcs
-			var Tarcs = B.arcs;
-				
-			if (!this.ignoreuse[B.kind] && Barcs)
-			{
-							
-				for(var k = 0;k<Barcs.length;k++){
-					Tarcs.push(Sarcs[Barcs[k]]);				
-				}
-				KindSet[B.kind] = true;
-				Lset.push(B);
-				Allset.push(B);
+			if (!this.ignoreuse[Bb.properties.kind]){
+				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
 			}
+				
 		}
+		
 		
 		for (var i = 0;i<objects.roads.geometries.length;i++){
 			var Bb = objects.roads.geometries[i];
@@ -754,17 +790,16 @@ define.class(function(require, $server$, service){
 		target.landuses = Lset;
 		
 		var empty = []
-		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(target.roads);
+		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(target.roads);
+		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
 		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(target.buildings);
 		
-		var landmesh = this.buildAreaPolygonVertexBuffer(Eset);
+if(1){		var landmesh = this.buildAreaPolygonVertexBuffer(Eset);
 		this.buildAreaPolygonVertexBuffer(Lset, landmesh);
 		this.buildAreaPolygonVertexBuffer(Wset, landmesh);
-		
-		
 		target.landVertexBuffer = landmesh;
-	//	console.log(Wset);
-//		target.landVertexBuffer = this.buildAreaPolygonVertexBuffer(Wset);
+}
+	//	target.landVertexBuffer = this.buildAreaPolygonVertexBuffer(Wset);
 		
 	}
 })
