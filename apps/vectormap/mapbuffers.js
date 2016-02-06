@@ -790,8 +790,8 @@ define.class(function(require, $server$, service){
 		target.landuses = Lset;
 		
 		var empty = []
-		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(target.roads);
-		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
+		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(target.roads);
+		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
 		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(target.buildings);
 		
 if(1){		var landmesh = this.buildAreaPolygonVertexBuffer(Eset);

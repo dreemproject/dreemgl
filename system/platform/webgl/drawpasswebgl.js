@@ -227,7 +227,7 @@ define.class(function(require, baseclass){
 					var blendshader = draw.shaders.viewportblend
 					if (view._viewport === '3d'){
 						// dont do this!
-						blendshader.depth_test = 'src_depth <= dst_depth'
+						if (shader.depth_test == '') shader.depth_test = 'src_depth <= dst_depth'												
 					}
 					else{
 						blendshader.depth_test = ''
@@ -245,7 +245,7 @@ define.class(function(require, baseclass){
 						var shader = shaders[j]
 
 						if(view._viewport === '3d'){
-							shader.depth_test = 'src_depth <= dst_depth'
+							if (shader.depth_test == '') shader.depth_test = 'src_depth <= dst_depth'
 						}
 
 						shader.pickguid = pickguid

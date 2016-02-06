@@ -224,17 +224,17 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.init = function(){
 
 			this.cities = {
-				   manhattan: [40.7072121, -74.0067985],
-				   amsterdam: [52.3608307,   4.8626387],
+				manhattan: [40.7072121, -74.0067985],
+				amsterdam: [52.3608307,   4.8626387],
 				sanfrancisco: [37.6509102,-122.4889338],
-			//	sanfrancisco: [37.8838923,-122.3398295],
+				//sanfrancisco: [37.8838923,-122.3398295],
 				sanfrancisco_goldengatepark:[37.7677892,-122.4853213],
-					   seoul: [37.5275421, 126.9748078],
-					   seoel: [37.5275421, 126.9748078],
-					   shenzhen_hqb:[22.5402897,114.0846914],
-					   hongkong:[22.2854084,114.1600463],
-					   sydney:[-33.8466226,151.2277997],
-					   london:[51.5091502,-0.1471011]
+				seoul: [37.5275421, 126.9748078],
+				seoel: [37.5275421, 126.9748078],
+				shenzhen_hqb:[22.5402897,114.0846914],
+				hongkong:[22.2854084,114.1600463],
+				sydney:[-33.8466226,151.2277997],
+				london:[51.5091502,-0.1471011]
 			}
 
 			//this.gotoCity("Amsterdam", 6);
@@ -366,8 +366,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 1000.0,
-			fogend: 5000.
-
+			fogend: 5000.,
+			layeroffset: 0
 		}
 		
 
@@ -387,7 +387,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 		
 		this.pointertap = function(){
-			this.find("mapdata").setCenter(this.lastpos[0], this.lastpos[1], this.zoomlevel,1);
+			this.find("mapdata").setCenter(this.lastpos[0], this.lastpos[1], this.zoomlevel + this.layeroffset,1);
 		}
 
 		this.lastpos = vec2(0);
@@ -395,7 +395,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.calctilepos = function(){
 			var x = Math.floor( this.coord[0] + this.trans[0]);
 			var y = Math.floor(this.coord[1] + this.trans[1]);
-			return [x,y,this.zoomlevel];
+			return [x,y,this.zoomlevel+ + this.layeroffset];
 		}
 
 		this.init = function(){
@@ -470,9 +470,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 	})
 
-	var tileshadermixin = define.class(Object, function(){
 
-	})
 
 
 	define.class(this,"buildingtile", "$ui/view", function(){
@@ -718,53 +716,56 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 
-		this.tilewidth = 5;
-		this.tileheight = 5;
-
+	
 		var tilearea = vec2(this.tilewidth, this.tileheight)
 		//console.log("tile area", tilearea);
-		
-		for(var x = 0;x<this.tilewidth;x++){
-			for(var y = 0;y<this.tileheight;y++){
-				var tx = Math.floor(x-(this.tilewidth-1)/2);
-				var ty = Math.floor(y-(this.tileheight-1)/2)
-				var land = this.landtile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
-				this.tilestoupdate.push(land);
-				res3d.push(land);
-			}
-		}
-		
-		for(var x = 0;x<this.tilewidth;x++){
-			for(var y = 0;y<this.tileheight;y++){
-				var tx = Math.floor(x-(this.tilewidth-1)/2);
-				var ty = Math.floor(y-(this.tileheight-1)/2)
-				var road = this.roadtile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
-				this.tilestoupdate.push(road);
-				res3d.push(road);
-			}
-		}
+		for(var layer = 0;layer<3;layer++){
+			
+			this.tilewidth = Math.pow(2, 1+ layer);
+			this.tileheight = Math.pow(2, 1+ layer);
 
-		for(var x = 0;x<this.tilewidth;x++){
-			for(var y = 0;y<this.tileheight;y++){
-				var tx = Math.floor(x-(this.tilewidth-1)/2);
-				var ty = Math.floor(y-(this.tileheight-1)/2)
-				var building = this.buildingtile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
-				this.tilestoupdate.push(building);
-				res3d.push(building);
-			}
-		}
 		
-		for(var x = 0;x<this.tilewidth;x++){
-			for(var y = 0;y<this.tileheight;y++){
-				var tx = Math.floor(x-(this.tilewidth-1)/2);
-				var ty = Math.floor(y-(this.tileheight-1)/2)
-				var building = this.labeltile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
-				this.tilestoupdate.push(building);
-				res3d.push(building);
+			for(var x = 0;x<this.tilewidth;x++){
+				for(var y = 0;y<this.tileheight;y++){
+					var tx = Math.floor(x-(this.tilewidth-1)/2);
+					var ty = Math.floor(y-(this.tileheight-1)/2)
+					var land = this.landtile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
+					this.tilestoupdate.push(land);
+					res3d.push(land);
+				}
+			}
+			
+			for(var x = 0;x<this.tilewidth;x++){
+				for(var y = 0;y<this.tileheight;y++){
+					var tx = Math.floor(x-(this.tilewidth-1)/2);
+					var ty = Math.floor(y-(this.tileheight-1)/2)
+					var road = this.roadtile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
+					this.tilestoupdate.push(road);
+					res3d.push(road);
+				}
+			}
+
+			for(var x = 0;x<this.tilewidth;x++){
+				for(var y = 0;y<this.tileheight;y++){
+					var tx = Math.floor(x-(this.tilewidth-1)/2);
+					var ty = Math.floor(y-(this.tileheight-1)/2)
+					var building = this.buildingtile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
+					this.tilestoupdate.push(building);
+					res3d.push(building);
+				}
+			}
+			
+			for(var x = 0;x<this.tilewidth;x++){
+				for(var y = 0;y<this.tileheight;y++){
+					var tx = Math.floor(x-(this.tilewidth-1)/2);
+					var ty = Math.floor(y-(this.tileheight-1)/2)
+					var labels = this.labeltile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
+					this.tilestoupdate.push(labels);
+					res3d.push(labels);
+				}
 			}
 		}
-
-		var dist = 2.5
+		var dist = 4.5
 		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
 
 		camera:vec3(0,-1000 * dist,1000 * dist), fov: 40, up: vec3(0,1,0)
