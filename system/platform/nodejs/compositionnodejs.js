@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -12,13 +12,24 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	var Render = require('$system/base/render')
 	var screen = require('$ui/screen')
 
+	var path = require('path');
+	var fs = require('fs');
+
+	this.commit = function (data) {
+		var filename = this.constructor.module.filename;
+		var source = 'define.class("$server/composition",' + data + ')';
+		console.log('[COMMIT]', filename);//, source);
+
+		return fs.writeFile(filename, source);
+	};
+
 	// ok now what. well we need to build our RPC interface
 	this.postAPI = function(msg, response){
 		if(msg.type == 'attribute'){
 			if (!msg.get) { //setter
 				this.setRpcAttribute(msg, response)
 				response.send({type:'return', attribute:msg.attribute, value:'OK'})
-			} 
+			}
 			else { //getter
 				var parts = msg.rpcid.split('.');
 				var obj
@@ -42,13 +53,15 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		}
 		else response.send({type:'error', message:'please set "msg.type" to "attribute" or "method"'})
 	}
-	
+
 	this.handleRpcMethod = function(msg){
 		// lets make a promise
 		return new Promise(function(resolve, reject){
 			var parts = msg.rpcid.split('.')
 			//! TODO fix this up to be multi role capable
-			var obj = this.names[parts[0]]
+			var part = parts[0];
+
+			var obj = this.names[part]
 			if(obj instanceof screen){
 				var scr = this.connected_screens[parts[0]]
 
@@ -76,10 +89,15 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 				})
 			}
 			else{ // its a local thing, call it directly on our composition
-				var obj = this.names
-				for(var i = 0; i < parts.length; i ++){
-					obj = obj[parts[i]]
-					if(!obj) return console.log("Error parsing rpc name "+msg.rpcid)
+				var obj;
+				if (part === 'this') {
+					obj = this;
+				} else {
+					obj = this.names;
+					for(var i = 0; i < parts.length; i ++){
+						obj = obj[parts[i]]
+						if(!obj) return console.log("Error parsing rpc name "+msg.rpcid)
+					}
 				}
 				var exception
 				try{
@@ -124,7 +142,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		var parts = msg.rpcid.split('.')
 		// keep it around for new joins
 		this.server_attributes[msg.rpcid] = msg
-		
+
 		if (socket) {
 			//make sure we set it on the rpc object
 			var cls = this.names[parts[0]]
@@ -158,7 +176,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	}
 
 	this.atConstructor = function(bus, session, previous){
-		
+
 		baseclass.prototype.atConstructor.call(this)
 
 		this.bus = bus
@@ -194,7 +212,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 				})
 			}
 			else if(msg.type == 'return'){
-				// lets resolve this return 
+				// lets resolve this return
 				this.rpc.resolveReturn(msg)
 			}
 			else if(msg.type == 'webrtcOffer'){ bus.broadcast(msg) }
@@ -213,14 +231,14 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			// create child name shortcut
 			var child = this.children[i]
 			child.rpc = this.rpc
-			if(child instanceof screen) continue		
+			if(child instanceof screen) continue
 			if(!child.environment || child.environment === define.$environment){
 				var init = []
 				child.connectWires(init)
 
-				for(var j = 0; j < init.length;j++) init[j]()				
+				for(var j = 0; j < init.length;j++) init[j]()
 				child.emit('init')
 			}
-		}		
+		}
 	}
 })

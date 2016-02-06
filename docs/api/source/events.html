@@ -209,22 +209,47 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n55" name="n55">55</a>
 <a href="#n56" name="n56">56</a>
 <a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
+<a href="#n59" name="n59">59</a>
+<strong><a href="#n60" name="n60">60</a></strong>
+<a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
 
         <span class="local-variable">this</span>.text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">hoverid</span>: -<span class="integer">1</span>,
-                <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)
+                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
+                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
+                <span class="key">hoverid</span>: -<span class="integer">1</span>
         }
 
-        <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(e){
+        <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.layout.left = <span class="integer">0</span>
+                <span class="local-variable">this</span>.layout.top =  <span class="integer">90</span>
+                <span class="local-variable">this</span>.layout.height =  <span class="local-variable">this</span>.parent.layout.height - <span class="integer">118</span>
+                <span class="local-variable">this</span>.layout.width =  <span class="local-variable">this</span>.parent.layout.width
+        }
+
+        <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.hoverid = <span class="local-variable">this</span>.last_pick_id
         }
 
         <span class="local-variable">this</span>.pickrange = <span class="integer">1024</span>;
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">eventrects</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+
                 <span class="keyword">var</span> vertstruct = define.struct({
                         <span class="key">pos</span>: vec2,
                         <span class="key">uv</span>: vec2,
@@ -247,8 +272,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 )
                         }
                 }
+
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> pos = mesh.pos
+                        pos.x = pos.x - view.zoom * view.scroll[<span class="integer">0</span>]
                         pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
                         <span class="keyword">var</span> w = mesh.uv.x * min(max(<span class="integer">100</span> / view.zoom, <span class="float">1.0</span>), <span class="float">50.0</span>)
                         pos = pos + vec2(w, <span class="float">0.0</span>)
@@ -262,9 +289,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">return</span> vec4(<span class="float">0.5</span>, <span class="float">0.5</span>, <span class="float">0.5</span>, <span class="integer">1</span>)
                 }
         })
-        <span class="local-variable">this</span>.hardrect = <span class="local-variable">this</span>.eventrects
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {}
+        <span class="local-variable">this</span>.eventrects = <span class="predefined-constant">true</span>
 
 })
 </pre></td>

@@ -265,7 +265,95 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.setTimeout(this.updateTiles, 10);
 	}
 
+	function UnProject(glx, gly, glz, modelview, projection){
+		var inv = vec4()
+		var A = mat4.mat4_mul_mat4(modelview, projection)
+		var m = mat4.invert(A)
+		inv[0] = glx
+		inv[1] = gly
+		inv[2] = 2.0 * glz - 1.0
+		inv[3] = 1.0
+		out = vec4.vec4_mul_mat4(inv, m)
+		// divide by W to perform perspective!
+		out[0] /= out[3]
+		out[1] /= out[3]
+		out[2] /= out[3]
+		return vec3(out)
+	}
 
+	
+
+	this.projectonplane = function(coord){
+		var vp = this.find("mapinside");
+		if (!vp) return;
+		
+
+		var sx = vp.layout.width;
+		var sy = vp.layout.height;
+	
+		var mx = (coord[0] / (sx / 2)) - 1.0
+		var my =  (coord[1] / (sy / 2)) - 1.0
+
+		var ray_nds  = vec3(mx,my,1);
+		var ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0,1.0);
+		
+		
+		var proj = vp.colormatrices.perspectivematrix;	
+		var invproj = mat4.identity();
+		mat4.invert(proj, invproj)
+
+
+		
+
+		var ray_eye = vec4.mul_mat4(ray_clip,invproj)
+		ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
+		
+		
+
+		var view = vp.colormatrices.lookatmatrix;	
+		var invview = mat4.identity();
+		mat4.invert(view, invview)
+		var raywor4 = vec4.mul_mat4(ray_eye, invview)
+		var ray_wor = vec3(raywor4[0], raywor4[1],raywor4[2]);
+		ray_wor = vec3.normalize(ray_wor);
+		var	camerapos = vp._camera;
+		var end = vec3(camerapos[0] + ray_wor[0] * 30000, 
+		camerapos[1] + ray_wor[1] * 30000, 
+		camerapos[2] + ray_wor[2] * 30000);
+		
+		var R = vec3.intersectplane(camerapos, end, vec3(0,1,0), 0)
+		if (!R) return null;
+		
+	//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
+	//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
+	
+	
+		return R;
+		
+	}
+	this.dragging = false;
+	this.startvect = vec2(0);
+	this.startDrag = function(ev){
+		var R = this.projectonplane( this.globalToLocal(ev.position));
+		if (R){
+			this.startvect = vec2(R[0]/BufferGen.TileSize,R[2]/BufferGen.TileSize)
+			this.startcenter = vec2(this.centerx, this.centery);
+		}
+	}
+	this.moveDrag = function(ev){
+		var R = this.projectonplane( this.globalToLocal(ev.position));
+		if (R){
+			
+			this.newvect = vec2(R[0]/BufferGen.TileSize,R[2]/BufferGen.TileSize)
+			
+			this.find("mapdata").setCenter( this.startvect[0] - this.newvect[0] + this.startcenter[0],
+			 this.startvect[1] - this.newvect[1] + this.startcenter[1], this.zoomlevel);
+
+		}
+	}
+	this.stopDrag = function(){
+		
+	}
 	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
 			trans: vec2(0),
@@ -277,7 +365,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 1000.0,
-			fogend: 5000.,
+			fogend: 5000.
 
 		}
 		
@@ -286,14 +374,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.bufferloadbool = false
 
 		this.onpointerend = function(ev){
-		//	console.log(ev.value[0]);
-			
+			this.host.stopDrag();
 		}
-		
+
+		this.onpointerstart = function(ev){
+			this.host.startDrag(ev);
+		}
+
 		this.onpointermove = function(ev){
-		//	console.log(ev.value[0]);
-			//console.log(ev);
-			console.log("whaa" , this.host.globalToLocal(ev.position));
+			this.host.moveDrag(ev);
 		}
 		
 		this.pointertap = function(){
@@ -359,6 +448,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					this.frameswaited++;
 					if (this.queued == 0){
 						if (this.shaders.hardrect && this.shaders.hardrect.update) this.shaders.hardrect.update();
+						if (this.resetbuffer) this.resetbuffer();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
 						this.queued  = 1;
 					}
@@ -496,9 +586,16 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			rpos = vec2(1,-1)*pos.xz + (idxpos - this.tiletrans)* this.tilesize;
 			return vec3(rpos.x, 0, rpos.y+pos.y);
 		}
-		
+		this.resetbuffer = function(){
+			this.labels = [];
+		}
 		this.loadBufferFromTile = function(tile) {			
 			var LabelSource = tile.Labels;
+			
+			if (!LabelSource){
+				this.labels = [];
+				return;
+			}
 			var thelabels = [];
 			var rankfontsizes = {
 				0:40, 
@@ -660,6 +757,16 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				res3d.push(building);
 			}
 		}
+		
+		for(var x = 0;x<this.tilewidth;x++){
+			for(var y = 0;y<this.tileheight;y++){
+				var tx = Math.floor(x-(this.tilewidth-1)/2);
+				var ty = Math.floor(y-(this.tileheight-1)/2)
+				var building = this.labeltile({host:this, fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty)});
+				this.tilestoupdate.push(building);
+				res3d.push(building);
+			}
+		}
 	
 		var dist = 2.5
 		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
@@ -668,8 +775,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		,lookat:vec3(0,0,0)
 		},
 
-			view({bgcolor:NaN, rotate:vec3(0,0.1,0)},
+			view({bgcolor:NaN},
 				res3d
+				//,label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
 				)
 
 			));

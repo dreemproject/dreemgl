@@ -325,6 +325,7 @@ define.class('$ui/view', function(require,
 			require.async(event.value.composition).then(function(result){
 
 				this.sourceset.parse(result)
+				console.log('>>', this.sourceset.ast)
 
 				// write it back to disk
 				this.sourceset.onchange = function(){
@@ -578,11 +579,14 @@ define.class('$ui/view', function(require,
 		for(var i = 0;i<this.sourceset.data.children.length;i++){
 			var node = this.sourceset.data.children[i];
 			// block({name:"e", title:"block E", x:450, y:600})
+			var fd = node.flowdata;
+			if (!fd) {
+				fd = {x:0, y:0}
+			}
 			res.push(
 				block({
-					flowdata:node.flowdata,
-					pos:vec3(node.flowdata.x,
-					node.flowdata.y,0),
+					flowdata:fd,
+					pos:vec3(fd.x, fd.y, 0),
 					name:node.name,
 					title:uppercaseFirst(node.classname + ': ' + node.name),
 					inputs:node.inputs,
@@ -809,32 +813,6 @@ define.class('$ui/view', function(require,
 					)
 					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
-,splitcontainer({flex:0.5,direction:"horizontal"}
-,dockpanel({alignitems:'stretch', aligncontent:'stretch', title:"Components", viewport:"2D", flex:0.35},
-  palette({
-	  name:'components',
-	  flex:1,
-	  bgcolor:"#4e4e4e",
-	  items:{Views:[
-	    {classname:'view',  label:'View',  icon:'clone', desc:'A rectangular view'},
-	    {classname:'label', label:'Text',  text:'Aa',    desc:'A text label' },
-	    {classname:'icon',  label:'Image', icon:'image', desc:'An image or icon'}]
-	  },
-	  dropTest:function(v, item) {
-		  console.log('test', item, v)
-		  return true;
-	  },
-	  drop:function(v, item) {
-		  console.log('dropped', item, 'onto', v);
-	  }
-  })
-)
-,dockpanel({title:"Properties", viewport:"2D"},
-  propviewer({flex:2,name:"mainproperties", target:"centralconstructiongrid", flex:1, overflow:"scroll"})
-)
-)
-
-
 			)
 		];
 	}

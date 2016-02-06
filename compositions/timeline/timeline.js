@@ -1,10 +1,10 @@
-define.class('$ui/view', function (background, labels, scrollbar) {
+define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.attributes = {
 		format: Config({type: Enum('12','24'),  value: "24"}),
-		zoom: Config({type: Number, value: 150}),
+		zoom: Config({type: Number, value: 7}),
 		maxzoom: Config({type: Number, value: 365}),
-		scroll: Config({type: Number, value: 0})
+		scroll: Config({type: Number, value: 4})
 	}
 
 	this.atDraw = function () {
@@ -32,17 +32,44 @@ define.class('$ui/view', function (background, labels, scrollbar) {
 		this.labels.hoursegs = segs
 	}
 
+	this.pointermultimove = function(event) {
+		if (event.length === 1 && event[0].view === this.background) {
+			if (event[0].touch) {
+				this.scroll = clamp(this._scroll - event[0].movement[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+			}
+		} else if (event.length === 2 && event[0].view === this.background) {
+			var lastzoom = this._zoom
+
+			var center = vec2.mix(event[0].position, event[1].position, 0.5)
+			var movement = vec2.mix(event[0].movement, event[1].movement, 0.5)
+			var distance = abs(event[0].position[0] - event[1].position[0])
+			var oldDistance = abs((event[0].position[0] - event[0].movement[0]) - (event[1].position[0] - event[1].movement[0]))
+
+			// TODO(aki): delta doesent feel right
+			var delta = (distance - oldDistance) / this.layout.width * this.zoom * 2
+			var newzoom = clamp(this.zoom - delta, 1, this.maxzoom)
+
+			this.zoom = newzoom
+
+			var xpos0 = this._scroll * lastzoom + this.globalToLocal(center)[0] / this.layout.width * lastzoom
+			var xpos1 = this._scroll * newzoom + this.globalToLocal(center)[0] / this.layout.width * newzoom
+			var shiftx = (xpos0 - xpos1) / newzoom
+
+			this.scroll = clamp(this._scroll + shiftx - movement[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+		}
+	}
 	this.pointerwheel = function(event) {
 		this.hscrollbar = this.find("scrollbar")
 		if (event.value[0]){
 			this.scroll = clamp(this._scroll + event.value[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
 		if (event.value[1]){
-			var delta = event.value[1] / 10
 			var lastzoom = this._zoom
+
+			var delta = event.value[1] / this.layout.width * this.zoom
 			var newzoom = clamp(this.zoom + delta, 1, this.maxzoom)
 
-			this.zoom = clamp(this.zoom + delta, 1, this.maxzoom)
+			this.zoom = newzoom
 
 			var xpos0 = this._scroll * lastzoom + this.globalToLocal(event.position)[0] / this.layout.width * lastzoom
 			var xpos1 = this._scroll * newzoom + this.globalToLocal(event.position)[0] / this.layout.width * newzoom
@@ -56,6 +83,7 @@ define.class('$ui/view', function (background, labels, scrollbar) {
 		return [
 			background({name: "background"}),
 			labels({name: "labels"}),
+			events({name: "events"}),
 			scrollbar({name: "scrollbar"})
 		]
 	}

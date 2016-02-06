@@ -3,16 +3,15 @@ define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 	this.flex = 1
 	this.flexdirection = 'column'
 	this.fgcolor = 'black'
-	this.height = 500
+	this.height = 200
 
 	this.attributes = {
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
+		scroll: wire('this.parent.scroll'),
+		hoursegs: Config({type: Number, value: 24}),
 		//TODO(aki): why this breaks sahder
 		// value: Config({type: Number, value: wire('this.parent.scroll')})
-		scroll: wire('this.parent.scroll'),
-		//TODO(aki): why this breaks sahder
-		// hoursegs: wire('this.parent.hoursegs')
-		hoursegs: Config({type: Number, value: 24}),
+		// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})
 	}
 
 	this.hardrect = function(){

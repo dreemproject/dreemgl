@@ -4,6 +4,7 @@
  * A palatte is a container view with drag-dropable components
  * 
  * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/widgets/palette.js"></iframe>
+ * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/widgets/palette.js">open example in new tab &raquo;</a>
  * 
  */
 /**
@@ -18,9 +19,11 @@
  * @attribute {Function} [dropTest="undefined"]
  * Function to call globally when testing if a palette item can be dropped onto another view.
  * This can also be defined on the individual components to override behavior.
+ * The signature of the function is function(dropevent,view,item,origevent,dropview){}
  */
 /**
  * @attribute {Function} [drop="undefined"]
  * Function to call globally when dropping a palette item onto a view.
  * This can also be defined on the individual components to override behavior.
+ * The signature of the function is function(dropevent,view,item,origevent,dropview){}
  */

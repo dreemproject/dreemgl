@@ -1,18 +1,30 @@
 define.class('$ui/label', function (require, $ui$, view) {
 
 	this.text = ''
+	this.position = 'absolute'
+	this.bgcolor = NaN
 
 	this.attributes = {
-		hoverid: -1,
-		zoom: wire('this.parent.zoom')
+		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
+		scroll: wire('this.parent.scroll'),
+		hoverid: -1
 	}
 
-	this.onpointerhover = function(e){
+	this.layout = function(){
+		this.layout.left = 0
+		this.layout.top =  90
+		this.layout.height =  this.parent.layout.height - 118
+		this.layout.width =  this.parent.layout.width
+	}
+
+	this.onpointerhover = function(event){
 		this.hoverid = this.last_pick_id
 	}
 
 	this.pickrange = 1024;
+
 	define.class(this, 'eventrects', this.Shader, function(){
+
 		var vertstruct = define.struct({
 			pos: vec2,
 			uv: vec2,
@@ -35,8 +47,10 @@ define.class('$ui/label', function (require, $ui$, view) {
 				)
 			}
 		}
+
 		this.position = function(){
 			var pos = mesh.pos
+			pos.x = pos.x - view.zoom * view.scroll[0]
 			pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
 			var w = mesh.uv.x * min(max(100 / view.zoom, 1.0), 50.0)
 			pos = pos + vec2(w, 0.0)
@@ -50,8 +64,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 			return vec4(0.5, 0.5, 0.5, 1)
 		}
 	})
-	this.hardrect = this.eventrects
 
-	this.render = function() {}
+	this.eventrects = true
 
 })

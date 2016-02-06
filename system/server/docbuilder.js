@@ -182,6 +182,7 @@ define.class(function(require){
 				var h = 300 * class_doc.examples.length;
 				output.push(' * ');
 				output.push(' * <iframe style="' + s + 'width:' + w + 'px;height:' + h + 'px" src="' + url + '"></iframe>');
+				output.push(' * <a target="blank" href="' + url + '">open example in new tab &raquo;</a>');
 				output.push(' * ');
 			}
 

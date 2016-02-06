@@ -223,7 +223,6 @@ define.class('$system/base/node', function(require){
 		pointermultiend:Config({type:Event}),
 		// fires when pointer is pressed and released quickly.
 		pointertap:Config({type:Event}),
-		pointermultitap:Config({type:Event}),
 		// fires when pointer moved without being pressed.
 		pointerhover:Config({type:Event}),
 		// fires when pointer enters an element.
@@ -811,7 +810,7 @@ define.class('$system/base/node', function(require){
 			// lets send dragenter/leave events
 			var newdrag = event.pick
 
-			if(!dragview.isDropTarget(newdrag)) newdrag = undefined
+			if(!dragview.isDropTarget(newdrag,event)) newdrag = undefined
 
 			if(lastdrag !== newdrag){
 				if(lastdrag) lastdrag.emitUpward('dragout',{})
@@ -820,12 +819,12 @@ define.class('$system/base/node', function(require){
 			}
 			if(newdrag) newdrag.emitUpward('dragmove', event)
 		}
-		this.onpointerend = function(){
+		this.onpointerend = function(event){
 			this.onpointermove = undefined
 			dragview.closeOverlay()
 			if(lastdrag){
 				lastdrag.emitUpward('dragout',{})
-				dragview.atDrop(lastdrag)
+				dragview.atDrop(lastdrag, event)
 			}
 		}
 	}
@@ -1548,6 +1547,46 @@ define.class('$system/base/node', function(require){
 		this.parent.children.unshift(this)
 		this.parent.redraw()
 	}
+
+	this.buildASTPath = function() {
+		var local = {
+			type:this.constructor.name
+		};
+
+		var path = [local];
+		if (this.parent) {
+			local.childindex = this.parent.children.indexOf(this);
+			local.constructor_index = this.parent.constructor_children.indexOf(this);
+
+			if (this.parent.buildASTPath) {
+				path = this.parent.buildASTPath();
+				path.push(local);
+			}
+		}
+
+		return path;
+	};
+
+	this.getASTNode = function() {
+		var path = this.buildASTPath();
+		path = path.filter(function(a){ return a.constructor_index != -1});
+		var node = this.screen.composition.ast;
+		for (var i=0;i<path.length;i++) {
+			var pathitem = path[i];
+			var search = {
+				type:"Call",
+				name:pathitem.type,
+				index:pathitem.childindex
+			};
+			node = this.screen.composition.seekASTNode(search, node);
+		}
+
+		return node;
+	};
+
+	this.seekASTNode = function(sought) {
+		return this.screen.composition.seekASTNode(sought, this.getASTNode());
+	};
 
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10

@@ -4,6 +4,7 @@
  * The treeview control - classic treeview with expandable nodes.
  * 
  * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/treeview.js"></iframe>
+ * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/treeview.js">open example in new tab &raquo;</a>
  * 
  */
 /**

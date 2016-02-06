@@ -21,15 +21,17 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 		// Function to call globally when testing if a palette item can be dropped onto another view.
 		// This can also be defined on the individual components to override behavior.
+		// The signature of the function is function(dropevent,view,item,origevent,dropview){}
 		dropTest:Config({type:Function}),
 
 		// Function to call globally when dropping a palette item onto a view.
 		// This can also be defined on the individual components to override behavior.
+		// The signature of the function is function(dropevent,view,item,origevent,dropview){}
 		drop:Config({type:Function})
 	};
 
 	define.class(this, "panel", view, function() {
-		this.bgcolor = NaN
+		this.bgcolor = 'transparent';
 		this.padding = vec4(20,10,20,10);
 		this.justifycontent = 'space-between';
 		this.attributes = {
@@ -104,8 +106,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "divider", view, function() {
-		this.justifycontent = 'space-between';
-		this.bgcolor = 'transparent';
+		this.justifycontent = "space-between";
+		this.bgcolor = "transparent";
 		this.margin = vec4(5,5,10,0);
 		this.borderbottomwidth = 1;
 		this.paddingbottom = 3;
@@ -120,23 +122,23 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			if (this.text) {
 				views.push(label({
 					fgcolor:this.bordercolor,
-					bgcolor:NaN,
+					bgcolor:"transparent",
 					text:this.text,
 					fontsize:this.fontsize
 				}));
 			}
 			if (this.panel) {
 				var icn;
-				if (this.panel.mode == 'compact') {
-					icn = 'list';
+				if (this.panel.mode == "compact") {
+					icn = "list";
 				} else {
-					icn = 'th-large';
+					icn = "th-large";
 				}
 
 				var self = this;
 
 				views.push(checkbox({
-					bgcolor:'transparent',
+					bgcolor:this.outer.bgcolor,
 					fgcolor:this.bordercolor,
 					borderwidth:0,
 					padding:0,
@@ -144,11 +146,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					icon:icn,
 					onvalue:function(ev) {
 						if (ev.value) {
-							self.panel.mode = 'detail';
-							this.icon = 'th-large';
+							self.panel.mode = "detail";
+							this.icon = "th-large";
 						} else {
-							self.panel.mode = 'compact';
-							this.icon = 'list';
+							self.panel.mode = "compact";
+							this.icon = "list";
 						}
 					}
 				}))
@@ -158,28 +160,32 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "panelview", view, function() {
-		this.bgcolor = 'transparent';
+		this.bgcolor = "white";
+		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panellabel", label, function() {
-		this.bgcolor = 'transparent';
-		this.fgcolor = '#e4e4e4';
+		this.bgcolor = "white";
+		this.fgcolor = "#e4e4e4";
 		this.padding = 0;
 		this.margin = 0;
+		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panelicon", icon, function() {
-		this.bgcolor = 'transparent';
+		this.bgcolor = 'white';
 		this.fgcolor = '#e4e4e4';
 		this.align = 'center';
 		this.padding = 0;
 		this.margin = 0;
+		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panelitem", view, function() {
 
-		this.bgcolor = 'transparent';
+		this.bgcolor = 'white';
 		this.flexdirection = 'column';
+		this.hardrect = {pickonly:true};
 
 		this.attributes = {
 			text:Config({type:String}),
@@ -189,7 +195,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			iconfontsize: 40,
 			hovercolor:'white',
 			hover:false,
-			pointerover:function() {
+			pointerhover:function() {
 				this.hover = true;
 			},
 			pointerout:function() {
@@ -210,12 +216,12 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 						width:this.iconfontsize,
 						height:this.iconfontsize * 2,
 
-						isDropTarget:function(v) {
+						isDropTarget:function(v, ev) {
 							var droptest = true;
 							if (pitem.dropTest) {
-								droptest = pitem.dropTest(v);
+								droptest = pitem.dropTest(ev, v, pitem, event, this);
 							} else if (this.outer && this.outer.dropTest) {
-								droptest = this.outer.dropTest(v, pitem);
+								droptest = this.outer.dropTest(ev, v, pitem, event, this);
 							}
 
 							if(!v || !droptest) {
@@ -226,11 +232,11 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 							return true
 						},
 
-						atDrop:function(v){
+						atDrop:function(v, ev){
 							if (pitem.drop) {
-								pitem.drop(v);
+								pitem.drop(ev, v, pitem, event, this);
 							} else if (this.outer && this.outer.drop) {
-								this.outer.drop(v, pitem);
+								this.outer.drop(ev, v, pitem, event, this);
 							}
 						}
 					})
@@ -310,7 +316,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 		}
 
 		return views;
-	}
+	};
 
 	var palette = this.constructor;
 	this.constructor.examples = {
@@ -331,16 +337,17 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 						text:'Aa',
 						desc:'A text label',
 						dropTest:function(v) {
+							console.log(this, 'cannot be dropped onto', v)
 							return false;
 						}
 					}]
 				},
-				dropTest:function(v, item) {
+				dropTest:function(ev, v, item) {
 					console.log('test', item, 'againt', v);
 					return true;
 				},
-				drop:function(v, item) {
-					console.log('dropped', item, 'onto', v);
+				drop:function(ev, v, item, orig) {
+					console.log('dropped', item, 'onto', v, '@', ev.position, 'started @', orig.position);
 				}
 			})
 		}

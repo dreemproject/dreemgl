@@ -214,23 +214,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
 <a href="#n62" name="n62">62</a>
-<a href="#n63" name="n63">63</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view, scrollbar) {
 
         <span class="local-variable">this</span>.flex = <span class="integer">1</span>
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.height = <span class="integer">500</span>
+        <span class="local-variable">this</span>.height = <span class="integer">200</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
+                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
+                <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
                 <span class="comment">//TODO(aki): why this breaks sahder</span>
                 <span class="comment">// value: Config({type: Number, value: wire('this.parent.scroll')})</span>
-                <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
-                <span class="comment">//TODO(aki): why this breaks sahder</span>
-                <span class="comment">// hoursegs: wire('this.parent.hoursegs')</span>
-                <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
+                <span class="comment">// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){

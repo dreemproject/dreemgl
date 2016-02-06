@@ -160,7 +160,7 @@ define.class('$ui/textbox', function(require){
 
 			if(view.wrap){
 				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
-					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * (this.indent)
+					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
 					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}

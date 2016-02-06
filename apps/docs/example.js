@@ -46,7 +46,8 @@ define.class('$server/composition', function(require, $ui$, screen, view, label,
 										),
 										view({flex:1, padding:7, flexdirection:"column", bgcolor:"transparent"},
 											label({flex:0, fgcolor:'#888', bgcolor:'transparent', text:"Live demo", fontsize:12, margin:vec4(10,0,0,5)}),
-											view({flex:1, flexdirection:"column", alignitems:'flex-start', margin:vec4(10,0,0,0), bgcolor:'#eee', overflow:'scroll'}, example.examplefunc())
+											view({flex:1, flexdirection:"column", alignitems:'flex-start', margin:vec4(10,0,0,0), bgcolor:'#eee', overflow:'scroll'},
+												example.examplefunc())
 										)
 									)
 								);

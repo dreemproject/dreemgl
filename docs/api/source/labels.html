@@ -244,6 +244,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n90" name="n90">90</a></strong>
 <a href="#n91" name="n91">91</a>
 <a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view) {
 
@@ -251,6 +252,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">format</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.format</span><span class="delimiter">'</span></span>)}),
@@ -272,9 +274,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> w = view.parent.layout.width
                         <span class="keyword">var</span> h = view.parent.layout.height
 
-                        <span class="keyword">var</span> mw = w / <span class="float">11.774193548387096</span> * <span class="integer">365</span> / zoom;
-                        <span class="keyword">var</span> dw = w / zoom;
-                        <span class="keyword">var</span> hw = w / <span class="integer">24</span> / zoom;
+                        <span class="keyword">var</span> mw = w / <span class="float">11.774193548387096</span> * <span class="integer">365</span> / zoom
+                        <span class="keyword">var</span> dw = w / zoom
+                        <span class="keyword">var</span> hw = w / <span class="integer">24</span> / zoom
 
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.newText()
                         <span class="keyword">if</span> (view.font) mesh.font = view.font
@@ -292,7 +294,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="keyword">if</span> (x &gt; w) <span class="keyword">break</span>
                                         mesh.add_x = x
                                         mesh.add_y = <span class="integer">24</span> - <span class="integer">5</span>
-                                        mesh.add(MONTHS[i],<span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
+                                        mesh.add(MONTHS[i % <span class="integer">12</span>],<span class="integer">0</span> ,<span class="integer">0</span> ,<span class="integer">0</span>)
                                 }
                         }
 

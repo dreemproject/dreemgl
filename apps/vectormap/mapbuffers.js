@@ -12,7 +12,8 @@ define.class(function(require, $server$, service){
 	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 			
-	this.ignoreuse = {
+	this.ignoreuse = {}
+	this.aignoreuse = {
 		allotments:true, 
 		apron:true, 
 		cemetery:true, 

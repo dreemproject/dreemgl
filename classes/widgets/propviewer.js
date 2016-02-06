@@ -4,31 +4,40 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox,$widgets$,propeditor){
+define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox, $widgets$, propeditor){
+// The property viewer allows for the visual inspection and manipulation of properties on DreemGL objects
 
 	this.attributes = {
+
+		// The target who's properties to view.  Can be either a DreemGL object or a named reference to one.
 		target:Config({type:Object, value:""}),
-		showunknown:Config({type:boolean, value:false})
-	}
+
+		// Shows properties for unknown property types
+		showunknown:Config({type:boolean, value:false}),
+
+		// internal, Callback used by the property editor to actually set properties.
+		callback:Config({type:Function})
+	};
 
 	this.borderwidth = 0;
 	this.flexdirection= "column";
 	this.margin = 0;
 	this.clearcolor = vec4("#303030");
-	this.padding = 0
+	this.padding = 0;
 	this.bgcolor = NaN;
 
 	this.uppercaseFirst = function (inp) {
 		if (!inp || inp.length == 0) return inp;
 		return inp.charAt(0).toUpperCase() + inp.slice(1);
-	}
+	};
 
 	this.render = function(){
 		var c = this.target;
 		if (typeof(this.target) === 'string') {
 			c = this.find(this.target);
-			if (!c) return [];
 		}
+
+		if (!c) return [];
 
 		var res = [];
 		var keysgroups = {};
@@ -67,14 +76,19 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				var key = keys[i];
 				var thevalue = c["_"+key];
 				var attr = c._attributes[key];
-				groupcontent.push(propeditor({
+				var props = {
 					target:this.target,
 					value:thevalue,
 					property:attr,
 					propertyname: key,
 					fontsize:this.fontsize,
 					showunknown:this.showunknown
-				}))
+				}
+
+				if (this.callback) {
+					props.callback = this.callback;
+				}
+				groupcontent.push(propeditor(props))
 			}
 
 			res.push(
@@ -97,12 +111,29 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 						groupcontent
 					)
 				)
-			)
+			);
 
 			res[res.length-1].collapsed = function(){
 				window.mydbg = 1
 			}
 		}
 		return res;
+	};
+
+	var propviewer = this.constructor;
+
+	this.constructor.examples = {
+		Usage: function () {
+			return [
+				label({height:30, width:300,
+					name:"inspectable",
+					text:"Inspect me below!",
+					fgcolor:'red',
+					bordercolor:'pink',
+					borderwidth:3}),
+				propviewer({y:40, width:300, height:700, target:"inspectable", overflow:"scroll"})
+			]
+		}
 	}
-})
+
+});
