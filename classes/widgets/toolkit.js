@@ -60,6 +60,11 @@ define.class("$ui/splitcontainer", function(require,
 			]
 		}}),
 
+		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
+		// and views can be resized and manipulated.
+		// In 'live' mode views lock into place the composition regains it's active behaviors
+		mode:Config({type:Enum('design','live'), value:'design'}),
+
 		// internal
 		selection:[],
 
@@ -151,6 +156,60 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	};
 
+	this.edgeCursor = function (ev) {
+		var resize = false;
+		if (this.testView(ev.view)) {
+			this.above = ev.view;
+
+			var pos = ev.view.globalToLocal(ev.pointer.position);
+			var edge = 5;
+
+			ev.view.cursor = 'arrow';
+
+			if (pos.x < edge && pos.y < edge) {
+				resize = "top-left";
+				ev.view.cursor = 'nwse-resize'
+
+			} else if (pos.x > ev.view.width - edge && pos.y < edge) {
+				resize = "top-right";
+				ev.view.cursor = 'nesw-resize'
+
+			} else if (pos.x < edge && pos.y > ev.view.height - edge) {
+				resize = "bottom-left";
+				ev.view.cursor = 'nesw-resize'
+
+			} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
+				resize = "bottom-right";
+				ev.view.cursor = 'nwse-resize'
+
+			} else if (pos.x < edge) {
+				resize = "left";
+				ev.view.cursor = 'ew-resize'
+
+			} else if (pos.y < edge) {
+				resize = "top";
+				ev.view.cursor = 'ns-resize'
+
+			} else if (pos.x > ev.view.width - edge) {
+				resize = "right";
+				ev.view.cursor = 'ew-resize'
+
+			} else if (pos.y > ev.view.height - edge) {
+				resize = "bottom";
+				ev.view.cursor = 'ns-resize'
+			}
+
+			if (!resize) {
+				ev.view.cursor = 'arrow';
+			}
+
+		} else {
+			ev.view.cursor = 'not-allowed';
+		}
+
+		return resize;
+	};
+
 	this.init = function () {
 		this.ensureDeps();
 
@@ -160,61 +219,18 @@ define.class("$ui/splitcontainer", function(require,
 				inspector.target = ev.view;
 				console.log('AST', ev.view.getASTNode());
 			}
+
+			var op = this.edgeCursor(ev);
+
+			if (op) {
+				console.log('do oper', op)
+			}
+
+
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
-			if (this.testView(ev.view)) {
-				this.above = ev.view;
-
-				var pos = ev.view.globalToLocal(ev.pointer.position);
-				var edge = 5;
-
-				var resize = false;
-				ev.view.cursor = 'arrow';
-
-				if (pos.x < edge && pos.y < edge) {
-					resize = "top-left";
-					ev.view.cursor = 'nw-resize'
-
-				} else if (pos.x > ev.view.width - edge && pos.y < edge) {
-					resize = "top-right";
-					ev.view.cursor = 'ne-resize'
-
-				} else if (pos.x < edge && pos.y > ev.view.height - edge) {
-					resize = "bottom-left";
-					ev.view.cursor = 'sw-resize'
-
-				} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
-					resize = "bottom-right";
-					ev.view.cursor = 'se-resize'
-
-				} else if (pos.x < edge) {
-					resize = "left";
-					ev.view.cursor = 'ew-resize'
-
-				} else if (pos.y < edge) {
-					resize = "top";
-					ev.view.cursor = 'ns-resize'
-
-				} else if (pos.x > ev.view.width - edge) {
-					resize = "right";
-					ev.view.cursor = 'ew-resize'
-
-				} else if (pos.y > ev.view.height - edge) {
-					resize = "bottom";
-					ev.view.cursor = 'ns-resize'
-				}
-
-				if (!resize) {
-					ev.view.cursor = 'arrow';
-				}
-
-
-
-
-			} else {
-				ev.view.cursor = 'not-allowed';
-			}
+			this.edgeCursor(ev)
 		}.bind(this)
 
 	};
