@@ -58,6 +58,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.setCenter = function(x,y,z, time){
+			console.log(x,y,z,time);
 			if (!time || time == 0)
 			{
 				this.centerpos = vec2(x,y)
@@ -236,9 +237,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					   london:[51.5091502,-0.1471011]
 			}
 
-			this.gotoCity("Amsterdam", 6);
+			//this.gotoCity("Amsterdam", 6);
 
-			
+			this.setCenter(33,17,6);
 			this.theinterval = this.setInterval(function(){
 				this.updateLoadQueue();
 			}.bind(this), 50);
@@ -767,7 +768,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				res3d.push(building);
 			}
 		}
-	
+
 		var dist = 2.5
 		res.push(view({flex: 1,viewport: "3d",name:"mapinside", nearplane:100*dist,farplane: 40000*dist,
 

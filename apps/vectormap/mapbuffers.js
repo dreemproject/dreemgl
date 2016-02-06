@@ -13,7 +13,7 @@ define.class(function(require, $server$, service){
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 			
 	this.ignoreuse = {}
-	this.aignoreuse = {
+	this.ignoreuse = {
 		allotments:true, 
 		apron:true, 
 		cemetery:true, 
@@ -634,6 +634,8 @@ define.class(function(require, $server$, service){
 			{
 				var B = {arcs:[], kind:"water" };
 				var Tarcs = B.arcs;
+				
+				
 				if (Bb.type == "MultiLineString"){
 					var arc = [];
 					for(var k = 0;k<Barcs.length;k++){
@@ -651,9 +653,29 @@ define.class(function(require, $server$, service){
 					Tarcs.push(arc);
 				}
 				else{
-					for(var k = 0; k < Bb.arcs.length;k++){
-						Tarcs.push(Sarcs[Bb.arcs[k]]);	
-					}					
+					if (Bb.type == "MultiPolygon"){
+						
+						for(var k = 0; k < Bb.arcs.length;k++){
+							var L  = Bb.arcs[k].length;
+							if (L == 1){
+								var sourcearc = Sarcs[Bb.arcs[k]];
+								Tarcs.push(sourcearc);	
+							}
+							else{
+								for (var m = 0;m<L;m++){
+									var sourcearc = Sarcs[Bb.arcs[k][m]];
+									Tarcs.push(sourcearc);	
+								}
+							}
+						}					
+					}
+					else{
+						if (Bb.type == "LineString"){
+							for(var k = 0; k < Bb.arcs.length;k++){
+								Tarcs.push(Sarcs[Bb.arcs[k]]);	
+							}					
+						}
+					}
 				}
 				if (Bb.type == "LineString" ){
 				// uncomment to get waterworks added as roads.
@@ -730,14 +752,19 @@ define.class(function(require, $server$, service){
 		target.waters = Wset;
 		target.earths = Eset;
 		target.landuses = Lset;
+		
+		var empty = []
 		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(target.roads);
 		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(target.buildings);
 		
 		var landmesh = this.buildAreaPolygonVertexBuffer(Eset);
 		this.buildAreaPolygonVertexBuffer(Lset, landmesh);
 		this.buildAreaPolygonVertexBuffer(Wset, landmesh);
-		target.landVertexBuffer = landmesh;
 		
+		
+		target.landVertexBuffer = landmesh;
+	//	console.log(Wset);
+//		target.landVertexBuffer = this.buildAreaPolygonVertexBuffer(Wset);
 		
 	}
 })
