@@ -1222,6 +1222,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1068" name="n1068">1068</a>
 <a href="#n1069" name="n1069">1069</a>
 <strong><a href="#n1070" name="n1070">1070</a></strong>
+<a href="#n1071" name="n1071">1071</a>
+<a href="#n1072" name="n1072">1072</a>
+<a href="#n1073" name="n1073">1073</a>
+<a href="#n1074" name="n1074">1074</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1242,17 +1246,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// forward ref of things we need on view</span>
         <span class="local-variable">this</span>.view = {
-                <span class="key">_totalmatrix</span>:mat4(), 
+                <span class="key">_totalmatrix</span>:mat4(),
                 <span class="function">textstyle</span>: <span class="keyword">function</span>(fgcolor, pos, tag){<span class="keyword">return</span> fgcolor;},
-                <span class="function">textpositionfn</span>:<span class="keyword">function</span>(pos){<span class="keyword">return</span> pos;}, 
-                <span class="key">_viewmatrix</span>:mat4(), 
-                <span class="key">_polygonoffset</span>:<span class="float">0.0</span>, 
-                <span class="key">_fgcolor</span>:vec4(), 
-                <span class="key">_outline_color</span>:vec4(), 
+                <span class="function">textpositionfn</span>:<span class="keyword">function</span>(pos){<span class="keyword">return</span> pos;},
+                <span class="key">_viewmatrix</span>:mat4(),
+                <span class="key">_polygonoffset</span>:<span class="float">0.0</span>,
+                <span class="key">_fgcolor</span>:vec4(),
+                <span class="key">_outline_color</span>:vec4(),
                 <span class="key">_outline_thickness</span>:<span class="float">0.0</span>,
                 <span class="key">_outline</span>: <span class="predefined-constant">false</span>,
-                <span class="key">_bgcolor</span>:vec4(), 
-                <span class="key">_opacity</span>:<span class="float">1.0</span>, 
+                <span class="key">_bgcolor</span>:vec4(),
+                <span class="key">_opacity</span>:<span class="float">1.0</span>,
                 <span class="key">screen</span>:{
                                 <span class="key">device</span>:{
                                         <span class="key">frame</span>:{
@@ -1457,16 +1461,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> y1 = <span class="local-variable">this</span>.array[o + <span class="integer">1</span>]
                                 <span class="keyword">var</span> fontsize = <span class="local-variable">this</span>.array[o + <span class="integer">3</span>]
                                 <span class="keyword">var</span> unicode = <span class="local-variable">this</span>.array[o + <span class="integer">6</span>]
-                                <span class="keyword">var</span> info = <span class="local-variable">this</span>.font .glyphs[unicode]
-                                <span class="keyword">var</span> add_x = x1 - fontsize * info.min_x + (unicode === <span class="integer">10</span>?<span class="integer">0</span>:info.advance * fontsize)
+                                <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[unicode]
+                                <span class="keyword">if</span>(!info) info = <span class="local-variable">this</span>.font.glyphs[<span class="integer">32</span>]
+                                <span class="keyword">var</span> add_x = x1 - fontsize * info.min_x + (unicode === <span class="integer">10</span> ? <span class="integer">0</span> : info.advance * fontsize)
                                 <span class="keyword">var</span> add_y = y1 + fontsize * info.min_x <span class="comment">//+ this.fontsize * this.line_spacing</span>
                                 <span class="keyword">if</span>(add_x &gt; text_w) text_w = add_x
                                 <span class="keyword">if</span>(add_y &gt; text_h) text_h = add_y
                         }
                         <span class="keyword">if</span>(with_cursor){
                                 <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[<span class="integer">32</span>]
-                                text_w += info.advance * <span class="local-variable">this</span>.fontsize
-                                <span class="keyword">if</span>(!text_h) text_h = <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
+                                <span class="keyword">if</span> (info) {
+                                        text_w += info.advance * <span class="local-variable">this</span>.fontsize
+                                        <span class="keyword">if</span>(!text_h) text_h = <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.line_spacing
+                                }
                         }
                         <span class="local-variable">this</span>.text_w = text_w
                         <span class="local-variable">this</span>.text_h = text_h
@@ -1493,11 +1500,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// lets add some strings</span>
                 <span class="local-variable">this</span>.<span class="function">addAtPos</span> = <span class="keyword">function</span>(string, pos, m1, m2, m3){
                         <span class="keyword">var</span> length = string.length
-                        
+
                         <span class="local-variable">this</span>.add_x = pos[<span class="integer">0</span>];
                         <span class="local-variable">this</span>.add_y = pos[<span class="integer">1</span>];
                         <span class="local-variable">this</span>.add_z = pos[<span class="integer">2</span>];
-                        
+
                         <span class="comment">// alright lets convert some text babeh!</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; length; i++){
                                 <span class="keyword">var</span> unicode = string.struct? string.array[i * <span class="integer">4</span>]: string.charCodeAt(i)
@@ -1513,7 +1520,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.add_y &gt; <span class="local-variable">this</span>.text_h) <span class="local-variable">this</span>.text_h = <span class="local-variable">this</span>.add_y
                 }
 
-                
+
                 <span class="local-variable">this</span>.__defineGetter__(<span class="string"><span class="delimiter">'</span><span class="content">char_count</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.lengthQuad()
                 })
@@ -1529,6 +1536,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                         }
                         <span class="keyword">var</span> info = <span class="local-variable">this</span>.font.glyphs[<span class="local-variable">this</span>.charCodeAt(off)]
+                        <span class="keyword">if</span>(!info) info = <span class="local-variable">this</span>.font.glyphs[<span class="integer">32</span>]
                         <span class="keyword">if</span>(isNaN(off))<span class="reserved">debugger</span>
                         <span class="keyword">var</span> coords = {
                                 <span class="key">x</span>: <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span>] - <span class="local-variable">this</span>.fontsize * info.min_x,
@@ -1671,7 +1679,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">false</span>
-        
+
         <span class="local-variable">this</span>.<span class="function">glyphy_mesh_sdf</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> glyphy_compute_position()
         }
@@ -1679,11 +1687,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">glyphy_compute_position</span> = <span class="keyword">function</span>(){
                 <span class="comment">// we want to compute a measure of scale relative to the actual pixels</span>
                 <span class="keyword">var</span> matrix = view.totalmatrix  * view.viewmatrix
-                
-                
+
+
                 <span class="keyword">var</span> finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z));
                 <span class="keyword">var</span> finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z));
-                
+
                 <span class="comment">// compute the main position and one rectgle atan fontsize for the pixelscale</span>
                 <span class="keyword">var</span> pos1 = vec4(finalpos1 , <span class="integer">1</span>) * matrix
                 <span class="keyword">var</span> pos2 = vec4(finalpos2,  <span class="integer">1</span>) * matrix
@@ -1724,7 +1732,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">outline_thickness</span>: <span class="reserved">float</span>,
                 <span class="key">outline</span>: bool
         }, <span class="string"><span class="delimiter">&quot;</span><span class="content">font_style_t</span><span class="delimiter">&quot;</span></span>)
-        
+
         <span class="local-variable">this</span>.glyphy_arc_t = define.struct({
                 <span class="key">p0</span>:vec2,
                 <span class="key">p1</span>:vec2,
@@ -2190,7 +2198,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
 
                  view.textstyle(style, pos, mesh.tag)
-                
+
                 dist -= mesh.boldness / <span class="integer">300</span>.
                 dist = dist / m * mesh.contrast
 
@@ -2275,7 +2283,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> alpha = glyphy_antialias(-dist)
                 <span class="keyword">var</span> alpha2 = glyphy_antialias(-dist2)
-                
+
                 <span class="keyword">if</span>(mesh.gamma_adjust.r != <span class="integer">1</span>.){
                 <span class="comment">//        alpha = pow(alpha, 1. / mesh.gamma_adjust.r)</span>
                 }

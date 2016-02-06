@@ -1868,6 +1868,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1714" name="n1714">1714</a>
 <a href="#n1715" name="n1715">1715</a>
 <a href="#n1716" name="n1716">1716</a>
+<a href="#n1717" name="n1717">1717</a>
+<a href="#n1718" name="n1718">1718</a>
+<a href="#n1719" name="n1719">1719</a>
+<strong><a href="#n1720" name="n1720">1720</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -3453,6 +3457,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="keyword">return</span> node;
+        };
+
+        <span class="local-variable">this</span>.<span class="function">seekASTNode</span> = <span class="keyword">function</span>(sought) {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.screen.composition.seekASTNode(sought, <span class="local-variable">this</span>.getASTNode());
         };
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">viewportblend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){

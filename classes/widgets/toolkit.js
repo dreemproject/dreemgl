@@ -7,14 +7,19 @@ define.class("$ui/splitcontainer", function(require,
 								  $ui$, view, label, icon,
 								  $widgets$, palette, propviewer){
 
+// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
+
 	this.name = "toolkit";
 	this.clearcolor = "#565656";
 	this.bgcolor = "#565656";
 	this.flexdirection = "column";
 
 	this.attributes = {
+
+		// The target for the property inspector
 		inspect:Config({type:Object}),
 
+		// Components available to be dragged into compositions.
 		components:Config({type:Object, value:{
 			Views:[
 				{
@@ -53,7 +58,32 @@ define.class("$ui/splitcontainer", function(require,
 					}
 				}
 			]
-		}})
+		}}),
+
+		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
+		// and views can be resized and manipulated.
+		// In 'live' mode views lock into place the composition regains it's active behaviors
+		mode:Config({type:Enum('design','live'), value:'design'}),
+
+		// internal
+		selection:[],
+
+		// internal
+		above:Config({type:Object})
+	};
+
+	this.addToSelection = function(obj){
+		var f = this.selection.indexOf(obj)
+		if (f == -1) this.selection.push(obj)
+		else return
+
+		if (this.selection.length > 1) return false;
+		return true;
+	};
+
+	this.removeFromSelection = function(obj){
+		var f = this.selection.indexOf(obj)
+		if(f>-1) this.selection.splice(f,1)
 	};
 
 	this.ensureDeps = function() {
@@ -124,18 +154,176 @@ define.class("$ui/splitcontainer", function(require,
 				}
 			}
 		}
+	};
 
-		this.screen.globalpointerstart = function(ev) {
-			var inspector = this.find('inspector');
-			if (inspector.target != ev.view && this.testView(ev.view)) {
-				inspector.target = ev.view
-				console.log('AST', ev.view.getASTNode());
+	this.edgeCursor = function (ev) {
+		var resize = false;
+		if (this.testView(ev.view)) {
+			this.above = ev.view;
+
+			var pos = ev.view.globalToLocal(ev.pointer.position);
+			var edge = 5;
+
+			ev.view.cursor = 'arrow';
+
+			if (pos.x < edge && pos.y < edge) {
+				resize = "top-left";
+				ev.view.cursor = 'nwse-resize'
+
+			} else if (pos.x > ev.view.width - edge && pos.y < edge) {
+				resize = "top-right";
+				ev.view.cursor = 'nesw-resize'
+
+			} else if (pos.x < edge && pos.y > ev.view.height - edge) {
+				resize = "bottom-left";
+				ev.view.cursor = 'nesw-resize'
+
+			} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
+				resize = "bottom-right";
+				ev.view.cursor = 'nwse-resize'
+
+			} else if (pos.x < edge) {
+				resize = "left";
+				ev.view.cursor = 'ew-resize'
+
+			} else if (pos.y < edge) {
+				resize = "top";
+				ev.view.cursor = 'ns-resize'
+
+			} else if (pos.x > ev.view.width - edge) {
+				resize = "right";
+				ev.view.cursor = 'ew-resize'
+
+			} else if (pos.y > ev.view.height - edge) {
+				resize = "bottom";
+				ev.view.cursor = 'ns-resize'
 			}
-		}.bind(this)
+
+			if (!resize) {
+				ev.view.cursor = 'arrow';
+			}
+
+		} else if (ev.view.tooltarget === false) {
+			ev.view.cursor = 'not-allowed';
+		}
+
+		return resize;
 	};
 
 	this.init = function () {
 		this.ensureDeps();
+
+		this.screen.globalpointerstart = function(ev) {
+			var inspector = this.find('inspector');
+			if (inspector.target != ev.view && this.testView(ev.view)) {
+				inspector.target = ev.view;
+				console.log('AST', ev.view.getASTNode());
+			}
+
+			if (this.testView(ev.view)) {
+				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+
+				this.__originalpos = {
+					x:ev.view.x,
+					y:ev.view.y
+				};
+
+				this.__originalsize = {
+					w:ev.view.width,
+					h:ev.view.height
+				};
+
+				this.__resizecorner = this.edgeCursor(ev);
+				ev.view.cursor = "move"
+			}
+
+		}.bind(this);
+
+		this.screen.globalpointermove = function(ev) {
+
+			if (this.__resizecorner) {
+				if (this.__resizecorner === "bottom-right") {
+					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+				} else if (this.__resizecorner === "bottom") {
+					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+				} else if (this.__resizecorner === "right") {
+					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+				} else if (this.__resizecorner === "top-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+				} else if (this.__resizecorner === "left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+				} else if (this.__resizecorner === "top") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+				} else if (this.__resizecorner === "bottom-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+				} else if (this.__resizecorner === "top-right") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+				}
+			} else if (this.__startpos && this.testView(ev.view)) {
+				if (ev.view.position != "absolute") {
+					ev.view.position = "absolute";
+				}
+				ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				ev.view.y = ev.pointer.position.y - this.__startpos.y;
+			}
+
+		}.bind(this);
+
+		this.screen.globalpointerend = function(ev) {
+			ev.view.cursor = 'arrow';
+			var commit = false;
+			if (this.__resizecorner) {
+				if (this.__resizecorner === "top-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+				} else if (this.__resizecorner === "top") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+				} else if (this.__resizecorner === "left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				} else if (this.__resizecorner === "bottom-left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				}
+
+				this.setASTObjectProperty(ev.view, "position", "absolute");
+				this.setASTObjectProperty(ev.view, "x", ev.view.x);
+				this.setASTObjectProperty(ev.view, "y", ev.view.y);
+				this.setASTObjectProperty(ev.view, "width", ev.view.width);
+				this.setASTObjectProperty(ev.view, "height", ev.view.height, true)
+				commit = true;
+			} else if (this.__startpos && this.testView(ev.view)) {
+
+				this.setASTObjectProperty(ev.view, "x", ev.pointer.position.x - this.__startpos.x);
+				this.setASTObjectProperty(ev.view, "y", ev.view.y, ev.pointer.position.y - this.__startpos.y)
+
+				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
+			}
+
+			if (commit) {
+				console.log('commit')
+				this.screen.composition.commitAST();
+			}
+
+
+			//TODO write changes to AST, otherwise it won't save them
+
+			this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+		}.bind(this);
+
+
+		this.screen.globalpointerhover = function(ev) {
+			this.edgeCursor(ev)
+		}.bind(this);
+
 	};
 
 	this.buildIdNode = function(id) {
@@ -234,6 +422,37 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	};
 
+	this.setASTObjectProperty = function(v, name, value) {
+		v[name] = value;
+
+		var ast = v.seekASTNode({type:"Object", index:0});
+
+		var found;
+		if (ast && ast.keys) {
+			for (var i=0;i < ast.keys.length;i++) {
+				var prop = ast.keys[i];
+				if (prop && prop.key && prop.key.name && prop.key.name === name) {
+					found = prop;
+					break;
+				}
+			}
+			if (!found) {
+				found = this.buildKeyValueNode(name, value, "init");
+				ast.keys.push(found);
+			} else {
+				found.value = this.buildValueNode(value);
+			}
+		} else {
+			ast = t.getASTNode();
+			if (ast) {
+				var args = {};
+				args[name] = value;
+				var obj = this.buildObjectNode(args, 'init');
+				ast.args.splice(0,0,obj);
+			}
+		}
+	};
+
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
 			title: Config({type:String, value:"Untitled"}),
@@ -277,11 +496,13 @@ define.class("$ui/splitcontainer", function(require,
 					flex:1,
 					bgcolor:"#4e4e4e",
 					items:this.components,
+
 					dropTest:function(ev, v, item, orig, dv) {
 						//var name = v && v.name ? v.name : "unknown";
 						//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
 						return this.testView(v);
 					}.bind(this),
+
 					drop:function(ev, v, item, orig, dv) {
 						// var name = v && v.name ? v.name : "unknown";
 						// console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
@@ -290,10 +511,14 @@ define.class("$ui/splitcontainer", function(require,
 							var node = v.getASTNode();
 
 							if (node) {
+								var params = JSON.parse(JSON.stringify(item.params));
+								params.position = 'absolute';
+								params.x = ev.position.x;
+								params.y = ev.position.y;
 
-								node.args.push(this.buildCallNode(item.classname, item.params));
+								node.args.push(this.buildCallNode(item.classname, params));
 
-								//console.log('Dropped onto node:', node);
+								console.log('Dropped onto node:', node);
 
 								this.screen.composition.commitAST();
 
@@ -315,46 +540,11 @@ define.class("$ui/splitcontainer", function(require,
 						}
 
 						if (t && editor.propertyname) {
-							//console.log('Set "', editor.propertyname, '" to "', val, '" (', typeof(val), ') on: ', t);
-							t[editor.propertyname] = val;
-
-							var ast = t.seekASTNode({type:"Object", index:0});
-
-							var found;
-							if (ast && ast.keys) {
-								for (var i=0;i < ast.keys.length;i++) {
-									var prop = ast.keys[i];
-									if (prop && prop.key && prop.key.name && prop.key.name === editor.propertyname) {
-										found = prop;
-										break;
-									}
-								}
-								if (!found) {
-									found = this.buildKeyValueNode(editor.propertyname, val, "init");
-									ast.keys.push(found);
-								} else {
-									found.value = this.buildValueNode(val);
-								}
-							} else {
-								ast = t.getASTNode();
-								if (ast) {
-									var args = {};
-									args[editor.propertyname] = value;
-									var obj = this.buildObjectNode(args, 'init');
-									ast.args.splice(0,0,obj);
-								}
-							}
-
-							// this saves it back, but don't do this until the property editor can handle
-							// the reload without resetting itself
-							//		this.screen.composition.commitAST();
-
+							this.setASTObjectProperty(t, editor.propertyname, val);
 						}
-
-
 					}.bind(this)
 				})
 			)
 		];
-	}
+	};
 });
