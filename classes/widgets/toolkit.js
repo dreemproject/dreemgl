@@ -53,7 +53,24 @@ define.class("$ui/splitcontainer", function(require,
 					}
 				}
 			]
-		}})
+		}}),
+
+		selection:[],
+		above:Config({type:Object})
+	};
+
+	this.addToSelection = function(obj){
+		var f = this.selection.indexOf(obj)
+		if (f == -1) this.selection.push(obj)
+		else return
+
+		if (this.selection.length > 1) return false;
+		return true;
+	};
+
+	this.removeFromSelection = function(obj){
+		var f = this.selection.indexOf(obj)
+		if(f>-1) this.selection.splice(f,1)
 	};
 
 	this.ensureDeps = function() {
@@ -124,18 +141,74 @@ define.class("$ui/splitcontainer", function(require,
 				}
 			}
 		}
-
-		this.screen.globalpointerstart = function(ev) {
-			var inspector = this.find('inspector');
-			if (inspector.target != ev.view && this.testView(ev.view)) {
-				inspector.target = ev.view
-				console.log('AST', ev.view.getASTNode());
-			}
-		}.bind(this)
 	};
 
 	this.init = function () {
 		this.ensureDeps();
+
+		this.screen.globalpointerstart = function(ev) {
+			var inspector = this.find('inspector');
+			if (inspector.target != ev.view && this.testView(ev.view)) {
+				inspector.target = ev.view;
+				console.log('AST', ev.view.getASTNode());
+			}
+		}.bind(this);
+
+		this.screen.globalpointerhover = function(ev) {
+			if (this.testView(ev.view)) {
+				this.above = ev.view;
+
+				var pos = ev.view.globalToLocal(ev.pointer.position);
+				var edge = 5;
+
+				var resize = false;
+				ev.view.cursor = 'arrow';
+
+				if (pos.x < edge && pos.y < edge) {
+					resize = "top-left";
+					ev.view.cursor = 'nw-resize'
+
+				} else if (pos.x > ev.view.width - edge && pos.y < edge) {
+					resize = "top-right";
+					ev.view.cursor = 'ne-resize'
+
+				} else if (pos.x < edge && pos.y > ev.view.height - edge) {
+					resize = "bottom-left";
+					ev.view.cursor = 'sw-resize'
+
+				} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
+					resize = "bottom-right";
+					ev.view.cursor = 'se-resize'
+
+				} else if (pos.x < edge) {
+					resize = "left";
+					ev.view.cursor = 'ew-resize'
+
+				} else if (pos.y < edge) {
+					resize = "top";
+					ev.view.cursor = 'ns-resize'
+
+				} else if (pos.x > ev.view.width - edge) {
+					resize = "right";
+					ev.view.cursor = 'ew-resize'
+
+				} else if (pos.y > ev.view.height - edge) {
+					resize = "bottom";
+					ev.view.cursor = 'ns-resize'
+				}
+
+				if (!resize) {
+					ev.view.cursor = 'arrow';
+				}
+
+
+
+
+			} else {
+				ev.view.cursor = 'not-allowed';
+			}
+		}.bind(this)
+
 	};
 
 	this.buildIdNode = function(id) {
@@ -277,11 +350,13 @@ define.class("$ui/splitcontainer", function(require,
 					flex:1,
 					bgcolor:"#4e4e4e",
 					items:this.components,
+
 					dropTest:function(ev, v, item, orig, dv) {
 						//var name = v && v.name ? v.name : "unknown";
 						//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
 						return this.testView(v);
 					}.bind(this),
+
 					drop:function(ev, v, item, orig, dv) {
 						// var name = v && v.name ? v.name : "unknown";
 						// console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
@@ -290,8 +365,12 @@ define.class("$ui/splitcontainer", function(require,
 							var node = v.getASTNode();
 
 							if (node) {
+								var params = JSON.parse(JSON.stringify(item.params));
+								params.position = 'absolute';
+								params.x = ev.position.x
+								params.y = ev.position.y
 
-								node.args.push(this.buildCallNode(item.classname, item.params));
+								node.args.push(this.buildCallNode(item.classname, params));
 
 								//console.log('Dropped onto node:', node);
 
