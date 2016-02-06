@@ -61,7 +61,7 @@ define.class("$ui/splitcontainer", function(require,
 		var arglist = [];
 		var plist = {};
 		var main = this.screen.composition.seekASTNode({type:"Function", index:0});
-		console.log('AST', main);
+		//console.log('AST', main);
 		if (main && main.params) {
 			for (var i=0;i<main.params.length;i++) {
 				var param = main.params[i];
@@ -344,14 +344,9 @@ define.class("$ui/splitcontainer", function(require,
 								}
 							}
 
-							if (!this.__commit) {
-								this.__commit = function() {
-									console.log('save');
-									this.screen.composition.commitAST();
-									this.__commit = undefined;
-								}.bind(this);
-								setTimeout(this.__commit, 500);
-							}
+							// this saves it back, but don't do this until the property editor can handle
+							// the reload without resetting itself
+							//		this.screen.composition.commitAST();
 
 						}
 
