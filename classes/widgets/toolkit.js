@@ -8,13 +8,146 @@ define.class("$ui/splitcontainer", function(require,
 								  $widgets$, palette, propviewer){
 
 	this.name = "toolkit";
-	this.flex = 1;
 	this.clearcolor = "#565656";
 	this.bgcolor = "#565656";
 	this.flexdirection = "column";
 
 	this.attributes = {
-		inspect:Config({type:Object})
+		inspect:Config({type:Object}),
+
+		components:Config({type:Object, value:{
+			Views:[
+				{
+					label:"View",
+					icon:"clone",
+					desc:"A rectangular view",
+					classname:"view",
+					classdir:"$ui$",
+					params:{
+						height:60,
+						width:60,
+						bgcolor:'purple'
+					}
+				},
+				{
+					label:"Text",
+					text:"Aa",
+					desc:"A text label",
+					classname:"label",
+					classdir:"$ui$",
+					params:{
+						bgcolor:'transparent',
+						fgcolor:'lightgreen',
+						text:'Howdy!'
+					}
+				},
+				{
+					label:"Image",
+					icon:"image",
+					desc:"An image or icon",
+					classname:"icon",
+					classdir:"$ui$",
+					params:{
+						fgcolor:'cornflower',
+						icon:'flask'
+					}
+				}
+			]
+		}})
+	};
+
+	this.ensureDeps = function() {
+		var at = "";
+		var arglist = [];
+		var plist = {};
+		var main = this.screen.composition.seekASTNode({type:"Function"});
+		if (main && main.params) {
+			for (var i=0;i<main.params.length;i++) {
+				var param = main.params[i];
+				if (param && param.id && param.id.name) {
+					var name = param.id.name;
+					if (name.startsWith('$') && name.endsWith('$')) {
+						at = name;
+					} else {
+						if (!plist[at]) {
+							plist[at] = [];
+						}
+						plist[at].push(name)
+					}
+					arglist.push(name);
+				}
+			}
+		}
+
+		if (this.components) {
+			var missing = {};
+			for (var key in this.components) {
+				if (this.components.hasOwnProperty(key)) {
+					var section = this.components[key];
+					for (var s=0;s<section.length;s++) {
+						var compdef = section[s];
+
+						var classname = compdef.classname;
+						var cdir = compdef.classdir || "$$";
+
+						var included = plist[cdir];
+						if (!included) {
+							included = [];
+						}
+
+						if (included.indexOf(classname) < 0) {
+							if (!missing[cdir]) {
+								missing[cdir] = []
+							}
+							missing[cdir].push(classname)
+						}
+					}
+				}
+			}
+
+			// TODO write missing values into the AST
+			for (var dir in missing) {
+				if (missing.hasOwnProperty(dir)) {
+					var position = arglist.indexOf(dir);
+					if (position < 0) {
+						position = arglist.length;
+						arglist.push(dir);
+						main.params.push(this.buildDefNode(dir));
+					}
+					var missed = missing[dir];
+					for (var m = 0; m < missed.length; m++) {
+						var item = missed[m];
+						arglist.splice(position + 1, 0, item);
+						main.params.splice(position + 1, 0, this.buildDefNode(item))
+					}
+				}
+			}
+		}
+
+		this.screen.globalpointerstart = function(ev) {
+			var inspector = this.find('inspector');
+			if (inspector.target != ev.view && this.testView(ev.view)) {
+				inspector.target = ev.view
+			}
+		}.bind(this)
+	};
+
+	this.init = function () {
+		this.ensureDeps();
+	};
+
+	this.buildIdNode = function(id) {
+		return {
+			type:"Id",
+			name:id
+		}
+	};
+
+	this.buildDefNode = function(name) {
+		return {
+			type: "Def",
+			id:this.buildIdNode(name)
+		}
 	};
 
 	this.buildValueNode = function(name, value) {
@@ -27,13 +160,12 @@ define.class("$ui/splitcontainer", function(require,
 		} else if (typeof(value) === 'number') {
 			valnode.kind = 'num';
 			valnode.raw = value.toString();
-
 		} else {
-			console.log("what is a ", typeof(value))
+			console.log("??? what is a ", typeof(value))
 		}
 
 		return {
-			key: { type: "Id", name: name },
+			key: this.buildIdNode(name),
 			value: valnode
 		};
 	};
@@ -56,7 +188,7 @@ define.class("$ui/splitcontainer", function(require,
 	this.buildCallNode = function(item) {
 		return {
 			type: "Call",
-			fn: { type:"Id", name:item.classname },
+			fn: this.buildIdNode(item.classname),
 			args: [
 				this.buildObjectNode(item)
 			]
@@ -88,6 +220,16 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	});
 
+	this.testView = function(v) {
+		var ok = true;
+		var p = v;
+		while (p && ok) {
+			ok = p !== this && p.tooltarget !== false;
+			p = p.parent;
+		}
+		return ok;
+	};
+
 	this.render = function() {
 		return [
 			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", viewport:"2D", flex:1},
@@ -95,49 +237,11 @@ define.class("$ui/splitcontainer", function(require,
 					name:"components",
 					flex:1,
 					bgcolor:"#4e4e4e",
-					items:{
-						Views:[
-							{label:"View",  icon:"clone", desc:"A rectangular view",
-								classname:"view",
-								params:{
-									height:150,
-									width:150,
-									bgcolor:'purple'
-								}
-							},
-							{label:"Text",  text:"Aa",    desc:"A text label",
-								classname:"label",
-								params:{
-									bgcolor:'transparent',
-									fgcolor:'lightgreen',
-									text:'Howdy!'
-								}
-							},
-							{label:"Image", icon:"image", desc:"An image or icon",
-								classname:"icon",
-								params:{
-									height:50,
-									width:50,
-									fgcolor:'cornflower',
-									icon:'flask'
-								}
-							}
-						]
-					},
+					items:this.components,
 					dropTest:function(ev, v, item, orig, dv) {
-						var name = v && v.name ? v.name : "unknown";
+						//var name = v && v.name ? v.name : "unknown";
 						//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
-
-                        var target = this;
-
-						var dropok = true;
-						var p = v;
-						while (p && dropok) {
-							dropok = p !== target && p.designtarget !== false;
-							p = p.parent;
-						}
-
-						return dropok;
+						return this.testView(v);
 					}.bind(this),
 					drop:function(ev, v, item, orig, dv) {
 						// var name = v && v.name ? v.name : "unknown";

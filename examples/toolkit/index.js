@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require, $ui$, screen, view, icon, label, splitcontainer, cadgrid, $widgets$, toolkit) {
+define.class("$server/composition",function(require, $ui$, screen, splitcontainer, cadgrid, $widgets$, toolkit) {
 
 	this.render = function() {
 		return [
@@ -13,10 +13,7 @@ define.class("$server/composition",function(require, $ui$, screen, view, icon, l
 							majorevery:5,
 							majorline:"#575757",
 							minorline:"#484848"
-						},
-						view({x:30, y:40, size:[100,100], bgcolor:'lightred'},icon({icon:'flask'})),
-						view({x:300, y:40, size:[200,200], bgcolor:'lightgreen'},view({x:10, y:10, size:[100,100], bgcolor:'orange'},view({width:50, height:50, bgcolor:'purple', designtarget:false}))),
-						view({x:200, y:150, size:[100,100], bgcolor:'lightblue'},label({text:'hello', bgcolor:NaN, fgcolor:'brown'}))
+						}
 					),
 					toolkit({inspect:"grid"})
 				)

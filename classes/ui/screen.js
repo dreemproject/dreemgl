@@ -214,6 +214,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointerstart` event from `pointer.view` and computes the cursor.
 		this.pointer.start = function(e){
 			if (e.pointer) {
+				this.emit('globalpointerstart', e);
+
 				e.view.emitUpward('pointerstart', e.pointer)
 				e.view.computeCursor()
 				if (!e.pointer.touch) {
@@ -234,6 +236,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointermove` event from `pointer.view`.
 		this.pointer.move = function(e){
 			if (e.pointer) {
+				this.emit('globalpointermove', e);
+
 				e.view.emitUpward('pointermove', e.pointer)
 				if (!e.pointer.touch && e.pointer.button == 2){
 					this.device.keyboard.pointerMove(e.pointer.position)
@@ -247,6 +251,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointerend` event `pointer.view` and computes the cursor.
 		this.pointer.end = function(e){
 			if (e.pointer) {
+				this.emit('globalpointerend', e);
+
 				e.view.emitUpward('pointerend', e.pointer)
 				e.view.computeCursor()
 				if (!e.pointer.touch) {
@@ -262,6 +268,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointertap` event from `pointer.view`.
 		this.pointer.tap = function(e){
 			if (e.pointer) {
+				this.emit('globalpointertap', e);
+
 				e.view.emitUpward('pointertap', e.pointer)
 			}
 		}.bind(this)
@@ -270,6 +278,8 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointerhover` event `pointer.view` and computes the cursor.
 		this.pointer.hover = function(e){
 			if (e.pointer) {
+				this.emit('globalpointerhover', e);
+
 				e.view.emitUpward('pointerhover', e.pointer)
 				e.view.computeCursor()
 			}
@@ -279,6 +289,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointerover` event from `pointer.view`.
 		this.pointer.over = function(e){
 			if (e.pointer) {
+				this.emit('globalpointerover', e);
 				e.view.emitUpward('pointerover', e.pointer)
 			}
 		}.bind(this)
@@ -287,6 +298,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointerout` event from `pointer.view`.
 		this.pointer.out = function(e){
 			if (e.pointer) {
+				this.emit('globalpointerout', e);
 				e.view.emitUpward('pointerout', e.pointer)
 			}
 		}.bind(this)
@@ -295,6 +307,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 		// Emits `pointerwheel` event from `pointer.view`.
 		this.pointer.wheel = function(e){
 			if (e.pointer) {
+				this.emit('globalpointerwheel', e);
 				e.view.emitUpward('pointerwheel', e.pointer)
 			}
 		}.bind(this)

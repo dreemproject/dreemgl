@@ -1851,6 +1851,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1697" name="n1697">1697</a>
 <a href="#n1698" name="n1698">1698</a>
 <a href="#n1699" name="n1699">1699</a>
+<strong><a href="#n1700" name="n1700">1700</a></strong>
+<a href="#n1701" name="n1701">1701</a>
+<a href="#n1702" name="n1702">1702</a>
+<a href="#n1703" name="n1703">1703</a>
+<a href="#n1704" name="n1704">1704</a>
+<a href="#n1705" name="n1705">1705</a>
+<a href="#n1706" name="n1706">1706</a>
+<a href="#n1707" name="n1707">1707</a>
+<a href="#n1708" name="n1708">1708</a>
+<a href="#n1709" name="n1709">1709</a>
+<strong><a href="#n1710" name="n1710">1710</a></strong>
+<a href="#n1711" name="n1711">1711</a>
+<a href="#n1712" name="n1712">1712</a>
+<a href="#n1713" name="n1713">1713</a>
+<a href="#n1714" name="n1714">1714</a>
+<a href="#n1715" name="n1715">1715</a>
+<a href="#n1716" name="n1716">1716</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -3419,6 +3436,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="keyword">return</span> path;
+        };
+
+        <span class="local-variable">this</span>.<span class="function">getASTNode</span> = <span class="keyword">function</span>() {
+                <span class="keyword">var</span> path = <span class="local-variable">this</span>.buildASTPath();
+                path = path.filter(<span class="keyword">function</span>(a){ <span class="keyword">return</span> a.constructor_index != -<span class="integer">1</span>});
+                <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen.composition.ast;
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;path.length;i++) {
+                        <span class="keyword">var</span> pathitem = path[i];
+                        <span class="keyword">var</span> search = {
+                                <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">name</span>:pathitem.type,
+                                <span class="key">index</span>:pathitem.childindex
+                        };
+                        node = <span class="local-variable">this</span>.screen.composition.seekASTNode(search, node);
+                }
+
+                <span class="keyword">return</span> node;
         };
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">viewportblend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){

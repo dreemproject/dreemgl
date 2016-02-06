@@ -195,7 +195,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			iconfontsize: 40,
 			hovercolor:'white',
 			hover:false,
-			pointerover:function() {
+			pointerhover:function() {
 				this.hover = true;
 			},
 			pointerout:function() {
