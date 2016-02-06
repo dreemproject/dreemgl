@@ -164,6 +164,7 @@ define.class("$ui/splitcontainer", function(require,
 				valnode.kind = 'string';
 			} else if (typeof(value) === 'number') {
 				valnode.kind = 'num';
+			} else if (typeof(value) === 'boolean') {
 			} else if (value && value.length) {
 				return this.buildCallNode("vec" + value.length, value)
 			} else {
@@ -175,7 +176,7 @@ define.class("$ui/splitcontainer", function(require,
 		if (typeof(value) === 'string') {
 			valnode.raw = "'" + value + "'";
 			valnode.multi = false;
-		} else if (typeof(value) === 'number') {
+		} else if (value.toString) {
 			valnode.raw = value.toString();
 		}
 
