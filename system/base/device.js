@@ -23,8 +23,8 @@ define.class(function(){
 	// some list of layers
 
 	// layer has list of draweable shader instances + ref to mesh
-		// - calculateable z-index
-		// - 3d mode needs to sort
+	// - calculateable z-index
+	// - 3d mode needs to sort
 
 
 });

@@ -9,7 +9,8 @@
 // 2 means array of nodes
 // 3 is the slightly off object declaration
 
-define({
+define(function(require, exports, module){
+	module.exports = {
 	Program:{ steps:2 },
 	Empty:{},
 
@@ -80,4 +81,4 @@ define({
 
 	Debugger: { },
 	With: { object:1, body:1 }
-})
+}})
