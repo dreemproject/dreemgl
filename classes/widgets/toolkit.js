@@ -222,6 +222,11 @@ define.class("$ui/splitcontainer", function(require,
 
 			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
+			this.__originalsize = {
+				w:ev.view.width,
+				h:ev.view.height
+			};
+
 			this.__resizecorner = this.edgeCursor(ev);
 			ev.view.cursor = "move"
 
@@ -230,7 +235,25 @@ define.class("$ui/splitcontainer", function(require,
 		this.screen.globalpointermove = function(ev) {
 
 			if (this.__resizecorner) {
-				console.log('resise', ev, this.__resizecorner);
+				if (this.__resizecorner === "bottom-right") {
+					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+				} else if (this.__resizecorner === "bottom") {
+					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+				} else if (this.__resizecorner === "right") {
+					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+				} else if (this.__resizecorner === "top-left") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+				} else if (this.__resizecorner === "top") {
+					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+				} else if (this.__resizecorner === "left") {
+					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+				}
 
 			} else if (this.testView(ev.view)) {
 				if (ev.view.position != "absolute") {
@@ -243,8 +266,17 @@ define.class("$ui/splitcontainer", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
-			ev.view.cursor = 'arrow';
+			if (this.__resizecorner) {
+
+			} else {
+				ev.view.x = ev.pointer.position.x - this.__startpos.x;
+				ev.view.y = ev.pointer.position.y - this.__startpos.y;
+				ev.view.cursor = 'arrow';
+			}
+
 			//TODO write changes to AST, otherwise it won't save them
+
+			this.__startpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
 
