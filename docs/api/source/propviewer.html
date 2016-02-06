@@ -283,6 +283,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
 <a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -299,7 +307,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">target</span>:Config({<span class="key">type</span>:Object, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
 
                 <span class="comment">// Shows properties for unknown property types</span>
-                <span class="key">showunknown</span>:Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>})
+                <span class="key">showunknown</span>:Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
+
+                <span class="comment">// internal, Callback used by the property editor to actually set properties.</span>
+                <span class="key">callback</span>:Config({<span class="key">type</span>:Function})
         };
 
         <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>;
@@ -359,14 +370,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> key = keys[i];
                                 <span class="keyword">var</span> thevalue = c[<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+key];
                                 <span class="keyword">var</span> attr = c._attributes[key];
-                                groupcontent.push(propeditor({
+                                <span class="keyword">var</span> props = {
                                         <span class="key">target</span>:<span class="local-variable">this</span>.target,
                                         <span class="key">value</span>:thevalue,
                                         <span class="key">property</span>:attr,
                                         <span class="key">propertyname</span>: key,
                                         <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
                                         <span class="key">showunknown</span>:<span class="local-variable">this</span>.showunknown
-                                }))
+                                }
+
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.callback) {
+                                        props.callback = <span class="local-variable">this</span>.callback;
+                                }
+                                groupcontent.push(propeditor(props))
                         }
 
                         res.push(

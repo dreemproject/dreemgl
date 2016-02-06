@@ -7,14 +7,19 @@ define.class("$ui/splitcontainer", function(require,
 								  $ui$, view, label, icon,
 								  $widgets$, palette, propviewer){
 
+// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
+
 	this.name = "toolkit";
 	this.clearcolor = "#565656";
 	this.bgcolor = "#565656";
 	this.flexdirection = "column";
 
 	this.attributes = {
+
+		// The target for the property inspector
 		inspect:Config({type:Object}),
 
+		// Components available to be dragged into compositions.
 		components:Config({type:Object, value:{
 			Views:[
 				{
@@ -55,7 +60,10 @@ define.class("$ui/splitcontainer", function(require,
 			]
 		}}),
 
+		// internal
 		selection:[],
+
+		// internal
 		above:Config({type:Object})
 	};
 

@@ -930,6 +930,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n776" name="n776">776</a>
 <a href="#n777" name="n777">777</a>
 <a href="#n778" name="n778">778</a>
+<a href="#n779" name="n779">779</a>
+<strong><a href="#n780" name="n780">780</a></strong>
+<a href="#n781" name="n781">781</a>
+<a href="#n782" name="n782">782</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,<span class="predefined">$ui$</span>, view,label, labelset, <span class="predefined">$$</span>, geo, urlfetch)
 {
@@ -991,6 +995,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
 
                 <span class="local-variable">this</span>.<span class="function">setCenter</span> = <span class="keyword">function</span>(x,y,z, time){
+                        console.log(x,y,z,time);
                         <span class="keyword">if</span> (!time || time == <span class="integer">0</span>)
                         {
                                 <span class="local-variable">this</span>.centerpos = vec2(x,y)
@@ -1169,9 +1174,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                            <span class="key">london</span>:[<span class="float">51.5091502</span>,-<span class="float">0.1471011</span>]
                         }
 
-                        <span class="local-variable">this</span>.gotoCity(<span class="string"><span class="delimiter">&quot;</span><span class="content">Amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="integer">6</span>);
+                        <span class="comment">//this.gotoCity(&quot;Amsterdam&quot;, 6);</span>
 
-                        
+                        <span class="local-variable">this</span>.setCenter(<span class="integer">31</span>,<span class="integer">18</span>,<span class="integer">6</span>);
                         <span class="local-variable">this</span>.theinterval = <span class="local-variable">this</span>.setInterval(<span class="keyword">function</span>(){
                                 <span class="local-variable">this</span>.updateLoadQueue();
                         }.bind(<span class="local-variable">this</span>), <span class="integer">50</span>);
@@ -1381,6 +1386,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         <span class="local-variable">this</span>.frameswaited++;
                                         <span class="keyword">if</span> (<span class="local-variable">this</span>.queued == <span class="integer">0</span>){
                                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.shaders.hardrect &amp;&amp; <span class="local-variable">this</span>.shaders.hardrect.update) <span class="local-variable">this</span>.shaders.hardrect.update();
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.resetbuffer) <span class="local-variable">this</span>.resetbuffer();
                                                 md.addToQueue(<span class="local-variable">this</span>.lastpos[<span class="integer">0</span>], <span class="local-variable">this</span>.lastpos[<span class="integer">1</span>], <span class="local-variable">this</span>.lastpos[<span class="integer">2</span>]);
                                                 <span class="local-variable">this</span>.queued  = <span class="integer">1</span>;
                                         }
@@ -1457,9 +1463,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="local-variable">this</span>.shaders.hardrect.mesh = tile.landVertexBuffer;
                 }
 
-
-
-
                 <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
 
                         <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
@@ -1468,7 +1471,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 pos = vec2(<span class="integer">1</span>,-<span class="integer">1</span>)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
                                 respos = vec4(pos.x, <span class="integer">0</span>, pos.y, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix ;
                                 respos.w -= mesh.pos.z*<span class="float">0.01</span>;
-
                                 <span class="keyword">return</span> respos;
                         }
 
@@ -1491,6 +1493,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         <span class="local-variable">this</span>.drawtype = <span class="local-variable">this</span>.TRIANGLES
 
+                        <span class="local-variable">this</span>.depth_test = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+
                         <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                                 <span class="comment">//return &quot;blue&quot;;</span>
                                 <span class="keyword">var</span> col =  vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#202050</span><span class="delimiter">&quot;</span></span>);
@@ -1500,11 +1504,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">var</span> zdist = max(<span class="integer">0</span>.,min(<span class="integer">1</span>.,(respos.z-view.fogstart)/view.fogend));
                                 zdist *= zdist;
                                 <span class="keyword">return</span> mix(prefog, view.fog, zdist);
-
-
                         }
                 }
-
         });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">labeltile</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/labelset</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(){
@@ -1518,9 +1519,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         rpos = vec2(<span class="integer">1</span>,-<span class="integer">1</span>)*pos.xz + (idxpos - <span class="local-variable">this</span>.tiletrans)* <span class="local-variable">this</span>.tilesize;
                         <span class="keyword">return</span> vec3(rpos.x, <span class="integer">0</span>, rpos.y+pos.y);
                 }
-                
+                <span class="local-variable">this</span>.<span class="function">resetbuffer</span> = <span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.labels = [];
+                }
                 <span class="local-variable">this</span>.<span class="function">loadBufferFromTile</span> = <span class="keyword">function</span>(tile) {                        
                         <span class="keyword">var</span> LabelSource = tile.Labels;
+                        
+                        <span class="keyword">if</span> (!LabelSource){
+                                <span class="local-variable">this</span>.labels = [];
+                                <span class="keyword">return</span>;
+                        }
                         <span class="keyword">var</span> thelabels = [];
                         <span class="keyword">var</span> rankfontsizes = {
                                 <span class="integer">0</span>:<span class="integer">40</span>, 
@@ -1692,7 +1700,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 res3d.push(building);
                         }
                 }
-        
+
                 <span class="keyword">var</span> dist = <span class="float">2.5</span>
                 res.push(view({<span class="key">flex</span>: <span class="integer">1</span>,<span class="key">viewport</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>, <span class="key">nearplane</span>:<span class="integer">100</span>*dist,<span class="key">farplane</span>: <span class="integer">40000</span>*dist,
 

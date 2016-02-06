@@ -7,7 +7,7 @@ a DreemGL component.
 
 Add `$widgets$toolkit` to any composition screen to bring up the visual toolkit for that screen.
 
-    define.class("$server/composition", function ($ui$, screen, cadgrid, $widgets$, toolkit) {
+    define.class("$server/composition", function ($ui$, screen, view, label, icon, cadgrid, $widgets$, toolkit) {
         this.render = function() {
           return screen({flexdirection:'row'},
             cadgrid({
