@@ -448,6 +448,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					this.frameswaited++;
 					if (this.queued == 0){
 						if (this.shaders.hardrect && this.shaders.hardrect.update) this.shaders.hardrect.update();
+						if (this.resetbuffer) this.resetbuffer();
 						md.addToQueue(this.lastpos[0], this.lastpos[1], this.lastpos[2]);
 						this.queued  = 1;
 					}
@@ -585,9 +586,16 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			rpos = vec2(1,-1)*pos.xz + (idxpos - this.tiletrans)* this.tilesize;
 			return vec3(rpos.x, 0, rpos.y+pos.y);
 		}
-		
+		this.resetbuffer = function(){
+			this.labels = [];
+		}
 		this.loadBufferFromTile = function(tile) {			
 			var LabelSource = tile.Labels;
+			
+			if (!LabelSource){
+				this.labels = [];
+				return;
+			}
 			var thelabels = [];
 			var rankfontsizes = {
 				0:40, 
