@@ -527,21 +527,30 @@ define.class("$ui/splitcontainer", function(require,
 					}.bind(this)
 				})
 			),
-			this.panel({title:"Properties", viewport:"2D", flex:2.5, visible:!!(this.inspect)},
+			this.panel({title:"Properties", viewport:"2D", flex:2.5},
 				propviewer({
 					name:"inspector",
 					target:this.inspect,
 					flex:1,
 					overflow:"scroll",
-					callback:function(val, editor) {
-						var t = editor.target;
-						if (typeof(t) === 'string') {
-							t = editor.find(t);
+					callback:function(val, editor, commit) {
+						if (commit) {
+							this.screen.composition.commitAST();
+						} else {
+							var t = editor.target;
+							if (typeof(t) === 'string') {
+								t = editor.find(t);
+							}
+
+							if (t && editor.propertyname) {
+								this.setASTObjectProperty(t, editor.propertyname, val);
+								if (editor.property.meta !== 'color') {
+									this.screen.composition.commitAST();
+								}
+							}
 						}
 
-						if (t && editor.propertyname) {
-							this.setASTObjectProperty(t, editor.propertyname, val);
-						}
+
 					}.bind(this)
 				})
 			)

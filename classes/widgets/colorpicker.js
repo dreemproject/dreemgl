@@ -324,7 +324,6 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, nu
 
 		this.pointermove = function(event){
 			var a = this.globalToLocal(event.position)
-			console.log(a, event.position)
 			this.updatehue(a);
 			this.redraw();
 		}

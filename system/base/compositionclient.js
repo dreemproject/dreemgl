@@ -44,6 +44,7 @@ define.class('./compositionbase', function(require, baseclass){
 	});
 
 	this.commitAST = function () {
+		console.log("[COMMIT]");
 		var msg = {
 			rpcid: 'this',
 			method: 'commit',

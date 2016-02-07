@@ -93,7 +93,8 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				}, view({class:'color_view'},
 					colorpicker({
 						value:this.value,
-						valuechange:function(val){this.callback(val, this);}.bind(this)
+						valuechange:function(val){this.callback(val, this);}.bind(this),
+						pointerend:function(ev) {this.callback(null, null, true);}.bind(this)
 					})));
 
 			} else {
