@@ -525,7 +525,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.loadBufferFromTile = function(tile){
 			this.shaders.hardrect.mesh = tile.landVertexBuffer;
 		}
-
+		this.pickalpha  = 0.1
 		this.hardrect = function(){
 
 			this.position = function(){
