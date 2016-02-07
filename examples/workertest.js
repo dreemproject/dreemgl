@@ -19,11 +19,9 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 	this.render = function(){ return [
 		screen({clearcolor:'#484230', flexdirection:'row'},
 			view({
-				init:function(){
-					var myworker = worker()
-					myworker.method().then(function(result){
-						console.log(result.value)
-					})
+				init:function(prev){
+					// create workers, use previous
+					this.workers = prev && prev.workers || worker()
 					//myworker.method('hi').then(function(){
 					//})
 				}

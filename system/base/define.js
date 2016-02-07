@@ -597,7 +597,8 @@
 		return output
 	}
 
-	define.worker = function(input){
+	define.workers = function(input, count){
+		if(!count) count = 1
 		var source = 'self.define = {packaged:true,$platform:"webgl"};(' + define_module.toString() + ')();\n'
 		source += '(' + define.module[define.expandVariables('$system/base/math.js')].factory.toString() + ')();\n'
 		for(var key in define.paths){
@@ -606,9 +607,14 @@
 		source += input
 		var blob = new Blob([source], { type: "text/javascript" })
 		var worker_url = URL.createObjectURL(blob)
-		var worker = new Worker(worker_url)
-		worker.source = source
-		return worker
+		var workers = []
+		for(var i = 0; i < count; i ++){
+			var worker = new Worker(worker_url)
+			worker.source = source
+			worker.stack = 0
+			workers.push(worker)
+		}
+		return workers
 	}
 
 	define.mixin = function(body, body2){

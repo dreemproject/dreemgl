@@ -10,6 +10,9 @@ define.class('$system/base/worker', function(require, exports){
 	this._resolveReturn = rpchub.resolveReturn
 
 	this._atConstructor = function(cores){
+		if(!cores) cores = define.cputhreads
+		if(cores < 1) cores = 1
+
 		// lets serialize our module system into a worker
 		var out = {}
 		function collectDeps(deps){
@@ -52,15 +55,16 @@ define.class('$system/base/worker', function(require, exports){
 		code += _worker_return.toString() + ';\n'
 
 		function workermsg(event){
+			console.log(event.data)
 			var msg = event.data
 			var ret = _worker[msg.name].apply(_worker, msg.args);
 			if(ret && ret.then) ret.then(function(value){
-				_worker_return(value, msg.uid)
+				_worker_return(value, msg.uid, msg.workerid)
 			})
-			else _worker_return(ret, msg.uid)
+			else _worker_return(ret, msg.uid, msg.workerid)
 		}
 
-		function _worker_return(ret, uid){
+		function _worker_return(ret, uid, workerid){
 			// fix the typed object handling
 			var transfer
 			if(ret && (typeof ret === 'object' || Array.isArray(ret))){
@@ -80,32 +84,44 @@ define.class('$system/base/worker', function(require, exports){
 					}
 				}
 			}
-			self.postMessage({value:ret, uid:uid}, transfer)
+			self.postMessage({value:ret, uid:uid, workerid:workerid}, transfer)
 		}
 
 		code += 'self.onmessage = ' + workermsg.toString() + '\n'
 
-		this._worker = define.worker(code)
-
-		this._worker.onmessage = function(event){
+		var onmessage = function(event){
 			// lets plug the struct arrays
+			var workerid = event.data.workerid
+			this._workers[workerid].stack --
 			this._resolveReturn(event.data)
 		}.bind(this)
+
+		this._workers = define.workers(code, cores)
+		for(var i = 0; i < this._workers.length; i++){
+			this._workers[i].onmessage = onmessage
+		}
 
 		// lets make the interface
 		for(var key in this){
 			var prop = this[key]
 			if(typeof prop === 'function' && key[0] !== '_'){
 				this[key] = function(key){
-					// alright so. what do we do
-					var msg = {type:'call', name:key, args:[]}
+					// alright lets pick the lowest-queue worker from the set
+					var min = Infinity, tgtid = 0
+					for(var i = 0; i < this._workers.length; i++){
+						var stack = this._workers[i].stack
+						if(stack < min) min = stack, tgtid = i
+					}
+					var msg = {type:'call', name:key, args:[], workerid:tgtid}
 					for(var i = 1; i < arguments.length; i++){
 						msg.args[i - 1] = arguments[i]
 						//!TODO add typed array transfer feature
 					}
+
 					var prom = this._allocPromise()
 					msg.uid = prom.uid
-					this._worker.postMessage(msg)
+					this._workers[tgtid].stack++
+					this._workers[tgtid].postMessage(msg)
 					return prom
 				}.bind(this,key)
 			}
