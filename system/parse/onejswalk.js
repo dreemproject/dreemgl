@@ -5,14 +5,15 @@
 // self generating onejs walker utility class, run with nodejs to regenerate
 
 if(typeof process !== 'undefined' && require.main === module){
-	var require = require('../../define')
+	var require = require('../base/define')
 	var defs = require('./onejsdef.js')
+	var fs = require('fs')
 	// read self
 	var head = fs.readFileSync(module.filename).toString().match(/^[\S\s]*\/\/ generated/)[0]
 	// the template for the generated bottom part
 	var template = function(){
-		define.class(function(require, exports, self){
-			self.walk = function(node, parent, state){
+		define.class(function(){
+			this.walk = function(node, parent, state){
 				if(!node) return
 				var fn = this[node.type]
 				if(!fn) throw new Error("Cannot find type " + node.type)
@@ -24,7 +25,7 @@ if(typeof process !== 'undefined' && require.main === module){
 
 	var out = '\n'	
 	for(var key in defs){
-		out += '	self.' + key + ' = function(node, parent, state){\n'
+		out += '	this.' + key + ' = function(node, parent, state){\n'
 		var def = defs[key]
 		for(var sub in def){
 			var type = def[sub]
@@ -39,197 +40,197 @@ if(typeof process !== 'undefined' && require.main === module){
 }
 
 // generated
-define.class(function(require, exports, self){
-	self.walk = function(node, parent, state){
+define.class(function(){
+	this.walk = function(node, parent, state){
 		if(!node) return
 		var fn = this[node.type]
 		if(!fn) throw new Error("Cannot find type " + node.type)
 		fn.call(this, node, parent, state)
 	}
 	
-	self.Program = function(node, parent, state){
+	this.Program = function(node, parent, state){
 		var arr = node.steps
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Empty = function(node, parent, state){
+	this.Empty = function(node, parent, state){
 	}
 
-	self.Id = function(node, parent, state){
+	this.Id = function(node, parent, state){
 		this.walk(node.typing, node, state)
 	}
 
-	self.Value = function(node, parent, state){
+	this.Value = function(node, parent, state){
 	}
 
-	self.This = function(node, parent, state){
+	this.This = function(node, parent, state){
 	}
 
-	self.Array = function(node, parent, state){
+	this.Array = function(node, parent, state){
 		var arr = node.elems
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Object = function(node, parent, state){
+	this.Object = function(node, parent, state){
 		var arr = node.keys
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i].value, node, state)
 	}
 
-	self.Index = function(node, parent, state){
+	this.Index = function(node, parent, state){
 		this.walk(node.object, node, state)
 		this.walk(node.index, node, state)
 	}
 
-	self.Key = function(node, parent, state){
+	this.Key = function(node, parent, state){
 		this.walk(node.object, node, state)
 		this.walk(node.key, node, state)
 	}
 
-	self.ThisCall = function(node, parent, state){
+	this.ThisCall = function(node, parent, state){
 		this.walk(node.object, node, state)
 		this.walk(node.key, node, state)
 	}
 
-	self.Block = function(node, parent, state){
+	this.Block = function(node, parent, state){
 		var arr = node.steps
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.List = function(node, parent, state){
+	this.List = function(node, parent, state){
 		var arr = node.items
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Comprehension = function(node, parent, state){
+	this.Comprehension = function(node, parent, state){
 		this.walk(node.for, node, state)
 		this.walk(node.expr, node, state)
 	}
 
-	self.Template = function(node, parent, state){
+	this.Template = function(node, parent, state){
 		var arr = node.chain
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Break = function(node, parent, state){
+	this.Break = function(node, parent, state){
 		this.walk(node.label, node, state)
 	}
 
-	self.Continue = function(node, parent, state){
+	this.Continue = function(node, parent, state){
 		this.walk(node.label, node, state)
 	}
 
-	self.Label = function(node, parent, state){
+	this.Label = function(node, parent, state){
 		this.walk(node.label, node, state)
 		this.walk(node.body, node, state)
 	}
 
-	self.If = function(node, parent, state){
+	this.If = function(node, parent, state){
 		this.walk(node.test, node, state)
 		this.walk(node.then, node, state)
 		this.walk(node.else, node, state)
 	}
 
-	self.Switch = function(node, parent, state){
+	this.Switch = function(node, parent, state){
 		this.walk(node.on, node, state)
 		var arr = node.cases
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Case = function(node, parent, state){
+	this.Case = function(node, parent, state){
 		this.walk(node.test, node, state)
 		var arr = node.steps
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Throw = function(node, parent, state){
+	this.Throw = function(node, parent, state){
 		this.walk(node.arg, node, state)
 	}
 
-	self.Try = function(node, parent, state){
+	this.Try = function(node, parent, state){
 		this.walk(node.try, node, state)
 		this.walk(node.arg, node, state)
 		this.walk(node.catch, node, state)
 		this.walk(node.finally, node, state)
 	}
 
-	self.While = function(node, parent, state){
+	this.While = function(node, parent, state){
 		this.walk(node.test, node, state)
 		this.walk(node.loop, node, state)
 	}
 
-	self.DoWhile = function(node, parent, state){
+	this.DoWhile = function(node, parent, state){
 		this.walk(node.loop, node, state)
 		this.walk(node.test, node, state)
 	}
 
-	self.For = function(node, parent, state){
+	this.For = function(node, parent, state){
 		this.walk(node.init, node, state)
 		this.walk(node.test, node, state)
 		this.walk(node.update, node, state)
 		this.walk(node.loop, node, state)
 	}
 
-	self.ForIn = function(node, parent, state){
+	this.ForIn = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 		this.walk(node.loop, node, state)
 	}
 
-	self.ForOf = function(node, parent, state){
+	this.ForOf = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 		this.walk(node.loop, node, state)
 	}
 
-	self.ForFrom = function(node, parent, state){
+	this.ForFrom = function(node, parent, state){
 		this.walk(node.right, node, state)
 		this.walk(node.left, node, state)
 		this.walk(node.loop, node, state)
 	}
 
-	self.ForTo = function(node, parent, state){
+	this.ForTo = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 		this.walk(node.loop, node, state)
 		this.walk(node.in, node, state)
 	}
 
-	self.Var = function(node, parent, state){
+	this.Var = function(node, parent, state){
 		var arr = node.defs
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.TypeVar = function(node, parent, state){
+	this.TypeVar = function(node, parent, state){
 		this.walk(node.typing, node, state)
 		var arr = node.defs
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 		this.walk(node.dim, node, state)
 	}
 
-	self.Struct = function(node, parent, state){
+	this.Struct = function(node, parent, state){
 		this.walk(node.id, node, state)
 		this.walk(node.struct, node, state)
 		this.walk(node.base, node, state)
 	}
 
-	self.Define = function(node, parent, state){
+	this.Define = function(node, parent, state){
 		this.walk(node.id, node, state)
 		this.walk(node.value, node, state)
 	}
 
-	self.Enum = function(node, parent, state){
+	this.Enum = function(node, parent, state){
 		this.walk(node.id, node, state)
 		var arr = node.enums
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Def = function(node, parent, state){
+	this.Def = function(node, parent, state){
 		this.walk(node.id, node, state)
 		this.walk(node.init, node, state)
 		this.walk(node.dim, node, state)
 	}
 
-	self.Function = function(node, parent, state){
+	this.Function = function(node, parent, state){
 		this.walk(node.id, node, state)
 		this.walk(node.name, node, state)
 		var arr = node.params
@@ -238,97 +239,97 @@ define.class(function(require, exports, self){
 		this.walk(node.body, node, state)
 	}
 
-	self.Return = function(node, parent, state){
+	this.Return = function(node, parent, state){
 		this.walk(node.arg, node, state)
 	}
 
-	self.Yield = function(node, parent, state){
+	this.Yield = function(node, parent, state){
 		this.walk(node.arg, node, state)
 	}
 
-	self.Await = function(node, parent, state){
+	this.Await = function(node, parent, state){
 		this.walk(node.arg, node, state)
 	}
 
-	self.Unary = function(node, parent, state){
+	this.Unary = function(node, parent, state){
 		this.walk(node.arg, node, state)
 	}
 
-	self.Binary = function(node, parent, state){
+	this.Binary = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 	}
 
-	self.Logic = function(node, parent, state){
+	this.Logic = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 	}
 
-	self.Assign = function(node, parent, state){
+	this.Assign = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 	}
 
-	self.Update = function(node, parent, state){
+	this.Update = function(node, parent, state){
 		this.walk(node.arg, node, state)
 	}
 
-	self.Condition = function(node, parent, state){
+	this.Condition = function(node, parent, state){
 		this.walk(node.test, node, state)
 		this.walk(node.then, node, state)
 		this.walk(node.else, node, state)
 	}
 
-	self.New = function(node, parent, state){
+	this.New = function(node, parent, state){
 		this.walk(node.fn, node, state)
 		var arr = node.args
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Call = function(node, parent, state){
+	this.Call = function(node, parent, state){
 		this.walk(node.fn, node, state)
 		var arr = node.args
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state)
 	}
 
-	self.Nest = function(node, parent, state){
+	this.Nest = function(node, parent, state){
 		this.walk(node.fn, node, state)
 		this.walk(node.body, node, state)
 	}
 
-	self.Class = function(node, parent, state){
+	this.Class = function(node, parent, state){
 		this.walk(node.id, node, state)
 		this.walk(node.base, node, state)
 		this.walk(node.body, node, state)
 	}
 
-	self.Signal = function(node, parent, state){
+	this.Signal = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.right, node, state)
 	}
 
-	self.Quote = function(node, parent, state){
+	this.Quote = function(node, parent, state){
 		this.walk(node.quote, node, state)
 	}
 
-	self.AssignQuote = function(node, parent, state){
+	this.AssignQuote = function(node, parent, state){
 		this.walk(node.left, node, state)
 		this.walk(node.quote, node, state)
 	}
 
-	self.Rest = function(node, parent, state){
+	this.Rest = function(node, parent, state){
 		this.walk(node.id, node, state)
 	}
 
-	self.Then = function(node, parent, state){
+	this.Then = function(node, parent, state){
 		this.walk(node.name, node, state)
 		this.walk(node.do, node, state)
 	}
 
-	self.Debugger = function(node, parent, state){
+	this.Debugger = function(node, parent, state){
 	}
 
-	self.With = function(node, parent, state){
+	this.With = function(node, parent, state){
 		this.walk(node.object, node, state)
 		this.walk(node.body, node, state)
 	}
