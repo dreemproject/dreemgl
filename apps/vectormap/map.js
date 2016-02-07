@@ -165,7 +165,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 						
 						this.loadedblocks[r.hash] = result.value
 						this.loadqueuehash[r.hash] = undefined;
-				
+						this.parent.updateTiles();
 					}.bind(this))
 					
 				this.currentRequest = undefined;
@@ -275,13 +275,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 	this.atDraw = function(){
 		this.updateTiles();
-		this.setTimeout(this.updateTiles, 10);
+		//this.setTimeout(this.updateTiles, 10);
 	}
 
 	this.init = function(){
 		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
 
-		this.setTimeout(this.updateTiles, 10);
+		//this.setTimeout(this.updateTiles, 10);
 	}
 
 	function UnProject(glx, gly, glz, modelview, projection){
@@ -355,7 +355,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.startDrag = function(ev){
 		var R = this.projectonplane( this.globalToLocal(ev.position));
 		if (R){
-			this.startvect = vec2(R[0]/BufferGen.TileSize,R[2]/BufferGen.TileSize)
+			this.startvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8))
 			this.startcenter = vec2(this.centerx, this.centery);
 		}
 	}
@@ -363,7 +363,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var R = this.projectonplane( this.globalToLocal(ev.position));
 		if (R){
 			
-			this.newvect = vec2(R[0]/BufferGen.TileSize,R[2]/BufferGen.TileSize)
+			this.newvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8) )
 			
 			this.find("mapdata").setCenter( this.startvect[0] - this.newvect[0] + this.startcenter[0],
 			 this.startvect[1] - this.newvect[1] + this.startcenter[1], this.zoomlevel);
@@ -753,7 +753,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var rt = this.tilestoupdate[a];
 				//rt.trans = vec2(Math.sin(this.time)*5, 0);
 				rt.setpos(floorvec[rt.layeroffset], this.zoomlevel + rt.layeroffset, frac[rt.layeroffset]);
-				rt.redraw();
+			//	rt.redraw();
 		}
 	}
 
