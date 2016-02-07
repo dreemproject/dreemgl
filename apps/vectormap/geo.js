@@ -75,6 +75,13 @@ define.class(function(require, $server$, service){
 			z: zoom
 		};
 	};
+	this.tileForMetersFrac = function (x, y, zoom) {
+		return {
+			x: ((x + this.half_circumference_meters) / (this.circumference_meters / Math.pow(2, zoom))),
+			y: ((-y + this.half_circumference_meters) / (this.circumference_meters / Math.pow(2, zoom))),
+			z: zoom
+		};
+	};
 
 	// Wrap a tile to positive #s for zoom
 	// Optionally specify the axes to wrap

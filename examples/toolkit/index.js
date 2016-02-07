@@ -17,14 +17,15 @@ define.class("$server/composition",function(require, $ui$, icon, label, view, sc
 							alignself:'stretch', 
 							flexdirection:'column', 
 							justifycontent:'center', 
-							x:0, 
-							y:0
+							x:159.99998474121094, 
+							y:240
 						},
-						view({height:309, width:343, bgcolor:vec4(0,0.501960813999176,0.03174766153097153,1), position:'absolute', x:78.00003051757812, y:94.99983215332031}),
-						view({height:287, width:278, bgcolor:vec4(0,0.501960813999176,0.3736295700073242,1), position:'absolute', x:750.0001220703125, y:50}),
-						icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:788.0000305175781, y:394}),
+						view({height:309, width:343, bgcolor:vec4(1,1,1,1), position:'absolute', x:452, y:267.9999694824219, dropshadowopacity:0.43, dropshadowradius:20.01, dropshadowoffset:vec2(23,3), dropshadowhardness:0.69, dropshadowcolor:vec4(0,0,0,1)}),
+						view({height:195, width:247, bgcolor:vec4(0,0.501960813999176,0.3736295700073242,1), position:'absolute', x:113.00015258789062, y:311}),
+						icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:762, y:150.99996948242188}),
 						view({height:196, width:147, bgcolor:'purple', position:'absolute', x:1061, y:300}),
-						view({height:354, width:275, bgcolor:vec4(0.9113264083862305,0.14734770357608795,0.9113264083862305,1), position:'absolute', x:452.00006103515625, y:214.99993896484375})
+						view({height:354, width:275, bgcolor:vec4(0.9113264083862305,0.14734770357608795,0.9113264083862305,1), position:'absolute', x:137.00013732910156, y:596.9998779296875}),
+						view({height:60, width:60, bgcolor:'purple', position:'absolute', x:373.00006103515625, y:146})
 					),
 					toolkit({inspect:"grid"})
 				)
