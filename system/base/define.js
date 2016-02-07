@@ -323,28 +323,60 @@
 
 	define.require = define.localRequire('','root')
 
-	define.findRequiresInFactory = function(factory){
+	define.findRequiresInFactory = function(factory, req){
 		var search = factory.toString()
 		
 		if(factory.body) search += '\n' + factory.body.toString()
 		if(factory.depstring) search += '\n' + factory.depstring.toString()		
 
-		var req = []
+		req = req || []
 		// bail out if we redefine require
 		if(search.match(/function\s+require/) || search.match(/var\s+require/)){
 			return req
 		}
 
 		search.replace(/\/\*[\s\S]*?\*\//g,'').replace(/([^:]|^)\/\/[^\n]*/g,'$1').replace(/require\s*\(\s*["']([^"']+)["']\s*\)/g, function(m,path){
+			
 			req.push(path)
 		})
 
-		// also scan for define.class
+		// fetch string baseclasses for nested classes and add them
+		var baserx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:['"]([^"']+)['"]\s*,\s*)function/g)
+
+		while((result = baserx.exec(search)) !== null) {
+			req.push(result[1])
+		}
 
 
 		return req
 	}
 
+
+	define.buildClassArgs = function(fn){
+		// Ideally these regexps are better, not vastly slower but maybe proper specwise matching for stuff, its a bit rough now
+		// This is otherwise known as a 'really bad idea'. However this makes the modules work easily, with a relatively small collision risk.		
+		var str = fn.toString()
+
+		str = str.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
+		
+		var result;
+		var output = []
+		var result = str.match(/function\s*[$_\w]*\s*\(([$_\w,\s]*)\)/)
+
+		var map = result[1].split(/\s*,\s*/)
+		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].toLowerCase().trim())
+
+		// now fetch all the fast classdeps
+		var matchrx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:(?:['"][[^"']+['"]|[$_\w]+)\s*,\s*)?function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
+
+		while((result = matchrx.exec(str)) !== null) {
+			output.push('$$')
+			var map = result[1].split(/\s*,\s*/)
+			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i].toLowerCase())
+		}
+
+		return output
+	}
 
 
 
@@ -437,6 +469,7 @@
 				else if(builtin === 6) args[i] = body.outer
 			}
 			else{
+
 				args[i] = require(path)
 				args[i].nested_module = Constructor.module
 			}
@@ -564,38 +597,6 @@
 		return Constructor
 	}
 
-	define.buildClassArgs = function(fn){
-		// Ideally these regexps are better, not vastly slower but maybe proper specwise matching for stuff, its a bit rough now
-		// This is otherwise known as a 'really bad idea'. However this makes the modules work easily, with a relatively small collision risk.		
-		var str = fn.toString()
-
-		str = str.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
-		
-		var result;
-		var output = []
-		var result = str.match(/function\s*[$_\w]*\s*\(([$_\w,\s]*)\)/)
-
-		var map = result[1].split(/\s*,\s*/)
-		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].toLowerCase().trim())
-
-		// fetch string baseclasses for nested classes and add them
-		var baserx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:['"]([^"']+)['"]\s*,\s*)function/g)
-
-		while((result = baserx.exec(str)) !== null) {
-			output.push(result[1])
-		}
-
-		// now fetch all the fast classdeps
-		var matchrx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:(?:['"][[^"']+['"]|[$_\w]+)\s*,\s*)?function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
-
-		while((result = matchrx.exec(str)) !== null) {
-			output.push('$$')
-			var map = result[1].split(/\s*,\s*/)
-			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i].toLowerCase())
-		}
-
-		return output
-	}
 
 	define.workers = function(input, count){
 		if(!count) count = 1
@@ -700,12 +701,14 @@
 		// lets parse the named argument pattern for the body
 		moduleFactory.body = body
 		moduleFactory.deps = []
+
 		// put the baseclass on the deps
 		if(base_class && typeof base_class === 'string'){
 			moduleFactory.baseclass = define.expandVariables(base_class)
 			moduleFactory.deps.push(define.expandVariables(base_class))
 			moduleFactory.depstring = 'require("' + base_class + '")'
 		}
+
 		// add automatic requires
 		if(body.classargs){
 			define.walkClassArgs(body.classargs, function(builtin, requirepath){

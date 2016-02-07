@@ -15,16 +15,30 @@ define.class('$system/base/worker', function(require, exports){
 
 		// lets serialize our module system into a worker
 		var out = {}
+
+		function collectBodyDeps(body){
+			var intreq = define.findRequiresInFactory(body)
+			for(var j = 0 ; j < intreq.length; j++){
+				intreq[j] = define.expandVariables(intreq[j])
+			}
+			if(intreq.length) collectDeps(intreq)
+		}
+
 		function collectDeps(deps){
 			if(!deps) return
 			for(var i = 0; i < deps.length; i++){
 				var dep = deps[i]
 				if(out[dep]) continue
-				var module = define.module[dep] || define.module[dep+'.js']
+				var module = define.module[dep]
+				if(!module) module = define.module[dep+'.js'], dep += '.js'
 				if(!module || !module.factory || typeof module.factory !== 'function') continue
-				
+
 				// alright so lets recur on deps
 				out[dep] = 1
+
+				if(module.factory.body){
+					collectBodyDeps(module.factory.body)
+				}
 				collectDeps(module.factory.deps)
 
 				// and now add our module
@@ -39,7 +53,9 @@ define.class('$system/base/worker', function(require, exports){
 				}
 			}
 		}
+		
 		collectDeps(this.constructor.module.factory.deps)
+		collectBodyDeps(this.constructor.module.factory.body)
 
 		var code = 'var _myworker = '+this.constructor.body.toString()+';\n'
 		for(var key in out){

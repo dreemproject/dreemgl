@@ -6,7 +6,8 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $ui$, screen, view){
 
-	var worker = define.class('$system/rpc/worker', function(){
+	var worker = define.class('$system/rpc/worker', function(require){
+		var mapbuffers = require('$apps/vectormap/mapbuffers')
 		this.method = function(arg){
 			var ret = vec2.array(10)
 			return {
@@ -22,8 +23,8 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 				init:function(prev){
 					// create workers, use previous
 					this.workers = prev && prev.workers || worker()
-					//myworker.method('hi').then(function(){
-					//})
+					this.workers.method('hi').then(function(){
+					})
 				}
 			})
 		)
