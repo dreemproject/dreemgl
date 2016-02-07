@@ -137,6 +137,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			fgcolor:this.fgcolor,
 			multiline:false,
 			bgcolor:NaN,
+			onfocus: function(ev,v,o) { if (!v) { this.focus = v; } }.bind(this),
 			onvalue:function(ev,v,o) {
 				var txval = parseFloat(o.value);
 				if (!isNaN(txval)) {
@@ -145,7 +146,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 					}
 				}
 			}.bind(this)
-		}));
+	}));
 		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
 		return res;
 

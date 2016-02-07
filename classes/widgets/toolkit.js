@@ -574,16 +574,13 @@ define.class("$ui/splitcontainer", function(require,
 					flex:1,
 					overflow:"scroll",
 					callback:function(val, editor, commit) {
-						if (!commit) {
+						if (editor && editor.target && editor.propertyname) {
 							var t = editor.target;
 							if (typeof(t) === 'string') {
 								t = editor.find(t);
 							}
 
-							if (t && editor.propertyname) {
-								if (editor.property.meta !== 'color' && t[editor.propertyname] != val) {
-									commit = true;
-								}
+							if (t) {
 								this.setASTObjectProperty(t, editor.propertyname, val);
 							}
 						}

@@ -72,7 +72,13 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
 			if (this.title) res.push(label({font: require('$resources/fonts/opensans_bold_ascii.glf'),marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bgcolor:NaN }));
-			var res2 = [view({bgcolor:NaN},res), icon({fontsize:this.outer.fontsize,alignself:"flex-end", icon:this.collapsed? "chevron-right":"chevron-down", fgcolor:vec4.contrastcolor(this.outer.basecolor) })]
+			var res2 = [view({bgcolor:NaN},res), icon({
+				marginright:7,
+				fontsize:this.outer.fontsize,
+				alignself:"flex-end",
+				icon:this.collapsed? "chevron-right":"chevron-down",
+				fgcolor:vec4.contrastcolor(this.outer.basecolor)
+			})]
 			return res2;
 		}
 
@@ -155,7 +161,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 				bgcolor: this.basecolor,
 				borderwidth: this.borderwidth,
 				bordercolor:this.bordercolor,
-
+				paddingright:10
 			},
 			this.constructor_children)
 			res.push(this.container)
