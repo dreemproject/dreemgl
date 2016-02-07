@@ -562,24 +562,31 @@ define.class("$ui/view", function(require,
 		this.padding = 0;
 		this.margin = 4;
 		this.borderradius =  vec4(10,10,1,1);
-		this.bgcolor = vec4("red");
+		this.bgcolor = NaN;
 		this.flex = 1;
 		this.flexdirection ="column";
+		this.alignitems = "stretch";
 
 		this.render = function(){
 			return [
-				view({bgcolor:"#585858",borderradius:0, bordercolor:"transparent" , borderwidth:0, margin:0, padding:vec4(0)},
-					view({margin:vec4(1,1,2,0),bgcolor:"#4e4e4e", borderwidth:0,borderradius:vec4(10,10,1,.1),padding:vec4(10,2,10,2)},
-						label({font: require('$resources/fonts/opensans_bold_ascii.glf'),margin:3, text:this.title, bgcolor:NaN, fontsize:this.fontsize, fgcolor: "white" })
-					)
-				),
+				label({
+					alignself:'flex-start',
+					fgcolor:"white",
+					text:this.title,
+					fontsize:this.fontsize,
+					margin:0,
+					padding:vec4(10,8,0,0),
+					bgcolor:"#4e4e4e",
+					borderwidth:0,
+					borderradius:vec4(10,10,0,0)
+				}),
 				this.constructor_children
 			];
 		}
 	});
 
 	this.testView = function(v) {
-		var ok = true;
+		var ok = v != this.screen;
 		var p = v;
 		while (p && ok) {
 			ok = p !== this && p.tooltarget !== false;
@@ -595,8 +602,26 @@ define.class("$ui/view", function(require,
 				text:"DreemGL Visual Toolkit",
 				padding:5,
 				paddingleft:10,
-				//alignitems:"center",
-				bgcolor:"transparent"}),
+				bgcolor:"white",
+				hardrect:{pickonly:true},
+				pointerstart:function(p) {
+					console.log('drag me start', p)
+					this.__grabpos = p.view.globalToLocal(p.position);
+				},
+				pointermove:function(p) {
+					if (this.parent.position === "absolute") {
+						console.log('drag me ', p, this.__grabpos, this.parent);
+						this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+					}
+				},
+				pointerend:function(p) {
+					if (this.parent.position === "absolute") {
+						console.log('drag me end', p, this.__grabpos)
+						this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+					}
+					this.__grabpos = undefined;
+				}
+			}),
 			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1},
 				palette({
 					name:"components",

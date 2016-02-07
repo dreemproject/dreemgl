@@ -44,7 +44,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	this.borderwidth = 0;
 	this.flexdirection= "column";
 	this.margin = 0;
-	this.clearcolor = vec4("#303030");
+	this.clearcolor = "#4e4e4e";
 	this.padding = 0;
 	this.bgcolor = NaN;
 
@@ -116,7 +116,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			res.push(
 				foldcontainer({
 						collapsed: true,
-						basecolor:"#4e4e4e",
+						basecolor:this.clearcolor,
 						autogradient: false,
 						icon:undefined,
 						title: this.uppercaseFirst(group),
