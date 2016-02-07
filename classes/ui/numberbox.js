@@ -18,7 +18,10 @@ define.class(function(require,$ui$, view, textbox, label, button){
 		decimals: Config({type:int, value:0}),
 		// Font size in device-pixels.
 		fontsize: Config({type: float, value: 14, meta:"fontsize" }),
-		title: Config({type:String, value:""})
+		title: Config({type:String, value:""}),
+
+		//internal
+		textfocus:Config({type:boolean})
 	}
 
 	this.tabstop = 0;
@@ -137,7 +140,9 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			fgcolor:this.fgcolor,
 			multiline:false,
 			bgcolor:NaN,
-			onfocus: function(ev,v,o) { if (!v) { this.focus = v; } }.bind(this),
+			onfocus: function(ev,v,o) {
+				this.textfocus = v;
+			}.bind(this),
 			onvalue:function(ev,v,o) {
 				var txval = parseFloat(o.value);
 				if (!isNaN(txval)) {

@@ -139,7 +139,6 @@ define.class("$ui/splitcontainer", function(require,
 				}
 			}
 
-			// TODO write missing values into the AST
 			for (var dir in missing) {
 				if (missing.hasOwnProperty(dir)) {
 					var position = arglist.indexOf(dir);
@@ -350,7 +349,7 @@ define.class("$ui/splitcontainer", function(require,
 			}
 
 			var pos = ev.view.globalToLocal(ev.pointer.position)
-			text = text + " " + pos.x.toFixed(0) + ", " + pos.y.toFixed(0);
+			text = text + " @ " + pos.x.toFixed(0) + ", " + pos.y.toFixed(0);
 			text = text + " <" + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0) + ">";
 
 			this.find("current").text = text;
