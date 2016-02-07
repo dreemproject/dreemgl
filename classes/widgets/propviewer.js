@@ -21,16 +21,19 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		// internal
 		astarget:Config({type:String, persist:true}),
 		onastarget:function(ev,v,o) {
-			var astpath = JSON.parse(v);
-			// console.log('path', astpath);
 			var node = this.screen;
-			for (var i=1;i<astpath.length;i++) {
-				var pathitem = astpath[i];
-				var child = node.children[pathitem.childindex];
-				if (pathitem.type == child.constructor.name) {
-					node = child;
-				} else {
-					break;
+
+			if (v) {
+				var astpath = JSON.parse(v);
+				// console.log('path', astpath);
+				for (var i=1;i<astpath.length;i++) {
+					var pathitem = astpath[i];
+					var child = node.children[pathitem.childindex];
+					if (pathitem.type == child.constructor.name) {
+						node = child;
+					} else {
+						break;
+					}
 				}
 			}
 
@@ -41,7 +44,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	this.borderwidth = 0;
 	this.flexdirection= "column";
 	this.margin = 0;
-	this.clearcolor = vec4("#303030");
+	this.clearcolor = "#4e4e4e";
 	this.padding = 0;
 	this.bgcolor = NaN;
 
@@ -113,7 +116,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			res.push(
 				foldcontainer({
 						collapsed: true,
-						basecolor:"#4e4e4e",
+						basecolor:this.clearcolor,
 						autogradient: false,
 						icon:undefined,
 						title: this.uppercaseFirst(group),
