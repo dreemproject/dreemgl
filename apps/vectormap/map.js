@@ -127,6 +127,29 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
+		
+		var worker = define.class('$system/rpc/worker', function(require){
+			this.BufferGen = require("$apps/vectormap/mapbuffers")();
+
+			this.build = function(str, r){
+				var ret = vec2.array(10)
+				
+				try{
+					console.log("trying to load!");
+					var thedata = JSON.parse(str);
+					this.BufferGen.build(r, thedata);
+				console.log("loaded!");
+					
+				}
+				catch(e){
+					console.log(e);
+					console.log(" while loading ", r.x, r.y, r.z);
+				}
+				return r;
+			}
+		})
+		
+	
 
 		this.loadstring = function(str){
 		//	if (!window.teller) window.teller = 0;
@@ -136,25 +159,20 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 				var r = this.currentRequest;
 				var hash = createHash(r.x, r.y, r.z);
+				r.hash = hash;
 
+					this.workers.build(str, r).then(function(result){
+						
+						this.loadedblocks[r.hash] = result.value
+						this.loadqueuehash[r.hash] = undefined;
+				
+					}.bind(this))
+					
 				this.currentRequest = undefined;
 				this.cleanLoadedBlocks();
 				this.updateLoadQueue();
 
-				try{
-					var thedata = JSON.parse(str);
-					BufferGen.build(r, thedata);
-					//BufferGen.buildempty(r, thedata);
-
-
-				}
-				catch(e){
-					console.log(e);
-					console.log(" while loading ", r.x, r.y, r.z);
-				}
-
-				this.loadedblocks[hash] = r
-				this.loadqueuehash[hash] = undefined;
+				
 			}
 		}
 
@@ -221,8 +239,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 		}
 
-		this.init = function(){
-
+		this.init = function(prev){
+			this.workers = prev && prev.workers || worker()
 			this.cities = {
 				manhattan: [40.7072121, -74.0067985],
 				amsterdam: [52.3608307,   4.8626387],
@@ -564,7 +582,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.color = function(){
 				//return "blue";
-				var col =  vec4(0,0,0.1,0.2);
+				var col =  vec4(0,0,0.6,1.0);
 
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
