@@ -298,8 +298,13 @@ define.class("$ui/splitcontainer", function(require,
 				this.setASTObjectProperty(ev.view, "x", ev.view.x);
 				this.setASTObjectProperty(ev.view, "y", ev.view.y);
 				this.setASTObjectProperty(ev.view, "width", ev.view.width);
-				this.setASTObjectProperty(ev.view, "height", ev.view.height, true)
-				commit = true;
+				this.setASTObjectProperty(ev.view, "height", ev.view.height)
+
+				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5)
+					|| (Math.abs(ev.view.y - this.__originalpos.y) > 0.5)
+					|| (Math.abs(ev.view.width - this.__originalsize.w) > 0.5)
+					|| (Math.abs(ev.view.height - this.__originalsize.h) > 0.5);
+
 			} else if (this.__startpos && this.testView(ev.view)) {
 
 				this.setASTObjectProperty(ev.view, "x", ev.pointer.position.x - this.__startpos.x);
@@ -309,12 +314,10 @@ define.class("$ui/splitcontainer", function(require,
 			}
 
 			if (commit) {
-				console.log('commit')
 				this.screen.composition.commitAST();
 			}
 
 
-			//TODO write changes to AST, otherwise it won't save them
 
 			this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);

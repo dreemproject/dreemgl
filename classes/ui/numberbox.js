@@ -136,7 +136,15 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			fontsize:this.fontsize,
 			fgcolor:this.fgcolor,
 			multiline:false,
-			bgcolor:NaN
+			bgcolor:NaN,
+			onvalue:function(ev,v,o) {
+				var txval = parseFloat(o.value);
+				if (!isNaN(txval)) {
+					if (Math.abs(this.value - txval) >= 0.01) {
+						this.value = txval;
+					}
+				}
+			}.bind(this)
 		}));
 		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
 		return res;
