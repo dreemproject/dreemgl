@@ -598,14 +598,14 @@
 	}
 
 
-	define.workers = function(input, count){
+	define.workers = function(head, tail, count){
 		if(!count) count = 1
-		var source = 'self.define = {packaged:true,$platform:"webgl"};(' + define_module.toString() + ')();\n'
+		var source = head + '\n\n\n;// Worker includes \nself.define = {packaged:true,$platform:"webgl"};(' + define_module.toString() + ')();\n'
 		source += '(' + define.module[define.expandVariables('$system/base/math.js')].factory.toString() + ')();\n'
 		for(var key in define.paths){
 			source += 'define.$'+key + ' = "'+define['$'+key]+'";\n'
 		}
-		source += input
+		source += tail
 		var blob = new Blob([source], { type: "text/javascript" })
 		var worker_url = URL.createObjectURL(blob)
 		var workers = []

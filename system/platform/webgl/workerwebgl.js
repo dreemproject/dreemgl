@@ -57,18 +57,19 @@ define.class('$system/base/worker', function(require, exports){
 		collectDeps(this.constructor.module.factory.deps)
 		collectBodyDeps(this.constructor.module.factory.body)
 
-		var code = 'var _myworker = '+this.constructor.body.toString()+';\n'
+		var head = 'var _myworker = '+this.constructor.body.toString()+';\n'
+		var tail = ''
 		for(var key in out){
 			//console.log(key)
-			code += out[key]
+			tail += out[key]
 		}
-		code += 'define.packagedClass("/myworker.js",["$system/base/worker",_myworker]);\n'
+		tail += 'define.packagedClass("/myworker.js",["$system/base/worker",_myworker]);\n'
 		// lets start with requiring /myworker
 
-		code += 'var _worker = define.require(\'/myworker\')();\n'
+		tail += 'var _worker = define.require(\'/myworker\')();\n'
 		
-		code += _worker_return.toString() + ';\n'
-		code += _worker_return.toString() + ';\n'
+		tail += _worker_return.toString() + ';\n'
+		tail += _worker_return.toString() + ';\n'
 
 		function workermsg(event){
 			var msg = event.data
@@ -102,7 +103,7 @@ define.class('$system/base/worker', function(require, exports){
 			self.postMessage({value:ret, uid:uid, workerid:workerid}, transfer)
 		}
 
-		code += 'self.onmessage = ' + workermsg.toString() + '\n'
+		tail += 'self.onmessage = ' + workermsg.toString() + '\n'
 
 		var onmessage = function(event){
 			// lets plug the struct arrays
@@ -111,7 +112,7 @@ define.class('$system/base/worker', function(require, exports){
 			this._resolveReturn(event.data)
 		}.bind(this)
 
-		this._workers = define.workers(code, cores)
+		this._workers = define.workers(head, tail, cores)
 		for(var i = 0; i < this._workers.length; i++){
 			this._workers[i].onmessage = onmessage
 		}

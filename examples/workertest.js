@@ -8,6 +8,9 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 
 	var worker = define.class('$system/rpc/worker', function(require){
 		var mapbuffers = require('$apps/vectormap/mapbuffers')
+		this.atConstructor = function(){
+			console.log("Starting worker!!")
+		}
 		this.method = function(arg){
 			var ret = vec2.array(10)
 			return {
