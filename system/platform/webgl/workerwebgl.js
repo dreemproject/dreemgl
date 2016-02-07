@@ -55,7 +55,6 @@ define.class('$system/base/worker', function(require, exports){
 		code += _worker_return.toString() + ';\n'
 
 		function workermsg(event){
-			console.log(event.data)
 			var msg = event.data
 			var ret = _worker[msg.name].apply(_worker, msg.args);
 			if(ret && ret.then) ret.then(function(value){
