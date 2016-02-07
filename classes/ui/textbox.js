@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function(require, $ui$, label){
+define.class("$ui/label", function(require){
 // Text input field
 
 	this.mixin(require('$system/textbox/textboximpl'))
@@ -90,6 +90,11 @@ define.class(function(require, $ui$, label){
 
 	this.textChanged = function(){
 		var string = this.textbuf.serializeText(0, this.textbuf.lengthQuad())
+		if (!this.multiline && (string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0)) {
+			string = string.replace(/(\r\n|\n|\r)/gm,"");
+			this.textbuf.removeText(0, this.textbuf.lengthQuad());
+			this.textbuf.insertText(0, string);
+		}
 		this.value = Mark(string)
 		this.relayout()
 	}

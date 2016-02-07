@@ -1548,7 +1548,7 @@ define.class('$system/base/node', function(require){
 		this.parent.redraw()
 	}
 
-	this.buildASTPath = function() {
+	this.getASTPath = function() {
 		var local = {
 			type:this.constructor.name
 		};
@@ -1558,8 +1558,8 @@ define.class('$system/base/node', function(require){
 			local.childindex = this.parent.children.indexOf(this);
 			local.constructor_index = this.parent.constructor_children.indexOf(this);
 
-			if (this.parent.buildASTPath) {
-				path = this.parent.buildASTPath();
+			if (this.parent.getASTPath) {
+				path = this.parent.getASTPath();
 				path.push(local);
 			}
 		}
@@ -1568,7 +1568,7 @@ define.class('$system/base/node', function(require){
 	};
 
 	this.getASTNode = function() {
-		var path = this.buildASTPath();
+		var path = this.getASTPath();
 		path = path.filter(function(a){ return a.constructor_index != -1});
 		var node = this.screen.composition.ast;
 		for (var i=0;i<path.length;i++) {

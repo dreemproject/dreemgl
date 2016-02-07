@@ -16,7 +16,29 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		showunknown:Config({type:boolean, value:false}),
 
 		// internal, Callback used by the property editor to actually set properties.
-		callback:Config({type:Function})
+		callback:Config({type:Function}),
+
+		// internal
+		astarget:Config({type:String, persist:true}),
+		onastarget:function(ev,v,o) {
+			var astpath = JSON.parse(v);
+//			console.log('path', astpath);
+			if (astpath && astpath.length && astpath[0].type === "screen") {
+				astpath.shift();
+			}
+//			astpath = astpath.filter(function(a){ return a.constructor_index != -1});
+			var node = this.screen;
+			for (var i=0;i<astpath.length;i++) {
+				var pathitem = astpath[i];
+
+				node = node.children[pathitem.childindex];
+			}
+
+			this.target = node;
+
+		}
+
+
 	};
 
 	this.borderwidth = 0;

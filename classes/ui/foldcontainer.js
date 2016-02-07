@@ -118,7 +118,6 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.pointerout = this.statedefault
 		this.pointerstart = function(ev){
 			this.stateclick()
-			console.log(ev)
 		}
 		this.pointerend = this.statedefault
 	})

@@ -41,6 +41,7 @@ define.class("$ui/splitcontainer", function(require,
 					classname:"label",
 					classdir:"$ui$",
 					params:{
+						fontsize:24,
 						bgcolor:'transparent',
 						fgcolor:'lightgreen',
 						text:'Howdy!'
@@ -69,7 +70,9 @@ define.class("$ui/splitcontainer", function(require,
 		selection:[],
 
 		// internal
-		above:Config({type:Object})
+		above:Config({type:Object}),
+
+		reticlesize: 7
 	};
 
 	this.addToSelection = function(obj){
@@ -162,7 +165,7 @@ define.class("$ui/splitcontainer", function(require,
 			this.above = ev.view;
 
 			var pos = ev.view.globalToLocal(ev.pointer.position);
-			var edge = 5;
+			var edge = this.reticlesize;
 
 			ev.view.cursor = 'arrow';
 
@@ -216,8 +219,9 @@ define.class("$ui/splitcontainer", function(require,
 		this.screen.globalpointerstart = function(ev) {
 			var inspector = this.find('inspector');
 			if (inspector.target != ev.view && this.testView(ev.view)) {
-				inspector.target = ev.view;
-				console.log('AST', ev.view.getASTNode());
+				var target = ev.view;
+				inspector.astarget = JSON.stringify(target.getASTPath());
+				//console.log('AST', ev.view.getASTNode());
 			}
 
 			if (this.testView(ev.view)) {
@@ -269,17 +273,24 @@ define.class("$ui/splitcontainer", function(require,
 					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
 					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
 				}
-			} else if (this.__startpos && this.testView(ev.view)) {
-				if (ev.view.position != "absolute") {
-					ev.view.position = "absolute";
+			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+
+				var pos = ev.pointer.position;
+				if (ev.view.parent) {
+					if (ev.view.position != "absolute") {
+						ev.view.position = "absolute";
+					}
+					pos = ev.view.parent.globalToLocal(ev.pointer.position)
 				}
-				ev.view.x = ev.pointer.position.x - this.__startpos.x;
-				ev.view.y = ev.pointer.position.y - this.__startpos.y;
+
+				ev.view.x = pos.x - this.__startpos.x;
+				ev.view.y = pos.y - this.__startpos.y;
 			}
 
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
+
 			ev.view.cursor = 'arrow';
 			var commit = false;
 			if (this.__resizecorner) {
@@ -298,29 +309,52 @@ define.class("$ui/splitcontainer", function(require,
 				this.setASTObjectProperty(ev.view, "x", ev.view.x);
 				this.setASTObjectProperty(ev.view, "y", ev.view.y);
 				this.setASTObjectProperty(ev.view, "width", ev.view.width);
-				this.setASTObjectProperty(ev.view, "height", ev.view.height, true)
-				commit = true;
+				this.setASTObjectProperty(ev.view, "height", ev.view.height);
+
+				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5)
+					|| (Math.abs(ev.view.y - this.__originalpos.y) > 0.5)
+					|| (Math.abs(ev.view.width - this.__originalsize.w) > 0.5)
+					|| (Math.abs(ev.view.height - this.__originalsize.h) > 0.5);
+
 			} else if (this.__startpos && this.testView(ev.view)) {
 
-				this.setASTObjectProperty(ev.view, "x", ev.pointer.position.x - this.__startpos.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y, ev.pointer.position.y - this.__startpos.y)
+				var pos = ev.pointer.position;
+				if (ev.view.parent) {
+					if (ev.view.position != "absolute") {
+						ev.view.position = "absolute";
+					}
+					pos = ev.view.parent.globalToLocal(ev.pointer.position)
+				}
+
+				this.setASTObjectProperty(ev.view, "x", pos.x - this.__startpos.x);
+				this.setASTObjectProperty(ev.view, "y", ev.view.y, pos.y - this.__startpos.y)
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
 			}
 
 			if (commit) {
-				console.log('commit')
 				this.screen.composition.commitAST();
 			}
-
-
-			//TODO write changes to AST, otherwise it won't save them
 
 			this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
-
 		this.screen.globalpointerhover = function(ev) {
+			//if (!this.__hoverview || this.__hoverview != ev.view) {
+			//	this.__hoverview = ev.view;
+			//}
+
+			var text = ev.view.constructor.name;
+			if (ev.view.name) {
+				text = ev.view.name + " (" + text + ")"
+			}
+
+			var pos = ev.view.globalToLocal(ev.pointer.position)
+			text = text + " " + pos.x.toFixed(0) + ", " + pos.y.toFixed(0);
+			text = text + " <" + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0) + ">";
+
+			this.find("current").text = text;
+
 			this.edgeCursor(ev)
 		}.bind(this);
 
@@ -504,21 +538,24 @@ define.class("$ui/splitcontainer", function(require,
 					}.bind(this),
 
 					drop:function(ev, v, item, orig, dv) {
-						// var name = v && v.name ? v.name : "unknown";
-						// console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
+						var name = v && v.name ? v.name : "unknown";
+						console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
 
 						if (v) {
 							var node = v.getASTNode();
 
 							if (node) {
 								var params = JSON.parse(JSON.stringify(item.params));
+
+								var pos = v.globalToLocal(ev.position);
+
 								params.position = 'absolute';
-								params.x = ev.position.x;
-								params.y = ev.position.y;
+								params.x = pos.x;
+								params.y = pos.y;
+
+								console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
 
 								node.args.push(this.buildCallNode(item.classname, params));
-
-								console.log('Dropped onto node:', node);
 
 								this.screen.composition.commitAST();
 
@@ -527,20 +564,31 @@ define.class("$ui/splitcontainer", function(require,
 					}.bind(this)
 				})
 			),
-			this.panel({title:"Properties", viewport:"2D", flex:2.5, visible:!!(this.inspect)},
+			this.panel({title:"Cursor", flex:0},
+				label({name:"current", text:"", padding:5, bgcolor:"#303030"})
+			),
+			this.panel({title:"Properties", viewport:"2D", flex:2.5},
 				propviewer({
 					name:"inspector",
 					target:this.inspect,
 					flex:1,
 					overflow:"scroll",
-					callback:function(val, editor) {
-						var t = editor.target;
-						if (typeof(t) === 'string') {
-							t = editor.find(t);
-						}
+					callback:function(val, editor, commit) {
+						if (!commit) {
+							var t = editor.target;
+							if (typeof(t) === 'string') {
+								t = editor.find(t);
+							}
 
-						if (t && editor.propertyname) {
-							this.setASTObjectProperty(t, editor.propertyname, val);
+							if (t && editor.propertyname) {
+								if (editor.property.meta !== 'color' && t[editor.propertyname] != val) {
+									commit = true;
+								}
+								this.setASTObjectProperty(t, editor.propertyname, val);
+							}
+						}
+						if (commit) {
+							this.screen.composition.commitAST();
 						}
 					}.bind(this)
 				})
