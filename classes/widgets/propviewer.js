@@ -113,11 +113,11 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			res.push(
 				foldcontainer({
 						collapsed: true,
-						basecolor:"#303030",
+						basecolor:"#4e4e4e",
 						autogradient: false,
 						icon:undefined,
 						title: this.uppercaseFirst(group),
-						bordercolor:"#4f4f4f"	,
+						bordercolor:"#565656"	,
 						fontsize:this.fontsize
 					},
 					view({

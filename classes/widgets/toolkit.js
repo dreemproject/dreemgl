@@ -288,13 +288,14 @@ define.class("$ui/splitcontainer", function(require,
 				ev.view.x = pos.x - this.__startpos.x;
 				ev.view.y = pos.y - this.__startpos.y;
 			} else if (this.__startrect) {
-				console.log('draw rect from', this.__startrect, "to", ev.pointer.position)
-				var pos = ev.pointer.position;
 				var select = this.find('selectorrect');
-				select.x = this.__startrect.x;
-				select.y = this.__startrect.y;
-				select.size = vec2(pos.x - this.__startrect.x, pos.y - this.__startrect.y);
-				select.visible = true
+				if (select) {
+					var pos = ev.pointer.position;
+					select.x = this.__startrect.x;
+					select.y = this.__startrect.y;
+					select.size = vec2(pos.x - this.__startrect.x, pos.y - this.__startrect.y);
+					select.visible = true
+				}
 			}
 
 		}.bind(this);
@@ -341,9 +342,11 @@ define.class("$ui/splitcontainer", function(require,
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
 			} else if (this.__startrect) {
-				this.find('selectorrect').visible = false;
-
 				console.log('TODO select everyting in this rect: from', this.__startrect, "to", ev.pointer.position)
+				var select = this.find('selectorrect');
+				if (select) {
+					select.visible = false;
+				}
 			}
 
 			if (commit) {
@@ -354,10 +357,6 @@ define.class("$ui/splitcontainer", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
-			//if (!this.__hoverview || this.__hoverview != ev.view) {
-			//	this.__hoverview = ev.view;
-			//}
-
 			var text = ev.view.constructor.name;
 			if (ev.view.name) {
 				text = ev.view.name + " (" + text + ")"
@@ -518,7 +517,7 @@ define.class("$ui/splitcontainer", function(require,
 		this.attributes = {
 			title: Config({type:String, value:"Untitled"}),
 			fontsize: Config({type:float, value:12, meta:"fontsize"})
-		}
+		};
 
 		this.padding = 0;
 		this.margin = 4;
@@ -551,7 +550,14 @@ define.class("$ui/splitcontainer", function(require,
 
 	this.render = function() {
 		return [
-			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", viewport:"2D", flex:1},
+			label({
+				name:"title",
+				text:"DreemGL Visual Toolkit",
+				padding:5,
+				paddingleft:10,
+				//alignitems:"center",
+				bgcolor:"transparent"}),
+			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1},
 				palette({
 					name:"components",
 					flex:1,
@@ -592,14 +598,15 @@ define.class("$ui/splitcontainer", function(require,
 				})
 			),
 			this.panel({title:"Cursor", flex:0},
-				label({name:"current", text:"", padding:5, bgcolor:"#303030"})
+				label({name:"current", text:"", padding:5, bgcolor:"#4e4e4e"})
 			),
-			this.panel({title:"Properties", viewport:"2D", flex:2.5},
+			this.panel({title:"Properties", flex:2.5},
 				propviewer({
 					name:"inspector",
 					target:this.inspect,
 					flex:1,
 					overflow:"scroll",
+					bgcolor:"#4e4e4e",
 					callback:function(val, editor, commit) {
 						if (editor && editor.target && editor.propertyname) {
 							var t = editor.target;
@@ -616,8 +623,7 @@ define.class("$ui/splitcontainer", function(require,
 						}
 					}.bind(this)
 				})
-			),
-			this.selectorrect()
+			)
 		];
 	};
 });
