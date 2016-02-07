@@ -811,7 +811,7 @@ define.class('$ui/view', function(require,
 							,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))
 						)
 					)
-					,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
+					 ,jseditor({name:'jsviewer', sourceset:this.sourceset, overflow:'scroll', flex:0.4})
 				)
 			)
 		];

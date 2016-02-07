@@ -10,9 +10,6 @@ define.class(function(require, exports){
 
 	this.atConstructor = function(host){
 		this.host = host
-		this.promises = {}
-		this.uid_free = []
-		this.uid = 0
 	}
 
 	this.methodRpc = function(name, msg){
@@ -35,7 +32,7 @@ define.class(function(require, exports){
 		}
 	}
 
-	this.resolveReturn = function(msg){
+	exports.resolveReturn = this.resolveReturn = function(msg){
 		var promise = this.promises[msg.uid]
 		if(!promise) return console.log('Error resolving RPC promise id ' + msg.uid)
 		this.uid_free.push(msg.uid)
@@ -48,9 +45,11 @@ define.class(function(require, exports){
 		}
 	}
 
-	this.allocPromise = function(){
+	exports.allocPromise = this.allocPromise = function(){
 		var uid 
-		
+		if(this.uid === undefined) this.uid = 0
+		if(!this.promises) this.promises = {}
+		if(!this.uid_free) this.uid_free = []
 		if(this.uid_free.length){
 			uid = this.uid_free.pop()
 		}
@@ -65,7 +64,7 @@ define.class(function(require, exports){
 		}
 
 		var resolve, reject
-		var prom = new Promise(function(_resolve, _reject){resolve = _resolve, reject = _reject})
+		var prom = new define.Promise(function(_resolve, _reject){resolve = _resolve, reject = _reject})
 		prom.resolve = resolve
 		prom.reject = reject
 		prom.uid = uid

@@ -34,7 +34,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 		}
 
 		this.pitchbend = function(msg){
-			this.shift = (msg.value-8129)/4096
+			this.shift = (msg.value - 8129)/4096
 		}
 
 		this.aftertouch = function(msg){

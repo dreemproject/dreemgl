@@ -6,19 +6,24 @@
 //Pure JS based composition
 define.class('$server/composition', function(require, $ui$, screen, view){
 
-var worker = define.class('$system/rpc/worker', function(){
-	this.method = function(){
-
-	}
-})
-//myworker.method.then()
+	var worker = define.class('$system/rpc/worker', function(){
+		this.method = function(arg){
+			var ret = vec2.array(10)
+			return {
+				thing:ret
+			}
+		}
+	})
+	//myworker.method.then()
 
 	this.render = function(){ return [
 		screen({clearcolor:'#484230', flexdirection:'row'},
 			view({
 				init:function(){
 					var myworker = worker()
-
+					myworker.method().then(function(result){
+						console.log(result.value)
+					})
 					//myworker.method('hi').then(function(){
 					//})
 				}
