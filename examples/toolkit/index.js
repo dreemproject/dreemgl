@@ -17,13 +17,11 @@ define.class("$server/composition",function(require, $ui$, icon, label, view, sc
 						alignself:'stretch', 
 						flexdirection:'column', 
 						justifycontent:'center', 
-						x:0, 
-						y:0
+						anchor:vec3(0,0,0), 
+						toolmove:false
 					},
-					view({height:309, width:343, bgcolor:vec4(0,0.501960813999176,0.03174766153097153,1), position:'absolute', x:337.0000305175781, y:232.9998016357422}),
-					view({height:60, width:60, bgcolor:vec4(0.5342326164245605,0.6136919856071472,0.8747740983963013,1), position:'absolute', x:981, y:129.99996948242188, bordercolor:vec4(0,0,0,0)}),
-					view({height:325, width:75, bgcolor:vec4(0.17111018300056458,0.17234812676906586,0.8197981119155884,1), position:'absolute', x:235.00006103515625, y:127}),
-					label({bgcolor:'transparent', fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:404.00006103515625, y:27, fontsize:102.5, boldness:0})
+					view({height:366, width:399, bgcolor:vec4(0,0.501960813999176,0.03174766153097153,1), position:'absolute', x:144.7498779296875, y:69.99996948242188},view({height:167, width:180, bgcolor:vec4(0.9339837431907654,0.8454103469848633,0.06254260987043381,1), position:'absolute', x:59.750152587890625, y:149.99998474121094, borderwidth:vec4(1,0,0,0)}),label({fontsize:30, bgcolor:'transparent', fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:82.99992370605469, y:21.000022888183594, width:NaN, height:NaN})),
+					view({height:360, width:365, bgcolor:vec4(0.4404359459877014,0.7965562343597412,0.8361037373542786,1), position:'absolute', x:669, y:139},view({height:60, width:60, bgcolor:vec4(0,0.17658153176307678,0.501960813999176,1), position:'absolute', x:66, y:69.00001525878906}),view({height:60, width:63, bgcolor:'purple', position:'absolute', x:141, y:171.0000762939453}))
 				),
 				toolkit()
 			)
