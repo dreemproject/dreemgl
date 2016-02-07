@@ -194,6 +194,7 @@ function main(){
 	}
 	else{
 		var RunMonitor = require('$system/server/runmonitor')
+		console.log(typeof RunMonitor)
 		new RunMonitor(args)
 	}
 }

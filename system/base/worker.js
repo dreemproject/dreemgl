@@ -3,26 +3,8 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-//Pure JS based composition
-define.class('$server/composition', function(require, $ui$, screen, view){
+define.class(function(node){
+	this.atConstructor = function(){}
 
-var worker = define.class('$system/rpc/worker', function(){
-	this.method = function(){
 
-	}
-})
-//myworker.method.then()
-
-	this.render = function(){ return [
-		screen({clearcolor:'#484230', flexdirection:'row'},
-			view({
-				init:function(){
-					var myworker = worker()
-
-					//myworker.method('hi').then(function(){
-					//})
-				}
-			})
-		)
-	]}
 })

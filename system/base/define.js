@@ -39,18 +39,28 @@
 // - optimized live editability and reloading of all class hierarchy parts (thats the reason
 //   the modulesystem + classes are fused)
 
-(function define_module(config_define){
+(function define_module(){
+
+	var config_define 
+	if(typeof window !== 'undefined') config_define =  window.define
+	else if(typeof self !== 'undefined') config_define = self.define
+	else if(typeof global !== 'undefined') global.define
 
 	// the main define function
-	function define(factory){
-		if(arguments.length == 2){ // precompiled version
-			define.factory[arguments[1]] = factory
+	function define(factory, package){
+		if(package !== undefined){ // precompiled version
+			define.factory[package] = factory
 			return
 		}
 		define.last_factory = factory // store for the script tag
 		// continue calling
 		if(define.define) define.define(factory)
 	}
+	
+	if(typeof window !== 'undefined') window.define = define, define.$environment = 'browser'
+	else if(typeof self !== 'undefined') self.define = define, define.$environment = 'worker'
+	else if (typeof global !== 'undefined') global.define = define, define.$environment = 'nodejs'
+	else define.$environment = 'v8'
 
 	// default config variables
 	define.inner = define_module
@@ -182,7 +192,7 @@
 
 	define.deferPromise = function(){
 		var res, rej
-		var prom = new Promise(function(ires, irej){
+		var prom = new define.Promise(function(ires, irej){
 			res = ires, rej = irej
 		})
 		prom.resolve = res
@@ -215,6 +225,7 @@
 			var factory = define.factory[abs_path]
 
 			if(!factory && dep_path.indexOf('$') === -1 && dep_path.charAt(0) !== '.'){
+				console.log(abs_path)
 				//console.log('skipping', dep_path)
 				return null
 			}
@@ -224,7 +235,6 @@
 
 			module = {exports:{}, factory:factory, id:abs_path, filename:abs_path}
 			define.module[abs_path] = module
-
 			if(factory === null) return null // its not an AMD module, but accept that
 			if(!factory) throw new Error("Cannot find factory for module (file not found): " + dep_path + " > " + abs_path)
 
@@ -252,7 +262,7 @@
 
 		require.async = function(path, ext){
 			var dep_path = define.joinPath(base_path, define.expandVariables(path))
-			return new Promise(function(resolve, reject){
+			return new define.Promise(function(resolve, reject){
 				if(define.factory[path]){
 					// if its already asynchronously loading..
 					var module = require(path, ext)
@@ -267,7 +277,7 @@
 
 		require.reloadAsync = function(path){
 
-			return new Promise(function(resolve, reject){
+			return new define.Promise(function(resolve, reject){
 
 				define.reload_id++
 
@@ -555,7 +565,8 @@
 	}
 
 	define.buildClassArgs = function(fn){
-
+		// Ideally these regexps are better, not vastly slower but maybe proper specwise matching for stuff, its a bit rough now
+		// This is otherwise known as a 'really bad idea'. However this makes the modules work easily, with a relatively small collision risk.		
 		var str = fn.toString()
 
 		str = str.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '')
@@ -567,7 +578,16 @@
 		var map = result[1].split(/\s*,\s*/)
 		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].toLowerCase().trim())
 
-		var matchrx = new RegExp(/define\.(?:render|class)\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*(?:[$_\w]+\s*,\s*){0,1}){0,1}function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
+		// fetch string baseclasses for nested classes and add them
+		var baserx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:['"]([^"']+)['"]\s*,\s*)function/g)
+
+		while((result = baserx.exec(str)) !== null) {
+			output.push(result[1])
+		}
+
+		// now fetch all the fast classdeps
+		var matchrx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:(?:['"][[^"']+['"]|[$_\w]+)\s*,\s*)?function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
+
 		while((result = matchrx.exec(str)) !== null) {
 			output.push('$$')
 			var map = result[1].split(/\s*,\s*/)
@@ -577,17 +597,40 @@
 		return output
 	}
 
+	define.worker = function(input){
+		var source = 'self.define = {packaged:true,$platform:"webgl"};(' + define_module.toString() + ')();\n'
+		source += '(' + define.module[define.expandVariables('$system/base/math.js')].factory.toString() + ')();\n'
+		for(var key in define.paths){
+			source += 'define.$'+key + ' = "'+define['$'+key]+'";\n'
+		}
+		source += input
+		var blob = new Blob([source], { type: "text/javascript" })
+		var worker_url = URL.createObjectURL(blob)
+		var worker = new Worker(worker_url)
+		worker.source = source
+		return worker
+	}
+
 	define.mixin = function(body, body2){
 		if(typeof body2 === 'function') body = body2
 		body.mixin = true
 		return define.class.apply(define, arguments)
 	}
 
-	// class module support
+	define.packagedClass = function(packaged, args){
+		args[args.length - 1].packaged = packaged
+		define.class.apply(define, args)
+	}
+
+	// define.class('base', function(){})                2
+	// define.class(function(){})                        1
+	// define.class(this, 'prop', 'base', function(){})  4
+
 	define.class = function(){
 		// lets make a class
 		var base_class
 		var body
+		var is_inner
 		if(arguments.length >= 3){ // inner class
 			is_inner = true
 			var outer_this = arguments[0]
@@ -646,19 +689,23 @@
 			define.makeClass(base, body, require, module, undefined, outer_this)
 		}
 
-
 		// make an argmap
 		body.classargs = define.buildClassArgs(body)
 		// lets parse the named argument pattern for the body
 		moduleFactory.body = body
+		moduleFactory.deps = []
 		// put the baseclass on the deps
-		if(base_class && typeof base_class === 'string') moduleFactory.depstring = 'require("' + base_class + '")'
-
+		if(base_class && typeof base_class === 'string'){
+			moduleFactory.baseclass = define.expandVariables(base_class)
+			moduleFactory.deps.push(define.expandVariables(base_class))
+			moduleFactory.depstring = 'require("' + base_class + '")'
+		}
 		// add automatic requires
 		if(body.classargs){
 			define.walkClassArgs(body.classargs, function(builtin, requirepath){
 				if(builtin) return
 				if(!moduleFactory.depstring) moduleFactory.depstring = ''
+				moduleFactory.deps.push(define.expandVariables(requirepath))
 				moduleFactory.depstring += 'require("' + requirepath + '")'
 				if(!base_class) base_class = requirepath
 			})
@@ -669,7 +716,7 @@
 		if(define.local_require_stack.length){
 			var outer_require = define.local_require_stack[define.local_require_stack.length - 1]
 			var outer_module = outer_require.module
-			var module = {exports:{}, filename:outer_module.filename, factory:outer_module.factory}
+			var module = {exports:{}, filename:outer_module.filename, factory:moduleFactory, outer:outer_module}
 			moduleFactory(outer_require, module.exports, module)
 			
 			if(outer_this){
@@ -681,14 +728,206 @@
 	
 			return module.exports
 		}
-
-		if(typeof arguments[arguments.length - 1] == 'string'){ // packaged
-			define(moduleFactory, arguments[arguments.length - 1])
-		}
-		else{ // unpackaged
-			define(moduleFactory)
-		}
+		//if(typeof arguments[arguments.length - 1] == 'string'){ // packaged
+		//	define(moduleFactory, arguments[arguments.length - 1])
+		//}
+		//else{ // unpackaged
+		define(moduleFactory, body.packaged)
+		//}
 	}
+
+
+
+
+
+
+
+
+
+	// Implementation of a debug promise
+
+
+
+
+
+
+
+
+
+
+
+
+	define.debugPromiseLib = function(exports){
+		// Use polyfill for setImmediate for performance gains
+		var asap = Promise.immediateFn || (typeof setImmediate === 'function' && setImmediate) ||
+			function(fn) { setTimeout(fn, 1); }
+
+		// Polyfill for Function.prototype.bind
+		function bind(fn, thisArg) {
+			return function() {
+				fn.apply(thisArg, arguments)
+			}
+		}
+
+		var isArray = Array.isArray || function(value) { return Object.prototype.toString.call(value) === "[object Array]" }
+
+		function Promise(fn) {
+			if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
+			if (typeof fn !== 'function') throw new TypeError('not a function')
+			this._state = null
+			this._value = null
+			this._deferreds = []
+
+			doResolve(fn, bind(resolve, this), bind(reject, this))
+		}
+
+		function handle(deferred) {
+			var me = this
+			if (this._state === null) {
+				this._deferreds.push(deferred)
+				return
+			}
+			asap(function() {
+				var cb = me._state ? deferred.onFulfilled : deferred.onRejected
+				if (cb === null) {
+					(me._state ? deferred.resolve : deferred.reject)(me._value)
+					return
+				}
+				var ret;
+				//try {
+					ret = cb(me._value)
+				//}
+				//catch (e) {
+				//	deferred.reject(e)
+				//	return;
+				//}
+				deferred.resolve(ret)
+			})
+		}
+
+		function resolve(newValue) {
+			//try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+				if (newValue === this) throw new TypeError('A promise cannot be resolved with itself.')
+				if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+					var then = newValue.then
+					if (typeof then === 'function') {
+						doResolve(bind(then, newValue), bind(resolve, this), bind(reject, this))
+						return;
+					}
+				}
+				this._state = true
+				this._value = newValue
+				finale.call(this)
+			//} catch (e) { reject.call(this, e); }
+		}
+
+		function reject(newValue) {
+			this._state = false
+			this._value = newValue
+			finale.call(this)
+		}
+
+		function finale() {
+			for (var i = 0, len = this._deferreds.length; i < len; i++) {
+				handle.call(this, this._deferreds[i])
+			}
+			this._deferreds = null
+		}
+
+		function Handler(onFulfilled, onRejected, resolve, reject){
+			this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null
+			this.onRejected = typeof onRejected === 'function' ? onRejected : null
+			this.resolve = resolve
+			this.reject = reject
+		}
+
+		function doResolve(fn, onFulfilled, onRejected) {
+			var done = false;
+			try {
+				fn(function (value) {
+					if (done) return
+					done = true
+					onFulfilled(value)
+				}, function (reason) {
+					if (done) return
+					done = true
+					onRejected(reason)
+				})
+			} catch (ex) {
+				if (done) return
+				done = true
+				onRejected(ex)
+			}
+		}
+
+		Promise.prototype['catch'] = function (onRejected) {
+			return this.then(null, onRejected);
+		}
+
+		Promise.prototype.then = function(onFulfilled, onRejected) {
+			var me = this;
+			return new Promise(function(resolve, reject) {
+				handle.call(me, new Handler(onFulfilled, onRejected, resolve, reject))
+			})
+		}
+
+		Promise.all = function () {
+			var args = Array.prototype.slice.call(arguments.length === 1 && isArray(arguments[0]) ? arguments[0] : arguments)
+
+			return new Promise(function (resolve, reject) {
+				if (args.length === 0) return resolve([])
+				var remaining = args.length
+				function res(i, val) {
+					//try {
+						if (val && (typeof val === 'object' || typeof val === 'function')) {
+							var then = val.then
+							if (typeof then === 'function') {
+								then.call(val, function (val) { res(i, val) }, reject)
+								return
+							}
+						}
+						args[i] = val
+						if (--remaining === 0) {
+							resolve(args)
+						}
+					//} catch (ex) {
+					//	reject(ex)
+					//}
+				}
+				for (var i = 0; i < args.length; i++) {
+					res(i, args[i])
+				}
+			})
+		}
+
+		Promise.resolve = function (value) {
+			if (value && typeof value === 'object' && value.constructor === Promise) {
+				return value
+			}
+
+			return new Promise(function (resolve) {
+				resolve(value)
+			})
+		}
+
+		Promise.reject = function (value) {
+			return new Promise(function (resolve, reject) {
+				reject(value)
+			})
+		}
+
+		Promise.race = function (values) {
+			return new Promise(function (resolve, reject) {
+				for(var i = 0, len = values.length; i < len; i++) {
+					values[i].then(resolve, reject)
+				}
+			})
+		}
+
+		return Promise
+	}
+	// check if we are in debug mode
+	define.Promise = define.debugPromiseLib()
 
 
 
@@ -716,10 +955,6 @@
 	}
 
 
-	// the environment we are in
-	if(typeof window !== 'undefined') define.$environment = 'browser'
-	else if(typeof process !== 'undefined') define.$environment = 'nodejs'
-	else define.$environment = 'v8'
 
 
 
@@ -736,8 +971,6 @@
 
 	if(define.packaged){
 		define.require = define.localRequire('')
-		return define
-
 
 	}
 
@@ -760,6 +993,7 @@
 		
 		// if define was already defined use it as a config store
 		// storage structures
+		define.cputhreads = navigator.hardwareConcurrency || 2
 		define.download_queue = {}
 		define.script_tags = {}
 		// the require function passed into the factory is local
@@ -787,12 +1021,12 @@
 					
 				if(module_deps && module_deps.indexOf(fac_url) === -1) module_deps.push(fac_url)
 
-				if(define.factory[fac_url]) return new Promise(function(resolve){resolve()})
+				if(define.factory[fac_url]) return new define.Promise(function(resolve){resolve()})
 
 				var prom = define.download_queue[abs_url]
 
 				if(prom){
-					if(recurblock) return new Promise(function(resolve){resolve()})
+					if(recurblock) return new define.Promise(function(resolve){resolve()})
 					return prom
 				}
 
@@ -808,7 +1042,7 @@
 			}
 
 			function loadImage(facurl, url, from_file){
-				return new Promise(function(resolve, reject){
+				return new define.Promise(function(resolve, reject){
 					var img = new Image()
 					img.src = url
 					img.onerror = function(){
@@ -823,7 +1057,7 @@
 			}
 
 			function loadXHR(facurl, url, from_file, type){
-				return new Promise(function(resolve, reject){
+				return new define.Promise(function(resolve, reject){
 					var req = new XMLHttpRequest()
 					// todo, make type do other things
 					req.responseType = define.lookupFileType(type)
@@ -854,8 +1088,8 @@
 
 			// insert by script tag
 			function loadScript(facurl, url, from_file){
-				return new Promise(function(resolve, reject){
-
+				return new define.Promise(function(resolve, reject){
+		
 					var script = document.createElement('script')
 					var base_path = define.filePath(url)
 						
@@ -877,6 +1111,7 @@
 						var factory = define.last_factory
 
 						define.factory[facurl] = factory
+
 
 						if(!factory) return reject("Factory is null for "+url+" from file "+from_file + " : " + facurl)
 
@@ -1067,7 +1302,7 @@
 
 		// fetch it async!
 		function httpGetCached(httpurl){
-			return new Promise(function(resolve, reject){
+			return new define.Promise(function(resolve, reject){
 				var myurl = url.parse(httpurl)
 				// ok turn this url into a cachepath
 
@@ -1160,7 +1395,7 @@
 
 				// block reentry
 				if(define.download_queue[modurl]){
-					return new Promise(function(resolve, reject){
+					return new define.Promise(function(resolve, reject){
 
 						resolve( cache_path_root + url.parse(modurl).path )
 					})
@@ -1168,7 +1403,7 @@
 				}
 
 				// we need to fetch the url, then look at its dependencies, fetch those
-				return define.download_queue[modurl] = new Promise(function(resolve, reject){
+				return define.download_queue[modurl] = new define.Promise(function(resolve, reject){
 					// lets make sure we dont already have the module in our system
 					httpGetCached(modurl).then(function(result){
 
@@ -1335,14 +1570,14 @@
 				try {
 					stats = fs.lstatSync(modname)
 					var data = fs.readFileSync(modname)
-					return new Promise(function(resolve, reject){
+					return new define.Promise(function(resolve, reject){
 						resolve(data)
 					})
 				}
 				catch(e) {
 				}
 
-				return new Promise(function(resolve, reject){
+				return new define.Promise(function(resolve, reject){
 					loadModuleAsync(modname, "root").then(function(path){
 						resolve(require(path))
 					}).catch(function(e){
@@ -2513,201 +2748,8 @@
 	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
 
+})()
 
+// use the switchable promise
 
-
-
-
-
-
-
-	// Implementation of a promise polyfill
-
-
-
-
-
-
-
-
-
-
-
-
-
-	define.promiseLib = function(exports){
-		// Use polyfill for setImmediate for performance gains
-		var asap = Promise.immediateFn || (typeof setImmediate === 'function' && setImmediate) ||
-			function(fn) { setTimeout(fn, 1); }
-
-		// Polyfill for Function.prototype.bind
-		function bind(fn, thisArg) {
-			return function() {
-				fn.apply(thisArg, arguments)
-			}
-		}
-
-		var isArray = Array.isArray || function(value) { return Object.prototype.toString.call(value) === "[object Array]" }
-
-		function Promise(fn) {
-			if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
-			if (typeof fn !== 'function') throw new TypeError('not a function')
-			this._state = null
-			this._value = null
-			this._deferreds = []
-
-			doResolve(fn, bind(resolve, this), bind(reject, this))
-		}
-
-		function handle(deferred) {
-			var me = this
-			if (this._state === null) {
-				this._deferreds.push(deferred)
-				return
-			}
-			asap(function() {
-				var cb = me._state ? deferred.onFulfilled : deferred.onRejected
-				if (cb === null) {
-					(me._state ? deferred.resolve : deferred.reject)(me._value)
-					return
-				}
-				var ret;
-				try {
-					ret = cb(me._value)
-				}
-				catch (e) {
-					deferred.reject(e)
-					return;
-				}
-				deferred.resolve(ret)
-			})
-		}
-
-		function resolve(newValue) {
-			try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-				if (newValue === this) throw new TypeError('A promise cannot be resolved with itself.')
-				if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-					var then = newValue.then
-					if (typeof then === 'function') {
-						doResolve(bind(then, newValue), bind(resolve, this), bind(reject, this))
-						return;
-					}
-				}
-				this._state = true
-				this._value = newValue
-				finale.call(this)
-			} catch (e) { reject.call(this, e); }
-		}
-
-		function reject(newValue) {
-			this._state = false
-			this._value = newValue
-			finale.call(this)
-		}
-
-		function finale() {
-			for (var i = 0, len = this._deferreds.length; i < len; i++) {
-				handle.call(this, this._deferreds[i])
-			}
-			this._deferreds = null
-		}
-
-		function Handler(onFulfilled, onRejected, resolve, reject){
-			this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null
-			this.onRejected = typeof onRejected === 'function' ? onRejected : null
-			this.resolve = resolve
-			this.reject = reject
-		}
-
-		function doResolve(fn, onFulfilled, onRejected) {
-			var done = false;
-			try {
-				fn(function (value) {
-					if (done) return
-					done = true
-					onFulfilled(value)
-				}, function (reason) {
-					if (done) return
-					done = true
-					onRejected(reason)
-				})
-			} catch (ex) {
-				if (done) return
-				done = true
-				onRejected(ex)
-			}
-		}
-
-		Promise.prototype['catch'] = function (onRejected) {
-			return this.then(null, onRejected);
-		}
-
-		Promise.prototype.then = function(onFulfilled, onRejected) {
-			var me = this;
-			return new Promise(function(resolve, reject) {
-				handle.call(me, new Handler(onFulfilled, onRejected, resolve, reject))
-			})
-		}
-
-		Promise.all = function () {
-			var args = Array.prototype.slice.call(arguments.length === 1 && isArray(arguments[0]) ? arguments[0] : arguments)
-
-			return new Promise(function (resolve, reject) {
-				if (args.length === 0) return resolve([])
-				var remaining = args.length
-				function res(i, val) {
-					try {
-						if (val && (typeof val === 'object' || typeof val === 'function')) {
-							var then = val.then
-							if (typeof then === 'function') {
-								then.call(val, function (val) { res(i, val) }, reject)
-								return
-							}
-						}
-						args[i] = val
-						if (--remaining === 0) {
-							resolve(args)
-						}
-					} catch (ex) {
-						reject(ex)
-					}
-				}
-				for (var i = 0; i < args.length; i++) {
-					res(i, args[i])
-				}
-			})
-		}
-
-		Promise.resolve = function (value) {
-			if (value && typeof value === 'object' && value.constructor === Promise) {
-				return value
-			}
-
-			return new Promise(function (resolve) {
-				resolve(value)
-			})
-		}
-
-		Promise.reject = function (value) {
-			return new Promise(function (resolve, reject) {
-				reject(value)
-			})
-		}
-
-		Promise.race = function (values) {
-			return new Promise(function (resolve, reject) {
-				for(var i = 0, len = values.length; i < len; i++) {
-					values[i].then(resolve, reject)
-				}
-			})
-		}
-
-		exports.Promise = Promise
-	}
-
-
-})(typeof define !== 'undefined' && define)
-
-
-if(typeof Promise === 'undefined') define.promiseLib(typeof process !== 'undefined'? global: window)
 if(define.atEnd) define.atEnd()

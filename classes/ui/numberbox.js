@@ -18,7 +18,10 @@ define.class(function(require,$ui$, view, textbox, label, button){
 		decimals: Config({type:int, value:0}),
 		// Font size in device-pixels.
 		fontsize: Config({type: float, value: 14, meta:"fontsize" }),
-		title: Config({type:String, value:""})
+		title: Config({type:String, value:""}),
+
+		//internal
+		textfocus:Config({type:boolean})
 	}
 
 	this.tabstop = 0;
@@ -129,6 +132,8 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			margin:vec4(4,0,4,0),
 			alignself:"center",
 			padding:0,
+			bgcolor:"white",
+			hardrect:{pickonly:true},
 			name:"thenumber",
 			align:"right",
 			value:this._value.toString(),
@@ -136,7 +141,9 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			fontsize:this.fontsize,
 			fgcolor:this.fgcolor,
 			multiline:false,
-			bgcolor:NaN,
+			onfocus: function(ev,v,o) {
+				this.textfocus = v;
+			}.bind(this),
 			onvalue:function(ev,v,o) {
 				var txval = parseFloat(o.value);
 				if (!isNaN(txval)) {
@@ -145,7 +152,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 					}
 				}
 			}.bind(this)
-		}));
+	}));
 		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
 		return res;
 

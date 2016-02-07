@@ -94,6 +94,7 @@ define.class("$ui/label", function(require){
 			string = string.replace(/(\r\n|\n|\r)/gm,"");
 			this.textbuf.removeText(0, this.textbuf.lengthQuad());
 			this.textbuf.insertText(0, string);
+			this.focus = false;
 		}
 		this.value = Mark(string)
 		this.relayout()

@@ -139,7 +139,6 @@ define.class("$ui/splitcontainer", function(require,
 				}
 			}
 
-			// TODO write missing values into the AST
 			for (var dir in missing) {
 				if (missing.hasOwnProperty(dir)) {
 					var position = arglist.indexOf(dir);
@@ -225,20 +224,25 @@ define.class("$ui/splitcontainer", function(require,
 			}
 
 			if (this.testView(ev.view)) {
-				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+				if (ev.view.toolmove === false){
+					ev.view.cursor = "crosshair";
+					this.__startrect = ev.pointer.position;
+				} else {
+					this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-				this.__originalpos = {
-					x:ev.view.x,
-					y:ev.view.y
-				};
+					this.__originalpos = {
+						x:ev.view.x,
+						y:ev.view.y
+					};
 
-				this.__originalsize = {
-					w:ev.view.width,
-					h:ev.view.height
-				};
+					this.__originalsize = {
+						w:ev.view.width,
+						h:ev.view.height
+					};
 
-				this.__resizecorner = this.edgeCursor(ev);
-				ev.view.cursor = "move"
+					this.__resizecorner = this.edgeCursor(ev);
+					ev.view.cursor = "move"
+				}
 			}
 
 		}.bind(this);
@@ -285,6 +289,15 @@ define.class("$ui/splitcontainer", function(require,
 
 				ev.view.x = pos.x - this.__startpos.x;
 				ev.view.y = pos.y - this.__startpos.y;
+			} else if (this.__startrect) {
+				var select = this.find('selectorrect');
+				if (select) {
+					var pos = ev.pointer.position;
+					select.x = this.__startrect.x;
+					select.y = this.__startrect.y;
+					select.size = vec2(pos.x - this.__startrect.x, pos.y - this.__startrect.y);
+					select.visible = true
+				}
 			}
 
 		}.bind(this);
@@ -316,7 +329,7 @@ define.class("$ui/splitcontainer", function(require,
 					|| (Math.abs(ev.view.width - this.__originalsize.w) > 0.5)
 					|| (Math.abs(ev.view.height - this.__originalsize.h) > 0.5);
 
-			} else if (this.__startpos && this.testView(ev.view)) {
+			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
 				var pos = ev.pointer.position;
 				if (ev.view.parent) {
@@ -327,31 +340,33 @@ define.class("$ui/splitcontainer", function(require,
 				}
 
 				this.setASTObjectProperty(ev.view, "x", pos.x - this.__startpos.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y, pos.y - this.__startpos.y)
+				this.setASTObjectProperty(ev.view, "y", ev.view.y, pos.y - this.__startpos.y);
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
+			} else if (this.__startrect) {
+				console.log('TODO select everyting in this rect: from', this.__startrect, "to", ev.pointer.position)
+				var select = this.find('selectorrect');
+				if (select) {
+					select.visible = false;
+				}
 			}
 
 			if (commit) {
 				this.screen.composition.commitAST();
 			}
 
-			this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+			this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
-			//if (!this.__hoverview || this.__hoverview != ev.view) {
-			//	this.__hoverview = ev.view;
-			//}
-
 			var text = ev.view.constructor.name;
 			if (ev.view.name) {
 				text = ev.view.name + " (" + text + ")"
 			}
 
 			var pos = ev.view.globalToLocal(ev.pointer.position)
-			text = text + " " + pos.x.toFixed(0) + ", " + pos.y.toFixed(0);
-			text = text + " <" + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0) + ">";
+			text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
+			text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
 
 			this.find("current").text = text;
 
@@ -487,11 +502,24 @@ define.class("$ui/splitcontainer", function(require,
 		}
 	};
 
+	define.class(this,"selectorrect",view,function() {
+		this.name = "selectorrect";
+		this.bordercolorfn = function(pos) {
+			var check = int(mod(0.01 * (gl_FragCoord.x + gl_FragCoord.y + time * 20.0),2.0)) == 1?1.0:0.7
+			return vec4(check * vec3(0.3,0.8,0.8),1)
+		}
+		this.borderwidth = 5;
+		this.bgcolor = vec4(1,1,1,0.03);
+		this.borderradius = 2;
+		this.position = "absolute";
+		this.visible = false;
+	});
+
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
 			title: Config({type:String, value:"Untitled"}),
 			fontsize: Config({type:float, value:12, meta:"fontsize"})
-		}
+		};
 
 		this.padding = 0;
 		this.margin = 4;
@@ -524,7 +552,14 @@ define.class("$ui/splitcontainer", function(require,
 
 	this.render = function() {
 		return [
-			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", viewport:"2D", flex:1},
+			label({
+				name:"title",
+				text:"DreemGL Visual Toolkit",
+				padding:5,
+				paddingleft:10,
+				//alignitems:"center",
+				bgcolor:"transparent"}),
+			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1},
 				palette({
 					name:"components",
 					flex:1,
@@ -565,25 +600,23 @@ define.class("$ui/splitcontainer", function(require,
 				})
 			),
 			this.panel({title:"Cursor", flex:0},
-				label({name:"current", text:"", padding:5, bgcolor:"#303030"})
+				label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
 			),
-			this.panel({title:"Properties", viewport:"2D", flex:2.5},
+			this.panel({title:"Properties", flex:2.5},
 				propviewer({
 					name:"inspector",
 					target:this.inspect,
 					flex:1,
 					overflow:"scroll",
+					bgcolor:"#4e4e4e",
 					callback:function(val, editor, commit) {
-						if (!commit) {
+						if (editor && editor.target && editor.propertyname) {
 							var t = editor.target;
 							if (typeof(t) === 'string') {
 								t = editor.find(t);
 							}
 
-							if (t && editor.propertyname) {
-								if (editor.property.meta !== 'color' && t[editor.propertyname] != val) {
-									commit = true;
-								}
+							if (t) {
 								this.setASTObjectProperty(t, editor.propertyname, val);
 							}
 						}
@@ -592,7 +625,8 @@ define.class("$ui/splitcontainer", function(require,
 						}
 					}.bind(this)
 				})
-			)
+			),
+			this.selectorrect()
 		];
 	};
 });

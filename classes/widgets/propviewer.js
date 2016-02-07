@@ -22,23 +22,20 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		astarget:Config({type:String, persist:true}),
 		onastarget:function(ev,v,o) {
 			var astpath = JSON.parse(v);
-//			console.log('path', astpath);
-			if (astpath && astpath.length && astpath[0].type === "screen") {
-				astpath.shift();
-			}
-//			astpath = astpath.filter(function(a){ return a.constructor_index != -1});
+			// console.log('path', astpath);
 			var node = this.screen;
-			for (var i=0;i<astpath.length;i++) {
+			for (var i=1;i<astpath.length;i++) {
 				var pathitem = astpath[i];
-
-				node = node.children[pathitem.childindex];
+				var child = node.children[pathitem.childindex];
+				if (pathitem.type == child.constructor.name) {
+					node = child;
+				} else {
+					break;
+				}
 			}
 
 			this.target = node;
-
 		}
-
-
 	};
 
 	this.borderwidth = 0;
@@ -105,7 +102,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 					propertyname: key,
 					fontsize:this.fontsize,
 					showunknown:this.showunknown
-				}
+				};
 
 				if (this.callback) {
 					props.callback = this.callback;
@@ -116,11 +113,11 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 			res.push(
 				foldcontainer({
 						collapsed: true,
-						basecolor:"#303030",
+						basecolor:"#4e4e4e",
 						autogradient: false,
 						icon:undefined,
 						title: this.uppercaseFirst(group),
-						bordercolor:"#4f4f4f"	,
+						bordercolor:"#565656"	,
 						fontsize:this.fontsize
 					},
 					view({
@@ -143,7 +140,6 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 	};
 
 	var propviewer = this.constructor;
-
 	this.constructor.examples = {
 		Usage: function () {
 			return [

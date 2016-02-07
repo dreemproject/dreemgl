@@ -9,11 +9,11 @@ define.class(function($server$, composition, $ui$, screen, cadgrid, view){
 	define.class(this, "selectorrect", view, function(){
 		this.name = 'selectorrect'
 		this.bordercolorfn = function(pos){
-			var check = (int(mod(0.20 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0
+			var check = (int(mod(0.05 * (gl_FragCoord.x + gl_FragCoord.y + time * 40.),2.)) == 1)? 1.0: 0.0
 			return vec4(check * vec3(0.8), 1)
 		}
 		this.bordercolor = vec4(1, 1, 1, 0.4)
-		this.borderwidth = 2
+		this.borderwidth = 5
 		this.bgcolor = vec4(1, 1, 1, 0.07)
 		this.borderradius = 2
 		this.position = "absolute"
