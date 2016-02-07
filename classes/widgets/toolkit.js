@@ -219,8 +219,9 @@ define.class("$ui/splitcontainer", function(require,
 		this.screen.globalpointerstart = function(ev) {
 			var inspector = this.find('inspector');
 			if (inspector.target != ev.view && this.testView(ev.view)) {
-				inspector.target = ev.view;
-				console.log('AST', ev.view.getASTNode());
+				var target = ev.view;
+				inspector.astarget = JSON.stringify(target.getASTPath());
+				//console.log('AST', ev.view.getASTNode());
 			}
 
 			if (this.testView(ev.view)) {
