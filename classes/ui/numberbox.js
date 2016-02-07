@@ -132,6 +132,8 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			margin:vec4(4,0,4,0),
 			alignself:"center",
 			padding:0,
+			bgcolor:"white",
+			hardrect:{pickonly:true},
 			name:"thenumber",
 			align:"right",
 			value:this._value.toString(),
@@ -139,7 +141,6 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			fontsize:this.fontsize,
 			fgcolor:this.fgcolor,
 			multiline:false,
-			bgcolor:NaN,
 			onfocus: function(ev,v,o) {
 				this.textfocus = v;
 			}.bind(this),

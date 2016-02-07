@@ -243,7 +243,7 @@ define.class("$ui/splitcontainer", function(require,
 					this.__resizecorner = this.edgeCursor(ev);
 					ev.view.cursor = "move"
 				}
-			} 
+			}
 
 		}.bind(this);
 
