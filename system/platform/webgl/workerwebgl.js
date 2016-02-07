@@ -119,7 +119,10 @@ define.class('$system/base/worker', function(require, exports){
 		// lets make the interface
 		for(var key in this){
 			var prop = this[key]
-			if(typeof prop === 'function' && key[0] !== '_'){
+			if(key === 'atConstructor'){
+				this[key] = undefined
+			}
+			else if(typeof prop === 'function' && key[0] !== '_'){
 				this[key] = function(key){
 					// alright lets pick the lowest-queue worker from the set
 					var min = Infinity, tgtid = 0
