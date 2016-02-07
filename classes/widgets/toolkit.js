@@ -223,25 +223,27 @@ define.class("$ui/splitcontainer", function(require,
 				//console.log('AST', ev.view.getASTNode());
 			}
 
-			if (this.testView(ev.view) && ev.view.toolmove !== false) {
-				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+			if (this.testView(ev.view)) {
+				if (ev.view.toolmove === false){
+					ev.view.cursor = "crosshair";
+					this.__startrect = ev.pointer.position;
+				} else {
+					this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-				this.__originalpos = {
-					x:ev.view.x,
-					y:ev.view.y
-				};
+					this.__originalpos = {
+						x:ev.view.x,
+						y:ev.view.y
+					};
 
-				this.__originalsize = {
-					w:ev.view.width,
-					h:ev.view.height
-				};
+					this.__originalsize = {
+						w:ev.view.width,
+						h:ev.view.height
+					};
 
-				this.__resizecorner = this.edgeCursor(ev);
-				ev.view.cursor = "move"
-			} else {
-				ev.view.cursor = "crosshair"
-				this.__startrect = ev.pointer.position;
-			}
+					this.__resizecorner = this.edgeCursor(ev);
+					ev.view.cursor = "move"
+				}
+			} 
 
 		}.bind(this);
 
