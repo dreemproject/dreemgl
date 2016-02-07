@@ -28,7 +28,8 @@ define.class("$server/composition",function(require, $ui$, icon, label, view, sc
 					view({height:60, width:60, bgcolor:'purple', position:'absolute', x:186.99996948242188, y:500}),
 					icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:621, y:457}),
 					label({fontsize:24, bgcolor:'transparent', fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:392, y:428}),
-					icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:317, y:451})
+					icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:317, y:451}),
+					icon({fgcolor:vec4(0.3921568691730499,0.929411768913269,0.5361123085021973,1), icon:'circle', position:'absolute', x:572, y:447, fontsize:80})
 				),
 				toolkit()
 			)

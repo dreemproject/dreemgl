@@ -158,7 +158,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		if (this.collapsed == false) {
 			this.container = this.containerview({
-				bgcolor: this.basecolor,
+				bgcolor: NaN,
 				borderwidth: this.borderwidth,
 				bordercolor:this.bordercolor,
 				paddingright:10

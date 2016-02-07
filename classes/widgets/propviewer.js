@@ -22,7 +22,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		astarget:Config({type:String, persist:true}),
 		onastarget:function(ev,v,o) {
 			var node = this.screen;
-			
+
 			if (v) {
 				var astpath = JSON.parse(v);
 				// console.log('path', astpath);
