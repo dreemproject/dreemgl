@@ -166,19 +166,19 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 	define.class(this, "panellabel", label, function() {
 		this.bgcolor = "white";
+		this.hardrect = {pickonly:true};
 		this.fgcolor = "#e4e4e4";
 		this.padding = 0;
 		this.margin = 0;
-		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panelicon", icon, function() {
 		this.bgcolor = 'white';
+		this.hardrect = {pickonly:true};
 		this.fgcolor = '#e4e4e4';
 		this.align = 'center';
 		this.padding = 0;
 		this.margin = 0;
-		this.hardrect = {pickonly:true};
 	});
 
 	define.class(this, "panelitem", view, function() {
@@ -211,7 +211,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 						position:'absolute',
 
-						bgcolor:'transparent',
+						bgcolor:'red',
 
 						width:this.iconfontsize,
 						height:this.iconfontsize * 2,

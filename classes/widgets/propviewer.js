@@ -21,16 +21,19 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 		// internal
 		astarget:Config({type:String, persist:true}),
 		onastarget:function(ev,v,o) {
-			var astpath = JSON.parse(v);
-			// console.log('path', astpath);
 			var node = this.screen;
-			for (var i=1;i<astpath.length;i++) {
-				var pathitem = astpath[i];
-				var child = node.children[pathitem.childindex];
-				if (pathitem.type == child.constructor.name) {
-					node = child;
-				} else {
-					break;
+			
+			if (v) {
+				var astpath = JSON.parse(v);
+				// console.log('path', astpath);
+				for (var i=1;i<astpath.length;i++) {
+					var pathitem = astpath[i];
+					var child = node.children[pathitem.childindex];
+					if (pathitem.type == child.constructor.name) {
+						node = child;
+					} else {
+						break;
+					}
 				}
 			}
 
