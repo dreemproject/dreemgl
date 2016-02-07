@@ -160,7 +160,7 @@ define.class("$ui/splitcontainer", function(require,
 
 	this.edgeCursor = function (ev) {
 		var resize = false;
-		if (this.testView(ev.view)) {
+		if (this.testView(ev.view) && ev.view.toolmove !== false) {
 			this.above = ev.view;
 
 			var pos = ev.view.globalToLocal(ev.pointer.position);
@@ -227,6 +227,10 @@ define.class("$ui/splitcontainer", function(require,
 				if (ev.view.toolmove === false){
 					ev.view.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
+					if (!this.__selectrect) {
+						this.__selectrect = this.screen.openOverlay(this.selectorrect)
+						this.__selectrect.pos = this.__startrect;
+					}
 				} else {
 					this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
@@ -250,6 +254,7 @@ define.class("$ui/splitcontainer", function(require,
 		this.screen.globalpointermove = function(ev) {
 
 			if (this.__resizecorner) {
+
 				if (this.__resizecorner === "bottom-right") {
 					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
 					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
@@ -277,6 +282,7 @@ define.class("$ui/splitcontainer", function(require,
 					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
 					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
 				}
+
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
 				var pos = ev.pointer.position;
@@ -290,13 +296,28 @@ define.class("$ui/splitcontainer", function(require,
 				ev.view.x = pos.x - this.__startpos.x;
 				ev.view.y = pos.y - this.__startpos.y;
 			} else if (this.__startrect) {
-				var select = this.find('selectorrect');
+				var select = this.__selectrect || this.find('selectorrect');
 				if (select) {
 					var pos = ev.pointer.position;
-					select.x = this.__startrect.x;
-					select.y = this.__startrect.y;
-					select.size = vec2(pos.x - this.__startrect.x, pos.y - this.__startrect.y);
-					select.visible = true
+
+					var a = this.__startrect;
+					var b = pos;
+
+					if (a.x < b.x && a.y < b.y) { //normal
+						select.pos = a;
+						select.size = vec2(b.x - a.x, b.y - a.y);
+					} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+						select.pos = vec2(b.x, a.y);
+						select.size = vec2(a.x - b.x, b.y - a.y);
+					} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+						select.pos = vec2(a.x, b.y);
+						select.size = vec2(b.x - a.x, a.y - b.y);
+					} else {
+						select.pos = vec2(b.x, b.y);
+						select.size = vec2(a.x - b.x, a.y - b.y);
+					}
+
+
 				}
 			}
 
@@ -345,9 +366,10 @@ define.class("$ui/splitcontainer", function(require,
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
 			} else if (this.__startrect) {
 				console.log('TODO select everyting in this rect: from', this.__startrect, "to", ev.pointer.position)
-				var select = this.find('selectorrect');
+				var select = this.__selectrect || this.find('selectorrect');
 				if (select) {
-					select.visible = false;
+					select.closeOverlay();
+					this.__selectrect = undefined;
 				}
 			}
 
@@ -371,6 +393,11 @@ define.class("$ui/splitcontainer", function(require,
 			this.find("current").text = text;
 
 			this.edgeCursor(ev)
+			if (this.__selectrect) {
+				this.__selectrect.closeOverlay();
+				this.__selectrect = undefined;
+			}
+
 		}.bind(this);
 
 	};
@@ -505,14 +532,13 @@ define.class("$ui/splitcontainer", function(require,
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var check = int(mod(0.01 * (gl_FragCoord.x + gl_FragCoord.y + time * 20.0),2.0)) == 1?1.0:0.7
-			return vec4(check * vec3(0.3,0.8,0.8),1)
+			var check = int(mod(0.01 * (gl_FragCoord.x + gl_FragCoord.y + time * 80.0),2.0)) == 1 ? 1.0:0.7;
+			return vec4(check * vec3(1,0.9,0.2),1)
 		}
-		this.borderwidth = 5;
-		this.bgcolor = vec4(1,1,1,0.03);
+		this.borderwidth = 4;
+		this.bgcolor = vec4(1,1,1,0.05);
 		this.borderradius = 2;
 		this.position = "absolute";
-		this.visible = false;
 	});
 
 	define.class(this, 'panel', view, function(){
@@ -625,8 +651,7 @@ define.class("$ui/splitcontainer", function(require,
 						}
 					}.bind(this)
 				})
-			),
-			this.selectorrect()
+			)
 		];
 	};
 });
