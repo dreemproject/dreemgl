@@ -501,16 +501,16 @@ define.class("$ui/splitcontainer", function(require,
 	};
 
 	define.class(this,"selectorrect",view,function() {
-		this.name = "selectorrect"
+		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
 			var check = int(mod(0.01 * (gl_FragCoord.x + gl_FragCoord.y + time * 20.0),2.0)) == 1?1.0:0.7
 			return vec4(check * vec3(0.3,0.8,0.8),1)
 		}
-		this.borderwidth = 5
-		this.bgcolor = vec4(1,1,1,0.03)
+		this.borderwidth = 5;
+		this.bgcolor = vec4(1,1,1,0.03);
 		this.borderradius = 2;
 		this.position = "absolute";
-		this.visible = false
+		this.visible = false;
 	});
 
 	define.class(this, 'panel', view, function(){
@@ -598,7 +598,7 @@ define.class("$ui/splitcontainer", function(require,
 				})
 			),
 			this.panel({title:"Cursor", flex:0},
-				label({name:"current", text:"", padding:5, bgcolor:"#4e4e4e"})
+				label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
 			),
 			this.panel({title:"Properties", flex:2.5},
 				propviewer({
@@ -623,7 +623,8 @@ define.class("$ui/splitcontainer", function(require,
 						}
 					}.bind(this)
 				})
-			)
+			),
+			this.selectorrect()
 		];
 	};
 });
