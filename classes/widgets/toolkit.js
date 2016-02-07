@@ -386,13 +386,23 @@ define.class("$ui/splitcontainer", function(require,
 				text = ev.view.name + " (" + text + ")"
 			}
 
-			var pos = ev.view.globalToLocal(ev.pointer.position)
-			text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
-			text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
+			var pointers = ev.pointers;
+			if (!pointers && ev.pointer) {
+				pointers = [ev.pointer];
+			}
 
-			this.find("current").text = text;
+			for (var i=0;i<pointers.length;i++) {
+				var pointer = pointers[i];
 
-			this.edgeCursor(ev)
+				var pos = ev.view.globalToLocal(pointer.position);
+				text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
+				text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
+
+				this.find("current").text = text;
+
+				this.edgeCursor(ev)
+			}
+
 			if (this.__selectrect) {
 				this.__selectrect.closeOverlay();
 				this.__selectrect = undefined;
