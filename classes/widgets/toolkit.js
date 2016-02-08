@@ -231,6 +231,11 @@ define.class("$ui/view", function(require,
 				}
 			}
 
+			if (ev.view.__selrect) {
+				ev.view.__selrect.pos = vec2(ev.view._layout.left - 1, ev.view._layout.top - 1);
+				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
+			}
+
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
@@ -311,6 +316,11 @@ define.class("$ui/view", function(require,
 					select.closeOverlay();
 					this.__selectrect = undefined;
 				}
+			}
+
+			if (ev.view.__selrect) {
+				ev.view.__selrect.pos = vec2(ev.view._layout.left - 1, ev.view._layout.top - 1);
+				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
 			}
 
 			if (commit) {
@@ -635,6 +645,7 @@ define.class("$ui/view", function(require,
 		this.bgcolor = vec4(0.7,0.7,0.7,0.07);
 		this.borderradius = 7;
 		this.position = "absolute";
+		this.tooltarget = false;
 	});
 
 	define.class(this,"selectedrect",view,function() {
@@ -651,6 +662,7 @@ define.class("$ui/view", function(require,
 		this.bgcolor = NaN;
 		this.borderradius = 0;
 		this.position = "absolute";
+		this.tooltarget = false;
 	});
 
 	define.class(this, 'panel', view, function(){
