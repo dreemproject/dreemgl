@@ -265,10 +265,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				shenzhen_hqb:[22.5402897,114.0846914],
 				hongkong:[22.2854084,114.1600463],
 				sydney:[-33.8466226,151.2277997],
-				london:[51.5091502,-0.1471011]
+				london:[51.5091502,-0.1471011],
+				texel:[53.0731212,4.712878]
 			}
 
-			this.gotoCity("Amsterdam", 6);
+			this.gotoCity("texel", 12);
 
 			//this.setCenter(31,18,6);
 			this.theinterval = this.setInterval(function(){

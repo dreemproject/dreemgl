@@ -307,7 +307,7 @@ define.class(function(require, $server$, service){
 		
 	}
 	
-	if (false){
+	if (true){
 	
 	for (var a in this.mapstyle){
 		var st = this.mapstyle[a];
