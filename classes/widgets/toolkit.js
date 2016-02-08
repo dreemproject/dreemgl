@@ -898,7 +898,7 @@ define.class("$ui/view", function(require,
 			})
 		));
 
-		views.push(this.panel({title:"Properties", flex:2},
+		views.push(this.panel({title:"Properties", flex:2.1},
 			propviewer({
 				name:"inspector",
 				target:this.inspect,

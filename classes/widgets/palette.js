@@ -200,54 +200,59 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			label:Config({type:String}),
 			iconfontsize: 40,
 			hovercolor:'white',
-			hover:false,
-			pointerhover:function() {
-				this.hover = true;
-			},
-			pointerout:function() {
-				this.hover = false;
-			},
-			pointerstart:function(event) {
-				this.startDrag(event, function() {
+			hover:false
+		};
 
-					var pitem = this;
-					return this.buildClas({
+		this.pointerhover = function() {
+			this.hover = true;
+			console.log('hover', this)
+		};
 
-						drawtarget:'color',
+		this.pointerout = function() {
+			console.log('unhover', this)
+			this.hover = false;
+		};
 
-						position:'absolute',
+		this.pointerstart = function(event) {
+			this.startDrag(event, function() {
 
-						bgcolor:NaN,
+				var pitem = this;
+				return this.buildClas({
 
-						width:this.iconfontsize,
-						height:this.iconfontsize * 2,
+					drawtarget:'color',
 
-						isDropTarget:function(v, ev) {
-							var droptest = true;
-							if (pitem.dropTest) {
-								droptest = pitem.dropTest(ev, v, pitem, event, this);
-							} else if (this.outer && this.outer.dropTest) {
-								droptest = this.outer.dropTest(ev, v, pitem, event, this);
-							}
+					position:'absolute',
 
-							if(!v || !droptest) {
-								this.screen.pointer.cursor = 'no-drop';
-								return false
-							}
-							this.screen.pointer.cursor = 'copy';
-							return true
-						},
+					bgcolor:NaN,
 
-						atDrop:function(v, ev){
-							if (pitem.drop) {
-								pitem.drop(ev, v, pitem, event, this);
-							} else if (this.outer && this.outer.drop) {
-								this.outer.drop(ev, v, pitem, event, this);
-							}
+					width:this.iconfontsize,
+					height:this.iconfontsize * 2,
+
+					isDropTarget:function(v, ev) {
+						var droptest = true;
+						if (pitem.dropTest) {
+							droptest = pitem.dropTest(ev, v, pitem, event, this);
+						} else if (this.outer && this.outer.dropTest) {
+							droptest = this.outer.dropTest(ev, v, pitem, event, this);
 						}
-					})
-				}.bind(this))
-			}
+
+						if(!v || !droptest) {
+							this.screen.pointer.cursor = 'no-drop';
+							return false
+						}
+						this.screen.pointer.cursor = 'copy';
+						return true
+					},
+
+					atDrop:function(v, ev){
+						if (pitem.drop) {
+							pitem.drop(ev, v, pitem, event, this);
+						} else if (this.outer && this.outer.drop) {
+							this.outer.drop(ev, v, pitem, event, this);
+						}
+					}
+				})
+			}.bind(this))
 		};
 
 		this.buildClas = function(args) {
