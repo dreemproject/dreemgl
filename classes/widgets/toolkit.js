@@ -106,6 +106,7 @@ define.class("$ui/view", function(require,
 						selectrect.width = target._layout.width + 2;
 						selectrect.height = target._layout.height + 2;
 						selectrect.target = target;
+						selectrect.rotate = target.rotate;
 
 						target.__selrect = selectrect;
 
