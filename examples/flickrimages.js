@@ -16,7 +16,7 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 
     // Generate placeholder images (using the teem logo).
 		var dynviews = [];
-		var nimages = 50;
+		var nimages = 100;
     var imagesize = vec2(128, 128);
 		// Display a default image for each view
 		for (var n=0; n<nimages; n++) {
