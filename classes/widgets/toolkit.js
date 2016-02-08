@@ -87,7 +87,7 @@ define.class("$ui/view", function(require,
 		// internal
 		above:Config({type:Object}),
 
-		reticlesize: 7
+		reticlesize: 6
 	};
 
 	this.ensureDeps = function() {
@@ -224,7 +224,7 @@ define.class("$ui/view", function(require,
 					ev.view.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
 					if (!this.__selectrect) {
-						this.__selectrect = this.screen.openOverlay(this.selectorrect)
+						this.__selectrect = this.screen.openOverlay(this.selectorrect);
 						this.__selectrect.pos = this.__startrect;
 					}
 				} else {
@@ -293,27 +293,28 @@ define.class("$ui/view", function(require,
 				ev.view.y = pos.y - this.__startpos.y;
 			} else if (this.__startrect) {
 				var select = this.__selectrect || this.find('selectorrect');
-				if (select) {
-					var pos = ev.pointer.position;
+				if (!select) {
+					select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
+					this.__selectrect.pos = this.__startrect;
+				}
 
-					var a = this.__startrect;
-					var b = pos;
+				var pos = ev.pointer.position;
 
-					if (a.x < b.x && a.y < b.y) { //normal
-						select.pos = a;
-						select.size = vec2(b.x - a.x, b.y - a.y);
-					} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
-						select.pos = vec2(b.x, a.y);
-						select.size = vec2(a.x - b.x, b.y - a.y);
-					} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
-						select.pos = vec2(a.x, b.y);
-						select.size = vec2(b.x - a.x, a.y - b.y);
-					} else {
-						select.pos = vec2(b.x, b.y);
-						select.size = vec2(a.x - b.x, a.y - b.y);
-					}
+				var a = this.__startrect;
+				var b = pos;
 
-
+				if (a.x < b.x && a.y < b.y) { //normal
+					select.pos = a;
+					select.size = vec2(b.x - a.x, b.y - a.y);
+				} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+					select.pos = vec2(b.x, a.y);
+					select.size = vec2(a.x - b.x, b.y - a.y);
+				} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+					select.pos = vec2(a.x, b.y);
+					select.size = vec2(b.x - a.x, a.y - b.y);
+				} else {
+					select.pos = vec2(b.x, b.y);
+					select.size = vec2(a.x - b.x, a.y - b.y);
 				}
 			}
 
