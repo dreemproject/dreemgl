@@ -347,7 +347,7 @@ define.class(function(require, exports){
 				out.src = gl.ONE
 				out.dst = gl.ZERO
 			}
-			else{
+			else {
 				throw new Error('Blend equation invalid (not frame or pixel)')
 			}
 		}
@@ -356,13 +356,23 @@ define.class(function(require, exports){
 	}
 
 	this.decodeDepthEquation = function(eq, value){
-		var out = {original:value}
+		var out = {original:value, func:0}
 		if(!eq) return out
-		if(eq.type == 'Logic' && eq.left.name == 'src_depth' && eq.right.name == 'dst_depth'){
-			out.func = gltypes.compare[eq.op]
+		if(eq.type === 'Id' && eq.name === 'disabled'){
+			out.func = 1
 			return out
 		}
-		else throw new Error('depth eqation not in pixel > frame format')
+		if(eq.type == 'Logic'){
+			if(eq.left.name == 'src_depth' && eq.right.name == 'dst_depth'){
+				out.func = gltypes.compare[eq.op]
+				return out
+			}
+			else if(eq.left.name == 'src_depth' && eq.right.name == 'dst_depth'){
+				out.func = gltypes.complement[eq.op]
+				return out
+			}
+		}
+		throw new Error('depth eqation not in "src_depth < dst_depth" format')
 	}
 
 	this.decodeStencilEquation = function(gl, eq, value){

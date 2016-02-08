@@ -262,4 +262,14 @@ define(function(require, exports){
 		'==':exports.gl.EQUAL,
 		'===':exports.gl.EQUAL
 	}
+	exports.complement = {
+		'<':exports.gl.GEQUAL,
+		'<=':exports.gl.GREATER,
+		'>':exports.gl.LEQUAL,
+		'>=':exports.gl.LESS,
+		'!==':exports.gl.NOTEQUAL,
+		'!=':exports.gl.NOTEQUAL,
+		'==':exports.gl.EQUAL,
+		'===':exports.gl.EQUAL
+	}
 })

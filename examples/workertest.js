@@ -27,6 +27,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					// create workers, use previous
 					this.workers = prev && prev.workers || worker()
 					this.workers.method('hi').then(function(){
+						
 					})
 				}
 			})

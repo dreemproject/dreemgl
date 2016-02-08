@@ -34,7 +34,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 				var dy = abs(pos.y - pointerpos.y)
 				var mindist = min(dx, dy)
 				var a = pos.xy
-				return mix(grid(a), mix(vec4(1,1,0.8,1),vec4(0,0,0,1),clamp((1.-mindist)*1.0, 0.,1. )),clamp((1.-mindist/5.0)*1.0, 0.,1. )/2.)
+				return mix(grid(a), mix(vec4(1,1,0.8,1), vec4(0,0,0,1), clamp((1. - mindist) * 1.0, 0.,1. )),clamp((1.-mindist/5.0)*1.0, 0.,1. )/2.)
 			}
 		}
 
@@ -44,7 +44,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 
 		this.pointerhover = function(event){
 			var a = this.globalToLocal(event.position)
-			this.shaders.hardrect.pointerpos = vec2(a[0],a[1])
+			this.shaders.hardrect.pointerpos = vec2(a[0], a[1])
 			this.redraw()
 			if (this.children.length > 0){
 				this.children[0].text = Math.round(a[0]) + ", " + Math.round(a[1]);

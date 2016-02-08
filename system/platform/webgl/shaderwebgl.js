@@ -224,7 +224,7 @@ define.class('$system/base/shader', function(require, exports){
 			gl.disable(gl.BLEND)
 		}
 		// set up depth test
-		if(this.depth_test_eq.func){
+		if(this.depth_test_eq.func > 1){
 			gl.enable(gl.DEPTH_TEST)
 			gl.depthFunc(this.depth_test_eq.func)
 		}
