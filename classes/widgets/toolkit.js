@@ -107,8 +107,8 @@ define.class("$ui/view", function(require,
 					var target = filtered[i];
 					if (!target.__selrect) {
 						var selectrect = this.screen.openOverlay(this.selectedrect);
-						selectrect.x = target._layout.left - 1;
-						selectrect.y = target._layout.top - 1;
+						selectrect.x = target._layout.absx - 1;
+						selectrect.y = target._layout.absy - 1;
 						selectrect.width = target._layout.width + 2;
 						selectrect.height = target._layout.height + 2;
 						selectrect.target = target;
@@ -217,7 +217,7 @@ define.class("$ui/view", function(require,
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
 						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-						selected.__selrect.pos = vec2(selected._layout.left - 1, selected._layout.top - 1);
+						selected.__selrect.pos = vec2(selected._layout.absx - 1, selected._layout.absy - 1);
 					}
 				}
 
@@ -249,7 +249,7 @@ define.class("$ui/view", function(require,
 			}
 
 			if (ev.view.__selrect) {
-				ev.view.__selrect.pos = vec2(ev.view._layout.left - 1, ev.view._layout.top - 1);
+				ev.view.__selrect.pos = vec2(ev.view._layout.absx - 1, ev.view._layout.absy - 1);
 				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
 			}
 
@@ -336,7 +336,7 @@ define.class("$ui/view", function(require,
 			}
 
 			if (ev.view.__selrect) {
-				ev.view.__selrect.pos = vec2(ev.view._layout.left - 1, ev.view._layout.top - 1);
+				ev.view.__selrect.pos = vec2(ev.view._layout.absx - 1, ev.view._layout.absy - 1);
 				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
 			}
 
