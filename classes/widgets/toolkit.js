@@ -130,7 +130,11 @@ define.class("$ui/view", function(require,
 
 		this.screen.globalpointerstart = function(ev) {
 			if (this.testView(ev.view)) {
-				this.selection = [ev.view];
+
+				if (!this.selection || this.selection.indexOf(ev.view) < 0) {
+					this.selection = [ev.view];
+				}
+
 				ev.view.focus = true;
 
 				if (ev.view.toolmove === false){
@@ -204,6 +208,15 @@ define.class("$ui/view", function(require,
 
 				ev.view.x = pos.x - this.__startpos.x;
 				ev.view.y = pos.y - this.__startpos.y;
+
+				if (this.selection) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
+						selected.__selrect.pos = vec2(selected._layout.left - 1, selected._layout.top - 1);
+					}
+				}
+
 			} else if (this.__startrect) {
 				var select = this.__selectrect || this.find('selectorrect');
 				if (!select) {
