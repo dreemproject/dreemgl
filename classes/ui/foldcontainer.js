@@ -71,7 +71,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			var res = []
 
 			if (this.icon)res.push(icon({fontsize:this.outer.fontsize, icon:this.icon, fgcolor:vec4.contrastcolor(this.outer.basecolor) }));
-			if (this.title) res.push(label({
+			if (this.title) res.push(label({bold:true,
 				marginleft:5,fgcolor:vec4.contrastcolor(this.outer.basecolor), fontsize: this.outer.fontsize, text:this.title, bgcolor:NaN }));
 			var res2 = [view({bgcolor:NaN},res), icon({
 				marginright:7,
