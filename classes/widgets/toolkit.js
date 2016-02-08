@@ -70,25 +70,24 @@ define.class("$ui/view", function(require,
 
 		// internal
 		selection:[],
+		onselection: function() {
+			var inspector = this.find('inspector');
+			if (this.selection) {
+				var selected = this.selection.filter(function(a) { return this.testView(a) }.bind(this))[0];
+				if (selected && inspector.target != selected) {
+					var target = selected;
+					inspector.astarget = JSON.stringify(target.getASTPath());
+					//console.log('AST', target.getASTNode());
+				}
+				return;
+			}
+			inspector.target = null;
+		},
 
 		// internal
 		above:Config({type:Object}),
 
 		reticlesize: 7
-	};
-
-	this.addToSelection = function(obj){
-		var f = this.selection.indexOf(obj)
-		if (f == -1) this.selection.push(obj)
-		else return
-
-		if (this.selection.length > 1) return false;
-		return true;
-	};
-
-	this.removeFromSelection = function(obj){
-		var f = this.selection.indexOf(obj)
-		if(f>-1) this.selection.splice(f,1)
 	};
 
 	this.ensureDeps = function() {
@@ -218,14 +217,9 @@ define.class("$ui/view", function(require,
 		this.ensureDeps();
 
 		this.screen.globalpointerstart = function(ev) {
-			var inspector = this.find('inspector');
-			if (inspector.target != ev.view && this.testView(ev.view)) {
-				var target = ev.view;
-				inspector.astarget = JSON.stringify(target.getASTPath());
-				//console.log('AST', ev.view.getASTNode());
-			}
-
 			if (this.testView(ev.view)) {
+				this.selection = [ev.view];
+
 				if (ev.view.toolmove === false){
 					ev.view.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
@@ -367,8 +361,38 @@ define.class("$ui/view", function(require,
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
 			} else if (this.__startrect) {
-				console.log('TODO select everyting in this rect: from', this.__startrect, "to", ev.pointer.position)
+				var pos = ev.pointer.position;
+
+				var a = this.__startrect;
+				var b = pos;
+
+				var rect = vec4();
+
+				if (a.x < b.x && a.y < b.y) { //normal
+					rect.x = a.x;
+					rect.y = a.y;
+					rect.w = b.x - a.x;
+					rect.z = b.y - a.y;
+				} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+					rect.x = b.x;
+					rect.y = a.y;
+					rect.w = a.x - b.x;
+					rect.z = b.y - a.y;
+				} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+					rect.x = a.x;
+					rect.y = b.y;
+					rect.w = b.x - a.x;
+					rect.z = a.y - b.y;
+				} else {
+					rect.x = b.x;
+					rect.y = b.y;
+					rect.w = a.x - b.x;
+					rect.z = a.y - b.y;
+				}
 				var select = this.__selectrect || this.find('selectorrect');
+
+				this.selection = this.screen.childrenInRect(rect, [select]);
+
 				if (select) {
 					select.closeOverlay();
 					this.__selectrect = undefined;
@@ -544,11 +568,11 @@ define.class("$ui/view", function(require,
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var speed = time * 200.0;
+			var speed = time * 100.0;
 			var size = 0.001;
 			var slices = 2.0;
-			var v = int(mod(size * (gl_FragCoord.x + gl_FragCoord.y + speed), slices));
-			return vec4((v + 0.5) * vec3(0.95, 0.75, 0.15), 1);
+			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+			return vec4((v + 0.75) * vec3(0.95, 0.75, 0.15), 1);
 		}
 		this.borderwidth = 3;
 		this.bgcolor = vec4(0.8,0.8,0.8,0.05);

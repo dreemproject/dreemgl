@@ -1548,6 +1548,33 @@ define.class('$system/base/node', function(require){
 		this.parent.redraw()
 	}
 
+	this.childrenInRect = function(rect, exclude) {
+		var hits = [];
+		for (var i = 0;i<this.children.length;i++) {
+			var child = this.children[i];
+			if (exclude && exclude.indexOf(child) > -1) {
+				continue;
+			}
+			if (child.boundsInsideRect(rect)) {
+				hits.push(child);
+			} else {
+				var sub = child.childrenInRect(rect, exclude);
+				if (sub.length) {
+					hits = hits.concat(sub)
+				}
+			}
+		}
+
+		return hits;
+	};
+
+	this.boundsInsideRect = function(r) {
+		return r.x <= this._layout.left
+			&& r.y <= this._layout.top
+			&& r.w >= this._layout.width
+			&& r.z >= this._layout.height;
+	};
+
 	this.getASTPath = function() {
 		var local = {
 			type:this.constructor.name
