@@ -74,18 +74,18 @@ define.class("$ui/view", function(require,
 					}
 				}
 			],
-			Behaviors:[
-				{
-					label:"Alert",
-					icon:"warning",
-					desc:"A pop up an alert dialog",
-					behaviors:{
-						onclick:function() {
-							alert('Beep.')
-						}
-					}
-				}
-			]
+			//Behaviors:[
+			//	{
+			//		label:"Alert",
+			//		icon:"warning",
+			//		desc:"A pop up an alert dialog",
+			//		behaviors:{
+			//			onclick:function() {
+			//				alert('Beep.')
+			//			}
+			//		}
+			//	}
+			//]
 		}}),
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
@@ -898,7 +898,7 @@ define.class("$ui/view", function(require,
 			})
 		));
 
-		views.push(this.panel({title:"Properties", flex:2.5},
+		views.push(this.panel({title:"Properties", flex:2},
 			propviewer({
 				name:"inspector",
 				target:this.inspect,

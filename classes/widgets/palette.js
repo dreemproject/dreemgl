@@ -69,7 +69,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					var labels = [];
 
 					if (item.label) {
-						labels.push(label({text:item.label, bold:true, bgcolor:'transparent', margintop:15}));
+						labels.push(label({text:item.label, bold:true, bgcolor:NaN}));
+						item.marginright = 5;
 					}
 
 					var desc = item.description || item.desc;
@@ -80,8 +81,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					var detail = view({
 						flexdirection:'row',
 						alignitems:'stretch',
-
 						bgcolor:'transparent',
+						paddingbottom:10,
 						borderbottomwidth:(i < this.items.length - 1 ? 1 : 0),
 						bordercolor:this.dividercolor,
 						marginbottom:this.dividermargin
@@ -124,7 +125,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					fgcolor:this.bordercolor,
 					bgcolor:"transparent",
 					text:this.text,
-					fontsize:this.fontsize
+					fontsize:this.fontsize,
+					margintop:5,
+					marginleft:5
 				}));
 			}
 			if (this.panel) {
@@ -142,6 +145,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					fgcolor:this.bordercolor,
 					borderwidth:0,
 					padding:0,
+					paddingright:5,
 					margin:0,
 					icon:icn,
 					onvalue:function(ev) {
@@ -186,6 +190,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 		this.bgcolor = 'white';
 		this.flexdirection = 'column';
 		this.hardrect = {pickonly:true};
+		this.padding = 0;
+		this.margin = 0;
 
 		this.attributes = {
 			text:Config({type:String}),
@@ -211,7 +217,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 						position:'absolute',
 
-						bgcolor:'red',
+						bgcolor:NaN,
 
 						width:this.iconfontsize,
 						height:this.iconfontsize * 2,
