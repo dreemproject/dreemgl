@@ -113,6 +113,7 @@ define.class("$ui/view", function(require,
 						selectrect.height = target._layout.height + 2;
 						selectrect.target = target;
 						selectrect.rotate = target.rotate;
+						selectrect.borderradius = target.borderradius;
 
 						target.__selrect = selectrect;
 
@@ -124,9 +125,6 @@ define.class("$ui/view", function(require,
 			}
 			inspector.target = null;
 		},
-
-		// internal
-		above:Config({type:Object}),
 
 		reticlesize: 6
 	};
@@ -475,8 +473,6 @@ define.class("$ui/view", function(require,
 	this.edgeCursor = function (ev) {
 		var resize = false;
 		if (this.testView(ev.view) && ev.view.toolmove !== false) {
-			this.above = ev.view;
-
 			var pos = ev.view.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 
@@ -681,7 +677,6 @@ define.class("$ui/view", function(require,
 		}
 		this.borderwidth = 2;
 		this.bgcolor = NaN;
-		this.borderradius = 0;
 		this.position = "absolute";
 		this.tooltarget = false;
 	});
