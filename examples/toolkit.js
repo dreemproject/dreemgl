@@ -25,7 +25,7 @@ define.class("$server/composition",function(require, $ui$, icon, label, view, sc
 					label({fontsize:24, bgcolor:'transparent', fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:457, y:486}),
 					view({height:269, width:343, bgcolor:vec4(0,0.501960813999176,0.4905743896961212,1), position:'absolute', x:855.0000610351562, y:78.99999237060547},icon({fgcolor:vec4(0.9129186868667603,0.9196687936782837,0.9317914843559265,1), icon:'flask', position:'absolute', x:143.9998779296875, y:59.000030517578125, fontsize:80})),
 					icon({fgcolor:vec4(1,0.1049855574965477,0.6859912872314453,1), icon:'anchor', position:'absolute', x:519.0000610351562, y:163.0000457763672, fontsize:70}),
-					view({height:60, width:60, bgcolor:'purple', position:'absolute', x:1036, y:580}),
+					view({height:60, width:60, bgcolor:vec4(0.7507445216178894,0.4611673057079315,0.2762908637523651,1), position:'absolute', x:761, y:128.00009155273438, borderradius:vec4(40,10,10,10)}),
 					icon({fgcolor:'cornflower', icon:'flask', position:'absolute', x:314, y:714}),
 					label({fontsize:24, bgcolor:'transparent', fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:392, y:428}),
 					icon({fgcolor:vec4(0.8803882002830505,0.893095076084137,0.9159155488014221,1), icon:'gear', position:'absolute', x:149, y:409.0000305175781, width:NaN, height:NaN, fontsize:68}),
