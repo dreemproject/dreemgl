@@ -219,6 +219,7 @@ define.class("$ui/view", function(require,
 		this.screen.globalpointerstart = function(ev) {
 			if (this.testView(ev.view)) {
 				this.selection = [ev.view];
+				ev.view.focus = true;
 
 				if (ev.view.toolmove === false){
 					ev.view.cursor = "crosshair";
@@ -442,7 +443,7 @@ define.class("$ui/view", function(require,
 				var commit = false;
 				for (var i=0;i<this.selection.length;i++) {
 					var v = this.selection[i];
-					if (this.testView(v) && v.toolremove !== false) {
+					if (v.focus && this.testView(v) && v.toolremove !== false) {
 						var node = v.getASTNode();
 						var parent = v.parent.getASTNode();
 						var index = parent.args.indexOf(node);
@@ -706,6 +707,8 @@ define.class("$ui/view", function(require,
 								console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
 
 								node.args.push(this.buildCallNode(item.classname, params));
+
+								//TODO set propviewer to inspect new object
 
 								this.screen.composition.commitAST();
 
