@@ -28,7 +28,7 @@ define.class(function(require){
 
 		this.args = args
 		var port = this.args['-port'] || process.env.PORT || 2000
-		var iface = this.args['-iface'] || process.env.IP || '0.0.0.0'
+		var iface = this.args['-iface'] || process.env.IP || '127.0.0.1'
 
 		this.cache_gzip = define.makeCacheDir('gzip')
 

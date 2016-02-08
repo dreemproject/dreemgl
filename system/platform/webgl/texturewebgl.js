@@ -264,4 +264,22 @@ define.class('$system/base/texture', function(exports){
 		})
 	}
 
+	this.array1d = function(index){
+		return texture2D(this, vec2(mod(index, this.size.x), floor(index / this.size.x)), {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
+	this.array2d = function(v){
+		return texture2D(this, vec2(v.x * this.size.x, v.y * this.size.y), {
+			MIN_FILTER: 'NEAREST',
+			MAG_FILTER: 'NEAREST',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
+
 })
