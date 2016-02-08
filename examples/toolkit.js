@@ -1,9 +1,9 @@
-define.class("$server/composition",function(require, $ui$, icon, label, view, screen, cadgrid, $widgets$, toolkit) {
+define.class("$server/composition",function(require, $ui$, button, icon, label, view, screen, cadgrid, $widgets$, toolkit) {
 	
 	this.render = function() {
 		return [
 			screen(
-				{flexdirection:"row", position:'absolute', x:308.00006103515625, y:118.00001525878906, width:484, height:472},
+				{flexdirection:"row", position:'absolute', x:0, y:0, width:484, height:472},
 				cadgrid({
 						name:"grid", 
 						flex:3, 
@@ -27,7 +27,8 @@ define.class("$server/composition",function(require, $ui$, icon, label, view, sc
 					icon({fgcolor:vec4(0.4203698933124542,0.759999692440033,0.8438690900802612,1), icon:'gear', position:'absolute', x:545.000244140625, y:44.99999237060547, fontsize:80}),
 					icon({fgcolor:vec4(0.3921568691730499,0.929411768913269,0.42688411474227905,1), icon:'anchor', position:'absolute', x:212.0001220703125, y:593, fontsize:180}),
 					view({height:117, width:134, bgcolor:vec4(1,0.8303571343421936,0.47680214047431946,1), position:'absolute', x:1006, y:217.00001525878906, borderradius:vec4(10,10,0,10), borderwidth:vec4(0,0,10,0), bordercolor:vec4(0.2679905891418457,0.3232444226741791,0.42181396484375,1)}),
-					view({height:60, width:60, bgcolor:'purple', position:'absolute', x:872.0000610351562, y:276})
+					view({height:60, width:60, bgcolor:'purple', position:'absolute', x:872.0000610351562, y:276}),
+					button({fontsize:24, fgcolor:'red', text:'Press Me!', position:'absolute', x:798.0000610351562, y:125.99996948242188, width:NaN, height:NaN})
 				),
 				toolkit({flexdirection:"column"})
 			)

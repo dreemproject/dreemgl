@@ -51,6 +51,18 @@ define.class("$ui/view", function(require,
 					}
 				},
 				{
+					label:"Button",
+					icon:"plus-square",
+					desc:"A basic button",
+					classname:"button",
+					classdir:"$ui$",
+					params:{
+						fontsize:24,
+						fgcolor:'red',
+						text:'Press Me!'
+					}
+				},
+				{
 					label:"Image",
 					icon:"image",
 					desc:"An image or icon",
@@ -61,7 +73,19 @@ define.class("$ui/view", function(require,
 						icon:'flask'
 					}
 				}
-			]
+			],
+			//Behaviors:[
+			//	{
+			//		label:"Alert",
+			//		icon:"warning",
+			//		desc:"A pop up an alert dialog",
+			//		behaviors:{
+			//			onclick:function() {
+			//				alert('Beep.')
+			//			}
+			//		}
+			//	}
+			//]
 		}}),
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
@@ -444,18 +468,20 @@ define.class("$ui/view", function(require,
 						var compdef = section[s];
 
 						var classname = compdef.classname;
-						var cdir = compdef.classdir || "$$";
+						if (classname) {
+							var cdir = compdef.classdir || "$$";
 
-						var included = plist[cdir];
-						if (!included) {
-							included = [];
-						}
-
-						if (included.indexOf(classname) < 0) {
-							if (!missing[cdir]) {
-								missing[cdir] = []
+							var included = plist[cdir];
+							if (!included) {
+								included = [];
 							}
-							missing[cdir].push(classname)
+
+							if (included.indexOf(classname) < 0) {
+								if (!missing[cdir]) {
+									missing[cdir] = []
+								}
+								missing[cdir].push(classname)
+							}
 						}
 					}
 				}
@@ -790,21 +816,39 @@ define.class("$ui/view", function(require,
 						var node = v.getASTNode();
 
 						if (node) {
-							var params = JSON.parse(JSON.stringify(item.params));
 
-							var pos = v.globalToLocal(ev.position);
+							if (item.behaviors) {
+								console.log('Dropped behavior ', item, 'onto node:', node);
+								for (var o in item.behaviors) {
+									console.log('o', o)
+									if (item.behaviors.hasOwnProperty(o)) {
+										var behave = item.behaviors[o];
+										console.log('b', behave)
+										v[o] = behave;
+									}
+								}
+								console.log('here')
+								//TODO store these into the ast, make sure prop viewer can see them w/code viewer?)
+							}
 
-							params.position = 'absolute';
-							params.x = pos.x;
-							params.y = pos.y;
+							if (item.classname && item.params) {
+								var params = JSON.parse(JSON.stringify(item.params));
 
-							console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
+								var pos = v.globalToLocal(ev.position);
 
-							node.args.push(this.buildCallNode(item.classname, params));
+								params.position = 'absolute';
+								params.x = pos.x;
+								params.y = pos.y;
+								console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
+
+								node.args.push(this.buildCallNode(item.classname, params));
+
+								this.screen.composition.commitAST();
+							}
+
 
 							//TODO set propviewer to inspect new object
 
-							this.screen.composition.commitAST();
 
 						}
 					}
