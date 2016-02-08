@@ -72,13 +72,46 @@ define.class("$ui/view", function(require,
 		selection:[],
 		onselection: function() {
 			var inspector = this.find('inspector');
+
+			if (!this.__selrects) {
+				this.__selrects = [];
+			}
+
+			for (var i = 0; i < this.__selrects.length; i++) {
+				var selrect = this.__selrects[i];
+				if (this.selection && this.selection.indexOf(selrect.target) > -1) {
+					continue;
+				}
+				selrect.closeOverlay();
+				delete selrect.target.__selrect
+
+				this.__selrects.splice(i,0);
+			}
+
 			if (this.selection) {
-				var selected = this.selection.filter(function(a) { return this.testView(a) }.bind(this))[0];
+				var filtered = this.selection.filter(function(a) { return a.toolselect !== false && this.testView(a) }.bind(this));
+				var selected = filtered[0];
 				if (selected && inspector.target != selected) {
 					var target = selected;
 					inspector.astarget = JSON.stringify(target.getASTPath());
-					//console.log('AST', target.getASTNode());
 				}
+
+				for (var i=0;i<filtered.length;i++) {
+					var target = filtered[i];
+					if (!target.__selrect) {
+						var selectrect = this.screen.openOverlay(this.selectedrect);
+						selectrect.x = target._layout.left - 1;
+						selectrect.y = target._layout.top - 1;
+						selectrect.width = target._layout.width + 2;
+						selectrect.height = target._layout.height + 2;
+						selectrect.target = target;
+
+						target.__selrect = selectrect;
+
+						this.__selrects.push(selectrect);
+					}
+				}
+
 				return;
 			}
 			inspector.target = null;
@@ -602,7 +635,21 @@ define.class("$ui/view", function(require,
 		this.bgcolor = vec4(0.7,0.7,0.7,0.07);
 		this.borderradius = 7;
 		this.position = "absolute";
+	});
 
+	define.class(this,"selectedrect",view,function() {
+		this.name = "selectorrect";
+		this.bordercolorfn = function(pos) {
+			var speed = time * 20.0;
+			var size = 0.05;
+			var slices = 2.0;
+			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
+		}
+		this.borderwidth = 2;
+		this.bgcolor = NaN;
+		this.borderradius = 0;
+		this.position = "absolute";
 	});
 
 	define.class(this, 'panel', view, function(){
