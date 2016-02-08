@@ -34,6 +34,8 @@ define.class(function($ui$, view){
 		bgcolor: Config({duration: 1.0})
 	}
 
+	this.tooltarget = false;
+
 	this.noscroll = true
 
 	var scrollbar = this.constructor;

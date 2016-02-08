@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon,
+								  $ui$, view, label, icon, treeview,
 								  $widgets$, palette, propviewer){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
@@ -15,6 +15,7 @@ define.class("$ui/view", function(require,
 	this.flex = 1;
 	this.flexdirection = "column";
 	this.alignitems = "stretch";
+	this.tooltarget = false;
 
 	this.attributes = {
 
@@ -121,129 +122,6 @@ define.class("$ui/view", function(require,
 		above:Config({type:Object}),
 
 		reticlesize: 6
-	};
-
-	this.ensureDeps = function() {
-		var at = "";
-		var arglist = [];
-		var plist = {};
-		var main = this.screen.composition.seekASTNode({type:"Function", index:0});
-		//console.log('AST', main);
-		if (main && main.params) {
-			for (var i=0;i<main.params.length;i++) {
-				var param = main.params[i];
-				if (param && param.id && param.id.name) {
-					var name = param.id.name;
-					if (name.startsWith('$') && name.endsWith('$')) {
-						at = name;
-					} else {
-						if (!plist[at]) {
-							plist[at] = [];
-						}
-						plist[at].push(name)
-					}
-					arglist.push(name);
-				}
-			}
-		}
-
-		if (this.components) {
-			var missing = {};
-			for (var key in this.components) {
-				if (this.components.hasOwnProperty(key)) {
-					var section = this.components[key];
-					for (var s=0;s<section.length;s++) {
-						var compdef = section[s];
-
-						var classname = compdef.classname;
-						var cdir = compdef.classdir || "$$";
-
-						var included = plist[cdir];
-						if (!included) {
-							included = [];
-						}
-
-						if (included.indexOf(classname) < 0) {
-							if (!missing[cdir]) {
-								missing[cdir] = []
-							}
-							missing[cdir].push(classname)
-						}
-					}
-				}
-			}
-
-			for (var dir in missing) {
-				if (missing.hasOwnProperty(dir)) {
-					var position = arglist.indexOf(dir);
-					if (position < 0) {
-						position = arglist.length;
-						arglist.push(dir);
-						main.params.push(this.buildDefNode(dir));
-					}
-					var missed = missing[dir];
-					for (var m = 0; m < missed.length; m++) {
-						var item = missed[m];
-						arglist.splice(position + 1, 0, item);
-						main.params.splice(position + 1, 0, this.buildDefNode(item))
-					}
-				}
-			}
-		}
-	};
-
-	this.edgeCursor = function (ev) {
-		var resize = false;
-		if (this.testView(ev.view) && ev.view.toolmove !== false) {
-			this.above = ev.view;
-
-			var pos = ev.view.globalToLocal(ev.pointer.position);
-			var edge = this.reticlesize;
-
-			ev.view.cursor = 'arrow';
-
-			if (pos.x < edge && pos.y < edge) {
-				resize = "top-left";
-				ev.view.cursor = 'nwse-resize'
-
-			} else if (pos.x > ev.view.width - edge && pos.y < edge) {
-				resize = "top-right";
-				ev.view.cursor = 'nesw-resize'
-
-			} else if (pos.x < edge && pos.y > ev.view.height - edge) {
-				resize = "bottom-left";
-				ev.view.cursor = 'nesw-resize'
-
-			} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
-				resize = "bottom-right";
-				ev.view.cursor = 'nwse-resize'
-
-			} else if (pos.x < edge) {
-				resize = "left";
-				ev.view.cursor = 'ew-resize'
-
-			} else if (pos.y < edge) {
-				resize = "top";
-				ev.view.cursor = 'ns-resize'
-
-			} else if (pos.x > ev.view.width - edge) {
-				resize = "right";
-				ev.view.cursor = 'ew-resize'
-
-			} else if (pos.y > ev.view.height - edge) {
-				resize = "bottom";
-				ev.view.cursor = 'ns-resize'
-			}
-
-			if (!resize) {
-				ev.view.cursor = 'arrow';
-			}
-
-		} else if (ev.view.tooltarget === false) {
-			ev.view.cursor = 'not-allowed';
-		}
-
-		return resize;
 	};
 
 	this.init = function () {
@@ -485,14 +363,135 @@ define.class("$ui/view", function(require,
 							commit = true;
 						}
 					}
-
 				}
 				if (commit) {
 					this.screen.composition.commitAST();
 				}
 			}
 		}.bind(this);
+	};
 
+	this.ensureDeps = function() {
+		var at = "";
+		var arglist = [];
+		var plist = {};
+		var main = this.screen.composition.seekASTNode({type:"Function", index:0});
+		//console.log('AST', main);
+		if (main && main.params) {
+			for (var i=0;i<main.params.length;i++) {
+				var param = main.params[i];
+				if (param && param.id && param.id.name) {
+					var name = param.id.name;
+					if (name.startsWith('$') && name.endsWith('$')) {
+						at = name;
+					} else {
+						if (!plist[at]) {
+							plist[at] = [];
+						}
+						plist[at].push(name)
+					}
+					arglist.push(name);
+				}
+			}
+		}
+
+		if (this.components) {
+			var missing = {};
+			for (var key in this.components) {
+				if (this.components.hasOwnProperty(key)) {
+					var section = this.components[key];
+					for (var s=0;s<section.length;s++) {
+						var compdef = section[s];
+
+						var classname = compdef.classname;
+						var cdir = compdef.classdir || "$$";
+
+						var included = plist[cdir];
+						if (!included) {
+							included = [];
+						}
+
+						if (included.indexOf(classname) < 0) {
+							if (!missing[cdir]) {
+								missing[cdir] = []
+							}
+							missing[cdir].push(classname)
+						}
+					}
+				}
+			}
+
+			for (var dir in missing) {
+				if (missing.hasOwnProperty(dir)) {
+					var position = arglist.indexOf(dir);
+					if (position < 0) {
+						position = arglist.length;
+						arglist.push(dir);
+						main.params.push(this.buildDefNode(dir));
+					}
+					var missed = missing[dir];
+					for (var m = 0; m < missed.length; m++) {
+						var item = missed[m];
+						arglist.splice(position + 1, 0, item);
+						main.params.splice(position + 1, 0, this.buildDefNode(item))
+					}
+				}
+			}
+		}
+	};
+
+	this.edgeCursor = function (ev) {
+		var resize = false;
+		if (this.testView(ev.view) && ev.view.toolmove !== false) {
+			this.above = ev.view;
+
+			var pos = ev.view.globalToLocal(ev.pointer.position);
+			var edge = this.reticlesize;
+
+			ev.view.cursor = 'arrow';
+
+			if (pos.x < edge && pos.y < edge) {
+				resize = "top-left";
+				ev.view.cursor = 'nwse-resize'
+
+			} else if (pos.x > ev.view.width - edge && pos.y < edge) {
+				resize = "top-right";
+				ev.view.cursor = 'nesw-resize'
+
+			} else if (pos.x < edge && pos.y > ev.view.height - edge) {
+				resize = "bottom-left";
+				ev.view.cursor = 'nesw-resize'
+
+			} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
+				resize = "bottom-right";
+				ev.view.cursor = 'nwse-resize'
+
+			} else if (pos.x < edge) {
+				resize = "left";
+				ev.view.cursor = 'ew-resize'
+
+			} else if (pos.y < edge) {
+				resize = "top";
+				ev.view.cursor = 'ns-resize'
+
+			} else if (pos.x > ev.view.width - edge) {
+				resize = "right";
+				ev.view.cursor = 'ew-resize'
+
+			} else if (pos.y > ev.view.height - edge) {
+				resize = "bottom";
+				ev.view.cursor = 'ns-resize'
+			}
+
+			if (!resize) {
+				ev.view.cursor = 'arrow';
+			}
+
+		} else if (ev.view.tooltarget === false) {
+			//ev.view.cursor = 'not-allowed';
+		}
+
+		return resize;
 	};
 
 	this.buildIdNode = function(id) {
@@ -689,7 +688,7 @@ define.class("$ui/view", function(require,
 		var ok = v != this.screen;
 		var p = v;
 		while (p && ok) {
-			ok = p !== this && p.tooltarget !== false;
+			ok = p.tooltarget !== false;
 			p = p.parent;
 		}
 		return ok;
@@ -767,6 +766,43 @@ define.class("$ui/view", function(require,
 			),
 			this.panel({title:"Cursor", flex:0},
 				label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
+			),
+			this.panel({title:"Structure", flex:1.0},
+				treeview({
+					flex:1,
+					name:"structure",
+					init:function() {
+						var swalk = function (v) {
+							if (v.tooltarget !== false) {
+								var children = [];
+								for (var i = 0; i < v.children.length; i++) {
+									var child = swalk(v.children[i]);
+									if (child) {
+										children.push(child);
+									}
+								}
+
+								var name = v.constructor.name;
+								if (v.name) {
+									name = v.name + " (" + name + ")"
+								}
+								return {
+									name:name,
+									children: children,
+									collapsed:(v.constructor.name !== "screen"),
+									view:v
+								}
+							}
+						};
+
+						this.data = swalk(this.screen);
+					},
+					onselect:function(ev) {
+						if (ev && ev.item && ev.item.view) {
+							this.selection = [ev.item.view]
+						}
+					}.bind(this)
+				})
 			),
 			this.panel({title:"Properties", flex:2.5},
 				propviewer({
