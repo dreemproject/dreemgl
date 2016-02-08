@@ -640,8 +640,9 @@ define.class("$ui/view", function(require,
 	define.class(this,"selectedrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var speed = time * 20.0;
-			var size = 0.05;
+//			var speed = time * 20.0;
+			var speed = 0.0;
+			var size = 0.03;
 			var slices = 2.0;
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
