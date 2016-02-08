@@ -344,6 +344,7 @@ define.class(function(require, exports){
 	}
 
 	this.atNewlyRendered = function(view){
+
 		// if view is not a layer we have to find the layer, and regenerate that whole layer.
 		if(!view.parent) this.screen = view // its the screen
 		// alright lets do this.
@@ -353,7 +354,15 @@ define.class(function(require, exports){
 		}
 
 		if(!node.parent){ // fast path to chuck the whole setc
-			//console.log("FLUSHING ALL")
+
+
+			for (var j = 0; j< this.pointer.hover.length;j++) {
+				var p = this.pointer.hover[j];
+				console.log("Removing dangling hover pointer", p)
+				this.pointer.hover.removePointer(p);
+			}
+
+
 			// lets put all the drawpasses in a pool for reuse
 			for(var i = 0; i < this.drawpass_list.length; i++){
 				var draw = this.drawpass_list[i]

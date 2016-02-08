@@ -413,7 +413,6 @@ define.class("$ui/view", function(require,
 
 		this.screen.globalkeydown = function(ev) {
 			if (ev.code === 8 && this.selection) {
-				console.log('selection!', this.selection)
 				var commit = false;
 				var multi = this.selection.length > 1;
 				for (var i=this.selection.length - 1; i>=0; i--) {
@@ -843,11 +842,11 @@ define.class("$ui/view", function(require,
 
 								node.args.push(this.buildCallNode(item.classname, params));
 
-								this.screen.composition.commitAST();
 							}
 
+							this.screen.composition.commitAST();
 
-							//TODO set propviewer to inspect new object
+							//TODO set propviewer to inspect new object on reload?
 
 
 						}

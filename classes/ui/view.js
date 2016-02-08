@@ -263,7 +263,7 @@ define.class('$system/base/node', function(require){
 		dropshadowcolor:Config({type:vec4,meta:"color", value:vec4("black")}),
 
 		// whether this view has focus
-		focus: false,
+		focus: Config({meta:"hidden", value:false}),
 		// tabstop, sorted by number
 		tabstop: NaN,
 
@@ -825,6 +825,7 @@ define.class('$system/base/node', function(require){
 			if(lastdrag){
 				lastdrag.emitUpward('dragout',{})
 				dragview.atDrop(lastdrag, event)
+				this.onpointerend = undefined
 			}
 		}
 	}

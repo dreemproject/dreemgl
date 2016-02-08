@@ -200,17 +200,15 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 			label:Config({type:String}),
 			iconfontsize: 40,
 			hovercolor:'white',
-			hover:false
+			hoverstate:false
 		};
 
 		this.pointerhover = function() {
-			this.hover = true;
-			console.log('hover', this)
+			this.hoverstate = true;
 		};
 
 		this.pointerout = function() {
-			console.log('unhover', this)
-			this.hover = false;
+			this.hoverstate = false;
 		};
 
 		this.pointerstart = function(event) {
@@ -283,7 +281,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 				args.icon = this.icon;
 			}
 
-			if (this.hover) {
+			if (this.hoverstate) {
 				args.fgcolor = this.hovercolor;
 			}
 
@@ -295,7 +293,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 			views.push(this.buildClas());
 
-			//if (this.hover) {
+			//if (this.hoverstate) {
 			//	views.push(label({text:this.label, bg:0}))
 			//}
 
