@@ -625,7 +625,7 @@ define.class("$ui/view", function(require,
 					this.__grabpos = undefined;
 				}
 			}),
-			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1},
+			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.5},
 				palette({
 					name:"components",
 					flex:1,
