@@ -74,16 +74,10 @@ define.class(function(exports){
 	}
 
 
-	// Search interface to retrieve images. You can call this routine multiple
-	// times if you need more images, but you run the risk of hitting rate limits.
-	// If 0 results are returned you should not continue searcing.
-	// Multiple pages is not currently working. You can retrieve up to 100
-	// results per query.
+	// Search interface to retrieve images.
 	//
-	// cb      Callback method which is passed the returned tweets, as an array,
-	//         and the next maxid argument if you need additional tweets.
-	// options is a hash of search options. Default values to do a SF search
-	//         will be used if no options are specified.
+	// cb      Callback method which is passed the returned photos, as an array.
+	// options is a hash of search options. Default values to do a SF search.
 	this.search = function(cb, options) {
 
 		if (!this.flickr) {
@@ -110,12 +104,12 @@ define.class(function(exports){
 			options = {
 				api_key : process.env.FLICKR_KEY
 				//,sort: 'date-taken-desc'
-				,lat: 37.7842
-				,lon: -122.4016
+				,lat: 37.826664   // Alcatraz
+				,lon: -122.423012
 				,radius: 2 // 2 km
-				,per_page: 50
+				,per_page: 100
 				,extras: 'geo, url_m'
-				,min_taken_date: '2016-02-01'
+				,min_taken_date: '2016-01-01'
 			};
 		}
 
