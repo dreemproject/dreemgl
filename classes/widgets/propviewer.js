@@ -29,7 +29,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 				for (var i=1;i<astpath.length;i++) {
 					var pathitem = astpath[i];
 					var child = node.children[pathitem.childindex];
-					if (pathitem.type == child.constructor.name) {
+					if (child && pathitem.type == child.constructor.name) {
 						node = child;
 					} else {
 						break;

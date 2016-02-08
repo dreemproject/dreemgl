@@ -439,11 +439,23 @@ define.class("$ui/view", function(require,
 
 		this.screen.globalkeydown = function(ev) {
 			if (ev.code === 8 && this.selection) {
+				var commit = false;
 				for (var i=0;i<this.selection.length;i++) {
 					var v = this.selection[i];
-					console.log('delete view from AST', v)
+					if (this.testView(v) && v.toolremove !== false) {
+						var node = v.getASTNode();
+						var parent = v.parent.getASTNode();
+						var index = parent.args.indexOf(node);
+						if (index >= 0) {
+							parent.args.splice(index, 1);
+							commit = true;
+						}
+					}
+
 				}
-				this.screen.composition.commitAST();
+				if (commit) {
+					this.screen.composition.commitAST();
+				}
 			}
 		}.bind(this);
 
