@@ -569,15 +569,15 @@ define.class("$ui/view", function(require,
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var speed = time * 100.0;
+			var speed = time * 20.0;
 			var size = 0.001;
 			var slices = 2.0;
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-			return vec4((v + 0.75) * vec3(0.95, 0.75, 0.15), 1);
+			return vec4((v + 1) * vec3(0.5, 0.5, 0.1), 0.8);
 		}
-		this.borderwidth = 3;
-		this.bgcolor = vec4(0.8,0.8,0.8,0.05);
-		this.borderradius = 2;
+		this.borderwidth = 1;
+		this.bgcolor = vec4(0.7,0.7,0.7,0.07);
+		this.borderradius = 7;
 		this.position = "absolute";
 	});
 
