@@ -413,9 +413,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.lastpos = vec2(0);
 
 		this.calctilepos = function(){
-			var x = Math.floor( this.coord[0] + this.trans[0]);
-			var y = Math.floor(this.coord[1] + this.trans[1]);
-			return [x,y,this.zoomlevel ];
+			var x = Math.floor( this._coord[0] + this._trans[0]);
+			var y = Math.floor(this._coord[1] + this._trans[1]);
+			return [x,y,this._zoomlevel ];
 		}
 
 		this.init = function(){
@@ -426,9 +426,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.setpos = function(newcoord, newzoom, frac){
-			this.tiletrans = frac;
-			this.zoomlevel = newzoom;
-			this.coord = vec2(Math.floor(newcoord[0]), Math.floor(newcoord[1]));
+			this._tiletrans = frac;
+			this._zoomlevel = newzoom;
+			this._coord = vec2(Math.floor(newcoord[0]), Math.floor(newcoord[1]));
 			this.checknewpos();
 		}
 
