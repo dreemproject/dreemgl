@@ -295,7 +295,17 @@ define.class("$ui/view", function(require,
 				this.setASTObjectProperty(ev.view, "x", pos.x - this.__startpos.x);
 				this.setASTObjectProperty(ev.view, "y", ev.view.y, pos.y - this.__startpos.y);
 
+				if (this.selection) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						this.setASTObjectProperty(selected, "x", selected.pos.x + ev.pointer.movement.x);
+						this.setASTObjectProperty(selected, "y", selected.pos.y + ev.pointer.movement.y);
+					}
+				}
+
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
+
+
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
 
