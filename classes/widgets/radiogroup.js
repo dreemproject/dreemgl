@@ -46,7 +46,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 
 						},
 						label({
-								font: require('$resources/fonts/opensans_bold_ascii.glf'),
+								bold: true,
 								text:(v&&v.trim().length > 0)?v:"undefined",
 								bgcolor:NaN,
 								margin: vec4(5,0,5,0),
