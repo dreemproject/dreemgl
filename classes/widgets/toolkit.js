@@ -544,11 +544,14 @@ define.class("$ui/view", function(require,
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var check = int(mod(0.01 * (gl_FragCoord.x + gl_FragCoord.y + time * 80.0),2.0)) == 1 ? 1.0:0.7;
-			return vec4(check * vec3(1,0.9,0.2),1)
+			var speed = time * 200.0;
+			var size = 0.001;
+			var slices = 2.0;
+			var v = int(mod(size * (gl_FragCoord.x + gl_FragCoord.y + speed), slices));
+			return vec4((v + 0.5) * vec3(0.95, 0.75, 0.15), 1);
 		}
-		this.borderwidth = 4;
-		this.bgcolor = vec4(1,1,1,0.05);
+		this.borderwidth = 3;
+		this.bgcolor = vec4(0.8,0.8,0.8,0.05);
 		this.borderradius = 2;
 		this.position = "absolute";
 	});
@@ -622,7 +625,7 @@ define.class("$ui/view", function(require,
 					this.__grabpos = undefined;
 				}
 			}),
-			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1},
+			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.5},
 				palette({
 					name:"components",
 					flex:1,

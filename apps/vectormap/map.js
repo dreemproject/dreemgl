@@ -62,7 +62,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			var m = geo.metersForTile({x:x, y:y, z:z})
 			
-			console.log(x,y,z,time, m);
+//			console.log(x,y,z,time, m);
 			if (!time || time == 0)
 			{
 				this.centerpos = vec2(x,y)
@@ -135,10 +135,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var ret = vec2.array(10)
 				
 				try{
-					console.log("trying to load!");
 					var thedata = JSON.parse(str);
 					this.BufferGen.build(r, thedata);
-				console.log("loaded!");
 					
 				}
 				catch(e){
@@ -357,6 +355,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		if (R){
 			this.startvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8))
 			this.startcenter = vec2(this.centerx, this.centery);
+			this.updateTiles();
 		}
 	}
 	this.moveDrag = function(ev){
@@ -367,6 +366,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			
 			this.find("mapdata").setCenter( this.startvect[0] - this.newvect[0] + this.startcenter[0],
 			 this.startvect[1] - this.newvect[1] + this.startcenter[1], this.zoomlevel);
+			this.updateTiles();
 
 		}
 	}
@@ -432,7 +432,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.checknewpos();
 		}
 
-		this.checknewpos = function(time){
+		this.checknewpos = function(thetime){
 			var R = this.calctilepos();
 
 			var newpos = 	vec3(R[0], R[1], R[2]);
@@ -444,9 +444,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				this.bufferloadbool = false;
 				this.queued  = 0;
 				this.redraw();
-				this.loadbuffer(time)
+				this.loadbuffer(thetime)
 			}else{
-				if (this.bufferloadbool == false) this.loadbuffer(time);else this.bl.lasttime = time;
+				if (this.bufferloadbool == false) this.loadbuffer(thetime);else this.bl.lasttime = thetime;
 			}
 		}
 
@@ -505,6 +505,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
+					pos.xy /= pow(2.0,view.layeroffset-2)
+			
 				respos = vec4(pos.x, -mesh.pos.z * view.bufferloaded + view.layeroffset*view.layerzmult + view.layerzoff, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				//r.w += 0.002;
 
@@ -578,7 +580,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.drawtype = this.TRIANGLES
 
-			this.depth_test = ""
+			this.depth_test = "src_depth <= dst_depth"
 
 			this.color = function(){
 				//return "blue";
@@ -714,7 +716,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.bgcolor = vec4("#101030");
 	this.flex = 1;
 	this.clearcolor = "black"
-	this.time = 0;
+	//this.time = 0;
 
 	this.updateTiles = function(){
 		if (!this.dataset) return;

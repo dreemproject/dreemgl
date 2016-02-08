@@ -120,7 +120,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 						autogradient: false,
 						icon:undefined,
 						title: this.uppercaseFirst(group),
-						bordercolor:"#565656"	,
+						bordercolor:"#565656",
 						fontsize:this.fontsize
 					},
 					view({
