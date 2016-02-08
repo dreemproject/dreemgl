@@ -696,139 +696,151 @@ define.class("$ui/view", function(require,
 	};
 
 	this.render = function() {
-		return [
-			label({
-				name:"title",
-				text:"DreemGL Visual Toolkit",
-				padding:5,
-				paddingleft:10,
-				bgcolor:"white",
-				flex:0,
-				hardrect:{pickonly:true},
-				pointerstart:function(p) {
-					console.log('drag me start', p)
-					this.__grabpos = p.view.globalToLocal(p.position);
-				},
-				pointermove:function(p) {
-					if (this.parent.position === "absolute") {
-						console.log('drag me ', p, this.__grabpos, this.parent);
-						this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
-					}
-				},
-				pointerend:function(p) {
-					if (this.parent.position === "absolute") {
-						console.log('drag me end', p, this.__grabpos)
-						this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
-					}
-					this.__grabpos = undefined;
-				}
-			}),
-			this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.1},
-				palette({
-					name:"components",
-					flex:1,
-					bgcolor:"#4e4e4e",
-					items:this.components,
+		var views = [];
 
-					dropTest:function(ev, v, item, orig, dv) {
-						//var name = v && v.name ? v.name : "unknown";
-						//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
-						return this.testView(v);
-					}.bind(this),
+		var vertical = this.flexdirection === "column";
 
-					drop:function(ev, v, item, orig, dv) {
-						var name = v && v.name ? v.name : "unknown";
-						console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
-
-						if (v) {
-							var node = v.getASTNode();
-
-							if (node) {
-								var params = JSON.parse(JSON.stringify(item.params));
-
-								var pos = v.globalToLocal(ev.position);
-
-								params.position = 'absolute';
-								params.x = pos.x;
-								params.y = pos.y;
-
-								console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
-
-								node.args.push(this.buildCallNode(item.classname, params));
-
-								//TODO set propviewer to inspect new object
-
-								this.screen.composition.commitAST();
-
-							}
-						}
-					}.bind(this)
-				})
-			),
-			this.panel({title:"Cursor", flex:0},
-				label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
-			),
-			this.panel({title:"Structure", flex:1.0},
-				treeview({
-					flex:1,
-					name:"structure",
-					init:function() {
-						var swalk = function (v) {
-							if (v.tooltarget !== false) {
-								var children = [];
-								for (var i = 0; i < v.children.length; i++) {
-									var child = swalk(v.children[i]);
-									if (child) {
-										children.push(child);
-									}
-								}
-
-								var name = v.constructor.name;
-								if (v.name) {
-									name = v.name + " (" + name + ")"
-								}
-								return {
-									name:name,
-									children: children,
-									collapsed:(v.constructor.name !== "screen"),
-									view:v
-								}
-							}
-						};
-
-						this.data = swalk(this.screen);
+		if (vertical) {
+			views = [
+				label({
+					name:"title",
+					text:"DreemGL Visual Toolkit",
+					padding:5,
+					paddingleft:10,
+					bgcolor:"white",
+					flex:0,
+					hardrect:{pickonly:true},
+					pointerstart:function(p) {
+						console.log('drag me start', p)
+						this.__grabpos = p.view.globalToLocal(p.position);
 					},
-					onselect:function(ev) {
-						if (ev && ev.item && ev.item.view) {
-							this.selection = [ev.item.view]
+					pointermove:function(p) {
+						if (this.parent.position === "absolute") {
+							console.log('drag me ', p, this.__grabpos, this.parent);
+							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 						}
-					}.bind(this)
+					},
+					pointerend:function(p) {
+						if (this.parent.position === "absolute") {
+							console.log('drag me end', p, this.__grabpos)
+							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+						}
+						this.__grabpos = undefined;
+					}
 				})
-			),
-			this.panel({title:"Properties", flex:2.5},
-				propviewer({
-					name:"inspector",
-					target:this.inspect,
-					flex:1,
-					overflow:"scroll",
-					bgcolor:"#4e4e4e",
-					callback:function(val, editor, commit) {
-						if (editor && editor.target && editor.propertyname) {
-							var t = editor.target;
-							if (typeof(t) === 'string') {
-								t = editor.find(t);
+			]
+		}
+
+		views.push(this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.1},
+			palette({
+				name:"components",
+				flex:1,
+				bgcolor:"#4e4e4e",
+				items:this.components,
+
+				dropTest:function(ev, v, item, orig, dv) {
+					//var name = v && v.name ? v.name : "unknown";
+					//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
+					return this.testView(v);
+				}.bind(this),
+
+				drop:function(ev, v, item, orig, dv) {
+					var name = v && v.name ? v.name : "unknown";
+					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
+
+					if (v) {
+						var node = v.getASTNode();
+
+						if (node) {
+							var params = JSON.parse(JSON.stringify(item.params));
+
+							var pos = v.globalToLocal(ev.position);
+
+							params.position = 'absolute';
+							params.x = pos.x;
+							params.y = pos.y;
+
+							console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
+
+							node.args.push(this.buildCallNode(item.classname, params));
+
+							//TODO set propviewer to inspect new object
+
+							this.screen.composition.commitAST();
+
+						}
+					}
+				}.bind(this)
+			})
+		));
+
+		views.push(this.panel({title:"Cursor", flex:vertical ? 0 : 2},
+			label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
+		));
+
+		views.push(this.panel({title:"Structure", flex:1.0},
+			treeview({
+				flex:1,
+				name:"structure",
+				init:function() {
+					var swalk = function (v) {
+						if (v.tooltarget !== false) {
+							var children = [];
+							for (var i = 0; i < v.children.length; i++) {
+								var child = swalk(v.children[i]);
+								if (child) {
+									children.push(child);
+								}
 							}
 
-							if (t) {
-								this.setASTObjectProperty(t, editor.propertyname, val);
+							var name = v.constructor.name;
+							if (v.name) {
+								name = v.name + " (" + name + ")"
+							}
+							return {
+								name:name,
+								children: children,
+								collapsed:(v.constructor.name !== "screen"),
+								view:v
 							}
 						}
-						if (commit) {
-							this.screen.composition.commitAST();
+					};
+
+					this.data = swalk(this.screen);
+				},
+				onselect:function(ev) {
+					if (ev && ev.item && ev.item.view) {
+						this.selection = [ev.item.view]
+					}
+				}.bind(this)
+			})
+		));
+
+		views.push(this.panel({title:"Properties", flex:2.5},
+			propviewer({
+				name:"inspector",
+				target:this.inspect,
+				flex:1,
+				overflow:"scroll",
+				bgcolor:"#4e4e4e",
+				callback:function(val, editor, commit) {
+					if (editor && editor.target && editor.propertyname) {
+						var t = editor.target;
+						if (typeof(t) === 'string') {
+							t = editor.find(t);
 						}
-					}.bind(this)
-				})
-			)
-		];
+
+						if (t) {
+							this.setASTObjectProperty(t, editor.propertyname, val);
+						}
+					}
+					if (commit) {
+						this.screen.composition.commitAST();
+					}
+				}.bind(this)
+			})
+		));
+
+		return views;
 	};
 });
