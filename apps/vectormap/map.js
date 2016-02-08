@@ -66,7 +66,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var m = geo.metersForTile({x:x, y:y, z:z})
 			for(var i =0 ;i<20;i++){
 				
-					var center = geo.tileForMeters(m[0], m[1], i);
+					var center = geo.tileForMeters(m.x, m.y, i);
 					centerset.push([center.x,center.y]);
 			}
 			
@@ -199,7 +199,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				
 			//	console.log(this.centers);
 			//	console.log("queuelen: " , this.loadqueue.length);
-				var zscalar = 1;
+				var zscalar = 4;
 
 				// sort queue on distance to cursor
 				for (var i = 0;i<this.loadqueue.length;i++){
@@ -208,8 +208,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var dy = this.centers[q.z][1] - q.y;
 					
 					var dz = (this.zoomlevel - q.z)*zscalar;
-					//console.log(dx,dy,dz, q.z, this.centers);
-					q.dist = dx * dx + dy * dy + dz * dz;
+					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
+					q.dist = (dx * dx + dy * dy) * (1 + Math.abs(dz));
 				}
 
 				this.loadqueue = this.loadqueue.sort(function(a,b){
@@ -582,7 +582,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				this.mesh =  BufferGen.LandVertexStruct.array();
 				var a = BufferGen.TileSize *0.05;
 				var b = BufferGen.TileSize - a;
-				var col =  vec4("#202050");
+				var col =  vec4(0,0,1,0.2);
 
 				this.mesh.push(a,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				this.mesh.push(b,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
@@ -599,11 +599,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.color = function(){
 				//return "blue";
-				var col =  vec4(0,0,0.6,1.0);
+				var col =  vec4(0,0,0.6,0.1);
 
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
-				prefog.a *=0.4;
+			//	prefog.a *=0.4;
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
@@ -838,7 +838,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
-		var dist = 13.5
+		var dist = 10.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
