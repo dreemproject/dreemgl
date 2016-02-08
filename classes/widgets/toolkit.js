@@ -437,6 +437,16 @@ define.class("$ui/view", function(require,
 
 		}.bind(this);
 
+		this.screen.globalkeydown = function(ev) {
+			if (ev.code === 8 && this.selection) {
+				for (var i=0;i<this.selection.length;i++) {
+					var v = this.selection[i];
+					console.log('delete view from AST', v)
+				}
+				this.screen.composition.commitAST();
+			}
+		}.bind(this);
+
 	};
 
 	this.buildIdNode = function(id) {
@@ -579,7 +589,7 @@ define.class("$ui/view", function(require,
 		this.bgcolor = vec4(0.7,0.7,0.7,0.07);
 		this.borderradius = 7;
 		this.position = "absolute";
-		
+
 	});
 
 	define.class(this, 'panel', view, function(){
