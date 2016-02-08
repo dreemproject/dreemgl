@@ -401,7 +401,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			fogstart: 1000.0,
 			fogend: 50000.,
 			layeroffset: 0,
-			layerzmult: -10,
+			layerzmult: 0,
 			layerzoff: 0
 		}
 		
@@ -595,7 +595,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.drawtype = this.TRIANGLES
 
-			this.depth_test = "src_depth <= dst_depth"
+			this.depth_test = "disabled"
 
 			this.color = function(){
 				//return "blue";
@@ -659,6 +659,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.labels = thelabels;
 		}
 		
+		this.depth_test = "disabled"
+
 		this.position = "absolute"
 		this.bgcolor = NaN;
 		//this.fontsize = 140;
@@ -711,6 +713,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 
 			this.drawtype = this.TRIANGLES
+						this.depth_test = "disabled"
+
 
 			this.color = function(){
 				//return "blue";
@@ -790,11 +794,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.tileheight = Math.pow(2, 1 + layer);
 			var tilearea = vec2(this.tilewidth, this.tileheight)
 			console.log(this.tilewidth , this.tileheight);		
-		
+			var ltx = 0;
+			var lty = 0;
+			if (layer ==0 ) lty = 1;
+			if (layer == 2) lty= -1;
 			for(var x = 0;x<this.tilewidth;x++){
 				for(var y = 0;y<this.tileheight;y++){
 					var tx = Math.floor(x-(this.tilewidth)/2);
-					var ty = Math.floor(y-(this.tileheight)/2)
+					var ty = Math.floor(y-(this.tileheight)/2) + lty;
 					var land = this.landtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
 					this.tilestoupdate.push(land);
 					res3d.push(land);
@@ -804,7 +811,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			for(var x = 0;x<this.tilewidth;x++){
 				for(var y = 0;y<this.tileheight;y++){
 					var tx = Math.floor(x-(this.tilewidth)/2);
-					var ty = Math.floor(y-(this.tileheight)/2)
+					var ty = Math.floor(y-(this.tileheight)/2) +lty;
 					var road = this.roadtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
 					this.tilestoupdate.push(road);
 					res3d.push(road);
@@ -814,7 +821,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			for(var x = 0;x<this.tilewidth;x++){
 				for(var y = 0;y<this.tileheight;y++){
 					var tx = Math.floor(x-(this.tilewidth)/2);
-					var ty = Math.floor(y-(this.tileheight)/2)
+					var ty = Math.floor(y-(this.tileheight)/2) + lty;
 					var building = this.buildingtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
 					this.tilestoupdate.push(building);
 					res3d.push(building);
@@ -824,7 +831,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			for(var x = 0;x<this.tilewidth;x++){
 				for(var y = 0;y<this.tileheight;y++){
 					var tx = Math.floor(x-(this.tilewidth)/2);
-					var ty = Math.floor(y-(this.tileheight)/2)
+					var ty = Math.floor(y-(this.tileheight)/2) + lty
 					var labels = this.labeltile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
 					this.tilestoupdate.push(labels);
 					res3d.push(labels);
