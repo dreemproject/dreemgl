@@ -90,12 +90,18 @@ define.class("$ui/view", function(require,
 			}
 
 			if (this.selection) {
-				var filtered = this.selection.filter(function(a) { return a.toolselect !== false && this.testView(a) }.bind(this));
-				var selected = filtered[0];
-				if (selected && inspector.target != selected) {
-					var target = selected;
-					inspector.astarget = JSON.stringify(target.getASTPath());
+
+				if (this.selection.length <= 1) {
+					var selected = this.selection[0];
+					if (selected && inspector.target != selected) {
+						var target = selected;
+						inspector.astarget = JSON.stringify(target.getASTPath());
+					}
+				} else {
+					inspector.target = null;
 				}
+
+				var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
 
 				for (var i=0;i<filtered.length;i++) {
 					var target = filtered[i];
@@ -375,10 +381,12 @@ define.class("$ui/view", function(require,
 
 		this.screen.globalkeydown = function(ev) {
 			if (ev.code === 8 && this.selection) {
+				console.log('selection!', this.selection)
 				var commit = false;
-				for (var i=0;i<this.selection.length;i++) {
+				var multi = this.selection.length > 1;
+				for (var i=this.selection.length - 1; i>=0; i--) {
 					var v = this.selection[i];
-					if (v.focus && this.testView(v) && v.toolremove !== false) {
+					if ((multi || v.focus) && this.testView(v) && v.toolremove !== false) {
 						var node = v.getASTNode();
 						var parent = v.parent.getASTNode();
 						var index = parent.args.indexOf(node);

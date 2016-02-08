@@ -118,12 +118,15 @@ define.class('$ui/view', function(icon, label){
 
 		cb.push(icon({
 			fgcolor:(this.value ? this.fgcolor : this.inactivecolor),
-			icon: this.icon
+			icon: this.icon,
+			bgcolor:"white",
+			hardrect:{pickonly:true}
 		}));
 
 		if (this.text) {
 			cb.push(label({
-				bgcolor:NaN,
+				bgcolor:"white",
+				hardrect:{pickonly:true},
 				padding:vec4(10,0,0,0),
 				text:this.text,
 				fontsize:this.fontsize,
