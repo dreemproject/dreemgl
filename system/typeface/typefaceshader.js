@@ -436,15 +436,19 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var height = this.line_height
 			//console.log(x, y)
 			//if(y < 0) return -2
+			var array = this.array
+			var fontsize = this.fontsize
+			var line_height = this.line_height
+			var glyphs = this.font.glyphs
+			var sink = fontsize * this.cursor_sink
 
 			for(var len = this.lengthQuad(), o = len - 1; o >= 0; o--){
 
-				var char_code = this.charCodeAt(o)
-				var info = this.font.glyphs[char_code]
+				var char_code = parseInt(array[o * 6*10 + 6])
+				var info = glyphs[char_code]
 
-				var y2 = this.array[o * 6 * 10 + 1] + this.fontsize * info.min_y + this.fontsize * this.cursor_sink
-				var y1 = y2 - this.line_height
-
+				var y2 = array[o * 6 * 10 + 1] + fontsize * info.min_y + sink
+				var y1 = y2 - line_height
 
 				if(y>=y1 && y<=y2){
 					var tl_x = this.array[o * 6 * 10 + 0]
