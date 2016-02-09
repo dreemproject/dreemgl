@@ -592,11 +592,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				
 				
-				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize  ;
+				pos = vec2(1,-1)*mesh.xy + (idxpos - view.tiletrans)* view.tilesize  ;
 				pos.xy /= pow(2.0,view.layeroffset-2 - view.fraczoom)
 				
 				respos = vec4(pos.x, view.layeroffset * view.layerzmult+ view.layerzoff, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
-				respos.w -= mesh.pos.z*0.01;
+				//respos.w -= mesh.pos.z*0.01;
 				return respos;
 			}
 
@@ -616,12 +616,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				this.mesh.push(b,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				this.mesh.push(a,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				*/
-				this.mesh.push(a,a,0,col[0], col[1],1);
-				this.mesh.push(b,a,0,col[0], col[1],1);
-				this.mesh.push(b,b,0,col[0], col[1],1);
-				this.mesh.push(a,a,0,col[0], col[1],1);
-				this.mesh.push(b,b,0,col[0], col[1],1);
-				this.mesh.push(a,b,0,col[0], col[1],1);
+				
+				this.mesh.push(a,a,col[0],1)
+				this.mesh.push(b,a,col[0],1)
+				this.mesh.push(b,b,col[0],1)
+				this.mesh.push(a,a,col[0],1)
+				this.mesh.push(b,b,col[0],1)
+				this.mesh.push(a,b,col[0],1)
 
 			}
 
@@ -633,10 +634,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				//return "blue";
 				var col =  vec4(0,0,0.6,0.1);
 
-				 
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
 				
-				var texcol = texture.sample(vec2(vec2(sin(mesh.color1.x*20.0)*0.5+0.5,sin( mesh.color1.y*14.0)*0.5+0.5)+ vec2(noise,0)));
+				var texcol = texture.sample(vec2(vec2(sin(mesh.z*20.0)*0.5+0.5,sin( mesh.z*14.0)*0.5+0.5)+ vec2(noise,0)));
 				
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 			//	prefog.a *=0.4;
@@ -810,7 +810,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		for(var a = 0;a<this.tilestoupdate.length;a++){
 			var rt = this.tilestoupdate[a];
 				//rt.trans = vec2(Math.sin(this.time)*5, 0);
-				rt.setpos(floorvec[rt.layeroffset], this.zoomlevel + rt.layeroffset, frac[rt.layeroffset], this.fraczoom);
+				rt.setpos(floorvec[rt.layeroffset], this._zoomlevel + rt._layeroffset, frac[rt._layeroffset], this.fraczoom);
 			rt.redraw();
 		}
 	}

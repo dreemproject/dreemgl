@@ -353,13 +353,14 @@ define.class(function(require, $server$, service){
 		markcolor: vec4
 	})
 	
-	var LandVertexStruct = this.LandVertexStruct = define.struct({
-		pos:vec3,
-		color1:vec2,
+	var LandVertexStruct = this.LandVertexStruct = vec4
+	//define.struct({
+	//	pos:vec3,
+	//	color1:vec2,
 		//color1:vec4,
 		//color2:vec4, 
-		id: float
-	})
+	//	id: float
+	//})
 	
 	
 	
@@ -517,31 +518,31 @@ define.class(function(require, $server$, service){
 					var tris = arc.tris
 
 					for(var a = 0;a<tris.length;a++){
-						mesh.push(tris[a][0], tris[a][1], off, color1[0], color1[1], i);
+						mesh.push(tris[a][0], tris[a][1], color1[0],  i);
 					}
 				}
 			}
 			if (land.polygons){
 				
 				var array = mesh.array
-				var o = mesh.length * 6
+				var o = mesh.length * 4
 
 				for(var j = 0;j<land.polygons.length;j++){
 					var poly = land.polygons[j];
 					var tris = poly.tris
-					for(var a = 0; a < tris.length; a += 2, o += 6){
+					for(var a = 0; a < tris.length; a += 2, o += 4){
 						array[o + 0] = tris[a]
 						array[o + 1] = tris[a + 1]
-						array[o + 2] = off
-						array[o + 3] = color1[0]
-						array[o + 4] = color1[1]
+						//array[o + 2] = off
+						array[o + 2] = color1[0]
+						//array[o + 4] = color1[1]
 						//array[o + 5] = color1[2]
 						//array[o + 6] = color1[3]
 						//array[o + 7] = color2[0]
 						//array[o + 8] = color2[1]
 						//array[o + 9] = color2[2]
 						//array[o + 10] = color2[3]
-						array[o + 5] = i
+						array[o + 3] = i
 						mesh.length ++
 					}
 				}
