@@ -31,8 +31,8 @@ define.class("$server/composition",function(require, $ui$, button, icon, label, 
 				),
 				toolkit({
 					position:'absolute', 
-					x:1096, 
-					y:38.00007247924805, 
+					x:1097, 
+					y:41.00020980834961, 
 					width:517, 
 					height:793
 				}

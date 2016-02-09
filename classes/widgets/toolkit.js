@@ -21,6 +21,10 @@ define.class("$ui/view", function(require,
 	this.width = 400;
 	this.height = 800;
 
+	this.borderradius = 7;
+	this.bordercolor = vec4(1,1,1,0.7);
+	this.borderwidth = 1;
+
 	this.attributes = {
 
 		// The target for the property inspector
