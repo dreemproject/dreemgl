@@ -11,7 +11,10 @@ define.class('$system/base/worker', function(require, exports){
 
 	this._atConstructor = function(cores){
 		if(cores === undefined) cores = 1
-		else if(cores < 1) cores = define.cputhreads
+		else if(cores < 1){
+			if(define.cputhreads === 2) cores = 1
+			else cores = define.cputhreads - 2
+		}
 
 		// lets serialize our module system into a worker
 		var out = {}
@@ -107,9 +110,16 @@ define.class('$system/base/worker', function(require, exports){
 
 		var onmessage = function(event){
 			// lets plug the struct arrays
-			var workerid = event.data.workerid
+			var dt =Date.now()
+			var data = event.data
+			if(Date.now() - dt > 50) console.log(data)
+
+			var workerid = data.workerid
+			
 			this._workers[workerid].stack --
-			this._resolveReturn(event.data)
+
+			this._resolveReturn(data)
+
 		}.bind(this)
 
 		this._workers = define.workers(head, tail, cores)

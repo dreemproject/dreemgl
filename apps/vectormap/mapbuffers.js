@@ -355,8 +355,9 @@ define.class(function(require, $server$, service){
 	
 	var LandVertexStruct = this.LandVertexStruct = define.struct({
 		pos:vec3,
-		color1:vec4,
-		color2:vec4, 
+		color1:vec2,
+		//color1:vec4,
+		//color2:vec4, 
 		id: float
 	})
 	
@@ -472,10 +473,32 @@ define.class(function(require, $server$, service){
 		return mesh;
 	}
 	
-	this.buildAreaPolygonVertexBuffer = function(areas, targetmesh){
+	this.calculateAreaPolygonVertexBuffer = function(areas){
+		var total = 0
+		for(var i = 0;i<areas.length;i++){
+			land = areas[i]
+			if (land.arcs){
+				for(var j = 0;j<land.arcs.length;j++){
+					var arc = land.arcs[j]
+					var tris = arcToTriangles(arc)
+					arc.tris = tris
+					total += tris.length
+				}
+			}
+			if (land.polygons){
+				for(var j = 0;j<land.polygons.length;j++){
+					var poly = land.polygons[j];
+					var tris = polyToTriangles(poly);
+					poly.tris = tris
+					total += tris.length / 2
+				}
+			}
+		}
+		return total
+	}
+
+	this.buildAreaPolygonVertexBuffer = function(areas, mesh){
 		//console.log(areas);
-		var mesh = targetmesh?targetmesh: LandVertexStruct.array();
-		
 		for(var i = 0;i<areas.length;i++){
 			var off = 0;
 			var land = areas[i];
@@ -491,48 +514,37 @@ define.class(function(require, $server$, service){
 			if (land.arcs){
 				for(var j = 0;j<land.arcs.length;j++){
 					var arc = land.arcs[j];
-					var tris = arcToTriangles(arc);
+					var tris = arc.tris
 
 					for(var a = 0;a<tris.length;a++){
-						mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
+						mesh.push(tris[a][0], tris[a][1], off, color1[0], color1[1], i);
 					}
 				}
 			}
 			if (land.polygons){
-				var total = 0
-				for(var j = 0;j<land.polygons.length;j++){
-					var poly = land.polygons[j];
-					var tris = polyToTriangles(poly);
-					poly.tris = tris
-					total += poly.tris.length / 2
-				}
-				// ensure the size
-				if(!total) continue
-
-				mesh.ensureSize(mesh.length + total)
-
+				
 				var array = mesh.array
-				var o = mesh.length * 12
+				var o = mesh.length * 6
 
 				for(var j = 0;j<land.polygons.length;j++){
 					var poly = land.polygons[j];
 					var tris = poly.tris
-					for(var a = 0;a<tris.length;a+=2, o += 12){
+					for(var a = 0; a < tris.length; a += 2, o += 6){
 						array[o + 0] = tris[a]
-						array[o + 1] = tris[a+1]
+						array[o + 1] = tris[a + 1]
 						array[o + 2] = off
 						array[o + 3] = color1[0]
 						array[o + 4] = color1[1]
-						array[o + 5] = color1[2]
-						array[o + 6] = color1[3]
-						array[o + 7] = color2[0]
-						array[o + 8] = color2[1]
-						array[o + 9] = color2[2]
-						array[o + 10] = color2[3]
-						array[o + 11] = i
+						//array[o + 5] = color1[2]
+						//array[o + 6] = color1[3]
+						//array[o + 7] = color2[0]
+						//array[o + 8] = color2[1]
+						//array[o + 9] = color2[2]
+						//array[o + 10] = color2[3]
+						array[o + 5] = i
+						mesh.length ++
 					}
 				}
-				mesh.length += total//tris.length
 			}
 		}
 		return mesh;
@@ -718,7 +730,7 @@ define.class(function(require, $server$, service){
 				
 	}
 	this.build = function(target, sourcedata){
-		
+		var dt = Date.now()
 		var Bset = [];
 		var Rset = [];
 		var Wset = [];
@@ -809,23 +821,31 @@ define.class(function(require, $server$, service){
 		}*/
 		
 		
-		target.buildings = Bset;
-		target.roads = Rset;
+		//target.buildings = Bset;
+		//target.roads = Rset;
 		target.Labels = Labels;
-		target.waters = Wset;
-		target.earths = Eset;
-		target.landuses = Lset;
+		//target.waters = Wset;
+		//target.earths = Eset;
+		//target.landuses = Lset;
 		
 		var empty = []
-		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(target.roads);
+		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(Rset);
 		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
-		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(target.buildings);
+		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(Bset);
 		
-if(1){		var landmesh = this.buildAreaPolygonVertexBuffer(Eset);
-		this.buildAreaPolygonVertexBuffer(Lset, landmesh);
-		this.buildAreaPolygonVertexBuffer(Wset, landmesh);
-		target.landVertexBuffer = landmesh;
+if(1){		
+		var geomsize = 0
+		geomsize += this.calculateAreaPolygonVertexBuffer(Eset)
+		geomsize += this.calculateAreaPolygonVertexBuffer(Lset)
+		geomsize += this.calculateAreaPolygonVertexBuffer(Wset)
+		var landmesh = LandVertexStruct.array(geomsize)
+		
+		this.buildAreaPolygonVertexBuffer(Eset,landmesh)
+		this.buildAreaPolygonVertexBuffer(Lset, landmesh)
+		this.buildAreaPolygonVertexBuffer(Wset, landmesh)
+		target.landVertexBuffer = landmesh
 }
+
 	//	target.landVertexBuffer = this.buildAreaPolygonVertexBuffer(Wset);
 		
 	}
