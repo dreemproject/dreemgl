@@ -13,7 +13,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 			buttoncolor2: {type: vec4, value: vec4("#8080c0")}
 		}
 
-		this.bg  = {
+		this.hardrect  = {
 			pointerpos: vec2(0),
 			gridcolor: vec4("#ffffff"),
 			grid:function(a){
@@ -44,7 +44,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 		// TODO(aki): fix in 3D view
 		this.pointermove = function(event){
 			var a = this.globalToLocal(event.position)
-			this.bgshader.pointerpos = vec2(a[0],a[1])
+			this.hardrect.pointerpos = vec2(a[0],a[1])
 			this.redraw()
 			if (this.children.length > 0){
 				this.children[0].text = Math.round(a[0]) + ", " + Math.round(a[1]);
@@ -62,7 +62,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					flexdirection:"column",
 					alignitems:'stretch',
 					bgcolor:'red',
-					bg:{
+					hardrect:{
 						color:function(){
 							return vec4(0.4, 0.4, 0.4+ mesh.y*0.8,1.0)
 						}

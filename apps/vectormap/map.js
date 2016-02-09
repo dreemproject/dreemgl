@@ -199,7 +199,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				
 			//	console.log(this.centers);
 			//	console.log("queuelen: " , this.loadqueue.length);
-				var zscalar = 4;
+				var zscalar = 1280;
 
 				// sort queue on distance to cursor
 				for (var i = 0;i<this.loadqueue.length;i++){
@@ -207,9 +207,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var dx = this.centers[q.z][0] - q.x;
 					var dy = this.centers[q.z][1] - q.y;
 					
-					var dz = (this.zoomlevel - q.z)*zscalar;
+					var dz = (20-q.z)*zscalar;
 					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
-					q.dist = (dx * dx + dy * dy) * (1 + Math.abs(dz));
+					q.dist = (dx * dx + dy * dy) * (50000 - dz);
 				}
 
 				this.loadqueue = this.loadqueue.sort(function(a,b){
@@ -839,7 +839,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
-		var dist = 10.5
+		var dist = 14.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
