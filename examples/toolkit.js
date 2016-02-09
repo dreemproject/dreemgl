@@ -3,7 +3,7 @@ define.class("$server/composition",function(require, $ui$, button, icon, label, 
 	this.render = function() {
 		return [
 			screen(
-				{flexdirection:"row", position:'absolute', x:463, y:-383, width:484, height:472},
+				{flexdirection:"row", position:'absolute', x:0, y:0, width:484, height:472},
 				cadgrid({
 						name:"grid", 
 						flex:3, 
@@ -22,12 +22,10 @@ define.class("$server/composition",function(require, $ui$, button, icon, label, 
 						toolrect:false, 
 						opaque:false
 					},
-					view({height:473, width:618, bgcolor:vec4(0.9318798184394836,0.31568998098373413,0.7469818592071533,1), position:'absolute', x:43.00016784667969, y:18.000076293945312},label({fontsize:54, bgcolor:'transparent', fgcolor:'white', text:'0_0', position:'absolute', x:156.00015258789062, y:29.999862670898438, width:NaN, height:NaN})),
-					view({height:257, width:451, bgcolor:vec4(0.12939296662807465,0.4936515688896179,0.6595012545585632,1), position:'absolute', x:338.6678466796875, y:55.101898193359375, rotate:vec3(0,0,10)}),
-					label({fontsize:190, bgcolor:'transparent', fgcolor:vec4(0.9903326034545898,0.8860607147216797,0,1), text:'Howdy!', position:'absolute', x:114.30331420898438, y:286.59063720703125, rotate:vec3(0,0,-0.55)}),
-					icon({fgcolor:vec4(0.3921568691730499,0.929411768913269,0.42688411474227905,1), icon:'anchor', position:'absolute', x:726.0000610351562, y:165, fontsize:180}),
-					icon({fgcolor:vec4(0.929411768913269,0.9167269468307495,0.3921568691730499,1), icon:'gear', position:'absolute', x:644.0001831054688, y:-88.9998779296875, fontsize:480, opaque:false}),
-					icon({fgcolor:'cornflower', icon:'gear', position:'absolute', x:906.0000610351562, y:110, fontsize:180})
+					view({height:473, width:618, bgcolor:vec4(0.9318798184394836,0.31568998098373413,0.7469818592071533,1), position:'absolute', x:151.00010681152344, y:113.0001220703125},label({fontsize:54, bgcolor:'transparent', fgcolor:'white', text:'0_0', position:'absolute', x:156.00015258789062, y:29.999862670898438, width:NaN, height:NaN}),label({fontsize:44, opaque:true, fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:237.99986267089844, y:203.9999237060547})),
+					view({height:257, width:451, bgcolor:vec4(0.12939296662807465,0.4936515688896179,0.6595012545585632,1), position:'absolute', x:538.1458129882812, y:222.90567016601562, rotate:vec3(0,0,10)}),
+					label({fontsize:190, bgcolor:'transparent', fgcolor:vec4(0.9903326034545898,0.8860607147216797,0,1), text:'Howdy!', position:'absolute', x:167.30331420898438, y:308.59063720703125, rotate:vec3(0,0,-0.55)}),
+					icon({fgcolor:vec4(0.3921568691730499,0.929411768913269,0.42688411474227905,1), icon:'anchor', position:'absolute', x:957.0000610351562, y:188, fontsize:180})
 				),
 				toolkit({
 					flexdirection:"column"

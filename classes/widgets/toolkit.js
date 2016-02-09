@@ -116,14 +116,16 @@ define.class("$ui/view", function(require,
 
 			if (this.selection) {
 
-				if (this.selection.length <= 1) {
-					var selected = this.selection[0];
-					if (selected && inspector.target != selected) {
-						var target = selected;
-						inspector.astarget = JSON.stringify(target.getASTPath());
+				if (inspector) {
+					if (this.selection.length <= 1) {
+						var selected = this.selection[0];
+						if (selected && inspector.target != selected) {
+							var target = selected;
+							inspector.astarget = JSON.stringify(target.getASTPath());
+						}
+					} else {
+						inspector.target = null;
 					}
-				} else {
-					inspector.target = null;
 				}
 
 				var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
@@ -242,7 +244,9 @@ define.class("$ui/view", function(require,
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
 						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-						selected.__selrect.pos = vec2(selected._layout.absx - 1, selected._layout.absy - 1);
+						if (selected.__selrect) {
+							selected.__selrect.pos = vec2(selected._layout.absx - 1, selected._layout.absy - 1);
+						}
 					}
 				}
 
