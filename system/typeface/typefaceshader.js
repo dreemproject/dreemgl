@@ -187,6 +187,27 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					this.add_y += this.fontsize * this.line_spacing
 				}
 			}
+
+		}
+		
+
+		self.pushQuad = function(){
+			this.clean = false
+			var slots = this.slots
+			if(arguments.length !== slots * 4) throw new Error('Please use individual components to set a quad for '+slots)
+			var off = this.length * slots
+			this.length += 6
+			if(this.length >= this.allocated){
+				this.ensureSize(this.length)
+			}
+			// ok so lets just write it out
+			var out = this.array
+			for(var i = 0; i < slots; i++){ // iterate the components
+				out[off + i      ] = arguments[i]
+				out[off + i + 1*slots] = out[off + i + 4*slots] = arguments[i + 1*slots]
+				out[off + i + 2*slots] = out[off + i + 3*slots] = arguments[i + 2*slots]
+				out[off + i + 5*slots] = arguments[i + 3*slots]
+			}
 		}
 
 		this.addGlyph = function(info, unicode, m1, m2, m3) {
@@ -197,25 +218,96 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var y2 = this.add_y - fontsize * info.max_y
 			var italic = this.italic_ness * info.height * fontsize
 			var cz = this.add_z ? this.add_z:0;
+
+			this.clean = false
+			var slots = this.slots
+			//if(arguments.length !== slots * 4) throw new Error('Please use individual components to set a quad for '+slots)
+			
+			var o = this.length * slots
+			this.length += 6
+			if(this.length >= this.allocated){
+				this.ensureSize(this.length)
+			}
+
+			var a = this.array
+
 			if(this.font.baked){
+				// INLINED for optimization.
+				a[o + 2] = a[o + 12] = a[o + 32] = a[o + 22] = a[o + 52] = a[o + 42] = cz
+				a[o + 3] = a[o + 13] = a[o + 33] = a[o + 23] = a[o + 53] = a[o + 43] = fontsize
+				a[o + 6] = a[o + 16] = a[o + 36] = a[o + 26] = a[o + 56] = a[o + 46] = unicode
+				a[o + 7] = a[o + 17] = a[o + 37] = a[o + 27] = a[o + 57] = a[o + 47] = m1
+				a[o + 8] = a[o + 18] = a[o + 38] = a[o + 28] = a[o + 58] = a[o + 48] = m2
+				a[o + 9] = a[o + 19] = a[o + 39] = a[o + 29] = a[o + 59] = a[o + 49] = m3
+				// top left
+				a[o + 0] = x1
+				a[o + 1] = y1
+				a[o + 4] = info.tmin_x
+				a[o + 5] = info.tmin_y
+
+				// top right
+				a[o + 10] = a[o + 30] = x2
+				a[o + 11] = a[o + 31] = y1
+				a[o + 14] = a[o + 34] = info.tmax_x
+				a[o + 15] = a[o + 35] = info.tmin_y
+				// bottom left
+				a[o + 20] = a[o + 50] = x1+italic
+				a[o + 21] = a[o + 51] = y2
+				a[o + 24] = a[o + 54] = info.tmin_x
+				a[o + 25] = a[o + 55] = info.tmax_y
+				// bottom right
+				a[o + 40] = x2 + italic
+				a[o + 41] = y2
+				a[o + 44] = info.tmax_x
+				a[o + 45] = info.tmax_y
+				
+				/*
 				this.pushQuad(
 					x1, y1, cz, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
 					x2, y1, cz, fontsize, info.tmax_x, info.tmin_y, unicode, m1, m2, m3,
 					x1 + italic, y2, cz, fontsize, info.tmin_x, info.tmax_y, unicode, m1, m2, m3,
 					x2 + italic, y2, cz, fontsize, info.tmax_x, info.tmax_y, unicode, m1, m2, m3
-				)
+				)*/
 			}
 			else {
 				var gx = ((info.atlas_x<<6) | info.nominal_w)<<1
 				var gy = ((info.atlas_y<<6) | info.nominal_h)<<1
+				
+				// INLINED for optimization. text is used a lot
+				a[o + 2] = a[o + 12] = a[o + 32] = a[o + 22] = a[o + 52] = a[o + 42] = cz
+				a[o + 3] = a[o + 13] = a[o + 33] = a[o + 23] = a[o + 53] = a[o + 43] = fontsize
+				a[o + 6] = a[o + 16] = a[o + 36] = a[o + 26] = a[o + 56] = a[o + 46] = unicode
+				a[o + 7] = a[o + 17] = a[o + 37] = a[o + 27] = a[o + 57] = a[o + 47] = m1
+				a[o + 8] = a[o + 18] = a[o + 38] = a[o + 28] = a[o + 58] = a[o + 48] = m2
+				a[o + 9] = a[o + 19] = a[o + 39] = a[o + 29] = a[o + 59] = a[o + 49] = m3
+				// top left
+				a[o + 0] = x1
+				a[o + 1] = y1
+				a[o + 4] = gx
+				a[o + 5] = gy
 
-
+				// top right
+				a[o + 10] = a[o + 30] = x2
+				a[o + 11] = a[o + 31] = y1
+				a[o + 14] = a[o + 34] = gx|1
+				a[o + 15] = a[o + 35] = gy
+				// bottom left
+				a[o + 20] = a[o + 50] = x1+italic
+				a[o + 21] = a[o + 51] = y2
+				a[o + 24] = a[o + 54] = gx
+				a[o + 25] = a[o + 55] = gy|1
+				// bottom right
+				a[o + 40] = x2 + italic
+				a[o + 41] = y2
+				a[o + 44] = gx|1
+				a[o + 45] = gy|1
+				/*
 				this.pushQuad(
 					x1, y1, cz, fontsize, gx, gy, unicode, m1, m2, m3,
 					x2, y1, cz, fontsize, gx|1, gy, unicode, m1, m2, m3,
 					x1 + italic, y2, cz,fontsize, gx, gy|1, unicode, m1, m2, m3,
 					x2 + italic, y2, cz, fontsize, gx|1, gy|1, unicode, m1, m2, m3
-				)
+				)*/
 			}
 			this.add_x += info.advance * fontsize
 
@@ -251,13 +343,27 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		// lets add some strings
-		this.add = function(string, m1, m2, m3){
+		this.add = function(string, im1, im2, im3){
 			var length = string.length
+			var m1 = im1, m2 = im2, m3 = im3
 			// alright lets convert some text babeh!
+			var array
+			if(string.struct) array = string.array
+			var glyphs = this.font.glyphs
 			for(var i = 0; i < length; i++){
-				var unicode = string.struct? string.array[i * 4]: string.charCodeAt(i)
-				var info = this.font.glyphs[unicode]
-				if(!info) info = this.font.glyphs[32]
+				var unicode
+				if(array){
+					unicode = array[i * 4]
+					m1 = array[i*4+1]
+					m2 = array[i*4+2]
+					m3 = array[i*4+3]
+				}
+				else{
+					unicode = string.charCodeAt(i)
+				}
+
+				var info = glyphs[unicode]
+				if(!info) info = glyphs[32]
 				// lets add some vertices
 				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
@@ -400,41 +506,44 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.serializeTags = function(start, end){
 			// lets serialize the tags array
 			var out = vec4.array(end - start)
-			for(var i = start; i < end; i++){
-				out.push(
-					this.array[i * 6 * 10 + 6],
-					this.array[i * 6 * 10 + 7],
-					this.array[i * 6 * 10 + 8],
-					this.array[i * 6 * 10 + 9])
+			var a = this.array
+			var o = out.array
+			for(var i = start, x = 0; i < end; x +=4, i++){
+				o[x] = a[i * 6 * 10 + 6]
+				o[x+1] = a[i * 6 * 10 + 7]
+				o[x+2] = a[i * 6 * 10 + 8]
+				o[x+3] = a[i * 6 * 10 + 9]
 			}
+			out.length = x>>2
 			return out
 		}
 
 		this.insertText = function(off, text){
 			// ok lets pull in the 'rest' as string
-			var str = this.serializeText(off, this.lengthQuad())
+			//var str = this.serializeText(off, this.lengthQuad())
+			var tags = this.serializeTags(off, this.lengthQuad())
 			// lets set the length and start adding
 			var rect = this.charCoords(off)
 			this.add_x = rect.x
 			this.add_y = rect.y
 			this.length = off * 6
 			this.add(text)
-			this.add(str)
+			this.add(tags)
 			this.computeBounds(true)
 			return text.length
 		}
 
 		this.removeText = function(off, end){
-			var str = this.serializeText(end, this.lengthQuad())
+			var tags = this.serializeTags(end, this.lengthQuad())
 			var rect = this.charCoords(off)
 			this.add_x = rect.x
 			this.add_y = rect.y
 			this.length = off * 6
-			this.add(str)
+			this.add(tags)
 			// recompute the bounds
 			this.computeBounds(true)
 
-			return str.length
+			return tags.length
 		}
 	})
 

@@ -253,7 +253,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.init = function(prev){
-			this.workers = prev && prev.workers || worker()
+			this.workers = prev && prev.workers || worker(0)
 			this.cities = {
 				manhattan: [40.7072121, -74.0067985],
 				amsterdam: [52.3608307,   4.8626387],

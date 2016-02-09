@@ -97,12 +97,12 @@ define.class('./jsviewer', function(require, $ui$, textbox){
 			this.was_cursor = this.change == enumchange.clipboard // dont delay reformat on paste
 
 			this.delay_update = 0
-			if(this.step_timeout) this.clearTimeout(this.step_timeout)
-			this.step_timeout = this.setTimeout(this.parseStep,0)
+			//if(this.step_timeout) this.clearTimeout(this.step_timeout)
+			//this.step_timeout = this.setTimeout(this.parseStep,0)
 		}
 		// if its an undo, 
-		if(change == enumchange.undoredo){ // set delay to cursor press
-			delay_update = parseStep
+		if(this.change == enumchange.undoredo){ // set delay to cursor press
+		//	delay_update = parseStep
 		}
 	}
 

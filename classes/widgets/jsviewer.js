@@ -21,7 +21,7 @@ define.class('$ui/textbox', function(require){
 
 	this.readonly = true
 
-	this.fontsize = 14
+	this.fontsize = 12
 	this.subpixel = true
 
 	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
@@ -147,7 +147,7 @@ define.class('$ui/textbox', function(require){
 			var textbuf = this.mesh = this.newText()
 
 			textbuf.font = view.font
-
+			var cycle = Date.now()
 			var ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
 
 			textbuf.fontsize = view.fontsize
@@ -169,6 +169,7 @@ define.class('$ui/textbox', function(require){
 					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
+			console.log(Date.now() - cycle)
 		}
 	}
 

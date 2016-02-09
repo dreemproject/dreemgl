@@ -10,8 +10,8 @@ define.class('$system/base/worker', function(require, exports){
 	this._resolveReturn = rpchub.resolveReturn
 
 	this._atConstructor = function(cores){
-		if(!cores) cores = define.cputhreads
-		if(cores < 1) cores = 1
+		if(cores === undefined) cores = 1
+		else if(cores < 1) cores = define.cputhreads
 
 		// lets serialize our module system into a worker
 		var out = {}
