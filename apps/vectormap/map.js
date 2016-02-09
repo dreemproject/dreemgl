@@ -17,6 +17,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 	this.zoomTo = function(z){
 		this.dataset.zoomTo(z);
+		this.updateTiles();
 	}
 	this.onpointerend = function(ev){
 			this.stopDrag();
