@@ -249,19 +249,20 @@ define.class(function(require, exports){
 		this.pick_x = pos[0]
 		this.pick_y = pos[1]
 
-		if (immediate) {
-			this.doPick(resolve)
-			return
-		}
-
 		var callback = function () {
 			this.doPick(resolve)
 			delete this.pick_timer
 		}.bind(this)
 
-		if (!this.pick_timer || this.pick_timer.time !== this.last_time) {
-			window.clearTimeout(this.pick_timer)
-			this.pick_timer = setTimeout(callback, 0)
+		// TODO(aki): remove sync picking
+		if (immediate) {
+			callback(resolve)
+			return
+		}
+
+		// Throttle picking at 15 fps
+		if (!this.pick_timer) {
+			this.pick_timer = setTimeout(callback, 1000/15)
 			this.pick_timer.time = this.last_time
 		}
 	}
