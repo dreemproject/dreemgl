@@ -95,7 +95,7 @@ define.class("$ui/view", function(require,
 		mode:Config({type:Enum('design','live'), value:'design'}),
 
 		// internal
-		selection:[],
+		selection:Config({persist:true, value:[]}),
 		onselection: function() {
 			var inspector = this.find('inspector');
 
@@ -860,7 +860,7 @@ define.class("$ui/view", function(require,
 			label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
 		));
 
-		views.push(this.panel({title:"Structure", flex:1.0},
+		views.push(this.panel({title:"Structure", flex:0.5},
 			treeview({
 				flex:1,
 				name:"structure",

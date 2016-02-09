@@ -263,7 +263,7 @@ define.class('$system/base/node', function(require){
 		dropshadowcolor:Config({type:vec4,meta:"color", value:vec4("black")}),
 
 		// whether this view has focus
-		focus: Config({meta:"hidden", value:false}),
+		focus: Config({meta:"hidden", value:false, persist:true}),
 		// tabstop, sorted by number
 		tabstop: NaN,
 

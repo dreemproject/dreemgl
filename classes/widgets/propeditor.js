@@ -224,7 +224,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						bordercolor:"gray",
 						margin:2,
 						multiline:false,
-						ontextfocus: function(ev,v,o) { if (!v) { this.callback("string", null, true); } }.bind(this),
+						onfocus: function(ev,v,o) { if (!v) { this.callback("string", null, true); } }.bind(this),
 						onvalue: function(ev,v,o){ this.callback(v, this); }.bind(this)
 					})
 
