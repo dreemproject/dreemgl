@@ -378,9 +378,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var R = vec3.intersectplane(camerapos, end, vec3(0,1,0), 0)
 		if (!R) return null;
 		
-	//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
-	//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
-	
+		//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
+		//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
 	
 		return R;
 		
@@ -715,12 +714,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.hardrect = function(){
 
 			this.position = function(){
-
-				var possrc = mesh.pos.xy + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
+				var sidevec = mesh.pos.zw
+				var side = mesh.geom.x
+				var dist = mesh.geom.y
+				var linewidth = mesh.geom.z
+				var possrc = mesh.pos.xy + sidevec * side * linewidth*0.5;
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-
-
 
 				var pos = vec2(1,-1)*possrc.xy + (idxpos - view.tiletrans) * view.tilesize;
 					pos.xy /= pow(2.0,view.layeroffset-2- view.fraczoom)
@@ -750,12 +750,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 
 			this.drawtype = this.TRIANGLES
-						this.depth_test = "disabled"
-
+			this.depth_test = "disabled"
 
 			this.color = function(){
 				//return "blue";
-				var prefog = mix(mesh.color, vec4(0), 1.0-view.bufferloaded);
+				var prefog = mix(pal.pal1(mesh.geom.w), vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 
 

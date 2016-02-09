@@ -216,10 +216,10 @@ define.class(function(require, exports){
 		this.pick_resolve = []
 
 		if(this.debug_pick){
+
 			var data = this.readPixels(x * this.ratio, this.main_frame.size[1] - y * this.ratio, 1, 1)
 		}
 		else{
-			console.log("READPIXEL", Date.now())
 			var data = this.readPixels(0, 0, 1, 1)
 		}
 
