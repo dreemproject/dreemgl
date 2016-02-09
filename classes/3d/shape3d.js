@@ -35,4 +35,5 @@ define.class(function(require, $ui$, view){
 		}
 	})
 	this.shape3d = true	
+	this.hardrect =false;
 })

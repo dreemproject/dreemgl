@@ -44,7 +44,8 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 		// TODO(aki): fix in 3D view
 		this.pointermove = function(event){
 			var a = this.globalToLocal(event.position)
-			this.hardrect.pointerpos = vec2(a[0],a[1])
+			
+			this.shaders.hardrect.pointerpos = vec2(a[0],a[1])
 			this.redraw()
 			if (this.children.length > 0){
 				this.children[0].text = Math.round(a[0]) + ", " + Math.round(a[1]);
