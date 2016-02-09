@@ -789,6 +789,7 @@ define.class("$ui/view", function(require,
 					},
 					pointermove:function(p) {
 						if (this.parent.position === "absolute") {
+							this.screen.pointer.cursor = "move";
 							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 						}
 					},
@@ -802,8 +803,8 @@ define.class("$ui/view", function(require,
 							this.parent.setASTObjectProperty(this.parent, "width", this.parent.width);
 							this.parent.setASTObjectProperty(this.parent, "height", this.parent.height);
 							this.screen.composition.commitAST();
-
 						}
+						this.screen.pointer.cursor = "arrow";
 						this.__grabpos = undefined;
 					}
 				})
