@@ -35,7 +35,7 @@ define.class("$ui/view", function(require,
 			Views:[
 				{
 					label:"View",
-					icon:"clone",
+					icon:"sticky-note",
 					desc:"A rectangular view",
 					classname:"view",
 					classdir:"$ui$",
@@ -59,8 +59,19 @@ define.class("$ui/view", function(require,
 					}
 				},
 				{
+					label:"Check Button",
+					icon:"check-square",
+					desc:"A check button",
+					classname:"checkbox",
+					classdir:"$ui$",
+					params:{
+						fontsize:24,
+						fgcolor:'pink'
+					}
+				},
+				{
 					label:"Button",
-					icon:"plus-square",
+					icon:"square",
 					desc:"A basic button",
 					classname:"button",
 					classdir:"$ui$",
@@ -83,18 +94,18 @@ define.class("$ui/view", function(require,
 					}
 				}
 			],
-			//Behaviors:[
-			//	{
-			//		label:"Alert",
-			//		icon:"warning",
-			//		desc:"A pop up an alert dialog",
-			//		behaviors:{
-			//			onclick:function() {
-			//				alert('Beep.')
-			//			}
-			//		}
-			//	}
-			//]
+			Behaviors:[
+				{
+					label:"Alert",
+					icon:"warning",
+					desc:"A pop up an alert dialog",
+					behaviors:{
+						onclick:function() {
+							alert('Beep.')
+						}
+					}
+				}
+			]
 		}}),
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
@@ -104,65 +115,68 @@ define.class("$ui/view", function(require,
 
 		// internal
 		selection:Config({persist:true, value:[]}),
-		onselection: function() {
-			var inspector = this.find('inspector');
 
-			if (!this.__selrects) {
-				this.__selrects = [];
-			}
-
-			for (var i = 0; i < this.__selrects.length; i++) {
-				var selrect = this.__selrects[i];
-				if (this.selection && this.selection.indexOf(selrect.target) > -1) {
-					continue;
-				}
-				selrect.closeOverlay();
-				delete selrect.target.__selrect
-
-				this.__selrects.splice(i,0);
-			}
-
-			if (this.selection) {
-
-				if (inspector) {
-					if (this.selection.length <= 1) {
-						var selected = this.selection[0];
-						if (selected && inspector.target != selected) {
-							var target = selected;
-							inspector.astarget = JSON.stringify(target.getASTPath());
-						}
-					} else {
-						inspector.target = null;
-					}
-				}
-
-				var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
-
-				for (var i=0;i<filtered.length;i++) {
-					var target = filtered[i];
-					if (!target.__selrect) {
-						var selectrect = this.screen.openOverlay(this.selectedrect);
-						selectrect.x = target._layout.absx - 1;
-						selectrect.y = target._layout.absy - 1;
-						selectrect.width = target._layout.width + 2;
-						selectrect.height = target._layout.height + 2;
-						selectrect.target = target;
-						selectrect.rotate = target.rotate;
-						selectrect.borderradius = target.borderradius;
-
-						target.__selrect = selectrect;
-
-						this.__selrects.push(selectrect);
-					}
-				}
-
-				return;
-			}
-			inspector.target = null;
-		},
+		watch:Config({persist:true, value:[]}),
 
 		reticlesize: 6,
 		animateborder: false
+	};
+
+	this.onselection = function() {
+		var inspector = this.find('inspector');
+
+		if (!this.__selrects) {
+			this.__selrects = [];
+		}
+
+		for (var i = 0; i < this.__selrects.length; i++) {
+			var selrect = this.__selrects[i];
+			if (this.selection && this.selection.indexOf(selrect.target) > -1) {
+				continue;
+			}
+			selrect.closeOverlay();
+			delete selrect.target.__selrect;
+
+			this.__selrects.splice(i,0);
+		}
+
+		if (this.selection) {
+
+			if (inspector) {
+				if (this.selection.length <= 1) {
+					var selected = this.selection[0];
+					if (selected && inspector.target != selected) {
+						var target = selected;
+						inspector.astarget = JSON.stringify(target.getASTPath());
+					}
+				} else {
+					inspector.target = null;
+				}
+			}
+
+			var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
+
+			for (var i=0;i<filtered.length;i++) {
+				var target = filtered[i];
+				if (!target.__selrect) {
+					var selectrect = this.screen.openOverlay(this.selectedrect);
+					selectrect.x = target._layout.absx - 1;
+					selectrect.y = target._layout.absy - 1;
+					selectrect.width = target._layout.width + 2;
+					selectrect.height = target._layout.height + 2;
+					selectrect.target = target;
+					selectrect.rotate = target.rotate;
+					selectrect.borderradius = target.borderradius;
+
+					target.__selrect = selectrect;
+
+					this.__selrects.push(selectrect);
+				}
+			}
+
+			return;
+		}
+		inspector.target = null;
 	};
 
 	this.init = function () {
