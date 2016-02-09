@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -27,7 +27,7 @@ define.class(function(exports){
 	 *   FLICKR_USER_ID
 	 *   FLICKR_ACCESS_TOKEN
 	 *   FLICKR_ACCESS_TOKEN_SECRET
-	 * 
+	 *
 	 * Install the flickr object via 'npm install flickrapi'.
 	 * If you don't have the access tokens, you will be prompted to log into your
 	 * flickr account and give permission.
@@ -46,7 +46,7 @@ define.class(function(exports){
 			func();
 			return;
 		}
-		
+
 		// Authenticate
 		var options = {
 			api_key: process.env.FLICKR_KEY
@@ -67,7 +67,7 @@ define.class(function(exports){
 			}
 			self.flickr = flickr;
 
-			// console.log("AUTH COMPLETE");
+			console.log("AUTH COMPLETE");
 
 			func();
 		});
@@ -85,7 +85,7 @@ define.class(function(exports){
 				// Auth has already failed so exit
 				return;
 			}
-			
+
 			// Authenticate first and then run this method again
 			var self = this;
 			var func = (function() {
@@ -108,16 +108,28 @@ define.class(function(exports){
 				,lon: -122.423012
 				,radius: 2 // 2 km
 				,per_page: 100
-				,extras: 'geo, url_m'
+				,extras: 'geo, url_m, date_taken'
 				,min_taken_date: '2016-01-01'
 			};
 		}
 
 		this.flickr.photos.search(options, function(err, result) {
-			cb(result);
+			// Filter data to include only what we need.
+			var photos = result.photos.photo
+			var _photos = []
+			for (var i = 0; i < photos.length; i++) {
+				var photo = photos[i]
+				var url = photo.url_m
+				_photos.push({
+					url: photo.url_m,
+					latitude: photo.latitude,
+					longitude: photo.longitude,
+					date: photo.datetaken
+				})
+			}
+			cb(_photos);
 		});
 
-		
 		return;
 	}
 
