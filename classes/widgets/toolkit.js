@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, treeview,
+								  $ui$, view, label, icon, treeview, button,
 								  $widgets$, palette, propviewer){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
@@ -161,13 +161,17 @@ define.class("$ui/view", function(require,
 			inspector.target = null;
 		},
 
-		reticlesize: 6
+		reticlesize: 6,
+		animateborder: false
 	};
 
 	this.init = function () {
 		this.ensureDeps();
 
 		this.screen.globalpointerstart = function(ev) {
+			if (!this.visible) {
+				return;
+			}
 			if (ev.view == this || this.testView(ev.view)) {
 
 				if (!this.selection || this.selection.indexOf(ev.view) < 0) {
@@ -204,6 +208,9 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointermove = function(ev) {
+			if (!this.visible) {
+				return;
+			}
 
 			if (this.__resizecorner) {
 
@@ -292,6 +299,9 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
+			if (!this.visible) {
+				return;
+			}
 
 			ev.view.cursor = 'arrow';
 			var commit = false;
@@ -393,6 +403,10 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
+			if (!this.visible) {
+				return;
+			}
+
 			var text = ev.view.constructor.name;
 			if (ev.view.name) {
 				text = ev.view.name + " (" + text + ")"
@@ -423,6 +437,15 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalkeydown = function(ev) {
+			if (ev.code === 84 && ev.ctrl && ev.shift) {
+				this.setASTObjectProperty(this, "visible", !this.visible);
+				this.screen.composition.commitAST();
+				return;
+			}
+			if (!this.visible) {
+				return;
+			}
+
 			if (ev.code === 8 && this.selection) {
 				var commit = false;
 				var multi = this.selection.length > 1;
@@ -729,7 +752,7 @@ define.class("$ui/view", function(require,
 
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
-			title: Config({type:String, value:"Untitled"}),
+			title: Config({type:String, value:""}),
 			fontsize: Config({type:float, value:12, meta:"fontsize"})
 		};
 
@@ -769,6 +792,14 @@ define.class("$ui/view", function(require,
 		return ok;
 	};
 
+	this.bordercolorfn = function(pos) {
+		var speed = this.animateborder ? time * 17.0 : 17.0;
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+
 	this.render = function() {
 		var views = [];
 
@@ -776,13 +807,9 @@ define.class("$ui/view", function(require,
 
 		if (vertical) {
 			views = [
-				label({
-					name:"title",
-					text:"DreemGL Visual Toolkit",
-					padding:5,
-					paddingleft:10,
+				view({
+					justifycontent:'space-between',
 					bgcolor:"white",
-					flex:0,
 					hardrect:{pickonly:true},
 					pointerstart:function(p) {
 						this.__grabpos = p.view.globalToLocal(p.position);
@@ -807,7 +834,25 @@ define.class("$ui/view", function(require,
 						this.screen.pointer.cursor = "arrow";
 						this.__grabpos = undefined;
 					}
-				})
+				},
+				label({
+					name:"title",
+					text:"DreemGL Visual Toolkit",
+					bgcolor:NaN,
+					padding:5,
+					paddingleft:10,
+					drawtarget:'color'
+				}),
+				button({
+					icon:'times',
+					bgcolor:NaN,
+					borderwidth:0,
+					marginright:5,
+					onclick:function(ev,v,o) {
+						this.setASTObjectProperty(this, "visible", false);
+						this.screen.composition.commitAST();
+					}.bind(this)
+				}))
 			]
 		}
 
