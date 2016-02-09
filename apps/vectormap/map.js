@@ -442,7 +442,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 1000.0,
-			fogend: 50000.,
+			fogend: 10000.,
 			layeroffset: 0,
 			layerzmult: 0,
 			layerzoff: 0,
@@ -677,8 +677,10 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.textpositionfn = function(pos){			
 			idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 			rpos = vec2(1,-1)*pos.xz + (idxpos - this.tiletrans)* this.tilesize;
+			rpos.y += pos.y;
+			rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
 			
-			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y+pos.y);
+			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 		}
 		this.resetbuffer = function(){
 			this.labels = [];
@@ -692,14 +694,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 			var thelabels = [];
 			var rankfontsizes = {
-				0:40, 
-				1:30, 
-				2:20,
-				3:10,
-				4:10,
-				5:10, 
-				6:10, 
-				7:10
+				0:240, 
+				1:130, 
+				2:120,
+				3:80,
+				4:80,
+				5:80, 
+				6:80, 
+				7:80
 			}
 			
 			for (var i =0 ;i<LabelSource.length;i++){
@@ -733,6 +735,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.shaders.hardrect.mesh = tile.roadVertexBuffer;
 		}
 		this.hardrect = function(){
+			this.texture = require("./mapmaterial.png");
 
 			this.position = function(){
 				var sidevec = mesh.pos.zw
@@ -775,10 +778,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.color = function(){
 				//return "blue";
-				var prefog = mix(pal.pal1(mesh.geom.w), vec4(0), 1.0-view.bufferloaded);
+				var texcol = texture.sample(vec2(vec2(sin(mesh.geom.w*20.0)*0.5+0.5,sin( mesh.geom.z*14.0)*0.5+0.5)));
+				texcol.xyz*=0.9;
+				//return "black" ;
+				var prefog = mix(texcol, vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 
-
+				
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
@@ -789,7 +795,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	});
 
 
-	this.bgcolor = vec4("#101030");
+	this.bgcolor = vec4("#f0f0ff");
 	this.flex = 1;
 	this.clearcolor = "black"
 	
@@ -822,7 +828,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	]
 		var sourcezoom = this.dataset.zoomlevel;
 		this.zoomlevel = Math.ceil(sourcezoom);
-	console.log(sourcezoom, this.zoomlevel);
+//	console.log(sourcezoom, this.zoomlevel);
 		
 		
 		this.centerx = this.dataset.centers[this.zoomlevel][0] + this.mapoffset[this.zoomlevel][0];
@@ -928,14 +934,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
-		var dist = 14.5
+		var dist = 4.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
 			,name: "mapinside"
 			,nearplane: 100 * dist
 			,farplane: 40000 * dist
-			,camera:vec3(0,-1000 * dist,100* dist), fov: 40, up: vec3(0,1,0)
+			,camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0)
 			,lookat:vec3(0,0,0)
 		},
 
