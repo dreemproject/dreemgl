@@ -32,8 +32,8 @@ define.class("$ui/view", function(require,
 					classname:"view",
 					classdir:"$ui$",
 					params:{
-						height:60,
-						width:60,
+						height:70,
+						width:80,
 						bgcolor:'purple'
 					}
 				},
@@ -44,8 +44,8 @@ define.class("$ui/view", function(require,
 					classname:"label",
 					classdir:"$ui$",
 					params:{
-						fontsize:24,
-						bgcolor:'transparent',
+						fontsize:44,
+						opaque:true,
 						fgcolor:'lightgreen',
 						text:'Howdy!'
 					}
@@ -70,7 +70,8 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fgcolor:'cornflower',
-						icon:'flask'
+						icon:'flask',
+						fontsize:80
 					}
 				}
 			],

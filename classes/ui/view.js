@@ -267,6 +267,18 @@ define.class('$system/base/node', function(require){
 		// tabstop, sorted by number
 		tabstop: NaN,
 
+		opaque: Config({value:false}),
+		onopaque:function(ev,v,o) {
+			if (v) {
+				this.hardrect = {pickonly:true}
+				if (!this.bgcolor || isNaN(this.bgcolor) || this.bgcolor === "transparent") {
+					this.bgcolor = "white";
+				}
+			} else if (this.hardrect && this.hardrect.pickonly) {
+				this.hardrect.pickonly = false;
+			}
+		},
+
 		cursor: Config({type:Enum(
 			'', 'arrow', 'none','wait','text','pointer',
 			'zoom-in','zoom-out','grab','grabbing',
