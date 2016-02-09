@@ -61,6 +61,8 @@ define.class(function(require, exports){
 		}.bind(this)
 
 		this.socket.onmessage = function(event){
+			// if its huuuge and value has escaped json, dont parse it
+			var data = event.data
 			var msg = JSON.parse(event.data)
 			this.atMessage(msg, this)
 		}.bind(this)
