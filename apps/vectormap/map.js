@@ -15,18 +15,21 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		return x + "_" + y + "_" + z;
 	}
 
-	this.pointerstart = function(){
-		console.log("pointerstart");
-	}
+	
+	this.onpointerend = function(ev){
+			this.stopDrag();
+		}
 
-	this.pointermove = function(){
-		console.log("pointermove");
-	}
+		this.onpointerstart = function(ev){
+			this.startDrag(ev);
+		}
 
-	this.pointerend = function(){
-		console.log("pointerend");
-	}
-
+		this.onpointermove = function(ev){
+			this.moveDrag(ev);
+		}
+		
+		
+		
 
 	this.gotoCity = function(city, zoomlevel){
 		this.dataset.gotoCity(city, zoomlevel);
@@ -52,12 +55,21 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.setCenterLatLng = function(lat, lng, zoom, time){
-			zoom = Math.floor(zoom);
+			
+			this._latlong = vec2(lat, lng);
 			var llm = geo.latLngToMeters(lat, lng)
-			var tvm = geo.tileForMeters(llm[0], llm[1], zoom );
+			var tvm = geo.tileForMeters(llm[0], llm[1], Math.floor(zoom) );
 			this.setCenter(tvm.x , tvm.y , zoom, time);
 		}
 		this.centers = [];
+		
+		this.zoomTo = function(newz){
+			var base = Math.floor(newz);
+			var frac = newz - base;
+			var newcen = this.centers[base];
+			
+			this.setCenter(newcen[0], newcen[1], base);
+		}
 		
 		this.setCenter = function(x,y,z, time){
 			
@@ -287,6 +299,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 	})
 
+	
 	this.atDraw = function(){
 		this.updateTiles();
 		//this.setTimeout(this.updateTiles, 10);
@@ -295,7 +308,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.init = function(){
 		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
 
-		//this.setTimeout(this.updateTiles, 10);
+		this.setInterval(this.updateTiles, 20);
 	}
 
 	function UnProject(glx, gly, glz, modelview, projection){
@@ -403,7 +416,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			fogend: 50000.,
 			layeroffset: 0,
 			layerzmult: 0,
-			layerzoff: 0
+			layerzoff: 0,
+			fraczoom:0.5
 		}
 		
 
@@ -441,10 +455,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.lastpos = vec3(R[0], R[1], R[2]);
 		}
 
-		this.setpos = function(newcoord, newzoom, frac){
+		this.setpos = function(newcoord, newzoom, frac, fraczoom){
 			this._tiletrans = frac;
 			this._zoomlevel = newzoom;
 			this._coord = vec2(Math.floor(newcoord[0]), Math.floor(newcoord[1]));
+			this._fraczoom = fraczoom;
 			this.checknewpos();
 		}
 
@@ -521,7 +536,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize;
-					pos.xy /= pow(2.0,view.layeroffset-2)
+					pos.xy /= pow(2.0,view.layeroffset-2- view.fraczoom)
 			
 				respos = vec4(pos.x, -mesh.pos.z * view.bufferloaded + view.layeroffset*view.layerzmult + view.layerzoff, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				//r.w += 0.002;
@@ -570,7 +585,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				
 				
 				pos = vec2(1,-1)*mesh.pos.xy + (idxpos - view.tiletrans)* view.tilesize  ;
-				pos.xy /= pow(2.0,view.layeroffset-2)
+				pos.xy /= pow(2.0,view.layeroffset-2 - view.fraczoom)
 				
 				respos = vec4(pos.x, view.layeroffset * view.layerzmult+ view.layerzoff, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				respos.w -= mesh.pos.z*0.01;
@@ -687,7 +702,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 
 				var pos = vec2(1,-1)*possrc.xy + (idxpos - view.tiletrans) * view.tilesize;
-					pos.xy /= pow(2.0,view.layeroffset-2)
+					pos.xy /= pow(2.0,view.layeroffset-2- view.fraczoom)
 			
 				 respos = vec4(pos.x, view.layeroffset*view.layerzmult + view.layerzoff, pos.y, 1) * view.totalmatrix * view.viewmatrix ;
 				respos.w += mesh.pos.z*0.1;
@@ -736,16 +751,18 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.bgcolor = vec4("#101030");
 	this.flex = 1;
 	this.clearcolor = "black"
-	//this.time = 0;
-
+	
 	this.updateTiles = function(){
 		if (!this.dataset) return;
 		this.centerx = this.dataset.centerpos[0];
 		this.centery = this.dataset.centerpos[1];
 		var centervec = vec2(this.centerx, this.centery);
 				//console.log(this.centerx, this.centery, this.zoomlevel);
-		this.zoomlevel = this.dataset.zoomlevel;
 
+
+		var sourcezoom = this.dataset.zoomlevel;
+		this.zoomlevel = Math.floor(sourcezoom);
+		this.fraczoom = sourcezoom - this.zoomlevel;
 		
 		var m = geo.metersForTile({x:this.centerx, y:this.centery, z:this.zoomlevel})
 			
@@ -772,7 +789,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		for(var a = 0;a<this.tilestoupdate.length;a++){
 			var rt = this.tilestoupdate[a];
 				//rt.trans = vec2(Math.sin(this.time)*5, 0);
-				rt.setpos(floorvec[rt.layeroffset], this.zoomlevel + rt.layeroffset, frac[rt.layeroffset]);
+				rt.setpos(floorvec[rt.layeroffset], this.zoomlevel + rt.layeroffset, frac[rt.layeroffset], this.fraczoom);
 			rt.redraw();
 		}
 	}
@@ -783,13 +800,12 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var res = [this.dataset];
 		var res3d = []
 
-		var div = 400
-		this.tilewidth = Math.ceil(this.layout.width/ div);
-		this.tileheight = Math.ceil(this.layout.height/ div);;
+//		var div = 400
+//		this.tilewidth = Math.ceil(this.layout.width/ div);
+//		this.tileheight = Math.ceil(this.layout.height/ div);;
 
 	
-		//console.log("tile area", tilearea);
-		for(var layer = 0;layer<3;layer++){
+		for(var layer = 0;layer<2;layer++){
 			
 			this.tilewidth = Math.pow(2, 1 + layer);
 			this.tileheight = Math.pow(2, 1 + layer);
