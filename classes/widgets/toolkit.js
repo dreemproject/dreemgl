@@ -17,6 +17,10 @@ define.class("$ui/view", function(require,
 	this.alignitems = "stretch";
 	this.tooltarget = false;
 
+	this.position = "absolute";
+	this.width = 400;
+	this.height = 800;
+
 	this.attributes = {
 
 		// The target for the property inspector
@@ -160,7 +164,7 @@ define.class("$ui/view", function(require,
 		this.ensureDeps();
 
 		this.screen.globalpointerstart = function(ev) {
-			if (this.testView(ev.view)) {
+			if (ev.view == this || this.testView(ev.view)) {
 
 				if (!this.selection || this.selection.indexOf(ev.view) < 0) {
 					this.selection = [ev.view];
@@ -189,7 +193,7 @@ define.class("$ui/view", function(require,
 					};
 
 					this.__resizecorner = this.edgeCursor(ev);
-					ev.view.cursor = "move"
+					ev.view.cursor = "move";
 				}
 			}
 
@@ -237,9 +241,6 @@ define.class("$ui/view", function(require,
 					pos = ev.view.parent.globalToLocal(ev.pointer.position)
 				}
 
-				ev.view.x = pos.x - this.__startpos.x;
-				ev.view.y = pos.y - this.__startpos.y;
-
 				if (this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
@@ -249,6 +250,8 @@ define.class("$ui/view", function(require,
 						}
 					}
 				}
+
+				ev.view.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y)
 
 			} else if (this.__startrect) {
 				var select = this.__selectrect || this.find('selectorrect');
@@ -333,7 +336,6 @@ define.class("$ui/view", function(require,
 				}
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
-
 
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
@@ -512,7 +514,7 @@ define.class("$ui/view", function(require,
 
 	this.edgeCursor = function (ev) {
 		var resize = false;
-		if (this.testView(ev.view) && ev.view.toolmove !== false) {
+		if (ev.view === this || (this.testView(ev.view) && ev.view.toolmove !== false)) {
 			var pos = ev.view.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 
@@ -710,7 +712,7 @@ define.class("$ui/view", function(require,
 		this.bordercolorfn = function(pos) {
 //			var speed = time * 20.0;
 			var speed = 0.0;
-			var size = 0.03;
+			var size = 0.02;
 			var slices = 2.0;
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
@@ -779,19 +781,24 @@ define.class("$ui/view", function(require,
 					flex:0,
 					hardrect:{pickonly:true},
 					pointerstart:function(p) {
-						console.log('drag me start', p)
 						this.__grabpos = p.view.globalToLocal(p.position);
 					},
 					pointermove:function(p) {
 						if (this.parent.position === "absolute") {
-							console.log('drag me ', p, this.__grabpos, this.parent);
 							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 						}
 					},
 					pointerend:function(p) {
 						if (this.parent.position === "absolute") {
-							console.log('drag me end', p, this.__grabpos)
 							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+
+							this.parent.setASTObjectProperty(this.parent, "position", "absolute");
+							this.parent.setASTObjectProperty(this.parent, "x", this.parent.x);
+							this.parent.setASTObjectProperty(this.parent, "y", this.parent.y);
+							this.parent.setASTObjectProperty(this.parent, "width", this.parent.width);
+							this.parent.setASTObjectProperty(this.parent, "height", this.parent.height);
+							this.screen.composition.commitAST();
+
 						}
 						this.__grabpos = undefined;
 					}
@@ -864,7 +871,7 @@ define.class("$ui/view", function(require,
 			label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
 		));
 
-		views.push(this.panel({title:"Structure", flex:0.5},
+		views.push(this.panel({title:"Structure", flex:0.7},
 			treeview({
 				flex:1,
 				name:"structure",
@@ -902,7 +909,7 @@ define.class("$ui/view", function(require,
 			})
 		));
 
-		views.push(this.panel({title:"Properties", flex:2.1},
+		views.push(this.panel({title:"Properties", flex:2},
 			propviewer({
 				name:"inspector",
 				target:this.inspect,
