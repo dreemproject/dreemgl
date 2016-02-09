@@ -792,11 +792,18 @@ define.class("$ui/view", function(require,
 		return ok;
 	};
 
-	this.bordercolorfn = function(pos) {
-		var speed = this.animateborder ? time * 17.0 : 17.0;
+	this.animatedbordercolorfn = function(pos) {
+		var speed = time * 17.0;
 		var size = 0.0008;
 		var slices = 3.5;
 		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.staticbordercolorfn = function(pos) {
+		var speed = 17.0;
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * (pos.x - pos.y + speed), slices));
 		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
 	};
 
