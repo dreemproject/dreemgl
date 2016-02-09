@@ -24,10 +24,10 @@ define.class("$server/composition",function(require, $ui$, button, icon, label, 
 					},
 					view({height:473, width:618, bgcolor:vec4(0.9318798184394836,0.31568998098373413,0.7469818592071533,1), position:'absolute', x:43.00016784667969, y:18.000076293945312},label({fontsize:54, bgcolor:'transparent', fgcolor:'white', text:'0_0', position:'absolute', x:156.00015258789062, y:29.999862670898438, width:NaN, height:NaN})),
 					view({height:257, width:451, bgcolor:vec4(0.12939296662807465,0.4936515688896179,0.6595012545585632,1), position:'absolute', x:377.924560546875, y:55.101898193359375, rotate:vec3(0,0,10)}),
-					label({fontsize:190, bgcolor:'transparent', fgcolor:vec4(0.9903326034545898,0.8860607147216797,0,1), text:'Howdy!', position:'absolute', x:117.06063842773438, y:106.86102294921875, rotate:vec3(0,0,-0.55)}),
+					label({fontsize:190, bgcolor:'transparent', fgcolor:vec4(0.9903326034545898,0.8860607147216797,0,1), text:'Howdy!', position:'absolute', x:86.1605224609375, y:286.59063720703125, rotate:vec3(0,0,-0.55)}),
 					icon({fgcolor:vec4(0.3921568691730499,0.929411768913269,0.42688411474227905,1), icon:'anchor', position:'absolute', x:726.0000610351562, y:165, fontsize:180}),
-					icon({fgcolor:vec4(0.929411768913269,0.9167269468307495,0.3921568691730499,1), icon:'gear', position:'absolute', x:639.0001220703125, y:34.000091552734375, fontsize:480, opaque:false}),
-					icon({fgcolor:'cornflower', icon:'glass', position:'absolute', x:962, y:40.99998474121094, fontsize:180})
+					icon({fgcolor:vec4(0.929411768913269,0.9167269468307495,0.3921568691730499,1), icon:'gear', position:'absolute', x:791.0001220703125, y:40.000091552734375, fontsize:480, opaque:false}),
+					icon({fgcolor:'cornflower', icon:'glass', position:'absolute', x:1016, y:38, fontsize:180})
 				),
 				toolkit({
 					flexdirection:"column"
