@@ -398,7 +398,7 @@ define.class(function(require, $server$, service){
 		
 		for(var i = 0; i < triangles.length; i++){
 			idx = triangles[i]
-			verts.push([flatverts[idx * 2], flatverts[idx * 2 + 1]])
+			verts.push(flatverts[idx * 2], flatverts[idx * 2 + 1])
 		}
 
 		return verts
@@ -492,19 +492,47 @@ define.class(function(require, $server$, service){
 				for(var j = 0;j<land.arcs.length;j++){
 					var arc = land.arcs[j];
 					var tris = arcToTriangles(arc);
+
 					for(var a = 0;a<tris.length;a++){
 						mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
 					}
 				}
 			}
 			if (land.polygons){
-					for(var j = 0;j<land.polygons.length;j++){
+				var total = 0
+				for(var j = 0;j<land.polygons.length;j++){
 					var poly = land.polygons[j];
 					var tris = polyToTriangles(poly);
-					for(var a = 0;a<tris.length;a++){
-						mesh.push(tris[a],off, vec4(color1), vec4(color2), i);
+					poly.tris = tris
+					total += poly.tris.length / 2
+				}
+				// ensure the size
+				if(!total) continue
+
+				mesh.ensureSize(mesh.length + total)
+
+				var array = mesh.array
+				var o = mesh.length * 12
+
+				for(var j = 0;j<land.polygons.length;j++){
+					var poly = land.polygons[j];
+					var tris = poly.tris
+					for(var a = 0;a<tris.length;a+=2, o += 12){
+						array[o + 0] = tris[a]
+						array[o + 1] = tris[a+1]
+						array[o + 2] = off
+						array[o + 3] = color1[0]
+						array[o + 4] = color1[1]
+						array[o + 5] = color1[2]
+						array[o + 6] = color1[3]
+						array[o + 7] = color2[0]
+						array[o + 8] = color2[1]
+						array[o + 9] = color2[2]
+						array[o + 10] = color2[3]
+						array[o + 11] = i
 					}
 				}
+				mesh.length += total//tris.length
 			}
 		}
 		return mesh;
@@ -514,108 +542,107 @@ define.class(function(require, $server$, service){
 		var mesh = RoadVertexStruct.array();
 		var z = 10;
 		for (var i = 0;i<roads.length;i++){							
-					
-					
-					var R = roads[i];
-					var linewidth = 3;
-					var color = vec4("gray") ;
-					
-					var st = mapstyle[R.kind];
-					if (!st) st = mapstyle["default"];
-					if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
-					
-					if (st.roadcolor) color = st.roadcolor;else UnhandledKindSet[R.kind] = "road" ;
-					var markcolor = color;
-					if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
-				
-				//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
-					
-					for(var rr = 0;rr<R.arcs.length;rr++){
-						var currentarc = R.arcs[rr]
-						if (currentarc.length == 1){
-							continue
-						}
-						//continue;
-						var A0 = currentarc[0];
-						var A1 = vec2(currentarc[1][0]+A0[0],currentarc[1][1]+A0[1]) ;
-						
-						//mesh.push(A0[0], A0[1], this.view.color);
-						var nx = A0[0];
-						var ny = A0[1];
-						
-						var odx = A1[0]-A0[0];
-						var ody = A1[1]-A0[1];
-						
-						var predelta = vec2.normalize(vec2(odx, ody));
-						var presdelta = vec2.rotate(predelta, 3.1415/2.0);
-					
-					
-					
-						var dist = 0;
-						var dist2 = 0;
-						var lastsdelta = vec2(0,0);
-					//	color = vec4("blue");
-						mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
-						mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
-
-						mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
-
-						mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
-						mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
-
-						//mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
-						mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
-
-
-					//	color = vec4(0,0,0.03,0.1)
-					var lastdelta = vec2(0);
-						for(var a = 1;a<currentarc.length;a++){					
-							var A =currentarc[a];
-							
-							var tnx = nx + A[0];
-							var tny = ny + A[1];
-							var predelt = vec2( tnx - nx, tny - ny);
-							var delta = vec2.normalize(predelt);
-							var sdelta = vec2.rotate(delta, PI/2);
-					
-							var dist2 = dist +  vec2.len(predelt);
-							
-							if (a>1){
-								mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-								mesh.push(nx,ny,z, color, 1, dist,linewidth,sdelta, markcolor);
-								mesh.push(nx,ny,z, color, -1, dist,linewidth,sdelta, markcolor);
-								
-								mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-								mesh.push(nx,ny,z, color,-1, dist,linewidth,sdelta, markcolor);
-								mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
-									
-							}
-							//color = vec4(0,1,0,0.2)
-							mesh.push( nx, ny,z,color, 1, dist ,linewidth, sdelta, markcolor);
-							mesh.push( nx, ny,z,color,-1, dist ,linewidth, sdelta, markcolor);
-							mesh.push(tnx,tny,z,color, 1, dist2,linewidth, sdelta, markcolor);
-							
-							mesh.push(nx,ny,z,color,-1, dist,linewidth, sdelta, markcolor);
-							mesh.push(tnx,tny,z,color,1,dist2,linewidth, sdelta, markcolor);
-							mesh.push(tnx,tny,z,color,-1, dist2,linewidth, sdelta, markcolor);
-							
-							lastsdelta = vec2(sdelta[0], sdelta[1]);
-							dist = dist2;									
-							nx = tnx;
-							ny = tny;
-							lastdelta = delta;
-						}
-						//color = vec4("red");
-						mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-						mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
-						mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
-
-						mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
-						mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, -0.5, dist+linewidth*0.5,linewidth,lastsdelta, markcolor);
-						mesh.push(nx,ny, z,color, -1, dist,linewidth,presdelta, markcolor);
-
-					}
+			
+			var R = roads[i];
+			var linewidth = 3;
+			var color = vec4("gray") ;
+			
+			var st = mapstyle[R.kind];
+			if (!st) st = mapstyle["default"];
+			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
+			
+			if (st.roadcolor) color = st.roadcolor;else UnhandledKindSet[R.kind] = "road" ;
+			var markcolor = color;
+			if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
+		
+		//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
+			
+			for(var rr = 0;rr<R.arcs.length;rr++){
+				var currentarc = R.arcs[rr]
+				if (currentarc.length == 1){
+					continue
 				}
+				//continue;
+				var A0 = currentarc[0];
+				var A1 = vec2(currentarc[1][0]+A0[0],currentarc[1][1]+A0[1]) ;
+				
+				//mesh.push(A0[0], A0[1], this.view.color);
+				var nx = A0[0];
+				var ny = A0[1];
+				
+				var odx = A1[0]-A0[0];
+				var ody = A1[1]-A0[1];
+				
+				var predelta = vec2.normalize(vec2(odx, ody));
+				var presdelta = vec2.rotate(predelta, 3.1415/2.0);
+			
+			
+			
+				var dist = 0;
+				var dist2 = 0;
+				var lastsdelta = vec2(0,0);
+			//	color = vec4("blue");
+				mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
+
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
+
+				//mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
+
+
+			//	color = vec4(0,0,0.03,0.1)
+			var lastdelta = vec2(0);
+				for(var a = 1;a<currentarc.length;a++){					
+					var A =currentarc[a];
+					
+					var tnx = nx + A[0];
+					var tny = ny + A[1];
+					var predelt = vec2( tnx - nx, tny - ny);
+					var delta = vec2.normalize(predelt);
+					var sdelta = vec2.rotate(delta, PI/2);
+			
+					var dist2 = dist +  vec2.len(predelt);
+					
+					if (a>1){
+						mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
+						mesh.push(nx,ny,z, color, 1, dist,linewidth,sdelta, markcolor);
+						mesh.push(nx,ny,z, color, -1, dist,linewidth,sdelta, markcolor);
+						
+						mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
+						mesh.push(nx,ny,z, color,-1, dist,linewidth,sdelta, markcolor);
+						mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
+							
+					}
+					//color = vec4(0,1,0,0.2)
+					mesh.push( nx, ny,z,color, 1, dist ,linewidth, sdelta, markcolor);
+					mesh.push( nx, ny,z,color,-1, dist ,linewidth, sdelta, markcolor);
+					mesh.push(tnx,tny,z,color, 1, dist2,linewidth, sdelta, markcolor);
+					
+					mesh.push(nx,ny,z,color,-1, dist,linewidth, sdelta, markcolor);
+					mesh.push(tnx,tny,z,color,1,dist2,linewidth, sdelta, markcolor);
+					mesh.push(tnx,tny,z,color,-1, dist2,linewidth, sdelta, markcolor);
+					
+					lastsdelta = vec2(sdelta[0], sdelta[1]);
+					dist = dist2;									
+					nx = tnx;
+					ny = tny;
+					lastdelta = delta;
+				}
+				//color = vec4("red");
+				mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
+				mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, -0.5, dist+linewidth*0.5,linewidth,lastsdelta, markcolor);
+				mesh.push(nx,ny, z,color, -1, dist,linewidth,presdelta, markcolor);
+
+			}
+		}
 				
 		return mesh;
 		

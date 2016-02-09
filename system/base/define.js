@@ -2049,7 +2049,7 @@
 				// lets double the size of the buffer
 				var oldsize = this.allocated * this.slots
 
-				if(this.length > this.allocated * 2) this.allocated = this.length
+				if(length > this.allocated * 2) this.allocated = length
 				else this.allocated = this.allocated * 2 // exponential strategy
 
 				var oldarray = this.array

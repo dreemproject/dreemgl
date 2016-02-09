@@ -10,6 +10,10 @@ define.class('./jsviewer', function(require, $ui$, textbox){
 	
 	var enumchange = this.enumchange
 
+	this.init = function(){
+		
+	}
+
 	// process inserts with matching parens
 	this.processInsert = function(lo, hi, text){
 		var cdelta = 0

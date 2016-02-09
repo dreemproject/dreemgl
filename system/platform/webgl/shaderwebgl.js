@@ -462,6 +462,7 @@ define.class('$system/base/shader', function(require, exports){
 		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
 		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)
+		return len
 	}
 
 })

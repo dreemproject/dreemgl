@@ -302,7 +302,7 @@ define.class(function(require, baseclass){
 
 	this.drawNormal = function(draw, view, matrices){
 		draw.updateShaders()
-		var count = 0
+		var vtx_count = 0
 		// alright lets iterate the shaders and call em
 		var shaders = draw.shader_draw_list
 		for(var j = 0; j < shaders.length; j++){
@@ -317,10 +317,10 @@ define.class(function(require, baseclass){
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
-			count++
-			shader.drawArrays(this.device)
+			
+			vtx_count += shader.drawArrays(this.device)
 		}
-		return count
+		return vtx_count
 	}
 
 	this.drawColor = function(isroot, time, clipview){
@@ -328,7 +328,8 @@ define.class(function(require, baseclass){
 		var device = this.device
 		var layout = view._layout
 		var gl = device.gl
-		var count = 0
+		var dom_count = 0
+		var vtx_count = 0
 		if(!layout || layout.width === 0 || isNaN(layout.width) || layout.height === 0 || isNaN(layout.height)) return
 
 		// lets see if we need to allocate our framebuffer..
@@ -393,7 +394,7 @@ define.class(function(require, baseclass){
 					this.drawBlend(draw)
 				}
 				else{
-					count += this.drawNormal(draw, view, matrices)
+					vtx_count += this.drawNormal(draw, view, matrices)
 				}
 
 
@@ -404,7 +405,7 @@ define.class(function(require, baseclass){
 			}
 			draw = this.nextItem(draw, 'pick')
 		}
-		//console.log(count)
+		//console.log(vtx_count)
 		return hastime
 	}
 
