@@ -48,7 +48,12 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 							noisegrid({padding:20, flexwrap:"nowrap", overflow:"scroll"}
 							//,label({outline:true, fontsize: 130, outline_thickness: 10, text:"outline test", bg:0})
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bgcolor:NaN})
-								,numberbox({value:16, onvalue:function(){}.bind(this), name:"numberbox", minvalue:0, stepvalue:1, maxvalue:18})
+
+								,view({bgcolor:NaN},
+								label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
+,			numberbox({value:16, onvalue:function(val){this.find("themap").zoomTo(val);}.bind(this), text:"numberbox", minvalue:0, stepvalue:1, maxvalue:18})
+								)
+
 								,Buttons
 								,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
 								,label({text:"Rotation control",margin: 10,fontsize:12,  bgcolor:NaN})

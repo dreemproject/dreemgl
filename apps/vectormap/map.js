@@ -15,7 +15,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		return x + "_" + y + "_" + z;
 	}
 
-	
+	this.zoomTo = function(z){
+		this.dataset.zoomTo(z);
+	}
 	this.onpointerend = function(ev){
 			this.stopDrag();
 		}
@@ -308,7 +310,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.init = function(){
 		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
 
-		this.setInterval(this.updateTiles, 20);
+	//	this.setInterval(this.updateTiles, 20);
 	}
 
 	function UnProject(glx, gly, glz, modelview, projection){
@@ -805,7 +807,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 //		this.tileheight = Math.ceil(this.layout.height/ div);;
 
 	
-		for(var layer = 0;layer<2;layer++){
+		for(var layer = 0;layer<3;layer++){
 			
 			this.tilewidth = Math.pow(2, 1 + layer);
 			this.tileheight = Math.pow(2, 1 + layer);
