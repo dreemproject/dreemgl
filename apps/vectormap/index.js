@@ -3,6 +3,12 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 	this.places= [
 	{text:"Amsterdam", place: "amsterdam", zoomlevel: 16},
 	{text:"Amsterdam-17", place: "amsterdam", zoomlevel: 17},
+	{text:"Amsterdam-16", place: "amsterdam", zoomlevel: 16},
+	{text:"Amsterdam-15", place: "amsterdam", zoomlevel: 15},
+	{text:"Amsterdam-14", place: "amsterdam", zoomlevel: 14},
+	{text:"Amsterdam-13", place: "amsterdam", zoomlevel: 13},
+	{text:"Amsterdam-12", place: "amsterdam", zoomlevel: 12},
+	{text:"Amsterdam-11", place: "amsterdam", zoomlevel: 11},
 	{text:"Amsterdam-10", place: "amsterdam", zoomlevel: 10},
 	{text:"Seoul", place: "seoul", zoomlevel: 16},
 	{text:"SF", place: "sanfrancisco", zoomlevel: 16},
