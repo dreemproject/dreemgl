@@ -358,7 +358,7 @@ define.class(function(require, exports){
 
 			for (var j = 0; j< this.pointer.hover.length;j++) {
 				var p = this.pointer.hover[j];
-				console.log("Removing dangling hover pointer", p)
+				//console.log("Removing dangling hover pointer", p)
 				this.pointer.hover.removePointer(p);
 			}
 
