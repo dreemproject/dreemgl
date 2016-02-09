@@ -216,10 +216,10 @@ define.class(function(require, exports){
 		this.pick_resolve = []
 
 		if(this.debug_pick){
+
 			var data = this.readPixels(x * this.ratio, this.main_frame.size[1] - y * this.ratio, 1, 1)
 		}
 		else{
-			console.log("READPIXEL", Date.now())
 			var data = this.readPixels(0, 0, 1, 1)
 		}
 
@@ -249,19 +249,20 @@ define.class(function(require, exports){
 		this.pick_x = pos[0]
 		this.pick_y = pos[1]
 
-		if (immediate) {
-			this.doPick(resolve)
-			return
-		}
-
 		var callback = function () {
 			this.doPick(resolve)
 			delete this.pick_timer
 		}.bind(this)
 
-		if (!this.pick_timer || this.pick_timer.time !== this.last_time) {
-			window.clearTimeout(this.pick_timer)
-			this.pick_timer = setTimeout(callback, 0)
+		// TODO(aki): remove sync picking
+		if (immediate) {
+			callback(resolve)
+			return
+		}
+
+		// Throttle picking at 15 fps
+		if (!this.pick_timer) {
+			this.pick_timer = setTimeout(callback, 1000/15)
 			this.pick_timer.time = this.last_time
 		}
 	}

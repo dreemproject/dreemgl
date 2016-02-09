@@ -344,13 +344,13 @@ define.class(function(require, $server$, service){
 	})
 	
 	var RoadVertexStruct = this.RoadVertexStruct = define.struct({		
-		pos:vec3,
-		color:vec4,
-		side: float, 
-		dist: float,
-		linewidth:float,
-		sidevec:vec2, 
-		markcolor: vec4
+		pos:vec4,
+		geom:vec4//sidevec:vec2 
+		//geom:vec3,
+		//color: float,
+		//side: float,
+		//dist: float,
+		//linewidth:float,
 	})
 	
 	var LandVertexStruct = this.LandVertexStruct = vec4
@@ -565,8 +565,11 @@ define.class(function(require, $server$, service){
 			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
 			
 			if (st.roadcolor) color = st.roadcolor;else UnhandledKindSet[R.kind] = "road" ;
-			var markcolor = color;
-			if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
+			// make color an id
+
+			var colorid = color[0]
+			//var markcolor = color;
+			//if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
 		
 		//	linewidth *= Math.pow(2, this.view.zoomlevel-14);
 			
@@ -589,26 +592,35 @@ define.class(function(require, $server$, service){
 				var predelta = vec2.normalize(vec2(odx, ody));
 				var presdelta = vec2.rotate(predelta, 3.1415/2.0);
 			
-			
-			
 				var dist = 0;
 				var dist2 = 0;
 				var lastsdelta = vec2(0,0);
 			//	color = vec4("blue");
+				// it used to be
+				//posx, posy, posz,
+				//colorr, colorg, colorb, colora,
+				//side, dist, linewidth, sidevec2, markcolor
+				// now it is
+				// posx, posy, sidex, sidey, side, dist, linewidth, colorid
+				/*
 				mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
 				mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
-
 				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
 
 				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
 				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
-
-				//mesh.push(nx,ny, color, 1, dist,linewidth,presdelta, markcolor);
 				mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
+				*/
+				mesh.push(nx,ny,predelta[0], predelta[1], 1, dist, linewidth, colorid)//z, color, 1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx,ny,presdelta[0], presdelta[1], -1, dist, linewidth, colorid)//z, color, -1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
 
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], -0.5, -10 ,linewidth,colorid);
+				mesh.push(nx,ny, presdelta[0], presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
 
-			//	color = vec4(0,0,0.03,0.1)
-			var lastdelta = vec2(0);
+				//	color = vec4(0,0,0.03,0.1)
+				var lastdelta = vec2(0);
 				for(var a = 1;a<currentarc.length;a++){					
 					var A =currentarc[a];
 					
@@ -621,23 +633,23 @@ define.class(function(require, $server$, service){
 					var dist2 = dist +  vec2.len(predelt);
 					
 					if (a>1){
-						mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-						mesh.push(nx,ny,z, color, 1, dist,linewidth,sdelta, markcolor);
-						mesh.push(nx,ny,z, color, -1, dist,linewidth,sdelta, markcolor);
+						mesh.push(nx,ny,lastdelta[0], lastdelta[1], 1, dist,linewidth,colorid);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], 1, dist,linewidth,colorid);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid);
 						
-						mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-						mesh.push(nx,ny,z, color,-1, dist,linewidth,sdelta, markcolor);
-						mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid);
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth,colorid);
 							
 					}
 					//color = vec4(0,1,0,0.2)
-					mesh.push( nx, ny,z,color, 1, dist ,linewidth, sdelta, markcolor);
-					mesh.push( nx, ny,z,color,-1, dist ,linewidth, sdelta, markcolor);
-					mesh.push(tnx,tny,z,color, 1, dist2,linewidth, sdelta, markcolor);
+					mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid);
+					mesh.push( nx, ny,sdelta[0], sdelta[1], -1, dist ,linewidth, colorid);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1], 1, dist2,linewidth, colorid);
 					
-					mesh.push(nx,ny,z,color,-1, dist,linewidth, sdelta, markcolor);
-					mesh.push(tnx,tny,z,color,1,dist2,linewidth, sdelta, markcolor);
-					mesh.push(tnx,tny,z,color,-1, dist2,linewidth, sdelta, markcolor);
+					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid);
 					
 					lastsdelta = vec2(sdelta[0], sdelta[1]);
 					dist = dist2;									
@@ -646,13 +658,13 @@ define.class(function(require, $server$, service){
 					lastdelta = delta;
 				}
 				//color = vec4("red");
-				mesh.push(nx,ny,z, color, 1, dist,linewidth,lastsdelta, markcolor);
-				mesh.push(nx,ny,z, color, -1, dist,linewidth,lastsdelta, markcolor);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
+				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid);
+				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid);
 
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, 0.5, dist+linewidth*0.5 ,linewidth,lastsdelta, markcolor);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, color, -0.5, dist+linewidth*0.5,linewidth,lastsdelta, markcolor);
-				mesh.push(nx,ny, z,color, -1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid);
+				mesh.push(nx,ny, presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
 
 			}
 		}
@@ -833,7 +845,7 @@ define.class(function(require, $server$, service){
 		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(Rset);
 		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
 		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(Bset);
-		
+
 if(1){		
 		var geomsize = 0
 		geomsize += this.calculateAreaPolygonVertexBuffer(Eset)

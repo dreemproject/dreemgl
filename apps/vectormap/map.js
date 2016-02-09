@@ -15,10 +15,12 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		return x + "_" + y + "_" + z;
 	}
 
-	this.zoomTo = function(z){
-		this.dataset.zoomTo(z);
+	this.zoomTo = function(z, time){
+		this.dataset.zoomTo(z, time);
 		this.updateTiles();
 	}
+	
+	
 	this.onpointerend = function(ev){
 			this.stopDrag();
 		}
@@ -56,60 +58,77 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			zoomlevel: 15,
 			callbacktarget: {}
 		}
-
-		this.setCenterLatLng = function(lat, lng, zoom, time){
-			
-			this._latlong = vec2(lat, lng);
-			var llm = geo.latLngToMeters(lat, lng)
-			var tvm = geo.tileForMeters(llm[0], llm[1], Math.floor(zoom) );
-			this.setCenter(tvm.x , tvm.y , zoom, time);
-		}
-		this.centers = [];
 		
-		this.zoomTo = function(newz, time){
-			var base = Math.floor(newz);
-			var frac = newz - base;
-			var newcen = this.centers[base];
-			if (!newcen) 
+		
+		this.setCenterLatLng = function(lat, lng, zoom, time){
+			console.log("huh?" );
+			time = time?time:0
+			
+			if (time >0)
 			{
-				debugger;
-				return;
+			var anim = {}
+			
+			
+			anim[time] = {motion:"inoutquad", value:vec2(lat,lng)};
+				
+			this.latlong =Animate(anim);
+			}
+			else{
+				this.latlong = vec2(lat,lng);
 			}
 			
-			this.setCenter(newcen[0], newcen[1], base);
+			
+		}
+		this.onzoomlevel = function(){
+			this.parent.updateTiles();
+		}
+		this.onlatlong = function(){
+			var m = geo.latLngToMeters(this.latlong[0], this.latlong[1])
+			console.log("MMMM", m);
+			m[0]= Math.round(m[0]);
+			m[1]= Math.round(m[1]);
+			var basecenter = geo.tileForMeters(m[0], m[1], 20);
+			var compmeters = geo.metersForTile({x:basecenter[0],y:basecenter[1], z:20});
+		
+			var centerset = []
+			for(var i =0 ;i<20;i++){
+				
+					var center = geo.tileForMeters(m[0], m[1], i);
+					centerset.push([center.x,center.y]);
+			}
+			
+			this.centers = centerset;						
+		}
+		
+		
+		
+		this.zoomTo = function(newz, time){
+			time = time? time:0;
+			if (time >0)
+			{
+				var anim = {}
+			
+			
+				anim[time] = {motion:"inoutquad", value:newz};
+				
+				this.zoomlevel =Animate(anim);
+			}
+			else{
+				this.zoomlevel = newz;
+			}
+			
+			
 		}
 		
 		this.setCenter = function(x,y,z, time){
 			
-			var centerset = []
 			
 			var m = geo.metersForTile({x:x, y:y, z:z})
-			for(var i =0 ;i<20;i++){
-				
-					var center = geo.tileForMeters(m.x, m.y, i);
-					centerset.push([center.x,center.y]);
-			}
 			
-			this.centers = centerset;
+			var ll = geo.metersToLatLng(m.x,m.y);
+			this.setCenterLatLng(ll[0], ll[1], time);
+			this.zoomTo(z, time);
 			
-			if (!time || time == 0)
-			{
-				this.centerpos = vec2(x,y)
-				this.zoomlevel = z;
-				
-			}
-			else{
-
-				var anim = {}
-				anim[1] = {motion:"inoutquad", value:vec2(x,y)};
-				this.centerpos = Animate(anim);
-
-
-
-				this.zoomlevel = z;
-
-				//debugger;
-			}
 		}
 
 
@@ -273,6 +292,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.init = function(prev){
+			this.centers = [];
+			
 			this.workers = prev && prev.workers || worker(0)
 			this.cities = {
 				manhattan: [40.7072121, -74.0067985],
@@ -378,9 +399,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var R = vec3.intersectplane(camerapos, end, vec3(0,1,0), 0)
 		if (!R) return null;
 		
-	//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
-	//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
-	
+		//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
+		//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
 	
 		return R;
 		
@@ -422,7 +442,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 1000.0,
-			fogend: 50000.,
+			fogend: 10000.,
 			layeroffset: 0,
 			layerzmult: 0,
 			layerzoff: 0,
@@ -657,8 +677,10 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.textpositionfn = function(pos){			
 			idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 			rpos = vec2(1,-1)*pos.xz + (idxpos - this.tiletrans)* this.tilesize;
+			rpos.y += pos.y;
+			rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
 			
-			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y+pos.y);
+			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 		}
 		this.resetbuffer = function(){
 			this.labels = [];
@@ -672,14 +694,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 			var thelabels = [];
 			var rankfontsizes = {
-				0:40, 
-				1:30, 
-				2:20,
-				3:10,
-				4:10,
-				5:10, 
-				6:10, 
-				7:10
+				0:240, 
+				1:130, 
+				2:120,
+				3:80,
+				4:80,
+				5:80, 
+				6:80, 
+				7:80
 			}
 			
 			for (var i =0 ;i<LabelSource.length;i++){
@@ -713,14 +735,16 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.shaders.hardrect.mesh = tile.roadVertexBuffer;
 		}
 		this.hardrect = function(){
+			this.texture = require("./mapmaterial.png");
 
 			this.position = function(){
-
-				var possrc = mesh.pos.xy + mesh.sidevec * mesh.side * mesh.linewidth*0.5;
+				var sidevec = mesh.pos.zw
+				var side = mesh.geom.x
+				var dist = mesh.geom.y
+				var linewidth = mesh.geom.z
+				var possrc = mesh.pos.xy + sidevec * side * linewidth*0.5;
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-
-
 
 				var pos = vec2(1,-1)*possrc.xy + (idxpos - view.tiletrans) * view.tilesize;
 					pos.xy /= pow(2.0,view.layeroffset-2- view.fraczoom)
@@ -750,15 +774,17 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 
 			this.drawtype = this.TRIANGLES
-						this.depth_test = "disabled"
-
+			this.depth_test = "disabled"
 
 			this.color = function(){
 				//return "blue";
-				var prefog = mix(mesh.color, vec4(0), 1.0-view.bufferloaded);
+				var texcol = texture.sample(vec2(vec2(sin(mesh.geom.w*20.0)*0.5+0.5,sin( mesh.geom.z*14.0)*0.5+0.5)));
+				texcol.xyz*=0.9;
+				//return "black" ;
+				var prefog = mix(texcol, vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 
-
+				
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
@@ -769,35 +795,64 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	});
 
 
-	this.bgcolor = vec4("#101030");
+	this.bgcolor = vec4("#f0f0ff");
 	this.flex = 1;
 	this.clearcolor = "black"
 	
 	this.updateTiles = function(){
 		if (!this.dataset) return;
 		
-		this.centerx = this.dataset.centerpos[0];
-		this.centery = this.dataset.centerpos[1];
+		this.mapoffset = [
+	
+	[0,0], //0 
+	[0,0],//1
+	[0,0],//2
+	[0,0],//3
+	[0,0],//4
+	[0,0],//5
+	[0,0],//6
+	[0,0],//7
+	[0,0],//8
+	[0,0],//9
+	[0,0],//10
+	[-1,-0.5],//11
+	[-3,-0.5],//12
+	[-6,-0.5],//13
+	[0,0],//14
+	[0,0],//15
+	[0,0],//16
+	[0,0],//17
+	[0,0],//18
+	[0,0],//19
+	[0,0]//20
+	]
+		var sourcezoom = this.dataset.zoomlevel;
+		this.zoomlevel = Math.ceil(sourcezoom);
+//	console.log(sourcezoom, this.zoomlevel);
+		
+		
+		this.centerx = this.dataset.centers[this.zoomlevel][0] + this.mapoffset[this.zoomlevel][0];
+		this.centery = this.dataset.centers[this.zoomlevel][1] + this.mapoffset[this.zoomlevel][1];
+		
+		//console.log(this.centerx ,this.centery ,this.zoomlevel, this.dataset.centers);
 		var centervec = vec2(this.centerx, this.centery);
 				//console.log(this.centerx, this.centery, this.zoomlevel);
 
 
-		var sourcezoom = this.dataset.zoomlevel;
-		this.zoomlevel = Math.floor(sourcezoom);
 		this.fraczoom = sourcezoom - this.zoomlevel;
 		
 		var m = geo.metersForTile({x:this.centerx, y:this.centery, z:this.zoomlevel})
 			
 		var level2 = geo.tileForMetersFrac(m.x, m.y, this.zoomlevel +1);
 		
+		level1 = {x:this.centerx, y: this.centery};
+		level1.y -=0.5;
 		level2.x +=0
 		level2.y -=0
 		var level3 = geo.tileForMetersFrac(m.x, m.y, this.zoomlevel +2);
 		level3.x -=0.0;
 		level3.y +=1;
 			
-		level1 = {x:this.centerx, y: this.centery};
-		level1.y -=0.5;
 		//	console.log(level2)
 		var frac = [];
 		frac.push(vec2(level1.x - Math.floor(level1.x), level1.y- Math.floor(level1.y)))
@@ -829,10 +884,10 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 //		this.tileheight = Math.ceil(this.layout.height/ div);;
 
 	
-		for(var layer = 0;layer<3;layer++){
+		for(var layer = 0;layer<2;layer++){
 			
-			this.tilewidth = Math.pow(2, 1 + layer);
-			this.tileheight = Math.pow(2, 1 + layer);
+			this.tilewidth = Math.pow(2, 2 + layer);
+			this.tileheight = Math.pow(2, 2 + layer);
 			var tilearea = vec2(this.tilewidth, this.tileheight)
 			console.log(this.tilewidth , this.tileheight);		
 			var ltx = 0;
@@ -879,14 +934,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
-		var dist = 14.5
+		var dist = 4.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
 			,name: "mapinside"
 			,nearplane: 100 * dist
 			,farplane: 40000 * dist
-			,camera:vec3(0,-1000 * dist,100* dist), fov: 40, up: vec3(0,1,0)
+			,camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0)
 			,lookat:vec3(0,0,0)
 		},
 
