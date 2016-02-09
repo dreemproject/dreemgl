@@ -65,10 +65,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 		this.centers = [];
 		
-		this.zoomTo = function(newz){
+		this.zoomTo = function(newz, time){
 			var base = Math.floor(newz);
 			var frac = newz - base;
 			var newcen = this.centers[base];
+			if (!newcen) 
+			{
+				debugger;
+				return;
+			}
 			
 			this.setCenter(newcen[0], newcen[1], base);
 		}
@@ -389,6 +394,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.updateTiles();
 		}
 	}
+	
 	this.moveDrag = function(ev){
 		var R = this.projectonplane( this.globalToLocal(ev.position));
 		if (R){
@@ -580,7 +586,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 		this.pickalpha  = 0.1
 		this.hardrect = function(){
-
+			this.texture = require("./mapmaterial.png");
 			this.position = function(){
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
@@ -619,8 +625,12 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				//return "blue";
 				var col =  vec4(0,0,0.6,0.1);
 
+				 
 				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
-				var prefog = mix(mix(mesh.color1, mesh.color2, noise), col, 1.0-view.bufferloaded);
+				
+				var texcol = texture.sample(vec2(vec2(sin(mesh.color1.x*20.0)*0.5+0.5,sin( mesh.color1.y*14.0)*0.5+0.5)+ vec2(noise,0)));
+				
+				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 			//	prefog.a *=0.4;
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
@@ -756,6 +766,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	
 	this.updateTiles = function(){
 		if (!this.dataset) return;
+		
 		this.centerx = this.dataset.centerpos[0];
 		this.centery = this.dataset.centerpos[1];
 		var centervec = vec2(this.centerx, this.centery);
@@ -801,6 +812,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		var res = [this.dataset];
 		var res3d = []
+		var labels3d = [];
+		var buildings3d = [];
 
 //		var div = 400
 //		this.tilewidth = Math.ceil(this.layout.width/ div);
@@ -843,7 +856,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var ty = Math.floor(y-(this.tileheight)/2) + lty;
 					var building = this.buildingtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
 					this.tilestoupdate.push(building);
-					res3d.push(building);
+					buildings3d.push(building);
 				}
 			}
 			
@@ -853,7 +866,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var ty = Math.floor(y-(this.tileheight)/2) + lty
 					var labels = this.labeltile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(tx,ty), layeroffset: layer});
 					this.tilestoupdate.push(labels);
-					res3d.push(labels);
+					labels3d.push(labels);
 				}
 			}
 		}
@@ -869,7 +882,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		},
 
 			view({bgcolor:NaN},
-				res3d
+				res3d,
+				buildings3d,
+				labels3d
 				//,label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
 				)
 
