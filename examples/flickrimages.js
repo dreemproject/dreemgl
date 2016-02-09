@@ -3,89 +3,77 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
 // The server uses flickrlib to retrieve flickr images from the SF area.
-// 
+//
 // I don't think dreemgl supports something like 'background-size: contain' to
 // scale the image to the size.
 
-
 define.class(function($server$, composition, service, $ui$, screen, view, label, require){
 
-	this.render = function(){
+	define.class(this, "demo", "$ui/view", function(){
 
-    // Generate placeholder images (using the teem logo).
-		var dynviews = [];
-		var nimages = 100;
-    var imagesize = vec2(128, 128);
-		// Display a default image for each view
-		for (var n=0; n<nimages; n++) {
-			var v1 = view({
-				size: imagesize
-				,bgimage: 'http://teem.nu/wp-content/uploads/2015/11/TEEMlogo.png'
-			})
-			dynviews.push(v1);
+		this.flex = 1
+		this.flexdirection = 'column'
+		this.overflow = 'scroll'
+
+		var IMAGE_COUNT = 100
+		var IMAGE_SIZE = vec2(256, 256)
+		var IMAGE_PLACEHOLDER = 'http://teem.nu/wp-content/uploads/2015/11/TEEMlogo.png'
+
+		this.attributes = {
+			imagelist: []
 		}
 
-		var views = [
-			// Server side service: flickrservice
-			service({
-				name:'flickrservice'
+		this.render = function () {
+			var dynviews = []
+			for (var n = 0; n < this.imagelist.length; n++) {
+				dynviews.push(view({
+					size: IMAGE_SIZE,
+					bgimage: this.imagelist[n].url
+				},
+				[
+					label({position: 'absolute', fontsize: 12, top: 0, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].latitude}),
+					label({position: 'absolute', fontsize: 12, top: 14, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].longitude}),
+					label({position: 'absolute', fontsize: 12, top: 28, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].date})
+				]))
+			}
+			return	dynviews
+		}
+	})
 
-				// Retrieve urls using the flickr streaming using the search interface.
-				,runflickr: function() {
+	this.render = function(){
+		return [
+			service({
+				name:'flickrservice',
+				runflickr: function() {
 					//TODO $system doesn't work here
-					if (this.flickr) {
-						// Stop an already running stream
-						delete this.flickr;
-					}
-          var FlickrLib = require('../system/lib/flickrlib');
-          this.flickr = new FlickrLib();
+					// Stop an already running stream
+					delete this.flickr // TODO is this necessary?
+					var FlickrLib = require('../system/lib/flickrlib')
+					this.flickr = new FlickrLib()
 
 					// The flickrlib returns an array of photos
 					var callback = (function(images) {
-						//console.log('CALLBACK images', images);
-						var photos = images.photos.photo;
-						var urls = [];
-						for (var i=0; i<photos.length; i++) {
-							var photo = photos[i];
-							var url = photo.url_m;
-							if (url)
-								urls.push(url);
-							//console.log(i, photo);
-						}
-						this.rpc.default.imageupdate(urls);
-
-					}).bind(this);
+						this.rpc.default.imageupdate(images)
+					}).bind(this)
 
 					// The second argument will specify search parameters
-					this.flickr.search(callback);
+					this.flickr.search(callback)
 				}
 
 			}),
-
-
 			screen({
-				name:'default'
-				,clearcolor:'white'
-				,viewindex:0
-				,init: function() {
-					this.rpc.flickrservice.runflickr();
+				name:'default',
+				clearcolor:'white',
+				init: function() {
+					this.rpc.flickrservice.runflickr()
+				},
+				imageupdate: function(images) {
+					this.find('demo').imagelist = images
 				}
-
-				// Receive image urls from the server. These are displayed in sequence
-				,imageupdate: function(urls) {
-					for (var i=0; i<urls.length; i++) {
-						var url = urls[i];
-						var v = this.children[this.viewindex];
-						v.bgimage = url;
-						this.viewindex = (this.viewindex+1) % nimages;
-					}
-				}
-			}
-					   ,dynviews)
-		];
-
-		return views
+			}, [
+				this.demo({name: 'demo'})
+			])
+		]
 	}
 })
