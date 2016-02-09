@@ -165,15 +165,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.build = function(str, r){
 				var ret = vec2.array(10)
 				
-				try{
+				//try{
 					var thedata = JSON.parse(str);
 					this.BufferGen.build(r, thedata);
 					
-				}
-				catch(e){
-					console.log(e);
-					console.log(" while loading ", r.x, r.y, r.z);
-				}
+				//}
+				//catch(e){
+				//	console.log(e);
+				//	console.log(" while loading ", r.x, r.y, r.z);
+				//}
 				return r;
 			}
 		})
@@ -191,10 +191,10 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				r.hash = hash;
 
 					this.workers.build(str, r).then(function(result){
-						
+						var dt = Date.now()
 						this.loadedblocks[r.hash] = result.value
 						this.loadqueuehash[r.hash] = undefined;
-						this.parent.updateTiles();
+						this.parent.redraw()//updateTiles();
 					}.bind(this))
 					
 				this.currentRequest = undefined;
@@ -608,13 +608,21 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var b = BufferGen.TileSize - a;
 				var col =  vec4(0,0,1,0.2);
 
+				/*
 				this.mesh.push(a,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				this.mesh.push(b,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
-
 				this.mesh.push(b,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				this.mesh.push(a,a,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				this.mesh.push(b,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				this.mesh.push(a,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
+				*/
+				this.mesh.push(a,a,0,col[0], col[1],1);
+				this.mesh.push(b,a,0,col[0], col[1],1);
+				this.mesh.push(b,b,0,col[0], col[1],1);
+				this.mesh.push(a,a,0,col[0], col[1],1);
+				this.mesh.push(b,b,0,col[0], col[1],1);
+				this.mesh.push(a,b,0,col[0], col[1],1);
+
 			}
 
 			this.drawtype = this.TRIANGLES
