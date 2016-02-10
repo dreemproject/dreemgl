@@ -11,35 +11,11 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 
 		// The target who's properties to view.  Can be either a DreemGL object or a named reference to one.
 		target:Config({type:Object, value:""}),
-
 		// Shows properties for unknown property types
 		showunknown:Config({type:boolean, value:false}),
 
 		// internal, Callback used by the property editor to actually set properties.
-		callback:Config({type:Function}),
-
-		// internal
-		astarget:Config({type:String, persist:true}),
-		onastarget:function(ev,v,o) {
-			var node = this.screen;
-
-			if (v) {
-				var astpath = JSON.parse(v);
-				// console.log('path', astpath);
-				for (var i=1;i<astpath.length;i++) {
-					var pathitem = astpath[i];
-					var child = node.children[pathitem.childindex];
-					if (child && pathitem.type == child.constructor.name) {
-						node = child;
-					} else {
-						node = undefined;
-						break;
-					}
-				}
-			}
-
-			this.target = node;
-		}
+		callback:Config({type:Function})
 	};
 
 	this.borderwidth = 0;

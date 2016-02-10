@@ -267,8 +267,6 @@ define.class("$ui/view", function(require,
 					//this.screen.composition.commitAST();
 				}
 
-				ev.view.focus = true;
-
 				if (ev.view.toolmove === false){
 					ev.view.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
@@ -386,7 +384,7 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
-			if (ev.pointer.pick && ev.view) {
+			if (this.__lastpick && ev.view.drawtarget === "color") {
 				ev.view.drawtarget = "both";
 			}
 
@@ -1180,7 +1178,33 @@ define.class("$ui/view", function(require,
 						this.__needscommit = false;
 						this.screen.composition.commitAST();
 					}
-				}.bind(this)
+				}.bind(this),
+				ontarget:function(ev,v,o) {
+					if (v) {
+						v.focus = true;
+					}
+				},
+				astarget:Config({type:String, persist:true}),
+				onastarget:function(ev,v,o) {
+					var node = this.screen;
+
+					if (v) {
+						var astpath = JSON.parse(v);
+						// console.log('path', astpath);
+						for (var i=1;i<astpath.length;i++) {
+							var pathitem = astpath[i];
+							var child = node.children[pathitem.childindex];
+							if (child && pathitem.type == child.constructor.name) {
+								node = child;
+							} else {
+								node = undefined;
+								break;
+							}
+						}
+					}
+
+					this.target = node;
+				}
 			})
 		));
 
