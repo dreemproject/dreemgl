@@ -1,7 +1,7 @@
 define.class('$server/composition', function (require,  $server$, fileio,$ui$, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
 
 	this.places= [
-	{text:"Amsterdam", place: "amsterdam", zoomlevel: 16},
+	{text:"Texel 11", place: "texel", zoomlevel: 11},
 	{text:"Amsterdam-17", place: "amsterdam", zoomlevel: 17},
 	{text:"Amsterdam-16", place: "amsterdam", zoomlevel: 16},
 	{text:"Amsterdam-15", place: "amsterdam", zoomlevel: 15},
@@ -58,7 +58,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 
 								,view({bgcolor:NaN},
 								label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
-,			numberbox({value:10, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
+,			numberbox({value:9, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
 								)
 
 								,Buttons
