@@ -118,11 +118,20 @@ define.class("$ui/view", function(require,
 		reticlesize: 6,
 		groupdrag:true,
 		animateborder: false,
+		rulers:true,
 
 		// internal
 		selection:Config({value:[], meta:"hidden"}),
 		watch:Config({persist:true, value:[], meta:"hidden"})
 //		astwatch:Config({persist:true, type:String})
+	};
+
+	this.onrulers = function() {
+		if (!this.rulers && this.__ruler) {
+			this.__ruler.closeOverlay();
+			this.__ruler.target = undefined;
+			this.__ruler = undefined;
+		}
 	};
 
 	this.onanimateborder = function (ev,v,o) {
@@ -240,6 +249,11 @@ define.class("$ui/view", function(require,
 			if (!this.visible) {
 				return;
 			}
+
+			if (this.__ruler) {
+				this.__ruler.rulermarkstart = ev.pointer.position;
+			}
+
 			if (ev.view == this) {
 				var inspector = this.find('inspector');
 				if (inspector) {
@@ -305,6 +319,10 @@ define.class("$ui/view", function(require,
 
 			if (this.__ruler && this.__ruler.target == ev.view) {
 				this.__ruler.target = ev.view.parent;
+			}
+			if (this.__ruler) {
+				this.__ruler.rulermarkstart = ev.view.pos;
+				this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
 			}
 
 			if (this.__resizecorner) {
@@ -579,6 +597,12 @@ define.class("$ui/view", function(require,
 				var pointer = pointers[i];
 
 				var pos = ev.view.globalToLocal(pointer.position);
+
+				if (this.__ruler && this.__ruler.target) {
+					this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
+				}
+
+
 				text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
 				text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
 
@@ -971,17 +995,27 @@ define.class("$ui/view", function(require,
 		this.borderwidth = vec4(10.0,10.0,10.0,10.0);
 		this.attributes = {
 			target:Config({type:Object}),
-			rulertickwidth:2,
-			rulertickspacing:15.0,
+			rulertickwidth:1,
+			rulertickspacing:10.0,
 			rulermajorevery:10,
-			rulermajorcolor:vec4("white"),
-			rulerminorcolor:vec4("gray"),
+			rulermajorcolor:vec4("#F9F6F4"),
+			rulerminorcolor:vec4("#B0C4DE"),
+			rulermarkstartcolor:vec4("#FFCC00"),
+			rulermarkstart:vec2(0,0),
+			rulermarkendcolor:vec4("#FF0080"),
+			rulermarkend:vec2(0,0),
 			bordercolorfn:function(p) {
 				var atx = p.x * layout.width;
 				var aty = p.y * layout.height;
 				if ((aty > borderwidth[2] && aty < layout.height - borderwidth[3]) && (atx < borderwidth[0] || atx > layout.width - borderwidth[1])) {
+					if (aty > rulermarkstart[1] - rulertickwidth * 0.5 && aty < rulermarkstart[1] + rulertickwidth * 0.5) {
+						return rulermarkstartcolor;
+					} else if (aty > rulermarkend[1] - rulertickwidth * 0.5 && aty < rulermarkend[1] + rulertickwidth * 0.5) {
+						return rulermarkendcolor;
+					}
+
 					var c = int(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
-					if (c < int(rulertickwidth)) {
+					if (c < int(rulertickwidth * 2.0)) {
 						return rulermajorcolor;
 					}
 
@@ -994,8 +1028,14 @@ define.class("$ui/view", function(require,
 				}
 				else if ((atx > borderwidth[0] && atx < layout.width - borderwidth[1]) && (aty < borderwidth[2] || aty > layout.height - borderwidth[3])) {
 
+					if (atx > rulermarkstart[0] - rulertickwidth * 0.5 && atx < rulermarkstart[0] + rulertickwidth * 0.5) {
+						return rulermarkstartcolor;
+					} else if (atx > rulermarkend[0] - rulertickwidth * 0.5 && atx < rulermarkend[0] + rulertickwidth * 0.5) {
+						return rulermarkendcolor;
+					}
+
 					var b = int(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
-					if (b < int(rulertickwidth)) {
+					if (b < int(rulertickwidth * 2.0)) {
 						return rulermajorcolor;
 					}
 
@@ -1011,6 +1051,11 @@ define.class("$ui/view", function(require,
 			}
 		};
 		this.ontarget = function(ev,v,o) {
+			if (!v) {
+				this.visible = false;
+				return;
+			}
+			this.visible = true;
 			this.pos = vec2(v._layout.absx, v._layout.absy);
 			this.size = vec2(v._layout.width, v._layout.height);
 			this.rotate = v.rotate;
@@ -1272,7 +1317,7 @@ define.class("$ui/view", function(require,
 						if (this.__ruler) {
 							this.__ruler.closeOverlay();
 						}
-						if (this.testView(v)) {
+						if (this.rulers && this.testView(v)) {
 							this.__ruler = this.screen.openOverlay(this.ruler);
 							this.__ruler.target = v;
 						}
