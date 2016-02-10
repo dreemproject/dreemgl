@@ -20,6 +20,8 @@ define.class("$ui/view", function(require,
 	this.position = "absolute";
 	this.width = 400;
 	this.height = 800;
+	this.opacity = 0.7;
+	this.visible = false;
 
 	this.borderradius = 7;
 	this.bordercolor = vec4(1,1,1,0.7);
@@ -855,7 +857,7 @@ define.class("$ui/view", function(require,
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + this.borderseed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
 		};
-		this.borderwidth = 2;
+		this.borderwidth = 4;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
@@ -870,7 +872,7 @@ define.class("$ui/view", function(require,
 			}.bind(this);
 
 			v.onpos = function(ev,v,o) {
-				this.pos = vec3(v.x - this.borderwidth[0] / 2.0, v.y - this.borderwidth[0] / 2.0, v.z);
+				this.pos = vec3(o._layout.absx - this.borderwidth[0] / 2.0, o._layout.absy - this.borderwidth[0] / 2.0, v.z);
 			}.bind(this);
 
 			v.onrotate = function(ev,v,o) {
@@ -991,7 +993,7 @@ define.class("$ui/view", function(require,
 				dropTest:function(ev, v, item, orig, dv) {
 					//var name = v && v.name ? v.name : "unknown";
 					//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
-					return this.testView(v);
+					return v !== this && this.testView(v);
 				}.bind(this),
 
 				drop:function(ev, v, item, orig, dv) {
