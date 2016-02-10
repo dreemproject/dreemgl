@@ -33,7 +33,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 		var Buttons = [];
 		for(var i = 0;i<this.places.length;i++){
 			var p = this.places[i];
-			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel);
+			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel, 1);
 			this.find("zoomlevelbox").value = this.zoomlevel;}, margin:4}))
 
 		}

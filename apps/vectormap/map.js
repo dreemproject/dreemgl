@@ -36,8 +36,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		
 		
 
-	this.gotoCity = function(city, zoomlevel){
-		this.dataset.gotoCity(city, zoomlevel);
+	this.gotoCity = function(city, zoomlevel, time){
+		this.dataset.gotoCity(city, zoomlevel, time);
 	}
 
 
@@ -281,14 +281,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.clearInterval(this.theinterval);
 		}
 
-		this.gotoCity = function(name, zoom){
+		this.gotoCity = function(name, zoom, time){
 			//console.log(this, name, this.cities);
 			if (!name || name.length == 0) return ;
 			var n2 = name.toLowerCase().replace(' ', '');
 
 			var c = this.cities[n2];
 			if (c){
-				this.setCenterLatLng(c[1], c[0], zoom,0);
+				this.setCenterLatLng(c[1], c[0], zoom,time);
 			}
 			else{
 				console.log("city not found:", name);
