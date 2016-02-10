@@ -197,6 +197,20 @@ define.class("$ui/view", function(require,
 				if (inspector) {
 					inspector.astarget = JSON.stringify(this.getASTPath());;
 				}
+				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+
+				this.__originalpos = {
+					x:ev.view.x,
+					y:ev.view.y
+				};
+
+				this.__originalsize = {
+					w:ev.view.width,
+					h:ev.view.height
+				};
+
+				this.__resizecorner = this.edgeCursor(ev);
+
 			} else if (this.testView(ev.view)) {
 
 				var astpath = JSON.stringify(ev.view.getASTPath());
