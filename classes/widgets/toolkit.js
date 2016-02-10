@@ -119,6 +119,7 @@ define.class("$ui/view", function(require,
 		// internal
 		selection:Config({value:[], meta:"hidden"}),
 		watch:Config({persist:true, value:[], meta:"hidden"})
+//		astwatch:Config({persist:true, type:String})
 	};
 
 	this.onwatch = function(ev,v,o) {
@@ -130,12 +131,16 @@ define.class("$ui/view", function(require,
 				var node = this.screen;
 				for (var j=1;node && j<astpath.length;j++) {
 					var pathitem = astpath[j];
-					var child = node.children[pathitem.childindex];
-					if (child && pathitem.type == child.constructor.name) {
-						node = child;
+					if (node.children) {
+						var child = node.children[pathitem.childindex];
+						if (child && pathitem.type == child.constructor.name) {
+							node = child;
+						} else {
+							node = undefined;
+							break;
+						}
 					} else {
 						node = undefined;
-						break;
 					}
 				}
 				if (node) {
@@ -145,6 +150,18 @@ define.class("$ui/view", function(require,
 		}
 		this.selection = selection;
 	};
+
+	//this.onastwatch = function(ev,v,o) {
+	//	if (v) {
+	//		var jwatch = JSON.parse(v);
+	//		var newwatch = [];
+	//		for (var i= 0;i<jwatch.length;i++) {
+	//			var j = jwatch[i];
+	//			newwatch.push(JSON.stringify(j));
+	//		}
+	//		this.watch = newwatch;
+	//	}
+	//};
 
 	this.onselection = function(ev,v,o) {
 		var inspector = this.find('inspector');
@@ -188,6 +205,10 @@ define.class("$ui/view", function(require,
 	this.init = function () {
 		this.ensureDeps();
 
+		//if (this.astwatch) {
+		//	this.onastwatch(null, this.astwatch, this)
+		//}
+
 		this.screen.globalpointerstart = function(ev) {
 			if (!this.visible) {
 				return;
@@ -216,6 +237,13 @@ define.class("$ui/view", function(require,
 				var astpath = JSON.stringify(ev.view.getASTPath());
 				if (!this.watch || this.watch.indexOf(astpath) < 0) {
 					this.watch = [astpath];
+					//var astw = [];
+					//for (var a=0;a<this.watch.length;a++) {
+					//	var j = JSON.parse(this.watch[a]);
+					//	astw.push(j);
+					//}
+					//this.setASTObjectProperty(this, "astwatch", JSON.stringify(astw));
+					//this.screen.composition.commitAST();
 				}
 
 				ev.view.focus = true;
@@ -441,6 +469,16 @@ define.class("$ui/view", function(require,
 					watch.push(astpath);
 				}
 				this.watch = watch;
+
+				//if (this.watch.length) {
+				//	var astw = [];
+				//	for (var a=0;a<this.watch.length;a++) {
+				//		var j = JSON.parse(this.watch[a]);
+				//		astw.push(j);
+				//	}
+				//	this.setASTObjectProperty(this, "astwatch", JSON.stringify(astw));
+				//	commit = true;
+				//}
 			}
 
 			if (commit) {
