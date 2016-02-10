@@ -388,7 +388,7 @@ define.class("$ui/view", function(require,
 
 			ev.view.cursor = 'arrow';
 			var commit = false;
-			if (this.__resizecorner) {
+			if (this.__resizecorner && this.testView(ev.view) && ev.view.toolresize !== false) {
 				if (this.__resizecorner === "top-left") {
 					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.y = ev.pointer.position.y - this.__startpos.y;
@@ -436,11 +436,13 @@ define.class("$ui/view", function(require,
 					if (this.groupdrag && this.selection) {
 						for (var i=0;i<this.selection.length;i++) {
 							var selected = this.selection[i];
-							nx = selected.pos.x + ev.pointer.movement.x;
-							this.setASTObjectProperty(selected, "x", nx);
+							if (this.testView(selected) && selected.toolmove !== false) {
+								nx = selected.pos.x + ev.pointer.movement.x;
+								this.setASTObjectProperty(selected, "x", nx);
 
-							ny = selected.pos.y + ev.pointer.movement.y;
-							this.setASTObjectProperty(selected, "y", ny);
+								ny = selected.pos.y + ev.pointer.movement.y;
+								this.setASTObjectProperty(selected, "y", ny);
+							}
 						}
 					}
 
@@ -798,6 +800,10 @@ define.class("$ui/view", function(require,
 	};
 
 	this.setASTObjectProperty = function(v, name, value) {
+		if (v == this.screen) {
+			console.error("how did a screen get selected to be edited?")
+			return;
+		}
 		v[name] = value;
 
 		var ast = v.seekASTNode({type:"Object", index:0});
@@ -872,7 +878,14 @@ define.class("$ui/view", function(require,
 			}.bind(this);
 
 			v.onpos = function(ev,v,o) {
-				this.pos = vec3(o._layout.absx - this.borderwidth[0] / 2.0, o._layout.absy - this.borderwidth[0] / 2.0, v.z);
+				var x = v.x - this.borderwidth[0] / 2.0;
+				var y = v.y - this.borderwidth[0] / 2.0;
+				var p = o;
+				while (p = p.parent) {
+					x = x + p.x;
+					y = y + p.y;
+				}
+				this.pos = vec3(x, y, v.z);
 			}.bind(this);
 
 			v.onrotate = function(ev,v,o) {
@@ -948,14 +961,15 @@ define.class("$ui/view", function(require,
 						}
 					},
 					pointerend:function(p) {
-						if (this.parent.position === "absolute") {
-							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+						var parent = this.parent
+						if (parent.testView && parent.toolmove !== false  && parent.position === "absolute") {
+							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 
-							this.parent.setASTObjectProperty(this.parent, "position", "absolute");
-							this.parent.setASTObjectProperty(this.parent, "x", this.parent.x);
-							this.parent.setASTObjectProperty(this.parent, "y", this.parent.y);
-							this.parent.setASTObjectProperty(this.parent, "width", this.parent.width);
-							this.parent.setASTObjectProperty(this.parent, "height", this.parent.height);
+							parent.setASTObjectProperty(parent, "position", "absolute");
+							parent.setASTObjectProperty(parent, "x", parent.x);
+							parent.setASTObjectProperty(parent, "y", parent.y);
+							parent.setASTObjectProperty(parent, "width", parent.width);
+							parent.setASTObjectProperty(parent, "height", parent.height);
 							this.screen.composition.commitAST();
 						}
 						this.screen.pointer.cursor = "arrow";
@@ -1103,7 +1117,7 @@ define.class("$ui/view", function(require,
 							t = editor.find(t);
 						}
 
-						if (t) {
+						if (t && this.testView(t) && t.tooledit !== false) {
 							this.setASTObjectProperty(t, editor.propertyname, val);
 							this.__needscommit = true;
 						}
