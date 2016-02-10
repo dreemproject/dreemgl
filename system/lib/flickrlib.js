@@ -16,7 +16,7 @@ define.class(function(exports){
 
 	// No credentials are stored in source. You must define them as an
 	// environment variable
-	Flickr = require('flickrapi')
+	var Flickr = require('flickrapi')
 
 	/**
 	 * @method constructor
@@ -97,7 +97,7 @@ define.class(function(exports){
 		}
 
 		// Already authenticated
-
+		var PAGE = 1;
 		// Default options
 		// https://www.flickr.com/services/api/flickr.photos.search.html
 		if (!options) {
@@ -107,7 +107,8 @@ define.class(function(exports){
 				,lat: 37.826664   // Alcatraz
 				,lon: -122.423012
 				,radius: 2 // 2 km
-				,per_page: 100
+				,per_page: 250 // Max per page
+				,page: PAGE
 				,extras: 'geo, url_m, date_taken'
 				,min_taken_date: '2016-01-01'
 			};
@@ -122,11 +123,21 @@ define.class(function(exports){
 				var url = photo.url_m
 				_photos.push({
 					url: photo.url_m,
-					latitude: photo.latitude,
-					longitude: photo.longitude,
-					date: photo.datetaken
+					title: photo.title,
+					width: parseFloat(photo.width_m),
+					height: parseFloat(photo.height_m),
+					latitude: parseFloat(photo.latitude),
+					longitude: parseFloat(photo.longitude),
+					date: new Date(photo.datetaken).getTime()
 				})
 			}
+
+			// Save data to JSON
+			// var fs = require('fs');
+			// fs.writeFile("compositions/timeline/data/flickr.json", JSON.stringify(_photos, null, 4), function(err) {
+			//     if (err) return console.log(err);
+			// });
+
 			cb(_photos);
 		});
 
