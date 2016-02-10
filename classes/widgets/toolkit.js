@@ -863,6 +863,19 @@ define.class("$ui/view", function(require,
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + this.borderseed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
 		};
+
+		this.minimumborderradius = 3;
+		this.borderradius = this.minimumborderradius;
+		this.onborderradius = function(ev,v,o) {
+			if (v) {
+				for (var i = 0; i < v.length; i++) {
+					if (!v[i]) {
+						v[i] = this.minimumborderradius;
+					}
+				}
+			}
+		};
+
 		this.borderwidth = 4;
 		this.bgcolor = NaN;
 		this.position = "absolute";
@@ -871,7 +884,10 @@ define.class("$ui/view", function(require,
 			this.pos = vec2(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0);
 			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
 			this.rotate = v.rotate;
-			this.borderradius = v.borderradius;
+
+			if (v.borderradius && v.borderradius[0] + v.borderradius[1] + v.borderradius[2] + v.borderradius[3]) {
+				this.borderradius = v.borderradius;
+			}
 
 			v.onsize = function(ev,v,o) {
 				this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
