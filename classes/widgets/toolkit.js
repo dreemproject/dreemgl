@@ -989,6 +989,7 @@ define.class("$ui/view", function(require,
  	});
 
 	define.class(this, "ruler", view, function() {
+		this.visible = wire('this.outer.visible');
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
@@ -1055,7 +1056,7 @@ define.class("$ui/view", function(require,
 				this.visible = false;
 				return;
 			}
-			this.visible = true;
+			this.visible = wire('this.outer.visible');
 			this.pos = vec2(v._layout.absx, v._layout.absy);
 			this.size = vec2(v._layout.width, v._layout.height);
 			this.rotate = v.rotate;
