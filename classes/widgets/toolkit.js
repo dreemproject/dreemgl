@@ -122,6 +122,25 @@ define.class("$ui/view", function(require,
 //		astwatch:Config({persist:true, type:String})
 	};
 
+	this.onanimateborder = function (ev,v,o) {
+		this.bordercolorfn = v ? this.animatedbordercolorfn : this.staticbordercolorfn;
+	}
+
+	this.animatedbordercolorfn = function(pos) {
+		var speed = time * 17.0;
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.staticbordercolorfn = function(pos) {
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * ((x + pos.x) - (y + pos.y)), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.bordercolorfn = this.staticbordercolorfn;
+
 	this.onwatch = function(ev,v,o) {
 		var selection = [];
 		if (v && v.length) {
@@ -465,8 +484,10 @@ define.class("$ui/view", function(require,
 				var watch = [];
 				for (var i=0;i<selection.length;i++) {
 					var selected = selection[i];
-					var astpath = JSON.stringify(selected.getASTPath());
-					watch.push(astpath);
+					if (selected !== this && this.testView(selected) && this.toolselect !== false) {
+						var astpath = JSON.stringify(selected.getASTPath());
+						watch.push(astpath);
+					}
 				}
 				this.watch = watch;
 
@@ -902,21 +923,6 @@ define.class("$ui/view", function(require,
 			p = p.parent;
 		}
 		return ok;
-	};
-
-	this.animatedbordercolorfn = function(pos) {
-		var speed = time * 17.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.staticbordercolorfn = function(pos) {
-		var speed = 17.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (pos.x - pos.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
 	};
 
 	this.render = function() {
