@@ -126,10 +126,10 @@ define.class("$ui/view", function(require,
 
 	this.onanimateborder = function (ev,v,o) {
 		this.bordercolorfn = v ? this.animatedbordercolorfn : this.staticbordercolorfn;
-	}
+	};
 
 	this.animatedbordercolorfn = function(pos) {
-		var speed = time * 17.0;
+		var speed = time * 37.0;
 		var size = 0.0008;
 		var slices = 3.5;
 		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
@@ -237,7 +237,7 @@ define.class("$ui/view", function(require,
 			if (ev.view == this) {
 				var inspector = this.find('inspector');
 				if (inspector) {
-					inspector.astarget = JSON.stringify(this.getASTPath());;
+					inspector.astarget = JSON.stringify(this.getASTPath());
 				}
 				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
@@ -287,6 +287,8 @@ define.class("$ui/view", function(require,
 
 					this.__resizecorner = this.edgeCursor(ev);
 					ev.view.cursor = "move";
+					ev.view.drawtarget = "color";
+					ev.pointer.pickview = true;
 				}
 			}
 
@@ -346,6 +348,8 @@ define.class("$ui/view", function(require,
 					}
 				}
 
+				this.__lastpick = ev.pointer.pick;
+
 			} else if (this.__startrect) {
 
 				var select = this.__selectrect || this.find('selectorrect');
@@ -382,13 +386,17 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
+			if (ev.pointer.pick && ev.view) {
+				ev.view.drawtarget = "both";
+			}
+
 			if (!this.visible) {
 				return;
 			}
 
 			ev.view.cursor = 'arrow';
 			var commit = false;
-			if (this.__resizecorner && this.testView(ev.view) && ev.view.toolresize !== false) {
+			if (this.__resizecorner && (ev.view == this || this.testView(ev.view)) && ev.view.toolresize !== false) {
 				if (this.__resizecorner === "top-left") {
 					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.y = ev.pointer.position.y - this.__startpos.y;
@@ -432,22 +440,48 @@ define.class("$ui/view", function(require,
 				var dy = Math.abs(ny - this.__originalpos.y);
 				if (dy > 0.5) {
 					this.setASTObjectProperty(ev.view, "y", ny);
+					commit = true;
+				}
 
-					if (this.groupdrag && this.selection) {
-						for (var i=0;i<this.selection.length;i++) {
-							var selected = this.selection[i];
-							if (this.testView(selected) && selected.toolmove !== false) {
-								nx = selected.pos.x + ev.pointer.movement.x;
-								this.setASTObjectProperty(selected, "x", nx);
+				if (this.groupdrag && this.selection) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						if (this.testView(selected) && selected.toolmove !== false) {
+							nx = selected.pos.x + ev.pointer.movement.x;
+							this.setASTObjectProperty(selected, "x", nx);
 
-								ny = selected.pos.y + ev.pointer.movement.y;
-								this.setASTObjectProperty(selected, "y", ny);
-							}
+							ny = selected.pos.y + ev.pointer.movement.y;
+							this.setASTObjectProperty(selected, "y", ny);
 						}
+					}
+				}
+
+				if (this.__lastpick && this.__lastpick !== ev.view.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+					pos = this.__lastpick.globalToLocal(ev.pointer.position);
+
+					nx = pos.x - this.__startpos.x;
+					ny = pos.y - this.__startpos.y;
+
+					this.setASTObjectProperty(ev.view, "x", nx, false);
+					this.setASTObjectProperty(ev.view, "y", ny, false);
+
+					var astnode = ev.view.getASTNode();
+
+					var newparent = this.__lastpick.getASTNode();
+					if (!newparent.args) {
+						newparent.args = []
+					}
+					newparent.args.push(astnode);
+
+					var oldparent = ev.view.parent.getASTNode();
+					var index = oldparent.args.indexOf(astnode);
+					if (index >= 0) {
+						oldparent.args.splice(index, 1);
 					}
 
 					commit = true;
 				}
+
 
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
@@ -510,7 +544,7 @@ define.class("$ui/view", function(require,
 				this.screen.composition.commitAST();
 			}
 
-			this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+			this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
@@ -696,8 +730,10 @@ define.class("$ui/view", function(require,
 				ev.view.cursor = 'arrow';
 			}
 
-		} else if (ev.view.tooltarget === false) {
-			//ev.view.cursor = 'not-allowed';
+		} else if (ev.view.toolallow === false) {
+			ev.view.cursor = 'not-allowed';
+		} else {
+			ev.view.cursor = 'arrow';
 		}
 
 		return resize;
@@ -799,12 +835,14 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	this.setASTObjectProperty = function(v, name, value) {
+	this.setASTObjectProperty = function(v, name, value, setval) {
 		if (v == this.screen) {
 			console.error("how did a screen get selected to be edited?")
 			return;
 		}
-		v[name] = value;
+		if (setval !== false) {
+			v[name] = value;
+		}
 
 		var ast = v.seekASTNode({type:"Object", index:0});
 
@@ -824,7 +862,7 @@ define.class("$ui/view", function(require,
 				found.value = this.buildValueNode(value);
 			}
 		} else {
-			ast = t.getASTNode();
+			ast = v.getASTNode();
 			if (ast) {
 				var args = {};
 				args[name] = value;
@@ -922,7 +960,7 @@ define.class("$ui/view", function(require,
 
 		this.padding = 0;
 		this.margin = 4;
-		this.borderradius =  vec4(10,10,1,1);
+		this.borderradius = vec4(10,10,1,1);
 		this.bgcolor = NaN;
 		this.flex = 1;
 		this.flexdirection ="column";
@@ -1013,7 +1051,7 @@ define.class("$ui/view", function(require,
 			]
 		}
 
-		views.push(this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.1},
+		views.push(this.panel({title:"Components", flex:1.0},
 			palette({
 				name:"components",
 				flex:1,
@@ -1133,7 +1171,7 @@ define.class("$ui/view", function(require,
 							t = editor.find(t);
 						}
 
-						if (t && this.testView(t) && t.tooledit !== false) {
+						if (t && (t == this || this.testView(t)) && t.tooledit !== false) {
 							this.setASTObjectProperty(t, editor.propertyname, val);
 							this.__needscommit = true;
 						}
