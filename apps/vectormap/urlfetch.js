@@ -26,7 +26,7 @@ define.class(function(require, $server$, service){
 			var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;
 			
 			if (fs.existsSync(cachedname)){
-				//console.log("[Map] Cache:", x,y,z);
+				console.log("[Map] Cache:", x,y,z);
 				var data = fs.readFileSync(cachedname).toString();
 				//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);
 				
@@ -37,23 +37,27 @@ define.class(function(require, $server$, service){
 				console.log("[Map] Cached slice has an error... loading again");
 			}
 			
-			//console.log("[Map] Downloading from mapzen:",x,y,z,"..." );
+			console.log("[Map] Downloading from mapzen:",x,y,z,"..." );
 			var fileurl = "http://vector.mapzen.com/osm/all/"+z+"/"+x+"/"+y+".topojson?api_key=vector-tiles-Qpvj7U4" 
 			var P = define.deferPromise()
 
 			nodehttp.get(fileurl).then(function(data){
-				fs.writeFileSync(cachedname, data);	
-				if (data.slice(0, 100).indexOf("<?xml")<0){					
-				//	console.log(" -- done. Saved to cache: ",x,y,z,"!" );
+				
+				try{
+					var thedata = JSON.parse(data);	
+			
+					fs.writeFileSync(cachedname, data);	
+					console.log(" -- done. Saved to cache: ",x,y,z,"!" );
 					//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, v);
 				
 					P.resolve(data);
-						
 				}
-				else{
-					console.log("Mapzen returned error:" , data);
-					P.resolve("<?xml>" + error);
+				catch(e){
+					
+						console.log("Mapzen returned error:" , data, e);
 				}
+				P.resolve("<?xml>");
+				
 			})
 			
 			return P;

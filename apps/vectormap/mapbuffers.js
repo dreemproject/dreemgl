@@ -2,7 +2,7 @@ define.class(function(require, $server$, service){
 	
 	var earcut = require('$system/lib/earcut-port.js')().earcut;
 
-	this.TileSize = 1024.0 ;
+	this.TileSize = 256.0;
 
 	
 	var KindSet = this.KindSet = {};
@@ -753,7 +753,8 @@ define.class(function(require, $server$, service){
 		var Allset = [];
 		var Places = [];
 		var Sarcs= sourcedata.arcs;
-
+	
+		target.transform = sourcedata.transform;
 		var objects = sourcedata.objects;
 		var BuildingGeoms = objects.buildings.geometries
 		for (var i = 0;i<BuildingGeoms.length;i++){

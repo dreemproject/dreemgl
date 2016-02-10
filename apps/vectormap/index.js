@@ -58,7 +58,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 
 								,view({bgcolor:NaN},
 								label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
-,			numberbox({value:16, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
+,			numberbox({value:10, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
 								)
 
 								,Buttons
