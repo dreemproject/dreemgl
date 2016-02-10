@@ -163,21 +163,38 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		this.cleanLoadedBlocks = function(){
 			var keys = Object.keys(this.loadedblocks);
-			if (keys.length < 50) return;
+			if (keys.length < 150) return;
 			
+			var zscalar = 1280;
+
 			
-			
-			for(var i =0 ;i<keys.length;i++)
-			{
-				var lb = this.loadedblocks[keys[i]]
-				var dx = lb.x - this.centers[lb.z][0];
-				var dy = lb.y - this.centers[lb.z][1];
-				var dz = (lb.z - this.zoomlevel)*2;
-				var dist  = dx*dx + dy*dy + dz*dz;
-				console.log(dist);
-				if (dist > 4*4 + 4*4 + 2*2) {
-					delete this.loadedblocks[keys[i]];
+			var dellist = [];
+			for (var i = 0;i<keys.length;i++){
+					var q = this.loadedblocks[keys[i]]
+					var dx = this.centers[q.z][0] - q.x;
+					var dy = this.centers[q.z][1] - q.y;
+					
+					var dz = (20-q.z)*zscalar;
+					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
+					var dist = (dx * dx + dy * dy) * (50000 - dz);
+					dellist.push({hash:keys[i], dist:dist})
+					
 				}
+
+				dellist = dellist.sort(function(a,b){
+					if (a.dist > b.dist) return 1;
+					if (a.dist < b.dist) return -1;
+					return 0;
+				});
+				
+				
+			
+			
+			for(var i =150 ;i<dellist.length;i++)
+			{
+				var todelete = dellist[i];
+				delete this.loadedblocks[todelete.hash];
+				
 			}
 		}
 		
@@ -437,6 +454,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.stopDrag = function(){
 		
 	}
+	
+	var alltiles = 0;
 	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
 			trans: vec2(0),
@@ -487,7 +506,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.init = function(){
 
 			var R = this.calctilepos();
-
+			this.tilename = "tile" + alltiles.toString() + "_"+ this.layeroffset;
+			alltiles++;
+//			console.log(this.tilename);
 			this.lastpos = vec3(R[0], R[1], R[2]);
 		}
 
@@ -549,13 +570,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 		}
 		
-		this.onzoomlevel = function(){
-		// this.checknewpos();
-		}
 		
-		this.oncoord = function(){
-		// this.checknewpos();
-		}
 		this.tilesize = BufferGen.TileSize;
 		this.width = this.tilesize;
 		this.height = this.tilesize;
@@ -684,9 +699,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				//return "blue";
 				var col =  vec4(0,0,0.6,0.1);
 
-				var noise = noise.cheapnoise(pos*0.02)*0.2+0.5;
+				var noise = noise.cheapnoise(pos*0.02)*0.07+0.5;
 				
-				var texcol = texture.sample(vec2(vec2(sin(mesh.z*20.0)*0.5+0.5,sin( mesh.z*14.0)*0.5+0.5)+ vec2(noise,0)));
+				var texcol = pal.pal2(mesh.z +  noise );
 				
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 				prefog.a *=0.9;
@@ -877,7 +892,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		
 		for(var i = 0;i<3;i++){
 			frac.push(vec2(0,0));
-			this.center_tile.push( geo.tileForMeters(this.center_meters[0], this.center_meters[1], this.zoomlevel + 1 ));
+			this.center_tile.push( geo.tileForMeters(this.center_meters[0], this.center_meters[1], this.zoomlevel + i ));
 		}
 		
 		
@@ -907,6 +922,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			rt.redraw();
 		}
 	}
+	
+	this.dumpdebug = function(){
+		for(var a = 0;a<this.tilestoupdate.length;a++){
+			var rt = this.tilestoupdate[a];
+			console.log(rt.lastpos);
+		}
+	}
 
 	this.render = function(){
 		this.tilestoupdate = [];
@@ -928,9 +950,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var tilearea = vec2(this.tilewidth, this.tileheight)
 			var ltx = 0;
 			var lty = 0;
-			xs = -Math.pow(2.0, layer);
+			var ext = Math.pow(2.0, layer);;
+			//ext = 0;
+			xs = -ext
 			xe = -xs +1;
-			ys = -Math.pow(2.0, layer);
+			ys = -ext;
 			ye = -ys+1;
 			for(var x = xs;x<xe;x++){
 				for(var y = ys;y<ye;y++){
@@ -955,13 +979,14 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					buildings3d.push(building);
 				}
 			}
-			
+			if (layer == 1){
 			for(var x = xs;x<xe;x++){
 				for(var y = ys;y<ye;y++){
 					var labels = this.labeltile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(x,y), layeroffset: layer});
 					this.tilestoupdate.push(labels);
 					labels3d.push(labels);
 				}
+			}
 			}
 		}
 		var dist = 8.5

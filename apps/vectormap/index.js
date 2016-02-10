@@ -56,18 +56,18 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 							//,label({outline:true, fontsize: 130, outline_thickness: 10, text:"outline test", bg:0})
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bgcolor:NaN})
 
-								,view({bgcolor:NaN},
-								label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
-,			numberbox({value:9, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
+								,view({bgcolor:NaN}
+									,label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
+									,numberbox({value:9, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
 								)
-
-								,Buttons
-								,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
+,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
 								,label({text:"Rotation control",margin: 10,fontsize:12,  bgcolor:NaN})
 								,ballrotate({name:"ballrotate1", height:100, target:"mapinside"})
 
 								)
-								,button({ text:"Used Tile types",click:function(){this.find("themap").dumpkindset();}, margin:4})
+								,button({ text:"DumpDebug",click:function(){this.find("themap").dumpdebug();}, margin:4})
+								,Buttons
+								
 							)
 						)
 
