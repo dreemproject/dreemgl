@@ -91,6 +91,7 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fgcolor:'cornflower',
+						opaque:true,
 						icon:'flask',
 						fontsize:80
 					}
@@ -100,7 +101,7 @@ define.class("$ui/view", function(require,
 				{
 					label:"Alert",
 					icon:"warning",
-					desc:"A pop up an alert dialog",
+					desc:"Adds a click event that pops up an alert dialog",
 					behaviors:{
 						onclick:function() {
 							alert('Beep.')
@@ -221,6 +222,11 @@ define.class("$ui/view", function(require,
 			inspector.target = null;
 		}
 
+		var tree = this.find("structure");
+		if (tree && tree.reload) {
+			tree.reload();
+		}
+
 	};
 
 	this.init = function () {
@@ -295,6 +301,10 @@ define.class("$ui/view", function(require,
 		this.screen.globalpointermove = function(ev) {
 			if (!this.visible) {
 				return;
+			}
+
+			if (this.__ruler && this.__ruler.target == ev.view) {
+				this.__ruler.target = ev.view.parent;
 			}
 
 			if (this.__resizecorner) {
@@ -384,13 +394,18 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
-			if (this.__lastpick && ev.view.drawtarget === "color") {
+			if (ev.view.drawtarget != "both") {
 				ev.view.drawtarget = "both";
 			}
 
 			if (!this.visible) {
 				return;
 			}
+
+			if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
+				this.__ruler.target = ev.view;
+			}
+
 
 			ev.view.cursor = 'arrow';
 			var commit = false;
@@ -887,11 +902,10 @@ define.class("$ui/view", function(require,
 	});
 
 	define.class(this, "selectedrect", view, function() {
-		this.name = "selectedrect";
 		this.visible = wire('this.outer.visible');
 		this.attributes = {
-			borderseed:Math.random() * 17.0,
-			target:Config({type:Object})
+			borderseed:Math.random() + 17.0,
+			target:Config({persist:true, type:Object})
 		};
 		this.bordercolorfn = function(pos) {
 			var size = 0.02;
@@ -930,8 +944,8 @@ define.class("$ui/view", function(require,
 			}.bind(this);
 
 			v.onpos = function(ev,v,o) {
-				var x = v.x - this.borderwidth[0] / 2.0;
-				var y = v.y - this.borderwidth[0] / 2.0;
+				var x = v.x - (this.borderwidth[0] + this.borderwidth[1]) / 2.0;
+				var y = v.y - (this.borderwidth[2] + this.borderwidth[3]) / 2.0;
 				var p = o;
 				while (p = p.parent) {
 					x = x + p.x;
@@ -949,6 +963,75 @@ define.class("$ui/view", function(require,
 			}.bind(this);
 		}
  	});
+
+	define.class(this, "ruler", view, function() {
+		this.bgcolor = NaN;
+		this.position = "absolute";
+		this.tooltarget = false;
+		this.borderwidth = vec4(10.0,10.0,10.0,10.0);
+		this.attributes = {
+			target:Config({type:Object}),
+			rulertickwidth:2,
+			rulertickspacing:15.0,
+			rulermajorevery:10,
+			rulermajorcolor:vec4("white"),
+			rulerminorcolor:vec4("gray"),
+			bordercolorfn:function(p) {
+				var atx = p.x * layout.width;
+				var aty = p.y * layout.height;
+				if ((aty > borderwidth[2] && aty < layout.height - borderwidth[3]) && (atx < borderwidth[0] || atx > layout.width - borderwidth[1])) {
+					var c = int(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
+					if (c < int(rulertickwidth)) {
+						return rulermajorcolor;
+					}
+
+					if (atx < borderwidth[0] * 0.5 || atx > layout.width - borderwidth[1] * 0.5) {
+						var m = int(mod(gl_FragCoord.y, rulertickspacing));
+						if (m < int(rulertickwidth)) {
+							return rulerminorcolor;
+						}
+					}
+				}
+				else if ((atx > borderwidth[0] && atx < layout.width - borderwidth[1]) && (aty < borderwidth[2] || aty > layout.height - borderwidth[3])) {
+
+					var b = int(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
+					if (b < int(rulertickwidth)) {
+						return rulermajorcolor;
+					}
+
+					if (aty < borderwidth[2] * 0.5 || aty > layout.height - borderwidth[3] * 0.5) {
+						var n = int(mod(gl_FragCoord.x, rulertickspacing));
+						if (n < int(rulertickwidth)) {
+							return rulerminorcolor;
+						}
+					}
+
+				}
+				return bordercolor;
+			}
+		};
+		this.ontarget = function(ev,v,o) {
+			this.pos = vec2(v._layout.absx, v._layout.absy);
+			this.size = vec2(v._layout.width, v._layout.height);
+			this.rotate = v.rotate;
+            //
+			//v.onsize = function(ev,v,o) {
+			//	this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
+			//}.bind(this);
+            //
+			//v.onpos = function(ev,v,o) {
+			//	this.pos = vec3(v._layout.absx, v._layout.absy, v.z);
+			//}.bind(this);
+            //
+			//v.onrotate = function(ev,v,o) {
+			//	this.rotate = v;
+			//}.bind(this);
+            //
+			//v.onborderradius = function(ev,v,o) {
+			//	this.borderradius = v;
+			//}.bind(this);
+		}
+	});
 
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
@@ -1118,7 +1201,7 @@ define.class("$ui/view", function(require,
 			treeview({
 				flex:1,
 				name:"structure",
-				init:function() {
+				reload:function() {
 					var swalk = function (v) {
 						if (v.tooltarget !== false) {
 							var children = [];
@@ -1133,16 +1216,20 @@ define.class("$ui/view", function(require,
 							if (v.name) {
 								name = v.name + " (" + name + ")"
 							}
+							var selected = (!!(this.selection) && this.selection.indexOf(v) > -1);
 							return {
 								name:name,
 								children: children,
+								selected: selected,
 								collapsed:(v.constructor.name !== "screen"),
 								view:v
 							}
 						}
-					};
-
+					}.bind(this.parent.outer);
 					this.data = swalk(this.screen);
+				},
+				init:function() {
+					this.reload();
 				},
 				onselect:function(ev) {
 					if (ev && ev.item && ev.item.view) {
@@ -1182,8 +1269,15 @@ define.class("$ui/view", function(require,
 				ontarget:function(ev,v,o) {
 					if (v) {
 						v.focus = true;
+						if (this.__ruler) {
+							this.__ruler.closeOverlay();
+						}
+						if (this.testView(v)) {
+							this.__ruler = this.screen.openOverlay(this.ruler);
+							this.__ruler.target = v;
+						}
 					}
-				},
+				}.bind(this),
 				astarget:Config({type:String, persist:true}),
 				onastarget:function(ev,v,o) {
 					var node = this.screen;
