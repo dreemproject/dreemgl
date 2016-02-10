@@ -50,9 +50,17 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 							var venue = venues[i];
 							// Grab the first image (300x300 resolution)
 							if (venue.photos && venue.photos.groups) {
-								var item = venue.photos.groups[0].items[0];
-								var url = item.prefix + '300x300' + item.suffix;
-								urls.push(url);
+								// Ignore any issues with the returned data
+								try {
+									var group = venue.photos.groups[0]
+									if (!group) continue;
+									var item = venue.photos.groups[0].items[0];
+									var url = item.prefix + '300x300' + item.suffix;
+									urls.push(url);
+								}
+								catch (ex) {
+									//console.log('Exception', ex);
+								}
 							}
 						}
 						this.rpc.default.imageupdate(urls);
