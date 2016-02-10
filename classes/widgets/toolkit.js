@@ -623,7 +623,7 @@ define.class("$ui/view", function(require,
 				var param = main.params[i];
 				if (param && param.id && param.id.name) {
 					var name = param.id.name;
-					if (name.startsWith('$') && name.endsWith('$')) {
+					if (name[0] === '$' && name[name.length - 1] === '$') {
 						at = name;
 					} else {
 						if (!plist[at]) {
