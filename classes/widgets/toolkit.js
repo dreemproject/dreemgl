@@ -20,6 +20,8 @@ define.class("$ui/view", function(require,
 	this.position = "absolute";
 	this.width = 400;
 	this.height = 800;
+	this.opacity = 0.7;
+	this.visible = false;
 
 	this.borderradius = 7;
 	this.bordercolor = vec4(1,1,1,0.7);
@@ -122,6 +124,25 @@ define.class("$ui/view", function(require,
 //		astwatch:Config({persist:true, type:String})
 	};
 
+	this.onanimateborder = function (ev,v,o) {
+		this.bordercolorfn = v ? this.animatedbordercolorfn : this.staticbordercolorfn;
+	};
+
+	this.animatedbordercolorfn = function(pos) {
+		var speed = time * 37.0;
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.staticbordercolorfn = function(pos) {
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * ((x + pos.x) - (y + pos.y)), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.bordercolorfn = this.staticbordercolorfn;
+
 	this.onwatch = function(ev,v,o) {
 		var selection = [];
 		if (v && v.length) {
@@ -216,7 +237,7 @@ define.class("$ui/view", function(require,
 			if (ev.view == this) {
 				var inspector = this.find('inspector');
 				if (inspector) {
-					inspector.astarget = JSON.stringify(this.getASTPath());;
+					inspector.astarget = JSON.stringify(this.getASTPath());
 				}
 				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
@@ -246,8 +267,6 @@ define.class("$ui/view", function(require,
 					//this.screen.composition.commitAST();
 				}
 
-				ev.view.focus = true;
-
 				if (ev.view.toolmove === false){
 					ev.view.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
@@ -266,6 +285,8 @@ define.class("$ui/view", function(require,
 
 					this.__resizecorner = this.edgeCursor(ev);
 					ev.view.cursor = "move";
+					ev.view.drawtarget = "color";
+					ev.pointer.pickview = true;
 				}
 			}
 
@@ -325,6 +346,8 @@ define.class("$ui/view", function(require,
 					}
 				}
 
+				this.__lastpick = ev.pointer.pick;
+
 			} else if (this.__startrect) {
 
 				var select = this.__selectrect || this.find('selectorrect');
@@ -361,13 +384,17 @@ define.class("$ui/view", function(require,
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
+			if (this.__lastpick && ev.view.drawtarget === "color") {
+				ev.view.drawtarget = "both";
+			}
+
 			if (!this.visible) {
 				return;
 			}
 
 			ev.view.cursor = 'arrow';
 			var commit = false;
-			if (this.__resizecorner) {
+			if (this.__resizecorner && (ev.view == this || this.testView(ev.view)) && ev.view.toolresize !== false) {
 				if (this.__resizecorner === "top-left") {
 					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.y = ev.pointer.position.y - this.__startpos.y;
@@ -380,15 +407,15 @@ define.class("$ui/view", function(require,
 				}
 
 				this.setASTObjectProperty(ev.view, "position", "absolute");
-				this.setASTObjectProperty(ev.view, "x", ev.view.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y);
-				this.setASTObjectProperty(ev.view, "width", ev.view.width);
-				this.setASTObjectProperty(ev.view, "height", ev.view.height);
+				this.setASTObjectProperty(ev.view, "x", ev.view._layout.absx);
+				this.setASTObjectProperty(ev.view, "y", ev.view._layout.absy);
+				this.setASTObjectProperty(ev.view, "width", ev.view._layout.width);
+				this.setASTObjectProperty(ev.view, "height", ev.view._layout.height);
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5)
 					|| (Math.abs(ev.view.y - this.__originalpos.y) > 0.5)
-					|| (Math.abs(ev.view.width - this.__originalsize.w) > 0.5)
-					|| (Math.abs(ev.view.height - this.__originalsize.h) > 0.5);
+					|| (Math.abs(ev.view._layout.width - this.__originalsize.w) > 0.5)
+					|| (Math.abs(ev.view._layout.height - this.__originalsize.h) > 0.5);
 
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
@@ -411,10 +438,13 @@ define.class("$ui/view", function(require,
 				var dy = Math.abs(ny - this.__originalpos.y);
 				if (dy > 0.5) {
 					this.setASTObjectProperty(ev.view, "y", ny);
+					commit = true;
+				}
 
-					if (this.groupdrag && this.selection) {
-						for (var i=0;i<this.selection.length;i++) {
-							var selected = this.selection[i];
+				if (this.groupdrag && this.selection) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						if (this.testView(selected) && selected.toolmove !== false) {
 							nx = selected.pos.x + ev.pointer.movement.x;
 							this.setASTObjectProperty(selected, "x", nx);
 
@@ -422,9 +452,34 @@ define.class("$ui/view", function(require,
 							this.setASTObjectProperty(selected, "y", ny);
 						}
 					}
+				}
+
+				if (this.__lastpick && this.__lastpick !== ev.view.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+					pos = this.__lastpick.globalToLocal(ev.pointer.position);
+
+					nx = pos.x - this.__startpos.x;
+					ny = pos.y - this.__startpos.y;
+
+					this.setASTObjectProperty(ev.view, "x", nx, false);
+					this.setASTObjectProperty(ev.view, "y", ny, false);
+
+					var astnode = ev.view.getASTNode();
+
+					var newparent = this.__lastpick.getASTNode();
+					if (!newparent.args) {
+						newparent.args = []
+					}
+					newparent.args.push(astnode);
+
+					var oldparent = ev.view.parent.getASTNode();
+					var index = oldparent.args.indexOf(astnode);
+					if (index >= 0) {
+						oldparent.args.splice(index, 1);
+					}
 
 					commit = true;
 				}
+
 
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
@@ -465,8 +520,10 @@ define.class("$ui/view", function(require,
 				var watch = [];
 				for (var i=0;i<selection.length;i++) {
 					var selected = selection[i];
-					var astpath = JSON.stringify(selected.getASTPath());
-					watch.push(astpath);
+					if (selected !== this && this.testView(selected) && this.toolselect !== false) {
+						var astpath = JSON.stringify(selected.getASTPath());
+						watch.push(astpath);
+					}
 				}
 				this.watch = watch;
 
@@ -485,7 +542,7 @@ define.class("$ui/view", function(require,
 				this.screen.composition.commitAST();
 			}
 
-			this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+			this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
@@ -566,7 +623,7 @@ define.class("$ui/view", function(require,
 				var param = main.params[i];
 				if (param && param.id && param.id.name) {
 					var name = param.id.name;
-					if (name.startsWith('$') && name.endsWith('$')) {
+					if (name[0] === '$' && name[name.length - 1] === '$') {
 						at = name;
 					} else {
 						if (!plist[at]) {
@@ -671,8 +728,10 @@ define.class("$ui/view", function(require,
 				ev.view.cursor = 'arrow';
 			}
 
-		} else if (ev.view.tooltarget === false) {
-			//ev.view.cursor = 'not-allowed';
+		} else if (ev.view.toolallow === false) {
+			ev.view.cursor = 'not-allowed';
+		} else {
+			ev.view.cursor = 'arrow';
 		}
 
 		return resize;
@@ -774,8 +833,14 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	this.setASTObjectProperty = function(v, name, value) {
-		v[name] = value;
+	this.setASTObjectProperty = function(v, name, value, setval) {
+		if (v == this.screen) {
+			console.error("how did a screen get selected to be edited?")
+			return;
+		}
+		if (setval !== false) {
+			v[name] = value;
+		}
 
 		var ast = v.seekASTNode({type:"Object", index:0});
 
@@ -795,7 +860,7 @@ define.class("$ui/view", function(require,
 				found.value = this.buildValueNode(value);
 			}
 		} else {
-			ast = t.getASTNode();
+			ast = v.getASTNode();
 			if (ast) {
 				var args = {};
 				args[name] = value;
@@ -808,7 +873,7 @@ define.class("$ui/view", function(require,
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var speed = time * 17.0;
+			var speed = time * 27.0;
 			var size = 0.0008;
 			var slices = 3.5;
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
@@ -834,7 +899,20 @@ define.class("$ui/view", function(require,
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + this.borderseed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
 		};
-		this.borderwidth = 2;
+
+		this.minimumborderradius = 3;
+		this.borderradius = this.minimumborderradius;
+		this.onborderradius = function(ev,v,o) {
+			if (v) {
+				for (var i = 0; i < v.length; i++) {
+					if (!v[i]) {
+						v[i] = this.minimumborderradius;
+					}
+				}
+			}
+		};
+
+		this.borderwidth = 4;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
@@ -842,14 +920,24 @@ define.class("$ui/view", function(require,
 			this.pos = vec2(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0);
 			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
 			this.rotate = v.rotate;
-			this.borderradius = v.borderradius;
+
+			if (v.borderradius && v.borderradius[0] + v.borderradius[1] + v.borderradius[2] + v.borderradius[3]) {
+				this.borderradius = v.borderradius;
+			}
 
 			v.onsize = function(ev,v,o) {
 				this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
 			}.bind(this);
 
 			v.onpos = function(ev,v,o) {
-				this.pos = vec3(v.x - this.borderwidth[0] / 2.0, v.y - this.borderwidth[0] / 2.0, v.z);
+				var x = v.x - this.borderwidth[0] / 2.0;
+				var y = v.y - this.borderwidth[0] / 2.0;
+				var p = o;
+				while (p = p.parent) {
+					x = x + p.x;
+					y = y + p.y;
+				}
+				this.pos = vec3(x, y, v.z);
 			}.bind(this);
 
 			v.onrotate = function(ev,v,o) {
@@ -870,7 +958,7 @@ define.class("$ui/view", function(require,
 
 		this.padding = 0;
 		this.margin = 4;
-		this.borderradius =  vec4(10,10,1,1);
+		this.borderradius = vec4(10,10,1,1);
 		this.bgcolor = NaN;
 		this.flex = 1;
 		this.flexdirection ="column";
@@ -904,21 +992,6 @@ define.class("$ui/view", function(require,
 		return ok;
 	};
 
-	this.animatedbordercolorfn = function(pos) {
-		var speed = time * 17.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.staticbordercolorfn = function(pos) {
-		var speed = 17.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (pos.x - pos.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-
 	this.render = function() {
 		var views = [];
 
@@ -940,14 +1013,15 @@ define.class("$ui/view", function(require,
 						}
 					},
 					pointerend:function(p) {
-						if (this.parent.position === "absolute") {
-							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+						var parent = this.parent
+						if (parent.testView && parent.toolmove !== false  && parent.position === "absolute") {
+							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 
-							this.parent.setASTObjectProperty(this.parent, "position", "absolute");
-							this.parent.setASTObjectProperty(this.parent, "x", this.parent.x);
-							this.parent.setASTObjectProperty(this.parent, "y", this.parent.y);
-							this.parent.setASTObjectProperty(this.parent, "width", this.parent.width);
-							this.parent.setASTObjectProperty(this.parent, "height", this.parent.height);
+							parent.setASTObjectProperty(parent, "position", "absolute");
+							parent.setASTObjectProperty(parent, "x", parent._layout.absx);
+							parent.setASTObjectProperty(parent, "y", parent._layout.absy);
+							parent.setASTObjectProperty(parent, "width", parent._layout.width);
+							parent.setASTObjectProperty(parent, "height", parent._layout.height);
 							this.screen.composition.commitAST();
 						}
 						this.screen.pointer.cursor = "arrow";
@@ -975,7 +1049,7 @@ define.class("$ui/view", function(require,
 			]
 		}
 
-		views.push(this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.1},
+		views.push(this.panel({title:"Components", flex:1.0},
 			palette({
 				name:"components",
 				flex:1,
@@ -985,7 +1059,7 @@ define.class("$ui/view", function(require,
 				dropTest:function(ev, v, item, orig, dv) {
 					//var name = v && v.name ? v.name : "unknown";
 					//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
-					return this.testView(v);
+					return v !== this && this.testView(v);
 				}.bind(this),
 
 				drop:function(ev, v, item, orig, dv) {
@@ -1095,7 +1169,7 @@ define.class("$ui/view", function(require,
 							t = editor.find(t);
 						}
 
-						if (t) {
+						if (t && (t == this || this.testView(t)) && t.tooledit !== false) {
 							this.setASTObjectProperty(t, editor.propertyname, val);
 							this.__needscommit = true;
 						}
@@ -1104,7 +1178,33 @@ define.class("$ui/view", function(require,
 						this.__needscommit = false;
 						this.screen.composition.commitAST();
 					}
-				}.bind(this)
+				}.bind(this),
+				ontarget:function(ev,v,o) {
+					if (v) {
+						v.focus = true;
+					}
+				},
+				astarget:Config({type:String, persist:true}),
+				onastarget:function(ev,v,o) {
+					var node = this.screen;
+
+					if (v) {
+						var astpath = JSON.parse(v);
+						// console.log('path', astpath);
+						for (var i=1;i<astpath.length;i++) {
+							var pathitem = astpath[i];
+							var child = node.children[pathitem.childindex];
+							if (child && pathitem.type == child.constructor.name) {
+								node = child;
+							} else {
+								node = undefined;
+								break;
+							}
+						}
+					}
+
+					this.target = node;
+				}
 			})
 		));
 

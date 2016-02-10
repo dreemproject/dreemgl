@@ -18,7 +18,6 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 
 		var IMAGE_COUNT = 100
 		var IMAGE_SIZE = vec2(256, 256)
-		var IMAGE_PLACEHOLDER = 'http://teem.nu/wp-content/uploads/2015/11/TEEMlogo.png'
 
 		this.attributes = {
 			imagelist: []
@@ -32,9 +31,10 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 					bgimage: this.imagelist[n].url
 				},
 				[
-					label({position: 'absolute', fontsize: 12, top: 0, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].latitude}),
-					label({position: 'absolute', fontsize: 12, top: 14, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].longitude}),
-					label({position: 'absolute', fontsize: 12, top: 28, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].date})
+					label({position: 'absolute', fontsize: 12, top: 0, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].title}),
+					label({position: 'absolute', fontsize: 12, top: 14, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].latitude}),
+					label({position: 'absolute', fontsize: 12, top: 28, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].longitude}),
+					label({position: 'absolute', fontsize: 12, top: 42, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].date})
 				]))
 			}
 			return	dynviews

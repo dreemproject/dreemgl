@@ -56,7 +56,7 @@ define.class(function(require, $server$, service){
 					
 						console.log("Mapzen returned error:" , data, e);
 				}
-				P.resolve("<?xml>");
+				P.resolve("{}");
 				
 			})
 			
