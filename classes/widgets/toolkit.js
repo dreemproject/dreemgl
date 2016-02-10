@@ -112,35 +112,52 @@ define.class("$ui/view", function(require,
 		// and views can be resized and manipulated.
 		// In 'live' mode views lock into place the composition regains it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
+		reticlesize: 6,
+		groupdrag:true,
+		animateborder: false,
 
 		// internal
-		selection:Config({persist:true, value:[]}),
-
-		watch:Config({persist:true, value:[]}),
-
-		reticlesize: 6,
-		animateborder: false
+		selection:Config({value:[], meta:"hidden"}),
+		watch:Config({persist:true, value:[], meta:"hidden"})
 	};
 
-	this.onselection = function() {
+	this.onwatch = function(ev,v,o) {
+		var selection = [];
+		if (v && v.length) {
+			for (var i=0;i< v.length;i++) {
+				var astpath = JSON.parse(v[i]);
+
+				var node = this.screen;
+				for (var j=1;node && j<astpath.length;j++) {
+					var pathitem = astpath[j];
+					var child = node.children[pathitem.childindex];
+					if (child && pathitem.type == child.constructor.name) {
+						node = child;
+					} else {
+						node = undefined;
+						break;
+					}
+				}
+				if (node) {
+					selection.push(node)
+				}
+			}
+		}
+		this.selection = selection;
+	};
+
+	this.onselection = function(ev,v,o) {
 		var inspector = this.find('inspector');
 
-		if (!this.__selrects) {
-			this.__selrects = [];
-		}
-
-		for (var i = 0; i < this.__selrects.length; i++) {
-			var selrect = this.__selrects[i];
-			if (this.selection && this.selection.indexOf(selrect.target) > -1) {
-				continue;
+		if (this.__selrects) {
+			for (var i = 0; i < this.__selrects.length; i++) {
+				var selrect = this.__selrects[i];
+				selrect.closeOverlay();
 			}
-			selrect.closeOverlay();
-			delete selrect.target.__selrect;
-
-			this.__selrects.splice(i,0);
 		}
 
 		if (this.selection) {
+			this.__selrects = [];
 
 			if (inspector) {
 				if (this.selection.length <= 1) {
@@ -158,25 +175,15 @@ define.class("$ui/view", function(require,
 
 			for (var i=0;i<filtered.length;i++) {
 				var target = filtered[i];
-				if (!target.__selrect) {
-					var selectrect = this.screen.openOverlay(this.selectedrect);
-					selectrect.x = target._layout.absx - 1;
-					selectrect.y = target._layout.absy - 1;
-					selectrect.width = target._layout.width + 2;
-					selectrect.height = target._layout.height + 2;
-					selectrect.target = target;
-					selectrect.rotate = target.rotate;
-					selectrect.borderradius = target.borderradius;
-
-					target.__selrect = selectrect;
-
-					this.__selrects.push(selectrect);
-				}
+				var selectrect = this.screen.openOverlay(this.selectedrect);
+				selectrect.target = target;
+				this.__selrects.push(selectrect);
 			}
 
-			return;
+		} else {
+			inspector.target = null;
 		}
-		inspector.target = null;
+
 	};
 
 	this.init = function () {
@@ -188,8 +195,9 @@ define.class("$ui/view", function(require,
 			}
 			if (ev.view == this || this.testView(ev.view)) {
 
-				if (!this.selection || this.selection.indexOf(ev.view) < 0) {
-					this.selection = [ev.view];
+				var astpath = JSON.stringify(ev.view.getASTPath());
+				if (!this.watch || this.watch.indexOf(astpath) < 0) {
+					this.watch = [astpath];
 				}
 
 				ev.view.focus = true;
@@ -197,10 +205,6 @@ define.class("$ui/view", function(require,
 				if (ev.view.toolmove === false){
 					ev.view.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
-					if (!this.__selectrect) {
-						this.__selectrect = this.screen.openOverlay(this.selectorrect);
-						this.__selectrect.pos = this.__startrect;
-					}
 				} else {
 					this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
@@ -266,19 +270,17 @@ define.class("$ui/view", function(require,
 					pos = ev.view.parent.globalToLocal(ev.pointer.position)
 				}
 
-				if (this.selection) {
+				ev.view.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
+
+				if (this.groupdrag && this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
 						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-						if (selected.__selrect) {
-							selected.__selrect.pos = vec2(selected._layout.absx - 1, selected._layout.absy - 1);
-						}
 					}
 				}
 
-				ev.view.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y)
-
 			} else if (this.__startrect) {
+
 				var select = this.__selectrect || this.find('selectorrect');
 				if (!select) {
 					select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
@@ -352,18 +354,32 @@ define.class("$ui/view", function(require,
 					pos = ev.view.parent.globalToLocal(ev.pointer.position)
 				}
 
-				this.setASTObjectProperty(ev.view, "x", pos.x - this.__startpos.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y, pos.y - this.__startpos.y);
-
-				if (this.selection) {
-					for (var i=0;i<this.selection.length;i++) {
-						var selected = this.selection[i];
-						this.setASTObjectProperty(selected, "x", selected.pos.x + ev.pointer.movement.x);
-						this.setASTObjectProperty(selected, "y", selected.pos.y + ev.pointer.movement.y);
-					}
+				var nx = pos.x - this.__startpos.x;
+				var dx = Math.abs(ev.view.x - this.__originalpos.x);
+				if (dx > 0.5) {
+					this.setASTObjectProperty(ev.view, "x", nx);
+					commit = true;
 				}
 
-				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
+				var ny = pos.y - this.__startpos.y;
+				var dy = Math.abs(ny - this.__originalpos.y);
+				if (dy > 0.5) {
+					this.setASTObjectProperty(ev.view, "y", ny);
+
+					if (this.groupdrag && this.selection) {
+						for (var i=0;i<this.selection.length;i++) {
+							var selected = this.selection[i];
+							nx = selected.pos.x + ev.pointer.movement.x;
+							this.setASTObjectProperty(selected, "x", nx);
+
+							ny = selected.pos.y + ev.pointer.movement.y;
+							this.setASTObjectProperty(selected, "y", ny);
+						}
+					}
+
+					commit = true;
+				}
+
 
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
@@ -395,18 +411,19 @@ define.class("$ui/view", function(require,
 					rect.z = a.y - b.y;
 				}
 				var select = this.__selectrect || this.find('selectorrect');
-
-				this.selection = this.screen.childrenInRect(rect, [select]);
-
 				if (select) {
 					select.closeOverlay();
 					this.__selectrect = undefined;
 				}
-			}
 
-			if (ev.view.__selrect) {
-				ev.view.__selrect.pos = vec2(ev.view._layout.absx - 1, ev.view._layout.absy - 1);
-				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
+				var selection = this.screen.childrenInRect(rect, [select]);
+				var watch = [];
+				for (var i=0;i<selection.length;i++) {
+					var selected = selection[i];
+					var astpath = JSON.stringify(selected.getASTPath());
+					watch.push(astpath);
+				}
+				this.watch = watch;
 			}
 
 			if (commit) {
@@ -444,8 +461,9 @@ define.class("$ui/view", function(require,
 			}
 
 			if (this.__selectrect) {
-				this.__selectrect.closeOverlay();
+				var m = this.__selectrect;
 				this.__selectrect = undefined;
+				m.closeOverlay();
 			}
 
 		}.bind(this);
@@ -748,21 +766,45 @@ define.class("$ui/view", function(require,
 		this.tooltarget = false;
 	});
 
-	define.class(this,"selectedrect",view,function() {
-		this.name = "selectorrect";
+	define.class(this, "selectedrect", view, function() {
+		this.name = "selectedrect";
+		this.attributes = {
+			borderseed:Math.random() * 17.0,
+			target:Config({type:Object})
+		};
 		this.bordercolorfn = function(pos) {
-//			var speed = time * 20.0;
-			var speed = 0.0;
 			var size = 0.02;
 			var slices = 2.0;
-			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + this.borderseed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
-		}
+		};
 		this.borderwidth = 2;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
-	});
+		this.ontarget = function(ev,v,o) {
+			this.pos = vec2(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0);
+			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
+			this.rotate = v.rotate;
+			this.borderradius = v.borderradius;
+
+			v.onsize = function(ev,v,o) {
+				this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
+			}.bind(this);
+
+			v.onpos = function(ev,v,o) {
+				this.pos = vec3(v.x - this.borderwidth[0] / 2.0, v.y - this.borderwidth[0] / 2.0, v.z);
+			}.bind(this);
+
+			v.onrotate = function(ev,v,o) {
+				this.rotate = v;
+			}.bind(this);
+
+			v.onborderradius = function(ev,v,o) {
+				this.borderradius = v;
+			}.bind(this);
+		}
+ 	});
 
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
@@ -974,7 +1016,10 @@ define.class("$ui/view", function(require,
 				},
 				onselect:function(ev) {
 					if (ev && ev.item && ev.item.view) {
-						this.selection = [ev.item.view]
+						var astpath = JSON.stringify(ev.item.view.getASTPath());
+						if (!this.watch || this.watch.indexOf(astpath) < 0) {
+							this.watch = [astpath];
+						}
 					}
 				}.bind(this)
 			})
