@@ -401,15 +401,15 @@ define.class("$ui/view", function(require,
 				}
 
 				this.setASTObjectProperty(ev.view, "position", "absolute");
-				this.setASTObjectProperty(ev.view, "x", ev.view.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y);
-				this.setASTObjectProperty(ev.view, "width", ev.view.width);
-				this.setASTObjectProperty(ev.view, "height", ev.view.height);
+				this.setASTObjectProperty(ev.view, "x", ev.view._layout.absx);
+				this.setASTObjectProperty(ev.view, "y", ev.view._layout.absy);
+				this.setASTObjectProperty(ev.view, "width", ev.view._layout.width);
+				this.setASTObjectProperty(ev.view, "height", ev.view._layout.height);
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5)
 					|| (Math.abs(ev.view.y - this.__originalpos.y) > 0.5)
-					|| (Math.abs(ev.view.width - this.__originalsize.w) > 0.5)
-					|| (Math.abs(ev.view.height - this.__originalsize.h) > 0.5);
+					|| (Math.abs(ev.view._layout.width - this.__originalsize.w) > 0.5)
+					|| (Math.abs(ev.view._layout.height - this.__originalsize.h) > 0.5);
 
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
@@ -982,10 +982,10 @@ define.class("$ui/view", function(require,
 							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 
 							parent.setASTObjectProperty(parent, "position", "absolute");
-							parent.setASTObjectProperty(parent, "x", parent.x);
-							parent.setASTObjectProperty(parent, "y", parent.y);
-							parent.setASTObjectProperty(parent, "width", parent.width);
-							parent.setASTObjectProperty(parent, "height", parent.height);
+							parent.setASTObjectProperty(parent, "x", parent._layout.absx);
+							parent.setASTObjectProperty(parent, "y", parent._layout.absy);
+							parent.setASTObjectProperty(parent, "width", parent._layout.width);
+							parent.setASTObjectProperty(parent, "height", parent._layout.height);
 							this.screen.composition.commitAST();
 						}
 						this.screen.pointer.cursor = "arrow";
