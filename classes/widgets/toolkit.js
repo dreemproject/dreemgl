@@ -163,8 +163,7 @@ define.class("$ui/view", function(require,
 				if (this.selection.length <= 1) {
 					var selected = this.selection[0];
 					if (selected && inspector.target != selected) {
-						var target = selected;
-						inspector.astarget = JSON.stringify(target.getASTPath());
+						inspector.astarget = JSON.stringify(selected.getASTPath());
 					}
 				} else {
 					inspector.target = null;
@@ -193,7 +192,12 @@ define.class("$ui/view", function(require,
 			if (!this.visible) {
 				return;
 			}
-			if (ev.view == this || this.testView(ev.view)) {
+			if (ev.view == this) {
+				var inspector = this.find('inspector');
+				if (inspector) {
+					inspector.astarget = JSON.stringify(this.getASTPath());;
+				}
+			} else if (this.testView(ev.view)) {
 
 				var astpath = JSON.stringify(ev.view.getASTPath());
 				if (!this.watch || this.watch.indexOf(astpath) < 0) {
@@ -379,7 +383,6 @@ define.class("$ui/view", function(require,
 
 					commit = true;
 				}
-
 
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
@@ -768,6 +771,7 @@ define.class("$ui/view", function(require,
 
 	define.class(this, "selectedrect", view, function() {
 		this.name = "selectedrect";
+		this.visible = wire('this.outer.visible');
 		this.attributes = {
 			borderseed:Math.random() * 17.0,
 			target:Config({type:Object})
@@ -1041,9 +1045,11 @@ define.class("$ui/view", function(require,
 
 						if (t) {
 							this.setASTObjectProperty(t, editor.propertyname, val);
+							this.__needscommit = true;
 						}
 					}
-					if (commit) {
+					if (commit && this.__needscommit) {
+						this.__needscommit = false;
 						this.screen.composition.commitAST();
 					}
 				}.bind(this)

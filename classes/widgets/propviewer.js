@@ -32,6 +32,7 @@ define.class(function(require, $ui$, foldcontainer, view, label, button, scrollb
 					if (child && pathitem.type == child.constructor.name) {
 						node = child;
 					} else {
+						node = undefined;
 						break;
 					}
 				}
