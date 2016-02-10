@@ -163,7 +163,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		this.cleanLoadedBlocks = function(){
 			var keys = Object.keys(this.loadedblocks);
-			if (keys.length < 150) return;
+			if (keys.length < 50) return;
 			
 			
 			
@@ -174,6 +174,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var dy = lb.y - this.centers[lb.z][1];
 				var dz = (lb.z - this.zoomlevel)*2;
 				var dist  = dx*dx + dy*dy + dz*dz;
+				console.log(dist);
 				if (dist > 4*4 + 4*4 + 2*2) {
 					delete this.loadedblocks[keys[i]];
 				}
