@@ -175,7 +175,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var dy = this.centers[q.z][1] - q.y;
 					
 					var dz = (20-q.z)*zscalar;
-					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
 					var dist = (dx * dx + dy * dy) * (50000 - dz);
 					dellist.push({hash:keys[i], dist:dist})
 					
@@ -255,11 +254,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.updateLoadQueue = function(){
 
 			if (this.currentRequest) return; // already loading something...
-			//console.log("queuelen: " , this.loadqueue.length);
 			if (this.loadqueue.length > 0){
 				
-			//	console.log(this.centers);
-			//	console.log("queuelen: " , this.loadqueue.length);
 				var zscalar = 1280;
 
 				// sort queue on distance to cursor
@@ -269,7 +265,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var dy = this.centers[q.z][1] - q.y;
 					
 					var dz = (20-q.z)*zscalar;
-					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
 					q.dist = (dx * dx + dy * dy) * (50000 - dz);
 				}
 
@@ -279,19 +274,12 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					return 0;
 				});
 
-				//console.log(this.loadqueue);
-				//var queuedist = ""
-				//for (var i = 0;i<this.loadqueue.length;i++){
-				//	queuedist += this.loadqueue[i].dist + " ";
-				//}
-				//console.log(queuedist);
 				var R =	this.currentRequest = this.loadqueue.pop();
 				this.rpc.urlfetch.grabmap(R.x, R.y, R.z).then(function(result){
 					this.loadstring(result.value)
 				}.bind(this));
 
 				// take closest one from the queue
-				// this.requestPending = true;
 			}
 		}
 
@@ -300,7 +288,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.gotoCity = function(name, zoom, time){
-			//console.log(this, name, this.cities);
 			if (!name || name.length == 0) return ;
 			var n2 = name.toLowerCase().replace(' ', '');
 
@@ -433,7 +420,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.startDrag = function(ev){
 		
 		var coord  =  this.globalToLocal(ev.position);
-		console.log("startcoord", coord);
 		var R = this.projectonplane( coord);
 		
 		if (R){
@@ -442,16 +428,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
 						
 			this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
-			console.log("startcenter", this.startcenter);
 			this.moveDrag(ev);
 		}
 	}
 	
 	this.moveDrag = function(ev){
 		
-		var coord  =  this.globalToLocal(ev.position);
-		console.log("firstcoord", coord);
-		
+		var coord  =  this.globalToLocal(ev.position);	
 		var R = this.projectonplane( coord);
 		if (R){
 			
@@ -463,9 +446,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var latlong = geo.metersToLatLng(newcenter[0], newcenter[1]);
 			latlong[0] += this.startcenter[0];
 			latlong[1] += this.startcenter[1];
-			console.log(newcenter[0],this.newvect[1], this.startvect[1])
-			//		console.log("newcenter", newcenter, meters, latlong);
-		this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel);
+			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel);
 			 this.updateTiles();
 
 		}
@@ -527,7 +508,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var R = this.calctilepos();
 			this.tilename = "tile" + alltiles.toString() + "_"+ this.layeroffset;
 			alltiles++;
-//			console.log(this.tilename);
 			this.lastpos = vec3(R[0], R[1], R[2]);
 		}
 
@@ -790,7 +770,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					thelabels.push(l2);
 				}
 			}
-			//console.log(ranks);
 			this.labels = thelabels;
 		}
 		
