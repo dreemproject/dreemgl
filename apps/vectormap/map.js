@@ -288,7 +288,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				texel:[53.0731212,4.712878]
 			}
 
-			this.gotoCity("texel",9);
+			this.gotoCity("sanfrancisco_goldengatepark",11);
 
 			//this.setCenter(31,18,6);
 			this.theinterval = this.setInterval(function(){
@@ -896,15 +896,30 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			,camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0)
 			,lookat:vec3(0,0,0)
 		},
-
 		view({bgcolor:NaN},
 			res3d,
 			buildings3d,
 			labels3d,
-			pointset({name: 'pointset'})
-			//,label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
+			pointset({
+				name: 'pointset',
+				pointselected: function (event) {
+					// TODO(aki): debug - remove
+					this.find('pointpreview').bgimage = event.url
+					this.find('pointpreview').visible = true
+				}
+			})
 			)
-		));
+		),
+		// TODO(aki): debug - remove
+		view({
+			name: 'pointpreview',
+			position: 'absolute',
+			bgimage: 'https://farm2.staticflickr.com/1513/24094157124_1ab51f8c34.jpg',
+			width: 100,
+			height: 100,
+			visible: false,
+			bgcolor: 'black'
+		}));
 
 		return res;
 	}

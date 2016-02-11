@@ -3,13 +3,21 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require){
+define.class('$ui/view', function(require, $$, geo){
 
 	var GLGeom = require('$system/geometry/basicgeometry')
+	var geo = this.geo = geo();
 
 	this.attributes = {
 		data: Config({type: Array, value: []}),
-		hoverid: -1
+		hoverid: -1,
+		pointselected: Config({type:Event})
+	}
+
+	this.oninit = function () {
+		this.rpc.jsonfetch.load("../timeline/data/flickr1.json").then(function(result){
+			this.data = result.value
+		}.bind(this));
 	}
 
 	this.onpointerhover = function(event) {
@@ -44,10 +52,14 @@ define.class('$ui/view', function(require){
 
 		this.update = function(){
 			var view = this.view
-			this.mesh = this.vertexstruct.array();
+			this.mesh = this.vertexstruct.array(view.data.length * 12);
 
 			for (var i = 0; i < view.data.length; i++) {
-				var geopos = vec3(random() * 1000, 0, random() * 1000)
+				// TODO(aki): are lat/lng swapped?
+				var meters = geo.latLngToMeters(view.data[i].longitude, view.data[i].latitude)
+				// TODO(aki): move to correct position on transformed map
+				var offsetToCenter = vec2(13626152, -4551543)
+				var geopos = vec3(meters[0] + offsetToCenter[0], 0, meters[1] + offsetToCenter[1])
 				GLGeom.createSphere(100, 8, 8, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
 					this.mesh.push(v1, geopos, n1, t1, i);
 					this.mesh.push(v2, geopos, n2, t2, i);
@@ -57,8 +69,7 @@ define.class('$ui/view', function(require){
 		}
 
 		this.position = function() {
-			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix)
-			transnorm = temp.xyz
+			normal = vec4(mesh.norm,1.0) * view.normalmatrix
 			pos = vec4(mesh.pos + mesh.geopos, 1) * view.modelmatrix * view.viewmatrix
 			return pos
 		}
@@ -68,10 +79,9 @@ define.class('$ui/view', function(require){
 			if (view.hoverid == mesh.id) {
 				return vec4(0, 1, 0, 1)
 			}
-			var tn = normalize(transnorm.xyz);
-			return vec4(tn*0.5+0.5,1.0);
+			return vec4(normalize(normal.xyz) * 0.5 + 0.5, 1.0);
 		}
 	})
 	this.points3d = true
-	this.hardrect =false;
+	this.hardrect = false
 })

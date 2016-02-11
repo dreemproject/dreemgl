@@ -1,7 +1,8 @@
-define.class('$server/composition', function ($ui$, view, label, screen, splitcontainer, noisegrid, button, $$, mapcontrols, map, urlfetch, acceleroremote, $3d$, ballrotate){
+define.class('$server/composition', function (require, $ui$, view, label, screen, splitcontainer, noisegrid, button, $$, mapcontrols, map, urlfetch, jsonfetch, acceleroremote, $3d$, ballrotate){
 	this.render = function(){
 		return [
-			urlfetch({name:"urlfetch"}),
+			urlfetch({name: "urlfetch"}),
+			jsonfetch({name: "jsonfetch"}),
 			screen({name:"index"
 				,style:{$:{fontsize:12}}
 					,acceleromove: function(x,y,z){

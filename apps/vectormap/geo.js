@@ -1,4 +1,4 @@
-// ported to dreemgl from: https://github.com/tangrams/tangram/blob/master/src/geo.js 
+// ported to dreemgl from: https://github.com/tangrams/tangram/blob/master/src/geo.js
 // original license text:
 
 // The MIT License (MIT)
@@ -30,7 +30,7 @@ define.class(function(require, $server$, service){
 	}
 	this.default_max_zoom = 18;
 	this.tile_size = 256;
-	
+
 	this.half_circumference_meters = 20037508.342789244;
 	this.circumference_meters = this.half_circumference_meters * 2;
 	this.min_zoom_meters_per_pixel = this.circumference_meters / this.tile_size; // min zoom draws world as 2 tiles wide
@@ -90,7 +90,7 @@ define.class(function(require, $server$, service){
 		if (maskx) {
 			x = x & m;
 		}
-		
+
 		if (masky) {
 			y = y & m;
 		}
@@ -119,14 +119,13 @@ define.class(function(require, $server$, service){
 	this.latLngToMeters = function(x, y) {
 		y = this.wrapLng(y + 360)
 		// Latitude
-		//var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);
-		
+		// var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);
 		y = Math.log(Math.tan(y*Math.PI/360 + Math.PI/4)) / Math.PI;
 		y *= this.half_circumference_meters;
-	
-	//	y = Math.log(t) / Math.PI;
-		//y *= this.half_circumference_meters;
-		
+
+		// y = Math.log(t) / Math.PI;
+		// y *= this.half_circumference_meters;
+
 		// Longitude
 		x *= this.half_circumference_meters / 180;
 		return [x, y];
