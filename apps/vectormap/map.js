@@ -19,7 +19,10 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.dataset.zoomTo(z, time);
 		this.updateTiles();
 	}
-	
+	this.onpointerwheel = function(ev){
+		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1] / 400,0.1);
+		console.log(ev.wheel);
+	}
 	
 	this.onpointerend = function(ev){
 			this.stopDrag();
@@ -134,6 +137,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 
 		this.addToQueue = function(x, y, z){
+			if (x < 0 || y< 0 || z< 0 || z>20) return;
 			var hash = createHash(x, y, z);
 			if (this.loadqueuehash[hash]) return; // already queued for load.
 			if (this.loadedblocks[hash]) return; // already loaded.
@@ -466,7 +470,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
 			fogstart: 4000.0,
-			fogend: 8000.,
+			fogend: 14000.,
 			layeroffset: 0,
 			layerzmult: 0,
 			layerzoff: 0,
@@ -544,18 +548,20 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				this.bl = md.getBlockByHash(this.tilehash);
 
 				if (this.bl){
-				if (this.frameswaited == 0 ) {
-						this.bufferloaded = 1.0
-					} else{
-					this.bufferloaded = Animate({1:{value:1.0, motion:"inoutquad"}});
-					}
-					this.bufferloadbool = true;
-					this.loadBufferFromTile(this.bl);
+					if (this.loadBufferFromTile(this.bl)){
 					
-					var trans = this.bl.transform.translate;
-					var mercmeter = geo.latLngToMeters(trans[0], trans[1]);
-					this.centerpos =vec2(mercmeter[0], mercmeter[1]);
-					this.redraw();
+						if (this.frameswaited == 0 ) {
+							this.bufferloaded = 1.0
+						} else{
+							this.bufferloaded = Animate({1:{value:1.0, motion:"inoutquad"}});
+						}
+						this.bufferloadbool = true;
+						
+						var trans = this.bl.transform.translate;
+						var mercmeter = geo.latLngToMeters(trans[0], trans[1]);
+						this.centerpos =vec2(mercmeter[0], mercmeter[1]);
+						this.redraw();
+					}
 				}
 				else{
 					this.frameswaited++;
@@ -582,7 +588,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	define.class(this,"buildingtile", "$ui/view", function(){
 		this.is = tilebasemixin;
 		this.loadBufferFromTile = function(tile){
+			if (!this.shaders || !this.shaders.hardrect) return false;
 			this.shaders.hardrect.mesh = tile.buildingVertexBuffer;
+			return true;
 		}
 
 		this.hardrect = function(){
@@ -637,7 +645,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.is = tilebasemixin;
 
 		this.loadBufferFromTile = function(tile){
-			this.shaders.hardrect.mesh = tile.landVertexBuffer;
+			if (!this.shaders || !this.shaders.hardrect) return false;
+				this.shaders.hardrect.mesh = tile.landVertexBuffer;
+			return true;
 		}
 		this.pickalpha  = 0.1
 		this.hardrect = function(){
@@ -771,6 +781,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 			this.labels = thelabels;
+			return true;
 		}
 		
 		this.depth_test = "disabled"
@@ -786,9 +797,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	
 	define.class(this,"roadtile", "$ui/view", function(){
 		this.is = tilebasemixin;
+		
 		this.loadBufferFromTile = function(tile){
+			if (!this.shaders || !this.shaders.hardrect) return;
+			
 			this.shaders.hardrect.mesh = tile.roadVertexBuffer;
+			
+			return true;
 		}
+		
 		this.hardrect = function(){
 			this.texture = require("./mapmaterial.png");
 
@@ -796,7 +813,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var sidevec = mesh.pos.zw
 				var side = mesh.geom.x
 				var dist = mesh.geom.y
-				var linewidth = mesh.geom.z
+				var linewidth = mesh.geom.z *  pow(2.0, view.layeroffset - view.fraczoom -2);
 				var possrc = mesh.pos.xy + sidevec * side * linewidth*0.5;
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
@@ -836,7 +853,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			this.depth_test = "disabled"
 
 			this.color = function(){
-				//return "blue";
+				
 				var texcol = texture.sample(vec2(vec2(sin(mesh.geom.w*20.0)*0.5+0.5,sin( mesh.geom.z*14.0)*0.5+0.5)));
 				texcol.xyz*=0.9;
 				//return "black" ;
@@ -851,6 +868,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			}
 		}
+		
+		this.hardrect = true;
 	});
 
 
@@ -987,7 +1006,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 			}
 		}
-		var dist = 8.5
+		var dist = 13.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"

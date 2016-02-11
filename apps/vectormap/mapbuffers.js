@@ -623,7 +623,7 @@ define.class(function(require, $server$, service){
 
 				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
 				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], -0.5, -10 ,linewidth,colorid);
-				mesh.push(nx,ny, presdelta[0], presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
+				mesh.push(nx                            ,ny                            , presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
 
 				//	color = vec4(0,0,0.03,0.1)
 				var lastdelta = vec2(0);
@@ -637,7 +637,6 @@ define.class(function(require, $server$, service){
 					var sdelta = vec2.rotate(delta, PI/2);
 			
 					var dist2 = dist +  vec2.len(predelt);
-					
 					if (a>1){
 						mesh.push(nx,ny,lastdelta[0], lastdelta[1], 1, dist,linewidth,colorid);
 						mesh.push(nx,ny,sdelta[0], sdelta[1], 1, dist,linewidth,colorid);
@@ -656,7 +655,7 @@ define.class(function(require, $server$, service){
 					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid);
 					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid);
 					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid);
-					
+				
 					lastsdelta = vec2(sdelta[0], sdelta[1]);
 					dist = dist2;									
 					nx = tnx;
@@ -670,7 +669,7 @@ define.class(function(require, $server$, service){
 
 				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid);
 				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid);
-				mesh.push(nx,ny, presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
+				mesh.push(nx,ny, presdelta[0], presdelta[1],  -1, dist,linewidth,colorid);
 
 			}
 		}

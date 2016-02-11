@@ -82,7 +82,17 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 					)
 				)
 			)
-			,screen({name:"acceleroremote"},acceleroremote({target:"index"}))			
+			,screen({name:"acceleroremote"},acceleroremote({target:"index"}))
+			,screen({name:"mobile"}
+				,map({
+									name: "mobilemap"
+								})
+								
+								,view({bgcolor:NaN},
+									button({icon:"home", justifycontent:"center", aligncontent:"center", flex:1,fontsize: 20, padding:20}),ballrotate({flex:1, padding:20,name:"ballrotate1", target:"mapinside"}))
+								,label({bgcolor:NaN,bold:true, text:"DreemGL Mapping: Mobile", position:"absolute", x:10, y:10})
+
+			)
 		];
 	}
 })
