@@ -3,11 +3,11 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$server/composition", function (require, $ui$, screen, $widgets$, jsviewer, $server$, fileio) {
 // Source code viewer which is embedded into the docs. You can select the file
 // to be displayed by adding the hash `string #file=example.js` to the URL
 // for this composition, e.g.
 // examples/dreem_in_10/helloworldsource#file=docsourceviewer.js
+define.class("$server/composition", function (require, $ui$, screen, $widgets$, jsviewer, $server$, fileio) {
 
 	// Settings for font size and bgcolor for the jsviewer component
 	this.style = {
