@@ -560,7 +560,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			this.color = function(){
 				var noise = noise.cheapnoise(pos*0.02)*0.1+0.5
-				var prefog = mix(mesh.color1, mesh.color1, noise)
+				var prefog = mesh.color1;
 				prefog.xyz *= 0.6 + 0.4*max(0.0, min(1.0, ((mesh.pos.z - mesh.height)*0.001)+0.4));
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				//zdist *= zdist;

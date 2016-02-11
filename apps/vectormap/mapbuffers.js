@@ -667,8 +667,8 @@ define.class(function(require, $server$, service){
 				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid);
 				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid);
 
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5,z, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid);
 				mesh.push(nx,ny, presdelta[0], presdelta[1],  -1, dist,linewidth,colorid);
 
 			}
