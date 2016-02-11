@@ -132,9 +132,9 @@ define.class(function(exports){
 				})
 			}
 
-			// Save data to JSON
+			// // Save data to JSON
 			// var fs = require('fs');
-			// fs.writeFile("compositions/timeline/data/flickr.json", JSON.stringify(_photos, null, 4), function(err) {
+			// fs.writeFile("compositions/timeline/data/flickr"+PAGE+".json", JSON.stringify(_photos, null, 4), function(err) {
 			//     if (err) return console.log(err);
 			// });
 

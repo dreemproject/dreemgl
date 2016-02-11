@@ -27,9 +27,6 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 	]
 	this.render = function(){
 
-		
-		
-		
 		var Buttons = [];
 		for(var i = 0;i<this.places.length;i++){
 			var p = this.places[i];
@@ -57,7 +54,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bgcolor:NaN})
 
 								,view({bgcolor:NaN}
-									,label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
+									,label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})
 									,numberbox({value:9, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
 								)
 ,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
@@ -67,7 +64,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 								)
 								,button({ text:"DumpDebug",click:function(){this.find("themap").dumpdebug();}, margin:4})
 								,Buttons
-								
+
 							)
 						)
 
@@ -87,7 +84,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 				,map({
 									name: "mobilemap"
 								})
-								
+
 								,view({bgcolor:NaN},
 									button({icon:"home", justifycontent:"center", aligncontent:"center", flex:1,fontsize: 20, padding:20}),ballrotate({flex:1, padding:20,name:"ballrotate1", target:"mapinside"}))
 								,label({bgcolor:NaN,bold:true, text:"DreemGL Mapping: Mobile", position:"absolute", x:10, y:10})
