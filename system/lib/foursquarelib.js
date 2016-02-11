@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -20,7 +20,7 @@ define.class(function(exports){
 	 * are read from environment variables,
 	 *   FOURSQUARE_CLIENT_ID
 	 *   FOURSQUARE_SECRET
-	 * 
+	 *
 	 * Install the foursquare object via 'npm install node-foursquare'.
 	 */
 	this.atConstructor = function() {
@@ -52,7 +52,7 @@ define.class(function(exports){
 	this.search = function(callback, location, options, nimages) {
 		location = location || [37.784173, -122.401557] // Mascone center
 		options = options || {}
-		
+
 		// Search for locations
 		this.foursquare.Venues.search(location[0], location[1], null, options, this.accessToken, function(error, data) {
 			if (error) console.log('error', error);
@@ -82,11 +82,11 @@ define.class(function(exports){
 
 		// Add photos
 		options['venuePhotos'] = 1
-		options['limit'] = 50
+		options['limit'] = 250
 
 		// Search for locations
 		this.foursquare.Venues.explore(location[0], location[1], null, options, this.accessToken, function(error, data) {
-			if (error) console.log('error', error);
+			if (error) console.error('error', error);
 			//console.log('data', data);
 
 			venues = []
@@ -95,9 +95,41 @@ define.class(function(exports){
 				var items = data.groups[0].items;
 				for (var i in items) {
 					var venue = items[i].venue;
-					venues.push(venue);
+					var photoUrl;
+					var photoDate;
+					if (venue.photos && venue.photos.groups) {
+						// Ignore any issues with the returned data
+						try {
+							var group = venue.photos.groups[0]
+							if (!group) continue;
+							var item = venue.photos.groups[0].items[0];
+							photoDate = item.createdAt
+							photoUrl = item.prefix + '300x300' + item.suffix;
+						}
+						catch (ex) {
+							console.error('Exception', ex);
+						}
+					}
+
+					venues.push({
+						url: photoUrl,
+						title: venue.name,
+						width: 300,
+						height: 300,
+						latitude: venue.location.lat,
+						longitude: venue.location.lng,
+						date: photoDate
+					});
 				}
 			}
+
+			console.log(venues.length)
+
+			// Save data to JSON
+			// var fs = require('fs');
+			// fs.writeFile("compositions/timeline/data/foursquare.json", JSON.stringify(venues, null, 4), function(err) {
+			//     if (err) return console.log(err);
+			// });
 
 			callback(venues);
 		});

@@ -5,89 +5,78 @@
 
 
 // The server uses foursquarelib to retrieve foursquare images from the SF area.
-// 
+//
 // I don't think dreemgl supports something like 'background-size: contain' to
 // scale the image to the size.
 
 
 define.class(function($server$, composition, service, $ui$, screen, view, label, require){
 
-	this.render = function(){
+	define.class(this, "demo", "$ui/view", function(){
 
-    // Generate placeholder images (using the teem logo).
-		var dynviews = [];
-		var nimages = 50;
-    var imagesize = vec2(128, 128);
-		// Display a default image for each view
-		for (var n=0; n<nimages; n++) {
-			var v1 = view({
-				size: imagesize
-				,bgimage: 'http://teem.nu/wp-content/uploads/2015/11/TEEMlogo.png'
-			})
-			dynviews.push(v1);
+		this.flex = 1
+		this.flexdirection = 'column'
+		this.overflow = 'scroll'
+
+		var IMAGE_COUNT = 100
+		var IMAGE_SIZE = vec2(256, 256)
+
+		this.attributes = {
+			imagelist: []
 		}
 
-		var views = [
-			// Server side service: foursquareservice
+		this.render = function () {
+			var dynviews = []
+			for (var n = 0; n < this.imagelist.length; n++) {
+				dynviews.push(view({
+					size: IMAGE_SIZE,
+					bgimage: this.imagelist[n].url
+				},
+				[
+					label({position: 'absolute', fontsize: 12, top: 0, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].title}),
+					label({position: 'absolute', fontsize: 12, top: 14, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].latitude}),
+					label({position: 'absolute', fontsize: 12, top: 28, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].longitude}),
+					label({position: 'absolute', fontsize: 12, top: 42, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].date})
+				]))
+			}
+			return	dynviews
+		}
+	})
+
+	this.render = function(){
+		return [
 			service({
-				name:'foursquareservice'
-
-				// Retrieve urls using the foursquare streaming using the search interface.
-				,runfoursquare: function() {
+				name:'foursquareservice',
+				runfoursquare: function() {
 					//TODO $system doesn't work here
-					if (this.foursquare) {
-						// Stop an already running stream
-						delete this.foursquare;
-					}
-          var FoursquareLib = require('../system/lib/foursquarelib');
-          this.foursquare = new FoursquareLib();
+					// Stop an already running stream
+					delete this.foursquare // TODO is this necessary?
+					var FoursquareLib = require('../system/lib/foursquarelib')
+					this.foursquare = new FoursquareLib()
 
-					// The foursquarelib returns an array of venues, with photos
-					// https://developer.foursquare.com/docs/responses/venue
-					var callback = (function(venues) {
-						var urls = [];
-						for (var i=0; i<venues.length; i++) {
-							var venue = venues[i];
-							// Grab the first image (300x300 resolution)
-							if (venue.photos && venue.photos.groups) {
-								var item = venue.photos.groups[0].items[0];
-								var url = item.prefix + '300x300' + item.suffix;
-								urls.push(url);
-							}
-						}
-						this.rpc.default.imageupdate(urls);
-
-					}).bind(this);
+					// The foursquarelib returns an array of photos
+					var callback = (function(images) {
+						this.rpc.default.imageupdate(images)
+					}).bind(this)
 
 					// The second argument will specify search parameters
-					// 
 					this.foursquare.explore(callback, null, {openNow: 1});
 				}
 
 			}),
-
-
 			screen({
-				name:'default'
-				,clearcolor:'white'
-				,viewindex:0
-				,init: function() {
-					this.rpc.foursquareservice.runfoursquare();
+				name:'default',
+				clearcolor:'white',
+				init: function() {
+					this.rpc.foursquareservice.runfoursquare()
+				},
+				imageupdate: function(images) {
+					this.find('demo').imagelist = images
 				}
-
-				// Receive image urls from the server. These are displayed in sequence
-				,imageupdate: function(urls) {
-					for (var i=0; i<urls.length; i++) {
-						var url = urls[i];
-						var v = this.children[this.viewindex];
-						v.bgimage = url;
-						this.viewindex = (this.viewindex+1) % nimages;
-					}
-				}
-			}
-					   ,dynviews)
-		];
-
-		return views
+			}, [
+				this.demo({name: 'demo'})
+			])
+		]
 	}
+
 })

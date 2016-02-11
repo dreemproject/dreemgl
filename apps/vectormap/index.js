@@ -1,7 +1,7 @@
 define.class('$server/composition', function (require,  $server$, fileio,$ui$, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid,button, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
 
 	this.places= [
-	{text:"Amsterdam", place: "amsterdam", zoomlevel: 16},
+	{text:"Texel 11", place: "texel", zoomlevel: 11},
 	{text:"Amsterdam-17", place: "amsterdam", zoomlevel: 17},
 	{text:"Amsterdam-16", place: "amsterdam", zoomlevel: 16},
 	{text:"Amsterdam-15", place: "amsterdam", zoomlevel: 15},
@@ -33,7 +33,7 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 		var Buttons = [];
 		for(var i = 0;i<this.places.length;i++){
 			var p = this.places[i];
-			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel);
+			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel, 1);
 			this.find("zoomlevelbox").value = this.zoomlevel;}, margin:4}))
 
 		}
@@ -56,18 +56,18 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 							//,label({outline:true, fontsize: 130, outline_thickness: 10, text:"outline test", bg:0})
 								,label({text:"Dreem Mapping",margin: 10,bold:true,fontsize:20, bgcolor:NaN})
 
-								,view({bgcolor:NaN},
-								label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
-,			numberbox({value:16, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
+								,view({bgcolor:NaN}
+									,label({text:"zoom level",padding:4,bold:false,fontsize:13, bgcolor:NaN})			
+									,numberbox({value:9, onvalue:function(val){this.find("themap").zoomTo(val.value, 1);}.bind(this), text:"numberbox", name:"zoomlevelbox", minvalue:0, stepvalue:1, maxvalue:18})
 								)
-
-								,Buttons
-								,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
+,noisegrid({bordercolor: "gray", flex:undefined, borderradius:10, margin:20,borderwidth:2, bgcolor:"black",  flexdirection:"column" , padding:5 }
 								,label({text:"Rotation control",margin: 10,fontsize:12,  bgcolor:NaN})
 								,ballrotate({name:"ballrotate1", height:100, target:"mapinside"})
 
 								)
-								,button({ text:"Used Tile types",click:function(){this.find("themap").dumpkindset();}, margin:4})
+								,button({ text:"DumpDebug",click:function(){this.find("themap").dumpdebug();}, margin:4})
+								,Buttons
+								
 							)
 						)
 

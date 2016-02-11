@@ -1,9 +1,9 @@
-define.class("$server/composition",function(require, $ui$, button, icon, label, view, screen, cadgrid, $widgets$, toolkit) {
+define.class("$server/composition",function(require, $ui$, checkbox, button, icon, label, view, screen, cadgrid, $widgets$, toolkit) {
 	
 	this.render = function() {
 		return [
 			screen(
-				{flexdirection:"row", position:'absolute', x:4, y:0, width:484, height:472},
+				{flexdirection:"row"},
 				cadgrid({
 						name:"grid", 
 						flex:3, 
@@ -19,24 +19,22 @@ define.class("$server/composition",function(require, $ui$, button, icon, label, 
 						justifycontent:'center', 
 						anchor:vec3(0,0,0), 
 						toolmove:false, 
-						toolrect:false, 
-						opaque:false
+						toolrect:false
 					},
-					view({height:473, width:618, bgcolor:vec4(0.9318798184394836,0.31568998098373413,0.7469818592071533,1), position:'absolute', x:613.0001220703125, y:41.000152587890625},label({fontsize:54, bgcolor:'transparent', fgcolor:'white', text:'0_o', position:'absolute', x:105.00015258789062, y:94.99983215332031, width:NaN, height:NaN}),label({fontsize:44, opaque:true, fgcolor:'lightgreen', text:'Howdy!', position:'absolute', x:237.99986267089844, y:203.9999237060547})),
-					view({height:257, width:451, bgcolor:vec4(0.12939296662807465,0.4936515688896179,0.6595012545585632,1), position:'absolute', x:96.96026611328125, y:146.61598205566406, rotate:vec3(0,0,10)}),
-					label({fontsize:190, bgcolor:'transparent', fgcolor:vec4(0.9903326034545898,0.8860607147216797,0,1), text:'Howdy!', position:'absolute', x:21.225921630859375, y:151.25074768066406, rotate:vec3(0,0,-0.55)}),
-					icon({fgcolor:vec4(0.3921568691730499,0.929411768913269,0.42688411474227905,1), icon:'anchor', position:'absolute', x:495, y:333.0000305175781, fontsize:180}),
-					icon({fgcolor:'cornflower', icon:'flask', fontsize:80, position:'absolute', x:777, y:54.000030517578125}),
-					icon({fgcolor:'cornflower', icon:'gear', fontsize:80, position:'absolute', x:684, y:166})
+					view({height:288, width:555, bgcolor:vec4(0.9318798184394836,0.31568998098373413,0.7469818592071533,1), position:'absolute', x:215.00051879882812, y:436.000244140625, borderradius:vec4(0,0,30,0)}),
+					view({height:310, width:273, bgcolor:'purple', position:'absolute', x:216.00106811523438, y:110.00057983398438, borderradius:vec4(2,1,1,30), opacity:0.91}),
+					view({height:356, width:362, bgcolor:'purple', position:'absolute', x:595.000732421875, y:49.00054931640625},label({fontsize:54, bgcolor:'transparent', opaque:true, fgcolor:'white', text:'0_o', position:'absolute', x:121.99871826171875, y:57.99919128417969, width:87.697265625, height:87.4800033569336})),
+					icon({fgcolor:'cornflower', icon:'gear', fontsize:80, position:'absolute', opaque:true, x:894.000244140625, y:470.00018310546875, width:68.57142925262451, height:129.6})
 				),
 				toolkit({
 					position:'absolute', 
-					x:1238, 
-					y:47.0003662109375, 
-					width:343, 
-					height:786, 
+					x:1068, 
+					y:42.00083541870117, 
+					width:393, 
+					height:788, 
 					visible:true, 
-					animateborder:false
+					animateborder:false, 
+					rulers:true
 				}
 				)
 			)

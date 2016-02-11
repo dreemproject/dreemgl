@@ -20,6 +20,8 @@ define.class("$ui/view", function(require,
 	this.position = "absolute";
 	this.width = 400;
 	this.height = 800;
+	this.opacity = 0.7;
+	this.visible = false;
 
 	this.borderradius = 7;
 	this.bordercolor = vec4(1,1,1,0.7);
@@ -35,7 +37,7 @@ define.class("$ui/view", function(require,
 			Views:[
 				{
 					label:"View",
-					icon:"clone",
+					icon:"sticky-note",
 					desc:"A rectangular view",
 					classname:"view",
 					classdir:"$ui$",
@@ -59,8 +61,19 @@ define.class("$ui/view", function(require,
 					}
 				},
 				{
+					label:"Check Button",
+					icon:"check-square",
+					desc:"A check button",
+					classname:"checkbox",
+					classdir:"$ui$",
+					params:{
+						fontsize:24,
+						fgcolor:'pink'
+					}
+				},
+				{
 					label:"Button",
-					icon:"plus-square",
+					icon:"square",
 					desc:"A basic button",
 					classname:"button",
 					classdir:"$ui$",
@@ -78,130 +91,235 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fgcolor:'cornflower',
+						opaque:true,
 						icon:'flask',
 						fontsize:80
 					}
 				}
 			],
-			//Behaviors:[
-			//	{
-			//		label:"Alert",
-			//		icon:"warning",
-			//		desc:"A pop up an alert dialog",
-			//		behaviors:{
-			//			onclick:function() {
-			//				alert('Beep.')
-			//			}
-			//		}
-			//	}
-			//]
+			Behaviors:[
+				{
+					label:"Alert",
+					icon:"warning",
+					desc:"Adds a click event that pops up an alert dialog",
+					behaviors:{
+						onclick:function() {
+							alert('Beep.')
+						}
+					}
+				}
+			]
 		}}),
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
 		// and views can be resized and manipulated.
 		// In 'live' mode views lock into place the composition regains it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
+		reticlesize: 6,
+		groupdrag:true,
+		animateborder: false,
+		rulers:true,
 
 		// internal
-		selection:Config({persist:true, value:[]}),
-		onselection: function() {
-			var inspector = this.find('inspector');
+		selection:Config({value:[], meta:"hidden"}),
+		watch:Config({persist:true, value:[], meta:"hidden"})
+//		astwatch:Config({persist:true, type:String})
+	};
 
-			if (!this.__selrects) {
-				this.__selrects = [];
-			}
+	this.onrulers = function() {
+		if (!this.rulers && this.__ruler) {
+			this.__ruler.closeOverlay();
+			this.__ruler.target = undefined;
+			this.__ruler = undefined;
+		}
+	};
 
-			for (var i = 0; i < this.__selrects.length; i++) {
-				var selrect = this.__selrects[i];
-				if (this.selection && this.selection.indexOf(selrect.target) > -1) {
-					continue;
-				}
-				selrect.closeOverlay();
-				delete selrect.target.__selrect
+	this.onanimateborder = function (ev,v,o) {
+		this.bordercolorfn = v ? this.animatedbordercolorfn : this.staticbordercolorfn;
+	};
 
-				this.__selrects.splice(i,0);
-			}
+	this.animatedbordercolorfn = function(pos) {
+		var speed = time * 37.0;
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.staticbordercolorfn = function(pos) {
+		var size = 0.0008;
+		var slices = 3.5;
+		var v = int(mod(size * ((x + pos.x) - (y + pos.y)), slices));
+		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
+	};
+	this.bordercolorfn = this.staticbordercolorfn;
 
-			if (this.selection) {
+	this.onwatch = function(ev,v,o) {
+		var selection = [];
+		if (v && v.length) {
+			for (var i=0;i< v.length;i++) {
+				var astpath = JSON.parse(v[i]);
 
-				if (inspector) {
-					if (this.selection.length <= 1) {
-						var selected = this.selection[0];
-						if (selected && inspector.target != selected) {
-							var target = selected;
-							inspector.astarget = JSON.stringify(target.getASTPath());
+				var node = this.screen;
+				for (var j=1;node && j<astpath.length;j++) {
+					var pathitem = astpath[j];
+					if (node.children) {
+						var child = node.children[pathitem.childindex];
+						if (child && pathitem.type == child.constructor.name) {
+							node = child;
+						} else {
+							node = undefined;
+							break;
 						}
 					} else {
-						inspector.target = null;
+						node = undefined;
 					}
 				}
-
-				var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
-
-				for (var i=0;i<filtered.length;i++) {
-					var target = filtered[i];
-					if (!target.__selrect) {
-						var selectrect = this.screen.openOverlay(this.selectedrect);
-						selectrect.x = target._layout.absx - 1;
-						selectrect.y = target._layout.absy - 1;
-						selectrect.width = target._layout.width + 2;
-						selectrect.height = target._layout.height + 2;
-						selectrect.target = target;
-						selectrect.rotate = target.rotate;
-						selectrect.borderradius = target.borderradius;
-
-						target.__selrect = selectrect;
-
-						this.__selrects.push(selectrect);
-					}
+				if (node) {
+					selection.push(node)
 				}
-
-				return;
 			}
-			inspector.target = null;
-		},
+		}
+		this.selection = selection;
+	};
 
-		reticlesize: 6,
-		animateborder: false
+	//this.onastwatch = function(ev,v,o) {
+	//	if (v) {
+	//		var jwatch = JSON.parse(v);
+	//		var newwatch = [];
+	//		for (var i= 0;i<jwatch.length;i++) {
+	//			var j = jwatch[i];
+	//			newwatch.push(JSON.stringify(j));
+	//		}
+	//		this.watch = newwatch;
+	//	}
+	//};
+
+	this.onselection = function(ev,v,o) {
+		var inspector = this.find('inspector');
+
+		if (this.__selrects) {
+			for (var i = 0; i < this.__selrects.length; i++) {
+				var selrect = this.__selrects[i];
+				selrect.closeOverlay();
+			}
+		}
+
+		if (this.selection) {
+			this.__selrects = [];
+
+			if (inspector) {
+				if (this.selection.length <= 1) {
+					var selected = this.selection[0];
+					if (selected && inspector.target != selected) {
+						inspector.astarget = JSON.stringify(selected.getASTPath());
+					}
+				} else {
+					inspector.target = null;
+				}
+			}
+
+			var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
+
+			for (var i=0;i<filtered.length;i++) {
+				var target = filtered[i];
+				var selectrect = this.screen.openOverlay(this.selectedrect);
+				selectrect.target = target;
+				this.__selrects.push(selectrect);
+			}
+
+		} else {
+			inspector.target = null;
+		}
+
+		var tree = this.find("structure");
+		if (tree && tree.reload) {
+			tree.reload();
+		}
+
 	};
 
 	this.init = function () {
 		this.ensureDeps();
 
+		//if (this.astwatch) {
+		//	this.onastwatch(null, this.astwatch, this)
+		//}
+
 		this.screen.globalpointerstart = function(ev) {
 			if (!this.visible) {
 				return;
 			}
-			if (ev.view == this || this.testView(ev.view)) {
 
-				if (!this.selection || this.selection.indexOf(ev.view) < 0) {
-					this.selection = [ev.view];
+			if (this.__ruler) {
+				this.__ruler.rulermarkstart = ev.pointer.position;
+			}
+
+			if (ev.view == this) {
+				var inspector = this.find('inspector');
+				if (inspector) {
+					inspector.astarget = JSON.stringify(this.getASTPath());
+				}
+				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+
+				this.__originalpos = {
+					x:ev.view.x,
+					y:ev.view.y
+				};
+
+				this.__originalsize = {
+					w:ev.view.width,
+					h:ev.view.height
+				};
+
+				this.__resizecorner = this.edgeCursor(ev);
+
+			} else if (this.testView(ev.view)) {
+
+				var astpath = JSON.stringify(ev.view.getASTPath());
+				if (!this.watch || this.watch.indexOf(astpath) < 0) {
+					this.watch = [astpath];
+					//var astw = [];
+					//for (var a=0;a<this.watch.length;a++) {
+					//	var j = JSON.parse(this.watch[a]);
+					//	astw.push(j);
+					//}
+					//this.setASTObjectProperty(this, "astwatch", JSON.stringify(astw));
+					//this.screen.composition.commitAST();
+				}
+				var dragview = ev.view;
+				if (!dragview.tooldragroot) {
+					var p = dragview;
+					while (p = p.parent) {
+						if (p.tooldragroot) {
+							dragview = p;
+							break;
+						}
+					}
 				}
 
-				ev.view.focus = true;
-
-				if (ev.view.toolmove === false){
-					ev.view.cursor = "crosshair";
+				if (dragview.toolmove === false){
+					dragview.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
-					if (!this.__selectrect) {
-						this.__selectrect = this.screen.openOverlay(this.selectorrect);
-						this.__selectrect.pos = this.__startrect;
-					}
 				} else {
-					this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+					// This is a drag
+
+
+					this.__startpos = dragview.globalToLocal(ev.pointer.position);
 
 					this.__originalpos = {
-						x:ev.view.x,
-						y:ev.view.y
+						x:dragview.x,
+						y:dragview.y
 					};
 
 					this.__originalsize = {
-						w:ev.view.width,
-						h:ev.view.height
+						w:dragview.width,
+						h:dragview.height
 					};
 
-					this.__resizecorner = this.edgeCursor(ev);
-					ev.view.cursor = "move";
+					this.__resizecorner = this.edgeCursor(ev, dragview);
+					dragview.cursor = "move";
+					dragview.drawtarget = "color";
+					ev.pointer.pickview = true;
 				}
 			}
 
@@ -212,59 +330,79 @@ define.class("$ui/view", function(require,
 				return;
 			}
 
+			if (this.__ruler && this.__ruler.target == ev.view) {
+				this.__ruler.target = ev.view.parent;
+			}
+			if (this.__ruler) {
+				this.__ruler.rulermarkstart = ev.view.pos;
+				this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
+			}
+
+			var dragview = ev.view;
+			if (!dragview.tooldragroot) {
+				var p = dragview;
+				while (p = p.parent) {
+					if (p.tooldragroot) {
+						dragview = p;
+						break;
+					}
+				}
+			}
+
 			if (this.__resizecorner) {
 
 				if (this.__resizecorner === "bottom-right") {
-					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
-					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
 				} else if (this.__resizecorner === "bottom") {
-					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
 				} else if (this.__resizecorner === "right") {
-					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
 				} else if (this.__resizecorner === "top-left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
-					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
-					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					dragview.x = ev.pointer.position.x - this.__startpos.x;
+					dragview.y = ev.pointer.position.y - this.__startpos.y;
+					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
 				} else if (this.__resizecorner === "left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+					dragview.x = ev.pointer.position.x - this.__startpos.x;
+					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
 				} else if (this.__resizecorner === "top") {
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
-					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					dragview.y = ev.pointer.position.y - this.__startpos.y;
+					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
 				} else if (this.__resizecorner === "bottom-left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
-					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+					dragview.x = ev.pointer.position.x - this.__startpos.x;
+					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
 				} else if (this.__resizecorner === "top-right") {
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
-					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
-					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+					dragview.y = ev.pointer.position.y - this.__startpos.y;
+					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
 				}
 
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
 				var pos = ev.pointer.position;
-				if (ev.view.parent) {
-					if (ev.view.position != "absolute") {
-						ev.view.position = "absolute";
+
+				if (dragview.parent) {
+					if (dragview.position != "absolute") {
+						dragview.position = "absolute";
 					}
-					pos = ev.view.parent.globalToLocal(ev.pointer.position)
+					pos = dragview.parent.globalToLocal(ev.pointer.position)
 				}
 
-				if (this.selection) {
+				dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
+
+				if (this.groupdrag && this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
 						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-						if (selected.__selrect) {
-							selected.__selrect.pos = vec2(selected._layout.absx - 1, selected._layout.absy - 1);
-						}
 					}
 				}
 
-				ev.view.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y)
+				this.__lastpick = ev.pointer.pick;
 
 			} else if (this.__startrect) {
+
 				var select = this.__selectrect || this.find('selectorrect');
 				if (!select) {
 					select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
@@ -291,21 +429,25 @@ define.class("$ui/view", function(require,
 				}
 			}
 
-			if (ev.view.__selrect) {
-				ev.view.__selrect.pos = vec2(ev.view._layout.absx - 1, ev.view._layout.absy - 1);
-				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
-			}
-
 		}.bind(this);
 
 		this.screen.globalpointerend = function(ev) {
+			if (ev.view.drawtarget != "both") {
+				ev.view.drawtarget = "both";
+			}
+
 			if (!this.visible) {
 				return;
 			}
 
+			if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
+				this.__ruler.target = ev.view;
+			}
+
+
 			ev.view.cursor = 'arrow';
 			var commit = false;
-			if (this.__resizecorner) {
+			if (this.__resizecorner && (ev.view == this || this.testView(ev.view)) && ev.view.toolresize !== false) {
 				if (this.__resizecorner === "top-left") {
 					ev.view.x = ev.pointer.position.x - this.__startpos.x;
 					ev.view.y = ev.pointer.position.y - this.__startpos.y;
@@ -318,15 +460,15 @@ define.class("$ui/view", function(require,
 				}
 
 				this.setASTObjectProperty(ev.view, "position", "absolute");
-				this.setASTObjectProperty(ev.view, "x", ev.view.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y);
-				this.setASTObjectProperty(ev.view, "width", ev.view.width);
-				this.setASTObjectProperty(ev.view, "height", ev.view.height);
+				this.setASTObjectProperty(ev.view, "x", ev.view._layout.absx);
+				this.setASTObjectProperty(ev.view, "y", ev.view._layout.absy);
+				this.setASTObjectProperty(ev.view, "width", ev.view._layout.width);
+				this.setASTObjectProperty(ev.view, "height", ev.view._layout.height);
 
 				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5)
 					|| (Math.abs(ev.view.y - this.__originalpos.y) > 0.5)
-					|| (Math.abs(ev.view.width - this.__originalsize.w) > 0.5)
-					|| (Math.abs(ev.view.height - this.__originalsize.h) > 0.5);
+					|| (Math.abs(ev.view._layout.width - this.__originalsize.w) > 0.5)
+					|| (Math.abs(ev.view._layout.height - this.__originalsize.h) > 0.5);
 
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
@@ -338,18 +480,59 @@ define.class("$ui/view", function(require,
 					pos = ev.view.parent.globalToLocal(ev.pointer.position)
 				}
 
-				this.setASTObjectProperty(ev.view, "x", pos.x - this.__startpos.x);
-				this.setASTObjectProperty(ev.view, "y", ev.view.y, pos.y - this.__startpos.y);
+				var nx = pos.x - this.__startpos.x;
+				var dx = Math.abs(ev.view.x - this.__originalpos.x);
+				if (dx > 0.5) {
+					this.setASTObjectProperty(ev.view, "x", nx);
+					commit = true;
+				}
 
-				if (this.selection) {
+				var ny = pos.y - this.__startpos.y;
+				var dy = Math.abs(ny - this.__originalpos.y);
+				if (dy > 0.5) {
+					this.setASTObjectProperty(ev.view, "y", ny);
+					commit = true;
+				}
+
+				if (this.groupdrag && this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
-						this.setASTObjectProperty(selected, "x", selected.pos.x + ev.pointer.movement.x);
-						this.setASTObjectProperty(selected, "y", selected.pos.y + ev.pointer.movement.y);
+						if (this.testView(selected) && selected.toolmove !== false) {
+							nx = selected.pos.x + ev.pointer.movement.x;
+							this.setASTObjectProperty(selected, "x", nx);
+
+							ny = selected.pos.y + ev.pointer.movement.y;
+							this.setASTObjectProperty(selected, "y", ny);
+						}
 					}
 				}
 
-				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5) || Math.abs((ev.view.y - this.__originalpos.y) > 0.5);
+				if (this.__lastpick && this.__lastpick !== ev.view.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+					pos = this.__lastpick.globalToLocal(ev.pointer.position);
+
+					nx = pos.x - this.__startpos.x;
+					ny = pos.y - this.__startpos.y;
+
+					this.setASTObjectProperty(ev.view, "x", nx, false);
+					this.setASTObjectProperty(ev.view, "y", ny, false);
+
+					var astnode = ev.view.getASTNode();
+
+					var newparent = this.__lastpick.getASTNode();
+					if (!newparent.args) {
+						newparent.args = []
+					}
+					newparent.args.push(astnode);
+
+					var oldparent = ev.view.parent.getASTNode();
+					var index = oldparent.args.indexOf(astnode);
+					if (index >= 0) {
+						oldparent.args.splice(index, 1);
+					}
+
+					commit = true;
+				}
+
 
 			} else if (this.__startrect) {
 				var pos = ev.pointer.position;
@@ -381,25 +564,39 @@ define.class("$ui/view", function(require,
 					rect.z = a.y - b.y;
 				}
 				var select = this.__selectrect || this.find('selectorrect');
-
-				this.selection = this.screen.childrenInRect(rect, [select]);
-
 				if (select) {
 					select.closeOverlay();
 					this.__selectrect = undefined;
 				}
-			}
 
-			if (ev.view.__selrect) {
-				ev.view.__selrect.pos = vec2(ev.view._layout.absx - 1, ev.view._layout.absy - 1);
-				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
+				var selection = this.screen.childrenInRect(rect, [select]);
+				var watch = [];
+				for (var i=0;i<selection.length;i++) {
+					var selected = selection[i];
+					if (selected !== this && this.testView(selected) && this.toolselect !== false) {
+						var astpath = JSON.stringify(selected.getASTPath());
+						watch.push(astpath);
+					}
+				}
+				this.watch = watch;
+
+				//if (this.watch.length) {
+				//	var astw = [];
+				//	for (var a=0;a<this.watch.length;a++) {
+				//		var j = JSON.parse(this.watch[a]);
+				//		astw.push(j);
+				//	}
+				//	this.setASTObjectProperty(this, "astwatch", JSON.stringify(astw));
+				//	commit = true;
+				//}
 			}
 
 			if (commit) {
+				this.ensureDeps();
 				this.screen.composition.commitAST();
 			}
 
-			this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+			this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 		}.bind(this);
 
 		this.screen.globalpointerhover = function(ev) {
@@ -421,6 +618,12 @@ define.class("$ui/view", function(require,
 				var pointer = pointers[i];
 
 				var pos = ev.view.globalToLocal(pointer.position);
+
+				if (this.__ruler && this.__ruler.target) {
+					this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
+				}
+
+
 				text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
 				text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
 
@@ -430,8 +633,9 @@ define.class("$ui/view", function(require,
 			}
 
 			if (this.__selectrect) {
-				this.__selectrect.closeOverlay();
+				var m = this.__selectrect;
 				this.__selectrect = undefined;
+				m.closeOverlay();
 			}
 
 		}.bind(this);
@@ -439,6 +643,7 @@ define.class("$ui/view", function(require,
 		this.screen.globalkeydown = function(ev) {
 			if (ev.code === 84 && ev.ctrl && ev.shift) {
 				this.setASTObjectProperty(this, "visible", !this.visible);
+				this.ensureDeps();
 				this.screen.composition.commitAST();
 				return;
 			}
@@ -462,6 +667,7 @@ define.class("$ui/view", function(require,
 					}
 				}
 				if (commit) {
+					this.ensureDeps();
 					this.screen.composition.commitAST();
 				}
 			}
@@ -479,7 +685,7 @@ define.class("$ui/view", function(require,
 				var param = main.params[i];
 				if (param && param.id && param.id.name) {
 					var name = param.id.name;
-					if (name.startsWith('$') && name.endsWith('$')) {
+					if (name[0] === '$' && name[name.length - 1] === '$') {
 						at = name;
 					} else {
 						if (!plist[at]) {
@@ -494,26 +700,50 @@ define.class("$ui/view", function(require,
 
 		if (this.components) {
 			var missing = {};
-			for (var key in this.components) {
-				if (this.components.hasOwnProperty(key)) {
-					var section = this.components[key];
-					for (var s=0;s<section.length;s++) {
-						var compdef = section[s];
+			if (Array.isArray(this.components)) {
+				for (var i=0;i<this.components.length;i++) {
+					var compdef = this.components[i];
 
-						var classname = compdef.classname;
-						if (classname) {
-							var cdir = compdef.classdir || "$$";
+					var classname = compdef.classname;
+					if (classname) {
+						var cdir = compdef.classdir || "$$";
 
-							var included = plist[cdir];
-							if (!included) {
-								included = [];
+						var included = plist[cdir];
+						if (!included) {
+							included = [];
+						}
+
+						if (included.indexOf(classname) < 0) {
+							if (!missing[cdir]) {
+								missing[cdir] = []
 							}
+							missing[cdir].push(classname)
+						}
+					}
+				}
+			} else {
 
-							if (included.indexOf(classname) < 0) {
-								if (!missing[cdir]) {
-									missing[cdir] = []
+				for (var key in this.components) {
+					if (this.components.hasOwnProperty(key)) {
+						var section = this.components[key];
+						for (var s=0;s<section.length;s++) {
+							var compdef = section[s];
+
+							var classname = compdef.classname;
+							if (classname) {
+								var cdir = compdef.classdir || "$$";
+
+								var included = plist[cdir];
+								if (!included) {
+									included = [];
 								}
-								missing[cdir].push(classname)
+
+								if (included.indexOf(classname) < 0) {
+									if (!missing[cdir]) {
+										missing[cdir] = []
+									}
+									missing[cdir].push(classname)
+								}
 							}
 						}
 					}
@@ -539,53 +769,58 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	this.edgeCursor = function (ev) {
+	this.edgeCursor = function (ev, useview) {
 		var resize = false;
-		if (ev.view === this || (this.testView(ev.view) && ev.view.toolmove !== false)) {
-			var pos = ev.view.globalToLocal(ev.pointer.position);
+
+		var vw = useview || ev.view;
+
+		if (vw === this || (this.testView(vw) && ev.view.toolmove !== false)) {
+			var pos = vw.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 
-			ev.view.cursor = 'arrow';
+			vw.cursor = 'arrow';
 
 			if (pos.x < edge && pos.y < edge) {
 				resize = "top-left";
-				ev.view.cursor = 'nwse-resize'
+				vw.cursor = 'nwse-resize'
 
-			} else if (pos.x > ev.view.width - edge && pos.y < edge) {
+			} else if (pos.x > vw.width - edge && pos.y < edge) {
 				resize = "top-right";
-				ev.view.cursor = 'nesw-resize'
+				vw.cursor = 'nesw-resize'
 
-			} else if (pos.x < edge && pos.y > ev.view.height - edge) {
+			} else if (pos.x < edge && pos.y > vw.height - edge) {
 				resize = "bottom-left";
-				ev.view.cursor = 'nesw-resize'
+				vw.cursor = 'nesw-resize'
 
-			} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
+			} else if (pos.x > vw.width - edge && pos.y > vw.height - edge) {
 				resize = "bottom-right";
-				ev.view.cursor = 'nwse-resize'
+				vw.cursor = 'nwse-resize'
 
 			} else if (pos.x < edge) {
 				resize = "left";
-				ev.view.cursor = 'ew-resize'
+				vw.cursor = 'ew-resize'
 
 			} else if (pos.y < edge) {
 				resize = "top";
-				ev.view.cursor = 'ns-resize'
+				vw.cursor = 'ns-resize'
 
-			} else if (pos.x > ev.view.width - edge) {
+			} else if (pos.x > vw.width - edge) {
 				resize = "right";
-				ev.view.cursor = 'ew-resize'
+				vw.cursor = 'ew-resize'
 
-			} else if (pos.y > ev.view.height - edge) {
+			} else if (pos.y > vw.height - edge) {
 				resize = "bottom";
-				ev.view.cursor = 'ns-resize'
+				vw.cursor = 'ns-resize'
 			}
 
 			if (!resize) {
-				ev.view.cursor = 'arrow';
+				vw.cursor = 'arrow';
 			}
 
-		} else if (ev.view.tooltarget === false) {
-			//ev.view.cursor = 'not-allowed';
+		} else if (vw.toolallow === false) {
+			vw.cursor = 'not-allowed';
+		} else {
+			vw.cursor = 'arrow';
 		}
 
 		return resize;
@@ -687,8 +922,14 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	this.setASTObjectProperty = function(v, name, value) {
-		v[name] = value;
+	this.setASTObjectProperty = function(v, name, value, setval) {
+		if (v == this.screen) {
+			console.error("how did a screen get selected to be edited?")
+			return;
+		}
+		if (setval !== false) {
+			v[name] = value;
+		}
 
 		var ast = v.seekASTNode({type:"Object", index:0});
 
@@ -708,7 +949,7 @@ define.class("$ui/view", function(require,
 				found.value = this.buildValueNode(value);
 			}
 		} else {
-			ast = t.getASTNode();
+			ast = v.getASTNode();
 			if (ast) {
 				var args = {};
 				args[name] = value;
@@ -721,7 +962,7 @@ define.class("$ui/view", function(require,
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
 		this.bordercolorfn = function(pos) {
-			var speed = time * 17.0;
+			var speed = time * 27.0;
 			var size = 0.0008;
 			var slices = 3.5;
 			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
@@ -734,20 +975,158 @@ define.class("$ui/view", function(require,
 		this.tooltarget = false;
 	});
 
-	define.class(this,"selectedrect",view,function() {
-		this.name = "selectorrect";
+	define.class(this, "selectedrect", view, function() {
+		this.visible = wire('this.outer.visible');
+		this.attributes = {
+			borderseed:Math.random() + 17.0,
+			target:Config({persist:true, type:Object})
+		};
 		this.bordercolorfn = function(pos) {
-//			var speed = time * 20.0;
-			var speed = 0.0;
 			var size = 0.02;
 			var slices = 2.0;
-			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
+			var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + this.borderseed), slices));
 			return vec4((v + 1) * vec3(0.9, 0.5, 0.8), 0.8);
-		}
-		this.borderwidth = 2;
+		};
+
+		this.minimumborderradius = 3;
+		this.borderradius = this.minimumborderradius;
+		this.onborderradius = function(ev,v,o) {
+			if (v) {
+				for (var i = 0; i < v.length; i++) {
+					if (!v[i]) {
+						v[i] = this.minimumborderradius;
+					}
+				}
+			}
+		};
+
+		this.borderwidth = 4;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
+		this.ontarget = function(ev,v,o) {
+			this.pos = vec2(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0);
+			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
+			this.rotate = v.rotate;
+
+			if (v.borderradius && v.borderradius[0] + v.borderradius[1] + v.borderradius[2] + v.borderradius[3]) {
+				this.borderradius = v.borderradius;
+			}
+
+			v.onsize = function(ev,v,o) {
+				this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
+			}.bind(this);
+
+			v.onpos = function(ev,v,o) {
+				var x = v.x - (this.borderwidth[0] + this.borderwidth[1]) / 2.0;
+				var y = v.y - (this.borderwidth[2] + this.borderwidth[3]) / 2.0;
+				var p = o;
+				while (p = p.parent) {
+					x = x + p.x;
+					y = y + p.y;
+				}
+				this.pos = vec3(x, y, v.z);
+			}.bind(this);
+
+			v.onrotate = function(ev,v,o) {
+				this.rotate = v;
+			}.bind(this);
+
+			v.onborderradius = function(ev,v,o) {
+				this.borderradius = v;
+			}.bind(this);
+		}
+ 	});
+
+	define.class(this, "ruler", view, function() {
+		this.visible = wire('this.outer.visible');
+		this.bgcolor = NaN;
+		this.position = "absolute";
+		this.tooltarget = false;
+		this.borderwidth = vec4(10.0,10.0,10.0,10.0);
+		this.attributes = {
+			target:Config({type:Object}),
+			rulertickwidth:1,
+			rulertickspacing:10.0,
+			rulermajorevery:10,
+			rulermajorcolor:vec4("#F9F6F4"),
+			rulerminorcolor:vec4("#B0C4DE"),
+			rulermarkstartcolor:vec4("#FFCC00"),
+			rulermarkstart:vec2(0,0),
+			rulermarkendcolor:vec4("#FF0080"),
+			rulermarkend:vec2(0,0),
+			bordercolorfn:function(p) {
+				var atx = p.x * layout.width;
+				var aty = p.y * layout.height;
+				if ((aty > borderwidth[2] && aty < layout.height - borderwidth[3]) && (atx < borderwidth[0] || atx > layout.width - borderwidth[1])) {
+					if (aty > rulermarkstart[1] - rulertickwidth * 0.5 && aty < rulermarkstart[1] + rulertickwidth * 0.5) {
+						return rulermarkstartcolor;
+					} else if (aty > rulermarkend[1] - rulertickwidth * 0.5 && aty < rulermarkend[1] + rulertickwidth * 0.5) {
+						return rulermarkendcolor;
+					}
+
+					var c = int(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
+					if (c < int(rulertickwidth * 2.0)) {
+						return rulermajorcolor;
+					}
+
+					if (atx < borderwidth[0] * 0.5 || atx > layout.width - borderwidth[1] * 0.5) {
+						var m = int(mod(gl_FragCoord.y, rulertickspacing));
+						if (m < int(rulertickwidth)) {
+							return rulerminorcolor;
+						}
+					}
+				}
+				else if ((atx > borderwidth[0] && atx < layout.width - borderwidth[1]) && (aty < borderwidth[2] || aty > layout.height - borderwidth[3])) {
+
+					if (atx > rulermarkstart[0] - rulertickwidth * 0.5 && atx < rulermarkstart[0] + rulertickwidth * 0.5) {
+						return rulermarkstartcolor;
+					} else if (atx > rulermarkend[0] - rulertickwidth * 0.5 && atx < rulermarkend[0] + rulertickwidth * 0.5) {
+						return rulermarkendcolor;
+					}
+
+					var b = int(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
+					if (b < int(rulertickwidth * 2.0)) {
+						return rulermajorcolor;
+					}
+
+					if (aty < borderwidth[2] * 0.5 || aty > layout.height - borderwidth[3] * 0.5) {
+						var n = int(mod(gl_FragCoord.x, rulertickspacing));
+						if (n < int(rulertickwidth)) {
+							return rulerminorcolor;
+						}
+					}
+
+				}
+				return bordercolor;
+			}
+		};
+		this.ontarget = function(ev,v,o) {
+			if (!v) {
+				this.visible = false;
+				return;
+			}
+			this.visible = wire('this.outer.visible');
+			this.pos = vec2(v._layout.absx, v._layout.absy);
+			this.size = vec2(v._layout.width, v._layout.height);
+			this.rotate = v.rotate;
+            //
+			//v.onsize = function(ev,v,o) {
+			//	this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
+			//}.bind(this);
+            //
+			//v.onpos = function(ev,v,o) {
+			//	this.pos = vec3(v._layout.absx, v._layout.absy, v.z);
+			//}.bind(this);
+            //
+			//v.onrotate = function(ev,v,o) {
+			//	this.rotate = v;
+			//}.bind(this);
+            //
+			//v.onborderradius = function(ev,v,o) {
+			//	this.borderradius = v;
+			//}.bind(this);
+		}
 	});
 
 	define.class(this, 'panel', view, function(){
@@ -758,7 +1137,7 @@ define.class("$ui/view", function(require,
 
 		this.padding = 0;
 		this.margin = 4;
-		this.borderradius =  vec4(10,10,1,1);
+		this.borderradius = vec4(10,10,1,1);
 		this.bgcolor = NaN;
 		this.flex = 1;
 		this.flexdirection ="column";
@@ -767,6 +1146,7 @@ define.class("$ui/view", function(require,
 		this.render = function(){
 			return [
 				label({
+					y:1,
 					alignself:'flex-start',
 					fgcolor:"white",
 					text:this.title,
@@ -792,21 +1172,6 @@ define.class("$ui/view", function(require,
 		return ok;
 	};
 
-	this.animatedbordercolorfn = function(pos) {
-		var speed = time * 17.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.staticbordercolorfn = function(pos) {
-		var speed = 17.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (pos.x - pos.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-
 	this.render = function() {
 		var views = [];
 
@@ -828,14 +1193,16 @@ define.class("$ui/view", function(require,
 						}
 					},
 					pointerend:function(p) {
-						if (this.parent.position === "absolute") {
-							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+						var parent = this.parent
+						if (parent.testView && parent.toolmove !== false  && parent.position === "absolute") {
+							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 
-							this.parent.setASTObjectProperty(this.parent, "position", "absolute");
-							this.parent.setASTObjectProperty(this.parent, "x", this.parent.x);
-							this.parent.setASTObjectProperty(this.parent, "y", this.parent.y);
-							this.parent.setASTObjectProperty(this.parent, "width", this.parent.width);
-							this.parent.setASTObjectProperty(this.parent, "height", this.parent.height);
+							parent.setASTObjectProperty(parent, "position", "absolute");
+							parent.setASTObjectProperty(parent, "x", parent._layout.absx);
+							parent.setASTObjectProperty(parent, "y", parent._layout.absy);
+							parent.setASTObjectProperty(parent, "width", parent._layout.width);
+							parent.setASTObjectProperty(parent, "height", parent._layout.height);
+							parent.ensureDeps();
 							this.screen.composition.commitAST();
 						}
 						this.screen.pointer.cursor = "arrow";
@@ -857,13 +1224,14 @@ define.class("$ui/view", function(require,
 					marginright:5,
 					onclick:function(ev,v,o) {
 						this.setASTObjectProperty(this, "visible", false);
+						this.ensureDeps();
 						this.screen.composition.commitAST();
 					}.bind(this)
 				}))
 			]
 		}
 
-		views.push(this.panel({alignitems:"stretch", aligncontent:"stretch", title:"Components", flex:1.1},
+		views.push(this.panel({title:"Components", flex:1.0},
 			palette({
 				name:"components",
 				flex:1,
@@ -873,12 +1241,12 @@ define.class("$ui/view", function(require,
 				dropTest:function(ev, v, item, orig, dv) {
 					//var name = v && v.name ? v.name : "unknown";
 					//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
-					return this.testView(v);
+					return v !== this && this.testView(v);
 				}.bind(this),
 
 				drop:function(ev, v, item, orig, dv) {
 					var name = v && v.name ? v.name : "unknown";
-					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
+//					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
 
 					if (v) {
 						var node = v.getASTNode();
@@ -907,12 +1275,13 @@ define.class("$ui/view", function(require,
 								params.position = 'absolute';
 								params.x = pos.x;
 								params.y = pos.y;
-								console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
+								//console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);
 
 								node.args.push(this.buildCallNode(item.classname, params));
 
 							}
 
+							this.ensureDeps();
 							this.screen.composition.commitAST();
 
 							//TODO set propviewer to inspect new object on reload?
@@ -932,7 +1301,7 @@ define.class("$ui/view", function(require,
 			treeview({
 				flex:1,
 				name:"structure",
-				init:function() {
+				reload:function() {
 					var swalk = function (v) {
 						if (v.tooltarget !== false) {
 							var children = [];
@@ -947,20 +1316,27 @@ define.class("$ui/view", function(require,
 							if (v.name) {
 								name = v.name + " (" + name + ")"
 							}
+							var selected = (!!(this.selection) && this.selection.indexOf(v) > -1);
 							return {
 								name:name,
 								children: children,
+								selected: selected,
 								collapsed:(v.constructor.name !== "screen"),
 								view:v
 							}
 						}
-					};
-
+					}.bind(this.parent.outer);
 					this.data = swalk(this.screen);
+				},
+				init:function() {
+					this.reload();
 				},
 				onselect:function(ev) {
 					if (ev && ev.item && ev.item.view) {
-						this.selection = [ev.item.view]
+						var astpath = JSON.stringify(ev.item.view.getASTPath());
+						if (!this.watch || this.watch.indexOf(astpath) < 0) {
+							this.watch = [astpath];
+						}
 					}
 				}.bind(this)
 			})
@@ -980,14 +1356,50 @@ define.class("$ui/view", function(require,
 							t = editor.find(t);
 						}
 
-						if (t) {
+						if (t && (t == this || this.testView(t)) && t.tooledit !== false) {
 							this.setASTObjectProperty(t, editor.propertyname, val);
+							this.__needscommit = true;
 						}
 					}
-					if (commit) {
+					if (commit && this.__needscommit) {
+						this.__needscommit = false;
+						this.ensureDeps();
 						this.screen.composition.commitAST();
 					}
-				}.bind(this)
+				}.bind(this),
+				ontarget:function(ev,v,o) {
+					if (v) {
+						v.focus = true;
+						if (this.__ruler) {
+							this.__ruler.closeOverlay();
+						}
+						if (this.rulers && this.testView(v)) {
+							this.__ruler = this.screen.openOverlay(this.ruler);
+							this.__ruler.target = v;
+						}
+					}
+				}.bind(this),
+				astarget:Config({type:String, persist:true}),
+				onastarget:function(ev,v,o) {
+					var node = this.screen;
+
+					if (v) {
+						var astpath = JSON.parse(v);
+						// console.log('path', astpath);
+						for (var i=1;i<astpath.length;i++) {
+							var pathitem = astpath[i];
+							var child = node.children[pathitem.childindex];
+							if (child && pathitem.type == child.constructor.name) {
+								node = child;
+							} else {
+								node = undefined;
+								break;
+							}
+						}
+					}
+
+					this.target = node;
+				}
 			})
 		));
 

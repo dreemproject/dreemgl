@@ -555,8 +555,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.mesh = this.textgeom.array()
 
 	// this thing makes a new text array buffer
-	this.newText = function(){
-		var buf = this.textgeom.array()
+	this.newText = function(length){
+		var buf = this.textgeom.array((length||0)*6)
 		buf.font = this.font
 		buf.clear()
 		return buf

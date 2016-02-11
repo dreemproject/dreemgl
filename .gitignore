@@ -1,7 +1,7 @@
 .idea
 **/.idea
 build/
-data/
+/data/
 node_modules/
 cache/
 .DS_Store

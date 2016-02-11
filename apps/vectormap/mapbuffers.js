@@ -2,7 +2,7 @@ define.class(function(require, $server$, service){
 	
 	var earcut = require('$system/lib/earcut-port.js')().earcut;
 
-	this.TileSize = 1024.0 ;
+	this.TileSize = 256.0;
 
 	
 	var KindSet = this.KindSet = {};
@@ -46,8 +46,8 @@ define.class(function(require, $server$, service){
 			color2: vec4("#38523d"),
 		},
 		national_park:{
-			color1:vec4("#608010"),
-			color2:vec4("#f0f020")
+			color1:0.22,
+			color2:0.22
 		},
 		park:{
 			offset:-7,
@@ -99,8 +99,8 @@ define.class(function(require, $server$, service){
 		},
 		grass:{
 			offset:-18,
-			color1: vec4(0.250980406999588,0.8156862854957581,0.125490203499794,1),
-			color2: vec4(0,0.501960813999176,0,1),
+			color1: 0.1,
+			color2: 0.12,
 		},
 		sports_centre:{
 			offset:-23,
@@ -168,7 +168,7 @@ define.class(function(require, $server$, service){
 		},
 		playground:{
 			offset:-19,
-			color1: vec4(0.7490196228027344,1,0,1),
+			color1: 0.15,
 			color2: vec4(1,0,0,1),
 		},
 		stadium:{
@@ -257,13 +257,13 @@ define.class(function(require, $server$, service){
 		},
 		breakwater:{
 			offset:-20,
-			color1: vec4(0,0,1,1),
-			color2: vec4(0,0,1,1),
+			color1: 0,
+			color2: 0,
 		},
 		water:{
 			offset:0,
-			color1: vec4(0,0,1,0.1),
-			color2: vec4(0,0,1,0.8),
+			color1:0,
+			color2: 0,
 		},
 		building:{
 			color1:vec4("white"),
@@ -313,6 +313,12 @@ define.class(function(require, $server$, service){
 		var st = this.mapstyle[a];
 		if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
 		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
+		if(typeof st.color1 == "object"){
+			st.color1 = st.color1[0];	
+			if(st.color1 <= 0) {
+				st.color1 = 0.8 ;
+			}
+		};
 	}}
 	
 	this.dumpkindset = function(){
@@ -504,8 +510,8 @@ define.class(function(require, $server$, service){
 			var off = 0;
 			var land = areas[i];
 			
-			var color1 = vec4(1,0,1,1);
-			var color2 = vec4(1,0,1,1);
+			var color1 = 0;
+			var color2 = 0;
 			var t = mapstyle[land.kind];
 			if (!t) t = mapstyle["default"];
 			if (t.color1) color1 = t.color1;else UnhandledKindSet[land.kind] = "land - no color1";
@@ -534,7 +540,7 @@ define.class(function(require, $server$, service){
 						array[o + 0] = tris[a]
 						array[o + 1] = tris[a + 1]
 						//array[o + 2] = off
-						array[o + 2] = color1[0]
+						array[o + 2] = color1
 						//array[o + 4] = color1[1]
 						//array[o + 5] = color1[2]
 						//array[o + 6] = color1[3]
@@ -753,7 +759,8 @@ define.class(function(require, $server$, service){
 		var Allset = [];
 		var Places = [];
 		var Sarcs= sourcedata.arcs;
-
+	
+		target.transform = sourcedata.transform;
 		var objects = sourcedata.objects;
 		var BuildingGeoms = objects.buildings.geometries
 		for (var i = 0;i<BuildingGeoms.length;i++){

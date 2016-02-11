@@ -37,14 +37,14 @@ define.class(function(require, $server$, service){
 
 	this.meters_per_pixel = [];
 	this.metersPerPixel = function (z) {
-		meters_per_pixel[z] = meters_per_pixel[z] || this.min_zoom_meters_per_pixel / Math.pow(2, z);
-		return meters_per_pixel[z];
+		this.meters_per_pixel[z] = this.meters_per_pixel[z] || this.min_zoom_meters_per_pixel / Math.pow(2, z);
+		return this.meters_per_pixel[z];
 	};
 
 	this.meters_per_tile = [];
 	this.metersPerTile = function (z) {
-		meters_per_tile[z] = meters_per_tile[z] || this.circumference_meters / Math.pow(2, z);
-		return meters_per_tile[z];
+		this.meters_per_tile[z] = this.meters_per_tile[z] || this.circumference_meters / Math.pow(2, z);
+		return this.meters_per_tile[z];
 	};
 
 	// Conversion functions based on an defined tile scale
