@@ -316,7 +316,7 @@ define.class(function(require, $server$, service){
 		if(typeof st.color1 == "object"){
 			st.color1 = st.color1[0];	
 			if(st.color1 <= 0) {
-				st.color1 = 0.2 + 0.5*Math.random();
+				st.color1 = 0.8 ;
 			}
 		};
 	}}

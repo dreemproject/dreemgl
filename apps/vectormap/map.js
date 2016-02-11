@@ -175,7 +175,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var dy = this.centers[q.z][1] - q.y;
 					
 					var dz = (20-q.z)*zscalar;
-					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
 					var dist = (dx * dx + dy * dy) * (50000 - dz);
 					dellist.push({hash:keys[i], dist:dist})
 					
@@ -255,11 +254,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.updateLoadQueue = function(){
 
 			if (this.currentRequest) return; // already loading something...
-			//console.log("queuelen: " , this.loadqueue.length);
 			if (this.loadqueue.length > 0){
 				
-			//	console.log(this.centers);
-			//	console.log("queuelen: " , this.loadqueue.length);
 				var zscalar = 1280;
 
 				// sort queue on distance to cursor
@@ -269,7 +265,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					var dy = this.centers[q.z][1] - q.y;
 					
 					var dz = (20-q.z)*zscalar;
-					//console.log(dx,dy,dz, q.z, this.centers[q.z]);
 					q.dist = (dx * dx + dy * dy) * (50000 - dz);
 				}
 
@@ -279,19 +274,12 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					return 0;
 				});
 
-				//console.log(this.loadqueue);
-				//var queuedist = ""
-				//for (var i = 0;i<this.loadqueue.length;i++){
-				//	queuedist += this.loadqueue[i].dist + " ";
-				//}
-				//console.log(queuedist);
 				var R =	this.currentRequest = this.loadqueue.pop();
 				this.rpc.urlfetch.grabmap(R.x, R.y, R.z).then(function(result){
 					this.loadstring(result.value)
 				}.bind(this));
 
 				// take closest one from the queue
-				// this.requestPending = true;
 			}
 		}
 
@@ -300,7 +288,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		}
 
 		this.gotoCity = function(name, zoom, time){
-			//console.log(this, name, this.cities);
 			if (!name || name.length == 0) return ;
 			var n2 = name.toLowerCase().replace(' ', '');
 
@@ -391,7 +378,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
-
+		
 		var ray_nds  = vec3(mx,my,1);
 		var ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0,1.0);
 		
@@ -431,23 +418,36 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.dragging = false;
 	this.startvect = vec2(0);
 	this.startDrag = function(ev){
-		var R = this.projectonplane( this.globalToLocal(ev.position));
+		
+		var coord  =  this.globalToLocal(ev.position);
+		var R = this.projectonplane( coord);
+		
 		if (R){
-			this.startvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8))
-			this.startcenter = vec2(this.centerx, this.centery);
-			this.updateTiles();
+			this.startvect = vec2(R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 16))
+			
+			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
+						
+			this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
+			this.moveDrag(ev);
 		}
 	}
 	
 	this.moveDrag = function(ev){
-		var R = this.projectonplane( this.globalToLocal(ev.position));
+		
+		var coord  =  this.globalToLocal(ev.position);	
+		var R = this.projectonplane( coord);
 		if (R){
 			
-			this.newvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8) )
-			
-			this.dataset.setCenter( this.startvect[0] - this.newvect[0] + this.startcenter[0],
-			 this.startvect[1] - this.newvect[1] + this.startcenter[1], this.zoomlevel);
-			this.updateTiles();
+			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize *16) )
+			var newcenter = vec2( 
+					(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel) ,
+					-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel) );
+			//var meters = geo.metersForTile({x:newcenter[0], y:newcenter[1], z:this.zoomlevel});
+			var latlong = geo.metersToLatLng(newcenter[0], newcenter[1]);
+			latlong[0] += this.startcenter[0];
+			latlong[1] += this.startcenter[1];
+			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel);
+			 this.updateTiles();
 
 		}
 	}
@@ -508,7 +508,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			var R = this.calctilepos();
 			this.tilename = "tile" + alltiles.toString() + "_"+ this.layeroffset;
 			alltiles++;
-//			console.log(this.tilename);
 			this.lastpos = vec3(R[0], R[1], R[2]);
 		}
 
@@ -771,7 +770,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 					thelabels.push(l2);
 				}
 			}
-			//console.log(ranks);
 			this.labels = thelabels;
 		}
 		
