@@ -33,6 +33,7 @@ define.class(function(require, exports){
 	}
 
 	exports.resolveReturn = this.resolveReturn = function(msg){
+		if(!this.promises) return
 		var promise = this.promises[msg.uid]
 		if(!promise) return console.log('Error resolving RPC promise id ' + msg.uid)
 		this.uid_free.push(msg.uid)
