@@ -30,6 +30,11 @@ define.class('$ui/view', function(require, $$, geo){
 		}
 	}
 
+	
+	this.onpointerout  = function(event) {
+		this.hoverid = -1;
+	}
+
 	this.ondata = function (data) {
 		this.pickrange = this.data.length
 	}
@@ -63,7 +68,7 @@ define.class('$ui/view', function(require, $$, geo){
 				var meters = geo.latLngToMeters(latlong[0], latlong[1])
 				// TODO(aki): move to correct position on transformed map
 				//console.log(meters)
-				var geopos = vec3(meters[0] , meters[1] )
+				var geopos = vec2(meters[0] , meters[1] )
 				GLGeom.createCylinder(10, -200, 20, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
 					this.mesh.push(v1, geopos, n1, t1, i);
 					this.mesh.push(v2, geopos, n2, t2, i);
