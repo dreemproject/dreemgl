@@ -28,11 +28,11 @@ define.class("$server/composition",function(require, $ui$, checkbox, button, ico
 				),
 				toolkit({
 					position:'absolute', 
-					x:1086, 
-					y:28.000831604003906, 
+					x:1068, 
+					y:42.00083541870117, 
 					width:393, 
 					height:788, 
-					visible:false, 
+					visible:true, 
 					animateborder:false, 
 					rulers:true
 				}

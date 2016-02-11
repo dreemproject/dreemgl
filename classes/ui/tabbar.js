@@ -8,22 +8,18 @@ define.class("$ui/view", function($ui$, view, label){
 
 
 	this.attributes = {
+
+	};
+
+	this.bgcolor = "green";
+	this.size = vec2(100,400);
+
+	var tabbar = this.constructor;
+	this.constructor.examples = {
+		Usage: function() {
+			return [
+				tabbar()
+			]
+		}
 	}
-
-	this.render = function() {
-
-	}
-
-
-	//var icon = this.constructor
-	//this.constructor.examples = {
-	//	Usage: function(){
-	//		return [
-	//			icon({icon:"flask", fontsize: 30, fgcolor: "red"})
-	//			,icon({icon:"youtube", fontsize: 30, fgcolor: "green"})
-	//			,icon({icon:"gears", fontsize: 30, fgcolor: "yellow"})
-	//			,icon({icon:"twitter", fontsize: 30, fgcolor: "blue"})
-	//		]
-	//	}
-	//}
 })

@@ -572,6 +572,7 @@ define.class("$ui/view", function(require,
 			}
 
 			if (commit) {
+				this.ensureDeps();
 				this.screen.composition.commitAST();
 			}
 
@@ -622,6 +623,7 @@ define.class("$ui/view", function(require,
 		this.screen.globalkeydown = function(ev) {
 			if (ev.code === 84 && ev.ctrl && ev.shift) {
 				this.setASTObjectProperty(this, "visible", !this.visible);
+				this.ensureDeps();
 				this.screen.composition.commitAST();
 				return;
 			}
@@ -645,6 +647,7 @@ define.class("$ui/view", function(require,
 					}
 				}
 				if (commit) {
+					this.ensureDeps();
 					this.screen.composition.commitAST();
 				}
 			}
@@ -677,26 +680,50 @@ define.class("$ui/view", function(require,
 
 		if (this.components) {
 			var missing = {};
-			for (var key in this.components) {
-				if (this.components.hasOwnProperty(key)) {
-					var section = this.components[key];
-					for (var s=0;s<section.length;s++) {
-						var compdef = section[s];
+			if (Array.isArray(this.components)) {
+				for (var i=0;i<this.components.length;i++) {
+					var compdef = this.components[i];
 
-						var classname = compdef.classname;
-						if (classname) {
-							var cdir = compdef.classdir || "$$";
+					var classname = compdef.classname;
+					if (classname) {
+						var cdir = compdef.classdir || "$$";
 
-							var included = plist[cdir];
-							if (!included) {
-								included = [];
+						var included = plist[cdir];
+						if (!included) {
+							included = [];
+						}
+
+						if (included.indexOf(classname) < 0) {
+							if (!missing[cdir]) {
+								missing[cdir] = []
 							}
+							missing[cdir].push(classname)
+						}
+					}
+				}
+			} else {
 
-							if (included.indexOf(classname) < 0) {
-								if (!missing[cdir]) {
-									missing[cdir] = []
+				for (var key in this.components) {
+					if (this.components.hasOwnProperty(key)) {
+						var section = this.components[key];
+						for (var s=0;s<section.length;s++) {
+							var compdef = section[s];
+
+							var classname = compdef.classname;
+							if (classname) {
+								var cdir = compdef.classdir || "$$";
+
+								var included = plist[cdir];
+								if (!included) {
+									included = [];
 								}
-								missing[cdir].push(classname)
+
+								if (included.indexOf(classname) < 0) {
+									if (!missing[cdir]) {
+										missing[cdir] = []
+									}
+									missing[cdir].push(classname)
+								}
 							}
 						}
 					}
@@ -1151,6 +1178,7 @@ define.class("$ui/view", function(require,
 							parent.setASTObjectProperty(parent, "y", parent._layout.absy);
 							parent.setASTObjectProperty(parent, "width", parent._layout.width);
 							parent.setASTObjectProperty(parent, "height", parent._layout.height);
+							this.ensureDeps();
 							this.screen.composition.commitAST();
 						}
 						this.screen.pointer.cursor = "arrow";
@@ -1172,6 +1200,7 @@ define.class("$ui/view", function(require,
 					marginright:5,
 					onclick:function(ev,v,o) {
 						this.setASTObjectProperty(this, "visible", false);
+						this.ensureDeps();
 						this.screen.composition.commitAST();
 					}.bind(this)
 				}))
@@ -1228,6 +1257,7 @@ define.class("$ui/view", function(require,
 
 							}
 
+							this.ensureDeps();
 							this.screen.composition.commitAST();
 
 							//TODO set propviewer to inspect new object on reload?
@@ -1309,6 +1339,7 @@ define.class("$ui/view", function(require,
 					}
 					if (commit && this.__needscommit) {
 						this.__needscommit = false;
+						this.ensureDeps();
 						this.screen.composition.commitAST();
 					}
 				}.bind(this),
