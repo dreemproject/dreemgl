@@ -382,7 +382,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var coord  =  this.globalToLocal(ev.position);
 		var R = this.projectonplane( coord);
 		if (R){
-			this.startvect = vec2(R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 16))
+			this.startvect = vec2(R[0]/(BufferGen.TileSize * 32),R[2]/(BufferGen.TileSize * 32))
 			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
 			this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
 			this.moveDrag(ev);
@@ -395,7 +395,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var R = this.projectonplane( coord);
 		if (R){
 
-			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize *16) )
+			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 32),R[2]/(BufferGen.TileSize * 32) )
 			var newcenter = vec2(
 					(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel) ,
 					-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel) );
