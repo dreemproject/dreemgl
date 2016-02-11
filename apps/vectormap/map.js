@@ -391,7 +391,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
-
+		
 		var ray_nds  = vec3(mx,my,1);
 		var ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0,1.0);
 		
@@ -431,23 +431,42 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	this.dragging = false;
 	this.startvect = vec2(0);
 	this.startDrag = function(ev){
-		var R = this.projectonplane( this.globalToLocal(ev.position));
+		
+		var coord  =  this.globalToLocal(ev.position);
+		console.log("startcoord", coord);
+		var R = this.projectonplane( coord);
+		
 		if (R){
-			this.startvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8))
-			this.startcenter = vec2(this.centerx, this.centery);
-			this.updateTiles();
+			this.startvect = vec2(R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 16))
+			
+			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
+						
+			this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
+			console.log("startcenter", this.startcenter);
+			this.moveDrag(ev);
 		}
 	}
 	
 	this.moveDrag = function(ev){
-		var R = this.projectonplane( this.globalToLocal(ev.position));
+		
+		var coord  =  this.globalToLocal(ev.position);
+		console.log("firstcoord", coord);
+		
+		var R = this.projectonplane( coord);
 		if (R){
 			
-			this.newvect = vec2(R[0]/(BufferGen.TileSize * 8),R[2]/(BufferGen.TileSize * 8) )
-			
-			this.dataset.setCenter( this.startvect[0] - this.newvect[0] + this.startcenter[0],
-			 this.startvect[1] - this.newvect[1] + this.startcenter[1], this.zoomlevel);
-			this.updateTiles();
+			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize *16) )
+			var newcenter = vec2( 
+					(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel) ,
+					-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel) );
+			//var meters = geo.metersForTile({x:newcenter[0], y:newcenter[1], z:this.zoomlevel});
+			var latlong = geo.metersToLatLng(newcenter[0], newcenter[1]);
+			latlong[0] += this.startcenter[0];
+			latlong[1] += this.startcenter[1];
+			console.log(newcenter[0],this.newvect[1], this.startvect[1])
+			//		console.log("newcenter", newcenter, meters, latlong);
+		this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel);
+			 this.updateTiles();
 
 		}
 	}
