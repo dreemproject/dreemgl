@@ -64,7 +64,7 @@ define.class('$ui/view', function(require, $$, geo){
 				// TODO(aki): move to correct position on transformed map
 				//console.log(meters)
 				var geopos = vec3(meters[0] , meters[1] )
-				GLGeom.createSphere(100, 8, 8, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
+				GLGeom.createCylinder(10, -200, 20, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
 					this.mesh.push(v1, geopos, n1, t1, i);
 					this.mesh.push(v2, geopos, n2, t2, i);
 					this.mesh.push(v3, geopos, n3, t3, i);

@@ -192,6 +192,56 @@ define(function(require, exports){
 		cb(11, v1, v2, v3, n1, n2, n3, t1, t2, t3, 5);		
 	}
 	
+	exports.createCylinder = function(R,h, xdetail, cb){
+		for (var p = 0; p < xdetail ; p+=1) {
+			var angle1 = (p * (3.14159265359 * 2))/xdetail;
+			var angle2 = (p + 1) * (3.14159265359 * 2)/xdetail;
+			var ax = Math.sin(angle1)
+			var bx = Math.sin(angle2)
+			var ay = Math.cos(angle1)
+			var by = Math.cos(angle2)
+			
+			var nx = Math.sin((angle1 + angle2)/2)
+			var ny = Math.cos((angle1 + angle2)/2)
+		
+			var tx1 = p / xdetail;
+			var tx2 = (p + 1) / xdetail;
+			
+			var az = 0;
+			var az2 = h;
+			if (h< 0)
+			{
+				az = h;
+				az2 =0;
+			}
+			v1n1t1(ax*R,az,  ay*R, 0,-1,0,tx1,0); 
+			v2n2t2(bx*R,az,  by*R, 0,-1,0,tx2,0);
+			v3n3t3(   0,az,    0, 0,-1,0,tx2,0);		
+
+			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
+			
+			v1n1t1(ax*R,az,  ay*R, nx,0,ny,tx1,0); 
+			v2n2t2(bx*R,az,  by*R, nx,0,ny,tx2,0);
+			v3n3t3(ax*R,az2, ay*R, nx,0,ny,tx2,0);		
+
+			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
+			
+			v1n1t1(bx*R,az,  by*R, nx,0,ny,tx2,0);
+			v2n2t2(ax*R,az2, ay*R, nx,0,ny,tx2,0);		
+			v3n3t3(bx*R,az2, by*R, nx,0,ny,tx2,0);
+		
+			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
+			
+			
+			v1n1t1(ax*R,az2,  ay*R, 0,1,0,tx1,0); 
+			v2n2t2(bx*R,az2,  by*R, 0,1,0,tx2,0);
+			v3n3t3(   0,az2,    0, 0,1,0,tx2,0);		
+
+			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
+			
+		}
+	}
+	
 	exports.createSphere = function(R, xdetail,ydetail, cb) {		
 		for (var p = 0; p < xdetail ; p+=1) {
 			var angle1 = (p * (3.14159265359 * 2))/xdetail;
