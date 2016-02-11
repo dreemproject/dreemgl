@@ -1223,7 +1223,7 @@ define.class("$ui/view", function(require,
 
 				drop:function(ev, v, item, orig, dv) {
 					var name = v && v.name ? v.name : "unknown";
-					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
+//					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
 
 					if (v) {
 						var node = v.getASTNode();
@@ -1252,7 +1252,7 @@ define.class("$ui/view", function(require,
 								params.position = 'absolute';
 								params.x = pos.x;
 								params.y = pos.y;
-								console.log('Dropped ', item.classname, 'onto node:', node, 'with params', params);
+								//console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);
 
 								node.args.push(this.buildCallNode(item.classname, params));
 

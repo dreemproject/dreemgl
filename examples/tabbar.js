@@ -21,7 +21,9 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgr
 						toolrect:false
 					},
 					tabbar({tabs:["a","teo","tree"], position:'absolute', x:562.0107116699219, y:149}),
-					tabbar({tabs:["a","teo","tree"], position:'absolute', x:562.0107116699219, y:149})
+					tabbar({tabs:["a","teo","tree"], position:'absolute', x:562.0107116699219, y:149}),
+					tabbar({position:'absolute', x:452, y:256}),
+					tabbar({position:'absolute', x:760, y:298})
 				),
 				toolkit({
 					position:'absolute', 
