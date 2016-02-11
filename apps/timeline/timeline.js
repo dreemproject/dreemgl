@@ -1,10 +1,16 @@
 define.class('$ui/view', function (background, labels, events, scrollbar) {
 
+	this.flexdirection = 'column'
+	this.padding = vec4(0, 80, 0, 18)
+	this.bgcolor = NaN
+
 	this.attributes = {
+		data: Config({type: Array,  value: []}),
 		format: Config({type: Enum('12','24'),  value: "24"}),
 		zoom: Config({type: Number, value: 7}),
 		maxzoom: Config({type: Number, value: 365}),
-		scroll: Config({type: Number, value: 4})
+		scroll: Config({type: Number, value: 4}),
+		eventselected: Config({type:Event})
 	}
 
 	this.atDraw = function () {
@@ -79,11 +85,21 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 	}
 
+	this.ondata = function (data) {
+		this.find('events1').data = data.value[0].data
+		this.find('events2').data = data.value[1].data
+		this.find('events3').data = data.value[2].data
+		this.find('events4').data = data.value[3].data
+	}
+
 	this.render = function() {
 		return [
 			background({name: "background"}),
 			labels({name: "labels"}),
-			events({name: "events"}),
+			events({name: "events1"}),
+			events({name: "events2"}),
+			events({name: "events3"}),
+			events({name: "events4"}),
 			scrollbar({name: "scrollbar"})
 		]
 	}

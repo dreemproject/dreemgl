@@ -1,9 +1,9 @@
 define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 
-	this.flex = 1
-	this.flexdirection = 'column'
+	// this.flex = 1
+	// this.flexdirection = 'column'
+	// this.position = 'absolute'
 	this.fgcolor = 'black'
-	this.height = 200
 
 	this.attributes = {
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
@@ -12,6 +12,11 @@ define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 		//TODO(aki): why this breaks sahder
 		// value: Config({type: Number, value: wire('this.parent.scroll')})
 		// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})
+	}
+
+	this.layout = function(){
+		this.layout.top = 0
+		this.layout.height = this.parent.layout.height
 	}
 
 	this.hardrect = function(){
