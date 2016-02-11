@@ -6,20 +6,55 @@
 
 define.class("$ui/view", function($ui$, view, label){
 
-
 	this.attributes = {
-
+		tabs:Config({type:Array, value:[
+			{
+				title:"Tab 1"
+			}
+		]})
 	};
 
-	this.bgcolor = "green";
-	this.size = vec2(100,400);
+	this.flexdirection = "row";
+
+	this.render = function() {
+		var tabs = [];
+
+		if (this.tabs) {
+			for (var i=0;i<this.tabs.length;i++) {
+				var tab = this.tabs[i];
+				tabs.push(this.tab({
+					// accecpt various formats
+					text:typeof(tab) === "string" ? tab : (tab.title || tab.label || tab.text)
+				}))
+			}
+		}
+
+		return tabs;
+	};
+
+	define.class(this, "tab", view, function() {
+		this.attributes = {
+			text:"Untitled"
+		};
+		this.bgcolor = "black";
+		this.borderradius = vec4(5,5,0,0);
+		this.render = function() {
+			return label({
+				alignself:"stretch",
+				fgcolor:"white",
+				text:this.text,
+				padding:5,
+				bgcolor:NaN
+			})
+		};
+	});
 
 	var tabbar = this.constructor;
 	this.constructor.examples = {
 		Usage: function() {
 			return [
-				tabbar()
+				tabbar({tabs:["One", "Two", {label:"Three"}]})
 			]
 		}
 	}
-})
+});

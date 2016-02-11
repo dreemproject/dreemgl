@@ -1123,6 +1123,7 @@ define.class("$ui/view", function(require,
 		this.render = function(){
 			return [
 				label({
+					y:1,
 					alignself:'flex-start',
 					fgcolor:"white",
 					text:this.title,
@@ -1178,7 +1179,7 @@ define.class("$ui/view", function(require,
 							parent.setASTObjectProperty(parent, "y", parent._layout.absy);
 							parent.setASTObjectProperty(parent, "width", parent._layout.width);
 							parent.setASTObjectProperty(parent, "height", parent._layout.height);
-							this.ensureDeps();
+							parent.ensureDeps();
 							this.screen.composition.commitAST();
 						}
 						this.screen.pointer.cursor = "arrow";
