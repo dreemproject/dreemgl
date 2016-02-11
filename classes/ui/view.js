@@ -1041,7 +1041,7 @@ define.class('$system/base/node', function(require){
 
 		if(this._viewport){
 			if(parentmatrix) {
-				mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.viewportmatrix)
+				mat4.mat4_mul_mat4(this.modelmatrix, parentmatrix, this.viewportmatrix)
 			}
 			else{
 				this.viewportmatrix = this.modelmatrix
@@ -1051,7 +1051,7 @@ define.class('$system/base/node', function(require){
 			parentmatrix = mat4.identity();
 		}
 		else{
-			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4(parentmatrix, this.modelmatrix, this.totalmatrix)
+			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4( this.modelmatrix, parentmatrix, this.totalmatrix)
 		}
 
 		var children = this.children
