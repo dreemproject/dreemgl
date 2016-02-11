@@ -20,10 +20,10 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgr
 						toolmove:false, 
 						toolrect:false
 					},
-					tabbar({tabs:["a","teo","tree"], position:'absolute', x:562.0107116699219, y:149}),
-					tabbar({tabs:["a","teo","tree"], position:'absolute', x:562.0107116699219, y:149}),
-					tabbar({position:'absolute', x:452, y:256}),
-					tabbar({position:'absolute', x:760, y:298})
+					tabbar({tabs:["a","teo","tree"], position:'absolute', x:349.6718444824219, y:110.31996154785156, width:148.8994140625, height:44.160000000000004}),
+					tabbar({tabs:["a","teo","tree"], position:'absolute', x:725.0107421875, y:360}),
+					tabbar({tabs:["a","teo","tree"], position:'absolute', x:349.6718444824219, y:110.31996154785156, width:148.8994140625, height:44.160000000000004}),
+					tabbar({tabs:["a","teo","tree"], position:'absolute', x:725.0107421875, y:360})
 				),
 				toolkit({
 					position:'absolute', 

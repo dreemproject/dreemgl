@@ -15,17 +15,39 @@ define.class("$ui/view", function($ui$, view, label){
 	};
 
 	this.flexdirection = "row";
+	this.tooldragroot = true;
+
+	this.createTab = function(tab) {
+
+		// accecpt various formats
+		if (typeof(tab) === "string") {
+			return this.tab({
+				text:tab
+			})
+		} else if (typeof(tab) === "function") {
+			return this.tab(tab);
+		} else {
+			return this.tab({
+				text:(tab.title || tab.label || tab.text)
+			})
+		}
+
+	};
 
 	this.render = function() {
 		var tabs = [];
+		var i,tab;
+		if (this.constructor_children) {
+			for (i=0;i<this.constructor_children.length;i++) {
+				tab = this.constructor_children[i];
+				tabs.push(this.createTab(tab));
+			}
+		}
 
 		if (this.tabs) {
-			for (var i=0;i<this.tabs.length;i++) {
-				var tab = this.tabs[i];
-				tabs.push(this.tab({
-					// accecpt various formats
-					text:typeof(tab) === "string" ? tab : (tab.title || tab.label || tab.text)
-				}))
+			for (i=0;i<this.tabs.length;i++) {
+				tab = this.tabs[i];
+				tabs.push(this.createTab(tab));
 			}
 		}
 

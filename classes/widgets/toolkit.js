@@ -286,26 +286,39 @@ define.class("$ui/view", function(require,
 					//this.setASTObjectProperty(this, "astwatch", JSON.stringify(astw));
 					//this.screen.composition.commitAST();
 				}
+				var dragview = ev.view;
+				if (!dragview.tooldragroot) {
+					var p = dragview;
+					while (p = p.parent) {
+						if (p.tooldragroot) {
+							dragview = p;
+							break;
+						}
+					}
+				}
 
-				if (ev.view.toolmove === false){
-					ev.view.cursor = "crosshair";
+				if (dragview.toolmove === false){
+					dragview.cursor = "crosshair";
 					this.__startrect = ev.pointer.position;
 				} else {
-					this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+					// This is a drag
+
+
+					this.__startpos = dragview.globalToLocal(ev.pointer.position);
 
 					this.__originalpos = {
-						x:ev.view.x,
-						y:ev.view.y
+						x:dragview.x,
+						y:dragview.y
 					};
 
 					this.__originalsize = {
-						w:ev.view.width,
-						h:ev.view.height
+						w:dragview.width,
+						h:dragview.height
 					};
 
-					this.__resizecorner = this.edgeCursor(ev);
-					ev.view.cursor = "move";
-					ev.view.drawtarget = "color";
+					this.__resizecorner = this.edgeCursor(ev, dragview);
+					dragview.cursor = "move";
+					dragview.drawtarget = "color";
 					ev.pointer.pickview = true;
 				}
 			}
@@ -325,47 +338,59 @@ define.class("$ui/view", function(require,
 				this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
 			}
 
+			var dragview = ev.view;
+			if (!dragview.tooldragroot) {
+				var p = dragview;
+				while (p = p.parent) {
+					if (p.tooldragroot) {
+						dragview = p;
+						break;
+					}
+				}
+			}
+
 			if (this.__resizecorner) {
 
 				if (this.__resizecorner === "bottom-right") {
-					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
-					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
 				} else if (this.__resizecorner === "bottom") {
-					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
 				} else if (this.__resizecorner === "right") {
-					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
 				} else if (this.__resizecorner === "top-left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
-					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
-					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					dragview.x = ev.pointer.position.x - this.__startpos.x;
+					dragview.y = ev.pointer.position.y - this.__startpos.y;
+					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
 				} else if (this.__resizecorner === "left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
+					dragview.x = ev.pointer.position.x - this.__startpos.x;
+					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
 				} else if (this.__resizecorner === "top") {
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
-					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
+					dragview.y = ev.pointer.position.y - this.__startpos.y;
+					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
 				} else if (this.__resizecorner === "bottom-left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.width = this.__originalsize.w - ev.pointer.delta.x;
-					ev.view.height = this.__originalsize.h + ev.pointer.delta.y;
+					dragview.x = ev.pointer.position.x - this.__startpos.x;
+					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
 				} else if (this.__resizecorner === "top-right") {
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
-					ev.view.height = this.__originalsize.h - ev.pointer.delta.y;
-					ev.view.width = this.__originalsize.w + ev.pointer.delta.x;
+					dragview.y = ev.pointer.position.y - this.__startpos.y;
+					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
 				}
 
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
 
 				var pos = ev.pointer.position;
-				if (ev.view.parent) {
-					if (ev.view.position != "absolute") {
-						ev.view.position = "absolute";
+
+				if (dragview.parent) {
+					if (dragview.position != "absolute") {
+						dragview.position = "absolute";
 					}
-					pos = ev.view.parent.globalToLocal(ev.pointer.position)
+					pos = dragview.parent.globalToLocal(ev.pointer.position)
 				}
 
-				ev.view.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
+				dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
 
 				if (this.groupdrag && this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
@@ -402,11 +427,6 @@ define.class("$ui/view", function(require,
 					select.pos = vec2(b.x, b.y);
 					select.size = vec2(a.x - b.x, a.y - b.y);
 				}
-			}
-
-			if (ev.view.__selrect) {
-				ev.view.__selrect.pos = vec2(ev.view._layout.absx - 1, ev.view._layout.absy - 1);
-				ev.view.__selrect.size = vec2(ev.view._layout.width + 2, ev.view._layout.height + 2);
 			}
 
 		}.bind(this);
@@ -749,55 +769,58 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	this.edgeCursor = function (ev) {
+	this.edgeCursor = function (ev, useview) {
 		var resize = false;
-		if (ev.view === this || (this.testView(ev.view) && ev.view.toolmove !== false)) {
-			var pos = ev.view.globalToLocal(ev.pointer.position);
+
+		var vw = useview || ev.view;
+
+		if (vw === this || (this.testView(vw) && ev.view.toolmove !== false)) {
+			var pos = vw.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 
-			ev.view.cursor = 'arrow';
+			vw.cursor = 'arrow';
 
 			if (pos.x < edge && pos.y < edge) {
 				resize = "top-left";
-				ev.view.cursor = 'nwse-resize'
+				vw.cursor = 'nwse-resize'
 
-			} else if (pos.x > ev.view.width - edge && pos.y < edge) {
+			} else if (pos.x > vw.width - edge && pos.y < edge) {
 				resize = "top-right";
-				ev.view.cursor = 'nesw-resize'
+				vw.cursor = 'nesw-resize'
 
-			} else if (pos.x < edge && pos.y > ev.view.height - edge) {
+			} else if (pos.x < edge && pos.y > vw.height - edge) {
 				resize = "bottom-left";
-				ev.view.cursor = 'nesw-resize'
+				vw.cursor = 'nesw-resize'
 
-			} else if (pos.x > ev.view.width - edge && pos.y > ev.view.height - edge) {
+			} else if (pos.x > vw.width - edge && pos.y > vw.height - edge) {
 				resize = "bottom-right";
-				ev.view.cursor = 'nwse-resize'
+				vw.cursor = 'nwse-resize'
 
 			} else if (pos.x < edge) {
 				resize = "left";
-				ev.view.cursor = 'ew-resize'
+				vw.cursor = 'ew-resize'
 
 			} else if (pos.y < edge) {
 				resize = "top";
-				ev.view.cursor = 'ns-resize'
+				vw.cursor = 'ns-resize'
 
-			} else if (pos.x > ev.view.width - edge) {
+			} else if (pos.x > vw.width - edge) {
 				resize = "right";
-				ev.view.cursor = 'ew-resize'
+				vw.cursor = 'ew-resize'
 
-			} else if (pos.y > ev.view.height - edge) {
+			} else if (pos.y > vw.height - edge) {
 				resize = "bottom";
-				ev.view.cursor = 'ns-resize'
+				vw.cursor = 'ns-resize'
 			}
 
 			if (!resize) {
-				ev.view.cursor = 'arrow';
+				vw.cursor = 'arrow';
 			}
 
-		} else if (ev.view.toolallow === false) {
-			ev.view.cursor = 'not-allowed';
+		} else if (vw.toolallow === false) {
+			vw.cursor = 'not-allowed';
 		} else {
-			ev.view.cursor = 'arrow';
+			vw.cursor = 'arrow';
 		}
 
 		return resize;
