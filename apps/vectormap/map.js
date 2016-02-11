@@ -21,7 +21,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	}
 
 	this.onpointerwheel = function(ev){
-		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1] / 400,0.1);
+		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1] / 400);
 		console.log(ev.wheel);
 	}
 
@@ -344,7 +344,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
-
+	mx/=2;
+	my/=2;
 		var ray_nds  = vec3(mx,my,1);
 		var ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0,1.0);
 
@@ -353,13 +354,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		mat4.invert(proj, invproj)
 
 		var ray_eye = vec4.mul_mat4(ray_clip,invproj)
-		ray_eye = vec4(ray_eye.x, ray_eye.y, -1.0, 0.0);
+		console.log(ray_eye);
+		ray_eye = vec4(ray_eye.x, ray_eye.y,  ray_eye.z, 0.0);
 
 		var view = vp.colormatrices.lookatmatrix;
 		var invview = mat4.identity();
 		mat4.invert(view, invview)
 		var raywor4 = vec4.mul_mat4(ray_eye, invview)
 		var ray_wor = vec3(raywor4[0], raywor4[1],raywor4[2]);
+		
 		ray_wor = vec3.normalize(ray_wor);
 		var	camerapos = vp._camera;
 		var end = vec3(camerapos[0] + ray_wor[0] * 30000,
@@ -368,10 +371,11 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		var R = vec3.intersectplane(camerapos, end, vec3(0,1,0), 0)
 		if (!R) return null;
-
-		//	this.find("MARKER").pos = vec3(R[0],R[1]-200,R[2]);
-		//	this.find("MARKER").text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
-
+		var M = this.find("MARKER");
+		if (M){
+			M.pos = vec3(R[0],R[1]-200,R[2]);
+			M.text =( Math.round(this.find("MARKER").pos[0]*100)/100) + ", "+  ( Math.round(this.find("MARKER").pos[2]*100)/100) ;
+		}
 		return R;
 	}
 
@@ -382,7 +386,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var coord  =  this.globalToLocal(ev.position);
 		var R = this.projectonplane( coord);
 		if (R){
-			this.startvect = vec2(R[0]/(BufferGen.TileSize * 32),R[2]/(BufferGen.TileSize * 32))
+			this.startvect = vec2(R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 32))
 			var meters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
 			this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
 			this.moveDrag(ev);
@@ -395,7 +399,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		var R = this.projectonplane( coord);
 		if (R){
 
-			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 32),R[2]/(BufferGen.TileSize * 32) )
+			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 32) )
 			var newcenter = vec2(
 					(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel) ,
 					-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel) );
@@ -614,13 +618,13 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				this.mesh.push(a,b,0,col[0], col[1], col[2],1,col[0], col[1], col[2],1);
 				*/
 
-				this.mesh.push(a,a,col[0],1)
+/*				this.mesh.push(a,a,col[0],1)
 				this.mesh.push(b,a,col[0],1)
 				this.mesh.push(b,b,col[0],1)
 				this.mesh.push(a,a,col[0],1)
 				this.mesh.push(b,b,col[0],1)
 				this.mesh.push(a,b,col[0],1)
-
+*/
 			}
 
 			this.drawtype = this.TRIANGLES
@@ -635,7 +639,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				var texcol = pal.pal2(mesh.z +  noise );
 
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
-				prefog.a *=0.9;
+				//prefog.a *=0.9;
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
@@ -888,7 +892,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
-		var dist = 13.5
+		var dist = 8.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
@@ -903,7 +907,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			res3d,
 			buildings3d,
 			labels3d
-			//,label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
+			//,label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" })
 			)
 		));
 
