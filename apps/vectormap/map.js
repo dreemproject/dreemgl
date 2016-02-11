@@ -1,14 +1,15 @@
-define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, urlfetch)
+define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo, urlfetch, pointset)
 {
 
 	var BufferGen = require("./mapbuffers")();
 	var geo = this.geo = geo();
 
 	this.attributes = {
-		latlong:vec2(52.3608307,   4.8626387),
+		latlong: vec2(52.3608307, 4.8626387),
 		centerx: 0,
 		centery: 0,
-		zoomlevel: 16
+		zoomlevel: 16,
+		pointdata: Config({type: Array, value: []})
 	}
 
 	function createHash (x, y, z){
@@ -37,12 +38,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.moveDrag(ev);
 	}
 
+	this.onpointdata = function () {
+		console.log(this.pointdata)
+	}
+
 	this.gotoCity = function(city, zoomlevel, time){
 		this.dataset.gotoCity(city, zoomlevel, time);
 	}
 
-	define.class(this, "mapdataset", "$ui/view", function( $$, geo)
-	{
+	define.class(this, "mapdataset", "$ui/view", function($$, geo){
 		this.requestPending = false;
 		this.loadqueue = [];
 		this.loadqueuehash = [];
@@ -52,8 +56,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		this.attributes = {
 			centerpos: vec2(0),
-
-			latlong: vec2(52.3608307,   4.8626387),
+			latlong: vec2(52.3608307, 4.8626387),
 			zoomlevel: 15,
 			callbacktarget: {}
 		}
@@ -61,19 +64,15 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		this.setCenterLatLng = function(lat, lng, zoom, time){
 			time = time?time:0
 
-			if (time >0)
-			{
-			var anim = {}
-
-			anim[time] = {motion:"inoutquad", value:vec2(lat,lng)};
-
-			this.latlong =Animate(anim);
+			if (time >0){
+				var anim = {}
+				anim[time] = {motion:"inoutquad", value:vec2(lat,lng)};
+				this.latlong =Animate(anim);
 			}
 			else{
 				this.latlong = vec2(lat,lng);
 			}
 			this.zoomTo(zoom, time);
-
 		}
 
 		this.onzoomlevel = function(){
@@ -91,11 +90,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 			var centerset = []
 			for(var i =0 ;i<20;i++){
-
-					var center = geo.tileForMeters(m[0], m[1], i);
-					centerset.push([center.x,center.y]);
+				var center = geo.tileForMeters(m[0], m[1], i);
+				centerset.push([center.x,center.y]);
 			}
-
 			this.centers = centerset;
 		}
 
@@ -114,7 +111,6 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		this.setCenter = function(x,y,z, time){
 			var m = geo.metersForTile({x:x, y:y, z:z})
-
 			var ll = geo.metersToLatLng(m.x,m.y);
 			this.setCenterLatLng(ll[0], ll[1], time);
 			this.zoomTo(z, time);
@@ -197,10 +193,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			}
 		})
 
-
 		this.loadstring = function(str){
-		//	if (!window.teller) window.teller = 0;
-		//	window.teller += str.length;
+			// if (!window.teller) window.teller = 0;
+			// window.teller += str.length;
 
 			if (this.currentRequest) {
 
@@ -390,22 +385,20 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 	}
 
 	this.moveDrag = function(ev){
-
 		var coord  =  this.globalToLocal(ev.position);
-		var R = this.projectonplane( coord);
-		if (R){
+		var R = this.projectonplane( coord);		if (R){
 
 			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 32),R[2]/(BufferGen.TileSize * 32) )
 			var newcenter = vec2(
-					(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel) ,
-					-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel) );
+				(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel),
+				-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel)
+			);
 			//var meters = geo.metersForTile({x:newcenter[0], y:newcenter[1], z:this.zoomlevel});
 			var latlong = geo.metersToLatLng(newcenter[0], newcenter[1]);
 			latlong[0] += this.startcenter[0];
 			latlong[1] += this.startcenter[1];
 			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel);
-			 this.updateTiles();
-
+			this.updateTiles();
 		}
 	}
 
@@ -835,14 +828,16 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 
 		var res = [this.dataset];
 		var res3d = []
-		var labels3d = [];
 		var buildings3d = [];
+		var labels3d = [];
+		var poi3d = [];
 
-//		var div = 400
-//		this.tilewidth = Math.ceil(this.layout.width/ div);
-//		this.tileheight = Math.ceil(this.layout.height/ div);;
+		// var div = 400
+		// this.tilewidth = Math.ceil(this.layout.width/ div);
+		// this.tileheight = Math.ceil(this.layout.height/ div);;
 
 		for(var layer = 0;layer<2;layer++){
+
 			this.tilewidth = 0;// Math.pow(2, 0 + layer);
 			this.tileheight =0;//= Math.pow(2, 0 + layer);
 			var tilearea = vec2(this.tilewidth, this.tileheight)
@@ -854,6 +849,7 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 			xe = -xs +1;
 			ys = -ext;
 			ye = -ys+1;
+
 			for(var x = xs;x<xe;x++){
 				for(var y = ys;y<ye;y++){
 					var land = this.landtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(x,y), layeroffset: layer});
@@ -888,7 +884,9 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 				}
 			}
 		}
+
 		var dist = 13.5
+
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
@@ -902,7 +900,8 @@ define.class("$ui/view", function(require,$ui$, view,label, labelset, $$, geo, u
 		view({bgcolor:NaN},
 			res3d,
 			buildings3d,
-			labels3d
+			labels3d,
+			pointset({name: 'pointset'})
 			//,label({name:"MARKER", text:"0, 0", fontsize:120,pos:[0,-200,0], bgcolor:NaN})
 			)
 		));
