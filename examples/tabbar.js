@@ -2,7 +2,47 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgr
 
 	this.render = function() {
 		return [
-			screen(
+			screen({name:"mobile"},
+				cadgrid({
+						name:"grid",
+						flex:3,
+						bgcolor:"#4e4e4e",
+						gridsize:8,
+						majorevery:5,
+						majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1),
+						minorline:vec4(0.2823529541492462,0.2823529541492462,0.2823529541492462,1),
+						alignitems:'stretch',
+						alignself:'stretch',
+						flexdirection:'column',
+						justifycontent:'flex-end'
+					},
+					tabbar({
+						tabs:[
+							{
+								icon:'comment',
+								bold:true
+							},
+							{
+								icon:'envelope',
+								bold:true
+							},
+							{
+								icon:'at',
+								bold:true
+							},
+							{
+								icon:'search',
+								bold:true
+							},
+							{
+								icon:'ellipsis-h',
+								bold:true
+							},
+						]
+					})
+				)
+			),
+			screen({name:"sandbox"},
 				cadgrid({
 						name:"grid",
 						flex:3,
@@ -26,6 +66,7 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgr
 						y:340,
 						tabs:[
 							{
+								showarrow:false,
 								normal:{
 									icon:"flask",
 									fgcolor:"gray"

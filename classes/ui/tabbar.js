@@ -30,7 +30,7 @@ define.class("$ui/view", function($ui$, view, label, icon){
 				on:undefined
 			},
 			selected:{
-				fgcolor:"yellow",
+				fgcolor:"#69f",
 				on:function(tab) {
 					if (tab.parent.__selected) {
 						tab.parent.__selected.state = "normal";
@@ -52,13 +52,25 @@ define.class("$ui/view", function($ui$, view, label, icon){
 	this.style = {
 		tab: {
 			flex: 1,
-			bgcolor:this.tabcolor
+			bgcolor:this.tabcolor,
+			arrowheight:5.0,
+			showarrow:true,
+			bgcolorfn:function(p) {
+				var atx = p.x * layout.width;
+				var aty = p.y * layout.height;
+				if (showarrow && aty < arrowheight && (atx + aty < layout.width * 0.5 || atx - aty > layout.width * 0.5)) {
+					return "transparent"
+				} else {
+					return bgcolor;
+				}
+			}
 		},
 	    tab_folder: {
 			y:1,
 			flex: 0,
 			bgcolor:this.tabcolor,
-			borderradius: vec4(15,15,0,0)
+			borderradius:vec4(15,15,0,0),
+			bgcolorfn:function(p) { return bgcolor; }
 		}
 	};
 
@@ -175,16 +187,19 @@ define.class("$ui/view", function($ui$, view, label, icon){
 				this.state = "active";
 			}
 		};
+
 		this.pointerhover = function(ev) {
 			if (this.state === "normal") {
 				this.state = "hover";
 			}
 		};
+
 		this.pointerout = function(ev) {
 			if (this.state === "hover") {
 				this.state = "normal";
 			}
 		};
+
 		this.pointerend = function(ev) {
 			if (this.state === "active") {
 				this.state = "selected";
