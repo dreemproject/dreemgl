@@ -308,6 +308,8 @@ define.class("$ui/view", function($ui$, view, label, icon){
 					{
 						class:"folder",
 						label:"two",
+						bgcolor:"#114",
+						bold:true,
 						selected:{ on:selectionhandler }
 					},
 					{
