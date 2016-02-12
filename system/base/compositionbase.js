@@ -67,8 +67,8 @@ define.class('$system/base/node',function(require){
 			// ok so as soon as we are stubbed, we need to proxify the object
 			var child = this.children[i]
 			if(!child.createRpcProxy) continue
-			// add the proxy to the rpc object
-			var name = child.name // || child.constructor.name
+			// add the proxy to the rpc object. Default screen name = 'default'
+			var name = child.name || 'default' // || child.constructor.name
 			this.rpc[name] = child.createRpcProxy(this.rpc)
 			this.names[name] = child
 		}
