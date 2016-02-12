@@ -5,7 +5,7 @@ require 'cgi'
 require 'coderay'
 
 scriptdir    = File.dirname(__FILE__)
-basedir      = File.expand_path(File.join(scriptdir, '..'))
+basedir      = File.expand_path(File.join(scriptdir, '..', '..'))
 docsdir      = File.join(basedir, 'docs', 'api', 'source')
 
 classesdir      = File.join(basedir, 'classes')

@@ -307,6 +307,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n153" name="n153">153</a>
 <a href="#n154" name="n154">154</a>
 <a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -328,7 +343,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">decimals</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">0</span>}),
                 <span class="comment">// Font size in device-pixels.</span>
                 <span class="key">fontsize</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">14</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">fontsize</span><span class="delimiter">&quot;</span></span> }),
-                <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>})
+                <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
+
+                <span class="comment">//internal</span>
+                <span class="key">textfocus</span>:Config({<span class="key">type</span>:<span class="reserved">boolean</span>})
         }
 
         <span class="local-variable">this</span>.tabstop = <span class="integer">0</span>;
@@ -439,6 +457,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">margin</span>:vec4(<span class="integer">4</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">0</span>),
                         <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">padding</span>:<span class="integer">0</span>,
+                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">hardrect</span>:{<span class="key">pickonly</span>:<span class="predefined-constant">true</span>},
                         <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thenumber</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">value</span>:<span class="local-variable">this</span>._value.toString(),
@@ -446,8 +466,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
                         <span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor,
                         <span class="key">multiline</span>:<span class="predefined-constant">false</span>,
-                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>
-                }));
+                        <span class="function">onfocus</span>: <span class="keyword">function</span>(ev,v,o) {
+                                <span class="local-variable">this</span>.textfocus = v;
+                        }.bind(<span class="local-variable">this</span>),
+                        <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o) {
+                                <span class="keyword">var</span> txval = parseFloat(o.value);
+                                <span class="keyword">if</span> (!isNaN(txval)) {
+                                        <span class="keyword">if</span> (Math.abs(<span class="local-variable">this</span>.value - txval) &gt;= <span class="float">0.01</span>) {
+                                                <span class="local-variable">this</span>.value = txval;
+                                        }
+                                }
+                        }.bind(<span class="local-variable">this</span>)
+        }));
                 res.push(button({<span class="key">margin</span>:vec4(<span class="integer">4</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">0</span>),<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="local-variable">this</span>.bgcolor,<span class="key">fgcolor</span>:<span class="local-variable">this</span>.fgcolor,<span class="key">borderwidth</span>:<span class="integer">0</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>, <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>,<span class="key">fontsize</span>: <span class="local-variable">this</span>.fontsize*(<span class="integer">2</span>/<span class="integer">3</span>),  <span class="key">padding</span>:<span class="integer">4</span>, <span class="key">borderradius</span>:<span class="integer">0</span>, <span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.upclick()}.bind(<span class="local-variable">this</span>)}));
                 <span class="keyword">return</span> res;
 

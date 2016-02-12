@@ -213,68 +213,81 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n59" name="n59">59</a>
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
+<a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
-        
+
         <span class="keyword">var</span> BufferGen = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./mapbuffers</span><span class="delimiter">&quot;</span></span>)();
-        
-                <span class="local-variable">this</span>.<span class="function">generatebuffer</span> = <span class="keyword">function</span>(targetfile, datastring){
+
+        <span class="local-variable">this</span>.<span class="function">generatebuffer</span> = <span class="keyword">function</span>(targetfile, datastring){
+                <span class="keyword">try</span>{
+                        <span class="keyword">var</span> thedata = JSON.parse(datastring);
+                        <span class="keyword">var</span> targetobj = {}
+                        <span class="comment">// BufferGen.build(targetobj, thedata);</span>
+                        <span class="comment">// console.log(targetobj.landVertexBuffer.length, targetobj.roadVertexBuffer.length, targetobj.buildingVertexBuffer.length);</span>
+                }
+                <span class="keyword">catch</span>(e){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">exception during bugger generation:</span><span class="delimiter">&quot;</span></span>, e)
+                }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">sessionstart</span> = <span class="keyword">function</span>(){
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Session started</span><span class="delimiter">&quot;</span></span>);
+        }
+
+        <span class="local-variable">this</span>.<span class="function">grabmap</span> = <span class="keyword">function</span>(x,y,z){
+
+                <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>);
+                <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
+                <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
+                <span class="keyword">var</span> cachedbuffername = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/BUFFER_</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
+
+                <span class="keyword">var</span> dogeneratebuffer = fs.existsSync(cachedbuffername)?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>;
+
+                <span class="keyword">if</span> (fs.existsSync(cachedname)){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Cache:</span><span class="delimiter">&quot;</span></span>, x,y,z);
+                        <span class="keyword">var</span> data = fs.readFileSync(cachedname).toString();
+                        <span class="comment">// if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);</span>
+                        <span class="comment">//</span>
+                        <span class="comment">// small error check... mapzen returns html/xml pages for all its errors</span>
+                        <span class="comment">// if (data.slice(0, 100).indexOf(&quot;&lt;?xml&quot;)&lt;0){</span>
+                                <span class="keyword">return</span> data;
+                        <span class="comment">//}</span>
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Cached slice has an error... loading again</span><span class="delimiter">&quot;</span></span>);
+                }
+
+                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Downloading from mapzen:</span><span class="delimiter">&quot;</span></span>,x,y,z,<span class="string"><span class="delimiter">&quot;</span><span class="content">...</span><span class="delimiter">&quot;</span></span> );
+                <span class="keyword">var</span> fileurl = <span class="string"><span class="delimiter">&quot;</span><span class="content">http://vector.mapzen.com/osm/all/</span><span class="delimiter">&quot;</span></span>+z+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>+x+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">.topojson?api_key=vector-tiles-Qpvj7U4</span><span class="delimiter">&quot;</span></span>
+                <span class="keyword">var</span> P = define.deferPromise()
+
+                nodehttp.get(fileurl).then(<span class="keyword">function</span>(data){
+
                         <span class="keyword">try</span>{
-                                <span class="keyword">var</span> thedata = JSON.parse(datastring);        
-                                <span class="keyword">var</span> targetobj = {}
-                        <span class="comment">//        BufferGen.build(targetobj, thedata);</span>
-                <span class="comment">//                console.log(targetobj.landVertexBuffer.length, targetobj.roadVertexBuffer.length, targetobj.buildingVertexBuffer.length);</span>
+                                <span class="keyword">var</span> thedata = JSON.parse(data);
+
+                                fs.writeFileSync(cachedname, data);
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> -- done. Saved to cache: </span><span class="delimiter">&quot;</span></span>,x,y,z,<span class="string"><span class="delimiter">&quot;</span><span class="content">!</span><span class="delimiter">&quot;</span></span> );
+                                <span class="comment">//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, v);</span>
+
+                                P.resolve(data);
                         }
                         <span class="keyword">catch</span>(e){
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">exception during bugger generation:</span><span class="delimiter">&quot;</span></span>, e)
-                        }
-                }
-                <span class="local-variable">this</span>.<span class="function">sessionstart</span> = <span class="keyword">function</span>(){
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Session started</span><span class="delimiter">&quot;</span></span>);
-                }
-                <span class="local-variable">this</span>.<span class="function">grabmap</span> = <span class="keyword">function</span>(x,y,z){
-                        
-                        <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>);
-                        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
-                        <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
-                        <span class="keyword">var</span> cachedbuffername = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/BUFFER_</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
-                        
-                        <span class="keyword">var</span> dogeneratebuffer = fs.existsSync(cachedbuffername)?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>;
-                        
-                        <span class="keyword">if</span> (fs.existsSync(cachedname)){
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Cache:</span><span class="delimiter">&quot;</span></span>, x,y,z);
-                                <span class="keyword">var</span> data = fs.readFileSync(cachedname).toString();
-                                <span class="comment">//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);</span>
-                                
-                                <span class="comment">// small error check... mapzen returns html/xml pages for all its errors</span>
-                        <span class="comment">//        if (data.slice(0, 100).indexOf(&quot;&lt;?xml&quot;)&lt;0){                                        </span>
-                                        <span class="keyword">return</span> data;
-                                <span class="comment">//}</span>
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Cached slice has an error... loading again</span><span class="delimiter">&quot;</span></span>);
-                        }
-                        
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Downloading from mapzen:</span><span class="delimiter">&quot;</span></span>,x,y,z,<span class="string"><span class="delimiter">&quot;</span><span class="content">...</span><span class="delimiter">&quot;</span></span> );
-                        <span class="keyword">var</span> fileurl = <span class="string"><span class="delimiter">&quot;</span><span class="content">http://vector.mapzen.com/osm/all/</span><span class="delimiter">&quot;</span></span>+z+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>+x+<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">.topojson?api_key=vector-tiles-Qpvj7U4</span><span class="delimiter">&quot;</span></span> 
-                        <span class="keyword">var</span> P = define.deferPromise()
 
-                        nodehttp.get(fileurl).then(<span class="keyword">function</span>(data){
-                                fs.writeFileSync(cachedname, data);        
-                                <span class="keyword">if</span> (data.slice(<span class="integer">0</span>, <span class="integer">100</span>).indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;?xml</span><span class="delimiter">&quot;</span></span>)&lt;<span class="integer">0</span>){                                        
-                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> -- done. Saved to cache: </span><span class="delimiter">&quot;</span></span>,x,y,z,<span class="string"><span class="delimiter">&quot;</span><span class="content">!</span><span class="delimiter">&quot;</span></span> );
-                                        <span class="comment">//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, v);</span>
-                                
-                                        P.resolve(data);
-                                                
-                                }
-                                <span class="keyword">else</span>{
-                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Mapzen returned error:</span><span class="delimiter">&quot;</span></span> , data);
-                                        P.resolve(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;?xml&gt;</span><span class="delimiter">&quot;</span></span> + error);
-                                }
-                        })
-                        
-                        <span class="keyword">return</span> P;
-                }.bind(<span class="local-variable">this</span>)                
-        })</pre></td>
+                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Mapzen returned error:</span><span class="delimiter">&quot;</span></span> , data, e);
+                        }
+                        P.resolve(<span class="string"><span class="delimiter">&quot;</span><span class="content">{}</span><span class="delimiter">&quot;</span></span>);
+
+                })
+
+                <span class="keyword">return</span> P;
+        }.bind(<span class="local-variable">this</span>)
+})
+</pre></td>
 </tr></table>
 
 </body>

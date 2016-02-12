@@ -235,6 +235,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n81" name="n81">81</a>
 <a href="#n82" name="n82">82</a>
 <a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -247,7 +248,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// 2 means array of nodes</span>
 <span class="comment">// 3 is the slightly off object declaration</span>
 
-define({
+define(<span class="keyword">function</span>(require, exports, module){
+        module.exports = {
         <span class="key">Program</span>:{ <span class="key">steps</span>:<span class="integer">2</span> },
         <span class="key">Empty</span>:{},
 
@@ -318,7 +320,7 @@ define({
 
         <span class="key">Debugger</span>: { },
         <span class="key">With</span>: { <span class="key">object</span>:<span class="integer">1</span>, <span class="key">body</span>:<span class="integer">1</span> }
-})
+}})
 </pre></td>
 </tr></table>
 

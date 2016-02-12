@@ -214,13 +214,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
 <a href="#n62" name="n62">62</a>
+<a href="#n63" name="n63">63</a>
+<a href="#n64" name="n64">64</a>
+<a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view, scrollbar) {
 
-        <span class="local-variable">this</span>.flex = <span class="integer">1</span>
-        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>
+        <span class="comment">// this.flex = 1</span>
+        <span class="comment">// this.flexdirection = 'column'</span>
+        <span class="comment">// this.position = 'absolute'</span>
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.height = <span class="integer">200</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
@@ -229,6 +234,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="comment">//TODO(aki): why this breaks sahder</span>
                 <span class="comment">// value: Config({type: Number, value: wire('this.parent.scroll')})</span>
                 <span class="comment">// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})</span>
+        }
+
+        <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.layout.top = <span class="integer">0</span>
+                <span class="local-variable">this</span>.layout.height = <span class="local-variable">this</span>.parent.layout.height
         }
 
         <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){

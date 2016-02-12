@@ -289,8 +289,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n135" name="n135">135</a>
 <a href="#n136" name="n136">136</a>
 <a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -305,7 +303,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">// The target who's properties to view.  Can be either a DreemGL object or a named reference to one.</span>
                 <span class="key">target</span>:Config({<span class="key">type</span>:Object, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-
                 <span class="comment">// Shows properties for unknown property types</span>
                 <span class="key">showunknown</span>:Config({<span class="key">type</span>:<span class="reserved">boolean</span>, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
 
@@ -316,7 +313,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>;
         <span class="local-variable">this</span>.flexdirection= <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
         <span class="local-variable">this</span>.margin = <span class="integer">0</span>;
-        <span class="local-variable">this</span>.clearcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>);
+        <span class="local-variable">this</span>.clearcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>;
         <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
 
@@ -377,7 +374,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="key">propertyname</span>: key,
                                         <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
                                         <span class="key">showunknown</span>:<span class="local-variable">this</span>.showunknown
-                                }
+                                };
 
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.callback) {
                                         props.callback = <span class="local-variable">this</span>.callback;
@@ -388,11 +385,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         res.push(
                                 foldcontainer({
                                                 <span class="key">collapsed</span>: <span class="predefined-constant">true</span>,
-                                                <span class="key">basecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">basecolor</span>:<span class="local-variable">this</span>.clearcolor,
                                                 <span class="key">autogradient</span>: <span class="predefined-constant">false</span>,
                                                 <span class="key">icon</span>:<span class="predefined-constant">undefined</span>,
                                                 <span class="key">title</span>: <span class="local-variable">this</span>.uppercaseFirst(group),
-                                                <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4f4f4f</span><span class="delimiter">&quot;</span></span>        ,
+                                                <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize
                                         },
                                         view({
@@ -415,7 +412,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         };
 
         <span class="keyword">var</span> propviewer = <span class="local-variable">this</span>.constructor;
-
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>: <span class="keyword">function</span> () {
                         <span class="keyword">return</span> [

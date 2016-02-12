@@ -242,9 +242,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(host){
                 <span class="local-variable">this</span>.host = host
-                <span class="local-variable">this</span>.promises = {}
-                <span class="local-variable">this</span>.uid_free = []
-                <span class="local-variable">this</span>.uid = <span class="integer">0</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">methodRpc</span> = <span class="keyword">function</span>(name, msg){
@@ -267,7 +264,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">resolveReturn</span> = <span class="keyword">function</span>(msg){
+        exports.resolveReturn = <span class="local-variable">this</span>.<span class="function">resolveReturn</span> = <span class="keyword">function</span>(msg){
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.promises) <span class="keyword">return</span>
                 <span class="keyword">var</span> promise = <span class="local-variable">this</span>.promises[msg.uid]
                 <span class="keyword">if</span>(!promise) <span class="keyword">return</span> console.log(<span class="string"><span class="delimiter">'</span><span class="content">Error resolving RPC promise id </span><span class="delimiter">'</span></span> + msg.uid)
                 <span class="local-variable">this</span>.uid_free.push(msg.uid)
@@ -280,9 +278,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">allocPromise</span> = <span class="keyword">function</span>(){
+        exports.allocPromise = <span class="local-variable">this</span>.<span class="function">allocPromise</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> uid 
-                
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.uid === <span class="predefined-constant">undefined</span>) <span class="local-variable">this</span>.uid = <span class="integer">0</span>
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.promises) <span class="local-variable">this</span>.promises = {}
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.uid_free) <span class="local-variable">this</span>.uid_free = []
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.uid_free.length){
                         uid = <span class="local-variable">this</span>.uid_free.pop()
                 }
@@ -297,7 +297,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">var</span> resolve, reject
-                <span class="keyword">var</span> prom = <span class="keyword">new</span> Promise(<span class="keyword">function</span>(_resolve, _reject){resolve = _resolve, reject = _reject})
+                <span class="keyword">var</span> prom = <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(_resolve, _reject){resolve = _resolve, reject = _reject})
                 prom.resolve = resolve
                 prom.reject = reject
                 prom.uid = uid

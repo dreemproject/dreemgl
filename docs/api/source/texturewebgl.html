@@ -419,6 +419,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n265" name="n265">265</a>
 <a href="#n266" name="n266">266</a>
 <a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
+<a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
+<strong><a href="#n280" name="n280">280</a></strong>
+<a href="#n281" name="n281">281</a>
+<a href="#n282" name="n282">282</a>
+<a href="#n283" name="n283">283</a>
+<a href="#n284" name="n284">284</a>
+<a href="#n285" name="n285">285</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -679,6 +697,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">point_flipped2</span> = <span class="keyword">function</span>(x, y){ <span class="keyword">return</span> point_flipped(vec2(x, y)) }
         <span class="local-variable">this</span>.<span class="function">point_flipped</span> = <span class="keyword">function</span>(v){
                 <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x, <span class="integer">1</span>. - v.y), {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
+        <span class="local-variable">this</span>.<span class="function">array1d</span> = <span class="keyword">function</span>(index){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(mod(index, <span class="local-variable">this</span>.size.x), floor(index / <span class="local-variable">this</span>.size.x)), {
+                        <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,
+                        <span class="key">WRAP_T</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>
+                })
+        }
+
+        <span class="local-variable">this</span>.<span class="function">array2d</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">return</span> texture2D(<span class="local-variable">this</span>, vec2(v.x * <span class="local-variable">this</span>.size.x, v.y * <span class="local-variable">this</span>.size.y), {
                         <span class="key">MIN_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">MAG_FILTER</span>: <span class="string"><span class="delimiter">'</span><span class="content">NEAREST</span><span class="delimiter">'</span></span>,
                         <span class="key">WRAP_S</span>: <span class="string"><span class="delimiter">'</span><span class="content">CLAMP_TO_EDGE</span><span class="delimiter">'</span></span>,

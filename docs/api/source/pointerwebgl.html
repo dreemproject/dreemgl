@@ -283,6 +283,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
 <a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -351,9 +357,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.setstart(mouseToPointers(e))
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
+                        window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousehover)
+                        window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousedown</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousedown)
                         <span class="comment">// Hack to capture mouse up outside iframe</span>
                         <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
+                        <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                 }
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousedown</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.mousedown.bind(<span class="local-variable">this</span>))
 
@@ -370,9 +379,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.setend(mouseToPointers(e))
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
+                        window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousehover)
+                        window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousedown</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousedown)
                         <span class="comment">// Hack to capture mouse up outside iframe</span>
                         <span class="keyword">if</span> (parent.window) parent.window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
+                        <span class="keyword">if</span> (parent.window) parent.window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                 }
                 <span class="local-variable">this</span>._mouseup = <span class="local-variable">this</span>.mouseup.bind(<span class="local-variable">this</span>)
 

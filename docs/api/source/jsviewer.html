@@ -335,6 +335,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n181" name="n181">181</a>
 <a href="#n182" name="n182">182</a>
 <a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -359,7 +360,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.readonly = <span class="predefined-constant">true</span>
 
-        <span class="local-variable">this</span>.fontsize = <span class="integer">14</span>
+        <span class="local-variable">this</span>.fontsize = <span class="integer">12</span>
         <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">true</span>
 
         <span class="keyword">var</span> font = <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii.glf</span><span class="delimiter">'</span></span>)
@@ -485,7 +486,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> textbuf = <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.newText()
 
                         textbuf.font = view.font
-
+                        <span class="keyword">var</span> cycle = Date.now()
                         <span class="keyword">var</span> ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
 
                         textbuf.fontsize = view.fontsize
@@ -507,6 +508,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         textbuf.add(text, group, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), m3)
                                 })
                         }
+                        console.log(Date.now() - cycle)
                 }
         }
 

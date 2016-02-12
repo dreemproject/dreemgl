@@ -243,14 +243,36 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n89" name="n89">89</a>
 <strong><a href="#n90" name="n90">90</a></strong>
 <a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (background, labels, events, scrollbar) {
 
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>
+        <span class="local-variable">this</span>.padding = vec4(<span class="integer">0</span>, <span class="integer">80</span>, <span class="integer">0</span>, <span class="integer">18</span>)
+        <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+
         <span class="local-variable">this</span>.attributes = {
+                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
                 <span class="key">format</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">24</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">7</span>}),
                 <span class="key">maxzoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">365</span>}),
-                <span class="key">scroll</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">4</span>})
+                <span class="key">scroll</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">4</span>}),
+                <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event})
         }
 
         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
@@ -325,11 +347,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
         }
 
+        <span class="local-variable">this</span>.<span class="function">ondata</span> = <span class="keyword">function</span> (data) {
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">events1</span><span class="delimiter">'</span></span>).data = data.value[<span class="integer">0</span>].data
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">events2</span><span class="delimiter">'</span></span>).data = data.value[<span class="integer">1</span>].data
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">events3</span><span class="delimiter">'</span></span>).data = data.value[<span class="integer">2</span>].data
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">events4</span><span class="delimiter">'</span></span>).data = data.value[<span class="integer">3</span>].data
+        }
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
                         background({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>}),
                         labels({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>}),
-                        events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events</span><span class="delimiter">&quot;</span></span>}),
+                        events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events1</span><span class="delimiter">&quot;</span></span>}),
+                        events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events2</span><span class="delimiter">&quot;</span></span>}),
+                        events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events3</span><span class="delimiter">&quot;</span></span>}),
+                        events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events4</span><span class="delimiter">&quot;</span></span>}),
                         scrollbar({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>})
                 ]
         }

@@ -576,6 +576,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n422" name="n422">422</a>
 <a href="#n423" name="n423">423</a>
 <a href="#n424" name="n424">424</a>
+<a href="#n425" name="n425">425</a>
+<a href="#n426" name="n426">426</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -806,7 +808,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> blendshader = draw.shaders.viewportblend
                                         <span class="keyword">if</span> (view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
                                                 <span class="comment">// dont do this!</span>
-                                                blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
+                                                <span class="keyword">if</span> (shader.depth_test_eq.func === <span class="integer">0</span>) shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>                                                                                                
                                         }
                                         <span class="keyword">else</span>{
                                                 blendshader.depth_test = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -824,7 +826,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="keyword">var</span> shader = shaders[j]
 
                                                 <span class="keyword">if</span>(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
-                                                        shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
+                                                        <span class="keyword">if</span> (shader.depth_test_eq.func == <span class="integer">0</span>) shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt;= dst_depth</span><span class="delimiter">'</span></span>
                                                 }
 
                                                 shader.pickguid = pickguid
@@ -881,24 +883,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">drawNormal</span> = <span class="keyword">function</span>(draw, view, matrices){
                 draw.updateShaders()
-                <span class="keyword">var</span> count = <span class="integer">0</span>
+                <span class="keyword">var</span> vtx_count = <span class="integer">0</span>
                 <span class="comment">// alright lets iterate the shaders and call em</span>
                 <span class="keyword">var</span> shaders = draw.shader_draw_list
                 <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; shaders.length; j++){
                         <span class="comment">// lets draw em</span>
                         <span class="keyword">var</span> shader = shaders[j]
                         <span class="keyword">if</span>(view._viewport === <span class="string"><span class="delimiter">'</span><span class="content">3d</span><span class="delimiter">'</span></span>){
-                                shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt; dst_depth</span><span class="delimiter">'</span></span>
+                                <span class="keyword">if</span>(shader.depth_test_eq.func === <span class="integer">0</span>)
+                                        shader.depth_test = <span class="string"><span class="delimiter">'</span><span class="content">src_depth &lt; dst_depth</span><span class="delimiter">'</span></span>
                         }
 
                         <span class="keyword">if</span>(shader.pickonly || !shader.visible) <span class="keyword">continue</span> <span class="comment">// was pick only</span>
                         <span class="comment">// we have to set our guid.</span>
                         <span class="keyword">if</span>(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
                         <span class="keyword">else</span> draw.viewmatrix = matrices.viewmatrix
-                        count++
-                        shader.drawArrays(<span class="local-variable">this</span>.device)
+                        
+                        vtx_count += shader.drawArrays(<span class="local-variable">this</span>.device)
                 }
-                <span class="keyword">return</span> count
+                <span class="keyword">return</span> vtx_count
         }
 
         <span class="local-variable">this</span>.<span class="function">drawColor</span> = <span class="keyword">function</span>(isroot, time, clipview){
@@ -906,7 +909,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> device = <span class="local-variable">this</span>.device
                 <span class="keyword">var</span> layout = view._layout
                 <span class="keyword">var</span> gl = device.gl
-                <span class="keyword">var</span> count = <span class="integer">0</span>
+                <span class="keyword">var</span> dom_count = <span class="integer">0</span>
+                <span class="keyword">var</span> vtx_count = <span class="integer">0</span>
                 <span class="keyword">if</span>(!layout || layout.width === <span class="integer">0</span> || isNaN(layout.width) || layout.height === <span class="integer">0</span> || isNaN(layout.height)) <span class="keyword">return</span>
 
                 <span class="comment">// lets see if we need to allocate our framebuffer..</span>
@@ -971,7 +975,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="local-variable">this</span>.drawBlend(draw)
                                 }
                                 <span class="keyword">else</span>{
-                                        count += <span class="local-variable">this</span>.drawNormal(draw, view, matrices)
+                                        vtx_count += <span class="local-variable">this</span>.drawNormal(draw, view, matrices)
                                 }
 
 
@@ -982,7 +986,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         draw = <span class="local-variable">this</span>.nextItem(draw, <span class="string"><span class="delimiter">'</span><span class="content">pick</span><span class="delimiter">'</span></span>)
                 }
-                <span class="comment">//console.log(count)</span>
+                <span class="comment">//console.log(vtx_count)</span>
                 <span class="keyword">return</span> hastime
         }
 

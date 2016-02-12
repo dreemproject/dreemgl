@@ -276,13 +276,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n122" name="n122">122</a>
 <a href="#n123" name="n123">123</a>
 <a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, label){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/label</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require){
 <span class="comment">// Text input field</span>
 
         <span class="local-variable">this</span>.mixin(require(<span class="string"><span class="delimiter">'</span><span class="content">$system/textbox/textboximpl</span><span class="delimiter">'</span></span>))
@@ -354,7 +360,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerfocus
                 }
-                <span class="keyword">else</span>{
+                <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.shaders) {
                         <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerunfocus
                 }
@@ -369,6 +375,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">textChanged</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> string = <span class="local-variable">this</span>.textbuf.serializeText(<span class="integer">0</span>, <span class="local-variable">this</span>.textbuf.lengthQuad())
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.multiline &amp;&amp; (string.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) &gt;= <span class="integer">0</span> || string.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">\r</span><span class="delimiter">'</span></span>) &gt;= <span class="integer">0</span>)) {
+                        string = string.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="char">\r</span><span class="char">\n</span><span class="content">|</span><span class="char">\n</span><span class="content">|</span><span class="char">\r</span><span class="content">)</span><span class="delimiter">/</span><span class="modifier">gm</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+                        <span class="local-variable">this</span>.textbuf.removeText(<span class="integer">0</span>, <span class="local-variable">this</span>.textbuf.lengthQuad());
+                        <span class="local-variable">this</span>.textbuf.insertText(<span class="integer">0</span>, string);
+                        <span class="local-variable">this</span>.focus = <span class="predefined-constant">false</span>;
+                }
                 <span class="local-variable">this</span>.value = Mark(string)
                 <span class="local-variable">this</span>.relayout()
         }

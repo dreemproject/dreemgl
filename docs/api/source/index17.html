@@ -228,81 +228,193 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n74" name="n74">74</a>
 <a href="#n75" name="n75">75</a>
 <a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require,  <span class="predefined">$server$</span>, fileio,<span class="predefined">$ui$</span>, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid,button, <span class="predefined">$$</span>, map, urlfetch, acceleroremote,<span class="predefined">$3d$</span>, ballrotate){
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-        <span class="local-variable">this</span>.places= [
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">16</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Amsterdam-17</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">17</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Amsterdam-10</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">amsterdam</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">10</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Seoul</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">seoul</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">16</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SF</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sanfrancisco</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">16</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SF-10</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sanfrancisco</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">10</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">NY - Manhattan</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">manhattan</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">16</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">NY - Manhattan 14</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">manhattan</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">14</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">NY - Manhattan 12</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">manhattan</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">12</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">NY - Manhattan 11</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">manhattan</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">11</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">NY - Manhattan 10</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">manhattan</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">10</span>},
-        {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SF - Golden Gate Park</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sanfrancisco_goldengatepark</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">17</span>},
-                {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">SZ - Huaqiang Bei</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">shenzhen_hqb</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">16</span>},
-                {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">HongKong</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">hongkong</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">10</span>},
-                {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Sydney</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">sydney</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">10</span>},
-                {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">London</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">london</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">13</span>},
-                {<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">London 15</span><span class="delimiter">&quot;</span></span>, <span class="key">place</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">london</span><span class="delimiter">&quot;</span></span>, <span class="key">zoomlevel</span>: <span class="integer">15</span>}
-        ]
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+<span class="comment">//Pure JS based composition</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, treeview,  cadgrid, splitcontainer, screen, view, label, button, <span class="predefined">$widgets$</span>, propviewer, colorpicker, <span class="predefined">$$</span>, flowgraph){
 
-                
-                
-                
-                <span class="keyword">var</span> Buttons = [];
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.places.length;i++){
-                        <span class="keyword">var</span> p = <span class="local-variable">this</span>.places[i];
-                        Buttons.push(button({<span class="key">place</span>:p.place, <span class="key">zoomlevel</span>:p.zoomlevel, <span class="key">text</span>:p.text,<span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">themap</span><span class="delimiter">&quot;</span></span>).gotoCity(<span class="local-variable">this</span>.place,<span class="local-variable">this</span>.zoomlevel);}, <span class="key">margin</span>:<span class="integer">4</span>}))
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, fileio){
+                <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
+                <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
+
+                <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>
+                <span class="local-variable">this</span>.rootdirectory = <span class="string"><span class="delimiter">'</span><span class="content">$compositions</span><span class="delimiter">'</span></span>
+
+                <span class="local-variable">this</span>.<span class="function">saveComposition</span> = <span class="keyword">function</span>(name, data){
+                        fs.writeFile(define.expandVariables(name)+<span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">define.class(&quot;$server/composition&quot;,</span><span class="delimiter">'</span></span>+data+<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>)
+                }
+
+                <span class="local-variable">this</span>.<span class="function">newComposition</span> = <span class="keyword">function</span>(name){
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">new composition creation requested:</span><span class="delimiter">&quot;</span></span>, name)
+                        <span class="comment">// todo: create folder in default composition path</span>
+                        <span class="comment">// todo: create default index.js using options from options.</span>
+                        <span class="comment">// todo: if things go wrong, return false</span>
+                        <span class="keyword">var</span> path = define.expandVariables(<span class="local-variable">this</span>.rootdirectory)+<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>+name
+                        <span class="keyword">var</span> file = path +<span class="string"><span class="delimiter">'</span><span class="content">/index.js</span><span class="delimiter">'</span></span>;
+                        <span class="keyword">try</span>{
+                                fs.mkdirSync(path)
+                        }<span class="keyword">catch</span>(e){}
+
+                        fs.writeFileSync(file,
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">define.class('$server/composition',function(){</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">        this.render = function(){ return [</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">        ]}</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>+
+                        <span class="string"><span class="delimiter">&quot;</span><span class="content">})</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">return</span>  <span class="local-variable">this</span>.rootdirectory + <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span> + name
+                }
+
+                <span class="local-variable">this</span>.<span class="function">getCompositionList</span> = <span class="keyword">function</span>(){
+
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+
+                        <span class="keyword">var</span> pathset = [<span class="string"><span class="delimiter">&quot;</span><span class="content">compositions</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$compositions</span><span class="delimiter">'</span></span>]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, [])
+                        ret.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">compositions</span><span class="delimiter">&quot;</span></span>
+                        root.children.push(ret)
+                        <span class="keyword">return</span> root
+
+                        <span class="keyword">return</span> [];
+                }
+
+                <span class="keyword">function</span> <span class="function">readRecurDir</span>(base, inname, ignoreset){
+                        <span class="keyword">var</span> local = path.join(base, inname)
+                        <span class="keyword">var</span> dir = fs.readdirSync(local)
+                        <span class="keyword">var</span> out = {<span class="key">isfolder</span>:<span class="predefined-constant">true</span>, <span class="key">name</span>:inname, <span class="key">collapsed</span>:<span class="integer">1</span>, <span class="key">children</span>:[]}
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; dir.length;i++){
+                                <span class="keyword">var</span> name = dir[i]
+                                <span class="keyword">var</span> mypath = path.join(local, name)
+                                <span class="keyword">if</span>(ignoreset){
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>; j &lt; ignoreset.length; j++){
+                                                <span class="keyword">var</span> item = ignoreset[j]
+                                                <span class="keyword">if</span>(<span class="keyword">typeof</span> item === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
+                                                        <span class="keyword">if</span>(mypath.indexOf(item) !== -<span class="integer">1</span>)  <span class="keyword">break</span>
+                                                }
+                                                <span class="keyword">else</span>{
+                                                        <span class="keyword">if</span>(mypath.match(item)) <span class="keyword">break</span>
+                                                }
+                                        }
+                                        <span class="keyword">if</span>(j &lt; ignoreset.length) <span class="keyword">continue</span>
+                                }
+                                <span class="keyword">var</span> stat = fs.statSync(mypath)
+                                <span class="keyword">if</span>(stat.isDirectory()){
+                                        out.children.push(readRecurDir(local, name, ignoreset))
+                                }
+                                <span class="keyword">else</span>{
+                                        out.children.push({<span class="key">name</span>:name, <span class="key">isfolder</span>:<span class="predefined-constant">false</span>, <span class="key">size</span>:stat.size})
+                                }
+                        }
+                        <span class="keyword">return</span> out
+                }
+
+                <span class="comment">// recursively read the flowgraph related class library</span>
+                <span class="local-variable">this</span>.<span class="function">readFlowLibrary</span> = <span class="keyword">function</span>(ignoreset){
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+
+                        <span class="keyword">var</span> pathset = [<span class="string"><span class="delimiter">&quot;</span><span class="content">flow</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$flow</span><span class="delimiter">'</span></span>]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, [])
+                        ret.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">flow</span><span class="delimiter">&quot;</span></span>
+                        root.children.push(ret)
+                        <span class="keyword">return</span> root
 
                 }
+
+                <span class="comment">// recursively read all directories starting from a base path</span>
+                <span class="local-variable">this</span>.<span class="function">readAllPaths</span> = <span class="keyword">function</span>(ignoreset <span class="comment">//files and directories to ignore while recursively expanding</span>
+                ){
+                        <span class="comment">// lets read all paths.</span>
+                        <span class="comment">// lets read the directory and return it</span>
+                        <span class="keyword">var</span> root = {<span class="key">collapsed</span>:<span class="integer">0</span>, <span class="key">children</span>:[]}
+
+                        <span class="keyword">if</span>(ignoreset) ignoreset = ignoreset.map(<span class="keyword">function</span>(value){
+                                <span class="keyword">if</span>(value.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">@</span><span class="delimiter">'</span></span>) == <span class="integer">0</span>) <span class="keyword">return</span> <span class="keyword">new</span> RegExp(value.slice(<span class="integer">1</span>))
+                                <span class="keyword">return</span> value
+                        })
+
+                        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
+                                <span class="keyword">if</span>(ignoreset.indexOf(key) !== -<span class="integer">1</span>) <span class="keyword">continue</span>
+                                <span class="keyword">var</span> ret = readRecurDir(define.expandVariables(define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key]), <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, ignoreset)
+                                ret.name = key
+                                root.children.push(ret)
+                        }
+                        <span class="keyword">return</span> root
+                }
+        })
+
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> [
-                        urlfetch({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">urlfetch</span><span class="delimiter">&quot;</span></span>}),
-                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>
-                                ,<span class="key">style</span>:{<span class="predefined">$</span>:{<span class="key">fontsize</span>:<span class="integer">12</span>}}
-
-                                        ,<span class="function">acceleromove</span>: <span class="keyword">function</span>(x,y,z){
-                                                <span class="comment">//console.log(&quot;moving:&quot; , x,y,z);</span>
-                                                <span class="keyword">var</span> d = <span class="integer">1000</span>/<span class="float">5.0</span>;
-                                                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>).camera = Animate({<span class="float">0.5</span>:vec3(x*d, y*d, z*d)});
+                        <span class="local-variable">this</span>.fileio(),
+                        screen({
+                                <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>),
+                                <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">style</span>:{
+                                        <span class="predefined">$</span>:{
+                                                <span class="key">fontsize</span>:<span class="integer">12</span>
                                         }
-                                        ,<span class="function">acceleropan</span>: <span class="keyword">function</span>(x,y,z){console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">panning:</span><span class="delimiter">&quot;</span></span>, x,y,z);}
-                                }
-                                ,view({<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#5b5b5b</span><span class="delimiter">&quot;</span></span>}
-                                        ,splitcontainer({<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>}
-                                                ,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flex</span>:<span class="float">0.2</span>,<span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>},
-                                                        noisegrid({<span class="key">padding</span>:<span class="integer">20</span>, <span class="key">flexwrap</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>, <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>}
-                                                        <span class="comment">//,label({outline:true, fontsize: 130, outline_thickness: 10, text:&quot;outline test&quot;, bg:0})</span>
-                                                                ,label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Dreem Mapping</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">10</span>,<span class="key">bold</span>:<span class="predefined-constant">true</span>,<span class="key">fontsize</span>:<span class="integer">20</span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>})
-                                                                ,numberbox({<span class="key">value</span>:<span class="integer">16</span>, <span class="function">onvalue</span>:<span class="keyword">function</span>(){}.bind(<span class="local-variable">this</span>), <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">numberbox</span><span class="delimiter">&quot;</span></span>, <span class="key">minvalue</span>:<span class="integer">0</span>, <span class="key">stepvalue</span>:<span class="integer">1</span>, <span class="key">maxvalue</span>:<span class="integer">18</span>})
-                                                                ,Buttons
-                                                                ,noisegrid({<span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="predefined-constant">undefined</span>, <span class="key">borderradius</span>:<span class="integer">10</span>, <span class="key">margin</span>:<span class="integer">20</span>,<span class="key">borderwidth</span>:<span class="integer">2</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>,  <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span> , <span class="key">padding</span>:<span class="integer">5</span> }
-                                                                ,label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Rotation control</span><span class="delimiter">&quot;</span></span>,<span class="key">margin</span>: <span class="integer">10</span>,<span class="key">fontsize</span>:<span class="integer">12</span>,  <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>})
-                                                                ,ballrotate({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ballrotate1</span><span class="delimiter">&quot;</span></span>, <span class="key">height</span>:<span class="integer">100</span>, <span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>})
-
-                                                                )
-                                                                ,button({ <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Used Tile types</span><span class="delimiter">&quot;</span></span>,<span class="function">click</span>:<span class="keyword">function</span>(){<span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">themap</span><span class="delimiter">&quot;</span></span>).dumpkindset();}, <span class="key">margin</span>:<span class="integer">4</span>})
-                                                        )
-                                                )
-
-                                                ,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flex</span>:<span class="float">0.8</span>},
-                                                        noisegrid({ <span class="key">padding</span>: <span class="integer">0</span>, <span class="key">flex</span>:<span class="integer">1</span>}
-                                                                ,map({
-                                                                        <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">themap</span><span class="delimiter">&quot;</span></span>
-                                                                })
-
-                                                        )
-                                                )
-                                        )
-                                )
+                                }},
+                                flowgraph()
                         )
-                        ,screen({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">acceleroremote</span><span class="delimiter">&quot;</span></span>},acceleroremote({<span class="key">target</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">index</span><span class="delimiter">&quot;</span></span>}))                        
-                ];
+                ]
         }
 })
 </pre></td>

@@ -162,69 +162,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n8" name="n8">8</a>
 <a href="#n9" name="n9">9</a>
 <strong><a href="#n10" name="n10">10</a></strong>
-<a href="#n11" name="n11">11</a>
-<a href="#n12" name="n12">12</a>
-<a href="#n13" name="n13">13</a>
-<a href="#n14" name="n14">14</a>
-<a href="#n15" name="n15">15</a>
-<a href="#n16" name="n16">16</a>
-<a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
-<a href="#n36" name="n36">36</a>
-<a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, icon, label, view, screen, splitcontainer, cadgrid, <span class="predefined">$widgets$</span>, toolkit) {
-        
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(<span class="predefined">$server$</span>, service, <span class="predefined">$ui$</span>, screen, view, <span class="predefined">$flow$services$</span>, map, omdb, webrequest, <span class="predefined">$flow$controllers$</span>, xypad, knob, keyboard, dpad, <span class="predefined">$flow$displays$</span>, labtext, inputs, outputs, album) {
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
-                        screen(
-                                splitcontainer(
-                                        cadgrid({
-                                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>, 
-                                                        <span class="key">flex</span>:<span class="integer">3</span>, 
-                                                        <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>, 
-                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>, 
-                                                        <span class="key">gridsize</span>:<span class="integer">10</span>, 
-                                                        <span class="key">majorevery</span>:<span class="integer">5</span>, 
-                                                        <span class="key">majorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#575757</span><span class="delimiter">&quot;</span></span>, 
-                                                        <span class="key">minorline</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#484848</span><span class="delimiter">&quot;</span></span>, 
-                                                        <span class="key">alignitems</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>, 
-                                                        <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>, 
-                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, 
-                                                        <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>
-                                                },
-                                                view({<span class="key">tooltarget</span>:<span class="predefined-constant">false</span>, <span class="key">height</span>:<span class="integer">160</span>, <span class="key">width</span>:<span class="integer">160</span>, <span class="key">bgcolor</span>:vec4(<span class="integer">0</span>,<span class="float">0.013421067036688328</span>,<span class="float">0.501960813999176</span>,<span class="integer">1</span>)}),
-                                                icon({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">cornflower</span><span class="delimiter">'</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>}),
-                                                icon({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">cornflower</span><span class="delimiter">'</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>}),
-                                                view({<span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>, <span class="key">height</span>:<span class="integer">60</span>, <span class="key">width</span>:<span class="integer">60</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>}),
-                                                view({<span class="key">height</span>:<span class="integer">60</span>, <span class="key">width</span>:<span class="integer">60</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>}),
-                                                label({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightgreen</span><span class="delimiter">'</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Howdy!</span><span class="delimiter">'</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>, <span class="key">x</span>:<span class="integer">925</span>, <span class="key">y</span>:<span class="integer">175</span>}),
-                                                view({<span class="key">height</span>:<span class="integer">60</span>, <span class="key">width</span>:<span class="integer">60</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>, <span class="key">x</span>:<span class="integer">289</span>, <span class="key">y</span>:<span class="integer">209</span>}),
-                                                icon({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">cornflower</span><span class="delimiter">'</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>, <span class="key">x</span>:<span class="integer">642</span>, <span class="key">y</span>:<span class="integer">79</span>}),
-                                                icon({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">cornflower</span><span class="delimiter">'</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>, <span class="key">x</span>:<span class="integer">548</span>, <span class="key">y</span>:<span class="integer">147</span>}),
-                                                view({<span class="key">height</span>:<span class="integer">60</span>, <span class="key">width</span>:<span class="integer">60</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>, <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>, <span class="key">x</span>:<span class="integer">454</span>, <span class="key">y</span>:<span class="integer">118</span>})
-                                        ),
-                                        toolkit({<span class="key">inspect</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>})
-                                )
-                        )
+                        xypad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">xypad0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">243</span>, <span class="key">y</span>:<span class="integer">412</span>}}),
+                        labtext({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">labtext0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">705</span>, <span class="key">y</span>:<span class="integer">142</span>}, <span class="key">vec2</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.xypad0.pointerpos</span><span class="delimiter">&quot;</span></span>), <span class="key">string</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.rpc.dpad0.value</span><span class="delimiter">&quot;</span></span>)}),
+                        dpad({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">dpad0</span><span class="delimiter">&quot;</span></span>, <span class="key">flowdata</span>:{<span class="key">x</span>:<span class="integer">100</span>, <span class="key">y</span>:<span class="integer">234</span>}})
                 ]
         }
 }

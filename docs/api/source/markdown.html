@@ -261,26 +261,26 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n107" name="n107">107</a>
 <a href="#n108" name="n108">108</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label){
         <span class="comment">// Markdown display class - this element can display a small subset of the &quot;markdown&quot; syntax. See the SUPPORTED_MARKDOWN.md file in the docviewer for supported elements.</span>
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// Body can be a single string or an array of strings - each string will be its own paragraph.</span>
                 <span class="key">body</span>: {},
-                
-                <span class="comment">// alignment of the bodytext. </span>
-                <span class="comment">// accepted values are &quot;left&quot;, &quot;right&quot;, &quot;justify&quot; and &quot;center&quot; </span>
+
+                <span class="comment">// alignment of the bodytext.</span>
+                <span class="comment">// accepted values are &quot;left&quot;, &quot;right&quot;, &quot;justify&quot; and &quot;center&quot;</span>
                 <span class="key">align</span>: Config({<span class="key">type</span>: String,  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>}),
 
                 <span class="comment">// Base fontsize - heading sizes will be multiples of this value.</span>
                 <span class="key">fontsize</span>: Config({<span class="key">type</span>:Number, <span class="key">value</span>: <span class="integer">14</span>}),
-                
+
                 <span class="comment">// The color to use as the default color for this textblock.</span>
                 <span class="key">fontcolor</span>: Config({<span class="key">type</span>:vec4, <span class="key">value</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>)})
         }
@@ -292,60 +292,60 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Create a set of visual elements for an array of textlines.</span>
         <span class="local-variable">this</span>.<span class="function">buildMarkdown</span>= <span class="keyword">function</span>(lines){
                 <span class="keyword">var</span> res = [];
-                
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> a <span class="keyword">in</span> lines)
-                {                                
+                {
                         <span class="keyword">var</span> L = lines[a];
                         <span class="keyword">var</span> LT = L.trim();
                         <span class="keyword">if</span> (LT.length == <span class="integer">0</span>) <span class="keyword">continue</span>;
-                
+
                         <span class="keyword">var</span> fontsize = <span class="local-variable">this</span>.fontsize;
                         <span class="keyword">var</span> Margin = vec4(<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">10</span>);
                         <span class="keyword">if</span> (LT.indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">######</span><span class="delimiter">&quot;</span></span>) == <span class="integer">0</span>){
                                 L = LT.substr(<span class="integer">7</span>);
-                                fontsize = <span class="local-variable">this</span>.fontsize * (<span class="integer">16</span>. <span class="regexp"><span class="delimiter">/</span><span class="content"> 14.);                                
+                                fontsize = <span class="local-variable">this</span>.fontsize * (<span class="integer">16</span>. <span class="regexp"><span class="delimiter">/</span><span class="content"> 14.);
                         } else if (LT.indexOf(&quot;#####&quot;) == 0){
                                 L = LT.substr(6);
-                                fontsize = this.fontsize * (18. </span><span class="delimiter">/</span></span> <span class="integer">14</span>.);                                
+                                fontsize = this.fontsize * (18. </span><span class="delimiter">/</span></span> <span class="integer">14</span>.);
                         } <span class="keyword">else</span> <span class="keyword">if</span> (LT.indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">####</span><span class="delimiter">&quot;</span></span>) == <span class="integer">0</span>){
                                 L = LT.substr(<span class="integer">5</span>);
-                                fontsize = <span class="local-variable">this</span>.fontsize * (<span class="integer">22</span>. <span class="regexp"><span class="delimiter">/</span><span class="content"> 14.);                                
+                                fontsize = <span class="local-variable">this</span>.fontsize * (<span class="integer">22</span>. <span class="regexp"><span class="delimiter">/</span><span class="content"> 14.);
                         } else if (LT.indexOf(&quot;###&quot;) == 0){
                                 L = LT.substr(4);
-                                fontsize = this.fontsize * (25. </span><span class="delimiter">/</span></span> <span class="integer">14</span>.);                                
+                                fontsize = this.fontsize * (25. </span><span class="delimiter">/</span></span> <span class="integer">14</span>.);
                         } <span class="keyword">else</span> <span class="keyword">if</span> (LT.indexOf(<span class="string"><span class="delimiter">&quot;</span><span class="content">##</span><span class="delimiter">&quot;</span></span>) == <span class="integer">0</span>){
                                 L = LT.substr(<span class="integer">3</span>);
-                                fontsize = <span class="local-variable">this</span>.fontsize * (<span class="integer">27</span>. <span class="regexp"><span class="delimiter">/</span><span class="content"> 14.);                                
+                                fontsize = <span class="local-variable">this</span>.fontsize * (<span class="integer">27</span>. <span class="regexp"><span class="delimiter">/</span><span class="content"> 14.);
                         } else if (LT.indexOf(&quot;#&quot;) == 0){
-                                L = LT.substr(2);                                        
-                                fontsize = this.fontsize * (30. </span><span class="delimiter">/</span></span> <span class="integer">14</span>.);                                
+                                L = LT.substr(2);
+                                fontsize = this.fontsize * (30. </span><span class="delimiter">/</span></span> <span class="integer">14</span>.);
                         } <span class="keyword">else</span> {
                                 <span class="comment">// default text</span>
                         }
-                        
+
                         res.push(label({<span class="key">fgcolor</span>: <span class="local-variable">this</span>.fontcolor, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">margin</span>: Margin, <span class="key">text</span>: L, <span class="key">fontsize</span>: fontsize, <span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">align</span>: <span class="local-variable">this</span>.align}));
                 }
-                
+
                 <span class="keyword">return</span> res;
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.body) <span class="keyword">return</span> [];
                 <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.body) === <span class="string"><span class="delimiter">&quot;</span><span class="content">array</span><span class="delimiter">&quot;</span></span> || (<span class="local-variable">this</span>.body.length &amp;&amp; <span class="keyword">typeof</span>(<span class="local-variable">this</span>.body) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span> ) ){
                                 <span class="comment">// join parts and do markup</span>
-                                
+
                         <span class="keyword">var</span> lines = [];
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.body.length;i++)
                         {
                                 <span class="keyword">var</span> splitted = <span class="local-variable">this</span>.body[i].split(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>)
                                 <span class="keyword">for</span>(<span class="keyword">var</span> j <span class="keyword">in</span> splitted) lines.push(splitted[j]);
                         }
-                                
+
                         <span class="keyword">return</span> <span class="local-variable">this</span>.buildMarkdown(lines);;
                 }
-                <span class="keyword">else</span>{                                
+                <span class="keyword">else</span>{
                         <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.body) === <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>){
-                                
+
                                 <span class="keyword">var</span> lines = [];
                                 <span class="keyword">var</span> splitted = <span class="local-variable">this</span>.body.split(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>);
                                 <span class="keyword">for</span>(<span class="keyword">var</span> j <span class="keyword">in</span> splitted) lines.push(splitted[j]);
@@ -353,14 +353,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">return</span> <span class="local-variable">this</span>.buildMarkdown(lines);
                         }
                         <span class="keyword">else</span>{
-                                <span class="keyword">return</span> [label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>, <span class="key">bg</span>:<span class="predefined-constant">false</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">unknown format for body!</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.body.toString(), <span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">fontsize</span>:<span class="integer">12</span>})];
+                                <span class="keyword">return</span> [label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">unknown format for body!</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.body.toString(), <span class="key">multiline</span>: <span class="predefined-constant">true</span>, <span class="key">fontsize</span>:<span class="integer">12</span>})];
                         }
                 }
         }
 
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [                                                        
+                        <span class="keyword">return</span> [
                                 markdown({<span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>, <span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content"># Heading on the right</span><span class="char">\n</span><span class="content">Bodytext</span><span class="delimiter">&quot;</span></span>})
                                 ,markdown({<span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">justify</span><span class="delimiter">&quot;</span></span>,<span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">## Justified text</span><span class="char">\n</span><span class="content">Should space out neatly on the line.</span><span class="delimiter">&quot;</span></span>})
                                 ,markdown({<span class="key">align</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>,<span class="key">body</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">### Basic leftalignment</span><span class="char">\n</span><span class="content">As usual</span><span class="delimiter">&quot;</span></span>})

@@ -2865,6 +2865,57 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2711" name="n2711">2711</a>
 <a href="#n2712" name="n2712">2712</a>
 <a href="#n2713" name="n2713">2713</a>
+<a href="#n2714" name="n2714">2714</a>
+<a href="#n2715" name="n2715">2715</a>
+<a href="#n2716" name="n2716">2716</a>
+<a href="#n2717" name="n2717">2717</a>
+<a href="#n2718" name="n2718">2718</a>
+<a href="#n2719" name="n2719">2719</a>
+<strong><a href="#n2720" name="n2720">2720</a></strong>
+<a href="#n2721" name="n2721">2721</a>
+<a href="#n2722" name="n2722">2722</a>
+<a href="#n2723" name="n2723">2723</a>
+<a href="#n2724" name="n2724">2724</a>
+<a href="#n2725" name="n2725">2725</a>
+<a href="#n2726" name="n2726">2726</a>
+<a href="#n2727" name="n2727">2727</a>
+<a href="#n2728" name="n2728">2728</a>
+<a href="#n2729" name="n2729">2729</a>
+<strong><a href="#n2730" name="n2730">2730</a></strong>
+<a href="#n2731" name="n2731">2731</a>
+<a href="#n2732" name="n2732">2732</a>
+<a href="#n2733" name="n2733">2733</a>
+<a href="#n2734" name="n2734">2734</a>
+<a href="#n2735" name="n2735">2735</a>
+<a href="#n2736" name="n2736">2736</a>
+<a href="#n2737" name="n2737">2737</a>
+<a href="#n2738" name="n2738">2738</a>
+<a href="#n2739" name="n2739">2739</a>
+<strong><a href="#n2740" name="n2740">2740</a></strong>
+<a href="#n2741" name="n2741">2741</a>
+<a href="#n2742" name="n2742">2742</a>
+<a href="#n2743" name="n2743">2743</a>
+<a href="#n2744" name="n2744">2744</a>
+<a href="#n2745" name="n2745">2745</a>
+<a href="#n2746" name="n2746">2746</a>
+<a href="#n2747" name="n2747">2747</a>
+<a href="#n2748" name="n2748">2748</a>
+<a href="#n2749" name="n2749">2749</a>
+<strong><a href="#n2750" name="n2750">2750</a></strong>
+<a href="#n2751" name="n2751">2751</a>
+<a href="#n2752" name="n2752">2752</a>
+<a href="#n2753" name="n2753">2753</a>
+<a href="#n2754" name="n2754">2754</a>
+<a href="#n2755" name="n2755">2755</a>
+<a href="#n2756" name="n2756">2756</a>
+<a href="#n2757" name="n2757">2757</a>
+<a href="#n2758" name="n2758">2758</a>
+<a href="#n2759" name="n2759">2759</a>
+<strong><a href="#n2760" name="n2760">2760</a></strong>
+<a href="#n2761" name="n2761">2761</a>
+<a href="#n2762" name="n2762">2762</a>
+<a href="#n2763" name="n2763">2763</a>
+<a href="#n2764" name="n2764">2764</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -2907,18 +2958,28 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// - optimized live editability and reloading of all class hierarchy parts (thats the reason</span>
 <span class="comment">//   the modulesystem + classes are fused)</span>
 
-(<span class="keyword">function</span> <span class="function">define_module</span>(config_define){
+(<span class="keyword">function</span> <span class="function">define_module</span>(){
+
+        <span class="keyword">var</span> config_define 
+        <span class="keyword">if</span>(<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) config_define =  window.define
+        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> self !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) config_define = self.define
+        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> global !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) global.define
 
         <span class="comment">// the main define function</span>
-        <span class="keyword">function</span> <span class="function">define</span>(factory){
-                <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length == <span class="integer">2</span>){ <span class="comment">// precompiled version</span>
-                        define.factory[<span class="local-variable">arguments</span>[<span class="integer">1</span>]] = factory
+        <span class="keyword">function</span> <span class="function">define</span>(factory, <span class="reserved">package</span>){
+                <span class="keyword">if</span>(<span class="reserved">package</span> !== <span class="predefined-constant">undefined</span>){ <span class="comment">// precompiled version</span>
+                        define.factory[<span class="reserved">package</span>] = factory
                         <span class="keyword">return</span>
                 }
                 define.last_factory = factory <span class="comment">// store for the script tag</span>
                 <span class="comment">// continue calling</span>
                 <span class="keyword">if</span>(define.define) define.define(factory)
         }
+        
+        <span class="keyword">if</span>(<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) window.define = define, define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">browser</span><span class="delimiter">'</span></span>
+        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> self !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) self.define = define, define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">worker</span><span class="delimiter">'</span></span>
+        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> global !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) global.define = define, define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">nodejs</span><span class="delimiter">'</span></span>
+        <span class="keyword">else</span> define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">v8</span><span class="delimiter">'</span></span>
 
         <span class="comment">// default config variables</span>
         define.inner = define_module
@@ -3050,7 +3111,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         define.<span class="function">deferPromise</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> res, rej
-                <span class="keyword">var</span> prom = <span class="keyword">new</span> Promise(<span class="keyword">function</span>(ires, irej){
+                <span class="keyword">var</span> prom = <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(ires, irej){
                         res = ires, rej = irej
                 })
                 prom.resolve = res
@@ -3083,6 +3144,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> factory = define.factory[abs_path]
 
                         <span class="keyword">if</span>(!factory &amp;&amp; dep_path.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>) === -<span class="integer">1</span> &amp;&amp; dep_path.charAt(<span class="integer">0</span>) !== <span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>){
+                                console.log(abs_path)
                                 <span class="comment">//console.log('skipping', dep_path)</span>
                                 <span class="keyword">return</span> <span class="predefined-constant">null</span>
                         }
@@ -3092,7 +3154,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         module = {<span class="key">exports</span>:{}, <span class="key">factory</span>:factory, <span class="key">id</span>:abs_path, <span class="key">filename</span>:abs_path}
                         define.module[abs_path] = module
-
                         <span class="keyword">if</span>(factory === <span class="predefined-constant">null</span>) <span class="keyword">return</span> <span class="predefined-constant">null</span> <span class="comment">// its not an AMD module, but accept that</span>
                         <span class="keyword">if</span>(!factory) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot find factory for module (file not found): </span><span class="delimiter">&quot;</span></span> + dep_path + <span class="string"><span class="delimiter">&quot;</span><span class="content"> &gt; </span><span class="delimiter">&quot;</span></span> + abs_path)
 
@@ -3120,7 +3181,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 require.<span class="function">async</span> = <span class="keyword">function</span>(path, ext){
                         <span class="keyword">var</span> dep_path = define.joinPath(base_path, define.expandVariables(path))
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                 <span class="keyword">if</span>(define.factory[path]){
                                         <span class="comment">// if its already asynchronously loading..</span>
                                         <span class="keyword">var</span> module = require(path, ext)
@@ -3135,7 +3196,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 require.<span class="function">reloadAsync</span> = <span class="keyword">function</span>(path){
 
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
 
                                 define.reload_id++
 
@@ -3181,28 +3242,60 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         define.require = define.localRequire(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">root</span><span class="delimiter">'</span></span>)
 
-        define.<span class="function">findRequiresInFactory</span> = <span class="keyword">function</span>(factory){
+        define.<span class="function">findRequiresInFactory</span> = <span class="keyword">function</span>(factory, req){
                 <span class="keyword">var</span> search = factory.toString()
                 
                 <span class="keyword">if</span>(factory.body) search += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> + factory.body.toString()
                 <span class="keyword">if</span>(factory.depstring) search += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> + factory.depstring.toString()                
 
-                <span class="keyword">var</span> req = []
+                req = req || []
                 <span class="comment">// bail out if we redefine require</span>
                 <span class="keyword">if</span>(search.match(<span class="regexp"><span class="delimiter">/</span><span class="content">function</span><span class="char">\s</span><span class="content">+require</span><span class="delimiter">/</span></span>) || search.match(<span class="regexp"><span class="delimiter">/</span><span class="content">var</span><span class="char">\s</span><span class="content">+require</span><span class="delimiter">/</span></span>)){
                         <span class="keyword">return</span> req
                 }
 
                 search.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\*</span><span class="content">[</span><span class="char">\s</span><span class="char">\S</span><span class="content">]*?</span><span class="content">\*</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>).replace(<span class="regexp"><span class="delimiter">/</span><span class="content">([^:]|^)</span><span class="content">\/</span><span class="content">\/</span><span class="content">[^</span><span class="char">\n</span><span class="content">]*</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="delimiter">'</span></span>).replace(<span class="regexp"><span class="delimiter">/</span><span class="content">require</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="char">\s</span><span class="content">*[&quot;']([^&quot;']+)[&quot;']</span><span class="char">\s</span><span class="content">*</span><span class="content">\)</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="keyword">function</span>(m,path){
+                        
                         req.push(path)
                 })
 
-                <span class="comment">// also scan for define.class</span>
+                <span class="comment">// fetch string baseclasses for nested classes and add them</span>
+                <span class="keyword">var</span> baserx = <span class="keyword">new</span> RegExp(<span class="regexp"><span class="delimiter">/</span><span class="content">define</span><span class="content">\.</span><span class="content">class</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="char">\s</span><span class="content">*(?:this</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*['&quot;][$_</span><span class="char">\w</span><span class="content">]+['&quot;]</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*)?(?:['&quot;]([^&quot;']+)['&quot;]</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*)function</span><span class="delimiter">/</span><span class="modifier">g</span></span>)
+
+                <span class="keyword">while</span>((result = baserx.exec(search)) !== <span class="predefined-constant">null</span>) {
+                        req.push(result[<span class="integer">1</span>])
+                }
 
 
                 <span class="keyword">return</span> req
         }
 
+
+        define.<span class="function">buildClassArgs</span> = <span class="keyword">function</span>(fn){
+                <span class="comment">// Ideally these regexps are better, not vastly slower but maybe proper specwise matching for stuff, its a bit rough now</span>
+                <span class="comment">// This is otherwise known as a 'really bad idea'. However this makes the modules work easily, with a relatively small collision risk.                </span>
+                <span class="keyword">var</span> str = fn.toString()
+
+                str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\*</span><span class="content">[</span><span class="char">\s</span><span class="char">\S</span><span class="content">]*?</span><span class="content">\*</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>).replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\/</span><span class="content">[^</span><span class="char">\n</span><span class="content">]*</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
+                
+                <span class="keyword">var</span> result;
+                <span class="keyword">var</span> output = []
+                <span class="keyword">var</span> result = str.match(<span class="regexp"><span class="delimiter">/</span><span class="content">function</span><span class="char">\s</span><span class="content">*[$_</span><span class="char">\w</span><span class="content">]*</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="content">([$_</span><span class="char">\w</span><span class="content">,</span><span class="char">\s</span><span class="content">]*)</span><span class="content">\)</span><span class="delimiter">/</span></span>)
+
+                <span class="keyword">var</span> map = result[<span class="integer">1</span>].split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>)
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;map.length; i++) <span class="keyword">if</span>(map[i] !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) output.push(map[i].toLowerCase().trim())
+
+                <span class="comment">// now fetch all the fast classdeps</span>
+                <span class="keyword">var</span> matchrx = <span class="keyword">new</span> RegExp(<span class="regexp"><span class="delimiter">/</span><span class="content">define</span><span class="content">\.</span><span class="content">class</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="char">\s</span><span class="content">*(?:this</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*['&quot;][$_</span><span class="char">\w</span><span class="content">]+['&quot;]</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*)?(?:(?:['&quot;][[^&quot;']+['&quot;]|[$_</span><span class="char">\w</span><span class="content">]+)</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*)?function</span><span class="char">\s</span><span class="content">*[$_</span><span class="char">\w</span><span class="content">]*</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="content">([$_</span><span class="char">\w</span><span class="content">,</span><span class="char">\s</span><span class="content">]*)</span><span class="content">\)</span><span class="char">\s</span><span class="content">*</span><span class="content">\{</span><span class="delimiter">/</span><span class="modifier">g</span></span>)
+
+                <span class="keyword">while</span>((result = matchrx.exec(str)) !== <span class="predefined-constant">null</span>) {
+                        output.push(<span class="string"><span class="delimiter">'</span><span class="content">$$</span><span class="delimiter">'</span></span>)
+                        <span class="keyword">var</span> map = result[<span class="integer">1</span>].split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>)
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;map.length; i++)<span class="keyword">if</span>(map[i] !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) output.push(map[i].toLowerCase())
+                }
+
+                <span class="keyword">return</span> output
+        }
 
 
 
@@ -3295,6 +3388,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">else</span> <span class="keyword">if</span>(builtin === <span class="integer">6</span>) args[i] = body.outer
                         }
                         <span class="keyword">else</span>{
+
                                 args[i] = require(path)
                                 args[i].nested_module = Constructor.module
                         }
@@ -3422,27 +3516,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> Constructor
         }
 
-        define.<span class="function">buildClassArgs</span> = <span class="keyword">function</span>(fn){
 
-                <span class="keyword">var</span> str = fn.toString()
-
-                str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\*</span><span class="content">[</span><span class="char">\s</span><span class="char">\S</span><span class="content">]*?</span><span class="content">\*</span><span class="content">\/</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>).replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\/</span><span class="content">[^</span><span class="char">\n</span><span class="content">]*</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                
-                <span class="keyword">var</span> result;
-                <span class="keyword">var</span> output = []
-                <span class="keyword">var</span> result = str.match(<span class="regexp"><span class="delimiter">/</span><span class="content">function</span><span class="char">\s</span><span class="content">*[$_</span><span class="char">\w</span><span class="content">]*</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="content">([$_</span><span class="char">\w</span><span class="content">,</span><span class="char">\s</span><span class="content">]*)</span><span class="content">\)</span><span class="delimiter">/</span></span>)
-
-                <span class="keyword">var</span> map = result[<span class="integer">1</span>].split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>)
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;map.length; i++) <span class="keyword">if</span>(map[i] !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) output.push(map[i].toLowerCase().trim())
-
-                <span class="keyword">var</span> matchrx = <span class="keyword">new</span> RegExp(<span class="regexp"><span class="delimiter">/</span><span class="content">define</span><span class="content">\.</span><span class="content">(?:render|class)</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="char">\s</span><span class="content">*(?:this</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*['&quot;][$_</span><span class="char">\w</span><span class="content">]+['&quot;]</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*(?:[$_</span><span class="char">\w</span><span class="content">]+</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*){0,1}){0,1}function</span><span class="char">\s</span><span class="content">*[$_</span><span class="char">\w</span><span class="content">]*</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="content">([$_</span><span class="char">\w</span><span class="content">,</span><span class="char">\s</span><span class="content">]*)</span><span class="content">\)</span><span class="char">\s</span><span class="content">*</span><span class="content">\{</span><span class="delimiter">/</span><span class="modifier">g</span></span>)
-                <span class="keyword">while</span>((result = matchrx.exec(str)) !== <span class="predefined-constant">null</span>) {
-                        output.push(<span class="string"><span class="delimiter">'</span><span class="content">$$</span><span class="delimiter">'</span></span>)
-                        <span class="keyword">var</span> map = result[<span class="integer">1</span>].split(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="content">*,</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>)
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i&lt;map.length; i++)<span class="keyword">if</span>(map[i] !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) output.push(map[i].toLowerCase())
+        define.<span class="function">workers</span> = <span class="keyword">function</span>(head, tail, count){
+                <span class="keyword">if</span>(!count) count = <span class="integer">1</span>
+                <span class="keyword">var</span> source = head + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">\n</span><span class="content">\n</span><span class="content">;// Worker includes </span><span class="content">\n</span><span class="content">self.define = {packaged:true,$platform:&quot;webgl&quot;};(</span><span class="delimiter">'</span></span> + define_module.toString() + <span class="string"><span class="delimiter">'</span><span class="content">)();</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                source += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + define.module[define.expandVariables(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/math.js</span><span class="delimiter">'</span></span>)].factory.toString() + <span class="string"><span class="delimiter">'</span><span class="content">)();</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> define.paths){
+                        source += <span class="string"><span class="delimiter">'</span><span class="content">define.$</span><span class="delimiter">'</span></span>+key + <span class="string"><span class="delimiter">'</span><span class="content"> = &quot;</span><span class="delimiter">'</span></span>+define[<span class="string"><span class="delimiter">'</span><span class="content">$</span><span class="delimiter">'</span></span>+key]+<span class="string"><span class="delimiter">'</span><span class="content">&quot;;</span><span class="content">\n</span><span class="delimiter">'</span></span>
                 }
-
-                <span class="keyword">return</span> output
+                source += tail
+                <span class="keyword">var</span> blob = <span class="keyword">new</span> Blob([source], { <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span> })
+                <span class="keyword">var</span> worker_url = URL.createObjectURL(blob)
+                <span class="keyword">var</span> workers = []
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; count; i ++){
+                        <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(worker_url)
+                        worker.source = source
+                        worker.stack = <span class="integer">0</span>
+                        workers.push(worker)
+                }
+                <span class="keyword">return</span> workers
         }
 
         define.<span class="function">mixin</span> = <span class="keyword">function</span>(body, body2){
@@ -3451,11 +3543,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">return</span> define.<span class="reserved">class</span>.apply(define, <span class="local-variable">arguments</span>)
         }
 
-        <span class="comment">// class module support</span>
+        define.<span class="function">packagedClass</span> = <span class="keyword">function</span>(packaged, args){
+                args[args.length - <span class="integer">1</span>].packaged = packaged
+                define.<span class="reserved">class</span>.apply(define, args)
+        }
+
+        <span class="comment">// define.class('base', function(){})                2</span>
+        <span class="comment">// define.class(function(){})                        1</span>
+        <span class="comment">// define.class(this, 'prop', 'base', function(){})  4</span>
+
         define.<span class="reserved">class</span> = <span class="keyword">function</span>(){
                 <span class="comment">// lets make a class</span>
                 <span class="keyword">var</span> base_class
                 <span class="keyword">var</span> body
+                <span class="keyword">var</span> is_inner
                 <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length &gt;= <span class="integer">3</span>){ <span class="comment">// inner class</span>
                         is_inner = <span class="predefined-constant">true</span>
                         <span class="keyword">var</span> outer_this = <span class="local-variable">arguments</span>[<span class="integer">0</span>]
@@ -3514,19 +3615,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         define.makeClass(base, body, require, module, <span class="predefined-constant">undefined</span>, outer_this)
                 }
 
-
                 <span class="comment">// make an argmap</span>
                 body.classargs = define.buildClassArgs(body)
                 <span class="comment">// lets parse the named argument pattern for the body</span>
                 moduleFactory.body = body
+                moduleFactory.deps = []
+
                 <span class="comment">// put the baseclass on the deps</span>
-                <span class="keyword">if</span>(base_class &amp;&amp; <span class="keyword">typeof</span> base_class === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) moduleFactory.depstring = <span class="string"><span class="delimiter">'</span><span class="content">require(&quot;</span><span class="delimiter">'</span></span> + base_class + <span class="string"><span class="delimiter">'</span><span class="content">&quot;)</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span>(base_class &amp;&amp; <span class="keyword">typeof</span> base_class === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
+                        moduleFactory.baseclass = define.expandVariables(base_class)
+                        moduleFactory.deps.push(define.expandVariables(base_class))
+                        moduleFactory.depstring = <span class="string"><span class="delimiter">'</span><span class="content">require(&quot;</span><span class="delimiter">'</span></span> + base_class + <span class="string"><span class="delimiter">'</span><span class="content">&quot;)</span><span class="delimiter">'</span></span>
+                }
 
                 <span class="comment">// add automatic requires</span>
                 <span class="keyword">if</span>(body.classargs){
                         define.walkClassArgs(body.classargs, <span class="keyword">function</span>(builtin, requirepath){
                                 <span class="keyword">if</span>(builtin) <span class="keyword">return</span>
                                 <span class="keyword">if</span>(!moduleFactory.depstring) moduleFactory.depstring = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                                moduleFactory.deps.push(define.expandVariables(requirepath))
                                 moduleFactory.depstring += <span class="string"><span class="delimiter">'</span><span class="content">require(&quot;</span><span class="delimiter">'</span></span> + requirepath + <span class="string"><span class="delimiter">'</span><span class="content">&quot;)</span><span class="delimiter">'</span></span>
                                 <span class="keyword">if</span>(!base_class) base_class = requirepath
                         })
@@ -3537,7 +3644,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">if</span>(define.local_require_stack.length){
                         <span class="keyword">var</span> outer_require = define.local_require_stack[define.local_require_stack.length - <span class="integer">1</span>]
                         <span class="keyword">var</span> outer_module = outer_require.module
-                        <span class="keyword">var</span> module = {<span class="key">exports</span>:{}, <span class="key">filename</span>:outer_module.filename, <span class="key">factory</span>:outer_module.factory}
+                        <span class="keyword">var</span> module = {<span class="key">exports</span>:{}, <span class="key">filename</span>:outer_module.filename, <span class="key">factory</span>:moduleFactory, <span class="key">outer</span>:outer_module}
                         moduleFactory(outer_require, module.exports, module)
                         
                         <span class="keyword">if</span>(outer_this){
@@ -3549,14 +3656,206 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         
                         <span class="keyword">return</span> module.exports
                 }
-
-                <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="local-variable">arguments</span>[<span class="local-variable">arguments</span>.length - <span class="integer">1</span>] == <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){ <span class="comment">// packaged</span>
-                        define(moduleFactory, <span class="local-variable">arguments</span>[<span class="local-variable">arguments</span>.length - <span class="integer">1</span>])
-                }
-                <span class="keyword">else</span>{ <span class="comment">// unpackaged</span>
-                        define(moduleFactory)
-                }
+                <span class="comment">//if(typeof arguments[arguments.length - 1] == 'string'){ // packaged</span>
+                <span class="comment">//        define(moduleFactory, arguments[arguments.length - 1])</span>
+                <span class="comment">//}</span>
+                <span class="comment">//else{ // unpackaged</span>
+                define(moduleFactory, body.packaged)
+                <span class="comment">//}</span>
         }
+
+
+
+
+
+
+
+
+
+        <span class="comment">// Implementation of a debug promise</span>
+
+
+
+
+
+
+
+
+
+
+
+
+        define.<span class="function">debugPromiseLib</span> = <span class="keyword">function</span>(exports){
+                <span class="comment">// Use polyfill for setImmediate for performance gains</span>
+                <span class="keyword">var</span> asap = Promise.immediateFn || (<span class="keyword">typeof</span> setImmediate === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; setImmediate) ||
+                        <span class="keyword">function</span>(fn) { setTimeout(fn, <span class="integer">1</span>); }
+
+                <span class="comment">// Polyfill for Function.prototype.bind</span>
+                <span class="keyword">function</span> <span class="function">bind</span>(fn, thisArg) {
+                        <span class="keyword">return</span> <span class="keyword">function</span>() {
+                                fn.apply(thisArg, <span class="local-variable">arguments</span>)
+                        }
+                }
+
+                <span class="keyword">var</span> isArray = Array.isArray || <span class="keyword">function</span>(value) { <span class="keyword">return</span> Object.prototype.toString.call(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">[object Array]</span><span class="delimiter">&quot;</span></span> }
+
+                <span class="keyword">function</span> <span class="function">Promise</span>(fn) {
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="local-variable">this</span> !== <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) <span class="keyword">throw</span> <span class="keyword">new</span> TypeError(<span class="string"><span class="delimiter">'</span><span class="content">Promises must be constructed via new</span><span class="delimiter">'</span></span>)
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span> fn !== <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) <span class="keyword">throw</span> <span class="keyword">new</span> TypeError(<span class="string"><span class="delimiter">'</span><span class="content">not a function</span><span class="delimiter">'</span></span>)
+                        <span class="local-variable">this</span>._state = <span class="predefined-constant">null</span>
+                        <span class="local-variable">this</span>._value = <span class="predefined-constant">null</span>
+                        <span class="local-variable">this</span>._deferreds = []
+
+                        doResolve(fn, bind(resolve, <span class="local-variable">this</span>), bind(reject, <span class="local-variable">this</span>))
+                }
+
+                <span class="keyword">function</span> <span class="function">handle</span>(deferred) {
+                        <span class="keyword">var</span> me = <span class="local-variable">this</span>
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>._state === <span class="predefined-constant">null</span>) {
+                                <span class="local-variable">this</span>._deferreds.push(deferred)
+                                <span class="keyword">return</span>
+                        }
+                        asap(<span class="keyword">function</span>() {
+                                <span class="keyword">var</span> cb = me._state ? deferred.onFulfilled : deferred.onRejected
+                                <span class="keyword">if</span> (cb === <span class="predefined-constant">null</span>) {
+                                        (me._state ? deferred.resolve : deferred.reject)(me._value)
+                                        <span class="keyword">return</span>
+                                }
+                                <span class="keyword">var</span> ret;
+                                <span class="comment">//try {</span>
+                                        ret = cb(me._value)
+                                <span class="comment">//}</span>
+                                <span class="comment">//catch (e) {</span>
+                                <span class="comment">//        deferred.reject(e)</span>
+                                <span class="comment">//        return;</span>
+                                <span class="comment">//}</span>
+                                deferred.resolve(ret)
+                        })
+                }
+
+                <span class="keyword">function</span> <span class="function">resolve</span>(newValue) {
+                        <span class="comment">//try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure</span>
+                                <span class="keyword">if</span> (newValue === <span class="local-variable">this</span>) <span class="keyword">throw</span> <span class="keyword">new</span> TypeError(<span class="string"><span class="delimiter">'</span><span class="content">A promise cannot be resolved with itself.</span><span class="delimiter">'</span></span>)
+                                <span class="keyword">if</span> (newValue &amp;&amp; (<span class="keyword">typeof</span> newValue === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> newValue === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>)) {
+                                        <span class="keyword">var</span> then = newValue.then
+                                        <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
+                                                doResolve(bind(then, newValue), bind(resolve, <span class="local-variable">this</span>), bind(reject, <span class="local-variable">this</span>))
+                                                <span class="keyword">return</span>;
+                                        }
+                                }
+                                <span class="local-variable">this</span>._state = <span class="predefined-constant">true</span>
+                                <span class="local-variable">this</span>._value = newValue
+                                finale.call(<span class="local-variable">this</span>)
+                        <span class="comment">//} catch (e) { reject.call(this, e); }</span>
+                }
+
+                <span class="keyword">function</span> <span class="function">reject</span>(newValue) {
+                        <span class="local-variable">this</span>._state = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>._value = newValue
+                        finale.call(<span class="local-variable">this</span>)
+                }
+
+                <span class="keyword">function</span> <span class="function">finale</span>() {
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>, len = <span class="local-variable">this</span>._deferreds.length; i &lt; len; i++) {
+                                handle.call(<span class="local-variable">this</span>, <span class="local-variable">this</span>._deferreds[i])
+                        }
+                        <span class="local-variable">this</span>._deferreds = <span class="predefined-constant">null</span>
+                }
+
+                <span class="keyword">function</span> <span class="function">Handler</span>(onFulfilled, onRejected, resolve, reject){
+                        <span class="local-variable">this</span>.onFulfilled = <span class="keyword">typeof</span> onFulfilled === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? onFulfilled : <span class="predefined-constant">null</span>
+                        <span class="local-variable">this</span>.onRejected = <span class="keyword">typeof</span> onRejected === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? onRejected : <span class="predefined-constant">null</span>
+                        <span class="local-variable">this</span>.resolve = resolve
+                        <span class="local-variable">this</span>.reject = reject
+                }
+
+                <span class="keyword">function</span> <span class="function">doResolve</span>(fn, onFulfilled, onRejected) {
+                        <span class="keyword">var</span> done = <span class="predefined-constant">false</span>;
+                        <span class="keyword">try</span> {
+                                fn(<span class="keyword">function</span> (value) {
+                                        <span class="keyword">if</span> (done) <span class="keyword">return</span>
+                                        done = <span class="predefined-constant">true</span>
+                                        onFulfilled(value)
+                                }, <span class="keyword">function</span> (reason) {
+                                        <span class="keyword">if</span> (done) <span class="keyword">return</span>
+                                        done = <span class="predefined-constant">true</span>
+                                        onRejected(reason)
+                                })
+                        } <span class="keyword">catch</span> (ex) {
+                                <span class="keyword">if</span> (done) <span class="keyword">return</span>
+                                done = <span class="predefined-constant">true</span>
+                                onRejected(ex)
+                        }
+                }
+
+                Promise.prototype[<span class="string"><span class="delimiter">'</span><span class="content">catch</span><span class="delimiter">'</span></span>] = <span class="keyword">function</span> (onRejected) {
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.then(<span class="predefined-constant">null</span>, onRejected);
+                }
+
+                Promise.prototype.<span class="function">then</span> = <span class="keyword">function</span>(onFulfilled, onRejected) {
+                        <span class="keyword">var</span> me = <span class="local-variable">this</span>;
+                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject) {
+                                handle.call(me, <span class="keyword">new</span> Handler(onFulfilled, onRejected, resolve, reject))
+                        })
+                }
+
+                Promise.<span class="function">all</span> = <span class="keyword">function</span> () {
+                        <span class="keyword">var</span> args = Array.prototype.slice.call(<span class="local-variable">arguments</span>.length === <span class="integer">1</span> &amp;&amp; isArray(<span class="local-variable">arguments</span>[<span class="integer">0</span>]) ? <span class="local-variable">arguments</span>[<span class="integer">0</span>] : <span class="local-variable">arguments</span>)
+
+                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve, reject) {
+                                <span class="keyword">if</span> (args.length === <span class="integer">0</span>) <span class="keyword">return</span> resolve([])
+                                <span class="keyword">var</span> remaining = args.length
+                                <span class="keyword">function</span> <span class="function">res</span>(i, val) {
+                                        <span class="comment">//try {</span>
+                                                <span class="keyword">if</span> (val &amp;&amp; (<span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>)) {
+                                                        <span class="keyword">var</span> then = val.then
+                                                        <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
+                                                                then.call(val, <span class="keyword">function</span> (val) { res(i, val) }, reject)
+                                                                <span class="keyword">return</span>
+                                                        }
+                                                }
+                                                args[i] = val
+                                                <span class="keyword">if</span> (--remaining === <span class="integer">0</span>) {
+                                                        resolve(args)
+                                                }
+                                        <span class="comment">//} catch (ex) {</span>
+                                        <span class="comment">//        reject(ex)</span>
+                                        <span class="comment">//}</span>
+                                }
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; args.length; i++) {
+                                        res(i, args[i])
+                                }
+                        })
+                }
+
+                Promise.<span class="function">resolve</span> = <span class="keyword">function</span> (value) {
+                        <span class="keyword">if</span> (value &amp;&amp; <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; value.constructor === Promise) {
+                                <span class="keyword">return</span> value
+                        }
+
+                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve) {
+                                resolve(value)
+                        })
+                }
+
+                Promise.<span class="function">reject</span> = <span class="keyword">function</span> (value) {
+                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve, reject) {
+                                reject(value)
+                        })
+                }
+
+                Promise.<span class="function">race</span> = <span class="keyword">function</span> (values) {
+                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve, reject) {
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = values.length; i &lt; len; i++) {
+                                        values[i].then(resolve, reject)
+                                }
+                        })
+                }
+
+                <span class="keyword">return</span> Promise
+        }
+        <span class="comment">// check if we are in debug mode</span>
+        define.Promise = define.debugPromiseLib()
 
 
 
@@ -3584,10 +3883,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         }
 
 
-        <span class="comment">// the environment we are in</span>
-        <span class="keyword">if</span>(<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">browser</span><span class="delimiter">'</span></span>
-        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">nodejs</span><span class="delimiter">'</span></span>
-        <span class="keyword">else</span> define.<span class="predefined">$environment</span> = <span class="string"><span class="delimiter">'</span><span class="content">v8</span><span class="delimiter">'</span></span>
 
 
 
@@ -3604,8 +3899,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="keyword">if</span>(define.packaged){
                 define.require = define.localRequire(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                <span class="keyword">return</span> define
-
 
         }
 
@@ -3628,6 +3921,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 
                 <span class="comment">// if define was already defined use it as a config store</span>
                 <span class="comment">// storage structures</span>
+                define.cputhreads = navigator.hardwareConcurrency || <span class="integer">2</span>
                 define.download_queue = {}
                 define.script_tags = {}
                 <span class="comment">// the require function passed into the factory is local</span>
@@ -3655,12 +3949,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         
                                 <span class="keyword">if</span>(module_deps &amp;&amp; module_deps.indexOf(fac_url) === -<span class="integer">1</span>) module_deps.push(fac_url)
 
-                                <span class="keyword">if</span>(define.factory[fac_url]) <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve){resolve()})
+                                <span class="keyword">if</span>(define.factory[fac_url]) <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){resolve()})
 
                                 <span class="keyword">var</span> prom = define.download_queue[abs_url]
 
                                 <span class="keyword">if</span>(prom){
-                                        <span class="keyword">if</span>(recurblock) <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve){resolve()})
+                                        <span class="keyword">if</span>(recurblock) <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){resolve()})
                                         <span class="keyword">return</span> prom
                                 }
 
@@ -3676,7 +3970,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
 
                         <span class="keyword">function</span> <span class="function">loadImage</span>(facurl, url, from_file){
-                                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                         <span class="keyword">var</span> img = <span class="keyword">new</span> Image()
                                         img.src = url
                                         img.<span class="function">onerror</span> = <span class="keyword">function</span>(){
@@ -3691,7 +3985,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
 
                         <span class="keyword">function</span> <span class="function">loadXHR</span>(facurl, url, from_file, type){
-                                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                         <span class="keyword">var</span> req = <span class="keyword">new</span> XMLHttpRequest()
                                         <span class="comment">// todo, make type do other things</span>
                                         req.responseType = define.lookupFileType(type)
@@ -3722,8 +4016,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                         <span class="comment">// insert by script tag</span>
                         <span class="keyword">function</span> <span class="function">loadScript</span>(facurl, url, from_file){
-                                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
-
+                                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
+                
                                         <span class="keyword">var</span> script = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">script</span><span class="delimiter">'</span></span>)
                                         <span class="keyword">var</span> base_path = define.filePath(url)
                                                 
@@ -3745,6 +4039,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="keyword">var</span> factory = define.last_factory
 
                                                 define.factory[facurl] = factory
+
 
                                                 <span class="keyword">if</span>(!factory) <span class="keyword">return</span> reject(<span class="string"><span class="delimiter">&quot;</span><span class="content">Factory is null for </span><span class="delimiter">&quot;</span></span>+url+<span class="string"><span class="delimiter">&quot;</span><span class="content"> from file </span><span class="delimiter">&quot;</span></span>+from_file + <span class="string"><span class="delimiter">&quot;</span><span class="content"> : </span><span class="delimiter">&quot;</span></span> + facurl)
 
@@ -3935,7 +4230,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 <span class="comment">// fetch it async!</span>
                 <span class="keyword">function</span> <span class="function">httpGetCached</span>(httpurl){
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                 <span class="keyword">var</span> myurl = url.parse(httpurl)
                                 <span class="comment">// ok turn this url into a cachepath</span>
 
@@ -4028,7 +4323,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                                 <span class="comment">// block reentry</span>
                                 <span class="keyword">if</span>(define.download_queue[modurl]){
-                                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
 
                                                 resolve( cache_path_root + url.parse(modurl).path )
                                         })
@@ -4036,7 +4331,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }
 
                                 <span class="comment">// we need to fetch the url, then look at its dependencies, fetch those</span>
-                                <span class="keyword">return</span> define.download_queue[modurl] = <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                                <span class="keyword">return</span> define.download_queue[modurl] = <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                         <span class="comment">// lets make sure we dont already have the module in our system</span>
                                         httpGetCached(modurl).then(<span class="keyword">function</span>(result){
 
@@ -4203,14 +4498,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="keyword">try</span> {
                                         stats = fs.lstatSync(modname)
                                         <span class="keyword">var</span> data = fs.readFileSync(modname)
-                                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                                 resolve(data)
                                         })
                                 }
                                 <span class="keyword">catch</span>(e) {
                                 }
 
-                                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                         loadModuleAsync(modname, <span class="string"><span class="delimiter">&quot;</span><span class="content">root</span><span class="delimiter">&quot;</span></span>).then(<span class="keyword">function</span>(path){
                                                 resolve(require(path))
                                         }).<span class="keyword">catch</span>(<span class="keyword">function</span>(e){
@@ -4673,7 +4968,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 <span class="comment">// lets double the size of the buffer</span>
                                 <span class="keyword">var</span> oldsize = <span class="local-variable">this</span>.allocated * <span class="local-variable">this</span>.slots
 
-                                <span class="keyword">if</span>(<span class="local-variable">this</span>.length &gt; <span class="local-variable">this</span>.allocated * <span class="integer">2</span>) <span class="local-variable">this</span>.allocated = <span class="local-variable">this</span>.length
+                                <span class="keyword">if</span>(length &gt; <span class="local-variable">this</span>.allocated * <span class="integer">2</span>) <span class="local-variable">this</span>.allocated = length
                                 <span class="keyword">else</span> <span class="local-variable">this</span>.allocated = <span class="local-variable">this</span>.allocated * <span class="integer">2</span> <span class="comment">// exponential strategy</span>
 
                                 <span class="keyword">var</span> oldarray = <span class="local-variable">this</span>.array
@@ -5381,203 +5676,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         defineArrayProp(Int32Array.prototype, {<span class="key">x</span>:<span class="integer">0</span>, <span class="key">y</span>:<span class="integer">1</span>, <span class="key">z</span>:<span class="integer">2</span>, <span class="key">w</span>:<span class="integer">3</span>}, [ivec2, ivec3, ivec4])
         <span class="comment">//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])</span>
 
+})()
 
+<span class="comment">// use the switchable promise</span>
 
-
-
-
-
-
-
-        <span class="comment">// Implementation of a promise polyfill</span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-        define.<span class="function">promiseLib</span> = <span class="keyword">function</span>(exports){
-                <span class="comment">// Use polyfill for setImmediate for performance gains</span>
-                <span class="keyword">var</span> asap = Promise.immediateFn || (<span class="keyword">typeof</span> setImmediate === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; setImmediate) ||
-                        <span class="keyword">function</span>(fn) { setTimeout(fn, <span class="integer">1</span>); }
-
-                <span class="comment">// Polyfill for Function.prototype.bind</span>
-                <span class="keyword">function</span> <span class="function">bind</span>(fn, thisArg) {
-                        <span class="keyword">return</span> <span class="keyword">function</span>() {
-                                fn.apply(thisArg, <span class="local-variable">arguments</span>)
-                        }
-                }
-
-                <span class="keyword">var</span> isArray = Array.isArray || <span class="keyword">function</span>(value) { <span class="keyword">return</span> Object.prototype.toString.call(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">[object Array]</span><span class="delimiter">&quot;</span></span> }
-
-                <span class="keyword">function</span> <span class="function">Promise</span>(fn) {
-                        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="local-variable">this</span> !== <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>) <span class="keyword">throw</span> <span class="keyword">new</span> TypeError(<span class="string"><span class="delimiter">'</span><span class="content">Promises must be constructed via new</span><span class="delimiter">'</span></span>)
-                        <span class="keyword">if</span> (<span class="keyword">typeof</span> fn !== <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) <span class="keyword">throw</span> <span class="keyword">new</span> TypeError(<span class="string"><span class="delimiter">'</span><span class="content">not a function</span><span class="delimiter">'</span></span>)
-                        <span class="local-variable">this</span>._state = <span class="predefined-constant">null</span>
-                        <span class="local-variable">this</span>._value = <span class="predefined-constant">null</span>
-                        <span class="local-variable">this</span>._deferreds = []
-
-                        doResolve(fn, bind(resolve, <span class="local-variable">this</span>), bind(reject, <span class="local-variable">this</span>))
-                }
-
-                <span class="keyword">function</span> <span class="function">handle</span>(deferred) {
-                        <span class="keyword">var</span> me = <span class="local-variable">this</span>
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>._state === <span class="predefined-constant">null</span>) {
-                                <span class="local-variable">this</span>._deferreds.push(deferred)
-                                <span class="keyword">return</span>
-                        }
-                        asap(<span class="keyword">function</span>() {
-                                <span class="keyword">var</span> cb = me._state ? deferred.onFulfilled : deferred.onRejected
-                                <span class="keyword">if</span> (cb === <span class="predefined-constant">null</span>) {
-                                        (me._state ? deferred.resolve : deferred.reject)(me._value)
-                                        <span class="keyword">return</span>
-                                }
-                                <span class="keyword">var</span> ret;
-                                <span class="keyword">try</span> {
-                                        ret = cb(me._value)
-                                }
-                                <span class="keyword">catch</span> (e) {
-                                        deferred.reject(e)
-                                        <span class="keyword">return</span>;
-                                }
-                                deferred.resolve(ret)
-                        })
-                }
-
-                <span class="keyword">function</span> <span class="function">resolve</span>(newValue) {
-                        <span class="keyword">try</span> { <span class="comment">//Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure</span>
-                                <span class="keyword">if</span> (newValue === <span class="local-variable">this</span>) <span class="keyword">throw</span> <span class="keyword">new</span> TypeError(<span class="string"><span class="delimiter">'</span><span class="content">A promise cannot be resolved with itself.</span><span class="delimiter">'</span></span>)
-                                <span class="keyword">if</span> (newValue &amp;&amp; (<span class="keyword">typeof</span> newValue === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> newValue === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>)) {
-                                        <span class="keyword">var</span> then = newValue.then
-                                        <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
-                                                doResolve(bind(then, newValue), bind(resolve, <span class="local-variable">this</span>), bind(reject, <span class="local-variable">this</span>))
-                                                <span class="keyword">return</span>;
-                                        }
-                                }
-                                <span class="local-variable">this</span>._state = <span class="predefined-constant">true</span>
-                                <span class="local-variable">this</span>._value = newValue
-                                finale.call(<span class="local-variable">this</span>)
-                        } <span class="keyword">catch</span> (e) { reject.call(<span class="local-variable">this</span>, e); }
-                }
-
-                <span class="keyword">function</span> <span class="function">reject</span>(newValue) {
-                        <span class="local-variable">this</span>._state = <span class="predefined-constant">false</span>
-                        <span class="local-variable">this</span>._value = newValue
-                        finale.call(<span class="local-variable">this</span>)
-                }
-
-                <span class="keyword">function</span> <span class="function">finale</span>() {
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>, len = <span class="local-variable">this</span>._deferreds.length; i &lt; len; i++) {
-                                handle.call(<span class="local-variable">this</span>, <span class="local-variable">this</span>._deferreds[i])
-                        }
-                        <span class="local-variable">this</span>._deferreds = <span class="predefined-constant">null</span>
-                }
-
-                <span class="keyword">function</span> <span class="function">Handler</span>(onFulfilled, onRejected, resolve, reject){
-                        <span class="local-variable">this</span>.onFulfilled = <span class="keyword">typeof</span> onFulfilled === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? onFulfilled : <span class="predefined-constant">null</span>
-                        <span class="local-variable">this</span>.onRejected = <span class="keyword">typeof</span> onRejected === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> ? onRejected : <span class="predefined-constant">null</span>
-                        <span class="local-variable">this</span>.resolve = resolve
-                        <span class="local-variable">this</span>.reject = reject
-                }
-
-                <span class="keyword">function</span> <span class="function">doResolve</span>(fn, onFulfilled, onRejected) {
-                        <span class="keyword">var</span> done = <span class="predefined-constant">false</span>;
-                        <span class="keyword">try</span> {
-                                fn(<span class="keyword">function</span> (value) {
-                                        <span class="keyword">if</span> (done) <span class="keyword">return</span>
-                                        done = <span class="predefined-constant">true</span>
-                                        onFulfilled(value)
-                                }, <span class="keyword">function</span> (reason) {
-                                        <span class="keyword">if</span> (done) <span class="keyword">return</span>
-                                        done = <span class="predefined-constant">true</span>
-                                        onRejected(reason)
-                                })
-                        } <span class="keyword">catch</span> (ex) {
-                                <span class="keyword">if</span> (done) <span class="keyword">return</span>
-                                done = <span class="predefined-constant">true</span>
-                                onRejected(ex)
-                        }
-                }
-
-                Promise.prototype[<span class="string"><span class="delimiter">'</span><span class="content">catch</span><span class="delimiter">'</span></span>] = <span class="keyword">function</span> (onRejected) {
-                        <span class="keyword">return</span> <span class="local-variable">this</span>.then(<span class="predefined-constant">null</span>, onRejected);
-                }
-
-                Promise.prototype.<span class="function">then</span> = <span class="keyword">function</span>(onFulfilled, onRejected) {
-                        <span class="keyword">var</span> me = <span class="local-variable">this</span>;
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject) {
-                                handle.call(me, <span class="keyword">new</span> Handler(onFulfilled, onRejected, resolve, reject))
-                        })
-                }
-
-                Promise.<span class="function">all</span> = <span class="keyword">function</span> () {
-                        <span class="keyword">var</span> args = Array.prototype.slice.call(<span class="local-variable">arguments</span>.length === <span class="integer">1</span> &amp;&amp; isArray(<span class="local-variable">arguments</span>[<span class="integer">0</span>]) ? <span class="local-variable">arguments</span>[<span class="integer">0</span>] : <span class="local-variable">arguments</span>)
-
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve, reject) {
-                                <span class="keyword">if</span> (args.length === <span class="integer">0</span>) <span class="keyword">return</span> resolve([])
-                                <span class="keyword">var</span> remaining = args.length
-                                <span class="keyword">function</span> <span class="function">res</span>(i, val) {
-                                        <span class="keyword">try</span> {
-                                                <span class="keyword">if</span> (val &amp;&amp; (<span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>)) {
-                                                        <span class="keyword">var</span> then = val.then
-                                                        <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>) {
-                                                                then.call(val, <span class="keyword">function</span> (val) { res(i, val) }, reject)
-                                                                <span class="keyword">return</span>
-                                                        }
-                                                }
-                                                args[i] = val
-                                                <span class="keyword">if</span> (--remaining === <span class="integer">0</span>) {
-                                                        resolve(args)
-                                                }
-                                        } <span class="keyword">catch</span> (ex) {
-                                                reject(ex)
-                                        }
-                                }
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; args.length; i++) {
-                                        res(i, args[i])
-                                }
-                        })
-                }
-
-                Promise.<span class="function">resolve</span> = <span class="keyword">function</span> (value) {
-                        <span class="keyword">if</span> (value &amp;&amp; <span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; value.constructor === Promise) {
-                                <span class="keyword">return</span> value
-                        }
-
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve) {
-                                resolve(value)
-                        })
-                }
-
-                Promise.<span class="function">reject</span> = <span class="keyword">function</span> (value) {
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve, reject) {
-                                reject(value)
-                        })
-                }
-
-                Promise.<span class="function">race</span> = <span class="keyword">function</span> (values) {
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span> (resolve, reject) {
-                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = values.length; i &lt; len; i++) {
-                                        values[i].then(resolve, reject)
-                                }
-                        })
-                }
-
-                exports.Promise = Promise
-        }
-
-
-})(<span class="keyword">typeof</span> define !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; define)
-
-
-<span class="keyword">if</span>(<span class="keyword">typeof</span> Promise === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) define.promiseLib(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>? global: window)
 <span class="keyword">if</span>(define.atEnd) define.atEnd()
 </pre></td>
 </tr></table>

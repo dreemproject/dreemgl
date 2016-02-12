@@ -310,8 +310,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n156" name="n156">156</a>
 <a href="#n157" name="n157">157</a>
 <a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">// ported to dreemgl from: https://github.com/tangrams/tangram/blob/master/src/geo.js </span>
+  <td class="code"><pre><span class="comment">// ported to dreemgl from: https://github.com/tangrams/tangram/blob/master/src/geo.js</span>
 <span class="comment">// original license text:</span>
 
 <span class="comment">// The MIT License (MIT)</span>
@@ -343,21 +349,21 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
         <span class="local-variable">this</span>.default_max_zoom = <span class="integer">18</span>;
         <span class="local-variable">this</span>.tile_size = <span class="integer">256</span>;
-        
+
         <span class="local-variable">this</span>.half_circumference_meters = <span class="float">20037508.342789244</span>;
         <span class="local-variable">this</span>.circumference_meters = <span class="local-variable">this</span>.half_circumference_meters * <span class="integer">2</span>;
         <span class="local-variable">this</span>.min_zoom_meters_per_pixel = <span class="local-variable">this</span>.circumference_meters / <span class="local-variable">this</span>.tile_size; <span class="comment">// min zoom draws world as 2 tiles wide</span>
 
         <span class="local-variable">this</span>.meters_per_pixel = [];
         <span class="local-variable">this</span>.<span class="function">metersPerPixel</span> = <span class="keyword">function</span> (z) {
-                meters_per_pixel[z] = meters_per_pixel[z] || <span class="local-variable">this</span>.min_zoom_meters_per_pixel / Math.pow(<span class="integer">2</span>, z);
-                <span class="keyword">return</span> meters_per_pixel[z];
+                <span class="local-variable">this</span>.meters_per_pixel[z] = <span class="local-variable">this</span>.meters_per_pixel[z] || <span class="local-variable">this</span>.min_zoom_meters_per_pixel / Math.pow(<span class="integer">2</span>, z);
+                <span class="keyword">return</span> <span class="local-variable">this</span>.meters_per_pixel[z];
         };
 
         <span class="local-variable">this</span>.meters_per_tile = [];
         <span class="local-variable">this</span>.<span class="function">metersPerTile</span> = <span class="keyword">function</span> (z) {
-                meters_per_tile[z] = meters_per_tile[z] || <span class="local-variable">this</span>.circumference_meters / Math.pow(<span class="integer">2</span>, z);
-                <span class="keyword">return</span> meters_per_tile[z];
+                <span class="local-variable">this</span>.meters_per_tile[z] = <span class="local-variable">this</span>.meters_per_tile[z] || <span class="local-variable">this</span>.circumference_meters / Math.pow(<span class="integer">2</span>, z);
+                <span class="keyword">return</span> <span class="local-variable">this</span>.meters_per_tile[z];
         };
 
         <span class="comment">// Conversion functions based on an defined tile scale</span>
@@ -388,6 +394,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">z</span>: zoom
                 };
         };
+        <span class="local-variable">this</span>.<span class="function">tileForMetersFrac</span> = <span class="keyword">function</span> (x, y, zoom) {
+                <span class="keyword">return</span> {
+                        <span class="key">x</span>: ((x + <span class="local-variable">this</span>.half_circumference_meters) / (<span class="local-variable">this</span>.circumference_meters / Math.pow(<span class="integer">2</span>, zoom))),
+                        <span class="key">y</span>: ((-y + <span class="local-variable">this</span>.half_circumference_meters) / (<span class="local-variable">this</span>.circumference_meters / Math.pow(<span class="integer">2</span>, zoom))),
+                        <span class="key">z</span>: zoom
+                };
+        };
 
         <span class="comment">// Wrap a tile to positive #s for zoom</span>
         <span class="comment">// Optionally specify the axes to wrap</span>
@@ -396,7 +409,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span> (maskx) {
                         x = x &amp; m;
                 }
-                
+
                 <span class="keyword">if</span> (masky) {
                         y = y &amp; m;
                 }
@@ -425,14 +438,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">latLngToMeters</span> = <span class="keyword">function</span>(x, y) {
                 y = <span class="local-variable">this</span>.wrapLng(y + <span class="integer">360</span>)
                 <span class="comment">// Latitude</span>
-                <span class="comment">//var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);</span>
-                
+                <span class="comment">// var t = Math.tan(((y*Math.PI/360) + Math.PI/2)/2);</span>
                 y = Math.log(Math.tan(y*Math.PI/<span class="integer">360</span> + Math.PI/<span class="integer">4</span>)) / Math.PI;
                 y *= <span class="local-variable">this</span>.half_circumference_meters;
-        
-        <span class="comment">//        y = Math.log(t) / Math.PI;</span>
-                <span class="comment">//y *= this.half_circumference_meters;</span>
-                
+
+                <span class="comment">// y = Math.log(t) / Math.PI;</span>
+                <span class="comment">// y *= this.half_circumference_meters;</span>
+
                 <span class="comment">// Longitude</span>
                 x *= <span class="local-variable">this</span>.half_circumference_meters / <span class="integer">180</span>;
                 <span class="keyword">return</span> [x, y];
@@ -468,7 +480,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 // TODO: support GeometryCollection
         };*/</span>
 
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

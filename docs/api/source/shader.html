@@ -903,6 +903,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n749" name="n749">749</a>
 <strong><a href="#n750" name="n750">750</a></strong>
 <a href="#n751" name="n751">751</a>
+<a href="#n752" name="n752">752</a>
+<a href="#n753" name="n753">753</a>
+<a href="#n754" name="n754">754</a>
+<a href="#n755" name="n755">755</a>
+<a href="#n756" name="n756">756</a>
+<a href="#n757" name="n757">757</a>
+<a href="#n758" name="n758">758</a>
+<a href="#n759" name="n759">759</a>
+<strong><a href="#n760" name="n760">760</a></strong>
+<a href="#n761" name="n761">761</a>
+<a href="#n762" name="n762">762</a>
+<a href="#n763" name="n763">763</a>
+<a href="#n764" name="n764">764</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -987,7 +1000,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">//                if(gltypes.extensions[ext] === 1)</span>
         <span class="comment">//                        ret += '\n#extension GL_' + ext + ' : enable'</span>
         <span class="comment">//        }</span>
-                ret += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="delimiter">'</span></span>
+                <span class="comment">// Don't add extentions to DALi</span>
+                <span class="keyword">if</span> (define.<span class="predefined">$platform</span> !== <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>) {
+                        ret += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="delimiter">'</span></span>
+                }
         
                 <span class="keyword">return</span> ret + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
         }
@@ -1253,7 +1269,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 out.src = gl.ONE
                                 out.dst = gl.ZERO
                         }
-                        <span class="keyword">else</span>{
+                        <span class="keyword">else</span> {
                                 <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Blend equation invalid (not frame or pixel)</span><span class="delimiter">'</span></span>)
                         }
                 }
@@ -1262,13 +1278,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">decodeDepthEquation</span> = <span class="keyword">function</span>(eq, value){
-                <span class="keyword">var</span> out = {<span class="key">original</span>:value}
+                <span class="keyword">var</span> out = {<span class="key">original</span>:value, <span class="key">func</span>:<span class="integer">0</span>}
                 <span class="keyword">if</span>(!eq) <span class="keyword">return</span> out
-                <span class="keyword">if</span>(eq.type == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> &amp;&amp; eq.left.name == <span class="string"><span class="delimiter">'</span><span class="content">src_depth</span><span class="delimiter">'</span></span> &amp;&amp; eq.right.name == <span class="string"><span class="delimiter">'</span><span class="content">dst_depth</span><span class="delimiter">'</span></span>){
-                        out.func = gltypes.compare[eq.op]
+                <span class="keyword">if</span>(eq.type === <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; eq.name === <span class="string"><span class="delimiter">'</span><span class="content">disabled</span><span class="delimiter">'</span></span>){
+                        out.func = <span class="integer">1</span>
                         <span class="keyword">return</span> out
                 }
-                <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">depth eqation not in pixel &gt; frame format</span><span class="delimiter">'</span></span>)
+                <span class="keyword">if</span>(eq.type == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span>){
+                        <span class="keyword">if</span>(eq.left.name == <span class="string"><span class="delimiter">'</span><span class="content">src_depth</span><span class="delimiter">'</span></span> &amp;&amp; eq.right.name == <span class="string"><span class="delimiter">'</span><span class="content">dst_depth</span><span class="delimiter">'</span></span>){
+                                out.func = gltypes.compare[eq.op]
+                                <span class="keyword">return</span> out
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span>(eq.left.name == <span class="string"><span class="delimiter">'</span><span class="content">src_depth</span><span class="delimiter">'</span></span> &amp;&amp; eq.right.name == <span class="string"><span class="delimiter">'</span><span class="content">dst_depth</span><span class="delimiter">'</span></span>){
+                                out.func = gltypes.complement[eq.op]
+                                <span class="keyword">return</span> out
+                        }
+                }
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">depth eqation not in &quot;src_depth &lt; dst_depth&quot; format</span><span class="delimiter">'</span></span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">decodeStencilEquation</span> = <span class="keyword">function</span>(gl, eq, value){
@@ -1654,7 +1680,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span> !== exports.prototype) <span class="local-variable">this</span>.compile()
 
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

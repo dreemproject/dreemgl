@@ -222,28 +222,53 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n68" name="n68">68</a>
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
+<a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
 
         <span class="local-variable">this</span>.text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
         <span class="local-variable">this</span>.attributes = {
+                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
                 <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
-                <span class="key">hoverid</span>: -<span class="integer">1</span>
+                <span class="key">hoverid</span>: -<span class="integer">1</span>,
+                <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event})
         }
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.layout.left = <span class="integer">0</span>
-                <span class="local-variable">this</span>.layout.top =  <span class="integer">90</span>
-                <span class="local-variable">this</span>.layout.height =  <span class="local-variable">this</span>.parent.layout.height - <span class="integer">118</span>
                 <span class="local-variable">this</span>.layout.width =  <span class="local-variable">this</span>.parent.layout.width
         }
 
         <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.hoverid = <span class="local-variable">this</span>.last_pick_id
+                <span class="keyword">var</span> eventData = <span class="local-variable">this</span>.data[<span class="local-variable">this</span>.hoverid]
+                <span class="keyword">if</span> (eventData) {
+                        <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">eventselected</span><span class="delimiter">'</span></span>, eventData)
+                }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">ondata</span> = <span class="keyword">function</span> (data) {
+                <span class="local-variable">this</span>.pickrange = <span class="local-variable">this</span>.data.length
         }
 
         <span class="local-variable">this</span>.pickrange = <span class="integer">1024</span>;
@@ -256,14 +281,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">id</span>: <span class="reserved">float</span>
                 })
                 <span class="local-variable">this</span>.mesh = vertstruct.array()
+
+                <span class="keyword">var</span> startTime = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 01 2016</span><span class="delimiter">&quot;</span></span>).getTime()
+
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
+                        <span class="keyword">var</span> data = view.data
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vertstruct.array();
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">1</span>; i &lt;= <span class="integer">1024</span>; i++) {
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; data.length; i++) {
+
+                                <span class="comment">// HACK: move dates to 2016 for demo</span>
+                                <span class="keyword">var</span> date = <span class="keyword">new</span> Date(data[i].date)
+                                date.setYear(<span class="integer">2016</span>)
+
+                                <span class="keyword">var</span> timeOffset = date.getTime() - startTime
+                                <span class="keyword">var</span> dayOffset = timeOffset / <span class="integer">1000</span> / <span class="integer">60</span> / <span class="integer">60</span> / <span class="integer">24</span>
+
                                 <span class="keyword">var</span> w = <span class="integer">0</span>
                                 <span class="keyword">var</span> h = <span class="integer">1</span>
-                                <span class="keyword">var</span> x = floor(random() * <span class="integer">365</span> * <span class="integer">24</span>) / <span class="integer">24</span>
+                                <span class="keyword">var</span> x = dayOffset
                                 <span class="keyword">var</span> y = <span class="integer">0</span>
+
                                 mesh.pushQuad(
                                         x   ,y    , <span class="integer">0</span>, <span class="integer">0</span>, i,
                                         x+w , y   , <span class="integer">1</span>, <span class="integer">0</span>, i,

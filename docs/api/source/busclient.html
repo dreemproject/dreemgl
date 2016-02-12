@@ -241,6 +241,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n87" name="n87">87</a>
 <a href="#n88" name="n88">88</a>
 <a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -305,6 +307,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }.bind(<span class="local-variable">this</span>)
 
                 <span class="local-variable">this</span>.socket.<span class="function">onmessage</span> = <span class="keyword">function</span>(event){
+                        <span class="comment">// if its huuuge and value has escaped json, dont parse it</span>
+                        <span class="keyword">var</span> data = event.data
                         <span class="keyword">var</span> msg = JSON.parse(event.data)
                         <span class="local-variable">this</span>.atMessage(msg, <span class="local-variable">this</span>)
                 }.bind(<span class="local-variable">this</span>)

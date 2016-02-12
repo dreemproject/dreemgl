@@ -413,14 +413,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n259" name="n259">259</a>
 <strong><a href="#n260" name="n260">260</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, foldcontainer, label, button, icon, <span class="predefined">$widgets$</span>, markdown, jsviewer){
-        
+
         <span class="keyword">var</span> parseDoc = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsdocgen</span><span class="delimiter">'</span></span>).parseDoc
 
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#343434</span><span class="delimiter">&quot;</span></span>)
@@ -429,7 +429,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.flexwrap = <span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.viewport = <span class="string"><span class="delimiter">&quot;</span><span class="content">2d</span><span class="delimiter">&quot;</span></span>
-        
+
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// the class for which to create the documentation. If a string is assigned, the model will be interpreted as a markdown text document.</span>
                 <span class="key">classconstr</span>: Config({<span class="key">type</span>:Function})
@@ -438,7 +438,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// A doc item is an item with a heading, such as methods or attributes</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">ClassDocItem</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
                 <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
-                <span class="comment">// the item to display. </span>
+                <span class="comment">// the item to display.</span>
                 <span class="comment">// An &quot;attribute&quot; item can have name, body_text, defvalue and type properties.</span>
                 <span class="comment">// A &quot;function&quot; item can have name, params and body_text properties.</span>
                 <span class="local-variable">this</span>.attributes = {
@@ -453,36 +453,36 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
                 <span class="local-variable">this</span>.flexwrap = <span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
 
-                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){        
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> res = [];
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.blocktype === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>){
                                 <span class="keyword">var</span> functionsig = <span class="string"><span class="delimiter">&quot;</span><span class="content">()</span><span class="delimiter">&quot;</span></span>
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.item.params &amp;&amp; <span class="local-variable">this</span>.item.params.length &gt; <span class="integer">0</span>) { 
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.item.params &amp;&amp; <span class="local-variable">this</span>.item.params.length &gt; <span class="integer">0</span>) {
                                         functionsig = <span class="string"><span class="delimiter">&quot;</span><span class="content">(</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.item.params.map(<span class="keyword">function</span>(a){<span class="keyword">return</span> a.name}).join(<span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>;
                                 }
                                 res.push(label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">margin</span>:vec4(<span class="integer">2</span>),<span class="key">text</span>: <span class="local-variable">this</span>.item.name + functionsig , <span class="key">fontsize</span>: <span class="integer">20</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">f0f0f0</span><span class="delimiter">&quot;</span></span>, <span class="key">bold</span>:<span class="predefined-constant">true</span>}));
                         }
                         <span class="keyword">else</span>{
                                 <span class="keyword">var</span> sub = [];
-                                
+
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.item.type){
                                         sub.push(label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">margin</span>:vec4(<span class="integer">2</span>),<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">type: </span><span class="delimiter">&quot;</span></span>+ <span class="local-variable">this</span>.item.type, <span class="key">fontsize</span>: <span class="integer">15</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>}));
                                 }
-                                
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.item.defvalue !== <span class="predefined-constant">undefined</span>){        
+
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.item.defvalue !== <span class="predefined-constant">undefined</span>){
                                         <span class="keyword">if</span> (<span class="local-variable">this</span>.item.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">vec4</span><span class="delimiter">&quot;</span></span>){
                                                 <span class="keyword">var</span> type  = define.typemap.types[<span class="local-variable">this</span>.item.type] ;
                                                 <span class="keyword">var</span> defvalue = type(<span class="local-variable">this</span>.item.defvalue);
-                                                <span class="keyword">var</span> labeltext = (Math.round(defvalue[<span class="integer">0</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + 
-                                                (Math.round(defvalue[<span class="integer">1</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + 
-                                                (Math.round(defvalue[<span class="integer">2</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + 
+                                                <span class="keyword">var</span> labeltext = (Math.round(defvalue[<span class="integer">0</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> +
+                                                (Math.round(defvalue[<span class="integer">1</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> +
+                                                (Math.round(defvalue[<span class="integer">2</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> +
                                                 (Math.round(defvalue[<span class="integer">3</span>]*<span class="integer">100</span>)/<span class="integer">100</span>) ;
-                                                
+
                                                 <span class="keyword">var</span> zwartdiff = defvalue[<span class="integer">0</span>] + defvalue[<span class="integer">1</span>] + defvalue[<span class="integer">2</span>];
                                                 <span class="keyword">var</span> witdiff = (<span class="integer">1</span>-defvalue[<span class="integer">0</span>]) + (<span class="integer">1</span>-defvalue[<span class="integer">1</span>]) + (<span class="integer">1</span>-defvalue[<span class="integer">2</span>]);
                                                 <span class="keyword">var</span> color = <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>;
                                                 <span class="keyword">if</span> (witdiff &gt; zwartdiff) color = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>;
-                                                
+
                                                 sub.push(
                                                         view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
                                                                 [
@@ -501,25 +501,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 }
                                         }
                                 }
-                                
+
                                 <span class="keyword">var</span> title = label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">margin</span>:vec4(<span class="integer">2</span>),<span class="key">text</span>: <span class="local-variable">this</span>.item.name, <span class="key">fontsize</span>: <span class="integer">20</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>})
-                                
+
                                 res.push(view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">flex</span>: <span class="integer">1</span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},[title,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>,  <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span> },sub)]));
                         }
-                        
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.item.body_text){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> t <span class="keyword">in</span> <span class="local-variable">this</span>.item.body_text){
                                         res.push(label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">text</span>: <span class="local-variable">this</span>.item.body_text[t], <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>: <span class="integer">12</span>, <span class="key">margin</span>: vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">10</span>,<span class="integer">5</span>)}));
                                 }
                         }
-                        
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.item.params &amp;&amp; <span class="local-variable">this</span>.item.params.length &gt; <span class="integer">0</span>){
                                 res.push(label({ <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">2</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">4</span>), <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">parameters:</span><span class="delimiter">&quot;</span></span> }));
-                                <span class="keyword">for</span> (<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.item.params){        
+                                <span class="keyword">for</span> (<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.item.params){
                                         <span class="keyword">var</span> parm = <span class="local-variable">this</span>.item.params[a];
                                         <span class="keyword">var</span> left = label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">4</span>,<span class="integer">4</span>), <span class="key">text</span>:parm.name});
                                         <span class="keyword">var</span> right;
-                                        
+
                                         <span class="keyword">if</span> (parm.body_text &amp;&amp; parm.body_text.length &gt; <span class="integer">0</span>){
                                                 right= view({<span class="key">flex</span>: <span class="float">0.8</span>},parm.body_text.map(<span class="keyword">function</span>(a){<span class="keyword">return</span> label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:a})}))
                                         } <span class="keyword">else</span> {
@@ -530,16 +530,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }
                                 res.push(view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">height</span>:<span class="integer">1</span>, <span class="key">borderwidth</span>: <span class="integer">1</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#e0e0e0</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: <span class="integer">0</span>}));
                         }
-                        
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.blocktype === <span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>){
-                                res.push(                                
+                                res.push(
                                         view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">padding</span>: vec4(<span class="integer">2</span>), <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>}
-                                                        ,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">borderwidth</span>: <span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: vec4(<span class="integer">4</span>), <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#e0e0e0</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0f0</span><span class="delimiter">&quot;</span></span>}
-                                                                ,label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Code</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>)})
-                                                                ,jsviewer({<span class="key">margin</span>:vec4(<span class="integer">0</span>), <span class="key">wrap</span>:<span class="predefined-constant">true</span>, <span class="key">source</span>:<span class="local-variable">this</span>.item.examplefunc.toString(), <span class="key">padding</span>:vec4(<span class="integer">4</span>), <span class="key">fontsize</span>: <span class="integer">12</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>, <span class="key">multiline</span>: <span class="predefined-constant">true</span>})
+                                                        ,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">borderwidth</span>: <span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: vec4(<span class="integer">4</span>), <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#eee</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>}
+                                                                ,label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#888</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Code</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>)})
+                                                                ,jsviewer({<span class="key">margin</span>:vec4(<span class="integer">0</span>), <span class="key">wrap</span>:<span class="predefined-constant">true</span>, <span class="key">source</span>:<span class="local-variable">this</span>.item.examplefunc.toString(), <span class="key">padding</span>:vec4(<span class="integer">4</span>), <span class="key">fontsize</span>: <span class="integer">12</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000025</span><span class="delimiter">&quot;</span></span>, <span class="key">multiline</span>: <span class="predefined-constant">true</span>})
                                                         )
-                                                        ,view({<span class="key">bg</span>:<span class="integer">1</span>,<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">borderwidth</span>: <span class="integer">1</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: vec4(<span class="integer">4</span>), <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#e0e0e0</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#808080</span><span class="delimiter">&quot;</span></span> } 
-                                                                ,label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,  <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Live demo</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>)})                                                                
+                                                        ,view({<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">borderwidth</span>: vec4(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>: vec4(<span class="integer">4</span>), <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#eee</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#333</span><span class="delimiter">&quot;</span></span> }
+                                                                ,label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,  <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Live demo</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>:vec4(<span class="integer">10</span>)})
                                                                 ,<span class="local-variable">this</span>.item.examplefunc()
                                                         )
                                         )
@@ -550,10 +550,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         });
 
         <span class="comment">// Build a documentation structure for a given constructor function</span>
-<span class="comment">//        this.parseDoc = </span>
-        
+<span class="comment">//        this.parseDoc =</span>
+
         <span class="comment">// This class will recursively expand a class_doc sturcture to an on-screen view.</span>
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">dividerline</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
                 <span class="local-variable">this</span>.height = <span class="integer">1</span>;
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">1</span>;
@@ -562,31 +562,31 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
                 <span class="local-variable">this</span>.margin = vec4(<span class="integer">0</span>,<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">0</span>);
         })
-        
-        
+
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">ClassDocView</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view){
-        
+
                 <span class="local-variable">this</span>.attributes = {
-                        <span class="comment">// If collapsible is true, the render function will build a foldcontainer around this class. This is used for recursion levels &gt; 0 of the docviewer class.        </span>
+                        <span class="comment">// If collapsible is true, the render function will build a foldcontainer around this class. This is used for recursion levels &gt; 0 of the docviewer class.</span>
                         <span class="key">collapsible</span>: Config({<span class="key">type</span>: Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
-                        <span class="comment">// the class_doc structure to display. </span>
+                        <span class="comment">// the class_doc structure to display.</span>
                         <span class="key">class_doc</span>: Config({<span class="key">type</span>: Object})
                 }
 
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
-                <span class="local-variable">this</span>.flexwrap = <span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span> 
-                
+                <span class="local-variable">this</span>.flexwrap = <span class="string"><span class="delimiter">&quot;</span><span class="content">nowrap</span><span class="delimiter">&quot;</span></span>
+
                 <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
                 <span class="local-variable">this</span>.<span class="function">BuildGroup</span> = <span class="keyword">function</span> (inputarray, title, icon, color, blocktype){
                         <span class="keyword">if</span> (!blocktype) blocktype = <span class="string"><span class="delimiter">&quot;</span><span class="content">attribute</span><span class="delimiter">&quot;</span></span>
                         <span class="keyword">var</span> subs = []
-                        
+
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt; inputarray.length;i++){
                                 subs.push(<span class="local-variable">this</span>.outer.ClassDocItem({<span class="key">blocktype</span>:blocktype, <span class="key">item</span>: inputarray[i]}))
                                 <span class="keyword">if</span> (i&lt; inputarray.length -<span class="integer">1</span> ) subs.push(<span class="local-variable">this</span>.outer.dividerline());
                         }
-                        
+
                         <span class="keyword">return</span> foldcontainer(
                                         {
                                                 <span class="key">collapsed</span>:<span class="predefined-constant">true</span>, <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>,<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
@@ -595,13 +595,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         }, subs)
                                 );
                 }
-                
+
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> body = [];
                         <span class="keyword">var</span> res =[];
                         <span class="keyword">var</span> class_doc = <span class="local-variable">this</span>.class_doc;
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.class_doc) <span class="keyword">return</span> [];
-                        
+
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.collapsible ){
                                 body.push(view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},[icon({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">fontsize</span>: <span class="integer">38</span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cube</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">White</span><span class="delimiter">&quot;</span></span> }),label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">text</span>:class_doc.class_name,<span class="key">fontsize</span>: <span class="integer">30</span>,<span class="key">margin</span>: vec4(<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">20</span>), <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">White</span><span class="delimiter">&quot;</span></span> })]));
                         }
@@ -614,35 +614,35 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         ]
                                 }.bind(<span class="local-variable">this</span>))));
                         }
-                
+
                         <span class="keyword">if</span> (class_doc.body_text.length &gt; <span class="integer">0</span>) {
                                 body.push(markdown({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">body</span>:class_doc.body_text, <span class="key">margin</span>: vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">10</span>,<span class="integer">10</span>), <span class="key">fontcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> }));
                         }
 
                         res.push(view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">margin</span>: vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">20</span>)}, body));
-                
+
                         <span class="keyword">if</span>(class_doc.examples.length &gt;<span class="integer">0</span>) res.push(<span class="local-variable">this</span>.BuildGroup(class_doc.examples, <span class="string"><span class="delimiter">&quot;</span><span class="content">Examples</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>));
                         <span class="keyword">if</span>(class_doc.attributes.length &gt;<span class="integer">0</span>) res.push(<span class="local-variable">this</span>.BuildGroup(class_doc.attributes, <span class="string"><span class="delimiter">&quot;</span><span class="content">Attributes</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">gears</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">#303000</span><span class="delimiter">&quot;</span></span>));
                         <span class="keyword">if</span>(class_doc.state_attributes.length &gt;<span class="integer">0</span>) res.push(<span class="local-variable">this</span>.BuildGroup(class_doc.state_attributes, <span class="string"><span class="delimiter">&quot;</span><span class="content">State Attributes</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">archive</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">#300000</span><span class="delimiter">&quot;</span></span>));
                         <span class="keyword">if</span>(class_doc.events.length &gt;<span class="integer">0</span>) res.push(<span class="local-variable">this</span>.BuildGroup(class_doc.events, <span class="string"><span class="delimiter">&quot;</span><span class="content">Events</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">plug</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">#300033</span><span class="delimiter">&quot;</span></span>));
-                                        
+
                         <span class="keyword">if</span> (class_doc.inner_classes.length &gt; <span class="integer">0</span>){
                                 <span class="keyword">var</span> classes = []
                                 <span class="keyword">for</span> (<span class="keyword">var</span> a <span class="keyword">in</span> class_doc.inner_classes){
-                                        classes.push(<span class="local-variable">this</span>.outer.ClassDocView({<span class="key">collapsible</span>:<span class="predefined-constant">true</span>, <span class="key">class_doc</span>: class_doc.inner_classes[a]}))                                
+                                        classes.push(<span class="local-variable">this</span>.outer.ClassDocView({<span class="key">collapsible</span>:<span class="predefined-constant">true</span>, <span class="key">class_doc</span>: class_doc.inner_classes[a]}))
                                 }
                                 res.push(foldcontainer({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>,<span class="key">collapsed</span>:<span class="predefined-constant">true</span>,  <span class="key">basecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#002000</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cubes</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Inner classes</span><span class="delimiter">&quot;</span></span> , <span class="key">fontsize</span>: <span class="integer">15</span>,<span class="key">margin</span>: vec4(<span class="integer">10</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">20</span>), <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> }, view({<span class="key">flexdirection</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>: <span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>}, classes)));
                         }
-                
+
                         <span class="keyword">if</span>(class_doc.methods.length &gt;<span class="integer">0</span>) res.push(<span class="local-variable">this</span>.BuildGroup(class_doc.methods, <span class="string"><span class="delimiter">&quot;</span><span class="content">Methods</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">paw</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">#000030</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>));
-                        
-                        
+
+
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.collapsible){
-                                
+
                                 <span class="keyword">return</span> foldcontainer({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>,<span class="key">basecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#002000</span><span class="delimiter">&quot;</span></span>,<span class="key">collapsed</span>:<span class="predefined-constant">true</span>,<span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">cube</span><span class="delimiter">&quot;</span></span>, <span class="key">title</span>:class_doc.class_name, <span class="key">fontsize</span>: <span class="integer">15</span>},view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>},res));
                         }
-                        
-                        <span class="keyword">return</span> res;        
+
+                        <span class="keyword">return</span> res;
                 }
         })
 
@@ -652,14 +652,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> R = <span class="local-variable">this</span>.classconstr<span class="comment">//         require(&quot;$classes/dataset&quot;)</span>
                 <span class="keyword">if</span>(<span class="keyword">typeof</span>(R) === <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>) {
                         <span class="keyword">return</span> [markdown({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">body</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + R.toString()})]
-                } 
+                }
                 <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span>(R) === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>){
 
                         <span class="keyword">var</span> class_doc = parseDoc(R)
 
                         <span class="keyword">return</span> [
                                 <span class="local-variable">this</span>.ClassDocView({<span class="key">class_doc</span>:class_doc})
-                        
+
                         ]
                 }
 
@@ -669,10 +669,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Show the documentation for a dreemgl class.</span>
         <span class="local-variable">this</span>.constructor.examples = {
                 <span class="function">Usage</span>:<span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [docviewer({<span class="key">classconstr</span>: docviewer})]                
+                        <span class="keyword">return</span> [docviewer({<span class="key">classconstr</span>: docviewer})]
                 }
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

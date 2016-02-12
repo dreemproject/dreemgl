@@ -490,6 +490,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n336" name="n336">336</a>
 <a href="#n337" name="n337">337</a>
 <a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -498,14 +499,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// self generating onejs walker utility class, run with nodejs to regenerate</span>
 
 <span class="keyword">if</span>(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; require.main === module){
-        <span class="keyword">var</span> require = require(<span class="string"><span class="delimiter">'</span><span class="content">../../define</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> require = require(<span class="string"><span class="delimiter">'</span><span class="content">../base/define</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> defs = require(<span class="string"><span class="delimiter">'</span><span class="content">./onejsdef.js</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
         <span class="comment">// read self</span>
         <span class="keyword">var</span> head = fs.readFileSync(module.filename).toString().match(<span class="regexp"><span class="delimiter">/</span><span class="content">^[</span><span class="char">\S</span><span class="char">\s</span><span class="content">]*</span><span class="content">\/</span><span class="content">\/</span><span class="content"> generated</span><span class="delimiter">/</span></span>)[<span class="integer">0</span>]
         <span class="comment">// the template for the generated bottom part</span>
         <span class="keyword">var</span> <span class="function">template</span> = <span class="keyword">function</span>(){
-                define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports, self){
-                        self.<span class="function">walk</span> = <span class="keyword">function</span>(node, parent, state){
+                define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
+                        <span class="local-variable">this</span>.<span class="function">walk</span> = <span class="keyword">function</span>(node, parent, state){
                                 <span class="keyword">if</span>(!node) <span class="keyword">return</span>
                                 <span class="keyword">var</span> fn = <span class="local-variable">this</span>[node.type]
                                 <span class="keyword">if</span>(!fn) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot find type </span><span class="delimiter">&quot;</span></span> + node.type)
@@ -517,7 +519,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="keyword">var</span> out = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>        
         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> defs){
-                out += <span class="string"><span class="delimiter">'</span><span class="content">        self.</span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="content"> = function(node, parent, state){</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                out += <span class="string"><span class="delimiter">'</span><span class="content">        this.</span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="content"> = function(node, parent, state){</span><span class="content">\n</span><span class="delimiter">'</span></span>
                 <span class="keyword">var</span> def = defs[key]
                 <span class="keyword">for</span>(<span class="keyword">var</span> sub <span class="keyword">in</span> def){
                         <span class="keyword">var</span> type = def[sub]
@@ -532,197 +534,197 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 }
 
 <span class="comment">// generated</span>
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports, self){
-        self.<span class="function">walk</span> = <span class="keyword">function</span>(node, parent, state){
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
+        <span class="local-variable">this</span>.<span class="function">walk</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">if</span>(!node) <span class="keyword">return</span>
                 <span class="keyword">var</span> fn = <span class="local-variable">this</span>[node.type]
                 <span class="keyword">if</span>(!fn) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">Cannot find type </span><span class="delimiter">&quot;</span></span> + node.type)
                 fn.call(<span class="local-variable">this</span>, node, parent, state)
         }
         
-        self.<span class="function">Program</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Program</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.steps
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Empty</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Empty</span> = <span class="keyword">function</span>(node, parent, state){
         }
 
-        self.<span class="function">Id</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Id</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.typing, node, state)
         }
 
-        self.<span class="function">Value</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(node, parent, state){
         }
 
-        self.<span class="function">This</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">This</span> = <span class="keyword">function</span>(node, parent, state){
         }
 
-        self.<span class="function">Array</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Array</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.elems
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Object</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.keys
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i].value, node, state)
         }
 
-        self.<span class="function">Index</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Index</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.object, node, state)
                 <span class="local-variable">this</span>.walk(node.index, node, state)
         }
 
-        self.<span class="function">Key</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Key</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.object, node, state)
                 <span class="local-variable">this</span>.walk(node.key, node, state)
         }
 
-        self.<span class="function">ThisCall</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">ThisCall</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.object, node, state)
                 <span class="local-variable">this</span>.walk(node.key, node, state)
         }
 
-        self.<span class="function">Block</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Block</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.steps
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">List</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">List</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.items
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Comprehension</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Comprehension</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">for</span>, node, state)
                 <span class="local-variable">this</span>.walk(node.expr, node, state)
         }
 
-        self.<span class="function">Template</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Template</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.chain
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Break</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Break</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.label, node, state)
         }
 
-        self.<span class="function">Continue</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Continue</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.label, node, state)
         }
 
-        self.<span class="function">Label</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Label</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.label, node, state)
                 <span class="local-variable">this</span>.walk(node.body, node, state)
         }
 
-        self.<span class="function">If</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">If</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.test, node, state)
                 <span class="local-variable">this</span>.walk(node.then, node, state)
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">else</span>, node, state)
         }
 
-        self.<span class="function">Switch</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Switch</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.on, node, state)
                 <span class="keyword">var</span> arr = node.cases
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Case</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Case</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.test, node, state)
                 <span class="keyword">var</span> arr = node.steps
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Throw</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Throw</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
         }
 
-        self.<span class="function">Try</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Try</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">try</span>, node, state)
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">catch</span>, node, state)
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">finally</span>, node, state)
         }
 
-        self.<span class="function">While</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">While</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.test, node, state)
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
         }
 
-        self.<span class="function">DoWhile</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">DoWhile</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
                 <span class="local-variable">this</span>.walk(node.test, node, state)
         }
 
-        self.<span class="function">For</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">For</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.init, node, state)
                 <span class="local-variable">this</span>.walk(node.test, node, state)
                 <span class="local-variable">this</span>.walk(node.update, node, state)
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
         }
 
-        self.<span class="function">ForIn</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">ForIn</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
         }
 
-        self.<span class="function">ForOf</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">ForOf</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
         }
 
-        self.<span class="function">ForFrom</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">ForFrom</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.right, node, state)
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
         }
 
-        self.<span class="function">ForTo</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">ForTo</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
                 <span class="local-variable">this</span>.walk(node.loop, node, state)
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">in</span>, node, state)
         }
 
-        self.<span class="function">Var</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Var</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="keyword">var</span> arr = node.defs
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">TypeVar</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">TypeVar</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.typing, node, state)
                 <span class="keyword">var</span> arr = node.defs
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
                 <span class="local-variable">this</span>.walk(node.dim, node, state)
         }
 
-        self.<span class="function">Struct</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Struct</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
                 <span class="local-variable">this</span>.walk(node.struct, node, state)
                 <span class="local-variable">this</span>.walk(node.base, node, state)
         }
 
-        self.<span class="function">Define</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Define</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
                 <span class="local-variable">this</span>.walk(node.value, node, state)
         }
 
-        self.<span class="function">Enum</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Enum</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
                 <span class="keyword">var</span> arr = node.enums
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Def</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Def</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
                 <span class="local-variable">this</span>.walk(node.init, node, state)
                 <span class="local-variable">this</span>.walk(node.dim, node, state)
         }
 
-        self.<span class="function">Function</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Function</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
                 <span class="local-variable">this</span>.walk(node.name, node, state)
                 <span class="keyword">var</span> arr = node.params
@@ -731,97 +733,97 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.walk(node.body, node, state)
         }
 
-        self.<span class="function">Return</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Return</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
         }
 
-        self.<span class="function">Yield</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Yield</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
         }
 
-        self.<span class="function">Await</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Await</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
         }
 
-        self.<span class="function">Unary</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Unary</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
         }
 
-        self.<span class="function">Binary</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Binary</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
         }
 
-        self.<span class="function">Logic</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Logic</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
         }
 
-        self.<span class="function">Assign</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Assign</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
         }
 
-        self.<span class="function">Update</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Update</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.arg, node, state)
         }
 
-        self.<span class="function">Condition</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Condition</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.test, node, state)
                 <span class="local-variable">this</span>.walk(node.then, node, state)
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">else</span>, node, state)
         }
 
-        self.<span class="function">New</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">New</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.fn, node, state)
                 <span class="keyword">var</span> arr = node.args
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Call</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Call</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.fn, node, state)
                 <span class="keyword">var</span> arr = node.args
                 <span class="keyword">if</span>(arr) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>, len = arr.length; i &lt; len; i++) <span class="local-variable">this</span>.walk(arr[i], node, state)
         }
 
-        self.<span class="function">Nest</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Nest</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.fn, node, state)
                 <span class="local-variable">this</span>.walk(node.body, node, state)
         }
 
-        self.<span class="function">Class</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Class</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
                 <span class="local-variable">this</span>.walk(node.base, node, state)
                 <span class="local-variable">this</span>.walk(node.body, node, state)
         }
 
-        self.<span class="function">Signal</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Signal</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.right, node, state)
         }
 
-        self.<span class="function">Quote</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Quote</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.quote, node, state)
         }
 
-        self.<span class="function">AssignQuote</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">AssignQuote</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.left, node, state)
                 <span class="local-variable">this</span>.walk(node.quote, node, state)
         }
 
-        self.<span class="function">Rest</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Rest</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.id, node, state)
         }
 
-        self.<span class="function">Then</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Then</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.name, node, state)
                 <span class="local-variable">this</span>.walk(node.<span class="keyword">do</span>, node, state)
         }
 
-        self.<span class="function">Debugger</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">Debugger</span> = <span class="keyword">function</span>(node, parent, state){
         }
 
-        self.<span class="function">With</span> = <span class="keyword">function</span>(node, parent, state){
+        <span class="local-variable">this</span>.<span class="function">With</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="local-variable">this</span>.walk(node.object, node, state)
                 <span class="local-variable">this</span>.walk(node.body, node, state)
         }

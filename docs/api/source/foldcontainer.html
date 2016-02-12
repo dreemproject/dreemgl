@@ -332,6 +332,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n178" name="n178">178</a>
 <a href="#n179" name="n179">179</a>
 <strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -406,8 +412,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> res = []
 
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.icon)res.push(icon({<span class="key">fontsize</span>:<span class="local-variable">this</span>.outer.fontsize, <span class="key">icon</span>:<span class="local-variable">this</span>.icon, <span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor) }));
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.title) res.push(label({<span class="key">font</span>: require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/opensans_bold_ascii.glf</span><span class="delimiter">'</span></span>),<span class="key">marginleft</span>:<span class="integer">5</span>,<span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor), <span class="key">fontsize</span>: <span class="local-variable">this</span>.outer.fontsize, <span class="key">text</span>:<span class="local-variable">this</span>.title, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span> }));
-                        <span class="keyword">var</span> res2 = [view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},res), icon({<span class="key">fontsize</span>:<span class="local-variable">this</span>.outer.fontsize,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>, <span class="key">icon</span>:<span class="local-variable">this</span>.collapsed? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor) })]
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.title) res.push(label({<span class="key">bold</span>:<span class="predefined-constant">true</span>,
+                                <span class="key">marginleft</span>:<span class="integer">5</span>,<span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor), <span class="key">fontsize</span>: <span class="local-variable">this</span>.outer.fontsize, <span class="key">text</span>:<span class="local-variable">this</span>.title, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span> }));
+                        <span class="keyword">var</span> res2 = [view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},res), icon({
+                                <span class="key">marginright</span>:<span class="integer">7</span>,
+                                <span class="key">fontsize</span>:<span class="local-variable">this</span>.outer.fontsize,
+                                <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">icon</span>:<span class="local-variable">this</span>.collapsed? <span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-right</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chevron-down</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">fgcolor</span>:vec4.contrastcolor(<span class="local-variable">this</span>.outer.basecolor)
+                        })]
                         <span class="keyword">return</span> res2;
                 }
 
@@ -453,7 +466,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.pointerout = <span class="local-variable">this</span>.statedefault
                 <span class="local-variable">this</span>.<span class="function">pointerstart</span> = <span class="keyword">function</span>(ev){
                         <span class="local-variable">this</span>.stateclick()
-                        console.log(ev)
                 }
                 <span class="local-variable">this</span>.pointerend = <span class="local-variable">this</span>.statedefault
         })
@@ -488,10 +500,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.collapsed == <span class="predefined-constant">false</span>) {
                         <span class="local-variable">this</span>.container = <span class="local-variable">this</span>.containerview({
-                                <span class="key">bgcolor</span>: <span class="local-variable">this</span>.basecolor,
+                                <span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>,
                                 <span class="key">borderwidth</span>: <span class="local-variable">this</span>.borderwidth,
                                 <span class="key">bordercolor</span>:<span class="local-variable">this</span>.bordercolor,
-
+                                <span class="key">paddingright</span>:<span class="integer">10</span>
                         },
                         <span class="local-variable">this</span>.constructor_children)
                         res.push(<span class="local-variable">this</span>.container)

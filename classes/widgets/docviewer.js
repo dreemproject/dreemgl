@@ -119,12 +119,12 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 			if (this.blocktype === "example"){
 				res.push(
 					view({flexdirection:"row", flex:1, padding: vec4(2), bgcolor: "#202020"}
-							,view({bgcolor:NaN,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#f0f0f0"}
-								,label({fgcolor:"white", bgcolor:NaN,text:"Code", margin:vec4(10)})
-								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 12, bgcolor:"#000030", multiline: true})
+							,view({bgcolor:NaN,flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#eee", bgcolor:NaN}
+								,label({fgcolor:"#888", bgcolor:NaN, text:"Code", margin:vec4(10)})
+								,jsviewer({margin:vec4(0), wrap:true, source:this.item.examplefunc.toString(), padding:vec4(4), fontsize: 12, bgcolor:"#000025", multiline: true})
 							)
-							,view({flex: 1, borderwidth: 1, flexdirection:"column", padding: vec4(4), bordercolor: "#e0e0e0", bgcolor: "#808080" }
-								,label({fgcolor:"white",bgcolor:"transparent",  text:"Live demo", margin:vec4(10)})
+							,view({flex: 1, borderwidth: vec4(0,1,1,1), flexdirection:"column", padding: vec4(4), bordercolor: "#eee", bgcolor: "#333" }
+								,label({fgcolor:"white",bgcolor:NaN,  text:"Live demo", margin:vec4(10)})
 								,this.item.examplefunc()
 							)
 					)

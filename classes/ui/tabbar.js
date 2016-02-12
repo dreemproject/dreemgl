@@ -36,10 +36,10 @@ define.class("$ui/view", function($ui$, view, label, icon){
 			selected:{
 				fgcolor:"#69f",
 				on:function(tab) {
-					if (this.selection) {
-						this.selection.state = "normal";
+					if (tab.parent.selection) {
+						tab.parent.selection.state = "normal";
 					}
-					this.selection = tab;
+					tab.parent.selection = tab;
 				}.bind(this)
 			},
 			disabled:{
@@ -268,10 +268,20 @@ define.class("$ui/view", function($ui$, view, label, icon){
 	this.constructor.examples = {
 		Usage: function() {
 			return [
+				tabbar({tabs:["one", "two", "three"], onselection:function(ev,tab,bar) {
+					if (tab) {
+						console.log('Selected', tab.text)
+					}
+				}})
+			]
+		},
+		Advanced: function() {
+			return [
 				tabbar({tabs:[
 					{
+						class:"folder",
 						normal:{
-							icon:"flask",
+							icon:"gear",
 							fgcolor:"gray"
 						},
 						hover:{
@@ -288,16 +298,21 @@ define.class("$ui/view", function($ui$, view, label, icon){
 						}
 					},
 					{
-						label:"two",
+						class:"folder",
+						label:"two"
+					},
+					{
+						class:"folder",
+						label:"three",
 						state:"disabled",
 						disabled:{
 							bgcolor:"gray",
 							fgcolor:"darkgray"
 						}
-					},
-					"tree"
+					}
 				]})
 			]
 		}
+
 	}
 });

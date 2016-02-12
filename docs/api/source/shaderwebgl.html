@@ -619,6 +619,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n465" name="n465">465</a>
 <a href="#n466" name="n466">466</a>
 <a href="#n467" name="n467">467</a>
+<a href="#n468" name="n468">468</a>
+<a href="#n469" name="n469">469</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -846,7 +848,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         gl.disable(gl.BLEND)
                 }
                 <span class="comment">// set up depth test</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.depth_test_eq.func){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.depth_test_eq.func &gt; <span class="integer">1</span>){
                         gl.enable(gl.DEPTH_TEST)
                         gl.depthFunc(<span class="local-variable">this</span>.depth_test_eq.func)
                 }
@@ -901,6 +903,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(!buf.glvb) buf.glvb = gl.createBuffer()
                         gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
                         <span class="keyword">if</span>(!buf.clean){
+                                <span class="keyword">var</span> dt = Date.now()
                                 gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
                                 buf.clean = <span class="predefined-constant">true</span>
                         }
@@ -935,7 +938,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 
                 <span class="comment">// set up depth test</span>
-                <span class="keyword">if</span>(root.depth_test_eq.func){
+                <span class="keyword">if</span>(root.depth_test_eq.func &gt; <span class="integer">1</span>){
                         <span class="comment">//console.log(root.depth_test_eq)</span>
                         gl.enable(gl.DEPTH_TEST)
                         gl.depthFunc(root.depth_test_eq.func)
@@ -1084,6 +1087,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> gl = devicewebgl.gl
                 <span class="keyword">var</span> len = <span class="local-variable">this</span>.useShader(gl, sub? <span class="local-variable">this</span>.shader[sub]: <span class="local-variable">this</span>.shader)
                 <span class="keyword">if</span>(len) gl.drawArrays(<span class="local-variable">this</span>.drawtype, start || <span class="integer">0</span>, end === <span class="predefined-constant">undefined</span>?len: end)
+                <span class="keyword">return</span> len
         }
 
 })</pre></td>

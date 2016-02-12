@@ -484,7 +484,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.args = args
                 <span class="keyword">var</span> port = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-port</span><span class="delimiter">'</span></span>] || process.env.PORT || <span class="integer">2000</span>
-                <span class="keyword">var</span> iface = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-iface</span><span class="delimiter">'</span></span>] || process.env.IP || <span class="string"><span class="delimiter">'</span><span class="content">0.0.0.0</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> iface = <span class="local-variable">this</span>.args[<span class="string"><span class="delimiter">'</span><span class="content">-iface</span><span class="delimiter">'</span></span>] || process.env.IP || <span class="string"><span class="delimiter">'</span><span class="content">127.0.0.1</span><span class="delimiter">'</span></span>
 
                 <span class="local-variable">this</span>.cache_gzip = define.makeCacheDir(<span class="string"><span class="delimiter">'</span><span class="content">gzip</span><span class="delimiter">'</span></span>)
 

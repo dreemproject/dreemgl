@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgrid, $widgets$, toolkit) {
+define.class("$server/composition",function(require, $ui$, tabbar, screen, label, view, cadgrid, $widgets$, toolkit) {
 
 	this.render = function() {
 		return [
@@ -16,33 +16,55 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgr
 						flexdirection:'column',
 						justifycontent:'flex-end'
 					},
+					view(
+						{
+							flex:1,
+							name:"main",
+							bgcolor:NaN,
+							alignitems:"center",
+							justifycontent:"center"
+						},
+						label({name:"page", text:"", bgcolor:NaN})
+					),
 					tabbar({
 						tabs:[
 							{
-								icon:'comment',
+								name:"SMS",
+								icon:"comment",
 								boldness:0.3,
 								fontsize:33
 							},
 							{
-								icon:'envelope',
+								name:"inbox",
+								icon:"envelope",
 								boldness:0.3,
 								fontsize:33
 							},
 							{
-								icon:'at',
+								name:"contacts",
+								icon:"at",
 								fontsize:33,
-								boldness:0.15,
+								boldness:0.15
 							},
 							{
-								icon:'search',
+								name:"search",
+								icon:"search",
 								fontsize:33
 							},
 							{
-								icon:'ellipsis-h',
+								name:"more",
+								icon:"ellipsis-h",
 								fontsize:33,
 								boldness:0
 							}
-						]
+						],
+						onselection:function(ev,tab,bar) {
+							if (tab && tab.name) {
+								var main = this.screen.find("main");
+								var label = main.find("page");
+								label.text = "Show the '" + tab.name + "' page";
+							}
+						}
 					})
 				)
 			),

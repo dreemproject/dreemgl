@@ -354,6 +354,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n200" name="n200">200</a></strong>
 <a href="#n201" name="n201">201</a>
 <a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -366,6 +370,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.readonly = <span class="predefined-constant">false</span>
         
         <span class="keyword">var</span> enumchange = <span class="local-variable">this</span>.enumchange
+
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
+                
+        }
 
         <span class="comment">// process inserts with matching parens</span>
         <span class="local-variable">this</span>.<span class="function">processInsert</span> = <span class="keyword">function</span>(lo, hi, text){
@@ -454,12 +462,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.was_cursor = <span class="local-variable">this</span>.change == enumchange.clipboard <span class="comment">// dont delay reformat on paste</span>
 
                         <span class="local-variable">this</span>.delay_update = <span class="integer">0</span>
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.step_timeout) <span class="local-variable">this</span>.clearTimeout(<span class="local-variable">this</span>.step_timeout)
-                        <span class="local-variable">this</span>.step_timeout = <span class="local-variable">this</span>.setTimeout(<span class="local-variable">this</span>.parseStep,<span class="integer">0</span>)
+                        <span class="comment">//if(this.step_timeout) this.clearTimeout(this.step_timeout)</span>
+                        <span class="comment">//this.step_timeout = this.setTimeout(this.parseStep,0)</span>
                 }
                 <span class="comment">// if its an undo, </span>
-                <span class="keyword">if</span>(change == enumchange.undoredo){ <span class="comment">// set delay to cursor press</span>
-                        delay_update = parseStep
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.change == enumchange.undoredo){ <span class="comment">// set delay to cursor press</span>
+                <span class="comment">//        delay_update = parseStep</span>
                 }
         }
 

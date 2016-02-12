@@ -400,6 +400,29 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n246" name="n246">246</a>
 <a href="#n247" name="n247">247</a>
 <a href="#n248" name="n248">248</a>
+<a href="#n249" name="n249">249</a>
+<strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
+<a href="#n253" name="n253">253</a>
+<a href="#n254" name="n254">254</a>
+<a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -417,7 +440,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">propertyname</span>:Config({<span class="key">type</span>:String,<span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>: <span class="integer">13</span>}),
                 <span class="key">showunknown</span>:Config({<span class="key">type</span>:bool, <span class="key">value</span>: <span class="predefined-constant">false</span>}),
-                <span class="key">callback</span>:Config({<span class="key">type</span>:Function, <span class="function">value</span>:<span class="keyword">function</span>(val, ed) {
+                <span class="key">callback</span>:Config({<span class="key">type</span>:Function, <span class="function">value</span>:<span class="keyword">function</span>(val, ed, commit) {
                         <span class="keyword">var</span> t = ed.target;
                         <span class="keyword">if</span> (<span class="keyword">typeof</span>(t) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
                                 t = ed.find(t);
@@ -482,7 +505,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="key">margin</span>:vec4(<span class="integer">2</span>,<span class="integer">0</span>,<span class="integer">2</span>,<span class="integer">5</span>),
                                 <span class="key">values</span>:<span class="local-variable">this</span>.property.type.values,
                                 <span class="key">currentvalue</span>:<span class="local-variable">this</span>.value,
-                                <span class="function">oncurrentvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>);}.bind(<span class="local-variable">this</span>)
+                                <span class="function">oncurrentvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>, <span class="predefined-constant">true</span>);}.bind(<span class="local-variable">this</span>)
                         });
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4</span><span class="delimiter">&quot;</span></span>){
@@ -496,7 +519,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 }, view({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">color_view</span><span class="delimiter">'</span></span>},
                                         colorpicker({
                                                 <span class="key">value</span>:<span class="local-variable">this</span>.value,
-                                                <span class="function">valuechange</span>:<span class="keyword">function</span>(val){<span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>);}.bind(<span class="local-variable">this</span>)
+                                                <span class="function">valuechange</span>:<span class="keyword">function</span>(val){ <span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>); }.bind(<span class="local-variable">this</span>),
+                                                <span class="function">pointerend</span>:<span class="keyword">function</span>(ev) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }.bind(<span class="local-variable">this</span>)
                                         })));
 
                         } <span class="keyword">else</span> {
@@ -517,19 +541,27 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         t4 = <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>;
                                 }
                                 editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
-                                                numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                        numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>],
+                                                <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4a</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
                                                         <span class="local-variable">this</span>.value = vec4(v, <span class="local-variable">this</span>.value[<span class="integer">1</span>], <span class="local-variable">this</span>.value[<span class="integer">2</span>], <span class="local-variable">this</span>.value[<span class="integer">3</span>]);
                                                         <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
                                                 }.bind(<span class="local-variable">this</span>)}),
-                                                numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                        numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>],
+                                                <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4b</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
                                                         <span class="local-variable">this</span>.value = vec4(<span class="local-variable">this</span>.value[<span class="integer">0</span>], v, <span class="local-variable">this</span>.value[<span class="integer">2</span>], <span class="local-variable">this</span>.value[<span class="integer">3</span>]);
                                                         <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
                                                 }.bind(<span class="local-variable">this</span>)}),
-                                                numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                        numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>],
+                                                <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4c</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
                                                         <span class="local-variable">this</span>.value = vec4(<span class="local-variable">this</span>.value[<span class="integer">0</span>], <span class="local-variable">this</span>.value[<span class="integer">1</span>], v, <span class="local-variable">this</span>.value[<span class="integer">3</span>]);
                                                         <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
                                                 }.bind(<span class="local-variable">this</span>)}),
-                                                numberbox({<span class="key">title</span>:t4, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">3</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                        numberbox({<span class="key">title</span>:t4, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec4</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">3</span>],
+                                                <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec4d</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
                                                         <span class="local-variable">this</span>.value = vec4(<span class="local-variable">this</span>.value[<span class="integer">0</span>], <span class="local-variable">this</span>.value[<span class="integer">1</span>], <span class="local-variable">this</span>.value[<span class="integer">2</span>], v);
                                                         <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
                                                 }.bind(<span class="local-variable">this</span>)}));
@@ -546,29 +578,39 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
 
                         editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
-                                           numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
-                                                   <span class="local-variable">this</span>.value = vec3(v, <span class="local-variable">this</span>.value[<span class="integer">1</span>], <span class="local-variable">this</span>.value[<span class="integer">2</span>]);
-                                                   <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
-                                           }.bind(<span class="local-variable">this</span>)}),
-                                           numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
-                                                   <span class="local-variable">this</span>.value = vec3(<span class="local-variable">this</span>.value[<span class="integer">0</span>], v, <span class="local-variable">this</span>.value[<span class="integer">2</span>]);
-                                                   <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
-                                           }.bind(<span class="local-variable">this</span>)}),
-                                       numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>], <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
-                                                   <span class="local-variable">this</span>.value = vec3(<span class="local-variable">this</span>.value[<span class="integer">0</span>], <span class="local-variable">this</span>.value[<span class="integer">1</span>], v);
-                                                   <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
-                                           }.bind(<span class="local-variable">this</span>)}));
+                                numberbox({<span class="key">title</span>:t1, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>],
+                                        <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3a</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                        <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                                <span class="local-variable">this</span>.value = vec3(v, <span class="local-variable">this</span>.value[<span class="integer">1</span>], <span class="local-variable">this</span>.value[<span class="integer">2</span>]);
+                                                <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
+                                        }.bind(<span class="local-variable">this</span>)}),
+                                numberbox({<span class="key">title</span>:t2, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>],
+                                        <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3b</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                        <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                                <span class="local-variable">this</span>.value = vec3(<span class="local-variable">this</span>.value[<span class="integer">0</span>], v, <span class="local-variable">this</span>.value[<span class="integer">2</span>]);
+                                                <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
+                                        }.bind(<span class="local-variable">this</span>)}),
+                                numberbox({<span class="key">title</span>:t3, <span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec3</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">2</span>],
+                                        <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec3c</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                        <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                                <span class="local-variable">this</span>.value = vec3(<span class="local-variable">this</span>.value[<span class="integer">0</span>], <span class="local-variable">this</span>.value[<span class="integer">1</span>], v);
+                                                <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
+                                        }.bind(<span class="local-variable">this</span>)}));
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2</span><span class="delimiter">&quot;</span></span>){
                         editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
-                                           numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="key">margin</span>:<span class="integer">2</span>, <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
-                                                   <span class="local-variable">this</span>.value = vec2(v, <span class="local-variable">this</span>.value[<span class="integer">1</span>]);
-                                                   <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
-                                           }.bind(<span class="local-variable">this</span>)}),
-                                           numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="key">margin</span>:<span class="integer">2</span>, <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
-                                                   <span class="local-variable">this</span>.value = vec2(<span class="local-variable">this</span>.value[<span class="integer">0</span>], v);
-                                                   <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
-                                           }.bind(<span class="local-variable">this</span>)}));
+                                numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">0</span>],<span class="key">margin</span>:<span class="integer">2</span>,
+                                        <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2a</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                        <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                                <span class="local-variable">this</span>.value = vec2(v, <span class="local-variable">this</span>.value[<span class="integer">1</span>]);
+                                                <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
+                                        }.bind(<span class="local-variable">this</span>)}),
+                                numberbox({<span class="reserved">class</span>:<span class="string"><span class="delimiter">'</span><span class="content">vec2</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="local-variable">this</span>.value[<span class="integer">1</span>],<span class="key">margin</span>:<span class="integer">2</span>,
+                                        <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec2b</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                        <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v,o){
+                                                <span class="local-variable">this</span>.value = vec2(<span class="local-variable">this</span>.value[<span class="integer">0</span>], v);
+                                                <span class="local-variable">this</span>.callback(<span class="local-variable">this</span>.value, <span class="local-variable">this</span>);
+                                        }.bind(<span class="local-variable">this</span>)}));
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">FloatLike</span><span class="delimiter">&quot;</span></span> || typename ==<span class="string"><span class="delimiter">&quot;</span><span class="content">float32</span><span class="delimiter">&quot;</span></span>){
                         editor = view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
@@ -576,6 +618,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                    <span class="key">minvalue</span>: <span class="local-variable">this</span>.property.minvalue,
                                                    <span class="key">maxvalue</span>: <span class="local-variable">this</span>.property.maxvalue,
                                                    <span class="key">value</span>:<span class="local-variable">this</span>.value,
+                                                   <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) { <span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
                                                    <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v){<span class="local-variable">this</span>.callback(v, <span class="local-variable">this</span>);}.bind(<span class="local-variable">this</span>)
                                            }));
 
@@ -589,7 +632,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="key">value</span>:<span class="local-variable">this</span>.value,
                                                 <span class="key">stepvalue</span>:<span class="integer">1</span>,
                                                 <span class="key">margin</span>:<span class="integer">2</span>,
-                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v){<span class="local-variable">this</span>.callback(v, <span class="local-variable">this</span>);}.bind(<span class="local-variable">this</span>)
+                                                <span class="function">ontextfocus</span>: <span class="keyword">function</span>(ev,v,o) {<span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); }}.bind(<span class="local-variable">this</span>),
+                                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,v){ <span class="local-variable">this</span>.callback(v, <span class="local-variable">this</span>); }.bind(<span class="local-variable">this</span>)
                                         }));
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">String</span><span class="delimiter">&quot;</span></span> || <span class="keyword">typeof</span>(typename) === <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>){
@@ -605,7 +649,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="key">borderwidth</span>:<span class="integer">1</span>,
                                                 <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">margin</span>:<span class="integer">2</span>,
-                                                <span class="function">onvalue</span>: <span class="keyword">function</span>(ev,v,o){<span class="local-variable">this</span>.callback(v, <span class="local-variable">this</span>);}.bind(<span class="local-variable">this</span>)
+                                                <span class="key">multiline</span>:<span class="predefined-constant">false</span>,
+                                                <span class="function">onfocus</span>: <span class="keyword">function</span>(ev,v,o) { <span class="keyword">if</span> (!v) { <span class="local-variable">this</span>.callback(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">null</span>, <span class="predefined-constant">true</span>); } }.bind(<span class="local-variable">this</span>),
+                                                <span class="function">onvalue</span>: <span class="keyword">function</span>(ev,v,o){ <span class="local-variable">this</span>.callback(v, <span class="local-variable">this</span>); }.bind(<span class="local-variable">this</span>)
                                         })
 
                         );
@@ -622,7 +668,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="key">borderwidth</span>:<span class="integer">2</span>,
                                 <span class="key">bordercolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#262626</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">margin</span>:<span class="integer">2</span>,
-                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>)}.bind(<span class="local-variable">this</span>)
+                                <span class="function">onvalue</span>:<span class="keyword">function</span>(ev,val) {<span class="local-variable">this</span>.callback(val, <span class="local-variable">this</span>, <span class="predefined-constant">true</span>)}.bind(<span class="local-variable">this</span>)
                         });
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (typename == <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span> &amp;&amp; meta == <span class="string"><span class="delimiter">&quot;</span><span class="content">font</span><span class="delimiter">&quot;</span></span>) {

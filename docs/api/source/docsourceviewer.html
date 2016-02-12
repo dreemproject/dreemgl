@@ -222,84 +222,76 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n68" name="n68">68</a>
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
-<a href="#n71" name="n71">71</a>
-<a href="#n72" name="n72">72</a>
-<a href="#n73" name="n73">73</a>
-<a href="#n74" name="n74">74</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-<span class="comment">// Source code viewer which is embedded into the docs. You can select the file to be displayed</span>
-<span class="comment">// by adding the hash `string #file=example.js` to the URL for this composition, e.g.</span>
-<span class="comment">// /examples/dreem_in_10/helloworldsource#file=docsourceviewer.js</span>
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,
-  <span class="keyword">function</span> (
-    require,
-    <span class="predefined">$ui$</span>, screen,
-    <span class="predefined">$$</span>, <span class="predefined">utility$sourceviewerscreen</span>
-  ) {
+<span class="comment">// Source code viewer which is embedded into the docs. You can select the file</span>
+<span class="comment">// to be displayed by adding the hash `string #file=example.js` to the URL</span>
+<span class="comment">// for this composition, e.g.</span>
+<span class="comment">// examples/dreem_in_10/helloworldsource#file=docsourceviewer.js</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, screen, <span class="predefined">$widgets$</span>, jsviewer, <span class="predefined">$server$</span>, fileio) {
 
-    <span class="local-variable">this</span>.attributes = {
-      <span class="key">sourcefile</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-    };
+        <span class="comment">// Settings for font size and bgcolor for the jsviewer component</span>
+        <span class="local-variable">this</span>.style = {
+                <span class="key">jsviewer</span>: {
+                        <span class="key">fontsize</span>: <span class="integer">12</span>
+                        ,<span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">eerieblack</span><span class="delimiter">'</span></span>
+                }
+        };
 
-    define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, fileio) {
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span>[
+                                fileio(
+                                        {
+                                                <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>,
+                                        }),
+                                screen(
+                                        {
+                                                <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>,
+                                                <span class="comment">// Loads the source of the file with the filename #file=SOME_FILE using</span>
+                                                <span class="comment">// the readSourceFile() function of the embedded fileio class.</span>
+                                                <span class="function">init</span>: <span class="keyword">function</span> () {
+                                                        <span class="keyword">var</span> sourcefile = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                                                        <span class="keyword">var</span> msg = <span class="string"><span class="delimiter">&quot;</span><span class="content">No source file specificied! Please specify source file name through hash, e.g. #file=somefile.js</span><span class="delimiter">&quot;</span></span>
+                                                        <span class="keyword">if</span> (window.location.hash) {
+                                                                <span class="keyword">var</span> values = window.location.hash.substring(<span class="integer">1</span>).split(<span class="string"><span class="delimiter">&quot;</span><span class="content">=</span><span class="delimiter">&quot;</span></span>);
+                                                                <span class="keyword">if</span> (values[<span class="integer">0</span>] == <span class="string"><span class="delimiter">'</span><span class="content">file</span><span class="delimiter">'</span></span>) {
+                                                                        sourcefile = values[<span class="integer">1</span>]
+                                                                }
+                                                        }
+                                                        <span class="keyword">if</span> (sourcefile === <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) {
+                                                                <span class="local-variable">this</span>.sourcecode = <span class="string"><span class="delimiter">'</span><span class="content">/* </span><span class="delimiter">'</span></span> + msg + <span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>
+                                                        } <span class="keyword">else</span> {
+                                                                <span class="local-variable">this</span>.rpc.fileio.readfile(define.classPath(<span class="local-variable">this</span>.composition) + sourcefile)
+                                                                        .then(<span class="keyword">function</span> (result) {
+                                                                                <span class="keyword">if</span> (result.value != <span class="predefined-constant">null</span>) {
+                                                                                        <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">'</span><span class="content">viewer</span><span class="delimiter">'</span></span>).source = result.value
+                                                                                }  <span class="keyword">else</span> {
+                                                                                        <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">'</span><span class="content">viewer</span><span class="delimiter">'</span></span>).source = <span class="string"><span class="delimiter">&quot;</span><span class="content"> /* ERROR</span><span class="char">\n</span><span class="content"> File </span><span class="delimiter">&quot;</span></span> + sourcefile + <span class="string"><span class="delimiter">&quot;</span><span class="content"> not found! */</span><span class="delimiter">&quot;</span></span>
+                                                                                }
+                                                                        }.bind(<span class="local-variable">this</span>));
+                                                        }
+                                                },
 
-      <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>);
-      <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
-                        <span class="keyword">var</span> e = <span class="predefined-constant">null</span>;
-
-      <span class="local-variable">this</span>.attributes = {
-        <span class="key">sourcecode</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">// NO SOURCE CODE LOADED!</span><span class="delimiter">&quot;</span></span>, <span class="key">flow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>}),
-      };
-
-      <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">'</span><span class="content">fileio</span><span class="delimiter">'</span></span>;
-
-      <span class="local-variable">this</span>.<span class="function">readSourceFile</span> = <span class="keyword">function</span>(theFile) {
-        <span class="keyword">var</span> basepath = (define.expandVariables(define.classPath(<span class="local-variable">this</span>)));
-        <span class="keyword">try</span> {
-          <span class="local-variable">this</span>.sourcecode = fs.readFileSync(basepath + theFile);
-                                        <span class="comment">// Strip out multiline comment (copyright notice)</span>
-                                        <span class="comment">// Removes /* ... */\n\n</span>
-                                        <span class="local-variable">this</span>.sourcecode = <span class="local-variable">this</span>.sourcecode.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\*</span><span class="content">([</span><span class="char">\s</span><span class="char">\S</span><span class="content">]*?)</span><span class="content">\*</span><span class="content">\/</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
-        } <span class="keyword">catch</span> (e) {
-          console.log(e);
+                                                <span class="comment">// Renders the source code stored in the screen's source code attribute</span>
+                                                <span class="function">render</span>: <span class="keyword">function</span> () {
+                                                        <span class="keyword">return</span> [
+                                                                jsviewer({
+                                                                        <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">viewer</span><span class="delimiter">'</span></span>
+                                                                        ,<span class="key">flex</span>: <span class="integer">1</span>
+                                                                        ,<span class="key">overflow</span>: <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
+                                                                        ,<span class="key">source</span>: <span class="string"><span class="delimiter">'</span><span class="content">// NO SOURCE LOADED</span><span class="delimiter">'</span></span>
+                                                                        ,<span class="key">multiline</span>: <span class="predefined-constant">false</span>
+                                                                })
+                                                        ];
+                                                }
+                                        }
+                                )
+                ];
         }
-        <span class="keyword">return</span> {<span class="key">src</span>: src, <span class="key">error</span>: e};
-      };
-    }).bind(<span class="local-variable">this</span>);
-
-    <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span> () {
-      <span class="keyword">if</span> (<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
-        <span class="keyword">if</span> (window.location.hash) {
-          <span class="keyword">var</span> values = window.location.hash.substring(<span class="integer">1</span>).split(<span class="string"><span class="delimiter">&quot;</span><span class="content">=</span><span class="delimiter">&quot;</span></span>);
-          <span class="keyword">if</span> (values[<span class="integer">0</span>] == <span class="string"><span class="delimiter">'</span><span class="content">file</span><span class="delimiter">'</span></span>) {
-            <span class="local-variable">this</span>.sourcefile = values[<span class="integer">1</span>];
-            console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">sourceFile=</span><span class="delimiter">&quot;</span></span> + <span class="local-variable">this</span>.sourcefile);
-          }
-        }
-        <span class="keyword">if</span> (<span class="local-variable">this</span>.sourcefile === <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) {
-          console.warn(<span class="string"><span class="delimiter">&quot;</span><span class="content">No source file specificied! Please specify source file name through hash, e.g. #file=somefile.js</span><span class="delimiter">&quot;</span></span>)
-        }
-      }
-    };
-
-    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-      <span class="keyword">return</span>[
-<span class="local-variable">this</span>.fileio({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">fileloader</span><span class="delimiter">'</span></span>}),
-<span class="predefined">utility$sourceviewerscreen</span>(
-        {
-                 <span class="key">sourcecode</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">rpc.fileloader.sourcecode</span><span class="delimiter">'</span></span>),
-                 <span class="function">init</span>: <span class="keyword">function</span> () {
-                         <span class="local-variable">this</span>.rpc.fileloader.readSourceFile(<span class="local-variable">this</span>.composition.sourcefile);
-                 }
-        }
-)
-      ];
-    }
   });
 </pre></td>
 </tr></table>
