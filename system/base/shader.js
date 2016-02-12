@@ -81,7 +81,10 @@ define.class(function(require, exports){
 	//		if(gltypes.extensions[ext] === 1)
 	//			ret += '\n#extension GL_' + ext + ' : enable'
 	//	}
-		ret += '\n#extension GL_OES_standard_derivatives : enable'
+		// Don't add extentions to DALi
+		if (define.$platform !== 'dali') {
+			ret += '\n#extension GL_OES_standard_derivatives : enable'
+		}
 	
 		return ret + '\n'
 	}
