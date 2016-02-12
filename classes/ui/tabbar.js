@@ -5,6 +5,7 @@
 // Sprite class
 
 define.class("$ui/view", function($ui$, view, label, icon){
+// Presents a bar of tabs which typically can only be selected one a time.
 
 	this.attributes = {
 
@@ -14,6 +15,9 @@ define.class("$ui/view", function($ui$, view, label, icon){
 
 		// Color of default tabs, can be overridden in style
 		tabcolor: Config({value:vec4(0,0,0,1), meta:"color" }),
+
+		// Current tab selection
+		selection:Config({type:Object}),
 
 		// Default tab states if none provided in the tab defintions.
 		states:Config({type:Object, value:{
@@ -32,11 +36,11 @@ define.class("$ui/view", function($ui$, view, label, icon){
 			selected:{
 				fgcolor:"#69f",
 				on:function(tab) {
-					if (tab.parent.__selected) {
-						tab.parent.__selected.state = "normal";
+					if (this.selection) {
+						this.selection.state = "normal";
 					}
-					tab.parent.__selected = tab;
-				}
+					this.selection = tab;
+				}.bind(this)
 			},
 			disabled:{
 				fgcolor:"darkgray",
@@ -110,6 +114,18 @@ define.class("$ui/view", function($ui$, view, label, icon){
 
 			// Foreground color of any label or icon text.
 			fgcolor: Config({value:vec4(1,1,1,1), meta:"color" }),
+
+			// reference to the font typeface, require it with require('font:')
+			font: Config({type:Object, meta:"font"}),
+
+			// Size of the font in pixels
+			fontsize: Config({type:float, value: 18, meta:"fontsize"}),
+
+			// Use a bold font
+			bold: false,
+
+			// The boldness of the font (values 0 - 1)
+			boldness: Config({type:float, value: 0.0}),
 
 			// Text to display in tab.
 			label:Config({type:String}),
@@ -214,6 +230,8 @@ define.class("$ui/view", function($ui$, view, label, icon){
 					fgcolor:this.fgcolor,
 					drawtarget:"color",
 					icon:this.icon,
+					fontsize:this.fontsize,
+					boldness:this.boldness,
 					padding:5,
 					bgcolor:NaN
 				}))
@@ -233,6 +251,10 @@ define.class("$ui/view", function($ui$, view, label, icon){
 					fgcolor:this.fgcolor,
 					drawtarget:"color",
 					text:this.label,
+					font:this.font,
+					fontsize:this.fontsize,
+					bold:this.bold,
+					boldness:this.boldness,
 					padding:5,
 					bgcolor:NaN
 				}))

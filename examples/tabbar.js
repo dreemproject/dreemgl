@@ -20,24 +20,28 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, cadgr
 						tabs:[
 							{
 								icon:'comment',
-								bold:true
+								boldness:0.3,
+								fontsize:33
 							},
 							{
 								icon:'envelope',
-								bold:true
+								boldness:0.3,
+								fontsize:33
 							},
 							{
 								icon:'at',
-								bold:true
+								fontsize:33,
+								boldness:0.15,
 							},
 							{
 								icon:'search',
-								bold:true
+								fontsize:33
 							},
 							{
 								icon:'ellipsis-h',
-								bold:true
-							},
+								fontsize:33,
+								boldness:0
+							}
 						]
 					})
 				)
