@@ -470,6 +470,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n316" name="n316">316</a>
 <a href="#n317" name="n317">317</a>
 <a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
+<a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -478,7 +487,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// Sprite class</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, view, label, icon){
-<span class="comment">// Presents a bar of tabs which typically can only be selected one a time.</span>
+<span class="comment">// Presents a bar of configurable tabs</span>
+
+        <span class="local-variable">this</span>.<span class="function">defaultselectionhandler</span> = <span class="keyword">function</span>(tab) {
+                <span class="keyword">if</span> (tab.parent.selection) {
+                        tab.parent.selection.state = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span>;
+                }
+                tab.parent.selection = tab;
+        };
 
         <span class="local-variable">this</span>.attributes = {
 
@@ -508,12 +524,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         },
                         <span class="key">selected</span>:{
                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#69f</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">on</span>:<span class="keyword">function</span>(tab) {
-                                        <span class="keyword">if</span> (tab.parent.selection) {
-                                                tab.parent.selection.state = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span>;
-                                        }
-                                        tab.parent.selection = tab;
-                                }.bind(<span class="local-variable">this</span>)
+                                <span class="key">on</span>:<span class="local-variable">this</span>.defaultselectionhandler
                         },
                         <span class="key">disabled</span>:{
                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">darkgray</span><span class="delimiter">&quot;</span></span>,
@@ -749,6 +760,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ]
                 },
                 <span class="function">Advanced</span>: <span class="keyword">function</span>() {
+
+                        <span class="keyword">var</span> <span class="function">selectionhandler</span> = <span class="keyword">function</span>(tab,state) {
+                                tab.parent.defaultselectionhandler(tab);
+                                alert(<span class="string"><span class="delimiter">&quot;</span><span class="content">custom logic for </span><span class="delimiter">&quot;</span></span> + state + <span class="string"><span class="delimiter">&quot;</span><span class="content"> handler can go here</span><span class="delimiter">&quot;</span></span>)
+                        };
+
                         <span class="keyword">return</span> [
                                 tabbar({<span class="key">tabs</span>:[
                                         {
@@ -772,7 +789,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         },
                                         {
                                                 <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>
+                                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">selected</span>:{ <span class="key">on</span>:selectionhandler }
                                         },
                                         {
                                                 <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,

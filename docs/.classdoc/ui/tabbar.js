@@ -1,7 +1,7 @@
 /**
  * @class tabbar
  * @extends view
- * Presents a bar of tabs which typically can only be selected one a time.
+ * Presents a bar of configurable tabs
  * 
  * <iframe style="border:0;width:900px;height:600px" src="http://localhost:2000/apps/docs/example#path=$root/ui/tabbar.js"></iframe>
  * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/tabbar.js">open example in new tab &raquo;</a>

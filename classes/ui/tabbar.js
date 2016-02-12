@@ -5,7 +5,14 @@
 // Sprite class
 
 define.class("$ui/view", function($ui$, view, label, icon){
-// Presents a bar of tabs which typically can only be selected one a time.
+// Presents a bar of configurable tabs
+
+	this.defaultselectionhandler = function(tab) {
+		if (tab.parent.selection) {
+			tab.parent.selection.state = "normal";
+		}
+		tab.parent.selection = tab;
+	};
 
 	this.attributes = {
 
@@ -35,12 +42,7 @@ define.class("$ui/view", function($ui$, view, label, icon){
 			},
 			selected:{
 				fgcolor:"#69f",
-				on:function(tab) {
-					if (tab.parent.selection) {
-						tab.parent.selection.state = "normal";
-					}
-					tab.parent.selection = tab;
-				}.bind(this)
+				on:this.defaultselectionhandler
 			},
 			disabled:{
 				fgcolor:"darkgray",
@@ -276,6 +278,12 @@ define.class("$ui/view", function($ui$, view, label, icon){
 			]
 		},
 		Advanced: function() {
+
+			var selectionhandler = function(tab,state) {
+				tab.parent.defaultselectionhandler(tab);
+				alert("custom logic for " + state + " handler can go here")
+			};
+
 			return [
 				tabbar({tabs:[
 					{
@@ -299,7 +307,8 @@ define.class("$ui/view", function($ui$, view, label, icon){
 					},
 					{
 						class:"folder",
-						label:"two"
+						label:"two",
+						selected:{ on:selectionhandler }
 					},
 					{
 						class:"folder",
