@@ -69,7 +69,7 @@ Before you submit your pull request consider the following guidelines:
 
 * Please sign our [Contributor License Agreement (CLA)](#cla) before sending pull requests. We cannot accept code without this.
 * Create a JIRA item for the task.
-* Make your changes in a new git branch:
+* Make your changes in a new git branch from the dev branch:
 
      ```shell
      git checkout -b my-fix-branch dev
