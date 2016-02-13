@@ -25,12 +25,14 @@ define.class("$server/composition",function(require, $ui$, button, screen, label
 						}),
 						button({
 							marginbottom:20,
+							label:"Click Button",
 							click:function(ev,v,o){
 							this.screen.find("status").text = "Button clicked!";
 						}}),
 						button({
 							bgcolor:"white",
 							icon:"flask",
+							label:"Toggle Button",
 							mode:"toggle",
 							toggle:function(ev,v,o) {
 								this.screen.find("status").text = "Button toggled to: " + v;

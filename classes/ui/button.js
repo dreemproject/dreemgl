@@ -44,14 +44,14 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		// Size of the font in pixels
 		fontsize: Config({type:float, value: 18, meta:"fontsize"}),
 
-		// Use a bold font
-		bold: false,
+		// Use a bold font on label
+		bold: true,
 
 		// The boldness of the label font (values 0 - 1)
 		boldness: Config({type:float, value: 0.0}),
 
 		// Text to display in button.
-		label:Config({type:String, value:"button"}),
+		label:Config({type:String, value:""}),
 
 		// Icon to display in button.
 		icon:Config({type:String}),
@@ -152,6 +152,8 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			this[key] = val;
 		}
 
+		this.class = v;
+
 		if (this.on) {
 			this.on.call(this, ev, v, o);
 		}
@@ -182,7 +184,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		if (this.__untoggle) {
 			delete this.__untoggle;
 			if (this.state !== "disabled") {
-				this.clickhandler(ev)
+				this.clickhandler(ev);
 				this.state = "normal";
 			}
 		} else if (this.state === "active") {
