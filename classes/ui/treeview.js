@@ -24,17 +24,8 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.bold = false;
 		this.fontsize = 14;
 
-		this.style = {
-			buttonlabel: {
-				padding:2
-			},
-			buttonicon: {
-				padding:2
-			}
-		};
-
 	//	this.borderradius = 0;
-		this.padding =  0
+		this.padding = 2
 		this.pickalpha = -1
 		this.labelactivecolor = vec4("#303000")
 		this.buttoncolor1 = "#3b3b3b"
@@ -79,7 +70,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			return [
 				this.haschildren?this.outer.foldbutton({
 					icon:this.folded? "chevron-right":"chevron-down",
-					padding: 0,
+					padding: 2,
 					click: this.toggleclick
 				}):[],
 				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),

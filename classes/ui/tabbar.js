@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class("$ui/view", function($ui$, button){
+define.class("$ui/view", function($ui$, statebutton){
 // Presents a bar of configurable tabs.  [example](http://localhost:2000/examples/tabbar).
 
 	this.defaultselectionhandler = function(ev, v, o) {
@@ -108,7 +108,7 @@ define.class("$ui/view", function($ui$, button){
 		return tabs;
 	};
 
-	define.class(this, "tab", button, function() {
+	define.class(this, "tab", statebutton, function() {
 		this.defaultstates = wire('this.parent.states');
 	});
 

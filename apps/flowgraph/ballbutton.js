@@ -3,14 +3,13 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/gradbutton', function(require, $ui$, view, icon){
+define.class('$ui/button', function(require, $ui$, view, icon){
 
 	this.attributes = {
 		ballsize: 16,
 		icon: "",
 		triangle: false,
 		triangleangle: 0,
-
 		borderradius: 8,
 		borderwidth: 3,
 		bordercolor: "#6c6c6c",
