@@ -5,6 +5,8 @@
 
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
+// A button
+
 
 	this.clickhandler = function(ev, v, o) {
 		if (ev) {
@@ -50,7 +52,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		// The boldness of the label font (values 0 - 1)
 		boldness: Config({type:float, value: 0.0}),
 
-		// Text to display in button.
+		// Text to display in button's label.
 		label:Config({type:String, value:""}),
 
 		// deprecated
