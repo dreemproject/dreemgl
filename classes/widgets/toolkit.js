@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, treeview, button,
+								  $ui$, view, label, icon, treeview, gbutton,
 								  $widgets$, palette, propviewer){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
@@ -63,7 +63,7 @@ define.class("$ui/view", function(require,
 				{
 					label:"Check Button",
 					icon:"check-square",
-					desc:"A check button",
+					desc:"A check gbutton",
 					classname:"checkbox",
 					classdir:"$ui$",
 					params:{
@@ -74,8 +74,8 @@ define.class("$ui/view", function(require,
 				{
 					label:"Button",
 					icon:"square",
-					desc:"A basic button",
-					classname:"button",
+					desc:"A basic gbutton",
+					classname:"gbutton",
 					classdir:"$ui$",
 					params:{
 						fontsize:24,
@@ -1217,7 +1217,7 @@ define.class("$ui/view", function(require,
 					paddingleft:10,
 					drawtarget:'color'
 				}),
-				button({
+				gbutton({
 					icon:'times',
 					bgcolor:NaN,
 					borderwidth:0,

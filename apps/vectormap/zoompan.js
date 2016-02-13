@@ -1,4 +1,4 @@
-define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, button, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup, $3d$, ballrotate, $$, urlfetch, geo, map){
+define.class('$server/composition', function vectormap(require,  $server$, fileio,$ui$, numberbox, gbutton, menubar, label, screen, view, foldcontainer, speakergrid,checkbox, icon, $widgets$, colorpicker,  jsviewer, radiogroup, $3d$, ballrotate, $$, urlfetch, geo, map){
 	define.class(this, "tiledmap", function($ui$, view)
 	{
 		this.render = function(){
@@ -173,7 +173,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 					var R = [];
 				for (var x = 0;x<10;x+=2){
 					var t = x + " " + y
-					R.push(button({xtarget:x, ytarget:y, ztarget:z, text:t,click:function(){this.rpc.index.moveTo(this.xtarget,this.ytarget,this.ztarget);}, margin:2}))
+					R.push(gbutton({xtarget:x, ytarget:y, ztarget:z, text:t,click:function(){this.rpc.index.moveTo(this.xtarget,this.ytarget,this.ztarget);}, margin:2}))
 				}
 					res.push(view({bg:0},R));
 				}
@@ -207,8 +207,8 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 				,view({bg:0},this.renderbuttongrid(4))
 				,label({fontsize:20, text:"level 3" , bg:0})
 				,view({bg:0},this.renderbuttongrid(3))
-				,button({text:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
-				,button({text:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
+				,gbutton({text:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
+				,gbutton({text:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
 					))
 		)
 		]

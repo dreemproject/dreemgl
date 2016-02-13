@@ -4,8 +4,8 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require,$ui$, view, textbox, label, button){
-	// Simple numberbox: a number with a plus and a minus button
+define.class(function(require,$ui$, view, textbox, label, gbutton){
+	// Simple numberbox: a number with a plus and a minus gbutton
 
 	this.attributes = {
 		value: Config({type: float, value: 0}),
@@ -127,7 +127,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			)
 		}
 
-		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left",  buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",text:"" , fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.downclick()}.bind(this)}));
+		res.push(gbutton({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left",  buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",text:"" , fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.downclick()}.bind(this)}));
 		res.push(textbox({
 			margin:vec4(4,0,4,0),
 			alignself:"center",
@@ -153,7 +153,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 				}
 			}.bind(this)
 	}));
-		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
+		res.push(gbutton({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", buttoncolor2:"#3b3b3b", buttoncolor1:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
 		return res;
 
 	}

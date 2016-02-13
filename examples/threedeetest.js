@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, button, $3d$, cube, sphere, plane){
+define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, gbutton, $3d$, cube, sphere, plane){
 
 	var pointerdebug = define.class(function pointerdebug($ui$view){
 
@@ -44,7 +44,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 		// TODO(aki): fix in 3D view
 		this.pointermove = function(event){
 			var a = this.globalToLocal(event.position)
-			
+
 			this.shaders.hardrect.pointerpos = vec2(a[0],a[1])
 			this.redraw()
 			if (this.children.length > 0){
@@ -68,7 +68,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 							return vec4(0.4, 0.4, 0.4+ mesh.y*0.8,1.0)
 						}
 					}},
-					button({
+					gbutton({
 						text:"Near",
 						click:function(){
 							var cam = this.find("theview");
@@ -76,7 +76,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 							cam.fov = 30;
 						}
 					}),
-					button({
+					gbutton({
 						text:"Far",
 						click:function(){
 							var cam = this.find("theview");
@@ -117,7 +117,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					)
 
 					,view({viewport:'2d', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
-						,button({text:"LKJQEW", click:function(){
+						,gbutton({text:"LKJQEW", click:function(){
 
 							var cam = this.find("theview");
 							cam.camera = vec3(1,2,3);
@@ -125,7 +125,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 							}
 						}),
 						pointerdebug({width:100, height:100}),
-						button({
+						gbutton({
 							text:"Far",
 							click:function(){
 								var cam = this.find("theview");
@@ -134,7 +134,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 							}
 						}),
 						pointerdebug({width:100, height:100}),
-						button({
+						gbutton({
 							text:"Left",
 							click:function(){
 								var cam = this.find("theview");
@@ -145,14 +145,14 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 
 						)
 					,view({viewport:'2d', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)}
-						,button({text:"this is really fast!", click:function(){
+						,gbutton({text:"this is really fast!", click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(0,2,-5);
 							cam.fov = 30;
 							}
 						})
 						,pointerdebug({width:100, height:100})
-						,button({text:"B", click:function(){
+						,gbutton({text:"B", click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(3,3,-4);
 							cam.fov = 90;
@@ -160,7 +160,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 
 						})
 						,pointerdebug({width:100, height:100})
-						,button({text:"C", click:function(){
+						,gbutton({text:"C", click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(-3,3,-3);
 							cam.fov = 90;

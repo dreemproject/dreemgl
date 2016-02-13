@@ -4,7 +4,7 @@
 	either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$ui/view', function(require,
-		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, button, scrollbar, textbox, numberbox, splitcontainer, menubar,
+		$ui$, view, icon, treeview, cadgrid, foldcontainer, label, gbutton, scrollbar, textbox, numberbox, splitcontainer, menubar,
 		$widgets$, palette, propviewer, searchbox, jseditor,
 		$server$, sourceset, dataset,
 		$$, aboutdialog, docviewerdialog, newcompositiondialog, opencompositiondialog, renamedialog,  library, dockpanel, block, connection){
@@ -794,18 +794,18 @@ define.class('$ui/view', function(require,
 						,view({name:"popuplayer", bgcolor:NaN},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
 								label({text:"Connection", bgcolor:NaN, margin:4})
-								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								,gbutton({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"Block", bgcolor:NaN, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								,gbutton({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 
 							,view({name:"groupui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),borderradius:8, borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
 								label({text:"Group", bgcolor:NaN, margin:4})
-								,button({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								,gbutton({padding:0,borderwidth:0, click:function(){this.removeBlock(undefined)}.bind(this),fgcolor:"white", icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,this.selectorrect({name:"selectorrect"})
 							,view({bgcolor:NaN}, connection({name:"openconnector", hasball: false, visible:false}))

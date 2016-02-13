@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function($ui$, knob, speakergrid, screen, view, label, numberbox, textbox, button, $widgets$, propviewer, colorpicker, radiogroup){
+define.class('$server/composition', function($ui$, knob, speakergrid, screen, view, label, numberbox, textbox, gbutton, $widgets$, propviewer, colorpicker, radiogroup){
 	this.render = function(){ return [
 		screen({clearcolor:vec4('blue'),flexwrap:"nowrap", flexdirection:"row",bg:{
 					color:function(){

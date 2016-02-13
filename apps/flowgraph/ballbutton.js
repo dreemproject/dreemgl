@@ -1,9 +1,9 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/button', function(require, $ui$, view, icon){
+define.class('$ui/gbutton', function(require, $ui$, view, icon){
 
 	this.attributes = {
 		ballsize: 16,
@@ -21,7 +21,7 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 		alignitems: "center",
 		justifycontent: "center"
 	}
-	
+
 	this.ontriangleangle = function(){
 		var tri = this.find("thetri")
 		if (tri){
@@ -29,13 +29,13 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 			tri.bgcolor = this.bordercolor
 		}
 	}
-	
+
 	this.onballsize = function(){
 		this.width = this.ballsize
 		this.height = this.ballsize
 		this.borderradius = this.ballsize/2
 	}
-	
+
 	define.class(this, "triangledisp", view, function(){
 		this.attributes = {angle: 0, radius:8}
 
@@ -51,12 +51,12 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 
 			this.position = function(){
 				var p = vec2(sin(mesh.x-view.angle)*view.radius, cos(mesh.x - view.angle) * view.radius)
-				
+
 				return vec4(p.xy + vec2(0,7), 0, 1) * view.totalmatrix * view.viewmatrix
 			}
 		}
 	})
-	
+
 	this.onbgcolor = function(){
 		var hsv = vec4.toHSV(this.bgcolor)
 		var lighter = vec4.fromHSV(hsv[0], hsv[1]*0.5, Math.min(1, hsv[2]*1.5), 1)
@@ -68,7 +68,7 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 		this.pressedcolor1 = lighter
 		this.pressedcolor2 = lighter
 	}
-	
+
 	this.onbordercolor = function(){
 		var tri = this.find("thetri");
 		if (tri){
@@ -76,15 +76,15 @@ define.class('$ui/button', function(require, $ui$, view, icon){
 			tri.bgcolor = this.bordercolor
 		}
 	}
-	
+
 	this.render =function(){
 		if (this.icon && this.icon.length > 0) return [
 			icon({icon:this.icon, alignself:"center", alignself:'stretch', fgcolor:wire("this.parent.bordercolor") })
 		]
-	
+
 		if (this.triangle) return [
 			this.triangledisp({name:"thetri", alignself:'stretch',bgcolor:wire("this.bordercolor") })
 		]
 		return []
-	}	
+	}
 })

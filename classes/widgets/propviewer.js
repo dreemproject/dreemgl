@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, foldcontainer, view, label, button, scrollbar, textbox, $widgets$, propeditor){
+define.class(function(require, $ui$, foldcontainer, view, label, gbutton, scrollbar, textbox, $widgets$, propeditor){
 // The property viewer allows for the visual inspection and manipulation of properties on DreemGL objects
 
 	this.attributes = {

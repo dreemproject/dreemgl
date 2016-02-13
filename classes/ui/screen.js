@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
+define.class('$ui/view', function(require, $ui$, gbutton, view, menubutton) {
 // Screens are the root of a view hierarchy, typically mapping to a physical device.
 
 	var Render = require('$system/base/render')
@@ -254,7 +254,7 @@ define.class('$ui/view', function(require, $ui$, button, view, menubutton) {
 			if (e.pointer) {
 				this.emit('globalpointermove', e)
 				e.view.emitUpward('pointermove', e.pointer)
-				if (!e.pointer.touch && e.pointer.button == 2){
+				if (!e.pointer.touch && e.pointer.gbutton == 2){
 					this.device.keyboard.pointerMove(e.pointer.position)
 				}
 			} else if (e.pointers) {

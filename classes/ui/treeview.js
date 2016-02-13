@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function($ui$, view, label, button, icon){
+define.class('$ui/view', function($ui$, view, label, gbutton, icon){
 // The treeview control - classic treeview with expandable nodes.
 
 	this.attributes = {
@@ -18,8 +18,8 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 	this.viewport = '2d'
 	this.overflow ='scroll'
 
-	// The fold button is a very very flat button.
-	define.class(this, 'foldbutton', button, function(){
+	// The fold gbutton is a very very flat gbutton.
+	define.class(this, 'foldbutton', gbutton, function(){
 		this.borderwidth = 0
 
 	//	this.borderradius = 0;

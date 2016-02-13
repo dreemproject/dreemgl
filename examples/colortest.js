@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, button, $widgets$, colorpicker){
+define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, gbutton, $widgets$, colorpicker){
 	this.render = function(){ return [
 		screen({clearcolor:'#484230', flexdirection:'row'},
 			splitcontainer({ vertical: false, flexdirection: "row", bgcolor: "black", flex:1},
@@ -26,7 +26,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					colorpicker({margin:4, flex:1, value:vec4("#102030"), bgcolor:vec4(0,0,0,0.4)})
 					)
 					,view({flexdirection:"row", bgcolor:"transparent",padding:7 },
-						button({
+						gbutton({
 							text:"Set Vec4",
 							click:function(){
 								var cp = this.find("colorpicker");
@@ -35,7 +35,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 							}
 						}),
 
-						button({
+						gbutton({
 							text:"Set HSL",
 							click:function(){
 								var cp = this.find("colorpicker");

@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon, treeview, cadgrid, label, button, $$, ballbutton, $widgets$, docviewer){
+define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon, treeview, cadgrid, label, gbutton, $$, ballbutton, $widgets$, docviewer){
 
 	this.bgcolor = vec4(0,0,0,0.5);
 	this.flexdirection ="column"
@@ -17,7 +17,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 			view({bg:false, flexdirection:"column", padding:20 },
 			//docviewer({classconstr:textbox, fontcolor:"white", bg:false}),
 				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
-					button({padding:10, text:"Close", icon:"check", click: function(){this.screen.closeModal(true);} })
+					gbutton({padding:10, text:"Close", icon:"check", click: function(){this.screen.closeModal(true);} })
  				)
 			)
 		);

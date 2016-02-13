@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, button, scrollbar, textbox, icon){
+define.class(function(require, $ui$, view, label, gbutton, scrollbar, textbox, icon){
 
 	this.attributes ={
 		values: Config({type:Object, value:[]}),
@@ -58,7 +58,7 @@ define.class(function(require, $ui$, view, label, button, scrollbar, textbox, ic
 				)
 			}
 			else{
-				res.push(button({
+				res.push(gbutton({
 						bgcolor:"#3b3b3b",
 						borderwidth:0,
 						padding:2,

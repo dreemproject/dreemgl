@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class('$server/composition', function(require,
-	$ui$, screen, view, button, label,
+	$ui$, screen, view, gbutton, label,
 	$behaviors$, draggable,
 	$3d$, teapot, ballrotate,
 	$widgets$, docviewer, jsviewer, slideviewer){
@@ -211,7 +211,7 @@ define.class('$server/composition', function(require,
 					}
 				}
 				,view({flex:1, bgcolor:'black'}
-					,button({
+					,gbutton({
 						text:'Left',
 						flex:1,
 						size: vec2(200, 200),
@@ -220,7 +220,7 @@ define.class('$server/composition', function(require,
 							this.screen.pager = -1
 						}
 					})
-					,button({
+					,gbutton({
 						text:'Right',
 						flex:1,
 						size: vec2(200, 200),

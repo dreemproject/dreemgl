@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function($ui$, numberbox, view, label, noisegrid, button, $3d$, ballrotate){
+define.class('$ui/view', function($ui$, numberbox, view, label, noisegrid, gbutton, $3d$, ballrotate){
 
 	this.places= [
 		{text:"Texel 11", place: "texel", zoomlevel: 11},
@@ -35,7 +35,7 @@ define.class('$ui/view', function($ui$, numberbox, view, label, noisegrid, butto
 		var Buttons = [];
 		for(var i = 0;i<this.places.length;i++){
 			var p = this.places[i];
-			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel, 1);
+			Buttons.push(gbutton({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel, 1);
 			this.find("zoomlevelbox").value = this.zoomlevel;}, margin:4}))
 		}
 
@@ -50,7 +50,7 @@ define.class('$ui/view', function($ui$, numberbox, view, label, noisegrid, butto
 				,label({text:"Rotation control",margin: 10,fontsize:12,  bgcolor:NaN})
 				,ballrotate({name:"ballrotate1", height:100, target:"mapinside"})
 				)
-				,button({text:"DumpDebug",click:function(){this.find("themap").dumpdebug()}, margin:4})
+				,gbutton({text:"DumpDebug",click:function(){this.find("themap").dumpdebug()}, margin:4})
 				,Buttons
 			)
 		]

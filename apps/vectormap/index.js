@@ -1,4 +1,4 @@
-define.class('$server/composition', function (require, $ui$, view, label, screen, splitcontainer, noisegrid, button, $$, mapcontrols, map, urlfetch, jsonfetch, acceleroremote, $3d$, ballrotate){
+define.class('$server/composition', function (require, $ui$, view, label, screen, splitcontainer, noisegrid, gbutton, $$, mapcontrols, map, urlfetch, jsonfetch, acceleroremote, $3d$, ballrotate){
 	this.render = function(){
 		return [
 			urlfetch({name: "urlfetch"}),
@@ -27,7 +27,7 @@ define.class('$server/composition', function (require, $ui$, view, label, screen
 			,screen({name:"mobile"}
 				,map({name: "mobilemap"})
 				,view({bgcolor:NaN},
-					button({icon:"home", justifycontent:"center", aligncontent:"center", flex:1,fontsize: 20, padding:20}),ballrotate({flex:1, padding:20,name:"ballrotate1", target:"mapinside"}))
+					gbutton({icon:"home", justifycontent:"center", aligncontent:"center", flex:1,fontsize: 20, padding:20}),ballrotate({flex:1, padding:20,name:"ballrotate1", target:"mapinside"}))
 				,label({bgcolor:NaN,bold:true, text:"DreemGL Mapping: Mobile", position:"absolute", x:10, y:10})
 			)
 		];
