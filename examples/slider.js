@@ -16,7 +16,28 @@ define.class("$server/composition",function(require, $ui$, slider, screen, label
 							flexdirection:'column',
 							justifycontent:'center'
 						},
-						slider({width:200})
+						label({
+							name:"current",
+							width:200,
+							height:30,
+							bgcolor:NaN,
+							marginbottom:30,
+							text:"The current value is: 0"
+						}),
+						slider({
+							width:400,
+							minhandlethreshold:26,
+							height:5,
+							value:0.0,
+							bgcolor:"pink",
+							fgcolor:"white",
+							onvalue:function(ev,v,o) {
+								var current = this.screen.find("current");
+								if (current) {
+									current.text = "The current value is: " + v
+								}
+								this.height = 5 + 30 * v
+							}})
 					)
 				)
 			]
