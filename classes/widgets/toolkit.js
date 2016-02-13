@@ -115,7 +115,7 @@ define.class("$ui/view", function(require,
 		// and views can be resized and manipulated.
 		// In 'live' mode views lock into place the composition regains it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
-		reticlesize: 6,
+		reticlesize: 9,
 		groupdrag:true,
 		animateborder: false,
 		rulers:true,
@@ -330,10 +330,14 @@ define.class("$ui/view", function(require,
 				return;
 			}
 
-			if (this.__ruler && this.__ruler.target == ev.view) {
-				this.__ruler.target = ev.view.parent;
-			}
 			if (this.__ruler) {
+				if (ev.pointer.pick && this.testView(ev.pointer.pick) && this.__ruler.target !== ev.pointer.pick) {
+					this.__ruler.target = ev.pointer.pick;
+				}
+				if (this.__ruler.target == ev.view) {
+					this.__ruler.target = ev.view.parent;
+				}
+
 				this.__ruler.rulermarkstart = ev.view.pos;
 				this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
 			}
@@ -1110,22 +1114,6 @@ define.class("$ui/view", function(require,
 			this.pos = vec2(v._layout.absx, v._layout.absy);
 			this.size = vec2(v._layout.width, v._layout.height);
 			this.rotate = v.rotate;
-            //
-			//v.onsize = function(ev,v,o) {
-			//	this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
-			//}.bind(this);
-            //
-			//v.onpos = function(ev,v,o) {
-			//	this.pos = vec3(v._layout.absx, v._layout.absy, v.z);
-			//}.bind(this);
-            //
-			//v.onrotate = function(ev,v,o) {
-			//	this.rotate = v;
-			//}.bind(this);
-            //
-			//v.onborderradius = function(ev,v,o) {
-			//	this.borderradius = v;
-			//}.bind(this);
 		}
 	});
 
