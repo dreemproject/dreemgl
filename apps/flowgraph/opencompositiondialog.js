@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon, treeview, cadgrid, label, gbutton, $$, ballbutton){
+define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 
 	this.bgcolor = vec4(0,0,0,0.5);
 
@@ -23,7 +23,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon
 		for(var i =0 ;i<this.compositions.length;i++){
 			var c= this.compositions[i];
 			console.log(c);
-			res.push(gbutton({text:c.name,name:c.name, margin:4, click:function(){this.screen.closeModal(this.name);}}));
+			res.push(button({label:c.name,name:c.name, margin:4, click:function(){this.screen.closeModal(this.name);}}));
 		}
 
 		return dialog({title:"Open composition", position:"relative"},
@@ -31,7 +31,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon
 			,res,
 			view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
 
-					gbutton({padding: 10, marginleft:10, icon:"close",text:"Cancel", click: function(){this.screen.closeModal(false);} })
+					button({padding: 10, marginleft:10, icon:"close",label:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)
 			)
 		);

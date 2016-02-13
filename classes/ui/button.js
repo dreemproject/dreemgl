@@ -53,6 +53,9 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		// Text to display in button.
 		label:Config({type:String, value:""}),
 
+		// deprecated
+		text:Config({type:String, value:""}),
+
 		// Icon to display in button.
 		icon:Config({type:String}),
 
@@ -103,6 +106,11 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 	this.init = function() {
 		this.onstate(null, this.state, this);
+	};
+
+	this.ontext = function(ev,v,o) {
+		console.error('.text is deprecated for button, please use .label');
+		this.label = v;
 	};
 
 	this.onstate = function(ev,v,o) {

@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, gbutton, $$, ballbutton){
+define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton){
 
 	function uppercaseFirst (inp) {
 		if (!inp || inp.length == 0) return inp;
@@ -48,7 +48,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 				//,
 				view({justifycontent:"space-between", flex:1, bgcolor:NaN},
 					label({text:this.classdesc.name.substr(0,this.classdesc.name.length-3 ), margin:3,fgcolor:this.fgcolor, bgcolor:NaN, flex:1})
-					,gbutton({icon:"plus", pointerhover: this.doHover.bind(this),click: this.addBlock.bind(this)})
+					,button({icon:"plus", pointerhover: this.doHover.bind(this),click: this.addBlock.bind(this)})
 				)
 			]
 		}

@@ -1,4 +1,4 @@
-define.class("$ui/view", function(require,$ui$, view,label, gbutton, noisegrid,speakergrid, $$, geo, urlfetch)
+define.class("$ui/view", function(require,$ui$, view,label, button, noisegrid,speakergrid, $$, geo, urlfetch)
 {
 	this.flex = 1;
 	this.attributes = {
@@ -10,8 +10,8 @@ define.class("$ui/view", function(require,$ui$, view,label, gbutton, noisegrid,s
 
 				view({bg:0, alignself:"center", flexdirection:"column"}
 					,label({name:"thelabel", text: "", bg:0})
-					,gbutton({icon:"arrows",margin: 10, padding:20, pointerstart : function(){this.setAccelTarget("Move");}.bind(this), pointerend: function(){this.setAccelTarget("");}.bind(this)})
-					,gbutton({icon:"video-camera",margin: 10, padding:20, pointerstart : function(){this.setAccelTarget("Pan");}.bind(this), pointerend: function(){this.setAccelTarget("");}.bind(this)})
+					,button({icon:"arrows",margin: 10, padding:20, pointerstart : function(){this.setAccelTarget("Move");}.bind(this), pointerend: function(){this.setAccelTarget("");}.bind(this)})
+					,button({icon:"video-camera",margin: 10, padding:20, pointerstart : function(){this.setAccelTarget("Pan");}.bind(this), pointerend: function(){this.setAccelTarget("");}.bind(this)})
 				)
 			)
 			)

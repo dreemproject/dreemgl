@@ -103,7 +103,7 @@ define.class('$system/base/node', function(){
 		this.view = view
 		this.value = pointer.value
 		this.position = pointer.position
-		this.gbutton = pointer.gbutton
+		this.button = pointer.button
 		this.shift = pointer.shift
 		this.alt = pointer.alt
 		this.ctrl = pointer.ctrl

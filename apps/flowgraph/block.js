@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, gbutton, $$, ballbutton, renameblockdialog){
+define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, label, button, $$, ballbutton, renameblockdialog){
 
 	this.cursor = "move"
 	this.position = "absolute"
@@ -337,9 +337,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			view({class:'header',alignitems:"center" }
 				,view({bgcolor:NaN, justifycontent:"center", alignitems:"center" }
 					,label({text:this.title,class:'head'})
-					,gbutton({class:"header", icon:"pencil",click:function(e){this.renameBlock(e);}.bind(this)})
+					,button({class:"header", icon:"pencil",click:function(e){this.renameBlock(e);}.bind(this)})
 				)
-				,gbutton({class:"header", icon:"remove",click:function(e){this.removeBlock(e);}.bind(this)})
+				,button({class:"header", icon:"remove",click:function(e){this.removeBlock(e);}.bind(this)})
 			)
 			,view({class:'main'},
 				view({bgimage:require("./placeholder.png") })

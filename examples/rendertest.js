@@ -5,7 +5,7 @@
 
 //Pure JS based composition
 
-define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, gbutton, $3d$, cube){
+define.class('$server/composition', function($ui$, screen, view, splitcontainer, label, button, $3d$, cube){
 
 	var pointerdebug = define.class(function pointerdebug($ui$view){
 
@@ -63,9 +63,9 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 				borderradius:30,
 				bgcolor:'#CBD6D9'
 				}
-				,gbutton({text:'test', flex:1, click:function(){
+				,button({label:'test', flex:1, click:function(){
 					this.parent.appendChild(function(){
-						return gbutton({text:'hii',flex:1})
+						return button({label:'hii',flex:1})
 					})
 				}})
 				,view({clearcolor:"lightblue", mode:'3D', flex:1, margin:2, bgcolor:'lightblue', name:'3dview', borderwidth:0, bordercolor:"black", borderradius:1, camera:vec3(2.1,2,2)}

@@ -37,7 +37,7 @@ define.class(function(require, $ui$button){
 	}
 
 	var rotator = this.constructor
-	// Basic usage of the gbutton.
+	// Basic usage of the button.
 	this.constructor.examples = {
 		Usage:function(){
 			return [

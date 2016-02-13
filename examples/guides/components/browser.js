@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function($ui$, screen, view, gbutton, textbox, $$, movie) {
+define.class(function($ui$, screen, view, button, textbox, $$, movie) {
 
     this.attributes = {
         term: Config({type:String}),
@@ -29,7 +29,7 @@ define.class(function($ui$, screen, view, gbutton, textbox, $$, movie) {
             { flexdirection:'column', flex:1, overflow:'scroll' },
             view({flexdirection:'row'},
 				textbox({ name:'search', value:'Cats', fgcolor:'black', borderwidth:1, bordercolor:'#666'}),
-				gbutton({text:'Search', click:function() {
+				button({label:'Search', click:function() {
 					// sets the term on our screen, this should fire the server thing
 					this.screen.term = this.parent.find('search').value;
 				}})

@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, gbutton, scrollbar, textbox, icon){
+define.class(function(require, $ui$, view, label, button, scrollbar, textbox, icon){
 
 	this.attributes ={
 		values: Config({type:Object, value:[]}),
@@ -58,7 +58,7 @@ define.class(function(require, $ui$, view, label, gbutton, scrollbar, textbox, i
 				)
 			}
 			else{
-				res.push(gbutton({
+				res.push(button({
 						bgcolor:"#3b3b3b",
 						borderwidth:0,
 						padding:2,
@@ -70,7 +70,7 @@ define.class(function(require, $ui$, view, label, gbutton, scrollbar, textbox, i
 						fgcolor:"#909090",
 						bold: false,
 
-						padding:2,text:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), pointerstart:function(){
+					    label:(v===undefined)?"unD": ((v.trim().length > 0)?v:"AAA"), pointerstart:function(){
 							radio.currentvalue = (this.text=="undefined" ||this.text=="unD") ? undefined:this.text;
 						},fontsize:this.fontsize
 					}))

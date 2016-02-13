@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, splitcontainer, screen, view, label, gbutton, $widgets$, propviewer, colorpicker, $$, flowgraph){
+define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, splitcontainer, screen, view, label, $widgets$, propviewer, colorpicker, $$, flowgraph){
 
 	define.class(this, 'fileio', function($server$, fileio){
 		var path = require('path')

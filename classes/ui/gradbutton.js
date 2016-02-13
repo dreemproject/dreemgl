@@ -5,7 +5,7 @@
 
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
-// Simple gbutton: a rectangle with a textlabel and an icon
+// Simple gradient button: a rectangle with a textlabel and an icon
 
 	this.attributes = {
 		// The label for the gbutton
@@ -184,14 +184,14 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		return view({class:'wrap',margin:this.internalmargin},res)
 	}
 
-	var gbutton = this.constructor
+	var gradbutton = this.constructor
 	// Basic usage of the gbutton.
 	this.constructor.examples = {
 		Usage:function(){
 			return [
-				gbutton({text:"Press me!"}),
-				gbutton({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  }),
-				gbutton({text:"With an icon!", icon:"flask" })
+				gradbutton({text:"Press me!"}),
+				gradbutton({text:"Colored!", buttoncolor1: "red", buttoncolor2: "blue", labelcolor: "white"  }),
+				gradbutton({text:"With an icon!", icon:"flask" })
 			]
 		}
 	}

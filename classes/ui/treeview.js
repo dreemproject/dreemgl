@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/view', function($ui$, view, label, gbutton, icon){
+define.class('$ui/view', function($ui$, view, label, button, icon){
 // The treeview control - classic treeview with expandable nodes.
 
 	this.attributes = {
@@ -18,9 +18,20 @@ define.class('$ui/view', function($ui$, view, label, gbutton, icon){
 	this.viewport = '2d'
 	this.overflow ='scroll'
 
-	// The fold gbutton is a very very flat gbutton.
-	define.class(this, 'foldbutton', gbutton, function(){
+	// The fold button is a very very flat button.
+	define.class(this, 'foldbutton', button, function(){
 		this.borderwidth = 0
+		this.bold = false;
+		this.fontsize = 14;
+
+		this.style = {
+			buttonlabel: {
+				padding:2
+			},
+			buttonicon: {
+				padding:2
+			}
+		};
 
 	//	this.borderradius = 0;
 		this.padding =  0
@@ -68,12 +79,12 @@ define.class('$ui/view', function($ui$, view, label, gbutton, icon){
 			return [
 				this.haschildren?this.outer.foldbutton({
 					icon:this.folded? "chevron-right":"chevron-down",
-					padding: 2,
+					padding: 0,
 					click: this.toggleclick
 				}):[],
 				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
 				this.outer.foldbutton({
-					text: this.text,
+					label: this.text,
 					click:function(){
 						this.emit('select',{node:this})
 					}.bind(this)

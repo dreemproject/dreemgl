@@ -63,7 +63,7 @@ define.class("$ui/view", function(require,
 				{
 					label:"Check Button",
 					icon:"check-square",
-					desc:"A check gbutton",
+					desc:"A check button",
 					classname:"checkbox",
 					classdir:"$ui$",
 					params:{
@@ -74,13 +74,13 @@ define.class("$ui/view", function(require,
 				{
 					label:"Button",
 					icon:"square",
-					desc:"A basic gbutton",
-					classname:"gbutton",
+					desc:"A basic button",
+					classname:"button",
 					classdir:"$ui$",
 					params:{
 						fontsize:24,
 						fgcolor:'red',
-						text:'Press Me!'
+						label:'Press Me!'
 					}
 				},
 				{

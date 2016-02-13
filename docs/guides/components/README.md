@@ -124,7 +124,7 @@ available to anyone browing to your component's root directory.
 For this guide one screen gathers user input (see `./examples/guides/components/browser.js`) and displays the list of 
 movies (as `movie` objects) returned by the web service:
 
-    define.class('$ui/screen', function($ui$, view, gbutton, label, $$, movie) {
+    define.class('$ui/screen', function($ui$, view, button, label, $$, movie) {
 
         this.attributes = {
           term: {type:String},
@@ -143,7 +143,7 @@ movies (as `movie` objects) returned by the web service:
             view(
                 {flexdirection:'column'},
                 label({ name:'search', text:'Aliens'}),
-                gbutton({text:'Search', click:function() {
+                button({label:'Search', click:function() {
                     this.screen.term = this.parent.search.text;
                 }}),
                 view(this.renderMovies())

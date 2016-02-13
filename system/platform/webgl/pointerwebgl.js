@@ -31,7 +31,7 @@ define.class('$system/base/pointer', function (require, exports){
 			return [{
 				value: vec2(event.pageX, event.pageY),
 				position: vec2(event.pageX, event.pageY),
-				gbutton: event.gbutton === 0 ? 1 : event.gbutton === 1 ? 3 : 2,
+				button: event.button === 0 ? 1 : event.button === 1 ? 3 : 2,
 				shift: event.shiftKey,
 				alt: event.altKey,
 				ctrl: event.ctrlKey,
@@ -48,7 +48,7 @@ define.class('$system/base/pointer', function (require, exports){
 				array.push({
 					value: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
 					position: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
-					gbutton: 1,
+					button: 1,
 					shift: event.shiftKey,
 					alt: event.altKey,
 					ctrl: event.ctrlKey,

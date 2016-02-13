@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function($ui$, screen, view, menubar, gbutton,label, speakergrid){
+define.class('$server/composition', function($ui$, screen, view, menubar, button,label, speakergrid){
 
 
 	this.justifycontent = "center" ;
@@ -39,7 +39,7 @@ define.class('$server/composition', function($ui$, screen, view, menubar, gbutto
 						position:"relative",margin:0,flex:1}))
 					),
 					view({bg:false, flex:1, alignitems:"center", justifycontent:"center" },
-					gbutton({text:"Open a menu!", alignself:"center", click:function(e){
+					button({label:"Open a menu!", alignself:"center", click:function(e){
 						this.screen.contextMenu([{name:"Peekaboo!"},{name:"Submenu", commands:[{name:"I am in a submenu!"}]}], e.value.x, e.value.y)
 					} })))
 				)

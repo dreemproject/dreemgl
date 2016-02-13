@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require,$ui$, gbutton, textbox, label,gbutton , view){
+define.class(function(require,$ui$, textbox, label, view){
 
 	this.attributes = {
 		commands:[],

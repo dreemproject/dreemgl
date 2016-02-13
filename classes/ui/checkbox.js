@@ -5,10 +5,10 @@
 
 
 define.class('$ui/view', function(icon, label){
-	// Simple toggle gbutton: a rectangle with a textlabel and an icon
+	// Simple toggle button: a rectangle with a textlabel and an icon
 
 	this.attributes = {
-		// The label for the gbutton
+		// The label for the button
 		text: Config({type: String, value: ""}),
 
 		icon: Config({type: String, value: "check"}),
@@ -30,22 +30,22 @@ define.class('$ui/view', function(icon, label){
 		// Color of the label text in pressed-down state
 		textactivecolor: Config({meta:"color", type: vec4, value: vec4("green")}),
 
-		// First gradient color for the gbutton background in neutral state
+		// First gradient color for the button background in neutral state
 		buttoncolor1: Config({meta:"color", type: vec4, value: vec4("#fffff0")}),
-		// Second gradient color for the gbutton background in neutral state
+		// Second gradient color for the button background in neutral state
 		buttoncolor2: Config({meta:"color", type: vec4, value: vec4("#ffffff")}),
 
-		// First gradient color for the gbutton background in hovered state
+		// First gradient color for the button background in hovered state
 		hovercolor1: Config({meta:"color", type: vec4, value: vec4("#f0f0f0")}),
-		// Second gradient color for the gbutton background in hovered state
+		// Second gradient color for the button background in hovered state
 		hovercolor2: Config({meta:"color", type: vec4, value: vec4("#f8f8f8")}),
 
-		// First gradient color for the gbutton background in pressed state
+		// First gradient color for the button background in pressed state
 		pressedcolor1: Config({meta:"color", type: vec4, value: vec4("#d0d0f0")}),
-		// Second gradient color for the gbutton background in pressed state
+		// Second gradient color for the button background in pressed state
 		pressedcolor2: Config({meta:"color", type: vec4, value: vec4("#d0d0f0")}),
 
-		// fires when gbutton is clicked
+		// fires when button is clicked
 		click:Config({type:Event}),
 		value:Config({type:Boolean, value:false}),
 
@@ -76,13 +76,13 @@ define.class('$ui/view', function(icon, label){
 		}
 	}
 
-	// the hover state when someone hovers over the gbutton
+	// the hover state when someone hovers over the button
 	this.statehover = function(){
 		this.col1 = this.hovercolor1
 		this.col2 = this.hovercolor2
 	}
 
-	// the normal gbutton state
+	// the normal button state
 	this.statenormal = function(){
 		this.col1 = this.buttoncolor1
 		this.col2 = this.buttoncolor2
@@ -137,7 +137,7 @@ define.class('$ui/view', function(icon, label){
 		return cb;
 	}
 
-	// Basic usage of the gbutton.
+	// Basic usage of the button.
 	var checkbox = this.constructor
 	this.constructor.examples = {
 		Usage:function(){

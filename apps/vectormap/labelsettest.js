@@ -1,4 +1,4 @@
-define.class('$server/composition', function (require,  $server$, fileio,$ui$, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid,gbutton, labelset, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
+define.class('$server/composition', function (require,  $server$, fileio,$ui$, numberbox,view, label, screen, speakergrid, splitcontainer,noisegrid, labelset, $$, map, urlfetch, acceleroremote,$3d$, ballrotate){
 
 
 	this.render = function(){

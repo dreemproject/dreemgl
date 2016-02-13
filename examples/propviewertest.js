@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class('$server/composition', function($ui$, cadgrid, splitcontainer, screen, view, label, gbutton, $widgets$, propviewer, colorpicker){
+define.class('$server/composition', function($ui$, cadgrid, splitcontainer, screen, view, label, button, $widgets$, propviewer, colorpicker){
 	this.render = function(){ return [
 		screen({clearcolor:vec4('blue'),flexwrap:"nowrap", flexdirection:"row",bgcolor:NaN}
 			,cadgrid({flexdirection:"column", bgcolor: "#303030",minorsize:5,majorsize:25,  majorline:"#383838", minorline:"#323232" }
@@ -19,7 +19,7 @@ define.class('$server/composition', function($ui$, cadgrid, splitcontainer, scre
 						)
 						,view({flexdirection:"column", flex:1, bgcolor:"#383838", margin:20, padding:4}
 							,view({flexdirection:"column",flex:1, bgcolor:NaN, margin:0}
-								,gbutton({name:"thebutton", text:"this is a gbutton with some example props"})
+								,button({name:"thebutton", label:"this is a button with some example props"})
 								,propviewer({target:"thebutton", flex:1, overflow:"scroll"})
 							)
 						)
@@ -35,7 +35,7 @@ define.class('$server/composition', function($ui$, cadgrid, splitcontainer, scre
 						)
 						,view({flexdirection:"column", flex:1, bgcolor:"#383838", margin:20, padding:4}
 							,view({flexdirection:"column",flex:1, bgcolor:NaN, margin:0}
-								,colorpicker({name:"thepicker", text:"this is a gbutton with some example props"})
+								,colorpicker({name:"thepicker", text:"this is a button with some example props"})
 								,propviewer({target:"thepicker", flex:1, overflow:"scroll"})
 							)
 						)

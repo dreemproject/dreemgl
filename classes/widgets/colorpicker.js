@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, label, gbutton, scrollbar, textbox, numberbox){
+define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox){
 
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
 
@@ -250,7 +250,7 @@ define.class(function(require, $ui$, view, label, gbutton, scrollbar, textbox, n
 		// most of the logic below is unnecessary because pointer events include deltas.
 		// this.pointerstart = function(event){
 		// 	var start = this.globalToLocal(event.position)
-		// 	// detect if we clicked not on the gbutton
+		// 	// detect if we clicked not on the button
 		// 	if(this.vertical){
 		// 		var p = start[1] / this.layout.height
 		// 	}
