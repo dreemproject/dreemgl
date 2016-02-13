@@ -1043,7 +1043,7 @@ define.class("$ui/view", function(require,
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
-		this.borderwidth = vec4(7.0,7.0,7.0,7.0);
+		this.borderwidth = vec4(5.0,5.0,5.0,5.0);
 		this.attributes = {
 			target:Config({type:Object}),
 			rulertickwidth:1,
