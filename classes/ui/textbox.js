@@ -71,6 +71,7 @@ define.class("$ui/label", function(require){
 	this.measure_with_cursor = true
 
 	this.focus = function(){
+		if(!this.shaders || !this.shaders.cursors) return
 		if(this._focus){
 			this.shaders.cursors.visible = this.readonly?false:true
 			this.markercolor = this.markerfocus

@@ -8,7 +8,7 @@ define.class("$server/composition",function(require, $ui$, checkbox, button, ico
 						name:"grid", 
 						flex:3, 
 						overflow:"scroll", 
-						bgcolor:"#4e4e4e", 
+						bgcolor:vec4(0.3882105052471161,0.17095264792442322,0.3309330940246582,1), 
 						gridsize:8, 
 						majorevery:5, 
 						majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1), 
@@ -21,15 +21,13 @@ define.class("$server/composition",function(require, $ui$, checkbox, button, ico
 						toolmove:false, 
 						toolrect:false
 					},
-					view({height:288, width:555, bgcolor:vec4(0.9318798184394836,0.31568998098373413,0.7469818592071533,1), position:'absolute', x:215.00051879882812, y:436.000244140625, borderradius:vec4(0,0,30,0)}),
-					view({height:310, width:273, bgcolor:'purple', position:'absolute', x:216.00106811523438, y:110.00057983398438, borderradius:vec4(2,1,1,30), opacity:0.91}),
-					view({height:356, width:362, bgcolor:'purple', position:'absolute', x:595.000732421875, y:49.00054931640625},label({fontsize:54, bgcolor:'transparent', opaque:true, fgcolor:'white', text:'0_o', position:'absolute', x:121.99871826171875, y:57.99919128417969, width:87.697265625, height:87.4800033569336})),
-					icon({fgcolor:'cornflower', icon:'gear', fontsize:80, position:'absolute', opaque:true, x:894.000244140625, y:470.00018310546875, width:68.57142925262451, height:129.6})
+					view({height:278, width:430, bgcolor:vec4(0.7704077959060669,0.7716017365455627,0.768651008605957,1), position:'absolute', x:198.00064086914062, y:101.00056457519531},label({fontsize:54, bgcolor:'transparent', opaque:true, fgcolor:vec4(0.709774374961853,0.6159481406211853,0.8231146335601807,1), text:'0_o', position:'absolute', x:121.99871826171875, y:57.99919128417969, width:87.697265625, height:87.4800033569336})),
+					view({height:310, width:273, bgcolor:'purple', position:'absolute', x:398.0011291503906, y:331.0006103515625, borderradius:vec4(2,1,1,30), opacity:0.91})
 				),
 				toolkit({
 					position:'absolute', 
-					x:1068, 
-					y:42.00083541870117, 
+					x:120, 
+					y:73.00083923339844, 
 					width:393, 
 					height:788, 
 					visible:true, 

@@ -165,6 +165,7 @@ define.mixin(function(require){
 	}
 
 	this.keypaste = function(event){
+		if(this.readonly) return
 		this.undo_group++
 		this.cursorset.insert(event.text)
 		this.doCursor()
@@ -172,6 +173,7 @@ define.mixin(function(require){
 	}
 
 	this.keypress = function(event){
+		if(this.readonly) return
 		this.undo_group++
 		this.cursorset.insert(event.value)
 		this.doCursor()

@@ -11,7 +11,7 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
 	this.style = {
 		label:{
 			margin:30
-		},
+		}
 	}
 
  	// so how is that going to work hm?
@@ -22,7 +22,7 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
  	// we inherit the _style object and copy over props.
 
  	// we look up textbox in _style
-  // this._classes[name]
+	// this._classes[name]
 
 	this.render = function(){ return [
 		screen({clearcolor:'#484230', flexdirection:'row'},
