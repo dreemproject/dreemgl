@@ -5,8 +5,8 @@
 // Sprite class
 
 define.class("$ui/view", function($ui$, view, icon) {
-// Slider with customizable handle.  To customize the handle put views as the slider's constructor children.  Some working
-// example code can be found in the [examples](http://localhost:2000/examples/slider).
+// Slider with customizable handle.  To customize the handle put views as the slider's constructor children.
+// [example](http://localhost:2000/examples/slider)
 
 	this.attributes = {
 

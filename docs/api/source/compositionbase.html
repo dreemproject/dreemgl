@@ -298,13 +298,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// ok so as soon as we are stubbed, we need to proxify the object</span>
                         <span class="keyword">var</span> child = <span class="local-variable">this</span>.children[i]
                         <span class="keyword">if</span>(!child.createRpcProxy) <span class="keyword">continue</span>
-                        <span class="comment">// add the proxy to the rpc object</span>
-                        <span class="keyword">var</span> name = child.name <span class="comment">// || child.constructor.name</span>
+                        <span class="comment">// add the proxy to the rpc object. Default screen name = 'default'</span>
+                        <span class="keyword">var</span> name = child.name || <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span> <span class="comment">// || child.constructor.name</span>
                         <span class="local-variable">this</span>.rpc[name] = child.createRpcProxy(<span class="local-variable">this</span>.rpc)
                         <span class="local-variable">this</span>.names[name] = child
                 }
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>
