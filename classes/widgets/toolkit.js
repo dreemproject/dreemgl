@@ -1000,7 +1000,7 @@ define.class("$ui/view", function(require,
 			}
 		};
 
-		this.borderwidth = 4;
+		this.borderwidth = 2;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
@@ -1043,7 +1043,7 @@ define.class("$ui/view", function(require,
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
-		this.borderwidth = vec4(10.0,10.0,10.0,10.0);
+		this.borderwidth = vec4(7.0,7.0,7.0,7.0);
 		this.attributes = {
 			target:Config({type:Object}),
 			rulertickwidth:1,
@@ -1051,9 +1051,9 @@ define.class("$ui/view", function(require,
 			rulermajorevery:10,
 			rulermajorcolor:vec4("#F9F6F4"),
 			rulerminorcolor:vec4("#B0C4DE"),
-			rulermarkstartcolor:vec4("#FFCC00"),
+			rulermarkstartcolor:vec4("#00CCFF"),
 			rulermarkstart:vec2(0,0),
-			rulermarkendcolor:vec4("#FF0080"),
+			rulermarkendcolor:vec4("#FF00CC"),
 			rulermarkend:vec2(0,0),
 			bordercolorfn:function(p) {
 				var atx = p.x * layout.width;

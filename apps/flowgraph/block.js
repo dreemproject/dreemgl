@@ -29,7 +29,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		view_main:{bgcolor:"#292929", width:this.mainwidth, flex: 1, margin:1,justifycontent:"center"},
 		view_header:{width:this.mainwidth, bgcolor:NaN, flex:1, justifycontent:"space-between"},
 
-		button_header:{buttoncolor2:"#292929", buttoncolor1:"#292929", bordercolor:"#292929", marginright:4},
+		button_header:{bgcolor:"#292929", marginright:4},
 		view_between1:{bgcolor:NaN, width:this.mainwidth, flex: 1, justifycontent:"space-between"},
 		view_between2:{bgcolor:NaN, position:"relative", x:8,alignself:"flex-start", flexdirection:"column"},
 		view_head:{bgcolor:NaN, position:"relative", x:-8,alignself:"flex-start", flexdirection:"column"},

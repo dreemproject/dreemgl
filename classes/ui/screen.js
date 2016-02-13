@@ -104,7 +104,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 						bold:false,
 						text:c.name,
 
-						buttoncolor1:"#a3a3a3",
+						bgcolor:"#a3a3a3",
 						borderwidth:0,
 						hovercolor1:"#737373",
 						hovercolor2:"#737373",
