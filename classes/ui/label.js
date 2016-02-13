@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -12,29 +12,29 @@ define.class(function(require, $ui$, view){
 
 	this.bgcolor = vec4("transparent")
 	this.polygonoffset = 0.0;
-	
-	this.textpositionfn = function(pos) {return pos;}; 
-	
+
+	this.textpositionfn = function(pos) {return pos;};
+
 	this.textstyle = function(fgcolor, pos, tag){
 		return fgcolor;
 	}
-	
+
 	this.attributes = {
 		// the text color
 		fgcolor: Config({type:vec4, value: vec4(1,1,1,1), meta:"color" }),
-	
+
 		// The string to display.
 		text: Config({type:String, value: "text" }),
-	
+
 		// Size of the font in pixels
 		fontsize: Config({type:float, value: 18, meta:"fontsize"}),
-	
+
 		// the boldness of the font (try values 0 - 1)
 		boldness: Config({type:float, value: 0.}),
 
 		// reference to the font typeface, require it with require('font:')
 		font: Config({type:Object, value: undefined, meta:"font"}),
-	
+
 		// Should the text wrap around when its width has been reached?
 		multiline: Config({type:Boolean, value: false }),
 		outline: false,
@@ -42,14 +42,14 @@ define.class(function(require, $ui$, view){
 		outline_color: vec4("black"),
 		// turn on subpixel aa, this requieres a bgcolor to be present
 		subpixel: Config({type:Boolean, value: false}),
-	
+
 		// Alignment of the bodytext.
 		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"}),
 		bold: false,
 
-		bgcolor: vec4("white")
+		bgcolor: NaN
 	}
-	
+
 	this.measure_with_cursor = false
 
 	this.bold = function(){
@@ -60,8 +60,8 @@ define.class(function(require, $ui$, view){
 			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
 		}
 	}
-	
-	// the normal font 
+
+	// the normal font
 	define.class(this, 'typefacenormal', TypeFace, function(){
 		this.updateorder = 3
 		this.draworder = 5
@@ -73,7 +73,7 @@ define.class(function(require, $ui$, view){
 
 		this.update = function(){
 			var view = this.view
-			
+
 			var mesh = this.newText()
 			if(view.font) mesh.font = view.font
 
@@ -81,7 +81,7 @@ define.class(function(require, $ui$, view){
 			mesh.boldness = view.boldness
 			mesh.outline = view.outline;
 			mesh.outline_thickness = view.outline_thickness;
-			
+
 			mesh.add_y = mesh.line_height
 
 			mesh.align = view.align
@@ -149,8 +149,8 @@ define.class(function(require, $ui$, view){
 			shader.update_dirty = true
 		}
 		return {
-			width: this.measured_width = shader.mesh.bound_w, 
-			height: this.measured_height = shader.mesh.bound_h 
+			width: this.measured_width = shader.mesh.bound_w,
+			height: this.measured_height = shader.mesh.bound_h
 		};
 	}
 

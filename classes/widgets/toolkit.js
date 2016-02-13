@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, treeview, gbutton,
+								  $ui$, view, label, icon, treeview, button,
 								  $widgets$, palette, propviewer){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
@@ -1217,12 +1217,13 @@ define.class("$ui/view", function(require,
 					paddingleft:10,
 					drawtarget:'color'
 				}),
-				gbutton({
-					icon:'times',
-					bgcolor:NaN,
+				button({
+					icon:"times",
+					fgcolor:"white",
+					opaque:true,
 					borderwidth:0,
-					marginright:5,
-					onclick:function(ev,v,o) {
+					marginright:3,
+					click:function(ev,v,o) {
 						this.setASTObjectProperty(this, "visible", false);
 						this.ensureDeps();
 						this.screen.composition.commitAST();

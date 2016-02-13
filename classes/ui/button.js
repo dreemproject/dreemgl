@@ -36,7 +36,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		image:Config({type:String}),
 
 		// Foreground color of any label or icon text.
-		fgcolor: Config({value:vec4(1,1,1,1), meta:"color" }),
+		fgcolor: Config({value:vec4(0.3,0.3,0.3,1), meta:"color" }),
 
 		// reference to the font typeface, require it with require('font:')
 		font: Config({type:Object, meta:"font"}),
@@ -61,19 +61,19 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		defaultstates:Config({type:Object, value:{
 			normal:{
-				fgcolor:"#333",
+//				fgcolor:"#333",
 				on:undefined
 			},
 			hover:{
-				fgcolor:"#888",
+//				fgcolor:"#888",
 				on:undefined
 			},
 			active:{
-				fgcolor:"#aaa",
+//				fgcolor:"#aaa",
 				on:undefined
 			},
 			selected:{
-				fgcolor:"#69f",
+//				fgcolor:"#69f",
 				on:this.clickhandler
 			},
 			disabled:{

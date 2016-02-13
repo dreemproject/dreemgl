@@ -37,9 +37,8 @@ define.class("$server/composition",function(require, $ui$, button, screen, label
 							toggle:function(ev,v,o) {
 								this.screen.find("status").text = "Button toggled to: " + v;
 							},
-							selected:{
-								fgcolor:'green'
-							}
+							selected:{ fgcolor:'green' },
+							normal:{ fgcolor:'gray' }
 						})
 					)
 				)
