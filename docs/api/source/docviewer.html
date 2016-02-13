@@ -412,6 +412,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n258" name="n258">258</a>
 <a href="#n259" name="n259">259</a>
 <strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -502,7 +506,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         }
                                 }
 
-                                <span class="keyword">var</span> title = label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">margin</span>:vec4(<span class="integer">2</span>),<span class="key">text</span>: <span class="local-variable">this</span>.item.name, <span class="key">fontsize</span>: <span class="integer">20</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>})
+                                <span class="keyword">var</span> name = <span class="local-variable">this</span>.item.name;
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.blocktype === <span class="string"><span class="delimiter">&quot;</span><span class="content">example</span><span class="delimiter">&quot;</span></span>) {
+                                        name = name.split(<span class="regexp"><span class="delimiter">/</span><span class="content">(?=[A-Z])</span><span class="delimiter">/</span></span>).join(<span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span>);
+                                }
+                                <span class="keyword">var</span> title = label({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">margin</span>:vec4(<span class="integer">2</span>),<span class="key">text</span>: name, <span class="key">fontsize</span>: <span class="integer">20</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>})
 
                                 res.push(view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">flex</span>: <span class="integer">1</span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span>},[title,view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-start</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>,  <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span> },sub)]));
                         }

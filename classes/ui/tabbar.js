@@ -5,7 +5,7 @@
 // Sprite class
 
 define.class("$ui/view", function($ui$, view, label, icon){
-// Presents a bar of configurable tabs.  A simple working example can be found [in the examples folder](http://localhost:2000/examples/tabbar).
+// Presents a bar of configurable tabs.  [example](http://localhost:2000/examples/tabbar).
 
 	this.defaultselectionhandler = function(tab) {
 		if (tab.parent.selection) {

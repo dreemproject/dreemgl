@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class("$ui/view", function($ui$, view) {
+define.class("$ui/view", function($ui$, view, icon) {
 // Slider with customizable handle.  To customize the handle put views as the slider's constructor children.  Some working
 // example code can be found in the [examples](http://localhost:2000/examples/slider).
 
@@ -100,5 +100,23 @@ define.class("$ui/view", function($ui$, view) {
 		this.height = this.width = 26;
 		this.borderradius = (this.height * 0.5) - 0.5;
 	});
+
+	var slider = this.constructor;
+	this.constructor.examples = {
+
+		Usage: function() {
+			return [
+				slider({x:30, y:30,width:150, bgcolor:"white", fgcolor:"red", value:0.9})
+			]
+		},
+
+		CustomHandle: function() {
+			return [
+				slider({x:10, y:30,width:250, bgcolor:"white",smooth:false}, view({bgcolor:'purple', width:40, height:40, fontsize:20}))
+			]
+		}
+
+	}
+
 
 });

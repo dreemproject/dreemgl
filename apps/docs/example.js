@@ -37,7 +37,10 @@ define.class('$server/composition', function(require, $ui$, screen, view, label,
 						if (class_doc && class_doc.examples) {
 							for (var i = 0;i< class_doc.examples.length;i++){
 								var example = class_doc.examples[i];
-								res.push(label({fgcolor:'#333', text:example.name + ':', bgcolor:NaN}));
+								var name = example.name;
+								name = name.split(/(?=[A-Z])/).join(" ");
+
+								res.push(label({fgcolor:'#333', text:name, bgcolor:NaN}));
 								res.push(
 									view({flexdirection:'row', flex:1, bgcolor:NaN},
 										view({flex:1.5, padding:7, flexdirection:"column", bgcolor:NaN},

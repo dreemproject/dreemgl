@@ -87,7 +87,11 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 					}
 				}
 
-				var title = label({bgcolor:NaN,margin:vec4(2),text: this.item.name, fontsize: 20, fgcolor: "white"})
+				var name = this.item.name;
+				if (this.blocktype === "example") {
+					name = name.split(/(?=[A-Z])/).join(" ");
+				}
+				var title = label({bgcolor:NaN,margin:vec4(2),text: name, fontsize: 20, fgcolor: "white"})
 
 				res.push(view({bgcolor:NaN,flex: 1,alignitems:"flex-start",justifycontent:"space-between"},[title,view({bgcolor:NaN,alignself:"flex-start",alignitems:"flex-end",  flexdirection:"column", alignitems:"flex-end" },sub)]));
 			}

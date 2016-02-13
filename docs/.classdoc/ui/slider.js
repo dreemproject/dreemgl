@@ -3,6 +3,10 @@
  * @extends view
  * Slider with customizable handle.  To customize the handle put views as the slider's constructor children.  Some working
  * example code can be found in the [examples](http://localhost:2000/examples/slider).
+ * 
+ * <iframe style="border:0;width:900px;height:600px" src="http://localhost:2000/apps/docs/example#path=$root/ui/slider.js"></iframe>
+ * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/slider.js">open example in new tab &raquo;</a>
+ * 
  */
 /**
  * @attribute {vec4} [fgcolor="black"]

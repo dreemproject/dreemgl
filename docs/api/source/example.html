@@ -217,6 +217,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n63" name="n63">63</a>
 <a href="#n64" name="n64">64</a>
 <a href="#n65" name="n65">65</a>
+<a href="#n66" name="n66">66</a>
+<a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -257,7 +260,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="keyword">if</span> (class_doc &amp;&amp; class_doc.examples) {
                                                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt; class_doc.examples.length;i++){
                                                                 <span class="keyword">var</span> example = class_doc.examples[i];
-                                                                res.push(label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#333</span><span class="delimiter">'</span></span>, <span class="key">text</span>:example.name + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>}));
+                                                                <span class="keyword">var</span> name = example.name;
+                                                                name = name.split(<span class="regexp"><span class="delimiter">/</span><span class="content">(?=[A-Z])</span><span class="delimiter">/</span></span>).join(<span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span>);
+
+                                                                res.push(label({<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#333</span><span class="delimiter">'</span></span>, <span class="key">text</span>:name, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>}));
                                                                 res.push(
                                                                         view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
                                                                                 view({<span class="key">flex</span>:<span class="float">1.5</span>, <span class="key">padding</span>:<span class="integer">7</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>, <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},
