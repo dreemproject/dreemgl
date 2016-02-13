@@ -8,6 +8,7 @@
 // for this composition, e.g.
 // examples/dreem_in_10/helloworldsource#file=docsourceviewer.js
 define.class("$server/composition", function (require, $ui$, screen, $widgets$, jsviewer, $server$, fileio) {
+// internal
 
 	// Settings for font size and bgcolor for the jsviewer component
 	this.style = {

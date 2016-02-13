@@ -226,97 +226,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n72" name="n72">72</a>
 <a href="#n73" name="n73">73</a>
 <a href="#n74" name="n74">74</a>
-<a href="#n75" name="n75">75</a>
-<a href="#n76" name="n76">76</a>
-<a href="#n77" name="n77">77</a>
-<a href="#n78" name="n78">78</a>
-<a href="#n79" name="n79">79</a>
-<strong><a href="#n80" name="n80">80</a></strong>
-<a href="#n81" name="n81">81</a>
-<a href="#n82" name="n82">82</a>
-<a href="#n83" name="n83">83</a>
-<a href="#n84" name="n84">84</a>
-<a href="#n85" name="n85">85</a>
-<a href="#n86" name="n86">86</a>
-<a href="#n87" name="n87">87</a>
-<a href="#n88" name="n88">88</a>
-<a href="#n89" name="n89">89</a>
-<strong><a href="#n90" name="n90">90</a></strong>
-<a href="#n91" name="n91">91</a>
-<a href="#n92" name="n92">92</a>
-<a href="#n93" name="n93">93</a>
-<a href="#n94" name="n94">94</a>
-<a href="#n95" name="n95">95</a>
-<a href="#n96" name="n96">96</a>
-<a href="#n97" name="n97">97</a>
-<a href="#n98" name="n98">98</a>
-<a href="#n99" name="n99">99</a>
-<strong><a href="#n100" name="n100">100</a></strong>
-<a href="#n101" name="n101">101</a>
-<a href="#n102" name="n102">102</a>
-<a href="#n103" name="n103">103</a>
-<a href="#n104" name="n104">104</a>
-<a href="#n105" name="n105">105</a>
-<a href="#n106" name="n106">106</a>
-<a href="#n107" name="n107">107</a>
-<a href="#n108" name="n108">108</a>
-<a href="#n109" name="n109">109</a>
-<strong><a href="#n110" name="n110">110</a></strong>
-<a href="#n111" name="n111">111</a>
-<a href="#n112" name="n112">112</a>
-<a href="#n113" name="n113">113</a>
-<a href="#n114" name="n114">114</a>
-<a href="#n115" name="n115">115</a>
-<a href="#n116" name="n116">116</a>
-<a href="#n117" name="n117">117</a>
-<a href="#n118" name="n118">118</a>
-<a href="#n119" name="n119">119</a>
-<strong><a href="#n120" name="n120">120</a></strong>
-<a href="#n121" name="n121">121</a>
-<a href="#n122" name="n122">122</a>
-<a href="#n123" name="n123">123</a>
-<a href="#n124" name="n124">124</a>
-<a href="#n125" name="n125">125</a>
-<a href="#n126" name="n126">126</a>
-<a href="#n127" name="n127">127</a>
-<a href="#n128" name="n128">128</a>
-<a href="#n129" name="n129">129</a>
-<strong><a href="#n130" name="n130">130</a></strong>
-<a href="#n131" name="n131">131</a>
-<a href="#n132" name="n132">132</a>
-<a href="#n133" name="n133">133</a>
-<a href="#n134" name="n134">134</a>
-<a href="#n135" name="n135">135</a>
-<a href="#n136" name="n136">136</a>
-<a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
-<strong><a href="#n140" name="n140">140</a></strong>
-<a href="#n141" name="n141">141</a>
-<a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
-<a href="#n144" name="n144">144</a>
-<a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
-<a href="#n149" name="n149">149</a>
-<strong><a href="#n150" name="n150">150</a></strong>
-<a href="#n151" name="n151">151</a>
-<a href="#n152" name="n152">152</a>
-<a href="#n153" name="n153">153</a>
-<a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
-<a href="#n158" name="n158">158</a>
-<a href="#n159" name="n159">159</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, tabbar, screen, label, view, cadgrid, <span class="predefined">$widgets$</span>, toolkit) {
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
-                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mobile</span><span class="delimiter">&quot;</span></span>},
+                        screen(
                                 cadgrid({
                                                 <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">flex</span>:<span class="integer">3</span>,
@@ -380,91 +295,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         }
                                                 }
                                         })
-                                )
-                        ),
-                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">sandbox</span><span class="delimiter">&quot;</span></span>},
-                                cadgrid({
-                                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">grid</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">flex</span>:<span class="integer">3</span>,
-                                                <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">gridsize</span>:<span class="integer">8</span>,
-                                                <span class="key">majorevery</span>:<span class="integer">5</span>,
-                                                <span class="key">majorline</span>:vec4(<span class="float">0.34117648005485535</span>,<span class="float">0.34117648005485535</span>,<span class="float">0.34117648005485535</span>,<span class="integer">1</span>),
-                                                <span class="key">minorline</span>:vec4(<span class="float">0.2823529541492462</span>,<span class="float">0.2823529541492462</span>,<span class="float">0.2823529541492462</span>,<span class="integer">1</span>),
-                                                <span class="key">alignitems</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,
-                                                <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>,
-                                                <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
-                                                <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,
-                                                <span class="key">anchor</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                                                <span class="key">toolmove</span>:<span class="predefined-constant">false</span>,
-                                                <span class="key">toolrect</span>:<span class="predefined-constant">false</span>
-                                        },
-                                        tabbar({
-                                                <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
-                                                <span class="key">x</span>:<span class="float">570.0107421875</span>,
-                                                <span class="key">y</span>:<span class="integer">340</span>,
-                                                <span class="key">tabs</span>:[
-                                                        {
-                                                                <span class="key">showarrow</span>:<span class="predefined-constant">false</span>,
-                                                                <span class="key">normal</span>:{
-                                                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flask</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                <span class="key">hover</span>:{
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                <span class="key">active</span>:{
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightgreen</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                <span class="key">selected</span>:{
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                <span class="key">disabled</span>:{
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">pink</span><span class="delimiter">&quot;</span></span>
-                                                                }
-                                                        },
-                                                        {
-                                                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">state</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">disabled</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">disabled</span>:{
-                                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">darkgray</span><span class="delimiter">&quot;</span></span>
-                                                                }
-                                                        },
-                                                        <span class="string"><span class="delimiter">&quot;</span><span class="content">tree</span><span class="delimiter">&quot;</span></span>,
-                                                        {
-                                                                <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                                <span class="key">normal</span>:{
-                                                                        <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$3.50</span><span class="delimiter">&quot;</span></span>
-                                                                },
-                                                                <span class="key">active</span>:{
-                                                                        <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">???</span><span class="delimiter">&quot;</span></span>
-                                                                }
-                                                        },
-                                                        <span class="string"><span class="delimiter">&quot;</span><span class="content">floor</span><span class="delimiter">&quot;</span></span>
-                                                ]
-                                        })
-                                ),
-                                toolkit({
-                                        <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
-                                        <span class="key">x</span>:<span class="integer">996</span>,
-                                        <span class="key">y</span>:<span class="float">35.00083541870117</span>,
-                                        <span class="key">width</span>:<span class="integer">393</span>,
-                                        <span class="key">height</span>:<span class="integer">788</span>,
-                                        <span class="key">visible</span>:<span class="predefined-constant">false</span>,
-                                        <span class="key">components</span>:[
-                                                {
-                                                        <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Tab Bar</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">desc</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">A tab bar</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">classname</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">tabbar</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">params</span>:{
-                                                        }
-                                                }
-                                        ]
-                                }
                                 )
                         )
                 ]

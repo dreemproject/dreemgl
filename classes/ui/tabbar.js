@@ -5,7 +5,7 @@
 // Sprite class
 
 define.class("$ui/view", function($ui$, view, label, icon){
-// Presents a bar of configurable tabs
+// Presents a bar of configurable tabs.  A simple working example can be found [in the examples folder](http://localhost:2000/examples/tabbar).
 
 	this.defaultselectionhandler = function(tab) {
 		if (tab.parent.selection) {
@@ -268,6 +268,7 @@ define.class("$ui/view", function($ui$, view, label, icon){
 
 	var tabbar = this.constructor;
 	this.constructor.examples = {
+
 		Usage: function() {
 			return [
 				tabbar({tabs:["one", "two", "three"], onselection:function(ev,tab,bar) {
@@ -277,6 +278,7 @@ define.class("$ui/view", function($ui$, view, label, icon){
 				}})
 			]
 		},
+
 		Advanced: function() {
 
 			var selectionhandler = function(tab,state) {

@@ -1,4 +1,5 @@
 define.class('$ui/view', function (events, $ui$, view, scrollbar) {
+// internal
 
 	// this.flex = 1
 	// this.flexdirection = 'column'
