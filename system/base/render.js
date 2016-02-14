@@ -24,9 +24,9 @@ define.class(function(exports){
 	function __atAttributeGet(key){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
+			if(process_list.indexOf(this) === -1)
+				process_list.push(this)
 			if(!process_timer){
-				if(process_list.indexOf(this) === -1)
-					process_list.push(this)
 				process_timer = setTimeout(processTimeout, 0)
 			}
 		}
