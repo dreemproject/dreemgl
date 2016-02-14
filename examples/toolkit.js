@@ -21,13 +21,12 @@ define.class("$server/composition",function(require, $ui$, checkbox, button, ico
 						toolmove:false, 
 						toolrect:false
 					},
-					view({height:302, width:297, bgcolor:vec4(0.13262520730495453,0.2034073919057846,0.028474919497966766,1), position:'absolute', x:45.000701904296875, y:120.00064086914062},label({fontsize:54, bgcolor:'transparent', opaque:true, fgcolor:vec4(0.709774374961853,0.6159481406211853,0.8231146335601807,1), text:'0_o', position:'absolute', x:96.99905395507812, y:112.99983215332031, width:87.697265625, height:87.4800033569336})),
-					view({height:310, width:273, bgcolor:'purple', position:'absolute', x:706.0010986328125, y:118.00064086914062, borderradius:vec4(2,1,1,30), opacity:0.91})
+					view({height:544, width:609, bgcolor:'purple', position:'absolute', x:43.000762939453125, y:98.00070190429688, borderradius:vec4(2,1,1,30)},view({height:240, width:249, bgcolor:vec4(0,0.24104894697666168,0.501960813999176,1), position:'absolute', x:264.0000915527344, y:100.99996948242188}),)
 				),
 				toolkit({
 					position:'absolute', 
-					x:1183, 
-					y:29.00084686279297, 
+					x:1162, 
+					y:38.00086975097656, 
 					width:393, 
 					height:788, 
 					visible:true, 

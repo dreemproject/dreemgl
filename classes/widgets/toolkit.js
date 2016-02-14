@@ -453,52 +453,53 @@ define.class("$ui/view", function(require,
 			}
 
 
-			ev.view.cursor = 'arrow';
+			var evview = ev.view;
+			evview.cursor = 'arrow';
 			var commit = false;
-			if (this.__resizecorner && (ev.view == this || this.testView(ev.view)) && ev.view.toolresize !== false) {
+			if (this.__resizecorner && (evview == this || this.testView(evview)) && evview.toolresize !== false) {
 				if (this.__resizecorner === "top-left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					evview.x = ev.pointer.position.x - this.__startpos.x;
+					evview.y = ev.pointer.position.y - this.__startpos.y;
 				} else if (this.__resizecorner === "top") {
-					ev.view.y = ev.pointer.position.y - this.__startpos.y;
+					evview.y = ev.pointer.position.y - this.__startpos.y;
 				} else if (this.__resizecorner === "left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					evview.x = ev.pointer.position.x - this.__startpos.x;
 				} else if (this.__resizecorner === "bottom-left") {
-					ev.view.x = ev.pointer.position.x - this.__startpos.x;
+					evview.x = ev.pointer.position.x - this.__startpos.x;
 				}
 
-				this.setASTObjectProperty(ev.view, "position", "absolute");
-				this.setASTObjectProperty(ev.view, "x", ev.view._layout.absx);
-				this.setASTObjectProperty(ev.view, "y", ev.view._layout.absy);
-				this.setASTObjectProperty(ev.view, "width", ev.view._layout.width);
-				this.setASTObjectProperty(ev.view, "height", ev.view._layout.height);
+				this.setASTObjectProperty(evview, "position", "absolute");
+				this.setASTObjectProperty(evview, "x", evview._layout.absx);
+				this.setASTObjectProperty(evview, "y", evview._layout.absy);
+				this.setASTObjectProperty(evview, "width", evview._layout.width);
+				this.setASTObjectProperty(evview, "height", evview._layout.height);
 
-				commit = (Math.abs(ev.view.x - this.__originalpos.x) > 0.5)
-					|| (Math.abs(ev.view.y - this.__originalpos.y) > 0.5)
-					|| (Math.abs(ev.view._layout.width - this.__originalsize.w) > 0.5)
-					|| (Math.abs(ev.view._layout.height - this.__originalsize.h) > 0.5);
+				commit = (Math.abs(evview.x - this.__originalpos.x) > 0.5)
+					|| (Math.abs(evview.y - this.__originalpos.y) > 0.5)
+					|| (Math.abs(evview._layout.width - this.__originalsize.w) > 0.5)
+					|| (Math.abs(evview._layout.height - this.__originalsize.h) > 0.5);
 
-			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+			} else if (this.__startpos && this.testView(evview) && evview.toolmove !== false) {
 
 				var pos = ev.pointer.position;
-				if (ev.view.parent) {
-					if (ev.view.position != "absolute") {
-						ev.view.position = "absolute";
+				if (evview.parent) {
+					if (evview.position != "absolute") {
+						evview.position = "absolute";
 					}
-					pos = ev.view.parent.globalToLocal(ev.pointer.position)
+					pos = evview.parent.globalToLocal(ev.pointer.position)
 				}
 
 				var nx = pos.x - this.__startpos.x;
-				var dx = Math.abs(ev.view.x - this.__originalpos.x);
+				var dx = Math.abs(evview.x - this.__originalpos.x);
 				if (dx > 0.5) {
-					this.setASTObjectProperty(ev.view, "x", nx);
+					this.setASTObjectProperty(evview, "x", nx);
 					commit = true;
 				}
 
 				var ny = pos.y - this.__startpos.y;
 				var dy = Math.abs(ny - this.__originalpos.y);
 				if (dy > 0.5) {
-					this.setASTObjectProperty(ev.view, "y", ny);
+					this.setASTObjectProperty(evview, "y", ny);
 					commit = true;
 				}
 
@@ -515,16 +516,16 @@ define.class("$ui/view", function(require,
 					}
 				}
 
-				if (this.__lastpick && this.__lastpick !== ev.view.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+				if (this.__lastpick && this.__lastpick !== evview.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
 					pos = this.__lastpick.globalToLocal(ev.pointer.position);
 
 					nx = pos.x - this.__startpos.x;
 					ny = pos.y - this.__startpos.y;
 
-					this.setASTObjectProperty(ev.view, "x", nx, false);
-					this.setASTObjectProperty(ev.view, "y", ny, false);
+					this.setASTObjectProperty(evview, "x", nx, false);
+					this.setASTObjectProperty(evview, "y", ny, false);
 
-					var astnode = ev.view.getASTNode();
+					var astnode = evview.getASTNode();
 
 					var newparent = this.__lastpick.getASTNode();
 					if (!newparent.args) {
@@ -532,7 +533,7 @@ define.class("$ui/view", function(require,
 					}
 					newparent.args.push(astnode);
 
-					var oldparent = ev.view.parent.getASTNode();
+					var oldparent = evview.parent.getASTNode();
 					var index = oldparent.args.indexOf(astnode);
 					if (index >= 0) {
 						oldparent.args.splice(index, 1);
@@ -931,7 +932,7 @@ define.class("$ui/view", function(require,
 	};
 
 	this.setASTObjectProperty = function(v, name, value, setval) {
-		if (v == this.screen) {
+		if (v == this.screen || v.constructor.name === "screen") {
 			console.error("how did a screen get selected to be edited?")
 			return;
 		}
@@ -940,6 +941,10 @@ define.class("$ui/view", function(require,
 		}
 
 		var ast = v.seekASTNode({type:"Object", index:0});
+
+		if (name === "x") {
+			console.log('got ast', value, ast)
+		}
 
 		var found;
 		if (ast && ast.keys) {

@@ -1625,7 +1625,10 @@ define.class('$system/base/node', function(require){
 	};
 
 	this.seekASTNode = function(sought) {
-		return this.screen.composition.seekASTNode(sought, this.getASTNode());
+		var ast = this.getASTNode();
+		if (ast) {
+			return this.screen.composition.seekASTNode(sought, ast);
+		}
 	};
 
 	define.class(this, 'viewportblend', this.Shader, function(){
