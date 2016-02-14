@@ -127,7 +127,7 @@ define.class('./compositionbase', function(require, baseclass){
 		this.parent = parent
 
 		// how come this one doesnt get patched up?
-		baseclass.prototype.atConstructor.call(this)
+		baseclass.atConstructor.call(this)
 
 		this.screenname = typeof location !== 'undefined' && location.search && location.search.slice(1)
 

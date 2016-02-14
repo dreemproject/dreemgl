@@ -25,7 +25,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 			this.device = new Device()
 		}
 
-		baseclass.prototype.atConstructor.call(this, previous, parent)
+		baseclass.atConstructor.call(this, previous, parent)
 
 	    //Render the display
 	    this.doRender();
@@ -40,7 +40,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 
 
 	this.doRender = function(previous, parent){
-		baseclass.prototype.doRender.call(this, previous, parent)
+		baseclass.doRender.call(this, previous, parent)
 
 /*  webgl
 		this.screen.addListener('locationhash', function(event){

@@ -465,7 +465,7 @@
 					args[i] = require
 				}
 				else if(builtin === 4) args[i] = Constructor.prototype
-				else if(builtin === 5) args[i] = baseclass
+				else if(builtin === 5) args[i] = baseclass? baseclass.prototype: undefined
 				else if(builtin === 6) args[i] = body.outer
 			}
 			else{

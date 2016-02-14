@@ -590,7 +590,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 
 	this.Condition = function(node, parent, state){
 		
-		var ret = baseclass.prototype.Condition.call(this, node, parent, state)
+		var ret = baseclass.Condition.call(this, node, parent, state)
 
 		// lets compare the types of 
 		var then_t = node.then.infer
@@ -624,7 +624,7 @@ define.class('$system/parse/onejsgen', function(require, exports, baseclass){
 
 	this.Logic = function(node, parent, state){
 		// return type boolean
-		var ret = baseclass.prototype.Logic.call(this, node, parent, state)
+		var ret = baseclass.Logic.call(this, node, parent, state)
 		node.infer = boolean
 		return ret
 	}

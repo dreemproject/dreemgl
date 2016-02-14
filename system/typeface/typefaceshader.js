@@ -1177,7 +1177,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	this.atExtend = function(){
 		this.mesh.font = this.font
-		baseclass.prototype.atExtend.call(this)
+		baseclass.atExtend.call(this)
 	}
 
 	this.glyphy_mesh = this.glyphy_mesh_sdf

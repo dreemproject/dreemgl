@@ -177,7 +177,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 
 	this.atConstructor = function(bus, session, previous){
 
-		baseclass.prototype.atConstructor.call(this)
+		baseclass.atConstructor.call(this)
 
 		this.bus = bus
 		this.session = session
