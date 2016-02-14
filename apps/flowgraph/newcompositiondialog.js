@@ -19,8 +19,8 @@ define.class('$ui/view', function(require, $$,dialog, $ui$, textbox,view, icon, 
 				),
 
 				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
-					button({padding:10, label:"OK", icon:"check", click:function(){this.screen.closeModal(this.find("newnamebox").value);} }),
-					button({padding: 10, marginleft:10, icon:"close", label:"Cancel", click:function(){this.screen.closeModal(false);} })
+					button({padding:10, text:"OK", icon:"check", click:function(){this.screen.closeModal(this.find("newnamebox").value);} }),
+					button({padding: 10, marginleft:10, icon:"close", text:"Cancel", click:function(){this.screen.closeModal(false);} })
  				)
 			)
 		);

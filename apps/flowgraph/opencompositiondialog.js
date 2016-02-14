@@ -23,7 +23,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon
 		for(var i =0 ;i<this.compositions.length;i++){
 			var c= this.compositions[i];
 			console.log(c);
-			res.push(button({label:c.name,name:c.name, margin:4, click:function(){this.screen.closeModal(this.name);}}));
+			res.push(button({text:c.name,name:c.name, margin:4, click:function(){this.screen.closeModal(this.name);}}));
 		}
 
 		return dialog({title:"Open composition", position:"relative"},
@@ -31,7 +31,7 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon
 			,res,
 			view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
 
-					button({padding: 10, marginleft:10, icon:"close",label:"Cancel", click: function(){this.screen.closeModal(false);} })
+					button({padding: 10, marginleft:10, icon:"close",text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)
 			)
 		);

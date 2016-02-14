@@ -793,8 +793,8 @@ define.class('$ui/view', function(require,
 
 						,view({name:"popuplayer", bgcolor:NaN},
 							view({name:"connectionui",visible:false,bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(1,14,14,14), borderwidth:1, bordercolor:"black",position:"absolute", flexdirection:"column"},
-								label({text:"Connection", bgcolor:NaN, margin:4}),
-								button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
+								label({text:"Connection", bgcolor:NaN, margin:4})
+								,button({padding:0, borderwidth:0, click:function(){this.removeConnection(undefined)}.bind(this),  icon:"remove",text:"delete", margin:4, fgcolor:"white", bgcolor:NaN})
 							)
 							,view({name:"blockui",visible:false, bgcolor:vec4(0.2,0.2,0.2,0.5),padding:5, borderradius:vec4(10,10,10,1), borderwidth:2, bordercolor:"black",position:"absolute", flexdirection:"column"},
 							//,view({name:"blockui",x:-200,bg:1,clearcolor:vec4(0,0,0,0),bgcolor:vec4(0,0,0,0),position:"absolute"},
