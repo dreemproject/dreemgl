@@ -9,10 +9,26 @@ define.class(function(exports){
 
 	var initializing = false
 
+	var process_list = []
+	var process_timer = undefined
+
+	function processTimeout(){
+		process_timer = undefined
+		var pl = process_list
+		process_list = []
+		for(var i = 0; i < pl.length; i++){
+			exports.process(pl[i], undefined, undefined, true)
+		}
+	}
+
 	function __atAttributeGet(key){
 		if(!initializing){
-			exports.process(this, undefined, undefined, true)
-			//this.relayout()
+			//exports.process(this, undefined, undefined, true)
+			if(!process_timer){
+				if(process_list.indexOf(this) === -1)
+					process_list.push(this)
+				process_timer = setTimeout(processTimeout, 0)
+			}
 		}
 	}
 
