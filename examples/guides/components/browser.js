@@ -29,7 +29,7 @@ define.class(function($ui$, screen, view, button, textbox, $$, movie) {
             { flexdirection:'column', flex:1, overflow:'scroll' },
             view({flexdirection:'row'},
 				textbox({ name:'search', value:'Cats', fgcolor:'black', borderwidth:1, bordercolor:'#666'}),
-				button({label:'Search', click:function() {
+				button({text:'Search', click:function() {
 					// sets the term on our screen, this should fire the server thing
 					this.screen.term = this.parent.find('search').value;
 				}})

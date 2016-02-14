@@ -63,9 +63,9 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 				borderradius:30,
 				bgcolor:'#CBD6D9'
 				}
-				,button({label:'test', flex:1, click:function(){
+				,button({text:'test', flex:1, click:function(){
 					this.parent.appendChild(function(){
-						return button({label:'hii',flex:1})
+						return button({text:'hii',flex:1})
 					})
 				}})
 				,view({clearcolor:"lightblue", mode:'3D', flex:1, margin:2, bgcolor:'lightblue', name:'3dview', borderwidth:0, bordercolor:"black", borderradius:1, camera:vec3(2.1,2,2)}

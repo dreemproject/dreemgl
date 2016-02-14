@@ -127,7 +127,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 			)
 		}
 
-		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left",  bgcolor:"#3b3b3b", label:"", fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.downclick()}.bind(this)}));
+		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0, icon:"chevron-left",  bgcolor:"#3b3b3b", text:"", fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.downclick()}.bind(this)}));
 		res.push(textbox({
 			margin:vec4(4,0,4,0),
 			alignself:"center",
@@ -153,7 +153,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 				}
 			}.bind(this)
 	}));
-		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,label:"", icon:"chevron-right", bgcolor:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
+		res.push(button({margin:vec4(4,0,4,0),alignself:"center",bgcolor:this.bgcolor,fgcolor:this.fgcolor,borderwidth:0,text:"", icon:"chevron-right", bgcolor:"#3b3b3b",fontsize: this.fontsize*(2/3),  padding:4, borderradius:0, click:function(){this.upclick()}.bind(this)}));
 		return res;
 
 	}

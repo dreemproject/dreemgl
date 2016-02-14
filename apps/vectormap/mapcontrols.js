@@ -35,7 +35,7 @@ define.class('$ui/view', function($ui$, numberbox, view, label, noisegrid, butto
 		var Buttons = [];
 		for(var i = 0;i<this.places.length;i++){
 			var p = this.places[i];
-			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, label:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel, 1);
+			Buttons.push(button({place:p.place, zoomlevel:p.zoomlevel, text:p.text,click:function(){this.find("themap").gotoCity(this.place,this.zoomlevel, 1);
 			this.find("zoomlevelbox").value = this.zoomlevel;}, margin:4}))
 		}
 
@@ -50,7 +50,7 @@ define.class('$ui/view', function($ui$, numberbox, view, label, noisegrid, butto
 				,label({text:"Rotation control",margin: 10,fontsize:12,  bgcolor:NaN})
 				,ballrotate({name:"ballrotate1", height:100, target:"mapinside"})
 				)
-				,button({label:"DumpDebug",click:function(){this.find("themap").dumpdebug()}, margin:4})
+				,button({text:"DumpDebug",click:function(){this.find("themap").dumpdebug()}, margin:4})
 				,Buttons
 			)
 		]

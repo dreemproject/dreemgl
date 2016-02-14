@@ -19,7 +19,7 @@ define.class('$server/composition', function($ui$, cadgrid, splitcontainer, scre
 						)
 						,view({flexdirection:"column", flex:1, bgcolor:"#383838", margin:20, padding:4}
 							,view({flexdirection:"column",flex:1, bgcolor:NaN, margin:0}
-								,button({name:"thebutton", label:"this is a button with some example props"})
+								,button({name:"thebutton", text:"this is a button with some example props"})
 								,propviewer({target:"thebutton", flex:1, overflow:"scroll"})
 							)
 						)

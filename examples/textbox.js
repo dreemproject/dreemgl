@@ -28,7 +28,7 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
 		screen({clearcolor:'#484230', flexdirection:'row'},
 			textbox({value:"T1", bgcolor:'red'}),
 			textbox({value:"T2", bgcolor:'orange'}),
-			button({label:'test'}),
+			button({text:'test'}),
 			label({fgcolor:'red', pointerstart:function(){
 				// lets open a modal dialog
 				this.screen.openModal(function(){return [
@@ -42,7 +42,7 @@ define.class('$server/composition',function($ui$, screen, view, textbox, button,
 						},
 						pos:[0,0],
 						size:[300,300],position:'absolute',text:'body'
-					}, button({label:'test123'}))
+					}, button({text:'test123'}))
 				]}).then(function(result){
 					console.log(result)
 				})

@@ -199,7 +199,7 @@ define.class(function(require, $ui$, view, foldcontainer, label, button, icon, $
 				body.push(view({bgcolor:NaN, margin:vec4(14)}, class_doc.base_class_chain.map(function(r){
 					return [
 						icon({bgcolor:NaN,icon:"arrow-right", fgcolor:"#f0f0f0", fontsize:15, margin:vec4(2)})
-						,button({margin: vec4(0),padding:vec4(10,0,10,0), label:r.name, fontsize:10, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
+						,button({margin: vec4(0),padding:vec4(10,0,10,0), text:r.name, fontsize:10, click: function(){this.screen.locationhash = {path: '$root'  + r.path};}.bind(this)})
 					]
 				}.bind(this))));
 			}

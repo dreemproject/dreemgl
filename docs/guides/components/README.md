@@ -143,7 +143,7 @@ movies (as `movie` objects) returned by the web service:
             view(
                 {flexdirection:'column'},
                 label({ name:'search', text:'Aliens'}),
-                button({label:'Search', click:function() {
+                button({text:'Search', click:function() {
                     this.screen.term = this.parent.search.text;
                 }}),
                 view(this.renderMovies())

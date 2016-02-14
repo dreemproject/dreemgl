@@ -711,11 +711,11 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 			clearcolor:vec4('darkgray'), overflow:'hidden', title:"VectorMap remote" },
 			speakergrid({justifycontent:"center", alignitems:"center" }, view({width:300, bg:0, flexdirection:"column", alignself:"center"}
 			,label({fontsize:40, text:"Vectormap" , bg:0})
-			,button({label:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
-			,button({label:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
-			,button({label:"Noord Amsterdam",click:function(){this.rpc.index.moveTo(33656,21434, 16);}, margin:2})
-			,button({label:"Sausalito",click:function(){this.rpc.index.moveTo(9647,12320, 16);}, margin:2})
-			,button({label:"San Fransisco",click:function(){this.rpc.index.moveTo(9647,12320, 16);}, margin:2})
+			,button({text:"Manhattan",click:function(){this.rpc.index.moveTo(9647*2,12320*2, 16);}, margin:2})
+			,button({text:"Amsterdam",click:function(){this.rpc.index.moveTo(33656,21534, 16);}, margin:2})
+			,button({text:"Noord Amsterdam",click:function(){this.rpc.index.moveTo(33656,21434, 16);}, margin:2})
+			,button({text:"Sausalito",click:function(){this.rpc.index.moveTo(9647,12320, 16);}, margin:2})
+			,button({text:"San Fransisco",click:function(){this.rpc.index.moveTo(9647,12320, 16);}, margin:2})
 			))
 		)
 	]}

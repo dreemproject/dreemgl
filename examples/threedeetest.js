@@ -117,7 +117,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 					)
 
 					,view({viewport:'2d', bgcolor:"red", pixelratio:2, scale: vec3(0.01, -0.01, 0.01), rotate:vec3(0,0, 0)}
-						,button({label:"LKJQEW", click:function(){
+						,button({text:"LKJQEW", click:function(){
 
 							var cam = this.find("theview");
 							cam.camera = vec3(1,2,3);
@@ -145,14 +145,14 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 
 						)
 					,view({viewport:'2d', bgcolor:"green", pixelratio:2, scale: vec3(0.02, -0.02, 0.02), pos: vec3(1,0,0), rotate:vec3(0,.5, 0)},
-						button({label:"this is really fast!", click:function(){
+						button({text:"this is really fast!", click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(0,2,-5);
 							cam.fov = 30;
 							}
 						})
 						,pointerdebug({width:100, height:100})
-						,button({label:"B", click:function(){
+						,button({text:"B", click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(3,3,-4);
 							cam.fov = 90;
@@ -160,7 +160,7 @@ define.class('$server/composition', function($ui$, screen, view, splitcontainer,
 
 						})
 						,pointerdebug({width:100, height:100})
-						,button({label:"C", click:function(){
+						,button({text:"C", click:function(){
 							var cam = this.find("theview");
 							cam.camera = vec3(-3,3,-3);
 							cam.fov = 90;

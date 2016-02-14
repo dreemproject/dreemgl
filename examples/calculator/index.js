@@ -84,45 +84,45 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 				view({bgcolor:NaN, flexdirection:"row", flex:1},
 					view({bgcolor:NaN, flexdirection:"column", flex:1},
 						view ({bgcolor:NaN, flex:1}
-							,button({padding:10,margin:6,label:"+", click:function(){this.add("+")}.bind(this),flex:1})
-							,button({padding:10,margin:6,label:"-", click:function(){this.add("-")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"/", click:function(){this.add("/")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"+", click:function(){this.add("+")}.bind(this),flex:1})
+							,button({padding:10,margin:6,text:"-", click:function(){this.add("-")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"/", click:function(){this.add("/")}.bind(this), flex:1})
 						)
 						,view ({bgcolor:NaN, flex:1}
-							,button({padding:10,margin:6,label:"*", click:function(){this.add("*")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"^2", click:function(){this.add("^2")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"^y", click:function(){this.add("^")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"*", click:function(){this.add("*")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"^2", click:function(){this.add("^2")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"^y", click:function(){this.add("^")}.bind(this), flex:1})
 						)
 						,view ({bgcolor:NaN, flex:1}
-							,button({padding:10,margin:6,label:"log", click:function(){this.add("log(",1)}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"ln", click:function(){this.add("ln(",1)}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"exp", click:function(){this.add("exp(",1)}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"log", click:function(){this.add("log(",1)}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"ln", click:function(){this.add("ln(",1)}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"exp", click:function(){this.add("exp(",1)}.bind(this), flex:1})
 						)
 						,view ({bgcolor:NaN, flex:1}
-							,button({padding:10,margin:6,label:"(", click:function(){this.add("(",1)}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:")", click:function(){this.add(")",-1)}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"(", click:function(){this.add("(",1)}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:")", click:function(){this.add(")",-1)}.bind(this), flex:1})
 						)
 					),
 
 					view({bgcolor:NaN, flexdirection:"column", flex:1},
 						view ({bgcolor:NaN}
-							,button({padding:10,margin:6,label:"1", click:function(){this.add("1")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"2", click:function(){this.add("2")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"3", click:function(){this.add("3")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"1", click:function(){this.add("1")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"2", click:function(){this.add("2")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"3", click:function(){this.add("3")}.bind(this), flex:1})
 						)
 						,view ({bgcolor:NaN}
-							,button({padding:10,margin:6,label:"4", click:function(){this.add("4")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"5", click:function(){this.add("5")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"6", click:function(){this.add("6")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"4", click:function(){this.add("4")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"5", click:function(){this.add("5")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"6", click:function(){this.add("6")}.bind(this), flex:1})
 						)
 						,view ({bgcolor:NaN}
-							,button({padding:10,margin:6,label:"7", click:function(){this.add("7")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"8", click:function(){this.add("8")}.bind(this), flex:1})
-							,button({padding:10,margin:6,label:"9", click:function(){this.add("9")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"7", click:function(){this.add("7")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"8", click:function(){this.add("8")}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"9", click:function(){this.add("9")}.bind(this), flex:1})
 						)
 						,view ({bgcolor:NaN, flex:1}
-							,button({padding:10,margin:6,label:"0", click:function(){this.add("0")}.bind(this), flex:1})
-							,button({buttoncolor1:"green",buttoncolor2:"lime",textcolor:"black" , padding:10,margin:6,label:"EXE", click:function(){this.evaluate()}.bind(this), flex:1})
+							,button({padding:10,margin:6,text:"0", click:function(){this.add("0")}.bind(this), flex:1})
+							,button({buttoncolor1:"green",buttoncolor2:"lime",textcolor:"black" , padding:10,margin:6,text:"EXE", click:function(){this.evaluate()}.bind(this), flex:1})
 						)
 					)
 
