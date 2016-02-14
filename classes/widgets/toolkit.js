@@ -317,6 +317,7 @@ define.class("$ui/view", function(require,
 					};
 
 					this.__resizecorner = this.edgeCursor(ev, dragview);
+					this.screen.pointer.cursor = "move";
 					dragview.cursor = "move";
 					dragview.drawtarget = "color";
 					ev.pointer.pickview = true;
@@ -384,6 +385,9 @@ define.class("$ui/view", function(require,
 				}
 
 			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+
+				this.screen.pointer.cursor = "move";
+				ev.view.cursor = "move";
 
 				var pos = ev.pointer.position;
 
@@ -1177,13 +1181,20 @@ define.class("$ui/view", function(require,
 					pointermove:function(p) {
 						if (this.parent.position === "absolute") {
 							this.screen.pointer.cursor = "move";
+
+							// TODO(mason) Figure out why this fixes the bug (comment the following and drag toolkit to see the bug)
+							this.parent.find("components").pos = vec2(0,0);
+							this.parent.find("structure").pos = vec2(0,0);
+							this.parent.find("inspector").pos = vec2(0,0);
+
 							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
 						}
 					},
 					pointerend:function(p) {
-						var parent = this.parent
+						var parent = this.parent;
 						if (parent.testView && parent.toolmove !== false  && parent.position === "absolute") {
-							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+
+							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y);
 
 							parent.setASTObjectProperty(parent, "position", "absolute");
 							parent.setASTObjectProperty(parent, "x", parent._layout.absx);

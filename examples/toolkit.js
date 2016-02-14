@@ -21,14 +21,13 @@ define.class("$server/composition",function(require, $ui$, checkbox, button, ico
 						toolmove:false, 
 						toolrect:false
 					},
-					view({height:302, width:297, bgcolor:vec4(0.13262520730495453,0.2034073919057846,0.028474919497966766,1), position:'absolute', x:137.00057983398438, y:74.00068664550781}),
-					view({height:310, width:273, bgcolor:'purple', position:'absolute', x:498.0010986328125, y:78.00064086914062, borderradius:vec4(2,1,1,30), opacity:0.91}),
-					label({fontsize:54, bgcolor:'transparent', opaque:true, fgcolor:vec4(0.709774374961853,0.6159481406211853,0.8231146335601807,1), text:'0_o', position:'absolute', x:816.999755859375, y:209.00048828125, width:87.697265625, height:87.4800033569336})
+					view({height:302, width:297, bgcolor:vec4(0.13262520730495453,0.2034073919057846,0.028474919497966766,1), position:'absolute', x:45.000701904296875, y:120.00064086914062}),
+					view({height:310, width:273, bgcolor:'purple', position:'absolute', x:517.0010986328125, y:167.00064086914062, borderradius:vec4(2,1,1,30), opacity:0.91},label({fontsize:54, bgcolor:'transparent', opaque:true, fgcolor:vec4(0.709774374961853,0.6159481406211853,0.8231146335601807,1), text:'0_o', position:'absolute', x:135.9986572265625, y:33.999847412109375, width:87.697265625, height:87.4800033569336}))
 				),
 				toolkit({
 					position:'absolute', 
-					x:1087, 
-					y:17.000839233398438, 
+					x:1091, 
+					y:46.0008544921875, 
 					width:393, 
 					height:788, 
 					visible:true, 
