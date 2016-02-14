@@ -400,7 +400,9 @@ define.class('$system/base/shader', function(require, exports){
 					.replace(/TEXTURE_ID/g, texid)
 					.replace(/TEXTURE_LOC/, 'shader.texlocs.' + key+ '.loc')
 					.replace(/TEXTURE_INFO/, 'shader.texlocs.' + key)
-					.replace(/TEXTUREGL_ID/, gltypes.gl.TEXTURE0 + texid)
+					.replace(/TEXTUREGL_ID/g, gltypes.gl.TEXTURE0 + texid)
+
+				texid++
 			}
 			return out
 		})
