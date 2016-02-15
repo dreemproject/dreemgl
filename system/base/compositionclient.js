@@ -11,6 +11,7 @@ define.class('./compositionbase', function(require, baseclass){
 	var screen = require('$ui/screen')
 	var Render = require('./render')
 	var ASToolkit = require('$system/parse/astoolkit')
+	var OneJSParser = require('$system/parse/onejsparser')
 
 	this.atConstructor = function(previous, parent){
 		this.parent = parent
@@ -225,12 +226,17 @@ define.class('./compositionbase', function(require, baseclass){
 		console.log.apply(console, args)
 	}
 
+	var onejsparser = new OneJSParser();
 	this.ASTNode = function() {
-		return this.ast;
+		if (!this._ast) {
+			var source = this.constructor.module.factory.body.toString();
+			this._ast = onejsparser.parse(source);
+		}
+		return this._ast;
 	};
 
 	this.commitAST = function () {
-		var source =  new ASToolkit(this.ast).toSource();
+		var source =  new ASToolkit(this.ASTNode()).toSource();
 
 		//console.log("[COMMIT]", source);
 

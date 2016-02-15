@@ -373,7 +373,7 @@ define.class("$ui/view", function(require,
 				}
 
 				dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
-				
+
 				if (this.groupdrag && this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
@@ -655,7 +655,7 @@ define.class("$ui/view", function(require,
 		var at = "";
 		var arglist = [];
 		var plist = {};
-		var main = new astoolkit(this.screen.composition.ast, {type:"Function"}).at;
+		var main = new astoolkit(this.screen.composition.ASTNode(), {type:"Function"}).at;
 		//console.log('AST', main);
 		if (main && main.params) {
 			for (var i=0;i<main.params.length;i++) {
@@ -1239,6 +1239,19 @@ define.class("$ui/view", function(require,
 					y = y + p.y;
 				}
 				this.pos = vec3(x, y, v.z);
+			}.bind(this);
+
+			v.onfontsize = function(ev,fs,o) {
+				var v = o.layout;
+				this.size = vec3(v.width + this.borderwidth[0], v.height + this.borderwidth[0], 0)
+				var x = v.left - (this.borderwidth[0] + this.borderwidth[1]) / 2.0;
+				var y = v.top - (this.borderwidth[2] + this.borderwidth[3]) / 2.0;
+				var p = o;
+				while (p = p.parent) {
+					x = x + p.x;
+					y = y + p.y;
+				}
+				this.pos = vec3(x, y, 0);
 			}.bind(this);
 
 			v.onrotate = function(ev,v,o) {

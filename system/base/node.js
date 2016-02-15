@@ -956,16 +956,6 @@ define.class(function(require){
 		destroy:Config({type:Event})
 	};
 
-	Object.defineProperty(this, "ast", {
-		get: function () {
-			if (!this._ast) {
-				var source = this.constructor.module.factory.body.toString();
-				this._ast = onejsparser.parse(source);
-			}
-			return this._ast;
-		}
-	});
-
 	this.ASTNodeFor = function(view) {
 		var ast = this.ASTNode();
 		if (ast) {
@@ -979,12 +969,7 @@ define.class(function(require){
 
 	this.ASTNode = function() {
 		if (!this._cachednode) {
-			if (this.parent && this.parent.ASTNodeFor) {
-				this._cachednode = this.parent.ASTNodeFor(this);
-			} else {
-				console.error("Asking for ASTNode but no parent, is this ok!?")
-				this._cachednode = this.ast
-			}
+			this._cachednode = this.parent.ASTNodeFor(this);
 		}
 		return this._cachednode;
 	};
