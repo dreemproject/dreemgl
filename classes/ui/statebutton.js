@@ -192,7 +192,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 	this.pointerend = function(ev) {
 		if (this.__untoggle) {
-			delete this.__untoggle;
+			this.__untoggle = undefined;
 			if (this.state !== "disabled") {
 				this.clickhandler(ev);
 				this.state = "normal";
