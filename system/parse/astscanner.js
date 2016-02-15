@@ -37,9 +37,9 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 
 	this.reset = function() {
 		this._unstage();
-		delete this.atparent;
-		delete this.atindex;
-		delete this.atstate;
+		this.atparent = undefined;
+		this.atindex = undefined;
+		this.atstate = undefined;
 		this.at = this._root;
 		return this;
 	};
@@ -54,9 +54,9 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 	this._unstage = function() {
 		if (this._stage) {
 			var type = this._stage.type;
-			delete this._stage;
+			this._stage = undefined;
 			if (type) {
-				delete this[type];
+				this[type] = undefined;
 			}
 		}
 	};
