@@ -860,7 +860,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		// this.tilewidth = Math.ceil(this.layout.width/ div);
 		// this.tileheight = Math.ceil(this.layout.height/ div);;
 
-		for(var layer = 0;layer<2;layer++){
+		for(var layer = 1;layer>=0;layer--){
+//for(var layer = 0;layer<2;layer++){
 
 			this.tilewidth = 0;// Math.pow(2, 0 + layer);
 			this.tileheight =0;//= Math.pow(2, 0 + layer);
