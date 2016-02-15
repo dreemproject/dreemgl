@@ -12,7 +12,22 @@ define.class(function(require, $server$, service){
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 
 	//this.ignoreuse = {}
-	this.ignoreuse = {
+	this.displaykinds ={
+		forsest: true,
+		water: true, 
+		meadow:true, 
+		playa:true, 
+		forest: true,
+		pedestrian: true,
+		earth:true, 
+		river:true,
+		beach: true,
+		grass: true,
+		lake:true,
+		canal: true
+	}
+	
+	this.noignoreuse = {
 		allotments:true,
 		apron:true,
 		cemetery:true,
@@ -808,7 +823,7 @@ define.class(function(require, $server$, service){
 		var LandUseGeoms = objects.landuse.geometries
 		for (var i = 0;i<LandUseGeoms.length;i++){
 			var Bb = LandUseGeoms[i];
-			if (!this.ignoreuse[Bb.properties.kind]){
+			if (this.displaykinds[Bb.properties.kind]){
 				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
 			}
 		}
