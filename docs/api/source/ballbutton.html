@@ -241,10 +241,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n87" name="n87">87</a>
 <a href="#n88" name="n88">88</a>
 <a href="#n89" name="n89">89</a>
-<strong><a href="#n90" name="n90">90</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
@@ -255,7 +254,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">icon</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">triangle</span>: <span class="predefined-constant">false</span>,
                 <span class="key">triangleangle</span>: <span class="integer">0</span>,
-
                 <span class="key">borderradius</span>: <span class="integer">8</span>,
                 <span class="key">borderwidth</span>: <span class="integer">3</span>,
                 <span class="key">bordercolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#6c6c6c</span><span class="delimiter">&quot;</span></span>,
@@ -266,7 +264,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">alignitems</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">ontriangleangle</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> tri = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">thetri</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (tri){
@@ -274,13 +272,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         tri.bgcolor = <span class="local-variable">this</span>.bordercolor
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">onballsize</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.width = <span class="local-variable">this</span>.ballsize
                 <span class="local-variable">this</span>.height = <span class="local-variable">this</span>.ballsize
                 <span class="local-variable">this</span>.borderradius = <span class="local-variable">this</span>.ballsize/<span class="integer">2</span>
         }
-        
+
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">triangledisp</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.attributes = {<span class="key">angle</span>: <span class="integer">0</span>, <span class="key">radius</span>:<span class="integer">8</span>}
 
@@ -296,12 +294,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
                                 <span class="keyword">var</span> p = vec2(sin(mesh.x-view.angle)*view.radius, cos(mesh.x - view.angle) * view.radius)
-                                
+
                                 <span class="keyword">return</span> vec4(p.xy + vec2(<span class="integer">0</span>,<span class="integer">7</span>), <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                         }
                 }
         })
-        
+
         <span class="local-variable">this</span>.<span class="function">onbgcolor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> hsv = vec4.toHSV(<span class="local-variable">this</span>.bgcolor)
                 <span class="keyword">var</span> lighter = vec4.fromHSV(hsv[<span class="integer">0</span>], hsv[<span class="integer">1</span>]*<span class="float">0.5</span>, Math.min(<span class="integer">1</span>, hsv[<span class="integer">2</span>]*<span class="float">1.5</span>), <span class="integer">1</span>)
@@ -313,7 +311,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.pressedcolor1 = lighter
                 <span class="local-variable">this</span>.pressedcolor2 = lighter
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">onbordercolor</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> tri = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">thetri</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">if</span> (tri){
@@ -321,18 +319,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         tri.bgcolor = <span class="local-variable">this</span>.bordercolor
                 }
         }
-        
+
         <span class="local-variable">this</span>.<span class="function">render</span> =<span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.icon &amp;&amp; <span class="local-variable">this</span>.icon.length &gt; <span class="integer">0</span>) <span class="keyword">return</span> [
                         icon({<span class="key">icon</span>:<span class="local-variable">this</span>.icon, <span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.parent.bordercolor</span><span class="delimiter">&quot;</span></span>) })
                 ]
-        
+
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.triangle) <span class="keyword">return</span> [
                         <span class="local-variable">this</span>.triangledisp({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">thetri</span><span class="delimiter">&quot;</span></span>, <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>,<span class="key">bgcolor</span>:wire(<span class="string"><span class="delimiter">&quot;</span><span class="content">this.bordercolor</span><span class="delimiter">&quot;</span></span>) })
                 ]
                 <span class="keyword">return</span> []
-        }        
-})</pre></td>
+        }
+})
+</pre></td>
 </tr></table>
 
 </body>

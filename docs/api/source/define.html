@@ -3384,7 +3384,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                         args[i] = require
                                 }
                                 <span class="keyword">else</span> <span class="keyword">if</span>(builtin === <span class="integer">4</span>) args[i] = Constructor.prototype
-                                <span class="keyword">else</span> <span class="keyword">if</span>(builtin === <span class="integer">5</span>) args[i] = baseclass
+                                <span class="keyword">else</span> <span class="keyword">if</span>(builtin === <span class="integer">5</span>) args[i] = baseclass? baseclass.prototype: <span class="predefined-constant">undefined</span>
                                 <span class="keyword">else</span> <span class="keyword">if</span>(builtin === <span class="integer">6</span>) args[i] = body.outer
                         }
                         <span class="keyword">else</span>{

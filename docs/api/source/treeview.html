@@ -416,6 +416,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n262" name="n262">262</a>
 <a href="#n263" name="n263">263</a>
 <a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -440,9 +443,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// The fold button is a very very flat button.</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">foldbutton</span><span class="delimiter">'</span></span>, button, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.borderwidth = <span class="integer">0</span>
+                <span class="local-variable">this</span>.bold = <span class="predefined-constant">false</span>;
+                <span class="local-variable">this</span>.fontsize = <span class="integer">14</span>;
 
         <span class="comment">//        this.borderradius = 0;</span>
-                <span class="local-variable">this</span>.padding =  <span class="integer">0</span>
+                <span class="local-variable">this</span>.padding = <span class="integer">2</span>
                 <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>
                 <span class="local-variable">this</span>.labelactivecolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303000</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.buttoncolor1 = <span class="string"><span class="delimiter">&quot;</span><span class="content">#3b3b3b</span><span class="delimiter">&quot;</span></span>
@@ -492,7 +497,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }):[],
                                 <span class="comment">//flatbutton({icon:this.folded?&quot;arrow-right&quot;:&quot;arrow-down&quot;,padding: 2, click: this.toggleclick}),</span>
                                 <span class="local-variable">this</span>.outer.foldbutton({
-                                        <span class="key">text</span>: <span class="local-variable">this</span>.text,
+                                        <span class="key">label</span>: <span class="local-variable">this</span>.text,
                                         <span class="function">click</span>:<span class="keyword">function</span>(){
                                                 <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">select</span><span class="delimiter">'</span></span>,{<span class="key">node</span>:<span class="local-variable">this</span>})
                                         }.bind(<span class="local-variable">this</span>)
@@ -522,7 +527,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">else</span> <span class="local-variable">this</span>.item.collapsed = <span class="predefined-constant">false</span>
                                 <span class="comment">//this.collapsed = this.item.collapsed;</span>
                                 <span class="comment">// a bottom level assign re-renders the item</span>
-                                <span class="local-variable">this</span>.item = <span class="local-variable">this</span>.item
+                                <span class="keyword">var</span> itm =  <span class="local-variable">this</span>.item;
+                                <span class="local-variable">this</span>.item = itm;
                                 <span class="comment">//this.reRender()</span>
                         }
                         <span class="comment">//this.reLayout();</span>

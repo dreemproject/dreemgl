@@ -233,7 +233,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.device = <span class="keyword">new</span> Device()
                 }
 
-                baseclass.prototype.atConstructor.call(<span class="local-variable">this</span>, previous, parent)
+                baseclass.atConstructor.call(<span class="local-variable">this</span>, previous, parent)
 
                         <span class="comment">//Render the display</span>
                         <span class="local-variable">this</span>.doRender();
@@ -249,7 +249,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
 
         <span class="local-variable">this</span>.<span class="function">doRender</span> = <span class="keyword">function</span>(previous, parent){
-                baseclass.prototype.doRender.call(<span class="local-variable">this</span>, previous, parent)
+                baseclass.doRender.call(<span class="local-variable">this</span>, previous, parent)
         }
 
 })

@@ -1,7 +1,7 @@
 /**
  * @class button
  * @extends view
- * Simple button: a rectangle with a textlabel and an icon
+ * Simple gradient button: a rectangle with a textlabel and an icon
  * 
  * <iframe style="border:0;width:900px;height:300px" src="http://localhost:2000/apps/docs/example#path=$root/ui/button.js"></iframe>
  * <a target="blank" href="http://localhost:2000/apps/docs/example#path=$root/ui/button.js">open example in new tab &raquo;</a>

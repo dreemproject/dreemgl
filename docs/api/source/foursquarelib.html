@@ -291,6 +291,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n137" name="n137">137</a>
 <a href="#n138" name="n138">138</a>
 <a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -344,7 +348,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// nimages  Max number of images to return per location. Default=null which</span>
         <span class="comment">//          will not return any images</span>
         <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>(callback, location, options, nimages) {
-                location = location || [<span class="float">37.784173</span>, -<span class="float">122.401557</span>] <span class="comment">// Mascone center</span>
+                <span class="comment">// location = location || [37.784173, -122.401557] // Mascone center</span>
+                location = location || [<span class="float">37.859603</span>, -<span class="float">122.491075</span>] <span class="comment">// Sausalito</span>
                 options = options || {}
 
                 <span class="comment">// Search for locations</span>
@@ -371,12 +376,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// location Location to search around [lat, lon]. If missing, SF is used</span>
         <span class="comment">// options  Hash of search options. If not defined, defaults are used.</span>
         <span class="local-variable">this</span>.<span class="function">explore</span> = <span class="keyword">function</span>(callback, location, options) {
-                location = location || [<span class="float">37.784173</span>, -<span class="float">122.401557</span>] <span class="comment">// Mascone center</span>
+                <span class="comment">// location = location || [37.784173, -122.401557] // Mascone center</span>
+                location = location || [<span class="float">37.859603</span>, -<span class="float">122.491075</span>] <span class="comment">// Sausalito</span>
+                <span class="comment">// location = location || [37.892600, -122.570779] // Mt Tam</span>
                 options = options || {}
 
                 <span class="comment">// Add photos</span>
+                options[<span class="string"><span class="delimiter">'</span><span class="content">openNow</span><span class="delimiter">'</span></span>] = <span class="integer">0</span>
                 options[<span class="string"><span class="delimiter">'</span><span class="content">venuePhotos</span><span class="delimiter">'</span></span>] = <span class="integer">1</span>
                 options[<span class="string"><span class="delimiter">'</span><span class="content">limit</span><span class="delimiter">'</span></span>] = <span class="integer">250</span>
+                options[<span class="string"><span class="delimiter">'</span><span class="content">radius</span><span class="delimiter">'</span></span>] = <span class="integer">100000</span>
+                options[<span class="string"><span class="delimiter">'</span><span class="content">section</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">'</span><span class="content">coffee</span><span class="delimiter">'</span></span>
 
                 <span class="comment">// Search for locations</span>
                 <span class="local-variable">this</span>.foursquare.Venues.explore(location[<span class="integer">0</span>], location[<span class="integer">1</span>], <span class="predefined-constant">null</span>, options, <span class="local-variable">this</span>.accessToken, <span class="keyword">function</span>(error, data) {
@@ -390,14 +400,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> items) {
                                         <span class="keyword">var</span> venue = items[i].venue;
                                         <span class="keyword">var</span> photoUrl;
-                                        <span class="keyword">var</span> photoDate;
                                         <span class="keyword">if</span> (venue.photos &amp;&amp; venue.photos.groups) {
                                                 <span class="comment">// Ignore any issues with the returned data</span>
                                                 <span class="keyword">try</span> {
                                                         <span class="keyword">var</span> group = venue.photos.groups[<span class="integer">0</span>]
                                                         <span class="keyword">if</span> (!group) <span class="keyword">continue</span>;
                                                         <span class="keyword">var</span> item = venue.photos.groups[<span class="integer">0</span>].items[<span class="integer">0</span>];
-                                                        photoDate = item.createdAt
                                                         photoUrl = item.prefix + <span class="string"><span class="delimiter">'</span><span class="content">300x300</span><span class="delimiter">'</span></span> + item.suffix;
                                                 }
                                                 <span class="keyword">catch</span> (ex) {
@@ -412,16 +420,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="key">height</span>: <span class="integer">300</span>,
                                                 <span class="key">latitude</span>: venue.location.lat,
                                                 <span class="key">longitude</span>: venue.location.lng,
-                                                <span class="key">date</span>: photoDate
+                                                <span class="key">category</span>: venue.categories[<span class="integer">0</span>].shortName,
+                                                <span class="key">rating</span>: venue.rating,
+                                                <span class="key">price</span>: venue.price ? venue.price.tier : <span class="integer">0</span>
                                         });
+
                                 }
                         }
 
-                        console.log(venues.length)
-
-                        <span class="comment">// Save data to JSON</span>
                         <span class="comment">// var fs = require('fs');</span>
-                        <span class="comment">// fs.writeFile(&quot;compositions/timeline/data/foursquare.json&quot;, JSON.stringify(venues, null, 4), function(err) {</span>
+                        <span class="comment">// fs.writeFile(&quot;apps/tripplanner/data/coffee.json&quot;, JSON.stringify(venues, null, 4), function(err) {</span>
                         <span class="comment">//     if (err) return console.log(err);</span>
                         <span class="comment">// });</span>
 

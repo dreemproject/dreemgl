@@ -621,6 +621,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n467" name="n467">467</a>
 <a href="#n468" name="n468">468</a>
 <a href="#n469" name="n469">469</a>
+<strong><a href="#n470" name="n470">470</a></strong>
+<a href="#n471" name="n471">471</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -809,7 +811,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span>(buf.length &gt; len) len = buf.length
                                 gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
                                 <span class="keyword">if</span>(!buf.clean){
-                                        gl.bufferData(gl.ARRAY_BUFFER, buf.array.buffer, gl.STATIC_DRAW)
+                                        gl.bufferData(gl.ARRAY_BUFFER, buf.array.buffer, gl.STREAM_DRAW )
                                         buf.clean = <span class="predefined-constant">true</span>
                                 }
                         }
@@ -904,7 +906,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
                         <span class="keyword">if</span>(!buf.clean){
                                 <span class="keyword">var</span> dt = Date.now()
-                                gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STATIC_DRAW)
+                                gl.bufferData(gl.ARRAY_BUFFER, buf.array, gl.STREAM_DRAW)
                                 buf.clean = <span class="predefined-constant">true</span>
                         }
                 }
@@ -1024,7 +1026,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">TEXTURE_ID</span><span class="delimiter">/</span><span class="modifier">g</span></span>, texid)
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">TEXTURE_LOC</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">shader.texlocs.</span><span class="delimiter">'</span></span> + key+ <span class="string"><span class="delimiter">'</span><span class="content">.loc</span><span class="delimiter">'</span></span>)
                                         .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">TEXTURE_INFO</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">shader.texlocs.</span><span class="delimiter">'</span></span> + key)
-                                        .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">TEXTUREGL_ID</span><span class="delimiter">/</span></span>, gltypes.gl.TEXTURE0 + texid)
+                                        .replace(<span class="regexp"><span class="delimiter">/</span><span class="content">TEXTUREGL_ID</span><span class="delimiter">/</span><span class="modifier">g</span></span>, gltypes.gl.TEXTURE0 + texid)
+
+                                texid++
                         }
                         <span class="keyword">return</span> out
                 })

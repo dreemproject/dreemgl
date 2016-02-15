@@ -282,6 +282,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n128" name="n128">128</a>
 <a href="#n129" name="n129">129</a>
 <strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -356,6 +357,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.measure_with_cursor = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.<span class="function">focus</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.shaders || !<span class="local-variable">this</span>.shaders.cursors) <span class="keyword">return</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._focus){
                         <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerfocus

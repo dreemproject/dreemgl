@@ -1872,46 +1872,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1718" name="n1718">1718</a>
 <a href="#n1719" name="n1719">1719</a>
 <strong><a href="#n1720" name="n1720">1720</a></strong>
-<a href="#n1721" name="n1721">1721</a>
-<a href="#n1722" name="n1722">1722</a>
-<a href="#n1723" name="n1723">1723</a>
-<a href="#n1724" name="n1724">1724</a>
-<a href="#n1725" name="n1725">1725</a>
-<a href="#n1726" name="n1726">1726</a>
-<a href="#n1727" name="n1727">1727</a>
-<a href="#n1728" name="n1728">1728</a>
-<a href="#n1729" name="n1729">1729</a>
-<strong><a href="#n1730" name="n1730">1730</a></strong>
-<a href="#n1731" name="n1731">1731</a>
-<a href="#n1732" name="n1732">1732</a>
-<a href="#n1733" name="n1733">1733</a>
-<a href="#n1734" name="n1734">1734</a>
-<a href="#n1735" name="n1735">1735</a>
-<a href="#n1736" name="n1736">1736</a>
-<a href="#n1737" name="n1737">1737</a>
-<a href="#n1738" name="n1738">1738</a>
-<a href="#n1739" name="n1739">1739</a>
-<strong><a href="#n1740" name="n1740">1740</a></strong>
-<a href="#n1741" name="n1741">1741</a>
-<a href="#n1742" name="n1742">1742</a>
-<a href="#n1743" name="n1743">1743</a>
-<a href="#n1744" name="n1744">1744</a>
-<a href="#n1745" name="n1745">1745</a>
-<a href="#n1746" name="n1746">1746</a>
-<a href="#n1747" name="n1747">1747</a>
-<a href="#n1748" name="n1748">1748</a>
-<a href="#n1749" name="n1749">1749</a>
-<strong><a href="#n1750" name="n1750">1750</a></strong>
-<a href="#n1751" name="n1751">1751</a>
-<a href="#n1752" name="n1752">1752</a>
-<a href="#n1753" name="n1753">1753</a>
-<a href="#n1754" name="n1754">1754</a>
-<a href="#n1755" name="n1755">1755</a>
-<a href="#n1756" name="n1756">1756</a>
-<a href="#n1757" name="n1757">1757</a>
-<a href="#n1758" name="n1758">1758</a>
-<a href="#n1759" name="n1759">1759</a>
-<strong><a href="#n1760" name="n1760">1760</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -3501,46 +3461,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         &amp;&amp; r.y &lt;= <span class="local-variable">this</span>._layout.top
                         &amp;&amp; r.w &gt;= <span class="local-variable">this</span>._layout.width
                         &amp;&amp; r.z &gt;= <span class="local-variable">this</span>._layout.height;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">getASTPath</span> = <span class="keyword">function</span>() {
-                <span class="keyword">var</span> local = {
-                        <span class="key">type</span>:<span class="local-variable">this</span>.constructor.name
-                };
-
-                <span class="keyword">var</span> path = [local];
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent) {
-                        local.childindex = <span class="local-variable">this</span>.parent.children.indexOf(<span class="local-variable">this</span>);
-                        local.constructor_index = <span class="local-variable">this</span>.parent.constructor_children.indexOf(<span class="local-variable">this</span>);
-
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.parent.getASTPath) {
-                                path = <span class="local-variable">this</span>.parent.getASTPath();
-                                path.push(local);
-                        }
-                }
-
-                <span class="keyword">return</span> path;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">getASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">var</span> path = <span class="local-variable">this</span>.getASTPath();
-                path = path.filter(<span class="keyword">function</span>(a){ <span class="keyword">return</span> a.constructor_index != -<span class="integer">1</span>});
-                <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen.composition.ast;
-                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;path.length;i++) {
-                        <span class="keyword">var</span> pathitem = path[i];
-                        <span class="keyword">var</span> search = {
-                                <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">name</span>:pathitem.type,
-                                <span class="key">index</span>:pathitem.childindex
-                        };
-                        node = <span class="local-variable">this</span>.screen.composition.seekASTNode(search, node);
-                }
-
-                <span class="keyword">return</span> node;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">seekASTNode</span> = <span class="keyword">function</span>(sought) {
-                <span class="keyword">return</span> <span class="local-variable">this</span>.screen.composition.seekASTNode(sought, <span class="local-variable">this</span>.getASTNode());
         };
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">viewportblend</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){

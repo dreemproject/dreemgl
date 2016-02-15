@@ -223,18 +223,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
 <a href="#n71" name="n71">71</a>
-<a href="#n72" name="n72">72</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Sprite class</span>
 
-define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, menubutton){        
+define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, menubutton){
 
-        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#585858</span><span class="delimiter">&quot;</span></span> 
-        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span> 
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#585858</span><span class="delimiter">&quot;</span></span>
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">row</span><span class="delimiter">&quot;</span></span>
         <span class="comment">//this.dropshadowradius = 20;</span>
         <span class="comment">//this.dropshadowopacity = 0.3;</span>
         <span class="comment">//this.dropshadowhardness = 0;</span>
@@ -243,37 +242,36 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
                 <span class="key">infotext</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">statustext</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>,
                 <span class="key">menus</span>:[]
-        }        
-        
+        }
+
         <span class="local-variable">this</span>.<span class="function">onstatustext</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.statustext &amp;&amp; <span class="local-variable">this</span>.statustext.length &gt; <span class="integer">0</span>)
                 {
                         <span class="local-variable">this</span>.setTimeout(<span class="keyword">function</span>(){<span class="local-variable">this</span>.statustext = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}.bind(<span class="local-variable">this</span>), <span class="integer">4000</span>);
                 }
         }
-                
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.menus) <span class="keyword">return</span> []
 
                 <span class="keyword">var</span> mres = []
-                        
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> m <span class="keyword">in</span> <span class="local-variable">this</span>.menus){
                         <span class="keyword">var</span> res = []
                         <span class="keyword">var</span> menu = <span class="local-variable">this</span>.menus[m]
                         mres.push(
                                 menubutton({
-                                        <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#585858</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#585858</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#585858</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">bold</span>:<span class="predefined-constant">false</span>,
-        
-                                        <span class="key">borderwidth</span>:<span class="integer">0</span>, 
+
+                                        <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                         <span class="key">borderradius</span>:<span class="integer">8</span>,
                                         <span class="key">margin</span>:vec4(<span class="integer">4</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                                        <span class="key">padding</span>:<span class="integer">5</span>,  
-                                        <span class="key">text</span>:menu.name, 
-                                        <span class="key">commands</span>: menu.commands, 
+                                        <span class="key">padding</span>:<span class="integer">5</span>,
+                                        <span class="key">text</span>:menu.name,
+                                        <span class="key">commands</span>: menu.commands,
                                         <span class="function">click</span>: <span class="keyword">function</span>(){
                                                 <span class="comment">// lets open a modal dialog</span>
                                                 <span class="local-variable">this</span>.screen.contextMenu(<span class="local-variable">this</span>.commands, <span class="local-variable">this</span>.layout.absx,<span class="local-variable">this</span>.layout.absy + <span class="local-variable">this</span>.layout.height);
@@ -295,8 +293,9 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
                 }
                 <span class="keyword">return</span> view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">space-between</span><span class="delimiter">&quot;</span></span> }, view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},mres), view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,<span class="key">alignself</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},labelres));
         }
-        
-})</pre></td>
+
+})
+</pre></td>
 </tr></table>
 
 </body>

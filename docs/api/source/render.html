@@ -328,6 +328,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n174" name="n174">174</a>
 <a href="#n175" name="n175">175</a>
 <a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -340,10 +356,26 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="keyword">var</span> initializing = <span class="predefined-constant">false</span>
 
+        <span class="keyword">var</span> process_list = []
+        <span class="keyword">var</span> process_timer = <span class="predefined-constant">undefined</span>
+
+        <span class="keyword">function</span> <span class="function">processTimeout</span>(){
+                process_timer = <span class="predefined-constant">undefined</span>
+                <span class="keyword">var</span> pl = process_list
+                process_list = []
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pl.length; i++){
+                        exports.process(pl[i], <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
+                }
+        }
+
         <span class="keyword">function</span> <span class="function">__atAttributeGet</span>(key){
                 <span class="keyword">if</span>(!initializing){
-                        exports.process(<span class="local-variable">this</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">undefined</span>, <span class="predefined-constant">true</span>)
-                        <span class="comment">//this.relayout()</span>
+                        <span class="comment">//exports.process(this, undefined, undefined, true)</span>
+                        <span class="keyword">if</span>(process_list.indexOf(<span class="local-variable">this</span>) === -<span class="integer">1</span>)
+                                process_list.push(<span class="local-variable">this</span>)
+                        <span class="keyword">if</span>(!process_timer){
+                                process_timer = setTimeout(processTimeout, <span class="integer">0</span>)
+                        }
                 }
         }
 

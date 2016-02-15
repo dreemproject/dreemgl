@@ -170,23 +170,65 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
 <a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(){
-
-        <span class="local-variable">this</span>.<span class="function">wave</span> = <span class="keyword">function</span>(pos, x, y){
-                <span class="keyword">return</span> sin(pos.x*x*<span class="integer">8</span>) + sin(pos.y*y*<span class="integer">8</span>)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">stripe</span> = <span class="keyword">function</span>(pos, amount, spacing){
-                <span class="keyword">var</span> stripex = (floor(mod((pos.x )* spacing  + <span class="float">0.05</span>,<span class="float">1.0</span>) *amount ) / amount) &lt; <span class="float">0.1</span>?<span class="float">1.0</span>:<span class="float">0.0</span>;
-                <span class="keyword">var</span> stripey = (floor(mod((pos.y  )*spacing + <span class="float">0.05</span>, <span class="float">1.0</span>)*amount ) / amount) &lt; <span class="float">0.1</span>?<span class="float">1.0</span>:<span class="float">0.0</span>;
-                <span class="keyword">var</span> maxstripe = max(stripex, stripey);
-                <span class="keyword">return</span> maxstripe
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view) {
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#ffffff </span><span class="delimiter">'</span></span>},
+                                view({
+                                        <span class="comment">//viewport:'2d',</span>
+                                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">view-0</span><span class="delimiter">'</span></span>,
+                                                <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
+                                                <span class="key">top</span>:<span class="integer">100</span>,
+                                                <span class="key">left</span>:<span class="integer">100</span>,
+                                                <span class="key">width</span>:<span class="integer">100</span>,
+                                                <span class="key">height</span>:<span class="integer">100</span>,
+                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#c0c0c0 </span><span class="delimiter">'</span></span>,
+                                                <span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="float">45.0</span>*DEG)
+                                        },
+                                        view({
+                                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">view-0-0</span><span class="delimiter">'</span></span>,
+                                                <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
+                                                <span class="key">top</span>:<span class="integer">10</span>,
+                                                <span class="key">left</span>:<span class="integer">10</span>,
+                                                <span class="key">width</span>:<span class="integer">50</span>,
+                                                <span class="key">height</span>:<span class="integer">50</span>,
+                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#ff3d3d </span><span class="delimiter">'</span></span>,
+                                                <span class="key">rotate</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">60</span>.*DEG)
+                                        },
+                                        view({
+                                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">view-0-0</span><span class="delimiter">'</span></span>,
+                                                <span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,
+                                                <span class="key">top</span>:<span class="integer">10</span>,
+                                                <span class="key">left</span>:<span class="integer">10</span>,
+                                                <span class="key">width</span>:<span class="integer">10</span>,
+                                                <span class="key">height</span>:<span class="integer">10</span>,
+                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">orange </span><span class="delimiter">'</span></span>
+                                        }))
+                                )
+                        )
+                ]
         }
 })
 </pre></td>

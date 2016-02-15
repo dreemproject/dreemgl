@@ -201,54 +201,56 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n47" name="n47">47</a>
 <a href="#n48" name="n48">48</a>
 <a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(timeline, <span class="predefined">$server$</span>, service, <span class="predefined">$ui$</span>, screen, view) {
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$$</span>, planner){
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> [
-                        service({
-                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">eventservice</span><span class="delimiter">'</span></span>,
-                                <span class="function">loadevents</span>: <span class="keyword">function</span>() {
-                                        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-                                        <span class="keyword">var</span> flickrdata1 = JSON.parse(fs.readFileSync(<span class="string"><span class="delimiter">'</span><span class="content">apps/timeline/data/flickr1.json</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">utf8</span><span class="delimiter">'</span></span>))
-                                        <span class="keyword">var</span> flickrdata2 = JSON.parse(fs.readFileSync(<span class="string"><span class="delimiter">'</span><span class="content">apps/timeline/data/flickr2.json</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">utf8</span><span class="delimiter">'</span></span>))
-                                        <span class="keyword">var</span> flickrdata3 = JSON.parse(fs.readFileSync(<span class="string"><span class="delimiter">'</span><span class="content">apps/timeline/data/flickr3.json</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">utf8</span><span class="delimiter">'</span></span>))
-                                        <span class="keyword">var</span> foursquaredata = JSON.parse(fs.readFileSync(<span class="string"><span class="delimiter">'</span><span class="content">apps/timeline/data/foursquare.json</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">utf8</span><span class="delimiter">'</span></span>))
-                                        <span class="local-variable">this</span>.rpc.<span class="keyword">default</span>.eventsupdate([
-                                                {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">flickrdata1</span><span class="delimiter">'</span></span>, <span class="key">data</span>: flickrdata1},
-                                                {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">flickrdata2</span><span class="delimiter">'</span></span>, <span class="key">data</span>: flickrdata2},
-                                                {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">flickrdata3</span><span class="delimiter">'</span></span>, <span class="key">data</span>: flickrdata3},
-                                                {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">foursquaredata</span><span class="delimiter">'</span></span>, <span class="key">data</span>: foursquaredata}
-                                        ])
-                                }
-                        }),
+                        planner({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">planner</span><span class="delimiter">&quot;</span></span>}),
+                        <span class="comment">// Default screen receives Results to diplay on map</span>
+                        <span class="comment">// Default screen receives agenda to diplay on timeline</span>
                         screen({
-                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>,
-                                <span class="function">init</span>: <span class="keyword">function</span>() {
-                                        <span class="local-variable">this</span>.rpc.eventservice.loadevents()
+                                <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">init</span>: <span class="keyword">function</span> () {
+                                        <span class="local-variable">this</span>.rpc.planner.loadResults(<span class="string"><span class="delimiter">'</span><span class="content">data/food.json</span><span class="delimiter">'</span></span>)
                                 },
-                                <span class="function">eventsupdate</span>: <span class="keyword">function</span> (data) {
-                                        <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">timeline</span><span class="delimiter">'</span></span>).data = data
+                                <span class="function">updateresults</span>: <span class="keyword">function</span> (results) {
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Results updated on default:</span><span class="delimiter">'</span></span>, results)
+                                        <span class="comment">// TODO: show results in the map</span>
+                                },
+                                <span class="function">updateagenda</span>: <span class="keyword">function</span> (agenda) {
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Agenda updated on default:</span><span class="delimiter">'</span></span>, agenda)
+                                        <span class="comment">// TODO: show agenda in the timeline</span>
                                 }
                         },[
-                                view({
-                                        <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
-                                }, [
-                                        timeline({
-                                                <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">timeline</span><span class="delimiter">'</span></span>,
-                                                <span class="function">oneventselected</span>: <span class="keyword">function</span> (event) {
-                                                        <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">eventpreview</span><span class="delimiter">'</span></span>).bgimage = event.url
-                                                }
-                                        }),
-                                        view({
-                                                <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">eventpreview</span><span class="delimiter">'</span></span>,
-                                                <span class="key">bgimage</span>: <span class="string"><span class="delimiter">'</span><span class="content">https://farm2.staticflickr.com/1513/24094157124_1ab51f8c34.jpg</span><span class="delimiter">'</span></span>,
-                                                <span class="key">width</span>: <span class="integer">300</span>,
-                                                <span class="key">height</span>: <span class="integer">300</span>,
-                                                <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
-                                        })
-                                ])
-                        ])
-                ]
+                                <span class="comment">// TODO: map and timeline go here</span>
+                        ]),
+                        <span class="comment">// Tablet screen receives Results to diplay on map</span>
+                        <span class="comment">// Tablet screen receives ChosenResultsInView to perform commit to agenda</span>
+                        <span class="comment">// Tablet screen sets the agenda</span>
+                        <span class="comment">// Tablet screen sets view bounds</span>
+                        screen({
+                                <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">tablet</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">updateresults</span>: <span class="keyword">function</span> (results) {
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Results updated on tablet:</span><span class="delimiter">'</span></span>, results)
+                                        <span class="comment">// TODO: show results in the map</span>
+                                },
+                                <span class="function">updatechosenresultsinview</span>: <span class="keyword">function</span> (results) {
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">ChosenResultsInView updated on tablet:</span><span class="delimiter">'</span></span>, results)
+                                        <span class="comment">// TODO: show results in the map</span>
+                                }
+                        }, [
+                                <span class="comment">// TODO: map, timeline and ChosenResultsInView list go here</span>
+                        ]),
+                        <span class="comment">// Phone screen recieves ResultsInView and performs voting on those items.</span>
+                        screen({
+                                <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">phone</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">updateresultsinview</span>: <span class="keyword">function</span> (results) {
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">ResultsInView updated on phone:</span><span class="delimiter">'</span></span>, results)
+                                        <span class="comment">// TODO: show filtered results in a list</span>
+                                }
+                        })
+                ];
         }
 })
 </pre></td>

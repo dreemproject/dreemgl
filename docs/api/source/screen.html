@@ -695,13 +695,18 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n541" name="n541">541</a>
 <a href="#n542" name="n542">542</a>
 <a href="#n543" name="n543">543</a>
+<a href="#n544" name="n544">544</a>
+<a href="#n545" name="n545">545</a>
+<a href="#n546" name="n546">546</a>
+<a href="#n547" name="n547">547</a>
+<a href="#n548" name="n548">548</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, button, view, menubutton) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, menubutton) {
 <span class="comment">// Screens are the root of a view hierarchy, typically mapping to a physical device.</span>
 
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/render</span><span class="delimiter">'</span></span>)
@@ -802,7 +807,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="key">bold</span>:<span class="predefined-constant">false</span>,
                                                 <span class="key">text</span>:c.name,
 
-                                                <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a3a3a3</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a3a3a3</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                                 <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#737373</span><span class="delimiter">&quot;</span></span>,
@@ -1238,6 +1243,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         }
+
+        <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.composition.ASTNodeFor(<span class="local-variable">this</span>);
+        };
+
 })
 </pre></td>
 </tr></table>

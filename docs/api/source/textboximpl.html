@@ -626,6 +626,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n472" name="n472">472</a>
 <a href="#n473" name="n473">473</a>
 <a href="#n474" name="n474">474</a>
+<a href="#n475" name="n475">475</a>
+<a href="#n476" name="n476">476</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -794,6 +796,7 @@ define.mixin(<span class="keyword">function</span>(require){
         }
 
         <span class="local-variable">this</span>.<span class="function">keypaste</span> = <span class="keyword">function</span>(event){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.undo_group++
                 <span class="local-variable">this</span>.cursorset.insert(event.text)
                 <span class="local-variable">this</span>.doCursor()
@@ -801,6 +804,7 @@ define.mixin(<span class="keyword">function</span>(require){
         }
 
         <span class="local-variable">this</span>.<span class="function">keypress</span> = <span class="keyword">function</span>(event){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.undo_group++
                 <span class="local-variable">this</span>.cursorset.insert(event.value)
                 <span class="local-variable">this</span>.doCursor()

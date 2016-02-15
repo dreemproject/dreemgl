@@ -1510,56 +1510,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1356" name="n1356">1356</a>
 <a href="#n1357" name="n1357">1357</a>
 <a href="#n1358" name="n1358">1358</a>
-<a href="#n1359" name="n1359">1359</a>
-<strong><a href="#n1360" name="n1360">1360</a></strong>
-<a href="#n1361" name="n1361">1361</a>
-<a href="#n1362" name="n1362">1362</a>
-<a href="#n1363" name="n1363">1363</a>
-<a href="#n1364" name="n1364">1364</a>
-<a href="#n1365" name="n1365">1365</a>
-<a href="#n1366" name="n1366">1366</a>
-<a href="#n1367" name="n1367">1367</a>
-<a href="#n1368" name="n1368">1368</a>
-<a href="#n1369" name="n1369">1369</a>
-<strong><a href="#n1370" name="n1370">1370</a></strong>
-<a href="#n1371" name="n1371">1371</a>
-<a href="#n1372" name="n1372">1372</a>
-<a href="#n1373" name="n1373">1373</a>
-<a href="#n1374" name="n1374">1374</a>
-<a href="#n1375" name="n1375">1375</a>
-<a href="#n1376" name="n1376">1376</a>
-<a href="#n1377" name="n1377">1377</a>
-<a href="#n1378" name="n1378">1378</a>
-<a href="#n1379" name="n1379">1379</a>
-<strong><a href="#n1380" name="n1380">1380</a></strong>
-<a href="#n1381" name="n1381">1381</a>
-<a href="#n1382" name="n1382">1382</a>
-<a href="#n1383" name="n1383">1383</a>
-<a href="#n1384" name="n1384">1384</a>
-<a href="#n1385" name="n1385">1385</a>
-<a href="#n1386" name="n1386">1386</a>
-<a href="#n1387" name="n1387">1387</a>
-<a href="#n1388" name="n1388">1388</a>
-<a href="#n1389" name="n1389">1389</a>
-<strong><a href="#n1390" name="n1390">1390</a></strong>
-<a href="#n1391" name="n1391">1391</a>
-<a href="#n1392" name="n1392">1392</a>
-<a href="#n1393" name="n1393">1393</a>
-<a href="#n1394" name="n1394">1394</a>
-<a href="#n1395" name="n1395">1395</a>
-<a href="#n1396" name="n1396">1396</a>
-<a href="#n1397" name="n1397">1397</a>
-<a href="#n1398" name="n1398">1398</a>
-<a href="#n1399" name="n1399">1399</a>
-<strong><a href="#n1400" name="n1400">1400</a></strong>
-<a href="#n1401" name="n1401">1401</a>
-<a href="#n1402" name="n1402">1402</a>
-<a href="#n1403" name="n1403">1403</a>
-<a href="#n1404" name="n1404">1404</a>
-<a href="#n1405" name="n1405">1405</a>
-<a href="#n1406" name="n1406">1406</a>
-<a href="#n1407" name="n1407">1407</a>
-<a href="#n1408" name="n1408">1408</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1567,8 +1517,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,
-                                                                  <span class="predefined">$ui$</span>, view, label, icon, treeview, button,
-                                                                  <span class="predefined">$widgets$</span>, palette, propviewer){
+                                                                  <span class="predefined">$ui$</span>, view, label, icon, treeview, button, statebutton,
+                                                                  <span class="predefined">$widgets$</span>, palette, propviewer,
+                                  <span class="predefined">$system$parse$</span>, astoolkit, onejsparser){
 
 <span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion</span>
 
@@ -1643,7 +1594,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">params</span>:{
                                                 <span class="key">fontsize</span>:<span class="integer">24</span>,
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
-                                                <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Press Me!</span><span class="delimiter">'</span></span>
+                                                <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Press Me!</span><span class="delimiter">'</span></span>
                                         }
                                 },
                                 {
@@ -1660,25 +1611,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         }
                                 }
                         ],
-                        <span class="key">Behaviors</span>:[
-                                {
-                                        <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Alert</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">warning</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">desc</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Adds a click event that pops up an alert dialog</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">behaviors</span>:{
-                                                <span class="function">onclick</span>:<span class="keyword">function</span>() {
-                                                        alert(<span class="string"><span class="delimiter">'</span><span class="content">Beep.</span><span class="delimiter">'</span></span>)
-                                                }
-                                        }
-                                }
-                        ]
+                        <span class="comment">//Behaviors:[</span>
+                        <span class="comment">//        {</span>
+                        <span class="comment">//                label:&quot;Alert&quot;,</span>
+                        <span class="comment">//                icon:&quot;warning&quot;,</span>
+                        <span class="comment">//                desc:&quot;Adds a click event that pops up an alert dialog&quot;,</span>
+                        <span class="comment">//                behaviors:{</span>
+                        <span class="comment">//                        onclick:function() {</span>
+                        <span class="comment">//                                alert('Beep.')</span>
+                        <span class="comment">//                        }</span>
+                        <span class="comment">//                }</span>
+                        <span class="comment">//        }</span>
+                        <span class="comment">//]</span>
                 }}),
 
                 <span class="comment">// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,</span>
                 <span class="comment">// and views can be resized and manipulated.</span>
                 <span class="comment">// In 'live' mode views lock into place the composition regains it's active behaviors</span>
                 <span class="key">mode</span>:Config({<span class="key">type</span>:Enum(<span class="string"><span class="delimiter">'</span><span class="content">design</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">live</span><span class="delimiter">'</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">design</span><span class="delimiter">'</span></span>}),
-                <span class="key">reticlesize</span>: <span class="integer">6</span>,
+                <span class="key">reticlesize</span>: <span class="integer">9</span>,
                 <span class="key">groupdrag</span>:<span class="predefined-constant">true</span>,
                 <span class="key">animateborder</span>: <span class="predefined-constant">false</span>,
                 <span class="key">rulers</span>:<span class="predefined-constant">true</span>,
@@ -1686,7 +1637,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// internal</span>
                 <span class="key">selection</span>:Config({<span class="key">value</span>:[], <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">watch</span>:Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">value</span>:[], <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>})
-<span class="comment">//                astwatch:Config({persist:true, type:String})</span>
         };
 
         <span class="local-variable">this</span>.<span class="function">onrulers</span> = <span class="keyword">function</span>() {
@@ -1720,42 +1670,27 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> selection = [];
                 <span class="keyword">if</span> (v &amp;&amp; v.length) {
                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt; v.length;i++) {
+                                <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen.ASTNode();
                                 <span class="keyword">var</span> astpath = JSON.parse(v[i]);
-
-                                <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen;
-                                <span class="keyword">for</span> (<span class="keyword">var</span> j=<span class="integer">1</span>;node &amp;&amp; j&lt;astpath.length;j++) {
-                                        <span class="keyword">var</span> pathitem = astpath[j];
-                                        <span class="keyword">if</span> (node.children) {
-                                                <span class="keyword">var</span> child = node.children[pathitem.childindex];
-                                                <span class="keyword">if</span> (child &amp;&amp; pathitem.type == child.constructor.name) {
-                                                        node = child;
-                                                } <span class="keyword">else</span> {
-                                                        node = <span class="predefined-constant">undefined</span>;
-                                                        <span class="keyword">break</span>;
+                                <span class="keyword">var</span> search = <span class="keyword">new</span> astoolkit(node, astpath).at;
+                                <span class="keyword">var</span> <span class="function">find</span> = <span class="keyword">function</span>(a,b) {
+                                        <span class="keyword">if</span> (a === b.ASTNode()) <span class="keyword">return</span> b;
+                                        <span class="keyword">if</span> (b.children) {
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; b.children.length;i++) {
+                                                        <span class="keyword">var</span> c = find(a, b.children[i]);
+                                                        <span class="keyword">if</span> (c) <span class="keyword">return</span> c;
                                                 }
-                                        } <span class="keyword">else</span> {
-                                                node = <span class="predefined-constant">undefined</span>;
                                         }
-                                }
-                                <span class="keyword">if</span> (node) {
-                                        selection.push(node)
+                                };
+                                <span class="keyword">var</span> found = find(search, <span class="local-variable">this</span>.screen);
+
+                                <span class="keyword">if</span> (found !== <span class="local-variable">this</span>.screen) {
+                                        selection.push(found)
                                 }
                         }
                 }
                 <span class="local-variable">this</span>.selection = selection;
         };
-
-        <span class="comment">//this.onastwatch = function(ev,v,o) {</span>
-        <span class="comment">//        if (v) {</span>
-        <span class="comment">//                var jwatch = JSON.parse(v);</span>
-        <span class="comment">//                var newwatch = [];</span>
-        <span class="comment">//                for (var i= 0;i&lt;jwatch.length;i++) {</span>
-        <span class="comment">//                        var j = jwatch[i];</span>
-        <span class="comment">//                        newwatch.push(JSON.stringify(j));</span>
-        <span class="comment">//                }</span>
-        <span class="comment">//                this.watch = newwatch;</span>
-        <span class="comment">//        }</span>
-        <span class="comment">//};</span>
 
         <span class="local-variable">this</span>.<span class="function">onselection</span> = <span class="keyword">function</span>(ev,v,o) {
                 <span class="keyword">var</span> inspector = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">inspector</span><span class="delimiter">'</span></span>);
@@ -1774,7 +1709,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.selection.length &lt;= <span class="integer">1</span>) {
                                         <span class="keyword">var</span> selected = <span class="local-variable">this</span>.selection[<span class="integer">0</span>];
                                         <span class="keyword">if</span> (selected &amp;&amp; inspector.target != selected) {
-                                                inspector.astarget = JSON.stringify(selected.getASTPath());
+                                                inspector.astarget = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(selected));
                                         }
                                 } <span class="keyword">else</span> {
                                         inspector.target = <span class="predefined-constant">null</span>;
@@ -1804,10 +1739,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span> () {
                 <span class="local-variable">this</span>.ensureDeps();
 
-                <span class="comment">//if (this.astwatch) {</span>
-                <span class="comment">//        this.onastwatch(null, this.astwatch, this)</span>
-                <span class="comment">//}</span>
-
                 <span class="local-variable">this</span>.screen.<span class="function">globalpointerstart</span> = <span class="keyword">function</span>(ev) {
                         <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
                                 <span class="keyword">return</span>;
@@ -1820,7 +1751,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (ev.view == <span class="local-variable">this</span>) {
                                 <span class="keyword">var</span> inspector = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">inspector</span><span class="delimiter">'</span></span>);
                                 <span class="keyword">if</span> (inspector) {
-                                        inspector.astarget = JSON.stringify(<span class="local-variable">this</span>.getASTPath());
+                                        inspector.astarget = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(<span class="local-variable">this</span>));
                                 }
                                 <span class="local-variable">this</span>.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
@@ -1838,17 +1769,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.testView(ev.view)) {
 
-                                <span class="keyword">var</span> astpath = JSON.stringify(ev.view.getASTPath());
+                                <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(ev.view));
                                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.watch || <span class="local-variable">this</span>.watch.indexOf(astpath) &lt; <span class="integer">0</span>) {
                                         <span class="local-variable">this</span>.watch = [astpath];
-                                        <span class="comment">//var astw = [];</span>
-                                        <span class="comment">//for (var a=0;a&lt;this.watch.length;a++) {</span>
-                                        <span class="comment">//        var j = JSON.parse(this.watch[a]);</span>
-                                        <span class="comment">//        astw.push(j);</span>
-                                        <span class="comment">//}</span>
-                                        <span class="comment">//this.setASTObjectProperty(this, &quot;astwatch&quot;, JSON.stringify(astw));</span>
-                                        <span class="comment">//this.screen.composition.commitAST();</span>
                                 }
+
                                 <span class="keyword">var</span> dragview = ev.view;
                                 <span class="keyword">if</span> (!dragview.tooldragroot) {
                                         <span class="keyword">var</span> p = dragview;
@@ -1866,7 +1791,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 } <span class="keyword">else</span> {
                                         <span class="comment">// This is a drag</span>
 
-
                                         <span class="local-variable">this</span>.__startpos = dragview.globalToLocal(ev.pointer.position);
 
                                         <span class="local-variable">this</span>.__originalpos = {
@@ -1880,6 +1804,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         };
 
                                         <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.edgeCursor(ev, dragview);
+                                        <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
                                         dragview.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
                                         dragview.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>;
                                         ev.pointer.pickview = <span class="predefined-constant">true</span>;
@@ -1893,10 +1818,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">return</span>;
                         }
 
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler &amp;&amp; <span class="local-variable">this</span>.__ruler.target == ev.view) {
-                                <span class="local-variable">this</span>.__ruler.target = ev.view.parent;
-                        }
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
+                                <span class="keyword">if</span> (ev.pointer.pick &amp;&amp; <span class="local-variable">this</span>.testView(ev.pointer.pick) &amp;&amp; <span class="local-variable">this</span>.__ruler.target !== ev.pointer.pick) {
+                                        <span class="local-variable">this</span>.__ruler.target = ev.pointer.pick;
+                                }
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler.target == ev.view) {
+                                        <span class="local-variable">this</span>.__ruler.target = ev.view.parent;
+                                }
+
                                 <span class="local-variable">this</span>.__ruler.rulermarkstart = ev.view.pos;
                                 <span class="local-variable">this</span>.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
                         }
@@ -1943,6 +1872,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
 
                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(ev.view) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span>) {
+
+                                <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
+                                ev.view.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
 
                                 <span class="keyword">var</span> pos = ev.pointer.position;
 
@@ -2008,52 +1940,53 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
 
 
-                        ev.view.cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>;
+                        <span class="keyword">var</span> evview = ev.view;
+                        evview.cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>;
                         <span class="keyword">var</span> commit = <span class="predefined-constant">false</span>;
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner &amp;&amp; (ev.view == <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(ev.view)) &amp;&amp; ev.view.toolresize !== <span class="predefined-constant">false</span>) {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner &amp;&amp; (evview == <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(evview)) &amp;&amp; evview.toolresize !== <span class="predefined-constant">false</span>) {
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-left</span><span class="delimiter">&quot;</span></span>) {
-                                        ev.view.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                        ev.view.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                                        evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                        evview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>) {
-                                        ev.view.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                                        evview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>) {
-                                        ev.view.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                        evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
                                 } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>) {
-                                        ev.view.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                        evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
                                 }
 
-                                <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
-                                <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, ev.view._layout.absx);
-                                <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ev.view._layout.absy);
-                                <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>, ev.view._layout.width);
-                                <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>, ev.view._layout.height);
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, evview._layout.absx);
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, evview._layout.absy);
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>, evview._layout.width);
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>, evview._layout.height);
 
-                                commit = (Math.abs(ev.view.x - <span class="local-variable">this</span>.__originalpos.x) &gt; <span class="float">0.5</span>)
-                                        || (Math.abs(ev.view.y - <span class="local-variable">this</span>.__originalpos.y) &gt; <span class="float">0.5</span>)
-                                        || (Math.abs(ev.view._layout.width - <span class="local-variable">this</span>.__originalsize.w) &gt; <span class="float">0.5</span>)
-                                        || (Math.abs(ev.view._layout.height - <span class="local-variable">this</span>.__originalsize.h) &gt; <span class="float">0.5</span>);
+                                commit = (Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x) &gt; <span class="float">0.5</span>)
+                                        || (Math.abs(evview.y - <span class="local-variable">this</span>.__originalpos.y) &gt; <span class="float">0.5</span>)
+                                        || (Math.abs(evview._layout.width - <span class="local-variable">this</span>.__originalsize.w) &gt; <span class="float">0.5</span>)
+                                        || (Math.abs(evview._layout.height - <span class="local-variable">this</span>.__originalsize.h) &gt; <span class="float">0.5</span>);
 
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(ev.view) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span>) {
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(evview) &amp;&amp; evview.toolmove !== <span class="predefined-constant">false</span>) {
 
                                 <span class="keyword">var</span> pos = ev.pointer.position;
-                                <span class="keyword">if</span> (ev.view.parent) {
-                                        <span class="keyword">if</span> (ev.view.position != <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
-                                                ev.view.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">if</span> (evview.parent) {
+                                        <span class="keyword">if</span> (evview.position != <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
+                                                evview.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
                                         }
-                                        pos = ev.view.parent.globalToLocal(ev.pointer.position)
+                                        pos = evview.parent.globalToLocal(ev.pointer.position)
                                 }
 
                                 <span class="keyword">var</span> nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
-                                <span class="keyword">var</span> dx = Math.abs(ev.view.x - <span class="local-variable">this</span>.__originalpos.x);
+                                <span class="keyword">var</span> dx = Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x);
                                 <span class="keyword">if</span> (dx &gt; <span class="float">0.5</span>) {
-                                        <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx);
+                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx);
                                         commit = <span class="predefined-constant">true</span>;
                                 }
 
                                 <span class="keyword">var</span> ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
                                 <span class="keyword">var</span> dy = Math.abs(ny - <span class="local-variable">this</span>.__originalpos.y);
                                 <span class="keyword">if</span> (dy &gt; <span class="float">0.5</span>) {
-                                        <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny);
+                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny);
                                         commit = <span class="predefined-constant">true</span>;
                                 }
 
@@ -2070,24 +2003,24 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         }
                                 }
 
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__lastpick &amp;&amp; <span class="local-variable">this</span>.__lastpick !== ev.view.parent &amp;&amp; <span class="local-variable">this</span>.testView(<span class="local-variable">this</span>.__lastpick) &amp;&amp; <span class="local-variable">this</span>.__lastpick.tooldrop !== <span class="predefined-constant">false</span>) {
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__lastpick &amp;&amp; <span class="local-variable">this</span>.__lastpick !== evview.parent &amp;&amp; <span class="local-variable">this</span>.testView(<span class="local-variable">this</span>.__lastpick) &amp;&amp; <span class="local-variable">this</span>.__lastpick.tooldrop !== <span class="predefined-constant">false</span>) {
                                         pos = <span class="local-variable">this</span>.__lastpick.globalToLocal(ev.pointer.position);
 
                                         nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
                                         ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
 
-                                        <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx, <span class="predefined-constant">false</span>);
-                                        <span class="local-variable">this</span>.setASTObjectProperty(ev.view, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny, <span class="predefined-constant">false</span>);
+                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx, <span class="predefined-constant">false</span>);
+                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny, <span class="predefined-constant">false</span>);
 
-                                        <span class="keyword">var</span> astnode = ev.view.getASTNode();
+                                        <span class="keyword">var</span> astnode = evview.ASTNode();
 
-                                        <span class="keyword">var</span> newparent = <span class="local-variable">this</span>.__lastpick.getASTNode();
+                                        <span class="keyword">var</span> newparent = <span class="local-variable">this</span>.__lastpick.ASTNode();
                                         <span class="keyword">if</span> (!newparent.args) {
                                                 newparent.args = []
                                         }
                                         newparent.args.push(astnode);
 
-                                        <span class="keyword">var</span> oldparent = ev.view.parent.getASTNode();
+                                        <span class="keyword">var</span> oldparent = evview.parent.ASTNode();
                                         <span class="keyword">var</span> index = oldparent.args.indexOf(astnode);
                                         <span class="keyword">if</span> (index &gt;= <span class="integer">0</span>) {
                                                 oldparent.args.splice(index, <span class="integer">1</span>);
@@ -2137,21 +2070,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;selection.length;i++) {
                                         <span class="keyword">var</span> selected = selection[i];
                                         <span class="keyword">if</span> (selected !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(selected) &amp;&amp; <span class="local-variable">this</span>.toolselect !== <span class="predefined-constant">false</span>) {
-                                                <span class="keyword">var</span> astpath = JSON.stringify(selected.getASTPath());
+                                                <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(selected));
                                                 watch.push(astpath);
                                         }
                                 }
                                 <span class="local-variable">this</span>.watch = watch;
-
-                                <span class="comment">//if (this.watch.length) {</span>
-                                <span class="comment">//        var astw = [];</span>
-                                <span class="comment">//        for (var a=0;a&lt;this.watch.length;a++) {</span>
-                                <span class="comment">//                var j = JSON.parse(this.watch[a]);</span>
-                                <span class="comment">//                astw.push(j);</span>
-                                <span class="comment">//        }</span>
-                                <span class="comment">//        this.setASTObjectProperty(this, &quot;astwatch&quot;, JSON.stringify(astw));</span>
-                                <span class="comment">//        commit = true;</span>
-                                <span class="comment">//}</span>
                         }
 
                         <span class="keyword">if</span> (commit) {
@@ -2220,8 +2143,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="local-variable">this</span>.selection.length - <span class="integer">1</span>; i&gt;=<span class="integer">0</span>; i--) {
                                         <span class="keyword">var</span> v = <span class="local-variable">this</span>.selection[i];
                                         <span class="keyword">if</span> ((multi || v.focus) &amp;&amp; <span class="local-variable">this</span>.testView(v) &amp;&amp; v.toolremove !== <span class="predefined-constant">false</span>) {
-                                                <span class="keyword">var</span> node = v.getASTNode();
-                                                <span class="keyword">var</span> parent = v.parent.getASTNode();
+                                                <span class="keyword">var</span> parent = v.parent.ASTNode();
+                                                <span class="keyword">var</span> node = v.ASTNode();
                                                 <span class="keyword">var</span> index = parent.args.indexOf(node);
                                                 <span class="keyword">if</span> (index &gt;= <span class="integer">0</span>) {
                                                         parent.args.splice(index, <span class="integer">1</span>);
@@ -2241,7 +2164,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> at = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
                 <span class="keyword">var</span> arglist = [];
                 <span class="keyword">var</span> plist = {};
-                <span class="keyword">var</span> main = <span class="local-variable">this</span>.screen.composition.seekASTNode({<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Function</span><span class="delimiter">&quot;</span></span>, <span class="key">index</span>:<span class="integer">0</span>});
+                <span class="keyword">var</span> main = <span class="keyword">new</span> astoolkit(<span class="local-variable">this</span>.screen.composition.ast, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Function</span><span class="delimiter">&quot;</span></span>}).at;
                 <span class="comment">//console.log('AST', main);</span>
                 <span class="keyword">if</span> (main &amp;&amp; main.params) {
                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;main.params.length;i++) {
@@ -2259,77 +2182,83 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         arglist.push(name);
                                 }
                         }
-                }
 
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.components) {
-                        <span class="keyword">var</span> missing = {};
-                        <span class="keyword">if</span> (Array.isArray(<span class="local-variable">this</span>.components)) {
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.components.length;i++) {
-                                        <span class="keyword">var</span> compdef = <span class="local-variable">this</span>.components[i];
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.components) {
+                                <span class="keyword">var</span> missing = {};
+                                <span class="keyword">if</span> (Array.isArray(<span class="local-variable">this</span>.components)) {
 
-                                        <span class="keyword">var</span> classname = compdef.classname;
-                                        <span class="keyword">if</span> (classname) {
-                                                <span class="keyword">var</span> cdir = compdef.classdir || <span class="string"><span class="delimiter">&quot;</span><span class="content">$$</span><span class="delimiter">&quot;</span></span>;
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.components.length;i++) {
+                                                <span class="keyword">var</span> compdef = <span class="local-variable">this</span>.components[i];
 
-                                                <span class="keyword">var</span> included = plist[cdir];
-                                                <span class="keyword">if</span> (!included) {
-                                                        included = [];
-                                                }
+                                                <span class="keyword">var</span> classname = compdef.classname;
+                                                <span class="keyword">if</span> (classname) {
+                                                        <span class="keyword">var</span> cdir = compdef.classdir || <span class="string"><span class="delimiter">&quot;</span><span class="content">$$</span><span class="delimiter">&quot;</span></span>;
 
-                                                <span class="keyword">if</span> (included.indexOf(classname) &lt; <span class="integer">0</span>) {
-                                                        <span class="keyword">if</span> (!missing[cdir]) {
-                                                                missing[cdir] = []
+                                                        <span class="keyword">var</span> included = plist[cdir];
+                                                        <span class="keyword">if</span> (!included) {
+                                                                included = [];
                                                         }
-                                                        missing[cdir].push(classname)
+
+                                                        <span class="keyword">if</span> (included.indexOf(classname) &lt; <span class="integer">0</span>) {
+                                                                <span class="keyword">if</span> (!missing[cdir]) {
+                                                                        missing[cdir] = []
+                                                                }
+                                                                missing[cdir].push(classname)
+                                                        }
                                                 }
                                         }
-                                }
-                        } <span class="keyword">else</span> {
 
-                                <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.components) {
-                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.components.hasOwnProperty(key)) {
-                                                <span class="keyword">var</span> section = <span class="local-variable">this</span>.components[key];
-                                                <span class="keyword">for</span> (<span class="keyword">var</span> s=<span class="integer">0</span>;s&lt;section.length;s++) {
-                                                        <span class="keyword">var</span> compdef = section[s];
+                                } <span class="keyword">else</span> {
 
-                                                        <span class="keyword">var</span> classname = compdef.classname;
-                                                        <span class="keyword">if</span> (classname) {
-                                                                <span class="keyword">var</span> cdir = compdef.classdir || <span class="string"><span class="delimiter">&quot;</span><span class="content">$$</span><span class="delimiter">&quot;</span></span>;
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.components) {
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.components.hasOwnProperty(key)) {
+                                                        <span class="keyword">var</span> section = <span class="local-variable">this</span>.components[key];
+                                                        <span class="keyword">for</span> (<span class="keyword">var</span> s=<span class="integer">0</span>;s&lt;section.length;s++) {
+                                                                <span class="keyword">var</span> compdef = section[s];
 
-                                                                <span class="keyword">var</span> included = plist[cdir];
-                                                                <span class="keyword">if</span> (!included) {
-                                                                        included = [];
-                                                                }
+                                                                <span class="keyword">var</span> classname = compdef.classname;
+                                                                <span class="keyword">if</span> (classname) {
+                                                                        <span class="keyword">var</span> cdir = compdef.classdir || <span class="string"><span class="delimiter">&quot;</span><span class="content">$$</span><span class="delimiter">&quot;</span></span>;
 
-                                                                <span class="keyword">if</span> (included.indexOf(classname) &lt; <span class="integer">0</span>) {
-                                                                        <span class="keyword">if</span> (!missing[cdir]) {
-                                                                                missing[cdir] = []
+                                                                        <span class="keyword">var</span> included = plist[cdir];
+                                                                        <span class="keyword">if</span> (!included) {
+                                                                                included = [];
                                                                         }
-                                                                        missing[cdir].push(classname)
+
+                                                                        <span class="keyword">if</span> (included.indexOf(classname) &lt; <span class="integer">0</span>) {
+                                                                                <span class="keyword">if</span> (!missing[cdir]) {
+                                                                                        missing[cdir] = []
+                                                                                }
+                                                                                missing[cdir].push(classname)
+                                                                        }
                                                                 }
                                                         }
                                                 }
                                         }
                                 }
-                        }
 
-                        <span class="keyword">for</span> (<span class="keyword">var</span> dir <span class="keyword">in</span> missing) {
-                                <span class="keyword">if</span> (missing.hasOwnProperty(dir)) {
-                                        <span class="keyword">var</span> position = arglist.indexOf(dir);
-                                        <span class="keyword">if</span> (position &lt; <span class="integer">0</span>) {
-                                                position = arglist.length;
-                                                arglist.push(dir);
-                                                main.params.push(<span class="local-variable">this</span>.buildDefNode(dir));
-                                        }
-                                        <span class="keyword">var</span> missed = missing[dir];
-                                        <span class="keyword">for</span> (<span class="keyword">var</span> m = <span class="integer">0</span>; m &lt; missed.length; m++) {
-                                                <span class="keyword">var</span> item = missed[m];
-                                                arglist.splice(position + <span class="integer">1</span>, <span class="integer">0</span>, item);
-                                                main.params.splice(position + <span class="integer">1</span>, <span class="integer">0</span>, <span class="local-variable">this</span>.buildDefNode(item))
+                                <span class="keyword">for</span> (<span class="keyword">var</span> dir <span class="keyword">in</span> missing) {
+                                        <span class="keyword">if</span> (missing.hasOwnProperty(dir)) {
+                                                <span class="keyword">var</span> def;
+                                                <span class="keyword">var</span> position = arglist.indexOf(dir);
+                                                <span class="keyword">if</span> (position &lt; <span class="integer">0</span>) {
+                                                        position = arglist.length;
+                                                        arglist.push(dir);
+                                                        def = <span class="local-variable">this</span>.createASTNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">function(</span><span class="delimiter">&quot;</span></span> + dir + <span class="string"><span class="delimiter">&quot;</span><span class="content">){}</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>).params[<span class="integer">0</span>];
+                                                        main.params.push(def);
+                                                }
+                                                <span class="keyword">var</span> missed = missing[dir];
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> m = <span class="integer">0</span>; m &lt; missed.length; m++) {
+                                                        <span class="keyword">var</span> item = missed[m];
+                                                        arglist.splice(position + <span class="integer">1</span>, <span class="integer">0</span>, item);
+                                                        def = <span class="local-variable">this</span>.createASTNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">function(</span><span class="delimiter">&quot;</span></span> + item + <span class="string"><span class="delimiter">&quot;</span><span class="content">){}</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>).params[<span class="integer">0</span>];
+                                                        main.params.splice(position + <span class="integer">1</span>, <span class="integer">0</span>, def)
+                                                }
                                         }
                                 }
                         }
                 }
+
         };
 
         <span class="local-variable">this</span>.<span class="function">edgeCursor</span> = <span class="keyword">function</span> (ev, useview) {
@@ -2389,104 +2318,299 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> resize;
         };
 
-        <span class="local-variable">this</span>.<span class="function">buildIdNode</span> = <span class="keyword">function</span>(id) {
-                <span class="keyword">return</span> {
-                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">name</span>:id
+        <span class="local-variable">this</span>.<span class="function">testView</span> = <span class="keyword">function</span>(v) {
+                <span class="keyword">var</span> ok = v != <span class="local-variable">this</span>.screen;
+                <span class="keyword">var</span> p = v;
+                <span class="keyword">while</span> (p &amp;&amp; ok) {
+                        ok = p.tooltarget !== <span class="predefined-constant">false</span>;
+                        p = p.parent;
                 }
+                <span class="keyword">return</span> ok;
         };
 
-        <span class="local-variable">this</span>.<span class="function">buildDefNode</span> = <span class="keyword">function</span>(name) {
-                <span class="keyword">return</span> {
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Def</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">id</span>:<span class="local-variable">this</span>.buildIdNode(name)
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">var</span> views = [];
+
+                <span class="keyword">var</span> vertical = <span class="local-variable">this</span>.flexdirection === <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
+
+                <span class="keyword">if</span> (vertical) {
+                        views = [
+                                view({
+                                        <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">space-between</span><span class="delimiter">'</span></span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hardrect</span>:{<span class="key">pickonly</span>:<span class="predefined-constant">true</span>},
+                                        <span class="function">pointerstart</span>:<span class="keyword">function</span>(p) {
+                                                <span class="local-variable">this</span>.__grabpos = p.view.globalToLocal(p.position);
+                                        },
+                                        <span class="function">pointermove</span>:<span class="keyword">function</span>(p) {
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent.position === <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
+                                                        <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
+
+                                                        <span class="comment">// TODO(mason) Figure out why this fixes the bug (comment the following and drag toolkit to see the bug)</span>
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>).pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>).pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>).pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
+
+                                                        <span class="local-variable">this</span>.parent.pos = vec2(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y)
+                                                }
+                                        },
+                                        <span class="function">pointerend</span>:<span class="keyword">function</span>(p) {
+                                                <span class="keyword">var</span> parent = <span class="local-variable">this</span>.parent;
+                                                <span class="keyword">if</span> (parent.testView &amp;&amp; parent.toolmove !== <span class="predefined-constant">false</span>  &amp;&amp; parent.position === <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
+
+                                                        parent.pos = vec2(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y);
+
+                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
+                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, parent._layout.absx);
+                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, parent._layout.absy);
+                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>, parent._layout.width);
+                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>, parent._layout.height);
+                                                        parent.ensureDeps();
+                                                        <span class="local-variable">this</span>.screen.composition.commitAST();
+                                                }
+                                                <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">arrow</span><span class="delimiter">&quot;</span></span>;
+                                                <span class="local-variable">this</span>.__grabpos = <span class="predefined-constant">undefined</span>;
+                                        }
+                                },
+                                label({
+                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DreemGL Visual Toolkit</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
+                                        <span class="key">padding</span>:<span class="integer">5</span>,
+                                        <span class="key">paddingleft</span>:<span class="integer">10</span>,
+                                        <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>
+                                }),
+                                statebutton({
+                                        <span class="key">fontsize</span>:<span class="integer">16</span>,
+                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">times</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#ddd</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">opaque</span>:<span class="predefined-constant">true</span>,
+                                        <span class="key">borderwidth</span>:<span class="integer">0</span>,
+                                        <span class="key">marginright</span>:<span class="integer">1</span>,
+                                        <span class="function">click</span>:<span class="keyword">function</span>(ev,v,o) {
+                                                <span class="local-variable">this</span>.setASTObjectProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">visible</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
+                                                <span class="local-variable">this</span>.ensureDeps();
+                                                <span class="local-variable">this</span>.screen.composition.commitAST();
+                                        }.bind(<span class="local-variable">this</span>)
+                                }))
+                        ]
                 }
-        };
 
-        <span class="local-variable">this</span>.<span class="function">buildValueNode</span> = <span class="keyword">function</span>(value, kind) {
-                <span class="keyword">var</span> valnode = {
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">value</span>: value,
-                        <span class="key">kind</span>: kind
-                };
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Components</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">1.0</span>},
+                        palette({
+                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">flex</span>:<span class="integer">1</span>,
+                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">items</span>:<span class="local-variable">this</span>.components,
 
-                <span class="keyword">if</span> (!valnode.kind) {
-                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-                                valnode.kind = <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>;
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>) {
-                                valnode.kind = <span class="string"><span class="delimiter">'</span><span class="content">num</span><span class="delimiter">'</span></span>;
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>) {
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (value &amp;&amp; value.length) {
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.buildCallNode(<span class="string"><span class="delimiter">&quot;</span><span class="content">vec</span><span class="delimiter">&quot;</span></span> + value.length, value)
-                        } <span class="keyword">else</span> {
-<span class="comment">//                                valnode.kind = typeof(value);</span>
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">??? what 'kind' is a </span><span class="delimiter">&quot;</span></span>, <span class="keyword">typeof</span>(value), value)
-                        }
-                }
+                                <span class="function">dropTest</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
+                                        <span class="comment">//var name = v &amp;&amp; v.name ? v.name : &quot;unknown&quot;;</span>
+                                        <span class="comment">//console.log(&quot;test if&quot;, item.label, &quot;from&quot;, orig.position, &quot;can be dropped onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
+                                        <span class="keyword">return</span> v !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(v);
+                                }.bind(<span class="local-variable">this</span>),
 
-                <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-                        valnode.raw = <span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span> + value + <span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span>;
-                        valnode.multi = <span class="predefined-constant">false</span>;
-                } <span class="keyword">else</span> <span class="keyword">if</span> (value.toString) {
-                        valnode.raw = value.toString();
-                }
+                                <span class="function">drop</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
+                                        <span class="keyword">var</span> name = v &amp;&amp; v.name ? v.name : <span class="string"><span class="delimiter">&quot;</span><span class="content">unknown</span><span class="delimiter">&quot;</span></span>;
+<span class="comment">//                                        console.log(&quot;dropped&quot;, item.label, &quot;from&quot;, orig.position, &quot;onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
 
-                <span class="keyword">return</span> valnode;
+                                        <span class="keyword">if</span> (v) {
+                                                <span class="keyword">var</span> node = v.ASTNode();
+                                                <span class="keyword">if</span> (node) {
 
-        };
+                                                        <span class="keyword">if</span> (item.behaviors) {
+                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Dropped behavior </span><span class="delimiter">'</span></span>, item, <span class="string"><span class="delimiter">'</span><span class="content">onto node:</span><span class="delimiter">'</span></span>, node);
+                                                                <span class="keyword">for</span> (<span class="keyword">var</span> o <span class="keyword">in</span> item.behaviors) {
+                                                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">o</span><span class="delimiter">'</span></span>, o)
+                                                                        <span class="keyword">if</span> (item.behaviors.hasOwnProperty(o)) {
+                                                                                <span class="keyword">var</span> behave = item.behaviors[o];
+                                                                                <span class="local-variable">this</span>.setASTObjectProperty(v, o, behave);
+                                                                        }
+                                                                }
+                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>, v.ASTNode())
+                                                                <span class="comment">//TODO store these into the ast, make sure prop viewer can see them w/code viewer?)</span>
+                                                        }
 
-        <span class="local-variable">this</span>.<span class="function">buildKeyValueNode</span> = <span class="keyword">function</span>(name, value, kind) {
-                <span class="keyword">var</span> kv = {
-                        <span class="key">key</span>: <span class="local-variable">this</span>.buildIdNode(name),
-                        <span class="key">value</span>: <span class="local-variable">this</span>.buildValueNode(value)
-                };
+                                                        <span class="keyword">if</span> (item.classname &amp;&amp; item.params) {
+                                                                <span class="keyword">var</span> params = JSON.parse(JSON.stringify(item.params));
 
-                <span class="keyword">if</span> (kind) {
-                        kv.kind = kind;
-                }
+                                                                <span class="keyword">var</span> pos = v.globalToLocal(ev.position);
 
-                <span class="keyword">return</span> kv;
-        };
+                                                                params.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>;
+                                                                params.x = pos.x;
+                                                                params.y = pos.y;
+<span class="comment">//                                                                console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);</span>
+                                                                <span class="keyword">var</span> obj = item.classname + <span class="string"><span class="delimiter">&quot;</span><span class="content">(</span><span class="delimiter">&quot;</span></span> + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>;
+                                                                <span class="keyword">var</span> astobj = <span class="local-variable">this</span>.createASTNode(obj, <span class="predefined-constant">true</span>);
+                                                                <span class="keyword">var</span> astparams = <span class="local-variable">this</span>.createASTNode(params);
+                                                                astobj.args.push(astparams);
 
-        <span class="local-variable">this</span>.<span class="function">buildObjectNode</span> = <span class="keyword">function</span>(items, kind) {
-                <span class="keyword">var</span> keys = [];
+                                                                node.args.push(astobj);
+                                                        }
 
-                <span class="keyword">if</span> (items) {
-                        <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> items) {
-                                <span class="keyword">if</span> (items.hasOwnProperty(key)) {
-                                        <span class="keyword">var</span> value = items[key];
-                                        keys.push(<span class="local-variable">this</span>.buildKeyValueNode(key, value, kind))
+                                                        <span class="local-variable">this</span>.ensureDeps();
+                                                        <span class="local-variable">this</span>.screen.composition.commitAST();
+
+                                                        <span class="comment">//TODO set propviewer to inspect new object on reload?</span>
+
+
+                                                }
+                                        }
+                                }.bind(<span class="local-variable">this</span>)
+                        })
+                ));
+
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Cursor</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:vertical ? <span class="integer">0</span> : <span class="integer">2</span>},
+                        label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">5</span>, <span class="key">paddingleft</span>:<span class="integer">10</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>})
+                ));
+
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Structure</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">0.7</span>},
+                        treeview({
+                                <span class="key">flex</span>:<span class="integer">1</span>,
+                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">reload</span>:<span class="keyword">function</span>() {
+                                        <span class="keyword">var</span> <span class="function">swalk</span> = <span class="keyword">function</span> (v) {
+                                                <span class="keyword">if</span> (v.tooltarget !== <span class="predefined-constant">false</span>) {
+                                                        <span class="keyword">var</span> children = [];
+                                                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; v.children.length; i++) {
+                                                                <span class="keyword">var</span> child = swalk(v.children[i]);
+                                                                <span class="keyword">if</span> (child) {
+                                                                        children.push(child);
+                                                                }
+                                                        }
+
+                                                        <span class="keyword">var</span> name = v.constructor.name;
+                                                        <span class="keyword">if</span> (v.name) {
+                                                                name = v.name + <span class="string"><span class="delimiter">&quot;</span><span class="content"> (</span><span class="delimiter">&quot;</span></span> + name + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>
+                                                        }
+                                                        <span class="keyword">var</span> selected = (!!(<span class="local-variable">this</span>.selection) &amp;&amp; <span class="local-variable">this</span>.selection.indexOf(v) &gt; -<span class="integer">1</span>);
+                                                        <span class="keyword">return</span> {
+                                                                <span class="key">name</span>:name,
+                                                                <span class="key">children</span>: children,
+                                                                <span class="key">selected</span>: selected,
+                                                                <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>,
+                                                                <span class="key">collapsed</span>:(v.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">screen</span><span class="delimiter">&quot;</span></span>),
+                                                                <span class="key">view</span>:v
+                                                        }
+                                                }
+                                        }.bind(<span class="local-variable">this</span>.parent.outer);
+                                        <span class="local-variable">this</span>.data = swalk(<span class="local-variable">this</span>.screen);
+                                },
+                                <span class="function">init</span>:<span class="keyword">function</span>() {
+                                        <span class="local-variable">this</span>.reload();
+                                },
+                                <span class="function">onselect</span>:<span class="keyword">function</span>(ev) {
+                                        <span class="keyword">if</span> (ev &amp;&amp; ev.item &amp;&amp; ev.item.view) {
+                                                <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(ev.item.view));
+                                                <span class="keyword">if</span> (!<span class="local-variable">this</span>.watch || <span class="local-variable">this</span>.watch.indexOf(astpath) &lt; <span class="integer">0</span>) {
+                                                        <span class="local-variable">this</span>.watch = [astpath];
+                                                }
+                                        }
+                                }.bind(<span class="local-variable">this</span>)
+                        })
+                ));
+
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">2</span>},
+                        propviewer({
+                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">target</span>:<span class="local-variable">this</span>.inspect,
+                                <span class="key">flex</span>:<span class="integer">1</span>,
+                                <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
+                                <span class="function">callback</span>:<span class="keyword">function</span>(val, editor, commit) {
+                                        <span class="keyword">if</span> (editor &amp;&amp; editor.target &amp;&amp; editor.propertyname) {
+                                                <span class="keyword">var</span> t = editor.target;
+                                                <span class="keyword">if</span> (<span class="keyword">typeof</span>(t) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
+                                                        t = editor.find(t);
+                                                }
+
+                                                <span class="keyword">if</span> (t &amp;&amp; (t == <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(t)) &amp;&amp; t.tooledit !== <span class="predefined-constant">false</span>) {
+                                                        <span class="local-variable">this</span>.setASTObjectProperty(t, editor.propertyname, val);
+                                                        <span class="local-variable">this</span>.__needscommit = <span class="predefined-constant">true</span>;
+                                                }
+                                        }
+                                        <span class="keyword">if</span> (commit &amp;&amp; <span class="local-variable">this</span>.__needscommit) {
+                                                <span class="local-variable">this</span>.__needscommit = <span class="predefined-constant">false</span>;
+                                                <span class="local-variable">this</span>.ensureDeps();
+                                                <span class="local-variable">this</span>.screen.composition.commitAST();
+                                        }
+                                }.bind(<span class="local-variable">this</span>),
+                                <span class="function">ontarget</span>:<span class="keyword">function</span>(ev,v,o) {
+                                        <span class="keyword">if</span> (v) {
+                                                v.focus = <span class="predefined-constant">true</span>;
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
+                                                        <span class="local-variable">this</span>.__ruler.closeOverlay();
+                                                }
+                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.rulers &amp;&amp; <span class="local-variable">this</span>.testView(v)) {
+                                                        <span class="local-variable">this</span>.__ruler = <span class="local-variable">this</span>.screen.openOverlay(<span class="local-variable">this</span>.ruler);
+                                                        <span class="local-variable">this</span>.__ruler.target = v;
+                                                }
+                                        }
+                                }.bind(<span class="local-variable">this</span>),
+                                <span class="key">astarget</span>:Config({<span class="key">type</span>:String, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
+                                <span class="function">onastarget</span>:<span class="keyword">function</span>(ev,v,o) {
+                                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen.ASTNode();
+
+                                        <span class="keyword">if</span> (v) {
+                                                <span class="keyword">var</span> astpath = JSON.parse(v);
+                                                <span class="keyword">var</span> search = <span class="keyword">new</span> astoolkit(node, astpath).at;
+                                                <span class="keyword">var</span> <span class="function">find</span> = <span class="keyword">function</span>(a,b) {
+                                                        <span class="keyword">if</span> (a === b.ASTNode()) <span class="keyword">return</span> b;
+                                                        <span class="keyword">if</span> (b.children) {
+                                                                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i &lt; b.children.length;i++) {
+                                                                        <span class="keyword">var</span> c = find(a, b.children[i]);
+                                                                        <span class="keyword">if</span> (c) <span class="keyword">return</span> c;
+                                                                }
+                                                        }
+                                                };
+                                                <span class="local-variable">this</span>.target = find(search, <span class="local-variable">this</span>.screen);
+                                        }
                                 }
-                        }
-                }
+                        })
+                ));
 
-                <span class="keyword">return</span> {
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">keys</span>: keys
-            }
+                <span class="keyword">return</span> views;
         };
 
-        <span class="local-variable">this</span>.<span class="function">buildCallNode</span> = <span class="keyword">function</span>(name, items) {
-                <span class="keyword">var</span> args = [];
+        <span class="local-variable">this</span>.<span class="function">ASTNodePath</span> = <span class="keyword">function</span>(v) {
+                <span class="keyword">var</span> ast = v.ASTNode();
 
-                <span class="keyword">if</span> (items.length) {
-                        <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">0</span>; a &lt; items.length;a++) {
-                                <span class="keyword">var</span> value = items[a];
-                                args.push(<span class="local-variable">this</span>.buildValueNode(value))
-                        }
+                <span class="keyword">var</span> parentpath;
+                <span class="keyword">var</span> index = -<span class="integer">1</span>;
+                <span class="keyword">if</span> (v.parent) {
+                        parentpath = <span class="local-variable">this</span>.ASTNodePath(v.parent);
+                        <span class="keyword">var</span> parent = v.parent.ASTNode();
+                        index = parent.args.indexOf(ast);
                 } <span class="keyword">else</span> {
-                        args.push(<span class="local-variable">this</span>.buildObjectNode(items))
+                        parentpath = [];
                 }
 
-                <span class="keyword">return</span> {
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key">fn</span>: <span class="local-variable">this</span>.buildIdNode(name),
-                        <span class="key">args</span>: args
+                <span class="keyword">var</span> path = {
+                        <span class="key">type</span>:ast.type,
+                        <span class="key">fn</span>:{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:ast.fn.name},
+                        <span class="key">_index</span>:index
+                };
+                parentpath.push(path);
+                <span class="keyword">return</span> parentpath;
+        };
+
+
+        <span class="local-variable">this</span>.<span class="function">createASTNode</span> = <span class="keyword">function</span>(v, raw) {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.__parser) {
+                        <span class="local-variable">this</span>.__parser = <span class="keyword">new</span> onejsparser();
                 }
+                <span class="keyword">var</span> string = raw ? v : JSON.stringify(v)
+                <span class="comment">// Need to remove the &quot;key&quot; quotes or else will create wrong type of key objects</span>
+                string = string.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">&quot;([a-zA-Z0-9_$]+)&quot;:</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$1:</span><span class="delimiter">&quot;</span></span>);
+
+                <span class="comment">// Replace the vecs with better values</span>
+                string = string.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\{</span><span class="content">____struct:&quot;(vec</span><span class="char">\d</span><span class="content">)&quot;,data:</span><span class="content">\[</span><span class="content">([</span><span class="char">\d</span><span class="content">.,]+)</span><span class="content">\]</span><span class="content">\}</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$1($2)</span><span class="delimiter">&quot;</span></span>);
+
+                <span class="keyword">var</span> ast = <span class="local-variable">this</span>.__parser.parse(string);
+                <span class="keyword">return</span> ast.steps[<span class="integer">0</span>];
         };
 
         <span class="local-variable">this</span>.<span class="function">setASTObjectProperty</span> = <span class="keyword">function</span>(v, name, value, setval) {
-                <span class="keyword">if</span> (v == <span class="local-variable">this</span>.screen) {
+                <span class="keyword">if</span> (v == <span class="local-variable">this</span>.screen || v.constructor.name === <span class="string"><span class="delimiter">&quot;</span><span class="content">screen</span><span class="delimiter">&quot;</span></span>) {
                         console.error(<span class="string"><span class="delimiter">&quot;</span><span class="content">how did a screen get selected to be edited?</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">return</span>;
                 }
@@ -2494,30 +2618,65 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         v[name] = value;
                 }
 
-                <span class="keyword">var</span> ast = v.seekASTNode({<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>, <span class="key">index</span>:<span class="integer">0</span>});
+                <span class="keyword">var</span> ast = v.ASTNode();
 
-                <span class="keyword">var</span> found;
-                <span class="keyword">if</span> (ast &amp;&amp; ast.keys) {
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i &lt; ast.keys.length;i++) {
-                                <span class="keyword">var</span> prop = ast.keys[i];
-                                <span class="keyword">if</span> (prop &amp;&amp; prop.key &amp;&amp; prop.key.name &amp;&amp; prop.key.name === name) {
-                                        found = prop;
-                                        <span class="keyword">break</span>;
-                                }
-                        }
-                        <span class="keyword">if</span> (!found) {
-                                found = <span class="local-variable">this</span>.buildKeyValueNode(name, value, <span class="string"><span class="delimiter">&quot;</span><span class="content">init</span><span class="delimiter">&quot;</span></span>);
-                                ast.keys.push(found);
+                <span class="keyword">var</span> astkey = <span class="keyword">new</span> astoolkit(ast, [{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>}, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:name}]);
+
+                <span class="keyword">var</span> at = astkey.at;
+
+                <span class="comment">//console.log(&quot;SET AST VALUE ON&quot;, v.constructor.name, name, &quot;=&quot;, value)</span>
+
+                <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>) {
+                        <span class="comment">// Found Id</span>
+                        <span class="keyword">var</span> item = astkey.atparent.keys[astkey.atindex];
+                        <span class="keyword">var</span> newval;
+
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
+                                newval = <span class="local-variable">this</span>.createASTNode(value.toString(), <span class="predefined-constant">true</span>)
                         } <span class="keyword">else</span> {
-                                found.value = <span class="local-variable">this</span>.buildValueNode(value);
+                                newval = <span class="local-variable">this</span>.createASTNode(value);
                         }
-                } <span class="keyword">else</span> {
-                        ast = v.getASTNode();
-                        <span class="keyword">if</span> (ast) {
-                                <span class="keyword">var</span> args = {};
+
+                        item.value = newval;
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>) {
+                        <span class="comment">// No Id, but found Object</span>
+                        <span class="keyword">var</span> args = {};
+                        <span class="keyword">var</span> item;
+
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
+                                args[name] = <span class="string"><span class="delimiter">&quot;</span><span class="content">REPLACE</span><span class="delimiter">&quot;</span></span>;
+                                <span class="keyword">var</span> newparams = <span class="local-variable">this</span>.createASTNode(args);
+                                item = newparams.keys[<span class="integer">0</span>];
+
+                                <span class="keyword">var</span> newval = <span class="local-variable">this</span>.createASTNode(value.toString(), <span class="predefined-constant">true</span>)
+                                item.value = newval
+                        } <span class="keyword">else</span> {
                                 args[name] = value;
-                                <span class="keyword">var</span> obj = <span class="local-variable">this</span>.buildObjectNode(args, <span class="string"><span class="delimiter">'</span><span class="content">init</span><span class="delimiter">'</span></span>);
-                                ast.args.splice(<span class="integer">0</span>,<span class="integer">0</span>,obj);
+                                <span class="keyword">var</span> newparams = <span class="local-variable">this</span>.createASTNode(args);
+                                item = newparams.keys[<span class="integer">0</span>];
+                        }
+
+                        <span class="keyword">if</span> (item) {
+                                at.keys.push(item);
+                        }
+
+                } <span class="keyword">else</span> {
+                        <span class="comment">// No Object either, create new one from scrach</span>
+                        <span class="keyword">var</span> newparams;
+                        <span class="keyword">var</span> args = {};
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
+                                args[name] = <span class="string"><span class="delimiter">&quot;</span><span class="content">REPLACE</span><span class="delimiter">&quot;</span></span>;
+                                newparams = <span class="local-variable">this</span>.createASTNode(args);
+                                item = newparams.keys[<span class="integer">0</span>];
+                                <span class="keyword">var</span> newval = <span class="local-variable">this</span>.createASTNode(value.toString(), <span class="predefined-constant">true</span>)
+                                item.value = newval
+                        } <span class="keyword">else</span> {
+                                args[name] = value;
+                                newparams = <span class="local-variable">this</span>.createASTNode(args);
+                        }
+                        <span class="keyword">if</span> (newparams) {
+                                at.args.push(newparams);
                         }
                 }
         };
@@ -2563,7 +2722,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 };
 
-                <span class="local-variable">this</span>.borderwidth = <span class="integer">4</span>;
+                <span class="local-variable">this</span>.borderwidth = <span class="integer">2</span>;
                 <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.tooltarget = <span class="predefined-constant">false</span>;
@@ -2599,14 +2758,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.borderradius = v;
                         }.bind(<span class="local-variable">this</span>);
                 }
-         });
+        });
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">ruler</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
                 <span class="local-variable">this</span>.visible = wire(<span class="string"><span class="delimiter">'</span><span class="content">this.outer.visible</span><span class="delimiter">'</span></span>);
                 <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.tooltarget = <span class="predefined-constant">false</span>;
-                <span class="local-variable">this</span>.borderwidth = vec4(<span class="float">10.0</span>,<span class="float">10.0</span>,<span class="float">10.0</span>,<span class="float">10.0</span>);
+                <span class="local-variable">this</span>.borderwidth = vec4(<span class="float">5.0</span>,<span class="float">5.0</span>,<span class="float">5.0</span>,<span class="float">5.0</span>);
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">target</span>:Config({<span class="key">type</span>:Object}),
                         <span class="key">rulertickwidth</span>:<span class="integer">1</span>,
@@ -2614,9 +2773,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">rulermajorevery</span>:<span class="integer">10</span>,
                         <span class="key">rulermajorcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#F9F6F4</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">rulerminorcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#B0C4DE</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">rulermarkstartcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FFCC00</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">rulermarkstartcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#00CCFF</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">rulermarkstart</span>:vec2(<span class="integer">0</span>,<span class="integer">0</span>),
-                        <span class="key">rulermarkendcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF0080</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">rulermarkendcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF00CC</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">rulermarkend</span>:vec2(<span class="integer">0</span>,<span class="integer">0</span>),
                         <span class="function">bordercolorfn</span>:<span class="keyword">function</span>(p) {
                                 <span class="keyword">var</span> atx = p.x * layout.width;
@@ -2673,22 +2832,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.pos = vec2(v._layout.absx, v._layout.absy);
                         <span class="local-variable">this</span>.size = vec2(v._layout.width, v._layout.height);
                         <span class="local-variable">this</span>.rotate = v.rotate;
-            <span class="comment">//</span>
-                        <span class="comment">//v.onsize = function(ev,v,o) {</span>
-                        <span class="comment">//        this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)</span>
-                        <span class="comment">//}.bind(this);</span>
-            <span class="comment">//</span>
-                        <span class="comment">//v.onpos = function(ev,v,o) {</span>
-                        <span class="comment">//        this.pos = vec3(v._layout.absx, v._layout.absy, v.z);</span>
-                        <span class="comment">//}.bind(this);</span>
-            <span class="comment">//</span>
-                        <span class="comment">//v.onrotate = function(ev,v,o) {</span>
-                        <span class="comment">//        this.rotate = v;</span>
-                        <span class="comment">//}.bind(this);</span>
-            <span class="comment">//</span>
-                        <span class="comment">//v.onborderradius = function(ev,v,o) {</span>
-                        <span class="comment">//        this.borderradius = v;</span>
-                        <span class="comment">//}.bind(this);</span>
                 }
         });
 
@@ -2725,249 +2868,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         });
 
-        <span class="local-variable">this</span>.<span class="function">testView</span> = <span class="keyword">function</span>(v) {
-                <span class="keyword">var</span> ok = v != <span class="local-variable">this</span>.screen;
-                <span class="keyword">var</span> p = v;
-                <span class="keyword">while</span> (p &amp;&amp; ok) {
-                        ok = p.tooltarget !== <span class="predefined-constant">false</span>;
-                        p = p.parent;
-                }
-                <span class="keyword">return</span> ok;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-                <span class="keyword">var</span> views = [];
-
-                <span class="keyword">var</span> vertical = <span class="local-variable">this</span>.flexdirection === <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
-
-                <span class="keyword">if</span> (vertical) {
-                        views = [
-                                view({
-                                        <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">space-between</span><span class="delimiter">'</span></span>,
-                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">hardrect</span>:{<span class="key">pickonly</span>:<span class="predefined-constant">true</span>},
-                                        <span class="function">pointerstart</span>:<span class="keyword">function</span>(p) {
-                                                <span class="local-variable">this</span>.__grabpos = p.view.globalToLocal(p.position);
-                                        },
-                                        <span class="function">pointermove</span>:<span class="keyword">function</span>(p) {
-                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.parent.position === <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
-                                                        <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
-                                                        <span class="local-variable">this</span>.parent.pos = vec2(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y)
-                                                }
-                                        },
-                                        <span class="function">pointerend</span>:<span class="keyword">function</span>(p) {
-                                                <span class="keyword">var</span> parent = <span class="local-variable">this</span>.parent
-                                                <span class="keyword">if</span> (parent.testView &amp;&amp; parent.toolmove !== <span class="predefined-constant">false</span>  &amp;&amp; parent.position === <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
-                                                        parent.pos = vec2(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y)
-
-                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
-                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, parent._layout.absx);
-                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, parent._layout.absy);
-                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>, parent._layout.width);
-                                                        parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>, parent._layout.height);
-                                                        parent.ensureDeps();
-                                                        <span class="local-variable">this</span>.screen.composition.commitAST();
-                                                }
-                                                <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">arrow</span><span class="delimiter">&quot;</span></span>;
-                                                <span class="local-variable">this</span>.__grabpos = <span class="predefined-constant">undefined</span>;
-                                        }
-                                },
-                                label({
-                                        <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DreemGL Visual Toolkit</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
-                                        <span class="key">padding</span>:<span class="integer">5</span>,
-                                        <span class="key">paddingleft</span>:<span class="integer">10</span>,
-                                        <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>
-                                }),
-                                button({
-                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">times</span><span class="delimiter">'</span></span>,
-                                        <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>,
-                                        <span class="key">borderwidth</span>:<span class="integer">0</span>,
-                                        <span class="key">marginright</span>:<span class="integer">5</span>,
-                                        <span class="function">onclick</span>:<span class="keyword">function</span>(ev,v,o) {
-                                                <span class="local-variable">this</span>.setASTObjectProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">visible</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
-                                                <span class="local-variable">this</span>.ensureDeps();
-                                                <span class="local-variable">this</span>.screen.composition.commitAST();
-                                        }.bind(<span class="local-variable">this</span>)
-                                }))
-                        ]
-                }
-
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Components</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">1.0</span>},
-                        palette({
-                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">items</span>:<span class="local-variable">this</span>.components,
-
-                                <span class="function">dropTest</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
-                                        <span class="comment">//var name = v &amp;&amp; v.name ? v.name : &quot;unknown&quot;;</span>
-                                        <span class="comment">//console.log(&quot;test if&quot;, item.label, &quot;from&quot;, orig.position, &quot;can be dropped onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
-                                        <span class="keyword">return</span> v !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(v);
-                                }.bind(<span class="local-variable">this</span>),
-
-                                <span class="function">drop</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
-                                        <span class="keyword">var</span> name = v &amp;&amp; v.name ? v.name : <span class="string"><span class="delimiter">&quot;</span><span class="content">unknown</span><span class="delimiter">&quot;</span></span>;
-<span class="comment">//                                        console.log(&quot;dropped&quot;, item.label, &quot;from&quot;, orig.position, &quot;onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
-
-                                        <span class="keyword">if</span> (v) {
-                                                <span class="keyword">var</span> node = v.getASTNode();
-
-                                                <span class="keyword">if</span> (node) {
-
-                                                        <span class="keyword">if</span> (item.behaviors) {
-                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Dropped behavior </span><span class="delimiter">'</span></span>, item, <span class="string"><span class="delimiter">'</span><span class="content">onto node:</span><span class="delimiter">'</span></span>, node);
-                                                                <span class="keyword">for</span> (<span class="keyword">var</span> o <span class="keyword">in</span> item.behaviors) {
-                                                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">o</span><span class="delimiter">'</span></span>, o)
-                                                                        <span class="keyword">if</span> (item.behaviors.hasOwnProperty(o)) {
-                                                                                <span class="keyword">var</span> behave = item.behaviors[o];
-                                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">b</span><span class="delimiter">'</span></span>, behave)
-                                                                                v[o] = behave;
-                                                                        }
-                                                                }
-                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>)
-                                                                <span class="comment">//TODO store these into the ast, make sure prop viewer can see them w/code viewer?)</span>
-                                                        }
-
-                                                        <span class="keyword">if</span> (item.classname &amp;&amp; item.params) {
-                                                                <span class="keyword">var</span> params = JSON.parse(JSON.stringify(item.params));
-
-                                                                <span class="keyword">var</span> pos = v.globalToLocal(ev.position);
-
-                                                                params.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>;
-                                                                params.x = pos.x;
-                                                                params.y = pos.y;
-                                                                <span class="comment">//console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);</span>
-
-                                                                node.args.push(<span class="local-variable">this</span>.buildCallNode(item.classname, params));
-
-                                                        }
-
-                                                        <span class="local-variable">this</span>.ensureDeps();
-                                                        <span class="local-variable">this</span>.screen.composition.commitAST();
-
-                                                        <span class="comment">//TODO set propviewer to inspect new object on reload?</span>
-
-
-                                                }
-                                        }
-                                }.bind(<span class="local-variable">this</span>)
-                        })
-                ));
-
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Cursor</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:vertical ? <span class="integer">0</span> : <span class="integer">2</span>},
-                        label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">5</span>, <span class="key">paddingleft</span>:<span class="integer">10</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>})
-                ));
-
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Structure</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">0.7</span>},
-                        treeview({
-                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">reload</span>:<span class="keyword">function</span>() {
-                                        <span class="keyword">var</span> <span class="function">swalk</span> = <span class="keyword">function</span> (v) {
-                                                <span class="keyword">if</span> (v.tooltarget !== <span class="predefined-constant">false</span>) {
-                                                        <span class="keyword">var</span> children = [];
-                                                        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; v.children.length; i++) {
-                                                                <span class="keyword">var</span> child = swalk(v.children[i]);
-                                                                <span class="keyword">if</span> (child) {
-                                                                        children.push(child);
-                                                                }
-                                                        }
-
-                                                        <span class="keyword">var</span> name = v.constructor.name;
-                                                        <span class="keyword">if</span> (v.name) {
-                                                                name = v.name + <span class="string"><span class="delimiter">&quot;</span><span class="content"> (</span><span class="delimiter">&quot;</span></span> + name + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>
-                                                        }
-                                                        <span class="keyword">var</span> selected = (!!(<span class="local-variable">this</span>.selection) &amp;&amp; <span class="local-variable">this</span>.selection.indexOf(v) &gt; -<span class="integer">1</span>);
-                                                        <span class="keyword">return</span> {
-                                                                <span class="key">name</span>:name,
-                                                                <span class="key">children</span>: children,
-                                                                <span class="key">selected</span>: selected,
-                                                                <span class="key">collapsed</span>:(v.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">screen</span><span class="delimiter">&quot;</span></span>),
-                                                                <span class="key">view</span>:v
-                                                        }
-                                                }
-                                        }.bind(<span class="local-variable">this</span>.parent.outer);
-                                        <span class="local-variable">this</span>.data = swalk(<span class="local-variable">this</span>.screen);
-                                },
-                                <span class="function">init</span>:<span class="keyword">function</span>() {
-                                        <span class="local-variable">this</span>.reload();
-                                },
-                                <span class="function">onselect</span>:<span class="keyword">function</span>(ev) {
-                                        <span class="keyword">if</span> (ev &amp;&amp; ev.item &amp;&amp; ev.item.view) {
-                                                <span class="keyword">var</span> astpath = JSON.stringify(ev.item.view.getASTPath());
-                                                <span class="keyword">if</span> (!<span class="local-variable">this</span>.watch || <span class="local-variable">this</span>.watch.indexOf(astpath) &lt; <span class="integer">0</span>) {
-                                                        <span class="local-variable">this</span>.watch = [astpath];
-                                                }
-                                        }
-                                }.bind(<span class="local-variable">this</span>)
-                        })
-                ));
-
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">2</span>},
-                        propviewer({
-                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">target</span>:<span class="local-variable">this</span>.inspect,
-                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                <span class="key">overflow</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">scroll</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">callback</span>:<span class="keyword">function</span>(val, editor, commit) {
-                                        <span class="keyword">if</span> (editor &amp;&amp; editor.target &amp;&amp; editor.propertyname) {
-                                                <span class="keyword">var</span> t = editor.target;
-                                                <span class="keyword">if</span> (<span class="keyword">typeof</span>(t) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-                                                        t = editor.find(t);
-                                                }
-
-                                                <span class="keyword">if</span> (t &amp;&amp; (t == <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(t)) &amp;&amp; t.tooledit !== <span class="predefined-constant">false</span>) {
-                                                        <span class="local-variable">this</span>.setASTObjectProperty(t, editor.propertyname, val);
-                                                        <span class="local-variable">this</span>.__needscommit = <span class="predefined-constant">true</span>;
-                                                }
-                                        }
-                                        <span class="keyword">if</span> (commit &amp;&amp; <span class="local-variable">this</span>.__needscommit) {
-                                                <span class="local-variable">this</span>.__needscommit = <span class="predefined-constant">false</span>;
-                                                <span class="local-variable">this</span>.ensureDeps();
-                                                <span class="local-variable">this</span>.screen.composition.commitAST();
-                                        }
-                                }.bind(<span class="local-variable">this</span>),
-                                <span class="function">ontarget</span>:<span class="keyword">function</span>(ev,v,o) {
-                                        <span class="keyword">if</span> (v) {
-                                                v.focus = <span class="predefined-constant">true</span>;
-                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
-                                                        <span class="local-variable">this</span>.__ruler.closeOverlay();
-                                                }
-                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.rulers &amp;&amp; <span class="local-variable">this</span>.testView(v)) {
-                                                        <span class="local-variable">this</span>.__ruler = <span class="local-variable">this</span>.screen.openOverlay(<span class="local-variable">this</span>.ruler);
-                                                        <span class="local-variable">this</span>.__ruler.target = v;
-                                                }
-                                        }
-                                }.bind(<span class="local-variable">this</span>),
-                                <span class="key">astarget</span>:Config({<span class="key">type</span>:String, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
-                                <span class="function">onastarget</span>:<span class="keyword">function</span>(ev,v,o) {
-                                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen;
-
-                                        <span class="keyword">if</span> (v) {
-                                                <span class="keyword">var</span> astpath = JSON.parse(v);
-                                                <span class="comment">// console.log('path', astpath);</span>
-                                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">1</span>;i&lt;astpath.length;i++) {
-                                                        <span class="keyword">var</span> pathitem = astpath[i];
-                                                        <span class="keyword">var</span> child = node.children[pathitem.childindex];
-                                                        <span class="keyword">if</span> (child &amp;&amp; pathitem.type == child.constructor.name) {
-                                                                node = child;
-                                                        } <span class="keyword">else</span> {
-                                                                node = <span class="predefined-constant">undefined</span>;
-                                                                <span class="keyword">break</span>;
-                                                        }
-                                                }
-                                        }
-
-                                        <span class="local-variable">this</span>.target = node;
-                                }
-                        })
-                ));
-
-                <span class="keyword">return</span> views;
-        };
 });
 </pre></td>
 </tr></table>

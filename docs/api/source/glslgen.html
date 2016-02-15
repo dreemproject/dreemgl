@@ -1505,7 +1505,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">Condition</span> = <span class="keyword">function</span>(node, parent, state){
                 
-                <span class="keyword">var</span> ret = baseclass.prototype.Condition.call(<span class="local-variable">this</span>, node, parent, state)
+                <span class="keyword">var</span> ret = baseclass.Condition.call(<span class="local-variable">this</span>, node, parent, state)
 
                 <span class="comment">// lets compare the types of </span>
                 <span class="keyword">var</span> then_t = node.then.infer
@@ -1539,7 +1539,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">Logic</span> = <span class="keyword">function</span>(node, parent, state){
                 <span class="comment">// return type boolean</span>
-                <span class="keyword">var</span> ret = baseclass.prototype.Logic.call(<span class="local-variable">this</span>, node, parent, state)
+                <span class="keyword">var</span> ret = baseclass.Logic.call(<span class="local-variable">this</span>, node, parent, state)
                 node.infer = <span class="reserved">boolean</span>
                 <span class="keyword">return</span> ret
         }
