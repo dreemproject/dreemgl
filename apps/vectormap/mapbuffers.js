@@ -12,7 +12,22 @@ define.class(function(require, $server$, service){
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 
 	//this.ignoreuse = {}
-	this.ignoreuse = {
+	this.displaykinds ={
+		forsest: true,
+		water: true, 
+		meadow:true, 
+		playa:true, 
+		forest: true,
+		pedestrian: true,
+		earth:true, 
+		river:true,
+		beach: true,
+		grass: true,
+		lake:true,
+		canal: true
+	}
+	
+	this.noignoreuse = {
 		allotments:true,
 		apron:true,
 		cemetery:true,
@@ -370,7 +385,7 @@ define.class(function(require, $server$, service){
 	})
 
 	var LandVertexStruct = this.LandVertexStruct =	define.struct({
-			pos:vec3,
+			pos:vec4,
 			color1:vec4,
 		//color1:vec4,
 		//color2:vec4,
@@ -536,20 +551,22 @@ define.class(function(require, $server$, service){
 			if (land.polygons){
 
 				var array = mesh.array
-				var o = mesh.length * 7
+				var o = mesh.length * 8
 
 				for(var j = 0;j<land.polygons.length;j++){
 					var poly = land.polygons[j];
 					var tris = poly.tris
-					for(var a = 0; a < tris.length; a += 2, o += 7){
+					for(var a = 0; a < tris.length; a += 2, o += 8){
 						array[o + 0] = tris[a]
 						array[o + 1] = tris[a + 1]
 						array[o + 2] = i
+						array[o + 3] = 0
+						
 						//array[o + 2] = off
-						array[o + 3] = color1[0]
-						array[o + 4] = color1[1]
-						array[o + 5] = color1[2]
-						array[o + 6] = color1[3]
+						array[o + 4] = color1[0]
+						array[o + 5] = color1[1]
+						array[o + 6] = color1[2]
+						array[o + 7] = color1[3]
 						//array[o + 4] = color1[1]
 						//array[o + 5] = color1[2]
 						//array[o + 6] = color1[3]
@@ -806,7 +823,7 @@ define.class(function(require, $server$, service){
 		var LandUseGeoms = objects.landuse.geometries
 		for (var i = 0;i<LandUseGeoms.length;i++){
 			var Bb = LandUseGeoms[i];
-			if (!this.ignoreuse[Bb.properties.kind]){
+			if (this.displaykinds[Bb.properties.kind]){
 				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
 			}
 		}

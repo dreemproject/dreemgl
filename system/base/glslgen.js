@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('$system/parse/onejsgen', function(require, exports, baseclass){
+define.class('$system/parse/onejsserialize', function(require, exports, baseclass){
 
 	var gltypes = require('./gltypes')
 	var OneJSParser =  require('$system/parse/onejsparser')

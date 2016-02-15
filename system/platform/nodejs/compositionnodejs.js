@@ -56,7 +56,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 
 	this.handleRpcMethod = function(msg){
 		// lets make a promise
-		return new Promise(function(resolve, reject){
+		return new define.Promise(function(resolve, reject){
 			var parts = msg.rpcid.split('.')
 			//! TODO fix this up to be multi role capable
 			var part = parts[0];

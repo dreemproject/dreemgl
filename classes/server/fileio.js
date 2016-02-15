@@ -17,7 +17,7 @@ define.class(function(require, service){
 	// <name> The file to read. File paths can use $-shortcuts to refer to various folders
 	this.filechange = function(name){
 		var filepath = path.join(define.expandVariables(define.$root), name)
-		return new Promise(function(resolve){
+		return new define.Promise(function(resolve){
 			// lets wait for a  filechange, then resolve it
 			var stat = JSON.stringify(fs.statSync(filepath))
 			var myitv = setInterval(function mytimeout(){

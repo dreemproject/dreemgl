@@ -255,7 +255,7 @@ define.class(function(require, exports){
 
 	this.pickScreen = function(x, y){
 		// promise based pickray rendering
-		return new Promise(function(resolve, reject){
+		return new define.Promise(function(resolve, reject){
 			this.pick_resolve.push(resolve)
 			this.pick_x = x
 			this.pick_y = y
