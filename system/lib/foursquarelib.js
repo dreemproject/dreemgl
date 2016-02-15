@@ -50,7 +50,8 @@ define.class(function(exports){
 	// nimages  Max number of images to return per location. Default=null which
 	//          will not return any images
 	this.search = function(callback, location, options, nimages) {
-		location = location || [37.784173, -122.401557] // Mascone center
+		// location = location || [37.784173, -122.401557] // Mascone center
+		location = location || [37.859603, -122.491075] // Sausalito
 		options = options || {}
 
 		// Search for locations
@@ -77,12 +78,17 @@ define.class(function(exports){
 	// location Location to search around [lat, lon]. If missing, SF is used
 	// options  Hash of search options. If not defined, defaults are used.
 	this.explore = function(callback, location, options) {
-		location = location || [37.784173, -122.401557] // Mascone center
+		// location = location || [37.784173, -122.401557] // Mascone center
+		location = location || [37.859603, -122.491075] // Sausalito
+		// location = location || [37.892600, -122.570779] // Mt Tam
 		options = options || {}
 
 		// Add photos
+		options['openNow'] = 0
 		options['venuePhotos'] = 1
 		options['limit'] = 250
+		options['radius'] = 100000
+		options['section'] = 'coffee'
 
 		// Search for locations
 		this.foursquare.Venues.explore(location[0], location[1], null, options, this.accessToken, function(error, data) {
@@ -96,14 +102,12 @@ define.class(function(exports){
 				for (var i in items) {
 					var venue = items[i].venue;
 					var photoUrl;
-					var photoDate;
 					if (venue.photos && venue.photos.groups) {
 						// Ignore any issues with the returned data
 						try {
 							var group = venue.photos.groups[0]
 							if (!group) continue;
 							var item = venue.photos.groups[0].items[0];
-							photoDate = item.createdAt
 							photoUrl = item.prefix + '300x300' + item.suffix;
 						}
 						catch (ex) {
@@ -118,16 +122,16 @@ define.class(function(exports){
 						height: 300,
 						latitude: venue.location.lat,
 						longitude: venue.location.lng,
-						date: photoDate
+						category: venue.categories[0].shortName,
+						rating: venue.rating,
+						price: venue.price ? venue.price.tier : 0
 					});
+
 				}
 			}
 
-			console.log(venues.length)
-
-			// Save data to JSON
 			// var fs = require('fs');
-			// fs.writeFile("compositions/timeline/data/foursquare.json", JSON.stringify(venues, null, 4), function(err) {
+			// fs.writeFile("apps/tripplanner/data/coffee.json", JSON.stringify(venues, null, 4), function(err) {
 			//     if (err) return console.log(err);
 			// });
 
