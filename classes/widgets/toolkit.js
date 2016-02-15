@@ -196,98 +196,39 @@ define.class("$ui/view", function(require,
 
 	};
 
-	this.init = function () {
-		this.ensureDeps();
+	this.globalpointerstart = function(ev) {
+		if (!this.visible) {
+			return;
+		}
 
-		this.screen.globalpointerstart = function(ev) {
-			if (!this.visible) {
-				return;
+		if (this.__ruler) {
+			this.__ruler.rulermarkstart = ev.pointer.position;
+		}
+
+		if (ev.view == this) {
+			var inspector = this.find('inspector');
+			if (inspector) {
+				inspector.astarget = JSON.stringify(this.ASTNodePath(this));
 			}
+			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-			if (this.__ruler) {
-				this.__ruler.rulermarkstart = ev.pointer.position;
-			}
+			this.__originalpos = {
+				x:ev.view.x,
+				y:ev.view.y
+			};
 
-			if (ev.view == this) {
-				var inspector = this.find('inspector');
-				if (inspector) {
-					inspector.astarget = JSON.stringify(this.ASTNodePath(this));
-				}
-				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+			this.__originalsize = {
+				w:ev.view.width,
+				h:ev.view.height
+			};
 
-				this.__originalpos = {
-					x:ev.view.x,
-					y:ev.view.y
-				};
+			this.__resizecorner = this.edgeCursor(ev);
 
-				this.__originalsize = {
-					w:ev.view.width,
-					h:ev.view.height
-				};
+		} else if (this.testView(ev.view)) {
 
-				this.__resizecorner = this.edgeCursor(ev);
-
-			} else if (this.testView(ev.view)) {
-
-				var astpath = JSON.stringify(this.ASTNodePath(ev.view));
-				if (!this.watch || this.watch.indexOf(astpath) < 0) {
-					this.watch = [astpath];
-				}
-
-				var dragview = ev.view;
-				if (!dragview.tooldragroot) {
-					var p = dragview;
-					while (p = p.parent) {
-						if (p.tooldragroot) {
-							dragview = p;
-							break;
-						}
-					}
-				}
-
-				if (dragview.toolmove === false){
-					dragview.cursor = "crosshair";
-					this.__startrect = ev.pointer.position;
-				} else {
-					// This is a drag
-
-					this.__startpos = dragview.globalToLocal(ev.pointer.position);
-
-					this.__originalpos = {
-						x:dragview.x,
-						y:dragview.y
-					};
-
-					this.__originalsize = {
-						w:dragview.width,
-						h:dragview.height
-					};
-
-					this.__resizecorner = this.edgeCursor(ev, dragview);
-					this.screen.pointer.cursor = "move";
-					dragview.cursor = "move";
-					dragview.drawtarget = "color";
-					ev.pointer.pickview = true;
-				}
-			}
-
-		}.bind(this);
-
-		this.screen.globalpointermove = function(ev) {
-			if (!this.visible) {
-				return;
-			}
-
-			if (this.__ruler) {
-				if (ev.pointer.pick && this.testView(ev.pointer.pick) && this.__ruler.target !== ev.pointer.pick) {
-					this.__ruler.target = ev.pointer.pick;
-				}
-				if (this.__ruler.target == ev.view) {
-					this.__ruler.target = ev.view.parent;
-				}
-
-				this.__ruler.rulermarkstart = ev.view.pos;
-				this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
+			var astpath = JSON.stringify(this.ASTNodePath(ev.view));
+			if (!this.watch || this.watch.indexOf(astpath) < 0) {
+				this.watch = [astpath];
 			}
 
 			var dragview = ev.view;
@@ -301,327 +242,391 @@ define.class("$ui/view", function(require,
 				}
 			}
 
-			if (this.__resizecorner) {
+			if (dragview.toolmove === false){
+				dragview.cursor = "crosshair";
+				this.__startrect = ev.pointer.position;
+			} else {
+				// This is a drag
 
-				if (this.__resizecorner === "bottom-right") {
-					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
-					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
-				} else if (this.__resizecorner === "bottom") {
-					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
-				} else if (this.__resizecorner === "right") {
-					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
-				} else if (this.__resizecorner === "top-left") {
-					dragview.x = ev.pointer.position.x - this.__startpos.x;
-					dragview.y = ev.pointer.position.y - this.__startpos.y;
-					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
-					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
-				} else if (this.__resizecorner === "left") {
-					dragview.x = ev.pointer.position.x - this.__startpos.x;
-					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
-				} else if (this.__resizecorner === "top") {
-					dragview.y = ev.pointer.position.y - this.__startpos.y;
-					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
-				} else if (this.__resizecorner === "bottom-left") {
-					dragview.x = ev.pointer.position.x - this.__startpos.x;
-					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
-					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
-				} else if (this.__resizecorner === "top-right") {
-					dragview.y = ev.pointer.position.y - this.__startpos.y;
-					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
-					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
-				}
+				this.__startpos = dragview.globalToLocal(ev.pointer.position);
 
-			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+				this.__originalpos = {
+					x:dragview.x,
+					y:dragview.y
+				};
 
+				this.__originalsize = {
+					w:dragview.width,
+					h:dragview.height
+				};
+
+				this.__resizecorner = this.edgeCursor(ev, dragview);
 				this.screen.pointer.cursor = "move";
-				ev.view.cursor = "move";
+				dragview.cursor = "move";
+				dragview.drawtarget = "color";
+				ev.pointer.pickview = true;
+			}
+		}
 
-				var pos = ev.pointer.position;
+	};
 
-				if (dragview.parent) {
-					if (dragview.position != "absolute") {
-						dragview.position = "absolute";
+	this.globalpointermove = function(ev) {
+		if (!this.visible) {
+			return;
+		}
+
+		if (this.__ruler) {
+			if (ev.pointer.pick && this.testView(ev.pointer.pick) && this.__ruler.target !== ev.pointer.pick) {
+				this.__ruler.target = ev.pointer.pick;
+			}
+			if (this.__ruler.target == ev.view) {
+				this.__ruler.target = ev.view.parent;
+			}
+
+			this.__ruler.rulermarkstart = ev.view.pos;
+			this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
+		}
+
+		var dragview = ev.view;
+		if (!dragview.tooldragroot) {
+			var p = dragview;
+			while (p = p.parent) {
+				if (p.tooldragroot) {
+					dragview = p;
+					break;
+				}
+			}
+		}
+
+		if (this.__resizecorner) {
+
+			if (this.__resizecorner === "bottom-right") {
+				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
+			} else if (this.__resizecorner === "bottom") {
+				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
+			} else if (this.__resizecorner === "right") {
+				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+			} else if (this.__resizecorner === "top-left") {
+				dragview.x = ev.pointer.position.x - this.__startpos.x;
+				dragview.y = ev.pointer.position.y - this.__startpos.y;
+				dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+				dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+			} else if (this.__resizecorner === "left") {
+				dragview.x = ev.pointer.position.x - this.__startpos.x;
+				dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+			} else if (this.__resizecorner === "top") {
+				dragview.y = ev.pointer.position.y - this.__startpos.y;
+				dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+			} else if (this.__resizecorner === "bottom-left") {
+				dragview.x = ev.pointer.position.x - this.__startpos.x;
+				dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
+			} else if (this.__resizecorner === "top-right") {
+				dragview.y = ev.pointer.position.y - this.__startpos.y;
+				dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+			}
+
+		} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+
+			this.screen.pointer.cursor = "move";
+			ev.view.cursor = "move";
+
+			var pos = ev.pointer.position;
+
+			if (dragview.parent) {
+				if (dragview.position != "absolute") {
+					dragview.position = "absolute";
+				}
+				pos = dragview.parent.globalToLocal(ev.pointer.position)
+			}
+
+			dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
+
+			if (this.groupdrag && this.selection) {
+				for (var i=0;i<this.selection.length;i++) {
+					var selected = this.selection[i];
+					selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
+				}
+			}
+
+			this.__lastpick = ev.pointer.pick;
+
+		} else if (this.__startrect) {
+
+			//resize
+
+			var select = this.__selectrect || this.find('selectorrect');
+			if (!select) {
+				select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
+				this.__selectrect.pos = this.__startrect;
+			}
+
+			var pos = ev.pointer.position;
+
+			var a = this.__startrect;
+			var b = pos;
+
+			if (a.x < b.x && a.y < b.y) { //normal
+				select.pos = a;
+				select.size = vec2(b.x - a.x, b.y - a.y);
+			} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+				select.pos = vec2(b.x, a.y);
+				select.size = vec2(a.x - b.x, b.y - a.y);
+			} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+				select.pos = vec2(a.x, b.y);
+				select.size = vec2(b.x - a.x, a.y - b.y);
+			} else {
+				select.pos = vec2(b.x, b.y);
+				select.size = vec2(a.x - b.x, a.y - b.y);
+			}
+		}
+
+	};
+
+	this.globalpointerend = function(ev) {
+		if (ev.view.drawtarget != "both") {
+			ev.view.drawtarget = "both";
+		}
+
+		if (!this.visible) {
+			return;
+		}
+
+		if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
+			this.__ruler.target = ev.view;
+		}
+
+
+		var evview = ev.view;
+		evview.cursor = 'arrow';
+		var commit = false;
+		if (this.__resizecorner && (evview == this || this.testView(evview)) && evview.toolresize !== false) {
+			if (this.__resizecorner === "top-left") {
+				evview.x = ev.pointer.position.x - this.__startpos.x;
+				evview.y = ev.pointer.position.y - this.__startpos.y;
+			} else if (this.__resizecorner === "top") {
+				evview.y = ev.pointer.position.y - this.__startpos.y;
+			} else if (this.__resizecorner === "left") {
+				evview.x = ev.pointer.position.x - this.__startpos.x;
+			} else if (this.__resizecorner === "bottom-left") {
+				evview.x = ev.pointer.position.x - this.__startpos.x;
+			}
+
+			this.setASTObjectProperty(evview, "position", "absolute");
+			this.setASTObjectProperty(evview, "x", evview._layout.absx);
+			this.setASTObjectProperty(evview, "y", evview._layout.absy);
+			this.setASTObjectProperty(evview, "width", evview._layout.width);
+			this.setASTObjectProperty(evview, "height", evview._layout.height);
+
+			commit = (Math.abs(evview.x - this.__originalpos.x) > 0.5)
+				|| (Math.abs(evview.y - this.__originalpos.y) > 0.5)
+				|| (Math.abs(evview._layout.width - this.__originalsize.w) > 0.5)
+				|| (Math.abs(evview._layout.height - this.__originalsize.h) > 0.5);
+
+		} else if (this.__startpos && this.testView(evview) && evview.toolmove !== false) {
+
+			var pos = ev.pointer.position;
+			if (evview.parent) {
+				if (evview.position != "absolute") {
+					evview.position = "absolute";
+				}
+				pos = evview.parent.globalToLocal(ev.pointer.position)
+			}
+
+			var nx = pos.x - this.__startpos.x;
+			var dx = Math.abs(evview.x - this.__originalpos.x);
+			if (dx > 0.5) {
+				this.setASTObjectProperty(evview, "x", nx);
+				commit = true;
+			}
+
+			var ny = pos.y - this.__startpos.y;
+			var dy = Math.abs(ny - this.__originalpos.y);
+			if (dy > 0.5) {
+				this.setASTObjectProperty(evview, "y", ny);
+				commit = true;
+			}
+
+			if (this.groupdrag && this.selection) {
+				for (var i=0;i<this.selection.length;i++) {
+					var selected = this.selection[i];
+					if (this.testView(selected) && selected.toolmove !== false) {
+						nx = selected.pos.x + ev.pointer.movement.x;
+						this.setASTObjectProperty(selected, "x", nx);
+
+						ny = selected.pos.y + ev.pointer.movement.y;
+						this.setASTObjectProperty(selected, "y", ny);
 					}
-					pos = dragview.parent.globalToLocal(ev.pointer.position)
-				}
-
-				dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
-
-				if (this.groupdrag && this.selection) {
-					for (var i=0;i<this.selection.length;i++) {
-						var selected = this.selection[i];
-						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-					}
-				}
-
-				this.__lastpick = ev.pointer.pick;
-
-			} else if (this.__startrect) {
-
-				//resize
-
-				var select = this.__selectrect || this.find('selectorrect');
-				if (!select) {
-					select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
-					this.__selectrect.pos = this.__startrect;
-				}
-
-				var pos = ev.pointer.position;
-
-				var a = this.__startrect;
-				var b = pos;
-
-				if (a.x < b.x && a.y < b.y) { //normal
-					select.pos = a;
-					select.size = vec2(b.x - a.x, b.y - a.y);
-				} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
-					select.pos = vec2(b.x, a.y);
-					select.size = vec2(a.x - b.x, b.y - a.y);
-				} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
-					select.pos = vec2(a.x, b.y);
-					select.size = vec2(b.x - a.x, a.y - b.y);
-				} else {
-					select.pos = vec2(b.x, b.y);
-					select.size = vec2(a.x - b.x, a.y - b.y);
 				}
 			}
 
-		}.bind(this);
+			if (this.__lastpick && this.__lastpick !== evview.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+				pos = this.__lastpick.globalToLocal(ev.pointer.position);
 
-		this.screen.globalpointerend = function(ev) {
-			if (ev.view.drawtarget != "both") {
-				ev.view.drawtarget = "both";
+				nx = pos.x - this.__startpos.x;
+				ny = pos.y - this.__startpos.y;
+
+				this.setASTObjectProperty(evview, "x", nx, false);
+				this.setASTObjectProperty(evview, "y", ny, false);
+
+				var astnode = evview.ASTNode();
+
+				var newparent = this.__lastpick.ASTNode();
+				if (!newparent.args) {
+					newparent.args = []
+				}
+				newparent.args.push(astnode);
+
+				var oldparent = evview.parent.ASTNode();
+				var index = oldparent.args.indexOf(astnode);
+				if (index >= 0) {
+					oldparent.args.splice(index, 1);
+				}
+
+				commit = true;
 			}
 
-			if (!this.visible) {
-				return;
+
+		} else if (this.__startrect) {
+			var pos = ev.pointer.position;
+
+			var a = this.__startrect;
+			var b = pos;
+
+			var rect = vec4();
+
+			if (a.x < b.x && a.y < b.y) { //normal
+				rect.x = a.x;
+				rect.y = a.y;
+				rect.w = b.x - a.x;
+				rect.z = b.y - a.y;
+			} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+				rect.x = b.x;
+				rect.y = a.y;
+				rect.w = a.x - b.x;
+				rect.z = b.y - a.y;
+			} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+				rect.x = a.x;
+				rect.y = b.y;
+				rect.w = b.x - a.x;
+				rect.z = a.y - b.y;
+			} else {
+				rect.x = b.x;
+				rect.y = b.y;
+				rect.w = a.x - b.x;
+				rect.z = a.y - b.y;
+			}
+			var select = this.__selectrect || this.find('selectorrect');
+			if (select) {
+				select.closeOverlay();
+				this.__selectrect = undefined;
 			}
 
-			if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
-				this.__ruler.target = ev.view;
+			var selection = this.screen.childrenInRect(rect, [select]);
+			var watch = [];
+			for (var i=0;i<selection.length;i++) {
+				var selected = selection[i];
+				if (selected !== this && this.testView(selected) && this.toolselect !== false) {
+					var astpath = JSON.stringify(this.ASTNodePath(selected));
+					watch.push(astpath);
+				}
+			}
+			this.watch = watch;
+		}
+
+		if (commit) {
+			this.ensureDeps();
+			this.screen.composition.commitAST();
+		}
+
+		this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+	};
+
+	this.globalpointerhover = function(ev) {
+		if (!this.visible) {
+			return;
+		}
+
+		var text = ev.view.constructor.name;
+		if (ev.view.name) {
+			text = ev.view.name + " (" + text + ")"
+		}
+
+		var pointers = ev.pointers;
+		if (!pointers && ev.pointer) {
+			pointers = [ev.pointer];
+		}
+
+		for (var i=0;i<pointers.length;i++) {
+			var pointer = pointers[i];
+
+			var pos = ev.view.globalToLocal(pointer.position);
+
+			if (this.__ruler && this.__ruler.target) {
+				this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
 			}
 
 
-			var evview = ev.view;
-			evview.cursor = 'arrow';
+			text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
+			text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
+
+			this.find("current").text = text;
+
+			this.edgeCursor(ev)
+		}
+
+		if (this.__selectrect) {
+			var m = this.__selectrect;
+			this.__selectrect = undefined;
+			m.closeOverlay();
+		}
+
+	};
+
+	this.globalkeydown = function(ev) {
+		if (ev.code === 84 && ev.ctrl && ev.shift) {
+			this.setASTObjectProperty(this, "visible", !this.visible);
+			this.ensureDeps();
+			this.screen.composition.commitAST();
+			return;
+		}
+		if (!this.visible) {
+			return;
+		}
+
+		if (ev.code === 8 && this.selection) {
 			var commit = false;
-			if (this.__resizecorner && (evview == this || this.testView(evview)) && evview.toolresize !== false) {
-				if (this.__resizecorner === "top-left") {
-					evview.x = ev.pointer.position.x - this.__startpos.x;
-					evview.y = ev.pointer.position.y - this.__startpos.y;
-				} else if (this.__resizecorner === "top") {
-					evview.y = ev.pointer.position.y - this.__startpos.y;
-				} else if (this.__resizecorner === "left") {
-					evview.x = ev.pointer.position.x - this.__startpos.x;
-				} else if (this.__resizecorner === "bottom-left") {
-					evview.x = ev.pointer.position.x - this.__startpos.x;
-				}
+			var multi = this.selection.length > 1;
+			for (var i=this.selection.length - 1; i>=0; i--) {
+				var v = this.selection[i];
+				var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
 
-				this.setASTObjectProperty(evview, "position", "absolute");
-				this.setASTObjectProperty(evview, "x", evview._layout.absx);
-				this.setASTObjectProperty(evview, "y", evview._layout.absy);
-				this.setASTObjectProperty(evview, "width", evview._layout.width);
-				this.setASTObjectProperty(evview, "height", evview._layout.height);
-
-				commit = (Math.abs(evview.x - this.__originalpos.x) > 0.5)
-					|| (Math.abs(evview.y - this.__originalpos.y) > 0.5)
-					|| (Math.abs(evview._layout.width - this.__originalsize.w) > 0.5)
-					|| (Math.abs(evview._layout.height - this.__originalsize.h) > 0.5);
-
-			} else if (this.__startpos && this.testView(evview) && evview.toolmove !== false) {
-
-				var pos = ev.pointer.position;
-				if (evview.parent) {
-					if (evview.position != "absolute") {
-						evview.position = "absolute";
-					}
-					pos = evview.parent.globalToLocal(ev.pointer.position)
-				}
-
-				var nx = pos.x - this.__startpos.x;
-				var dx = Math.abs(evview.x - this.__originalpos.x);
-				if (dx > 0.5) {
-					this.setASTObjectProperty(evview, "x", nx);
-					commit = true;
-				}
-
-				var ny = pos.y - this.__startpos.y;
-				var dy = Math.abs(ny - this.__originalpos.y);
-				if (dy > 0.5) {
-					this.setASTObjectProperty(evview, "y", ny);
-					commit = true;
-				}
-
-				if (this.groupdrag && this.selection) {
-					for (var i=0;i<this.selection.length;i++) {
-						var selected = this.selection[i];
-						if (this.testView(selected) && selected.toolmove !== false) {
-							nx = selected.pos.x + ev.pointer.movement.x;
-							this.setASTObjectProperty(selected, "x", nx);
-
-							ny = selected.pos.y + ev.pointer.movement.y;
-							this.setASTObjectProperty(selected, "y", ny);
-						}
-					}
-				}
-
-				if (this.__lastpick && this.__lastpick !== evview.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
-					pos = this.__lastpick.globalToLocal(ev.pointer.position);
-
-					nx = pos.x - this.__startpos.x;
-					ny = pos.y - this.__startpos.y;
-
-					this.setASTObjectProperty(evview, "x", nx, false);
-					this.setASTObjectProperty(evview, "y", ny, false);
-
-					var astnode = evview.ASTNode();
-
-					var newparent = this.__lastpick.ASTNode();
-					if (!newparent.args) {
-						newparent.args = []
-					}
-					newparent.args.push(astnode);
-
-					var oldparent = evview.parent.ASTNode();
-					var index = oldparent.args.indexOf(astnode);
+				if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
+					var parent = v.parent.ASTNode();
+					var node = v.ASTNode();
+					var index = parent.args.indexOf(node);
 					if (index >= 0) {
-						oldparent.args.splice(index, 1);
-					}
-
-					commit = true;
-				}
-
-
-			} else if (this.__startrect) {
-				var pos = ev.pointer.position;
-
-				var a = this.__startrect;
-				var b = pos;
-
-				var rect = vec4();
-
-				if (a.x < b.x && a.y < b.y) { //normal
-					rect.x = a.x;
-					rect.y = a.y;
-					rect.w = b.x - a.x;
-					rect.z = b.y - a.y;
-				} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
-					rect.x = b.x;
-					rect.y = a.y;
-					rect.w = a.x - b.x;
-					rect.z = b.y - a.y;
-				} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
-					rect.x = a.x;
-					rect.y = b.y;
-					rect.w = b.x - a.x;
-					rect.z = a.y - b.y;
-				} else {
-					rect.x = b.x;
-					rect.y = b.y;
-					rect.w = a.x - b.x;
-					rect.z = a.y - b.y;
-				}
-				var select = this.__selectrect || this.find('selectorrect');
-				if (select) {
-					select.closeOverlay();
-					this.__selectrect = undefined;
-				}
-
-				var selection = this.screen.childrenInRect(rect, [select]);
-				var watch = [];
-				for (var i=0;i<selection.length;i++) {
-					var selected = selection[i];
-					if (selected !== this && this.testView(selected) && this.toolselect !== false) {
-						var astpath = JSON.stringify(this.ASTNodePath(selected));
-						watch.push(astpath);
+						parent.args.splice(index, 1);
+						commit = true;
 					}
 				}
-				this.watch = watch;
 			}
-
 			if (commit) {
 				this.ensureDeps();
 				this.screen.composition.commitAST();
 			}
+		}
+	};
 
-			this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
-		}.bind(this);
-
-		this.screen.globalpointerhover = function(ev) {
-			if (!this.visible) {
-				return;
-			}
-
-			var text = ev.view.constructor.name;
-			if (ev.view.name) {
-				text = ev.view.name + " (" + text + ")"
-			}
-
-			var pointers = ev.pointers;
-			if (!pointers && ev.pointer) {
-				pointers = [ev.pointer];
-			}
-
-			for (var i=0;i<pointers.length;i++) {
-				var pointer = pointers[i];
-
-				var pos = ev.view.globalToLocal(pointer.position);
-
-				if (this.__ruler && this.__ruler.target) {
-					this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
-				}
-
-
-				text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
-				text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
-
-				this.find("current").text = text;
-
-				this.edgeCursor(ev)
-			}
-
-			if (this.__selectrect) {
-				var m = this.__selectrect;
-				this.__selectrect = undefined;
-				m.closeOverlay();
-			}
-
-		}.bind(this);
-
-		this.screen.globalkeydown = function(ev) {
-			if (ev.code === 84 && ev.ctrl && ev.shift) {
-				this.setASTObjectProperty(this, "visible", !this.visible);
-				this.ensureDeps();
-				this.screen.composition.commitAST();
-				return;
-			}
-			if (!this.visible) {
-				return;
-			}
-
-			if (ev.code === 8 && this.selection) {
-				var commit = false;
-				var multi = this.selection.length > 1;
-				for (var i=this.selection.length - 1; i>=0; i--) {
-					var v = this.selection[i];
-					var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
-
-					if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
-						var parent = v.parent.ASTNode();
-						var node = v.ASTNode();
-						var index = parent.args.indexOf(node);
-						if (index >= 0) {
-							parent.args.splice(index, 1);
-							commit = true;
-						}
-					}
-				}
-				if (commit) {
-					this.ensureDeps();
-					this.screen.composition.commitAST();
-				}
-			}
-		}.bind(this);
+	this.init = function () {
+		this.ensureDeps();
+		this.screen.globalpointerstart = this.globalpointerstart.bind(this);
+		this.screen.globalpointermove = this.globalpointermove.bind(this);
+		this.screen.globalpointerend = this.globalpointerend.bind(this);
+		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
+		this.screen.globalkeydown = this.globalkeydown.bind(this);
 	};
 
 	this.ensureDeps = function() {
@@ -869,30 +874,21 @@ define.class("$ui/view", function(require,
 				items:this.components,
 
 				dropTest:function(ev, v, item, orig, dv) {
-					//var name = v && v.name ? v.name : "unknown";
-					//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
 					return v !== this && this.testView(v);
 				}.bind(this),
 
 				drop:function(ev, v, item, orig, dv) {
-					var name = v && v.name ? v.name : "unknown";
-//					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
-
 					if (v) {
 						var node = v.ASTNode();
 						if (node) {
 
 							if (item.behaviors) {
-								console.log('Dropped behavior ', item, 'onto node:', node);
 								for (var o in item.behaviors) {
-									console.log('o', o)
 									if (item.behaviors.hasOwnProperty(o)) {
 										var behave = item.behaviors[o];
 										this.setASTObjectProperty(v, o, behave);
 									}
 								}
-								console.log('here', v.ASTNode())
-								//TODO store these into the ast, make sure prop viewer can see them w/code viewer?)
 							}
 
 							if (item.classname && item.params) {
@@ -903,7 +899,6 @@ define.class("$ui/view", function(require,
 								params.position = 'absolute';
 								params.x = pos.x;
 								params.y = pos.y;
-//								console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);
 								var obj = item.classname + "(" + ")";
 								var astobj = this.createASTNode(obj, true);
 								var astparams = this.createASTNode(params);
@@ -915,7 +910,7 @@ define.class("$ui/view", function(require,
 							this.ensureDeps();
 							this.screen.composition.commitAST();
 
-							//TODO set propviewer to inspect new object on reload?
+							//TODO(mason) set propviewer to inspect new object on reload?
 
 
 						}
