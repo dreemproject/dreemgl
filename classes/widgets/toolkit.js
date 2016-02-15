@@ -438,18 +438,18 @@ define.class("$ui/view", function(require,
 			var nx = pos.x - this.__startpos.x;
 			var dx = Math.abs(evview.x - this.__originalpos.x);
 			if (dx > 0.5) {
-				this.setASTObjectProperty(evview, "x", nx);
+//				this.setASTObjectProperty(evview, "x", nx);
 				commit = true;
 			}
 
 			var ny = pos.y - this.__startpos.y;
 			var dy = Math.abs(ny - this.__originalpos.y);
 			if (dy > 0.5) {
-				this.setASTObjectProperty(evview, "y", ny);
+//				this.setASTObjectProperty(evview, "y", ny);
 				commit = true;
 			}
 
-			if (this.groupdrag && this.selection) {
+			if (this.selection) {
 				for (var i=0;i<this.selection.length;i++) {
 					var selected = this.selection[i];
 					if (this.testView(selected) && selected.toolmove !== false) {
