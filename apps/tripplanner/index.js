@@ -2,6 +2,8 @@ define.class('$server/composition', function (require, $ui$, screen, view, label
 	this.render = function(){
 		return [
 			planner({name: "planner"}),
+			// Default screen receives Results to diplay on map
+			// Default screen receives agenda to diplay on timeline
 			screen({
 				name: "default",
 				init: function () {
@@ -18,8 +20,16 @@ define.class('$server/composition', function (require, $ui$, screen, view, label
 			},[
 				// TODO: map and timeline go here
 			]),
+			// Tablet screen receives Results to diplay on map
+			// Tablet screen receives ChosenResultsInView to perform commit to agenda
+			// Tablet screen sets the agenda
+			// Tablet screen sets view bounds
 			screen({
 				name: "tablet",
+				updateresults: function (results) {
+					console.log('Results updated on tablet:', results)
+					// TODO: show results in the map
+				},
 				updatechosenresultsinview: function (results) {
 					console.log('ChosenResultsInView updated on tablet:', results)
 					// TODO: show results in the map
@@ -27,6 +37,7 @@ define.class('$server/composition', function (require, $ui$, screen, view, label
 			}, [
 				// TODO: map, timeline and ChosenResultsInView list go here
 			]),
+			// Phone screen recieves ResultsInView and performs voting on those items.
 			screen({
 				name: "phone",
 				updateresultsinview: function (results) {
