@@ -62,7 +62,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		this.setCenterLatLng = function(lat, lng, zoom, time){
 			time = time?time:0
-
+			if (zoom > geo.default_max_zoom) zoom = geo.default_max_zoom;
 			if (time >0){
 				var anim = {}
 				anim[time] = {motion:"inoutquad", value:vec2(lat,lng)};
@@ -97,7 +97,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.zoomTo = function(newz, time){
-			time = time? time:0;
+		if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
+			
+		time = time? time:0;
 			if (time >0)
 			{
 				var anim = {}
@@ -451,7 +453,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 //			latlong[1] += this.startcenter[1];
 //console.log("tap to: ", meters, latlong);
 console.log(ev);
-			this.mapdata.setCenterLatLng(latlong[0], latlong[1] ,this.mapdata.zoomlevel, 1);
+var zoomoffs = 0;
+if (ev.clicker == 2) zoomoffs ++;
+			this.mapdata.setCenterLatLng(latlong[0], latlong[1] ,this.mapdata.zoomlevel + zoomoffs, 1);
 
 			
 			
