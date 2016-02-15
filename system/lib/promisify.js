@@ -9,7 +9,7 @@ define(function(){
 	function promisify(call){
 		return function(){
 			var arg = Array.prototype.slice.call(arguments)
-			return new Promise(function(resolve, reject){
+			return new define.Promise(function(resolve, reject){
 				arg.push(function(err, result){
 					if(err) reject(err)
 					else resolve(result)
@@ -20,7 +20,7 @@ define(function(){
 	}
 
 	promisify.timeout = function(time){
-		return new Promise(function(resolve){
+		return new define.Promise(function(resolve){
 			setTimeout(function(){
 				resolve(time)
 			}, time)

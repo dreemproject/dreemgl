@@ -10,7 +10,7 @@ define(function(){
 		var ret = function(){
 			var iter = generator.apply(this, arguments)
 
-			return new Promise(function(resolve, reject){
+			return new define.Promise(function(resolve, reject){
 				function error(e){ reject(e) }
 				function next(value){
 					var iterval = iter.next(value)
