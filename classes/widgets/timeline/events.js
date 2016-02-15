@@ -82,7 +82,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 		}
 		this.color = function(){
 			PickGuid = mesh.id
-			if (view.hoverid === mesh.id){
+			if (view.hoverid == mesh.id){
 				return vec4(0, 1, 0, 1)
 			}
 			return vec4(0.5, 0.5, 0.5, 1)

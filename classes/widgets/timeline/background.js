@@ -10,7 +10,7 @@ define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 	this.attributes = {
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 		scroll: wire('this.parent.scroll'),
-		hoursegs: Config({type: Number, value: 24}),
+		hoursegs: Config({type: Number, value: 24})
 		//TODO(aki): why this breaks shader
 		// value: Config({type: Number, value: wire('this.parent.scroll')})
 		// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})
