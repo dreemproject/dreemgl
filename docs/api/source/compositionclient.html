@@ -398,6 +398,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n244" name="n244">244</a>
 <a href="#n245" name="n245">245</a>
 <a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
+<a href="#n248" name="n248">248</a>
+<a href="#n249" name="n249">249</a>
+<strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -411,7 +417,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="keyword">var</span> RpcHub = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/rpchub</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> screen = require(<span class="string"><span class="delimiter">'</span><span class="content">$ui/screen</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">./render</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> ASToolkit = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/astoolkit</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> ASTScanner = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/astscanner</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> OneJSParser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(previous, parent){
                 <span class="local-variable">this</span>.parent = parent
@@ -626,12 +633,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 console.log.apply(console, args)
         }
 
+        <span class="keyword">var</span> onejsparser = <span class="keyword">new</span> OneJSParser();
         <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> <span class="local-variable">this</span>.ast;
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>._ast) {
+                        <span class="keyword">var</span> source = <span class="local-variable">this</span>.constructor.module.factory.body.toString();
+                        <span class="local-variable">this</span>._ast = onejsparser.parse(source);
+                }
+                <span class="keyword">return</span> <span class="local-variable">this</span>._ast;
         };
 
         <span class="local-variable">this</span>.<span class="function">commitAST</span> = <span class="keyword">function</span> () {
-                <span class="keyword">var</span> source =  <span class="keyword">new</span> ASToolkit(<span class="local-variable">this</span>.ast).toSource();
+                <span class="keyword">var</span> source =  <span class="keyword">new</span> ASTScanner(<span class="local-variable">this</span>.ASTNode()).toSource();
 
                 <span class="comment">//console.log(&quot;[COMMIT]&quot;, source);</span>
 

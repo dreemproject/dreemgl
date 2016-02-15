@@ -339,8 +339,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
-	mx/=2;
-	my/=2;
+		mx/=2;
+		my/=2;
 		var ray_nds  = vec3(mx,my,1);
 		var ray_clip = vec4(ray_nds.x, ray_nds.y, -1.0,1.0);
 
@@ -366,6 +366,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		var R = vec3.intersectplane(camerapos, end, vec3(0,1,0), 0)
 		if (!R) return null;
+		
 		var M = this.find("MARKER");
 		if (M){
 			M.pos = vec3(R[0],R[1]-200,R[2]);
@@ -374,7 +375,6 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		return R;
 	}
 
-	this.dragging = false;
 	this.startvect = vec2(0);
 
 	this.startDrag = function(ev){
@@ -582,7 +582,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.position = function(){
 
 				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-				pos = vec2(1,-1)*mesh.xy;// + (idxpos - view.tiletrans)* view.tilesize  ;
+				pos = vec2(1,-1)*mesh.pos.xy;// + (idxpos - view.tiletrans)* view.tilesize  ;
 				//pos.xy *= (view.meterspertile/view.tilesize);
 
 				pos.xy -= (((( view.centerpos- view.centermeter)) / view.meterspertile)*1024.0) * vec2(-1.0,1.0);
@@ -625,11 +625,12 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 			this.color = function(){
 				//return "blue";
+				PickGuid = mesh.pos.z
 				var col =  vec4(0,0,0.6,0.1);
 
 				var noise = noise.cheapnoise(pos*0.02)*0.07+0.5;
 
-				var texcol = pal.pal2(mesh.z +  noise );
+				var texcol = mesh.color1;
 
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 				//prefog.a *=0.9;

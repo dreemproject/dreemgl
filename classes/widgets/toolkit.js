@@ -6,7 +6,7 @@
 define.class("$ui/view", function(require,
 								  $ui$, view, label, icon, treeview, button, statebutton,
 								  $widgets$, palette, propviewer,
-                                  $system$parse$, astoolkit, onejsparser){
+                                  $system$parse$, astscanner, onejsparser){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
 
@@ -159,7 +159,7 @@ define.class("$ui/view", function(require,
 			for (var i=0;i< v.length;i++) {
 				var node = this.screen.ASTNode();
 				var astpath = JSON.parse(v[i]);
-				var search = new astoolkit(node, astpath).at;
+				var search = new astscanner(node, astpath).at;
 				var find = function(a,b) {
 					if (a === b.ASTNode()) return b;
 					if (b.children) {
@@ -655,7 +655,7 @@ define.class("$ui/view", function(require,
 		var at = "";
 		var arglist = [];
 		var plist = {};
-		var main = new astoolkit(this.screen.composition.ASTNode(), {type:"Function"}).at;
+		var main = new astscanner(this.screen.composition.ASTNode(), {type:"Function"}).at;
 		//console.log('AST', main);
 		if (main && main.params) {
 			for (var i=0;i<main.params.length;i++) {
@@ -1043,7 +1043,7 @@ define.class("$ui/view", function(require,
 
 					if (v) {
 						var astpath = JSON.parse(v);
-						var search = new astoolkit(node, astpath).at;
+						var search = new astscanner(node, astpath).at;
 						var find = function(a,b) {
 							if (a === b.ASTNode()) return b;
 							if (b.children) {
@@ -1111,7 +1111,7 @@ define.class("$ui/view", function(require,
 
 		var ast = v.ASTNode();
 
-		var astkey = new astoolkit(ast, [{type:"Object"}, {type:"Id", name:name}]);
+		var astkey = new astscanner(ast, [{type:"Object"}, {type:"Id", name:name}]);
 
 		var at = astkey.at;
 

@@ -11,7 +11,7 @@ define.class(function(require, $server$, service){
 	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 
-	this.ignoreuse = {}
+	//this.ignoreuse = {}
 	this.ignoreuse = {
 		allotments:true,
 		apron:true,
@@ -31,20 +31,41 @@ define.class(function(require, $server$, service){
 		meadow:false, nature_reserve:false, park:false, parking:true,
 		pedestrian:true,
 		pitch:true,
+		national_park:true,
 		place_of_worship:true, playground:true, quarry:true, railway:true, recreation_ground:false, residential:false, retail:true,
-		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true};
+		riverbank:true,reservoir:true,
+		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true};
 
+	var watercolor = vec4("#8080f0");
+	
 	var mapstyle = this.mapstyle = {
 		ferry:{
 			roadcolor: vec4(0.6784313917160034,0.8470588326454163,0.9019607901573181,1),
 		},
+		riverbank:{color1:watercolor},
+		marina:{color1:watercolor},
+		reservoir:{color1:watercolor},
+		stream:{color1:watercolor},
+		canal:{color1:watercolor},
+		lake:{color1:watercolor},
+		playa:{color1:vec4("#f0f0c0")},
+		river:{color1:watercolor},
+		basin:{color1:watercolor},
+		swimming_pool:{color1:watercolor},
+		sea:{
+			color1:watercolor
+		},
+		ocean:{
+			color1:watercolor
+		},
+		
 		earth:{
 			offset:10,
 			color1: vec4("#4a644a"),
 			color2: vec4("#38523d"),
 		},
 		national_park:{
-			color1:0.22,
+			color1:vec4("lime"),
 			color2:0.22
 		},
 		park:{
@@ -97,8 +118,7 @@ define.class(function(require, $server$, service){
 		},
 		grass:{
 			offset:-18,
-			color1: 0.1,
-			color2: 0.12,
+			color1:vec4("lightgreen"),
 		},
 		sports_centre:{
 			offset:-23,
@@ -166,7 +186,7 @@ define.class(function(require, $server$, service){
 		},
 		playground:{
 			offset:-19,
-			color1: 0.15,
+			color1: vec4("lightblue"),
 			color2: vec4(1,0,0,1),
 		},
 		stadium:{
@@ -255,12 +275,12 @@ define.class(function(require, $server$, service){
 		},
 		breakwater:{
 			offset:-20,
-			color1: 0,
+			color1: watercolor,
 			color2: 0,
 		},
 		water:{
 			offset:0,
-			color1:0,
+			color1: watercolor,
 			color2: 0,
 		},
 		building:{
@@ -299,7 +319,7 @@ define.class(function(require, $server$, service){
 		},
 		default:
 		{
-			color1:vec4('white'),
+			color1:vec4('red'),
 			color2:vec4('blue')
 		}
 	}
@@ -308,14 +328,9 @@ define.class(function(require, $server$, service){
 
 	for (var a in this.mapstyle){
 		var st = this.mapstyle[a];
-		if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
-		if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
-		if(typeof st.color1 == "object"){
-			st.color1 = st.color1[0];
-			if(st.color1 <= 0) {
-				st.color1 = 0.8 ;
-			}
-		};
+	//	if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
+	//	if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
+	
 	}}
 
 	this.dumpkindset = function(){
@@ -354,14 +369,13 @@ define.class(function(require, $server$, service){
 		//linewidth:float,
 	})
 
-	var LandVertexStruct = this.LandVertexStruct = vec4
-	//define.struct({
-	//	pos:vec3,
-	//	color1:vec2,
+	var LandVertexStruct = this.LandVertexStruct =	define.struct({
+			pos:vec3,
+			color1:vec4,
 		//color1:vec4,
 		//color2:vec4,
-	//	id: float
-	//})
+			//id: float
+	})
 
 	function arcToFlatVertices(arc, flatverts){
 		if (!arc) return []
@@ -501,12 +515,13 @@ define.class(function(require, $server$, service){
 			var off = 0;
 			var land = areas[i];
 
-			var color1 = 0;
-			var color2 = 0;
+			var color1 = vec4(1,1,0,1);;
+			//var color2 = ;
 			var t = mapstyle[land.kind];
-			if (!t) t = mapstyle["default"];
+			if (!t) {t = mapstyle["default"];console.log(land.kind);};
+			
 			if (t.color1) color1 = t.color1;else UnhandledKindSet[land.kind] = "land - no color1";
-			if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = "land - no color2 ";
+			//if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = "land - no color2 ";
 			if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = "land - no offset"
 
 			if (land.arcs){
@@ -521,16 +536,20 @@ define.class(function(require, $server$, service){
 			if (land.polygons){
 
 				var array = mesh.array
-				var o = mesh.length * 4
+				var o = mesh.length * 7
 
 				for(var j = 0;j<land.polygons.length;j++){
 					var poly = land.polygons[j];
 					var tris = poly.tris
-					for(var a = 0; a < tris.length; a += 2, o += 4){
+					for(var a = 0; a < tris.length; a += 2, o += 7){
 						array[o + 0] = tris[a]
 						array[o + 1] = tris[a + 1]
+						array[o + 2] = i
 						//array[o + 2] = off
-						array[o + 2] = color1
+						array[o + 3] = color1[0]
+						array[o + 4] = color1[1]
+						array[o + 5] = color1[2]
+						array[o + 6] = color1[3]
 						//array[o + 4] = color1[1]
 						//array[o + 5] = color1[2]
 						//array[o + 6] = color1[3]
@@ -538,7 +557,6 @@ define.class(function(require, $server$, service){
 						//array[o + 8] = color2[1]
 						//array[o + 9] = color2[2]
 						//array[o + 10] = color2[3]
-						array[o + 3] = i
 						mesh.length ++
 					}
 				}

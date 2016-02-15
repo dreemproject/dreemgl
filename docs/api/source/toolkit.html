@@ -1510,6 +1510,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1356" name="n1356">1356</a>
 <a href="#n1357" name="n1357">1357</a>
 <a href="#n1358" name="n1358">1358</a>
+<a href="#n1359" name="n1359">1359</a>
+<strong><a href="#n1360" name="n1360">1360</a></strong>
+<a href="#n1361" name="n1361">1361</a>
+<a href="#n1362" name="n1362">1362</a>
+<a href="#n1363" name="n1363">1363</a>
+<a href="#n1364" name="n1364">1364</a>
+<a href="#n1365" name="n1365">1365</a>
+<a href="#n1366" name="n1366">1366</a>
+<a href="#n1367" name="n1367">1367</a>
+<a href="#n1368" name="n1368">1368</a>
+<a href="#n1369" name="n1369">1369</a>
+<strong><a href="#n1370" name="n1370">1370</a></strong>
+<a href="#n1371" name="n1371">1371</a>
+<a href="#n1372" name="n1372">1372</a>
+<a href="#n1373" name="n1373">1373</a>
+<a href="#n1374" name="n1374">1374</a>
+<a href="#n1375" name="n1375">1375</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1519,7 +1536,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,
                                                                   <span class="predefined">$ui$</span>, view, label, icon, treeview, button, statebutton,
                                                                   <span class="predefined">$widgets$</span>, palette, propviewer,
-                                  <span class="predefined">$system$parse$</span>, astoolkit, onejsparser){
+                                  <span class="predefined">$system$parse$</span>, astscanner, onejsparser){
 
 <span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion</span>
 
@@ -1672,7 +1689,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt; v.length;i++) {
                                 <span class="keyword">var</span> node = <span class="local-variable">this</span>.screen.ASTNode();
                                 <span class="keyword">var</span> astpath = JSON.parse(v[i]);
-                                <span class="keyword">var</span> search = <span class="keyword">new</span> astoolkit(node, astpath).at;
+                                <span class="keyword">var</span> search = <span class="keyword">new</span> astscanner(node, astpath).at;
                                 <span class="keyword">var</span> <span class="function">find</span> = <span class="keyword">function</span>(a,b) {
                                         <span class="keyword">if</span> (a === b.ASTNode()) <span class="keyword">return</span> b;
                                         <span class="keyword">if</span> (b.children) {
@@ -1897,6 +1914,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.__lastpick = ev.pointer.pick;
 
                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startrect) {
+
+                                <span class="comment">//resize</span>
 
                                 <span class="keyword">var</span> select = <span class="local-variable">this</span>.__selectrect || <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
                                 <span class="keyword">if</span> (!select) {
@@ -2142,7 +2161,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> multi = <span class="local-variable">this</span>.selection.length &gt; <span class="integer">1</span>;
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="local-variable">this</span>.selection.length - <span class="integer">1</span>; i&gt;=<span class="integer">0</span>; i--) {
                                         <span class="keyword">var</span> v = <span class="local-variable">this</span>.selection[i];
-                                        <span class="keyword">if</span> ((multi || v.focus) &amp;&amp; <span class="local-variable">this</span>.testView(v) &amp;&amp; v.toolremove !== <span class="predefined-constant">false</span>) {
+                                        <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span>;
+
+                                        <span class="keyword">if</span> ((multi || candelete) &amp;&amp; <span class="local-variable">this</span>.testView(v) &amp;&amp; v.toolremove !== <span class="predefined-constant">false</span>) {
                                                 <span class="keyword">var</span> parent = v.parent.ASTNode();
                                                 <span class="keyword">var</span> node = v.ASTNode();
                                                 <span class="keyword">var</span> index = parent.args.indexOf(node);
@@ -2164,7 +2185,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> at = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
                 <span class="keyword">var</span> arglist = [];
                 <span class="keyword">var</span> plist = {};
-                <span class="keyword">var</span> main = <span class="keyword">new</span> astoolkit(<span class="local-variable">this</span>.screen.composition.ast, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Function</span><span class="delimiter">&quot;</span></span>}).at;
+                <span class="keyword">var</span> main = <span class="keyword">new</span> astscanner(<span class="local-variable">this</span>.screen.composition.ASTNode(), {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Function</span><span class="delimiter">&quot;</span></span>}).at;
                 <span class="comment">//console.log('AST', main);</span>
                 <span class="keyword">if</span> (main &amp;&amp; main.params) {
                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;main.params.length;i++) {
@@ -2536,7 +2557,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }.bind(<span class="local-variable">this</span>),
                                 <span class="function">ontarget</span>:<span class="keyword">function</span>(ev,v,o) {
                                         <span class="keyword">if</span> (v) {
-                                                v.focus = <span class="predefined-constant">true</span>;
+
                                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
                                                         <span class="local-variable">this</span>.__ruler.closeOverlay();
                                                 }
@@ -2552,7 +2573,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                         <span class="keyword">if</span> (v) {
                                                 <span class="keyword">var</span> astpath = JSON.parse(v);
-                                                <span class="keyword">var</span> search = <span class="keyword">new</span> astoolkit(node, astpath).at;
+                                                <span class="keyword">var</span> search = <span class="keyword">new</span> astscanner(node, astpath).at;
                                                 <span class="keyword">var</span> <span class="function">find</span> = <span class="keyword">function</span>(a,b) {
                                                         <span class="keyword">if</span> (a === b.ASTNode()) <span class="keyword">return</span> b;
                                                         <span class="keyword">if</span> (b.children) {
@@ -2598,7 +2619,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.__parser) {
                         <span class="local-variable">this</span>.__parser = <span class="keyword">new</span> onejsparser();
                 }
-                <span class="keyword">var</span> string = raw ? v : JSON.stringify(v)
+                <span class="keyword">var</span> string = raw ? v : JSON.stringify(v);
                 <span class="comment">// Need to remove the &quot;key&quot; quotes or else will create wrong type of key objects</span>
                 string = string.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">&quot;([a-zA-Z0-9_$]+)&quot;:</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$1:</span><span class="delimiter">&quot;</span></span>);
 
@@ -2620,7 +2641,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> ast = v.ASTNode();
 
-                <span class="keyword">var</span> astkey = <span class="keyword">new</span> astoolkit(ast, [{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>}, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:name}]);
+                <span class="keyword">var</span> astkey = <span class="keyword">new</span> astscanner(ast, [{<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>}, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:name}]);
 
                 <span class="keyword">var</span> at = astkey.at;
 
@@ -2748,6 +2769,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         y = y + p.y;
                                 }
                                 <span class="local-variable">this</span>.pos = vec3(x, y, v.z);
+                        }.bind(<span class="local-variable">this</span>);
+
+                        v.<span class="function">onfontsize</span> = <span class="keyword">function</span>(ev,fs,o) {
+                                <span class="keyword">var</span> v = o.layout;
+                                <span class="local-variable">this</span>.size = vec3(v.width + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], v.height + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], <span class="integer">0</span>)
+                                <span class="keyword">var</span> x = v.left - (<span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>] + <span class="local-variable">this</span>.borderwidth[<span class="integer">1</span>]) / <span class="float">2.0</span>;
+                                <span class="keyword">var</span> y = v.top - (<span class="local-variable">this</span>.borderwidth[<span class="integer">2</span>] + <span class="local-variable">this</span>.borderwidth[<span class="integer">3</span>]) / <span class="float">2.0</span>;
+                                <span class="keyword">var</span> p = o;
+                                <span class="keyword">while</span> (p = p.parent) {
+                                        x = x + p.x;
+                                        y = y + p.y;
+                                }
+                                <span class="local-variable">this</span>.pos = vec3(x, y, <span class="integer">0</span>);
                         }.bind(<span class="local-variable">this</span>);
 
                         v.<span class="function">onrotate</span> = <span class="keyword">function</span>(ev,v,o) {

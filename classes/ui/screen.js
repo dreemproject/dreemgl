@@ -8,7 +8,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 
 	var Render = require('$system/base/render')
 	var Animate = require('$system/base/animate')
-	var ASToolkit = require('$system/parse/astoolkit')
+	var ASTScanner = require('$system/parse/astscanner')
 
 	this.attributes = {
 		// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments
@@ -549,7 +549,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			if (typeof(this.__constructorIndex) !== "undefined") {
 				this._cachednode = past.args[this.__constructorIndex];
 			} else {
-				this._cachednode = new ASToolkit(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
+				this._cachednode = new ASTScanner(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
 			}
 		}
 		return this._cachednode;

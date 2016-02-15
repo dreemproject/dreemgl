@@ -10,7 +10,7 @@ define.class('./compositionbase', function(require, baseclass){
 	var RpcHub = require('$system/rpc/rpchub')
 	var screen = require('$ui/screen')
 	var Render = require('./render')
-	var ASToolkit = require('$system/parse/astoolkit')
+	var ASTScanner = require('$system/parse/astscanner')
 	var OneJSParser = require('$system/parse/onejsparser')
 
 	this.atConstructor = function(previous, parent){
@@ -236,7 +236,7 @@ define.class('./compositionbase', function(require, baseclass){
 	};
 
 	this.commitAST = function () {
-		var source =  new ASToolkit(this.ASTNode()).toSource();
+		var source =  new ASTScanner(this.ASTNode()).toSource();
 
 		//console.log("[COMMIT]", source);
 
