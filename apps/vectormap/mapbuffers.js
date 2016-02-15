@@ -370,7 +370,7 @@ define.class(function(require, $server$, service){
 	})
 
 	var LandVertexStruct = this.LandVertexStruct =	define.struct({
-			pos:vec3,
+			pos:vec4,
 			color1:vec4,
 		//color1:vec4,
 		//color2:vec4,
@@ -536,20 +536,22 @@ define.class(function(require, $server$, service){
 			if (land.polygons){
 
 				var array = mesh.array
-				var o = mesh.length * 7
+				var o = mesh.length * 8
 
 				for(var j = 0;j<land.polygons.length;j++){
 					var poly = land.polygons[j];
 					var tris = poly.tris
-					for(var a = 0; a < tris.length; a += 2, o += 7){
+					for(var a = 0; a < tris.length; a += 2, o += 8){
 						array[o + 0] = tris[a]
 						array[o + 1] = tris[a + 1]
 						array[o + 2] = i
+						array[o + 3] = 0
+						
 						//array[o + 2] = off
-						array[o + 3] = color1[0]
-						array[o + 4] = color1[1]
-						array[o + 5] = color1[2]
-						array[o + 6] = color1[3]
+						array[o + 4] = color1[0]
+						array[o + 5] = color1[1]
+						array[o + 6] = color1[2]
+						array[o + 7] = color1[3]
 						//array[o + 4] = color1[1]
 						//array[o + 5] = color1[2]
 						//array[o + 6] = color1[3]
