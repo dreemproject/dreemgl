@@ -31,7 +31,7 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 		this._stages = astpath;
 		this.reset();
 		if (this._stages) {
-			this.search()
+			this.scan()
 		}
 	};
 
@@ -44,7 +44,7 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 		return this;
 	};
 
-	this.search = function() {
+	this.scan = function() {
 		while (this._prepare()) {
 			this.walk(this.at);
 		}
@@ -98,7 +98,7 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 						this.atindex = index;
 						this.atstate = state;
 						this.at = node;
-						this.search();
+						this.scan();
 					}
 
 				}.bind(this);
