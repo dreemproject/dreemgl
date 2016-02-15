@@ -634,7 +634,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 				//prefog.a *=0.9;
-				prefog.a *= view.layeroffset  - view.fraczoom
+				prefog.a *= max(0.0, min(1.0, view.layeroffset  - view.fraczoom))
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
