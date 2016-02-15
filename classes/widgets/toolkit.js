@@ -333,18 +333,18 @@ define.class("$ui/view", function(require,
 			this.screen.pointer.cursor = "move";
 			ev.view.cursor = "move";
 
-			var pos = ev.pointer.position;
+//			var pos = ev.pointer.position;
 
 			if (dragview.parent) {
 				if (dragview.position != "absolute") {
 					dragview.position = "absolute";
 				}
-				pos = dragview.parent.globalToLocal(ev.pointer.position)
+//				pos = dragview.parent.globalToLocal(ev.pointer.position)
 			}
 
-			dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
+//			dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
 
-			if (this.groupdrag && this.selection) {
+			if (this.selection) {
 				for (var i=0;i<this.selection.length;i++) {
 					var selected = this.selection[i];
 					selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
