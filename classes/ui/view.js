@@ -267,18 +267,6 @@ define.class('$system/base/node', function(require){
 		// tabstop, sorted by number
 		tabstop: NaN,
 
-		opaque: Config({value:false}),
-		onopaque:function(ev,v,o) {
-			if (v) {
-				this.hardrect = {pickonly:true}
-				if (!this.bgcolor || isNaN(this.bgcolor) || this.bgcolor === "transparent") {
-					this.bgcolor = "white";
-				}
-			} else if (this.hardrect && this.hardrect.pickonly) {
-				this.hardrect.pickonly = false;
-			}
-		},
-
 		cursor: Config({type:Enum(
 			'', 'arrow', 'none','wait','text','pointer',
 			'zoom-in','zoom-out','grab','grabbing',
@@ -583,11 +571,11 @@ define.class('$system/base/node', function(require){
 	this.sortShaders = function(){
 		var shaders = this.shaders
 		this.shader_draw_list = this.shader_list.slice(0).sort(function(a, b){
-			return shaders[a.shadername].draworder > this[b.shadername].draworder
+			return shaders[a.shadername].draworder > shaders[b.shadername].draworder
 		}.bind(this))
 
 		this.shader_update_list = this.shader_list.slice(0).sort(function(a, b){
-			return shaders[a.shadername].updateorder > this[b.shadername].updateorder
+			return shaders[a.shadername].updateorder > shaders[b.shadername].updateorder
 		}.bind(this))
 		//console.log(this.shader_draw_list)
 	}
@@ -1429,7 +1417,7 @@ define.class('$system/base/node', function(require){
 	// rounded rect shader class
 	define.class(this, 'shadowrect', this.Shader, function(){
 		this.updateorder = 0
-		this.draworder = 0
+
 		this.vertexstruct = define.struct({
 			pos: vec2,
 			angle: float,
