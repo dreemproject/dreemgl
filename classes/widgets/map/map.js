@@ -1,7 +1,7 @@
 define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo, urlfetch, pointset)
 {
 
-	var BufferGen = require("./mapbuffers")();
+	var BufferGen = require("$widgets/map/mapbuffers")();
 	var geo = this.geo = geo();
 
 	this.attributes = {
@@ -175,7 +175,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		var worker = define.class('$system/rpc/worker', function(require){
-			this.BufferGen = require("$apps/vectormap/mapbuffers")();
+			this.BufferGen = require("$widgets/map/mapbuffers")();
 
 			this.build = function(str, r){
 				var ret = vec2.array(10)

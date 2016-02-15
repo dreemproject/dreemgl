@@ -1,6 +1,6 @@
 define.class(function(require, $server$, service){
 
-	var BufferGen = require("./mapbuffers")();
+	var BufferGen = require("$widgets/map/mapbuffers")();
 
 	this.generatebuffer = function(targetfile, datastring){
 		try{
@@ -22,10 +22,13 @@ define.class(function(require, $server$, service){
 
 		var nodehttp = require('$system/server/nodehttp');
 		var fs = require('fs');
-		var cachedname = define.expandVariables(define.classPath(this) + "tilecache/" + x +"_"+y+"_" + z+".json");
-		var cachedbuffername = define.expandVariables(define.classPath(this) + "tilecache/BUFFER_" + x +"_"+y+"_" + z+".json");
+		try{
+			fs.mkdirSync(define.expandVariables(define.classPath(this) + "../../../cache/map/"));
+			
+		}catch(e){}
+		var cachedname = define.expandVariables(define.classPath(this) + "../../../cache/map/" + x +"_"+y+"_" + z+".json");
 
-		var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;
+		//var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;
 
 		if (fs.existsSync(cachedname)){
 			console.log("[Map] Cache:", x,y,z);
@@ -56,7 +59,7 @@ define.class(function(require, $server$, service){
 			}
 			catch(e){
 
-					console.log("Mapzen returned error:" , data, e);
+					console.log("Mapzen returned error:" , e);
 			}
 			P.resolve("{}");
 
