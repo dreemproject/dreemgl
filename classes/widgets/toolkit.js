@@ -373,7 +373,7 @@ define.class("$ui/view", function(require,
 				}
 
 				dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
-
+				
 				if (this.groupdrag && this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
@@ -384,6 +384,8 @@ define.class("$ui/view", function(require,
 				this.__lastpick = ev.pointer.pick;
 
 			} else if (this.__startrect) {
+
+				//resize
 
 				var select = this.__selectrect || this.find('selectorrect');
 				if (!select) {
@@ -629,7 +631,9 @@ define.class("$ui/view", function(require,
 				var multi = this.selection.length > 1;
 				for (var i=this.selection.length - 1; i>=0; i--) {
 					var v = this.selection[i];
-					if ((multi || v.focus) && this.testView(v) && v.toolremove !== false) {
+					var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+
+					if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
 						var parent = v.parent.ASTNode();
 						var node = v.ASTNode();
 						var index = parent.args.indexOf(node);
@@ -1023,7 +1027,7 @@ define.class("$ui/view", function(require,
 				}.bind(this),
 				ontarget:function(ev,v,o) {
 					if (v) {
-						v.focus = true;
+
 						if (this.__ruler) {
 							this.__ruler.closeOverlay();
 						}
@@ -1085,7 +1089,7 @@ define.class("$ui/view", function(require,
 		if (!this.__parser) {
 			this.__parser = new onejsparser();
 		}
-		var string = raw ? v : JSON.stringify(v)
+		var string = raw ? v : JSON.stringify(v);
 		// Need to remove the "key" quotes or else will create wrong type of key objects
 		string = string.replace(/"([a-zA-Z0-9_$]+)":/g, "$1:");
 

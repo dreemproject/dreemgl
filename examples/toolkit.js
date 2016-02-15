@@ -21,9 +21,12 @@ define.class("$server/composition",function(require, $ui$, icon, button, checkbo
 						toolmove:false, 
 						toolrect:false
 					},
-					view({height:399, width:452, bgcolor:vec4(0,0.501960813999176,0.29542306065559387,1), position:"absolute", x:59.99993896484375, y:38.000030517578125}),
-					view({height:382, width:362, bgcolor:"purple", position:"absolute", x:694, y:142.00003051757812},label({fontsize:74, opaque:true, fgcolor:vec4(0.1089630052447319,0.5584797263145447,0.7466379404067993,1), text:"0_o", position:"absolute", x:59.00006103515625, y:90})),
-					icon({fgcolor:vec4(0.4585062861442566,0.4850725829601288,0.6486908197402954,1), opaque:true, icon:"ge", fontsize:80, position:"absolute", x:576, y:134})
+					view({height:305, width:252, bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1), position:"absolute", x:174.99998474121094, y:226.00001525878906}),
+					icon({fgcolor:"cornflower", opaque:true, icon:"ge", fontsize:80, position:"absolute", x:723, y:141.00003051757812}),
+					icon({fgcolor:"cornflower", opaque:true, icon:"flask", fontsize:80, position:"absolute", x:752, y:374}),
+					icon({fgcolor:"cornflower", opaque:true, icon:"flask", fontsize:80, position:"absolute", x:555.9999694824219, y:298.0000305175781}),
+					view({height:310, width:244, bgcolor:"purple", position:"absolute", x:870, y:281}),
+					view({height:143, width:138, bgcolor:"purple", position:"absolute", x:451.9999694824219, y:153})
 				),
 				toolkit({
 					position:"absolute", 
