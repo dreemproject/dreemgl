@@ -956,20 +956,15 @@ define.class(function(require){
 		destroy:Config({type:Event})
 	};
 
-	this.ASTNodeFor = function(view) {
-		var ast = this.ASTNode();
-		if (ast) {
-			if (typeof(view.__constructorIndex) !== "undefined") {
-				return ast.args[view.__constructorIndex];
-			} else {
-				return new ASToolkit(ast, {type:"Call", fn:{ type:"Id", name:view.constructor.name }}).at;
-			}
-		}
-	};
-
 	this.ASTNode = function() {
 		if (!this._cachednode) {
-			this._cachednode = this.parent.ASTNodeFor(this);
+			var past = this.parent.ASTNode();
+
+			if (typeof(this.__constructorIndex) !== "undefined") {
+				this._cachednode = past.args[this.__constructorIndex];
+			} else {
+				this._cachednode = new ASToolkit(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
+			}
 		}
 		return this._cachednode;
 	};
