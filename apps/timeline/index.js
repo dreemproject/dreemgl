@@ -1,4 +1,4 @@
-define.class('$server/composition', function(timeline, $server$, service, $ui$, screen, view) {
+define.class('$server/composition', function($server$, service, $ui$, screen, view, $widgets$timeline$, timeline) {
 	this.render = function() {
 		return [
 			screen({name:'default'}, [
