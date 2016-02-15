@@ -9,17 +9,18 @@ define.class(function(require, exports){
 	var rpcproxy = require('./rpcproxy')
 
 	this.atConstructor = function(host){
-		this.host = host
+		this.__host = host
 	}
 
 	this.methodRpc = function(name, msg){
 		msg.rpcid = name
-		return this.host.callRpcMethod(msg)
+
+		return this.__host.callRpcMethod(msg)
 	}
 
 	this.attributeRpc = function(name, msg){
 		msg.rpcid = name
-		return this.host.setRpcAttribute(msg, null )
+		return this.__host.setRpcAttribute(msg, null )
 	}
 
 	// lets disconnect all listeners
@@ -33,11 +34,11 @@ define.class(function(require, exports){
 	}
 
 	exports.resolveReturn = this.resolveReturn = function(msg){
-		if(!this.promises) return
-		var promise = this.promises[msg.uid]
+		if(!this.__promises) return
+		var promise = this.__promises[msg.uid]
 		if(!promise) return console.log('Error resolving RPC promise id ' + msg.uid)
-		this.uid_free.push(msg.uid)
-		this.promises[msg.uid] = undefined
+		this.__uid_free.push(msg.uid)
+		this.__promises[msg.uid] = undefined
 		if(msg.error){
 			promise.reject(msg)
 		}
@@ -48,15 +49,15 @@ define.class(function(require, exports){
 
 	exports.allocPromise = this.allocPromise = function(){
 		var uid 
-		if(this.uid === undefined) this.uid = 0
-		if(!this.promises) this.promises = {}
-		if(!this.uid_free) this.uid_free = []
-		if(this.uid_free.length){
-			uid = this.uid_free.pop()
+		if(this.__uid === undefined) this.__uid = 0
+		if(!this.__promises) this.__promises = {}
+		if(!this.__uid_free) this.__uid_free = []
+		if(this.__uid_free.length){
+			uid = this.__uid_free.pop()
 		}
-		else uid = this.uid++
+		else uid = this.__uid++
 
-		if(this.uid > 500){
+		if(this.__uid > 500){
 			// TODO make a promise timeout cleanup
 			console.log('Warning, we have an RPC promise leak')
 			for(var i = 0;i<100;i++){
@@ -69,7 +70,7 @@ define.class(function(require, exports){
 		prom.resolve = resolve
 		prom.reject = reject
 		prom.uid = uid
-		this.promises[uid] = prom
+		this.__promises[uid] = prom
 
 		return prom
 	}
