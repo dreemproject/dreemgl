@@ -634,4 +634,16 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 		]
 
 	}
+	
+	var colorpicker = this.constructor
+	// Basic usage of the button.
+	this.constructor.examples = {
+		Usage:function(){
+			return [
+				colorpicker({width:300})
+			]
+		}
+	}
+	
+	
 })

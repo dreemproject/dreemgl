@@ -117,7 +117,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.addToQueue = function(x, y, z){
-			if (x < 0 || y< 0 || z< 0 || z>20) return;
+			if (x < 0 || y< 0 || z< 0 || z>geo.default_max_zoom) return;
 			var hash = createHash(x, y, z);
 			if (this.loadqueuehash[hash]) return; // already queued for load.
 			if (this.loadedblocks[hash]) return; // already loaded.
@@ -443,8 +443,19 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.host.moveDrag(ev);
 		}
 
-		this.pointertap = function(){
-			this.mapdata.setCenter(this.lastpos[0], this.lastpos[1], this.lastpos[2],1);
+		this.pointertap = function(ev){
+			
+			var meters = geo.metersForTile({x:this.lastpos[0], y:this.lastpos[1], z:this.lastpos[2]});
+			var latlong = geo.metersToLatLng(meters.x, meters.y);
+//			latlong[0] += this.startcenter[0];
+//			latlong[1] += this.startcenter[1];
+//console.log("tap to: ", meters, latlong);
+console.log(ev);
+			this.mapdata.setCenterLatLng(latlong[0], latlong[1] ,this.mapdata.zoomlevel, 1);
+
+			
+			
+			//this.mapdata.setCenter(this.lastpos[0], this.lastpos[1], this.mapdata.zoomlevel,1);
 		}
 
 		this.lastpos = vec2(0);
@@ -634,7 +645,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 				//prefog.a *=0.9;
-				prefog.a *= max(0.0, min(1.0, view.layeroffset  - view.fraczoom))
+				//prefog.a *= max(0.0, min(1.0, view.layeroffset  - view.fraczoom))
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
 				return mix(prefog, view.fog, zdist);
@@ -860,8 +871,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		// this.tilewidth = Math.ceil(this.layout.width/ div);
 		// this.tileheight = Math.ceil(this.layout.height/ div);;
 
-		for(var layer = 1;layer>=0;layer--){
-//for(var layer = 0;layer<2;layer++){
+		//for(var layer = 1;layer>=0;layer--){
+		for(var layer = 0;layer<2;layer++){
 
 			this.tilewidth = 0;// Math.pow(2, 0 + layer);
 			this.tileheight =0;//= Math.pow(2, 0 + layer);
@@ -909,7 +920,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				}
 			}
 		}
-		var dist = 8.5
+		var dist = 13.5
 		res.push(view({
 			flex: 1
 			,viewport: "3d"
@@ -947,4 +958,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		return res;
 	}
+	
+	
+	
+	
 })
