@@ -246,7 +246,7 @@ define.class('./compositionbase', function(require, baseclass){
 			type: 'method',
 			args:[source]
 		};
-		this.rpc.host.callRpcMethod(msg);
+		this.rpc.__host.callRpcMethod(msg);
 	};
 
 })

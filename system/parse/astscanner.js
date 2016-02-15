@@ -56,7 +56,7 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 			var type = this._stage.type;
 			this._stage = undefined;
 			if (type) {
-				this[type] = undefined;
+				delete this[type];
 			}
 		}
 	};
