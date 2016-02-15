@@ -1588,49 +1588,6 @@ define.class('$system/base/node', function(require){
 			&& r.z >= this._layout.height;
 	};
 
-	this.getASTPath = function() {
-		var local = {
-			type:this.constructor.name
-		};
-
-		var path = [local];
-		if (this.parent) {
-			local.childindex = this.parent.children.indexOf(this);
-			local.constructor_index = this.parent.constructor_children.indexOf(this);
-
-			if (this.parent.getASTPath) {
-				path = this.parent.getASTPath();
-				path.push(local);
-			}
-		}
-
-		return path;
-	};
-
-	this.getASTNode = function() {
-		var path = this.getASTPath();
-		path = path.filter(function(a){ return a.constructor_index != -1});
-		var node = this.screen.composition.ast;
-		for (var i=0;i<path.length;i++) {
-			var pathitem = path[i];
-			var search = {
-				type:"Call",
-				name:pathitem.type,
-				index:pathitem.childindex
-			};
-			node = this.screen.composition.seekASTNode(search, node);
-		}
-
-		return node;
-	};
-
-	this.seekASTNode = function(sought) {
-		var ast = this.getASTNode();
-		if (ast) {
-			return this.screen.composition.seekASTNode(sought, ast);
-		}
-	};
-
 	define.class(this, 'viewportblend', this.Shader, function(){
 		this.draworder = 10
 		this.updateorder = 10

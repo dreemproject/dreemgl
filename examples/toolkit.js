@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require, $ui$, checkbox, button, icon, label, view, screen, cadgrid, $widgets$, toolkit) {
+define.class("$server/composition",function(require, $ui$, icon, button, checkbox, label, view, screen, cadgrid, $widgets$, toolkit) {
 	
 	this.render = function() {
 		return [
@@ -21,17 +21,17 @@ define.class("$server/composition",function(require, $ui$, checkbox, button, ico
 						toolmove:false, 
 						toolrect:false
 					},
-					view({height:544, width:609, bgcolor:'purple', position:'absolute', x:43.000762939453125, y:98.00070190429688, borderradius:vec4(2,1,1,30)},view({height:240, width:249, bgcolor:vec4(0,0.24104894697666168,0.501960813999176,1), position:'absolute', x:264.0000915527344, y:100.99996948242188}),)
+					view({height:399, width:452, bgcolor:vec4(0,0.501960813999176,0.29542306065559387,1), position:"absolute", x:59.99993896484375, y:38.000030517578125}),
+					view({height:382, width:362, bgcolor:"purple", position:"absolute", x:694, y:142.00003051757812},label({fontsize:74, opaque:true, fgcolor:vec4(0.1089630052447319,0.5584797263145447,0.7466379404067993,1), text:"0_o", position:"absolute", x:59.00006103515625, y:90})),
+					icon({fgcolor:vec4(0.4585062861442566,0.4850725829601288,0.6486908197402954,1), opaque:true, icon:"ge", fontsize:80, position:"absolute", x:576, y:134})
 				),
 				toolkit({
-					position:'absolute', 
-					x:1162, 
-					y:38.00086975097656, 
-					width:393, 
-					height:788, 
-					visible:true, 
-					animateborder:false, 
-					rulers:true
+					position:"absolute", 
+					x:1114, 
+					y:19, 
+					width:431, 
+					height:700, 
+					visible:true
 				}
 				)
 			)

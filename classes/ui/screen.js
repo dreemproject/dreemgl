@@ -540,4 +540,9 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			}
 		}
 	}
+
+	this.ASTNode = function() {
+		return this.composition.ASTNodeFor(this);
+	};
+
 })

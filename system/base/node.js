@@ -9,6 +9,7 @@ define.class(function(require){
 	var OneJSParser =  require('$system/parse/onejsparser')
 	var WiredWalker = require('$system/parse/wiredwalker')
 	var RpcProxy = require('$system/rpc/rpcproxy')
+	var ASToolkit = require('$system/parse/astoolkit')
 
 	// parser and walker for wired attributes
 	var onejsparser = new OneJSParser()
@@ -89,6 +90,7 @@ define.class(function(require){
 				this.initFromConstructorArgs(arg)
 			}
 			else if(arg !== undefined && typeof arg === 'object'){
+				arg.__constructorIndex = i;
 				this.constructor_children.push(arg)
 				// var name = arg.name
 				//if(name !== undefined && !(name in this)) this[name] = arg
@@ -952,6 +954,39 @@ define.class(function(require){
 		init:Config({type:Event}),
 		// destroy event, called on all the objects that get dropped by the renderer on a re-render
 		destroy:Config({type:Event})
-	}
+	};
+
+	Object.defineProperty(this, "ast", {
+		get: function () {
+			if (!this._ast) {
+				var source = this.constructor.module.factory.body.toString();
+				this._ast = onejsparser.parse(source);
+			}
+			return this._ast;
+		}
+	});
+
+	this.ASTNodeFor = function(view) {
+		var ast = this.ASTNode();
+		if (ast) {
+			if (typeof(view.__constructorIndex) !== "undefined") {
+				return ast.args[view.__constructorIndex];
+			} else {
+				return new ASToolkit(ast, {type:"Call", fn:{ type:"Id", name:view.constructor.name }}).at;
+			}
+		}
+	};
+
+	this.ASTNode = function() {
+		if (!this._cachednode) {
+			if (this.parent && this.parent.ASTNodeFor) {
+				this._cachednode = this.parent.ASTNodeFor(this);
+			} else {
+				console.error("Asking for ASTNode but no parent, is this ok!?")
+				this._cachednode = this.ast
+			}
+		}
+		return this._cachednode;
+	};
 
 })

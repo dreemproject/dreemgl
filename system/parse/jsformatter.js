@@ -698,20 +698,19 @@ define.class(function(require, exports){
 
 		for(var i = 0; i < n.args.length; i++){
 			var arg = n.args[i]
-			if (arg) {
-				this.comments(arg.cmu)
-				if(this.lastIsNewline()) this.tab(this.indent)
-				var has_nl = this.expand(arg)
 
-				// check wether to switch to has_newlines
-				if(i === 0 && first_is_obj && !has_newlines){
-					has_newlines = has_nl
-				}
+			this.comments(arg.cmu)
+			if(this.lastIsNewline()) this.tab(this.indent)
+			var has_nl = this.expand(arg)
 
-				if(i < n.args.length - 1) this.comma(exports._Call, this.group++)
-				if(has_newlines && !this.comments(arg.cmr))
-					this.newline()
+			// check wether to switch to has_newlines
+			if(i === 0 && first_is_obj && !has_newlines){
+				has_newlines = has_nl
 			}
+
+			if(i < n.args.length - 1) this.comma(exports._Call, this.group++)
+			if(has_newlines && !this.comments(arg.cmr))
+				this.newline()
 		}
 		if(has_newlines && this.comments(n.cm2)) this.tab(this.indent - 1)
 

@@ -105,7 +105,8 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 				else this.item.collapsed = false
 				//this.collapsed = this.item.collapsed;
 				// a bottom level assign re-renders the item
-				this.item = this.item
+				var itm =  this.item;
+				this.item = itm;
 				//this.reRender()
 			}
 			//this.reLayout();
