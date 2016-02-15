@@ -9,7 +9,7 @@ define.class(function(require){
 	var OneJSParser =  require('$system/parse/onejsparser')
 	var WiredWalker = require('$system/parse/wiredwalker')
 	var RpcProxy = require('$system/rpc/rpcproxy')
-	var ASToolkit = require('$system/parse/astoolkit')
+	var ASTScanner = require('$system/parse/astscanner')
 
 	// parser and walker for wired attributes
 	var onejsparser = new OneJSParser()
@@ -963,7 +963,7 @@ define.class(function(require){
 			if (typeof(this.__constructorIndex) !== "undefined") {
 				this._cachednode = past.args[this.__constructorIndex];
 			} else {
-				this._cachednode = new ASToolkit(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
+				this._cachednode = new ASTScanner(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
 			}
 		}
 		return this._cachednode;

@@ -700,6 +700,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n546" name="n546">546</a>
 <a href="#n547" name="n547">547</a>
 <a href="#n548" name="n548">548</a>
+<a href="#n549" name="n549">549</a>
+<strong><a href="#n550" name="n550">550</a></strong>
+<a href="#n551" name="n551">551</a>
+<a href="#n552" name="n552">552</a>
+<a href="#n553" name="n553">553</a>
+<a href="#n554" name="n554">554</a>
+<a href="#n555" name="n555">555</a>
+<a href="#n556" name="n556">556</a>
+<a href="#n557" name="n557">557</a>
+<a href="#n558" name="n558">558</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -711,6 +721,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="keyword">var</span> Render = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/render</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Animate = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/base/animate</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> ASTScanner = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/astscanner</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// internal, the locationhash is a parsed JS object version of the #var2=1;var2=2 url arguments</span>
@@ -1245,7 +1256,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">return</span> <span class="local-variable">this</span>.composition.ASTNodeFor(<span class="local-variable">this</span>);
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>._cachednode) {
+                        <span class="keyword">var</span> past = <span class="local-variable">this</span>.composition.ASTNode();
+
+                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.__constructorIndex) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>) {
+                                <span class="local-variable">this</span>._cachednode = past.args[<span class="local-variable">this</span>.__constructorIndex];
+                        } <span class="keyword">else</span> {
+                                <span class="local-variable">this</span>._cachednode = <span class="keyword">new</span> ASTScanner(past, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>, <span class="key">fn</span>:{ <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:<span class="local-variable">this</span>.constructor.name }}).at;
+                        }
+                }
+                <span class="keyword">return</span> <span class="local-variable">this</span>._cachednode;
         };
 
 })
