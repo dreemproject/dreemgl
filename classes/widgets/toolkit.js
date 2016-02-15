@@ -25,7 +25,7 @@ define.class("$ui/view", function(require,
 	this.visible = false;
 
 	this.borderradius = 7;
-	this.bordercolor = vec4(1,1,1,0.7);
+	this.bordercolor = vec4(0.3,0.6,0.8,0.4);
 	this.borderwidth = 1;
 
 	this.attributes = {
@@ -56,7 +56,8 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fontsize:44,
-						opaque:true,
+						pickalpha:-1,
+						bgcolor:"transparent",
 						fgcolor:'lightgreen',
 						text:'Howdy!'
 					}
@@ -118,40 +119,12 @@ define.class("$ui/view", function(require,
 		mode:Config({type:Enum('design','live'), value:'design'}),
 		reticlesize: 9,
 		groupdrag:true,
-		animateborder: false,
 		rulers:true,
 
 		// internal
 		selection:Config({value:[], meta:"hidden"}),
 		watch:Config({persist:true, value:[], meta:"hidden"})
 	};
-
-	this.onrulers = function() {
-		if (!this.rulers && this.__ruler) {
-			this.__ruler.closeOverlay();
-			this.__ruler.target = undefined;
-			this.__ruler = undefined;
-		}
-	};
-
-	this.onanimateborder = function (ev,v,o) {
-		this.bordercolorfn = v ? this.animatedbordercolorfn : this.staticbordercolorfn;
-	};
-
-	this.animatedbordercolorfn = function(pos) {
-		var speed = time * 37.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.staticbordercolorfn = function(pos) {
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * ((x + pos.x) - (y + pos.y)), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.bordercolorfn = this.staticbordercolorfn;
 
 	this.onwatch = function(ev,v,o) {
 		var selection = [];
@@ -875,7 +848,8 @@ define.class("$ui/view", function(require,
 					fontsize:16,
 					icon:"times",
 					fgcolor:"#ddd",
-					opaque:true,
+					pickalpha:-1,
+					bgcolor:"transparent",
 					borderwidth:0,
 					marginright:1,
 					click:function(ev,v,o) {

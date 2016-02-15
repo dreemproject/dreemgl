@@ -148,6 +148,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					paddingright:5,
 					margin:0,
 					icon:icn,
+					pickalpha:-1,
 					onvalue:function(ev) {
 						if (ev.value) {
 							self.panel.mode = "detail";
