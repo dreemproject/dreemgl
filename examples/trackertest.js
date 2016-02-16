@@ -4,9 +4,16 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class(function(require, $server$, composition, $ui$, screen, view, $widgets$, tracker){
+define.class(function(require, $server$, composition, $ui$, button,screen, view, $widgets$, tracker){
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},[
+		
+		view({flexdirection:"row", bgcolor:"#9f9373"},[
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"play", margin:2,textcolor:"lime",  padding:6}),
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"pause", margin:2, textcolor:"#ffdf20", padding:6}),
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"stop", margin:2,textcolor:"red",  padding:6})
+		])
+		,
 			tracker({
 				flex:1, 
 				overflow:'scroll',

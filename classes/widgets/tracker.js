@@ -16,7 +16,7 @@ define.class('$ui/label', function(require){
 		tracks:[]
 	}
 
-	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
+	this.bgcolor = vec4("#dad6c9")
 	this.readonly = false
 	this.fontsize = 12
 	this.subpixel = true
@@ -39,11 +39,14 @@ define.class('$ui/label', function(require){
 
 	this.textstyle = function(style, pos, tag){
 		//if(type>7)mesh.outline = true
+		if (tag.y == this.cursorrow) {
+			style.fgcolor ='white'
+		}else
 		if(mod(tag.y,4.)<1.){
-			style.fgcolor = 'white'
+			style.fgcolor = '#9f9373'
 		}
 		else{
-			style.fgcolor = 'gray'
+			style.fgcolor = '#303030'
 		}
 	}
 
@@ -110,7 +113,7 @@ define.class('$ui/label', function(require){
 		}
 
 		this.color = function(){
-			return 'ocean'
+			return '#252936'
 		}
 
 		this.position = function(){
