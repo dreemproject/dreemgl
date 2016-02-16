@@ -70,12 +70,19 @@ define.class('$system/base/worker', function(require, exports){
 		// lets start with requiring /myworker
 
 		tail += 'var _worker = define.require(\'/myworker\')();\n'
+		tail += '_worker.postMessage = function(msg,transfer){self.postMessage({message:msg,workerid:_worker.workerid},transfer)};\n'
+		tail += _worker_return.toString() + ';\n'
 		
-		tail += _worker_return.toString() + ';\n'
-		tail += _worker_return.toString() + ';\n'
-
 		function workermsg(event){
 			var msg = event.data
+			if(msg.initid){
+				_worker.workerid = msg.workerid
+				return
+			}
+			if(msg.message){
+				_worker.onmessage(msg.message)
+				return
+			}
 			var ret = _worker[msg.name].apply(_worker, msg.args);
 			if(ret && ret.then) ret.then(function(value){
 				_worker_return(value, msg.uid, msg.workerid)
@@ -112,7 +119,10 @@ define.class('$system/base/worker', function(require, exports){
 			// lets plug the struct arrays
 			var dt =Date.now()
 			var data = event.data
-			if(Date.now() - dt > 50) console.log(data)
+			if(data.message){
+				return this.onmessage(data.message)
+			}
+			//if(Date.now() - dt > 50) console.log(data)
 
 			var workerid = data.workerid
 			
@@ -123,6 +133,7 @@ define.class('$system/base/worker', function(require, exports){
 		}.bind(this)
 
 		this._workers = define.workers(head, tail, cores)
+
 		for(var i = 0; i < this._workers.length; i++){
 			this._workers[i].onmessage = onmessage
 		}
@@ -130,7 +141,10 @@ define.class('$system/base/worker', function(require, exports){
 		// lets make the interface
 		for(var key in this){
 			var prop = this[key]
-			if(key === 'atConstructor'){
+			if(key === 'onmessage'){
+
+			}
+			else if(key === 'atConstructor'){
 				this[key] = undefined
 			}
 			else if(typeof prop === 'function' && key[0] !== '_'){
@@ -154,6 +168,12 @@ define.class('$system/base/worker', function(require, exports){
 					return prom
 				}.bind(this,key)
 			}
+		}
+
+		this.postMessage = function(msg, transfer, tgtid){
+			// post to a worker
+			var workerid = tgtid || 0
+			this._workers[workerid].postMessage({message:msg}, transfer)
 		}
 	}
 })

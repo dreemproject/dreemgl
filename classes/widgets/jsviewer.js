@@ -169,7 +169,6 @@ define.class('$ui/textbox', function(require){
 					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
-			console.log(Date.now() - cycle)
 		}
 	}
 

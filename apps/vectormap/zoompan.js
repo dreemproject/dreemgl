@@ -46,7 +46,7 @@ define.class('$server/composition', function vectormap(require,  $server$, filei
 		}
 
 		this.keydown = function(v){
-			this.screen.defaultKeyboardHandler(this, v);
+			this.defaultKeyboardHandler(v);
 		}
 
 		this.bg = function(){

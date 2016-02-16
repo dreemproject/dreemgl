@@ -611,6 +611,7 @@
 		var workers = []
 		for(var i = 0; i < count; i ++){
 			var worker = new Worker(worker_url)
+			worker.postMessage({initid:true, workerid:i})
 			worker.source = source
 			worker.stack = 0
 			workers.push(worker)

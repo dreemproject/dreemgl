@@ -321,10 +321,10 @@ define.class('$system/base/node', function(require){
 
 	this.ondropshadowradius = function(){
 		if (this.dropshadowopacity > 0){
-			this.shadowrect = true;
+			this.shadowrect = true
 		}
 		else {
-			this.shadowrect = false;
+			this.shadowrect = false
 		}
 	}
 
@@ -523,6 +523,29 @@ define.class('$system/base/node', function(require){
 			else{
 				this.setBgImage(this._bgimage)
 			}
+		}
+	}
+
+	this.defaultKeyboardHandler = function(v, prefix){
+		if (!prefix) prefix = ""
+
+		var keyboard = this.screen.keyboard
+		keyboard.textarea.focus()
+
+		var name = prefix + 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
+		//this.undo_group++
+
+		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
+		if(keyboard.ctrl) name += 'Ctrl'
+		if(keyboard.alt) name += 'Alt'
+		if(keyboard.shift) name += 'Shift'
+
+		if(this[name]) {
+			this[name](v)
+		}
+		else{
+			//console.log(name)
+			if (this.keydownHandler) this.keydownHandler(name)
 		}
 	}
 

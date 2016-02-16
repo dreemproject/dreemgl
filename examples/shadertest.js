@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function($server$, composition, $ui$, screen, view){
+define.class('$server/composition', function(require, $ui$, screen, view){
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
 			view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
@@ -12,15 +12,19 @@ define.class(function($server$, composition, $ui$, screen, view){
 					myvalue:Config({value:0., motion:'linear', duration:0.5}),
 					pointerstart:function(){ this.myvalue = 1 },
 					pointerend:function(){ this.myvalue = 0 },
+					koe:require('$resources/textures/checker.png'),
+					schaap:require('$resources/textures/envmap1.png'),
 					bgcolorfn:function(mesh){
 						//return vec4(0,1,0,1)
 						// gradient
-						return mix('red','blue', mesh.y)
+						return mix(koe.sample(math.rotate2d(mesh.xy-.5,time)+.5), schaap.sample(mesh.xy), mod(time+ myvalue*atan(mesh.x-.5, mesh.y-.5),1.))
+						//koe.sample(mesh.xy) * schaap.sample(mesh.xy)
+
 						// plasma
 						//return pal.pal1(noise.noise3d(vec3(mesh.x*10,mesh.y*10,view.time)))
 
 						// something crazy
-						//return demo.highdefblirpy(mesh.xy*0.1, view.time, 1.)
+						//return demo.highdefblirpy(mesh.xy*0.1, time, 1.)
 
 						// fractal
 						//

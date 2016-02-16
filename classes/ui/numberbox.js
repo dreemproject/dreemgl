@@ -63,7 +63,7 @@ define.class(function(require,$ui$, view, textbox, label, button){
 	}
 
 	this.keydown = function(v){
-		this.screen.defaultKeyboardHandler(this, v);
+		this.defaultKeyboardHandler(v);
 	}
 
 	this.focus = function(newfocus){

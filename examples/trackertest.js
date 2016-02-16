@@ -4,13 +4,13 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 //Pure JS based composition
-define.class(function(require, $server$, composition, $ui$, screen, view, $widgets$, jseditor){
+define.class(function(require, $server$, composition, $ui$, screen, view, $widgets$, tracker){
 	this.render = function(){ return [
-		screen({name:'default', clearcolor:vec4('black')},
-			jseditor({
-				flex:1, overflow:'scroll',fontsize:12,
-				source:require('./jseditortest').module.factory.body.toString()
+		screen({name:'default', clearcolor:vec4('black')},[
+			tracker({
+				flex:1, 
+				overflow:'scroll',
 			})
-		)
+		])
 	]}
 })

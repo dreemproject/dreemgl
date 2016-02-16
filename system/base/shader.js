@@ -46,6 +46,7 @@ define.class(function(require, exports){
 	this._atConstructor = function(){
 		this.view = this.outer
 	}
+
 	this.set_precision = true
 
 	this.extensions = ''
@@ -74,7 +75,7 @@ define.class(function(require, exports){
 		// ehm how do we find extensions to enable?
 		var ret = this.set_precision?'precision ' + this.precision + ' float;\n':''
 		//	'precision ' + this.precision + ' int;'
-
+		
 		//var ret = ''
 		//for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
 		//	var ext = exts[i]
