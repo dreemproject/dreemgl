@@ -120,6 +120,7 @@ define.class("$ui/view", function(require,
 		mode:Config({type:Enum('design','live'), value:'design'}),
 		reticlesize: 9,
 		groupdrag:true,
+		groupreparent:false,
 		rulers:true,
 
 		// internal
@@ -247,7 +248,7 @@ define.class("$ui/view", function(require,
 				dragview.cursor = "crosshair";
 				this.__startrect = ev.pointer.position;
 			} else {
-				// This is a drag
+				// This may be a drag
 
 				this.__startpos = dragview.globalToLocal(ev.pointer.position);
 
@@ -285,7 +286,7 @@ define.class("$ui/view", function(require,
 			}
 
 			this.__ruler.rulermarkstart = ev.view.pos;
-			this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
+			this.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,0);
 		}
 
 		var dragview = ev.view;
@@ -343,12 +344,12 @@ define.class("$ui/view", function(require,
 //				pos = dragview.parent.globalToLocal(ev.pointer.position)
 			}
 
-//			dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
+//			dragview.pos = vec3(pos.x - this.__startpos.x, pos.y - this.__startpos.y, 0);
 
 			if (this.selection) {
 				for (var i=0;i<this.selection.length;i++) {
 					var selected = this.selection[i];
-					selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
+					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0)
 					if (!this.groupdrag) {
 						break;
 					}
@@ -374,16 +375,16 @@ define.class("$ui/view", function(require,
 
 			if (a.x < b.x && a.y < b.y) { //normal
 				select.pos = a;
-				select.size = vec2(b.x - a.x, b.y - a.y);
+				select.size = vec3(b.x - a.x, b.y - a.y,0);
 			} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
-				select.pos = vec2(b.x, a.y);
-				select.size = vec2(a.x - b.x, b.y - a.y);
+				select.pos = vec3(b.x, a.y,0);
+				select.size = vec3(a.x - b.x, b.y - a.y);
 			} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
-				select.pos = vec2(a.x, b.y);
-				select.size = vec2(b.x - a.x, a.y - b.y);
+				select.pos = vec3(a.x, b.y,0);
+				select.size = vec3(b.x - a.x, a.y - b.y,0);
 			} else {
-				select.pos = vec2(b.x, b.y);
-				select.size = vec2(a.x - b.x, a.y - b.y);
+				select.pos = vec3(b.x, b.y);
+				select.size = vec3(a.x - b.x, a.y - b.y,0);
 			}
 		}
 
@@ -402,11 +403,13 @@ define.class("$ui/view", function(require,
 			this.__ruler.target = ev.view;
 		}
 
-
 		var evview = ev.view;
 		evview.cursor = 'arrow';
 		var commit = false;
 		if (this.__resizecorner && (evview == this || this.testView(evview)) && evview.toolresize !== false) {
+
+			// Resize
+
 			if (this.__resizecorner === "top-left") {
 				evview.x = ev.pointer.position.x - this.__startpos.x;
 				evview.y = ev.pointer.position.y - this.__startpos.y;
@@ -430,6 +433,8 @@ define.class("$ui/view", function(require,
 				|| (Math.abs(evview._layout.height - this.__originalsize.h) > 0.5);
 
 		} else if (this.__startpos && this.testView(evview) && evview.toolmove !== false) {
+
+			// Move view
 
 			var pos = ev.pointer.position;
 			if (evview.parent) {
@@ -462,14 +467,18 @@ define.class("$ui/view", function(require,
 
 						ny = selected.pos.y + ev.pointer.movement.y;
 						this.setASTObjectProperty(selected, "y", ny);
-					}
-					if (!this.groupdrag) {
-						break;
+
+						if (!this.groupdrag) {
+							break;
+						}
 					}
 				}
 			}
 
 			if (this.__lastpick && this.__lastpick !== evview.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+
+				// Reparent because we dropped into a new view
+
 				pos = this.__lastpick.globalToLocal(ev.pointer.position);
 
 				nx = pos.x - this.__startpos.x;
@@ -478,25 +487,47 @@ define.class("$ui/view", function(require,
 				this.setASTObjectProperty(evview, "x", nx, false);
 				this.setASTObjectProperty(evview, "y", ny, false);
 
-				var astnode = evview.ASTNode();
-
 				var newparent = this.__lastpick.ASTNode();
 				if (!newparent.args) {
 					newparent.args = []
 				}
-				newparent.args.push(astnode);
 
-				var oldparent = evview.parent.ASTNode();
-				var index = oldparent.args.indexOf(astnode);
-				if (index >= 0) {
-					oldparent.args.splice(index, 1);
+				if (this.selection) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						var astnode = selected.ASTNode();
+						newparent.args.push(astnode);
+
+						var oldparent = selected.parent.ASTNode();
+						var index = oldparent.args.indexOf(astnode);
+						if (index >= 0) {
+							oldparent.args.splice(index, 1);
+						}
+
+						if (!this.groupdrag || !this.groupreparent) {
+							break;
+						}
+					}
 				}
 
 				commit = true;
 			}
 
+			if (!commit) {
+				// Just a click ending, let's target what we clicked
+
+				var inspector = this.find('inspector');
+				if (inspector) {
+					inspector.astarget = JSON.stringify(this.ASTNodePath(evview));
+				}
+
+			}
+
 
 		} else if (this.__startrect) {
+
+			// Selection rectangle
+
 			var pos = ev.pointer.position;
 
 			var a = this.__startrect;
@@ -823,18 +854,18 @@ define.class("$ui/view", function(require,
 							this.screen.pointer.cursor = "move";
 
 							// TODO(mason) Figure out why this fixes the bug (comment the following and drag toolkit to see the bug)
-							this.parent.find("components").pos = vec2(0,0);
-							this.parent.find("structure").pos = vec2(0,0);
-							this.parent.find("inspector").pos = vec2(0,0);
+							this.parent.find("components").pos = vec3(0,0,0);
+							this.parent.find("structure").pos = vec3(0,0,0);
+							this.parent.find("inspector").pos = vec3(0,0,0);
 
-							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+							this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)
 						}
 					},
 					pointerend:function(p) {
 						var parent = this.parent;
 						if (parent.testView && parent.toolmove !== false  && parent.position === "absolute") {
 
-							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y);
+							parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y, 0);
 
 							parent.setASTObjectProperty(parent, "position", "absolute");
 							parent.setASTObjectProperty(parent, "x", parent._layout.absx);
@@ -1194,8 +1225,8 @@ define.class("$ui/view", function(require,
 		this.position = "absolute";
 		this.tooltarget = false;
 		this.ontarget = function(ev,v,o) {
-			this.pos = vec2(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0);
-			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
+			this.pos = vec3(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0, 0);
+			this.size = vec3(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0], 0);
 			this.rotate = v.rotate;
 
 			var p = v;
@@ -1269,9 +1300,9 @@ define.class("$ui/view", function(require,
 			rulermajorcolor:vec4("#F9F6F4"),
 			rulerminorcolor:vec4("#B0C4DE"),
 			rulermarkstartcolor:vec4("#00CCFF"),
-			rulermarkstart:vec2(0,0),
+			rulermarkstart:vec3(0,0,0),
 			rulermarkendcolor:vec4("#FF00CC"),
-			rulermarkend:vec2(0,0),
+			rulermarkend:vec3(0,0,0),
 			bordercolorfn:function(p) {
 				var atx = p.x * layout.width;
 				var aty = p.y * layout.height;
@@ -1324,8 +1355,8 @@ define.class("$ui/view", function(require,
 				return;
 			}
 			this.visible = wire('this.outer.visible');
-			this.pos = vec2(v._layout.absx, v._layout.absy);
-			this.size = vec2(v._layout.width, v._layout.height);
+			this.pos = vec3(v._layout.absx, v._layout.absy, 0);
+			this.size = vec3(v._layout.width, v._layout.height, 0);
 			this.rotate = v.rotate;
 
 			var p = v;
