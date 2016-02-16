@@ -4,33 +4,13 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class(function(require, $server$, dataset){
-	// internal, Sourceset is a dataset-api on source
+	// internal, sourcefile is a dataset-api representing a dreem source file
+
 	var jsparser = require('$system/parse/onejsparser')
 	var jsformatter = require('$system/parse/jsformatter')
 
 	this.attributes = {
 		change: Config({type:Event})
-	}
-
-	function findRenderFunction(ast){
-		var steps = ast.steps[0].body.steps
-		for(var i = 0; i < steps.length; i++){
-			var step = steps[i]
-			if(step.type === 'Assign' && step.left.type === 'Key' &&
-				step.left.key.name === 'render'){
-				return step.right
-			}
-		}
-	}
-
-	function findReturnArray(body){
-		var steps = body.steps
-		for(var i = 0; i < steps.length; i++){
-			var step = steps[i]
-			if(step.type === 'Return'){
-				return step.arg
-			}
-		}
 	}
 
 	this.atConstructor = function(source){
@@ -41,148 +21,12 @@ define.class(function(require, $server$, dataset){
 	this.fork = function(callback){
 		this.undo_stack.push(this.last_source)
 		this.redo_stack.length = 0
-		callback()
+		callback(this)
 		// lets reserialize
 		this.last_source = this.stringify()
-		this.process()
 		this.notifyAssignedAttributes()
 		// save to disk.
 		this.emit('change')
-	}
-
-	this.process = function(){
-		var resolver = {}
-
-		var deps = this.ast.steps[0].params
-		var args = this.classconstr.module.factory.body.class_args
-
-		for(var i = 0; i < deps.length; i++){
-			resolver[ deps[i].id.name ] = args[i]
-		}
-
-		// we need to find the render function in the composition root
-		// so how shall we do that.
-		// well..
-		// lets write the code
-
-		// lets find the return array
-		var ret = findReturnArray(findRenderFunction(this.ast).body)
-
-		var data = this.data = {
-			retarray: ret,
-			name:'root',
-			node:ret.elems,
-			children:[],
-			childnames:{}
-		}
-
-		// now we need to walk this fucker.
-		function walkArgs(array, output){
-			for(var i = 0; i < array.length; i++){
-				var item = array[i]
-				if(item.type === 'Object'){
-					output.propobj = item
-					// lets put some props on there
-					// whats the name of this thing?
-					var keys = item.keys
-					for(var j = 0; j < keys.length; j++){
-						var key = keys[j]
-						var name = key.key.name
-						var value = key.value
-						if(name === 'flowdata'){
-							var fdoutput = output.flowdata = {}
-							output.flowdatanode = key
-							var flowdata = value
-
-							for(var k = 0; k < flowdata.keys.length; k++){
-								var fditem = flowdata.keys[k]
-								var value
-								if(fditem.value.type === 'Unary'){
-									value = fditem.value.op === '-'? -fditem.value.arg.value: fditem.value.arg.value
-								}
-								else{
-									value = fditem.value.value
-								}
-								fdoutput[fditem.key.name] = value
-							}
-						}
-						else if(name === 'name'){
-							output.name = key.value.value
-							data.childnames[output.name] = output
-						}
-						else if(key.value.type === 'Call' && key.value.fn.name === 'wire'){
-							var wire = key.value
-							var str = wire.args[0].value
-
-							if(str.indexOf('this.rpc') !== 0) continue
-
-							var parts = str.slice(9).split('.')
-							if(parts.length !== 2) continue
-							if(!output.wires) output.wires = []
-							output.wires.push({
-								from:parts[0],
-								output:parts[1],
-								input:name
-							})
-						}
-					}
-					continue
-				}
-			}
-		}
-
-		function walkComposition(array, output){
-			for(var i = 0; i < array.length; i++){
-				var item = array[i]
-
-				if(item.type !== 'Call') continue
-				var classname
-				if(item.fn.type === 'Key' && item.fn.object.type === 'This'){
-					classname = 'this.' + item.fn.key.name
-				}
-				else if(item.fn.type === 'Id'){
-					classname = item.fn.name
-				}
-				else {
-					console.error(classname = "Please implement in sourceset.js")
-				}
-
-				var child = {
-					classname: classname,
-					node: item,
-					children:[],
-					inputs:[],
-					outputs:[]
-				}
-
-				// we haz classname.
-				var clazz = resolver[classname]
-				var attribs = clazz.prototype._attributes
-				for(var key in attribs){
-					var attrib = attribs[key]
-
-					if(attrib.flow){
-						var con = {
-							name: key,
-							title: key,
-							type: attrib.type,
-							attrib: attrib
-						}
-						if(attrib.flow === 'in'){
-							child.inputs.push(con)
-						}
-						else if(attrib.flow === 'out'){
-							child.outputs.push(con)
-						}
-					}
-				}
-
-				output.children.push(child)
-				walkArgs(item.args, child)
-				//walkTree(item.args, child)
-			}
-		}
-		walkComposition(ret.elems, this.data)
 	}
 
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
