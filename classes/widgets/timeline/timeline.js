@@ -12,9 +12,10 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.attributes = {
 		data: Config({type: Array,  value: []}),
 		format: Config({type: Enum('12','24'),  value: "24"}),
-		zoom: Config({type: Number, value: 7}),
+		zoom: Config({type: Number, value: 1}),
+		minzoom: Config({type: Number, value: 1/24}),
 		maxzoom: Config({type: Number, value: 365}),
-		scroll: Config({type: Number, value: 4}),
+		scroll: Config({type: Number, value: 0}),
 		eventselected: Config({type:Event})
 	}
 
@@ -58,7 +59,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 			// TODO(aki): delta doesent feel right
 			var delta = (distance - oldDistance) / this.layout.width * this.zoom * 2
-			var newzoom = clamp(this.zoom - delta, 1, this.maxzoom)
+			var newzoom = clamp(this.zoom - delta, this.minzoom, this.maxzoom)
 
 			this.zoom = newzoom
 
@@ -78,7 +79,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			var lastzoom = this._zoom
 
 			var delta = event.value[1]*20.0 / this.layout.width * this.zoom
-			var newzoom = clamp(this.zoom + delta, 1, this.maxzoom)
+			var newzoom = clamp(this.zoom + delta, this.minzoom, this.maxzoom)
 
 			this.zoom = newzoom
 
@@ -90,21 +91,11 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 	}
 
-	this.ondata = function (data) {
-		this.find('events1').data = data.value[0].data
-		this.find('events2').data = data.value[1].data
-		this.find('events3').data = data.value[2].data
-		this.find('events4').data = data.value[3].data
-	}
-
 	this.render = function() {
 		return [
 			background({name: "background"}),
 			labels({name: "labels"}),
-			events({name: "events1"}),
-			events({name: "events2"}),
-			events({name: "events3"}),
-			events({name: "events4"}),
+			events({name: "events"}),
 			scrollbar({name: "scrollbar"})
 		]
 	}

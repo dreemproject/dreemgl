@@ -41,11 +41,6 @@ define.class('$ui/scrollbar', function () {
 			}
 			this.visible = true
 		}
-		// TODO(aki): hiding breaks atDraw
-		// if (this._total == this._page) {
-		// 	if (0 !== this._value) this._value = 0
-		// 	this.visible = false
-		// }
 	}
 
 })
