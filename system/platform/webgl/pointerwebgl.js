@@ -10,6 +10,9 @@ define.class('$system/base/pointer', function (require, exports){
 	this._cursor = 'arrow'
 	this._tooltip = 'Application'
 
+	// Minimum non-zero wheel value
+	var wheelmin = vec2(1000, 1000)
+
 	Object.defineProperty(this, 'cursor', {
 		get:function(){
 			return this._cursor
@@ -28,6 +31,11 @@ define.class('$system/base/pointer', function (require, exports){
 
 		// Internal: creates pointer array with a single pointer from mouse event data.
 		var mouseToPointers = function (event) {
+
+			// Set wheel min non-zero value
+			wheelmin[0] = min(wheelmin[0], abs(event.deltaX || wheelmin[0]))
+			wheelmin[1] = min(wheelmin[1], abs(event.deltaY || wheelmin[1]))
+
 			return [{
 				value: vec2(event.pageX, event.pageY),
 				position: vec2(event.pageX, event.pageY),
@@ -36,7 +44,7 @@ define.class('$system/base/pointer', function (require, exports){
 				alt: event.altKey,
 				ctrl: event.ctrlKey,
 				meta: event.metaKey,
-				wheel: vec2(event.deltaX, event.deltaY),
+				wheel: vec2(event.deltaX / wheelmin[0], event.deltaY / wheelmin[1]),
 				touch: false
 			}]
 		}.bind(this)
