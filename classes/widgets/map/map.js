@@ -7,7 +7,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.attributes = {
 		latlong: vec2(52.3608307, 4.8626387),
 		zoomlevel: 16,
-		pointdata: Config({type: Array, value: []})
+		pointdata: Config({type: Array, value: []}),
+		pointselected: Config({type:Event})
 	}
 
 	function createHash (x, y, z){
@@ -36,7 +37,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.onpointdata = function () {
-		console.log(this.pointdata)
+		this.find('pointset').data = this.pointdata;
 	}
 
 	this.gotoCity = function(city, zoomlevel, time){
@@ -96,7 +97,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		this.zoomTo = function(newz, time){
 		if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
-			
+
 		time = time? time:0;
 			if (time >0)
 			{
@@ -339,7 +340,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
-			
+
 		var view = vp.colormatrices.lookatmatrix;
 		var invview = mat4.identity();
 		mat4.invert(view, invview)
@@ -348,14 +349,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var nearheight = Math.tan((vp.fov/2)*((Math.PI*2)/360.0)) * vp.nearplane;
 		var nearwidth = nearheight * aspect;
 		var zeropos = vec4(0,0,0,1.0);
-		var camerainview = vec4(mx*nearwidth,my*nearheight, -vp.nearplane,0.0);	
+		var camerainview = vec4(mx*nearwidth,my*nearheight, -vp.nearplane,0.0);
 		var zeroworld = vec4.mul_mat4(zeropos, invview)
 		var cameraworld = vec4.mul_mat4(camerainview, invview)
 		var end = vec3(zeroworld[0] + cameraworld[0]*1000, zeroworld[1] + cameraworld[1]*1000, zeroworld[2] + cameraworld[2]*1000)
 
 		var R = vec3.intersectplane(zeroworld, end, vec3(0,1,0), 0)
 		if (!R) return null;
-		
+
 		var M = this.find("MARKER");
 		if (M){
 			M.pos = vec3(R[0],R[1]-200,R[2]);
@@ -434,19 +435,15 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.pointertap = function(ev){
-			
 			var meters = geo.metersForTile({x:this.lastpos[0], y:this.lastpos[1], z:this.lastpos[2]});
 			var latlong = geo.metersToLatLng(meters.x, meters.y);
-//			latlong[0] += this.startcenter[0];
-//			latlong[1] += this.startcenter[1];
-//console.log("tap to: ", meters, latlong);
-console.log(ev);
-var zoomoffs = 0;
-if (ev.clicker == 2) zoomoffs ++;
+			// latlong[0] += this.startcenter[0];
+			// latlong[1] += this.startcenter[1];
+			// console.log("tap to: ", meters, latlong);
+			console.log(ev);
+			var zoomoffs = 0;
+			if (ev.clicker == 2) zoomoffs ++;
 			this.mapdata.setCenterLatLng(latlong[0], latlong[1] ,this.mapdata.zoomlevel + zoomoffs, 1);
-
-			
-			
 			//this.mapdata.setCenter(this.lastpos[0], this.lastpos[1], this.mapdata.zoomlevel,1);
 		}
 
@@ -567,7 +564,6 @@ if (ev.clicker == 2) zoomoffs ++;
 				return mix(prefog, view.fog, zdist);
 			}
 		}
-
 	});
 
 	define.class(this,"landtile", "$ui/view", function(){
@@ -831,7 +827,7 @@ if (ev.clicker == 2) zoomoffs ++;
 			console.log(rt.lastpos);
 		}
 	}
-	
+
 	this.updatePointSet = function(){
 		var ps = this.find("pointset");
 		if(!ps)return
@@ -839,17 +835,17 @@ if (ev.clicker == 2) zoomoffs ++;
 		var center_meters = geo.latLngToMeters(this.dataset.latlong[0],this.dataset.latlong[1]);
 
 		ps.centerinmeters = vec2(center_meters[0], center_meters[1]);
-		ps.meterstounits = BufferGen.TileSize/(geo.metersPerTile(Math.floor(this.zoomlevel+4)) / Math.pow(2.0,this.fraczoom));		
+		ps.meterstounits = BufferGen.TileSize/(geo.metersPerTile(Math.floor(this.zoomlevel+4)) / Math.pow(2.0,this.fraczoom));
 		ps.redraw();
 	}
 	this.onzoomlevel = function(){
 		this.updatePointSet();
 	}
-	
+
 	this.onlatlong = function(){
 		this.updatePointSet();
 	}
-	
+
 	this.render = function(){
 		this.tilestoupdate = [];
 
@@ -916,45 +912,28 @@ if (ev.clicker == 2) zoomoffs ++;
 		var dist = 13.5
 		res.push(
 			view({
-				flex: 1
-				,viewport: "3d"
-				,name: "mapinside"
-				,nearplane: 100 * dist
-				,farplane: 40000 * dist
-				,camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0)
-				,lookat:vec3(0,0,0)
-			},
-			view({bgcolor:NaN},
-				res3d,
-				buildings3d
-				,label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" })
-				,labels3d/*,
-				pointset({
-					name: 'pointset',
-					pointselected: function (event) {
-						// TODO(aki): debug - remove
-						this.find('pointpreview').bgimage = event.url
-						this.find('pointpreview').visible = true
-					}
-				})*/
-				)
-			),
-			// TODO(aki): debug - remove
-			view({
-				name: 'pointpreview',
-				position: 'absolute',
-				bgimage: 'https://farm2.staticflickr.com/1513/24094157124_1ab51f8c34.jpg',
-				width: 100,
-				height: 100,
-				visible: false,
-				bgcolor: 'black'
-			})
+				flex: 1,
+				viewport: "3d",
+				name: "mapinside",
+				nearplane: 100 * dist,
+				farplane: 40000 * dist,
+				camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0),
+				lookat:vec3(0,0,0)
+			},[
+				view({bgcolor:NaN},[
+					res3d,
+					buildings3d,
+					label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
+					labels3d,
+					pointset({name: 'pointset'})
+				])
+			])
 		);
 
 		return res;
 	}
-	
-	
-	
-	
+
+
+
+
 })
