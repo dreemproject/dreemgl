@@ -1,4 +1,4 @@
-define.class("$ui/view", function(require,$ui$, view,label, button, noisegrid,speakergrid, $$, geo, urlfetch)
+define.class("$ui/view", function(require,$ui$, view,label, button, noisegrid,speakergrid)
 {
 	this.flex = 1;
 	this.attributes = {

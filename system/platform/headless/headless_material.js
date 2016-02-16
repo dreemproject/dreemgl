@@ -118,7 +118,42 @@ define.class(function(require, exports){
 		return 'headlessmaterial' + this.id;
 	}
 
+	this.currentstate = function(verbose) {
+		var states = [];
+		
+		if (!HeadlessApi.isShown(this.name())) {
+			states = this.headlessshader.currentstate(verbose);
+
+			var state = [
+				{name: this.name()}
+				,{shader: this.headlessshader.name()}
+			]
+
+			// Add textures
+			var textures = [];
+			for (var i in this.textures) {
+				var tex = this.textures[i];
+				var texture = [
+					{name: tex.name}
+					,{texture: tex.texture}
+					,{sampler: tex.sampler}
+				];
+				textures.push(texture);
+			}
+			if (textures.length)
+				state.push({textures: textures});
+			
+			states.push(state);
+			HeadlessApi.shownObject(this.name());
+		}
+
+		return states;
+	}
+
+
 	this.inspect = function(depth) {
+		//HACK
+		this.currentstate();
 		var obj = {headlessMaterial:this.id, obj:[this.headlessshader.inspect(depth)]};
 		var util = require('util')
 		return util.inspect(obj, {depth: null});

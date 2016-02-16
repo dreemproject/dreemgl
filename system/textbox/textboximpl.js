@@ -10,12 +10,12 @@ define.mixin(function(require){
 	var parse = new (require('$system/parse/onejsparser'))()
 
 	// change sources
-	var enumchange = this.enumchange = {
+	/*var enumchange = this.enumchange = {
 		keypress:1,
 		delete:2,
 		clipboard:3,
 		undoredo:4
-	}
+	}*/
 
 	this.change = 0
 
@@ -169,7 +169,7 @@ define.mixin(function(require){
 		this.undo_group++
 		this.cursorset.insert(event.text)
 		this.doCursor()
-		this.change = enumchange.clipboard
+		this.change = 'clipboard'//enumchange.clipboard
 	}
 
 	this.keypress = function(event){
@@ -177,7 +177,7 @@ define.mixin(function(require){
 		this.undo_group++
 		this.cursorset.insert(event.value)
 		this.doCursor()
-		this.change = enumchange.keypress
+		this.change = 'keypress'//enumchange.keypress
 	}
 
 	var utfmap = {
@@ -250,7 +250,7 @@ define.mixin(function(require){
 			else if(trans !== undefined){
 				if(this.readonly) return
 				this.cursorset.insert(trans)
-				this.change = enumchange.keypress
+				this.change = 'keypress'
 			}
 		}
 	}
@@ -315,7 +315,7 @@ define.mixin(function(require){
 	this.keyZCmd = function(){
 		if(this.readonly) return
 		this.undoRedo(this.undo_stack, this.redo_stack)
-		this.change = enumchange.undoredo
+		this.change = 'undoredo'
 		//doCursor()
 	}
 
@@ -323,7 +323,7 @@ define.mixin(function(require){
 	this.keyYCmd = function(){
 		if(this.readonly) return
 		this.undoRedo(this.redo_stack, this.undo_stack)
-		this.change = enumchange.undoredo
+		this.change = 'undoredo'
 		//change = Change.undoRedo
 		//doCursor()
 	}
@@ -339,14 +339,14 @@ define.mixin(function(require){
 	this.keyXCmd = function(){
 		if(this.readonly) return
 		// cut the crap
-		this.change = enumchange.delete
+		this.change = 'delete'
 		this.cursorset.delete()
 	}
 
 	this.keyBackspace = function(){
 		if(this.readonly) return
 		this.cursorset.backspace()
-		this.change = enumchange.delete
+		this.change = 'delete'
 		this.selectionToClipboard()
 		this.doCursor()
 	}
@@ -362,7 +362,7 @@ define.mixin(function(require){
 
 	this.keyDelete = function(){
 		if(this.readonly) return
-		this.change = enumchange.delete
+		this.change = 'delete'
 		this.cursorset.delete()
 		this.selectionToClipboard()
 		this.doCursor()

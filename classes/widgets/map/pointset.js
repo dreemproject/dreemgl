@@ -16,12 +16,6 @@ define.class('$ui/view', function(require, $$, geo){
 		centerinmeters: vec2(0,0)
 	}
 
-	this.oninit = function () {
-		this.rpc.jsonfetch.load("../timeline/data/flickr1.json").then(function(result){
-			this.data = result.value
-		}.bind(this));
-	}
-
 	this.onpointerhover = function(event) {
 		this.hoverid = this.last_pick_id
 		var eventData = this.data[this.hoverid]
@@ -30,7 +24,6 @@ define.class('$ui/view', function(require, $$, geo){
 		}
 	}
 
-	
 	this.onpointerout  = function(event) {
 		this.hoverid = -1;
 	}
@@ -63,12 +56,10 @@ define.class('$ui/view', function(require, $$, geo){
 
 			for (var i = 0; i < view.data.length; i++) {
 				// TODO(aki): are lat/lng swapped?
-				var latlong = vec2( view.data[i].longitude,view.data[i].latitude);
-			//	console.log(latlong);
+				var latlong = vec2(view.data[i].longitude,view.data[i].latitude);
 				var meters = geo.latLngToMeters(latlong[0], latlong[1])
 				// TODO(aki): move to correct position on transformed map
-				//console.log(meters)
-				var geopos = vec2(meters[0] , meters[1] )
+				var geopos = vec2(meters[0] , meters[1])
 				GLGeom.createCone(100,10, -500, 20, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
 					this.mesh.push(v1, geopos, n1, t1, i);
 					this.mesh.push(v2, geopos, n2, t2, i);
@@ -80,7 +71,6 @@ define.class('$ui/view', function(require, $$, geo){
 		this.position = function() {
 			normal = vec4(mesh.norm,1.0) * view.normalmatrix
 			var posgeo = (view.centerinmeters - mesh.geopos) *vec2(-1.,1.);
-//			var pos3 = vec3(0,0,0)
 			var pos3 = (vec3(posgeo.x,  0, posgeo.y) * view.meterstounits) + mesh.pos;;
 			pos = vec4( pos3 , 1) * view.modelmatrix * view.viewmatrix
 			return pos

@@ -116,6 +116,7 @@ define.class('$system/base/node', function(){
 		this.movement = pointer.movement || vec2()
 		this.isover = pointer.isover
 		this.pick = pointer.pick
+		this.clicker = pointer.clicker
 		this.t = Date.now()
 		if (pointer.wheel !== undefined) this.wheel = pointer.wheel
 	}
@@ -308,12 +309,12 @@ define.class('$system/base/node', function(){
 
 	// Internal: emits `wheel` event.
 	this.setwheel = function(pointerlist) {
-		var dist = 0
+		var dist = Infinity
 		// Hack to prevent screen picking when mouse is not moving
 		if (this._wheel[0]) {
 			dist = vec2.distance(pointerlist[0].position, this._wheel[0].position)
 		}
-		if (dist > 0 || !this._wheel[0]) {
+		if (dist > 0) {
 			this.device.pickScreen(pointerlist[0].position, function(view){
 				var pointer = new Pointer(pointerlist[0], 0, view)
 				pointer.value = pointer.wheel

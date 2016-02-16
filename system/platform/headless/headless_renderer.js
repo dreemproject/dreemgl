@@ -45,7 +45,28 @@ define.class(function(require, exports){
 		return 'headlessrenderer' + this.id;
 	}
 
+	this.currentstate = function(verbose) {
+		var states = [];
+		if (!HeadlessApi.isShown(this.name())) {
+			states = this.headlessgeometry.currentstate(verbose);
+			states.push(this.headlessmaterial.currentstate(verbose));
+
+			var state = [
+				{name: this.name()}
+				,{geometry: this.headlessgeometry.name()}
+				,{material: this.headlessmaterial.name()}
+			]
+			states.push(state);
+			HeadlessApi.shownObject(this.name());
+		}
+
+		return states;
+	}
+
+
 	this.inspect = function(depth) {
+		//HACK
+		this.currentstate();
 		var obj = {headlessRenderer:this.id, obj:[this.headlessgeometry.inspect(depth), this.headlessmaterial.inspect(depth)]};
 		var util = require('util')
 		return util.inspect(obj, {depth: null});

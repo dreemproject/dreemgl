@@ -22,6 +22,7 @@ define.class('$system/base/texture', function(exports, require){
 	Texture.Cache = {};
 
 	HeadlessApi = require('./headless_api')
+	HeadlessUtil = require('./headless_util')
 	fs = require('fs');
 
 	this.atConstructor = function(type, w, h, device){
@@ -52,6 +53,7 @@ define.class('$system/base/texture', function(exports, require){
 		var fullpath = imagedata.path;
 		if (imagedata.path[0] !== '/') fullpath = define.$example + fullpath;
 
+		
 		var img = new headless.ResourceImage({url: fullpath});
 
 		var tex = new Texture('rgba', img.getWidth(), img.getHeight())
@@ -77,19 +79,11 @@ define.class('$system/base/texture', function(exports, require){
 
 		tex = new Texture('rgba', w, h)
 		tex.array = array
+		
 
-		// Headless wants a byte array
+		// Simulate an image
 		var uint8 = new Uint8Array(array);
-
-		var image_options = {
-			width: w,
-			height: h,
-			pixelFormat : headless.PIXEL_FORMAT_RGBA8888
-		};
-		//console.log('********** fromArray', image_options, uint8.length);
-
-		var img = new headless.BufferImage(uint8, image_options);
-		tex.image = img;
+		tex.image = {width: w, height: h, uint8: uint8};
 
 		Texture.Cache[texture_key] = tex;
 

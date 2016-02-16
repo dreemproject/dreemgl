@@ -3,23 +3,21 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-// Flexbox flexdirection example.
-define.class("$server/composition",
-	function ($ui$, screen, view) {
-		// internal, Create a single screen with background color 'green'
-		this.render = function () {
-			return [
-				screen(
-					{name: 'default', clearcolor: 'black'},
-					/* boxes with flexdirection row / horizontal layout */
-					view({
-							bgcolor: vec4(.2,.3,.3,1.0),
-							padding: vec4(5)
-						},
-						view({w:20, h:20, bgcolor: vec4(.5,.5,.5,1.0)})
-					)
-				)
-			];
-		}
-	}
-);
+//Pure JS based composition
+define.class(function(require, $server$, composition, $ui$, button,screen, view, $widgets$, tracker){
+	this.render = function(){ return [
+		screen({name:'default', clearcolor:vec4('black')},[
+		
+		view({flexdirection:"row", bgcolor:"#9f9373"},[
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"play", margin:2,textcolor:"lime",  padding:6}),
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"pause", margin:2, textcolor:"#ffdf20", padding:6}),
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"stop", margin:2,textcolor:"red",  padding:6})
+		])
+		,
+			tracker({
+				flex:1, 
+				overflow:'scroll',
+			})
+		])
+	]}
+})

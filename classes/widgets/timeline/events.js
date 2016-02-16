@@ -1,10 +1,15 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class('$ui/label', function (require, $ui$, view) {
 
 	this.text = ''
 	this.bgcolor = NaN
 
 	this.attributes = {
-		data: Config({type: Array,  value: []}),
+		data: Config({type: Array,  value: wire('this.parent.data')}),
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 		scroll: wire('this.parent.scroll'),
 		hoverid: -1,
@@ -15,7 +20,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 		this.layout.width =  this.parent.layout.width
 	}
 
-	this.onpointerhover = function(event){
+	this.onpointerstart = function(event){
 		this.hoverid = this.last_pick_id
 		var eventData = this.data[this.hoverid]
 		if (eventData) {
@@ -46,23 +51,23 @@ define.class('$ui/label', function (require, $ui$, view) {
 			var mesh = this.mesh = vertstruct.array();
 			for(var i = 0; i < data.length; i++) {
 
-				// HACK: move dates to 2016 for demo
 				var date = new Date(data[i].date)
-				date.setYear(2016)
+				var enddate = new Date(data[i].enddate)
 
 				var timeOffset = date.getTime() - startTime
 				var dayOffset = timeOffset / 1000 / 60 / 60 / 24
+				var dayWidth = (enddate.getTime() - date.getTime()) / 1000 / 60 / 60 / 24
 
-				var w = 0
+				var w = dayWidth
 				var h = 1
 				var x = dayOffset
 				var y = 0
 
 				mesh.pushQuad(
-					x   ,y    , 0, 0, i,
-					x+w , y   , 1, 0, i,
-					x   , y+h , 0, 1, i,
-					x+w ,y+h  , 1, 1, i
+					x  , y  , 0, 0, i,
+					x+w, y  , 1, 0, i,
+					x  , y+h, 0, 1, i,
+					x+w, y+h, 1, 1, i
 				)
 			}
 		}
@@ -71,13 +76,11 @@ define.class('$ui/label', function (require, $ui$, view) {
 			var pos = mesh.pos
 			pos.x = pos.x - view.zoom * view.scroll[0]
 			pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
-			var w = mesh.uv.x * min(max(100 / view.zoom, 1.0), 50.0)
-			pos = pos + vec2(w, 0.0)
 			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 		this.color = function(){
 			PickGuid = mesh.id
-			if (view.hoverid == mesh.id) {
+			if (view.hoverid == mesh.id){
 				return vec4(0, 1, 0, 1)
 			}
 			return vec4(0.5, 0.5, 0.5, 1)

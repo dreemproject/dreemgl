@@ -1,3 +1,8 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.flexdirection = 'column'
@@ -7,9 +12,10 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.attributes = {
 		data: Config({type: Array,  value: []}),
 		format: Config({type: Enum('12','24'),  value: "24"}),
-		zoom: Config({type: Number, value: 7}),
+		zoom: Config({type: Number, value: 1}),
+		minzoom: Config({type: Number, value: 1/24}),
 		maxzoom: Config({type: Number, value: 365}),
-		scroll: Config({type: Number, value: 4}),
+		scroll: Config({type: Number, value: 0}),
 		eventselected: Config({type:Event})
 	}
 
@@ -53,7 +59,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 			// TODO(aki): delta doesent feel right
 			var delta = (distance - oldDistance) / this.layout.width * this.zoom * 2
-			var newzoom = clamp(this.zoom - delta, 1, this.maxzoom)
+			var newzoom = clamp(this.zoom - delta, this.minzoom, this.maxzoom)
 
 			this.zoom = newzoom
 
@@ -67,13 +73,13 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.pointerwheel = function(event) {
 		this.hscrollbar = this.find("scrollbar")
 		if (event.value[0]){
-			this.scroll = clamp(this._scroll + event.value[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+			this.scroll = clamp(this._scroll + event.value[0] *20.0/ this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
 		if (event.value[1]){
 			var lastzoom = this._zoom
 
-			var delta = event.value[1] / this.layout.width * this.zoom
-			var newzoom = clamp(this.zoom + delta, 1, this.maxzoom)
+			var delta = event.value[1]*20.0 / this.layout.width * this.zoom
+			var newzoom = clamp(this.zoom + delta, this.minzoom, this.maxzoom)
 
 			this.zoom = newzoom
 
@@ -85,21 +91,11 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 	}
 
-	this.ondata = function (data) {
-		this.find('events1').data = data.value[0].data
-		this.find('events2').data = data.value[1].data
-		this.find('events3').data = data.value[2].data
-		this.find('events4').data = data.value[3].data
-	}
-
 	this.render = function() {
 		return [
 			background({name: "background"}),
 			labels({name: "labels"}),
-			events({name: "events1"}),
-			events({name: "events2"}),
-			events({name: "events3"}),
-			events({name: "events4"}),
+			events({name: "events"}),
 			scrollbar({name: "scrollbar"})
 		]
 	}

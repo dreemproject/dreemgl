@@ -6,9 +6,10 @@
 define.class("$ui/view", function(require,
 								  $ui$, view, label, icon, treeview, button, statebutton,
 								  $widgets$, palette, propviewer,
+								  $server$, sourceset,
                                   $system$parse$, astscanner, onejsparser){
 
-// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
+// The DreemGL Visual Toolkit allows for visual manipulation of a running composition
 
 	this.name = "toolkit";
 	this.clearcolor = "#565656";
@@ -25,7 +26,7 @@ define.class("$ui/view", function(require,
 	this.visible = false;
 
 	this.borderradius = 7;
-	this.bordercolor = vec4(1,1,1,0.7);
+	this.bordercolor = vec4(0.3,0.6,0.8,0.4);
 	this.borderwidth = 1;
 
 	this.attributes = {
@@ -34,7 +35,7 @@ define.class("$ui/view", function(require,
 		inspect:Config({type:Object}),
 
 		// Components available to be dragged into compositions.
-		components:Config({type:Object, value:{
+		components:{
 			Views:[
 				{
 					label:"View",
@@ -45,6 +46,7 @@ define.class("$ui/view", function(require,
 					params:{
 						height:70,
 						width:80,
+						pickalpha:-1,
 						bgcolor:'purple'
 					}
 				},
@@ -56,7 +58,8 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fontsize:44,
-						opaque:true,
+						pickalpha:-1,
+						bgcolor:"transparent",
 						fgcolor:'lightgreen',
 						text:'Howdy!'
 					}
@@ -68,7 +71,10 @@ define.class("$ui/view", function(require,
 					classname:"checkbox",
 					classdir:"$ui$",
 					params:{
+						tooldragroot:true,
+						toolresize:false,
 						fontsize:24,
+						pickalpha:-1,
 						fgcolor:'pink'
 					}
 				},
@@ -79,7 +85,9 @@ define.class("$ui/view", function(require,
 					classname:"button",
 					classdir:"$ui$",
 					params:{
+						tooldragroot:true,
 						fontsize:24,
+						pickalpha:-1,
 						fgcolor:'red',
 						label:'Press Me!'
 					}
@@ -92,7 +100,7 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fgcolor:'cornflower',
-						opaque:true,
+						pickalpha:-1,
 						icon:'flask',
 						fontsize:80
 					}
@@ -110,48 +118,21 @@ define.class("$ui/view", function(require,
 			//		}
 			//	}
 			//]
-		}}),
+		},
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
-		// and views can be resized and manipulated.
-		// In 'live' mode views lock into place the composition regains it's active behaviors
+		// and views can be resized and manipulated.  In 'live' mode views lock into place the composition regains
+		// it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
 		reticlesize: 9,
 		groupdrag:true,
-		animateborder: false,
+		groupreparent:false,
 		rulers:true,
 
 		// internal
 		selection:Config({value:[], meta:"hidden"}),
 		watch:Config({persist:true, value:[], meta:"hidden"})
 	};
-
-	this.onrulers = function() {
-		if (!this.rulers && this.__ruler) {
-			this.__ruler.closeOverlay();
-			this.__ruler.target = undefined;
-			this.__ruler = undefined;
-		}
-	};
-
-	this.onanimateborder = function (ev,v,o) {
-		this.bordercolorfn = v ? this.animatedbordercolorfn : this.staticbordercolorfn;
-	};
-
-	this.animatedbordercolorfn = function(pos) {
-		var speed = time * 37.0;
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.staticbordercolorfn = function(pos) {
-		var size = 0.0008;
-		var slices = 3.5;
-		var v = int(mod(size * ((x + pos.x) - (y + pos.y)), slices));
-		return vec4((v + 0.45) * vec3(0.5, 0.9, 0.9), 0.8);
-	};
-	this.bordercolorfn = this.staticbordercolorfn;
 
 	this.onwatch = function(ev,v,o) {
 		var selection = [];
@@ -223,98 +204,39 @@ define.class("$ui/view", function(require,
 
 	};
 
-	this.init = function () {
-		this.ensureDeps();
+	this.globalpointerstart = function(ev) {
+		if (!this.visible) {
+			return;
+		}
 
-		this.screen.globalpointerstart = function(ev) {
-			if (!this.visible) {
-				return;
+		if (this.__ruler) {
+			this.__ruler.rulermarkstart = ev.pointer.position;
+		}
+
+		if (ev.view == this) {
+			var inspector = this.find('inspector');
+			if (inspector) {
+				inspector.astarget = JSON.stringify(this.ASTNodePath(this));
 			}
+			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-			if (this.__ruler) {
-				this.__ruler.rulermarkstart = ev.pointer.position;
-			}
+			this.__originalpos = {
+				x:ev.view.x,
+				y:ev.view.y
+			};
 
-			if (ev.view == this) {
-				var inspector = this.find('inspector');
-				if (inspector) {
-					inspector.astarget = JSON.stringify(this.ASTNodePath(this));
-				}
-				this.__startpos = ev.view.globalToLocal(ev.pointer.position);
+			this.__originalsize = {
+				w:ev.view.width,
+				h:ev.view.height
+			};
 
-				this.__originalpos = {
-					x:ev.view.x,
-					y:ev.view.y
-				};
+			this.__resizecorner = this.edgeCursor(ev);
 
-				this.__originalsize = {
-					w:ev.view.width,
-					h:ev.view.height
-				};
+		} else if (this.testView(ev.view)) {
 
-				this.__resizecorner = this.edgeCursor(ev);
-
-			} else if (this.testView(ev.view)) {
-
-				var astpath = JSON.stringify(this.ASTNodePath(ev.view));
-				if (!this.watch || this.watch.indexOf(astpath) < 0) {
-					this.watch = [astpath];
-				}
-
-				var dragview = ev.view;
-				if (!dragview.tooldragroot) {
-					var p = dragview;
-					while (p = p.parent) {
-						if (p.tooldragroot) {
-							dragview = p;
-							break;
-						}
-					}
-				}
-
-				if (dragview.toolmove === false){
-					dragview.cursor = "crosshair";
-					this.__startrect = ev.pointer.position;
-				} else {
-					// This is a drag
-
-					this.__startpos = dragview.globalToLocal(ev.pointer.position);
-
-					this.__originalpos = {
-						x:dragview.x,
-						y:dragview.y
-					};
-
-					this.__originalsize = {
-						w:dragview.width,
-						h:dragview.height
-					};
-
-					this.__resizecorner = this.edgeCursor(ev, dragview);
-					this.screen.pointer.cursor = "move";
-					dragview.cursor = "move";
-					dragview.drawtarget = "color";
-					ev.pointer.pickview = true;
-				}
-			}
-
-		}.bind(this);
-
-		this.screen.globalpointermove = function(ev) {
-			if (!this.visible) {
-				return;
-			}
-
-			if (this.__ruler) {
-				if (ev.pointer.pick && this.testView(ev.pointer.pick) && this.__ruler.target !== ev.pointer.pick) {
-					this.__ruler.target = ev.pointer.pick;
-				}
-				if (this.__ruler.target == ev.view) {
-					this.__ruler.target = ev.view.parent;
-				}
-
-				this.__ruler.rulermarkstart = ev.view.pos;
-				this.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
+			var astpath = JSON.stringify(this.ASTNodePath(ev.view));
+			if (!this.watch || this.watch.indexOf(astpath) < 0) {
+				this.watch = [astpath];
 			}
 
 			var dragview = ev.view;
@@ -328,327 +250,427 @@ define.class("$ui/view", function(require,
 				}
 			}
 
-			if (this.__resizecorner) {
+			if (dragview.toolmove === false){
+				dragview.cursor = "crosshair";
+				this.__startrect = ev.pointer.position;
+			} else {
+				// This may be a drag
 
-				if (this.__resizecorner === "bottom-right") {
-					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
-					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
-				} else if (this.__resizecorner === "bottom") {
-					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
-				} else if (this.__resizecorner === "right") {
-					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
-				} else if (this.__resizecorner === "top-left") {
-					dragview.x = ev.pointer.position.x - this.__startpos.x;
-					dragview.y = ev.pointer.position.y - this.__startpos.y;
-					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
-					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
-				} else if (this.__resizecorner === "left") {
-					dragview.x = ev.pointer.position.x - this.__startpos.x;
-					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
-				} else if (this.__resizecorner === "top") {
-					dragview.y = ev.pointer.position.y - this.__startpos.y;
-					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
-				} else if (this.__resizecorner === "bottom-left") {
-					dragview.x = ev.pointer.position.x - this.__startpos.x;
-					dragview.width = this.__originalsize.w - ev.pointer.delta.x;
-					dragview.height = this.__originalsize.h + ev.pointer.delta.y;
-				} else if (this.__resizecorner === "top-right") {
-					dragview.y = ev.pointer.position.y - this.__startpos.y;
-					dragview.height = this.__originalsize.h - ev.pointer.delta.y;
-					dragview.width = this.__originalsize.w + ev.pointer.delta.x;
-				}
+				this.__startpos = dragview.globalToLocal(ev.pointer.position);
 
-			} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+				this.__originalpos = {
+					x:dragview.x,
+					y:dragview.y
+				};
 
+				this.__originalsize = {
+					w:dragview.width,
+					h:dragview.height
+				};
+
+				this.__resizecorner = this.edgeCursor(ev, dragview);
 				this.screen.pointer.cursor = "move";
-				ev.view.cursor = "move";
+				dragview.cursor = "move";
+				dragview.drawtarget = "color";
+				ev.pointer.pickview = true;
+			}
+		}
 
-				var pos = ev.pointer.position;
+	};
 
-				if (dragview.parent) {
-					if (dragview.position != "absolute") {
-						dragview.position = "absolute";
+	this.globalpointermove = function(ev) {
+		if (!this.visible) {
+			return;
+		}
+
+		if (this.__ruler) {
+			if (ev.pointer.pick && this.testView(ev.pointer.pick) && this.__ruler.target !== ev.pointer.pick) {
+				this.__ruler.target = ev.pointer.pick;
+			}
+			if (this.__ruler.target == ev.view) {
+				this.__ruler.target = ev.view.parent;
+			}
+
+			this.__ruler.rulermarkstart = ev.view.pos;
+			this.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,0);
+		}
+
+		var dragview = ev.view;
+		if (!dragview.tooldragroot) {
+			var p = dragview;
+			while (p = p.parent) {
+				if (p.tooldragroot) {
+					dragview = p;
+					break;
+				}
+			}
+		}
+
+		if (this.__resizecorner) {
+
+			if (this.__resizecorner === "bottom-right") {
+				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
+			} else if (this.__resizecorner === "bottom") {
+				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
+			} else if (this.__resizecorner === "right") {
+				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+			} else if (this.__resizecorner === "top-left") {
+				dragview.x = ev.pointer.position.x - this.__startpos.x;
+				dragview.y = ev.pointer.position.y - this.__startpos.y;
+				dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+				dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+			} else if (this.__resizecorner === "left") {
+				dragview.x = ev.pointer.position.x - this.__startpos.x;
+				dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+			} else if (this.__resizecorner === "top") {
+				dragview.y = ev.pointer.position.y - this.__startpos.y;
+				dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+			} else if (this.__resizecorner === "bottom-left") {
+				dragview.x = ev.pointer.position.x - this.__startpos.x;
+				dragview.width = this.__originalsize.w - ev.pointer.delta.x;
+				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
+			} else if (this.__resizecorner === "top-right") {
+				dragview.y = ev.pointer.position.y - this.__startpos.y;
+				dragview.height = this.__originalsize.h - ev.pointer.delta.y;
+				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
+			}
+
+		} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+
+			this.screen.pointer.cursor = "move";
+			ev.view.cursor = "move";
+
+//			var pos = ev.pointer.position;
+
+			if (dragview.parent) {
+				if (dragview.position != "absolute") {
+					dragview.position = "absolute";
+				}
+//				pos = dragview.parent.globalToLocal(ev.pointer.position)
+			}
+
+//			dragview.pos = vec3(pos.x - this.__startpos.x, pos.y - this.__startpos.y, 0);
+
+			if (this.selection) {
+				for (var i=0;i<this.selection.length;i++) {
+					var selected = this.selection[i];
+					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0)
+					if (!this.groupdrag) {
+						break;
 					}
-					pos = dragview.parent.globalToLocal(ev.pointer.position)
+				}
+			}
+
+			this.__lastpick = ev.pointer.pick;
+
+		} else if (this.__startrect) {
+
+			//resize
+
+			var select = this.__selectrect || this.find('selectorrect');
+			if (!select) {
+				select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
+				this.__selectrect.pos = this.__startrect;
+			}
+
+			var pos = ev.pointer.position;
+
+			var a = this.__startrect;
+			var b = pos;
+
+			if (a.x < b.x && a.y < b.y) { //normal
+				select.pos = a;
+				select.size = vec3(b.x - a.x, b.y - a.y,0);
+			} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+				select.pos = vec3(b.x, a.y,0);
+				select.size = vec3(a.x - b.x, b.y - a.y);
+			} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+				select.pos = vec3(a.x, b.y,0);
+				select.size = vec3(b.x - a.x, a.y - b.y,0);
+			} else {
+				select.pos = vec3(b.x, b.y);
+				select.size = vec3(a.x - b.x, a.y - b.y,0);
+			}
+		}
+
+	};
+
+	this.globalpointerend = function(ev) {
+		if (ev.view.drawtarget != "both") {
+			ev.view.drawtarget = "both";
+		}
+
+		if (!this.visible) {
+			return;
+		}
+
+		if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
+			this.__ruler.target = ev.view;
+		}
+
+		var evview = ev.view;
+		evview.cursor = 'arrow';
+		var commit = false;
+		if (this.__resizecorner && (evview == this || this.testView(evview)) && evview.toolresize !== false) {
+
+			// Resize
+
+			if (this.__resizecorner === "top-left") {
+				evview.x = ev.pointer.position.x - this.__startpos.x;
+				evview.y = ev.pointer.position.y - this.__startpos.y;
+			} else if (this.__resizecorner === "top") {
+				evview.y = ev.pointer.position.y - this.__startpos.y;
+			} else if (this.__resizecorner === "left") {
+				evview.x = ev.pointer.position.x - this.__startpos.x;
+			} else if (this.__resizecorner === "bottom-left") {
+				evview.x = ev.pointer.position.x - this.__startpos.x;
+			}
+
+			this.setASTObjectProperty(evview, "position", "absolute");
+			this.setASTObjectProperty(evview, "x", evview._layout.absx);
+			this.setASTObjectProperty(evview, "y", evview._layout.absy);
+			this.setASTObjectProperty(evview, "width", evview._layout.width);
+			this.setASTObjectProperty(evview, "height", evview._layout.height);
+
+			commit = (Math.abs(evview.x - this.__originalpos.x) > 0.5)
+				|| (Math.abs(evview.y - this.__originalpos.y) > 0.5)
+				|| (Math.abs(evview._layout.width - this.__originalsize.w) > 0.5)
+				|| (Math.abs(evview._layout.height - this.__originalsize.h) > 0.5);
+
+		} else if (this.__startpos && this.testView(evview) && evview.toolmove !== false) {
+
+			// Move view
+
+			var pos = ev.pointer.position;
+			if (evview.parent) {
+				if (evview.position != "absolute") {
+					evview.position = "absolute";
+				}
+				pos = evview.parent.globalToLocal(ev.pointer.position)
+			}
+
+			var nx = pos.x - this.__startpos.x;
+			var dx = Math.abs(evview.x - this.__originalpos.x);
+			if (dx > 0.5) {
+//				this.setASTObjectProperty(evview, "x", nx);
+				commit = true;
+			}
+
+			var ny = pos.y - this.__startpos.y;
+			var dy = Math.abs(ny - this.__originalpos.y);
+			if (dy > 0.5) {
+//				this.setASTObjectProperty(evview, "y", ny);
+				commit = true;
+			}
+
+			if (this.selection) {
+				for (var i=0;i<this.selection.length;i++) {
+					var selected = this.selection[i];
+					if (this.testView(selected) && selected.toolmove !== false) {
+						nx = selected.pos.x + ev.pointer.movement.x;
+						this.setASTObjectProperty(selected, "x", nx);
+
+						ny = selected.pos.y + ev.pointer.movement.y;
+						this.setASTObjectProperty(selected, "y", ny);
+
+						if (!this.groupdrag) {
+							break;
+						}
+					}
+				}
+			}
+
+			if (this.__lastpick && this.__lastpick !== evview.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
+
+				// Reparent because we dropped into a new view
+
+				pos = this.__lastpick.globalToLocal(ev.pointer.position);
+
+				nx = pos.x - this.__startpos.x;
+				ny = pos.y - this.__startpos.y;
+
+				this.setASTObjectProperty(evview, "x", nx, false);
+				this.setASTObjectProperty(evview, "y", ny, false);
+
+				var newparent = this.__lastpick.ASTNode();
+				if (!newparent.args) {
+					newparent.args = []
 				}
 
-				dragview.pos = vec2(pos.x - this.__startpos.x, pos.y - this.__startpos.y);
-
-				if (this.groupdrag && this.selection) {
+				if (this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
-						selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-					}
-				}
+						var astnode = selected.ASTNode();
+						newparent.args.push(astnode);
 
-				this.__lastpick = ev.pointer.pick;
+						var oldparent = selected.parent.ASTNode();
+						var index = oldparent.args.indexOf(astnode);
+						if (index >= 0) {
+							oldparent.args.splice(index, 1);
+						}
 
-			} else if (this.__startrect) {
-
-				//resize
-
-				var select = this.__selectrect || this.find('selectorrect');
-				if (!select) {
-					select = this.__selectrect = this.screen.openOverlay(this.selectorrect);
-					this.__selectrect.pos = this.__startrect;
-				}
-
-				var pos = ev.pointer.position;
-
-				var a = this.__startrect;
-				var b = pos;
-
-				if (a.x < b.x && a.y < b.y) { //normal
-					select.pos = a;
-					select.size = vec2(b.x - a.x, b.y - a.y);
-				} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
-					select.pos = vec2(b.x, a.y);
-					select.size = vec2(a.x - b.x, b.y - a.y);
-				} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
-					select.pos = vec2(a.x, b.y);
-					select.size = vec2(b.x - a.x, a.y - b.y);
-				} else {
-					select.pos = vec2(b.x, b.y);
-					select.size = vec2(a.x - b.x, a.y - b.y);
-				}
-			}
-
-		}.bind(this);
-
-		this.screen.globalpointerend = function(ev) {
-			if (ev.view.drawtarget != "both") {
-				ev.view.drawtarget = "both";
-			}
-
-			if (!this.visible) {
-				return;
-			}
-
-			if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
-				this.__ruler.target = ev.view;
-			}
-
-
-			var evview = ev.view;
-			evview.cursor = 'arrow';
-			var commit = false;
-			if (this.__resizecorner && (evview == this || this.testView(evview)) && evview.toolresize !== false) {
-				if (this.__resizecorner === "top-left") {
-					evview.x = ev.pointer.position.x - this.__startpos.x;
-					evview.y = ev.pointer.position.y - this.__startpos.y;
-				} else if (this.__resizecorner === "top") {
-					evview.y = ev.pointer.position.y - this.__startpos.y;
-				} else if (this.__resizecorner === "left") {
-					evview.x = ev.pointer.position.x - this.__startpos.x;
-				} else if (this.__resizecorner === "bottom-left") {
-					evview.x = ev.pointer.position.x - this.__startpos.x;
-				}
-
-				this.setASTObjectProperty(evview, "position", "absolute");
-				this.setASTObjectProperty(evview, "x", evview._layout.absx);
-				this.setASTObjectProperty(evview, "y", evview._layout.absy);
-				this.setASTObjectProperty(evview, "width", evview._layout.width);
-				this.setASTObjectProperty(evview, "height", evview._layout.height);
-
-				commit = (Math.abs(evview.x - this.__originalpos.x) > 0.5)
-					|| (Math.abs(evview.y - this.__originalpos.y) > 0.5)
-					|| (Math.abs(evview._layout.width - this.__originalsize.w) > 0.5)
-					|| (Math.abs(evview._layout.height - this.__originalsize.h) > 0.5);
-
-			} else if (this.__startpos && this.testView(evview) && evview.toolmove !== false) {
-
-				var pos = ev.pointer.position;
-				if (evview.parent) {
-					if (evview.position != "absolute") {
-						evview.position = "absolute";
-					}
-					pos = evview.parent.globalToLocal(ev.pointer.position)
-				}
-
-				var nx = pos.x - this.__startpos.x;
-				var dx = Math.abs(evview.x - this.__originalpos.x);
-				if (dx > 0.5) {
-					this.setASTObjectProperty(evview, "x", nx);
-					commit = true;
-				}
-
-				var ny = pos.y - this.__startpos.y;
-				var dy = Math.abs(ny - this.__originalpos.y);
-				if (dy > 0.5) {
-					this.setASTObjectProperty(evview, "y", ny);
-					commit = true;
-				}
-
-				if (this.groupdrag && this.selection) {
-					for (var i=0;i<this.selection.length;i++) {
-						var selected = this.selection[i];
-						if (this.testView(selected) && selected.toolmove !== false) {
-							nx = selected.pos.x + ev.pointer.movement.x;
-							this.setASTObjectProperty(selected, "x", nx);
-
-							ny = selected.pos.y + ev.pointer.movement.y;
-							this.setASTObjectProperty(selected, "y", ny);
+						if (!this.groupdrag || !this.groupreparent) {
+							break;
 						}
 					}
 				}
 
-				if (this.__lastpick && this.__lastpick !== evview.parent && this.testView(this.__lastpick) && this.__lastpick.tooldrop !== false) {
-					pos = this.__lastpick.globalToLocal(ev.pointer.position);
-
-					nx = pos.x - this.__startpos.x;
-					ny = pos.y - this.__startpos.y;
-
-					this.setASTObjectProperty(evview, "x", nx, false);
-					this.setASTObjectProperty(evview, "y", ny, false);
-
-					var astnode = evview.ASTNode();
-
-					var newparent = this.__lastpick.ASTNode();
-					if (!newparent.args) {
-						newparent.args = []
-					}
-					newparent.args.push(astnode);
-
-					var oldparent = evview.parent.ASTNode();
-					var index = oldparent.args.indexOf(astnode);
-					if (index >= 0) {
-						oldparent.args.splice(index, 1);
-					}
-
-					commit = true;
-				}
-
-
-			} else if (this.__startrect) {
-				var pos = ev.pointer.position;
-
-				var a = this.__startrect;
-				var b = pos;
-
-				var rect = vec4();
-
-				if (a.x < b.x && a.y < b.y) { //normal
-					rect.x = a.x;
-					rect.y = a.y;
-					rect.w = b.x - a.x;
-					rect.z = b.y - a.y;
-				} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
-					rect.x = b.x;
-					rect.y = a.y;
-					rect.w = a.x - b.x;
-					rect.z = b.y - a.y;
-				} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
-					rect.x = a.x;
-					rect.y = b.y;
-					rect.w = b.x - a.x;
-					rect.z = a.y - b.y;
-				} else {
-					rect.x = b.x;
-					rect.y = b.y;
-					rect.w = a.x - b.x;
-					rect.z = a.y - b.y;
-				}
-				var select = this.__selectrect || this.find('selectorrect');
-				if (select) {
-					select.closeOverlay();
-					this.__selectrect = undefined;
-				}
-
-				var selection = this.screen.childrenInRect(rect, [select]);
-				var watch = [];
-				for (var i=0;i<selection.length;i++) {
-					var selected = selection[i];
-					if (selected !== this && this.testView(selected) && this.toolselect !== false) {
-						var astpath = JSON.stringify(this.ASTNodePath(selected));
-						watch.push(astpath);
-					}
-				}
-				this.watch = watch;
+				commit = true;
 			}
 
+			if (!commit) {
+				// Just a click ending, let's target what we clicked
+
+				var inspector = this.find('inspector');
+				if (inspector) {
+					inspector.astarget = JSON.stringify(this.ASTNodePath(evview));
+				}
+
+			}
+
+
+		} else if (this.__startrect) {
+
+			// Selection rectangle
+
+			var pos = ev.pointer.position;
+
+			var a = this.__startrect;
+			var b = pos;
+
+			var rect = vec4();
+
+			if (a.x < b.x && a.y < b.y) { //normal
+				rect.x = a.x;
+				rect.y = a.y;
+				rect.w = b.x - a.x;
+				rect.z = b.y - a.y;
+			} else if (b.x < a.x && a.y < b.y) { // b lower left, a upper right
+				rect.x = b.x;
+				rect.y = a.y;
+				rect.w = a.x - b.x;
+				rect.z = b.y - a.y;
+			} else if (a.x < b.x && b.y < a.y) { // a lower left, b upper right
+				rect.x = a.x;
+				rect.y = b.y;
+				rect.w = b.x - a.x;
+				rect.z = a.y - b.y;
+			} else {
+				rect.x = b.x;
+				rect.y = b.y;
+				rect.w = a.x - b.x;
+				rect.z = a.y - b.y;
+			}
+			var select = this.__selectrect || this.find('selectorrect');
+			if (select) {
+				select.closeOverlay();
+				this.__selectrect = undefined;
+			}
+
+			var selection = this.screen.childrenInRect(rect, [select]);
+			var watch = [];
+			for (var i=0;i<selection.length;i++) {
+				var selected = selection[i];
+				if (selected !== this && this.testView(selected) && this.toolselect !== false) {
+					var astpath = JSON.stringify(this.ASTNodePath(selected));
+					watch.push(astpath);
+				}
+			}
+			this.watch = watch;
+		}
+
+		if (commit) {
+			this.ensureDeps();
+			this.screen.composition.commitAST();
+		}
+
+		this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
+	};
+
+	this.globalpointerhover = function(ev) {
+		if (!this.visible) {
+			return;
+		}
+
+		var text = ev.view.constructor.name;
+		if (ev.view.name) {
+			text = ev.view.name + " (" + text + ")"
+		}
+
+		var pointers = ev.pointers;
+		if (!pointers && ev.pointer) {
+			pointers = [ev.pointer];
+		}
+
+		for (var i=0;i<pointers.length;i++) {
+			var pointer = pointers[i];
+
+			var pos = ev.view.globalToLocal(pointer.position);
+
+			if (this.__ruler && this.__ruler.target) {
+				this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
+			}
+
+
+			text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
+			text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
+
+			this.find("current").text = text;
+
+			this.edgeCursor(ev)
+		}
+
+		if (this.__selectrect) {
+			var m = this.__selectrect;
+			this.__selectrect = undefined;
+			m.closeOverlay();
+		}
+
+	};
+
+	this.globalkeydown = function(ev) {
+		if (ev.code === 84 && ev.ctrl && ev.shift) {
+			this.setASTObjectProperty(this, "visible", !this.visible);
+			this.ensureDeps();
+			this.screen.composition.commitAST();
+			return;
+		}
+		if (!this.visible) {
+			return;
+		}
+
+		if (ev.code === 8 && this.selection) {
+			var commit = false;
+			var multi = this.selection.length > 1;
+			for (var i=this.selection.length - 1; i>=0; i--) {
+				var v = this.selection[i];
+				var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+
+				if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
+					var parent = v.parent.ASTNode();
+					var node = v.ASTNode();
+					var index = parent.args.indexOf(node);
+					if (index >= 0) {
+						parent.args.splice(index, 1);
+						commit = true;
+					}
+				}
+			}
 			if (commit) {
 				this.ensureDeps();
 				this.screen.composition.commitAST();
 			}
+		}
+	};
 
-			this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
-		}.bind(this);
-
-		this.screen.globalpointerhover = function(ev) {
-			if (!this.visible) {
-				return;
-			}
-
-			var text = ev.view.constructor.name;
-			if (ev.view.name) {
-				text = ev.view.name + " (" + text + ")"
-			}
-
-			var pointers = ev.pointers;
-			if (!pointers && ev.pointer) {
-				pointers = [ev.pointer];
-			}
-
-			for (var i=0;i<pointers.length;i++) {
-				var pointer = pointers[i];
-
-				var pos = ev.view.globalToLocal(pointer.position);
-
-				if (this.__ruler && this.__ruler.target) {
-					this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
-				}
-
-
-				text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
-				text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
-
-				this.find("current").text = text;
-
-				this.edgeCursor(ev)
-			}
-
-			if (this.__selectrect) {
-				var m = this.__selectrect;
-				this.__selectrect = undefined;
-				m.closeOverlay();
-			}
-
-		}.bind(this);
-
-		this.screen.globalkeydown = function(ev) {
-			if (ev.code === 84 && ev.ctrl && ev.shift) {
-				this.setASTObjectProperty(this, "visible", !this.visible);
-				this.ensureDeps();
-				this.screen.composition.commitAST();
-				return;
-			}
-			if (!this.visible) {
-				return;
-			}
-
-			if (ev.code === 8 && this.selection) {
-				var commit = false;
-				var multi = this.selection.length > 1;
-				for (var i=this.selection.length - 1; i>=0; i--) {
-					var v = this.selection[i];
-					var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
-
-					if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
-						var parent = v.parent.ASTNode();
-						var node = v.ASTNode();
-						var index = parent.args.indexOf(node);
-						if (index >= 0) {
-							parent.args.splice(index, 1);
-							commit = true;
-						}
-					}
-				}
-				if (commit) {
-					this.ensureDeps();
-					this.screen.composition.commitAST();
-				}
-			}
-		}.bind(this);
+	this.init = function () {
+		this.ensureDeps();
+		this.screen.globalpointerstart = this.globalpointerstart.bind(this);
+		this.screen.globalpointermove = this.globalpointermove.bind(this);
+		this.screen.globalpointerend = this.globalpointerend.bind(this);
+		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
+		this.screen.globalkeydown = this.globalkeydown.bind(this);
 	};
 
 	this.ensureDeps = function() {
@@ -757,7 +779,7 @@ define.class("$ui/view", function(require,
 
 		var vw = useview || ev.view;
 
-		if (vw === this || (this.testView(vw) && ev.view.toolmove !== false)) {
+		if (vw === this || (this.testView(vw) && ev.view.toolmove !== false && ev.view.toolresize !== false)) {
 			var pos = vw.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 
@@ -838,18 +860,18 @@ define.class("$ui/view", function(require,
 							this.screen.pointer.cursor = "move";
 
 							// TODO(mason) Figure out why this fixes the bug (comment the following and drag toolkit to see the bug)
-							this.parent.find("components").pos = vec2(0,0);
-							this.parent.find("structure").pos = vec2(0,0);
-							this.parent.find("inspector").pos = vec2(0,0);
+							this.parent.find("components").pos = vec3(0,0,0);
+							this.parent.find("structure").pos = vec3(0,0,0);
+							this.parent.find("inspector").pos = vec3(0,0,0);
 
-							this.parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y)
+							this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)
 						}
 					},
 					pointerend:function(p) {
 						var parent = this.parent;
 						if (parent.testView && parent.toolmove !== false  && parent.position === "absolute") {
 
-							parent.pos = vec2(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y);
+							parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y, 0);
 
 							parent.setASTObjectProperty(parent, "position", "absolute");
 							parent.setASTObjectProperty(parent, "x", parent._layout.absx);
@@ -875,7 +897,8 @@ define.class("$ui/view", function(require,
 					fontsize:16,
 					icon:"times",
 					fgcolor:"#ddd",
-					opaque:true,
+					pickalpha:-1,
+					bgcolor:"transparent",
 					borderwidth:0,
 					marginright:1,
 					click:function(ev,v,o) {
@@ -895,30 +918,21 @@ define.class("$ui/view", function(require,
 				items:this.components,
 
 				dropTest:function(ev, v, item, orig, dv) {
-					//var name = v && v.name ? v.name : "unknown";
-					//console.log("test if", item.label, "from", orig.position, "can be dropped onto", name, "@", ev.position, dv);
 					return v !== this && this.testView(v);
 				}.bind(this),
 
 				drop:function(ev, v, item, orig, dv) {
-					var name = v && v.name ? v.name : "unknown";
-//					console.log("dropped", item.label, "from", orig.position, "onto", name, "@", ev.position, dv);
-
 					if (v) {
 						var node = v.ASTNode();
 						if (node) {
 
 							if (item.behaviors) {
-								console.log('Dropped behavior ', item, 'onto node:', node);
 								for (var o in item.behaviors) {
-									console.log('o', o)
 									if (item.behaviors.hasOwnProperty(o)) {
 										var behave = item.behaviors[o];
 										this.setASTObjectProperty(v, o, behave);
 									}
 								}
-								console.log('here', v.ASTNode())
-								//TODO store these into the ast, make sure prop viewer can see them w/code viewer?)
 							}
 
 							if (item.classname && item.params) {
@@ -929,7 +943,6 @@ define.class("$ui/view", function(require,
 								params.position = 'absolute';
 								params.x = pos.x;
 								params.y = pos.y;
-//								console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);
 								var obj = item.classname + "(" + ")";
 								var astobj = this.createASTNode(obj, true);
 								var astparams = this.createASTNode(params);
@@ -941,7 +954,7 @@ define.class("$ui/view", function(require,
 							this.ensureDeps();
 							this.screen.composition.commitAST();
 
-							//TODO set propviewer to inspect new object on reload?
+							//TODO(mason) set propviewer to inspect new object on reload?
 
 
 						}
@@ -1213,18 +1226,27 @@ define.class("$ui/view", function(require,
 			}
 		};
 
-		this.borderwidth = 2;
+		this.borderwidth = 1.5;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
 		this.ontarget = function(ev,v,o) {
-			this.pos = vec2(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0);
-			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
+			this.pos = vec3(v._layout.absx - this.borderwidth[0] / 2.0, v._layout.absy - this.borderwidth[0] / 2.0, 0);
+			this.size = vec3(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0], 0);
 			this.rotate = v.rotate;
+
+			var p = v;
+			while (p = p.parent) {
+				for (var i=0;i<this.rotate.length;i++) {
+					this.rotate[i] += p.rotate[i]
+				}
+			}
 
 			if (v.borderradius && v.borderradius[0] + v.borderradius[1] + v.borderradius[2] + v.borderradius[3]) {
 				this.borderradius = v.borderradius;
 			}
+
+			//TODO (mason) these events maybe need to be cleaned up later, not sure yet
 
 			v.onsize = function(ev,v,o) {
 				this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
@@ -1256,6 +1278,12 @@ define.class("$ui/view", function(require,
 
 			v.onrotate = function(ev,v,o) {
 				this.rotate = v;
+				var p = o;
+				while (p = p.parent) {
+					for (var i=0;i<this.rotate.length;i++) {
+						this.rotate[i] += p.rotate[i]
+					}
+				}
 			}.bind(this);
 
 			v.onborderradius = function(ev,v,o) {
@@ -1278,9 +1306,9 @@ define.class("$ui/view", function(require,
 			rulermajorcolor:vec4("#F9F6F4"),
 			rulerminorcolor:vec4("#B0C4DE"),
 			rulermarkstartcolor:vec4("#00CCFF"),
-			rulermarkstart:vec2(0,0),
+			rulermarkstart:vec3(0,0,0),
 			rulermarkendcolor:vec4("#FF00CC"),
-			rulermarkend:vec2(0,0),
+			rulermarkend:vec3(0,0,0),
 			bordercolorfn:function(p) {
 				var atx = p.x * layout.width;
 				var aty = p.y * layout.height;
@@ -1333,9 +1361,16 @@ define.class("$ui/view", function(require,
 				return;
 			}
 			this.visible = wire('this.outer.visible');
-			this.pos = vec2(v._layout.absx, v._layout.absy);
-			this.size = vec2(v._layout.width, v._layout.height);
+			this.pos = vec3(v._layout.absx, v._layout.absy, 0);
+			this.size = vec3(v._layout.width, v._layout.height, 0);
 			this.rotate = v.rotate;
+
+			var p = v;
+			while (p = p.parent) {
+				for (var i=0;i<this.rotate.length;i++) {
+					this.rotate[i] += p.rotate[i]
+				}
+			}
 		}
 	});
 

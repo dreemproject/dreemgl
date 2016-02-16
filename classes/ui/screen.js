@@ -57,29 +57,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		this.bindInputs()
 	}
 
-	this.defaultKeyboardHandler = function(target, v, prefix){
-		if (!prefix) prefix = ""
-
-		var keyboard = this.screen.keyboard
-		keyboard.textarea.focus()
-
-		var name = prefix + 'keydown' + v.name[0].toUpperCase() + v.name.slice(1)
-		this.undo_group++
-
-		if(keyboard.leftmeta || keyboard.rightmeta) name += 'Cmd'
-		if(keyboard.ctrl) name += 'Ctrl'
-		if(keyboard.alt) name += 'Alt'
-		if(keyboard.shift) name += 'Shift'
-
-		if(target[name]) {
-			target[name](v)
-		}
-		else{
-			//console.log(name)
-			if (target.keydownHandler) target.keydownHandler(name)
-		}
-	}
-
 	// TODO(aki): move menu into a configurable component.
 	// internal, display a classic "rightclick" or "dropdown" menu at position x,y - if no x,y is provided, last pointer coordinates will be substituted instead.
 	this.contextMenu = function(commands, x,y){

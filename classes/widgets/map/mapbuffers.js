@@ -1,3 +1,8 @@
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
+
 define.class(function(require, $server$, service){
 
 	var earcut = require('$system/lib/earcut-port.js')().earcut;
@@ -51,7 +56,7 @@ define.class(function(require, $server$, service){
 		riverbank:true,reservoir:true,
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true};
 
-	var watercolor = vec4("#8080f0");
+	var watercolor = vec4("ocean");
 	
 	var mapstyle = this.mapstyle = {
 		ferry:{

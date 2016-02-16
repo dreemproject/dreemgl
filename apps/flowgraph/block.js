@@ -148,7 +148,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	}
 
 	this.keydown = function(v){
-		this.screen.defaultKeyboardHandler(this, v);
+		this.defaultKeyboardHandler(v);
 	}
 
 	this.init = function(){

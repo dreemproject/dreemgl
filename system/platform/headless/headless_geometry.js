@@ -327,8 +327,6 @@ define.class(function(require, exports){
 			// Update an existing buffer using setData
 			HeadlessApi.writeHeadlessBuffer(buffer, bufferindex, data)
 		}
-
-
 	}
 
 
@@ -353,7 +351,48 @@ define.class(function(require, exports){
 		return 'headlessgeometry' + this.id;
 	}
 
+	this.currentstate = function(verbose) {
+
+		var states = [];
+
+		if (!HeadlessApi.isShown(this.name())) {
+			// Sort the vertex_buffers 
+			var vertex_data = []
+			var keys = Object.keys(this.vertex_buffers).sort();
+
+			for (var i in keys) {
+				// Decompose the stored vertex_buffer data
+				var obj = this.vertex_buffers[keys[i]];
+				var buffer = obj[3]
+				var type = buffer.format;
+				
+				var data = buffer.data;
+				var values = []
+				for (var j in data) {
+					// No more than 4 decimal places
+					values.push(parseFloat(data[j].toFixed(4)));
+				}
+
+				var vertex = [type, values];
+				vertex_data.push(vertex);
+			}
+
+			var state = [
+				{name: this.name()}
+				,{type: this.geometryType}
+				,{vertex_buffers: vertex_data}
+			]
+
+			states = [state];
+			HeadlessApi.shownObject(this.name());
+		}
+
+		return states;
+	}
+
 	this.inspect = function(depth) {
+		//HACK
+		this.currentstate();
 		var obj = {headlessGeometry: this.id};
 		var util = require('util')
 		return util.inspect(obj, {depth: null});

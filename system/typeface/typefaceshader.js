@@ -432,6 +432,17 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return this.array[off * 6 * 10 + 0 + 10]
 		}
 
+		this.offsetFromTag = function(tagid, tag, start){
+			var off = start || 0, len = this.length
+			while(Math.abs(this.array[off * 6 * 10 + 7 + tagid] - tag) > 0.001){
+
+				if(off >= len) return -1
+				off ++
+		
+			}
+			return off
+		}
+
 		this.offsetFromPos = function(x, y){
 			var height = this.line_height
 			//console.log(x, y)

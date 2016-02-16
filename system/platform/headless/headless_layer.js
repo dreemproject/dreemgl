@@ -64,6 +64,27 @@ define.class(function(require, exports){
 		return 'headlesslayer' + this.id;
 	}
 
+	this.currentstate = function(verbose) {
+		var states = [];
+		var actors = []
+		for (var i in this.actors) {
+			actors.push(this.actors[i].name());
+			states = states.concat(this.actors[i].currentstate(verbose));
+		}
+		
+		if (!HeadlessApi.isShown(this.name())) {
+			var state = [
+				{name: this.name()}
+				,{actors: actors}
+			]
+			
+			HeadlessApi.shownObject(this.name());
+			states.push(state);
+		}
+
+		return states;
+	}
+
 	this.inspect = function(depth) {
 		var obj = {headlesslayer:this.id, actors:this.actors};
 		var util = require('util')

@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('./jsviewer', function(require, $ui$, textbox){
+define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 
 	this.readonly = false
 	
@@ -95,6 +95,9 @@ define.class('./jsviewer', function(require, $ui$, textbox){
 	
 	// the change event
 	this.textChanged = function(){
+		baseclass.textChanged.call(this)
+		this.worker.postMessage({source:this._value})
+		/*
 		this.was_cursor = false
 		if(this.change == enumchange.keypress || this.change == enumchange.delete || this.change == enumchange.clipboard){
 			this.was_delete = this.change == enumchange.delete
@@ -108,6 +111,9 @@ define.class('./jsviewer', function(require, $ui$, textbox){
 		if(this.change == enumchange.undoredo){ // set delay to cursor press
 		//	delay_update = parseStep
 		}
+		// send the worker new source
+		this.worker.postMessage({source:this.})*/
+
 	}
 
 	this.oncursor = function(){
@@ -119,8 +125,60 @@ define.class('./jsviewer', function(require, $ui$, textbox){
 		}
 	}
 
+	// alright lets make a worker that parses and reserializes
+	var worker = define.class('$system/rpc/worker', function(require){
+		
+		var Parser = require('$system/parse/onejsparser')
+		var JSFormatter = require('$system/parse/jsformatter')
+
+		this.onmessage = function(msg){
+			// lets start a parse!
+			try{
+				var ast = Parser.parse(msg.source)
+			}
+			catch(e){
+				console.log(e)
+				return
+			}
+			// ok now we need to reserialize from ast
+
+			var buf = {
+				out:vec4.array(msg.source.length + 100),
+				charCodeAt: function(i){return this.out.array[i*4]},
+				char_count:0
+			};
+
+			// lets reserialize output
+			var out = buf.out
+			JSFormatter.walk(ast, buf, function(str, group, l1, l2, l3, m3){
+				out.ensureSize(out.length + str.length)
+				var o = out.length
+				for(var i = 0; i < str.length; i++){
+					var v = o * 4 + i * 4
+					out.array[v] = str.charCodeAt(i)
+					out.array[v + 1] = group
+					out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					out.array[v + 3] = m3
+				}
+				buf.char_count += str.length;
+			})
+			this.postMessage(buf.out.array, buf.out)
+		}
+	})
+
+	this.oninit = function(prev){
+		this.worker = prev && prev.worker || worker()
+		// if we get source back yay
+		this.worker.onmessage = function(msg){
+			// alright lets run the diff step.
+
+			//console.log(msg)
+		}.bind(this)
+	}
+/*
 	this.parseStep = function(){
 		var dt = Date.now()
+		// lets serialize thi
 		this.step_serialized = layer.serializeText()
 		// okay.. so we parse it, we get an error. now what.
 		var dump = step_serialized.replace(/[\s\r\n]/g,function(f){
@@ -194,7 +252,7 @@ define.class('./jsviewer', function(require, $ui$, textbox){
 		//console.log('diffStep! '+(Date.now()-dt))
 		step_timeout  = thisTimeout(applyStep,0)
 	}
-
+	*/
 	// Basic usage
 	var jseditor = this.constructor
 
