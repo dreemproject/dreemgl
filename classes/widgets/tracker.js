@@ -6,9 +6,6 @@
 
 define.class('$ui/label', function(require){
 
-	var JSFormatter = require('$system/parse/jsformatter')	
-	var Parser = require('$system/parse/onejsparser')
-
 	this.attributes = {
 		cursorcol: 1,
 		cursorrow: 0,
@@ -54,10 +51,6 @@ define.class('$ui/label', function(require){
 	this.typeface = function(){
 		this.font = font
 
-		for(var key in JSFormatter.types){
-			this[key] = String(JSFormatter.types[key])
-		}
-
 		this.paint = function(p, edge, pixelsize){
 			return vec4(-1.)
 		}
@@ -81,6 +74,7 @@ define.class('$ui/label', function(require){
 
 			var tracklen = view.tracks.length
 			var rowlen = view.tracks[0].length
+			var dt = Date.now()
 			for(var row = 0; row < rowlen; row++){
 				for(var col = 0; col < tracklen; col++){
 
@@ -91,6 +85,7 @@ define.class('$ui/label', function(require){
 				}
 				textbuf.add("\n", row, 8, 0)
 			}
+			console.log(Date.now()-dt)
 			view.total_rows = row
 		}
 	}

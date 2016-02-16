@@ -26,7 +26,7 @@ define.class(function(require){
                 }
                 p = p.parent
             }
-            if (fullname.endsWith('.js') && fullname.indexOf('node_modules') < 0 && fullname.indexOf('docs/api') < 0) {
+            if (/\.js$/.test(fullname) && fullname.indexOf('node_modules') < 0 && fullname.indexOf('docs/api') < 0) {
                 paths.push(fullname)
             }
 
