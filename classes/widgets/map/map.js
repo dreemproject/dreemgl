@@ -929,7 +929,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				])
 			])
 		);
-
+		res.push(this.constructor_children);
 		return res;
 	}
 

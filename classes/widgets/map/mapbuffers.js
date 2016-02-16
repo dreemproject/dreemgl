@@ -51,7 +51,7 @@ define.class(function(require, $server$, service){
 		riverbank:true,reservoir:true,
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true};
 
-	var watercolor = vec4("#8080f0");
+	var watercolor = vec4("ocean");
 	
 	var mapstyle = this.mapstyle = {
 		ferry:{
