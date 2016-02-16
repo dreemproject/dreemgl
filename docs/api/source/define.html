@@ -2916,6 +2916,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2762" name="n2762">2762</a>
 <a href="#n2763" name="n2763">2763</a>
 <a href="#n2764" name="n2764">2764</a>
+<a href="#n2765" name="n2765">2765</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -3530,6 +3531,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> workers = []
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; count; i ++){
                         <span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(worker_url)
+                        worker.postMessage({<span class="key">initid</span>:<span class="predefined-constant">true</span>, <span class="key">workerid</span>:i})
                         worker.source = source
                         worker.stack = <span class="integer">0</span>
                         workers.push(worker)

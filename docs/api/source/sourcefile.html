@@ -202,55 +202,67 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n48" name="n48">48</a>
 <a href="#n49" name="n49">49</a>
 <strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$$</span>, planner){
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                <span class="keyword">return</span> [
-                        planner({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">planner</span><span class="delimiter">&quot;</span></span>}),
-                        <span class="comment">// Default screen receives Results to diplay on map</span>
-                        <span class="comment">// Default screen receives agenda to diplay on timeline</span>
-                        screen({
-                                <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">init</span>: <span class="keyword">function</span> () {
-                                        <span class="local-variable">this</span>.rpc.planner.loadResults(<span class="string"><span class="delimiter">'</span><span class="content">data/food.json</span><span class="delimiter">'</span></span>)
-                                },
-                                <span class="function">updateresults</span>: <span class="keyword">function</span> (results) {
-                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Results updated on default:</span><span class="delimiter">'</span></span>, results)
-                                        <span class="comment">// TODO: show results in the map</span>
-                                },
-                                <span class="function">updateagenda</span>: <span class="keyword">function</span> (agenda) {
-                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Agenda updated on default:</span><span class="delimiter">'</span></span>, agenda)
-                                        <span class="comment">// TODO: show agenda in the timeline</span>
-                                }
-                        },[
-                                <span class="comment">// TODO: map and timeline go here</span>
-                        ]),
-                        <span class="comment">// Tablet screen receives Results to diplay on map</span>
-                        <span class="comment">// Tablet screen receives ChosenResultsInView to perform commit to agenda</span>
-                        <span class="comment">// Tablet screen sets the agenda</span>
-                        <span class="comment">// Tablet screen sets view bounds</span>
-                        screen({
-                                <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">tablet</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">updateresults</span>: <span class="keyword">function</span> (results) {
-                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">Results updated on tablet:</span><span class="delimiter">'</span></span>, results)
-                                        <span class="comment">// TODO: show results in the map</span>
-                                },
-                                <span class="function">updatechosenresultsinview</span>: <span class="keyword">function</span> (results) {
-                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">ChosenResultsInView updated on tablet:</span><span class="delimiter">'</span></span>, results)
-                                        <span class="comment">// TODO: show results in the map</span>
-                                }
-                        }, [
-                                <span class="comment">// TODO: map, timeline and ChosenResultsInView list go here</span>
-                        ]),
-                        <span class="comment">// Phone screen recieves ResultsInView and performs voting on those items.</span>
-                        screen({
-                                <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">phone</span><span class="delimiter">&quot;</span></span>,
-                                <span class="function">updateresultsinview</span>: <span class="keyword">function</span> (results) {
-                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">ResultsInView updated on phone:</span><span class="delimiter">'</span></span>, results)
-                                        <span class="comment">// TODO: show filtered results in a list</span>
-                                }
-                        })
-                ];
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+ You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/dataset</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require){
+        <span class="comment">// internal, sourcefile is a dataset-api representing a dreem source file</span>
+
+        <span class="keyword">var</span> jsparser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> jsformatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)
+
+        <span class="local-variable">this</span>.attributes = {
+                <span class="key">change</span>: Config({<span class="key">type</span>:Event})
+        }
+
+        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(source){
+                <span class="keyword">if</span>(source) <span class="local-variable">this</span>.parse(source)
+                <span class="local-variable">this</span>.last_source = source
+        }
+
+        <span class="local-variable">this</span>.<span class="function">fork</span> = <span class="keyword">function</span>(callback){
+                <span class="local-variable">this</span>.undo_stack.push(<span class="local-variable">this</span>.last_source)
+                <span class="local-variable">this</span>.redo_stack.length = <span class="integer">0</span>
+                callback(<span class="local-variable">this</span>)
+                <span class="comment">// lets reserialize</span>
+                <span class="local-variable">this</span>.last_source = <span class="local-variable">this</span>.stringify()
+                <span class="local-variable">this</span>.notifyAssignedAttributes()
+                <span class="comment">// save to disk.</span>
+                <span class="local-variable">this</span>.emit(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>)
+        }
+
+        <span class="comment">// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.</span>
+        <span class="local-variable">this</span>.<span class="function">parse</span> = <span class="keyword">function</span>(classconstr){
+                <span class="keyword">var</span> source = classconstr.module.factory.body.toString()
+                <span class="local-variable">this</span>.classconstr = classconstr
+
+                <span class="comment">// lets create an AST</span>
+                <span class="local-variable">this</span>.ast = jsparser.parse(source)
+                <span class="local-variable">this</span>.process()
+                <span class="local-variable">this</span>.notifyAssignedAttributes()
+        }
+
+        <span class="comment">// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.</span>
+        <span class="local-variable">this</span>.<span class="function">stringify</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> buf = {
+                        <span class="key">out</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
+                        <span class="function">charCodeAt</span>: <span class="keyword">function</span>(i){<span class="keyword">return</span> <span class="local-variable">this</span>.out.charCodeAt(i)},
+                        <span class="key">char_count</span>:<span class="integer">0</span>
+                }
+                jsformatter.walk(<span class="local-variable">this</span>.ast, buf, <span class="keyword">function</span>(str){
+                        buf.char_count += str.length
+                        buf.out += str
+                })
+                <span class="keyword">return</span> buf.out
         }
 })
 </pre></td>

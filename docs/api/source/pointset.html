@@ -241,16 +241,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n87" name="n87">87</a>
 <a href="#n88" name="n88">88</a>
 <a href="#n89" name="n89">89</a>
-<strong><a href="#n90" name="n90">90</a></strong>
-<a href="#n91" name="n91">91</a>
-<a href="#n92" name="n92">92</a>
-<a href="#n93" name="n93">93</a>
-<a href="#n94" name="n94">94</a>
-<a href="#n95" name="n95">95</a>
-<a href="#n96" name="n96">96</a>
-<a href="#n97" name="n97">97</a>
-<a href="#n98" name="n98">98</a>
-<a href="#n99" name="n99">99</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -270,12 +260,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">centerinmeters</span>: vec2(<span class="integer">0</span>,<span class="integer">0</span>)
         }
 
-        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span> () {
-                <span class="local-variable">this</span>.rpc.jsonfetch.load(<span class="string"><span class="delimiter">&quot;</span><span class="content">../timeline/data/flickr1.json</span><span class="delimiter">&quot;</span></span>).then(<span class="keyword">function</span>(result){
-                        <span class="local-variable">this</span>.data = result.value
-                }.bind(<span class="local-variable">this</span>));
-        }
-
         <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(event) {
                 <span class="local-variable">this</span>.hoverid = <span class="local-variable">this</span>.last_pick_id
                 <span class="keyword">var</span> eventData = <span class="local-variable">this</span>.data[<span class="local-variable">this</span>.hoverid]
@@ -284,7 +268,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        
         <span class="local-variable">this</span>.<span class="function">onpointerout</span>  = <span class="keyword">function</span>(event) {
                 <span class="local-variable">this</span>.hoverid = -<span class="integer">1</span>;
         }
@@ -317,12 +300,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; view.data.length; i++) {
                                 <span class="comment">// TODO(aki): are lat/lng swapped?</span>
-                                <span class="keyword">var</span> latlong = vec2( view.data[i].longitude,view.data[i].latitude);
-                        <span class="comment">//        console.log(latlong);</span>
+                                <span class="keyword">var</span> latlong = vec2(view.data[i].longitude,view.data[i].latitude);
                                 <span class="keyword">var</span> meters = geo.latLngToMeters(latlong[<span class="integer">0</span>], latlong[<span class="integer">1</span>])
                                 <span class="comment">// TODO(aki): move to correct position on transformed map</span>
-                                <span class="comment">//console.log(meters)</span>
-                                <span class="keyword">var</span> geopos = vec2(meters[<span class="integer">0</span>] , meters[<span class="integer">1</span>] )
+                                <span class="keyword">var</span> geopos = vec2(meters[<span class="integer">0</span>] , meters[<span class="integer">1</span>])
                                 GLGeom.createCone(<span class="integer">100</span>,<span class="integer">10</span>, -<span class="integer">500</span>, <span class="integer">20</span>, <span class="keyword">function</span>(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
                                         <span class="local-variable">this</span>.mesh.push(v1, geopos, n1, t1, i);
                                         <span class="local-variable">this</span>.mesh.push(v2, geopos, n2, t2, i);
@@ -334,7 +315,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>() {
                         normal = vec4(mesh.norm,<span class="float">1.0</span>) * view.normalmatrix
                         <span class="keyword">var</span> posgeo = (view.centerinmeters - mesh.geopos) *vec2(-<span class="integer">1</span>.,<span class="integer">1</span>.);
-<span class="comment">//                        var pos3 = vec3(0,0,0)</span>
                         <span class="keyword">var</span> pos3 = (vec3(posgeo.x,  <span class="integer">0</span>, posgeo.y) * view.meterstounits) + mesh.pos;;
                         pos = vec4( pos3 , <span class="integer">1</span>) * view.modelmatrix * view.viewmatrix
                         <span class="keyword">return</span> pos

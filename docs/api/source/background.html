@@ -218,24 +218,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n64" name="n64">64</a>
 <a href="#n65" name="n65">65</a>
 <a href="#n66" name="n66">66</a>
-<a href="#n67" name="n67">67</a>
-<a href="#n68" name="n68">68</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view, scrollbar) {
-<span class="comment">// internal</span>
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-        <span class="comment">// this.flex = 1</span>
-        <span class="comment">// this.flexdirection = 'column'</span>
-        <span class="comment">// this.position = 'absolute'</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (events, <span class="predefined">$ui$</span>, view, scrollbar) {
+
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
                 <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
-                <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
-                <span class="comment">//TODO(aki): why this breaks sahder</span>
-                <span class="comment">// value: Config({type: Number, value: wire('this.parent.scroll')})</span>
-                <span class="comment">// hoursegs: Config({type: Number, value: wire('this.parent.hoursegs')})</span>
+                <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>})
         }
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){

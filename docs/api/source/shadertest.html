@@ -206,13 +206,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n52" name="n52">52</a>
 <a href="#n53" name="n53">53</a>
 <a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, <span class="predefined">$ui$</span>, screen, view){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, view){
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){ <span class="keyword">return</span> [
                 screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>)},
                         view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">gray</span><span class="delimiter">'</span></span>, <span class="key">borderradius</span>:<span class="integer">20</span>, <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">padding</span>:<span class="integer">30</span>},
@@ -221,15 +225,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="key">myvalue</span>:Config({<span class="key">value</span>:<span class="integer">0</span>., <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">linear</span><span class="delimiter">'</span></span>, <span class="key">duration</span>:<span class="float">0.5</span>}),
                                         <span class="function">pointerstart</span>:<span class="keyword">function</span>(){ <span class="local-variable">this</span>.myvalue = <span class="integer">1</span> },
                                         <span class="function">pointerend</span>:<span class="keyword">function</span>(){ <span class="local-variable">this</span>.myvalue = <span class="integer">0</span> },
+                                        <span class="key">koe</span>:require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/textures/checker.png</span><span class="delimiter">'</span></span>),
+                                        <span class="key">schaap</span>:require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/textures/envmap1.png</span><span class="delimiter">'</span></span>),
                                         <span class="function">bgcolorfn</span>:<span class="keyword">function</span>(mesh){
                                                 <span class="comment">//return vec4(0,1,0,1)</span>
                                                 <span class="comment">// gradient</span>
-                                                <span class="keyword">return</span> mix(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>, mesh.y)
+                                                <span class="keyword">return</span> mix(koe.sample(math.rotate2d(mesh.xy-<span class="float">.5</span>,time)+<span class="float">.5</span>), schaap.sample(mesh.xy), mod(time+ myvalue*atan(mesh.x-<span class="float">.5</span>, mesh.y-<span class="float">.5</span>),<span class="integer">1</span>.))
+                                                <span class="comment">//koe.sample(mesh.xy) * schaap.sample(mesh.xy)</span>
+
                                                 <span class="comment">// plasma</span>
                                                 <span class="comment">//return pal.pal1(noise.noise3d(vec3(mesh.x*10,mesh.y*10,view.time)))</span>
 
                                                 <span class="comment">// something crazy</span>
-                                                <span class="comment">//return demo.highdefblirpy(mesh.xy*0.1, view.time, 1.)</span>
+                                                <span class="comment">//return demo.highdefblirpy(mesh.xy*0.1, time, 1.)</span>
 
                                                 <span class="comment">// fractal</span>
                                                 <span class="comment">//</span>

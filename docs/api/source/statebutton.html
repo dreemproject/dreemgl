@@ -597,7 +597,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(ev) {
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.__untoggle) {
-                        <span class="keyword">delete</span> <span class="local-variable">this</span>.__untoggle;
+                        <span class="local-variable">this</span>.__untoggle = <span class="predefined-constant">undefined</span>;
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.state !== <span class="string"><span class="delimiter">&quot;</span><span class="content">disabled</span><span class="delimiter">&quot;</span></span>) {
                                 <span class="local-variable">this</span>.clickhandler(ev);
                                 <span class="local-variable">this</span>.state = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span>;

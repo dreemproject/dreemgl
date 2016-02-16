@@ -703,580 +703,558 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n549" name="n549">549</a>
 <strong><a href="#n550" name="n550">550</a></strong>
 <a href="#n551" name="n551">551</a>
-<a href="#n552" name="n552">552</a>
-<a href="#n553" name="n553">553</a>
-<a href="#n554" name="n554">554</a>
-<a href="#n555" name="n555">555</a>
-<a href="#n556" name="n556">556</a>
-<a href="#n557" name="n557">557</a>
-<a href="#n558" name="n558">558</a>
-<a href="#n559" name="n559">559</a>
-<strong><a href="#n560" name="n560">560</a></strong>
-<a href="#n561" name="n561">561</a>
-<a href="#n562" name="n562">562</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+<span class="comment">// self generating onejs walker utility class, run with nodejs to regenerate</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, exports){
-
-        <span class="local-variable">this</span>.space = <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.newline = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.indent = <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.line = <span class="integer">0</span>
-        <span class="local-variable">this</span>.comma = <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space
-        <span class="local-variable">this</span>.term = <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>
-
-        <span class="local-variable">this</span>.<span class="function">expand</span> = <span class="keyword">function</span>(node, parent, state){ <span class="comment">// recursive expansion</span>
-                <span class="keyword">if</span>(!state) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Please pass in state {depth:&quot;&quot;}</span><span class="delimiter">'</span></span>)
-                <span class="keyword">if</span>(!node || !node.type) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-
-                node.parent = parent
-                node.infer = <span class="predefined-constant">undefined</span>
-
-                <span class="keyword">if</span>(!<span class="local-variable">this</span>[node.type]) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Undefined type in OneJSGen:</span><span class="delimiter">'</span></span> + node.type)
-
-                <span class="keyword">var</span> ret = <span class="local-variable">this</span>[node.type](node, parent, state)
-
-                <span class="comment">// lets pass the inference up</span>
-                <span class="keyword">if</span>(node.infer &amp;&amp; parent &amp;&amp; !parent.infer) parent.infer = node.infer
-
-                <span class="keyword">if</span>(node.store){
-                        <span class="keyword">if</span>(node.store &amp; <span class="integer">1</span>) ret = ret + <span class="string"><span class="delimiter">'</span><span class="content">..</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(node.store &amp; <span class="integer">2</span>) ret = ret + <span class="string"><span class="delimiter">'</span><span class="content">!</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(node.store &amp; <span class="integer">4</span>) ret = ret + <span class="string"><span class="delimiter">'</span><span class="content">~</span><span class="delimiter">'</span></span>
-                }
-
-                <span class="keyword">if</span>(state.trace){
-                        <span class="keyword">var</span> out = state.depth + node.type + <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(node.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>) out += <span class="string"><span class="delimiter">&quot;</span><span class="content"> fn:</span><span class="delimiter">&quot;</span></span> +node.fn.name
-                        <span class="keyword">if</span>(node.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>) out += <span class="string"><span class="delimiter">'</span><span class="content"> name:</span><span class="delimiter">'</span></span> + node.name
-                        <span class="keyword">if</span>(node.type == <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>) out += <span class="string"><span class="delimiter">'</span><span class="content"> value:</span><span class="delimiter">'</span></span> + node.value
-                        console.log(out)
-                }
-
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">block</span> = <span class="keyword">function</span>(array, parent, state, noindent){ <span class="comment">// term split array</span>
-                state = Object.create(state)
-                <span class="keyword">if</span>(!noindent) state.depth += <span class="local-variable">this</span>.indent
-
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length; i++){
-                        <span class="keyword">var</span> node = array[ i ]
-                        <span class="keyword">var</span> blk = <span class="local-variable">this</span>.expand(node, parent, state)
-
-                        <span class="keyword">if</span>(blk === <span class="predefined-constant">undefined</span>) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">ast node </span><span class="delimiter">'</span></span> + node.type + <span class="string"><span class="delimiter">'</span><span class="content"> returned undefined in block</span><span class="delimiter">'</span></span>)
-
-                        <span class="keyword">if</span>(blk[<span class="integer">0</span>] == <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> || blk[<span class="integer">0</span>] == <span class="string"><span class="delimiter">'</span><span class="content">[</span><span class="delimiter">'</span></span>) ret += state.depth + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span> + blk
-                        <span class="keyword">else</span> ret += state.depth + blk
-
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.term) ret += <span class="local-variable">this</span>.term
-
-                        <span class="keyword">if</span>(ret[ret.length - <span class="integer">1</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> ) ret += <span class="local-variable">this</span>.newline, <span class="local-variable">this</span>.line++
-                }
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">flat</span> = <span class="keyword">function</span>(array, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length; i++){
-                        <span class="keyword">if</span>(i) ret += <span class="local-variable">this</span>.comma
-                        ret += <span class="local-variable">this</span>.expand(array[i], parent, state)
-                }
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">list</span> = <span class="keyword">function</span>(array, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length; i++){
-                        <span class="keyword">if</span>(ret !== <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) ret += <span class="local-variable">this</span>.comma
-                        ret += <span class="local-variable">this</span>.expand(array[i], parent, state)
-                        <span class="keyword">if</span>(ret[ret.length - <span class="integer">1</span>] == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){
-                                ret += state.depth
-                                <span class="keyword">if</span>(i !== len - <span class="integer">1</span>) ret += <span class="local-variable">this</span>.indent
+<span class="keyword">if</span>(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp; require.main === module){
+        <span class="keyword">var</span> require = require(<span class="string"><span class="delimiter">'</span><span class="content">../base/define</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> defs = require(<span class="string"><span class="delimiter">'</span><span class="content">./onejsdef.js</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
+        <span class="comment">// read self</span>
+        <span class="keyword">var</span> head = fs.readFileSync(module.filename).toString().match(<span class="regexp"><span class="delimiter">/</span><span class="content">^[</span><span class="char">\S</span><span class="char">\s</span><span class="content">]*</span><span class="content">\/</span><span class="content">\/</span><span class="content"> generated</span><span class="delimiter">/</span></span>)[<span class="integer">0</span>]
+        <span class="comment">// the template for the generated bottom part</span>
+        <span class="keyword">var</span> <span class="function">template</span> = <span class="keyword">function</span>(){
+                define.<span class="reserved">class</span>(<span class="keyword">function</span>(exports){
+                        BODY
+                        <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(obj){
+                                <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length &gt; <span class="integer">1</span>) <span class="keyword">return</span> <span class="local-variable">this</span>._Object.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>)
+                                <span class="keyword">var</span> ret = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span>,<span class="key">keys</span>:[]}
+                                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj){
+                                        ret.keys.push({<span class="key">key</span>:key, <span class="key">value</span>:obj})
+                                }
+                                <span class="keyword">return</span> ret
                         }
-                }
-                <span class="keyword">return</span> ret
-        }
 
-        <span class="local-variable">this</span>.<span class="function">needsParens</span> = <span class="keyword">function</span>(node, other, isleft){
-                <span class="keyword">var</span> other_t = other.type
-
-                <span class="keyword">if</span>(other_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span> || 
-                        (other_t == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span> || other_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span>) &amp;&amp; other.prio &lt;= node.prio){
-                        <span class="keyword">if</span>(other.prio == node.prio &amp;&amp; isleft) <span class="keyword">return</span> <span class="predefined-constant">false</span>
-                        <span class="keyword">return</span> <span class="predefined-constant">true</span>
-                }
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Program</span> = <span class="keyword">function</span>(node, parent, state){ 
-                <span class="keyword">return</span> <span class="local-variable">this</span>.block(node.steps, node, state, <span class="predefined-constant">true</span>)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Empty</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Id</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> flag = node.flag
-                <span class="keyword">if</span>(flag){
-                        <span class="keyword">if</span>(flag === -<span class="integer">1</span>) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">..</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(flag === <span class="integer">46</span>) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span> + node.name
-                        <span class="keyword">if</span>(flag === <span class="integer">126</span>) <span class="keyword">return</span> node.name + <span class="string"><span class="delimiter">'</span><span class="content">~</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(flag === <span class="integer">33</span>) <span class="keyword">return</span> node.name + <span class="string"><span class="delimiter">'</span><span class="content">!</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(flag === <span class="integer">64</span>) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">@</span><span class="delimiter">'</span></span> + (node.name!==<span class="predefined-constant">undefined</span>?node.name:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                        <span class="keyword">if</span>(flag === <span class="integer">35</span>) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">#</span><span class="delimiter">'</span></span> + (node.name!==<span class="predefined-constant">undefined</span>?node.name:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-                }
-                <span class="keyword">if</span>(node.typing) <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.typing, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + node.name
-                <span class="keyword">return</span> node.name
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Define</span> = <span class="keyword">function</span>(node, parent, state){ <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">depricated</span><span class="delimiter">'</span></span>) }
-
-        <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> node.raw 
-        }
-         <span class="comment">// string, number, bool</span>
-        <span class="local-variable">this</span>.<span class="function">This</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">this</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Array</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">[</span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.list(node.elems, node, state) +
-                <span class="string"><span class="delimiter">'</span><span class="content">]</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(node, parent, state){ 
-
-                <span class="keyword">var</span> nstate = Object.create(state)
-                nstate.depth += <span class="local-variable">this</span>.indent
-
-                <span class="keyword">var</span> keys = node.keys
-                <span class="keyword">var</span> len = k.length
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space
-
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
-                        <span class="keyword">var</span> prop = keys[i]
-                        <span class="keyword">if</span>(i) ret += <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space
-                        
-                        <span class="keyword">var</span> ch = ret[ret.length -<span class="integer">1</span>]
-                        <span class="keyword">if</span>(ch == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) ret += nstate.depth
-                        <span class="keyword">else</span> <span class="keyword">if</span>(ch == <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>) ret +=  <span class="local-variable">this</span>.newline + nstate.depth
-                        
-                        ret += prop.key.name || prop.key.raw
-
-                        <span class="keyword">if</span>(prop.<span class="reserved">short</span> === <span class="predefined-constant">undefined</span>){
-                                ret += <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(prop.value, node, nstate)
+                        <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(v){
+                                <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length &gt; <span class="integer">1</span>) <span class="keyword">return</span> <span class="local-variable">this</span>._Object.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>)
+                                <span class="keyword">if</span>(<span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
+                                        <span class="keyword">return</span> {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Value</span><span class="delimiter">'</span></span>, <span class="key">value</span>:v, <span class="key">kind</span>:<span class="keyword">typeof</span> v}
+                                }
+                                <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Dont support value</span><span class="delimiter">'</span></span>)
                         }
+                })
+        }.toString().match(<span class="regexp"><span class="delimiter">/</span><span class="content">function</span><span class="char">\s</span><span class="content">*</span><span class="content">\(</span><span class="content">\)</span><span class="content">\{</span><span class="char">\n</span><span class="content">([</span><span class="char">\S</span><span class="char">\s</span><span class="content">]*)</span><span class="content">\}</span><span class="delimiter">/</span></span>)[<span class="integer">1</span>].replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(^|</span><span class="char">\n</span><span class="content">)</span><span class="char">\t</span><span class="char">\t</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>)
+
+        <span class="keyword">var</span> rename = {<span class="keyword">for</span>:<span class="string"><span class="delimiter">'</span><span class="content">_for</span><span class="delimiter">'</span></span>, <span class="keyword">else</span>:<span class="string"><span class="delimiter">'</span><span class="content">_else</span><span class="delimiter">'</span></span>, <span class="keyword">try</span>:<span class="string"><span class="delimiter">'</span><span class="content">_try</span><span class="delimiter">'</span></span>,<span class="keyword">catch</span>:<span class="string"><span class="delimiter">'</span><span class="content">_catch</span><span class="delimiter">'</span></span>, <span class="keyword">finally</span>:<span class="string"><span class="delimiter">'</span><span class="content">_finally</span><span class="delimiter">'</span></span>, <span class="keyword">in</span>:<span class="string"><span class="delimiter">'</span><span class="content">_in</span><span class="delimiter">'</span></span>, <span class="keyword">do</span>:<span class="string"><span class="delimiter">'</span><span class="content">_do</span><span class="delimiter">'</span></span>, <span class="key">const</span>:<span class="string"><span class="delimiter">'</span><span class="content">_const</span><span class="delimiter">'</span></span>}
+        <span class="keyword">var</span> out = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>        
+        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> defs){
+                out += <span class="string"><span class="delimiter">'</span><span class="content">        this._</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content"> = this.</span><span class="delimiter">'</span></span> + key + <span class="string"><span class="delimiter">'</span><span class="content"> = function(</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> def = defs[key]
+                <span class="keyword">var</span> args = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> body = <span class="string"><span class="delimiter">'</span><span class="content">                return {</span><span class="content">\n</span><span class="content">                        type:&quot;</span><span class="delimiter">'</span></span>+key+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> sub <span class="keyword">in</span> def){
+                        <span class="keyword">var</span> ren = rename[sub] || sub
+                        <span class="keyword">if</span>(args) args += <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span>
+                        args += ren
+                        body += <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="content">\n</span><span class="content">                        </span><span class="delimiter">'</span></span> + sub + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + ren 
+
+                        <span class="comment">//var type = def[sub]</span>
                 }
-
-                <span class="keyword">var</span> ch = ret[ ret.length - <span class="integer">1</span> ]
-                <span class="keyword">if</span>( ch == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) ret += state.depth +<span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-                <span class="keyword">else</span>{
-                        <span class="keyword">if</span>( ch == <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span> ) ret += <span class="local-variable">this</span>.newline + state.depth + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-                        <span class="keyword">else</span> ret += <span class="local-variable">this</span>.space + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-                }
-
-                <span class="keyword">return</span> ret
+                body += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">                }</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                out += args + <span class="string"><span class="delimiter">'</span><span class="content">){</span><span class="content">\n</span><span class="delimiter">'</span></span> + body +  <span class="string"><span class="delimiter">'</span><span class="content">        }</span><span class="content">\n</span><span class="content">\n</span><span class="delimiter">'</span></span>
         }
+        fs.writeFileSync(module.filename, head + template.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">BODY</span><span class="delimiter">/</span></span>,out))
+        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Written </span><span class="delimiter">&quot;</span></span> + module.filename)
+}
 
-        <span class="local-variable">this</span>.<span class="function">Index</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> obj = node.object
-                <span class="keyword">var</span> object_t = obj.type
-                <span class="keyword">var</span> object = <span class="local-variable">this</span>.expand(obj, node, state)
-
-                <span class="keyword">if</span>(object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">ThisCall</span><span class="delimiter">'</span></span>)
-                        object = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + object + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">return</span> object + <span class="string"><span class="delimiter">'</span><span class="content">[</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.index, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">]</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Key</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> obj = node.object
-                <span class="keyword">var</span> object_t = obj.type
-                <span class="keyword">var</span> object = <span class="local-variable">this</span>.expand(obj, node, state)
+<span class="comment">// generated</span>
+define.<span class="reserved">class</span>(<span class="keyword">function</span>(exports){
         
-                <span class="keyword">if</span>(object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>&amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">ThisCall</span><span class="delimiter">'</span></span>)
-                        object = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + object + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">return</span>  object + (<span class="local-variable">this</span>.exist?<span class="string"><span class="delimiter">'</span><span class="content">?.</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>) + <span class="local-variable">this</span>.expand(node.key, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">ThisCall</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> obj = node.object
-                <span class="keyword">var</span> object_t = obj.type
-                <span class="keyword">var</span> object = <span class="local-variable">this</span>.expand(obj, node)
-        
-                <span class="keyword">if</span>(object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Index</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Key</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">Call</span><span class="delimiter">'</span></span>&amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">This</span><span class="delimiter">'</span></span> &amp;&amp; object_t !== <span class="string"><span class="delimiter">'</span><span class="content">ThisCall</span><span class="delimiter">'</span></span>)
-                        object = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + object + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">return</span>  object + <span class="string"><span class="delimiter">'</span><span class="content">::</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.key, node)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Block</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.newline + <span class="local-variable">this</span>.block(node.steps, node, state) + state.depth + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">List</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.list(node.items, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Comprehension</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Template</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">`</span><span class="delimiter">'</span></span>
-                <span class="keyword">var</span> chain = node.chain
-                <span class="keyword">var</span> len = chain.length 
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; len; i++){
-                        <span class="keyword">var</span> item = chain[i]
-                        <span class="keyword">if</span>(item.type == <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span>){
-                                <span class="keyword">if</span>(item.steps.length == <span class="integer">1</span> &amp;&amp; outer.IsExpr[item.steps[<span class="integer">0</span>].type]){
-                                        ret += <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(item.steps[<span class="integer">0</span>], node, state) + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-                                } 
-                                <span class="keyword">else</span> ret += <span class="local-variable">this</span>.expand(item, node, state)
-                        }
-                        <span class="keyword">else</span> {
-                                <span class="keyword">if</span>(item.value !== <span class="predefined-constant">undefined</span>) ret += item.value
-                        }
+        <span class="local-variable">this</span>._Program = <span class="local-variable">this</span>.<span class="function">Program</span> = <span class="keyword">function</span>(steps){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Program</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">steps</span>:steps
                 }
-                ret += <span class="string"><span class="delimiter">'</span><span class="content">`</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> ret
         }
 
-        <span class="local-variable">this</span>.<span class="function">Break</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">break</span><span class="delimiter">'</span></span> + (node.label? <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.label, node, state): <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Continue</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">continue</span><span class="delimiter">'</span></span>+(node.label?<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.expand(node.label, node, state): <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Label</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.label, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.body, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">If</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">if(</span><span class="delimiter">'</span></span>
-                ret += <span class="local-variable">this</span>.expand(node.test, node, state)
-
-                <span class="keyword">if</span>(ret[ret.length - <span class="integer">1</span>] == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>) ret += state.depth + <span class="local-variable">this</span>.indent
-                ret += <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.then, node, state) 
-
-                <span class="keyword">if</span>(node.<span class="keyword">else</span>){
-                        <span class="keyword">var</span> ch = ret[ret.length - <span class="integer">1</span>]
-                        <span class="keyword">if</span>( ch !== <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.term) ret += <span class="local-variable">this</span>.term
-                        <span class="keyword">if</span>( ch !== <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> ) ret += <span class="local-variable">this</span>.newline
-                        ret += state.depth + <span class="string"><span class="delimiter">'</span><span class="content">else </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">else</span>, node, state)
+        <span class="local-variable">this</span>._Empty = <span class="local-variable">this</span>.<span class="function">Empty</span> = <span class="keyword">function</span>(){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Empty</span><span class="delimiter">&quot;</span></span>
                 }
-
-                <span class="keyword">return</span> ret
         }
 
-        <span class="local-variable">this</span>.<span class="function">Switch</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">switch(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.on, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">){</span><span class="delimiter">'</span></span>
-                ret += <span class="local-variable">this</span>.newline
-
-                <span class="keyword">var</span> nstate = Object.create(state)
-                nstate.depth += <span class="local-variable">this</span>.indent                                
-
-                <span class="keyword">var</span> cases = node.cases
-                <span class="keyword">if</span>(cases) <span class="keyword">for</span>( <span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; cases.length; i++ ) ret += nstate.depth + <span class="local-variable">this</span>.expand(cases[i], node, nstate)
-
-                ret += state.depth + <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Case</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">if</span>(!node.test){
-                        <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">default:</span><span class="delimiter">'</span></span> + (node.steps.length? <span class="local-variable">this</span>.newline+<span class="local-variable">this</span>.block(node.steps, node, state): <span class="local-variable">this</span>.newline)
+        <span class="local-variable">this</span>._Id = <span class="local-variable">this</span>.<span class="function">Id</span> = <span class="keyword">function</span>(name, flag, typing){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">name</span>:name,
+                        <span class="key">flag</span>:flag,
+                        <span class="key">typing</span>:typing
                 }
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">case </span><span class="delimiter">'</span></span>
-
-                ret += <span class="local-variable">this</span>.expand(node.test, node) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> 
-                ret += <span class="local-variable">this</span>.newline
-
-                <span class="keyword">if</span>(node.steps.length) ret += <span class="local-variable">this</span>.block(node.steps, node)
-
-                <span class="keyword">return</span> ret
         }
 
-        <span class="local-variable">this</span>.<span class="function">Throw</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">throw </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.arg, node)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Try</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">try</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">try</span>, node)
-                <span class="keyword">if</span>(node.<span class="keyword">catch</span>){
-                        <span class="keyword">if</span>(node.arg.type !== <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span>) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">unsupported catch type</span><span class="delimiter">&quot;</span></span>)
-                        <span class="keyword">var</span> name = node.arg.name 
-                        ret += <span class="string"><span class="delimiter">'</span><span class="content">catch(</span><span class="delimiter">'</span></span> + name + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">catch</span>, node, state)
-                } 
-
-                <span class="keyword">if</span>(node.<span class="keyword">finally</span>) ret += <span class="string"><span class="delimiter">'</span><span class="content">finally</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">finally</span>, node, state)
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">While</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">while(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.expand(node.loop, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">DoWhile</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">do</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.loop, node, state) + 
-                        <span class="string"><span class="delimiter">'</span><span class="content">while(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">For</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.init, node, state)+<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>+
-                                <span class="local-variable">this</span>.expand(node.test, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span> +
-                                <span class="local-variable">this</span>.expand(node.update, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
-                                <span class="local-variable">this</span>.expand(node.loop, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">ForIn</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.expand(node.loop, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">ForOf</span> = <span class="keyword">function</span>(node, parent, state){
-
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> of </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.expand(node.loop, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">ForFrom</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> from </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.expand(node.loop, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">ForTo</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">for(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.left, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> to </span><span class="delimiter">'</span></span> +
-                        <span class="local-variable">this</span>.expand(node.right, node, state) + 
-                        (node.<span class="keyword">in</span>?<span class="string"><span class="delimiter">'</span><span class="content"> in </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.<span class="keyword">in</span>, node, state):<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.expand(node.loop, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Var</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">var </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.flat(node.defs, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">TypeVar</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.typing, node, state) + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.flat(node.defs, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Def</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.id, node, state) + 
-                        (node.init ? <span class="local-variable">this</span>.space + <span class="string"><span class="delimiter">'</span><span class="content">=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.init, node, state) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Struct</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">struct </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.id, node, state) + <span class="local-variable">this</span>.expand(node.struct, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Enum</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">enum </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.id, node) + <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.newline + 
-                        state.depth + <span class="local-variable">this</span>.indent + <span class="local-variable">this</span>.list(node.enums, node, state) +<span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Function</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">if</span>(node.arrow){
-                        <span class="keyword">var</span> arrow = node.arrow
-                        <span class="comment">// if an arrow has just one Id as arg leave off ( )</span>
-                        <span class="keyword">if</span>( !node.name &amp;&amp; !node.rest &amp;&amp; node.params &amp;&amp; node.params.length == <span class="integer">1</span> &amp;&amp; !node.params[<span class="integer">0</span>].init &amp;&amp; node.params[<span class="integer">0</span>].id.type == <span class="string"><span class="delimiter">'</span><span class="content">Id</span><span class="delimiter">'</span></span> ){
-                                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.params[<span class="integer">0</span>].id, node, state) + arrow + <span class="local-variable">this</span>.expand(node.body, node, state)
-                        }
-                        <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                        <span class="keyword">if</span>(node.name) ret += <span class="local-variable">this</span>.expand(node.name, node, state)
-
-                        ret += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> +(node.params?<span class="local-variable">this</span>.list(node.params, node, state):<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + 
-                                (node.rest ? <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.rest, node, state) : <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> )+ <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> 
-                        <span class="keyword">if</span>(!node.name || node.body.type != <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span> || arrow != <span class="string"><span class="delimiter">'</span><span class="content">-&gt;</span><span class="delimiter">'</span></span>) ret += arrow
-                        ret += <span class="local-variable">this</span>.expand(node.body, node)
-                        <span class="local-variable">this</span>.cignore = <span class="integer">1</span>
-                        <span class="keyword">return</span> ret
+        <span class="local-variable">this</span>._Value = <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(value, raw, kind, multi){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">value</span>:value,
+                        <span class="key">raw</span>:raw,
+                        <span class="key">kind</span>:kind,
+                        <span class="key">multi</span>:multi
                 }
-                <span class="keyword">var</span> ret 
-                <span class="keyword">if</span>(node.name) ret = <span class="local-variable">this</span>.expand(node.name)
-                <span class="keyword">else</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>( node.gen ) ret += <span class="string"><span class="delimiter">'</span><span class="content">*</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>( node.id ) ret += <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.expand(node.id, node, state)
-                ret += <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.list(node.params, node, state)
-                <span class="keyword">if</span>( node.rest ) ret += <span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.rest, node, state) 
-                ret += <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-                ret += <span class="local-variable">this</span>.expand(node.body, node, state)
+        }
+
+        <span class="local-variable">this</span>._This = <span class="local-variable">this</span>.<span class="function">This</span> = <span class="keyword">function</span>(){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">This</span><span class="delimiter">&quot;</span></span>
+                }
+        }
+
+        <span class="local-variable">this</span>._Array = <span class="local-variable">this</span>.<span class="function">Array</span> = <span class="keyword">function</span>(elems){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Array</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">elems</span>:elems
+                }
+        }
+
+        <span class="local-variable">this</span>._Object = <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(keys){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">keys</span>:keys
+                }
+        }
+
+        <span class="local-variable">this</span>._Index = <span class="local-variable">this</span>.<span class="function">Index</span> = <span class="keyword">function</span>(object, index){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Index</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">object</span>:object,
+                        <span class="key">index</span>:index
+                }
+        }
+
+        <span class="local-variable">this</span>._Key = <span class="local-variable">this</span>.<span class="function">Key</span> = <span class="keyword">function</span>(object, key, exist){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Key</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">object</span>:object,
+                        <span class="key">key</span>:key,
+                        <span class="key">exist</span>:exist
+                }
+        }
+
+        <span class="local-variable">this</span>._ThisCall = <span class="local-variable">this</span>.<span class="function">ThisCall</span> = <span class="keyword">function</span>(object, key){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ThisCall</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">object</span>:object,
+                        <span class="key">key</span>:key
+                }
+        }
+
+        <span class="local-variable">this</span>._Block = <span class="local-variable">this</span>.<span class="function">Block</span> = <span class="keyword">function</span>(steps){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Block</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">steps</span>:steps
+                }
+        }
+
+        <span class="local-variable">this</span>._List = <span class="local-variable">this</span>.<span class="function">List</span> = <span class="keyword">function</span>(items){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">List</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">items</span>:items
+                }
+        }
+
+        <span class="local-variable">this</span>._Comprehension = <span class="local-variable">this</span>.<span class="function">Comprehension</span> = <span class="keyword">function</span>(_for, expr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Comprehension</span><span class="delimiter">&quot;</span></span>,
+                        <span class="keyword">for</span>:_for,
+                        <span class="key">expr</span>:expr
+                }
+        }
+
+        <span class="local-variable">this</span>._Template = <span class="local-variable">this</span>.<span class="function">Template</span> = <span class="keyword">function</span>(chain){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Template</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">chain</span>:chain
+                }
+        }
+
+        <span class="local-variable">this</span>._Break = <span class="local-variable">this</span>.<span class="function">Break</span> = <span class="keyword">function</span>(label){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Break</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">label</span>:label
+                }
+        }
+
+        <span class="local-variable">this</span>._Continue = <span class="local-variable">this</span>.<span class="function">Continue</span> = <span class="keyword">function</span>(label){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Continue</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">label</span>:label
+                }
+        }
+
+        <span class="local-variable">this</span>._Label = <span class="local-variable">this</span>.<span class="function">Label</span> = <span class="keyword">function</span>(label, body){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Label</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">label</span>:label,
+                        <span class="key">body</span>:body
+                }
+        }
+
+        <span class="local-variable">this</span>._If = <span class="local-variable">this</span>.<span class="function">If</span> = <span class="keyword">function</span>(test, then, _else, postfix, compr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">If</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">test</span>:test,
+                        <span class="key">then</span>:then,
+                        <span class="keyword">else</span>:_else,
+                        <span class="key">postfix</span>:postfix,
+                        <span class="key">compr</span>:compr
+                }
+        }
+
+        <span class="local-variable">this</span>._Switch = <span class="local-variable">this</span>.<span class="function">Switch</span> = <span class="keyword">function</span>(on, cases){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Switch</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">on</span>:on,
+                        <span class="key">cases</span>:cases
+                }
+        }
+
+        <span class="local-variable">this</span>._Case = <span class="local-variable">this</span>.<span class="function">Case</span> = <span class="keyword">function</span>(test, steps){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Case</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">test</span>:test,
+                        <span class="key">steps</span>:steps
+                }
+        }
+
+        <span class="local-variable">this</span>._Throw = <span class="local-variable">this</span>.<span class="function">Throw</span> = <span class="keyword">function</span>(arg){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Throw</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">arg</span>:arg
+                }
+        }
+
+        <span class="local-variable">this</span>._Try = <span class="local-variable">this</span>.<span class="function">Try</span> = <span class="keyword">function</span>(_try, arg, _catch, _finally){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Try</span><span class="delimiter">&quot;</span></span>,
+                        <span class="keyword">try</span>:_try,
+                        <span class="key">arg</span>:arg,
+                        <span class="keyword">catch</span>:_catch,
+                        <span class="keyword">finally</span>:_finally
+                }
+        }
+
+        <span class="local-variable">this</span>._While = <span class="local-variable">this</span>.<span class="function">While</span> = <span class="keyword">function</span>(test, loop){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">While</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">test</span>:test,
+                        <span class="key">loop</span>:loop
+                }
+        }
+
+        <span class="local-variable">this</span>._DoWhile = <span class="local-variable">this</span>.<span class="function">DoWhile</span> = <span class="keyword">function</span>(loop, test){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">DoWhile</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">loop</span>:loop,
+                        <span class="key">test</span>:test
+                }
+        }
+
+        <span class="local-variable">this</span>._For = <span class="local-variable">this</span>.<span class="function">For</span> = <span class="keyword">function</span>(init, test, update, loop, compr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">For</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">init</span>:init,
+                        <span class="key">test</span>:test,
+                        <span class="key">update</span>:update,
+                        <span class="key">loop</span>:loop,
+                        <span class="key">compr</span>:compr
+                }
+        }
+
+        <span class="local-variable">this</span>._ForIn = <span class="local-variable">this</span>.<span class="function">ForIn</span> = <span class="keyword">function</span>(left, right, loop, compr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ForIn</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right,
+                        <span class="key">loop</span>:loop,
+                        <span class="key">compr</span>:compr
+                }
+        }
+
+        <span class="local-variable">this</span>._ForOf = <span class="local-variable">this</span>.<span class="function">ForOf</span> = <span class="keyword">function</span>(left, right, loop, compr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ForOf</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right,
+                        <span class="key">loop</span>:loop,
+                        <span class="key">compr</span>:compr
+                }
+        }
+
+        <span class="local-variable">this</span>._ForFrom = <span class="local-variable">this</span>.<span class="function">ForFrom</span> = <span class="keyword">function</span>(right, left, loop, compr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ForFrom</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">right</span>:right,
+                        <span class="key">left</span>:left,
+                        <span class="key">loop</span>:loop,
+                        <span class="key">compr</span>:compr
+                }
+        }
+
+        <span class="local-variable">this</span>._ForTo = <span class="local-variable">this</span>.<span class="function">ForTo</span> = <span class="keyword">function</span>(left, right, loop, _in, compr){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">ForTo</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right,
+                        <span class="key">loop</span>:loop,
+                        <span class="keyword">in</span>:_in,
+                        <span class="key">compr</span>:compr
+                }
+        }
+
+        <span class="local-variable">this</span>._Var = <span class="local-variable">this</span>.<span class="function">Var</span> = <span class="keyword">function</span>(defs, _const){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Var</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">defs</span>:defs,
+                        <span class="key">const</span>:_const
+                }
+        }
+
+        <span class="local-variable">this</span>._TypeVar = <span class="local-variable">this</span>.<span class="function">TypeVar</span> = <span class="keyword">function</span>(typing, defs, dim){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">TypeVar</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">typing</span>:typing,
+                        <span class="key">defs</span>:defs,
+                        <span class="key">dim</span>:dim
+                }
+        }
+
+        <span class="local-variable">this</span>._Struct = <span class="local-variable">this</span>.<span class="function">Struct</span> = <span class="keyword">function</span>(id, struct, base){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Struct</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">struct</span>:struct,
+                        <span class="key">base</span>:base
+                }
+        }
+
+        <span class="local-variable">this</span>._Define = <span class="local-variable">this</span>.<span class="function">Define</span> = <span class="keyword">function</span>(id, value){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Define</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">value</span>:value
+                }
+        }
+
+        <span class="local-variable">this</span>._Enum = <span class="local-variable">this</span>.<span class="function">Enum</span> = <span class="keyword">function</span>(id, enums){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Enum</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">enums</span>:enums
+                }
+        }
+
+        <span class="local-variable">this</span>._Def = <span class="local-variable">this</span>.<span class="function">Def</span> = <span class="keyword">function</span>(id, init, dim){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Def</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">init</span>:init,
+                        <span class="key">dim</span>:dim
+                }
+        }
+
+        <span class="local-variable">this</span>._Function = <span class="local-variable">this</span>.<span class="function">Function</span> = <span class="keyword">function</span>(id, name, params, rest, body, arrow, gen, def){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Function</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">name</span>:name,
+                        <span class="key">params</span>:params,
+                        <span class="key">rest</span>:rest,
+                        <span class="key">body</span>:body,
+                        <span class="key">arrow</span>:arrow,
+                        <span class="key">gen</span>:gen,
+                        <span class="key">def</span>:def
+                }
+        }
+
+        <span class="local-variable">this</span>._Return = <span class="local-variable">this</span>.<span class="function">Return</span> = <span class="keyword">function</span>(arg){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Return</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">arg</span>:arg
+                }
+        }
+
+        <span class="local-variable">this</span>._Yield = <span class="local-variable">this</span>.<span class="function">Yield</span> = <span class="keyword">function</span>(arg){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Yield</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">arg</span>:arg
+                }
+        }
+
+        <span class="local-variable">this</span>._Await = <span class="local-variable">this</span>.<span class="function">Await</span> = <span class="keyword">function</span>(arg){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Await</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">arg</span>:arg
+                }
+        }
+
+        <span class="local-variable">this</span>._Unary = <span class="local-variable">this</span>.<span class="function">Unary</span> = <span class="keyword">function</span>(op, prefix, arg){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Unary</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">op</span>:op,
+                        <span class="key">prefix</span>:prefix,
+                        <span class="key">arg</span>:arg
+                }
+        }
+
+        <span class="local-variable">this</span>._Binary = <span class="local-variable">this</span>.<span class="function">Binary</span> = <span class="keyword">function</span>(op, prio, left, right){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Binary</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">op</span>:op,
+                        <span class="key">prio</span>:prio,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right
+                }
+        }
+
+        <span class="local-variable">this</span>._Logic = <span class="local-variable">this</span>.<span class="function">Logic</span> = <span class="keyword">function</span>(op, prio, left, right){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Logic</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">op</span>:op,
+                        <span class="key">prio</span>:prio,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right
+                }
+        }
+
+        <span class="local-variable">this</span>._Assign = <span class="local-variable">this</span>.<span class="function">Assign</span> = <span class="keyword">function</span>(op, prio, left, right){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Assign</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">op</span>:op,
+                        <span class="key">prio</span>:prio,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right
+                }
+        }
+
+        <span class="local-variable">this</span>._Update = <span class="local-variable">this</span>.<span class="function">Update</span> = <span class="keyword">function</span>(op, prio, arg, prefix){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Update</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">op</span>:op,
+                        <span class="key">prio</span>:prio,
+                        <span class="key">arg</span>:arg,
+                        <span class="key">prefix</span>:prefix
+                }
+        }
+
+        <span class="local-variable">this</span>._Condition = <span class="local-variable">this</span>.<span class="function">Condition</span> = <span class="keyword">function</span>(test, then, _else){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Condition</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">test</span>:test,
+                        <span class="key">then</span>:then,
+                        <span class="keyword">else</span>:_else
+                }
+        }
+
+        <span class="local-variable">this</span>._New = <span class="local-variable">this</span>.<span class="function">New</span> = <span class="keyword">function</span>(fn, args){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">New</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">fn</span>:fn,
+                        <span class="key">args</span>:args
+                }
+        }
+
+        <span class="local-variable">this</span>._Call = <span class="local-variable">this</span>.<span class="function">Call</span> = <span class="keyword">function</span>(fn, args, extarg){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">fn</span>:fn,
+                        <span class="key">args</span>:args,
+                        <span class="key">extarg</span>:extarg
+                }
+        }
+
+        <span class="local-variable">this</span>._Nest = <span class="local-variable">this</span>.<span class="function">Nest</span> = <span class="keyword">function</span>(fn, body, arrow){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Nest</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">fn</span>:fn,
+                        <span class="key">body</span>:body,
+                        <span class="key">arrow</span>:arrow
+                }
+        }
+
+        <span class="local-variable">this</span>._Class = <span class="local-variable">this</span>.<span class="function">Class</span> = <span class="keyword">function</span>(id, base, body){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Class</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">base</span>:base,
+                        <span class="key">body</span>:body
+                }
+        }
+
+        <span class="local-variable">this</span>._Signal = <span class="local-variable">this</span>.<span class="function">Signal</span> = <span class="keyword">function</span>(left, right){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Signal</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">left</span>:left,
+                        <span class="key">right</span>:right
+                }
+        }
+
+        <span class="local-variable">this</span>._Quote = <span class="local-variable">this</span>.<span class="function">Quote</span> = <span class="keyword">function</span>(quote){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Quote</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">quote</span>:quote
+                }
+        }
+
+        <span class="local-variable">this</span>._AssignQuote = <span class="local-variable">this</span>.<span class="function">AssignQuote</span> = <span class="keyword">function</span>(left, quote){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">AssignQuote</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">left</span>:left,
+                        <span class="key">quote</span>:quote
+                }
+        }
+
+        <span class="local-variable">this</span>._Rest = <span class="local-variable">this</span>.<span class="function">Rest</span> = <span class="keyword">function</span>(id, dots){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Rest</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">id</span>:id,
+                        <span class="key">dots</span>:dots
+                }
+        }
+
+        <span class="local-variable">this</span>._Then = <span class="local-variable">this</span>.<span class="function">Then</span> = <span class="keyword">function</span>(name, _do){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Then</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">name</span>:name,
+                        <span class="keyword">do</span>:_do
+                }
+        }
+
+        <span class="local-variable">this</span>._Debugger = <span class="local-variable">this</span>.<span class="function">Debugger</span> = <span class="keyword">function</span>(){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Debugger</span><span class="delimiter">&quot;</span></span>
+                }
+        }
+
+        <span class="local-variable">this</span>._With = <span class="local-variable">this</span>.<span class="function">With</span> = <span class="keyword">function</span>(object, body){
+                <span class="keyword">return</span> {
+                        <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">With</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">object</span>:object,
+                        <span class="key">body</span>:body
+                }
+        }
+
+
+        <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(obj){
+                <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length &gt; <span class="integer">1</span>) <span class="keyword">return</span> <span class="local-variable">this</span>._Object.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>)
+                <span class="keyword">var</span> ret = {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span>,<span class="key">keys</span>:[]}
+                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj){
+                        ret.keys.push({<span class="key">key</span>:key, <span class="key">value</span>:obj})
+                }
                 <span class="keyword">return</span> ret
         }
 
-        <span class="local-variable">this</span>.<span class="function">Return</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">if</span>(!node.arg) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">return</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">return </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.arg, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Yield</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">if</span>(!node.arg) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">yield</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">yield </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.arg, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Await</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">if</span>(!node.arg) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">await</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">await </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.arg, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Unary</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> arg = <span class="local-variable">this</span>.expand(node.arg, node, state)
-                <span class="keyword">var</span> atype = node.arg.type
-
-                <span class="keyword">if</span>(node.prefix){
-                        <span class="keyword">if</span>(atype == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || atype == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span> ||
-                                atype == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || atype == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>)
-                                arg = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + arg + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                        <span class="keyword">if</span>(node.op.length != <span class="integer">1</span>) <span class="keyword">return</span> node.op + <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> + arg
-
-                        <span class="keyword">return</span> node.op + arg
+        <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(v){
+                <span class="keyword">if</span>(<span class="local-variable">arguments</span>.length &gt; <span class="integer">1</span>) <span class="keyword">return</span> <span class="local-variable">this</span>._Object.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>)
+                <span class="keyword">if</span>(<span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> v === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
+                        <span class="keyword">return</span> {<span class="key">type</span>:<span class="string"><span class="delimiter">'</span><span class="content">Value</span><span class="delimiter">'</span></span>, <span class="key">value</span>:v, <span class="key">kind</span>:<span class="keyword">typeof</span> v}
                 }
-                <span class="keyword">return</span> arg + node.op
+                <span class="keyword">else</span> <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">'</span><span class="content">Dont support value</span><span class="delimiter">'</span></span>)
         }
-
-        <span class="comment">// alright so how are we going to do parens?</span>
-        <span class="local-variable">this</span>.<span class="function">Binary</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> left = <span class="local-variable">this</span>.expand(node.left, node, state)
-                <span class="keyword">var</span> right = <span class="local-variable">this</span>.expand(node.right, node, state)
-
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.left)) left = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + left + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.right)) right = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + right + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> 
-
-                <span class="keyword">return</span> left + <span class="local-variable">this</span>.space + node.op + <span class="local-variable">this</span>.space + right
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Logic</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> left = <span class="local-variable">this</span>.expand(node.left, node, state)
-                <span class="keyword">var</span> right = <span class="local-variable">this</span>.expand(node.right, node, state)
-
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.left)) left = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + left + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.needsParens(node, node.right)) right = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + right + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> 
-
-                <span class="keyword">return</span> left + <span class="local-variable">this</span>.space + node.op + <span class="local-variable">this</span>.space + right
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Assign</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> left = <span class="local-variable">this</span>.expand(node.left, node, state)
-                <span class="keyword">var</span> right = <span class="local-variable">this</span>.expand(node.right, node, state)
-                <span class="keyword">return</span> left + <span class="local-variable">this</span>.space + node.op + <span class="local-variable">this</span>.space + right
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Update</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">if</span>(node.prefix) <span class="keyword">return</span> node.op + <span class="local-variable">this</span>.expand(node.arg, node, state)
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.arg, node, state) + node.op
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Condition</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="comment">// if we have a test of logic or binary </span>
-                <span class="keyword">var</span> test = <span class="local-variable">this</span>.expand(node.test, node, state)
-                <span class="keyword">var</span> test_t = node.test.type
-
-                <span class="keyword">if</span>(test_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || test_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || 
-                        test_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || test_t == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span>) test = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + test + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">var</span> else_v = <span class="local-variable">this</span>.expand(node.<span class="keyword">else</span>, node, state)
-                <span class="keyword">var</span> else_t = node.<span class="keyword">else</span>.type
-                <span class="keyword">if</span>(else_t == <span class="string"><span class="delimiter">'</span><span class="content">Assign</span><span class="delimiter">'</span></span> || else_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || 
-                        else_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || else_t == <span class="string"><span class="delimiter">'</span><span class="content">Binary</span><span class="delimiter">'</span></span>) else_v = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + else_v + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">return</span> test + <span class="string"><span class="delimiter">'</span><span class="content">?</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.space + <span class="local-variable">this</span>.expand(node.then, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + 
-                        <span class="local-variable">this</span>.space + else_v
-        }
-
-        <span class="local-variable">this</span>.<span class="function">New</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> fn = <span class="local-variable">this</span>.expand(node.fn, node, state)
-                <span class="keyword">var</span> fn_t = node.fn.type
-                <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>) 
-                        fn = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + fn + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">new </span><span class="delimiter">'</span></span> + fn + <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.list(node.args, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">callArgs</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> arg = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(node.first_args) arg += <span class="local-variable">this</span>.list(node.first_args, node, state)
-                <span class="keyword">if</span>(node.args &amp;&amp; node.args.length){
-                        <span class="keyword">if</span>(arg) arg += <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span>
-                        arg += <span class="local-variable">this</span>.list(node.args, node, state)
-                }
-                <span class="keyword">if</span>(node.last_args){
-                        <span class="keyword">if</span>(arg) arg += <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span>
-                        arg += <span class="local-variable">this</span>.list(node.last_args, node, state)
-                }
-                <span class="keyword">return</span> arg
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Call</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> fn = <span class="local-variable">this</span>.expand(node.fn, node, state)
-                <span class="keyword">var</span> fn_t = node.fn.type
-                <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Function</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>) 
-                        fn = <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + fn + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">return</span> fn + <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.callArgs(node, parent, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Nest</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.fn, node, state) + <span class="local-variable">this</span>.expand(node.body, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Class</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">class </span><span class="delimiter">'</span></span> + node.id.name
-                <span class="keyword">if</span>(node.base) ret += <span class="string"><span class="delimiter">'</span><span class="content"> extends </span><span class="delimiter">'</span></span> + node.base.name 
-                ret += <span class="local-variable">this</span>.expand(node.body, node, state)
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Quote</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.quote, node, state)
-                <span class="keyword">return</span> ret
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Signal</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> left = <span class="local-variable">this</span>.expand(node.left, node, state)
-                <span class="keyword">var</span> right = <span class="local-variable">this</span>.expand(node.right, node, state)
-                <span class="keyword">return</span> left + <span class="string"><span class="delimiter">'</span><span class="content">:=</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + quote
-        }
-
-        <span class="local-variable">this</span>.<span class="function">AssignQuote</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">var</span> left = <span class="local-variable">this</span>.expand(node.left, node, state)
-                <span class="keyword">var</span> quote = <span class="local-variable">this</span>.expand(node.quote, node, state)
-                <span class="keyword">return</span> left + <span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.space + quote
-        }
-        
-        <span class="local-variable">this</span>.<span class="function">Rest</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">...</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.id, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">CallBlock</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.expand(node.object, node, state) + <span class="local-variable">this</span>.expand(node.body, node, state)
-        }
-
-        <span class="local-variable">this</span>.<span class="function">Debugger</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">debugger</span><span class="delimiter">'</span></span>
-        }
-
-        <span class="local-variable">this</span>.<span class="function">With</span> = <span class="keyword">function</span>(node, parent, state){
-                <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">with(</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.object, node, state) + <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.expand(node.body, node, state)
-        }
-})</pre></td>
+})
+        </pre></td>
 </tr></table>
 
 </body>

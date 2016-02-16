@@ -177,26 +177,62 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n23" name="n23">23</a>
 <a href="#n24" name="n24">24</a>
 <a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
+<a href="#n31" name="n31">31</a>
+<a href="#n32" name="n32">32</a>
+<a href="#n33" name="n33">33</a>
+<a href="#n34" name="n34">34</a>
+<a href="#n35" name="n35">35</a>
+<a href="#n36" name="n36">36</a>
+<a href="#n37" name="n37">37</a>
+<a href="#n38" name="n38">38</a>
+<a href="#n39" name="n39">39</a>
+<strong><a href="#n40" name="n40">40</a></strong>
+<a href="#n41" name="n41">41</a>
+<a href="#n42" name="n42">42</a>
+<a href="#n43" name="n43">43</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+  <td class="code"><pre><span class="comment">/* Copyright 3015-3016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-<span class="comment">// Flexbox flexdirection example.</span>
+<span class="comment">// flexbox flexdirection example.</span>
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,
         <span class="keyword">function</span> (<span class="predefined">$ui$</span>, screen, view) {
-                <span class="comment">// internal, Create a single screen with background color 'green'</span>
+
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span> () {
                         <span class="keyword">return</span> [
                                 screen(
-                                        {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>},
+                                        {<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>},
                                         <span class="comment">/* boxes with flexdirection row / horizontal layout */</span>
                                         view({
-                                                        <span class="key">bgcolor</span>: vec4(<span class="float">.2</span>,<span class="float">.3</span>,<span class="float">.3</span>,<span class="float">1.0</span>),
+                                                  <span class="key">w</span>: <span class="integer">160</span>,
+                                                        <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">darkvanilla</span><span class="delimiter">'</span></span>,
                                                         <span class="key">padding</span>: vec4(<span class="integer">5</span>)
                                                 },
-                                                view({<span class="key">w</span>:<span class="integer">20</span>, <span class="key">h</span>:<span class="integer">20</span>, <span class="key">bgcolor</span>: vec4(<span class="float">.5</span>,<span class="float">.5</span>,<span class="float">.5</span>,<span class="float">1.0</span>)})
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">alabamacrimson</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">castletongreen</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">amber</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">azure</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">byzantine</span><span class="delimiter">'</span></span>})
+                                        ),
+                                        <span class="comment">/* boxes with flexdirectino 'column' / vertical layout */</span>
+                                        view({
+                                                        <span class="key">w</span>: <span class="integer">160</span>,
+                                                        <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">darkmediumgray</span><span class="delimiter">'</span></span>,
+                                                        <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>,
+                                                        <span class="key">padding</span>: vec4(<span class="integer">5</span>)
+                                                },
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">alabamacrimson</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">castletongreen</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">amber</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">azure</span><span class="delimiter">'</span></span>}),
+                                                view({<span class="key">w</span>:<span class="integer">30</span>, <span class="key">h</span>:<span class="integer">30</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">byzantine</span><span class="delimiter">'</span></span>})
                                         )
                                 )
                         ];

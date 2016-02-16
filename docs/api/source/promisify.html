@@ -195,7 +195,7 @@ define(<span class="keyword">function</span>(){
         <span class="keyword">function</span> <span class="function">promisify</span>(call){
                 <span class="keyword">return</span> <span class="keyword">function</span>(){
                         <span class="keyword">var</span> arg = Array.prototype.slice.call(<span class="local-variable">arguments</span>)
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                 arg.push(<span class="keyword">function</span>(err, result){
                                         <span class="keyword">if</span>(err) reject(err)
                                         <span class="keyword">else</span> resolve(result)
@@ -206,7 +206,7 @@ define(<span class="keyword">function</span>(){
         }
 
         promisify.<span class="function">timeout</span> = <span class="keyword">function</span>(time){
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){
                         setTimeout(<span class="keyword">function</span>(){
                                 resolve(time)
                         }, time)

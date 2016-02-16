@@ -687,29 +687,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n533" name="n533">533</a>
 <a href="#n534" name="n534">534</a>
 <a href="#n535" name="n535">535</a>
-<a href="#n536" name="n536">536</a>
-<a href="#n537" name="n537">537</a>
-<a href="#n538" name="n538">538</a>
-<a href="#n539" name="n539">539</a>
-<strong><a href="#n540" name="n540">540</a></strong>
-<a href="#n541" name="n541">541</a>
-<a href="#n542" name="n542">542</a>
-<a href="#n543" name="n543">543</a>
-<a href="#n544" name="n544">544</a>
-<a href="#n545" name="n545">545</a>
-<a href="#n546" name="n546">546</a>
-<a href="#n547" name="n547">547</a>
-<a href="#n548" name="n548">548</a>
-<a href="#n549" name="n549">549</a>
-<strong><a href="#n550" name="n550">550</a></strong>
-<a href="#n551" name="n551">551</a>
-<a href="#n552" name="n552">552</a>
-<a href="#n553" name="n553">553</a>
-<a href="#n554" name="n554">554</a>
-<a href="#n555" name="n555">555</a>
-<a href="#n556" name="n556">556</a>
-<a href="#n557" name="n557">557</a>
-<a href="#n558" name="n558">558</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -768,29 +745,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.pointer = <span class="local-variable">this</span>.device.pointer
                 <span class="local-variable">this</span>.midi = <span class="local-variable">this</span>.device.midi
                 <span class="local-variable">this</span>.bindInputs()
-        }
-
-        <span class="local-variable">this</span>.<span class="function">defaultKeyboardHandler</span> = <span class="keyword">function</span>(target, v, prefix){
-                <span class="keyword">if</span> (!prefix) prefix = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
-
-                <span class="keyword">var</span> keyboard = <span class="local-variable">this</span>.screen.keyboard
-                keyboard.textarea.focus()
-
-                <span class="keyword">var</span> name = prefix + <span class="string"><span class="delimiter">'</span><span class="content">keydown</span><span class="delimiter">'</span></span> + v.name[<span class="integer">0</span>].toUpperCase() + v.name.slice(<span class="integer">1</span>)
-                <span class="local-variable">this</span>.undo_group++
-
-                <span class="keyword">if</span>(keyboard.leftmeta || keyboard.rightmeta) name += <span class="string"><span class="delimiter">'</span><span class="content">Cmd</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.ctrl) name += <span class="string"><span class="delimiter">'</span><span class="content">Ctrl</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.alt) name += <span class="string"><span class="delimiter">'</span><span class="content">Alt</span><span class="delimiter">'</span></span>
-                <span class="keyword">if</span>(keyboard.shift) name += <span class="string"><span class="delimiter">'</span><span class="content">Shift</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">if</span>(target[name]) {
-                        target[name](v)
-                }
-                <span class="keyword">else</span>{
-                        <span class="comment">//console.log(name)</span>
-                        <span class="keyword">if</span> (target.keydownHandler) target.keydownHandler(name)
-                }
         }
 
         <span class="comment">// TODO(aki): move menu into a configurable component.</span>

@@ -191,7 +191,7 @@ define(<span class="keyword">function</span>(){
                 <span class="keyword">var</span> <span class="function">ret</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> iter = generator.apply(<span class="local-variable">this</span>, <span class="local-variable">arguments</span>)
 
-                        <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                                 <span class="keyword">function</span> <span class="function">error</span>(e){ reject(e) }
                                 <span class="keyword">function</span> <span class="function">next</span>(value){
                                         <span class="keyword">var</span> iterval = iter.next(value)

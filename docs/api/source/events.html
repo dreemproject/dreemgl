@@ -241,14 +241,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n87" name="n87">87</a>
 <a href="#n88" name="n88">88</a>
 <a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, view) {
 
         <span class="local-variable">this</span>.text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
+                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.data</span><span class="delimiter">'</span></span>)}),
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
                 <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
                 <span class="key">hoverid</span>: -<span class="integer">1</span>,
@@ -259,7 +267,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.layout.width =  <span class="local-variable">this</span>.parent.layout.width
         }
 
-        <span class="local-variable">this</span>.<span class="function">onpointerhover</span> = <span class="keyword">function</span>(event){
+        <span class="local-variable">this</span>.<span class="function">onpointerstart</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.hoverid = <span class="local-variable">this</span>.last_pick_id
                 <span class="keyword">var</span> eventData = <span class="local-variable">this</span>.data[<span class="local-variable">this</span>.hoverid]
                 <span class="keyword">if</span> (eventData) {
@@ -290,23 +298,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vertstruct.array();
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; data.length; i++) {
 
-                                <span class="comment">// HACK: move dates to 2016 for demo</span>
                                 <span class="keyword">var</span> date = <span class="keyword">new</span> Date(data[i].date)
-                                date.setYear(<span class="integer">2016</span>)
+                                <span class="keyword">var</span> enddate = <span class="keyword">new</span> Date(data[i].enddate)
 
                                 <span class="keyword">var</span> timeOffset = date.getTime() - startTime
                                 <span class="keyword">var</span> dayOffset = timeOffset / <span class="integer">1000</span> / <span class="integer">60</span> / <span class="integer">60</span> / <span class="integer">24</span>
+                                <span class="keyword">var</span> dayWidth = (enddate.getTime() - date.getTime()) / <span class="integer">1000</span> / <span class="integer">60</span> / <span class="integer">60</span> / <span class="integer">24</span>
 
-                                <span class="keyword">var</span> w = <span class="integer">0</span>
+                                <span class="keyword">var</span> w = dayWidth
                                 <span class="keyword">var</span> h = <span class="integer">1</span>
                                 <span class="keyword">var</span> x = dayOffset
                                 <span class="keyword">var</span> y = <span class="integer">0</span>
 
                                 mesh.pushQuad(
-                                        x   ,y    , <span class="integer">0</span>, <span class="integer">0</span>, i,
-                                        x+w , y   , <span class="integer">1</span>, <span class="integer">0</span>, i,
-                                        x   , y+h , <span class="integer">0</span>, <span class="integer">1</span>, i,
-                                        x+w ,y+h  , <span class="integer">1</span>, <span class="integer">1</span>, i
+                                        x  , y  , <span class="integer">0</span>, <span class="integer">0</span>, i,
+                                        x+w, y  , <span class="integer">1</span>, <span class="integer">0</span>, i,
+                                        x  , y+h, <span class="integer">0</span>, <span class="integer">1</span>, i,
+                                        x+w, y+h, <span class="integer">1</span>, <span class="integer">1</span>, i
                                 )
                         }
                 }
@@ -315,13 +323,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> pos = mesh.pos
                         pos.x = pos.x - view.zoom * view.scroll[<span class="integer">0</span>]
                         pos = pos * vec2(view.layout.width / view.zoom, view.layout.height)
-                        <span class="keyword">var</span> w = mesh.uv.x * min(max(<span class="integer">100</span> / view.zoom, <span class="float">1.0</span>), <span class="float">50.0</span>)
-                        pos = pos + vec2(w, <span class="float">0.0</span>)
                         <span class="keyword">return</span> vec4(pos, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                 }
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
                         PickGuid = mesh.id
-                        <span class="keyword">if</span> (view.hoverid == mesh.id) {
+                        <span class="keyword">if</span> (view.hoverid == mesh.id){
                                 <span class="keyword">return</span> vec4(<span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">0</span>, <span class="integer">1</span>)
                         }
                         <span class="keyword">return</span> vec4(<span class="float">0.5</span>, <span class="float">0.5</span>, <span class="float">0.5</span>, <span class="integer">1</span>)

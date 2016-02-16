@@ -307,20 +307,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>._stages = astpath;
                 <span class="local-variable">this</span>.reset();
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._stages) {
-                        <span class="local-variable">this</span>.search()
+                        <span class="local-variable">this</span>.scan()
                 }
         };
 
         <span class="local-variable">this</span>.<span class="function">reset</span> = <span class="keyword">function</span>() {
                 <span class="local-variable">this</span>._unstage();
-                <span class="keyword">delete</span> <span class="local-variable">this</span>.atparent;
-                <span class="keyword">delete</span> <span class="local-variable">this</span>.atindex;
-                <span class="keyword">delete</span> <span class="local-variable">this</span>.atstate;
+                <span class="local-variable">this</span>.atparent = <span class="predefined-constant">undefined</span>;
+                <span class="local-variable">this</span>.atindex = <span class="predefined-constant">undefined</span>;
+                <span class="local-variable">this</span>.atstate = <span class="predefined-constant">undefined</span>;
                 <span class="local-variable">this</span>.at = <span class="local-variable">this</span>._root;
                 <span class="keyword">return</span> <span class="local-variable">this</span>;
         };
 
-        <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>() {
+        <span class="local-variable">this</span>.<span class="function">scan</span> = <span class="keyword">function</span>() {
                 <span class="keyword">while</span> (<span class="local-variable">this</span>._prepare()) {
                         <span class="local-variable">this</span>.walk(<span class="local-variable">this</span>.at);
                 }
@@ -330,7 +330,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="local-variable">this</span>.<span class="function">_unstage</span> = <span class="keyword">function</span>() {
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._stage) {
                         <span class="keyword">var</span> type = <span class="local-variable">this</span>._stage.type;
-                        <span class="keyword">delete</span> <span class="local-variable">this</span>._stage;
+                        <span class="local-variable">this</span>._stage = <span class="predefined-constant">undefined</span>;
                         <span class="keyword">if</span> (type) {
                                 <span class="keyword">delete</span> <span class="local-variable">this</span>[type];
                         }
@@ -374,7 +374,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="local-variable">this</span>.atindex = index;
                                                 <span class="local-variable">this</span>.atstate = state;
                                                 <span class="local-variable">this</span>.at = node;
-                                                <span class="local-variable">this</span>.search();
+                                                <span class="local-variable">this</span>.scan();
                                         }
 
                                 }.bind(<span class="local-variable">this</span>);

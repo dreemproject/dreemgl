@@ -916,6 +916,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n762" name="n762">762</a>
 <a href="#n763" name="n763">763</a>
 <a href="#n764" name="n764">764</a>
+<a href="#n765" name="n765">765</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -965,6 +966,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">_atConstructor</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.view = <span class="local-variable">this</span>.outer
         }
+
         <span class="local-variable">this</span>.set_precision = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.extensions = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
@@ -993,7 +995,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// ehm how do we find extensions to enable?</span>
                 <span class="keyword">var</span> ret = <span class="local-variable">this</span>.set_precision?<span class="string"><span class="delimiter">'</span><span class="content">precision </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.precision + <span class="string"><span class="delimiter">'</span><span class="content"> float;</span><span class="content">\n</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                 <span class="comment">//        'precision ' + this.precision + ' int;'</span>
-
+                
                 <span class="comment">//var ret = ''</span>
                 <span class="comment">//for(var i = 0, exts = this.extensions.split('|'); i&lt;exts.length; i++){</span>
                 <span class="comment">//        var ext = exts[i]</span>
