@@ -143,6 +143,7 @@ function main(){
 			// Store the path from the root to the specified directory.
 			// There is a mismatch between headless and dreem server.
 			var index = composition.lastIndexOf('/');
+			if (index < 0) index = composition.lastIndexOf('\\');
 			define.$example = (index >= 0) ? composition.substring(0,index+1) : './'
 			try {
 				// The images are relative to ths specified directory

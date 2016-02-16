@@ -36,6 +36,13 @@ define.class(function(require){
 		this.height = parseInt(args['-height']) || 1080;
 		this.name = args['-name'] || 'dreemgl';
 		this.verbose = ('-verbose' in args);
+		
+		if ('-dumpstate' in args) {
+			var ds = args['-dumpstate'];
+			this.dumpstate = (ds.length > 0) ? args['-dumpstate'] : 'stdout';
+		}
+
+
 
 		// The duration (msec) of the test. 0 = render once and stop
 		this.duration = parseInt(args['-duration']) || 0;
@@ -106,7 +113,7 @@ define.class(function(require){
 		require.clearCache()
 
 		this.HeadlessApi = require('./headless_api');
-		this.HeadlessApi.initialize({width: this.width, height: this.height, name: this.name, duration: this.duration, verbose: this.verbose});
+		this.HeadlessApi.initialize({width: this.width, height: this.height, name: this.name, duration: this.duration, verbose: this.verbose, dumpstate: this.dumpstate});
 
 		var Composition = require(define.expandVariables(this.filename))
 		this.composition = new Composition(this.busserver, this.session)
