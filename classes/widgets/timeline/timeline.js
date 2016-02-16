@@ -72,12 +72,12 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.pointerwheel = function(event) {
 		this.hscrollbar = this.find("scrollbar")
 		if (event.value[0]){
-			this.scroll = clamp(this._scroll + event.value[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+			this.scroll = clamp(this._scroll + event.value[0] *20.0/ this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
 		if (event.value[1]){
 			var lastzoom = this._zoom
 
-			var delta = event.value[1] / this.layout.width * this.zoom
+			var delta = event.value[1]*20.0 / this.layout.width * this.zoom
 			var newzoom = clamp(this.zoom + delta, 1, this.maxzoom)
 
 			this.zoom = newzoom
