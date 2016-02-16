@@ -138,7 +138,53 @@ define.class(function(require, exports){
 		return 'headlessactor' + this.id;
 	}
 
+	this.currentstate = function(verbose) {
+		var states = this.headlessrenderer.currentstate(verbose);
+
+		if (!HeadlessApi.isShown(this.name())) {
+			var props = [];
+			var keys = Object.keys(this.props).sort();
+			for (var i in keys) {
+				var key = keys[i];
+				var prop = {};
+
+				// Format the values. This might be an array
+				var vals = this.props[key];
+				var v;
+				if (Array.isArray(vals)) {
+					v = [];
+					for (var i in vals) {
+						v.push(parseFloat(vals[i].toFixed(4)));
+					}
+				}
+				else {
+					v = parseFloat(vals.toFixed(4));
+				}
+				
+
+				prop[key] = v;
+				props.push(prop);
+			}
+
+			var state = [
+				{name: this.name()}
+				,{renderer: this.headlessrenderer.name()}
+				,{onstage: this.onstage}
+			];
+			if (props.length > 0)
+				state.push ({props: props});
+
+			states.push(state);
+			HeadlessApi.shownObject(this.name());
+		}
+		
+		return states;
+	}
+
 	this.inspect = function(depth) {
+		//HACK
+		this.currentstate();
+		
 		var obj = {headlessActor:this.id, obj:[this.headlessrenderer.inspect(depth)]};
 		var util = require('util')
 		return util.inspect(obj, {depth: null});

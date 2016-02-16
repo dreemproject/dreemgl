@@ -105,6 +105,7 @@ define.class(function(exports){
 		HeadlessApi.duration = settings.duration;
 		HeadlessApi.name = settings.name;
 		HeadlessApi.verbose = settings.verbose;
+		HeadlessApi.dumpstate = settings.dumpstate;
           
 		try {
 			// Create a top-level layer to the stage. 
@@ -127,9 +128,76 @@ define.class(function(exports){
 		if (HeadlessApi.verbose)
 			console.log('Terminate');
 		
-		// TODO Dump the object state if enabled
+		// Dump the object state, if enabled, to a file
+		if (HeadlessApi.dumpstate && HeadlessApi.dumpstate.length > 0) {
+			var state = HeadlessApi.currentstate(true);
+			var state_json = JSON.stringify(state, null, 2);
+
+			// Write to the specified file, or stdout
+			var file = HeadlessApi.dumpstate.toString();
+			if (file === 'stdout') {
+				process.stdout.write(state_json);
+			}
+			else {
+				var fs = require('fs');
+				fs.writeFileSync(file, state_json);
+			}
+		}
 
 		process.exit(0);
+	}
+
+
+	/**
+	 * @method currentstate
+	 * Static method to return the json state of the composition.
+	 * Objects are displayed in the order they are referenced.
+	 */
+	HeadlessApi.currentstate = function(verbose) {
+		HeadlessApi.shownobjects = {};
+
+		var states = HeadlessApi.rootlayer.currentstate(verbose);
+
+		return states;
+	}
+
+
+	/**
+	 * @method shownObject
+	 * Static method to indicate a named object that has been displayed
+	 * @param {objname} String Object name
+	 */
+	HeadlessApi.shownobjects = {};
+	HeadlessApi.shownObject = function(objname) {
+		HeadlessApi.shownobjects[objname] = 1;
+	}
+
+
+	/**
+	 * @method isShown
+	 * Static method to test if the named object has been shown.
+	 * @param {objname} String Object name
+	 */
+	HeadlessApi.isShown = function(objname) {
+		return (objname in HeadlessApi.shownobjects);
+	}
+
+
+
+	HeadlessApi.inspect = function() {
+		// TODO Dump the object state if enabled
+		var output = HeadlessApi.rootlayer.inspect();
+		console.log('rootlayer', output);
+	}
+
+	/**
+	 * @method inspect
+	 * Static method to return the json state of the composition.
+	 */
+	HeadlessApi.inspect = function() {
+		// TODO Dump the object state if enabled
+		var output = HeadlessApi.rootlayer.inspect();
+		console.log('rootlayer', output);
 	}
 
 

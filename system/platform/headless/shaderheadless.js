@@ -220,10 +220,8 @@ console.log('*******************************************************************
 			if (texture.image) {
 				var ti = TEXTURE_INFO
 
-				//TODO Get current values for sampler
-				var sampler = new headless.Sampler();
-				sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);
-				sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);
+				// Simulate the DALi Sampler
+				var sampler = {};
 
 				//FIX
 				if (headlessmaterial) {
@@ -246,10 +244,8 @@ console.log('*******************************************************************
 					if (texture.image) {
 						var ti = TEXTURE_INFO
 
-						//TODO Get current values for sampler
-						var sampler = new headless.Sampler();
-						sampler.setFilterMode(headless.FILTER_MODE_LINEAR, headless.FILTER_MODE_LINEAR);
-						sampler.setWrapMode(headless.WRAP_MODE_CLAMP_TO_EDGE, headless.WRAP_MODE_CLAMP_TO_EDGE);
+						// Simulate the DALi Sampler
+						var sampler = {};
 
 						var index = headlessmaterial.addTexture(texture.image, ti.loc, sampler);
 						gltex.texture_index = index;

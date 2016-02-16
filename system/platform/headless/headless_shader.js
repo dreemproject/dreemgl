@@ -40,7 +40,7 @@ define.class(function(require, exports){
 		var headless = HeadlessApi.headless;
 		this.id = ++HeadlessShader.GlobalId;
 		this.vertexshader = vertexShader;
-		this.fragmentShader = fragmentShader;
+		this.fragmentshader = fragmentShader;
 	}
 
 		// Internal method to remove comments and empty lines from a shader. This
@@ -73,8 +73,25 @@ define.class(function(require, exports){
 		return 'headlessshader' + this.id;
 	}
 
+	this.currentstate = function(verbose) {
+		var states = [];
+		if (!HeadlessApi.isShown(this.name())) {
+			var state = [
+				{name: this.name()},
+				,{vertexshader: verbose ? this.vertexshader : HeadlessApi.getHash(this.vertexshader)}
+				,{fragmentShader: verbose ? this.fragmentshader : HeadlessApi.getHash(this.fragmentshader)}
+			]
+
+			states = [state];
+			HeadlessApi.shownObject(this.name());
+		}
+
+		return states;
+	}
+
 	this.inspect = function(depth) {
-		var obj = {headlessShader:this.id, vertex:this.vertexshader.length, fragment:this.fragmentShader.length};
+		var obj = {headlessShader:this.id, vertex:this.vertexshader.length, fragment:this.fragmentshader.length};
+
 		var util = require('util')
 		return util.inspect(obj, {depth: null});
 	}
