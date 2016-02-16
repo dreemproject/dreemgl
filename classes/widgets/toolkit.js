@@ -6,9 +6,10 @@
 define.class("$ui/view", function(require,
 								  $ui$, view, label, icon, treeview, button, statebutton,
 								  $widgets$, palette, propviewer,
+								  $server$, sourceset,
                                   $system$parse$, astscanner, onejsparser){
 
-// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion
+// The DreemGL Visual Toolkit allows for visual manipulation of a running composition
 
 	this.name = "toolkit";
 	this.clearcolor = "#565656";
@@ -34,7 +35,7 @@ define.class("$ui/view", function(require,
 		inspect:Config({type:Object}),
 
 		// Components available to be dragged into compositions.
-		components:Config({type:Object, value:{
+		components:{
 			Views:[
 				{
 					label:"View",
@@ -111,11 +112,11 @@ define.class("$ui/view", function(require,
 			//		}
 			//	}
 			//]
-		}}),
+		},
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
-		// and views can be resized and manipulated.
-		// In 'live' mode views lock into place the composition regains it's active behaviors
+		// and views can be resized and manipulated.  In 'live' mode views lock into place the composition regains
+		// it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
 		reticlesize: 9,
 		groupdrag:true,
@@ -348,6 +349,9 @@ define.class("$ui/view", function(require,
 				for (var i=0;i<this.selection.length;i++) {
 					var selected = this.selection[i];
 					selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
+					if (!this.groupdrag) {
+						break;
+					}
 				}
 			}
 
@@ -458,6 +462,9 @@ define.class("$ui/view", function(require,
 
 						ny = selected.pos.y + ev.pointer.movement.y;
 						this.setASTObjectProperty(selected, "y", ny);
+					}
+					if (!this.groupdrag) {
+						break;
 					}
 				}
 			}
@@ -1182,7 +1189,7 @@ define.class("$ui/view", function(require,
 			}
 		};
 
-		this.borderwidth = 2;
+		this.borderwidth = 1.5;
 		this.bgcolor = NaN;
 		this.position = "absolute";
 		this.tooltarget = false;
@@ -1191,9 +1198,18 @@ define.class("$ui/view", function(require,
 			this.size = vec2(v._layout.width + this.borderwidth[0], v._layout.height + this.borderwidth[0])
 			this.rotate = v.rotate;
 
+			var p = v;
+			while (p = p.parent) {
+				for (var i=0;i<this.rotate.length;i++) {
+					this.rotate[i] += p.rotate[i]
+				}
+			}
+
 			if (v.borderradius && v.borderradius[0] + v.borderradius[1] + v.borderradius[2] + v.borderradius[3]) {
 				this.borderradius = v.borderradius;
 			}
+
+			//TODO (mason) these events maybe need to be cleaned up later, not sure yet
 
 			v.onsize = function(ev,v,o) {
 				this.size = vec3(v.x + this.borderwidth[0], v.y + this.borderwidth[0], v.z)
@@ -1225,6 +1241,12 @@ define.class("$ui/view", function(require,
 
 			v.onrotate = function(ev,v,o) {
 				this.rotate = v;
+				var p = o;
+				while (p = p.parent) {
+					for (var i=0;i<this.rotate.length;i++) {
+						this.rotate[i] += p.rotate[i]
+					}
+				}
 			}.bind(this);
 
 			v.onborderradius = function(ev,v,o) {
@@ -1305,6 +1327,13 @@ define.class("$ui/view", function(require,
 			this.pos = vec2(v._layout.absx, v._layout.absy);
 			this.size = vec2(v._layout.width, v._layout.height);
 			this.rotate = v.rotate;
+
+			var p = v;
+			while (p = p.parent) {
+				for (var i=0;i<this.rotate.length;i++) {
+					this.rotate[i] += p.rotate[i]
+				}
+			}
 		}
 	});
 
