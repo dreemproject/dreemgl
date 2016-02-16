@@ -46,6 +46,7 @@ define.class("$ui/view", function(require,
 					params:{
 						height:70,
 						width:80,
+						pickalpha:-1,
 						bgcolor:'purple'
 					}
 				},
@@ -70,7 +71,9 @@ define.class("$ui/view", function(require,
 					classname:"checkbox",
 					classdir:"$ui$",
 					params:{
+						tooldragroot:true,
 						fontsize:24,
+						pickalpha:-1,
 						fgcolor:'pink'
 					}
 				},
@@ -81,7 +84,9 @@ define.class("$ui/view", function(require,
 					classname:"button",
 					classdir:"$ui$",
 					params:{
+						tooldragroot:true,
 						fontsize:24,
+						pickalpha:-1,
 						fgcolor:'red',
 						label:'Press Me!'
 					}
@@ -94,7 +99,7 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						fgcolor:'cornflower',
-						opaque:true,
+						pickalpha:-1,
 						icon:'flask',
 						fontsize:80
 					}
