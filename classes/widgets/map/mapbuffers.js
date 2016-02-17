@@ -845,7 +845,7 @@ define.class(function(require, $server$, service){
 				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
 			}
 			else{
-				console.log("ignoring", Bb.properties.kind);
+				//console.log("ignoring", Bb.properties.kind);
 			}
 		}
 

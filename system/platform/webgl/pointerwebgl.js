@@ -165,7 +165,8 @@ define.class('$system/base/pointer', function (require, exports){
 
 			}
 			else if(is_windows){
-
+				dx/=8;
+				dy/=8;
 			}
 			//wheel = vec2(e.deltaX, e.deltaY)
 			this.setwheel(mouseToPointers(e, dx, dy))
