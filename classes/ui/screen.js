@@ -28,9 +28,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		globalpointerover: Config({type:Event}),
 		globalpointerout: Config({type:Event}),
 		globalpointerwheel: Config({type:Event}),
-		globalpointermultistart: Config({type:Event}),
-		globalpointermultimove: Config({type:Event}),
-		globalpointermultiend: Config({type:Event})
+		globalpointermultimove: Config({type:Event})
 	}
 
 	this.bgcolor = NaN
@@ -219,16 +217,12 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				} else if (this.modal){
 					this.modal.emitUpward('focuslost', {global: e.pointer.position})
 				}
-			} else if (e.pointers) {
-				this.emit('globalpointermultistart', e)
-				e.view.emitUpward('pointermultistart', e.pointers)
 			}
 		}.bind(this)
 
 		// Event handler for `pointer.move` event.
 		// Emits `pointermove` event from `pointer.view`.
 		this.pointer.move = function(e){
-
 			if (e.pointer) {
 				this.emit('globalpointermove', e)
 				e.view.emitUpward('pointermove', e.pointer)
@@ -252,9 +246,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 					this.keyboard.pointerMove(e.pointer.position)
 					this.keyboard.checkSpecialKeys(e.pointer)
 				}
-			} else if (e.pointers) {
-				this.emit('globalpointermultiend', e)
-				e.view.emitUpward('pointermultiend', e.pointers)
 			}
 		}.bind(this)
 

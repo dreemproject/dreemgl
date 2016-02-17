@@ -1561,6 +1561,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1407" name="n1407">1407</a>
 <a href="#n1408" name="n1408">1408</a>
 <a href="#n1409" name="n1409">1409</a>
+<strong><a href="#n1410" name="n1410">1410</a></strong>
+<a href="#n1411" name="n1411">1411</a>
+<a href="#n1412" name="n1412">1412</a>
+<a href="#n1413" name="n1413">1413</a>
+<a href="#n1414" name="n1414">1414</a>
+<a href="#n1415" name="n1415">1415</a>
+<a href="#n1416" name="n1416">1416</a>
+<a href="#n1417" name="n1417">1417</a>
+<a href="#n1418" name="n1418">1418</a>
+<a href="#n1419" name="n1419">1419</a>
+<strong><a href="#n1420" name="n1420">1420</a></strong>
+<a href="#n1421" name="n1421">1421</a>
+<a href="#n1422" name="n1422">1422</a>
+<a href="#n1423" name="n1423">1423</a>
+<a href="#n1424" name="n1424">1424</a>
+<a href="#n1425" name="n1425">1425</a>
+<a href="#n1426" name="n1426">1426</a>
+<a href="#n1427" name="n1427">1427</a>
+<a href="#n1428" name="n1428">1428</a>
+<a href="#n1429" name="n1429">1429</a>
+<strong><a href="#n1430" name="n1430">1430</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1636,6 +1657,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">params</span>:{
                                                 <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
+                                                <span class="key">toolresize</span>:<span class="predefined-constant">false</span>,
                                                 <span class="key">fontsize</span>:<span class="integer">24</span>,
                                                 <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">pink</span><span class="delimiter">'</span></span>
@@ -2342,7 +2364,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> vw = useview || ev.view;
 
-                <span class="keyword">if</span> (vw === <span class="local-variable">this</span> || (<span class="local-variable">this</span>.testView(vw) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span>)) {
+                <span class="keyword">if</span> (vw === <span class="local-variable">this</span> || (<span class="local-variable">this</span>.testView(vw) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span> &amp;&amp; ev.view.toolresize !== <span class="predefined-constant">false</span>)) {
                         <span class="keyword">var</span> pos = vw.globalToLocal(ev.pointer.position);
                         <span class="keyword">var</span> edge = <span class="local-variable">this</span>.reticlesize;
 
@@ -2750,6 +2772,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>,view,<span class="keyword">function</span>() {
                 <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">selectorrect</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.<span class="function">bordercolorfn</span> = <span class="keyword">function</span>(pos) {
                         <span class="keyword">var</span> speed = time * <span class="float">27.0</span>;
                         <span class="keyword">var</span> size = <span class="float">0.0008</span>;
@@ -2766,6 +2789,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">selectedrect</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
                 <span class="local-variable">this</span>.visible = wire(<span class="string"><span class="delimiter">'</span><span class="content">this.outer.visible</span><span class="delimiter">'</span></span>);
+                <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">borderseed</span>:Math.random() + <span class="float">17.0</span>,
                         <span class="key">target</span>:Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">type</span>:Object})
@@ -2857,7 +2881,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">ruler</span><span class="delimiter">&quot;</span></span>, view, <span class="keyword">function</span>() {
                 <span class="local-variable">this</span>.visible = wire(<span class="string"><span class="delimiter">'</span><span class="content">this.outer.visible</span><span class="delimiter">'</span></span>);
-                <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
+                <span class="local-variable">this</span>.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.tooltarget = <span class="predefined-constant">false</span>;
                 <span class="local-variable">this</span>.borderwidth = vec4(<span class="float">5.0</span>,<span class="float">5.0</span>,<span class="float">5.0</span>,<span class="float">5.0</span>);
@@ -2872,52 +2897,69 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">rulermarkstart</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
                         <span class="key">rulermarkendcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF00CC</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">rulermarkend</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                        <span class="function">bordercolorfn</span>:<span class="keyword">function</span>(p) {
-                                <span class="keyword">var</span> atx = p.x * layout.width;
-                                <span class="keyword">var</span> aty = p.y * layout.height;
-                                <span class="keyword">if</span> ((aty &gt; borderwidth[<span class="integer">2</span>] &amp;&amp; aty &lt; layout.height - borderwidth[<span class="integer">3</span>]) &amp;&amp; (atx &lt; borderwidth[<span class="integer">0</span>] || atx &gt; layout.width - borderwidth[<span class="integer">1</span>])) {
-                                        <span class="keyword">if</span> (aty &gt; rulermarkstart[<span class="integer">1</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; aty &lt; rulermarkstart[<span class="integer">1</span>] + rulertickwidth * <span class="float">0.5</span>) {
-                                                <span class="keyword">return</span> rulermarkstartcolor;
-                                        } <span class="keyword">else</span> <span class="keyword">if</span> (aty &gt; rulermarkend[<span class="integer">1</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; aty &lt; rulermarkend[<span class="integer">1</span>] + rulertickwidth * <span class="float">0.5</span>) {
-                                                <span class="keyword">return</span> rulermarkendcolor;
-                                        }
-
-                                        <span class="keyword">var</span> c = <span class="reserved">int</span>(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
-                                        <span class="keyword">if</span> (c &lt; <span class="reserved">int</span>(rulertickwidth * <span class="float">2.0</span>)) {
-                                                <span class="keyword">return</span> rulermajorcolor;
-                                        }
-
-                                        <span class="keyword">if</span> (atx &lt; borderwidth[<span class="integer">0</span>] * <span class="float">0.5</span> || atx &gt; layout.width - borderwidth[<span class="integer">1</span>] * <span class="float">0.5</span>) {
-                                                <span class="keyword">var</span> m = <span class="reserved">int</span>(mod(gl_FragCoord.y, rulertickspacing));
-                                                <span class="keyword">if</span> (m &lt; <span class="reserved">int</span>(rulertickwidth)) {
-                                                        <span class="keyword">return</span> rulerminorcolor;
-                                                }
-                                        }
-                                }
-                                <span class="keyword">else</span> <span class="keyword">if</span> ((atx &gt; borderwidth[<span class="integer">0</span>] &amp;&amp; atx &lt; layout.width - borderwidth[<span class="integer">1</span>]) &amp;&amp; (aty &lt; borderwidth[<span class="integer">2</span>] || aty &gt; layout.height - borderwidth[<span class="integer">3</span>])) {
-
-                                        <span class="keyword">if</span> (atx &gt; rulermarkstart[<span class="integer">0</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; atx &lt; rulermarkstart[<span class="integer">0</span>] + rulertickwidth * <span class="float">0.5</span>) {
-                                                <span class="keyword">return</span> rulermarkstartcolor;
-                                        } <span class="keyword">else</span> <span class="keyword">if</span> (atx &gt; rulermarkend[<span class="integer">0</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; atx &lt; rulermarkend[<span class="integer">0</span>] + rulertickwidth * <span class="float">0.5</span>) {
-                                                <span class="keyword">return</span> rulermarkendcolor;
-                                        }
-
-                                        <span class="keyword">var</span> b = <span class="reserved">int</span>(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
-                                        <span class="keyword">if</span> (b &lt; <span class="reserved">int</span>(rulertickwidth * <span class="float">2.0</span>)) {
-                                                <span class="keyword">return</span> rulermajorcolor;
-                                        }
-
-                                        <span class="keyword">if</span> (aty &lt; borderwidth[<span class="integer">2</span>] * <span class="float">0.5</span> || aty &gt; layout.height - borderwidth[<span class="integer">3</span>] * <span class="float">0.5</span>) {
-                                                <span class="keyword">var</span> n = <span class="reserved">int</span>(mod(gl_FragCoord.x, rulertickspacing));
-                                                <span class="keyword">if</span> (n &lt; <span class="reserved">int</span>(rulertickwidth)) {
-                                                        <span class="keyword">return</span> rulerminorcolor;
-                                                }
-                                        }
-
-                                }
-                                <span class="keyword">return</span> bordercolor;
-                        }
+                        <span class="key">markers</span>:vec4(<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">100</span>,<span class="integer">100</span>)
                 };
+
+                <span class="comment">//this.bgcolorfn = function(p) {</span>
+                <span class="comment">//        var px = width * p.x;</span>
+        <span class="comment">//</span>
+                <span class="comment">//        var py = height * p.y;</span>
+        <span class="comment">//</span>
+                <span class="comment">//        if (abs(px - markers[0]) &lt; 1.0 || abs(py - markers[1]) &lt; 1.0) {</span>
+                <span class="comment">//                return vec4(0,1,0,1);</span>
+                <span class="comment">//        } else if (abs(px - markers[2]) &lt; 1.0 || abs(py - markers[3]) &lt; 1.0) {</span>
+                <span class="comment">//                return vec4(1,0,0,1);</span>
+                <span class="comment">//        } else {</span>
+                <span class="comment">//                return vec4(0,0,0,0);</span>
+                <span class="comment">//        }</span>
+                <span class="comment">//};</span>
+
+                <span class="local-variable">this</span>.<span class="function">bordercolorfn</span> = <span class="keyword">function</span>(p) {
+                        <span class="keyword">var</span> atx = p.x * layout.width;
+                        <span class="keyword">var</span> aty = p.y * layout.height;
+                        <span class="keyword">if</span> ((aty &gt; borderwidth[<span class="integer">2</span>] &amp;&amp; aty &lt; layout.height - borderwidth[<span class="integer">3</span>]) &amp;&amp; (atx &lt; borderwidth[<span class="integer">0</span>] || atx &gt; layout.width - borderwidth[<span class="integer">1</span>])) {
+                                <span class="keyword">if</span> (aty &gt; rulermarkstart[<span class="integer">1</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; aty &lt; rulermarkstart[<span class="integer">1</span>] + rulertickwidth * <span class="float">0.5</span>) {
+                                        <span class="keyword">return</span> rulermarkstartcolor;
+                                } <span class="keyword">else</span> <span class="keyword">if</span> (aty &gt; rulermarkend[<span class="integer">1</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; aty &lt; rulermarkend[<span class="integer">1</span>] + rulertickwidth * <span class="float">0.5</span>) {
+                                        <span class="keyword">return</span> rulermarkendcolor;
+                                }
+
+                                <span class="keyword">var</span> c = <span class="reserved">int</span>(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
+                                <span class="keyword">if</span> (c &lt; <span class="reserved">int</span>(rulertickwidth * <span class="float">2.0</span>)) {
+                                        <span class="keyword">return</span> rulermajorcolor;
+                                }
+
+                                <span class="keyword">if</span> (atx &lt; borderwidth[<span class="integer">0</span>] * <span class="float">0.5</span> || atx &gt; layout.width - borderwidth[<span class="integer">1</span>] * <span class="float">0.5</span>) {
+                                        <span class="keyword">var</span> m = <span class="reserved">int</span>(mod(gl_FragCoord.y, rulertickspacing));
+                                        <span class="keyword">if</span> (m &lt; <span class="reserved">int</span>(rulertickwidth)) {
+                                                <span class="keyword">return</span> rulerminorcolor;
+                                        }
+                                }
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span> ((atx &gt; borderwidth[<span class="integer">0</span>] &amp;&amp; atx &lt; layout.width - borderwidth[<span class="integer">1</span>]) &amp;&amp; (aty &lt; borderwidth[<span class="integer">2</span>] || aty &gt; layout.height - borderwidth[<span class="integer">3</span>])) {
+
+                                <span class="keyword">if</span> (atx &gt; rulermarkstart[<span class="integer">0</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; atx &lt; rulermarkstart[<span class="integer">0</span>] + rulertickwidth * <span class="float">0.5</span>) {
+                                        <span class="keyword">return</span> rulermarkstartcolor;
+                                } <span class="keyword">else</span> <span class="keyword">if</span> (atx &gt; rulermarkend[<span class="integer">0</span>] - rulertickwidth * <span class="float">0.5</span> &amp;&amp; atx &lt; rulermarkend[<span class="integer">0</span>] + rulertickwidth * <span class="float">0.5</span>) {
+                                        <span class="keyword">return</span> rulermarkendcolor;
+                                }
+
+                                <span class="keyword">var</span> b = <span class="reserved">int</span>(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
+                                <span class="keyword">if</span> (b &lt; <span class="reserved">int</span>(rulertickwidth * <span class="float">2.0</span>)) {
+                                        <span class="keyword">return</span> rulermajorcolor;
+                                }
+
+                                <span class="keyword">if</span> (aty &lt; borderwidth[<span class="integer">2</span>] * <span class="float">0.5</span> || aty &gt; layout.height - borderwidth[<span class="integer">3</span>] * <span class="float">0.5</span>) {
+                                        <span class="keyword">var</span> n = <span class="reserved">int</span>(mod(gl_FragCoord.x, rulertickspacing));
+                                        <span class="keyword">if</span> (n &lt; <span class="reserved">int</span>(rulertickwidth)) {
+                                                <span class="keyword">return</span> rulerminorcolor;
+                                        }
+                                }
+
+                        }
+                        <span class="keyword">return</span> bordercolor;
+                }
+
                 <span class="local-variable">this</span>.<span class="function">ontarget</span> = <span class="keyword">function</span>(ev,v,o) {
                         <span class="keyword">if</span> (!v) {
                                 <span class="local-variable">this</span>.visible = <span class="predefined-constant">false</span>;

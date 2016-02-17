@@ -214,13 +214,11 @@ define.class('$system/base/node', function(require){
 
 		// fires when pointer is pressed down.
 		pointerstart:Config({type:Event}),
-		pointermultistart:Config({type:Event}),
 		// fires when pointer is pressed and moved (dragged).
 		pointermove:Config({type:Event}),
 		pointermultimove:Config({type:Event}),
 		// fires when pointer is released.
 		pointerend:Config({type:Event}),
-		pointermultiend:Config({type:Event}),
 		// fires when pointer is pressed and released quickly.
 		pointertap:Config({type:Event}),
 		// fires when pointer moved without being pressed.

@@ -72,20 +72,20 @@ define.class(function(require, exports){
 	this.precision = 'highp'
 
 	this.compileHeader = function(){
+		var ret = '';
 		// ehm how do we find extensions to enable?
-		var ret = this.set_precision?'precision ' + this.precision + ' float;\n':''
+		// Extensions come first.
+		ret += '#extension GL_OES_standard_derivatives : enable\n'
+
+		ret += this.set_precision?'precision ' + this.precision + ' float;\n':''
 		//	'precision ' + this.precision + ' int;'
-		
+
 		//var ret = ''
 		//for(var i = 0, exts = this.extensions.split('|'); i<exts.length; i++){
 		//	var ext = exts[i]
 	//		if(gltypes.extensions[ext] === 1)
 	//			ret += '\n#extension GL_' + ext + ' : enable'
 	//	}
-		// Don't add extentions to DALi
-		if (define.$platform !== 'dali') {
-			ret += '\n#extension GL_OES_standard_derivatives : enable'
-		}
 	
 		return ret + '\n'
 	}

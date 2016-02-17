@@ -978,10 +978,8 @@
 
 
 
-
-	if(define.packaged){
+	function define_packaged(){
 		define.require = define.localRequire('')
-
 	}
 
 
@@ -999,7 +997,7 @@
 
 
 
-	else if(typeof window !== 'undefined')(function(){ // browser implementation
+	function define_browser(){ // browser implementation
 		
 		// if define was already defined use it as a config store
 		// storage structures
@@ -1268,7 +1266,7 @@
 			}
 		}
 		define.autoreloadConnect()
-	})()
+	}
 
 
 
@@ -1287,7 +1285,7 @@
 
 
 
-	else if(typeof process !== 'undefined')(function(){ // nodeJS implementation
+	function define_nodejs(){ // nodeJS implementation
 		module.exports = global.define = define
 
 		define.$root = define.filePath(process.mainModule.filename.replace(/\\/g,'/'))
@@ -1623,11 +1621,10 @@
 		global.define.module = {}
 		global.define.factory = {}
 		// fetch a new require for the main module and return that
-		
 		define.define(function(require){
 			module.exports = require
 		})
-	})()
+	}
 
 
 
@@ -1642,15 +1639,12 @@
 
 
 
-	else{
+	function define_worker(){
 		self.define = define
 
 		define.define = function(body){
-			console.log('here')
 		}
 	}
-
-
 
 
 
@@ -2757,7 +2751,10 @@
 	//defineArrayProp(Float32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.vec2, exports.vec3, exports.vec4])
 	defineArrayProp(Int32Array.prototype, {x:0, y:1, z:2, w:3}, [ivec2, ivec3, ivec4])
 	//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])
-
+	if(define.packaged) define_packaged()
+	else if(define.$environment === 'nodejs') define_nodejs()
+	else if(define.$environment === 'browser') define_browser()
+	else if(define.$environment === 'worker') define_worker()
 })()
 
 // use the switchable promise

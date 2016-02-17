@@ -504,7 +504,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 p = p.parent
             }
-            <span class="keyword">if</span> (fullname.endsWith(<span class="string"><span class="delimiter">'</span><span class="content">.js</span><span class="delimiter">'</span></span>) &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">node_modules</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span> &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">docs/api</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span>) {
+            <span class="keyword">if</span> (<span class="regexp"><span class="delimiter">/</span><span class="content">\.</span><span class="content">js$</span><span class="delimiter">/</span></span>.test(fullname) &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">node_modules</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span> &amp;&amp; fullname.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">docs/api</span><span class="delimiter">'</span></span>) &lt; <span class="integer">0</span>) {
                 paths.push(fullname)
             }
 

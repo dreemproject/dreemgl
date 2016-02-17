@@ -10,9 +10,6 @@ define.class('$system/base/pointer', function (require, exports){
 	this._cursor = 'arrow'
 	this._tooltip = 'Application'
 
-	// Minimum non-zero wheel value
-	var wheelmin = vec2(1000, 1000)
-
 	Object.defineProperty(this, 'cursor', {
 		get:function(){
 			return this._cursor
@@ -30,12 +27,7 @@ define.class('$system/base/pointer', function (require, exports){
 		this.device = device
 
 		// Internal: creates pointer array with a single pointer from mouse event data.
-		var mouseToPointers = function (event) {
-
-			// Set wheel min non-zero value
-			wheelmin[0] = min(wheelmin[0], abs(event.deltaX || wheelmin[0]))
-			wheelmin[1] = min(wheelmin[1], abs(event.deltaY || wheelmin[1]))
-
+		var mouseToPointers = function (event, wheelx, wheely) {
 			return [{
 				value: vec2(event.pageX, event.pageY),
 				position: vec2(event.pageX, event.pageY),
@@ -44,7 +36,7 @@ define.class('$system/base/pointer', function (require, exports){
 				alt: event.altKey,
 				ctrl: event.ctrlKey,
 				meta: event.metaKey,
-				wheel: vec2(event.deltaX / wheelmin[0], event.deltaY / wheelmin[1]),
+				wheel: vec2(wheelx, wheely),
 				touch: false
 			}]
 		}.bind(this)
@@ -134,12 +126,49 @@ define.class('$system/base/pointer', function (require, exports){
 		window.addEventListener('touchcancel', this.touchend.bind(this))
 		window.addEventListener('touchleave', this.touchend.bind(this))
 
-		// Internal: handler for `wheel` event. Sets the wheel or zoom attribute/event.
-		this.wheelmove = function(e){
+		// scrollwheel fun
+		// the different platforms
+		var is_osx = navigator.userAgent.indexOf("Macintosh") > -1
+		var is_windows = navigator.appVersion.indexOf("Win") > -1
+		var is_gecko = 'MozAppearance' in document.documentElement.style
+		var is_chrome = navigator.userAgent.indexOf('Chrome') > -1
+
+		// Minimum non-zero wheel value
+		// var wheelmin = vec2(1000, 1000)
+
+		document.addEventListener('wheel', function(e){
 			e.preventDefault()
-			this.setwheel(mouseToPointers(e))
-		}
-		document.addEventListener('wheel', this.wheelmove.bind(this))
+
+			// Set wheel min non-zero value
+			//wheelmin[0] = min(wheelmin[0], abs(event.deltaX || wheelmin[0]))
+			//wheelmin[1] = min(wheelmin[1], abs(event.deltaY || wheelmin[1]))
+
+			var dx = e.deltaX, dy = e.deltaY
+
+			// line scroll
+			if (e.deltaMode === 1){
+				dx *= 12
+				dy *= 12
+			}
+			// page scroll
+			else if (e.deltaMode === 2){
+				dx *= 800
+				dy *= 800
+			}
+
+			dx /= 2
+			dy /= 2
+
+			if (is_osx){
+
+			}
+			else if (is_windows){
+				dx /= 8;
+				dy /= 8;
+			}
+
+			this.setwheel(mouseToPointers(e, dx, dy))
+		}.bind(this))
 	}
 
 })

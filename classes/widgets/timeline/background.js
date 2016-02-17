@@ -8,7 +8,7 @@ define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 	this.fgcolor = 'black'
 
 	this.attributes = {
-		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
+		zoom: wire('this.parent.zoom'),
 		scroll: wire('this.parent.scroll'),
 		hoursegs: Config({type: Number, value: 24})
 	}

@@ -244,6 +244,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n90" name="n90">90</a></strong>
 <a href="#n91" name="n91">91</a>
 <a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -305,10 +315,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> dayOffset = timeOffset / <span class="integer">1000</span> / <span class="integer">60</span> / <span class="integer">60</span> / <span class="integer">24</span>
                                 <span class="keyword">var</span> dayWidth = (enddate.getTime() - date.getTime()) / <span class="integer">1000</span> / <span class="integer">60</span> / <span class="integer">60</span> / <span class="integer">24</span>
 
+                                <span class="comment">// TODO(aki): Improve dumb stacking of ovelapping events</span>
+                                <span class="keyword">var</span> overlapsnext = <span class="predefined-constant">false</span>
+                                <span class="keyword">if</span> (data[i + <span class="integer">1</span>] &amp;&amp; data[i + <span class="integer">1</span>].date &lt;= data[i].enddate) {
+                                        overlapsnext = <span class="predefined-constant">true</span>
+                                }
+                                <span class="keyword">var</span> overlapsprev = <span class="predefined-constant">false</span>
+                                <span class="keyword">if</span> (i &gt; <span class="integer">0</span> &amp;&amp; data[i - <span class="integer">1</span>].enddate &gt;= data[i].date) {
+                                        overlapsprev = <span class="predefined-constant">true</span>
+                                }
+
                                 <span class="keyword">var</span> w = dayWidth
-                                <span class="keyword">var</span> h = <span class="integer">1</span>
+                                <span class="keyword">var</span> h = overlapsprev || overlapsnext ? <span class="float">0.5</span> : <span class="integer">1</span>
                                 <span class="keyword">var</span> x = dayOffset
-                                <span class="keyword">var</span> y = <span class="integer">0</span>
+                                <span class="keyword">var</span> y = overlapsprev ? <span class="float">0.5</span> : <span class="integer">0</span>
 
                                 mesh.pushQuad(
                                         x  , y  , <span class="integer">0</span>, <span class="integer">0</span>, i,

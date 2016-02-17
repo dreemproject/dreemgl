@@ -2914,9 +2914,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n2760" name="n2760">2760</a></strong>
 <a href="#n2761" name="n2761">2761</a>
 <a href="#n2762" name="n2762">2762</a>
-<a href="#n2763" name="n2763">2763</a>
-<a href="#n2764" name="n2764">2764</a>
-<a href="#n2765" name="n2765">2765</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -3898,10 +3895,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
 
-
-        <span class="keyword">if</span>(define.packaged){
+        <span class="keyword">function</span> <span class="function">define_packaged</span>(){
                 define.require = define.localRequire(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>)
-
         }
 
 
@@ -3919,7 +3914,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
 
-        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)(<span class="keyword">function</span>(){ <span class="comment">// browser implementation</span>
+        <span class="keyword">function</span> <span class="function">define_browser</span>(){ <span class="comment">// browser implementation</span>
                 
                 <span class="comment">// if define was already defined use it as a config store</span>
                 <span class="comment">// storage structures</span>
@@ -4188,7 +4183,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
                 }
                 define.autoreloadConnect()
-        })()
+        }
 
 
 
@@ -4207,7 +4202,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
 
-        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> process !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>)(<span class="keyword">function</span>(){ <span class="comment">// nodeJS implementation</span>
+        <span class="keyword">function</span> <span class="function">define_nodejs</span>(){ <span class="comment">// nodeJS implementation</span>
                 module.exports = global.define = define
 
                 define.<span class="predefined">$root</span> = define.filePath(process.mainModule.filename.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\\</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>))
@@ -4543,11 +4538,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 global.define.module = {}
                 global.define.factory = {}
                 <span class="comment">// fetch a new require for the main module and return that</span>
-                
                 define.define(<span class="keyword">function</span>(require){
                         module.exports = require
                 })
-        })()
+        }
 
 
 
@@ -4562,15 +4556,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
 
-        <span class="keyword">else</span>{
+        <span class="keyword">function</span> <span class="function">define_worker</span>(){
                 self.define = define
 
                 define.<span class="function">define</span> = <span class="keyword">function</span>(body){
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>)
                 }
         }
-
-
 
 
 
@@ -5677,7 +5668,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="comment">//defineArrayProp(Float32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.vec2, exports.vec3, exports.vec4])</span>
         defineArrayProp(Int32Array.prototype, {<span class="key">x</span>:<span class="integer">0</span>, <span class="key">y</span>:<span class="integer">1</span>, <span class="key">z</span>:<span class="integer">2</span>, <span class="key">w</span>:<span class="integer">3</span>}, [ivec2, ivec3, ivec4])
         <span class="comment">//defineArrayProp(Int32Array.prototype, {r:0, g:1, b:2, a:3}, [exports.ivec2, exports.ivec3, exports.ivec4])</span>
-
+        <span class="keyword">if</span>(define.packaged) define_packaged()
+        <span class="keyword">else</span> <span class="keyword">if</span>(define.<span class="predefined">$environment</span> === <span class="string"><span class="delimiter">'</span><span class="content">nodejs</span><span class="delimiter">'</span></span>) define_nodejs()
+        <span class="keyword">else</span> <span class="keyword">if</span>(define.<span class="predefined">$environment</span> === <span class="string"><span class="delimiter">'</span><span class="content">browser</span><span class="delimiter">'</span></span>) define_browser()
+        <span class="keyword">else</span> <span class="keyword">if</span>(define.<span class="predefined">$environment</span> === <span class="string"><span class="delimiter">'</span><span class="content">worker</span><span class="delimiter">'</span></span>) define_worker()
 })()
 
 <span class="comment">// use the switchable promise</span>

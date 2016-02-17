@@ -58,10 +58,20 @@ define.class('$ui/label', function (require, $ui$, view) {
 				var dayOffset = timeOffset / 1000 / 60 / 60 / 24
 				var dayWidth = (enddate.getTime() - date.getTime()) / 1000 / 60 / 60 / 24
 
+				// TODO(aki): Improve dumb stacking of ovelapping events
+				var overlapsnext = false
+				if (data[i + 1] && data[i + 1].date <= data[i].enddate) {
+					overlapsnext = true
+				}
+				var overlapsprev = false
+				if (i > 0 && data[i - 1].enddate >= data[i].date) {
+					overlapsprev = true
+				}
+
 				var w = dayWidth
-				var h = 1
+				var h = overlapsprev || overlapsnext ? 0.5 : 1
 				var x = dayOffset
-				var y = 0
+				var y = overlapsprev ? 0.5 : 0
 
 				mesh.pushQuad(
 					x  , y  , 0, 0, i,

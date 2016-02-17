@@ -378,11 +378,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n224" name="n224">224</a>
 <a href="#n225" name="n225">225</a>
 <a href="#n226" name="n226">226</a>
-<a href="#n227" name="n227">227</a>
-<a href="#n228" name="n228">228</a>
-<a href="#n229" name="n229">229</a>
-<strong><a href="#n230" name="n230">230</a></strong>
-<a href="#n231" name="n231">231</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -391,9 +386,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
-
-        <span class="keyword">var</span> JSFormatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)        
-        <span class="keyword">var</span> Parser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">cursorcol</span>: <span class="integer">1</span>,
@@ -440,10 +432,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">typeface</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.font = font
 
-                <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> JSFormatter.types){
-                        <span class="local-variable">this</span>[key] = String(JSFormatter.types[key])
-                }
-
                 <span class="local-variable">this</span>.<span class="function">paint</span> = <span class="keyword">function</span>(p, edge, pixelsize){
                         <span class="keyword">return</span> vec4(-<span class="integer">1</span>.)
                 }
@@ -467,6 +455,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="keyword">var</span> tracklen = view.tracks.length
                         <span class="keyword">var</span> rowlen = view.tracks[<span class="integer">0</span>].length
+                        <span class="keyword">var</span> dt = Date.now()
                         <span class="keyword">for</span>(<span class="keyword">var</span> row = <span class="integer">0</span>; row &lt; rowlen; row++){
                                 <span class="keyword">for</span>(<span class="keyword">var</span> col = <span class="integer">0</span>; col &lt; tracklen; col++){
 
@@ -477,6 +466,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                                 textbuf.add(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>, row, <span class="integer">8</span>, <span class="integer">0</span>)
                         }
+                        console.log(Date.now()-dt)
                         view.total_rows = row
                 }
         }

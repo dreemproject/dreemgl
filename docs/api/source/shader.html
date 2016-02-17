@@ -992,20 +992,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.precision = <span class="string"><span class="delimiter">'</span><span class="content">highp</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.<span class="function">compileHeader</span> = <span class="keyword">function</span>(){
+                <span class="keyword">var</span> ret = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
                 <span class="comment">// ehm how do we find extensions to enable?</span>
-                <span class="keyword">var</span> ret = <span class="local-variable">this</span>.set_precision?<span class="string"><span class="delimiter">'</span><span class="content">precision </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.precision + <span class="string"><span class="delimiter">'</span><span class="content"> float;</span><span class="content">\n</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                <span class="comment">// Extensions come first.</span>
+                ret += <span class="string"><span class="delimiter">'</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="content">\n</span><span class="delimiter">'</span></span>
+
+                ret += <span class="local-variable">this</span>.set_precision?<span class="string"><span class="delimiter">'</span><span class="content">precision </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.precision + <span class="string"><span class="delimiter">'</span><span class="content"> float;</span><span class="content">\n</span><span class="delimiter">'</span></span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                 <span class="comment">//        'precision ' + this.precision + ' int;'</span>
-                
+
                 <span class="comment">//var ret = ''</span>
                 <span class="comment">//for(var i = 0, exts = this.extensions.split('|'); i&lt;exts.length; i++){</span>
                 <span class="comment">//        var ext = exts[i]</span>
         <span class="comment">//                if(gltypes.extensions[ext] === 1)</span>
         <span class="comment">//                        ret += '\n#extension GL_' + ext + ' : enable'</span>
         <span class="comment">//        }</span>
-                <span class="comment">// Don't add extentions to DALi</span>
-                <span class="keyword">if</span> (define.<span class="predefined">$platform</span> !== <span class="string"><span class="delimiter">'</span><span class="content">dali</span><span class="delimiter">'</span></span>) {
-                        ret += <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="content">#extension GL_OES_standard_derivatives : enable</span><span class="delimiter">'</span></span>
-                }
         
                 <span class="keyword">return</span> ret + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
         }

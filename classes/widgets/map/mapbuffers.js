@@ -18,7 +18,6 @@ define.class(function(require, $server$, service){
 
 	//this.ignoreuse = {}
 	this.displaykinds ={
-		forsest: true,
 		water: true, 
 		meadow:true, 
 		playa:true, 
@@ -29,7 +28,21 @@ define.class(function(require, $server$, service){
 		beach: true,
 		grass: true,
 		lake:true,
-		canal: true
+		building:true,
+		canal: true,
+		land:true,
+		park:true,
+		parking:true,
+		pitch:true,
+		footway:true,
+		playground:true,
+		wood:true,
+		residential:true,
+		farm:true,
+		wetland:true,
+		aerodrome:true,
+		farmyard:true, scrub:true,
+		forest:true,nature_reserve:true,riverbank:true, railway:true, runway:true, farmland:true
 	}
 	
 	this.noignoreuse = {
@@ -381,9 +394,9 @@ define.class(function(require, $server$, service){
 
 	var RoadVertexStruct = this.RoadVertexStruct = define.struct({
 		pos:vec4,
-		geom:vec4//sidevec:vec2
+		geom:vec4,//sidevec:vec2
 		//geom:vec3,
-		//color: float,
+		color: vec4
 		//side: float,
 		//dist: float,
 		//linewidth:float,
@@ -601,6 +614,7 @@ define.class(function(require, $server$, service){
 			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
 
 			if (st.roadcolor) color = st.roadcolor;else UnhandledKindSet[R.kind] = "road" ;
+			//console.log(R.kind, color);
 			// make color an id
 
 			var colorid = color[0]
@@ -646,13 +660,13 @@ define.class(function(require, $server$, service){
 				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
 				mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
 				*/
-				mesh.push(nx,ny,predelta[0], predelta[1], 1, dist, linewidth, colorid)//z, color, 1, dist,linewidth,presdelta, markcolor);
-				mesh.push(nx,ny,presdelta[0], presdelta[1], -1, dist, linewidth, colorid)//z, color, -1, dist,linewidth,presdelta, markcolor);
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
+				mesh.push(nx,ny,predelta[0], predelta[1], 1, dist, linewidth, colorid, color[0], color[1], color[2], color[3])//z, color, 1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx,ny,presdelta[0], presdelta[1], -1, dist, linewidth, colorid, color[0], color[1], color[2], color[3])//z, color, -1, dist,linewidth,presdelta, markcolor);
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid);
-				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], -0.5, -10 ,linewidth,colorid);
-				mesh.push(nx                            ,ny                            , presdelta[0], presdelta[1], -1, dist,linewidth,colorid);
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], 0.5, -10 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
+				mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5, presdelta[0], presdelta[1], -0.5, -10 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
+				mesh.push(nx                            ,ny                            , presdelta[0], presdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
 				//	color = vec4(0,0,0.03,0.1)
 				var lastdelta = vec2(0);
@@ -667,23 +681,23 @@ define.class(function(require, $server$, service){
 
 					var dist2 = dist +  vec2.len(predelt);
 					if (a>1){
-						mesh.push(nx,ny,lastdelta[0], lastdelta[1], 1, dist,linewidth,colorid);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], 1, dist,linewidth,colorid);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid);
+						mesh.push(nx,ny,lastdelta[0], lastdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
-						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid);
-						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth,colorid);
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
 					}
 					//color = vec4(0,1,0,0.2)
-					mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid);
-					mesh.push( nx, ny,sdelta[0], sdelta[1], -1, dist ,linewidth, colorid);
-					mesh.push(tnx,tny,sdelta[0], sdelta[1], 1, dist2,linewidth, colorid);
+					mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push( nx, ny,sdelta[0], sdelta[1], -1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1], 1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
 
-					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid);
-					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid);
-					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid);
+					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
 
 					lastsdelta = vec2(sdelta[0], sdelta[1]);
 					dist = dist2;
@@ -692,13 +706,13 @@ define.class(function(require, $server$, service){
 					lastdelta = delta;
 				}
 				//color = vec4("red");
-				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid);
-				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid);
+				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid, color[0], color[1], color[2], color[3]);
 
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid);
-				mesh.push(nx,ny, presdelta[0], presdelta[1],  -1, dist,linewidth,colorid);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
+				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid, color[0], color[1], color[2], color[3]);
+				mesh.push(nx,ny, presdelta[0], presdelta[1],  -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 			}
 		}
 		return mesh;
@@ -830,6 +844,9 @@ define.class(function(require, $server$, service){
 			var Bb = LandUseGeoms[i];
 			if (this.displaykinds[Bb.properties.kind]){
 				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
+			}
+			else{
+				//console.log("ignoring", Bb.properties.kind);
 			}
 		}
 

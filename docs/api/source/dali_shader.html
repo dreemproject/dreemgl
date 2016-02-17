@@ -256,6 +256,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n102" name="n102">102</a>
 <a href="#n103" name="n103">103</a>
 <a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -345,6 +348,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">// Create a multi-line string</span>
                 str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\\</span><span class="content">n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\\</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>);
+
+                <span class="comment">// Add an additional newline for #extension (or else it won't compile)</span>
+                str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="content">\#</span><span class="content">extension.*)</span><span class="char">\\</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="content">\n</span><span class="char">\\</span><span class="content">\n</span><span class="delimiter">'</span></span>);
 
         <span class="keyword">return</span> str;
 }

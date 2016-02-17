@@ -155,13 +155,17 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.stateclick()
 	}
 	this.pointerend = function(event){
-		this.statenormal()
 		if (event.isover){
+			this.statehover();
 			this.emit('click',event)
+		}
+		else{
+			this.statenormal()
 		}
 	}
 
 	this.render = function(){
+		if (this.constructor_children.length > 0) return this.constructor_children;
 		var res = []
 		this.buttonres = undefined
 		this.iconres = undefined

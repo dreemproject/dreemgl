@@ -1091,8 +1091,52 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n937" name="n937">937</a>
 <a href="#n938" name="n938">938</a>
 <a href="#n939" name="n939">939</a>
+<strong><a href="#n940" name="n940">940</a></strong>
+<a href="#n941" name="n941">941</a>
+<a href="#n942" name="n942">942</a>
+<a href="#n943" name="n943">943</a>
+<a href="#n944" name="n944">944</a>
+<a href="#n945" name="n945">945</a>
+<a href="#n946" name="n946">946</a>
+<a href="#n947" name="n947">947</a>
+<a href="#n948" name="n948">948</a>
+<a href="#n949" name="n949">949</a>
+<strong><a href="#n950" name="n950">950</a></strong>
+<a href="#n951" name="n951">951</a>
+<a href="#n952" name="n952">952</a>
+<a href="#n953" name="n953">953</a>
+<a href="#n954" name="n954">954</a>
+<a href="#n955" name="n955">955</a>
+<a href="#n956" name="n956">956</a>
+<a href="#n957" name="n957">957</a>
+<a href="#n958" name="n958">958</a>
+<a href="#n959" name="n959">959</a>
+<strong><a href="#n960" name="n960">960</a></strong>
+<a href="#n961" name="n961">961</a>
+<a href="#n962" name="n962">962</a>
+<a href="#n963" name="n963">963</a>
+<a href="#n964" name="n964">964</a>
+<a href="#n965" name="n965">965</a>
+<a href="#n966" name="n966">966</a>
+<a href="#n967" name="n967">967</a>
+<a href="#n968" name="n968">968</a>
+<a href="#n969" name="n969">969</a>
+<strong><a href="#n970" name="n970">970</a></strong>
+<a href="#n971" name="n971">971</a>
+<a href="#n972" name="n972">972</a>
+<a href="#n973" name="n973">973</a>
+<a href="#n974" name="n974">974</a>
+<a href="#n975" name="n975">975</a>
+<a href="#n976" name="n976">976</a>
+<a href="#n977" name="n977">977</a>
+<a href="#n978" name="n978">978</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, labelset, <span class="predefined">$$</span>, geo, urlfetch, pointset)
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+   either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, labelset, <span class="predefined">$$</span>, geo, urlfetch, pointset)
 {
 
         <span class="keyword">var</span> BufferGen = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$widgets/map/mapbuffers</span><span class="delimiter">&quot;</span></span>)();
@@ -1115,7 +1159,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         }
 
         <span class="local-variable">this</span>.<span class="function">onpointerwheel</span> = <span class="keyword">function</span>(ev){
-                <span class="local-variable">this</span>.zoomTo(<span class="local-variable">this</span>.dataset.zoomlevel - ev.wheel[<span class="integer">1</span>] / <span class="integer">30</span>);
+                <span class="local-variable">this</span>.zoomTo(<span class="local-variable">this</span>.dataset.zoomlevel - ev.wheel[<span class="integer">1</span>]);
         }
 
         <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(ev){
@@ -1138,6 +1182,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="local-variable">this</span>.dataset.gotoCity(city, zoomlevel, time);
         }
 
+        
+        <span class="local-variable">this</span>.<span class="function">flyTo</span> = <span class="keyword">function</span>(lat,lng, zoom,time){
+                <span class="local-variable">this</span>.dataset.flyTo(lat,lng, zoom, time);                
+        }
+        
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">mapdataset</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$$</span>, geo){
                 <span class="local-variable">this</span>.requestPending = <span class="predefined-constant">false</span>;
                 <span class="local-variable">this</span>.loadqueue = [];
@@ -1151,6 +1200,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">latlong</span>: vec2(<span class="float">52.3608307</span>, <span class="float">4.8626387</span>),
                         <span class="key">zoomlevel</span>: <span class="integer">15</span>,
                         <span class="key">callbacktarget</span>: {}
+                }
+                
+                <span class="local-variable">this</span>.<span class="function">flyTo</span> = <span class="keyword">function</span>(lat, lng, zoom, time){
+                        time = time?time:<span class="integer">0</span>
+                        <span class="keyword">if</span> (zoom &gt; geo.default_max_zoom) zoom = geo.default_max_zoom;
+                        
+                        <span class="keyword">if</span> (time &gt;<span class="integer">0</span>){
+                                <span class="keyword">var</span> anim = {}
+                                anim[time] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inoutquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:vec2(lat,lng)};
+                                <span class="local-variable">this</span>.latlong =Animate(anim);
+                                <span class="keyword">var</span> anim = {}
+                                anim[time/<span class="integer">2</span>] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">outquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:Math.min(zoom-<span class="float">0.5</span>, <span class="local-variable">this</span>.zoomlevel-<span class="float">0.5</span>)};
+                                anim[time] = {<span class="key">motion</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inquad</span><span class="delimiter">&quot;</span></span>, <span class="key">value</span>:zoom};
+                                <span class="local-variable">this</span>.zoomlevel =Animate(anim);
+                        
+                        
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.zoomlevel = zoom;
+                        }
+                        
+                        
+                        
+                        
                 }
 
                 <span class="local-variable">this</span>.<span class="function">setCenterLatLng</span> = <span class="keyword">function</span>(lat, lng, zoom, time){
@@ -1190,9 +1263,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 }
 
                 <span class="local-variable">this</span>.<span class="function">zoomTo</span> = <span class="keyword">function</span>(newz, time){
-                <span class="keyword">if</span> (newz &gt; geo.default_max_zoom) newz = geo.default_max_zoom;
+                        <span class="keyword">if</span> (newz &gt; geo.default_max_zoom) newz = geo.default_max_zoom;
 
-                time = time? time:<span class="integer">0</span>;
+                        time = time? time:<span class="integer">0</span>;
                         <span class="keyword">if</span> (time &gt;<span class="integer">0</span>)
                         {
                                 <span class="keyword">var</span> anim = {}
@@ -1503,8 +1576,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="key">bufferloaded</span>: <span class="float">0.0</span>,
                         <span class="key">tiletrans</span>: vec2(<span class="integer">0</span>),
                         <span class="key">fog</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">fogstart</span>: <span class="float">4000.0</span>,
-                        <span class="key">fogend</span>: <span class="integer">14000</span>.,
+                        <span class="key">fogstart</span>: <span class="float">14000.0</span>,
+                        <span class="key">fogend</span>: <span class="integer">24000</span>.,
                         <span class="key">layeroffset</span>: <span class="integer">0</span>,
                         <span class="key">layerzmult</span>: <span class="integer">0</span>,
                         <span class="key">layerzoff</span>: <span class="integer">0</span>,
@@ -1851,7 +1924,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="local-variable">this</span>.depth_test = <span class="string"><span class="delimiter">&quot;</span><span class="content">disabled</span><span class="delimiter">&quot;</span></span>
 
                         <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                                <span class="keyword">var</span> texcol = texture.sample(vec2(vec2(sin(mesh.geom.w*<span class="float">20.0</span>)*<span class="float">0.5</span>+<span class="float">0.5</span>,sin( mesh.geom.z*<span class="float">14.0</span>)*<span class="float">0.5</span>+<span class="float">0.5</span>)));
+                                <span class="keyword">var</span> texcol = mesh.color
                                 texcol.xyz*=<span class="float">0.9</span>;
                                 <span class="comment">//return &quot;black&quot; ;</span>
                                 <span class="keyword">var</span> prefog = mix(texcol, vec4(<span class="integer">0</span>), <span class="float">1.0</span>-view.bufferloaded);
@@ -1949,10 +2022,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> labels3d = [];
                 <span class="keyword">var</span> poi3d = [];
 
-                <span class="comment">// var div = 400</span>
-                <span class="comment">// this.tilewidth = Math.ceil(this.layout.width/ div);</span>
-                <span class="comment">// this.tileheight = Math.ceil(this.layout.height/ div);;</span>
-
+                 <span class="keyword">var</span> div = <span class="integer">1024</span>
+                <span class="local-variable">this</span>.tilewidth = Math.ceil(<span class="local-variable">this</span>.layout.width/ div);
+                <span class="local-variable">this</span>.tileheight = Math.ceil(<span class="local-variable">this</span>.layout.height/ div);;
+                
+                <span class="local-variable">this</span>.camdist = (<span class="local-variable">this</span>.layout.width)/Math.tan(<span class="integer">15</span>*((Math.PI*<span class="float">2.0</span>)/<span class="float">360.0</span>));
+                console.log(<span class="local-variable">this</span>.camdist, <span class="local-variable">this</span>.tilewidth, <span class="local-variable">this</span>.tileheight);
+                
+                <span class="keyword">var</span> basew = <span class="local-variable">this</span>.tilewidth/<span class="integer">2</span>;
+                <span class="keyword">var</span> baseh = <span class="local-variable">this</span>.tileheight/<span class="integer">2</span>;
                 <span class="comment">//for(var layer = 1;layer&gt;=0;layer--){</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> layer = <span class="integer">0</span>;layer&lt;<span class="integer">2</span>;layer++){
 
@@ -1961,8 +2039,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> tilearea = vec2(<span class="local-variable">this</span>.tilewidth, <span class="local-variable">this</span>.tileheight)
                         <span class="keyword">var</span> ltx = <span class="integer">0</span>;
                         <span class="keyword">var</span> lty = <span class="integer">0</span>;
-                        <span class="keyword">var</span> extw = Math.pow(<span class="float">2.0</span>, layer);;
-                        <span class="keyword">var</span> exth = Math.pow(<span class="float">2.0</span>, layer);;
+                        <span class="keyword">var</span> extw = basew * Math.pow(<span class="float">2.0</span>, layer-<span class="float">0.5</span>);;
+                        <span class="keyword">var</span> exth = baseh * Math.pow(<span class="float">2.0</span>, layer-<span class="float">0.5</span>);;
                         <span class="comment">//ext = 0;</span>
                         xs = -extw
                         xe = -xs +<span class="integer">1</span>;
@@ -2003,21 +2081,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                 }
                         }
                 }
-                <span class="keyword">var</span> dist = <span class="float">13.5</span>
+                <span class="keyword">var</span> dist = <span class="float">120.5</span>
                 res.push(
                         view({
                                 <span class="key">flex</span>: <span class="integer">1</span>,
                                 <span class="key">viewport</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">nearplane</span>: <span class="integer">100</span> * dist,
-                                <span class="key">farplane</span>: <span class="integer">40000</span> * dist,
-                                <span class="key">camera</span>:vec3(<span class="integer">0</span>,-<span class="integer">1000</span> * dist,<span class="integer">100</span>* dist), <span class="key">fov</span>: <span class="integer">30</span>, <span class="key">up</span>: vec3(<span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>),
+                                <span class="key">nearplane</span>: <span class="integer">100</span> ,
+                                <span class="key">farplane</span>: <span class="local-variable">this</span>.camdist * <span class="integer">2</span>,
+                                <span class="key">camera</span>:vec3(<span class="integer">0</span>,-<span class="local-variable">this</span>.camdist,<span class="integer">0</span>), <span class="key">fov</span>: <span class="integer">30</span>, <span class="key">up</span>: vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
                                 <span class="key">lookat</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
                         },[
                                 view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},[
                                         res3d,
                                         buildings3d,
-                                        label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">MARKER</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">0, 0</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>:<span class="integer">220</span>,<span class="key">pos</span>:[<span class="integer">0</span>,-<span class="integer">200</span>,<span class="integer">0</span>], <span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>, <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span> }),
+                                        <span class="comment">//label({name:&quot;MARKER&quot;, text:&quot;0, 0&quot;, fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: &quot;black&quot; }),</span>
                                         labels3d,
                                         pointset({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">pointset</span><span class="delimiter">'</span></span>})
                                 ])

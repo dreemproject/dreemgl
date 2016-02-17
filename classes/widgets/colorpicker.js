@@ -3,7 +3,6 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
 define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox){
 
 	var Shader = this.Shader = require('$system/platform/$platform/shader$platform')
@@ -24,16 +23,16 @@ define.class(function(require, $ui$, view, label, scrollbar, textbox, numberbox)
 		sliderheight: Config({type: float, value:15}),
 	}
 
-	this.basehue = 0.5;
-	this.bgcolor = vec4(0.0,0.0,0.0,0.4)
-	this.flexdirection = "column";
+	this.basehue = 0.5
+	this.bgcolor = vec4(0.0, 0.0, 0.0, 0.4)
+	this.flexdirection = "column"
 	this.padding = vec4(10)
-	this.minwidth = 200;
-	this.maxwidth = 300;
+	this.minwidth = 200
+	this.maxwidth = 300
 	this.borderradius = 3
 	this.borderwidth = 1
 	this.bordercolor = this.internalbordercolor
-	this.contrastcolor = vec4("black");
+	this.contrastcolor = vec4("black")
 
 	this.internalbordercolor= function(){
 		this.bordercolor = this.internalbordercolor
