@@ -16,7 +16,7 @@ define.class("$server/composition",function(require, $ui$, checkbox, icon, butto
 						alignitems:'center',
 						alignself:'stretch',
 						flexdirection:'column',
-						justifycontent:'center',
+						justifycontent:'space-around',
 						anchor:vec3(0,0,0),
 						toolmove:false,
 						toolrect:false
@@ -30,11 +30,24 @@ define.class("$server/composition",function(require, $ui$, checkbox, icon, butto
 							max:0.6
 						},
 						view({flex:1, bgcolor:"gray", alignitems:"center", justifycontent:"center"},
-							label({text:"Drawer"})),
+							label({text:"< Double Drawer >"})),
 						view({bgcolor:"yellow", flex:1, alignitems:"center", justifycontent:"flex-end"},
 							label({text:"Right Tray", fgcolor:"purple", fontsize:24, marginright:10})),
 						view({bgcolor:"purple", flex:1, alignitems:"center"},
 							label({text:"Left Tray", fgcolor:"yellow", fontsize:24, marginleft:10}))
+					),
+
+					drawer(
+						{
+							flex:0,
+							width:200,
+							height:60,
+							min:-0.66
+						},
+						view({flex:1, bgcolor:"gray", alignitems:"center", justifycontent:"center"},
+							label({text:"Drawer >"})),
+						view({bgcolor:"yellow", flex:1, alignitems:"center", justifycontent:"flex-end"},
+							label({text:"Right Only", fgcolor:"purple", fontsize:24, marginright:10}))
 					)
 				),
 				toolkit({visible:false, position:"absolute", x:781, y:90.99999237060547, width:400, height:800})
