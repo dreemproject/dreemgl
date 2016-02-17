@@ -10,14 +10,18 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.bgcolor = NaN
 
 	this.attributes = {
-		start: Config({type: Date,  value: new Date("Jan 1 2016")}),
-		end: Config({type: Date,  value: new Date("Dec 31 2016")}),
-		data: Config({type: Array,  value: []}),
-		format: Config({type: Enum('12','24'),  value: "12"}),
-		zoom: Config({type: Number, value: 0.5}),
+		format:  Config({type: Enum('12','24'),  value: "12"}),
+		start:   Config({type: Date,  value: new Date("Jan 1 2016")}),
+		end:     Config({type: Date,  value: new Date("Dec 31 2016")}),
+
+		data:    Config({type: Array,  value: []}),
+
 		minzoom: Config({type: Number, value: 1/24}),
 		maxzoom: Config({type: Number, value: 365}),
+
+		zoom: Config({type: Number, value: 0.5}),
 		scroll: Config({type: Number, value: 0}),
+
 		eventselected: Config({type:Event})
 	}
 

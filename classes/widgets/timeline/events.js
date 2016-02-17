@@ -60,11 +60,11 @@ define.class('$ui/label', function (require, $ui$, view) {
 
 				// TODO(aki): Improve dumb stacking of ovelapping events
 				var overlapsnext = false
-				if (data[i + 1] && data[i + 1].date < data[i].enddate) {
+				if (data[i + 1] && data[i + 1].date <= data[i].enddate) {
 					overlapsnext = true
 				}
 				var overlapsprev = false
-				if (i > 0 && data[i - 1].enddate > data[i].date) {
+				if (i > 0 && data[i - 1].enddate >= data[i].date) {
 					overlapsprev = true
 				}
 

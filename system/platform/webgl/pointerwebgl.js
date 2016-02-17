@@ -10,9 +10,6 @@ define.class('$system/base/pointer', function (require, exports){
 	this._cursor = 'arrow'
 	this._tooltip = 'Application'
 
-	// Minimum non-zero wheel value
-	//var wheelmin = vec2(1000, 1000)
-
 	Object.defineProperty(this, 'cursor', {
 		get:function(){
 			return this._cursor
@@ -31,11 +28,6 @@ define.class('$system/base/pointer', function (require, exports){
 
 		// Internal: creates pointer array with a single pointer from mouse event data.
 		var mouseToPointers = function (event, wheelx, wheely) {
-
-			// Set wheel min non-zero value
-			//wheelmin[0] = min(wheelmin[0], abs(event.deltaX || wheelmin[0]))
-			//wheelmin[1] = min(wheelmin[1], abs(event.deltaY || wheelmin[1]))
-			//console.log(event.wheelDelta)
 			return [{
 				value: vec2(event.pageX, event.pageY),
 				position: vec2(event.pageX, event.pageY),
@@ -44,7 +36,7 @@ define.class('$system/base/pointer', function (require, exports){
 				alt: event.altKey,
 				ctrl: event.ctrlKey,
 				meta: event.metaKey,
-				wheel: vec2(wheelx, wheely),//vec2(event.deltaX / wheelmin[0], event.deltaY / wheelmin[1]),
+				wheel: vec2(wheelx, wheely),
 				touch: false
 			}]
 		}.bind(this)
@@ -134,72 +126,49 @@ define.class('$system/base/pointer', function (require, exports){
 		window.addEventListener('touchcancel', this.touchend.bind(this))
 		window.addEventListener('touchleave', this.touchend.bind(this))
 
-		//this.wheelmove.bind(this))
-
 		// scrollwheel fun
-
 		// the different platforms
-
 		var is_osx = navigator.userAgent.indexOf("Macintosh") > -1
 		var is_windows = navigator.appVersion.indexOf("Win") > -1
 		var is_gecko = 'MozAppearance' in document.documentElement.style
 		var is_chrome = navigator.userAgent.indexOf('Chrome') > -1
 
+		// Minimum non-zero wheel value
+		// var wheelmin = vec2(1000, 1000)
+
 		document.addEventListener('wheel', function(e){
 			e.preventDefault()
 
+			// Set wheel min non-zero value
+			//wheelmin[0] = min(wheelmin[0], abs(event.deltaX || wheelmin[0]))
+			//wheelmin[1] = min(wheelmin[1], abs(event.deltaY || wheelmin[1]))
+
 			var dx = e.deltaX, dy = e.deltaY
 
-			if(e.deltaMode === 1){
+			// line scroll
+			if (e.deltaMode === 1){
 				dx *= 12
 				dy *= 12
 			}
-			else if(e.deltaMode ===2){
+			// page scroll
+			else if (e.deltaMode === 2){
 				dx *= 800
 				dy *= 800
 			}
-			dx /= 120
-			dy /= 120
 
-			if(is_osx){
+			dx /= 2
+			dy /= 2
+
+			if (is_osx){
 
 			}
-			else if(is_windows){
-				dx/=8;
-				dy/=8;
+			else if (is_windows){
+				dx /= 8;
+				dy /= 8;
 			}
-			//wheel = vec2(e.deltaX, e.deltaY)
+
 			this.setwheel(mouseToPointers(e, dx, dy))
 		}.bind(this))
-
-/*
-		if(isGecko){
-			window.addEventListener('DOMMouseScroll', function(e){
-				setMouse(e)
-				var d = e.detail;
-				d = d * 10
-				if(e.axis == 1){
-					gl.ms.v = 0
-					gl.ms.h = d
-				} else {
-					gl.ms.v = d
-					gl.ms.h = 0
-				}
-				gl.mouse_s()
-			})
-		}
-
-		window.onmousewheel = function(e){
-			//e.wheelDeltaX or e.wheelDeltaY is set
-			setMouse(e)
-			var n = Math.abs(e.wheelDeltaX || e.wheelDeltaY)
-			if(n%120) n = isSafari?-6:-1
-			else n = -15
-			gl.ms.h = e.wheelDeltaX / n
-			gl.ms.v = e.wheelDeltaY / n
-			gl.mouse_s()
-		}*/
-
 	}
 
 })
