@@ -49,6 +49,11 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.dataset.gotoCity(city, zoomlevel, time);
 	}
 
+	
+	this.flyTo = function(lat,lng, zoom,time){
+		this.dataset.flyTo(lat,lng, zoom, time);		
+	}
+	
 	define.class(this, "mapdataset", "$ui/view", function($$, geo){
 		this.requestPending = false;
 		this.loadqueue = [];
@@ -62,6 +67,30 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			latlong: vec2(52.3608307, 4.8626387),
 			zoomlevel: 15,
 			callbacktarget: {}
+		}
+		
+		this.flyTo = function(lat, lng, zoom, time){
+			time = time?time:0
+			if (zoom > geo.default_max_zoom) zoom = geo.default_max_zoom;
+			
+			if (time >0){
+				var anim = {}
+				anim[time] = {motion:"inoutquad", value:vec2(lat,lng)};
+				this.latlong =Animate(anim);
+				var anim = {}
+				anim[time/2] = {motion:"outquad", value:Math.min(zoom-0.5, this.zoomlevel-0.5)};
+				anim[time] = {motion:"inquad", value:zoom};
+				this.zoomlevel =Animate(anim);
+			
+			
+			}
+			else{
+				this.zoomlevel = zoom;
+			}
+			
+			
+			
+			
 		}
 
 		this.setCenterLatLng = function(lat, lng, zoom, time){
@@ -101,9 +130,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.zoomTo = function(newz, time){
-		if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
+			if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
 
-		time = time? time:0;
+			time = time? time:0;
 			if (time >0)
 			{
 				var anim = {}
