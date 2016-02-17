@@ -791,7 +791,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.depth_test = "disabled"
 
 			this.color = function(){
-				var texcol = texture.sample(vec2(vec2(sin(mesh.geom.w*20.0)*0.5+0.5,sin( mesh.geom.z*14.0)*0.5+0.5)));
+				var texcol = mesh.color
 				texcol.xyz*=0.9;
 				//return "black" ;
 				var prefog = mix(texcol, vec4(0), 1.0-view.bufferloaded);
