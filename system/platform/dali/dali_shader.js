@@ -87,6 +87,9 @@ define.class(function(require, exports){
 		// Create a multi-line string
 		str = str.replace(/\\n/g, "\\\n");
 
+		// Add an additional newline for #extension (or else it won't compile)
+		str = str.replace(/(\#extension.*)\\\n/g, '$1\n\\\n');
+
         return str;
 }
 
