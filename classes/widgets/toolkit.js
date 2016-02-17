@@ -1187,6 +1187,7 @@ define.class("$ui/view", function(require,
 
 	define.class(this,"selectorrect",view,function() {
 		this.name = "selectorrect";
+		this.drawtarget = "color";
 		this.bordercolorfn = function(pos) {
 			var speed = time * 27.0;
 			var size = 0.0008;
@@ -1203,6 +1204,7 @@ define.class("$ui/view", function(require,
 
 	define.class(this, "selectedrect", view, function() {
 		this.visible = wire('this.outer.visible');
+		this.drawtarget = "color";
 		this.attributes = {
 			borderseed:Math.random() + 17.0,
 			target:Config({persist:true, type:Object})
@@ -1294,7 +1296,8 @@ define.class("$ui/view", function(require,
 
 	define.class(this, "ruler", view, function() {
 		this.visible = wire('this.outer.visible');
-		this.bgcolor = NaN;
+		this.drawtarget = "color";
+		this.bgcolor = "transparent";
 		this.position = "absolute";
 		this.tooltarget = false;
 		this.borderwidth = vec4(5.0,5.0,5.0,5.0);
@@ -1309,52 +1312,69 @@ define.class("$ui/view", function(require,
 			rulermarkstart:vec3(0,0,0),
 			rulermarkendcolor:vec4("#FF00CC"),
 			rulermarkend:vec3(0,0,0),
-			bordercolorfn:function(p) {
-				var atx = p.x * layout.width;
-				var aty = p.y * layout.height;
-				if ((aty > borderwidth[2] && aty < layout.height - borderwidth[3]) && (atx < borderwidth[0] || atx > layout.width - borderwidth[1])) {
-					if (aty > rulermarkstart[1] - rulertickwidth * 0.5 && aty < rulermarkstart[1] + rulertickwidth * 0.5) {
-						return rulermarkstartcolor;
-					} else if (aty > rulermarkend[1] - rulertickwidth * 0.5 && aty < rulermarkend[1] + rulertickwidth * 0.5) {
-						return rulermarkendcolor;
-					}
-
-					var c = int(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
-					if (c < int(rulertickwidth * 2.0)) {
-						return rulermajorcolor;
-					}
-
-					if (atx < borderwidth[0] * 0.5 || atx > layout.width - borderwidth[1] * 0.5) {
-						var m = int(mod(gl_FragCoord.y, rulertickspacing));
-						if (m < int(rulertickwidth)) {
-							return rulerminorcolor;
-						}
-					}
-				}
-				else if ((atx > borderwidth[0] && atx < layout.width - borderwidth[1]) && (aty < borderwidth[2] || aty > layout.height - borderwidth[3])) {
-
-					if (atx > rulermarkstart[0] - rulertickwidth * 0.5 && atx < rulermarkstart[0] + rulertickwidth * 0.5) {
-						return rulermarkstartcolor;
-					} else if (atx > rulermarkend[0] - rulertickwidth * 0.5 && atx < rulermarkend[0] + rulertickwidth * 0.5) {
-						return rulermarkendcolor;
-					}
-
-					var b = int(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
-					if (b < int(rulertickwidth * 2.0)) {
-						return rulermajorcolor;
-					}
-
-					if (aty < borderwidth[2] * 0.5 || aty > layout.height - borderwidth[3] * 0.5) {
-						var n = int(mod(gl_FragCoord.x, rulertickspacing));
-						if (n < int(rulertickwidth)) {
-							return rulerminorcolor;
-						}
-					}
-
-				}
-				return bordercolor;
-			}
+			markers:vec4(10,10,100,100)
 		};
+
+		//this.bgcolorfn = function(p) {
+		//	var px = width * p.x;
+        //
+		//	var py = height * p.y;
+        //
+		//	if (abs(px - markers[0]) < 1.0 || abs(py - markers[1]) < 1.0) {
+		//		return vec4(0,1,0,1);
+		//	} else if (abs(px - markers[2]) < 1.0 || abs(py - markers[3]) < 1.0) {
+		//		return vec4(1,0,0,1);
+		//	} else {
+		//		return vec4(0,0,0,0);
+		//	}
+		//};
+
+		this.bordercolorfn = function(p) {
+			var atx = p.x * layout.width;
+			var aty = p.y * layout.height;
+			if ((aty > borderwidth[2] && aty < layout.height - borderwidth[3]) && (atx < borderwidth[0] || atx > layout.width - borderwidth[1])) {
+				if (aty > rulermarkstart[1] - rulertickwidth * 0.5 && aty < rulermarkstart[1] + rulertickwidth * 0.5) {
+					return rulermarkstartcolor;
+				} else if (aty > rulermarkend[1] - rulertickwidth * 0.5 && aty < rulermarkend[1] + rulertickwidth * 0.5) {
+					return rulermarkendcolor;
+				}
+
+				var c = int(mod(gl_FragCoord.y, rulertickspacing * rulermajorevery));
+				if (c < int(rulertickwidth * 2.0)) {
+					return rulermajorcolor;
+				}
+
+				if (atx < borderwidth[0] * 0.5 || atx > layout.width - borderwidth[1] * 0.5) {
+					var m = int(mod(gl_FragCoord.y, rulertickspacing));
+					if (m < int(rulertickwidth)) {
+						return rulerminorcolor;
+					}
+				}
+			}
+			else if ((atx > borderwidth[0] && atx < layout.width - borderwidth[1]) && (aty < borderwidth[2] || aty > layout.height - borderwidth[3])) {
+
+				if (atx > rulermarkstart[0] - rulertickwidth * 0.5 && atx < rulermarkstart[0] + rulertickwidth * 0.5) {
+					return rulermarkstartcolor;
+				} else if (atx > rulermarkend[0] - rulertickwidth * 0.5 && atx < rulermarkend[0] + rulertickwidth * 0.5) {
+					return rulermarkendcolor;
+				}
+
+				var b = int(mod(gl_FragCoord.x, rulertickspacing * rulermajorevery));
+				if (b < int(rulertickwidth * 2.0)) {
+					return rulermajorcolor;
+				}
+
+				if (aty < borderwidth[2] * 0.5 || aty > layout.height - borderwidth[3] * 0.5) {
+					var n = int(mod(gl_FragCoord.x, rulertickspacing));
+					if (n < int(rulertickwidth)) {
+						return rulerminorcolor;
+					}
+				}
+
+			}
+			return bordercolor;
+		}
+
 		this.ontarget = function(ev,v,o) {
 			if (!v) {
 				this.visible = false;

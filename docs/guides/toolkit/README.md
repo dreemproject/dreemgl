@@ -19,7 +19,7 @@ Add `$widgets$toolkit` to any composition screen to bring up the visual toolkit 
               majorline:"#575757",
               minorline:"#484848"}
             ),
-            toolkit({inspect:"grid"}));
+            toolkit());
         };
       }
     );
@@ -29,7 +29,7 @@ Add `$widgets$toolkit` to any composition screen to bring up the visual toolkit 
 
 If you have the DreemGL server running the example sandbox can be found here:
 
-<iframe style="border:0;width:900px; height:600px" src="/examples/toolkit"></iframe>
+<iframe style="border:0;width:900px; height:600px" src="/examples/usingtoolkit"></iframe>
 
 
 

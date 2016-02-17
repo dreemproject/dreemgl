@@ -315,9 +315,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// Sprite class</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view){
-<span class="comment">// A drawer view that slides to reveal trays either to the left and right in horiaonal mode or or the top and</span>
+<span class="comment">// A drawer view that slides to reveal trays either to the left and right in horizontal mode or or the top and</span>
 <span class="comment">// bottom in vertical mode.  Subviews can contain components which will become activated as the lower tray is revealed.</span>
-<span class="comment">// Up to three subviews can be added tot he drawer's constructor, providing the top drawer view, the right tray view</span>
+<span class="comment">// Up to three subviews can be added to the drawer's constructor, providing the top drawer view, the right tray view</span>
 <span class="comment">// and the left tray view, in that order.</span>
 
         <span class="local-variable">this</span>.tooldragroot = <span class="predefined-constant">true</span>;
@@ -452,7 +452,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> [
                                 drawer({
                                         <span class="key">x</span>:<span class="integer">50</span>,<span class="key">y</span>:<span class="integer">50</span>,
-                                        <span class="key">height</span>:<span class="integer">100</span>, <span class="key">width</span>:<span class="integer">300</span>
+                                        <span class="key">height</span>:<span class="integer">70</span>, <span class="key">width</span>:<span class="integer">200</span>
                                 },
                                         view({<span class="key">flex</span>:<span class="integer">1</span>,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;&lt; Slide Me &gt;&gt;</span><span class="delimiter">&quot;</span></span>})),
                                         view({<span class="key">flex</span>:<span class="integer">1</span>,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">green</span><span class="delimiter">&quot;</span></span>,<span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>,<span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>}, label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">I'm the right</span><span class="delimiter">&quot;</span></span>})),
