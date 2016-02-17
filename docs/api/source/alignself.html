@@ -213,90 +213,68 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n59" name="n59">59</a>
 <strong><a href="#n60" name="n60">60</a></strong>
 <a href="#n61" name="n61">61</a>
-<a href="#n62" name="n62">62</a>
-<a href="#n63" name="n63">63</a>
-<a href="#n64" name="n64">64</a>
-<a href="#n65" name="n65">65</a>
-<a href="#n66" name="n66">66</a>
-<a href="#n67" name="n67">67</a>
-<a href="#n68" name="n68">68</a>
-<a href="#n69" name="n69">69</a>
-<strong><a href="#n70" name="n70">70</a></strong>
-<a href="#n71" name="n71">71</a>
-<a href="#n72" name="n72">72</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+  <td class="code"><pre><span class="comment">/* Copyright 5015-5016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, service){
-        <span class="comment">// The fileio class provides an easy RPC mechanism to load/create/save/enumerate files and directories. The fileio instance should live on the server part of the composition.</span>
-        <span class="comment">// do not ever put this in a web-facing composition as it has no security features</span>
+<span class="comment">// flexbox 'alignself' example</span>
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,
+        <span class="keyword">function</span> (<span class="predefined">$ui$</span>, screen, view, label) {
 
-        <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">fileio</span><span class="delimiter">&quot;</span></span>
+                <span class="local-variable">this</span>.style = {
+                        <span class="key">label</span>: {
+                                <span class="key">fontsize</span>: <span class="integer">10</span>,
+                                <span class="key">margintop</span>: <span class="integer">10</span>,
+                                <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>,
+                                <span class="key">bgcolor</span>: <span class="predefined-constant">NaN</span>
+                        }
+                }
 
-        <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-        <span class="keyword">var</span> path = require(<span class="string"><span class="delimiter">'</span><span class="content">path</span><span class="delimiter">'</span></span>)
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                        <span class="keyword">return</span>[
+                                screen({<span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>, <span class="key">clearcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>},
 
-        <span class="comment">// wait for a file to change - then resolve the promise. Returns a promise.</span>
-        <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
-        <span class="local-variable">this</span>.<span class="function">filechange</span> = <span class="keyword">function</span>(name){
-                <span class="keyword">var</span> filepath = path.join(define.expandVariables(define.<span class="predefined">$root</span>), name)
-                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve){
-                        <span class="comment">// lets wait for a  filechange, then resolve it</span>
-                        <span class="keyword">var</span> stat = JSON.stringify(fs.statSync(filepath))
-                        <span class="keyword">var</span> myitv = setInterval(<span class="keyword">function</span> <span class="function">mytimeout</span>(){
-                                <span class="keyword">var</span> newstat = JSON.stringify(fs.statSync(filepath))
-                                <span class="keyword">if</span>(stat !== newstat){
-                                        clearInterval(myitv)
-                                        resolve(fs.readFileSync(filepath).toString())
-                                }
-                        }, <span class="integer">100</span>)
-                })
+                                        view({<span class="key">h</span>:<span class="integer">400</span>, <span class="key">paddingleft</span>: <span class="integer">10</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">darkmediumgray</span><span class="delimiter">'</span></span>,
+                                                        <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">justifycontent</span>: <span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>},
+
+                                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">alignitems: 'center'</span><span class="delimiter">&quot;</span></span> }),
+                                                <span class="comment">// First row with alignitems='center' on container</span>
+                                                view({
+                                                                <span class="key">h</span>: <span class="integer">120</span>,
+                                                                <span class="key">w</span>: <span class="integer">240</span>,
+                                                                <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">artichoke</span><span class="delimiter">'</span></span>,
+                                                                <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>,
+                                                                <span class="key">alignitems</span>: <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>
+                                                        },
+                                                        view({<span class="key">w</span>:<span class="integer">80</span>, <span class="key">h</span>:<span class="integer">80</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">alabamacrimson</span><span class="delimiter">'</span></span> }),
+                                                        view({<span class="key">w</span>:<span class="integer">80</span>, <span class="key">h</span>:<span class="integer">80</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">huntergreen</span><span class="delimiter">'</span></span>}),
+                                                        view({<span class="key">w</span>:<span class="integer">80</span>, <span class="key">h</span>:<span class="integer">80</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">fluorescentorange</span><span class="delimiter">'</span></span>})
+                                                ),
+
+                                                label({<span class="key">text</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">alignself on item overrides container aligitems='center'</span><span class="delimiter">&quot;</span></span> }),
+                                                <span class="comment">// Second row with alignitems='center' on container, but children overriding</span>
+                                                <span class="comment">// the value using alignself.</span>
+                                                view({
+                                                                <span class="key">h</span>: <span class="integer">120</span>,
+                                                                <span class="key">w</span>: <span class="integer">240</span>,
+                                                                <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">artichoke</span><span class="delimiter">'</span></span>,
+                                                                <span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">row</span><span class="delimiter">'</span></span>,
+                                                                <span class="key">alignitems</span>: <span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>
+                                                        },
+                                                        view({<span class="key">w</span>:<span class="integer">80</span>, <span class="key">h</span>:<span class="integer">80</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">alabamacrimson</span><span class="delimiter">'</span></span>, <span class="key">alignself</span>: <span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>}),
+                                                        view({<span class="key">w</span>:<span class="integer">80</span>, <span class="key">h</span>:<span class="integer">80</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">huntergreen</span><span class="delimiter">'</span></span>, <span class="key">alignself</span>: <span class="string"><span class="delimiter">'</span><span class="content">flex-end</span><span class="delimiter">'</span></span>}),
+                                                        view({<span class="key">w</span>:<span class="integer">80</span>, <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">fluorescentorange</span><span class="delimiter">'</span></span>, <span class="key">alignself</span>: <span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>})
+                                                )
+                                        )
+                                )
+                        ];
+                };
+
         }
+);
 
-        <span class="comment">// Return the full contents of a file as a string. Returns the result of node.js fs.readFileSync or null in case of exception</span>
-        <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
-        <span class="local-variable">this</span>.<span class="function">readfile</span> = <span class="keyword">function</span>(name){
-                <span class="keyword">try</span>{
-                        <span class="keyword">return</span> fs.readFileSync(define.expandVariables(name)).toString()
-                }
-                <span class="keyword">catch</span>(e){
-                        <span class="keyword">return</span> <span class="predefined-constant">null</span>
-                }
-        }
-
-        <span class="comment">// writefile synchronously writes data to a file. Returns the result of node.js fs.writeFileSync or null in case of exception</span>
-        <span class="comment">// &lt;name&gt; The file to read. File paths can use $-shortcuts to refer to various folders</span>
-        <span class="comment">// &lt;data&gt; The data to write</span>
-        <span class="local-variable">this</span>.<span class="function">writefile</span> = <span class="keyword">function</span>(name, data){
-
-                <span class="keyword">try</span>{
-                        console.log(name);
-                        <span class="keyword">var</span> fullname = define.expandVariables( name);
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">writing file:</span><span class="delimiter">&quot;</span></span>,fullname);
-                        <span class="keyword">return</span> fs.writeFileSync(fullname, data)
-                }
-                <span class="keyword">catch</span>(e){
-                        <span class="keyword">return</span> <span class="predefined-constant">null</span>
-                }
-        }
-        <span class="comment">// reads a directory and returns its contents</span>
-        <span class="comment">// &lt;name&gt; the name of the directory to read</span>
-        <span class="local-variable">this</span>.<span class="function">readdir</span> = <span class="keyword">function</span>(name){
-                <span class="comment">// lets read the directory and return it</span>
-                <span class="keyword">try</span>{
-                        <span class="keyword">var</span> dir = fs.readdirSync(path.join(define.expandVariables(define.<span class="predefined">$root</span>), name))
-                        <span class="keyword">return</span> dir
-                }
-                <span class="keyword">catch</span>(e){
-                        <span class="keyword">return</span> []
-                }
-                <span class="comment">// lets do a query</span>
-        }
-})
 </pre></td>
 </tr></table>
 

@@ -867,7 +867,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">pickScreen</span> = <span class="keyword">function</span>(x, y){
                 <span class="comment">// promise based pickray rendering</span>
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                         <span class="local-variable">this</span>.pick_resolve.push(resolve)
                         <span class="local-variable">this</span>.pick_x = x
                         <span class="local-variable">this</span>.pick_y = y

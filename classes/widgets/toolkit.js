@@ -72,6 +72,7 @@ define.class("$ui/view", function(require,
 					classdir:"$ui$",
 					params:{
 						tooldragroot:true,
+						toolresize:false,
 						fontsize:24,
 						pickalpha:-1,
 						fgcolor:'pink'
@@ -778,7 +779,7 @@ define.class("$ui/view", function(require,
 
 		var vw = useview || ev.view;
 
-		if (vw === this || (this.testView(vw) && ev.view.toolmove !== false)) {
+		if (vw === this || (this.testView(vw) && ev.view.toolmove !== false && ev.view.toolresize !== false)) {
 			var pos = vw.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 

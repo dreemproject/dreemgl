@@ -223,6 +223,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n69" name="n69">69</a>
 <strong><a href="#n70" name="n70">70</a></strong>
 <a href="#n71" name="n71">71</a>
+<a href="#n72" name="n72">72</a>
+<a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -233,7 +237,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">// to be displayed by adding the hash `string #file=example.js` to the URL</span>
 <span class="comment">// for this composition, e.g.</span>
 <span class="comment">// examples/dreem_in_10/helloworldsource#file=docsourceviewer.js</span>
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (require, <span class="predefined">$ui$</span>, screen, <span class="predefined">$widgets$</span>, jsviewer, <span class="predefined">$server$</span>, fileio) {
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (<span class="predefined">$ui$</span>, screen, <span class="predefined">$widgets$</span>, jsviewer, <span class="predefined">$server$</span>, fileio) {
 <span class="comment">// internal</span>
 
         <span class="comment">// Settings for font size and bgcolor for the jsviewer component</span>
@@ -257,6 +261,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 <span class="comment">// the readSourceFile() function of the embedded fileio class.</span>
                                                 <span class="function">init</span>: <span class="keyword">function</span> () {
                                                         <span class="keyword">var</span> sourcefile = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+                                                        <span class="keyword">var</span> source = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
                                                         <span class="keyword">var</span> msg = <span class="string"><span class="delimiter">&quot;</span><span class="content">No source file specificied! Please specify source file name through hash, e.g. #file=somefile.js</span><span class="delimiter">&quot;</span></span>
                                                         <span class="keyword">if</span> (window.location.hash) {
                                                                 <span class="keyword">var</span> values = window.location.hash.substring(<span class="integer">1</span>).split(<span class="string"><span class="delimiter">&quot;</span><span class="content">=</span><span class="delimiter">&quot;</span></span>);
@@ -270,7 +275,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 <span class="local-variable">this</span>.rpc.fileio.readfile(define.classPath(<span class="local-variable">this</span>.composition) + sourcefile)
                                                                         .then(<span class="keyword">function</span> (result) {
                                                                                 <span class="keyword">if</span> (result.value != <span class="predefined-constant">null</span>) {
-                                                                                        <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">'</span><span class="content">viewer</span><span class="delimiter">'</span></span>).source = result.value
+                                                                                        <span class="comment">// Strip out multiline comment (copyright notice)</span>
+                                                                                        <span class="comment">// Removes /* ... */\n\n</span>
+                                                                                        source = result.value.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">\/</span><span class="content">\*</span><span class="content">([</span><span class="char">\s</span><span class="char">\S</span><span class="content">]*?)</span><span class="content">\*</span><span class="content">\/</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+                                                                                        <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">'</span><span class="content">viewer</span><span class="delimiter">'</span></span>).source = source
                                                                                 }  <span class="keyword">else</span> {
                                                                                         <span class="local-variable">this</span>.findChild(<span class="string"><span class="delimiter">'</span><span class="content">viewer</span><span class="delimiter">'</span></span>).source = <span class="string"><span class="delimiter">&quot;</span><span class="content"> /* ERROR</span><span class="char">\n</span><span class="content"> File </span><span class="delimiter">&quot;</span></span> + sourcefile + <span class="string"><span class="delimiter">&quot;</span><span class="content"> not found! */</span><span class="delimiter">&quot;</span></span>
                                                                                 }

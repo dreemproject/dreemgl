@@ -234,6 +234,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n80" name="n80">80</a></strong>
 <a href="#n81" name="n81">81</a>
 <a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
          You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -277,7 +294,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> headless = HeadlessApi.headless;
                 <span class="local-variable">this</span>.id = ++HeadlessShader.GlobalId;
                 <span class="local-variable">this</span>.vertexshader = vertexShader;
-                <span class="local-variable">this</span>.fragmentShader = fragmentShader;
+                <span class="local-variable">this</span>.fragmentshader = fragmentShader;
         }
 
                 <span class="comment">// Internal method to remove comments and empty lines from a shader. This</span>
@@ -310,8 +327,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">headlessshader</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id;
         }
 
+        <span class="local-variable">this</span>.<span class="function">currentstate</span> = <span class="keyword">function</span>(verbose) {
+                <span class="keyword">var</span> states = [];
+                <span class="keyword">if</span> (!HeadlessApi.isShown(<span class="local-variable">this</span>.name())) {
+                        <span class="keyword">var</span> state = [
+                                {<span class="key">name</span>: <span class="local-variable">this</span>.name()},
+                                ,{<span class="key">vertexshader</span>: verbose ? <span class="local-variable">this</span>.vertexshader : HeadlessApi.getHash(<span class="local-variable">this</span>.vertexshader)}
+                                ,{<span class="key">fragmentShader</span>: verbose ? <span class="local-variable">this</span>.fragmentshader : HeadlessApi.getHash(<span class="local-variable">this</span>.fragmentshader)}
+                        ]
+
+                        states = [state];
+                        HeadlessApi.shownObject(<span class="local-variable">this</span>.name());
+                }
+
+                <span class="keyword">return</span> states;
+        }
+
         <span class="local-variable">this</span>.<span class="function">inspect</span> = <span class="keyword">function</span>(depth) {
-                <span class="keyword">var</span> obj = {<span class="key">headlessShader</span>:<span class="local-variable">this</span>.id, <span class="key">vertex</span>:<span class="local-variable">this</span>.vertexshader.length, <span class="key">fragment</span>:<span class="local-variable">this</span>.fragmentShader.length};
+                <span class="keyword">var</span> obj = {<span class="key">headlessShader</span>:<span class="local-variable">this</span>.id, <span class="key">vertex</span>:<span class="local-variable">this</span>.vertexshader.length, <span class="key">fragment</span>:<span class="local-variable">this</span>.fragmentshader.length};
+
                 <span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">'</span><span class="content">util</span><span class="delimiter">'</span></span>)
                 <span class="keyword">return</span> util.inspect(obj, {<span class="key">depth</span>: <span class="predefined-constant">null</span>});
         }

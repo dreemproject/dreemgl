@@ -160,14 +160,54 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n6" name="n6">6</a>
 <a href="#n7" name="n7">7</a>
 <a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
 </pre></td>
-  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, service, <span class="predefined">$ui$</span>, screen, view, <span class="predefined">$widgets$timeline$</span>, timeline) {
 
-        <span class="local-variable">this</span>.<span class="function">load</span> = <span class="keyword">function</span>(url) {
-                <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>)
-                <span class="keyword">return</span> JSON.parse(fs.readFileSync(define.expandVariables(define.classPath(<span class="local-variable">this</span>) + url), <span class="string"><span class="delimiter">'</span><span class="content">utf8</span><span class="delimiter">'</span></span>))
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">return</span> [
+                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>}, [
+                                view({<span class="key">flexdirection</span>: <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
+                                <span class="function">oninit</span>: <span class="keyword">function</span> () {
+                                        <span class="keyword">var</span> startDate = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 1 2016</span><span class="delimiter">&quot;</span></span>)
+                                        <span class="keyword">var</span> timeline = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">timeline</span><span class="delimiter">'</span></span>)
+                                        <span class="keyword">var</span> hstep = <span class="integer">1000</span> * <span class="integer">60</span> * <span class="integer">60</span>
+                                        <span class="keyword">var</span> events = []
+                                        <span class="keyword">var</span> date
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="integer">1000</span>; i++) {
+                                                date = <span class="keyword">new</span> Date(startDate.getTime() + i * (<span class="integer">6</span> + floor(random() * <span class="integer">3</span>) ) * hstep)
+                                                events.push({
+                                                        <span class="key">date</span>: date,
+                                                        <span class="key">enddate</span>: <span class="keyword">new</span> Date(date.getTime() + (<span class="integer">8</span> - floor(random() * <span class="integer">8</span>) ) * hstep / <span class="integer">4</span>)
+                                                })
+                                        }
+                                        timeline.data = events
+                                }
+                                },[
+                                        timeline({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">timeline</span><span class="delimiter">'</span></span>})
+                                ])
+                        ])
+                ]
         }
-
 })
 </pre></td>
 </tr></table>

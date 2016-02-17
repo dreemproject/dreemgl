@@ -1000,6 +1000,41 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n846" name="n846">846</a>
 <a href="#n847" name="n847">847</a>
 <a href="#n848" name="n848">848</a>
+<a href="#n849" name="n849">849</a>
+<strong><a href="#n850" name="n850">850</a></strong>
+<a href="#n851" name="n851">851</a>
+<a href="#n852" name="n852">852</a>
+<a href="#n853" name="n853">853</a>
+<a href="#n854" name="n854">854</a>
+<a href="#n855" name="n855">855</a>
+<a href="#n856" name="n856">856</a>
+<a href="#n857" name="n857">857</a>
+<a href="#n858" name="n858">858</a>
+<a href="#n859" name="n859">859</a>
+<strong><a href="#n860" name="n860">860</a></strong>
+<a href="#n861" name="n861">861</a>
+<a href="#n862" name="n862">862</a>
+<a href="#n863" name="n863">863</a>
+<a href="#n864" name="n864">864</a>
+<a href="#n865" name="n865">865</a>
+<a href="#n866" name="n866">866</a>
+<a href="#n867" name="n867">867</a>
+<a href="#n868" name="n868">868</a>
+<a href="#n869" name="n869">869</a>
+<strong><a href="#n870" name="n870">870</a></strong>
+<a href="#n871" name="n871">871</a>
+<a href="#n872" name="n872">872</a>
+<a href="#n873" name="n873">873</a>
+<a href="#n874" name="n874">874</a>
+<a href="#n875" name="n875">875</a>
+<a href="#n876" name="n876">876</a>
+<a href="#n877" name="n877">877</a>
+<a href="#n878" name="n878">878</a>
+<a href="#n879" name="n879">879</a>
+<strong><a href="#n880" name="n880">880</a></strong>
+<a href="#n881" name="n881">881</a>
+<a href="#n882" name="n882">882</a>
+<a href="#n883" name="n883">883</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
 
@@ -1014,8 +1049,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
         <span class="keyword">var</span> roadcolors = {<span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>, <span class="key">ferry</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">rail</span><span class="delimiter">&quot;</span></span> : vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>), <span class="key"><span class="delimiter">&quot;</span><span class="content">minor_road</span><span class="delimiter">&quot;</span></span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>), <span class="key"><span class="delimiter">&quot;</span><span class="content">major_road</span><span class="delimiter">&quot;</span></span> : vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">highway</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>)}
         <span class="keyword">var</span> roadmarkcolors = {<span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, <span class="key">major_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">minor_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a0a0a0</span><span class="delimiter">&quot;</span></span>}
 
-        <span class="local-variable">this</span>.ignoreuse = {}
-        <span class="local-variable">this</span>.ignoreuse = {
+        <span class="comment">//this.ignoreuse = {}</span>
+        <span class="local-variable">this</span>.displaykinds ={
+                <span class="key">forsest</span>: <span class="predefined-constant">true</span>,
+                <span class="key">water</span>: <span class="predefined-constant">true</span>, 
+                <span class="key">meadow</span>:<span class="predefined-constant">true</span>, 
+                <span class="key">playa</span>:<span class="predefined-constant">true</span>, 
+                <span class="key">forest</span>: <span class="predefined-constant">true</span>,
+                <span class="key">pedestrian</span>: <span class="predefined-constant">true</span>,
+                <span class="key">earth</span>:<span class="predefined-constant">true</span>, 
+                <span class="key">river</span>:<span class="predefined-constant">true</span>,
+                <span class="key">beach</span>: <span class="predefined-constant">true</span>,
+                <span class="key">grass</span>: <span class="predefined-constant">true</span>,
+                <span class="key">lake</span>:<span class="predefined-constant">true</span>,
+                <span class="key">canal</span>: <span class="predefined-constant">true</span>
+        }
+        
+        <span class="local-variable">this</span>.noignoreuse = {
                 <span class="key">allotments</span>:<span class="predefined-constant">true</span>,
                 <span class="key">apron</span>:<span class="predefined-constant">true</span>,
                 <span class="key">cemetery</span>:<span class="predefined-constant">true</span>,
@@ -1034,20 +1084,41 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="key">meadow</span>:<span class="predefined-constant">false</span>, <span class="key">nature_reserve</span>:<span class="predefined-constant">false</span>, <span class="key">park</span>:<span class="predefined-constant">false</span>, <span class="key">parking</span>:<span class="predefined-constant">true</span>,
                 <span class="key">pedestrian</span>:<span class="predefined-constant">true</span>,
                 <span class="key">pitch</span>:<span class="predefined-constant">true</span>,
+                <span class="key">national_park</span>:<span class="predefined-constant">true</span>,
                 <span class="key">place_of_worship</span>:<span class="predefined-constant">true</span>, <span class="key">playground</span>:<span class="predefined-constant">true</span>, <span class="key">quarry</span>:<span class="predefined-constant">true</span>, <span class="key">railway</span>:<span class="predefined-constant">true</span>, <span class="key">recreation_ground</span>:<span class="predefined-constant">false</span>, <span class="key">residential</span>:<span class="predefined-constant">false</span>, <span class="key">retail</span>:<span class="predefined-constant">true</span>,
-                <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">school</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>, <span class="key">sports_centre</span>:<span class="predefined-constant">true</span>, <span class="key">stadium</span>:<span class="predefined-constant">true</span>, <span class="key">taxiway</span>:<span class="predefined-constant">true</span>, <span class="key">theatre</span>:<span class="predefined-constant">true</span>, <span class="key">university</span>:<span class="predefined-constant">true</span>, <span class="key">village_green</span>:<span class="predefined-constant">true</span>, <span class="key">wetland</span>:<span class="predefined-constant">true</span>, <span class="key">wood</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">urban area</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">park</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">protected land</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>};
+                <span class="key">riverbank</span>:<span class="predefined-constant">true</span>,<span class="key">reservoir</span>:<span class="predefined-constant">true</span>,
+                <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">school</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>, <span class="key">sports_centre</span>:<span class="predefined-constant">true</span>, <span class="key">stadium</span>:<span class="predefined-constant">true</span>, <span class="key">taxiway</span>:<span class="predefined-constant">true</span>, <span class="key">theatre</span>:<span class="predefined-constant">true</span>, <span class="key">university</span>:<span class="predefined-constant">true</span>, <span class="key">village_green</span>:<span class="predefined-constant">true</span>, <span class="key">wetland</span>:<span class="predefined-constant">true</span>, <span class="key">wood</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">urban area</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">park</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">protected land</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">protected_area</span>:<span class="predefined-constant">true</span>};
 
+        <span class="keyword">var</span> watercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">ocean</span><span class="delimiter">&quot;</span></span>);
+        
         <span class="keyword">var</span> mapstyle = <span class="local-variable">this</span>.mapstyle = {
                 <span class="key">ferry</span>:{
                         <span class="key">roadcolor</span>: vec4(<span class="float">0.6784313917160034</span>,<span class="float">0.8470588326454163</span>,<span class="float">0.9019607901573181</span>,<span class="integer">1</span>),
                 },
+                <span class="key">riverbank</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">marina</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">reservoir</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">stream</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">canal</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">lake</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">playa</span>:{<span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f0f0c0</span><span class="delimiter">&quot;</span></span>)},
+                <span class="key">river</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">basin</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">swimming_pool</span>:{<span class="key">color1</span>:watercolor},
+                <span class="key">sea</span>:{
+                        <span class="key">color1</span>:watercolor
+                },
+                <span class="key">ocean</span>:{
+                        <span class="key">color1</span>:watercolor
+                },
+                
                 <span class="key">earth</span>:{
                         <span class="key">offset</span>:<span class="integer">10</span>,
                         <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4a644a</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">color2</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#38523d</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="key">national_park</span>:{
-                        <span class="key">color1</span>:<span class="float">0.22</span>,
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">lime</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">color2</span>:<span class="float">0.22</span>
                 },
                 <span class="key">park</span>:{
@@ -1100,8 +1171,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 },
                 <span class="key">grass</span>:{
                         <span class="key">offset</span>:-<span class="integer">18</span>,
-                        <span class="key">color1</span>: <span class="float">0.1</span>,
-                        <span class="key">color2</span>: <span class="float">0.12</span>,
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">lightgreen</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="key">sports_centre</span>:{
                         <span class="key">offset</span>:-<span class="integer">23</span>,
@@ -1169,7 +1239,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 },
                 <span class="key">playground</span>:{
                         <span class="key">offset</span>:-<span class="integer">19</span>,
-                        <span class="key">color1</span>: <span class="float">0.15</span>,
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">color2</span>: vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
                 },
                 <span class="key">stadium</span>:{
@@ -1258,12 +1328,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 },
                 <span class="key">breakwater</span>:{
                         <span class="key">offset</span>:-<span class="integer">20</span>,
-                        <span class="key">color1</span>: <span class="integer">0</span>,
+                        <span class="key">color1</span>: watercolor,
                         <span class="key">color2</span>: <span class="integer">0</span>,
                 },
                 <span class="key">water</span>:{
                         <span class="key">offset</span>:<span class="integer">0</span>,
-                        <span class="key">color1</span>:<span class="integer">0</span>,
+                        <span class="key">color1</span>: watercolor,
                         <span class="key">color2</span>: <span class="integer">0</span>,
                 },
                 <span class="key">building</span>:{
@@ -1302,7 +1372,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 },
                 <span class="keyword">default</span>:
                 {
-                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>),
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>),
                         <span class="key">color2</span>:vec4(<span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>)
                 }
         }
@@ -1311,14 +1381,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
         <span class="keyword">for</span> (<span class="keyword">var</span> a <span class="keyword">in</span> <span class="local-variable">this</span>.mapstyle){
                 <span class="keyword">var</span> st = <span class="local-variable">this</span>.mapstyle[a];
-                <span class="keyword">if</span> (st.color1) st.color1 = vec4.desaturate(st.color1,<span class="float">0.85</span>);
-                <span class="keyword">if</span> (st.color2) st.color2 = vec4.desaturate(st.color2,<span class="float">0.84</span>);
-                <span class="keyword">if</span>(<span class="keyword">typeof</span> st.color1 == <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>){
-                        st.color1 = st.color1[<span class="integer">0</span>];
-                        <span class="keyword">if</span>(st.color1 &lt;= <span class="integer">0</span>) {
-                                st.color1 = <span class="float">0.8</span> ;
-                        }
-                };
+        <span class="comment">//        if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);</span>
+        <span class="comment">//        if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);</span>
+        
         }}
 
         <span class="local-variable">this</span>.<span class="function">dumpkindset</span> = <span class="keyword">function</span>(){
@@ -1357,14 +1422,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="comment">//linewidth:float,</span>
         })
 
-        <span class="keyword">var</span> LandVertexStruct = <span class="local-variable">this</span>.LandVertexStruct = vec4
-        <span class="comment">//define.struct({</span>
-        <span class="comment">//        pos:vec3,</span>
-        <span class="comment">//        color1:vec2,</span>
+        <span class="keyword">var</span> LandVertexStruct = <span class="local-variable">this</span>.LandVertexStruct =        define.struct({
+                        <span class="key">pos</span>:vec4,
+                        <span class="key">color1</span>:vec4,
                 <span class="comment">//color1:vec4,</span>
                 <span class="comment">//color2:vec4,</span>
-        <span class="comment">//        id: float</span>
-        <span class="comment">//})</span>
+                        <span class="comment">//id: float</span>
+        })
 
         <span class="keyword">function</span> <span class="function">arcToFlatVertices</span>(arc, flatverts){
                 <span class="keyword">if</span> (!arc) <span class="keyword">return</span> []
@@ -1504,12 +1568,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">var</span> off = <span class="integer">0</span>;
                         <span class="keyword">var</span> land = areas[i];
 
-                        <span class="keyword">var</span> color1 = <span class="integer">0</span>;
-                        <span class="keyword">var</span> color2 = <span class="integer">0</span>;
+                        <span class="keyword">var</span> color1 = vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>);;
+                        <span class="comment">//var color2 = ;</span>
                         <span class="keyword">var</span> t = mapstyle[land.kind];
-                        <span class="keyword">if</span> (!t) t = mapstyle[<span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>];
+                        <span class="keyword">if</span> (!t) {t = mapstyle[<span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>];console.log(land.kind);};
+                        
                         <span class="keyword">if</span> (t.color1) color1 = t.color1;<span class="keyword">else</span> UnhandledKindSet[land.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">land - no color1</span><span class="delimiter">&quot;</span></span>;
-                        <span class="keyword">if</span> (t.color2) color2 = t.color2;<span class="keyword">else</span> UnhandledKindSet[land.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">land - no color2 </span><span class="delimiter">&quot;</span></span>;
+                        <span class="comment">//if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = &quot;land - no color2 &quot;;</span>
                         <span class="keyword">if</span> (t.offset) off = t.offset;<span class="keyword">else</span> UnhandledKindSet[land.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">land - no offset</span><span class="delimiter">&quot;</span></span>
 
                         <span class="keyword">if</span> (land.arcs){
@@ -1524,16 +1589,22 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         <span class="keyword">if</span> (land.polygons){
 
                                 <span class="keyword">var</span> array = mesh.array
-                                <span class="keyword">var</span> o = mesh.length * <span class="integer">4</span>
+                                <span class="keyword">var</span> o = mesh.length * <span class="integer">8</span>
 
                                 <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="integer">0</span>;j&lt;land.polygons.length;j++){
                                         <span class="keyword">var</span> poly = land.polygons[j];
                                         <span class="keyword">var</span> tris = poly.tris
-                                        <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">0</span>; a &lt; tris.length; a += <span class="integer">2</span>, o += <span class="integer">4</span>){
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">0</span>; a &lt; tris.length; a += <span class="integer">2</span>, o += <span class="integer">8</span>){
                                                 array[o + <span class="integer">0</span>] = tris[a]
                                                 array[o + <span class="integer">1</span>] = tris[a + <span class="integer">1</span>]
+                                                array[o + <span class="integer">2</span>] = i
+                                                array[o + <span class="integer">3</span>] = <span class="integer">0</span>
+                                                
                                                 <span class="comment">//array[o + 2] = off</span>
-                                                array[o + <span class="integer">2</span>] = color1
+                                                array[o + <span class="integer">4</span>] = color1[<span class="integer">0</span>]
+                                                array[o + <span class="integer">5</span>] = color1[<span class="integer">1</span>]
+                                                array[o + <span class="integer">6</span>] = color1[<span class="integer">2</span>]
+                                                array[o + <span class="integer">7</span>] = color1[<span class="integer">3</span>]
                                                 <span class="comment">//array[o + 4] = color1[1]</span>
                                                 <span class="comment">//array[o + 5] = color1[2]</span>
                                                 <span class="comment">//array[o + 6] = color1[3]</span>
@@ -1541,7 +1612,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="comment">//array[o + 8] = color2[1]</span>
                                                 <span class="comment">//array[o + 9] = color2[2]</span>
                                                 <span class="comment">//array[o + 10] = color2[3]</span>
-                                                array[o + <span class="integer">3</span>] = i
                                                 mesh.length ++
                                         }
                                 }
@@ -1791,7 +1861,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 <span class="keyword">var</span> LandUseGeoms = objects.landuse.geometries
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;LandUseGeoms.length;i++){
                         <span class="keyword">var</span> Bb = LandUseGeoms[i];
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.ignoreuse[Bb.properties.kind]){
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.displaykinds[Bb.properties.kind]){
                                 DecodeAndAdd(Bb, Lset, Sarcs, <span class="string"><span class="delimiter">&quot;</span><span class="content">landuse</span><span class="delimiter">&quot;</span></span> );
                         }
                 }

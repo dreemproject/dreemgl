@@ -359,11 +359,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">focus</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.shaders || !<span class="local-variable">this</span>.shaders.cursors) <span class="keyword">return</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>._focus){
-                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>
+                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly? <span class="predefined-constant">false</span>: <span class="predefined-constant">true</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerfocus
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.shaders) {
-                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.shaders.cursors.visible = <span class="local-variable">this</span>.readonly? <span class="predefined-constant">true</span>: <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.markercolor = <span class="local-variable">this</span>.markerunfocus
                 }
                 <span class="local-variable">this</span>.redraw()

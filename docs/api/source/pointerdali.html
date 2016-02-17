@@ -279,6 +279,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n125" name="n125">125</a>
 <a href="#n126" name="n126">126</a>
 <a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -291,6 +309,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>._cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>._tooltip = <span class="string"><span class="delimiter">'</span><span class="content">Application</span><span class="delimiter">'</span></span>
+
+        <span class="comment">// Minimum non-zero wheel value</span>
+        <span class="keyword">var</span> wheelmin = vec2(<span class="integer">1000</span>, <span class="integer">1000</span>)
 
         Object.defineProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursor</span><span class="delimiter">'</span></span>, {
                 <span class="function">get</span>:<span class="keyword">function</span>(){
@@ -310,15 +331,20 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// Internal: creates pointer array with a single pointer from mouse event data.</span>
                 <span class="keyword">var</span> <span class="function">mouseToPointers</span> = <span class="keyword">function</span> (event) {
+
+                        <span class="comment">// Set wheel min non-zero value</span>
+                        wheelmin[<span class="integer">0</span>] = min(wheelmin[<span class="integer">0</span>], abs(event.deltaX || wheelmin[<span class="integer">0</span>]))
+                        wheelmin[<span class="integer">1</span>] = min(wheelmin[<span class="integer">1</span>], abs(event.deltaY || wheelmin[<span class="integer">1</span>]))
+
                         <span class="keyword">return</span> [{
+                                <span class="key">value</span>: vec2(event.pageX, event.pageY),
                                 <span class="key">position</span>: vec2(event.pageX, event.pageY),
-                                <span class="key">movement</span>: vec2(event.movementX, event.movementY),
                                 <span class="key">button</span>: event.button === <span class="integer">0</span> ? <span class="integer">1</span> : event.button === <span class="integer">1</span> ? <span class="integer">3</span> : <span class="integer">2</span>,
                                 <span class="key">shift</span>: event.shiftKey,
                                 <span class="key">alt</span>: event.altKey,
                                 <span class="key">ctrl</span>: event.ctrlKey,
                                 <span class="key">meta</span>: event.metaKey,
-                                <span class="key">wheel</span>: vec2(event.deltaX, event.deltaY),
+                                <span class="key">wheel</span>: vec2(event.deltaX / wheelmin[<span class="integer">0</span>], event.deltaY / wheelmin[<span class="integer">1</span>]),
                                 <span class="key">touch</span>: <span class="predefined-constant">false</span>
                         }]
                 }.bind(<span class="local-variable">this</span>)
@@ -328,8 +354,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> array = []
                         <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; event.changedTouches.length; i++) {
                                 array.push({
+                                        <span class="key">value</span>: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
                                         <span class="key">position</span>: vec2(event.changedTouches[i].pageX, event.changedTouches[i].pageY),
-                                        <span class="key">movement</span>: vec2(event.changedTouches[i].movementX, event.changedTouches[i].movementY),
                                         <span class="key">button</span>: <span class="integer">1</span>,
                                         <span class="key">shift</span>: event.shiftKey,
                                         <span class="key">alt</span>: event.altKey,
@@ -347,7 +373,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.setstart(mouseToPointers(e))
                         <span class="comment">// window.addEventListener('mousemove', this._mousemove)</span>
                         <span class="comment">// window.addEventListener('mouseup', this._mouseup)</span>
+                        <span class="comment">// window.addEventListener('contextmenu', this._mouseup)</span>
                         <span class="comment">// window.removeEventListener('mousemove', this._mousehover)</span>
+                        <span class="comment">// window.removeEventListener('mousedown', this._mousedown)</span>
+                        <span class="comment">// Hack to capture mouse up outside iframe</span>
+                        <span class="comment">// if (parent.window) parent.window.addEventListener('mouseup', this._mouseup)</span>
+                        <span class="comment">// if (parent.window) parent.window.addEventListener('contextmenu', this._mouseup)</span>
                 }
                 <span class="comment">// window.addEventListener('mousedown', this.mousedown.bind(this))</span>
 
@@ -364,7 +395,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.setend(mouseToPointers(e))
                         <span class="comment">// window.removeEventListener('mousemove', this._mousemove)</span>
                         <span class="comment">// window.removeEventListener('mouseup', this._mouseup)</span>
+                        <span class="comment">// window.removeEventListener('contextmenu', this._mouseup)</span>
                         <span class="comment">// window.addEventListener('mousemove', this._mousehover)</span>
+                        <span class="comment">// window.addEventListener('mousedown', this._mousedown)</span>
+                        <span class="comment">// Hack to capture mouse up outside iframe</span>
+                        <span class="comment">// if (parent.window) parent.window.removeEventListener('mouseup', this._mouseup)</span>
+                        <span class="comment">// if (parent.window) parent.window.removeEventListener('contextmenu', this._mouseup)</span>
                 }
                 <span class="local-variable">this</span>._mouseup = <span class="local-variable">this</span>.mouseup.bind(<span class="local-variable">this</span>)
 

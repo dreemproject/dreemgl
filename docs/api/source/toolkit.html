@@ -1527,6 +1527,40 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1373" name="n1373">1373</a>
 <a href="#n1374" name="n1374">1374</a>
 <a href="#n1375" name="n1375">1375</a>
+<a href="#n1376" name="n1376">1376</a>
+<a href="#n1377" name="n1377">1377</a>
+<a href="#n1378" name="n1378">1378</a>
+<a href="#n1379" name="n1379">1379</a>
+<strong><a href="#n1380" name="n1380">1380</a></strong>
+<a href="#n1381" name="n1381">1381</a>
+<a href="#n1382" name="n1382">1382</a>
+<a href="#n1383" name="n1383">1383</a>
+<a href="#n1384" name="n1384">1384</a>
+<a href="#n1385" name="n1385">1385</a>
+<a href="#n1386" name="n1386">1386</a>
+<a href="#n1387" name="n1387">1387</a>
+<a href="#n1388" name="n1388">1388</a>
+<a href="#n1389" name="n1389">1389</a>
+<strong><a href="#n1390" name="n1390">1390</a></strong>
+<a href="#n1391" name="n1391">1391</a>
+<a href="#n1392" name="n1392">1392</a>
+<a href="#n1393" name="n1393">1393</a>
+<a href="#n1394" name="n1394">1394</a>
+<a href="#n1395" name="n1395">1395</a>
+<a href="#n1396" name="n1396">1396</a>
+<a href="#n1397" name="n1397">1397</a>
+<a href="#n1398" name="n1398">1398</a>
+<a href="#n1399" name="n1399">1399</a>
+<strong><a href="#n1400" name="n1400">1400</a></strong>
+<a href="#n1401" name="n1401">1401</a>
+<a href="#n1402" name="n1402">1402</a>
+<a href="#n1403" name="n1403">1403</a>
+<a href="#n1404" name="n1404">1404</a>
+<a href="#n1405" name="n1405">1405</a>
+<a href="#n1406" name="n1406">1406</a>
+<a href="#n1407" name="n1407">1407</a>
+<a href="#n1408" name="n1408">1408</a>
+<a href="#n1409" name="n1409">1409</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1536,9 +1570,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,
                                                                   <span class="predefined">$ui$</span>, view, label, icon, treeview, button, statebutton,
                                                                   <span class="predefined">$widgets$</span>, palette, propviewer,
+                                                                  <span class="predefined">$server$</span>, sourceset,
                                   <span class="predefined">$system$parse$</span>, astscanner, onejsparser){
 
-<span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running compostion</span>
+<span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running composition</span>
 
         <span class="local-variable">this</span>.name = <span class="string"><span class="delimiter">&quot;</span><span class="content">toolkit</span><span class="delimiter">&quot;</span></span>;
         <span class="local-variable">this</span>.clearcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#565656</span><span class="delimiter">&quot;</span></span>;
@@ -1555,7 +1590,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.visible = <span class="predefined-constant">false</span>;
 
         <span class="local-variable">this</span>.borderradius = <span class="integer">7</span>;
-        <span class="local-variable">this</span>.bordercolor = vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="float">0.7</span>);
+        <span class="local-variable">this</span>.bordercolor = vec4(<span class="float">0.3</span>,<span class="float">0.6</span>,<span class="float">0.8</span>,<span class="float">0.4</span>);
         <span class="local-variable">this</span>.borderwidth = <span class="integer">1</span>;
 
         <span class="local-variable">this</span>.attributes = {
@@ -1564,7 +1599,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">inspect</span>:Config({<span class="key">type</span>:Object}),
 
                 <span class="comment">// Components available to be dragged into compositions.</span>
-                <span class="key">components</span>:Config({<span class="key">type</span>:Object, <span class="key">value</span>:{
+                <span class="key">components</span>:{
                         <span class="key">Views</span>:[
                                 {
                                         <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">View</span><span class="delimiter">&quot;</span></span>,
@@ -1575,6 +1610,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">params</span>:{
                                                 <span class="key">height</span>:<span class="integer">70</span>,
                                                 <span class="key">width</span>:<span class="integer">80</span>,
+                                                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                 <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>
                                         }
                                 },
@@ -1586,7 +1622,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">params</span>:{
                                                 <span class="key">fontsize</span>:<span class="integer">44</span>,
-                                                <span class="key">opaque</span>:<span class="predefined-constant">true</span>,
+                                                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
+                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightgreen</span><span class="delimiter">'</span></span>,
                                                 <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Howdy!</span><span class="delimiter">'</span></span>
                                         }
@@ -1598,7 +1635,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">classname</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">checkbox</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">params</span>:{
+                                                <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
                                                 <span class="key">fontsize</span>:<span class="integer">24</span>,
+                                                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">pink</span><span class="delimiter">'</span></span>
                                         }
                                 },
@@ -1609,7 +1648,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">classname</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">button</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">params</span>:{
+                                                <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
                                                 <span class="key">fontsize</span>:<span class="integer">24</span>,
+                                                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
                                                 <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Press Me!</span><span class="delimiter">'</span></span>
                                         }
@@ -1622,7 +1663,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">params</span>:{
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">cornflower</span><span class="delimiter">'</span></span>,
-                                                <span class="key">opaque</span>:<span class="predefined-constant">true</span>,
+                                                <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                 <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>,
                                                 <span class="key">fontsize</span>:<span class="integer">80</span>
                                         }
@@ -1640,48 +1681,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">//                }</span>
                         <span class="comment">//        }</span>
                         <span class="comment">//]</span>
-                }}),
+                },
 
                 <span class="comment">// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,</span>
-                <span class="comment">// and views can be resized and manipulated.</span>
-                <span class="comment">// In 'live' mode views lock into place the composition regains it's active behaviors</span>
+                <span class="comment">// and views can be resized and manipulated.  In 'live' mode views lock into place the composition regains</span>
+                <span class="comment">// it's active behaviors</span>
                 <span class="key">mode</span>:Config({<span class="key">type</span>:Enum(<span class="string"><span class="delimiter">'</span><span class="content">design</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">live</span><span class="delimiter">'</span></span>), <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">design</span><span class="delimiter">'</span></span>}),
                 <span class="key">reticlesize</span>: <span class="integer">9</span>,
                 <span class="key">groupdrag</span>:<span class="predefined-constant">true</span>,
-                <span class="key">animateborder</span>: <span class="predefined-constant">false</span>,
+                <span class="key">groupreparent</span>:<span class="predefined-constant">false</span>,
                 <span class="key">rulers</span>:<span class="predefined-constant">true</span>,
 
                 <span class="comment">// internal</span>
                 <span class="key">selection</span>:Config({<span class="key">value</span>:[], <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">watch</span>:Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">value</span>:[], <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>})
         };
-
-        <span class="local-variable">this</span>.<span class="function">onrulers</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>.rulers &amp;&amp; <span class="local-variable">this</span>.__ruler) {
-                        <span class="local-variable">this</span>.__ruler.closeOverlay();
-                        <span class="local-variable">this</span>.__ruler.target = <span class="predefined-constant">undefined</span>;
-                        <span class="local-variable">this</span>.__ruler = <span class="predefined-constant">undefined</span>;
-                }
-        };
-
-        <span class="local-variable">this</span>.<span class="function">onanimateborder</span> = <span class="keyword">function</span> (ev,v,o) {
-                <span class="local-variable">this</span>.bordercolorfn = v ? <span class="local-variable">this</span>.animatedbordercolorfn : <span class="local-variable">this</span>.staticbordercolorfn;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">animatedbordercolorfn</span> = <span class="keyword">function</span>(pos) {
-                <span class="keyword">var</span> speed = time * <span class="float">37.0</span>;
-                <span class="keyword">var</span> size = <span class="float">0.0008</span>;
-                <span class="keyword">var</span> slices = <span class="float">3.5</span>;
-                <span class="keyword">var</span> v = <span class="reserved">int</span>(mod(size * (gl_FragCoord.x - gl_FragCoord.y + speed), slices));
-                <span class="keyword">return</span> vec4((v + <span class="float">0.45</span>) * vec3(<span class="float">0.5</span>, <span class="float">0.9</span>, <span class="float">0.9</span>), <span class="float">0.8</span>);
-        };
-        <span class="local-variable">this</span>.<span class="function">staticbordercolorfn</span> = <span class="keyword">function</span>(pos) {
-                <span class="keyword">var</span> size = <span class="float">0.0008</span>;
-                <span class="keyword">var</span> slices = <span class="float">3.5</span>;
-                <span class="keyword">var</span> v = <span class="reserved">int</span>(mod(size * ((x + pos.x) - (y + pos.y)), slices));
-                <span class="keyword">return</span> vec4((v + <span class="float">0.45</span>) * vec3(<span class="float">0.5</span>, <span class="float">0.9</span>, <span class="float">0.9</span>), <span class="float">0.8</span>);
-        };
-        <span class="local-variable">this</span>.bordercolorfn = <span class="local-variable">this</span>.staticbordercolorfn;
 
         <span class="local-variable">this</span>.<span class="function">onwatch</span> = <span class="keyword">function</span>(ev,v,o) {
                 <span class="keyword">var</span> selection = [];
@@ -1753,98 +1767,39 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         };
 
-        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span> () {
-                <span class="local-variable">this</span>.ensureDeps();
+        <span class="local-variable">this</span>.<span class="function">globalpointerstart</span> = <span class="keyword">function</span>(ev) {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
+                        <span class="keyword">return</span>;
+                }
 
-                <span class="local-variable">this</span>.screen.<span class="function">globalpointerstart</span> = <span class="keyword">function</span>(ev) {
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
-                                <span class="keyword">return</span>;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
+                        <span class="local-variable">this</span>.__ruler.rulermarkstart = ev.pointer.position;
+                }
+
+                <span class="keyword">if</span> (ev.view == <span class="local-variable">this</span>) {
+                        <span class="keyword">var</span> inspector = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">inspector</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">if</span> (inspector) {
+                                inspector.astarget = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(<span class="local-variable">this</span>));
                         }
+                        <span class="local-variable">this</span>.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
-                                <span class="local-variable">this</span>.__ruler.rulermarkstart = ev.pointer.position;
-                        }
+                        <span class="local-variable">this</span>.__originalpos = {
+                                <span class="key">x</span>:ev.view.x,
+                                <span class="key">y</span>:ev.view.y
+                        };
 
-                        <span class="keyword">if</span> (ev.view == <span class="local-variable">this</span>) {
-                                <span class="keyword">var</span> inspector = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">inspector</span><span class="delimiter">'</span></span>);
-                                <span class="keyword">if</span> (inspector) {
-                                        inspector.astarget = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(<span class="local-variable">this</span>));
-                                }
-                                <span class="local-variable">this</span>.__startpos = ev.view.globalToLocal(ev.pointer.position);
+                        <span class="local-variable">this</span>.__originalsize = {
+                                <span class="key">w</span>:ev.view.width,
+                                <span class="key">h</span>:ev.view.height
+                        };
 
-                                <span class="local-variable">this</span>.__originalpos = {
-                                        <span class="key">x</span>:ev.view.x,
-                                        <span class="key">y</span>:ev.view.y
-                                };
+                        <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.edgeCursor(ev);
 
-                                <span class="local-variable">this</span>.__originalsize = {
-                                        <span class="key">w</span>:ev.view.width,
-                                        <span class="key">h</span>:ev.view.height
-                                };
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.testView(ev.view)) {
 
-                                <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.edgeCursor(ev);
-
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.testView(ev.view)) {
-
-                                <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(ev.view));
-                                <span class="keyword">if</span> (!<span class="local-variable">this</span>.watch || <span class="local-variable">this</span>.watch.indexOf(astpath) &lt; <span class="integer">0</span>) {
-                                        <span class="local-variable">this</span>.watch = [astpath];
-                                }
-
-                                <span class="keyword">var</span> dragview = ev.view;
-                                <span class="keyword">if</span> (!dragview.tooldragroot) {
-                                        <span class="keyword">var</span> p = dragview;
-                                        <span class="keyword">while</span> (p = p.parent) {
-                                                <span class="keyword">if</span> (p.tooldragroot) {
-                                                        dragview = p;
-                                                        <span class="keyword">break</span>;
-                                                }
-                                        }
-                                }
-
-                                <span class="keyword">if</span> (dragview.toolmove === <span class="predefined-constant">false</span>){
-                                        dragview.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">crosshair</span><span class="delimiter">&quot;</span></span>;
-                                        <span class="local-variable">this</span>.__startrect = ev.pointer.position;
-                                } <span class="keyword">else</span> {
-                                        <span class="comment">// This is a drag</span>
-
-                                        <span class="local-variable">this</span>.__startpos = dragview.globalToLocal(ev.pointer.position);
-
-                                        <span class="local-variable">this</span>.__originalpos = {
-                                                <span class="key">x</span>:dragview.x,
-                                                <span class="key">y</span>:dragview.y
-                                        };
-
-                                        <span class="local-variable">this</span>.__originalsize = {
-                                                <span class="key">w</span>:dragview.width,
-                                                <span class="key">h</span>:dragview.height
-                                        };
-
-                                        <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.edgeCursor(ev, dragview);
-                                        <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
-                                        dragview.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
-                                        dragview.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>;
-                                        ev.pointer.pickview = <span class="predefined-constant">true</span>;
-                                }
-                        }
-
-                }.bind(<span class="local-variable">this</span>);
-
-                <span class="local-variable">this</span>.screen.<span class="function">globalpointermove</span> = <span class="keyword">function</span>(ev) {
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
-                                <span class="keyword">return</span>;
-                        }
-
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
-                                <span class="keyword">if</span> (ev.pointer.pick &amp;&amp; <span class="local-variable">this</span>.testView(ev.pointer.pick) &amp;&amp; <span class="local-variable">this</span>.__ruler.target !== ev.pointer.pick) {
-                                        <span class="local-variable">this</span>.__ruler.target = ev.pointer.pick;
-                                }
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler.target == ev.view) {
-                                        <span class="local-variable">this</span>.__ruler.target = ev.view.parent;
-                                }
-
-                                <span class="local-variable">this</span>.__ruler.rulermarkstart = ev.view.pos;
-                                <span class="local-variable">this</span>.__ruler.rulermarkend = vec2(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height);
+                        <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(ev.view));
+                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.watch || <span class="local-variable">this</span>.watch.indexOf(astpath) &lt; <span class="integer">0</span>) {
+                                <span class="local-variable">this</span>.watch = [astpath];
                         }
 
                         <span class="keyword">var</span> dragview = ev.view;
@@ -1858,327 +1813,427 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                         }
 
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner) {
+                        <span class="keyword">if</span> (dragview.toolmove === <span class="predefined-constant">false</span>){
+                                dragview.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">crosshair</span><span class="delimiter">&quot;</span></span>;
+                                <span class="local-variable">this</span>.__startrect = ev.pointer.position;
+                        } <span class="keyword">else</span> {
+                                <span class="comment">// This may be a drag</span>
 
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-right</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.width = <span class="local-variable">this</span>.__originalsize.w + ev.pointer.delta.x;
-                                        dragview.height = <span class="local-variable">this</span>.__originalsize.h + ev.pointer.delta.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.height = <span class="local-variable">this</span>.__originalsize.h + ev.pointer.delta.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.width = <span class="local-variable">this</span>.__originalsize.w + ev.pointer.delta.x;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-left</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                        dragview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
-                                        dragview.width = <span class="local-variable">this</span>.__originalsize.w - ev.pointer.delta.x;
-                                        dragview.height = <span class="local-variable">this</span>.__originalsize.h - ev.pointer.delta.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                        dragview.width = <span class="local-variable">this</span>.__originalsize.w - ev.pointer.delta.x;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
-                                        dragview.height = <span class="local-variable">this</span>.__originalsize.h - ev.pointer.delta.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                        dragview.width = <span class="local-variable">this</span>.__originalsize.w - ev.pointer.delta.x;
-                                        dragview.height = <span class="local-variable">this</span>.__originalsize.h + ev.pointer.delta.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-right</span><span class="delimiter">&quot;</span></span>) {
-                                        dragview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
-                                        dragview.height = <span class="local-variable">this</span>.__originalsize.h - ev.pointer.delta.y;
-                                        dragview.width = <span class="local-variable">this</span>.__originalsize.w + ev.pointer.delta.x;
-                                }
+                                <span class="local-variable">this</span>.__startpos = dragview.globalToLocal(ev.pointer.position);
 
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(ev.view) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span>) {
+                                <span class="local-variable">this</span>.__originalpos = {
+                                        <span class="key">x</span>:dragview.x,
+                                        <span class="key">y</span>:dragview.y
+                                };
 
+                                <span class="local-variable">this</span>.__originalsize = {
+                                        <span class="key">w</span>:dragview.width,
+                                        <span class="key">h</span>:dragview.height
+                                };
+
+                                <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.edgeCursor(ev, dragview);
                                 <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
-                                ev.view.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
+                                dragview.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
+                                dragview.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>;
+                                ev.pointer.pickview = <span class="predefined-constant">true</span>;
+                        }
+                }
 
-                                <span class="keyword">var</span> pos = ev.pointer.position;
+        };
 
-                                <span class="keyword">if</span> (dragview.parent) {
-                                        <span class="keyword">if</span> (dragview.position != <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
-                                                dragview.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
+        <span class="local-variable">this</span>.<span class="function">globalpointermove</span> = <span class="keyword">function</span>(ev) {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
+                        <span class="keyword">return</span>;
+                }
+
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler) {
+                        <span class="keyword">if</span> (ev.pointer.pick &amp;&amp; <span class="local-variable">this</span>.testView(ev.pointer.pick) &amp;&amp; <span class="local-variable">this</span>.__ruler.target !== ev.pointer.pick) {
+                                <span class="local-variable">this</span>.__ruler.target = ev.pointer.pick;
+                        }
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler.target == ev.view) {
+                                <span class="local-variable">this</span>.__ruler.target = ev.view.parent;
+                        }
+
+                        <span class="local-variable">this</span>.__ruler.rulermarkstart = ev.view.pos;
+                        <span class="local-variable">this</span>.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,<span class="integer">0</span>);
+                }
+
+                <span class="keyword">var</span> dragview = ev.view;
+                <span class="keyword">if</span> (!dragview.tooldragroot) {
+                        <span class="keyword">var</span> p = dragview;
+                        <span class="keyword">while</span> (p = p.parent) {
+                                <span class="keyword">if</span> (p.tooldragroot) {
+                                        dragview = p;
+                                        <span class="keyword">break</span>;
+                                }
+                        }
+                }
+
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner) {
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-right</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.width = <span class="local-variable">this</span>.__originalsize.w + ev.pointer.delta.x;
+                                dragview.height = <span class="local-variable">this</span>.__originalsize.h + ev.pointer.delta.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.height = <span class="local-variable">this</span>.__originalsize.h + ev.pointer.delta.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">right</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.width = <span class="local-variable">this</span>.__originalsize.w + ev.pointer.delta.x;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-left</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                dragview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                                dragview.width = <span class="local-variable">this</span>.__originalsize.w - ev.pointer.delta.x;
+                                dragview.height = <span class="local-variable">this</span>.__originalsize.h - ev.pointer.delta.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                dragview.width = <span class="local-variable">this</span>.__originalsize.w - ev.pointer.delta.x;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                                dragview.height = <span class="local-variable">this</span>.__originalsize.h - ev.pointer.delta.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                dragview.width = <span class="local-variable">this</span>.__originalsize.w - ev.pointer.delta.x;
+                                dragview.height = <span class="local-variable">this</span>.__originalsize.h + ev.pointer.delta.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-right</span><span class="delimiter">&quot;</span></span>) {
+                                dragview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                                dragview.height = <span class="local-variable">this</span>.__originalsize.h - ev.pointer.delta.y;
+                                dragview.width = <span class="local-variable">this</span>.__originalsize.w + ev.pointer.delta.x;
+                        }
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(ev.view) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span>) {
+
+                        <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
+                        ev.view.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
+
+<span class="comment">//                        var pos = ev.pointer.position;</span>
+
+                        <span class="keyword">if</span> (dragview.parent) {
+                                <span class="keyword">if</span> (dragview.position != <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
+                                        dragview.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
+                                }
+<span class="comment">//                                pos = dragview.parent.globalToLocal(ev.pointer.position)</span>
+                        }
+
+<span class="comment">//                        dragview.pos = vec3(pos.x - this.__startpos.x, pos.y - this.__startpos.y, 0);</span>
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.selection) {
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.selection.length;i++) {
+                                        <span class="keyword">var</span> selected = <span class="local-variable">this</span>.selection[i];
+                                        selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,<span class="integer">0</span>)
+                                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.groupdrag) {
+                                                <span class="keyword">break</span>;
                                         }
-                                        pos = dragview.parent.globalToLocal(ev.pointer.position)
+                                }
+                        }
+
+                        <span class="local-variable">this</span>.__lastpick = ev.pointer.pick;
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startrect) {
+
+                        <span class="comment">//resize</span>
+
+                        <span class="keyword">var</span> select = <span class="local-variable">this</span>.__selectrect || <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">if</span> (!select) {
+                                select = <span class="local-variable">this</span>.__selectrect = <span class="local-variable">this</span>.screen.openOverlay(<span class="local-variable">this</span>.selectorrect);
+                                <span class="local-variable">this</span>.__selectrect.pos = <span class="local-variable">this</span>.__startrect;
+                        }
+
+                        <span class="keyword">var</span> pos = ev.pointer.position;
+
+                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.__startrect;
+                        <span class="keyword">var</span> b = pos;
+
+                        <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; a.y &lt; b.y) { <span class="comment">//normal</span>
+                                select.pos = a;
+                                select.size = vec3(b.x - a.x, b.y - a.y,<span class="integer">0</span>);
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (b.x &lt; a.x &amp;&amp; a.y &lt; b.y) { <span class="comment">// b lower left, a upper right</span>
+                                select.pos = vec3(b.x, a.y,<span class="integer">0</span>);
+                                select.size = vec3(a.x - b.x, b.y - a.y);
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; b.y &lt; a.y) { <span class="comment">// a lower left, b upper right</span>
+                                select.pos = vec3(a.x, b.y,<span class="integer">0</span>);
+                                select.size = vec3(b.x - a.x, a.y - b.y,<span class="integer">0</span>);
+                        } <span class="keyword">else</span> {
+                                select.pos = vec3(b.x, b.y);
+                                select.size = vec3(a.x - b.x, a.y - b.y,<span class="integer">0</span>);
+                        }
+                }
+
+        };
+
+        <span class="local-variable">this</span>.<span class="function">globalpointerend</span> = <span class="keyword">function</span>(ev) {
+                <span class="keyword">if</span> (ev.view.drawtarget != <span class="string"><span class="delimiter">&quot;</span><span class="content">both</span><span class="delimiter">&quot;</span></span>) {
+                        ev.view.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">both</span><span class="delimiter">&quot;</span></span>;
+                }
+
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
+                        <span class="keyword">return</span>;
+                }
+
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler &amp;&amp; <span class="local-variable">this</span>.__ruler.target !== ev.view &amp;&amp; <span class="local-variable">this</span>.testView(ev.view)) {
+                        <span class="local-variable">this</span>.__ruler.target = ev.view;
+                }
+
+                <span class="keyword">var</span> evview = ev.view;
+                evview.cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>;
+                <span class="keyword">var</span> commit = <span class="predefined-constant">false</span>;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner &amp;&amp; (evview == <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(evview)) &amp;&amp; evview.toolresize !== <span class="predefined-constant">false</span>) {
+
+                        <span class="comment">// Resize</span>
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-left</span><span class="delimiter">&quot;</span></span>) {
+                                evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                                evview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>) {
+                                evview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>) {
+                                evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>) {
+                                evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
+                        }
+
+                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
+                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, evview._layout.absx);
+                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, evview._layout.absy);
+                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>, evview._layout.width);
+                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>, evview._layout.height);
+
+                        commit = (Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x) &gt; <span class="float">0.5</span>)
+                                || (Math.abs(evview.y - <span class="local-variable">this</span>.__originalpos.y) &gt; <span class="float">0.5</span>)
+                                || (Math.abs(evview._layout.width - <span class="local-variable">this</span>.__originalsize.w) &gt; <span class="float">0.5</span>)
+                                || (Math.abs(evview._layout.height - <span class="local-variable">this</span>.__originalsize.h) &gt; <span class="float">0.5</span>);
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(evview) &amp;&amp; evview.toolmove !== <span class="predefined-constant">false</span>) {
+
+                        <span class="comment">// Move view</span>
+
+                        <span class="keyword">var</span> pos = ev.pointer.position;
+                        <span class="keyword">if</span> (evview.parent) {
+                                <span class="keyword">if</span> (evview.position != <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
+                                        evview.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
+                                }
+                                pos = evview.parent.globalToLocal(ev.pointer.position)
+                        }
+
+                        <span class="keyword">var</span> nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
+                        <span class="keyword">var</span> dx = Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x);
+                        <span class="keyword">if</span> (dx &gt; <span class="float">0.5</span>) {
+<span class="comment">//                                this.setASTObjectProperty(evview, &quot;x&quot;, nx);</span>
+                                commit = <span class="predefined-constant">true</span>;
+                        }
+
+                        <span class="keyword">var</span> ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
+                        <span class="keyword">var</span> dy = Math.abs(ny - <span class="local-variable">this</span>.__originalpos.y);
+                        <span class="keyword">if</span> (dy &gt; <span class="float">0.5</span>) {
+<span class="comment">//                                this.setASTObjectProperty(evview, &quot;y&quot;, ny);</span>
+                                commit = <span class="predefined-constant">true</span>;
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.selection) {
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.selection.length;i++) {
+                                        <span class="keyword">var</span> selected = <span class="local-variable">this</span>.selection[i];
+                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.testView(selected) &amp;&amp; selected.toolmove !== <span class="predefined-constant">false</span>) {
+                                                nx = selected.pos.x + ev.pointer.movement.x;
+                                                <span class="local-variable">this</span>.setASTObjectProperty(selected, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx);
+
+                                                ny = selected.pos.y + ev.pointer.movement.y;
+                                                <span class="local-variable">this</span>.setASTObjectProperty(selected, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny);
+
+                                                <span class="keyword">if</span> (!<span class="local-variable">this</span>.groupdrag) {
+                                                        <span class="keyword">break</span>;
+                                                }
+                                        }
+                                }
+                        }
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__lastpick &amp;&amp; <span class="local-variable">this</span>.__lastpick !== evview.parent &amp;&amp; <span class="local-variable">this</span>.testView(<span class="local-variable">this</span>.__lastpick) &amp;&amp; <span class="local-variable">this</span>.__lastpick.tooldrop !== <span class="predefined-constant">false</span>) {
+
+                                <span class="comment">// Reparent because we dropped into a new view</span>
+
+                                pos = <span class="local-variable">this</span>.__lastpick.globalToLocal(ev.pointer.position);
+
+                                nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
+                                ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
+
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx, <span class="predefined-constant">false</span>);
+                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny, <span class="predefined-constant">false</span>);
+
+                                <span class="keyword">var</span> newparent = <span class="local-variable">this</span>.__lastpick.ASTNode();
+                                <span class="keyword">if</span> (!newparent.args) {
+                                        newparent.args = []
                                 }
 
-                                dragview.pos = vec2(pos.x - <span class="local-variable">this</span>.__startpos.x, pos.y - <span class="local-variable">this</span>.__startpos.y);
-
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.groupdrag &amp;&amp; <span class="local-variable">this</span>.selection) {
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.selection) {
                                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.selection.length;i++) {
                                                 <span class="keyword">var</span> selected = <span class="local-variable">this</span>.selection[i];
-                                                selected.pos = vec2(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y)
-                                        }
-                                }
+                                                <span class="keyword">var</span> astnode = selected.ASTNode();
+                                                newparent.args.push(astnode);
 
-                                <span class="local-variable">this</span>.__lastpick = ev.pointer.pick;
+                                                <span class="keyword">var</span> oldparent = selected.parent.ASTNode();
+                                                <span class="keyword">var</span> index = oldparent.args.indexOf(astnode);
+                                                <span class="keyword">if</span> (index &gt;= <span class="integer">0</span>) {
+                                                        oldparent.args.splice(index, <span class="integer">1</span>);
+                                                }
 
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startrect) {
-
-                                <span class="comment">//resize</span>
-
-                                <span class="keyword">var</span> select = <span class="local-variable">this</span>.__selectrect || <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
-                                <span class="keyword">if</span> (!select) {
-                                        select = <span class="local-variable">this</span>.__selectrect = <span class="local-variable">this</span>.screen.openOverlay(<span class="local-variable">this</span>.selectorrect);
-                                        <span class="local-variable">this</span>.__selectrect.pos = <span class="local-variable">this</span>.__startrect;
-                                }
-
-                                <span class="keyword">var</span> pos = ev.pointer.position;
-
-                                <span class="keyword">var</span> a = <span class="local-variable">this</span>.__startrect;
-                                <span class="keyword">var</span> b = pos;
-
-                                <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; a.y &lt; b.y) { <span class="comment">//normal</span>
-                                        select.pos = a;
-                                        select.size = vec2(b.x - a.x, b.y - a.y);
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (b.x &lt; a.x &amp;&amp; a.y &lt; b.y) { <span class="comment">// b lower left, a upper right</span>
-                                        select.pos = vec2(b.x, a.y);
-                                        select.size = vec2(a.x - b.x, b.y - a.y);
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; b.y &lt; a.y) { <span class="comment">// a lower left, b upper right</span>
-                                        select.pos = vec2(a.x, b.y);
-                                        select.size = vec2(b.x - a.x, a.y - b.y);
-                                } <span class="keyword">else</span> {
-                                        select.pos = vec2(b.x, b.y);
-                                        select.size = vec2(a.x - b.x, a.y - b.y);
-                                }
-                        }
-
-                }.bind(<span class="local-variable">this</span>);
-
-                <span class="local-variable">this</span>.screen.<span class="function">globalpointerend</span> = <span class="keyword">function</span>(ev) {
-                        <span class="keyword">if</span> (ev.view.drawtarget != <span class="string"><span class="delimiter">&quot;</span><span class="content">both</span><span class="delimiter">&quot;</span></span>) {
-                                ev.view.drawtarget = <span class="string"><span class="delimiter">&quot;</span><span class="content">both</span><span class="delimiter">&quot;</span></span>;
-                        }
-
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
-                                <span class="keyword">return</span>;
-                        }
-
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler &amp;&amp; <span class="local-variable">this</span>.__ruler.target !== ev.view &amp;&amp; <span class="local-variable">this</span>.testView(ev.view)) {
-                                <span class="local-variable">this</span>.__ruler.target = ev.view;
-                        }
-
-
-                        <span class="keyword">var</span> evview = ev.view;
-                        evview.cursor = <span class="string"><span class="delimiter">'</span><span class="content">arrow</span><span class="delimiter">'</span></span>;
-                        <span class="keyword">var</span> commit = <span class="predefined-constant">false</span>;
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner &amp;&amp; (evview == <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(evview)) &amp;&amp; evview.toolresize !== <span class="predefined-constant">false</span>) {
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top-left</span><span class="delimiter">&quot;</span></span>) {
-                                        evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                        evview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">top</span><span class="delimiter">&quot;</span></span>) {
-                                        evview.y = ev.pointer.position.y - <span class="local-variable">this</span>.__startpos.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">left</span><span class="delimiter">&quot;</span></span>) {
-                                        evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__resizecorner === <span class="string"><span class="delimiter">&quot;</span><span class="content">bottom-left</span><span class="delimiter">&quot;</span></span>) {
-                                        evview.x = ev.pointer.position.x - <span class="local-variable">this</span>.__startpos.x;
-                                }
-
-                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
-                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, evview._layout.absx);
-                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, evview._layout.absy);
-                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>, evview._layout.width);
-                                <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>, evview._layout.height);
-
-                                commit = (Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x) &gt; <span class="float">0.5</span>)
-                                        || (Math.abs(evview.y - <span class="local-variable">this</span>.__originalpos.y) &gt; <span class="float">0.5</span>)
-                                        || (Math.abs(evview._layout.width - <span class="local-variable">this</span>.__originalsize.w) &gt; <span class="float">0.5</span>)
-                                        || (Math.abs(evview._layout.height - <span class="local-variable">this</span>.__originalsize.h) &gt; <span class="float">0.5</span>);
-
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startpos &amp;&amp; <span class="local-variable">this</span>.testView(evview) &amp;&amp; evview.toolmove !== <span class="predefined-constant">false</span>) {
-
-                                <span class="keyword">var</span> pos = ev.pointer.position;
-                                <span class="keyword">if</span> (evview.parent) {
-                                        <span class="keyword">if</span> (evview.position != <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
-                                                evview.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
-                                        }
-                                        pos = evview.parent.globalToLocal(ev.pointer.position)
-                                }
-
-                                <span class="keyword">var</span> nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
-                                <span class="keyword">var</span> dx = Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x);
-                                <span class="keyword">if</span> (dx &gt; <span class="float">0.5</span>) {
-                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx);
-                                        commit = <span class="predefined-constant">true</span>;
-                                }
-
-                                <span class="keyword">var</span> ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
-                                <span class="keyword">var</span> dy = Math.abs(ny - <span class="local-variable">this</span>.__originalpos.y);
-                                <span class="keyword">if</span> (dy &gt; <span class="float">0.5</span>) {
-                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny);
-                                        commit = <span class="predefined-constant">true</span>;
-                                }
-
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.groupdrag &amp;&amp; <span class="local-variable">this</span>.selection) {
-                                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.selection.length;i++) {
-                                                <span class="keyword">var</span> selected = <span class="local-variable">this</span>.selection[i];
-                                                <span class="keyword">if</span> (<span class="local-variable">this</span>.testView(selected) &amp;&amp; selected.toolmove !== <span class="predefined-constant">false</span>) {
-                                                        nx = selected.pos.x + ev.pointer.movement.x;
-                                                        <span class="local-variable">this</span>.setASTObjectProperty(selected, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx);
-
-                                                        ny = selected.pos.y + ev.pointer.movement.y;
-                                                        <span class="local-variable">this</span>.setASTObjectProperty(selected, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny);
+                                                <span class="keyword">if</span> (!<span class="local-variable">this</span>.groupdrag || !<span class="local-variable">this</span>.groupreparent) {
+                                                        <span class="keyword">break</span>;
                                                 }
                                         }
                                 }
 
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__lastpick &amp;&amp; <span class="local-variable">this</span>.__lastpick !== evview.parent &amp;&amp; <span class="local-variable">this</span>.testView(<span class="local-variable">this</span>.__lastpick) &amp;&amp; <span class="local-variable">this</span>.__lastpick.tooldrop !== <span class="predefined-constant">false</span>) {
-                                        pos = <span class="local-variable">this</span>.__lastpick.globalToLocal(ev.pointer.position);
-
-                                        nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
-                                        ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
-
-                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx, <span class="predefined-constant">false</span>);
-                                        <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">y</span><span class="delimiter">&quot;</span></span>, ny, <span class="predefined-constant">false</span>);
-
-                                        <span class="keyword">var</span> astnode = evview.ASTNode();
-
-                                        <span class="keyword">var</span> newparent = <span class="local-variable">this</span>.__lastpick.ASTNode();
-                                        <span class="keyword">if</span> (!newparent.args) {
-                                                newparent.args = []
-                                        }
-                                        newparent.args.push(astnode);
-
-                                        <span class="keyword">var</span> oldparent = evview.parent.ASTNode();
-                                        <span class="keyword">var</span> index = oldparent.args.indexOf(astnode);
-                                        <span class="keyword">if</span> (index &gt;= <span class="integer">0</span>) {
-                                                oldparent.args.splice(index, <span class="integer">1</span>);
-                                        }
-
-                                        commit = <span class="predefined-constant">true</span>;
-                                }
-
-
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startrect) {
-                                <span class="keyword">var</span> pos = ev.pointer.position;
-
-                                <span class="keyword">var</span> a = <span class="local-variable">this</span>.__startrect;
-                                <span class="keyword">var</span> b = pos;
-
-                                <span class="keyword">var</span> rect = vec4();
-
-                                <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; a.y &lt; b.y) { <span class="comment">//normal</span>
-                                        rect.x = a.x;
-                                        rect.y = a.y;
-                                        rect.w = b.x - a.x;
-                                        rect.z = b.y - a.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (b.x &lt; a.x &amp;&amp; a.y &lt; b.y) { <span class="comment">// b lower left, a upper right</span>
-                                        rect.x = b.x;
-                                        rect.y = a.y;
-                                        rect.w = a.x - b.x;
-                                        rect.z = b.y - a.y;
-                                } <span class="keyword">else</span> <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; b.y &lt; a.y) { <span class="comment">// a lower left, b upper right</span>
-                                        rect.x = a.x;
-                                        rect.y = b.y;
-                                        rect.w = b.x - a.x;
-                                        rect.z = a.y - b.y;
-                                } <span class="keyword">else</span> {
-                                        rect.x = b.x;
-                                        rect.y = b.y;
-                                        rect.w = a.x - b.x;
-                                        rect.z = a.y - b.y;
-                                }
-                                <span class="keyword">var</span> select = <span class="local-variable">this</span>.__selectrect || <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
-                                <span class="keyword">if</span> (select) {
-                                        select.closeOverlay();
-                                        <span class="local-variable">this</span>.__selectrect = <span class="predefined-constant">undefined</span>;
-                                }
-
-                                <span class="keyword">var</span> selection = <span class="local-variable">this</span>.screen.childrenInRect(rect, [select]);
-                                <span class="keyword">var</span> watch = [];
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;selection.length;i++) {
-                                        <span class="keyword">var</span> selected = selection[i];
-                                        <span class="keyword">if</span> (selected !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(selected) &amp;&amp; <span class="local-variable">this</span>.toolselect !== <span class="predefined-constant">false</span>) {
-                                                <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(selected));
-                                                watch.push(astpath);
-                                        }
-                                }
-                                <span class="local-variable">this</span>.watch = watch;
+                                commit = <span class="predefined-constant">true</span>;
                         }
 
+                        <span class="keyword">if</span> (!commit) {
+                                <span class="comment">// Just a click ending, let's target what we clicked</span>
+
+                                <span class="keyword">var</span> inspector = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">inspector</span><span class="delimiter">'</span></span>);
+                                <span class="keyword">if</span> (inspector) {
+                                        inspector.astarget = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(evview));
+                                }
+
+                        }
+
+
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.__startrect) {
+
+                        <span class="comment">// Selection rectangle</span>
+
+                        <span class="keyword">var</span> pos = ev.pointer.position;
+
+                        <span class="keyword">var</span> a = <span class="local-variable">this</span>.__startrect;
+                        <span class="keyword">var</span> b = pos;
+
+                        <span class="keyword">var</span> rect = vec4();
+
+                        <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; a.y &lt; b.y) { <span class="comment">//normal</span>
+                                rect.x = a.x;
+                                rect.y = a.y;
+                                rect.w = b.x - a.x;
+                                rect.z = b.y - a.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (b.x &lt; a.x &amp;&amp; a.y &lt; b.y) { <span class="comment">// b lower left, a upper right</span>
+                                rect.x = b.x;
+                                rect.y = a.y;
+                                rect.w = a.x - b.x;
+                                rect.z = b.y - a.y;
+                        } <span class="keyword">else</span> <span class="keyword">if</span> (a.x &lt; b.x &amp;&amp; b.y &lt; a.y) { <span class="comment">// a lower left, b upper right</span>
+                                rect.x = a.x;
+                                rect.y = b.y;
+                                rect.w = b.x - a.x;
+                                rect.z = a.y - b.y;
+                        } <span class="keyword">else</span> {
+                                rect.x = b.x;
+                                rect.y = b.y;
+                                rect.w = a.x - b.x;
+                                rect.z = a.y - b.y;
+                        }
+                        <span class="keyword">var</span> select = <span class="local-variable">this</span>.__selectrect || <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">selectorrect</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">if</span> (select) {
+                                select.closeOverlay();
+                                <span class="local-variable">this</span>.__selectrect = <span class="predefined-constant">undefined</span>;
+                        }
+
+                        <span class="keyword">var</span> selection = <span class="local-variable">this</span>.screen.childrenInRect(rect, [select]);
+                        <span class="keyword">var</span> watch = [];
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;selection.length;i++) {
+                                <span class="keyword">var</span> selected = selection[i];
+                                <span class="keyword">if</span> (selected !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(selected) &amp;&amp; <span class="local-variable">this</span>.toolselect !== <span class="predefined-constant">false</span>) {
+                                        <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.ASTNodePath(selected));
+                                        watch.push(astpath);
+                                }
+                        }
+                        <span class="local-variable">this</span>.watch = watch;
+                }
+
+                <span class="keyword">if</span> (commit) {
+                        <span class="local-variable">this</span>.ensureDeps();
+                        <span class="local-variable">this</span>.screen.composition.commitAST();
+                }
+
+                <span class="local-variable">this</span>.__lastpick = <span class="local-variable">this</span>.__startrect = <span class="local-variable">this</span>.__startpos = <span class="local-variable">this</span>.__originalpos = <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.__originalsize = <span class="predefined-constant">undefined</span>;
+        };
+
+        <span class="local-variable">this</span>.<span class="function">globalpointerhover</span> = <span class="keyword">function</span>(ev) {
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
+                        <span class="keyword">return</span>;
+                }
+
+                <span class="keyword">var</span> text = ev.view.constructor.name;
+                <span class="keyword">if</span> (ev.view.name) {
+                        text = ev.view.name + <span class="string"><span class="delimiter">&quot;</span><span class="content"> (</span><span class="delimiter">&quot;</span></span> + text + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>
+                }
+
+                <span class="keyword">var</span> pointers = ev.pointers;
+                <span class="keyword">if</span> (!pointers &amp;&amp; ev.pointer) {
+                        pointers = [ev.pointer];
+                }
+
+                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;pointers.length;i++) {
+                        <span class="keyword">var</span> pointer = pointers[i];
+
+                        <span class="keyword">var</span> pos = ev.view.globalToLocal(pointer.position);
+
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler &amp;&amp; <span class="local-variable">this</span>.__ruler.target) {
+                                <span class="local-variable">this</span>.__ruler.rulermarkstart = <span class="local-variable">this</span>.__ruler.target.globalToLocal(pointer.position);
+                        }
+
+
+                        text = text + <span class="string"><span class="delimiter">&quot;</span><span class="content"> @ </span><span class="delimiter">&quot;</span></span> + ev.pointer.position.x.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + ev.pointer.position.y.toFixed(<span class="integer">0</span>);
+                        text = text + <span class="string"><span class="delimiter">&quot;</span><span class="content"> &lt;</span><span class="delimiter">&quot;</span></span> + pos.x.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + pos.y.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">&gt;</span><span class="delimiter">&quot;</span></span>;
+
+                        <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>).text = text;
+
+                        <span class="local-variable">this</span>.edgeCursor(ev)
+                }
+
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.__selectrect) {
+                        <span class="keyword">var</span> m = <span class="local-variable">this</span>.__selectrect;
+                        <span class="local-variable">this</span>.__selectrect = <span class="predefined-constant">undefined</span>;
+                        m.closeOverlay();
+                }
+
+        };
+
+        <span class="local-variable">this</span>.<span class="function">globalkeydown</span> = <span class="keyword">function</span>(ev) {
+                <span class="keyword">if</span> (ev.code === <span class="integer">84</span> &amp;&amp; ev.ctrl &amp;&amp; ev.shift) {
+                        <span class="local-variable">this</span>.setASTObjectProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">visible</span><span class="delimiter">&quot;</span></span>, !<span class="local-variable">this</span>.visible);
+                        <span class="local-variable">this</span>.ensureDeps();
+                        <span class="local-variable">this</span>.screen.composition.commitAST();
+                        <span class="keyword">return</span>;
+                }
+                <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
+                        <span class="keyword">return</span>;
+                }
+
+                <span class="keyword">if</span> (ev.code === <span class="integer">8</span> &amp;&amp; <span class="local-variable">this</span>.selection) {
+                        <span class="keyword">var</span> commit = <span class="predefined-constant">false</span>;
+                        <span class="keyword">var</span> multi = <span class="local-variable">this</span>.selection.length &gt; <span class="integer">1</span>;
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="local-variable">this</span>.selection.length - <span class="integer">1</span>; i&gt;=<span class="integer">0</span>; i--) {
+                                <span class="keyword">var</span> v = <span class="local-variable">this</span>.selection[i];
+                                <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span>;
+
+                                <span class="keyword">if</span> ((multi || candelete) &amp;&amp; <span class="local-variable">this</span>.testView(v) &amp;&amp; v.toolremove !== <span class="predefined-constant">false</span>) {
+                                        <span class="keyword">var</span> parent = v.parent.ASTNode();
+                                        <span class="keyword">var</span> node = v.ASTNode();
+                                        <span class="keyword">var</span> index = parent.args.indexOf(node);
+                                        <span class="keyword">if</span> (index &gt;= <span class="integer">0</span>) {
+                                                parent.args.splice(index, <span class="integer">1</span>);
+                                                commit = <span class="predefined-constant">true</span>;
+                                        }
+                                }
+                        }
                         <span class="keyword">if</span> (commit) {
                                 <span class="local-variable">this</span>.ensureDeps();
                                 <span class="local-variable">this</span>.screen.composition.commitAST();
                         }
+                }
+        };
 
-                        <span class="local-variable">this</span>.__lastpick = <span class="local-variable">this</span>.__startrect = <span class="local-variable">this</span>.__startpos = <span class="local-variable">this</span>.__originalpos = <span class="local-variable">this</span>.__resizecorner = <span class="local-variable">this</span>.__originalsize = <span class="predefined-constant">undefined</span>;
-                }.bind(<span class="local-variable">this</span>);
-
-                <span class="local-variable">this</span>.screen.<span class="function">globalpointerhover</span> = <span class="keyword">function</span>(ev) {
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
-                                <span class="keyword">return</span>;
-                        }
-
-                        <span class="keyword">var</span> text = ev.view.constructor.name;
-                        <span class="keyword">if</span> (ev.view.name) {
-                                text = ev.view.name + <span class="string"><span class="delimiter">&quot;</span><span class="content"> (</span><span class="delimiter">&quot;</span></span> + text + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>
-                        }
-
-                        <span class="keyword">var</span> pointers = ev.pointers;
-                        <span class="keyword">if</span> (!pointers &amp;&amp; ev.pointer) {
-                                pointers = [ev.pointer];
-                        }
-
-                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;pointers.length;i++) {
-                                <span class="keyword">var</span> pointer = pointers[i];
-
-                                <span class="keyword">var</span> pos = ev.view.globalToLocal(pointer.position);
-
-                                <span class="keyword">if</span> (<span class="local-variable">this</span>.__ruler &amp;&amp; <span class="local-variable">this</span>.__ruler.target) {
-                                        <span class="local-variable">this</span>.__ruler.rulermarkstart = <span class="local-variable">this</span>.__ruler.target.globalToLocal(pointer.position);
-                                }
-
-
-                                text = text + <span class="string"><span class="delimiter">&quot;</span><span class="content"> @ </span><span class="delimiter">&quot;</span></span> + ev.pointer.position.x.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + ev.pointer.position.y.toFixed(<span class="integer">0</span>);
-                                text = text + <span class="string"><span class="delimiter">&quot;</span><span class="content"> &lt;</span><span class="delimiter">&quot;</span></span> + pos.x.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + pos.y.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">&gt;</span><span class="delimiter">&quot;</span></span>;
-
-                                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>).text = text;
-
-                                <span class="local-variable">this</span>.edgeCursor(ev)
-                        }
-
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.__selectrect) {
-                                <span class="keyword">var</span> m = <span class="local-variable">this</span>.__selectrect;
-                                <span class="local-variable">this</span>.__selectrect = <span class="predefined-constant">undefined</span>;
-                                m.closeOverlay();
-                        }
-
-                }.bind(<span class="local-variable">this</span>);
-
-                <span class="local-variable">this</span>.screen.<span class="function">globalkeydown</span> = <span class="keyword">function</span>(ev) {
-                        <span class="keyword">if</span> (ev.code === <span class="integer">84</span> &amp;&amp; ev.ctrl &amp;&amp; ev.shift) {
-                                <span class="local-variable">this</span>.setASTObjectProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">visible</span><span class="delimiter">&quot;</span></span>, !<span class="local-variable">this</span>.visible);
-                                <span class="local-variable">this</span>.ensureDeps();
-                                <span class="local-variable">this</span>.screen.composition.commitAST();
-                                <span class="keyword">return</span>;
-                        }
-                        <span class="keyword">if</span> (!<span class="local-variable">this</span>.visible) {
-                                <span class="keyword">return</span>;
-                        }
-
-                        <span class="keyword">if</span> (ev.code === <span class="integer">8</span> &amp;&amp; <span class="local-variable">this</span>.selection) {
-                                <span class="keyword">var</span> commit = <span class="predefined-constant">false</span>;
-                                <span class="keyword">var</span> multi = <span class="local-variable">this</span>.selection.length &gt; <span class="integer">1</span>;
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="local-variable">this</span>.selection.length - <span class="integer">1</span>; i&gt;=<span class="integer">0</span>; i--) {
-                                        <span class="keyword">var</span> v = <span class="local-variable">this</span>.selection[i];
-                                        <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span>;
-
-                                        <span class="keyword">if</span> ((multi || candelete) &amp;&amp; <span class="local-variable">this</span>.testView(v) &amp;&amp; v.toolremove !== <span class="predefined-constant">false</span>) {
-                                                <span class="keyword">var</span> parent = v.parent.ASTNode();
-                                                <span class="keyword">var</span> node = v.ASTNode();
-                                                <span class="keyword">var</span> index = parent.args.indexOf(node);
-                                                <span class="keyword">if</span> (index &gt;= <span class="integer">0</span>) {
-                                                        parent.args.splice(index, <span class="integer">1</span>);
-                                                        commit = <span class="predefined-constant">true</span>;
-                                                }
-                                        }
-                                }
-                                <span class="keyword">if</span> (commit) {
-                                        <span class="local-variable">this</span>.ensureDeps();
-                                        <span class="local-variable">this</span>.screen.composition.commitAST();
-                                }
-                        }
-                }.bind(<span class="local-variable">this</span>);
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span> () {
+                <span class="local-variable">this</span>.ensureDeps();
+                <span class="local-variable">this</span>.screen.globalpointerstart = <span class="local-variable">this</span>.globalpointerstart.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.screen.globalpointermove = <span class="local-variable">this</span>.globalpointermove.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.screen.globalpointerend = <span class="local-variable">this</span>.globalpointerend.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.screen.globalpointerhover = <span class="local-variable">this</span>.globalpointerhover.bind(<span class="local-variable">this</span>);
+                <span class="local-variable">this</span>.screen.globalkeydown = <span class="local-variable">this</span>.globalkeydown.bind(<span class="local-variable">this</span>);
         };
 
         <span class="local-variable">this</span>.<span class="function">ensureDeps</span> = <span class="keyword">function</span>() {
@@ -2368,18 +2423,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">&quot;</span><span class="content">move</span><span class="delimiter">&quot;</span></span>;
 
                                                         <span class="comment">// TODO(mason) Figure out why this fixes the bug (comment the following and drag toolkit to see the bug)</span>
-                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>).pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>).pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>).pos = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
 
-                                                        <span class="local-variable">this</span>.parent.pos = vec2(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y)
+                                                        <span class="local-variable">this</span>.parent.pos = vec3(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y,<span class="integer">0</span>)
                                                 }
                                         },
                                         <span class="function">pointerend</span>:<span class="keyword">function</span>(p) {
                                                 <span class="keyword">var</span> parent = <span class="local-variable">this</span>.parent;
                                                 <span class="keyword">if</span> (parent.testView &amp;&amp; parent.toolmove !== <span class="predefined-constant">false</span>  &amp;&amp; parent.position === <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
 
-                                                        parent.pos = vec2(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y);
+                                                        parent.pos = vec3(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y, <span class="integer">0</span>);
 
                                                         parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">position</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>);
                                                         parent.setASTObjectProperty(parent, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, parent._layout.absx);
@@ -2405,7 +2460,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">fontsize</span>:<span class="integer">16</span>,
                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">times</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#ddd</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">opaque</span>:<span class="predefined-constant">true</span>,
+                                        <span class="key">pickalpha</span>:-<span class="integer">1</span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                         <span class="key">marginright</span>:<span class="integer">1</span>,
                                         <span class="function">click</span>:<span class="keyword">function</span>(ev,v,o) {
@@ -2425,30 +2481,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">items</span>:<span class="local-variable">this</span>.components,
 
                                 <span class="function">dropTest</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
-                                        <span class="comment">//var name = v &amp;&amp; v.name ? v.name : &quot;unknown&quot;;</span>
-                                        <span class="comment">//console.log(&quot;test if&quot;, item.label, &quot;from&quot;, orig.position, &quot;can be dropped onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
                                         <span class="keyword">return</span> v !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(v);
                                 }.bind(<span class="local-variable">this</span>),
 
                                 <span class="function">drop</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
-                                        <span class="keyword">var</span> name = v &amp;&amp; v.name ? v.name : <span class="string"><span class="delimiter">&quot;</span><span class="content">unknown</span><span class="delimiter">&quot;</span></span>;
-<span class="comment">//                                        console.log(&quot;dropped&quot;, item.label, &quot;from&quot;, orig.position, &quot;onto&quot;, name, &quot;@&quot;, ev.position, dv);</span>
-
                                         <span class="keyword">if</span> (v) {
                                                 <span class="keyword">var</span> node = v.ASTNode();
                                                 <span class="keyword">if</span> (node) {
 
                                                         <span class="keyword">if</span> (item.behaviors) {
-                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Dropped behavior </span><span class="delimiter">'</span></span>, item, <span class="string"><span class="delimiter">'</span><span class="content">onto node:</span><span class="delimiter">'</span></span>, node);
                                                                 <span class="keyword">for</span> (<span class="keyword">var</span> o <span class="keyword">in</span> item.behaviors) {
-                                                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">o</span><span class="delimiter">'</span></span>, o)
                                                                         <span class="keyword">if</span> (item.behaviors.hasOwnProperty(o)) {
                                                                                 <span class="keyword">var</span> behave = item.behaviors[o];
                                                                                 <span class="local-variable">this</span>.setASTObjectProperty(v, o, behave);
                                                                         }
                                                                 }
-                                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">here</span><span class="delimiter">'</span></span>, v.ASTNode())
-                                                                <span class="comment">//TODO store these into the ast, make sure prop viewer can see them w/code viewer?)</span>
                                                         }
 
                                                         <span class="keyword">if</span> (item.classname &amp;&amp; item.params) {
@@ -2459,7 +2506,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                 params.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>;
                                                                 params.x = pos.x;
                                                                 params.y = pos.y;
-<span class="comment">//                                                                console.log('Dropped', item.classname, 'onto node:', node, 'with params', params);</span>
                                                                 <span class="keyword">var</span> obj = item.classname + <span class="string"><span class="delimiter">&quot;</span><span class="content">(</span><span class="delimiter">&quot;</span></span> + <span class="string"><span class="delimiter">&quot;</span><span class="content">)</span><span class="delimiter">&quot;</span></span>;
                                                                 <span class="keyword">var</span> astobj = <span class="local-variable">this</span>.createASTNode(obj, <span class="predefined-constant">true</span>);
                                                                 <span class="keyword">var</span> astparams = <span class="local-variable">this</span>.createASTNode(params);
@@ -2471,7 +2517,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="local-variable">this</span>.ensureDeps();
                                                         <span class="local-variable">this</span>.screen.composition.commitAST();
 
-                                                        <span class="comment">//TODO set propviewer to inspect new object on reload?</span>
+                                                        <span class="comment">//TODO(mason) set propviewer to inspect new object on reload?</span>
 
 
                                                 }
@@ -2743,18 +2789,27 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 };
 
-                <span class="local-variable">this</span>.borderwidth = <span class="integer">2</span>;
+                <span class="local-variable">this</span>.borderwidth = <span class="float">1.5</span>;
                 <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
                 <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.tooltarget = <span class="predefined-constant">false</span>;
                 <span class="local-variable">this</span>.<span class="function">ontarget</span> = <span class="keyword">function</span>(ev,v,o) {
-                        <span class="local-variable">this</span>.pos = vec2(v._layout.absx - <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>] / <span class="float">2.0</span>, v._layout.absy - <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>] / <span class="float">2.0</span>);
-                        <span class="local-variable">this</span>.size = vec2(v._layout.width + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], v._layout.height + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>])
+                        <span class="local-variable">this</span>.pos = vec3(v._layout.absx - <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>] / <span class="float">2.0</span>, v._layout.absy - <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>] / <span class="float">2.0</span>, <span class="integer">0</span>);
+                        <span class="local-variable">this</span>.size = vec3(v._layout.width + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], v._layout.height + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], <span class="integer">0</span>);
                         <span class="local-variable">this</span>.rotate = v.rotate;
+
+                        <span class="keyword">var</span> p = v;
+                        <span class="keyword">while</span> (p = p.parent) {
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.rotate.length;i++) {
+                                        <span class="local-variable">this</span>.rotate[i] += p.rotate[i]
+                                }
+                        }
 
                         <span class="keyword">if</span> (v.borderradius &amp;&amp; v.borderradius[<span class="integer">0</span>] + v.borderradius[<span class="integer">1</span>] + v.borderradius[<span class="integer">2</span>] + v.borderradius[<span class="integer">3</span>]) {
                                 <span class="local-variable">this</span>.borderradius = v.borderradius;
                         }
+
+                        <span class="comment">//TODO (mason) these events maybe need to be cleaned up later, not sure yet</span>
 
                         v.<span class="function">onsize</span> = <span class="keyword">function</span>(ev,v,o) {
                                 <span class="local-variable">this</span>.size = vec3(v.x + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], v.y + <span class="local-variable">this</span>.borderwidth[<span class="integer">0</span>], v.z)
@@ -2786,6 +2841,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         v.<span class="function">onrotate</span> = <span class="keyword">function</span>(ev,v,o) {
                                 <span class="local-variable">this</span>.rotate = v;
+                                <span class="keyword">var</span> p = o;
+                                <span class="keyword">while</span> (p = p.parent) {
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.rotate.length;i++) {
+                                                <span class="local-variable">this</span>.rotate[i] += p.rotate[i]
+                                        }
+                                }
                         }.bind(<span class="local-variable">this</span>);
 
                         v.<span class="function">onborderradius</span> = <span class="keyword">function</span>(ev,v,o) {
@@ -2808,9 +2869,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">rulermajorcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#F9F6F4</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">rulerminorcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#B0C4DE</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">rulermarkstartcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#00CCFF</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">rulermarkstart</span>:vec2(<span class="integer">0</span>,<span class="integer">0</span>),
+                        <span class="key">rulermarkstart</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
                         <span class="key">rulermarkendcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#FF00CC</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">rulermarkend</span>:vec2(<span class="integer">0</span>,<span class="integer">0</span>),
+                        <span class="key">rulermarkend</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
                         <span class="function">bordercolorfn</span>:<span class="keyword">function</span>(p) {
                                 <span class="keyword">var</span> atx = p.x * layout.width;
                                 <span class="keyword">var</span> aty = p.y * layout.height;
@@ -2863,9 +2924,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">return</span>;
                         }
                         <span class="local-variable">this</span>.visible = wire(<span class="string"><span class="delimiter">'</span><span class="content">this.outer.visible</span><span class="delimiter">'</span></span>);
-                        <span class="local-variable">this</span>.pos = vec2(v._layout.absx, v._layout.absy);
-                        <span class="local-variable">this</span>.size = vec2(v._layout.width, v._layout.height);
+                        <span class="local-variable">this</span>.pos = vec3(v._layout.absx, v._layout.absy, <span class="integer">0</span>);
+                        <span class="local-variable">this</span>.size = vec3(v._layout.width, v._layout.height, <span class="integer">0</span>);
                         <span class="local-variable">this</span>.rotate = v.rotate;
+
+                        <span class="keyword">var</span> p = v;
+                        <span class="keyword">while</span> (p = p.parent) {
+                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.rotate.length;i++) {
+                                        <span class="local-variable">this</span>.rotate[i] += p.rotate[i]
+                                }
+                        }
                 }
         });
 

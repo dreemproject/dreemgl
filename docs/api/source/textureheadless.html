@@ -487,12 +487,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n333" name="n333">333</a>
 <a href="#n334" name="n334">334</a>
 <a href="#n335" name="n335">335</a>
-<a href="#n336" name="n336">336</a>
-<a href="#n337" name="n337">337</a>
-<a href="#n338" name="n338">338</a>
-<a href="#n339" name="n339">339</a>
-<strong><a href="#n340" name="n340">340</a></strong>
-<a href="#n341" name="n341">341</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
          You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -518,6 +512,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         Texture.Cache = {};
 
         HeadlessApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./headless_api</span><span class="delimiter">'</span></span>)
+        HeadlessUtil = require(<span class="string"><span class="delimiter">'</span><span class="content">./headless_util</span><span class="delimiter">'</span></span>)
         fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(type, w, h, device){
@@ -548,6 +543,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> fullpath = imagedata.path;
                 <span class="keyword">if</span> (imagedata.path[<span class="integer">0</span>] !== <span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) fullpath = define.<span class="predefined">$example</span> + fullpath;
 
+                
                 <span class="keyword">var</span> img = <span class="keyword">new</span> headless.ResourceImage({<span class="key">url</span>: fullpath});
 
                 <span class="keyword">var</span> tex = <span class="keyword">new</span> Texture(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, img.getWidth(), img.getHeight())
@@ -573,19 +569,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 tex = <span class="keyword">new</span> Texture(<span class="string"><span class="delimiter">'</span><span class="content">rgba</span><span class="delimiter">'</span></span>, w, h)
                 tex.array = array
+                
 
-                <span class="comment">// Headless wants a byte array</span>
+                <span class="comment">// Simulate an image</span>
                 <span class="keyword">var</span> uint8 = <span class="keyword">new</span> Uint8Array(array);
-
-                <span class="keyword">var</span> image_options = {
-                        <span class="key">width</span>: w,
-                        <span class="key">height</span>: h,
-                        <span class="key">pixelFormat</span> : headless.PIXEL_FORMAT_RGBA8888
-                };
-                <span class="comment">//console.log('********** fromArray', image_options, uint8.length);</span>
-
-                <span class="keyword">var</span> img = <span class="keyword">new</span> headless.BufferImage(uint8, image_options);
-                tex.image = img;
+                tex.image = {<span class="key">width</span>: w, <span class="key">height</span>: h, <span class="key">uint8</span>: uint8};
 
                 Texture.Cache[texture_key] = tex;
 

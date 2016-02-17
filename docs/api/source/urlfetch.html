@@ -219,10 +219,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n65" name="n65">65</a>
 <a href="#n66" name="n66">66</a>
 <a href="#n67" name="n67">67</a>
+<a href="#n68" name="n68">68</a>
+<a href="#n69" name="n69">69</a>
+<strong><a href="#n70" name="n70">70</a></strong>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$server$</span>, service){
 
-        <span class="keyword">var</span> BufferGen = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./mapbuffers</span><span class="delimiter">&quot;</span></span>)();
+        <span class="keyword">var</span> BufferGen = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">$widgets/map/mapbuffers</span><span class="delimiter">&quot;</span></span>)();
 
         <span class="local-variable">this</span>.<span class="function">generatebuffer</span> = <span class="keyword">function</span>(targetfile, datastring){
                 <span class="keyword">try</span>{
@@ -244,13 +247,16 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
                 <span class="keyword">var</span> nodehttp = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/server/nodehttp</span><span class="delimiter">'</span></span>);
                 <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
-                <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
-                <span class="keyword">var</span> cachedbuffername = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">tilecache/BUFFER_</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
+                <span class="keyword">try</span>{
+                        fs.mkdirSync(define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span>));
 
-                <span class="keyword">var</span> dogeneratebuffer = fs.existsSync(cachedbuffername)?<span class="predefined-constant">false</span>:<span class="predefined-constant">true</span>;
+                }<span class="keyword">catch</span>(e){}
+                <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
+
+                <span class="comment">//var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;</span>
 
                 <span class="keyword">if</span> (fs.existsSync(cachedname)){
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[Map] Cache:</span><span class="delimiter">&quot;</span></span>, x,y,z);
+                        <span class="comment">// console.log(&quot;[Map] Cache:&quot;, x,y,z);</span>
                         <span class="keyword">var</span> data = fs.readFileSync(cachedname).toString();
                         <span class="comment">// if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);</span>
                         <span class="comment">//</span>
@@ -278,7 +284,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                         }
                         <span class="keyword">catch</span>(e){
 
-                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Mapzen returned error:</span><span class="delimiter">&quot;</span></span> , data, e);
+                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">Mapzen returned error:</span><span class="delimiter">&quot;</span></span> , e);
                         }
                         P.resolve(<span class="string"><span class="delimiter">&quot;</span><span class="content">{}</span><span class="delimiter">&quot;</span></span>);
 

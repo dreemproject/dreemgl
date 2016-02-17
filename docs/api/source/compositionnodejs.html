@@ -455,7 +455,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">handleRpcMethod</span> = <span class="keyword">function</span>(msg){
                 <span class="comment">// lets make a promise</span>
-                <span class="keyword">return</span> <span class="keyword">new</span> Promise(<span class="keyword">function</span>(resolve, reject){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
                         <span class="keyword">var</span> parts = msg.rpcid.split(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>)
                         <span class="comment">//! TODO fix this up to be multi role capable</span>
                         <span class="keyword">var</span> part = parts[<span class="integer">0</span>];

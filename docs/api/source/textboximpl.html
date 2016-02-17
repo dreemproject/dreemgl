@@ -641,12 +641,12 @@ define.mixin(<span class="keyword">function</span>(require){
         <span class="keyword">var</span> parse = <span class="keyword">new</span> (require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>))()
 
         <span class="comment">// change sources</span>
-        <span class="keyword">var</span> enumchange = <span class="local-variable">this</span>.enumchange = {
-                <span class="key">keypress</span>:<span class="integer">1</span>,
-                <span class="keyword">delete</span>:<span class="integer">2</span>,
-                <span class="key">clipboard</span>:<span class="integer">3</span>,
-                <span class="key">undoredo</span>:<span class="integer">4</span>
-        }
+        <span class="comment">/*var enumchange = this.enumchange = {
+                keypress:1,
+                delete:2,
+                clipboard:3,
+                undoredo:4
+        }*/</span>
 
         <span class="local-variable">this</span>.change = <span class="integer">0</span>
 
@@ -800,7 +800,7 @@ define.mixin(<span class="keyword">function</span>(require){
                 <span class="local-variable">this</span>.undo_group++
                 <span class="local-variable">this</span>.cursorset.insert(event.text)
                 <span class="local-variable">this</span>.doCursor()
-                <span class="local-variable">this</span>.change = enumchange.clipboard
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">clipboard</span><span class="delimiter">'</span></span><span class="comment">//enumchange.clipboard</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">keypress</span> = <span class="keyword">function</span>(event){
@@ -808,7 +808,7 @@ define.mixin(<span class="keyword">function</span>(require){
                 <span class="local-variable">this</span>.undo_group++
                 <span class="local-variable">this</span>.cursorset.insert(event.value)
                 <span class="local-variable">this</span>.doCursor()
-                <span class="local-variable">this</span>.change = enumchange.keypress
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span><span class="comment">//enumchange.keypress</span>
         }
 
         <span class="keyword">var</span> utfmap = {
@@ -881,7 +881,7 @@ define.mixin(<span class="keyword">function</span>(require){
                         <span class="keyword">else</span> <span class="keyword">if</span>(trans !== <span class="predefined-constant">undefined</span>){
                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                                 <span class="local-variable">this</span>.cursorset.insert(trans)
-                                <span class="local-variable">this</span>.change = enumchange.keypress
+                                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span>
                         }
                 }
         }
@@ -946,7 +946,7 @@ define.mixin(<span class="keyword">function</span>(require){
         <span class="local-variable">this</span>.<span class="function">keyZCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.undoRedo(<span class="local-variable">this</span>.undo_stack, <span class="local-variable">this</span>.redo_stack)
-                <span class="local-variable">this</span>.change = enumchange.undoredo
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">undoredo</span><span class="delimiter">'</span></span>
                 <span class="comment">//doCursor()</span>
         }
 
@@ -954,7 +954,7 @@ define.mixin(<span class="keyword">function</span>(require){
         <span class="local-variable">this</span>.<span class="function">keyYCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.undoRedo(<span class="local-variable">this</span>.redo_stack, <span class="local-variable">this</span>.undo_stack)
-                <span class="local-variable">this</span>.change = enumchange.undoredo
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">undoredo</span><span class="delimiter">'</span></span>
                 <span class="comment">//change = Change.undoRedo</span>
                 <span class="comment">//doCursor()</span>
         }
@@ -970,14 +970,14 @@ define.mixin(<span class="keyword">function</span>(require){
         <span class="local-variable">this</span>.<span class="function">keyXCmd</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="comment">// cut the crap</span>
-                <span class="local-variable">this</span>.change = enumchange.<span class="keyword">delete</span>
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.cursorset.<span class="keyword">delete</span>()
         }
 
         <span class="local-variable">this</span>.<span class="function">keyBackspace</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
                 <span class="local-variable">this</span>.cursorset.backspace()
-                <span class="local-variable">this</span>.change = enumchange.<span class="keyword">delete</span>
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()
         }
@@ -993,7 +993,7 @@ define.mixin(<span class="keyword">function</span>(require){
 
         <span class="local-variable">this</span>.<span class="function">keyDelete</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.readonly) <span class="keyword">return</span>
-                <span class="local-variable">this</span>.change = enumchange.<span class="keyword">delete</span>
+                <span class="local-variable">this</span>.change = <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.cursorset.<span class="keyword">delete</span>()
                 <span class="local-variable">this</span>.selectionToClipboard()
                 <span class="local-variable">this</span>.doCursor()

@@ -335,6 +335,54 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n181" name="n181">181</a>
 <a href="#n182" name="n182">182</a>
 <a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -342,80 +390,51 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/textbox</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/label</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
 
         <span class="keyword">var</span> JSFormatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)        
         <span class="keyword">var</span> Parser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="comment">// The code to display</span>
-                <span class="key">source</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">sourceset</span>: <span class="predefined-constant">null</span>,
-                <span class="comment">// wrap the text</span>
-                <span class="key">wrap</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>})
+                <span class="key">cursorcol</span>: <span class="integer">1</span>,
+                <span class="key">cursorrow</span>: <span class="integer">0</span>,
+                <span class="key">cursorchar</span>:<span class="integer">0</span>,
+                <span class="key">tracks</span>:[]
         }
 
-        <span class="local-variable">this</span>.bgcolor = vec4(<span class="integer">12</span>/<span class="integer">255</span>, <span class="integer">33</span>/<span class="integer">255</span>, <span class="integer">65</span>/<span class="integer">255</span>, <span class="integer">1</span>)
-
-        <span class="local-variable">this</span>.readonly = <span class="predefined-constant">true</span>
-
+        <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#dad6c9</span><span class="delimiter">&quot;</span></span>)
+        <span class="local-variable">this</span>.readonly = <span class="predefined-constant">false</span>
         <span class="local-variable">this</span>.fontsize = <span class="integer">12</span>
         <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">true</span>
 
         <span class="keyword">var</span> font = <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii.glf</span><span class="delimiter">'</span></span>)
 
-        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> JSFormatter.types){
-                <span class="local-variable">this</span>[key] = String(JSFormatter.types[key])
+        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(){
+                <span class="comment">// store the line positions from the textgenerator</span>
+                <span class="comment">//this.linepositions = []</span>
+                <span class="comment">// lets build our track datastructure</span>
+                <span class="local-variable">this</span>.tracks = []
+                <span class="keyword">for</span>(<span class="keyword">var</span> col = <span class="integer">0</span>; col &lt; <span class="integer">8</span>; col++){
+                        <span class="keyword">var</span> track = []
+                        <span class="local-variable">this</span>.tracks.push(track)
+                        <span class="keyword">for</span>(<span class="keyword">var</span> row = <span class="integer">0</span>; row &lt; <span class="integer">512</span>; row++){
+                                track.push(col)
+                        }
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, pos, tag){
-
-                <span class="keyword">var</span> group = tag.y
-                <span class="keyword">var</span> type = <span class="reserved">int</span>(tag.z / <span class="integer">65536</span>.)
-                <span class="keyword">var</span> sub = <span class="reserved">int</span>(mod(tag.z / <span class="integer">256</span>., <span class="integer">256</span>.))
-                <span class="keyword">var</span> part = <span class="reserved">int</span>(mod(tag.z, <span class="integer">256</span>.))
-                <span class="keyword">var</span> unicode = <span class="reserved">int</span>(tag.x)
-                
-                <span class="keyword">if</span>(unicode == <span class="integer">10</span> || unicode == <span class="integer">32</span> || unicode == <span class="integer">9</span>) discard
-                <span class="keyword">if</span>(sub == _Paren || sub == _Brace || sub == _Bracket){
-                        <span class="keyword">if</span>(sub == _Paren){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                        }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Bracket){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ccc</span><span class="delimiter">&quot;</span></span>
-                        }
-                        <span class="keyword">else</span>{
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                        }
-                }
-                <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Operator){
-                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
-                }
-                <span class="keyword">else</span> <span class="keyword">if</span>(type == _Id){
-                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
-                        <span class="keyword">if</span>(sub == _Color){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">pink</span><span class="delimiter">&quot;</span></span>
-                        }
-                }
-                <span class="keyword">else</span> <span class="keyword">if</span>(type == _Value){
-                        <span class="keyword">if</span>(sub == _String){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#0f0</span><span class="delimiter">&quot;</span></span>
-                        }
-                        <span class="keyword">else</span>{
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">aero</span><span class="delimiter">&quot;</span></span>
-                        }
-                }
-                <span class="keyword">else</span> <span class="keyword">if</span>(type == _Comment){
-                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#777</span><span class="delimiter">&quot;</span></span>
-                }
-                <span class="keyword">else</span> <span class="keyword">if</span>(type == _This){
-                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff7fe1</span><span class="delimiter">&quot;</span></span>
-                }<span class="keyword">else</span>{
-                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
-                }
                 <span class="comment">//if(type&gt;7)mesh.outline = true</span>
+                <span class="keyword">if</span> (tag.y == <span class="local-variable">this</span>.cursorrow) {
+                        style.fgcolor =<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
+                }<span class="keyword">else</span>
+                <span class="keyword">if</span>(mod(tag.y,<span class="integer">4</span>.)&lt;<span class="integer">1</span>.){
+                        style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#9f9373</span><span class="delimiter">'</span></span>
+                }
+                <span class="keyword">else</span>{
+                        style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#303030</span><span class="delimiter">'</span></span>
+                }
         }
-
 
         <span class="comment">// extend the font shader</span>
         <span class="local-variable">this</span>.<span class="function">typeface</span> = <span class="keyword">function</span>(){
@@ -426,87 +445,164 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">paint</span> = <span class="keyword">function</span>(p, edge, pixelsize){
-                        <span class="comment">//var edge = min(length(dpx))</span>
-                        <span class="comment">//dump = edge</span>
-                        <span class="keyword">var</span> unicode = <span class="reserved">int</span>(mesh.tag.x)
-                        <span class="keyword">var</span> selected = mesh.tag.w
-
-                        <span class="keyword">if</span>(unicode == <span class="integer">10</span>){
-                                <span class="keyword">return</span> vec4(<span class="integer">0</span>)
-                        }
-
-                        <span class="keyword">if</span>(unicode == <span class="integer">32</span>){
-                                <span class="keyword">if</span>(selected &lt; <span class="integer">0</span>.){
-                                        <span class="keyword">var</span> w = <span class="float">.3</span>
-                                        <span class="keyword">var</span> h = <span class="float">.13</span>
-                                        <span class="keyword">var</span> field = shape.box(p, <span class="float">.5</span> - <span class="float">.5</span> * w, <span class="float">.5</span> - <span class="float">.5</span> * h, w, h)
-                                        <span class="keyword">return</span> vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#AF8F7E</span><span class="delimiter">&quot;</span></span>.rgb, smoothstep(<span class="float">.75</span> * edge, -<span class="float">.75</span> * edge, field))
-                                }
-                                <span class="keyword">return</span> vec4(<span class="integer">0</span>)
-                        }
-
-                        <span class="keyword">if</span>(unicode == <span class="integer">9</span>){ <span class="comment">// the screen aligned tab dots</span>
-                                <span class="comment">//return 'darkblue'</span>
-                                <span class="comment">// make a nice tab line</span>
-                                <span class="comment">//var out = vec4(0)</span>
-                                <span class="comment">//dump = edge</span>
-                                <span class="comment">//if(pixelsize &lt; 0.5){//edge &gt; 0.1){ // pixel drawing</span>
-                                        <span class="comment">//if(mod(gl_FragCoord.x, 24*6.) &lt; 1.) return '#445'</span>
-                                        <span class="keyword">var</span> s = pixelsize * <span class="integer">130</span>.
-                                        <span class="keyword">if</span>(p.x &gt; s &amp;&amp; p.x &lt; <span class="float">1.5</span> * s &amp;&amp; mod(p.y, <span class="float">1.5</span>*s) &gt; s) <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">#443</span><span class="delimiter">'</span></span>
-                                        <span class="comment">//if(p.x &gt; dpdx.x &amp;&amp; p.x &lt;= 3*dpdx.x &amp;&amp; mod(p.y, 2.*dpdy.y) &gt; dpdy.y) return '#445'</span>
-                                <span class="comment">//}</span>
-                                <span class="comment">//else { // switch to vector drawing</span>
-                                <span class="comment">//        var w = 1</span>
-                                <span class="comment">//        var h = 1</span>
-                                <span class="comment">//        var field = shape.box(mod(p, vec2(24*6, 3.)), .5 * w, 0, w, h)</span>
-                                <span class="comment">//        var col = vec4(&quot;#667&quot;.rgb, smoothstep(edge, -edge, field))</span>
-                                <span class="comment">//        if(col.a &gt; 0.01) return col</span>
-                                <span class="comment">//}</span>
-
-                                <span class="keyword">if</span>(selected &lt; <span class="integer">0</span>.){
-                                        <span class="comment">//if(edge &gt; 0.02){</span>
-                                        <span class="comment">//        if(p.x &gt; 3. * dpdx.x &amp;&amp; p.y &gt;= .5 - .5 * dpdy.y &amp;&amp; p.y &lt;= .5 + .5 * dpdy.y)</span>
-                                        <span class="comment">//                return vec4(&quot;#AF8F7E&quot;.rgb,1.)</span>
-                                        <span class="comment">//        return vec4(0)</span>
-                                        <span class="comment">//}</span>
-                                        <span class="keyword">var</span> sz = <span class="float">.01</span>
-                                        <span class="keyword">var</span> field = shape.line(p, <span class="integer">0</span>., <span class="float">.5</span>-sz, <span class="integer">1</span>., <span class="float">.5</span>-sz, <span class="integer">2</span>.*sz)
-                                        <span class="keyword">return</span> vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#AF8F7E</span><span class="delimiter">&quot;</span></span>.rgb, smoothstep(edge,-edge,field))
-                                }
-                                <span class="keyword">return</span> vec4(<span class="integer">0</span>)
-                        }
                         <span class="keyword">return</span> vec4(-<span class="integer">1</span>.)
                 }
 
+                <span class="comment">// lets generate a memory track into a trackview</span>
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
-                        <span class="keyword">var</span> maxwidth = view.layout.width
+                        view.linepositions = []
                         <span class="keyword">var</span> textbuf = <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.newText()
 
                         textbuf.font = view.font
-                        <span class="keyword">var</span> cycle = Date.now()
-                        <span class="keyword">var</span> ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
 
                         textbuf.fontsize = view.fontsize
                         textbuf.add_y = textbuf.line_height
                         textbuf.align = <span class="string"><span class="delimiter">'</span><span class="content">left</span><span class="delimiter">'</span></span>
                         textbuf.start_y = textbuf.line_height
-                        textbuf.boldness = <span class="float">0.6</span>
+                        textbuf.boldness = <span class="float">0.2</span>
 
                         textbuf.clear()
 
-                        <span class="keyword">if</span>(view.wrap){
-                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, group, l1, l2, l3, m3){
-                                        <span class="keyword">var</span> indent = textbuf.font.glyphs[<span class="integer">9</span>].advance * textbuf.fontsize * <span class="local-variable">this</span>.indent
-                                        textbuf.addWithinWidth(text, maxwidth, indent, group, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), m3)
-                                })
+                        <span class="keyword">var</span> tracklen = view.tracks.length
+                        <span class="keyword">var</span> rowlen = view.tracks[<span class="integer">0</span>].length
+                        <span class="keyword">for</span>(<span class="keyword">var</span> row = <span class="integer">0</span>; row &lt; rowlen; row++){
+                                <span class="keyword">for</span>(<span class="keyword">var</span> col = <span class="integer">0</span>; col &lt; tracklen; col++){
+
+                                        <span class="keyword">var</span> num = view.tracks[col][row]
+                                        textbuf.add((<span class="string"><span class="delimiter">&quot;</span><span class="content">0000</span><span class="delimiter">&quot;</span></span>+num).slice(-<span class="integer">4</span>), row, col,<span class="integer">0</span>)
+                                        
+                                        textbuf.add_x += view.fontsize*<span class="integer">2</span>
+                                }
+                                textbuf.add(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>, row, <span class="integer">8</span>, <span class="integer">0</span>)
                         }
-                        <span class="keyword">else</span>{
-                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, group, l1, l2, l3, m3){
-                                        textbuf.add(text, group, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), m3)
-                                })
+                        view.total_rows = row
+                }
+        }
+
+        <span class="local-variable">this</span>.tabstop = <span class="integer">0</span>
+
+        <span class="comment">// background lines</span>
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">bgline</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+
+                }
+        })
+
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursorbar_row</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.updateorder = <span class="integer">8</span>
+                <span class="local-variable">this</span>.draworder = <span class="integer">2</span>
+                <span class="local-variable">this</span>.mesh = vec2.array()
+
+                <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
+                }
+
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">#252936</span><span class="delimiter">'</span></span>
+                }
+
+                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">return</span> mesh.xy * view.totalmatrix * view.viewmatrix
+                }
+
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
+                        <span class="local-variable">this</span>.mesh = vec2.array()
+                        <span class="local-variable">this</span>.mesh.length = <span class="integer">0</span>
+                        <span class="keyword">var</span> textbuf = view.shaders.typeface.mesh
+                        <span class="comment">// ok lets find the geometry position of the current cursor</span>
+                        <span class="comment">// lets get the current line and find it</span>
+                        <span class="keyword">var</span> off = textbuf.offsetFromTag(<span class="integer">0</span>, view.cursorrow, <span class="integer">0</span>)
+                        <span class="keyword">if</span>(off !== -<span class="integer">1</span>){
+                                <span class="keyword">var</span> rect = textbuf.cursorRect(off)
+                                <span class="local-variable">this</span>.mesh.pushQuad(
+                                        <span class="integer">0</span>,rect.y,
+                                        view.layout.width, rect.y,
+                                        <span class="integer">0</span>,rect.y+rect.h,
+                                        view.layout.width, rect.y + rect.h
+                                )
                         }
+                }
+        })
+        <span class="local-variable">this</span>.cursorbar_row = <span class="predefined-constant">true</span>
+
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">cursorbar_col</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.updateorder = <span class="integer">8</span>
+                <span class="local-variable">this</span>.draworder = <span class="integer">4</span>
+                <span class="local-variable">this</span>.mesh = vec2.array()
+
+                <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
+                }
+
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">ocean</span><span class="delimiter">'</span></span>*<span class="integer">2</span>.
+                }
+
+                <span class="local-variable">this</span>.<span class="function">position</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">return</span> mesh.xy * view.totalmatrix * view.viewmatrix
+                }
+
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
+                        <span class="local-variable">this</span>.mesh = vec2.array()
+                        <span class="local-variable">this</span>.mesh.length = <span class="integer">0</span>
+                        <span class="keyword">var</span> textbuf = view.shaders.typeface.mesh
+                        <span class="comment">// ok lets find the geometry position of the current cursor</span>
+                        <span class="comment">// lets get the current line and find it</span>
+                        <span class="keyword">var</span> off = textbuf.offsetFromTag(<span class="integer">0</span>, view.cursorrow, <span class="integer">0</span>)
+                        off = textbuf.offsetFromTag(<span class="integer">1</span>, view.cursorcol, off)
+                        off += view.cursorchar
+
+                        <span class="comment">// store the final offset for editing</span>
+                        <span class="local-variable">this</span>.cursor_final_offset = off
+                        <span class="keyword">if</span>(off !== -<span class="integer">1</span>){
+                                <span class="keyword">var</span> rect = textbuf.cursorRect(off)
+                                <span class="local-variable">this</span>.mesh.pushQuad(
+                                        rect.x,rect.y,
+                                        rect.x+rect.w, rect.y,
+                                        rect.x,rect.y+rect.h,
+                                        rect.x+rect.w, rect.y + rect.h
+                                )
+                        }
+                }
+        })
+        <span class="local-variable">this</span>.cursorbar_col = <span class="predefined-constant">true</span>
+
+        <span class="local-variable">this</span>.<span class="function">keydown</span> = <span class="keyword">function</span>(e){
+                <span class="keyword">if</span>(e.name.indexOf(<span class="string"><span class="delimiter">'</span><span class="content">num</span><span class="delimiter">'</span></span>) === <span class="integer">0</span>){
+                        <span class="keyword">var</span> numpressed = parseInt(e.name.charAt(<span class="integer">3</span>))
+                        <span class="comment">// lets plug it into our track!</span>
+                        <span class="comment">//var num = this.tracks[this.cursorcol][this.cursorrow]</span>
+                        num = numpressed * Math.pow(<span class="integer">10</span>, <span class="integer">3</span>-<span class="local-variable">this</span>.cursorchar)
+                        <span class="local-variable">this</span>.tracks[<span class="local-variable">this</span>.cursorcol][<span class="local-variable">this</span>.cursorrow] = num
+                        <span class="local-variable">this</span>.tracks = <span class="local-variable">this</span>.tracks
+                }
+                <span class="keyword">else</span> <span class="local-variable">this</span>.defaultKeyboardHandler(e)
+                <span class="comment">//console.log(e)</span>
+        }
+
+        <span class="local-variable">this</span>.<span class="function">keydownDownarrow</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.cursorrow &lt; <span class="local-variable">this</span>.total_rows-<span class="integer">1</span>)
+                        <span class="local-variable">this</span>.cursorrow ++
+        }
+
+        <span class="local-variable">this</span>.<span class="function">keydownUparrow</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.cursorrow &gt; <span class="integer">0</span>)
+                        <span class="local-variable">this</span>.cursorrow --
+        }
+
+        <span class="local-variable">this</span>.<span class="function">keydownRightarrow</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span>(++<span class="local-variable">this</span>.cursorchar&gt;=<span class="integer">4</span>){
+                        <span class="local-variable">this</span>.cursorchar = <span class="integer">0</span>
+                        <span class="local-variable">this</span>.cursorcol ++
+                }
+        }
+
+        <span class="local-variable">this</span>.<span class="function">keydownLeftarrow</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span>(--<span class="local-variable">this</span>.cursorchar&lt;<span class="integer">0</span>){
+                        <span class="local-variable">this</span>.cursorchar = <span class="integer">3</span>
+                        <span class="local-variable">this</span>.cursorcol --
                 }
         }
 

@@ -358,6 +358,64 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n204" name="n204">204</a>
 <a href="#n205" name="n205">205</a>
 <a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
+<a href="#n235" name="n235">235</a>
+<a href="#n236" name="n236">236</a>
+<a href="#n237" name="n237">237</a>
+<a href="#n238" name="n238">238</a>
+<a href="#n239" name="n239">239</a>
+<strong><a href="#n240" name="n240">240</a></strong>
+<a href="#n241" name="n241">241</a>
+<a href="#n242" name="n242">242</a>
+<a href="#n243" name="n243">243</a>
+<a href="#n244" name="n244">244</a>
+<a href="#n245" name="n245">245</a>
+<a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
+<a href="#n248" name="n248">248</a>
+<a href="#n249" name="n249">249</a>
+<strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
+<a href="#n253" name="n253">253</a>
+<a href="#n254" name="n254">254</a>
+<a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -365,7 +423,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">./jsviewer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, textbox){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">./jsviewer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, baseclass, <span class="predefined">$ui$</span>, textbox){
 
         <span class="local-variable">this</span>.readonly = <span class="predefined-constant">false</span>
         
@@ -456,19 +514,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         
         <span class="comment">// the change event</span>
         <span class="local-variable">this</span>.<span class="function">textChanged</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.was_cursor = <span class="predefined-constant">false</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.change == enumchange.keypress || <span class="local-variable">this</span>.change == enumchange.<span class="keyword">delete</span> || <span class="local-variable">this</span>.change == enumchange.clipboard){
-                        <span class="local-variable">this</span>.was_delete = <span class="local-variable">this</span>.change == enumchange.<span class="keyword">delete</span>
-                        <span class="local-variable">this</span>.was_cursor = <span class="local-variable">this</span>.change == enumchange.clipboard <span class="comment">// dont delay reformat on paste</span>
+                baseclass.textChanged.call(<span class="local-variable">this</span>)
+                <span class="local-variable">this</span>.worker.postMessage({<span class="key">source</span>:<span class="local-variable">this</span>._value})
+                <span class="comment">/*
+                this.was_cursor = false
+                if(this.change == enumchange.keypress || this.change == enumchange.delete || this.change == enumchange.clipboard){
+                        this.was_delete = this.change == enumchange.delete
+                        this.was_cursor = this.change == enumchange.clipboard // dont delay reformat on paste
 
-                        <span class="local-variable">this</span>.delay_update = <span class="integer">0</span>
-                        <span class="comment">//if(this.step_timeout) this.clearTimeout(this.step_timeout)</span>
-                        <span class="comment">//this.step_timeout = this.setTimeout(this.parseStep,0)</span>
+                        this.delay_update = 0
+                        //if(this.step_timeout) this.clearTimeout(this.step_timeout)
+                        //this.step_timeout = this.setTimeout(this.parseStep,0)
                 }
-                <span class="comment">// if its an undo, </span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.change == enumchange.undoredo){ <span class="comment">// set delay to cursor press</span>
-                <span class="comment">//        delay_update = parseStep</span>
+                // if its an undo, 
+                if(this.change == enumchange.undoredo){ // set delay to cursor press
+                //        delay_update = parseStep
                 }
+                // send the worker new source
+                this.worker.postMessage({source:this.})*/</span>
+
         }
 
         <span class="local-variable">this</span>.<span class="function">oncursor</span> = <span class="keyword">function</span>(){
@@ -480,82 +544,134 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">parseStep</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> dt = Date.now()
-                <span class="local-variable">this</span>.step_serialized = layer.serializeText()
-                <span class="comment">// okay.. so we parse it, we get an error. now what.</span>
-                <span class="keyword">var</span> dump = step_serialized.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">[</span><span class="char">\s</span><span class="char">\r</span><span class="char">\n</span><span class="content">]</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="keyword">function</span>(f){
-                        <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="char">\\</span><span class="delimiter">'</span></span>+f.charCodeAt(<span class="integer">0</span>)
+        <span class="comment">// alright lets make a worker that parses and reserializes</span>
+        <span class="keyword">var</span> worker = define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$system/rpc/worker</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
+                
+                <span class="keyword">var</span> Parser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
+                <span class="keyword">var</span> JSFormatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)
+
+                <span class="local-variable">this</span>.<span class="function">onmessage</span> = <span class="keyword">function</span>(msg){
+                        <span class="comment">// lets start a parse!</span>
+                        <span class="keyword">try</span>{
+                                <span class="keyword">var</span> ast = Parser.parse(msg.source)
+                        }
+                        <span class="keyword">catch</span>(e){
+                                console.log(e)
+                                <span class="keyword">return</span>
+                        }
+                        <span class="comment">// ok now we need to reserialize from ast</span>
+
+                        <span class="keyword">var</span> buf = {
+                                <span class="key">out</span>:vec4.array(msg.source.length + <span class="integer">100</span>),
+                                <span class="function">charCodeAt</span>: <span class="keyword">function</span>(i){<span class="keyword">return</span> <span class="local-variable">this</span>.out.array[i*<span class="integer">4</span>]},
+                                <span class="key">char_count</span>:<span class="integer">0</span>
+                        };
+
+                        <span class="comment">// lets reserialize output</span>
+                        <span class="keyword">var</span> out = buf.out
+                        JSFormatter.walk(ast, buf, <span class="keyword">function</span>(str, group, l1, l2, l3, m3){
+                                out.ensureSize(out.length + str.length)
+                                <span class="keyword">var</span> o = out.length
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; str.length; i++){
+                                        <span class="keyword">var</span> v = o * <span class="integer">4</span> + i * <span class="integer">4</span>
+                                        out.array[v] = str.charCodeAt(i)
+                                        out.array[v + <span class="integer">1</span>] = group
+                                        out.array[v + <span class="integer">2</span>] = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
+                                        out.array[v + <span class="integer">3</span>] = m3
+                                }
+                                buf.char_count += str.length;
+                        })
+                        <span class="local-variable">this</span>.postMessage(buf.out.array, buf.out)
+                }
+        })
+
+        <span class="local-variable">this</span>.<span class="function">oninit</span> = <span class="keyword">function</span>(prev){
+                <span class="local-variable">this</span>.worker = prev &amp;&amp; prev.worker || worker()
+                <span class="comment">// if we get source back yay</span>
+                <span class="local-variable">this</span>.worker.<span class="function">onmessage</span> = <span class="keyword">function</span>(msg){
+                        <span class="comment">// alright lets run the diff step.</span>
+
+                        <span class="comment">//console.log(msg)</span>
+                }.bind(<span class="local-variable">this</span>)
+        }
+<span class="comment">/*
+        this.parseStep = function(){
+                var dt = Date.now()
+                // lets serialize thi
+                this.step_serialized = layer.serializeText()
+                // okay.. so we parse it, we get an error. now what.
+                var dump = step_serialized.replace(/[\s\r\n]/g,function(f){
+                        return '\\'+f.charCodeAt(0)
                 })
                 step_ast = parseLive(step_serialized)
-                <span class="comment">//console.log(AST.toDump(step_ast))</span>
-                <span class="comment">//console.log('----parseStep! '+(Date.now()-dt))</span>
-                step_timeout = thisTimeout(astgenStep,<span class="integer">0</span>)
+                //console.log(AST.toDump(step_ast))
+                //console.log('----parseStep! '+(Date.now()-dt))
+                step_timeout = thisTimeout(astgenStep,0)
         }
 
-        <span class="local-variable">this</span>.<span class="function">astgenStep</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> dt = Date.now()
+        this.astgenStep = function(){
+                var dt = Date.now()
                 code_formatter.setSize(step_serialized.length)
                 code_formatter.clear()
                 code_formatter.ast = step_ast
-                <span class="comment">//console.log(code_formatter.serializeText())</span>
-                <span class="comment">//console.log('astgenStep! '+(Date.now()-dt))</span>
-                step_timeout = thisTimeout(diffStep,<span class="integer">0</span>)
+                //console.log(code_formatter.serializeText())
+                //console.log('astgenStep! '+(Date.now()-dt))
+                step_timeout = thisTimeout(diffStep,0)
         }
 
-        <span class="local-variable">this</span>.<span class="function">diffStep</span> = <span class="keyword">function</span>(){
-                <span class="keyword">var</span> dt = Date.now()
-                <span class="comment">// lets diff our code_formatter.output</span>
-                <span class="comment">// against our textbuffer, whilst updating colors</span>
-                <span class="comment">// and then we remove/insert the delta.</span>
-                <span class="comment">// ok lets first try to do it wholesale</span>
-                <span class="keyword">var</span> range = layer.diffTags(code_formatter.output)
-                <span class="keyword">if</span>(range){ <span class="comment">// remove a range, and insert a range</span>
-                        <span class="keyword">var</span> delta = <span class="integer">0</span>
-                        <span class="comment">// if what we do is essentially undo the last action, dont do it</span>
-                        <span class="keyword">var</span> last = undo_stack[undo_stack.length-<span class="integer">1</span>]
+        this.diffStep = function(){
+                var dt = Date.now()
+                // lets diff our code_formatter.output
+                // against our textbuffer, whilst updating colors
+                // and then we remove/insert the delta.
+                // ok lets first try to do it wholesale
+                var range = layer.diffTags(code_formatter.output)
+                if(range){ // remove a range, and insert a range
+                        var delta = 0
+                        // if what we do is essentially undo the last action, dont do it
+                        var last = undo_stack[undo_stack.length-1]
                         
-                        <span class="comment">// lets check if we inserted a space, and now its being removed</span>
-                        <span class="keyword">function</span> <span class="function">next</span>(){
-                                <span class="comment">// first we remove</span>
-                                <span class="keyword">var</span> rem_delta =  <span class="integer">0</span>
-                                <span class="keyword">if</span>(range.my_start&lt;=range.my_end){
-                                        rem_delta += range.my_end + <span class="integer">1</span> - range.my_start
+                        // lets check if we inserted a space, and now its being removed
+                        function next(){
+                                // first we remove
+                                var rem_delta =  0
+                                if(range.my_start&lt;=range.my_end){
+                                        rem_delta += range.my_end + 1 - range.my_start
                                 }
-                                <span class="keyword">var</span> add_delta = <span class="integer">0</span>
-                                <span class="keyword">if</span>(range.other_start &lt;= range.other_end){
-                                        add_delta += range.other_end + <span class="integer">1</span> - range.other_start
+                                var add_delta = 0
+                                if(range.other_start &lt;= range.other_end){
+                                        add_delta += range.other_end + 1 - range.other_start
                                 }
-                                <span class="keyword">var</span> delta = add_delta - rem_delta
-                                <span class="comment">// if we are input driven, we only accept positive add</span>
-                                <span class="keyword">if</span>(was_cursor || delta == <span class="integer">0</span> || !was_delete &amp;&amp; delta &gt; <span class="integer">0</span>){
+                                var delta = add_delta - rem_delta
+                                // if we are input driven, we only accept positive add
+                                if(was_cursor || delta == 0 || !was_delete &amp;&amp; delta &gt; 0){
                                         undo_group++
                                         cursors.markDelta()
-                                        <span class="keyword">if</span>(rem_delta){
-                                                addUndoInsert(range.my_start, range.my_end+<span class="integer">1</span>)
-                                                layer.removeText(range.my_start, range.my_end+<span class="integer">1</span>)
-                                                <span class="comment">// lets fetch what we are removing</span>
+                                        if(rem_delta){
+                                                addUndoInsert(range.my_start, range.my_end+1)
+                                                layer.removeText(range.my_start, range.my_end+1)
+                                                // lets fetch what we are removing
                                         }
-                                        <span class="keyword">if</span>(add_delta){
-                                                <span class="keyword">var</span> inslice = code_formatter.output.slice(range.other_start, range.other_end+<span class="integer">1</span>)
+                                        if(add_delta){
+                                                var inslice = code_formatter.output.slice(range.other_start, range.other_end+1)
 
-                                                <span class="comment">// lets see what we are inserting</span>
+                                                // lets see what we are inserting
                                                 layer.insertText(range.my_start, inslice)
                                                 addUndoDelete(range.my_start, range.my_start + inslice.length)
                                         }
                                         cursors.moveDelta(range.my_start, add_delta - rem_delta)
                                 }
-                                <span class="keyword">else</span> <span class="keyword">if</span>(!was_cursor){
+                                else if(!was_cursor){
                                         delay_update = next
                                 }
                         }
                         next()
                 }
-                <span class="comment">//console.log(range)</span>
-                <span class="comment">//console.log('diffStep! '+(Date.now()-dt))</span>
-                step_timeout  = thisTimeout(applyStep,<span class="integer">0</span>)
+                //console.log(range)
+                //console.log('diffStep! '+(Date.now()-dt))
+                step_timeout  = thisTimeout(applyStep,0)
         }
-
+        */</span>
         <span class="comment">// Basic usage</span>
         <span class="keyword">var</span> jseditor = <span class="local-variable">this</span>.constructor
 

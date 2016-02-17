@@ -1339,6 +1339,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1185" name="n1185">1185</a>
 <a href="#n1186" name="n1186">1186</a>
 <a href="#n1187" name="n1187">1187</a>
+<a href="#n1188" name="n1188">1188</a>
+<a href="#n1189" name="n1189">1189</a>
+<strong><a href="#n1190" name="n1190">1190</a></strong>
+<a href="#n1191" name="n1191">1191</a>
+<a href="#n1192" name="n1192">1192</a>
+<a href="#n1193" name="n1193">1193</a>
+<a href="#n1194" name="n1194">1194</a>
+<a href="#n1195" name="n1195">1195</a>
+<a href="#n1196" name="n1196">1196</a>
+<a href="#n1197" name="n1197">1197</a>
+<a href="#n1198" name="n1198">1198</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1772,6 +1783,17 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">char_tr_x</span> = <span class="keyword">function</span>(off){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span> + <span class="integer">10</span>]
+                }
+
+                <span class="local-variable">this</span>.<span class="function">offsetFromTag</span> = <span class="keyword">function</span>(tagid, tag, start){
+                        <span class="keyword">var</span> off = start || <span class="integer">0</span>, len = <span class="local-variable">this</span>.length
+                        <span class="keyword">while</span>(Math.abs(<span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">7</span> + tagid] - tag) &gt; <span class="float">0.001</span>){
+
+                                <span class="keyword">if</span>(off &gt;= len) <span class="keyword">return</span> -<span class="integer">1</span>
+                                off ++
+                
+                        }
+                        <span class="keyword">return</span> off
                 }
 
                 <span class="local-variable">this</span>.<span class="function">offsetFromPos</span> = <span class="keyword">function</span>(x, y){
