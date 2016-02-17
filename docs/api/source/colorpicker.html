@@ -800,13 +800,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n646" name="n646">646</a>
 <a href="#n647" name="n647">647</a>
 <a href="#n648" name="n648">648</a>
-<a href="#n649" name="n649">649</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, view, label, scrollbar, textbox, numberbox){
 
@@ -828,16 +826,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">sliderheight</span>: Config({<span class="key">type</span>: <span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">15</span>}),
         }
 
-        <span class="local-variable">this</span>.basehue = <span class="float">0.5</span>;
-        <span class="local-variable">this</span>.bgcolor = vec4(<span class="float">0.0</span>,<span class="float">0.0</span>,<span class="float">0.0</span>,<span class="float">0.4</span>)
-        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
+        <span class="local-variable">this</span>.basehue = <span class="float">0.5</span>
+        <span class="local-variable">this</span>.bgcolor = vec4(<span class="float">0.0</span>, <span class="float">0.0</span>, <span class="float">0.0</span>, <span class="float">0.4</span>)
+        <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>
         <span class="local-variable">this</span>.padding = vec4(<span class="integer">10</span>)
-        <span class="local-variable">this</span>.minwidth = <span class="integer">200</span>;
-        <span class="local-variable">this</span>.maxwidth = <span class="integer">300</span>;
+        <span class="local-variable">this</span>.minwidth = <span class="integer">200</span>
+        <span class="local-variable">this</span>.maxwidth = <span class="integer">300</span>
         <span class="local-variable">this</span>.borderradius = <span class="integer">3</span>
         <span class="local-variable">this</span>.borderwidth = <span class="integer">1</span>
         <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.internalbordercolor
-        <span class="local-variable">this</span>.contrastcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>);
+        <span class="local-variable">this</span>.contrastcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>)
 
         <span class="local-variable">this</span>.<span class="function">internalbordercolor</span>= <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.bordercolor = <span class="local-variable">this</span>.internalbordercolor

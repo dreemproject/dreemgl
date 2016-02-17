@@ -229,7 +229,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
+                <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
                 <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
                 <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>})
         }

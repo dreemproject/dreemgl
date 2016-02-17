@@ -255,6 +255,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n101" name="n101">101</a>
 <a href="#n102" name="n102">102</a>
 <a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -268,12 +274,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
         <span class="local-variable">this</span>.attributes = {
-                <span class="key">data</span>: Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
-                <span class="key">format</span>: Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">24</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>}),
+                <span class="key">format</span>:  Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">12</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">start</span>:   Config({<span class="key">type</span>: Date,  <span class="key">value</span>: <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 1 2016</span><span class="delimiter">&quot;</span></span>)}),
+                <span class="key">end</span>:     Config({<span class="key">type</span>: Date,  <span class="key">value</span>: <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Dec 31 2016</span><span class="delimiter">&quot;</span></span>)}),
+
+                <span class="key">data</span>:    Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
+
                 <span class="key">minzoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>/<span class="integer">24</span>}),
                 <span class="key">maxzoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">365</span>}),
+
+                <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="float">0.5</span>}),
                 <span class="key">scroll</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
+
                 <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event})
         }
 
@@ -330,13 +342,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
         <span class="local-variable">this</span>.<span class="function">pointerwheel</span> = <span class="keyword">function</span>(event) {
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
-                <span class="keyword">if</span> (event.value[<span class="integer">0</span>]){
-                        <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + event.value[<span class="integer">0</span>] *<span class="float">20.0</span>/ <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
+                <span class="keyword">if</span> (event.value[<span class="integer">0</span>] &amp;&amp; abs(event.value[<span class="integer">0</span>]) &gt; abs(event.value[<span class="integer">1</span>])){
+                        <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + event.value[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
                 }
-                <span class="keyword">if</span> (event.value[<span class="integer">1</span>]){
+                <span class="keyword">if</span> (event.value[<span class="integer">1</span>] &amp;&amp; abs(event.value[<span class="integer">1</span>]) &gt; abs(event.value[<span class="integer">0</span>])){
                         <span class="keyword">var</span> lastzoom = <span class="local-variable">this</span>._zoom
 
-                        <span class="keyword">var</span> delta = event.value[<span class="integer">1</span>]*<span class="float">20.0</span> / <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.zoom
+                        <span class="keyword">var</span> delta = event.value[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.zoom
                         <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom + delta, <span class="local-variable">this</span>.minzoom, <span class="local-variable">this</span>.maxzoom)
 
                         <span class="local-variable">this</span>.zoom = newzoom

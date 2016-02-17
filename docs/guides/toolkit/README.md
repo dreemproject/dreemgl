@@ -27,9 +27,9 @@ Add `$widgets$toolkit` to any composition screen to bring up the visual toolkit 
 
 ## Live Example
 
-If you have the DreemGL server running the example sandbox can be found here:
+If you have the DreemGL server running the example sandbox can be found at [/examples/usingtoolkit](/examples/usingtoolkit):
 
-<iframe style="border:0;width:900px; height:600px" src="/examples/usingtoolkit"></iframe>
+<iframe style="border:0;width:900px; height:800px" src="/examples/usingtoolkit"></iframe>
 
 
 

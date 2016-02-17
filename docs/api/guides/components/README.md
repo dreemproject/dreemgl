@@ -5,7 +5,7 @@ a DreemGL component.
 
 ## Simple Web Service as a DreemGL Component
 
-The example provided by the guide can be found mounted at [/examples/guides/components](/examples/guides/components).
+The example provided by the guide can be found mounted at [/docs/examples/components](/docs/examples/components).
 
 The guide will walk you through building a simple component that talks to a server-side web service. This component will
 provide a search object and simple UI for the [OMDB](http://omdbapi.com/) database.
@@ -14,11 +14,11 @@ provide a search object and simple UI for the [OMDB](http://omdbapi.com/) databa
 
 If you have the DreemGL server running the example outlined in this document will render below:
 
-<iframe style="border:0;width:900px; height:600px" src="/examples/guides/components"></iframe>
+<iframe style="border:0;width:900px; height:600px" src="/docs/examples/components"></iframe>
 
 ### Live Slides
 
-Additionally, a live slide-show that demonstrates many of the same concepts in this guide can be found [/examples/extdemo](/examples/extdemo)
+Additionally, a live slide-show that demonstrates many of the same concepts in this guide can be found [/docs/slides/extendingdreem](/docs/slides/extendingdreem)
 
 ## Setting Up
 
@@ -29,9 +29,9 @@ component to a Dreem GL server is with a symlink into the DreemGL `$root` direct
     ln -s /path/to/component-directory/ /path/to/dreemgl's-$root/<componentname>
 
 Note here that the name you choose for `<componentname>` is important in that it will be the namespace that other 
-compositions will use to instantiate it's classes later.  For example, this guide is in `./examples/guides/components`, 
-so all of it's classes can then be accessed using `$examples$guides$components$<classname>`, 
-`$examples$, guides$components$<classname>` or `$examples$guides$components$, <classname>`.  Within a component you can 
+compositions will use to instantiate it's classes later.  For example, this guide is in `./docs/examples/components`, 
+so all of it's classes can then be accessed using `$docs$guides$components$<classname>`, 
+`$docs$, examples$components$<classname>` or `$docs$examples$components$, <classname>`.  Within a component you can 
 use '$$' to search the current directory, so this name is only important in how other components and compositions will 
 access the component's objects.  
 
@@ -58,7 +58,7 @@ If required, be sure to install any dependancies in the component directory:
 DreemGL components are usually collections of both server objects and UI widgets.  If your component has some 
 server-side behavior, include a `$server/service` object.  This example provides a server-side lookups of the 
 [OMDB](http://omdbapi.com/) database.  Here is a simple object that encapsulates a single "search" within the 
-database (see `./examples/guides/components/search.js` for more detailed version):
+database (see `./docs/examples/components/search.js` for more detailed version):
 
     define.class('$server/service', function(require) {
 
@@ -84,7 +84,7 @@ search API and sets it's own results attribute upon return.
 ### Screen/Client Side
 
 Client-side UI views are also an important part of external components, and this example provies a simple view
-to consume the data coming from it's server component (see `./examples/guides/components/movie.js` for complete code):
+to consume the data coming from it's server component (see `./docs/examples/components/movie.js` for complete code):
 
     define.class('$ui/view', function (label) {
 
@@ -121,7 +121,7 @@ In addition to a `REAMDE.md` DreemGL components often provide one or more exampl
 composition with some simple examples and usage information is usually a good practice, as these will immediately be 
 available to anyone browing to your component's root directory.
 
-For this guide one screen gathers user input (see `./examples/guides/components/browser.js`) and displays the list of 
+For this guide one screen gathers user input (see `./docs/examples/components/browser.js`) and displays the list of 
 movies (as `movie` objects) returned by the web service:
 
     define.class('$ui/screen', function($ui$, view, button, label, $$, movie) {
@@ -261,7 +261,7 @@ The JSON structure for a setting an attribute is as follows:
 
 An an example, to set the search term variable on the example above, you can use [curl](http://curl.haxx.se/) like so:
 
-    curl -X POST -d '{"rpcid":"main", "type":"attribute", "attribute":"term", "value":"Snow"}' http://localhost:2000/guide
+    curl -X POST -d '{"rpcid":"main", "type":"attribute", "attribute":"term", "value":"Snow"}' http://localhost:2000/docs/examples/components
 
 Which will return:
 
@@ -281,7 +281,7 @@ Getting attributes is identical to setting, but without a `value` property and s
 
 Reading the kework attribute off the omdb search object:
 
-    curl -X POST -d '{"rpcid":"omdb", "type":"attribute", "attribute":"keyword", "get":true}' http://localhost:2000/guide
+    curl -X POST -d '{"rpcid":"omdb", "type":"attribute", "attribute":"keyword", "get":true}' http://localhost:2000/docs/examples/components
 
 If you had set the search term with the previous example, it will now return:
 
@@ -302,7 +302,7 @@ like this:
 
 This will directly manipulate the `onkeyword` function of the omdb search object to trigger a
 
-    curl -X POST -d '{"rpcid":"omdb", "type":"method", "method":"onkeyword", "args":["Red"]}' http://localhost:2000/guide
+    curl -X POST -d '{"rpcid":"omdb", "type":"method", "method":"onkeyword", "args":["Red"]}' http://localhost:2000/docs/examples/components
 
 The screen will redraw and this the API will return:
 

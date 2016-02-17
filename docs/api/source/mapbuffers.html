@@ -1040,6 +1040,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n886" name="n886">886</a>
 <a href="#n887" name="n887">887</a>
 <a href="#n888" name="n888">888</a>
+<a href="#n889" name="n889">889</a>
+<strong><a href="#n890" name="n890">890</a></strong>
+<a href="#n891" name="n891">891</a>
+<a href="#n892" name="n892">892</a>
+<a href="#n893" name="n893">893</a>
+<a href="#n894" name="n894">894</a>
+<a href="#n895" name="n895">895</a>
+<a href="#n896" name="n896">896</a>
+<a href="#n897" name="n897">897</a>
+<a href="#n898" name="n898">898</a>
+<a href="#n899" name="n899">899</a>
+<strong><a href="#n900" name="n900">900</a></strong>
+<a href="#n901" name="n901">901</a>
+<a href="#n902" name="n902">902</a>
+<a href="#n903" name="n903">903</a>
+<a href="#n904" name="n904">904</a>
+<a href="#n905" name="n905">905</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1061,7 +1078,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="comment">//this.ignoreuse = {}</span>
         <span class="local-variable">this</span>.displaykinds ={
-                <span class="key">forsest</span>: <span class="predefined-constant">true</span>,
                 <span class="key">water</span>: <span class="predefined-constant">true</span>, 
                 <span class="key">meadow</span>:<span class="predefined-constant">true</span>, 
                 <span class="key">playa</span>:<span class="predefined-constant">true</span>, 
@@ -1072,7 +1088,21 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">beach</span>: <span class="predefined-constant">true</span>,
                 <span class="key">grass</span>: <span class="predefined-constant">true</span>,
                 <span class="key">lake</span>:<span class="predefined-constant">true</span>,
-                <span class="key">canal</span>: <span class="predefined-constant">true</span>
+                <span class="key">building</span>:<span class="predefined-constant">true</span>,
+                <span class="key">canal</span>: <span class="predefined-constant">true</span>,
+                <span class="key">land</span>:<span class="predefined-constant">true</span>,
+                <span class="key">park</span>:<span class="predefined-constant">true</span>,
+                <span class="key">parking</span>:<span class="predefined-constant">true</span>,
+                <span class="key">pitch</span>:<span class="predefined-constant">true</span>,
+                <span class="key">footway</span>:<span class="predefined-constant">true</span>,
+                <span class="key">playground</span>:<span class="predefined-constant">true</span>,
+                <span class="key">wood</span>:<span class="predefined-constant">true</span>,
+                <span class="key">residential</span>:<span class="predefined-constant">true</span>,
+                <span class="key">farm</span>:<span class="predefined-constant">true</span>,
+                <span class="key">wetland</span>:<span class="predefined-constant">true</span>,
+                <span class="key">aerodrome</span>:<span class="predefined-constant">true</span>,
+                <span class="key">farmyard</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>,
+                <span class="key">forest</span>:<span class="predefined-constant">true</span>,<span class="key">nature_reserve</span>:<span class="predefined-constant">true</span>,<span class="key">riverbank</span>:<span class="predefined-constant">true</span>, <span class="key">railway</span>:<span class="predefined-constant">true</span>, <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">farmland</span>:<span class="predefined-constant">true</span>
         }
         
         <span class="local-variable">this</span>.noignoreuse = {
@@ -1424,9 +1454,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="keyword">var</span> RoadVertexStruct = <span class="local-variable">this</span>.RoadVertexStruct = define.struct({
                 <span class="key">pos</span>:vec4,
-                <span class="key">geom</span>:vec4<span class="comment">//sidevec:vec2</span>
+                <span class="key">geom</span>:vec4,<span class="comment">//sidevec:vec2</span>
                 <span class="comment">//geom:vec3,</span>
-                <span class="comment">//color: float,</span>
+                <span class="key">color</span>: vec4
                 <span class="comment">//side: float,</span>
                 <span class="comment">//dist: float,</span>
                 <span class="comment">//linewidth:float,</span>
@@ -1644,6 +1674,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span> (roadwidths[R.kind]) linewidth = roadwidths[R.kind];<span class="keyword">else</span> UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
 
                         <span class="keyword">if</span> (st.roadcolor) color = st.roadcolor;<span class="keyword">else</span> UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
+                        <span class="comment">//console.log(R.kind, color);</span>
                         <span class="comment">// make color an id</span>
 
                         <span class="keyword">var</span> colorid = color[<span class="integer">0</span>]
@@ -1689,13 +1720,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
                                 mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
                                 */</span>
-                                mesh.push(nx,ny,predelta[<span class="integer">0</span>], predelta[<span class="integer">1</span>], <span class="integer">1</span>, dist, linewidth, colorid)<span class="comment">//z, color, 1, dist,linewidth,presdelta, markcolor);</span>
-                                mesh.push(nx,ny,presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist, linewidth, colorid)<span class="comment">//z, color, -1, dist,linewidth,presdelta, markcolor);</span>
-                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], <span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid);
+                                mesh.push(nx,ny,predelta[<span class="integer">0</span>], predelta[<span class="integer">1</span>], <span class="integer">1</span>, dist, linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>])<span class="comment">//z, color, 1, dist,linewidth,presdelta, markcolor);</span>
+                                mesh.push(nx,ny,presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist, linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>])<span class="comment">//z, color, -1, dist,linewidth,presdelta, markcolor);</span>
+                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], <span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
-                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], <span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid);
-                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid);
-                                mesh.push(nx                            ,ny                            , presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid);
+                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], <span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx                            ,ny                            , presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
                                 <span class="comment">//        color = vec4(0,0,0.03,0.1)</span>
                                 <span class="keyword">var</span> lastdelta = vec2(<span class="integer">0</span>);
@@ -1710,23 +1741,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                         <span class="keyword">var</span> dist2 = dist +  vec2.len(predelt);
                                         <span class="keyword">if</span> (a&gt;<span class="integer">1</span>){
-                                                mesh.push(nx,ny,lastdelta[<span class="integer">0</span>], lastdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid);
-                                                mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid);
-                                                mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid);
+                                                mesh.push(nx,ny,lastdelta[<span class="integer">0</span>], lastdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                                mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                                mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
-                                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid);
-                                                mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid);
-                                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid);
+                                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                                mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
                                         }
                                         <span class="comment">//color = vec4(0,1,0,0.2)</span>
-                                        mesh.push( nx, ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist ,linewidth, colorid);
-                                        mesh.push( nx, ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist ,linewidth, colorid);
-                                        mesh.push(tnx,tny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist2,linewidth, colorid);
+                                        mesh.push( nx, ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist ,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                        mesh.push( nx, ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist ,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                        mesh.push(tnx,tny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist2,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
-                                        mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth, colorid);
-                                        mesh.push(tnx,tny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>],<span class="integer">1</span>, dist2,linewidth, colorid);
-                                        mesh.push(tnx,tny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist2,linewidth, colorid);
+                                        mesh.push(nx,ny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                        mesh.push(tnx,tny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>],<span class="integer">1</span>, dist2,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                        mesh.push(tnx,tny,sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist2,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
                                         lastsdelta = vec2(sdelta[<span class="integer">0</span>], sdelta[<span class="integer">1</span>]);
                                         dist = dist2;
@@ -1735,13 +1766,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         lastdelta = delta;
                                 }
                                 <span class="comment">//color = vec4(&quot;red&quot;);</span>
-                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth, colorid);
-                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth, colorid);
-                                mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span>, linewidth,colorid);
+                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx,ny,lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span>, linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
-                                mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span> ,linewidth,colorid);
-                                mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span>,linewidth,colorid);
-                                mesh.push(nx,ny, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>],  -<span class="integer">1</span>, dist,linewidth,colorid);
+                                mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span>,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx,ny, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>],  -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
                         }
                 }
                 <span class="keyword">return</span> mesh;
@@ -1873,6 +1904,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> Bb = LandUseGeoms[i];
                         <span class="keyword">if</span> (<span class="local-variable">this</span>.displaykinds[Bb.properties.kind]){
                                 DecodeAndAdd(Bb, Lset, Sarcs, <span class="string"><span class="delimiter">&quot;</span><span class="content">landuse</span><span class="delimiter">&quot;</span></span> );
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="comment">//console.log(&quot;ignoring&quot;, Bb.properties.kind);</span>
                         }
                 }
 

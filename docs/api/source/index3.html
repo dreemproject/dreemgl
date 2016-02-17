@@ -169,97 +169,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n15" name="n15">15</a>
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
-<a href="#n18" name="n18">18</a>
-<a href="#n19" name="n19">19</a>
-<strong><a href="#n20" name="n20">20</a></strong>
-<a href="#n21" name="n21">21</a>
-<a href="#n22" name="n22">22</a>
-<a href="#n23" name="n23">23</a>
-<a href="#n24" name="n24">24</a>
-<a href="#n25" name="n25">25</a>
-<a href="#n26" name="n26">26</a>
-<a href="#n27" name="n27">27</a>
-<a href="#n28" name="n28">28</a>
-<a href="#n29" name="n29">29</a>
-<strong><a href="#n30" name="n30">30</a></strong>
-<a href="#n31" name="n31">31</a>
-<a href="#n32" name="n32">32</a>
-<a href="#n33" name="n33">33</a>
-<a href="#n34" name="n34">34</a>
-<a href="#n35" name="n35">35</a>
-<a href="#n36" name="n36">36</a>
-<a href="#n37" name="n37">37</a>
-<a href="#n38" name="n38">38</a>
-<a href="#n39" name="n39">39</a>
-<strong><a href="#n40" name="n40">40</a></strong>
-<a href="#n41" name="n41">41</a>
-<a href="#n42" name="n42">42</a>
-<a href="#n43" name="n43">43</a>
-<a href="#n44" name="n44">44</a>
-<a href="#n45" name="n45">45</a>
-<a href="#n46" name="n46">46</a>
-<a href="#n47" name="n47">47</a>
-<a href="#n48" name="n48">48</a>
-<a href="#n49" name="n49">49</a>
-<strong><a href="#n50" name="n50">50</a></strong>
-<a href="#n51" name="n51">51</a>
-<a href="#n52" name="n52">52</a>
-<a href="#n53" name="n53">53</a>
-<a href="#n54" name="n54">54</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, screen, <span class="predefined">$examples$guides$components$</span>, search, <span class="predefined">$widgets$</span>, slideviewer, <span class="predefined">$$</span>, devices, syntax, index, <span class="predefined">slides$intro</span>, <span class="predefined">slides$syntax</span>, <span class="predefined">slides$paths</span>, <span class="predefined">slides$internal</span>, <span class="predefined">slides$external</span>, <span class="predefined">slides$api</span>, <span class="predefined">slides$resources</span>){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, screen, textbox, view, <span class="predefined">$$</span>, map) {
 
-        <span class="keyword">function</span> <span class="function">getSource</span>(obj) {
-                <span class="keyword">return</span> obj.module.factory.body.toString();
-        }
+    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() { <span class="keyword">return</span> [
+        screen({},
+            view({<span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>, <span class="key">flex</span>:<span class="integer">1</span>},
+              textbox({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">placename</span><span class="delimiter">'</span></span>, <span class="key">value</span>:<span class="string"><span class="delimiter">'</span><span class="content">Portland, OR</span><span class="delimiter">'</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>}),
+              map({<span class="key">location</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">find.placename.value</span><span class="delimiter">'</span></span>), <span class="key">width</span>:<span class="integer">250</span>, <span class="key">height</span>:<span class="integer">250</span>}))
+            )
+    ] }
 
-        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span> <span class="function">render</span>() {
 
-                <span class="keyword">return</span> [
-                        <span class="comment">// `examples/guide/search.js` is used here</span>
-                        search({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">search</span><span class="delimiter">'</span></span>, <span class="key">keyword</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Aliens</span><span class="delimiter">&quot;</span></span>}),
-                        screen({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">desktop</span><span class="delimiter">'</span></span>},
-                                slideviewer({ <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">slides</span><span class="delimiter">'</span></span>,
-                                                <span class="key">slide</span>:{
-                                                        <span class="key">padding</span>:<span class="integer">15</span>,
-                                                        <span class="key">borderradius</span>:<span class="integer">20</span>
-                                                },
-                                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                                <span class="key">viewport</span>:<span class="string"><span class="delimiter">'</span><span class="content">2d</span><span class="delimiter">'</span></span>,
-                                                <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>,
-                                                <span class="key">slideheight</span>: <span class="integer">800</span>,
-                                                <span class="key">bgcolor</span>: <span class="string"><span class="delimiter">'</span><span class="content">black</span><span class="delimiter">'</span></span>,
-                                                <span class="key">scroll</span>:Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>})
-                                        },
-                                        <span class="predefined">slides$intro</span>({
-                                                <span class="key">flex</span>:<span class="integer">1</span>,
-                                                <span class="key">syntaxCode</span>:getSource(syntax)
-                                        }),
-                                        <span class="predefined">slides$syntax</span>({<span class="key">flex</span>: <span class="integer">1</span>, <span class="key">syntaxCode</span>:getSource(syntax)}),
-                                        <span class="predefined">slides$paths</span>({<span class="key">flex</span>: <span class="integer">1</span>}),
-                                        <span class="predefined">slides$internal</span>({
-                                                <span class="key">flex</span>: <span class="integer">1</span>,
-                                                <span class="key">movies</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.search.results</span><span class="delimiter">'</span></span>),
-                                                <span class="key">searchCode</span>:getSource(search),
-                                                <span class="key">compositionCode</span>:getSource(index)
-                                        }),
-                                        <span class="predefined">slides$external</span>({
-                                                <span class="key">flex</span>: <span class="integer">1</span>,
-                                                <span class="key">apiCode</span>:getSource(devices),
-                                                <span class="key">devices</span>:wire(<span class="string"><span class="delimiter">'</span><span class="content">this.rpc.devbus.active</span><span class="delimiter">'</span></span>)
-                                        }),
-                                        <span class="predefined">slides$api</span>({<span class="key">flex</span>: <span class="integer">1</span>}),
-                                        <span class="predefined">slides$resources</span>({<span class="key">flex</span>: <span class="integer">1</span>})
-                                )
-                    ),
-                        devices({<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">devbus</span><span class="delimiter">'</span></span>})
-                ]
-        }
 });
 </pre></td>
 </tr></table>
