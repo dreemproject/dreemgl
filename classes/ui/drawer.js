@@ -5,9 +5,9 @@
 // Sprite class
 
 define.class("$ui/view", function(require, $ui$, view){
-// A drawer view that slides to reveal trays either to the left and right in horiaonal mode or or the top and
+// A drawer view that slides to reveal trays either to the left and right in horizontal mode or or the top and
 // bottom in vertical mode.  Subviews can contain components which will become activated as the lower tray is revealed.
-// Up to three subviews can be added tot he drawer's constructor, providing the top drawer view, the right tray view
+// Up to three subviews can be added to the drawer's constructor, providing the top drawer view, the right tray view
 // and the left tray view, in that order.
 
 	this.tooldragroot = true;
