@@ -860,15 +860,15 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var labels3d = [];
 		var poi3d = [];
 
-		 var div = 400
+		 var div = 1024
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 		
 		this.camdist = (this.layout.width)/Math.tan(15*((Math.PI*2.0)/360.0));
-		console.log(this.camdist);
+		console.log(this.camdist, this.tilewidth, this.tileheight);
 		
-		var basew = 1;
-		var baseh = 1;
+		var basew = this.tilewidth/2;
+		var baseh = this.tileheight/2;
 		//for(var layer = 1;layer>=0;layer--){
 		for(var layer = 0;layer<2;layer++){
 
@@ -877,8 +877,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			var tilearea = vec2(this.tilewidth, this.tileheight)
 			var ltx = 0;
 			var lty = 0;
-			var extw = basew * Math.pow(2.0, layer);;
-			var exth = baseh * Math.pow(2.0, layer);;
+			var extw = basew * Math.pow(2.0, layer-0.5);;
+			var exth = baseh * Math.pow(2.0, layer-0.5);;
 			//ext = 0;
 			xs = -extw
 			xe = -xs +1;
@@ -919,21 +919,21 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				}
 			}
 		}
-		var dist = 20.5
+		var dist = 120.5
 		res.push(
 			view({
 				flex: 1,
 				viewport: "3d",
 				name: "mapinside",
-				nearplane: 100 * dist,
-				farplane: 40000 * dist,
+				nearplane: 100 ,
+				farplane: this.camdist * 2,
 				camera:vec3(0,-this.camdist,0), fov: 30, up: vec3(0,0,1),
 				lookat:vec3(0,0,0)
 			},[
 				view({bgcolor:NaN},[
 					res3d,
 					buildings3d,
-					label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
+					//label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
 					labels3d,
 					pointset({name: 'pointset'})
 				])

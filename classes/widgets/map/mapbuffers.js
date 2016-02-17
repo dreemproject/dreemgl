@@ -28,8 +28,20 @@ define.class(function(require, $server$, service){
 		beach: true,
 		grass: true,
 		lake:true,
+		building:true,
 		canal: true,
 		land:true,
+		park:true,
+		parking:true,
+		pitch:true,
+		footway:true,
+		playground:true,
+		wood:true,
+		residential:true,
+		farm:true,
+		wetland:true,
+		aerodrome:true,
+		farmyard:true, scrub:true,
 		forest:true,nature_reserve:true,riverbank:true, railway:true, runway:true, farmland:true
 	}
 	
@@ -831,6 +843,9 @@ define.class(function(require, $server$, service){
 			var Bb = LandUseGeoms[i];
 			if (this.displaykinds[Bb.properties.kind]){
 				DecodeAndAdd(Bb, Lset, Sarcs, "landuse" );
+			}
+			else{
+				console.log("ignoring", Bb.properties.kind);
 			}
 		}
 
