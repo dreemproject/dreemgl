@@ -12,12 +12,12 @@ To start DreemGL type:
 
 To view the Intro presentation, click here:
 
-[http://127.0.0.1:2000/introduction](http://127.0.0.1:2000/introductio)
+[http://127.0.0.1:2000/docs/slides/introduction](http://127.0.0.1:2000/docs/slides/introduction)
 
 To try livecoding a shader open this:
 
-[http://127.0.0.1:2000/examples/rendertest](http://127.0.0.1:2000/examples/rendertest) and open
-[examples/rendertest.js](examples/rendertest.js) in your editor and start typing away and saving, reload should
+[http://127.0.0.1:2000/test/tests/rendertest](http://127.0.0.1:2000/test/tests/rendertest) and open
+[./test/tests/rendertest.js](/test/tests/rendertest.js) in your editor and start typing away and saving, reload should
 be live.
 
 As the server starts, it also shows other local IP's its listening on (for trying it on your phone)
