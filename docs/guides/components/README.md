@@ -30,8 +30,8 @@ component to a Dreem GL server is with a symlink into the DreemGL `$root` direct
 
 Note here that the name you choose for `<componentname>` is important in that it will be the namespace that other 
 compositions will use to instantiate it's classes later.  For example, this guide is in `./examples/guides/components`, 
-so all of it's classes can then be accessed using `$examples$guides$components$<classname>`, 
-`$examples$, guides$components$<classname>` or `$examples$guides$components$, <classname>`.  Within a component you can 
+so all of it's classes can then be accessed using `$docs$guides$components$<classname>`, 
+`$docs$, guides$components$<classname>` or `$docs$guides$components$, <classname>`.  Within a component you can 
 use '$$' to search the current directory, so this name is only important in how other components and compositions will 
 access the component's objects.  
 

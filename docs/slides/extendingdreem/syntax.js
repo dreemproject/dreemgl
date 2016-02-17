@@ -5,11 +5,10 @@
 
 define.class(function ($ui$, view, $docs$examples$components$, movie, $$, slides$device) {
 
-    // internal, `$examples$guide$` followed by `movie` is loading the `movie` view found in `./examples/guide/movie.js`
+    // internal, `$docs$examples$components$` followed by `movie` is loading the `movie` view found in `./docs/examples/components/movie.js`
 
-    // The `$` prefix refers to the current directory, regardless of the current directory name
-    // so `$, slides$device` maps to `./examples/<this directory>/slides/device.js`
-    // (which in this case is, `./examples/extdemo/slides/device.js`)
+    // The `$$` prefix refers to the current directory, regardless of the current directory name
+    // so `$$, slides$device` maps to `$root/docs/slides/extendingdreem/slides/device.js`
 
     this.attributes = {
         movieData : Config({type:Object}),

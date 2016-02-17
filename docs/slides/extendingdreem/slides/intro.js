@@ -60,7 +60,7 @@ define.class(function ($ui$, view, label) {
             //    margintop:10
             //}),
             label({
-                text:'+ See `./examples/guide/README.md` for implementation guide',
+                text:'+ See `./docs/guides/components/README.md` for full implementation guide',
                 fgcolor:'#333',
                 bgcolor:'transparent',
                 fontsize:25,
