@@ -14,7 +14,7 @@ The *flexbox* layout algorithm is direction-agnostic as opposed to the block lay
 
 While a discussion of flexible boxes is liberated from terms like horizontal/inline axis and vertical/block axis, it requires a new terminology to properly describe the model. Consider the following diagram when reviewing the vocabulary items below. It shows a flex container that has a flexdirection of row, meaning that the flex items follow each other horizontally across the main axis according to the established writing mode, the direction in which the element's text flows, in this case left-to-right.
 
-<img src="../images/flexbox-diagram.png" width="750" height="511">
+<img src="https://raw.githubusercontent.com/dreemproject/dreemgl/master/docs/images/flexbox-diagram.png" width="750" height="511">
 
 ### Flex container
 
@@ -118,9 +118,9 @@ While DreemGL uses the Facebook css-layout JavaScript library, the attribute nam
 
 This DreemGL application lets you play around with the various attributes and values, providing immediate visual feedback. You should open the application in a separate browser tab while going through this guide, and can use it to verify your understanding of flexbox.
 
-<a href="/examples/guides/flexbox/flexboxtool" target="_blank">Open flexbox tool in tab</a>
+<a href="/docs/examples/flexbox/flexboxtool" target="_blank">Open flexbox tool in tab</a>
 
-<iframe style="width:860px; height:864px; border:0" src="/examples/guides/flexbox/flexboxtool"></iframe>
+<iframe style="width:860px; height:864px; border:0" src="/docs/examples/flexbox/flexboxtool"></iframe>
 
 ## Container attributes
 
@@ -128,19 +128,19 @@ This DreemGL application lets you play around with the various attributes and va
 
 The **flexdirection** attribute controls how items are laid out in the flex container, by setting the direction of the main axis. The two directions available are horizontal layout using the value *row*, and vertical layout using the value **column**. The following examples shows two containers with three children, each. The first container uses the default **row** direction for layout, the second container the **column** layout.
 
-<a href="/examples/guides/flexbox/flexdirection" target="_blank">/examples/guides/flexbox/flexdirection.js</a>
+<a href="/docs/examples/flexbox/flexdirection" target="_blank">/docs/examples/flexbox/flexdirection.js</a>
 
-<iframe style="width:200px; height:200px; border:0" src="/examples/guides/flexbox/flexdirection"></iframe>
+<iframe style="width:200px; height:200px; border:0" src="/docs/examples/flexbox/flexdirection"></iframe>
 <br/>
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/flexdirection.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/flexdirection.js"></iframe>
 
 ### The *flexwrap* attribute
 
 By default flexbox will arrange all items on a single line, with no wrapping in place. The **flexwrap** attribute controls if the flex container lay out its items in single or multiple lines. The example below shows two containers with 5 boxes. The first container has **flexwrap** set to **nowrap**, the second container has **flexwrap** set to **wrap**, therefore the last item (which does not fit into the container) has been pushed to a new line.
 
-<iframe style="width:300px; height:220px; border:0" src="/examples/guides/flexbox/flexwrap"></iframe>
+<iframe style="width:300px; height:220px; border:0" src="/docs/examples/flexbox/flexwrap"></iframe>
 <br/>
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/flexwrap.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/flexwrap.js"></iframe>
 
 ### The *justifycontent* attribute
 
@@ -152,11 +152,11 @@ This defines the alignment along the main axis. It helps distribute extra free s
 * **space-between** items are evenly distributed in the line; first item is on the start line, last item on the end line
 * **space-around** items are evenly distributed in the line with equal space around them. Note that visually the spaces aren't equal, since all the items have equal space on both sides. The first item will have one unit of space against the container edge, but two units of space between the next item because that next item has its own spacing that applies.
 
-<a href="/examples/guides/flexbox/justifycontent" target="_blank">/examples/guides/flexbox/justifycontent.js</a>
+<a href="/docs/examples/flexbox/justifycontent" target="_blank">/docs/examples/flexbox/justifycontent.js</a>
 
-<iframe style="width:320px; height:340px; border:0" src="/examples/guides/flexbox/justifycontent"></iframe>
+<iframe style="width:320px; height:340px; border:0" src="/docs/examples/flexbox/justifycontent"></iframe>
 <br/>
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/justifycontent.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/justifycontent.js"></iframe>
 
 ### The *alignitems* attribute
 
@@ -164,32 +164,32 @@ The **alignitems** attribute aligns flex items of the current flex line the same
 
 Check the following example: The flexdirection of the container is set to **row**, and each of the views has a different height. Depending on the **alignitems** value, the views are arranged accordingly. The last row with the **alignitems** value of **stretch** is a special case: For that row there has been no height set for the red and the orange view, therefore the height is stretched to the maximum value.
 
-<a href="/examples/guides/flexbox/alignitems" target="_blank">/examples/guides/flexbox/alignitems.js</a>
+<a href="/docs/examples/flexbox/alignitems" target="_blank">/docs/examples/flexbox/alignitems.js</a>
 
-<iframe style="width:320px; height:400px; border:0" src="/examples/guides/flexbox/alignitems"></iframe>
+<iframe style="width:320px; height:400px; border:0" src="/docs/examples/flexbox/alignitems"></iframe>
 <br/>
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/alignitems.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/alignitems.js"></iframe>
 
 #### Changing container size with *alignitems='stretch'*
 
 When setting **alignitems** to **stretch**, the item width/height will be adjusted when the container size changes along the cross axis. Check the following example, where no height is set on both the red and the blue view. The cross axis is the y-axis. Clicking anywhere into the container area will grow or shrink the height of the container over a duration of 1 second. As you can see, the red and blue view the will grow and shrink with the container along the cross axis.
 
-<a href="/examples/guides/flexbox/alignitems_animation" target="_blank">/examples/guides/flexbox/alignitems_animation.js</a>
+<a href="/docs/examples/flexbox/alignitems_animation" target="_blank">/docs/examples/flexbox/alignitems_animation.js</a>
 
-<iframe style="width:385px; height:185px; border:0" src="/examples/guides/flexbox/alignitems_animation"></iframe>
+<iframe style="width:385px; height:185px; border:0" src="/docs/examples/flexbox/alignitems_animation"></iframe>
 <br/>
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/alignitems_animation.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/alignitems_animation.js"></iframe>
 
 
 ### Centering using *flexbox*
 
 To center content with flexbox inside a container, set the **flexdirection** and the **justifycontent** attributes to **center**. 
 
-<a href="/examples/guides/flexbox/flexcentering1" target="_blank">/examples/guides/flexbox/flexcentering1</a>
+<a href="/docs/examples/flexbox/flexcentering1" target="_blank">/docs/examples/flexbox/flexcentering1</a>
 
-<iframe style="width:200px; height:200px; border:0" src="/examples/guides/flexbox/flexcentering1"></iframe>
+<iframe style="width:200px; height:200px; border:0" src="/docs/examples/flexbox/flexcentering1"></iframe>
 
-<iframe style="width:656px; height:200px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/flexcentering1.js"></iframe>
+<iframe style="width:656px; height:200px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/flexcentering1.js"></iframe>
 
 ## Child attributes
 
@@ -206,11 +206,11 @@ Only two attributes can be set on the child directly to influence the layout of 
 
 Take a look at the following example. The top row of items uses **alignitems='center'** with a **flexdirection='row'** setting. Therefore all views are center along x-axis. For the bottom row, all children override the container alignment along the main axis by using a different **alignself** value.
 
-<a href="/examples/guides/flexbox/alignself" target="_blank">/examples/guides/flexbox/alignself.js</a>
+<a href="/docs/examples/flexbox/alignself" target="_blank">/docs/examples/flexbox/alignself.js</a>
 
-<iframe style="width:320px; height:310px; border:0" src="/examples/guides/flexbox/alignself"></iframe>
+<iframe style="width:320px; height:310px; border:0" src="/docs/examples/flexbox/alignself"></iframe>
 
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/alignself.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/alignself.js"></iframe>
 
 ### The *flex* attribute
 
@@ -224,8 +224,8 @@ The following example will make things clearer: For all rows, the **flexdirectio
 
 Clicking into the container will animate the width (shrinking and growing). You can see that for the middle row the red and orange view maintain a width of 80, only the green view will adapt to the new space available.
 
-<a href="/examples/guides/flexbox/childflex" target="_blank">/examples/guides/flexbox/childflex.js</a>
+<a href="/docs/examples/flexbox/childflex" target="_blank">/docs/examples/flexbox/childflex.js</a>
 
-<iframe style="width:860px; height:200px; border:0" src="/examples/guides/flexbox/childflex"></iframe>
+<iframe style="width:860px; height:200px; border:0" src="/docs/examples/flexbox/childflex"></iframe>
 
-<iframe style="width:860px; height:400px; border:0" src="/examples/guides/docsourceviewer#file=flexbox/childflex.js"></iframe>
+<iframe style="width:860px; height:400px; border:0" src="/docs/examples/docsourceviewer#file=flexbox/childflex.js"></iframe>
