@@ -13,7 +13,6 @@ define.class(function(require, $server$, service){
 
 	//this.ignoreuse = {}
 	this.displaykinds ={
-		forsest: true,
 		water: true, 
 		meadow:true, 
 		playa:true, 
@@ -24,7 +23,9 @@ define.class(function(require, $server$, service){
 		beach: true,
 		grass: true,
 		lake:true,
-		canal: true
+		canal: true,
+		land:true,
+		forest:true,nature_reserve:true,riverbank:true, railway:true, runway:true, farmland:true
 	}
 	
 	this.noignoreuse = {

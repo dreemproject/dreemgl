@@ -8,10 +8,10 @@ define.class(function(require, $server$, composition, $ui$, button,screen, view,
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},[
 		
-		view({flexdirection:"row", bgcolor:"#9f9373"},[
-			button({buttoncolor1:"9f9373",fontsize:20,icon:"play", margin:2,textcolor:"lime",  padding:6}),
-			button({buttoncolor1:"9f9373",fontsize:20,icon:"pause", margin:2, textcolor:"#ffdf20", padding:6}),
-			button({buttoncolor1:"9f9373",fontsize:20,icon:"stop", margin:2,textcolor:"red",  padding:6})
+		view({flexdirection:"row", bgcolor:"#9f9373", margin:1, padding:4},[
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"play", margin:2,textcolor:"lime",  padding:vec4(4,0,4,3)}),
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"pause", margin:2, textcolor:"#ffdf20", padding:vec4(4,0,4,3)}),
+			button({buttoncolor1:"9f9373",fontsize:20,icon:"stop", margin:2,textcolor:"red",  padding:vec4(4,0,4,3)})
 		])
 		,
 			tracker({

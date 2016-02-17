@@ -409,8 +409,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			bufferloaded: 0.0,
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
-			fogstart: 4000.0,
-			fogend: 14000.,
+			fogstart: 14000.0,
+			fogend: 24000.,
 			layeroffset: 0,
 			layerzmult: 0,
 			layerzoff: 0,
@@ -855,10 +855,15 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var labels3d = [];
 		var poi3d = [];
 
-		// var div = 400
-		// this.tilewidth = Math.ceil(this.layout.width/ div);
-		// this.tileheight = Math.ceil(this.layout.height/ div);;
-
+		 var div = 400
+		this.tilewidth = Math.ceil(this.layout.width/ div);
+		this.tileheight = Math.ceil(this.layout.height/ div);;
+		
+		this.camdist = (this.layout.width)/Math.tan(15*((Math.PI*2.0)/360.0));
+		console.log(this.camdist);
+		
+		var basew = 1;
+		var baseh = 1;
 		//for(var layer = 1;layer>=0;layer--){
 		for(var layer = 0;layer<2;layer++){
 
@@ -867,8 +872,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			var tilearea = vec2(this.tilewidth, this.tileheight)
 			var ltx = 0;
 			var lty = 0;
-			var extw = Math.pow(2.0, layer);;
-			var exth = Math.pow(2.0, layer);;
+			var extw = basew * Math.pow(2.0, layer);;
+			var exth = baseh * Math.pow(2.0, layer);;
 			//ext = 0;
 			xs = -extw
 			xe = -xs +1;
@@ -909,7 +914,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				}
 			}
 		}
-		var dist = 13.5
+		var dist = 20.5
 		res.push(
 			view({
 				flex: 1,
@@ -917,7 +922,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				name: "mapinside",
 				nearplane: 100 * dist,
 				farplane: 40000 * dist,
-				camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0),
+				camera:vec3(0,-this.camdist,0), fov: 30, up: vec3(0,0,1),
 				lookat:vec3(0,0,0)
 			},[
 				view({bgcolor:NaN},[
