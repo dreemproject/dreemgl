@@ -26,7 +26,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.onpointerwheel = function(ev){
-		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1]);
+		this.zoomTo(this.dataset.zoomlevel - ev.wheel[1]/120);
 	}
 
 	this.onpointerend = function(ev){
