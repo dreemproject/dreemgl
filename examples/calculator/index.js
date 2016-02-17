@@ -14,6 +14,11 @@ define.class('$server/composition', function (require,  $server$, fileio,$ui$, n
 		this.attributes = {
 			results: []
 		}
+		this.dropshadowopacity=0.2
+		this.dropshadowhardness=0;
+		this.dropshadowoffset=vec2(10);
+		this.dropshadowradius = 30
+		
 		this.alignself="center";
 		this.flex = undefined;
 		this.flexdirection = "column";

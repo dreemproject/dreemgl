@@ -49,6 +49,11 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.dataset.gotoCity(city, zoomlevel, time);
 	}
 
+	
+	this.flyTo = function(lat,lng, zoom,time){
+		this.dataset.flyTo(lat,lng, zoom, time);		
+	}
+	
 	define.class(this, "mapdataset", "$ui/view", function($$, geo){
 		this.requestPending = false;
 		this.loadqueue = [];
@@ -62,6 +67,30 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			latlong: vec2(52.3608307, 4.8626387),
 			zoomlevel: 15,
 			callbacktarget: {}
+		}
+		
+		this.flyTo = function(lat, lng, zoom, time){
+			time = time?time:0
+			if (zoom > geo.default_max_zoom) zoom = geo.default_max_zoom;
+			
+			if (time >0){
+				var anim = {}
+				anim[time] = {motion:"inoutquad", value:vec2(lat,lng)};
+				this.latlong =Animate(anim);
+				var anim = {}
+				anim[time/2] = {motion:"outquad", value:Math.min(zoom-0.5, this.zoomlevel-0.5)};
+				anim[time] = {motion:"inquad", value:zoom};
+				this.zoomlevel =Animate(anim);
+			
+			
+			}
+			else{
+				this.zoomlevel = zoom;
+			}
+			
+			
+			
+			
 		}
 
 		this.setCenterLatLng = function(lat, lng, zoom, time){
@@ -101,9 +130,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.zoomTo = function(newz, time){
-		if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
+			if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
 
-		time = time? time:0;
+			time = time? time:0;
 			if (time >0)
 			{
 				var anim = {}
@@ -414,8 +443,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			bufferloaded: 0.0,
 			tiletrans: vec2(0),
 			fog: vec4("lightblue"),
-			fogstart: 4000.0,
-			fogend: 14000.,
+			fogstart: 14000.0,
+			fogend: 24000.,
 			layeroffset: 0,
 			layerzmult: 0,
 			layerzoff: 0,
@@ -860,10 +889,15 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var labels3d = [];
 		var poi3d = [];
 
-		// var div = 400
-		// this.tilewidth = Math.ceil(this.layout.width/ div);
-		// this.tileheight = Math.ceil(this.layout.height/ div);;
-
+		 var div = 1024
+		this.tilewidth = Math.ceil(this.layout.width/ div);
+		this.tileheight = Math.ceil(this.layout.height/ div);;
+		
+		this.camdist = (this.layout.width)/Math.tan(15*((Math.PI*2.0)/360.0));
+		console.log(this.camdist, this.tilewidth, this.tileheight);
+		
+		var basew = this.tilewidth/2;
+		var baseh = this.tileheight/2;
 		//for(var layer = 1;layer>=0;layer--){
 		for(var layer = 0;layer<2;layer++){
 
@@ -872,8 +906,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			var tilearea = vec2(this.tilewidth, this.tileheight)
 			var ltx = 0;
 			var lty = 0;
-			var extw = Math.pow(2.0, layer);;
-			var exth = Math.pow(2.0, layer);;
+			var extw = basew * Math.pow(2.0, layer-0.5);;
+			var exth = baseh * Math.pow(2.0, layer-0.5);;
 			//ext = 0;
 			xs = -extw
 			xe = -xs +1;
@@ -914,21 +948,21 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				}
 			}
 		}
-		var dist = 13.5
+		var dist = 120.5
 		res.push(
 			view({
 				flex: 1,
 				viewport: "3d",
 				name: "mapinside",
-				nearplane: 100 * dist,
-				farplane: 40000 * dist,
-				camera:vec3(0,-1000 * dist,100* dist), fov: 30, up: vec3(0,1,0),
+				nearplane: 100 ,
+				farplane: this.camdist * 2,
+				camera:vec3(0,-this.camdist,0), fov: 30, up: vec3(0,0,1),
 				lookat:vec3(0,0,0)
 			},[
 				view({bgcolor:NaN},[
 					res3d,
 					buildings3d,
-					label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
+					//label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
 					labels3d,
 					pointset({name: 'pointset'})
 				])

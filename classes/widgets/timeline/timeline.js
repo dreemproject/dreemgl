@@ -10,9 +10,11 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.bgcolor = NaN
 
 	this.attributes = {
+		start: Config({type: Date,  value: new Date("Jan 1 2016")}),
+		end: Config({type: Date,  value: new Date("Dec 31 2016")}),
 		data: Config({type: Array,  value: []}),
-		format: Config({type: Enum('12','24'),  value: "24"}),
-		zoom: Config({type: Number, value: 1}),
+		format: Config({type: Enum('12','24'),  value: "12"}),
+		zoom: Config({type: Number, value: 0.5}),
 		minzoom: Config({type: Number, value: 1/24}),
 		maxzoom: Config({type: Number, value: 365}),
 		scroll: Config({type: Number, value: 0}),
@@ -72,13 +74,13 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 	this.pointerwheel = function(event) {
 		this.hscrollbar = this.find("scrollbar")
-		if (event.value[0]){
-			this.scroll = clamp(this._scroll + event.value[0] *20.0/ this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+		if (event.value[0] && abs(event.value[0]) > abs(event.value[1])){
+			this.scroll = clamp(this._scroll + event.value[0]  * 20 / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
-		if (event.value[1]){
+		if (event.value[1] && abs(event.value[1]) > abs(event.value[0])){
 			var lastzoom = this._zoom
 
-			var delta = event.value[1]*20.0 / this.layout.width * this.zoom
+			var delta = event.value[1] * 20 / this.layout.width * this.zoom
 			var newzoom = clamp(this.zoom + delta, this.minzoom, this.maxzoom)
 
 			this.zoom = newzoom
