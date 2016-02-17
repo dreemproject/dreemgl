@@ -86,10 +86,10 @@ define.class('$system/base/keyboard', function (require, exports){
 				this._leftarrow ||
 				this._rightarrow ||
 				this._uparrow ||
-				this._downarrow){
+				this._downarrow ||
+				this._backspace){
 				if(e.preventDefault) e.preventDefault()
 			}
-
 			is_keyboard_cut = false
 			is_keyboard_all = false
 		}.bind(this)

@@ -9,7 +9,7 @@ define.class(function(require, $server$, composition, $ui$, screen, view, $widge
 		screen({name:'default', clearcolor:vec4('black')},
 			jseditor({
 				flex:1, overflow:'scroll',fontsize:12,
-				source:require('./jseditortest').module.factory.body.toString()
+				source:require('$ui/view').module.factory.body.toString()
 			})
 		)
 	]}

@@ -11,6 +11,7 @@ define.class(function(require, baseclass){
 		this.device = gldevice
 		this.view = view
 		view.drawpass = this
+
 		// lets do the flatten
 		this.pickmatrices = {
 			viewmatrix: mat4.identity(),
