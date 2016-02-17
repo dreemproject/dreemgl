@@ -155,9 +155,12 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 		this.stateclick()
 	}
 	this.pointerend = function(event){
-		this.statenormal()
 		if (event.isover){
+			this.statehover();
 			this.emit('click',event)
+		}
+		else{
+			this.statenormal()
 		}
 	}
 
