@@ -22,19 +22,19 @@ define.class("$server/composition",function(require, $ui$, checkbox, icon, butto
 						toolrect:false
 					},
 					drawer(
-						{width:200, height:60, bgcolor:"darkgray", x:300, y:305, direction:"horizontal"},
-						view({
-							name:"gold",
-							bgcolor:"gold",
-							flex:1
-						}
-						),
-						view({
-							name:"yellow",
-							bgcolor:"yellow",
-							flex:1
-						}
-						)
+						{
+							flex:0,
+							width:200,
+							height:60,
+							min:-0.65,
+							max:0.6
+						},
+						view({flex:1, bgcolor:"gray", alignitems:"center", justifycontent:"center"},
+							label({text:"Drawer"})),
+						view({bgcolor:"yellow", flex:1, alignitems:"center", justifycontent:"flex-end"},
+							label({text:"Right Tray", fgcolor:"purple", fontsize:24, marginright:10})),
+						view({bgcolor:"purple", flex:1, alignitems:"center"},
+							label({text:"Left Tray", fgcolor:"yellow", fontsize:24, marginleft:10}))
 					)
 				),
 				toolkit({visible:false, position:"absolute", x:781, y:90.99999237060547, width:400, height:800})

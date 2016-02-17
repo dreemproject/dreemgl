@@ -4,20 +4,28 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class("$ui/view", function($ui$, view){
-// A view that slides left or right to reveal a subview
+define.class("$ui/view", function(require, $ui$, view){
+// A drawer view that slides to reveal trays either to the left and right in horiaonal mode or or the top and
+// bottom in vertical mode.  Subviews can contain components which will become activated as the lower tray is revealed.
+// Up to three subviews can be added tot he drawer's constructor, providing the top drawer view, the right tray view
+// and the left tray view, in that order.
 
 	this.tooldragroot = true;
 	this.overflow = "hidden";
 
 	this.attributes = {
 
+		// The orientation of the drawers, ether left/right or top/bottom
 		direction:Config({type:Enum("horizontal", "vertical"), value:"horizontal"}),
 
-		// The current value, between 0.0 ~ 1.0
+		// The relative offset of the top drawer view to the center, a value between (far left) -1.0 ~ 1.0 (far right),
+		// with 0 being exactly at the center.
 		value:Config({value:0.0, persist:true}),
 
-		min:-0.7,
+		// The threshold value at which to allow the drawer to open and lock the right tray
+		min:-0.5,
+
+		// The threshold value at which to allow the drawer to open and lock the left tray
 		max:0.5
 	};
 
@@ -27,10 +35,15 @@ define.class("$ui/view", function($ui$, view){
 			this._main.y = this.direction === "vertical" ? v * this.height : 0;
 		}
 
-		console.log('v>', v)
-
 		this._left.visible = v > 0;
-		this._right.visible = !this._left.visible;
+
+		if (this._left) {
+			this._left.drawtarget = v === this.max ? "both" : "color"
+		}
+		if (this._right) {
+			this._right.drawtarget = v === this.min ? "both" : "color"
+		}
+
 	};
 
 	this.pointermove = function(p, loc, v) {
@@ -59,7 +72,7 @@ define.class("$ui/view", function($ui$, view){
 		if (value !== this.value) {
 			this.value = value;
 		}
-	};
+    };
 
 	this.pointerend = function(p, loc, v) {
 		var main = this._main;
@@ -97,39 +110,58 @@ define.class("$ui/view", function($ui$, view){
 	this.render = function() {
 		var views = [];
 
-		if (this.leftview) {
-			views.push(this._left = view({
-				name:"green",
-				bgcolor:"green",
-				position:"absolute",
-				width:this.width,
-				height:this.height,
-				alignitems:"stretch",
-				justifycontent:"center"
-			},this.leftview));
-		}
-
 		if (this.rightview) {
 			views.push(this._right = view({
-				name:"red",
-				bgcolor:"red",
+				drawtarget:"color",
 				position:"absolute",
+				alignitems:"stretch",
+				justifycontent:"center",
+				width:this.width,
+				height:this.height
+			}, this.rightview));
+		}
+
+		if (this.leftview) {
+			views.push(this._left = view({
+				drawtarget:"color",
+				position:"absolute",
+				alignitems:"stretch",
+				justifycontent:"center",
 				width:this.width,
 				height:this.height,
-				alignitems:"stretch",
-				justifycontent:"center"
-			}, this.rightview));
+				visible:false
+			},this.leftview));
 		}
 
 		views.push(this._main = view({
 			name:"main",
 			drawtarget:"color",
 			position:"absolute",
+			alignitems:"stretch",
+			justifycontent:"center",
 			width:this.width,
 			height:this.height
 		}, this.mainview));
 
 		return views;
 	};
+
+	// Basic usage of the drawer.
+	var drawer = this.constructor;
+	this.constructor.examples = {
+		Usage:function(){
+			var label = require("$ui/label");
+			return [
+				drawer({
+					x:50,y:50,
+					height:100, width:300
+				},
+					view({flex:1,bgcolor:"red",justifycontent:"center",alignitems:"center"}, label({text:"<< Slide Me >>"})),
+					view({flex:1,bgcolor:"green",justifycontent:"flex-end",alignitems:"center"}, label({text:"I'm the right"})),
+					view({flex:1,bgcolor:"blue",alignitems:"center"}, label({text:"I'm the left"})))
+			]
+		}
+	}
+
 
 });
