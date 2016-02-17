@@ -9,26 +9,26 @@ require 'net/http'
 require 'json'
 
 devices = {
-    'BEACON 814' => 'beacon',
+    'BEACON 814' => 'wifi',
     'Office' => 'home',
-    'Laptop' => 'laptop',
-    'Inbox' => 'message',
-    'BT mic' => 'mic',
+    'Laptop' => 'keyboard',
+    'Inbox' => 'envelope',
+    'BT mic' => 'microphone',
     'iPhone' => 'phone',
-    'Charging' => 'power',
-    'Brother 429' => 'printer',
-    'Kitchen Lamp' => 'smartbulb',
+    'Charging' => 'plug',
+    'Brother 429' => 'print',
+    'Kitchen Lamp' => 'lightbulb',
     'Console' => 'terminal',
     'LED H4500' => 'tv',
-    'Wallet' => 'wallet',
+    'Wallet' => 'briefcase',
 
-    'WiFi' => 'beacon',
+    'WiFi' => 'wifi',
     'Home Network' => 'home',
     'Desktop' => 'laptop',
-    'SMS' => 'message',
+    'SMS' => 'inbox',
     'Android' => 'phone',
-    'Air Print' => 'printer',
-    'Lights' => 'smartbulb',
+    'Air Print' => 'print',
+    'Lights' => 'lightbulb',
     'Smart TV' => 'tv'
 }
 
@@ -37,7 +37,7 @@ loop do
   selected = devices.to_a.sample
   action = %w(join part).sample
 
-  uri = URI.parse("http://localhost:2000/examples/extdemo")
+  uri = URI.parse("http://localhost:2000/docs/slides/extendingdreem")
   Net::HTTP.start(uri.hostname, uri.port) do |http|
     (req = Net::HTTP::Post.new(uri)).body = {
         rpcid: "devbus",

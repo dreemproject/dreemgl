@@ -50,8 +50,7 @@ define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, devi
         if (this.deviceList) {
             for (var i = 0; i < this.deviceList.length; i++) {
                 var data = this.deviceList[i];
-                data.width = 70;
-                data.height = 70;
+                data.height = 130;
                 cells.push(device(data));
             }
         }
@@ -61,7 +60,7 @@ define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, devi
             view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
                 view(
                     {flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), clipping:true, bgcolor:'transparent'},
-                    label({height:30, fgcolor:'#333', bgcolor:'transparent', fontsize:14, flex: 0, alignself: 'stretch', text:'DreemGL Server (./examples/extdemo/devices.js)'}),
+                    label({height:30, fgcolor:'#333', bgcolor:'transparent', fontsize:14, flex: 0, alignself: 'stretch', text:'DreemGL Server (./docs/slides/extendingdreem/devices.js)'}),
                     jsviewer({ flex: 1, overflow:'scroll', alignself: 'stretch', source: this.apiCode, fontsize: 13, bgcolor: "#000030", multiline: true}),
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, alignself: 'stretch', text:'Method call via API (Ruby Example)'}),
                     textbox({ flex: 1, alignself: 'stretch', value:this.clientCode, readonly:true, fontsize: 12, fgcolor:'yellow', bgcolor: "#000030", multiline: false})
@@ -69,7 +68,7 @@ define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, devi
                 view(
                     {flexdirection: 'column', flex: 1, alignself: 'stretch', clipping:true, padding: 4, margin: 10, bgcolor:'transparent'},
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, alignself: 'stretch', text:'Active Devices'}),
-                    label({fontsize:10, fgcolor:'#333', bgcolor:'transparent', height:30, flex: 0, alignself: 'stretch', text:'(run ./examples/extdemo/bin/createdevices.rb to simulate device activity)'}),
+                    label({fontsize:10, fgcolor:'#333', bgcolor:'transparent', height:30, flex: 0, alignself: 'stretch', text:'(run ./docs/slides/extendingdreem/bin/createdevices.rb to simulate device activity)'}),
                     view({flex: 1, bgcolor: '#D1CAB0', cornerradius: 0}, cells)
                 )
             )

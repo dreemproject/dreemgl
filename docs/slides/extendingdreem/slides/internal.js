@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label, $examples$guides$components$, movie, $widgets$, jsviewer) {
+define.class(function ($ui$, view, label, $docs$examples$components$, movie, $widgets$, jsviewer) {
 
 	this.attributes = {
 		movies: Config({type: Array}),
@@ -30,9 +30,9 @@ define.class(function ($ui$, view, label, $examples$guides$components$, movie, $
 			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'Proxy through service when everything can be handeled entirely via nodejs!'}),
 			view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
 				view({flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), bgcolor:'transparent'},
-					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./examples/guide/search.js)'}),
+					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./docs/examples/components/search.js)'}),
 					jsviewer({flex: 1, overflow:'scroll', alignself: 'stretch', source: this.searchCode, fontsize: 14, bgcolor: "#000030", multiline: true}),
-					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./examples/extdemo/index.js)'}),
+					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./docs/examples/components/index.js)'}),
 					jsviewer({flex: 1, overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false})
 				),
 				view({flex: 1, flexdirection:'row', padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7"}, cells)

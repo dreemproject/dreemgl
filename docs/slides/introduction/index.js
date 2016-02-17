@@ -61,6 +61,7 @@ define.class('$server/composition', function(require,
 
 					view({
 						slidetitle:'This composition'
+						,bgcolor:NaN
 						,flex:1
 						,flexdirection:"column"
 						}
@@ -139,9 +140,9 @@ define.class('$server/composition', function(require,
 					0),
 					view({
 						flex:1,
-						slidetitle:'Rendering vs drawing',
+						slidetitle:'Rendering vs drawing',bgcolor:NaN,
 						},
-						view({flexdirection:'row', flex:1},
+						view({flexdirection:'row', flex:1,bgcolor:NaN},
 							jsviewer({
 								flex:1,
 								alignself:'stretch',
@@ -182,7 +183,7 @@ define.class('$server/composition', function(require,
 					0),
 					view({
 						flex:1,
-						slidetitle:'Compositions'
+						slidetitle:'Compositions',bgcolor:NaN
 						}
 						,jsviewer({
 							blarp:1,
@@ -190,7 +191,7 @@ define.class('$server/composition', function(require,
 							overflow:'scroll',
 							flex:1,
 							margin:vec4(10),
-							source: require('../rpcremote').module.factory.body.toString(),
+							source: require('$root/examples/rpcremote').module.factory.body.toString(),
 							padding:vec4(4),
 							fontsize: 14,
 							multiline: true
