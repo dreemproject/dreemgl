@@ -5,8 +5,7 @@
 
 
 define.class('$ui/view', function(require, $ui$, view, label, icon){
-// A button
-
+// internal
 
 	this.clickhandler = function(ev, v, o) {
 		if (ev) {

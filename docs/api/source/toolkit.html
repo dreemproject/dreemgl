@@ -1561,6 +1561,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1407" name="n1407">1407</a>
 <a href="#n1408" name="n1408">1408</a>
 <a href="#n1409" name="n1409">1409</a>
+<strong><a href="#n1410" name="n1410">1410</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1636,6 +1637,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">params</span>:{
                                                 <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
+                                                <span class="key">toolresize</span>:<span class="predefined-constant">false</span>,
                                                 <span class="key">fontsize</span>:<span class="integer">24</span>,
                                                 <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                                 <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">pink</span><span class="delimiter">'</span></span>
@@ -2342,7 +2344,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> vw = useview || ev.view;
 
-                <span class="keyword">if</span> (vw === <span class="local-variable">this</span> || (<span class="local-variable">this</span>.testView(vw) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span>)) {
+                <span class="keyword">if</span> (vw === <span class="local-variable">this</span> || (<span class="local-variable">this</span>.testView(vw) &amp;&amp; ev.view.toolmove !== <span class="predefined-constant">false</span> &amp;&amp; ev.view.toolresize !== <span class="predefined-constant">false</span>)) {
                         <span class="keyword">var</span> pos = vw.globalToLocal(ev.pointer.position);
                         <span class="keyword">var</span> edge = <span class="local-variable">this</span>.reticlesize;
 
