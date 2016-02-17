@@ -49,10 +49,6 @@ define.class("$ui/view", function(require, $ui$, view){
 	this.pointermove = function(p, loc, v) {
 		var main = this._main;
 
-		if (!main) {
-			main = this._main = find("main");
-		}
-
 		var value = 0;
 
 		if (this.direction === "vertical") {
@@ -75,12 +71,6 @@ define.class("$ui/view", function(require, $ui$, view){
     };
 
 	this.pointerend = function(p, loc, v) {
-		var main = this._main;
-
-		if (!main) {
-			main = this._main = find("main");
-		}
-
 		var value = this.value;
 
 		if (value < this.min) {
@@ -98,7 +88,6 @@ define.class("$ui/view", function(require, $ui$, view){
 		if (value !== this.value) {
 			this.value = value;
 		}
-
 	};
 
 	this.init = function() {
@@ -134,7 +123,6 @@ define.class("$ui/view", function(require, $ui$, view){
 		}
 
 		views.push(this._main = view({
-			name:"main",
 			drawtarget:"color",
 			position:"absolute",
 			alignitems:"stretch",
@@ -154,7 +142,7 @@ define.class("$ui/view", function(require, $ui$, view){
 			return [
 				drawer({
 					x:50,y:50,
-					height:100, width:300
+					height:70, width:200
 				},
 					view({flex:1,bgcolor:"red",justifycontent:"center",alignitems:"center"}, label({text:"<< Slide Me >>"})),
 					view({flex:1,bgcolor:"green",justifycontent:"flex-end",alignitems:"center"}, label({text:"I'm the right"})),
