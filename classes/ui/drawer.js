@@ -49,6 +49,11 @@ define.class("$ui/view", function(require, $ui$, view){
 	this.pointermove = function(p, loc, v) {
 		var main = this._main;
 
+		if (this.ignoremove === true) {
+			this.value = this._value;
+			return;
+		}
+
 		var value = 0;
 
 		if (this.direction === "vertical") {
@@ -71,6 +76,12 @@ define.class("$ui/view", function(require, $ui$, view){
     };
 
 	this.pointerend = function(p, loc, v) {
+
+		if (this.ignoremove === true) {
+			this.ignoremove = undefined;
+			return;
+		}
+
 		var value = this.value;
 
 		if (value < this.min) {
