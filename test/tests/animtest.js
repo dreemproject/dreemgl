@@ -11,11 +11,11 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					flex:1,
 					myvalue:0.,
 					pointerstart:function(){ 
-						console.log("ANIMATE!")
+						console.log("Animate!")
 						this.animate('myvalue',{1:1}).then(function(){
-							console.log('ANIMATION COMPLETE!')
+							console.log('Anim1 Complete')
 							this.animate('myvalue',{1:{value:0,motion:'inoutexpo'}}).then(function(){
-								console.log('ANIMATION COMPLETE!')
+								console.log('Anim2 Complete')
 							}.bind(this))
 						}.bind(this))
 					},
