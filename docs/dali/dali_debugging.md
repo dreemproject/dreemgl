@@ -67,14 +67,14 @@ The tools valgrind and gdb can be used to help isolate issues such as crashes an
 #### gdb
 gdb should stop running if an error is found. The 'bt' command will show a stack trace. 
 ```
-gdb --args node server.js -width 600 -height 600 -dali examples/dalitests/boxes
+gdb --args node server.js -width 600 -height 600 -dali test/dalitests/boxes
 r
 ```
 #### valgrind
 
 This may run slowly so be patient. You can ctrl-C to stop running and see any reported heap leaks.
 ```
-valgrind node server.js -width 600 -height 600 -dali examples/dalitests/boxes
+valgrind node server.js -width 600 -height 600 -dali test/dalitests/boxes
 ```
 
 Results of running valgrind on the boxes example

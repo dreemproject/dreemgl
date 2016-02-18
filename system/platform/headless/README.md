@@ -13,7 +13,7 @@ node server.js -nomoni -headless <COMPOSITION>
 The COMPOSITION is the location of the COMPOSITION relative to the top of the DreemGL repository. The ```-nomoni``` argument tells the node server not to reload the application when it attempts to close. For example, to run the test ```test_initialization.js```
 
 ```javascript
-node server.js -nomoni -verbose -headless tests/test_initialization
+node server.js -nomoni -verbose -headless test/test_initialization
 ```
 
 The output is
