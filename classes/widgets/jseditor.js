@@ -160,9 +160,11 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 					out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
 					out.array[v + 3] = m3
 				}
+				out.length += str.length
 				buf.char_count += str.length;
 			})
-			this.postMessage(buf.out.array, buf.out)
+
+			this.postMessage({length:buf.out.length, array:buf.out.array}, [buf.out.array.buffer])
 		}
 	})
 
@@ -171,8 +173,50 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 		// if we get source back yay
 		this.worker.onmessage = function(msg){
 			// alright lets run the diff step.
+			// shall we just swap the entire fucker out?... no that breaks undo
+			// ah right.
+			// we dont want that.
+			// but we might have to update the typed array in a tight loop.
+			// get the start diff
+			var dt = Date.now()
+			var start = 0
+			var data_new = msg.array
+			var mesh = this.shaders.typeface.mesh
+			var data_old = mesh.array
+			var len_new = msg.length
+			var len_old = mesh.length / 6
+			for(;start < len_new && start < len_old; start++){
+				var off_old = start * 10 * 6
+				var off_new = start * 4
+				if(data_new[off_new] !== data_old[off_old + 6]) break
+				// copy data over
+				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
+				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
+				data_old[off_old + 8] = data_old[off_old + 18] = data_old[off_old + 28] = 
+				data_old[off_old + 38] = data_old[off_old + 48] = data_old[off_old + 58] = data_new[off_new+2]
+				data_old[off_old + 9] = data_old[off_old + 19] = data_old[off_old + 29] = 
+				data_old[off_old + 39] = data_old[off_old + 49] = data_old[off_old + 59] = data_new[off_new+3]
+			}
+			var end_old = len_old - 1, end_new = len_new - 1
+			for(;end_old > start && end_new > start; end_old--, end_new--){
+				var off_old = end_old * 10 * 6
+				var off_new = end_new * 4
+				if(data_new[off_new] !== data_old[off_old + 6]) break
+			}
+			
+			// alright we now have a range by which to 'insert' things or remove them
+			// range in the new buffer is start->end_new
+			// range in the old buffer is start->end_old
+			var new_range = end_new - start
+			var old_range = end_old - start 
 
-			//console.log(msg)
+			mesh.setLength(start)
+			var buf = {struct:1, start:start, array:data_new, length:len_new}
+			mesh.add(buf)
+
+			mesh.clean = false
+			this.redraw()
+
 		}.bind(this)
 	}
 /*
