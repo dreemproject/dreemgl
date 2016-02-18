@@ -28,96 +28,98 @@ define.class("$ui/view", function(require,
 	this.bordercolor = vec4(0.3,0.6,0.8,0.4);
 	this.borderwidth = 1;
 
+	this.defaultcomponents = {
+		Views:[
+			{
+				label:"View",
+				icon:"sticky-note",
+				desc:"A rectangular view",
+				classname:"view",
+				classdir:"$ui$",
+				params:{
+					height:70,
+					width:80,
+					pickalpha:-1,
+					bgcolor:'purple'
+				}
+			},
+			{
+				label:"Text",
+				text:"Aa",
+				desc:"A text label",
+				classname:"label",
+				classdir:"$ui$",
+				params:{
+					fontsize:44,
+					pickalpha:-1,
+					bgcolor:"transparent",
+					fgcolor:'lightgreen',
+					text:'Howdy!'
+				}
+			},
+			{
+				label:"Check Button",
+				icon:"check-square",
+				desc:"A check button",
+				classname:"checkbox",
+				classdir:"$ui$",
+				params:{
+					tooldragroot:true,
+					toolresize:false,
+					fontsize:24,
+					pickalpha:-1,
+					fgcolor:'pink'
+				}
+			},
+			{
+				label:"Button",
+				icon:"square",
+				desc:"A basic button",
+				classname:"button",
+				classdir:"$ui$",
+				params:{
+					tooldragroot:true,
+					fontsize:24,
+					pickalpha:-1,
+					fgcolor:'red',
+					label:'Press Me!'
+				}
+			},
+			{
+				label:"Image",
+				icon:"image",
+				desc:"An image or icon",
+				classname:"icon",
+				classdir:"$ui$",
+				params:{
+					fgcolor:'cornflower',
+					pickalpha:-1,
+					icon:'flask',
+					fontsize:80
+				}
+			}
+		],
+		//Behaviors:[
+		//	{
+		//		label:"Alert",
+		//		icon:"warning",
+		//		desc:"Adds a click event that pops up an alert dialog",
+		//		behaviors:{
+		//			onclick:function() {
+		//				alert('Beep.')
+		//			}
+		//		}
+		//	}
+		//]
+	};
+
 	this.attributes = {
 
 		// The target for the property inspector
 		inspect:Config({type:Object}),
 
 		// Components available to be dragged into compositions.
-		components:{
-			Views:[
-				{
-					label:"View",
-					icon:"sticky-note",
-					desc:"A rectangular view",
-					classname:"view",
-					classdir:"$ui$",
-					params:{
-						height:70,
-						width:80,
-						pickalpha:-1,
-						bgcolor:'purple'
-					}
-				},
-				{
-					label:"Text",
-					text:"Aa",
-					desc:"A text label",
-					classname:"label",
-					classdir:"$ui$",
-					params:{
-						fontsize:44,
-						pickalpha:-1,
-						bgcolor:"transparent",
-						fgcolor:'lightgreen',
-						text:'Howdy!'
-					}
-				},
-				{
-					label:"Check Button",
-					icon:"check-square",
-					desc:"A check button",
-					classname:"checkbox",
-					classdir:"$ui$",
-					params:{
-						tooldragroot:true,
-						toolresize:false,
-						fontsize:24,
-						pickalpha:-1,
-						fgcolor:'pink'
-					}
-				},
-				{
-					label:"Button",
-					icon:"square",
-					desc:"A basic button",
-					classname:"button",
-					classdir:"$ui$",
-					params:{
-						tooldragroot:true,
-						fontsize:24,
-						pickalpha:-1,
-						fgcolor:'red',
-						label:'Press Me!'
-					}
-				},
-				{
-					label:"Image",
-					icon:"image",
-					desc:"An image or icon",
-					classname:"icon",
-					classdir:"$ui$",
-					params:{
-						fgcolor:'cornflower',
-						pickalpha:-1,
-						icon:'flask',
-						fontsize:80
-					}
-				}
-			],
-			//Behaviors:[
-			//	{
-			//		label:"Alert",
-			//		icon:"warning",
-			//		desc:"Adds a click event that pops up an alert dialog",
-			//		behaviors:{
-			//			onclick:function() {
-			//				alert('Beep.')
-			//			}
-			//		}
-			//	}
-			//]
-		},
+		components:this.defaultcomponents,
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
 		// and views can be resized and manipulated.  In 'live' mode views lock into place the composition regains
@@ -143,6 +145,32 @@ define.class("$ui/view", function(require,
 
 		// internal
 		selected:Config({persist:true, value:[], meta:"hidden"})
+	};
+
+	this.init = function() {
+		this.sourcefile = astio(this.screen.composition.constructor);
+		this.sourcefile.onchange = this.onchange.bind(this);
+
+		this.onselected(null, this.selected, this);
+
+		this.ensureDeps();
+		this.screen.globalpointerstart = this.globalpointerstart.bind(this);
+		this.screen.globalpointermove = this.globalpointermove.bind(this);
+		this.screen.globalpointerend = this.globalpointerend.bind(this);
+		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
+		this.screen.globalkeydown = this.globalkeydown.bind(this);
+	};
+
+	this.onchange = function(ev,src,o) {
+		//console.log("[COMMIT]", src);
+
+		var msg = {
+			rpcid: 'this',
+			method: 'commit',
+			type: 'method',
+			args:[src]
+		};
+		this.rpc.__host.callRpcMethod(msg);
 	};
 
 	this.onselected = function(ev,v,o) {
@@ -173,10 +201,12 @@ define.class("$ui/view", function(require,
 	};
 
 	this.onselection = function(ev,v,o) {
+		var i;
+
 		var inspector = this.find('inspector');
 
 		if (this.__selrects) {
-			for (var i = 0; i < this.__selrects.length; i++) {
+			for (i = 0; i < this.__selrects.length; i++) {
 				var selrect = this.__selrects[i];
 				selrect.closeOverlay();
 			}
@@ -198,7 +228,7 @@ define.class("$ui/view", function(require,
 
 			var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
 
-			for (var i=0;i<filtered.length;i++) {
+			for (i=0;i<filtered.length;i++) {
 				var target = filtered[i];
 				var selectrect = this.screen.openOverlay(this.selectedrect);
 				selectrect.target = target;
@@ -652,18 +682,6 @@ define.class("$ui/view", function(require,
 				this.commit();
 			}
 		}
-	};
-
-	this.init = function () {
-		this.sourcefile = astio(this.screen.composition.constructor);
-		this.onselected(null, this.selected, this);
-
-		this.ensureDeps();
-		this.screen.globalpointerstart = this.globalpointerstart.bind(this);
-		this.screen.globalpointermove = this.globalpointermove.bind(this);
-		this.screen.globalpointerend = this.globalpointerend.bind(this);
-		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
-		this.screen.globalkeydown = this.globalkeydown.bind(this);
 	};
 
 	this.ensureDeps = function() {
@@ -1133,72 +1151,52 @@ define.class("$ui/view", function(require,
 	};
 
 	this.commit = function() {
-		var changes = this.__changes;
-		if (changes && changes.length) {
-			this.__changes = [];
+		if (this.__changes && this.__changes.length) {
 			this.sourcefile.fork(function(src) {
-				for (var i=0;i<changes.length;i++){
-					var changeset = changes[i];
-
-					src.reset();
-					if (changeset.changes) {
-						for (var j=0;j<changeset.changes.length;j++) {
-							var change = changeset.changes[j];
-							src.reset();
-							src.seekNodeFor(changeset.view);
-							src.setArgValue(change.key, change.value);
-						}
-					} else if (changeset.remove) {
-						var v = changeset.remove;
-
-						var node = src.nodeFor(v);
-
-						src.seekNodeFor(v.parent);
-						src.removeArgNode(node);
-					} else if (changeset.param) {
-						var param = changeset.param;
-						var def = src.build.Def(src.build.Id(param));
-						var main = this.sourcefile.nodeFor(this.screen.composition);
-						if (changeset.pos) {
-							main.params.splice(changeset.pos, 0, def)
+				while (this.__changes.length) {
+					var changes = this.__changes;
+					this.__changes = [];
+					for (var i=0;i<changes.length;i++){
+						var changeset = changes[i];
+						src.reset();
+						if (changeset.changes) {
+							for (var j=0;j<changeset.changes.length;j++) {
+								var change = changeset.changes[j];
+								src.reset();
+								src.seekNodeFor(changeset.view);
+								src.setArgValue(change.key, change.value);
+							}
+						} else if (changeset.remove) {
+							var v = changeset.remove;
+							var node = src.nodeFor(v);
+							src.seekNodeFor(v.parent);
+							src.removeArgNode(node);
+						} else if (changeset.param) {
+							var param = changeset.param;
+							var def = src.build.Def(src.build.Id(param));
+							var main = this.sourcefile.nodeFor(this.screen.composition);
+							if (changeset.pos) {
+								main.params.splice(changeset.pos, 0, def)
+							} else {
+								main.params.push(def)
+							}
+						} else if (changeset.parent) {
+							src.seekNodeFor(changeset.parent);
+							if (changeset.child) {
+								src.pushArg(src.nodeFor(changeset.child));
+							}
+							if (changeset.params) {
+								var item = changeset.params;
+								var obj = src.build.Call(src.build.Id(item.classname), [src.build.Object(item.params)]);
+								src.pushArg(obj);
+							}
 						} else {
-							main.params.push(def)
+							console.log("bad change?", changeset)
 						}
-					} else if (changeset.parent) {
-						src.seekNodeFor(changeset.parent);
-						if (changeset.child) {
-							src.pushArg(src.nodeFor(changeset.child));
-						}
-						if (changeset.params) {
-							var item = changeset.params;
-							var obj = src.build.Call(src.build.Id(item.classname), [src.build.Object(item.params)]);
-							src.pushArg(obj);
-						}
-					} else {
-						console.log("bad change?", changeset)
 					}
-
 				}
 			}.bind(this));
 		}
-
-		if (this.__changes && this.__changes.length) {
-			console.log('oops, more changes arrived', this.__changes.length)
-			this.commit()
-		} else {
-			//write back to server
-			var source = this.sourcefile.stringify();
-			//console.log("[COMMIT]", source);
-
-			var msg = {
-				rpcid: 'this',
-				method: 'commit',
-				type: 'method',
-				args:[source]
-			};
-			this.rpc.__host.callRpcMethod(msg);
-		}
-
 	};
 
 	define.class(this,"selectorrect",view,function() {

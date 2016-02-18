@@ -24,10 +24,10 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 		this.reset();
 		callback(this);
 		// lets reserialize
-		this.last_source = this.stringify();
+		var last = this.last_source = this.stringify();
 		this.notifyAssignedAttributes();
 		// save to disk.
-		this.emit('change')
+		this.emit('change', {value:last})
 	};
 
 	this.nodeFor = function(o) {
@@ -140,7 +140,6 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 			// No Id, but found an Object
 
 			args = {};
-
 			if (typeof(value) === "function") {
 				args[name] = "REPLACE";
 				newparams = this.createASTNode(args);
@@ -173,6 +172,7 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 				args[name] = value;
 				newparams = this.createASTNode(args);
 			}
+
 			if (newparams) {
 				at.args.push(newparams);
 			}
