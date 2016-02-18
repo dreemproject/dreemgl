@@ -452,14 +452,14 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 	// animation
 
 	// internal, start an animation, delegated from view
-	this.startAnimationRoot = function(obj, key, value, track, promise){
+	this.startAnimationRoot = function(obj, key, value, track, resolve){
 		// ok so. if we get a config passed in, we pass that in
 		var config = obj.getAttributeConfig(key)
 
 		var first = obj['_' + key]
 
 		var anim = new Animate(config, obj, key, track, first, value)
-		anim.promise = promise
+		anim.resolve = resolve
 		var animkey = obj.getViewGuid() + '_' + key
 		this.anims[animkey] = anim
 		obj.redraw()
@@ -495,7 +495,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				anim.obj['_' + anim.key] = value.last_value
 				anim.obj.emit(anim.key, {animate:true, end:true, key: anim.key, owner:anim.obj, value:value.last_value})
 				anim.obj.redraw()
-				if(anim.promise) anim.promise.resolve()
+				if(anim.resolve) anim.resolve()
 			}
 			else{
 				// what if we have a value with storage?

@@ -1234,6 +1234,12 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
+	this.animate = function(key, track){
+		return new define.Promise(function(resolve, reject){
+			this.startAnimation(key, undefined, track, resolve)
+		}.bind(this))
+	}
+
 	this.startAnimation = function(key, value, track, resolve){
 		if(this.initialized) return this.screen.startAnimationRoot(this, key, value, track, resolve)
 		else{
