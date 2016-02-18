@@ -14,12 +14,16 @@ define.class(function(require, $server$, service){
 
 	var roadwidths = {
 			water:20, 
-			path:2,
-			ferry:4,
-			rail: 4, 
+		
+			ferry:6,
+			Ferry:6,
+			rail: 6,
+			railway: 6,	
+racetrack:6,			
 			minor_road: 6,
-			major_road: 8, 
-			path: 3, highway:12}
+			major_road: 10, 
+			path: 4, highway:15,
+			Road:200}
 	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 
@@ -51,7 +55,7 @@ define.class(function(require, $server$, service){
 		wetland:true,
 		aerodrome:true,
 		farmyard:true, scrub:true,
-		forest:true,nature_reserve:true,riverbank:true, railway:true, runway:true, farmland:true
+		forest:true,nature_reserve:false,riverbank:true, railway:true, runway:true, farmland:true
 	}
 	
 	this.noignoreuse = {
@@ -78,293 +82,21 @@ define.class(function(require, $server$, service){
 		riverbank:true,reservoir:true,
 		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true};
 
-	var watercolor = vec4("#c0d5d5");
 	
-	var mapstyle = this.mapstyle = {
-		ferry:{
-			roadcolor: vec4(0.6784313917160034,0.8470588326454163,0.9019607901573181,1),
-		},
-		riverbank:{color1:watercolor},
-		marina:{color1:watercolor},
-		reservoir:{color1:watercolor},
-		stream:{color1:watercolor},
-		canal:{color1:watercolor},
-		lake:{color1:watercolor},
-		playa:{color1:vec4("#f0f0c0")},
-		river:{color1:watercolor},
-		basin:{color1:watercolor},
-		swimming_pool:{color1:watercolor},
-		sea:{
-			color1:watercolor
-		},
-		ocean:{
-			color1:watercolor
-		},
-		
-		earth:{
-			color1: vec4("#c0c0c0"),
-			
-		},
-		national_park:{
-			color1:vec4("lime"),
-			color2:0.22
-		},
-		park:{
-			offset:-7,
-			color1: vec4("#bad6ab",1),
-			color2: vec4(0.003921568859368563,0.19607843458652496,0.125490203499794,1),
-		},
-		aerodrome:{
-		},
-		residential:{
-			color1: vec4("#cdc7bf"),
-		},
-		industrial:{
-			color1:vec4("#202020"),
-			color2:vec4("#d0d0d0")
-		},
-		recreation_ground:{
-			offset:-18.8,
-			color1:vec4("#8080f0"),
-			color2:vec4("#6060f0")
-		},
-		scrub:{
-		},
-		wetland:{
-			offset:-18.5,
-			color1: vec4("darkgreen"),
-			color2: vec4("darkblue")
-
-		},
-		beach:{
-			offset:-19,
-			color1: vec4("#f0f0a0"),
-			color2: vec4("yellow")
-
-		},
-		nature_reserve:{
-			offset:-18,
-			color1: vec4("green"),
-			color2: vec4("green")
-		},
-		commercial:{
-		},
-		golf_course:{
-		},
-		farm:{
-			color1: vec4(1,1,0.10000000149011612,1),
-			color2: vec4(1,1,0.10000000149011612,1),
-		},
-		grass:{
-			offset:-18,
-			color1:vec4("lightgreen"),
-		},
-		sports_centre:{
-			offset:-23,
-			color1: vec4(1,0,0,1),
-			color2: vec4(1,1,1,1),
-		},
-		farmland:{
-			color1:vec4("#808010"),
-			color2:vec4("#606020")
-		},
-		hospital:{
-		},
-		retail:{
-			offset:27,
-			color1: vec4(0,0,1,0.5),
-			color2: vec4(0,0,1,0.5),
-		},
-		allotments:{
-		},
-		runway:{
-			offset:-20,
-
-				color1:vec4("gray"),
-			color2:vec4("#d0d0d0")
-		},
-		forest:{
-			offset:-30,
-			color1: vec4(0.003921568859368563,0.19607843458652496,0.125490203499794,1),
-			color2: vec4(0,0,0,1),
-		},
-		meadow:{
-		},
-		parking:{
-			offset:-8,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
-		},
-		plant:{
-			color1:vec4("#208020"),
-			color2:vec4("#208020")
-		},
-		pitch:{
-			offset:-17,
-			color1: vec4(0.7490196228027344,1,0,1),
-			color2: vec4(0,0.501960813999176,0,1),
-		},
-		cemetery:{
-			color1: vec4("gray"),
-			color2: vec4("darkgray")
-		},
-		zoo:{
-		},
-		attraction:{
-		},
-		university:{
-			offset:-21,
-			color1: vec4(1,0,0,1),
-			color2: vec4(0,0,0,1),
-		},
-		apron:{
-		},
-		military:{
-		},
-		wastewater_plant:{
-		},
-		playground:{
-			offset:-19,
-			color1: vec4("lightblue"),
-			color2: vec4(1,0,0,1),
-		},
-		stadium:{
-		},
-		railway:{
-		},
-		rail:{
-			roadcolor: vec4("pink")
-		},
-		garden:{
-			offset:-14,
-			color1: vec4(0,0.501960813999176,0,1),
-			color2: vec4(0.250980406999588,0.8156862854957581,0.501960813999176,1),
-		},
-		farmyard:{
-			color1:vec4("#808010"),
-			color2:vec4("#606020")
-		},
-		generator:{
-		},
-		college:{
-		},
-		pedestrian:{
-			offset:-9,
-			color1: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
-			color2: vec4(1,1,0,1),
-		},
-		school:{
-		},
-		substation:{
-		},
-		petting_zoo:{
-		},
-		wood:{
-			color1:vec4("#208020"),
-			color2:vec4("#106010")
-		},
-		common:{
-			offset:24,
-			color1: vec4(1,1,1,1),
-			color2: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-		},
-		village_green:{
-			offset:-15,
-			color1: vec4(0,0.501960813999176,0,1),
-			color2: vec4(0,0.501960813999176,0,1),
-		},
-		prison:{
-		},
-		major_road:{
-			roadcolor: vec4("#f8faca",1),
-		},
-		highway:{
-			roadcolor: vec4("#f4c0ab",1),
-		},
-		minor_road:{
-			roadcolor: vec4("white"),
-		},
-		undefined:{
-		},
-		works:{
-		},
-		protected_area:{
-			color1: vec4("red"),
-			color2: vec4("green")
-		},
-		theme_park:{
-		},
-		path:{
-			roadcolor: vec4(0.8156862854957581,0.8156862854957581,0.8156862854957581,1),
-		},
-		quarry:{
-			color1: vec4("gray"),
-			color2: vec4("black")
-		},
-		bridge:{
-			offset:-22,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(1,1,1,1),
-		},
-		breakwater:{
-			offset:-20,
-			color1: watercolor,
-			color2: 0,
-		},
-		water:{
-			offset:0,
-			color1: watercolor,
-			color2: 0,
-		},
-		building:{
-			color1:vec4("#cac0b6"),
-			color2:vec4("white")
-		},
-		apartments:{
-		},
-		garages:{
-		},
-		storage_tank:{
-		},
-		pier:{
-			offset:-5,
-			color1: vec4(0.250980406999588,0.250980406999588,0.250980406999588,1),
-			color2: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-		},
-		place_of_worship:{
-		},
-		water_works:{
-		},
-		cinema:{
-		},
-		taxiway:{
-		},
-		fuel:{
-		},
-		footway:{
-			offset:-12,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(1,1,0,1),
-		},
-		groyne:{
-		},
-		roller_coaster:{
-		},
-		default:
-		{
-			color1:vec4('red'),
-			color2:vec4('blue')
-		}
-	}
-
+	
+	var styleset = require("./mapstyle.js")();
+	
+	var mapstyle = this.mapstyle = 	styleset.mapstyle;
+	
 	if (true){
 
-	for (var a in this.mapstyle){
-		var st = this.mapstyle[a];
-	//	if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
-	//	if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
-	
-	}}
+		for (var a in this.mapstyle){
+			var st = this.mapstyle[a];
+		//	if (st.color1) st.color1 = vec4.desaturate(st.color1,0.85);
+		//	if (st.color2) st.color2 = vec4.desaturate(st.color2,0.84);
+		
+		}
+	}
 
 	this.dumpkindset = function(){
 		var mapstylestring = "var mapstyle = {\n";
@@ -552,14 +284,17 @@ define.class(function(require, $server$, service){
 			var off = 0;
 			var land = areas[i];
 
-			var color1 = vec4(1,1,0,1);;
+			var color1 = vec4(1,0,1,1);;
 			//var color2 = ;
 			var t = mapstyle[land.kind];
-			if (!t) {t = mapstyle["default"];console.log(land.kind);};
+			if (!t) {t = mapstyle["default"];console.log("defaulting for:", land.kind);};
 			
-			if (t.color1) color1 = t.color1;else UnhandledKindSet[land.kind] = "land - no color1";
+			if (t.color1) color1 = t.color1;else {
+				UnhandledKindSet[land.kind] = "land - no color1";
+				console.log("no color for: ", land.kind);
+			}
 			//if (t.color2) color2 = t.color2;else UnhandledKindSet[land.kind] = "land - no color2 ";
-			if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = "land - no offset"
+			//if (t.offset) off = t.offset;else UnhandledKindSet[land.kind] = "land - no offset"
 
 			if (land.arcs){
 				for(var j = 0;j<land.arcs.length;j++){
@@ -604,7 +339,8 @@ define.class(function(require, $server$, service){
 		return mesh;
 	}
 
-	this.buildRoadPolygonVertexBuffer = function(roads){
+	this.buildRoadPolygonVertexBuffer = function(roads, zoomlevel){
+		if (!zoomlevel) zoomlevel = 10;
 		var mesh = RoadVertexStruct.array();
 		var z = 10;
 		for (var i = 0;i<roads.length;i++){
@@ -615,8 +351,13 @@ define.class(function(require, $server$, service){
 
 			var st = mapstyle[R.kind];
 			if (!st) st = mapstyle["default"];
-			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else UnhandledKindSet[R.kind] = "road" ;
+			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else
+			{
+				console.log("no width:", R.kind);
+				UnhandledKindSet[R.kind] = "road" ;
+			}
 			
+			linewidth *= Math.pow(2.0, zoomlevel - 13);
 			if (st.roadcolor){
 				color = st.roadcolor
 			}else {
@@ -954,7 +695,7 @@ define.class(function(require, $server$, service){
 		//target.landuses = Lset;
 
 		var empty = []
-		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(Rset);
+		target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer(Rset, target.z);
 		//target.roadVertexBuffer = this.buildRoadPolygonVertexBuffer([]);
 		target.buildingVertexBuffer = this.buildBuildingVertexBuffer(Bset);
 

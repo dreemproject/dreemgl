@@ -678,14 +678,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 	define.class(this,"labeltile", "$ui/labelset", function(){
 		this.polygonoffset = 10.0;
-		this.outline = true;
-		this.outline_thickness = 4;
+		this.outline = false;
+		this.outline_thickness = 0;
 		this.is = tilebasemixin;
 		this.outline_color = "black" ;
-
+		this.fgcolor = "black" 
 		this.textpositionfn = function(pos){
-			idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-			rpos = vec2(1,-1)*pos.xz + (idxpos - this.tiletrans)* this.tilesize;
+		//	idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+			rpos = vec2(1,-1)*pos.xz ;
 			rpos.y += pos.y;
 			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
 			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
@@ -694,6 +694,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 		}
 
+		this.textstyle = function(style, pos, tag){
+		style.fgcolor = "black";
+		style.outlinecolor = "black" ;
+		style.outline_thickness = 120.0;
+		style.outline = false;
+		//return vec4(tag.yzw, 1.0);
+	}
+	
 		this.resetbuffer = function(){
 			this.labels = [];
 		}
@@ -708,10 +716,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			var thelabels = [];
 			var rankfontsizes = {
 				0:60,
-				1:40,
-				2:30,
-				3:20,
-				4:-1,
+				1:55,
+				2:50,
+				3:45,
+				4:40,
 				5:-1,
 				6:-1,
 				7:-1
@@ -724,8 +732,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 					f = rankfontsizes[l.scalerank] * Math.pow(2, this.layeroffset-1);
 					//f+= l.scalerank?(100/l.scalerank):0;
 				}
-				if ( f >-1){
-					var l2 = {text:l.name,fontsize:f,outline:false, color:vec4("black"), outlinecolor:vec4("white"), pos:vec3(l.x, -11,l.y)};
+				if (f >-1){
+					var l2 = {text:l.name,fontsize:f,outline:false, color:vec4("black"), outlinecolor:vec4("black"), pos:vec3(l.x, -11,l.y)};
 					thelabels.push(l2);
 				}
 			}
@@ -758,10 +766,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				var sidevec = mesh.pos.zw
 				var side = mesh.geom.x
 				var dist = mesh.geom.y
-				var linewidth = mesh.geom.z *  pow(2.0, view.layeroffset - view.fraczoom -2);
+				var linewidth = mesh.geom.z ;//*  pow(2.0, view.layeroffset - view.fraczoom -2);
 				var possrc = mesh.pos.xy + sidevec * side * linewidth*0.5;
 
-				idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
+				//idxpos = (  view.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 
 				var pos = vec2(1,-1)*possrc.xy ;//+ (idxpos - view.tiletrans) * view.tilesize;
 
@@ -793,8 +801,6 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 			this.color = function(){
 				var texcol = mesh.color
-				texcol.xyz*=0.9;
-				//return "black" ;
 				var prefog = mix(texcol, vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
