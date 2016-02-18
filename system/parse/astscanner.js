@@ -44,7 +44,12 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 		return this;
 	};
 
-	this.scan = function() {
+	this.scan = function(newstages) {
+		if (newstages) {
+			this._unstage();
+			this._stages = newstages;
+		}
+
 		while (this._prepare()) {
 			this.walk(this.at);
 		}
@@ -56,7 +61,8 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 			var type = this._stage.type;
 			this._stage = undefined;
 			if (type) {
-				delete this[type];
+//				delete this[type];
+				this[type] = baseclass[type];
 			}
 		}
 	};
@@ -69,10 +75,14 @@ define.class("$system/parse/onejswalk", function(baseclass, require) {
 				if (stage.hasOwnProperty(prop) && prop[0] != '_') {
 					var val = stage[prop];
 					var nodeval = node[prop];
-					if (typeof(val) === "object") {
-						match = match && this._match(val, nodeval)
+					if (val) {
+						if (typeof(val) === "object") {
+							match = match && this._match(val, nodeval)
+						} else {
+							match = match && nodeval === val
+						}
 					} else {
-						match = match && nodeval === val
+						// we just ignore empty keys in search term for now since onejsgen will create them regardless
 					}
 				}
 				if (!match) {

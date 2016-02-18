@@ -3,15 +3,21 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$server/composition",function(module, $server$, service, $ui$, screen, view, $flow$services$, map, omdb, webrequest, $flow$controllers$, xypad, knob, keyboard, dpad, $flow$displays$, shaderviz, labtext, inputs, outputs, album) {
+//Pure JS based composition
+define.class('$server/composition', function(require, $ui$, screen, view, blur){
 
-	define.classPath(this)
-
-	this.render = function() {
-		return [
-			xypad({name:"xypad0", flowdata:{x:41, y:354}}),
-			shaderviz({name:"shaderviz", flowdata:{x:445, y:109}, shaderpos:wire("this.rpc.xypad0.pointerpos")})
-		]
-	}
-}
-)
+	this.render = function(){ return [
+		screen({clearcolor:'#484230', flexdirection:'row'},
+			view({
+				// each viewport 2D has a compose function
+				// in which it returns a composition structure
+				fx: function(){
+					//how this thing renders
+					
+				},
+				init: function(prev){
+				}
+			})
+		)
+	]}
+})

@@ -172,6 +172,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		if (this.icon && this.icon.length > 0){
 			this.iconres = icon({
+				drawtarget:"color",
 				fgcolor:this.textcolor,
 				fontsize: this.fontsize,
 				icon: this.icon
@@ -181,6 +182,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 		if (this.text && this.text.length > 0){
 			this.buttonres = label({
+				drawtarget:"color",
 				marginleft:this.iconres?4:0,
 				//bgcolor:this.bgcolor,
 				fontsize: this.fontsize,

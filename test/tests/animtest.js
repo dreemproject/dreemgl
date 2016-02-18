@@ -3,14 +3,32 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-//Pure JS based composition
-define.class(function(require, $server$, composition, $ui$, screen, view, $widgets$, jseditor){
+define.class('$server/composition', function(require, $ui$, screen, view){
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
-			jseditor({
-				flex:1, overflow:'scroll',fontsize:15,
-				source:require('./jseditortest').module.factory.body.toString()
-			})
+			view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
+				view({
+					flex:1,
+					myvalue:0.,
+					pointerstart:function(){ 
+						console.log("Animate!")
+						this.animate('myvalue',{1:1}).then(function(){
+							console.log('Anim1 Complete')
+							this.animate('myvalue',{1:{value:0,motion:'inoutexpo'}}).then(function(){
+								console.log('Anim2 Complete')
+							}.bind(this))
+						}.bind(this))
+					},
+					pointerend:function(){},
+					bgcolorfn:function(mesh){
+						//return vec4(0,1,0,1)
+						// gradient
+
+						// plasma
+						return pal.pal1(noise.noise3d(vec3(mesh.x*10*myvalue,mesh.y*10*myvalue,0.1*time)))
+					}
+				})
+			)
 		)
 	]}
 })

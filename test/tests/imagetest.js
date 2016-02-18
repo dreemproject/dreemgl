@@ -3,6 +3,18 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition',function(){	this.render = function(){ return [
+define.class('$server/composition', function(require, $ui$, screen, view){
+	this.render = function(){ return [
+		screen({name:'default', clearcolor:vec4('black')},
+			view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
+				view({
+					borderradius:100,
+					borderwidth:10,
+					bordercolor:'red',
+					bgimage:require('$resources/textures/noise.png'),
+					flex:1
+				})
+			)
+		)
 	]}
 })

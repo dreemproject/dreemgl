@@ -345,12 +345,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// lets add some strings
 		this.add = function(string, im1, im2, im3){
 			var length = string.length
+			this.ensureSize(this.length + length)
+
 			var m1 = im1, m2 = im2, m3 = im3
 			// alright lets convert some text babeh!
 			var array
 			if(string.struct) array = string.array
 			var glyphs = this.font.glyphs
-			for(var i = 0; i < length; i++){
+			for(var i = string.start || 0; i < length; i++){
 				var unicode
 				if(array){
 					unicode = array[i * 4]
@@ -531,6 +533,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			}
 			out.length = x>>2
 			return out
+		}
+
+		this.setLength = function(len){
+			var rect = this.charCoords(len)
+			this.length = len * 6
+			this.add_x = rect.x
+			this.add_y = rect.y
 		}
 
 		this.insertText = function(off, text){
