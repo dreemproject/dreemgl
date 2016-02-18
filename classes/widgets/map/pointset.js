@@ -60,7 +60,7 @@ define.class('$ui/view', function(require, $$, geo){
 				var meters = geo.latLngToMeters(latlong[0], latlong[1])
 				// TODO(aki): move to correct position on transformed map
 				var geopos = vec2(meters[0] , meters[1])
-				GLGeom.createCone(100,10, -500, 20, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
+				GLGeom.createCone(20,1, -500, 20, function(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
 					this.mesh.push(v1, geopos, n1, t1, i);
 					this.mesh.push(v2, geopos, n2, t2, i);
 					this.mesh.push(v3, geopos, n3, t3, i);

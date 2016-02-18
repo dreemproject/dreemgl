@@ -20,8 +20,8 @@ define.class(function(require, $server$, service){
 			rail: 6,
 			railway: 6,	
 racetrack:6,			
-			minor_road: 6,
-			major_road: 10, 
+			minor_road: 4,
+			major_road: 6, 
 			path: 4, highway:15,
 			Road:200}
 	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
@@ -371,6 +371,10 @@ racetrack:6,
 			//if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);
 			// linewidth *= Math.pow(2, this.view.zoomlevel-14);
 
+			var showcaps = false;
+			var showfill = true;
+			var showcorner = true;
+			
 			for(var rr = 0;rr<R.arcs.length;rr++){
 		
 				
@@ -396,7 +400,7 @@ racetrack:6,
 				var dist2 = 0;
 				var lastsdelta = vec2(0,0);
 			
-			
+			if (showcaps){
 				mesh.push(
 								nx,
 								ny,
@@ -478,7 +482,7 @@ racetrack:6,
 								colorid, 
 								color[0], color[1], color[2], color[3]);
 
-				
+			}
 				var lastdelta = vec2(0);
 				
 				
@@ -493,10 +497,10 @@ racetrack:6,
 
 					
 					var dist2 = dist +  vec2.len(predelt);
-					if (a>1){
-						mesh.push(nx,ny,lastdelta[0], lastdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
-						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+					if (a>1 && showcorner){
+						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,   sdelta[0],    sdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+						mesh.push(nx,ny,   sdelta[0],    sdelta[1],-1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 
 						mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
 						mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
@@ -504,14 +508,15 @@ racetrack:6,
 
 					}
 					//color = vec4(0,1,0,0.2)
-					mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					if (showfill){
+						mesh.push( nx, ny,sdelta[0], sdelta[1], 1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
 					mesh.push( nx, ny,sdelta[0], sdelta[1], -1, dist ,linewidth, colorid, color[0], color[1], color[2], color[3]);
 					mesh.push(tnx,tny,sdelta[0], sdelta[1], 1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
 
 					mesh.push(nx,ny,sdelta[0], sdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
 					mesh.push(tnx,tny,sdelta[0], sdelta[1],1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
 					mesh.push(tnx,tny,sdelta[0], sdelta[1], -1, dist2,linewidth, colorid, color[0], color[1], color[2], color[3]);
-
+					}
 					lastsdelta = vec2(sdelta[0], sdelta[1]);
 					dist = dist2;
 					nx = tnx;
@@ -519,13 +524,15 @@ racetrack:6,
 					lastdelta = delta;
 				}
 				//color = vec4("red");
-				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
-				mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid, color[0], color[1], color[2], color[3]);
+				if (showcaps){
+					mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], 1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx,ny,lastsdelta[0], lastsdelta[1], -1, dist,linewidth, colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5, linewidth,colorid, color[0], color[1], color[2], color[3]);
 
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
-				mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid, color[0], color[1], color[2], color[3]);
-				mesh.push(nx,ny, pre_side_delta[0], pre_side_delta[1],  -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], 0.5, dist+linewidth*0.5 ,linewidth,colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx + lastdelta[0]*linewidth*0.5,ny + lastdelta[1]*linewidth*0.5, lastsdelta[0], lastsdelta[1], -0.5, dist+linewidth*0.5,linewidth,colorid, color[0], color[1], color[2], color[3]);
+					mesh.push(nx,ny, pre_side_delta[0], pre_side_delta[1],  -1, dist,linewidth,colorid, color[0], color[1], color[2], color[3]);
+				}
 			}
 		}
 		return mesh;
@@ -597,7 +604,19 @@ racetrack:6,
 			TargetSet.push(B);
 		}
 	}
-
+	
+	this.getRoadSortKey = function(kind){
+		if (!kind) return 0;
+		var s = mapstyle[kind];
+		if (!s) return 0;
+		if (s.sortkey) return s.sortkey;
+		return 0;
+	}
+	
+	this.sortroads = function(a, b) {
+		return a.sortkey - b.sortkey;
+	}
+	
 	this.build = function(target, sourcedata){
 		var dt = Date.now()
 		var Bset = [];
@@ -668,7 +687,7 @@ racetrack:6,
 
 		for (var i = 0;i<objects.roads.geometries.length;i++){
 			var Bb = objects.roads.geometries[i];
-			var B = { arcs:[], kind: Bb.properties.kind};
+			var B = { arcs:[], kind: Bb.properties.kind, sortkey: this.getRoadSortKey(Bb.properties.kind)};
 			var Barcs = Bb.arcs;
 			for(var k = 0;k<Barcs.length;k++){
 				B.arcs.push(Sarcs[Barcs[k]]);
@@ -676,7 +695,9 @@ racetrack:6,
 			Rset.push(B);
 			KindSet[B.kind] = true;
 		}
-
+		
+		Rset.sort(this.sortroads);
+		
 		/*  Skip transits for now..
 		for (var i = 0;i<objects.transit.geometries.length;i++){
 			var Bb = objects.transit.geometries[i];

@@ -903,6 +903,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
+		var showland = true;
 		//for(var layer = 1;layer>=0;layer--){
 		for(var layer = 0;layer<2;layer++){
 
@@ -918,12 +919,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			xe = -xs +1;
 			ys = -exth;
 			ye = -ys+1;
-
-			for(var x = xs;x<xe;x++){
-				for(var y = ys;y<ye;y++){
-					var land = this.landtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(x,y), layeroffset: layer});
-					this.tilestoupdate.push(land);
-					res3d.push(land);
+			if (showland){
+				for(var x = xs;x<xe;x++){
+					for(var y = ys;y<ye;y++){
+						var land = this.landtile({host:this, mapdata:this.dataset,fog:this.bgcolor, tilearea:tilearea, trans:vec2(x,y), layeroffset: layer});
+						this.tilestoupdate.push(land);
+						res3d.push(land);
+					}
 				}
 			}
 
