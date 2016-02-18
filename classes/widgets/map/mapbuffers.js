@@ -24,6 +24,7 @@ define.class(function(require, $server$, service){
 	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
 
 	//this.ignoreuse = {}
+	//this.displaykinds = {}
 	this.displaykinds ={
 		water: true, 
 		meadow:true, 
@@ -101,9 +102,8 @@ define.class(function(require, $server$, service){
 		},
 		
 		earth:{
-			offset:10,
-			color1: vec4("#4a644a"),
-			color2: vec4("#38523d"),
+			color1: vec4("#c0c0c0"),
+			
 		},
 		national_park:{
 			color1:vec4("lime"),
@@ -117,9 +117,7 @@ define.class(function(require, $server$, service){
 		aerodrome:{
 		},
 		residential:{
-			offset:-13,
-			color1: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
-			color2: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
+			color1: vec4("#cdc7bf"),
 		},
 		industrial:{
 			color1:vec4("#202020"),
@@ -319,7 +317,7 @@ define.class(function(require, $server$, service){
 			color2: 0,
 		},
 		building:{
-			color1:vec4("white"),
+			color1:vec4("#cac0b6"),
 			color2:vec4("white")
 		},
 		apartments:{
@@ -471,7 +469,11 @@ define.class(function(require, $server$, service){
 
 	this.buildBuildingVertexBuffer = function(buildings){
 		var mesh = BuildingVertexStruct.array(buildings.length * 30);
-
+		var buildingcolor = mapstyle.building.color1;
+		var c0 = buildingcolor[0];
+		var c1 = buildingcolor[1];
+		var c2 = buildingcolor[2];
+		
 		for(var i = 0;i<buildings.length;i++){
 			var building = buildings[i];
 
@@ -500,18 +502,18 @@ define.class(function(require, $server$, service){
 					}
 
 					c = 0.8 + 0.2 *Math.sin(Math.atan2(A2[1]-A1[1], A2[0]-A1[0]));
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid,theH);
-					mesh.push(A2[0],A2[1],0, c,c,c, 1, i,bid,theH);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid,theH);
-					mesh.push(A1[0],A1[1],0, c,c,c, 1, i,bid,theH);
-					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c,c,c, 1, i,bid,theH);
-					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c,c,c, 1, i,bid,theH);
+					mesh.push(A1[0],A1[1],0, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A2[0],A2[1],0, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A1[0],A1[1],0, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A2[0]+isox,A2[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
+					mesh.push(A1[0]+isox,A1[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
 					A1 = A2;
 				}
 				c = 1.0
 				for(var a = 0;a<tris.length;a++){
 					var atri = tris[a];
-					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c,c,c, 1, i,bid,theH);
+					mesh.push(atri[0]+isox,atri[1]+isoy,theH, c0*c,c1*c,c2*c, 1, i,bid,theH);
 				}
 			}
 		}
