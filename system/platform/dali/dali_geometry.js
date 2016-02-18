@@ -23,6 +23,8 @@ define.class(function(require, exports){
 	// internal, DaliApi is a static object to access the dali api
 	DaliApi = require('./dali_api')
 
+	var gltypes = require('$system/base/gltypes')
+
 	// Assign a unique id to each daligeometry object
 	var DaliGeometry = exports
 	DaliGeometry.GlobalId = 0
@@ -31,8 +33,9 @@ define.class(function(require, exports){
 	 * @method constructor
 	 * Create a dali.Geometry object, using triangles
 	 * You can access the dali.Geometry object as this.daligeometry
-	 * @param {number} drawtype Line drawing type. dali uses the same values
-	 *                 as webgl. The default is dali.GEOMETRY_TRIANGLES.
+	 * @param {number} drawtype Line drawing type (webgl value).
+     *                 DALi does NOT use the same values (but they are close)
+	 *                 The default is dali.GEOMETRY_TRIANGLES.
 	 */
 	this.atConstructor = function(drawtype) {
 		this.object_type = 'DaliGeometry'
@@ -46,12 +49,24 @@ define.class(function(require, exports){
 		this.id = ++DaliGeometry.GlobalId;
 		this.daligeometry = new dali.Geometry();
 
-		drawtype = drawtype || dali.GEOMETRY_TRIANGLES;
-		this.daligeometry.setGeometryType(drawtype);
+		// Map the webgl values to DALi. Triangle fan and strip are different
+		var drawmap = {};
+		drawmap[gltypes.gl.POINTS]         = dali.GEOMETRY_POINTS;
+		drawmap[gltypes.gl.LINES]          = dali.GEOMETRY_LINES;
+		drawmap[gltypes.gl.LINE_LOOP]      = dali.GEOMETRY_LINE_LOOP;
+		drawmap[gltypes.gl.LINE_STRIP]     = dali.GEOMETRY_LINE_STRIP;
+		drawmap[gltypes.gl.TRIANGLES]      = dali.GEOMETRY_TRIANGLES;
+		drawmap[gltypes.gl.TRIANGLE_STRIP] = dali.GEOMETRY_TRIANGLE_STRIP;
+		drawmap[gltypes.gl.TRIANGLE_FAN]   = dali.GEOMETRY_TRIANGLE_FAN;
+
+		drawtype = drawtype || gltypes.gl.TRIANGLES;
+		var dali_drawtype = drawmap[drawtype];
+
+		this.daligeometry.setGeometryType(dali_drawtype);
 
 		if (DaliApi.emitcode) {
 			console.log('DALICODE: var ' + this.name() + ' = new dali.Geometry();');
-			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + this.drawtypeDali(drawtype) + ');');
+			console.log('DALICODE: ' + this.name() + '.setGeometryType(' + this.drawtypeDali(dali_drawtype) + ');');
 		}
 	}
 
