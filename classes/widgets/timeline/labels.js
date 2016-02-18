@@ -7,9 +7,9 @@ define.class('$ui/label', function (events, $ui$, view) {
 
 	this.position = 'absolute'
 	this.bgcolor = NaN
-	this.fgcolor = 'black'
+	this.fgcolor = 'white'
 	this.drawtarget = 'color'
-
+	this.bold = true;
 	this.attributes = {
 		format: Config({type: Number, value: wire('this.parent.format')}),
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),

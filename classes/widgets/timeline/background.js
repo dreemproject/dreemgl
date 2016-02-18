@@ -31,7 +31,7 @@ define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 		}
 		this.color = function(){
 			var col = vec4()
-			var fill = vec4(0.098, 0.098, 0.098, 1)
+			var fill = vec4("#204e4f")
 			var a = 24.0 / view.layout.height
 			var b = 48.0 / view.layout.height
 			var c = 72.0 / view.layout.height
@@ -56,10 +56,10 @@ define.class('$ui/view', function (events, $ui$, view, scrollbar) {
 				pattern = hour
 			} else {
 				pattern = hour
-				fill = vec4(0.8, 0.8, 0.8, 1)
+				//fill = vec4("red")
 			}
 			// TODO(aki): crossfade patterns
-			return mix(fill, 'white', pattern)
+			return mix(fill, '#4e4e4e', pattern)
 		}
 	}
 
