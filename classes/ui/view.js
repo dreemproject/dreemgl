@@ -357,20 +357,33 @@ define.class('$system/base/node', function(require){
 
 		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
 			// this switches the bg shader to the rounded one
-			this.bgshader_name = 'roundedrectshader'
-			this.bordershader_name = 'roundedbordershader'
-			this.roundedrect = bg_on
+			if(this._bgimage){
+				this.roundedimage = bg_on
+				this.roundedrect = false
+			}
+			else{
+				this.roundedrect = bg_on
+				this.roundedimage = false
+			}
 			this.roundedborder = border_on
+			this.hardimage = false
 			this.hardrect = false
 			this.hardborder = false
 		}
 		else {
-			this.bgshader_name = 'hardrectshader'
-			this.bordershader_name = 'hardbordershader'
-			this.hardrect = bg_on
+			if(this._bgimage){
+				this.hardimage = bg_on
+				this.hardrect = false
+			}
+			else{
+				this.hardrect = bg_on
+				this.hardimage = false
+			}
+
 			this.hardborder = border_on
 			this.roundedrect = false
 			this.roundedborder = false
+			this.roundedimage = false
 		}
 	}
 
@@ -436,11 +449,6 @@ define.class('$system/base/node', function(require){
 			this.viewportmatrix = mat4()
 		}
 
-		if(this._bgimage || this._wiredfn_bgimage){
-			// set the bg shader
-			this.hardrect = false
-			this.hardimage = true
-		}
 		// create shaders
 		this.shaders = {}
 		for(var key in this.shader_enable){
@@ -522,6 +530,7 @@ define.class('$system/base/node', function(require){
 				this.setBgImage(this._bgimage)
 			}
 		}
+		else this.setBorderShaders()
 	}
 
 	this.defaultKeyboardHandler = function(v, prefix){
@@ -548,7 +557,9 @@ define.class('$system/base/node', function(require){
 	}
 
 	this.setBgImage = function(image){
-		var img = this.shaders.hardimage.texture = Shader.Texture.fromImage(image);
+		var shader = this.shaders.hardimage || this.shaders.roundedimage
+		if(!shader) return
+		var img = shader.texture = Shader.Texture.fromImage(image);
 		if(isNaN(this._size[0])){
 			this._size = img.size
 			this.relayout()
@@ -1359,6 +1370,7 @@ define.class('$system/base/node', function(require){
 		}
 	})
 
+
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
 		this.dont_scroll_as_viewport = true
@@ -1440,6 +1452,19 @@ define.class('$system/base/node', function(require){
 			return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
 		}
 	})
+
+	// hard edged bgimage shader
+	define.class(this, 'roundedimage', this.roundedrect, function(){
+		this.dont_scroll_as_viewport = true
+		this.updateorder = 0
+		this.draworder = 0
+		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
+		this.color = function(){
+			var col = this.texture.sample(uv.xy)
+			return vec4(col.rgb, col.a * view.opacity)
+		}
+	})
+
 
 	// rounded rect shader class
 	define.class(this, 'shadowrect', this.Shader, function(){
