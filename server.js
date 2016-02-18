@@ -90,7 +90,6 @@ function main(){
 		'flow':'$root/classes/flow',
 		'testing':'$root/classes/testing',
 		'widgets':'$root/classes/widgets',
-		'compositions':'$root/compositions',
 		'examples':'$root/examples',
 		'apps':'$root/apps',
 		'docs':'$root/docs',
