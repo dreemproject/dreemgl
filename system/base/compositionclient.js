@@ -225,28 +225,4 @@ define.class('./compositionbase', function(require, baseclass){
 		})
 		console.log.apply(console, args)
 	}
-
-	var onejsparser = new OneJSParser();
-	this.ASTNode = function() {
-		if (!this._ast) {
-			var source = this.constructor.module.factory.body.toString();
-			this._ast = onejsparser.parse(source);
-		}
-		return this._ast;
-	};
-
-	this.commitAST = function () {
-		var source =  new ASTScanner(this.ASTNode()).toSource();
-
-		//console.log("[COMMIT]", source);
-
-		var msg = {
-			rpcid: 'this',
-			method: 'commit',
-			type: 'method',
-			args:[source]
-		};
-		this.rpc.__host.callRpcMethod(msg);
-	};
-
 })

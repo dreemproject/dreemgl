@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require, $ui$, icon, button, checkbox, label, view, screen, cadgrid, $widgets$, toolkit) {
+define.class("$server/composition",function(require, $ui$, checkbox, checkbox, icon, button, label, view, screen, cadgrid, $widgets$, toolkit) {
 	
 	this.render = function() {
 		return [
@@ -26,14 +26,14 @@ define.class("$server/composition",function(require, $ui$, icon, button, checkbo
 					view({height:25, width:648, bgcolor:vec4(0.860729455947876,0.864276111125946,0.19516445696353912,1), position:"absolute", x:324, y:571.0005493164062}),
 					label({fontsize:144, pickalpha:-1, bgcolor:"transparent", fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1), text:"Howdy!", position:"absolute", x:434.99993896484375, y:382.0001220703125, width:504.4921875, height:233.28000000000003, opacity:0.6}),
 					button({fontsize:24, fgcolor:"red", label:"Press Me!", position:"absolute", x:476, y:332.9999694824219}),
-					checkbox({tooldragroot:true, toolresize:false, fontsize:24, pickalpha:-1, fgcolor:"pink", position:"absolute", x:511, y:192})
+					view({height:70, width:80, pickalpha:-1, bgcolor:"purple", position:"absolute", x:500, y:100})
 				),
 				toolkit({
 					position:"absolute", 
 					visible:true, 
 					rulers:true, 
-					x:1129, 
-					y:36.00006103515625, 
+					x:1074, 
+					y:30.000076293945312, 
 					width:400, 
 					height:800
 				}

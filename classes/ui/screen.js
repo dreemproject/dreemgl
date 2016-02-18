@@ -510,17 +510,4 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 		}
 	}
 
-	this.ASTNode = function() {
-		if (!this._cachednode) {
-			var past = this.composition.ASTNode();
-
-			if (typeof(this.__constructorIndex) !== "undefined") {
-				this._cachednode = past.args[this.__constructorIndex];
-			} else {
-				this._cachednode = new ASTScanner(past, {type:"Call", fn:{ type:"Id", name:this.constructor.name }}).at;
-			}
-		}
-		return this._cachednode;
-	};
-
 })

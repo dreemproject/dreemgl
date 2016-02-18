@@ -19,7 +19,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 		var filename = this.constructor.module.filename;
 		var source = 'define.class("$server/composition",' + data + ')';
 		console.log('[COMMIT]', filename);//, source);
-
 		return fs.writeFile(filename, source);
 	};
 
