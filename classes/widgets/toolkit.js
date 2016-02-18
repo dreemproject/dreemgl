@@ -6,8 +6,7 @@
 define.class("$ui/view", function(require,
 								  $ui$, view, label, icon, treeview, button, statebutton,
 								  $widgets$, palette, propviewer,
-								  $server$, sourceset,
-                                  $system$parse$, astscanner, onejsparser){
+								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
 
@@ -29,128 +28,170 @@ define.class("$ui/view", function(require,
 	this.bordercolor = vec4(0.3,0.6,0.8,0.4);
 	this.borderwidth = 1;
 
+	this.defaultcomponents = {
+		Views:[
+			{
+				label:"View",
+				icon:"sticky-note",
+				desc:"A rectangular view",
+				classname:"view",
+				classdir:"$ui$",
+				params:{
+					height:70,
+					width:80,
+					pickalpha:-1,
+					bgcolor:'purple'
+				}
+			},
+			{
+				label:"Text",
+				text:"Aa",
+				desc:"A text label",
+				classname:"label",
+				classdir:"$ui$",
+				params:{
+					fontsize:44,
+					pickalpha:-1,
+					bgcolor:"transparent",
+					fgcolor:'lightgreen',
+					text:'Howdy!'
+				}
+			},
+			{
+				label:"Check Button",
+				icon:"check-square",
+				desc:"A check button",
+				classname:"checkbox",
+				classdir:"$ui$",
+				params:{
+					tooldragroot:true,
+					toolresize:false,
+					fontsize:24,
+					pickalpha:-1,
+					fgcolor:'pink'
+				}
+			},
+			{
+				label:"Button",
+				icon:"square",
+				desc:"A basic button",
+				classname:"button",
+				classdir:"$ui$",
+				params:{
+					tooldragroot:true,
+					fontsize:24,
+					pickalpha:-1,
+					fgcolor:'red',
+					label:'Press Me!'
+				}
+			},
+			{
+				label:"Image",
+				icon:"image",
+				desc:"An image or icon",
+				classname:"icon",
+				classdir:"$ui$",
+				params:{
+					fgcolor:'cornflower',
+					pickalpha:-1,
+					icon:'flask',
+					fontsize:80
+				}
+			}
+		],
+		//Behaviors:[
+		//	{
+		//		label:"Alert",
+		//		icon:"warning",
+		//		desc:"Adds a click event that pops up an alert dialog",
+		//		behaviors:{
+		//			onclick:function() {
+		//				alert('Beep.')
+		//			}
+		//		}
+		//	}
+		//]
+	};
+
 	this.attributes = {
 
 		// The target for the property inspector
 		inspect:Config({type:Object}),
 
 		// Components available to be dragged into compositions.
-		components:{
-			Views:[
-				{
-					label:"View",
-					icon:"sticky-note",
-					desc:"A rectangular view",
-					classname:"view",
-					classdir:"$ui$",
-					params:{
-						height:70,
-						width:80,
-						pickalpha:-1,
-						bgcolor:'purple'
-					}
-				},
-				{
-					label:"Text",
-					text:"Aa",
-					desc:"A text label",
-					classname:"label",
-					classdir:"$ui$",
-					params:{
-						fontsize:44,
-						pickalpha:-1,
-						bgcolor:"transparent",
-						fgcolor:'lightgreen',
-						text:'Howdy!'
-					}
-				},
-				{
-					label:"Check Button",
-					icon:"check-square",
-					desc:"A check button",
-					classname:"checkbox",
-					classdir:"$ui$",
-					params:{
-						tooldragroot:true,
-						toolresize:false,
-						fontsize:24,
-						pickalpha:-1,
-						fgcolor:'pink'
-					}
-				},
-				{
-					label:"Button",
-					icon:"square",
-					desc:"A basic button",
-					classname:"button",
-					classdir:"$ui$",
-					params:{
-						tooldragroot:true,
-						fontsize:24,
-						pickalpha:-1,
-						fgcolor:'red',
-						label:'Press Me!'
-					}
-				},
-				{
-					label:"Image",
-					icon:"image",
-					desc:"An image or icon",
-					classname:"icon",
-					classdir:"$ui$",
-					params:{
-						fgcolor:'cornflower',
-						pickalpha:-1,
-						icon:'flask',
-						fontsize:80
-					}
-				}
-			],
-			//Behaviors:[
-			//	{
-			//		label:"Alert",
-			//		icon:"warning",
-			//		desc:"Adds a click event that pops up an alert dialog",
-			//		behaviors:{
-			//			onclick:function() {
-			//				alert('Beep.')
-			//			}
-			//		}
-			//	}
-			//]
-		},
+		components:this.defaultcomponents,
 
 		// When in 'design' mode buttons in compositions no longer become clickable, text fields become immutable,
 		// and views can be resized and manipulated.  In 'live' mode views lock into place the composition regains
 		// it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
+
+		// The size of the reticle hot corners inside of a view
 		reticlesize: 9,
+
+		// When dragging multiple selections, `groupdrag:true` will result in all selected views dragging together
+		// whereas `groupdrag:false` will only move the view under the cursor
 		groupdrag:true,
+
+		// When dropping a multiple selection into a view, should all views be reparented into the view that the
+		// mouse is over, or should they drop exactly where they are physically locate don the canvas.
 		groupreparent:false,
+
+		//  Show or hide the rules when selecting and dragging
 		rulers:true,
 
 		// internal
 		selection:Config({value:[], meta:"hidden"}),
-		watch:Config({persist:true, value:[], meta:"hidden"})
+
+		// internal
+		selected:Config({persist:true, value:[], meta:"hidden"})
 	};
 
-	this.onwatch = function(ev,v,o) {
+	this.init = function() {
+		this.sourcefile = astio(this.screen.composition.constructor);
+		this.sourcefile.onchange = this.onchange.bind(this);
+
+		this.onselected(null, this.selected, this);
+
+		this.ensureDeps();
+		this.screen.globalpointerstart = this.globalpointerstart.bind(this);
+		this.screen.globalpointermove = this.globalpointermove.bind(this);
+		this.screen.globalpointerend = this.globalpointerend.bind(this);
+		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
+		this.screen.globalkeydown = this.globalkeydown.bind(this);
+	};
+
+	this.onchange = function(ev,src,o) {
+		//console.log("[COMMIT]", src);
+
+		var msg = {
+			rpcid: 'this',
+			method: 'commit',
+			type: 'method',
+			args:[src]
+		};
+
+		this.rpc.__host.callRpcMethod(msg);
+	};
+
+	this.onselected = function(ev,v,o) {
 		var selection = [];
-		if (v && v.length) {
-			for (var i=0;i< v.length;i++) {
-				var node = this.screen.ASTNode();
-				var astpath = JSON.parse(v[i]);
-				var search = new astscanner(node, astpath).at;
-				var find = function(a,b) {
-					if (a === b.ASTNode()) return b;
-					if (b.children) {
-						for (var i = 0;i < b.children.length;i++) {
-							var c = find(a, b.children[i]);
-							if (c) return c;
-						}
+		if (v && v.length && this.sourcefile) {
+			var find = function(a, b) {
+				if (a === this.sourcefile.nodeFor(b)) return b;
+				if (b.children) {
+					for (var i = 0;i < b.children.length;i++) {
+						var c = find(a, b.children[i]);
+						if (c) return c;
 					}
-				};
-				var found = find(search, this.screen);
+				}
+			}.bind(this);
+
+			for (var i=0;i< v.length;i++) {
+				var astpath = JSON.parse(v[i]);
+				this.sourcefile.reset();
+				var node = this.sourcefile.nodeForPath(astpath);
+				var found = find(node, this.screen);
 
 				if (found !== this.screen) {
 					selection.push(found)
@@ -161,10 +202,12 @@ define.class("$ui/view", function(require,
 	};
 
 	this.onselection = function(ev,v,o) {
+		var i;
+
 		var inspector = this.find('inspector');
 
 		if (this.__selrects) {
-			for (var i = 0; i < this.__selrects.length; i++) {
+			for (i = 0; i < this.__selrects.length; i++) {
 				var selrect = this.__selrects[i];
 				selrect.closeOverlay();
 			}
@@ -177,7 +220,7 @@ define.class("$ui/view", function(require,
 				if (this.selection.length <= 1) {
 					var selected = this.selection[0];
 					if (selected && inspector.target != selected) {
-						inspector.astarget = JSON.stringify(this.ASTNodePath(selected));
+						inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(selected));
 					}
 				} else {
 					inspector.target = null;
@@ -186,7 +229,7 @@ define.class("$ui/view", function(require,
 
 			var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
 
-			for (var i=0;i<filtered.length;i++) {
+			for (i=0;i<filtered.length;i++) {
 				var target = filtered[i];
 				var selectrect = this.screen.openOverlay(this.selectedrect);
 				selectrect.target = target;
@@ -216,7 +259,7 @@ define.class("$ui/view", function(require,
 		if (ev.view == this) {
 			var inspector = this.find('inspector');
 			if (inspector) {
-				inspector.astarget = JSON.stringify(this.ASTNodePath(this));
+				inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(this));
 			}
 			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
@@ -230,13 +273,13 @@ define.class("$ui/view", function(require,
 				h:ev.view.height
 			};
 
-			this.__resizecorner = this.edgeCursor(ev);
+			this.__resizecorner = this.resetCursor(ev);
 
 		} else if (this.testView(ev.view)) {
 
-			var astpath = JSON.stringify(this.ASTNodePath(ev.view));
-			if (!this.watch || this.watch.indexOf(astpath) < 0) {
-				this.watch = [astpath];
+			var astpath = JSON.stringify(this.sourcefile.nodePathFor(ev.view));
+			if (!this.selected || this.selected.indexOf(astpath) < 0) {
+				this.selected = [astpath];
 			}
 
 			var dragview = ev.view;
@@ -268,7 +311,7 @@ define.class("$ui/view", function(require,
 					h:dragview.height
 				};
 
-				this.__resizecorner = this.edgeCursor(ev, dragview);
+				this.__resizecorner = this.resetCursor(ev, dragview);
 				this.screen.pointer.cursor = "move";
 				dragview.cursor = "move";
 				dragview.drawtarget = "color";
@@ -341,16 +384,11 @@ define.class("$ui/view", function(require,
 			this.screen.pointer.cursor = "move";
 			ev.view.cursor = "move";
 
-//			var pos = ev.pointer.position;
-
 			if (dragview.parent) {
 				if (dragview.position != "absolute") {
 					dragview.position = "absolute";
 				}
-//				pos = dragview.parent.globalToLocal(ev.pointer.position)
 			}
-
-//			dragview.pos = vec3(pos.x - this.__startpos.x, pos.y - this.__startpos.y, 0);
 
 			if (this.selection) {
 				for (var i=0;i<this.selection.length;i++) {
@@ -453,14 +491,12 @@ define.class("$ui/view", function(require,
 			var nx = pos.x - this.__startpos.x;
 			var dx = Math.abs(evview.x - this.__originalpos.x);
 			if (dx > 0.5) {
-//				this.setASTObjectProperty(evview, "x", nx);
 				commit = true;
 			}
 
 			var ny = pos.y - this.__startpos.y;
 			var dy = Math.abs(ny - this.__originalpos.y);
 			if (dy > 0.5) {
-//				this.setASTObjectProperty(evview, "y", ny);
 				commit = true;
 			}
 
@@ -493,22 +529,12 @@ define.class("$ui/view", function(require,
 				this.setASTObjectProperty(evview, "x", nx, false);
 				this.setASTObjectProperty(evview, "y", ny, false);
 
-				var newparent = this.__lastpick.ASTNode();
-				if (!newparent.args) {
-					newparent.args = []
-				}
-
 				if (this.selection) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
-						var astnode = selected.ASTNode();
-						newparent.args.push(astnode);
 
-						var oldparent = selected.parent.ASTNode();
-						var index = oldparent.args.indexOf(astnode);
-						if (index >= 0) {
-							oldparent.args.splice(index, 1);
-						}
+						this.appendASTNodeOn(this.__lastpick, selected)
+						this.removeASTNodeFor(selected)
 
 						if (!this.groupdrag || !this.groupreparent) {
 							break;
@@ -524,7 +550,7 @@ define.class("$ui/view", function(require,
 
 				var inspector = this.find('inspector');
 				if (inspector) {
-					inspector.astarget = JSON.stringify(this.ASTNodePath(evview));
+					inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(evview));
 				}
 
 			}
@@ -573,16 +599,16 @@ define.class("$ui/view", function(require,
 			for (var i=0;i<selection.length;i++) {
 				var selected = selection[i];
 				if (selected !== this && this.testView(selected) && this.toolselect !== false) {
-					var astpath = JSON.stringify(this.ASTNodePath(selected));
+					var astpath = JSON.stringify(this.sourcefile.nodePathFor(selected));
 					watch.push(astpath);
 				}
 			}
-			this.watch = watch;
+			this.selected = watch;
 		}
 
 		if (commit) {
 			this.ensureDeps();
-			this.screen.composition.commitAST();
+			this.commit();
 		}
 
 		this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
@@ -612,13 +638,12 @@ define.class("$ui/view", function(require,
 				this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
 			}
 
-
 			text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
 			text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
 
 			this.find("current").text = text;
 
-			this.edgeCursor(ev)
+			this.resetCursor(ev)
 		}
 
 		if (this.__selectrect) {
@@ -633,14 +658,15 @@ define.class("$ui/view", function(require,
 		if (ev.code === 84 && ev.ctrl && ev.shift) {
 			this.setASTObjectProperty(this, "visible", !this.visible);
 			this.ensureDeps();
-			this.screen.composition.commitAST();
+			this.commit();
 			return;
 		}
+
 		if (!this.visible) {
 			return;
 		}
 
-		if (ev.code === 8 && this.selection) {
+		if (ev.code === 8 && this.selection && this.selection.length) {
 			var commit = false;
 			var multi = this.selection.length > 1;
 			for (var i=this.selection.length - 1; i>=0; i--) {
@@ -648,37 +674,24 @@ define.class("$ui/view", function(require,
 				var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
 
 				if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
-					var parent = v.parent.ASTNode();
-					var node = v.ASTNode();
-					var index = parent.args.indexOf(node);
-					if (index >= 0) {
-						parent.args.splice(index, 1);
-						commit = true;
-					}
+					this.removeASTNodeFor(v)
+					commit = true;
 				}
 			}
 			if (commit) {
 				this.ensureDeps();
-				this.screen.composition.commitAST();
+				this.commit();
 			}
 		}
-	};
-
-	this.init = function () {
-		this.ensureDeps();
-		this.screen.globalpointerstart = this.globalpointerstart.bind(this);
-		this.screen.globalpointermove = this.globalpointermove.bind(this);
-		this.screen.globalpointerend = this.globalpointerend.bind(this);
-		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
-		this.screen.globalkeydown = this.globalkeydown.bind(this);
 	};
 
 	this.ensureDeps = function() {
 		var at = "";
 		var arglist = [];
 		var plist = {};
-		var main = new astscanner(this.screen.composition.ASTNode(), {type:"Function"}).at;
-		//console.log('AST', main);
+
+		var main = this.sourcefile.nodeFor(this.screen.composition);
+//		console.log('AST', main);
 		if (main && main.params) {
 			for (var i=0;i<main.params.length;i++) {
 				var param = main.params[i];
@@ -752,20 +765,17 @@ define.class("$ui/view", function(require,
 
 				for (var dir in missing) {
 					if (missing.hasOwnProperty(dir)) {
-						var def;
 						var position = arglist.indexOf(dir);
 						if (position < 0) {
 							position = arglist.length;
 							arglist.push(dir);
-							def = this.createASTNode("function(" + dir + "){}", true).params[0];
-							main.params.push(def);
+							this.spliceASTParam(dir)
 						}
 						var missed = missing[dir];
 						for (var m = 0; m < missed.length; m++) {
 							var item = missed[m];
 							arglist.splice(position + 1, 0, item);
-							def = this.createASTNode("function(" + item + "){}", true).params[0];
-							main.params.splice(position + 1, 0, def)
+							this.spliceASTParam(item, position + 1)
 						}
 					}
 				}
@@ -774,7 +784,7 @@ define.class("$ui/view", function(require,
 
 	};
 
-	this.edgeCursor = function (ev, useview) {
+	this.resetCursor = function (ev, useview) {
 		var resize = false;
 
 		var vw = useview || ev.view;
@@ -879,7 +889,7 @@ define.class("$ui/view", function(require,
 							parent.setASTObjectProperty(parent, "width", parent._layout.width);
 							parent.setASTObjectProperty(parent, "height", parent._layout.height);
 							parent.ensureDeps();
-							this.screen.composition.commitAST();
+							this.commit();
 						}
 						this.screen.pointer.cursor = "arrow";
 						this.__grabpos = undefined;
@@ -904,7 +914,7 @@ define.class("$ui/view", function(require,
 					click:function(ev,v,o) {
 						this.setASTObjectProperty(this, "visible", false);
 						this.ensureDeps();
-						this.screen.composition.commitAST();
+						this.commit();
 					}.bind(this)
 				}))
 			]
@@ -923,41 +933,33 @@ define.class("$ui/view", function(require,
 
 				drop:function(ev, v, item, orig, dv) {
 					if (v) {
-						var node = v.ASTNode();
-						if (node) {
 
-							if (item.behaviors) {
-								for (var o in item.behaviors) {
-									if (item.behaviors.hasOwnProperty(o)) {
-										var behave = item.behaviors[o];
-										this.setASTObjectProperty(v, o, behave);
-									}
+						if (item.behaviors) {
+							for (var o in item.behaviors) {
+								if (item.behaviors.hasOwnProperty(o)) {
+									var behave = item.behaviors[o];
+									this.setASTObjectProperty(v, o, behave);
 								}
 							}
-
-							if (item.classname && item.params) {
-								var params = JSON.parse(JSON.stringify(item.params));
-
-								var pos = v.globalToLocal(ev.position);
-
-								params.position = 'absolute';
-								params.x = pos.x;
-								params.y = pos.y;
-								var obj = item.classname + "(" + ")";
-								var astobj = this.createASTNode(obj, true);
-								var astparams = this.createASTNode(params);
-								astobj.args.push(astparams);
-
-								node.args.push(astobj);
-							}
-
-							this.ensureDeps();
-							this.screen.composition.commitAST();
-
-							//TODO(mason) set propviewer to inspect new object on reload?
-
-
 						}
+
+						if (item.classname && item.params) {
+							var params = JSON.parse(JSON.stringify(item.params));
+
+							var pos = v.globalToLocal(ev.position);
+
+							params.position = 'absolute';
+							params.x = pos.x;
+							params.y = pos.y;
+
+							this.createASTNodeOn(v, {classname:item.classname, params:params})
+						}
+
+						this.ensureDeps();
+						this.commit();
+
+						//TODO(mason) set propviewer to inspect new object on reload?
+
 					}
 				}.bind(this)
 			})
@@ -1004,9 +1006,9 @@ define.class("$ui/view", function(require,
 				},
 				onselect:function(ev) {
 					if (ev && ev.item && ev.item.view) {
-						var astpath = JSON.stringify(this.ASTNodePath(ev.item.view));
-						if (!this.watch || this.watch.indexOf(astpath) < 0) {
-							this.watch = [astpath];
+						var astpath = JSON.stringify(this.sourcefile.nodePathFor(ev.item.view));
+						if (!this.selected || this.selected.indexOf(astpath) < 0) {
+							this.selected = [astpath];
 						}
 					}
 				}.bind(this)
@@ -1035,7 +1037,7 @@ define.class("$ui/view", function(require,
 					if (commit && this.__needscommit) {
 						this.__needscommit = false;
 						this.ensureDeps();
-						this.screen.composition.commitAST();
+						this.commit();
 					}
 				}.bind(this),
 				ontarget:function(ev,v,o) {
@@ -1052,65 +1054,71 @@ define.class("$ui/view", function(require,
 				}.bind(this),
 				astarget:Config({type:String, persist:true}),
 				onastarget:function(ev,v,o) {
-					var node = this.screen.ASTNode();
-
 					if (v) {
-						var astpath = JSON.parse(v);
-						var search = new astscanner(node, astpath).at;
-						var find = function(a,b) {
-							if (a === b.ASTNode()) return b;
+						var find = function(a, b) {
+							if (a === this.sourcefile.nodeFor(b)) return b;
 							if (b.children) {
 								for (var i = 0;i < b.children.length;i++) {
 									var c = find(a, b.children[i]);
 									if (c) return c;
 								}
 							}
-						};
-						this.target = find(search, this.screen);
+						}.bind(this);
+
+						var astpath = JSON.parse(v);
+						this.sourcefile.reset();
+						var node = this.sourcefile.nodeForPath(astpath);
+						o.target = find(node, this.screen);
 					}
-				}
+				}.bind(this)
 			})
 		));
 
 		return views;
 	};
 
-	this.ASTNodePath = function(v) {
-		var ast = v.ASTNode();
+	this.spliceASTParam = function(param, pos) {
 
-		var parentpath;
-		var index = -1;
-		if (v.parent) {
-			parentpath = this.ASTNodePath(v.parent);
-			var parent = v.parent.ASTNode();
-			index = parent.args.indexOf(ast);
-		} else {
-			parentpath = [];
+		if (!this.__changes) {
+			this.__changes = [];
 		}
 
-		var path = {
-			type:ast.type,
-			fn:{type:"Id", name:ast.fn.name},
-			_index:index
+		var change = {
+			param:param
 		};
-		parentpath.push(path);
-		return parentpath;
+
+		if (pos) {
+			change.pos = pos
+		}
+
+		this.__changes.push(change);
 	};
 
-
-	this.createASTNode = function(v, raw) {
-		if (!this.__parser) {
-			this.__parser = new onejsparser();
+	this.createASTNodeOn = function(parent, params) {
+		if (!this.__changes) {
+			this.__changes = [];
 		}
-		var string = raw ? v : JSON.stringify(v);
-		// Need to remove the "key" quotes or else will create wrong type of key objects
-		string = string.replace(/"([a-zA-Z0-9_$]+)":/g, "$1:");
 
-		// Replace the vecs with better values
-		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,]+)\]\}/g, "$1($2)");
+		this.__changes.push({ parent:parent, params:params });
+	};
 
-		var ast = this.__parser.parse(string);
-		return ast.steps[0];
+	this.appendASTNodeOn = function(parent, child) {
+
+		if (!this.__changes) {
+			this.__changes = [];
+		}
+
+		this.__changes.push({ parent:parent, child:child });
+
+	};
+
+	this.removeASTNodeFor = function(v) {
+
+		if (!this.__changes) {
+			this.__changes = [];
+		}
+
+		this.__changes.push({ remove:v });
 	};
 
 	this.setASTObjectProperty = function(v, name, value, setval) {
@@ -1122,66 +1130,73 @@ define.class("$ui/view", function(require,
 			v[name] = value;
 		}
 
-		var ast = v.ASTNode();
+		if (!this.__changes) {
+			this.__changes = [];
+		}
 
-		var astkey = new astscanner(ast, [{type:"Object"}, {type:"Id", name:name}]);
-
-		var at = astkey.at;
-
-		//console.log("SET AST VALUE ON", v.constructor.name, name, "=", value)
-
-		if (at.type === "Id") {
-			// Found Id
-			var item = astkey.atparent.keys[astkey.atindex];
-			var newval;
-
-			if (typeof(value) === "function") {
-				newval = this.createASTNode(value.toString(), true)
-			} else {
-				newval = this.createASTNode(value);
+		var changes;
+		for (var i=0;i<this.__changes.length;i++) {
+			var ch = this.__changes[i];
+			if (ch.view === v) {
+				changes = ch;
+				break;
 			}
+		}
 
-			item.value = newval;
+		if (!changes) {
+			changes = { view:v, changes:[] };
+			this.__changes.push(changes)
+		}
 
-		} else if (at.type === "Object") {
-			// No Id, but found Object
-			var args = {};
-			var item;
+		changes.changes.push({key:name, value:value});
+	};
 
-			if (typeof(value) === "function") {
-				args[name] = "REPLACE";
-				var newparams = this.createASTNode(args);
-				item = newparams.keys[0];
-
-				var newval = this.createASTNode(value.toString(), true)
-				item.value = newval
-			} else {
-				args[name] = value;
-				var newparams = this.createASTNode(args);
-				item = newparams.keys[0];
-			}
-
-			if (item) {
-				at.keys.push(item);
-			}
-
-		} else {
-			// No Object either, create new one from scrach
-			var newparams;
-			var args = {};
-			if (typeof(value) === "function") {
-				args[name] = "REPLACE";
-				newparams = this.createASTNode(args);
-				item = newparams.keys[0];
-				var newval = this.createASTNode(value.toString(), true)
-				item.value = newval
-			} else {
-				args[name] = value;
-				newparams = this.createASTNode(args);
-			}
-			if (newparams) {
-				at.args.push(newparams);
-			}
+	this.commit = function() {
+		if (this.__changes && this.__changes.length) {
+			this.sourcefile.fork(function(src) {
+				while (this.__changes.length) {
+					var changes = this.__changes;
+					this.__changes = [];
+					for (var i=0;i<changes.length;i++){
+						var changeset = changes[i];
+						src.reset();
+						if (changeset.changes) {
+							for (var j=0;j<changeset.changes.length;j++) {
+								var change = changeset.changes[j];
+								src.reset();
+								src.seekNodeFor(changeset.view);
+								src.setArgValue(change.key, change.value);
+							}
+						} else if (changeset.remove) {
+							var v = changeset.remove;
+							var node = src.nodeFor(v);
+							src.seekNodeFor(v.parent);
+							src.removeArgNode(node);
+						} else if (changeset.param) {
+							var param = changeset.param;
+							var def = src.build.Def(src.build.Id(param));
+							var main = this.sourcefile.nodeFor(this.screen.composition);
+							if (changeset.pos) {
+								main.params.splice(changeset.pos, 0, def)
+							} else {
+								main.params.push(def)
+							}
+						} else if (changeset.parent) {
+							src.seekNodeFor(changeset.parent);
+							if (changeset.child) {
+								src.pushArg(src.nodeFor(changeset.child));
+							}
+							if (changeset.params) {
+								var item = changeset.params;
+								var obj = src.build.Call(src.build.Id(item.classname), [src.build.Object(item.params)]);
+								src.pushArg(obj);
+							}
+						} else {
+							console.log("bad change?", changeset)
+						}
+					}
+				}
+			}.bind(this));
 		}
 	};
 
