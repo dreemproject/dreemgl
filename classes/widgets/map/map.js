@@ -892,14 +892,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var buildings3d = [];
 		var labels3d = [];
 		var poi3d = [];
-		var fov = 10;
+		var fov = 30;
 		 var div = 1024
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 		
 		this.camdist = (this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
 		
-		this.camdist *=0.7
+		this.camdist *=1.2
 		
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
