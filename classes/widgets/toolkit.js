@@ -137,8 +137,14 @@ define.class("$ui/view", function(require,
 		// mouse is over, or should they drop exactly where they are physically locate don the canvas.
 		groupreparent:false,
 
-		//  Show or hide the rules when selecting and dragging
+		// Show or hide the rules when selecting and dragging
 		rulers:true,
+
+        // Show guidelines when moving
+		movelines:true,
+
+		// Always center guideline crosshairs on the mouse cursor
+		hoverlines:false,
 
 		// internal
 		selection:Config({value:[], meta:"hidden"}),
@@ -336,6 +342,12 @@ define.class("$ui/view", function(require,
 
 			this.__ruler.rulermarkstart = ev.view.pos;
 			this.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,0);
+
+
+			if (this.movelines !== false) {
+				this.__ruler.lines = vec4(ev.view.pos.x, ev.view.pos.y, ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height)
+			}
+
 		}
 
 		var dragview = ev.view;
@@ -444,6 +456,7 @@ define.class("$ui/view", function(require,
 		}
 
 		if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
+			this.__ruler.lines = vec4(0,0,0,0);
 			this.__ruler.target = ev.view;
 		}
 
@@ -624,27 +637,24 @@ define.class("$ui/view", function(require,
 			text = ev.view.name + " (" + text + ")"
 		}
 
-		var pointers = ev.pointers;
-		if (!pointers && ev.pointer) {
-			pointers = [ev.pointer];
-		}
+		var pointer = ev.pointer;
 
-		for (var i=0;i<pointers.length;i++) {
-			var pointer = pointers[i];
+		var pos = ev.view.globalToLocal(pointer.position);
 
-			var pos = ev.view.globalToLocal(pointer.position);
-
-			if (this.__ruler && this.__ruler.target) {
-				this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
+		if (this.__ruler && this.__ruler.target) {
+			this.__ruler.rulermarkstart = this.__ruler.target.globalToLocal(pointer.position);
+			if (this.hoverlines !== false) {
+				var rpos = this.__ruler.target.globalToLocal(pointer.position)
+				this.__ruler.lines = vec4(rpos.x,rpos.y,0,0)
 			}
-
-			text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
-			text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
-
-			this.find("current").text = text;
-
-			this.resetCursor(ev)
 		}
+
+		text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
+		text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
+
+		this.find("current").text = text;
+
+		this.resetCursor(ev);
 
 		if (this.__selectrect) {
 			var m = this.__selectrect;
@@ -1323,26 +1333,32 @@ define.class("$ui/view", function(require,
 			rulermajorevery:10,
 			rulermajorcolor:vec4("#F9F6F4"),
 			rulerminorcolor:vec4("#B0C4DE"),
-			rulermarkstartcolor:vec4("#00CCFF"),
+			rulermarkstartcolor:vec4("#00CCDD"),
 			rulermarkstart:vec3(0,0,0),
-			rulermarkendcolor:vec4("#FF00CC"),
+			rulermarkendcolor:vec4("#DD00BB"),
 			rulermarkend:vec3(0,0,0),
-			markers:vec4(10,10,100,100)
+			linecolor:vec4("darkgray"),
+			lines:vec4(0,0,0,0),
+			linedotspacing:5.0
 		};
 
-		//this.bgcolorfn = function(p) {
-		//	var px = width * p.x;
-        //
-		//	var py = height * p.y;
-        //
-		//	if (abs(px - markers[0]) < 1.0 || abs(py - markers[1]) < 1.0) {
-		//		return vec4(0,1,0,1);
-		//	} else if (abs(px - markers[2]) < 1.0 || abs(py - markers[3]) < 1.0) {
-		//		return vec4(1,0,0,1);
-		//	} else {
-		//		return vec4(0,0,0,0);
-		//	}
-		//};
+		this.bgcolorfn = function(p) {
+			var px = width * p.x;
+
+			var py = height * p.y;
+
+			if (lines[0] > 0.0 && abs(px - lines[0]) < 0.5 && int(mod(py, linedotspacing)) == 0) {
+				return linecolor;
+			} else if (lines[1] > 0.0 && abs(py - lines[1]) < 0.5 && int(mod(px, linedotspacing)) == 0) {
+				return linecolor;
+			} else if (lines[2] > 0.0 && abs(px - lines[2]) < 0.5 && int(mod(py, linedotspacing)) == 0) {
+				return linecolor;
+			} else if (lines[3] > 0.0 && abs(py - lines[3]) < 0.5 && int(mod(px, linedotspacing)) == 0) {
+				return linecolor;
+			} else {
+				return bgcolor;
+			}
+		};
 
 		this.bordercolorfn = function(p) {
 			var atx = p.x * layout.width;

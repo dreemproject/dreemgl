@@ -8,7 +8,7 @@ define.class(function(require, $server$, composition, $ui$, screen, view, $widge
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
 			jseditor({
-				flex:1, overflow:'scroll',fontsize:12,
+				flex:1, overflow:'scroll',fontsize:15,
 				source:require('./jseditortest').module.factory.body.toString()
 			})
 		)
