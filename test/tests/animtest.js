@@ -16,7 +16,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 							console.log('ANIMATION COMPLETE!')
 							this.animate('myvalue',{1:{value:0,motion:'inoutexpo'}}).then(function(){
 								console.log('ANIMATION COMPLETE!')
-							})
+							}.bind(this))
 						}.bind(this))
 					},
 					pointerend:function(){},
