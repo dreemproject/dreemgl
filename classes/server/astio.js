@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$server/dataset", function(require, $system$parse$, onejsparser, jsformatter, astscanner, onejsgen){
-	// internal, sourcefile is a dataset-api representing a dreem source file
+	// internal, dataset-api for manipulating Dreem AST
 
 	this.attributes = {
 		change: Config({type:Event})

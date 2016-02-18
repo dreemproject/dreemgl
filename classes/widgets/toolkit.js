@@ -342,12 +342,6 @@ define.class("$ui/view", function(require,
 
 			this.__ruler.rulermarkstart = ev.view.pos;
 			this.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,0);
-
-
-			if (this.movelines !== false) {
-				this.__ruler.lines = vec4(ev.view.pos.x, ev.view.pos.y, ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height)
-			}
-
 		}
 
 		var dragview = ev.view;
@@ -402,21 +396,34 @@ define.class("$ui/view", function(require,
 				}
 			}
 
+			var ax,ay,bx,by;
 			if (this.selection) {
 				for (var i=0;i<this.selection.length;i++) {
 					var selected = this.selection[i];
-					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0)
+					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0);
+					ax = selected.pos[0];
+					ay = selected.pos[1];
+					bx = ax + selected.width;
+					by = ay + selected.height;
+
 					if (!this.groupdrag) {
 						break;
 					}
 				}
 			}
 
+
+			if (this.__ruler && this.__ruler.target && this.movelines !== false) {
+				this.__ruler.lines = vec4(ax,ay,bx,by)
+			}
+
+
+
 			this.__lastpick = ev.pointer.pick;
 
 		} else if (this.__startrect) {
 
-			//resize
+			//select rect
 
 			var select = this.__selectrect || this.find('selectorrect');
 			if (!select) {
@@ -1339,7 +1346,7 @@ define.class("$ui/view", function(require,
 			rulermarkend:vec3(0,0,0),
 			linecolor:vec4("darkgray"),
 			lines:vec4(0,0,0,0),
-			linedotspacing:5.0
+			linedotspacing:10.0
 		};
 
 		this.bgcolorfn = function(p) {
