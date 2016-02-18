@@ -170,6 +170,7 @@ define.class("$ui/view", function(require,
 			type: 'method',
 			args:[src]
 		};
+
 		this.rpc.__host.callRpcMethod(msg);
 	};
 
