@@ -634,6 +634,9 @@ racetrack:6,
 				var x = Bb.coordinates[0];;
 				var y = Bb.coordinates[1];;
 				Labels.push({x:x, y:y, kind:Bb.properties.kind, name: Bb.properties.name, scalerank: Bb.properties.scalerank})
+				if (!Bb.properties.scalerank){
+					//console.log(Bb.properties);
+				}
 				// console.log(Bb.properties.kind, Bb.properties);
 			}
 			else{

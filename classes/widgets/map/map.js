@@ -727,11 +727,12 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 			for (var i =0 ;i<LabelSource.length;i++){
 				var l = LabelSource[i];
-				var f = 2;
+				var f = 20;
 				if (l.scalerank !== undefined){
 					f = rankfontsizes[l.scalerank] * Math.pow(2, this.layeroffset-1);
 					//f+= l.scalerank?(100/l.scalerank):0;
 				}
+				
 				if (f >-1){
 					var l2 = {text:l.name,fontsize:f,outline:false, color:vec4("black"), outlinecolor:vec4("black"), pos:vec3(l.x, -11,l.y)};
 					thelabels.push(l2);
