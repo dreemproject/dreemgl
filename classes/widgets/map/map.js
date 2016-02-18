@@ -66,6 +66,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			centerpos: vec2(0),
 			latlong: vec2(52.3608307, 4.8626387),
 			zoomlevel: 15,
+			throwawaythreshold: 150,
 			callbacktarget: {}
 		}
 		
@@ -181,7 +182,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		this.cleanLoadedBlocks = function(){
 			var keys = Object.keys(this.loadedblocks);
-			if (keys.length < 150) return;
+			if (keys.length < this.throwawaythreshold	) return;
 
 			var zscalar = 1280;
 
@@ -203,7 +204,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 					return 0;
 				});
 
-			for(var i =150 ;i<dellist.length;i++){
+			for(var i =this.throwawaythreshold ;i<dellist.length;i++){
 				var todelete = dellist[i];
 				delete this.loadedblocks[todelete.hash];
 			}
@@ -346,7 +347,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 	this.init = function(){
 		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
-		// this.setInterval(this.updateTiles, 20);
+		this.setInterval(this.updateTiles, 1000);
 	}
 
 	function UnProject(glx, gly, glz, modelview, projection){
@@ -808,22 +809,25 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.bgcolor = vec4("#c0c0d0");
 	this.flex = 1;
 	this.clearcolor = "black"
-
+	this.framessincerender = 0;
+	
+	this.atDraw = function(){
+		this.framessincerender++;
+	}
+	
 	this.updateTiles = function(){
+		
+		console.log(this.framessincerender);
 		if (!this.dataset) return;
 		if (!this.dataset.centers) return;
-
+		
+		
 		var sourcezoom = this.dataset.zoomlevel;
 		this.zoomlevel = Math.ceil(sourcezoom);
 		this.fraczoom = sourcezoom - this.zoomlevel;
 		this.meters_per_pixel = geo.metersPerPixel(this.zoomlevel);
 
-		// Size of the half-viewport in meters at current zoom
-		this.viewport_meters = {
-			x: this.layout.width * this.meters_per_pixel,
-			y: this.layout.height * this.meters_per_pixel
-		};
-
+		
 		// Center of viewport in meters, and tile
 		this.center_meters = geo.latLngToMeters(this.dataset.latlong[0],this.dataset.latlong[1]);
 
@@ -835,16 +839,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.center_tile.push( geo.tileForMeters(this.center_meters[0], this.center_meters[1], this.zoomlevel + i ));
 		}
 
-		this.bounds_meters = {
-			sw: {
-				x: this.center_meters.x - this.viewport_meters.x / 2,
-				y: this.center_meters.y - this.viewport_meters.y / 2
-			},
-			ne: {
-				x: this.center_meters.x + this.viewport_meters.x / 2,
-				y: this.center_meters.y + this.viewport_meters.y / 2
-			}
-		};
+	
 
 		for(var a = 0;a<this.tilestoupdate.length;a++){
 			var rt = this.tilestoupdate[a];
@@ -872,6 +867,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		ps.meterstounits = BufferGen.TileSize/(geo.metersPerTile(Math.floor(this.zoomlevel+4)) / Math.pow(2.0,this.fraczoom));
 		ps.redraw();
 	}
+	
 	this.onzoomlevel = function(){
 		this.updatePointSet();
 	}
@@ -881,6 +877,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.render = function(){
+		
 		this.tilestoupdate = [];
 
 		var res = [this.dataset];
@@ -888,13 +885,12 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var buildings3d = [];
 		var labels3d = [];
 		var poi3d = [];
-
+var fov = 30;
 		 var div = 1024
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 		
-		this.camdist = (this.layout.width)/Math.tan(15*((Math.PI*2.0)/360.0));
-		console.log(this.camdist, this.tilewidth, this.tileheight);
+		this.camdist = (this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
 		
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
@@ -951,12 +947,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var dist = 120.5
 		res.push(
 			view({
+				bgcolor:"red",
 				flex: 1,
 				viewport: "3d",
 				name: "mapinside",
 				nearplane: 100 ,
 				farplane: this.camdist * 2,
-				camera:vec3(0,-this.camdist,0), fov: 30, up: vec3(0,0,1),
+				camera:vec3(0,-this.camdist,0), fov: fov, up: vec3(0,0,1),
 				lookat:vec3(0,0,0)
 			},[
 				view({bgcolor:NaN},[
@@ -969,10 +966,17 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			])
 		);
 		res.push(this.constructor_children);
+		this.framessincerender = 0;
+		//this.redraw();
+		
 		return res;
 	}
 
-
-
+	this.atChildrenRendered = function(){
+		//console.log("at children rendererd");
+		this.updateTiles();
+		this.updatePointSet();
+		this.redraw();
+	}
 
 })
