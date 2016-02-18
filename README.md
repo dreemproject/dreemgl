@@ -16,8 +16,8 @@ To view the Intro presentation, click here:
 
 To try livecoding a shader open this:
 
-[http://127.0.0.1:2000/test/tests/rendertest](http://127.0.0.1:2000/test/tests/rendertest) and open
-[./test/tests/rendertest.js](/test/tests/rendertest.js) in your editor and start typing away and saving, reload should
+[http://127.0.0.1:2000/tests/rendertest](http://127.0.0.1:2000/tests/rendertest) and open
+[./tests/rendertest.js](/tests/rendertest.js) in your editor and start typing away and saving, reload should
 be live.
 
 As the server starts, it also shows other local IP's its listening on (for trying it on your phone)

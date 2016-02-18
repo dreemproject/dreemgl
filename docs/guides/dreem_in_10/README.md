@@ -70,7 +70,7 @@ node server.js -port 3555
 ```
 
 To test if everything is working fine, open the following URL for the *shadertest.js* composition in a supported browser:
-<a href="http://localhost:2000/test/tests/shadertest" target="_blank">http://localhost:2000/test/tests/shadertest</a>
+<a href="http://localhost:2000/tests/shadertest" target="_blank">http://localhost:2000/tests/shadertest</a>
 
 You should be seeing an animated shape rendering a shaders, similar to the image below:
 <img src="https://raw.githubusercontent.com/dreemproject/dreemgl/master/docs/images/shadertest.png" width="500"/>
@@ -115,9 +115,9 @@ Before we dive into the source code of our *Hello World* composition, you need t
 
 ### Compositions and URIs
 You create a composition in its own file. When running a composition, the server maps the composition's JavaScript file to a URI. Remember the *shadertest.js* composition? The URI for the composition is
-<a href="http://localhost:2000/test/tests/shadertest" target="_blank">http://localhost:2000/test/tests/shadertest</a>
+<a href="http://localhost:2000/tests/shadertest" target="_blank">http://localhost:2000/tests/shadertest</a>
 
-You will find the corresponding file at `DREEM/test/tests/shadertest.js`, where `DREEM` is the root folder of your DreemGL installation. While you can add your own compositions to the DREEM/examples, the better approach is to put your all your own compositions into a separate folder (e.g. a folder on the same level as the DreemGL toolkit folder). You can make your own composition folder available to DreemGL by using the `-path` option when launching the server, e.g.
+You will find the corresponding file at `DREEM/tests/shadertest.js`, where `DREEM` is the root folder of your DreemGL installation. While you can add your own compositions to the DREEM/examples, the better approach is to put your all your own compositions into a separate folder (e.g. a folder on the same level as the DreemGL toolkit folder). You can make your own composition folder available to DreemGL by using the `-path` option when launching the server, e.g.
 
 ```bash
 node server.js -path project1:../myproject
