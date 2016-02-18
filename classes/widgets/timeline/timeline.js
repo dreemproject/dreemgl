@@ -6,21 +6,27 @@
 define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.flexdirection = 'column'
-	this.padding = vec4(0, 80, 0, 18)
+	this.padding = vec4(0, 56, 0, 18)
 	this.bgcolor = NaN
+
+	this.MIN_ZOOM = 0.25
+	this.TIME_SCALE = 86400000 // millis to days
 
 	this.attributes = {
 		format:  Config({type: Enum('12','24'),  value: "12"}),
-		start:   Config({type: Date,  value: new Date("Jan 1 2016")}),
-		end:     Config({type: Date,  value: new Date("Dec 31 2016")}),
+
+		start:   Config({type: String,  value: "Jan 1 2016"}),
+		end:     Config({type: String,  value: "Dec 31 2016"}),
 
 		data:    Config({type: Array,  value: []}),
 
-		minzoom: Config({type: Number, value: 1/24}),
-		maxzoom: Config({type: Number, value: 365}),
-
 		zoom: Config({type: Number, value: 0.5}),
 		scroll: Config({type: Number, value: 0}),
+
+		monthwidth: Config({type: Number, value: 0}),
+		daywidth: Config({type: Number, value: 0}),
+		hourwidth: Config({type: Number, value: 0}),
+		hoursegs: Config({type: Number, value: 24}),
 
 		eventselected: Config({type:Event})
 	}
@@ -31,23 +37,46 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		this.hscrollbar = this.find("scrollbar")
 		this.hscrollbar.updateScrollbars()
 
-		var segs,  hw = this.layout.width / 24 / this.zoom
-		if (hw < 1) {
-			segs = 1
-		} else if (hw < 12) {
-			segs = 2
-		} else if (hw < 21) {
-			segs = 4
-		} else if (hw < 35) {
-			segs = 8
-		} else if (hw < 55) {
-			segs = 12
+		this.monthwidth = this.layout.width * 30 / this.zoom
+		this.daywidth = this.layout.width / this.zoom
+		this.hourwidth = this.layout.width / 24 / this.zoom
+
+		this.hoursegs = 1
+		if (this.hourwidth < 9) {
+			this.hoursegs = 1
+		} else if (this.hourwidth < 22) {
+			this.hoursegs = 4
+		} else if (this.hourwidth < 44) {
+			this.hoursegs = 8
+		} else if (this.hourwidth < 88) {
+			this.hoursegs = 12
 		} else {
-			segs = 24
+			this.hoursegs = 24
 		}
 		// TODO(aki): better data-binding that doesent trigger render
-		this.background.hoursegs = segs
-		this.labels.hoursegs = segs
+		// This should be handled by data binding
+		this.background.monthwidth = this._monthwidth
+		this.background.daywidth = this._daywidth
+		this.background.hourwidth = this._hourwidth
+		this.background.hoursegs = this._hoursegs
+		this.labels.monthwidth = this._monthwidth
+		this.labels.daywidth = this._daywidth
+		this.labels.hourwidth = this._hourwidth
+		this.labels.hoursegs = this._hoursegs
+
+	}
+
+	this.getStart = function () {
+		return new Date(this.start).getTime()// / this.TIME_SCALE
+	}
+	this.getEnd = function () {
+		return new Date(this.end).getTime()// / this.TIME_SCALE
+	}
+	this.getRange = function () {
+		return this.getEnd() - this.getStart()
+	}
+	this.getOffset = function () {
+		return this.zoom * this.scroll
 	}
 
 	this.pointermultimove = function(event) {
@@ -65,7 +94,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 			// TODO(aki): delta doesent feel right
 			var delta = (distance - oldDistance) / this.layout.width * this.zoom * 2
-			var newzoom = clamp(this.zoom - delta, this.minzoom, this.maxzoom)
+			var newzoom = clamp(this.zoom - delta, this.MIN_ZOOM, this.getRange() / this.TIME_SCALE)
 
 			this.zoom = newzoom
 
@@ -84,8 +113,8 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		if (event.value[1] && abs(event.value[1]) > abs(event.value[0])){
 			var lastzoom = this._zoom
 
-			var delta = event.value[1]*10.0 / this.layout.width * this.zoom
-			var newzoom = clamp(this.zoom + delta, this.minzoom, this.maxzoom)
+			var delta = event.value[1] / this.layout.width * this.zoom
+			var newzoom = clamp(this.zoom + delta, this.MIN_ZOOM, this.getRange() / this.TIME_SCALE)
 
 			this.zoom = newzoom
 
