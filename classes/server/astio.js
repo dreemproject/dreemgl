@@ -119,7 +119,7 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 
 		var at = this.__scanner.at;
 
-		console.log("SET AST VALUE ON", at, key, "=", value);
+		//console.log("SET AST VALUE ON", at, key, "=", value, ":", this.__scanner);
 
 		var item, newval, args, newparams;
 
@@ -152,7 +152,7 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 				//args[name] = value;
 				//var newparams = this.createASTNode(args);
 				//item = newparams.keys[0];
-				item = { key:key, value:value }
+				item = { key:build.Id(key), value:build.Value(value) }
 			}
 
 			if (item) {

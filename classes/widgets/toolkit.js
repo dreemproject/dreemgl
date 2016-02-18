@@ -630,11 +630,12 @@ define.class("$ui/view", function(require,
 			this.commit();
 			return;
 		}
+
 		if (!this.visible) {
 			return;
 		}
 
-		if (ev.code === 8 && this.selection) {
+		if (ev.code === 8 && this.selection && this.selection.length) {
 			var commit = false;
 			var multi = this.selection.length > 1;
 			for (var i=this.selection.length - 1; i>=0; i--) {
@@ -643,6 +644,7 @@ define.class("$ui/view", function(require,
 
 				if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
 					this.removeASTNodeFor(v)
+					commit = true;
 				}
 			}
 			if (commit) {
@@ -670,7 +672,7 @@ define.class("$ui/view", function(require,
 		var plist = {};
 
 		var main = this.sourcefile.nodeFor(this.screen.composition);
-		console.log('AST', main);
+//		console.log('AST', main);
 		if (main && main.params) {
 			for (var i=0;i<main.params.length;i++) {
 				var param = main.params[i];
@@ -1140,9 +1142,10 @@ define.class("$ui/view", function(require,
 
 					src.reset();
 					if (changeset.changes) {
-						src.seekNodeFor(changeset.view);
-						for (var j=0;j<changeset.changes;j++) {
+						for (var j=0;j<changeset.changes.length;j++) {
 							var change = changeset.changes[j];
+							src.reset();
+							src.seekNodeFor(changeset.view);
 							src.setArgValue(change.key, change.value);
 						}
 					} else if (changeset.remove) {
@@ -1154,7 +1157,7 @@ define.class("$ui/view", function(require,
 						src.removeArgNode(node);
 					} else if (changeset.param) {
 						var param = changeset.param;
-						var def = src.build.Def(src.build.Id(param))
+						var def = src.build.Def(src.build.Id(param));
 						var main = this.sourcefile.nodeFor(this.screen.composition);
 						if (changeset.pos) {
 							main.params.splice(changeset.pos, 0, def)
@@ -1185,7 +1188,7 @@ define.class("$ui/view", function(require,
 		} else {
 			//write back to server
 			var source = this.sourcefile.stringify();
-			console.log("[COMMIT]", source);
+			//console.log("[COMMIT]", source);
 
 			var msg = {
 				rpcid: 'this',
