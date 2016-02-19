@@ -42,7 +42,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.onpointdata = function () {
-		this.find('pointset').data = this.pointdata;
+		var ps = this.find('pointset');
+		if (ps) ps.data = this.pointdata;
 	}
 
 	this.gotoCity = function(city, zoomlevel, time){
@@ -661,11 +662,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				//return "blue";
 				PickGuid = mesh.pos.z
 				var col =  vec4(0,0,0.6,0.1);
-
 				var noise = noise.cheapnoise(pos*0.02)*0.07+0.5;
-
 				var texcol = mesh.color1;
-
 				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
 				//prefog.a *=0.9;
 				//prefog.a *= max(0.0, min(1.0, view.layeroffset  - view.fraczoom))
@@ -866,7 +864,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 	this.updatePointSet = function(){
 		var ps = this.find("pointset");
-		if(!ps)return
+		if(!ps) return
 
 		var center_meters = geo.latLngToMeters(this.dataset.latlong[0],this.dataset.latlong[1]);
 
@@ -893,13 +891,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var labels3d = [];
 		var poi3d = [];
 		var fov = 30;
-		 var div = 1024
+	 var div = 1024;
 		this.tilewidth = Math.ceil(this.layout.width/ div);
 		this.tileheight = Math.ceil(this.layout.height/ div);;
 		
 		this.camdist = (this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
 		
-		this.camdist *=1.2
+		this.camdist *=1.0
 		
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;

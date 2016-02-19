@@ -41,8 +41,6 @@ define.class(function(require){
 			color1: vec4("#bad6ab",1),
 			color2: vec4(0.003921568859368563,0.19607843458652496,0.125490203499794,1),
 		},
-		aerodrome:{
-		},
 		residential:{
 			color1: vec4("#cdc7bf"),
 		},
@@ -107,7 +105,13 @@ define.class(function(require){
 		runway:{
 			offset:-20,
 
-			color1:vec4("gray"),
+			color1:vec4("#c0c0c0"),
+			color2:vec4("#d0d0d0")
+		},
+		aerodrome:{
+			offset:-20,
+
+			color1:vec4("#c0c0c0"),
 			color2:vec4("#d0d0d0")
 		},
 		forest:{
@@ -125,7 +129,7 @@ define.class(function(require){
 			color2: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
 		},
 		plant:{
-			color1:vec4("#208020"),
+			color1:vec4("#90f050"),
 			color2:vec4("#208020")
 		},
 		pitch:{
@@ -159,15 +163,16 @@ define.class(function(require){
 		stadium:{
 		},
 		railway:{
-			roadcolor: vec4("#5e5e5e")
+			roadcolor: vec4("#5e5e5e"),
+			color1: vec4("#5e5e5e"),
+			sortkey:3
 		},
 		rail:{
-			roadcolor: vec4("#5e5e5e")
+			roadcolor: vec4("#5e5e5e"),
+			sortkey:3
 		},
 		garden:{
-			offset:-14,
-			color1: vec4(0,0.501960813999176,0,1),
-			color2: vec4(0.250980406999588,0.8156862854957581,0.501960813999176,1),
+			color1: vec4("#90f050"),
 		},
 		farmyard:{
 			color1:vec4("#808010"),
@@ -178,7 +183,6 @@ define.class(function(require){
 		college:{
 		},
 		pedestrian:{
-			offset:-9,
 			color1: vec4(0.8274509906768799,0.8274509906768799,0.8274509906768799,1),
 			color2: vec4(1,1,0,1),
 		},
@@ -189,18 +193,14 @@ define.class(function(require){
 		petting_zoo:{
 		},
 		wood:{
-			color1:vec4("#208020"),
-			color2:vec4("#106010")
+			color1:vec4("#90f050"),
+
 		},
 		common:{
-			offset:24,
 			color1: vec4(1,1,1,1),
-			color2: vec4(0.501960813999176,0.501960813999176,0.501960813999176,1),
 		},
 		village_green:{
-			offset:-15,
-			color1: vec4(0,0.501960813999176,0,1),
-			color2: vec4(0,0.501960813999176,0,1),
+			color1: vec4("#90f050"),
 		},
 		prison:{
 		},
@@ -211,11 +211,14 @@ define.class(function(require){
 			roadcolor: vec4("#f8faca"),
 		},
 		Ferry:{
-			roadcolor:vec4("blue")
+			roadcolor:vec4("blue"),
+			sortkey: -1
 		},
 		highway:{
 			roadcolor: vec4("#f4c0ab"),
-		},
+
+			sortkey:2,
+			},
 		minor_road:{
 			roadcolor: vec4("white"),
 		},
