@@ -683,12 +683,10 @@ define.class("$ui/view", function(require,
 			return;
 		}
 
-		if (ev.name === "z" && ev.ctrl) {
-			console.log("undo!")
-			this.sourcefile.undo();
-		} else if (ev.name === "z" && ev.ctrl && ev.shift) {
-			console.log("redo!")
+		if (ev.name === "z" && (ev.ctrl || ev.meta) && ev.shift) {
 			this.sourcefile.redo();
+		} else if (ev.name === "z" && (ev.ctrl || ev.meta)) {
+			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
 			var commit = false;
 			var multi = this.selection.length > 1;
