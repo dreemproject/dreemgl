@@ -684,8 +684,10 @@ define.class("$ui/view", function(require,
 		}
 
 		if (ev.name === "z" && (ev.ctrl || ev.meta) && ev.shift) {
+			this.selected = [];
 			this.sourcefile.redo();
 		} else if (ev.name === "z" && (ev.ctrl || ev.meta)) {
+			this.selected = [];
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
 			var commit = false;
