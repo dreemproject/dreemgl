@@ -171,7 +171,7 @@ define.class("$ui/view", function(require,
 	};
 
 	this.onchange = function(ev,src,o) {
-		console.log("[COMMIT]", src);
+		console.log("[COMMIT]");//, src);
 
 		var msg = {
 			rpcid: 'this',
@@ -505,9 +505,9 @@ define.class("$ui/view", function(require,
 
 			var pos = ev.pointer.position;
 			if (evview.parent) {
-				if (evview.position != "absolute") {
-					evview.position = "absolute";
-				}
+				//if (evview.position != "absolute") {
+				//	evview.position = "absolute";
+				//}
 				pos = evview.parent.globalToLocal(ev.pointer.position)
 			}
 
@@ -518,7 +518,7 @@ define.class("$ui/view", function(require,
 			}
 
 			var ny = pos.y - this.__startpos.y;
-			var dy = Math.abs(ny - this.__originalpos.y);
+			var dy = Math.abs(evview.y - this.__originalpos.y);
 			if (dy > 0.5) {
 				commit = true;
 			}
@@ -526,7 +526,7 @@ define.class("$ui/view", function(require,
 			if (this.selection) {
 				for (var i=0;i<this.selection.length;i++) {
 					var selected = this.selection[i];
-					if (this.testView(selected) && selected.toolmove !== false) {
+					if (this.testView(selected) && selected.toolmove !== false && selected.position === "absolute") {
 						nx = selected.pos.x + ev.pointer.movement.x;
 						this.setASTObjectProperty(selected, "x", nx);
 

@@ -163,7 +163,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 			this.statenormal()
 		}
 	}
-
+	
 	this.render = function(){
 		if (this.constructor_children.length > 0) return this.constructor_children;
 		var res = []

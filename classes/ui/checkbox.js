@@ -66,10 +66,6 @@ define.class('$ui/view', function(icon, label){
 		}
 	}
 
-	//this.onclick = function(){
-	//	this.value  = !(this.value);
-	//}
-
 	this.hardrect = {
 		color: function(){
 			return mix(view.col1, view.col2, (uv.y)/0.8)

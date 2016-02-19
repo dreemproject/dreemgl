@@ -226,7 +226,7 @@ define.class(function(require){
 			child.emitRecursive(key, event)
 		}
 	}
-	
+
 	this.emit_block_set = null
 
 	this.emit = function(key, ievent){
