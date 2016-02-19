@@ -1019,12 +1019,14 @@ define.class("$ui/view", function(require,
 							var selected = (!!(this.selection) && this.selection.indexOf(v) > -1);
 
 							var itemview = view({
-								bgcolor:NaN
+								bgcolor:NaN,
+								alignitems:"center"
 							},
 								checkbox({
 									icon:"lock",
 									pickalpha:-1,
-									fgcolor:"white",
+									fgcolor:vec4(1,0.1,0.2,1),
+									inactivecolor:"#666",
 									bgcolor:"transparent",
 									fontsize:14,
 									borderwidth:0,
@@ -1040,31 +1042,33 @@ define.class("$ui/view", function(require,
 									pickalpha:-1,
 									fontsize:14,
 									fgcolor:"white",
+									inactivecolor:"#666",
 									bgcolor:"transparent",
 									marginleft:5,
 									borderwidth:0,
 									padding:0,
-									value: v.visible,
+									value: true,
 									click:function() {
 										v.visible = !v.visible;
-										this.value = v.visible
+										this.value = !this.value;
 									}
 								}),
 								label({
 									text:name,
 									fgcolor:"white",
-									margintop:5,
 									marginleft:5,
-									fontsize:12,
+									fontsize:14,
 									pickalpha:-1
 								}),
 								checkbox({
-									icon:"wrench",
+									icon:"warning",
 									pickalpha:-1,
-									fgcolor:"lightgray",
+									fgcolor:"yellow",
+									inactivecolor:"#444",
 									bgcolor:"transparent",
-									fontsize:14,
-									marginleft:5,
+									fontsize:12,
+									margintop:7,
+									marginleft:7,
 									borderwidth:0,
 									padding:0,
 									value: v.tooltarget === false,
