@@ -24,15 +24,15 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 					dropshadowoffset:vec2(9,9)
 
 				},
-				view({margin:10, flexdirection:"row",bg:false},
-					label({text:"old name:",bg:false}),
+				view({margin:10, flexdirection:"row",bgcolor:NaN},
+					label({text:"old name:",bgcolor:NaN}),
 					textbox({value:this.oldname, enabled: false, marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
-				view({margin:10, flexdirection:"row",bg:false},
-					label({text:"new name:",bg:false}),
+				view({margin:10, flexdirection:"row",bgcolor:NaN},
+					label({text:"new name:",bgcolor:NaN}),
 					textbox({value:this.oldname, name:"newnamebox", marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
-				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
+				view({flexdirection:"row",bgcolor:NaN, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
 					button({padding:10, text:"OK", icon:"check", click: function(){this.screen.closeModal(this.find("newnamebox").value);} }),
 					button({padding: 10, marginleft:10, icon:"close", text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)

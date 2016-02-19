@@ -27,9 +27,9 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox, view, icon
 		}
 
 		return dialog({title:"Open composition", position:"relative"},
-			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) }
+			view({bgcolor:NaN, flexdirection:"column", padding:vec4(20,10,10,10) }
 			,res,
-			view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
+			view({flexdirection:"row",bgcolor:NaN, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
 
 					button({padding: 10, marginleft:10, icon:"close",text:"Cancel", click: function(){this.screen.closeModal(false);} })
  				)

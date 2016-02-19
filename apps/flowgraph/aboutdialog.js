@@ -9,9 +9,9 @@ define.class('$ui/view', function(require, $$, dialog, $ui$, textbox,view, icon,
 
 	this.render =function(){
 		return dialog({title:"About Flowgraph", position:"relative"},
-			view({bg:false, flexdirection:"column", padding:20 },
-				markdown({fontcolor:"white", margin:10,bg:false, body:"# About Flowgraph!\nThis text needs to be written.."}),
-				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
+			view({bgcolor:NaN, flexdirection:"column", padding:20 },
+				markdown({fontcolor:"white", margin:10,bgcolor:NaN, body:"# About Flowgraph!\nThis text needs to be written.."}),
+				view({flexdirection:"row",bgcolor:NaN, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
 					button({padding:10, text:"Close", icon:"check", click: function(){this.screen.closeModal(true);} })
  				)
 			)

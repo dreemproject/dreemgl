@@ -4,25 +4,31 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require,$ui$, textbox, label, view){
+define.class('$ui/button', function(require,$ui$, textbox, label, view){
 
 	this.attributes = {
 		commands:[],
 	}
-
-
+	this.oninit = function(){
+		this.buttoncolor1 = this.bgcolor;
+		this.buttoncolor2 = this.bgcolor;
+		
+	}
+	this.borderwidth =0 ;
+	this.borderradius = 0;
+	this.padding = 4;
 	this.render = function(){
 		var res = [];
 		this.buttonres = undefined;
 		this.iconres = undefined
 
 		if (this.icon && this.icon.length > 0){
-			this.iconres = icon({alignself:"center", fgcolor:this.textcolor, icon: this.icon});
+			this.iconres = icon({alignself:"center", fgcolor:this.textcolor, bgcolor:NaN,icon: this.icon});
 			res.push(this.iconres);
 		}
 
 		if (this.text && this.text.length > 0){
-			this.buttonres = label({alignself:"center", bgcolor:this.bgcolor, fgcolor:this.textcolor,  position: "relative", text: this.text})
+			this.buttonres = label({alignself:"center", bgcolor:NaN, fgcolor:this.textcolor,  position: "relative", text: this.text})
 			res.push(this.buttonres);
 		}
 

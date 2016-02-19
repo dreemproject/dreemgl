@@ -229,8 +229,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 	}
 
-	define.class(this, "inputbutton", function($ui$, view, label){
-		this.drawtarget = 'pick'
+	define.class(this, "inputbutton","$ui/view",  function($ui$, view, label){
+		//this.drawtarget = 'pick'
 
 		this.attributes = {
 			name:"thing",
@@ -259,8 +259,8 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		}
 	})
 
-	define.class(this, "outputbutton", function($ui$, view, label){
-		this.drawtarget = 'pick'
+	define.class(this, "outputbutton","$ui/view",  function($ui$, view, label){
+		//this.drawtarget = 'pick'
 
 		this.attributes = {
 			name:"thing",

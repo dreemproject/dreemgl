@@ -8,17 +8,17 @@ define.class('$ui/view', function(require, $$,dialog, $ui$, textbox,view, icon, 
 	this.bgcolor = vec4(0,0,0,0.5);
 	this.render =function(){
 		return dialog({title:"New composition", position:"relative"},
-			view({bg:false, flexdirection:"column", padding:vec4(20,10,10,10) },
-				view({margin:10, flexdirection:"row",bg:false, flex:1},
-					label({text:"Name:",bg:false}),
+			view({bgcolor:NaN, flexdirection:"column", padding:vec4(20,10,10,10) },
+				view({margin:10, flexdirection:"row",bgcolor:NaN, flex:1},
+					label({text:"Name:",bgcolor:NaN}),
 					textbox({value:"tadaa",name:"newnamebox",  onvalue:function(){console.log(this.find("newnamebox").value)}.bind(this),marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
-				view({margin:10, flexdirection:"row",bg:false, flex:1},
-					label({text:"Folder to be created:",bg:false}),
-					label({marginleft:10,name:"pathlabel", text:"$root/tadaa",bg:false})
+				view({margin:10, flexdirection:"row",bgcolor:NaN, flex:1},
+					label({text:"Folder to be created:",bgcolor:NaN}),
+					label({marginleft:10,name:"pathlabel", text:"$root/tadaa",bgcolor:NaN})
 				),
 
-				view({flexdirection:"row",bg:false, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
+				view({flexdirection:"row",bgcolor:NaN, alignitems: "flex-end", justifycontent:"flex-end", alignself:"flex-end"   },
 					button({padding:10, text:"OK", icon:"check", click:function(){this.screen.closeModal(this.find("newnamebox").value);} }),
 					button({padding: 10, marginleft:10, icon:"close", text:"Cancel", click:function(){this.screen.closeModal(false);} })
  				)

@@ -24,17 +24,17 @@ define.class('$server/composition', function(require, $ui$,treeview,  speakergri
 					}
 				}},
 				speakergrid({glowcolor:"#505060",  flexwrap:"nowrap", overflow:"scroll" },
-					label({margin:10, paddingtop:10, fontsize:30, text:"Rename block", bg:false}),
+					label({margin:10, paddingtop:10, fontsize:30, text:"Rename block", bgcolor:NaN}),
 					renameblockdialog({oldname:"this is my old name" }),
-					label({margin:10, paddingtop:10, fontsize:30, text:"Rename composition", bg:false}),
+					label({margin:10, paddingtop:10, fontsize:30, text:"Rename composition", bgcolor:NaN}),
 					renamedialog(),
-					label({margin:10, fontsize:30, text:"New composition", bg:false}),
+					label({margin:10, fontsize:30, text:"New composition", bgcolor:NaN}),
 					newcompositiondialog(),
-					label({margin:10, fontsize:30, text:"Open composition", bg:false}),
+					label({margin:10, fontsize:30, text:"Open composition", bgcolor:NaN}),
 					opencompositiondialog(),
-					label({margin:10, fontsize:30, text:"About", bg:false}),
+					label({margin:10, fontsize:30, text:"About", bgcolor:NaN}),
 					aboutdialog(),
-					label({margin:10, fontsize:30, text:"Docviewer", bg:false}),
+					label({margin:10, fontsize:30, text:"Docviewer", bgcolor:NaN}),
 					docviewerdialog({title:"I am a custom markdown viewer" , body:"Huzzah"})
 				)
 			)
