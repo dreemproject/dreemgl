@@ -327,7 +327,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Go back to the previous state. All classes that have this dataset bound will get their assignment updated</span>
         <span class="local-variable">this</span>.<span class="function">undo</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.undo_stack.length) <span class="keyword">return</span>
-                <span class="local-variable">this</span>.redo_stack.push( <span class="local-variable">this</span>.stringify(<span class="local-variable">this</span>.data))
+                <span class="local-variable">this</span>.redo_stack.push(<span class="local-variable">this</span>.stringify(<span class="local-variable">this</span>.data))
                 <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.parse(<span class="local-variable">this</span>.undo_stack.pop());
                 <span class="local-variable">this</span>.notifyAssignedAttributes();
         }

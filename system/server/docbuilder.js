@@ -171,7 +171,9 @@ define.class(function(require){
             }
             if (class_doc.body_text) {
                 for (i=0; i < class_doc.body_text.length; i++) {
-                    output.push(' * ' + class_doc.body_text[i]);
+					var body = class_doc.body_text[i];
+					body = body.replace(/not-supported\s*[:]?\s*/, "@unsupported ");
+                    output.push(' * ' + body);
                 }
             }
 
@@ -210,7 +212,9 @@ define.class(function(require){
                         }
                         for (j=0;j < attr.body_text.length; j++) {
                             str = attr.body_text[j];
-                            output.push(' * ' + str);
+							str = str.replace(/not-supported\s*[:]?\s*/, "@unsupported ");
+
+							output.push(' * ' + str);
                         }
                         output.push(' */');
                     }
@@ -242,6 +246,7 @@ define.class(function(require){
 
                             for (j=0;j < meth.body_text.length; j++) {
                                 str = meth.body_text[j];
+								str = str.replace(/not-supported\s*[:]?\s*/, "@unsupported ");
                                 output.push(' * ' + str);
                             }
 
@@ -291,6 +296,7 @@ define.class(function(require){
                         output.push(' * @event ' + event.name);
                         for (j=0;j < event.body_text.length; j++) {
                             str = event.body_text[j];
+							str = str.replace(/not-supported\s*[:]?\s*/, "@unsupported ");
                             output.push(' * ' + str);
                         }
                         output.push(' */');

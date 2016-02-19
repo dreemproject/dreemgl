@@ -1057,6 +1057,78 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n903" name="n903">903</a>
 <a href="#n904" name="n904">904</a>
 <a href="#n905" name="n905">905</a>
+<a href="#n906" name="n906">906</a>
+<a href="#n907" name="n907">907</a>
+<a href="#n908" name="n908">908</a>
+<a href="#n909" name="n909">909</a>
+<strong><a href="#n910" name="n910">910</a></strong>
+<a href="#n911" name="n911">911</a>
+<a href="#n912" name="n912">912</a>
+<a href="#n913" name="n913">913</a>
+<a href="#n914" name="n914">914</a>
+<a href="#n915" name="n915">915</a>
+<a href="#n916" name="n916">916</a>
+<a href="#n917" name="n917">917</a>
+<a href="#n918" name="n918">918</a>
+<a href="#n919" name="n919">919</a>
+<strong><a href="#n920" name="n920">920</a></strong>
+<a href="#n921" name="n921">921</a>
+<a href="#n922" name="n922">922</a>
+<a href="#n923" name="n923">923</a>
+<a href="#n924" name="n924">924</a>
+<a href="#n925" name="n925">925</a>
+<a href="#n926" name="n926">926</a>
+<a href="#n927" name="n927">927</a>
+<a href="#n928" name="n928">928</a>
+<a href="#n929" name="n929">929</a>
+<strong><a href="#n930" name="n930">930</a></strong>
+<a href="#n931" name="n931">931</a>
+<a href="#n932" name="n932">932</a>
+<a href="#n933" name="n933">933</a>
+<a href="#n934" name="n934">934</a>
+<a href="#n935" name="n935">935</a>
+<a href="#n936" name="n936">936</a>
+<a href="#n937" name="n937">937</a>
+<a href="#n938" name="n938">938</a>
+<a href="#n939" name="n939">939</a>
+<strong><a href="#n940" name="n940">940</a></strong>
+<a href="#n941" name="n941">941</a>
+<a href="#n942" name="n942">942</a>
+<a href="#n943" name="n943">943</a>
+<a href="#n944" name="n944">944</a>
+<a href="#n945" name="n945">945</a>
+<a href="#n946" name="n946">946</a>
+<a href="#n947" name="n947">947</a>
+<a href="#n948" name="n948">948</a>
+<a href="#n949" name="n949">949</a>
+<strong><a href="#n950" name="n950">950</a></strong>
+<a href="#n951" name="n951">951</a>
+<a href="#n952" name="n952">952</a>
+<a href="#n953" name="n953">953</a>
+<a href="#n954" name="n954">954</a>
+<a href="#n955" name="n955">955</a>
+<a href="#n956" name="n956">956</a>
+<a href="#n957" name="n957">957</a>
+<a href="#n958" name="n958">958</a>
+<a href="#n959" name="n959">959</a>
+<strong><a href="#n960" name="n960">960</a></strong>
+<a href="#n961" name="n961">961</a>
+<a href="#n962" name="n962">962</a>
+<a href="#n963" name="n963">963</a>
+<a href="#n964" name="n964">964</a>
+<a href="#n965" name="n965">965</a>
+<a href="#n966" name="n966">966</a>
+<a href="#n967" name="n967">967</a>
+<a href="#n968" name="n968">968</a>
+<a href="#n969" name="n969">969</a>
+<strong><a href="#n970" name="n970">970</a></strong>
+<a href="#n971" name="n971">971</a>
+<a href="#n972" name="n972">972</a>
+<a href="#n973" name="n973">973</a>
+<a href="#n974" name="n974">974</a>
+<a href="#n975" name="n975">975</a>
+<a href="#n976" name="n976">976</a>
+<a href="#n977" name="n977">977</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1072,11 +1144,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="keyword">var</span> KindSet = <span class="local-variable">this</span>.KindSet = {};
         <span class="keyword">var</span> UnhandledKindSet = <span class="local-variable">this</span>.UnhandledKindSet = {};
 
-        <span class="keyword">var</span> roadwidths = {<span class="key">water</span>:<span class="integer">20</span>, <span class="key">path</span>:<span class="integer">2</span>,<span class="key">ferry</span>:<span class="integer">4</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">rail</span><span class="delimiter">&quot;</span></span> : <span class="integer">4</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">minor_road</span><span class="delimiter">&quot;</span></span>: <span class="integer">8</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">major_road</span><span class="delimiter">&quot;</span></span> : <span class="integer">12</span>, <span class="key">path</span>: <span class="integer">3</span>, <span class="key">highway</span>:<span class="integer">12</span>}
+        <span class="keyword">var</span> roadwidths = {
+                        <span class="key">water</span>:<span class="integer">20</span>, 
+                        <span class="key">path</span>:<span class="integer">2</span>,
+                        <span class="key">ferry</span>:<span class="integer">4</span>,
+                        <span class="key">rail</span>: <span class="integer">4</span>, 
+                        <span class="key">minor_road</span>: <span class="integer">6</span>,
+                        <span class="key">major_road</span>: <span class="integer">8</span>, 
+                        <span class="key">path</span>: <span class="integer">3</span>, <span class="key">highway</span>:<span class="integer">12</span>}
         <span class="keyword">var</span> roadcolors = {<span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, <span class="key">path</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>, <span class="key">ferry</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">rail</span><span class="delimiter">&quot;</span></span> : vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>), <span class="key"><span class="delimiter">&quot;</span><span class="content">minor_road</span><span class="delimiter">&quot;</span></span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#505050</span><span class="delimiter">&quot;</span></span>), <span class="key"><span class="delimiter">&quot;</span><span class="content">major_road</span><span class="delimiter">&quot;</span></span> : vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#404040</span><span class="delimiter">&quot;</span></span>), <span class="key">highway</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#303030</span><span class="delimiter">&quot;</span></span>)}
         <span class="keyword">var</span> roadmarkcolors = {<span class="key">water</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#30a0ff</span><span class="delimiter">&quot;</span></span>, <span class="key">major_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>, <span class="key">minor_road</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#a0a0a0</span><span class="delimiter">&quot;</span></span>}
 
         <span class="comment">//this.ignoreuse = {}</span>
+        <span class="comment">//this.displaykinds = {}</span>
         <span class="local-variable">this</span>.displaykinds ={
                 <span class="key">water</span>: <span class="predefined-constant">true</span>, 
                 <span class="key">meadow</span>:<span class="predefined-constant">true</span>, 
@@ -1099,6 +1179,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">wood</span>:<span class="predefined-constant">true</span>,
                 <span class="key">residential</span>:<span class="predefined-constant">true</span>,
                 <span class="key">farm</span>:<span class="predefined-constant">true</span>,
+                <span class="key">rail</span>:<span class="predefined-constant">true</span>,
                 <span class="key">wetland</span>:<span class="predefined-constant">true</span>,
                 <span class="key">aerodrome</span>:<span class="predefined-constant">true</span>,
                 <span class="key">farmyard</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>,
@@ -1129,7 +1210,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">riverbank</span>:<span class="predefined-constant">true</span>,<span class="key">reservoir</span>:<span class="predefined-constant">true</span>,
                 <span class="key">runway</span>:<span class="predefined-constant">true</span>, <span class="key">school</span>:<span class="predefined-constant">true</span>, <span class="key">scrub</span>:<span class="predefined-constant">true</span>, <span class="key">sports_centre</span>:<span class="predefined-constant">true</span>, <span class="key">stadium</span>:<span class="predefined-constant">true</span>, <span class="key">taxiway</span>:<span class="predefined-constant">true</span>, <span class="key">theatre</span>:<span class="predefined-constant">true</span>, <span class="key">university</span>:<span class="predefined-constant">true</span>, <span class="key">village_green</span>:<span class="predefined-constant">true</span>, <span class="key">wetland</span>:<span class="predefined-constant">true</span>, <span class="key">wood</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">urban area</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">park</span>:<span class="predefined-constant">true</span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">protected land</span><span class="delimiter">&quot;</span></span>:<span class="predefined-constant">true</span>, <span class="key">protected_area</span>:<span class="predefined-constant">true</span>};
 
-        <span class="keyword">var</span> watercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">ocean</span><span class="delimiter">&quot;</span></span>);
+        <span class="keyword">var</span> watercolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#c0d5d5</span><span class="delimiter">&quot;</span></span>);
         
         <span class="keyword">var</span> mapstyle = <span class="local-variable">this</span>.mapstyle = {
                 <span class="key">ferry</span>:{
@@ -1153,9 +1234,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 },
                 
                 <span class="key">earth</span>:{
-                        <span class="key">offset</span>:<span class="integer">10</span>,
-                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4a644a</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">color2</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#38523d</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#c0c0c0</span><span class="delimiter">&quot;</span></span>),
+                        
                 },
                 <span class="key">national_park</span>:{
                         <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">lime</span><span class="delimiter">&quot;</span></span>),
@@ -1163,15 +1243,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 },
                 <span class="key">park</span>:{
                         <span class="key">offset</span>:-<span class="integer">7</span>,
-                        <span class="key">color1</span>: vec4(<span class="float">0.250980406999588</span>,<span class="float">0.8156862854957581</span>,<span class="float">0.1882352977991104</span>,<span class="integer">1</span>),
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#bad6ab</span><span class="delimiter">&quot;</span></span>,<span class="integer">1</span>),
                         <span class="key">color2</span>: vec4(<span class="float">0.003921568859368563</span>,<span class="float">0.19607843458652496</span>,<span class="float">0.125490203499794</span>,<span class="integer">1</span>),
                 },
                 <span class="key">aerodrome</span>:{
                 },
                 <span class="key">residential</span>:{
-                        <span class="key">offset</span>:-<span class="integer">13</span>,
-                        <span class="key">color1</span>: vec4(<span class="float">0.501960813999176</span>,<span class="float">0.501960813999176</span>,<span class="float">0.501960813999176</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="float">0.8274509906768799</span>,<span class="float">0.8274509906768799</span>,<span class="float">0.8274509906768799</span>,<span class="integer">1</span>),
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#cdc7bf</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="key">industrial</span>:{
                         <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#202020</span><span class="delimiter">&quot;</span></span>),
@@ -1286,6 +1364,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 },
                 <span class="key">railway</span>:{
                 },
+                <span class="key">rail</span>:{
+                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">pink</span><span class="delimiter">&quot;</span></span>)
+                },
                 <span class="key">garden</span>:{
                         <span class="key">offset</span>:-<span class="integer">14</span>,
                         <span class="key">color1</span>: vec4(<span class="integer">0</span>,<span class="float">0.501960813999176</span>,<span class="integer">0</span>,<span class="integer">1</span>),
@@ -1327,22 +1408,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">prison</span>:{
                 },
                 <span class="key">major_road</span>:{
-                        <span class="key">offset</span>:-<span class="integer">55</span>,
-                        <span class="key">color1</span>: vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">roadcolor</span>: vec4(<span class="float">0.250980406999588</span>,<span class="float">0.250980406999588</span>,<span class="float">0.250980406999588</span>,<span class="integer">1</span>),
+                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f8faca</span><span class="delimiter">&quot;</span></span>,<span class="integer">1</span>),
                 },
                 <span class="key">highway</span>:{
-                        <span class="key">offset</span>:-<span class="integer">55</span>,
-                        <span class="key">color1</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">roadcolor</span>: vec4(<span class="float">0.1882352977991104</span>,<span class="float">0.1882352977991104</span>,<span class="float">0.1882352977991104</span>,<span class="integer">1</span>),
+                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f4c0ab</span><span class="delimiter">&quot;</span></span>,<span class="integer">1</span>),
                 },
                 <span class="key">minor_road</span>:{
-                        <span class="key">offset</span>:-<span class="integer">55</span>,
-                        <span class="key">color1</span>: vec4(<span class="integer">1</span>,<span class="float">0.6470588445663452</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="integer">1</span>,<span class="float">0.6470588445663452</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">roadcolor</span>: vec4(<span class="float">0.3137255012989044</span>,<span class="float">0.3137255012989044</span>,<span class="float">0.3137255012989044</span>,<span class="integer">1</span>),
+                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="predefined-constant">undefined</span>:{
                 },
@@ -1377,7 +1449,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">color2</span>: <span class="integer">0</span>,
                 },
                 <span class="key">building</span>:{
-                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#cac0b6</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">color2</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>)
                 },
                 <span class="key">apartments</span>:{
@@ -1529,7 +1601,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">buildBuildingVertexBuffer</span> = <span class="keyword">function</span>(buildings){
                 <span class="keyword">var</span> mesh = BuildingVertexStruct.array(buildings.length * <span class="integer">30</span>);
-
+                <span class="keyword">var</span> buildingcolor = mapstyle.building.color1;
+                <span class="keyword">var</span> c0 = buildingcolor[<span class="integer">0</span>];
+                <span class="keyword">var</span> c1 = buildingcolor[<span class="integer">1</span>];
+                <span class="keyword">var</span> c2 = buildingcolor[<span class="integer">2</span>];
+                
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>;i&lt;buildings.length;i++){
                         <span class="keyword">var</span> building = buildings[i];
 
@@ -1558,18 +1634,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         }
 
                                         c = <span class="float">0.8</span> + <span class="float">0.2</span> *Math.sin(Math.atan2(A2[<span class="integer">1</span>]-A1[<span class="integer">1</span>], A2[<span class="integer">0</span>]-A1[<span class="integer">0</span>]));
-                                        mesh.push(A1[<span class="integer">0</span>],A1[<span class="integer">1</span>],<span class="integer">0</span>, c,c,c, <span class="integer">1</span>, i,bid,theH);
-                                        mesh.push(A2[<span class="integer">0</span>],A2[<span class="integer">1</span>],<span class="integer">0</span>, c,c,c, <span class="integer">1</span>, i,bid,theH);
-                                        mesh.push(A2[<span class="integer">0</span>]+isox,A2[<span class="integer">1</span>]+isoy,theH, c,c,c, <span class="integer">1</span>, i,bid,theH);
-                                        mesh.push(A1[<span class="integer">0</span>],A1[<span class="integer">1</span>],<span class="integer">0</span>, c,c,c, <span class="integer">1</span>, i,bid,theH);
-                                        mesh.push(A2[<span class="integer">0</span>]+isox,A2[<span class="integer">1</span>]+isoy,theH, c,c,c, <span class="integer">1</span>, i,bid,theH);
-                                        mesh.push(A1[<span class="integer">0</span>]+isox,A1[<span class="integer">1</span>]+isoy,theH, c,c,c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(A1[<span class="integer">0</span>],A1[<span class="integer">1</span>],<span class="integer">0</span>, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(A2[<span class="integer">0</span>],A2[<span class="integer">1</span>],<span class="integer">0</span>, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(A2[<span class="integer">0</span>]+isox,A2[<span class="integer">1</span>]+isoy,theH, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(A1[<span class="integer">0</span>],A1[<span class="integer">1</span>],<span class="integer">0</span>, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(A2[<span class="integer">0</span>]+isox,A2[<span class="integer">1</span>]+isoy,theH, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(A1[<span class="integer">0</span>]+isox,A1[<span class="integer">1</span>]+isoy,theH, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
                                         A1 = A2;
                                 }
                                 c = <span class="float">1.0</span>
                                 <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">0</span>;a&lt;tris.length;a++){
                                         <span class="keyword">var</span> atri = tris[a];
-                                        mesh.push(atri[<span class="integer">0</span>]+isox,atri[<span class="integer">1</span>]+isoy,theH, c,c,c, <span class="integer">1</span>, i,bid,theH);
+                                        mesh.push(atri[<span class="integer">0</span>]+isox,atri[<span class="integer">1</span>]+isoy,theH, c0*c,c1*c,c2*c, <span class="integer">1</span>, i,bid,theH);
                                 }
                         }
                 }
@@ -1672,17 +1748,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> st = mapstyle[R.kind];
                         <span class="keyword">if</span> (!st) st = mapstyle[<span class="string"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>];
                         <span class="keyword">if</span> (roadwidths[R.kind]) linewidth = roadwidths[R.kind];<span class="keyword">else</span> UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
-
-                        <span class="keyword">if</span> (st.roadcolor) color = st.roadcolor;<span class="keyword">else</span> UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
-                        <span class="comment">//console.log(R.kind, color);</span>
-                        <span class="comment">// make color an id</span>
-
-                        <span class="keyword">var</span> colorid = color[<span class="integer">0</span>]
+                        
+                        <span class="keyword">if</span> (st.roadcolor){
+                                color = st.roadcolor
+                        }<span class="keyword">else</span> {
+                                UnhandledKindSet[R.kind] = <span class="string"><span class="delimiter">&quot;</span><span class="content">road</span><span class="delimiter">&quot;</span></span> ;
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">roadkind with no color</span><span class="delimiter">&quot;</span></span>, R.kind);
+                        }
+                        
+                
+                        <span class="keyword">var</span> colorid = i;
                         <span class="comment">//var markcolor = color;</span>
                         <span class="comment">//if (roadmarkcolors[R.kind]) markcolor = vec4(roadmarkcolors[R.kind]);</span>
                         <span class="comment">// linewidth *= Math.pow(2, this.view.zoomlevel-14);</span>
 
                         <span class="keyword">for</span>(<span class="keyword">var</span> rr = <span class="integer">0</span>;rr&lt;R.arcs.length;rr++){
+                
+                                
                                 <span class="keyword">var</span> currentarc = R.arcs[rr]
                                 <span class="keyword">if</span> (currentarc.length == <span class="integer">1</span>){
                                         <span class="keyword">continue</span>
@@ -1699,37 +1781,98 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> ody = A1[<span class="integer">1</span>]-A0[<span class="integer">1</span>];
 
                                 <span class="keyword">var</span> predelta = vec2.normalize(vec2(odx, ody));
-                                <span class="keyword">var</span> presdelta = vec2.rotate(predelta, <span class="float">3.1415</span>/<span class="float">2.0</span>);
+                                <span class="keyword">var</span> pre_side_delta = vec2.rotate(predelta, <span class="float">3.1415</span>/<span class="float">2.0</span>);
 
                                 <span class="keyword">var</span> dist = <span class="integer">0</span>;
                                 <span class="keyword">var</span> dist2 = <span class="integer">0</span>;
                                 <span class="keyword">var</span> lastsdelta = vec2(<span class="integer">0</span>,<span class="integer">0</span>);
-                        <span class="comment">//        color = vec4(&quot;blue&quot;);</span>
-                                <span class="comment">// it used to be</span>
-                                <span class="comment">//posx, posy, posz,</span>
-                                <span class="comment">//colorr, colorg, colorb, colora,</span>
-                                <span class="comment">//side, dist, linewidth, sidevec2, markcolor</span>
-                                <span class="comment">// now it is</span>
-                                <span class="comment">// posx, posy, sidex, sidey, side, dist, linewidth, colorid</span>
-                                <span class="comment">/*
-                                mesh.push(nx,ny,z, color, 1, dist,linewidth,presdelta, markcolor);
-                                mesh.push(nx,ny,z, color, -1, dist,linewidth,presdelta, markcolor);
-                                mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
+                        
+                        
+                                mesh.push(
+                                                                nx,
+                                                                ny,
+                                                                pre_side_delta[<span class="integer">0</span>], 
+                                                                pre_side_delta[<span class="integer">1</span>], 
+                                                                <span class="integer">1</span>, 
+                                                                dist, 
+                                                                linewidth, 
+                                                                colorid, 
+                                                                color[<span class="integer">0</span>], 
+                                                                color[<span class="integer">1</span>], 
+                                                                color[<span class="integer">2</span>],
+                                                                color[<span class="integer">3</span>]
+                                                )
+                                mesh.push(
+                                                                nx,
+                                                                ny,
+                                                                pre_side_delta[<span class="integer">0</span>], 
+                                                                pre_side_delta[<span class="integer">1</span>], 
+                                                                -<span class="integer">1</span>, 
+                                                                dist, 
+                                                                linewidth, 
+                                                                colorid, 
+                                                                color[<span class="integer">0</span>], 
+                                                                color[<span class="integer">1</span>], 
+                                                                color[<span class="integer">2</span>], 
+                                                                color[<span class="integer">3</span>]
+                                                );
+                                mesh.push(
+                                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
+                                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, 
+                                                                pre_side_delta[<span class="integer">0</span>], 
+                                                                pre_side_delta[<span class="integer">1</span>], 
+                                                                <span class="float">0.5</span>, 
+                                                                -linewidth,
+                                                                linewidth,
+                                                                colorid, 
+                                                                color[<span class="integer">0</span>], 
+                                                                color[<span class="integer">1</span>], 
+                                                                color[<span class="integer">2</span>], 
+                                                                color[<span class="integer">3</span>]
+                                                );
 
-                                mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, 0.5, -10 ,linewidth,presdelta, markcolor);
-                                mesh.push(nx - predelta[0]*linewidth*0.5,ny - predelta[1]*linewidth*0.5,z, color, -0.5, -10 ,linewidth,presdelta, markcolor);
-                                mesh.push(nx,ny, z, color, -1, dist,linewidth,presdelta, markcolor);
-                                */</span>
-                                mesh.push(nx,ny,predelta[<span class="integer">0</span>], predelta[<span class="integer">1</span>], <span class="integer">1</span>, dist, linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>])<span class="comment">//z, color, 1, dist,linewidth,presdelta, markcolor);</span>
-                                mesh.push(nx,ny,presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist, linewidth, colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>])<span class="comment">//z, color, -1, dist,linewidth,presdelta, markcolor);</span>
-                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], <span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(
+                                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
+                                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, 
+                                                                pre_side_delta[<span class="integer">0</span>], 
+                                                                pre_side_delta[<span class="integer">1</span>], 
+                                                                <span class="float">0.5</span>, 
+                                                                -linewidth,
+                                                                linewidth,
+                                                                colorid, 
+                                                                color[<span class="integer">0</span>], 
+                                                                color[<span class="integer">1</span>], 
+                                                                color[<span class="integer">2</span>], 
+                                                                color[<span class="integer">3</span>]
+                                                        );
+                                mesh.push(
+                                                                nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,
+                                                                ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>,
+                                                                pre_side_delta[<span class="integer">0</span>], 
+                                                                pre_side_delta[<span class="integer">1</span>], 
+                                                                -<span class="float">0.5</span>, 
+                                                                -linewidth,
+                                                                linewidth,
+                                                                colorid, 
+                                                                color[<span class="integer">0</span>], 
+                                                                color[<span class="integer">1</span>], 
+                                                                color[<span class="integer">2</span>], 
+                                                                color[<span class="integer">3</span>]);
+                                mesh.push(
+                                                                nx,
+                                                                ny, 
+                                                                pre_side_delta[<span class="integer">0</span>], 
+                                                                pre_side_delta[<span class="integer">1</span>], 
+                                                                -<span class="integer">1</span>, 
+                                                                dist,
+                                                                linewidth,
+                                                                colorid, 
+                                                                color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
 
-                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], <span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
-                                mesh.push(nx - predelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny - predelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="float">0.5</span>, -<span class="integer">10</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
-                                mesh.push(nx                            ,ny                            , presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>], -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
-
-                                <span class="comment">//        color = vec4(0,0,0.03,0.1)</span>
+                                
                                 <span class="keyword">var</span> lastdelta = vec2(<span class="integer">0</span>);
+                                
+                                
                                 <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">1</span>;a&lt;currentarc.length;a++){
                                         <span class="keyword">var</span> A =currentarc[a];
 
@@ -1739,6 +1882,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> delta = vec2.normalize(predelt);
                                         <span class="keyword">var</span> sdelta = vec2.rotate(delta, PI/<span class="integer">2</span>);
 
+                                        
                                         <span class="keyword">var</span> dist2 = dist +  vec2.len(predelt);
                                         <span class="keyword">if</span> (a&gt;<span class="integer">1</span>){
                                                 mesh.push(nx,ny,lastdelta[<span class="integer">0</span>], lastdelta[<span class="integer">1</span>], <span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
@@ -1772,7 +1916,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                                 mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], <span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span> ,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
                                 mesh.push(nx + lastdelta[<span class="integer">0</span>]*linewidth*<span class="float">0.5</span>,ny + lastdelta[<span class="integer">1</span>]*linewidth*<span class="float">0.5</span>, lastsdelta[<span class="integer">0</span>], lastsdelta[<span class="integer">1</span>], -<span class="float">0.5</span>, dist+linewidth*<span class="float">0.5</span>,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
-                                mesh.push(nx,ny, presdelta[<span class="integer">0</span>], presdelta[<span class="integer">1</span>],  -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
+                                mesh.push(nx,ny, pre_side_delta[<span class="integer">0</span>], pre_side_delta[<span class="integer">1</span>],  -<span class="integer">1</span>, dist,linewidth,colorid, color[<span class="integer">0</span>], color[<span class="integer">1</span>], color[<span class="integer">2</span>], color[<span class="integer">3</span>]);
                         }
                 }
                 <span class="keyword">return</span> mesh;

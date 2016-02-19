@@ -665,19 +665,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n511" name="n511">511</a>
 <a href="#n512" name="n512">512</a>
 <a href="#n513" name="n513">513</a>
-<a href="#n514" name="n514">514</a>
-<a href="#n515" name="n515">515</a>
-<a href="#n516" name="n516">516</a>
-<a href="#n517" name="n517">517</a>
-<a href="#n518" name="n518">518</a>
-<a href="#n519" name="n519">519</a>
-<strong><a href="#n520" name="n520">520</a></strong>
-<a href="#n521" name="n521">521</a>
-<a href="#n522" name="n522">522</a>
-<a href="#n523" name="n523">523</a>
-<a href="#n524" name="n524">524</a>
-<a href="#n525" name="n525">525</a>
-<a href="#n526" name="n526">526</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1133,14 +1120,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// animation</span>
 
         <span class="comment">// internal, start an animation, delegated from view</span>
-        <span class="local-variable">this</span>.<span class="function">startAnimationRoot</span> = <span class="keyword">function</span>(obj, key, value, track, promise){
+        <span class="local-variable">this</span>.<span class="function">startAnimationRoot</span> = <span class="keyword">function</span>(obj, key, value, track, resolve){
                 <span class="comment">// ok so. if we get a config passed in, we pass that in</span>
                 <span class="keyword">var</span> config = obj.getAttributeConfig(key)
 
                 <span class="keyword">var</span> first = obj[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key]
 
                 <span class="keyword">var</span> anim = <span class="keyword">new</span> Animate(config, obj, key, track, first, value)
-                anim.promise = promise
+                anim.resolve = resolve
                 <span class="keyword">var</span> animkey = obj.getViewGuid() + <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + key
                 <span class="local-variable">this</span>.anims[animkey] = anim
                 obj.redraw()
@@ -1176,7 +1163,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 anim.obj[<span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span> + anim.key] = value.last_value
                                 anim.obj.emit(anim.key, {<span class="key">animate</span>:<span class="predefined-constant">true</span>, <span class="key">end</span>:<span class="predefined-constant">true</span>, <span class="key">key</span>: anim.key, <span class="key">owner</span>:anim.obj, <span class="key">value</span>:value.last_value})
                                 anim.obj.redraw()
-                                <span class="keyword">if</span>(anim.promise) anim.promise.resolve()
+                                <span class="keyword">if</span>(anim.resolve) anim.resolve()
                         }
                         <span class="keyword">else</span>{
                                 <span class="comment">// what if we have a value with storage?</span>
@@ -1190,19 +1177,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
         }
-
-        <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>._cachednode) {
-                        <span class="keyword">var</span> past = <span class="local-variable">this</span>.composition.ASTNode();
-
-                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.__constructorIndex) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>) {
-                                <span class="local-variable">this</span>._cachednode = past.args[<span class="local-variable">this</span>.__constructorIndex];
-                        } <span class="keyword">else</span> {
-                                <span class="local-variable">this</span>._cachednode = <span class="keyword">new</span> ASTScanner(past, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>, <span class="key">fn</span>:{ <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:<span class="local-variable">this</span>.constructor.name }}).at;
-                        }
-                }
-                <span class="keyword">return</span> <span class="local-variable">this</span>._cachednode;
-        };
 
 })
 </pre></td>

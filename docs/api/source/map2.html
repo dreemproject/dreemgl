@@ -1130,6 +1130,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n976" name="n976">976</a>
 <a href="#n977" name="n977">977</a>
 <a href="#n978" name="n978">978</a>
+<a href="#n979" name="n979">979</a>
+<strong><a href="#n980" name="n980">980</a></strong>
+<a href="#n981" name="n981">981</a>
+<a href="#n982" name="n982">982</a>
+<a href="#n983" name="n983">983</a>
+<a href="#n984" name="n984">984</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1159,7 +1165,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">onpointerwheel</span> = <span class="keyword">function</span>(ev){
-                <span class="local-variable">this</span>.zoomTo(<span class="local-variable">this</span>.dataset.zoomlevel - ev.wheel[<span class="integer">1</span>]);
+                <span class="local-variable">this</span>.zoomTo(<span class="local-variable">this</span>.dataset.zoomlevel - ev.wheel[<span class="integer">1</span>]/<span class="integer">120</span>);
         }
 
         <span class="local-variable">this</span>.<span class="function">onpointerend</span> = <span class="keyword">function</span>(ev){
@@ -1199,6 +1205,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">centerpos</span>: vec2(<span class="integer">0</span>),
                         <span class="key">latlong</span>: vec2(<span class="float">52.3608307</span>, <span class="float">4.8626387</span>),
                         <span class="key">zoomlevel</span>: <span class="integer">15</span>,
+                        <span class="key">throwawaythreshold</span>: <span class="integer">150</span>,
                         <span class="key">callbacktarget</span>: {}
                 }
                 
@@ -1314,7 +1321,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">cleanLoadedBlocks</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> keys = Object.keys(<span class="local-variable">this</span>.loadedblocks);
-                        <span class="keyword">if</span> (keys.length &lt; <span class="integer">150</span>) <span class="keyword">return</span>;
+                        <span class="keyword">if</span> (keys.length &lt; <span class="local-variable">this</span>.throwawaythreshold        ) <span class="keyword">return</span>;
 
                         <span class="keyword">var</span> zscalar = <span class="integer">1280</span>;
 
@@ -1336,7 +1343,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">return</span> <span class="integer">0</span>;
                                 });
 
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="integer">150</span> ;i&lt;dellist.length;i++){
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="local-variable">this</span>.throwawaythreshold ;i&lt;dellist.length;i++){
                                 <span class="keyword">var</span> todelete = dellist[i];
                                 <span class="keyword">delete</span> <span class="local-variable">this</span>.loadedblocks[todelete.hash];
                         }
@@ -1479,7 +1486,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.dataset = <span class="local-variable">this</span>.mapdataset({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">mapdata</span><span class="delimiter">&quot;</span></span>, <span class="key">callbacktarget</span>: <span class="local-variable">this</span>});
-                <span class="comment">// this.setInterval(this.updateTiles, 20);</span>
+                <span class="local-variable">this</span>.setInterval(<span class="local-variable">this</span>.updateTiles, <span class="integer">1000</span>);
         }
 
         <span class="keyword">function</span> <span class="function">UnProject</span>(glx, gly, glz, modelview, projection){
@@ -1941,22 +1948,25 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#c0c0d0</span><span class="delimiter">&quot;</span></span>);
         <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
         <span class="local-variable">this</span>.clearcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">black</span><span class="delimiter">&quot;</span></span>
-
+        <span class="local-variable">this</span>.framessincerender = <span class="integer">0</span>;
+        
+        <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.framessincerender++;
+        }
+        
         <span class="local-variable">this</span>.<span class="function">updateTiles</span> = <span class="keyword">function</span>(){
+                
+                <span class="comment">//console.log(this.framessincerender);</span>
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.dataset) <span class="keyword">return</span>;
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.dataset.centers) <span class="keyword">return</span>;
-
+                
+                
                 <span class="keyword">var</span> sourcezoom = <span class="local-variable">this</span>.dataset.zoomlevel;
                 <span class="local-variable">this</span>.zoomlevel = Math.ceil(sourcezoom);
                 <span class="local-variable">this</span>.fraczoom = sourcezoom - <span class="local-variable">this</span>.zoomlevel;
                 <span class="local-variable">this</span>.meters_per_pixel = geo.metersPerPixel(<span class="local-variable">this</span>.zoomlevel);
 
-                <span class="comment">// Size of the half-viewport in meters at current zoom</span>
-                <span class="local-variable">this</span>.viewport_meters = {
-                        <span class="key">x</span>: <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.meters_per_pixel,
-                        <span class="key">y</span>: <span class="local-variable">this</span>.layout.height * <span class="local-variable">this</span>.meters_per_pixel
-                };
-
+                
                 <span class="comment">// Center of viewport in meters, and tile</span>
                 <span class="local-variable">this</span>.center_meters = geo.latLngToMeters(<span class="local-variable">this</span>.dataset.latlong[<span class="integer">0</span>],<span class="local-variable">this</span>.dataset.latlong[<span class="integer">1</span>]);
 
@@ -1968,16 +1978,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.center_tile.push( geo.tileForMeters(<span class="local-variable">this</span>.center_meters[<span class="integer">0</span>], <span class="local-variable">this</span>.center_meters[<span class="integer">1</span>], <span class="local-variable">this</span>.zoomlevel + i ));
                 }
 
-                <span class="local-variable">this</span>.bounds_meters = {
-                        <span class="key">sw</span>: {
-                                <span class="key">x</span>: <span class="local-variable">this</span>.center_meters.x - <span class="local-variable">this</span>.viewport_meters.x / <span class="integer">2</span>,
-                                <span class="key">y</span>: <span class="local-variable">this</span>.center_meters.y - <span class="local-variable">this</span>.viewport_meters.y / <span class="integer">2</span>
-                        },
-                        <span class="key">ne</span>: {
-                                <span class="key">x</span>: <span class="local-variable">this</span>.center_meters.x + <span class="local-variable">this</span>.viewport_meters.x / <span class="integer">2</span>,
-                                <span class="key">y</span>: <span class="local-variable">this</span>.center_meters.y + <span class="local-variable">this</span>.viewport_meters.y / <span class="integer">2</span>
-                        }
-                };
+        
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> a = <span class="integer">0</span>;a&lt;<span class="local-variable">this</span>.tilestoupdate.length;a++){
                         <span class="keyword">var</span> rt = <span class="local-variable">this</span>.tilestoupdate[a];
@@ -2005,6 +2006,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 ps.meterstounits = BufferGen.TileSize/(geo.metersPerTile(Math.floor(<span class="local-variable">this</span>.zoomlevel+<span class="integer">4</span>)) / Math.pow(<span class="float">2.0</span>,<span class="local-variable">this</span>.fraczoom));
                 ps.redraw();
         }
+        
         <span class="local-variable">this</span>.<span class="function">onzoomlevel</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.updatePointSet();
         }
@@ -2014,6 +2016,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                
                 <span class="local-variable">this</span>.tilestoupdate = [];
 
                 <span class="keyword">var</span> res = [<span class="local-variable">this</span>.dataset];
@@ -2021,13 +2024,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> buildings3d = [];
                 <span class="keyword">var</span> labels3d = [];
                 <span class="keyword">var</span> poi3d = [];
-
+                <span class="keyword">var</span> fov = <span class="integer">10</span>;
                  <span class="keyword">var</span> div = <span class="integer">1024</span>
                 <span class="local-variable">this</span>.tilewidth = Math.ceil(<span class="local-variable">this</span>.layout.width/ div);
                 <span class="local-variable">this</span>.tileheight = Math.ceil(<span class="local-variable">this</span>.layout.height/ div);;
                 
-                <span class="local-variable">this</span>.camdist = (<span class="local-variable">this</span>.layout.width)/Math.tan(<span class="integer">15</span>*((Math.PI*<span class="float">2.0</span>)/<span class="float">360.0</span>));
-                console.log(<span class="local-variable">this</span>.camdist, <span class="local-variable">this</span>.tilewidth, <span class="local-variable">this</span>.tileheight);
+                <span class="local-variable">this</span>.camdist = (<span class="local-variable">this</span>.layout.width)/Math.tan((fov/<span class="integer">2</span>)*((Math.PI*<span class="float">2.0</span>)/<span class="float">360.0</span>));
+                
+                <span class="local-variable">this</span>.camdist *=<span class="float">0.7</span>
                 
                 <span class="keyword">var</span> basew = <span class="local-variable">this</span>.tilewidth/<span class="integer">2</span>;
                 <span class="keyword">var</span> baseh = <span class="local-variable">this</span>.tileheight/<span class="integer">2</span>;
@@ -2084,12 +2088,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> dist = <span class="float">120.5</span>
                 res.push(
                         view({
+                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">flex</span>: <span class="integer">1</span>,
                                 <span class="key">viewport</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">3d</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">mapinside</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">nearplane</span>: <span class="integer">100</span> ,
                                 <span class="key">farplane</span>: <span class="local-variable">this</span>.camdist * <span class="integer">2</span>,
-                                <span class="key">camera</span>:vec3(<span class="integer">0</span>,-<span class="local-variable">this</span>.camdist,<span class="integer">0</span>), <span class="key">fov</span>: <span class="integer">30</span>, <span class="key">up</span>: vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
+                                <span class="key">camera</span>:vec3(<span class="integer">0</span>,-<span class="local-variable">this</span>.camdist,<span class="integer">0</span>), <span class="key">fov</span>: fov, <span class="key">up</span>: vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>),
                                 <span class="key">lookat</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>)
                         },[
                                 view({<span class="key">bgcolor</span>:<span class="predefined-constant">NaN</span>},[
@@ -2102,11 +2107,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ])
                 );
                 res.push(<span class="local-variable">this</span>.constructor_children);
+                <span class="local-variable">this</span>.framessincerender = <span class="integer">0</span>;
+                <span class="comment">//this.redraw();</span>
+                
                 <span class="keyword">return</span> res;
         }
 
-
-
+        <span class="local-variable">this</span>.<span class="function">atChildrenRendered</span> = <span class="keyword">function</span>(){
+                <span class="comment">//console.log(&quot;at children rendererd&quot;);</span>
+                <span class="local-variable">this</span>.updateTiles();
+                <span class="local-variable">this</span>.updatePointSet();
+                <span class="local-variable">this</span>.redraw();
+        }
 
 })
 </pre></td>

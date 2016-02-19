@@ -1350,6 +1350,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1196" name="n1196">1196</a>
 <a href="#n1197" name="n1197">1197</a>
 <a href="#n1198" name="n1198">1198</a>
+<a href="#n1199" name="n1199">1199</a>
+<strong><a href="#n1200" name="n1200">1200</a></strong>
+<a href="#n1201" name="n1201">1201</a>
+<a href="#n1202" name="n1202">1202</a>
+<a href="#n1203" name="n1203">1203</a>
+<a href="#n1204" name="n1204">1204</a>
+<a href="#n1205" name="n1205">1205</a>
+<a href="#n1206" name="n1206">1206</a>
+<a href="#n1207" name="n1207">1207</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1698,12 +1707,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// lets add some strings</span>
                 <span class="local-variable">this</span>.<span class="function">add</span> = <span class="keyword">function</span>(string, im1, im2, im3){
                         <span class="keyword">var</span> length = string.length
+                        <span class="local-variable">this</span>.ensureSize(<span class="local-variable">this</span>.length + length)
+
                         <span class="keyword">var</span> m1 = im1, m2 = im2, m3 = im3
                         <span class="comment">// alright lets convert some text babeh!</span>
                         <span class="keyword">var</span> array
                         <span class="keyword">if</span>(string.struct) array = string.array
                         <span class="keyword">var</span> glyphs = <span class="local-variable">this</span>.font.glyphs
-                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; length; i++){
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = string.start || <span class="integer">0</span>; i &lt; length; i++){
                                 <span class="keyword">var</span> unicode
                                 <span class="keyword">if</span>(array){
                                         unicode = array[i * <span class="integer">4</span>]
@@ -1884,6 +1895,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                         out.length = x&gt;&gt;<span class="integer">2</span>
                         <span class="keyword">return</span> out
+                }
+
+                <span class="local-variable">this</span>.<span class="function">setLength</span> = <span class="keyword">function</span>(len){
+                        <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(len)
+                        <span class="local-variable">this</span>.length = len * <span class="integer">6</span>
+                        <span class="local-variable">this</span>.add_x = rect.x
+                        <span class="local-variable">this</span>.add_y = rect.y
                 }
 
                 <span class="local-variable">this</span>.<span class="function">insertText</span> = <span class="keyword">function</span>(off, text){

@@ -197,6 +197,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n43" name="n43">43</a>
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
+<a href="#n47" name="n47">47</a>
+<a href="#n48" name="n48">48</a>
+<a href="#n49" name="n49">49</a>
+<strong><a href="#n50" name="n50">50</a></strong>
+<a href="#n51" name="n51">51</a>
+<a href="#n52" name="n52">52</a>
+<a href="#n53" name="n53">53</a>
+<a href="#n54" name="n54">54</a>
+<a href="#n55" name="n55">55</a>
+<a href="#n56" name="n56">56</a>
+<a href="#n57" name="n57">57</a>
+<a href="#n58" name="n58">58</a>
 </pre></td>
   <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, <span class="predefined">$ui$</span>, checkbox, icon, button, drawer, label, view, screen, cadgrid, <span class="predefined">$widgets$</span>, toolkit) {
 
@@ -216,7 +229,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                 <span class="key">alignitems</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,
                                                 <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">stretch</span><span class="delimiter">'</span></span>,
                                                 <span class="key">flexdirection</span>:<span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>,
-                                                <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">center</span><span class="delimiter">'</span></span>,
+                                                <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">'</span><span class="content">space-around</span><span class="delimiter">'</span></span>,
                                                 <span class="key">anchor</span>:vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>),
                                                 <span class="key">toolmove</span>:<span class="predefined-constant">false</span>,
                                                 <span class="key">toolrect</span>:<span class="predefined-constant">false</span>
@@ -230,11 +243,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                                                         <span class="key">max</span>:<span class="float">0.6</span>
                                                 },
                                                 view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
-                                                        label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Drawer</span><span class="delimiter">&quot;</span></span>})),
+                                                        label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt; Double Drawer &gt;</span><span class="delimiter">&quot;</span></span>})),
                                                 view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>},
                                                         label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Right Tray</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>:<span class="integer">24</span>, <span class="key">marginright</span>:<span class="integer">10</span>})),
                                                 view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
                                                         label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Left Tray</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>:<span class="integer">24</span>, <span class="key">marginleft</span>:<span class="integer">10</span>}))
+                                        ),
+
+                                        drawer(
+                                                {
+                                                        <span class="key">flex</span>:<span class="integer">0</span>,
+                                                        <span class="key">width</span>:<span class="integer">200</span>,
+                                                        <span class="key">height</span>:<span class="integer">60</span>,
+                                                        <span class="key">min</span>:-<span class="float">0.66</span>
+                                                },
+                                                view({<span class="key">flex</span>:<span class="integer">1</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>},
+                                                        label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Drawer &gt;</span><span class="delimiter">&quot;</span></span>})),
+                                                view({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">yellow</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>, <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>, <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">flex-end</span><span class="delimiter">&quot;</span></span>},
+                                                        label({<span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Right Only</span><span class="delimiter">&quot;</span></span>, <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">purple</span><span class="delimiter">&quot;</span></span>, <span class="key">fontsize</span>:<span class="integer">24</span>, <span class="key">marginright</span>:<span class="integer">10</span>}))
                                         )
                                 ),
                                 toolkit({<span class="key">visible</span>:<span class="predefined-constant">false</span>, <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>, <span class="key">x</span>:<span class="integer">781</span>, <span class="key">y</span>:<span class="float">90.99999237060547</span>, <span class="key">width</span>:<span class="integer">400</span>, <span class="key">height</span>:<span class="integer">800</span>})

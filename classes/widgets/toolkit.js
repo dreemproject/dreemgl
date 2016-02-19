@@ -168,7 +168,7 @@ define.class("$ui/view", function(require,
 	};
 
 	this.onchange = function(ev,src,o) {
-		//console.log("[COMMIT]", src);
+		console.log("[COMMIT]", src);
 
 		var msg = {
 			rpcid: 'this',
@@ -672,7 +672,7 @@ define.class("$ui/view", function(require,
 	};
 
 	this.globalkeydown = function(ev) {
-		if (ev.code === 84 && ev.ctrl && ev.shift) {
+		if (ev.name === "t" && ev.ctrl && ev.shift) {
 			this.setASTObjectProperty(this, "visible", !this.visible);
 			this.ensureDeps();
 			this.commit();
@@ -683,7 +683,13 @@ define.class("$ui/view", function(require,
 			return;
 		}
 
-		if (ev.code === 8 && this.selection && this.selection.length) {
+		if (ev.name === "z" && ev.ctrl) {
+			console.log("undo!")
+			this.sourcefile.undo();
+		} else if (ev.name === "z" && ev.ctrl && ev.shift) {
+			console.log("redo!")
+			this.sourcefile.redo();
+		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
 			var commit = false;
 			var multi = this.selection.length > 1;
 			for (var i=this.selection.length - 1; i>=0; i--) {

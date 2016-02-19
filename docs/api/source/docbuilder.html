@@ -475,6 +475,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n321" name="n321">321</a>
 <a href="#n322" name="n322">322</a>
 <a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
+<a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -649,7 +655,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
             }
             <span class="keyword">if</span> (class_doc.body_text) {
                 <span class="keyword">for</span> (i=<span class="integer">0</span>; i &lt; class_doc.body_text.length; i++) {
-                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + class_doc.body_text[i]);
+                                        <span class="keyword">var</span> body = class_doc.body_text[i];
+                                        body = body.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">not-supported</span><span class="char">\s</span><span class="content">*[:]?</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">@unsupported </span><span class="delimiter">&quot;</span></span>);
+                    output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + body);
                 }
             }
 
@@ -688,7 +696,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         }
                         <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; attr.body_text.length; j++) {
                             str = attr.body_text[j];
-                            output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
+                                                        str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">not-supported</span><span class="char">\s</span><span class="content">*[:]?</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">@unsupported </span><span class="delimiter">&quot;</span></span>);
+
+                                                        output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
                         }
                         output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);
                     }
@@ -720,6 +730,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                             <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; meth.body_text.length; j++) {
                                 str = meth.body_text[j];
+                                                                str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">not-supported</span><span class="char">\s</span><span class="content">*[:]?</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">@unsupported </span><span class="delimiter">&quot;</span></span>);
                                 output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
                             }
 
@@ -769,6 +780,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * @event </span><span class="delimiter">'</span></span> + event.name);
                         <span class="keyword">for</span> (j=<span class="integer">0</span>;j &lt; event.body_text.length; j++) {
                             str = event.body_text[j];
+                                                        str = str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">not-supported</span><span class="char">\s</span><span class="content">*[:]?</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">@unsupported </span><span class="delimiter">&quot;</span></span>);
                             output.push(<span class="string"><span class="delimiter">'</span><span class="content"> * </span><span class="delimiter">'</span></span> + str);
                         }
                         output.push(<span class="string"><span class="delimiter">'</span><span class="content"> */</span><span class="delimiter">'</span></span>);

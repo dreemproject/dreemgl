@@ -3,30 +3,58 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class("$server/dataset", function(require, $system$parse$, onejsparser, jsformatter, astscanner, onejsgen){
-	// internal, dataset-api for manipulating Dreem AST
+define.class("$system/base/node", function(require, baseclass, $system$parse$, onejsparser, jsformatter, astscanner, onejsgen){
+	// internal, api for manipulating Dreem AST
 
 	this.attributes = {
-		change: Config({type:Event})
-	};
+		change: Config({type:Event}),
+		undostack:Config({value:[], persist:true}),
+	    redostack:Config({value:[], persist:true})
+    };
 
 	this.atConstructor = function(source) {
 		this.build = new onejsgen();
 		if (source) {
 			this.parse(source)
 		}
-		this.last_source = source
+		this.last_source = this.stringify()
 	};
 
 	this.fork = function(callback) {
-		this.undo_stack.push(this.last_source);
-		this.redo_stack.length = 0;
+		this.undostack.push(this.last_source);
+
+		console.log("us>", this.undostack)
+
+
+		this.redostack.length = 0;
 		this.reset();
 		callback(this);
 		// lets reserialize
 		var last = this.last_source = this.stringify();
-		this.notifyAssignedAttributes();
 		// save to disk.
+		this.emit('change', {value:last})
+	};
+
+	this.undo = function() {
+
+		console.log("us>", this.undostack)
+
+		if(!this.undostack.length) return;
+		this.redostack.push(this.stringify(this.ast));
+
+		var popped = this.undostack.pop();
+		this.ast = this.parse(popped);
+		console.log('new', popped, this.ast)
+
+		var last = this.last_source = this.stringify();
+		this.emit('change', {value:last})
+	};
+
+	this.redo = function() {
+		if(!this.redostack.length) return;
+		this.undostack.push(this.stringify(this.ast));
+		this.ast = this.parse(this.redostack.pop());
+		var last = this.last_source = this.stringify();
 		this.emit('change', {value:last})
 	};
 
@@ -197,7 +225,7 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 	};
 
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.
-	this.parse = function(classconstr){
+	this.parse = function(classconstr) {
 		var source;
 		if (typeof(classconstr) === "string") {
 			source = classconstr
@@ -207,11 +235,10 @@ define.class("$server/dataset", function(require, $system$parse$, onejsparser, j
 
 		this.ast = onejsparser.parse(source);
 		this.__scanner = new astscanner(this.ast);
-		this.notifyAssignedAttributes()
 	};
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
-	this.stringify = function(){
+	this.stringify = function() {
 		var buf = {
 			out:'',
 			charCodeAt: function(i){return this.out.charCodeAt(i)},

@@ -416,6 +416,50 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n262" name="n262">262</a>
 <a href="#n263" name="n263">263</a>
 <a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
+<a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
+<strong><a href="#n280" name="n280">280</a></strong>
+<a href="#n281" name="n281">281</a>
+<a href="#n282" name="n282">282</a>
+<a href="#n283" name="n283">283</a>
+<a href="#n284" name="n284">284</a>
+<a href="#n285" name="n285">285</a>
+<a href="#n286" name="n286">286</a>
+<a href="#n287" name="n287">287</a>
+<a href="#n288" name="n288">288</a>
+<a href="#n289" name="n289">289</a>
+<strong><a href="#n290" name="n290">290</a></strong>
+<a href="#n291" name="n291">291</a>
+<a href="#n292" name="n292">292</a>
+<a href="#n293" name="n293">293</a>
+<a href="#n294" name="n294">294</a>
+<a href="#n295" name="n295">295</a>
+<a href="#n296" name="n296">296</a>
+<a href="#n297" name="n297">297</a>
+<a href="#n298" name="n298">298</a>
+<a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
+<a href="#n302" name="n302">302</a>
+<a href="#n303" name="n303">303</a>
+<a href="#n304" name="n304">304</a>
+<a href="#n305" name="n305">305</a>
+<a href="#n306" name="n306">306</a>
+<a href="#n307" name="n307">307</a>
+<a href="#n308" name="n308">308</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -579,9 +623,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         out.array[v + <span class="integer">2</span>] = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
                                         out.array[v + <span class="integer">3</span>] = m3
                                 }
+                                out.length += str.length
                                 buf.char_count += str.length;
                         })
-                        <span class="local-variable">this</span>.postMessage(buf.out.array, buf.out)
+
+                        <span class="local-variable">this</span>.postMessage({<span class="key">length</span>:buf.out.length, <span class="key">array</span>:buf.out.array}, [buf.out.array.buffer])
                 }
         })
 
@@ -590,8 +636,50 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// if we get source back yay</span>
                 <span class="local-variable">this</span>.worker.<span class="function">onmessage</span> = <span class="keyword">function</span>(msg){
                         <span class="comment">// alright lets run the diff step.</span>
+                        <span class="comment">// shall we just swap the entire fucker out?... no that breaks undo</span>
+                        <span class="comment">// ah right.</span>
+                        <span class="comment">// we dont want that.</span>
+                        <span class="comment">// but we might have to update the typed array in a tight loop.</span>
+                        <span class="comment">// get the start diff</span>
+                        <span class="keyword">var</span> dt = Date.now()
+                        <span class="keyword">var</span> start = <span class="integer">0</span>
+                        <span class="keyword">var</span> data_new = msg.array
+                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.shaders.typeface.mesh
+                        <span class="keyword">var</span> data_old = mesh.array
+                        <span class="keyword">var</span> len_new = msg.length
+                        <span class="keyword">var</span> len_old = mesh.length / <span class="integer">6</span>
+                        <span class="keyword">for</span>(;start &lt; len_new &amp;&amp; start &lt; len_old; start++){
+                                <span class="keyword">var</span> off_old = start * <span class="integer">10</span> * <span class="integer">6</span>
+                                <span class="keyword">var</span> off_new = start * <span class="integer">4</span>
+                                <span class="keyword">if</span>(data_new[off_new] !== data_old[off_old + <span class="integer">6</span>]) <span class="keyword">break</span>
+                                <span class="comment">// copy data over</span>
+                                data_old[off_old + <span class="integer">7</span>] = data_old[off_old + <span class="integer">17</span>] = data_old[off_old + <span class="integer">27</span>] = 
+                                data_old[off_old + <span class="integer">37</span>] = data_old[off_old + <span class="integer">47</span>] = data_old[off_old + <span class="integer">57</span>] = data_new[off_new+<span class="integer">1</span>]
+                                data_old[off_old + <span class="integer">8</span>] = data_old[off_old + <span class="integer">18</span>] = data_old[off_old + <span class="integer">28</span>] = 
+                                data_old[off_old + <span class="integer">38</span>] = data_old[off_old + <span class="integer">48</span>] = data_old[off_old + <span class="integer">58</span>] = data_new[off_new+<span class="integer">2</span>]
+                                data_old[off_old + <span class="integer">9</span>] = data_old[off_old + <span class="integer">19</span>] = data_old[off_old + <span class="integer">29</span>] = 
+                                data_old[off_old + <span class="integer">39</span>] = data_old[off_old + <span class="integer">49</span>] = data_old[off_old + <span class="integer">59</span>] = data_new[off_new+<span class="integer">3</span>]
+                        }
+                        <span class="keyword">var</span> end_old = len_old - <span class="integer">1</span>, end_new = len_new - <span class="integer">1</span>
+                        <span class="keyword">for</span>(;end_old &gt; start &amp;&amp; end_new &gt; start; end_old--, end_new--){
+                                <span class="keyword">var</span> off_old = end_old * <span class="integer">10</span> * <span class="integer">6</span>
+                                <span class="keyword">var</span> off_new = end_new * <span class="integer">4</span>
+                                <span class="keyword">if</span>(data_new[off_new] !== data_old[off_old + <span class="integer">6</span>]) <span class="keyword">break</span>
+                        }
+                        
+                        <span class="comment">// alright we now have a range by which to 'insert' things or remove them</span>
+                        <span class="comment">// range in the new buffer is start-&gt;end_new</span>
+                        <span class="comment">// range in the old buffer is start-&gt;end_old</span>
+                        <span class="keyword">var</span> new_range = end_new - start
+                        <span class="keyword">var</span> old_range = end_old - start 
 
-                        <span class="comment">//console.log(msg)</span>
+                        mesh.setLength(start)
+                        <span class="keyword">var</span> buf = {<span class="key">struct</span>:<span class="integer">1</span>, <span class="key">start</span>:start, <span class="key">array</span>:data_new, <span class="key">length</span>:len_new}
+                        mesh.add(buf)
+
+                        mesh.clean = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.redraw()
+
                 }.bind(<span class="local-variable">this</span>)
         }
 <span class="comment">/*

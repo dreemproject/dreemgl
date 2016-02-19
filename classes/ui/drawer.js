@@ -49,6 +49,7 @@ define.class("$ui/view", function(require, $ui$, view){
 	this.pointermove = function(p, loc, v) {
 		var main = this._main;
 
+		// FIXME(mason) this is for the demo, and is a lame way to do it.  Needs to be cancellable pointer event maybe?
 		if (this.ignoremove === true) {
 			this.value = this._value;
 			return;
@@ -77,6 +78,7 @@ define.class("$ui/view", function(require, $ui$, view){
 
 	this.pointerend = function(p, loc, v) {
 
+		// FIXME(mason) see above
 		if (this.ignoremove === true) {
 			this.ignoremove = undefined;
 			return;
