@@ -406,7 +406,6 @@ define.class(function(require, baseclass){
 			}
 			draw = this.nextItem(draw, 'pick')
 		}
-		//console.log(vtx_count)
 		return hastime
 	}
 
