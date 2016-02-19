@@ -41,6 +41,10 @@ define.class(function(require){
 		}
 	})
 
+	this.moveToOffset = function(offset){
+		this.start = this.end = offset
+	}
+
 	this.moveLeft = function(only_end){
 		this.end = this.end - 1
 		if(this.end < 0) this.end = 0

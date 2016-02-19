@@ -434,6 +434,10 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return this.array[off * 6 * 10 + 0 + 10]
 		}
 
+		this.tagAt = function(off, tagid){
+			return this.array[off * 6 * 10 + 6 + (tagid||0)]
+		}
+
 		this.offsetFromTag = function(tagid, tag, start){
 			var off = start || 0, len = this.length
 			while(Math.abs(this.array[off * 6 * 10 + 7 + tagid] - tag) > 0.001){

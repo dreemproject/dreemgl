@@ -88,7 +88,7 @@ define.class(function(require){
 		// lets communicate the position of our first cursor
 
 	}
-
+	/*
 	this.markDelta = function(){
 		for(var i = 0; i < this.list.length; i++){
 			var cursor = this.list[i]
@@ -128,7 +128,7 @@ define.class(function(require){
 		}
 		this.update()
 	}
-
+	*/
 	this.update = function(){
 		if(this.editor.cursorsChanged) this.editor.cursorsChanged()
 	}

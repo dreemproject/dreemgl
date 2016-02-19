@@ -711,6 +711,7 @@ define.class(function(require, exports){
 			if(i < n.args.length - 1) this.comma(exports._Call, this.group++)
 			if(has_newlines && !this.comments(arg.cmr))
 				this.newline()
+			//else this.space()
 		}
 		if(has_newlines && this.comments(n.cm2)) this.tab(this.indent - 1)
 

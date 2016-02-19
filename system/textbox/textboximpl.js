@@ -9,14 +9,6 @@ define.mixin(function(require){
 	var Cursor = require('./singlecursor')
 	var parse = new (require('$system/parse/onejsparser'))()
 
-	// change sources
-	/*var enumchange = this.enumchange = {
-		keypress:1,
-		delete:2,
-		clipboard:3,
-		undoredo:4
-	}*/
-
 	this.change = 0
 
 	this.doCursor = function(){
@@ -97,6 +89,7 @@ define.mixin(function(require){
 		}
 		stack1.splice(i+1)
 		this.cursorset.fromArray(last_cursor)
+		this.textChanged()
 	}
 
 	// alright we serialize all ze cursors and concat and send over.
@@ -177,6 +170,7 @@ define.mixin(function(require){
 		this.undo_group++
 		this.cursorset.insert(event.value)
 		this.doCursor()
+		this.change_keypress = event.value
 		this.change = 'keypress'//enumchange.keypress
 	}
 

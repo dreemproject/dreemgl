@@ -11,7 +11,6 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 	var enumchange = this.enumchange
 
 	this.init = function(){
-		
 	}
 
 	// process inserts with matching parens
@@ -54,32 +53,14 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 			var state = 0
 			var indent = 0
 			var split = 0
-			while(this.textbuf.charCodeAt(i) == 9){
-				i++
-				indent--
+			while(this.textbuf.charCodeAt(i) !== 9 && i >= 0){
+				i--
 			}
-			if(this.textbuf.charCodeAt(i) == 125 && this.textbuf.charCodeAt(i-1) == 123){
-				i++, split = 1
+			while(this.textbuf.charCodeAt(i) === 9){
+				i--
+				indent++
 			}
-			while(i<this.textbuf.char_count){
-				var code = this.textbuf.charCodeAt(i)
-				if(state == 0 && code == 123) indent--
-				if(state == 1){
-					if(code == 9 || code == 125) indent++
-					else break
-				}
-				if(code == 10) state = 1
-				i++
-			}
-			if(indent>0){
-				if(split){
-					text += Array(indent+2).join('\t') + '\n' + Array(indent+1).join('\t')
-					cdelta = -1 - indent
-				}
-				else{
-					text += Array(indent+1).join('\t')
-				}
-			}
+			text += Array(indent + 1).join('\t')
 		}
 		return [text, cdelta]
 	}
@@ -94,35 +75,11 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 	}
 	
 	// the change event
+	this.change_id = 0
 	this.textChanged = function(){
 		baseclass.textChanged.call(this)
-		this.worker.postMessage({source:this._value})
-		/*
-		this.was_cursor = false
-		if(this.change == enumchange.keypress || this.change == enumchange.delete || this.change == enumchange.clipboard){
-			this.was_delete = this.change == enumchange.delete
-			this.was_cursor = this.change == enumchange.clipboard // dont delay reformat on paste
-
-			this.delay_update = 0
-			//if(this.step_timeout) this.clearTimeout(this.step_timeout)
-			//this.step_timeout = this.setTimeout(this.parseStep,0)
-		}
-		// if its an undo, 
-		if(this.change == enumchange.undoredo){ // set delay to cursor press
-		//	delay_update = parseStep
-		}
-		// send the worker new source
-		this.worker.postMessage({source:this.})*/
-
-	}
-
-	this.oncursor = function(){
-		if(this.delay_update){
-			this.was_cursor = true
-			this.was_delete = false
-			this.delay_update()
-			this.delay_update = 0
-		}
+		console.log("HERE!")
+		this.worker.postMessage({change_id:++this.change_id, source:this._value})
 	}
 
 	// alright lets make a worker that parses and reserializes
@@ -145,26 +102,29 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 			var buf = {
 				out:vec4.array(msg.source.length + 100),
 				charCodeAt: function(i){return this.out.array[i*4]},
-				char_count:0
+				char_count:0,
+				walk_id:0
 			};
 
 			// lets reserialize output
 			var out = buf.out
-			JSFormatter.walk(ast, buf, function(str, group, l1, l2, l3, m3){
+			JSFormatter.walk(ast, buf, function(str, group, l1, l2, l3, node){
 				out.ensureSize(out.length + str.length)
 				var o = out.length
+				var first = str.charCodeAt(0)
+				if(first !== 32 && first !== 9 && first !== 10) buf.walk_id++
 				for(var i = 0; i < str.length; i++){
 					var v = o * 4 + i * 4
 					out.array[v] = str.charCodeAt(i)
 					out.array[v + 1] = group
 					out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
-					out.array[v + 3] = m3
+					out.array[v + 3] = buf.walk_id
 				}
 				out.length += str.length
 				buf.char_count += str.length;
 			})
 
-			this.postMessage({length:buf.out.length, array:buf.out.array}, [buf.out.array.buffer])
+			this.postMessage({length:buf.out.length, change_id: msg.change_id, array:buf.out.array}, [buf.out.array.buffer])
 		}
 	})
 
@@ -172,12 +132,8 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 		this.worker = prev && prev.worker || worker()
 		// if we get source back yay
 		this.worker.onmessage = function(msg){
-			// alright lets run the diff step.
-			// shall we just swap the entire fucker out?... no that breaks undo
-			// ah right.
-			// we dont want that.
-			// but we might have to update the typed array in a tight loop.
-			// get the start diff
+
+			if(msg.change_id !== this.change_id) return // toss it, its too late.
 			var dt = Date.now()
 			var start = 0
 			var data_new = msg.array
@@ -204,12 +160,68 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 				if(data_new[off_new] !== data_old[off_old + 6]) break
 			}
 			
-			// alright we now have a range by which to 'insert' things or remove them
-			// range in the new buffer is start->end_new
-			// range in the old buffer is start->end_old
 			var new_range = end_new - start
 			var old_range = end_old - start 
 
+			if(old_range < new_range && this.change === 'delete') return
+			if(old_range > new_range && this.change === 'keypress') return
+
+			// do the cursor move magic
+			var deleted_whitespace = true
+			if(this.change === 'delete'){
+				var undo_data = this.undo_stack[this.undo_stack.length - 1].data
+				for(var i = 0; i < undo_data.length; i++){
+					var char = undo_data.array[i*4]
+					if(char !== 32 && char !== 9 && char !== 10) deleted_whitespace = false
+				}
+			}
+			var cursor_now = this.cursorset.list[0].start
+
+			// if we insert a newline or do a delete use the marker
+			if(new_range !== old_range){
+				if(this.change === 'keypress' && this.change_keypress === '\n'|| this.change === 'delete' && deleted_whitespace){
+					// use the tag
+					var nextto = mesh.tagAt(cursor_now,3) 
+					for(var t = start; t < len_new; t++){
+						if(nextto == data_new[t*4+3]){
+							this.cursorset.list[0].moveToOffset(t)
+							break
+						}
+					}
+				}
+				else if(this.change === 'delete'){
+					this.cursorset.list[0].moveToOffset(start)
+				}
+				else if(this.change === 'keypress'){
+					// stick to the character
+					var char_at = data_new[cursor_now*4]
+					if(char_at === 9){ // we are typing in a tab
+						this.cursorset.list[0].moveToOffset(end_new+1)
+					}
+					else if(char_at !== 44){
+						var nextto = mesh.tagAt(cursor_now - 1,0)
+						var fd = 0
+						for(var t = start - 1; t < len_new; t++){
+							if(nextto == data_new[t*4+0]){
+								fd = 1
+							}
+							else if(fd){	// move the cursor
+								this.cursorset.list[0].moveToOffset(t)
+								break
+							}
+						}
+					}
+				}
+				this.cursorset.update()
+				// create the undo entry
+				if(new_range){
+					this.addUndoInsert(start, end_old+1)
+					this.addUndoDelete(start, end_new+1)
+					this.undo_group++
+				}
+			}
+
+			// this replaces the textbuffer
 			mesh.setLength(start)
 			var buf = {struct:1, start:start, array:data_new, length:len_new}
 			mesh.add(buf)

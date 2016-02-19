@@ -157,16 +157,18 @@ define.class('$ui/textbox', function(require){
 			textbuf.boldness = 0.6
 
 			textbuf.clear()
-
+			var node_id = 0
 			if(view.wrap){
-				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
+				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, node){
 					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
 					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
 				})
 			}
 			else{
-				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, m3){
-					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
+				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, node){
+					var start = text.charCodeAt(0)
+					if(start !== 32 && start !== 10 && start !== 9) node_id ++
+					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), node_id)
 				})
 			}
 		}

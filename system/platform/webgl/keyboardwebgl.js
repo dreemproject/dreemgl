@@ -235,7 +235,7 @@ define.class('$system/base/keyboard', function (require, exports){
 				this._clipboard = value
 				this.textarea.value = value + ' '
 				this.textarea.selectionStart = 0
-		        this.textarea.selectionEnd = value.length - 1
+		        this.textarea.selectionEnd = value.length
 				this.textarea.focus()
 			}
 		})

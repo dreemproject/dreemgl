@@ -10,7 +10,7 @@ define.class(function(require, $server$, composition, $ui$, screen, view, $widge
 			jseditor({
 				flex:1, overflow:'scroll',fontsize:15,
 				source:require('./jseditortest').module.factory.body.toString()
-			})
+			},[1])
 		)
 	]}
 })

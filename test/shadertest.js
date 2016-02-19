@@ -12,13 +12,9 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					myvalue:Config({value:0., motion:'linear', duration:0.5}),
 					pointerstart:function(){ this.myvalue = 1 },
 					pointerend:function(){ this.myvalue = 0 },
-					koe:require('$resources/textures/checker.png'),
-					schaap:require('$resources/textures/envmap1.png'),
 					bgcolorfn:function(mesh){
 						//return vec4(0,1,0,1)
 						// gradient
-						return mix(koe.sample(math.rotate2d(mesh.xy-.5,time)+.5), schaap.sample(mesh.xy), mod(time+ myvalue*atan(mesh.x-.5, mesh.y-.5),1.))
-						//koe.sample(mesh.xy) * schaap.sample(mesh.xy)
 
 						// plasma
 						//return pal.pal1(noise.noise3d(vec3(mesh.x*10,mesh.y*10,view.time)))
@@ -32,7 +28,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 
 						// circles
 						// we have a rectangle
-/*
+
 						var t = view.time
 						var field = float(0)
 						var p = mesh.xy * vec2(view.layout.width, view.layout.height) + vec2(-300,-300)
@@ -49,7 +45,7 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 						var bg = vec4(0.,0.,0.,0.05)
 
 						return mix(bg.rgba, fg.rgba, fg.a)
-*/
+
 					}
 				})
 			)
