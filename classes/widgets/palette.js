@@ -145,7 +145,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 					fgcolor:this.bordercolor,
 					borderwidth:0,
 					padding:0,
-					paddingright:5,
+					paddingright:7,
 					margin:0,
 					icon:icn,
 					pickalpha:-1,
@@ -157,6 +157,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 							self.panel.mode = "compact";
 							this.icon = "list";
 						}
+
 					}
 				}))
 			}
@@ -165,21 +166,21 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 	});
 
 	define.class(this, "panelview", view, function() {
-		this.bgcolor = "white";
-		this.hardrect = {pickonly:true};
+		this.bgcolor = "transparent";
+		this.pickalpha = -1;
 	});
 
 	define.class(this, "panellabel", label, function() {
-		this.bgcolor = "white";
-		this.hardrect = {pickonly:true};
+		this.bgcolor = "transparent";
+		this.pickalpha = -1;
 		this.fgcolor = "#e4e4e4";
 		this.padding = 0;
 		this.margin = 0;
 	});
 
 	define.class(this, "panelicon", icon, function() {
-		this.bgcolor = 'white';
-		this.hardrect = {pickonly:true};
+		this.bgcolor = 'transparent';
+		this.pickalpha = -1;
 		this.fgcolor = '#e4e4e4';
 		this.align = 'center';
 		this.padding = 0;
@@ -188,9 +189,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 
 	define.class(this, "panelitem", view, function() {
 
-		this.bgcolor = 'white';
+		this.bgcolor = 'transparent';
 		this.flexdirection = 'column';
-		this.hardrect = {pickonly:true};
+		this.pickalpha = -1;
 		this.padding = 0;
 		this.margin = 0;
 

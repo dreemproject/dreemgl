@@ -73,7 +73,7 @@ define.class("$ui/view", function(require,
 			},
 			{
 				label:"Button",
-				icon:"square",
+				icon:"stop",
 				desc:"A basic button",
 				classname:"button",
 				classdir:"$ui$",
@@ -1034,7 +1034,6 @@ define.class("$ui/view", function(require,
 									value: v.toolmove === false,
 									click:function() {
 										v.toolmove = !this.value;
-										this.value = v.toolmove
 									}
 								}),
 								checkbox({
@@ -1047,15 +1046,14 @@ define.class("$ui/view", function(require,
 									marginleft:5,
 									borderwidth:0,
 									padding:0,
-									value: true,
+									value: v.visible,
 									click:function() {
 										v.visible = !v.visible;
-										this.value = !this.value;
 									}
 								}),
 								label({
 									text:name,
-									fgcolor:"white",
+									fgcolor: "white",
 									marginleft:5,
 									fontsize:14,
 									pickalpha:-1
@@ -1074,7 +1072,6 @@ define.class("$ui/view", function(require,
 									value: v.tooltarget === false,
 									click:function() {
 										v.tooltarget = !this.value;
-										this.value = v.tooltarget
 									}
 								})
 							);

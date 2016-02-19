@@ -66,9 +66,9 @@ define.class('$ui/view', function(icon, label){
 		}
 	}
 
-	this.onclick = function(){
-		this.value  = this.value?false:true;
-	}
+	//this.onclick = function(){
+	//	this.value  = !(this.value);
+	//}
 
 	this.hardrect = {
 		color: function(){
@@ -94,7 +94,7 @@ define.class('$ui/view', function(icon, label){
 		this.col1 = this.pressedcolor1
 		this.col2 = this.pressedcolor2
 
-		this.value  = this.value?false:true;
+		this.value  = !(this.value);
 	}
 
 	this.init = function(){
@@ -120,7 +120,7 @@ define.class('$ui/view', function(icon, label){
 			fgcolor:(!!(this.value) ? this.fgcolor : this.inactivecolor),
 			icon: this.icon,
 			fontsize:this.fontsize,
-			bgcolor:NaN,
+			bgcolor:"transparent",
 			drawtarget:"color"
 		}));
 
