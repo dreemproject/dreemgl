@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, treeview, button, statebutton,
+								  $ui$, view, label, icon, checkbox, treeview, button, statebutton,
 								  $widgets$, palette, propviewer,
 								  $server$, astio){
 
@@ -1017,11 +1017,68 @@ define.class("$ui/view", function(require,
 								name = v.name + " (" + name + ")"
 							}
 							var selected = (!!(this.selection) && this.selection.indexOf(v) > -1);
+
+							var itemview = view({
+								bgcolor:NaN
+							},
+								checkbox({
+									icon:"lock",
+									pickalpha:-1,
+									fgcolor:"white",
+									bgcolor:"transparent",
+									fontsize:14,
+									borderwidth:0,
+									padding:0,
+									value: v.toolmove === false,
+									click:function() {
+										v.toolmove = !this.value;
+										this.value = v.toolmove
+									}
+								}),
+								checkbox({
+									icon:"eye",
+									pickalpha:-1,
+									fontsize:14,
+									fgcolor:"white",
+									bgcolor:"transparent",
+									marginleft:5,
+									borderwidth:0,
+									padding:0,
+									value: v.visible,
+									click:function() {
+										v.visible = !v.visible;
+										this.value = v.visible
+									}
+								}),
+								label({
+									text:name,
+									fgcolor:"white",
+									margintop:5,
+									marginleft:5,
+									fontsize:12,
+									pickalpha:-1
+								}),
+								checkbox({
+									icon:"wrench",
+									pickalpha:-1,
+									fgcolor:"lightgray",
+									bgcolor:"transparent",
+									fontsize:14,
+									marginleft:5,
+									borderwidth:0,
+									padding:0,
+									value: v.tooltarget === false,
+									click:function() {
+										v.tooltarget = !this.value;
+										this.value = v.tooltarget
+									}
+								})
+							);
+
 							return {
-								name:name,
+								itemview: itemview,
 								children: children,
 								selected: selected,
-								fgcolor: "red",
 								collapsed:(v.constructor.name !== "screen"),
 								view:v
 							}

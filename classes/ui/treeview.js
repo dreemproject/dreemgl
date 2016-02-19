@@ -37,7 +37,7 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.borderradius = 0
 		this.borderwidth = 0
 		this.fgcolor = "#d0d0d0"
-		this.bgcolor = "3b3b3b";
+		this.bgcolor = "transparent";
 		this.margin = 0
 		//this.alignself = "flex-start"
 	})
@@ -62,25 +62,37 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 		this.hovercolor2 = "#505050"
 		this.cornerradius = 0
 		this.fgcolor = "#f0f0f0"
+		this.bgcolor = "#3b3b3b"
 		this.margin = 2
-		this.bgcolor = "transparent"
+		//this.bgcolor = "transparent"
 		//this.alignself = "flex-start"
 
 		this.render = function(){
-			return [
-				this.haschildren?this.outer.foldbutton({
-					icon:this.folded? "chevron-right":"chevron-down",
+
+			var vws = [];
+
+			if (this.haschildren) {
+				vws.push(this.outer.foldbutton({
+					icon: this.folded ? "chevron-right" : "chevron-down",
 					padding: 2,
 					click: this.toggleclick
-				}):[],
-				//flatbutton({icon:this.folded?"arrow-right":"arrow-down",padding: 2, click: this.toggleclick}),
-				this.outer.foldbutton({
-					label: this.text,
+				}))
+			}
+
+			if (this.text) {
+				vws.push(this.outer.foldbutton({
+					text: this.text,
 					click:function(){
 						this.emit('select',{node:this})
 					}.bind(this)
-				})
-			];
+				}))
+			}
+
+			if (this.constructor_children.length) {
+				vws = vws.concat(this.constructor_children)
+			}
+
+			return vws;
 		}
 	});
 
@@ -149,17 +161,20 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			//debugger;
 			if (!this.item) return [label({text:""})];
 			//this.collapsed;
-			var res = [
-				this.outer.newitemheading({
-						haschildren: this.item.children && this.item.children.length,
-						folded: this.item.collapsed,
-						toggleclick: this.toggle.bind(this),
-						select: this.processSelect.bind(this),
-						text:this.item.name,
-						id:this.item.id
-					})
-			];
+			var res = [];
 
+			var itemview = [];
+			if (this.item.itemview) {
+				itemview.push(this.item.itemview)
+			}
+			res.push(this.outer.newitemheading({
+					haschildren: this.item.children && this.item.children.length,
+					folded: this.item.collapsed,
+					toggleclick: this.toggle.bind(this),
+					select: this.processSelect.bind(this),
+					text:this.item.name,
+					id:this.item.id
+			}, itemview));
 
 			if (this.item.collapsed == false){
 				if (this.item.children){

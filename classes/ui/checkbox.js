@@ -117,8 +117,9 @@ define.class('$ui/view', function(icon, label){
 		var cb = [];
 
 		cb.push(icon({
-			fgcolor:(this.value ? this.fgcolor : this.inactivecolor),
+			fgcolor:(!!(this.value) ? this.fgcolor : this.inactivecolor),
 			icon: this.icon,
+			fontsize:this.fontsize,
 			bgcolor:NaN,
 			drawtarget:"color"
 		}));
@@ -130,7 +131,7 @@ define.class('$ui/view', function(icon, label){
 				padding:vec4(10,0,0,0),
 				text:this.text,
 				fontsize:this.fontsize,
-				fgcolor:(this.value ? this.textactivecolor : this.textcolor)
+				fgcolor:(!!(this.value) ? this.textactivecolor : this.textcolor)
 			}))
 		}
 

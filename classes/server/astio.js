@@ -55,11 +55,11 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 				past = this.ast;
 			}
 
-			if (typeof(o.__constructorIndex) !== "undefined") {
-				o.__ast = past.args[o.__constructorIndex];
-			} else if (o.constructor.module.factory.baseclass === "/server/composition") {
+			if (o.constructor.module.factory.baseclass === "/server/composition") {
 				var key = this.build.Function();
 				o.__ast = new astscanner(past, key).at;
+			} else if (typeof(o.__constructorIndex) !== "undefined") {
+				o.__ast = past.args[o.__constructorIndex];
 			} else {
 				var key = this.build.Call(this.build.Id(o.constructor.name));
 				o.__ast = new astscanner(past, key).at;
