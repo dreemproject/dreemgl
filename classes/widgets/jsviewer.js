@@ -1,12 +1,12 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
 define.class('$ui/textbox', function(require){
 
-	var JSFormatter = require('$system/parse/jsformatter')	
+	var JSFormatter = require('$system/parse/jsformatter')
 	var Parser = require('$system/parse/onejsparser')
 
 	this.attributes = {
@@ -37,7 +37,7 @@ define.class('$ui/textbox', function(require){
 		var sub = int(mod(tag.z / 256., 256.))
 		var part = int(mod(tag.z, 256.))
 		var unicode = int(tag.x)
-		
+
 		if(unicode == 10 || unicode == 32 || unicode == 9) discard
 		if(sub == _Paren || sub == _Brace || sub == _Bracket){
 			if(sub == _Paren){
@@ -161,7 +161,7 @@ define.class('$ui/textbox', function(require){
 			if(view.wrap){
 				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, node){
 					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
-					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), m3)
+					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0))
 				})
 			}
 			else{

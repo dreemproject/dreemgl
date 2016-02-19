@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, checkbox, treeview, button, statebutton,
+								  $ui$, view, label, icon, checkbox, treeview, button, statebutton, tabbar,
 								  $widgets$, palette, propviewer,
 								  $server$, astio){
 
@@ -360,6 +360,8 @@ define.class("$ui/view", function(require,
 
 		if (this.__resizecorner) {
 
+			// Resize
+
 			if (this.__resizecorner === "bottom-right") {
 				dragview.width = this.__originalsize.w + ev.pointer.delta.x;
 				dragview.height = this.__originalsize.h + ev.pointer.delta.y;
@@ -389,6 +391,8 @@ define.class("$ui/view", function(require,
 			}
 
 		} else if (this.__startpos && this.testView(ev.view) && ev.view.toolmove !== false) {
+
+			// Move
 
 			this.screen.pointer.cursor = "move";
 			ev.view.cursor = "move";
@@ -1051,9 +1055,23 @@ define.class("$ui/view", function(require,
 										v.visible = !v.visible;
 									}
 								}),
-								label({
-									text:name,
-									fgcolor: "white",
+								statebutton({
+									label:name,
+									bgcolor:"transparent",
+									state: selected ? "selected" : "normal",
+									normal:{
+										fgcolor: "#ddd"
+									},
+									hover:{
+										fgcolor:"#fff"
+									},
+									click:function(ev, val, o) {
+										var astpath = JSON.stringify(this.sourcefile.nodePathFor(v));
+										if (!this.selected || this.selected.indexOf(astpath) < 0) {
+											this.selected = [astpath];
+										}
+										//o.state = "selected"
+									}.bind(this),
 									marginleft:5,
 									fontsize:14,
 									pickalpha:-1
@@ -1080,7 +1098,7 @@ define.class("$ui/view", function(require,
 								itemview: itemview,
 								children: children,
 								selected: selected,
-								collapsed:(v.constructor.name !== "screen"),
+								collapsed:false,
 								view:v
 							}
 						}
@@ -1517,18 +1535,23 @@ define.class("$ui/view", function(require,
 
 		this.render = function(){
 			return [
-				label({
-					y:1,
-					alignself:'flex-start',
-					fgcolor:"white",
-					text:this.title,
-					fontsize:this.fontsize,
-					margin:0,
-					padding:vec4(10,8,0,0),
-					bgcolor:"#4e4e4e",
-					borderwidth:0,
-					borderradius:vec4(10,10,0,0)
-				}),
+				tabbar({tabs:[
+					{
+						alignself:'flex-start',
+						y:1,
+						class:"folder",
+						label:this.title,
+						fontsize:this.fontsize,
+						bgcolor:"#4e4e4e",
+						text:this.title,
+						margin:0,
+						padding:vec4(3,3,0,0),
+						fgcolor:"white",
+						normal:{ fgcolor:"white" },
+						hover:{ fgcolor:"white" },
+						selected:{ fgcolor:"white" }
+					}
+				]}),
 				this.constructor_children
 			];
 		}
