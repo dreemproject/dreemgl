@@ -21,41 +21,28 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 	};
 
 	this.fork = function(callback) {
-		this.undostack.push(this.last_source);
-
-		console.log("us>", this.undostack)
-
-
+		this.undostack.push(JSON.stringify(this.ast));
 		this.redostack.length = 0;
 		this.reset();
 		callback(this);
-		// lets reserialize
 		var last = this.last_source = this.stringify();
-		// save to disk.
 		this.emit('change', {value:last})
 	};
 
 	this.undo = function() {
-
-		console.log("us>", this.undostack)
-
 		if(!this.undostack.length) return;
-		this.redostack.push(this.stringify(this.ast));
-
-		var popped = this.undostack.pop();
-		this.ast = this.parse(popped);
-		console.log('new', popped, this.ast)
-
+		this.redostack.push(JSON.stringify(this.ast));
+		this.ast = JSON.parse(this.undostack.pop());
 		var last = this.last_source = this.stringify();
 		this.emit('change', {value:last})
 	};
 
 	this.redo = function() {
 		if(!this.redostack.length) return;
-		this.undostack.push(this.stringify(this.ast));
-		this.ast = this.parse(this.redostack.pop());
+		this.undostack.push(JSON.stringify(this.ast));
+		this.ast = JSON.parse(this.redostack.pop());
 		var last = this.last_source = this.stringify();
-		this.emit('change', {value:last})
+		this.emit('change', {value:last});
 	};
 
 	this.nodeFor = function(o) {
