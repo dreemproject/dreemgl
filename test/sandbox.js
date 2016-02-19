@@ -25,7 +25,7 @@ define.class("$server/composition",function(require, $ui$, checkbox, checkbox, i
 					view({height:416, width:325, bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1), position:"absolute", x:95.00006103515625, y:22.000152587890625, margin:vec4(0,0,0,0)},view({height:143, width:138, bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1), position:"absolute", x:92, y:174.00001525878906, borderradius:vec4(10,30,60,80)},icon({fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1), opaque:true, icon:"flask", fontsize:80, position:"absolute", x:33, y:-16})),icon({fgcolor:vec4(0.885095477104187,0.8980835676193237,0.9214090704917908,1), opaque:true, icon:"ge", fontsize:80, position:"absolute", x:122.9998779296875, y:41.00006103515625})),
 					view({height:25, width:648, bgcolor:vec4(0.860729455947876,0.864276111125946,0.19516445696353912,1), position:"absolute", x:324, y:571.0005493164062}),
 					label({fontsize:144, pickalpha:-1, bgcolor:"transparent", fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1), text:"Howdy!", position:"absolute", x:511.99993896484375, y:334.0001220703125, width:504.4921875, height:233.28000000000003, opacity:0.6}),
-					view({height:181, width:91, pickalpha:-1, bgcolor:"purple", position:"absolute", x:545, y:70.99993896484375})
+					view({height:181, width:779, pickalpha:-1, bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1), position:"absolute", x:141, y:614.9999389648438})
 				),
 				toolkit({
 					position:"absolute", 

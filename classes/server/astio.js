@@ -145,8 +145,10 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 			if (typeof(value) === "function") {
 				newval = this.createASTNode(value.toString(), true)
-			} else {
+			} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
 				newval = this.build.Value(value);
+			} else {
+				newval = this.createASTNode(value)
 			}
 
 			item.value = newval;
@@ -162,11 +164,10 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 				newval = this.createASTNode(value.toString(), true);
 				item.value = newval
-			} else {
-				//args[name] = value;
-				//var newparams = this.createASTNode(args);
-				//item = newparams.keys[0];
+			} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
 				item = { key:build.Id(key), value:build.Value(value) }
+			} else {
+				item = { key:build.Id(key), value:this.createASTNode(value) }
 			}
 
 			if (item) {

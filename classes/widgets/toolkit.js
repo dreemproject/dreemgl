@@ -126,6 +126,9 @@ define.class("$ui/view", function(require,
 		// it's active behaviors
 		mode:Config({type:Enum('design','live'), value:'design'}),
 
+		// Should views be dropped as absolute or relative children
+		dropmode:Config({type:Enum('absolute','relative'), value:'absolute'}),
+
 		// The size of the reticle hot corners inside of a view
 		reticlesize: 9,
 
@@ -971,9 +974,11 @@ define.class("$ui/view", function(require,
 
 							var pos = v.globalToLocal(ev.position);
 
-							params.position = 'absolute';
-							params.x = pos.x;
-							params.y = pos.y;
+							params.position = this.dropmode;
+							if (this.dropmode === 'absolute') {
+								params.x = pos.x;
+								params.y = pos.y;
+							}
 
 							this.createASTNodeOn(v, {classname:item.classname, params:params})
 						}
