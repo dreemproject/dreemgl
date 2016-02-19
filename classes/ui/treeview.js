@@ -74,7 +74,11 @@ define.class('$ui/view', function($ui$, view, label, button, icon){
 			if (this.haschildren) {
 				vws.push(this.outer.foldbutton({
 					icon: this.folded ? "chevron-right" : "chevron-down",
-					padding: 2,
+					paddingleft:1,
+					paddingright:2,
+					paddingtop:2,
+					margintop:3,
+					fontsize:10,
 					click: this.toggleclick
 				}))
 			}

@@ -1001,7 +1001,7 @@ define.class("$ui/view", function(require,
 			label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
 		));
 
-		views.push(this.panel({title:"Structure", flex:0.7},
+		views.push(this.panel({title:"Structure", flex:1},
 			treeview({
 				flex:1,
 				name:"structure",
@@ -1024,12 +1024,15 @@ define.class("$ui/view", function(require,
 
 							var itemview = view({
 								bgcolor:NaN,
+								padding:0,
+								margin:0,
+								height:25,
 								alignitems:"center"
 							},
 								checkbox({
 									icon:"lock",
 									pickalpha:-1,
-									fgcolor:vec4(1,0.1,0.2,1),
+									fgcolor:vec4(0.1,0.6,0.8,1),
 									inactivecolor:"#666",
 									bgcolor:"transparent",
 									fontsize:14,
@@ -1040,27 +1043,12 @@ define.class("$ui/view", function(require,
 										v.toolmove = !this.value;
 									}
 								}),
-								checkbox({
-									icon:"eye",
-									pickalpha:-1,
-									fontsize:14,
-									fgcolor:"white",
-									inactivecolor:"#666",
-									bgcolor:"transparent",
-									marginleft:5,
-									borderwidth:0,
-									padding:0,
-									value: v.visible,
-									click:function() {
-										v.visible = !v.visible;
-									}
-								}),
 								statebutton({
 									label:name,
 									bgcolor:"transparent",
-									state: selected ? "selected" : "normal",
 									normal:{
-										fgcolor: "#ddd"
+										fgcolor: "#ddd",
+										padding:0
 									},
 									hover:{
 										fgcolor:"#fff"
@@ -1072,9 +1060,25 @@ define.class("$ui/view", function(require,
 										}
 										//o.state = "selected"
 									}.bind(this),
-									marginleft:5,
+									marginleft:0,
+									padding:0,
 									fontsize:14,
 									pickalpha:-1
+								}),
+								checkbox({
+									icon:"eye-slash",
+									pickalpha:-1,
+									fontsize:14,
+									fgcolor:vec4(1,0.5,0.5,1),
+									inactivecolor:"#666",
+									bgcolor:"transparent",
+									marginleft:3,
+									borderwidth:0,
+									padding:0,
+									value: !v.visible,
+									click:function() {
+										v.visible = !v.visible;
+									}
 								}),
 								checkbox({
 									icon:"warning",
@@ -1083,7 +1087,7 @@ define.class("$ui/view", function(require,
 									inactivecolor:"#444",
 									bgcolor:"transparent",
 									fontsize:12,
-									margintop:7,
+									//margintop:7,
 									marginleft:7,
 									borderwidth:0,
 									padding:0,
@@ -1119,7 +1123,7 @@ define.class("$ui/view", function(require,
 			})
 		));
 
-		views.push(this.panel({title:"Properties", flex:2},
+		views.push(this.panel({title:"Properties", flex:1.7},
 			propviewer({
 				name:"inspector",
 				target:this.inspect,
