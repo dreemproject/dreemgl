@@ -304,7 +304,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> meters = geo.latLngToMeters(latlong[<span class="integer">0</span>], latlong[<span class="integer">1</span>])
                                 <span class="comment">// TODO(aki): move to correct position on transformed map</span>
                                 <span class="keyword">var</span> geopos = vec2(meters[<span class="integer">0</span>] , meters[<span class="integer">1</span>])
-                                GLGeom.createCone(<span class="integer">100</span>,<span class="integer">10</span>, -<span class="integer">500</span>, <span class="integer">20</span>, <span class="keyword">function</span>(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
+                                GLGeom.createCone(<span class="integer">20</span>,<span class="integer">1</span>, -<span class="integer">500</span>, <span class="integer">20</span>, <span class="keyword">function</span>(triidx,v1,v2,v3,n1,n2,n3,t1,t2,t3,faceidx){
                                         <span class="local-variable">this</span>.mesh.push(v1, geopos, n1, t1, i);
                                         <span class="local-variable">this</span>.mesh.push(v2, geopos, n2, t2, i);
                                         <span class="local-variable">this</span>.mesh.push(v3, geopos, n3, t3, i);
