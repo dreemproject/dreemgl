@@ -165,9 +165,9 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 				newval = this.createASTNode(value.toString(), true);
 				item.value = newval
 			} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
-				item = { key:build.Id(key), value:build.Value(value) }
+				item = { key:this.build.Id(key), value:this.build.Value(value) }
 			} else {
-				item = { key:build.Id(key), value:this.createASTNode(value) }
+				item = { key:this.build.Id(key), value:this.createASTNode(value) }
 			}
 
 			if (item) {

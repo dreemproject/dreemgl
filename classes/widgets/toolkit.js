@@ -915,7 +915,7 @@ define.class("$ui/view", function(require,
 							parent.setASTObjectProperty(parent, "width", parent._layout.width);
 							parent.setASTObjectProperty(parent, "height", parent._layout.height);
 							parent.ensureDeps();
-							this.commit();
+							parent.commit();
 						}
 						this.screen.pointer.cursor = "arrow";
 						this.__grabpos = undefined;
