@@ -69,7 +69,7 @@ define.class('$system/base/node', function(require, $ui$, label){
 	// Go back to the previous state. All classes that have this dataset bound will get their assignment updated
 	this.undo = function(){
 		if(!this.undo_stack.length) return
-		this.redo_stack.push( this.stringify(this.data))
+		this.redo_stack.push(this.stringify(this.data))
 		this.data = this.parse(this.undo_stack.pop());
 		this.notifyAssignedAttributes();
 	}

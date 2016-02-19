@@ -24,7 +24,6 @@ echo "Building docs..."
 jsduck "$CLASSDOC_DIR" --tags "$BIN_DIR/custom_tags.rb" --output="$API_DOCS_DIR" --title="$DOCS_TITLE" --footer="$COPYRIGHT" --external="$TYPENAMES" --guides $GUIDES_JSON --guides-toc-level=3
 
 echo "Building source docs..."
-
 rm -rf "$SRC_DOCS_DIR"/*
 "$BIN_DIR/buildsourcedocs.rb"
 

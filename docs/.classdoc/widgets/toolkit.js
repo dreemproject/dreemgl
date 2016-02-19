@@ -17,3 +17,29 @@
  * and views can be resized and manipulated.  In 'live' mode views lock into place the composition regains
  * it's active behaviors
  */
+/**
+ * @attribute {float32} [reticlesize="9"]
+ * The size of the reticle hot corners inside of a view
+ */
+/**
+ * @attribute {boolean} [groupdrag="true"]
+ * When dragging multiple selections, `groupdrag:true` will result in all selected views dragging together
+ * whereas `groupdrag:false` will only move the view under the cursor
+ */
+/**
+ * @attribute {boolean} [groupreparent="undefined"]
+ * When dropping a multiple selection into a view, should all views be reparented into the view that the
+ * mouse is over, or should they drop exactly where they are physically locate don the canvas.
+ */
+/**
+ * @attribute {boolean} [rulers="true"]
+ * Show or hide the rules when selecting and dragging
+ */
+/**
+ * @attribute {boolean} [movelines="true"]
+ * Show guidelines when moving
+ */
+/**
+ * @attribute {boolean} [hoverlines="undefined"]
+ * Always center guideline crosshairs on the mouse cursor
+ */

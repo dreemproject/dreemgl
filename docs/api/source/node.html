@@ -1111,19 +1111,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n957" name="n957">957</a>
 <a href="#n958" name="n958">958</a>
 <a href="#n959" name="n959">959</a>
-<strong><a href="#n960" name="n960">960</a></strong>
-<a href="#n961" name="n961">961</a>
-<a href="#n962" name="n962">962</a>
-<a href="#n963" name="n963">963</a>
-<a href="#n964" name="n964">964</a>
-<a href="#n965" name="n965">965</a>
-<a href="#n966" name="n966">966</a>
-<a href="#n967" name="n967">967</a>
-<a href="#n968" name="n968">968</a>
-<a href="#n969" name="n969">969</a>
-<strong><a href="#n970" name="n970">970</a></strong>
-<a href="#n971" name="n971">971</a>
-<a href="#n972" name="n972">972</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -2081,19 +2068,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">init</span>:Config({<span class="key">type</span>:Event}),
                 <span class="comment">// destroy event, called on all the objects that get dropped by the renderer on a re-render</span>
                 <span class="key">destroy</span>:Config({<span class="key">type</span>:Event})
-        };
-
-        <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>._cachednode) {
-                        <span class="keyword">var</span> past = <span class="local-variable">this</span>.parent.ASTNode();
-
-                        <span class="keyword">if</span> (<span class="keyword">typeof</span>(<span class="local-variable">this</span>.__constructorIndex) !== <span class="string"><span class="delimiter">&quot;</span><span class="content">undefined</span><span class="delimiter">&quot;</span></span>) {
-                                <span class="local-variable">this</span>._cachednode = past.args[<span class="local-variable">this</span>.__constructorIndex];
-                        } <span class="keyword">else</span> {
-                                <span class="local-variable">this</span>._cachednode = <span class="keyword">new</span> ASTScanner(past, {<span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Call</span><span class="delimiter">&quot;</span></span>, <span class="key">fn</span>:{ <span class="key">type</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>:<span class="local-variable">this</span>.constructor.name }}).at;
-                        }
-                }
-                <span class="keyword">return</span> <span class="local-variable">this</span>._cachednode;
         };
 
 })

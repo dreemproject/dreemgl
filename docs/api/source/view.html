@@ -1881,6 +1881,37 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1727" name="n1727">1727</a>
 <a href="#n1728" name="n1728">1728</a>
 <a href="#n1729" name="n1729">1729</a>
+<strong><a href="#n1730" name="n1730">1730</a></strong>
+<a href="#n1731" name="n1731">1731</a>
+<a href="#n1732" name="n1732">1732</a>
+<a href="#n1733" name="n1733">1733</a>
+<a href="#n1734" name="n1734">1734</a>
+<a href="#n1735" name="n1735">1735</a>
+<a href="#n1736" name="n1736">1736</a>
+<a href="#n1737" name="n1737">1737</a>
+<a href="#n1738" name="n1738">1738</a>
+<a href="#n1739" name="n1739">1739</a>
+<strong><a href="#n1740" name="n1740">1740</a></strong>
+<a href="#n1741" name="n1741">1741</a>
+<a href="#n1742" name="n1742">1742</a>
+<a href="#n1743" name="n1743">1743</a>
+<a href="#n1744" name="n1744">1744</a>
+<a href="#n1745" name="n1745">1745</a>
+<a href="#n1746" name="n1746">1746</a>
+<a href="#n1747" name="n1747">1747</a>
+<a href="#n1748" name="n1748">1748</a>
+<a href="#n1749" name="n1749">1749</a>
+<strong><a href="#n1750" name="n1750">1750</a></strong>
+<a href="#n1751" name="n1751">1751</a>
+<a href="#n1752" name="n1752">1752</a>
+<a href="#n1753" name="n1753">1753</a>
+<a href="#n1754" name="n1754">1754</a>
+<a href="#n1755" name="n1755">1755</a>
+<a href="#n1756" name="n1756">1756</a>
+<a href="#n1757" name="n1757">1757</a>
+<a href="#n1758" name="n1758">1758</a>
+<a href="#n1759" name="n1759">1759</a>
+<strong><a href="#n1760" name="n1760">1760</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -2241,20 +2272,33 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">if</span>(radius[<span class="integer">0</span>] !== <span class="integer">0</span> || radius[<span class="integer">1</span>] !== <span class="integer">0</span> || radius[<span class="integer">2</span>] !== <span class="integer">0</span> || radius[<span class="integer">3</span>] !== <span class="integer">0</span>){
                         <span class="comment">// this switches the bg shader to the rounded one</span>
-                        <span class="local-variable">this</span>.bgshader_name = <span class="string"><span class="delimiter">'</span><span class="content">roundedrectshader</span><span class="delimiter">'</span></span>
-                        <span class="local-variable">this</span>.bordershader_name = <span class="string"><span class="delimiter">'</span><span class="content">roundedbordershader</span><span class="delimiter">'</span></span>
-                        <span class="local-variable">this</span>.roundedrect = bg_on
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage){
+                                <span class="local-variable">this</span>.roundedimage = bg_on
+                                <span class="local-variable">this</span>.roundedrect = <span class="predefined-constant">false</span>
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.roundedrect = bg_on
+                                <span class="local-variable">this</span>.roundedimage = <span class="predefined-constant">false</span>
+                        }
                         <span class="local-variable">this</span>.roundedborder = border_on
+                        <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.hardborder = <span class="predefined-constant">false</span>
                 }
                 <span class="keyword">else</span> {
-                        <span class="local-variable">this</span>.bgshader_name = <span class="string"><span class="delimiter">'</span><span class="content">hardrectshader</span><span class="delimiter">'</span></span>
-                        <span class="local-variable">this</span>.bordershader_name = <span class="string"><span class="delimiter">'</span><span class="content">hardbordershader</span><span class="delimiter">'</span></span>
-                        <span class="local-variable">this</span>.hardrect = bg_on
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage){
+                                <span class="local-variable">this</span>.hardimage = bg_on
+                                <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.hardrect = bg_on
+                                <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">false</span>
+                        }
+
                         <span class="local-variable">this</span>.hardborder = border_on
                         <span class="local-variable">this</span>.roundedrect = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.roundedborder = <span class="predefined-constant">false</span>
+                        <span class="local-variable">this</span>.roundedimage = <span class="predefined-constant">false</span>
                 }
         }
 
@@ -2320,11 +2364,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.viewportmatrix = mat4()
                 }
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>._bgimage || <span class="local-variable">this</span>._wiredfn_bgimage){
-                        <span class="comment">// set the bg shader</span>
-                        <span class="local-variable">this</span>.hardrect = <span class="predefined-constant">false</span>
-                        <span class="local-variable">this</span>.hardimage = <span class="predefined-constant">true</span>
-                }
                 <span class="comment">// create shaders</span>
                 <span class="local-variable">this</span>.shaders = {}
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> <span class="local-variable">this</span>.shader_enable){
@@ -2406,6 +2445,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.setBgImage(<span class="local-variable">this</span>._bgimage)
                         }
                 }
+                <span class="keyword">else</span> <span class="local-variable">this</span>.setBorderShaders()
         }
 
         <span class="local-variable">this</span>.<span class="function">defaultKeyboardHandler</span> = <span class="keyword">function</span>(v, prefix){
@@ -2432,7 +2472,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">setBgImage</span> = <span class="keyword">function</span>(image){
-                <span class="keyword">var</span> img = <span class="local-variable">this</span>.shaders.hardimage.texture = Shader.Texture.fromImage(image);
+                <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.hardimage || <span class="local-variable">this</span>.shaders.roundedimage
+                <span class="keyword">if</span>(!shader) <span class="keyword">return</span>
+                <span class="keyword">var</span> img = shader.texture = Shader.Texture.fromImage(image);
                 <span class="keyword">if</span>(isNaN(<span class="local-variable">this</span>._size[<span class="integer">0</span>])){
                         <span class="local-variable">this</span>._size = img.size
                         <span class="local-variable">this</span>.relayout()
@@ -3118,6 +3160,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         }
 
+        <span class="local-variable">this</span>.<span class="function">animate</span> = <span class="keyword">function</span>(key, track){
+                <span class="keyword">return</span> <span class="keyword">new</span> define.Promise(<span class="keyword">function</span>(resolve, reject){
+                        <span class="local-variable">this</span>.startAnimation(key, <span class="predefined-constant">undefined</span>, track, resolve)
+                }.bind(<span class="local-variable">this</span>))
+        }
+
         <span class="local-variable">this</span>.<span class="function">startAnimation</span> = <span class="keyword">function</span>(key, value, track, resolve){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.initialized) <span class="keyword">return</span> <span class="local-variable">this</span>.screen.startAnimationRoot(<span class="local-variable">this</span>, key, value, track, resolve)
                 <span class="keyword">else</span>{
@@ -3237,6 +3285,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
         })
 
+
         <span class="comment">// rounded rect shader class</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
@@ -3318,6 +3367,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> vec4(sized.x, sized.y, <span class="integer">0</span>, <span class="integer">1</span>) * view.totalmatrix * view.viewmatrix
                 }
         })
+
+        <span class="comment">// hard edged bgimage shader</span>
+        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">roundedimage</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.roundedrect, <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.dont_scroll_as_viewport = <span class="predefined-constant">true</span>
+                <span class="local-variable">this</span>.updateorder = <span class="integer">0</span>
+                <span class="local-variable">this</span>.draworder = <span class="integer">0</span>
+                <span class="local-variable">this</span>.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
+                <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> col = <span class="local-variable">this</span>.texture.sample(uv.xy)
+                        <span class="keyword">return</span> vec4(col.rgb, col.a * view.opacity)
+                }
+        })
+
 
         <span class="comment">// rounded rect shader class</span>
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">shadowrect</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.Shader, <span class="keyword">function</span>(){

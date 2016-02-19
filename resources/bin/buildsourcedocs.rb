@@ -11,10 +11,9 @@ docsdir      = File.join(basedir, 'docs', 'api', 'source')
 classesdir      = File.join(basedir, 'classes')
 systemdir       = File.join(basedir, 'system')
 examplesdir     = File.join(basedir, 'examples')
-compositionsdir = File.join(basedir, 'compositions')
 appsdir         = File.join(basedir, 'apps')
 
-dirs = [classesdir, systemdir, examplesdir, compositionsdir, appsdir]
+dirs = [classesdir, systemdir, examplesdir, appsdir]
 
 dirs.each do |dir|
   Find.find(dir) do |path|

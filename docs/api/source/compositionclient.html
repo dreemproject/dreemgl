@@ -380,30 +380,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n226" name="n226">226</a>
 <a href="#n227" name="n227">227</a>
 <a href="#n228" name="n228">228</a>
-<a href="#n229" name="n229">229</a>
-<strong><a href="#n230" name="n230">230</a></strong>
-<a href="#n231" name="n231">231</a>
-<a href="#n232" name="n232">232</a>
-<a href="#n233" name="n233">233</a>
-<a href="#n234" name="n234">234</a>
-<a href="#n235" name="n235">235</a>
-<a href="#n236" name="n236">236</a>
-<a href="#n237" name="n237">237</a>
-<a href="#n238" name="n238">238</a>
-<a href="#n239" name="n239">239</a>
-<strong><a href="#n240" name="n240">240</a></strong>
-<a href="#n241" name="n241">241</a>
-<a href="#n242" name="n242">242</a>
-<a href="#n243" name="n243">243</a>
-<a href="#n244" name="n244">244</a>
-<a href="#n245" name="n245">245</a>
-<a href="#n246" name="n246">246</a>
-<a href="#n247" name="n247">247</a>
-<a href="#n248" name="n248">248</a>
-<a href="#n249" name="n249">249</a>
-<strong><a href="#n250" name="n250">250</a></strong>
-<a href="#n251" name="n251">251</a>
-<a href="#n252" name="n252">252</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -632,30 +608,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
                 console.log.apply(console, args)
         }
-
-        <span class="keyword">var</span> onejsparser = <span class="keyword">new</span> OneJSParser();
-        <span class="local-variable">this</span>.<span class="function">ASTNode</span> = <span class="keyword">function</span>() {
-                <span class="keyword">if</span> (!<span class="local-variable">this</span>._ast) {
-                        <span class="keyword">var</span> source = <span class="local-variable">this</span>.constructor.module.factory.body.toString();
-                        <span class="local-variable">this</span>._ast = onejsparser.parse(source);
-                }
-                <span class="keyword">return</span> <span class="local-variable">this</span>._ast;
-        };
-
-        <span class="local-variable">this</span>.<span class="function">commitAST</span> = <span class="keyword">function</span> () {
-                <span class="keyword">var</span> source =  <span class="keyword">new</span> ASTScanner(<span class="local-variable">this</span>.ASTNode()).toSource();
-
-                <span class="comment">//console.log(&quot;[COMMIT]&quot;, source);</span>
-
-                <span class="keyword">var</span> msg = {
-                        <span class="key">rpcid</span>: <span class="string"><span class="delimiter">'</span><span class="content">this</span><span class="delimiter">'</span></span>,
-                        <span class="key">method</span>: <span class="string"><span class="delimiter">'</span><span class="content">commit</span><span class="delimiter">'</span></span>,
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>,
-                        <span class="key">args</span>:[source]
-                };
-                <span class="local-variable">this</span>.rpc.__host.callRpcMethod(msg);
-        };
-
 })
 </pre></td>
 </tr></table>

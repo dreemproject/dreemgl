@@ -119,3 +119,28 @@ class License < JsDuck::Tag::Tag
   end
 end
 
+class Unsupported < JsDuck::Tag::Tag
+  def initialize
+    @tagname = :unsupported
+    @pattern = 'unsupported'
+    @html_position = POS_DOC + 0.1
+    @repeatable = true
+  end
+
+  def parse_doc(scanner, position)
+    text = scanner.match(/.*$/)
+    return { :tagname => :unsupported, :text => text }
+  end
+
+  def process_doc(context, unsupported_tags, position)
+    context[:unsupported] = unsupported_tags.map {|tag| tag[:text] }
+  end
+
+  def to_html(context)
+    unsupported = context[:unsupported].map {|unsupported| "<b>#{unsupported}</b>" }.join(" or ")
+    <<-EOHTML
+      <p>This software is unsupported under: #{unsupported}.</p>
+    EOHTML
+  end
+end
+

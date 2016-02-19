@@ -261,6 +261,35 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n107" name="n107">107</a>
 <a href="#n108" name="n108">108</a>
 <a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -270,21 +299,27 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (background, labels, events, scrollbar) {
 
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.padding = vec4(<span class="integer">0</span>, <span class="integer">80</span>, <span class="integer">0</span>, <span class="integer">18</span>)
+        <span class="local-variable">this</span>.padding = vec4(<span class="integer">0</span>, <span class="integer">56</span>, <span class="integer">0</span>, <span class="integer">18</span>)
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+
+        <span class="local-variable">this</span>.MIN_ZOOM = <span class="float">0.25</span>
+        <span class="local-variable">this</span>.TIME_SCALE = <span class="integer">86400000</span> <span class="comment">// millis to days</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">format</span>:  Config({<span class="key">type</span>: Enum(<span class="string"><span class="delimiter">'</span><span class="content">12</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">24</span><span class="delimiter">'</span></span>),  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">12</span><span class="delimiter">&quot;</span></span>}),
-                <span class="key">start</span>:   Config({<span class="key">type</span>: Date,  <span class="key">value</span>: <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 1 2016</span><span class="delimiter">&quot;</span></span>)}),
-                <span class="key">end</span>:     Config({<span class="key">type</span>: Date,  <span class="key">value</span>: <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Dec 31 2016</span><span class="delimiter">&quot;</span></span>)}),
+
+                <span class="key">start</span>:   Config({<span class="key">type</span>: String,  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 1 2016</span><span class="delimiter">&quot;</span></span>}),
+                <span class="key">end</span>:     Config({<span class="key">type</span>: String,  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Dec 31 2016</span><span class="delimiter">&quot;</span></span>}),
 
                 <span class="key">data</span>:    Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
 
-                <span class="key">minzoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">1</span>/<span class="integer">24</span>}),
-                <span class="key">maxzoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">365</span>}),
-
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="float">0.5</span>}),
                 <span class="key">scroll</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
+
+                <span class="key">monthwidth</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
+                <span class="key">daywidth</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
+                <span class="key">hourwidth</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
+                <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
 
                 <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event})
         }
@@ -295,23 +330,46 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.hscrollbar.updateScrollbars()
 
-                <span class="keyword">var</span> segs,  hw = <span class="local-variable">this</span>.layout.width / <span class="integer">24</span> / <span class="local-variable">this</span>.zoom
-                <span class="keyword">if</span> (hw &lt; <span class="integer">1</span>) {
-                        segs = <span class="integer">1</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (hw &lt; <span class="integer">12</span>) {
-                        segs = <span class="integer">2</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (hw &lt; <span class="integer">21</span>) {
-                        segs = <span class="integer">4</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (hw &lt; <span class="integer">35</span>) {
-                        segs = <span class="integer">8</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (hw &lt; <span class="integer">55</span>) {
-                        segs = <span class="integer">12</span>
+                <span class="local-variable">this</span>.monthwidth = <span class="local-variable">this</span>.layout.width * <span class="integer">30</span> / <span class="local-variable">this</span>.zoom
+                <span class="local-variable">this</span>.daywidth = <span class="local-variable">this</span>.layout.width / <span class="local-variable">this</span>.zoom
+                <span class="local-variable">this</span>.hourwidth = <span class="local-variable">this</span>.layout.width / <span class="integer">24</span> / <span class="local-variable">this</span>.zoom
+
+                <span class="local-variable">this</span>.hoursegs = <span class="integer">1</span>
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">9</span>) {
+                        <span class="local-variable">this</span>.hoursegs = <span class="integer">1</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">22</span>) {
+                        <span class="local-variable">this</span>.hoursegs = <span class="integer">4</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">44</span>) {
+                        <span class="local-variable">this</span>.hoursegs = <span class="integer">8</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">88</span>) {
+                        <span class="local-variable">this</span>.hoursegs = <span class="integer">12</span>
                 } <span class="keyword">else</span> {
-                        segs = <span class="integer">24</span>
+                        <span class="local-variable">this</span>.hoursegs = <span class="integer">24</span>
                 }
                 <span class="comment">// TODO(aki): better data-binding that doesent trigger render</span>
-                <span class="local-variable">this</span>.background.hoursegs = segs
-                <span class="local-variable">this</span>.labels.hoursegs = segs
+                <span class="comment">// This should be handled by data binding</span>
+                <span class="local-variable">this</span>.background.monthwidth = <span class="local-variable">this</span>._monthwidth
+                <span class="local-variable">this</span>.background.daywidth = <span class="local-variable">this</span>._daywidth
+                <span class="local-variable">this</span>.background.hourwidth = <span class="local-variable">this</span>._hourwidth
+                <span class="local-variable">this</span>.background.hoursegs = <span class="local-variable">this</span>._hoursegs
+                <span class="local-variable">this</span>.labels.monthwidth = <span class="local-variable">this</span>._monthwidth
+                <span class="local-variable">this</span>.labels.daywidth = <span class="local-variable">this</span>._daywidth
+                <span class="local-variable">this</span>.labels.hourwidth = <span class="local-variable">this</span>._hourwidth
+                <span class="local-variable">this</span>.labels.hoursegs = <span class="local-variable">this</span>._hoursegs
+
+        }
+
+        <span class="local-variable">this</span>.<span class="function">getStart</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()<span class="comment">// / this.TIME_SCALE</span>
+        }
+        <span class="local-variable">this</span>.<span class="function">getEnd</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()<span class="comment">// / this.TIME_SCALE</span>
+        }
+        <span class="local-variable">this</span>.<span class="function">getRange</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.getEnd() - <span class="local-variable">this</span>.getStart()
+        }
+        <span class="local-variable">this</span>.<span class="function">getOffset</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.zoom * <span class="local-variable">this</span>.scroll
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermultimove</span> = <span class="keyword">function</span>(event) {
@@ -329,7 +387,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="comment">// TODO(aki): delta doesent feel right</span>
                         <span class="keyword">var</span> delta = (distance - oldDistance) / <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.zoom * <span class="integer">2</span>
-                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom - delta, <span class="local-variable">this</span>.minzoom, <span class="local-variable">this</span>.maxzoom)
+                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom - delta, <span class="local-variable">this</span>.MIN_ZOOM, <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE)
 
                         <span class="local-variable">this</span>.zoom = newzoom
 
@@ -343,13 +401,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">pointerwheel</span> = <span class="keyword">function</span>(event) {
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (event.value[<span class="integer">0</span>] &amp;&amp; abs(event.value[<span class="integer">0</span>]) &gt; abs(event.value[<span class="integer">1</span>])){
-                        <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + event.value[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
+                        <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + event.value[<span class="integer">0</span>]*<span class="float">10.0</span> / <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
                 }
                 <span class="keyword">if</span> (event.value[<span class="integer">1</span>] &amp;&amp; abs(event.value[<span class="integer">1</span>]) &gt; abs(event.value[<span class="integer">0</span>])){
                         <span class="keyword">var</span> lastzoom = <span class="local-variable">this</span>._zoom
 
                         <span class="keyword">var</span> delta = event.value[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.zoom
-                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom + delta, <span class="local-variable">this</span>.minzoom, <span class="local-variable">this</span>.maxzoom)
+                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom + delta, <span class="local-variable">this</span>.MIN_ZOOM, <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE)
 
                         <span class="local-variable">this</span>.zoom = newzoom
 
