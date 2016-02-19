@@ -226,13 +226,15 @@ define.class(function(require){
 			child.emitRecursive(key, event)
 		}
 	}
+	
+	this.emit_block_set = null
 
 	this.emit = function(key, ievent){
 		var event = ievent || {}
 
 		var lock_key = '_lock_' + key
 
-		if(this[lock_key]) return
+		if(this[lock_key] || this.emit_block_set && this.emit_block_set.indexOf(key) !== -1) return
 
 		this[lock_key] = true
 		try{
