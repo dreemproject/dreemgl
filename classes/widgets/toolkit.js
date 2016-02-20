@@ -160,10 +160,6 @@ define.class("$ui/view", function(require,
 		selected:Config({persist:true, value:[], meta:"hidden"})
 	};
 
-	this.onclipboard = function(ev,v,o) {
-		console.log("new clipboard contents!", v)
-	};
-
 	this.init = function() {
 		this.sourcefile = astio(this.screen.composition.constructor);
 		this.sourcefile.onchange = this.onchange.bind(this);
