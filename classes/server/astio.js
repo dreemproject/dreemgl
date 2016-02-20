@@ -90,6 +90,108 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 		return parentpath;
 	};
 
+	// ===== AST Object Manipulation Helpters
+
+	// TODO(mason) refactor this stuff, unduplicate
+
+	this.createASTNode = function(v, raw) {
+		if (!this.__parser) {
+			this.__parser = new onejsparser();
+		}
+		var string = raw ? v : JSON.stringify(v);
+
+		// Need to remove the "key" quotes or else will create wrong type of key objects
+		string = string.replace(/"([a-zA-Z0-9_$]+)":/g, "$1:");
+
+		// Replace the vecs with better values
+		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,]+)\]\}/g, "$1($2)");
+
+		var ast = this.__parser.parse(string);
+		return ast.steps[0];
+	};
+
+	this.getCallNodeValue = function(callnode, key) {
+		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Id(key)]);
+
+		var item = scanner.atparent.keys[scanner.atindex];
+
+		if (item.value) {
+			return item.value.value
+		}
+	};
+
+	this.deleteCallNodeKey = function(callnode, key) {
+		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Id(key)]);
+		if (scanner.atindex >= 0) {
+			scanner.atparent.keys.splice(scanner.atindex, 1);
+		}
+	};
+
+	this.setCallNodeValue = function(callnode, key, value) {
+
+		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Id(key)]);
+
+		var at = scanner.at;
+
+		var item, newval, args, newparams;
+
+		if (at.type === "Id") {
+			// Found an Id
+
+			item = scanner.atparent.keys[scanner.atindex];
+
+			if (typeof(value) === "function") {
+				newval = this.createASTNode(value.toString(), true)
+			//} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
+			//	newval = this.build.Value(value);
+			} else {
+				newval = this.createASTNode(value)
+			}
+
+			item.value = newval;
+
+		} else if (at.type === "Object") {
+			// No Id, but found an Object
+
+			args = {};
+			if (typeof(value) === "function") {
+				args[name] = "REPLACE";
+				newparams = this.createASTNode(args);
+				item = newparams.keys[0];
+
+				newval = this.createASTNode(value.toString(), true);
+				item.value = newval
+			//} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
+			//	item = { key:this.build.Id(key), value:this.build.Value(value) }
+			} else {
+				item = { key:this.build.Id(key), value:this.createASTNode(value) }
+			}
+
+			if (item) {
+				at.keys.push(item);
+			}
+
+		} else {
+			// No Object either, create new one from scrach
+
+			args = {};
+			if (typeof(value) === "function") {
+				args[name] = "REPLACE";
+				newparams = this.createASTNode(args);
+				item = newparams.keys[0];
+				newval = this.createASTNode(value.toString(), true);
+				item.value = newval
+			} else {
+				args[name] = value;
+				newparams = this.createASTNode(args);
+			}
+
+			if (newparams) {
+				at.args.push(newparams);
+			}
+		}
+	};
+
 	// ===== scanner calls =====
 
 	this.reset = function () {
@@ -194,22 +296,6 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 			}
 		}
 
-	};
-
-	this.createASTNode = function(v, raw) {
-		if (!this.__parser) {
-			this.__parser = new onejsparser();
-		}
-		var string = raw ? v : JSON.stringify(v);
-
-		// Need to remove the "key" quotes or else will create wrong type of key objects
-		string = string.replace(/"([a-zA-Z0-9_$]+)":/g, "$1:");
-
-		// Replace the vecs with better values
-		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,]+)\]\}/g, "$1($2)");
-
-		var ast = this.__parser.parse(string);
-		return ast.steps[0];
 	};
 
 	// convert a string in to a meaningful javascript object for this dataset. The default is JSON, but you could use this function to accept any format of choice.

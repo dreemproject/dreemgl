@@ -6,7 +6,6 @@
 define.class("$ui/view", function(require,
 								  $ui$, view, label, icon, checkbox, treeview, button, statebutton, tabbar,
 								  $widgets$, palette, propviewer,
-								  $system$parse$, astscanner,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
@@ -652,12 +651,15 @@ define.class("$ui/view", function(require,
 			return;
 		}
 
+		var pointer = ev.pointer;
+
+		this.__lasthover = pointer.position;
+		this.__lastover = ev.view;
+
 		var text = ev.view.constructor.name;
 		if (ev.view.name) {
 			text = ev.view.name + " (" + text + ")"
 		}
-
-		var pointer = ev.pointer;
 
 		var pos = ev.view.globalToLocal(pointer.position);
 
@@ -704,7 +706,7 @@ define.class("$ui/view", function(require,
 		for (var i=this.selection.length - 1; i>=0; i--) {
 			var v = this.selection[i];
 			if (this.testView(v)) {
-				copied.push(this.sourcefile.nodeFor(v));
+				copied.push(JSON.stringify(this.sourcefile.nodeFor(v)));
 			}
 		}
 		this.clipboard = copied;
@@ -744,16 +746,36 @@ define.class("$ui/view", function(require,
 		} else if (ev.name === "v" && (ev.ctrl || ev.meta)) {
 			var commit = false;
 			if (this.clipboard && this.clipboard.length) {
-				for (var i=0;i<this.selection.length;i++) {
-					var v = this.selection[i];
+				var pastetargets = this.selection || [];
+
+				if (this.__lastover && !pastetargets.length) {
+					pastetargets.push(this.__lastover)
+				}
+
+				for (var i=0;i<pastetargets.length;i++) {
+					var v = pastetargets[i];
 					if (this.testView(v)) {
 						for (var j=0;j<this.clipboard.length;j++) {
-							var ast = this.clipboard[j];
-							var scanner = new astscanner(ast, [{type:"Object"}, {type:"Id", name:"x"}]);
-							scanner.atparent.keys.splice(scanner.atindex,1);
-							scanner.at = scanner.atparent;
-							scanner.scan([{type:"Id", name:"y"}]);
-							scanner.atparent.keys.splice(scanner.atindex,1);
+							var ast = JSON.parse(this.clipboard[j]);
+							if (this.dropmode === "absolute") {
+								this.sourcefile.setCallNodeValue(ast, "position", "absolute")
+								var indent = j * 10;
+								if (this.__lasthover) {
+									var pos = v.globalToLocal(this.__lasthover)
+									this.sourcefile.setCallNodeValue(ast, "x", pos[0] + indent)
+									this.sourcefile.setCallNodeValue(ast, "y", pos[1] + indent)
+								} else {
+									this.sourcefile.setCallNodeValue(ast, "x", indent)
+									this.sourcefile.setCallNodeValue(ast, "y", indent)
+								}
+
+							} else {
+
+								this.sourcefile.deleteCallNodeKey(ast, "position");
+								this.sourcefile.deleteCallNodeKey(ast, "x");
+								this.sourcefile.deleteCallNodeKey(ast, "y");
+							}
+
 							this.appendASTArgOn(v, ast);
 							commit = true;
 						}
