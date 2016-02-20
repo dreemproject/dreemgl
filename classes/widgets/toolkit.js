@@ -1185,6 +1185,18 @@ define.class("$ui/view", function(require,
 			treeview({
 				flex:1,
 				name:"structure",
+				bgcolor:"#4e4e4e",
+				style:{
+					$:{
+						buttoncolor1:"transparent",
+						buttoncolor2:"transparent",
+						borderwidth:0,
+						bgcolor:"#4e4e4e"
+					},
+					treeline:{
+						bgcolor:"#4e4e4e"
+					}
+				},
 				reload:function() {
 					var swalk = function (v) {
 						if (v.tooltarget !== false) {
@@ -1225,7 +1237,7 @@ define.class("$ui/view", function(require,
 								}),
 								statebutton({
 									label:name,
-									bgcolor:"transparent",
+									bgcolor:"#4e4e4e",
 									normal:{
 										fgcolor: "#ddd",
 										padding:0
