@@ -6,6 +6,7 @@
 define.class("$ui/view", function(require,
 								  $ui$, view, label, icon, checkbox, treeview, button, statebutton, tabbar,
 								  $widgets$, palette, propviewer,
+								  $system$parse$, astscanner,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
@@ -150,10 +151,17 @@ define.class("$ui/view", function(require,
 		hoverlines:false,
 
 		// internal
+		clipboard:Config({persist:true, value:[], meta:"hidden"}),
+
+		// internal
 		selection:Config({value:[], meta:"hidden"}),
 
 		// internal
 		selected:Config({persist:true, value:[], meta:"hidden"})
+	};
+
+	this.onclipboard = function(ev,v,o) {
+		console.log("new clipboard contents!", v)
 	};
 
 	this.init = function() {
@@ -236,13 +244,13 @@ define.class("$ui/view", function(require,
 				}
 			}
 
-			var filtered = this.selection.filter(function(a) { return a.toolrect !== false && this.testView(a) }.bind(this));
-
-			for (i=0;i<filtered.length;i++) {
-				var target = filtered[i];
-				var selectrect = this.screen.openOverlay(this.selectedrect);
-				selectrect.target = target;
-				this.__selrects.push(selectrect);
+			for (i=0;i<this.selection.length;i++) {
+				var target = this.selection[i];
+				if (target.toolrect !== false && this.testView(target)) {
+					var selectrect = this.screen.openOverlay(this.selectedrect);
+					selectrect.target = target;
+					this.__selrects.push(selectrect);
+				}
 			}
 
 		} else {
@@ -253,7 +261,6 @@ define.class("$ui/view", function(require,
 		if (tree && tree.reload) {
 			tree.reload();
 		}
-
 	};
 
 	this.globalpointerstart = function(ev) {
@@ -621,16 +628,19 @@ define.class("$ui/view", function(require,
 				this.__selectrect = undefined;
 			}
 
-			var selection = this.screen.childrenInRect(rect, [select]);
-			var watch = [];
-			for (var i=0;i<selection.length;i++) {
-				var selected = selection[i];
-				if (selected !== this && this.testView(selected) && this.toolselect !== false) {
-					var astpath = JSON.stringify(this.sourcefile.nodePathFor(selected));
-					watch.push(astpath);
+			if (rect.w > 0.5 || rect.z > 0.5) {
+				var selection = this.screen.childrenInRect(rect, [select]);
+				var selctedinrect = [];
+				for (var i=0;i<selection.length;i++) {
+					var selected = selection[i];
+					if (selected !== this && this.testView(selected) && this.toolselect !== false) {
+						var astpath = JSON.stringify(this.sourcefile.nodePathFor(selected));
+						selctedinrect.push(astpath);
+					}
 				}
+				this.selected = selctedinrect;
 			}
-			this.selected = watch;
+
 		}
 
 		if (commit) {
@@ -678,6 +688,32 @@ define.class("$ui/view", function(require,
 
 	};
 
+	this.deleteselection = function() {
+		var commit = false;
+		for (var i=this.selection.length - 1; i>=0; i--) {
+			var v = this.selection[i];
+			if (this.testView(v) && v.toolremove !== false) {
+				this.removeASTNodeFor(v);
+				commit = true;
+			}
+		}
+		if (commit) {
+			this.ensureDeps();
+			this.commit();
+		}
+	};
+
+	this.copyselection = function() {
+		var copied = [];
+		for (var i=this.selection.length - 1; i>=0; i--) {
+			var v = this.selection[i];
+			if (this.testView(v)) {
+				copied.push(this.sourcefile.nodeFor(v));
+			}
+		}
+		this.clipboard = copied;
+	};
+
 	this.globalkeydown = function(ev) {
 		if (ev.name === "t" && ev.ctrl && ev.shift) {
 			this.setASTObjectProperty(this, "visible", !this.visible);
@@ -698,38 +734,40 @@ define.class("$ui/view", function(require,
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
 			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
-
 			if (candelete) {
-				var commit = false;
-				for (var i=this.selection.length - 1; i>=0; i--) {
-					var v = this.selection[i];
-					if (this.testView(v) && v.toolremove !== false) {
-						this.removeASTNodeFor(v)
-						commit = true;
-					}
-				}
-				if (commit) {
-					this.ensureDeps();
-					this.commit();
-				}
+				this.deleteselection();
 			}
 		} else if (ev.name === "x" && (ev.ctrl || ev.meta)) {
-			console.log("cut!")
+			this.copyselection();
+			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+			if (candelete) {
+				this.deleteselection();
+			}
 		} else if (ev.name === "c" && (ev.ctrl || ev.meta)) {
-			for (var i=this.selection.length - 1; i>=0; i--) {
-				var v = this.selection[i];
-				var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
-
-				if ((multi || candelete) && this.testView(v) && v.toolremove !== false) {
-					this.removeASTNodeFor(v)
-					commit = true;
+			this.copyselection();
+		} else if (ev.name === "v" && (ev.ctrl || ev.meta)) {
+			var commit = false;
+			if (this.clipboard && this.clipboard.length) {
+				for (var i=0;i<this.selection.length;i++) {
+					var v = this.selection[i];
+					if (this.testView(v)) {
+						for (var j=0;j<this.clipboard.length;j++) {
+							var ast = this.clipboard[j];
+							var scanner = new astscanner(ast, [{type:"Object"}, {type:"Id", name:"x"}]);
+							scanner.atparent.keys.splice(scanner.atindex,1);
+							scanner.at = scanner.atparent;
+							scanner.scan([{type:"Id", name:"y"}]);
+							scanner.atparent.keys.splice(scanner.atindex,1);
+							this.appendASTArgOn(v, ast);
+							commit = true;
+						}
+					}
 				}
 			}
-
-
-			console.log("copy!")
-		} else if (ev.name === "p" && (ev.ctrl || ev.meta)) {
-			console.log("paste!")
+			if (commit) {
+				this.ensureDeps();
+				this.commit();
+			}
 		}
 	};
 
@@ -1237,6 +1275,16 @@ define.class("$ui/view", function(require,
 
 	};
 
+	this.appendASTArgOn = function(parent, arg) {
+
+		if (!this.__changes) {
+			this.__changes = [];
+		}
+
+		this.__changes.push({ parent:parent, arg:arg });
+
+	};
+
 	this.removeASTNodeFor = function(v) {
 
 		if (!this.__changes) {
@@ -1315,6 +1363,9 @@ define.class("$ui/view", function(require,
 								var item = changeset.params;
 								var obj = src.build.Call(src.build.Id(item.classname), [src.build.Object(item.params)]);
 								src.pushArg(obj);
+							}
+							if (changeset.arg) {
+								src.pushArg(changeset.arg);
 							}
 						} else {
 							console.log("bad change?", changeset)
