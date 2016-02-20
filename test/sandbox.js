@@ -29,7 +29,8 @@ define.class("$server/composition",function(require, $ui$, checkbox, checkbox, i
 					button({tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:459.00006103515625, y:90.99996948242188}),
 					button({click:function() {
 							console.log("XXX")
-						}, tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:415, y:272.9999694824219})
+						}, tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:415, y:272.9999694824219}),
+					view({height:149, width:132, pickalpha:-1, bgcolor:"purple", position:"absolute", x:896.0001220703125, y:219})
 				),
 				toolkit({
 					position:"absolute", 

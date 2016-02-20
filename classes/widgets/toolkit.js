@@ -914,6 +914,13 @@ define.class("$ui/view", function(require,
 			var pos = vw.globalToLocal(ev.pointer.position);
 			var edge = this.reticlesize;
 
+ 			if (vw._layout.width < edge * 2) {
+				edge = Math.max(3, vw._layout.width * 0.25)
+			}
+			if (vw._layout.height < edge * 2) {
+				edge = Math.max(3, vw._layout.height * 0.25)
+			}
+
 			vw.cursor = 'arrow';
 
 			if (pos.x < edge && pos.y < edge) {
