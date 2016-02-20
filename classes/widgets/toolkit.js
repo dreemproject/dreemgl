@@ -184,7 +184,15 @@ define.class("$ui/view", function(require,
 			xhr.open('POST', window.location.pathname, true);
 			xhr.onload = function() {
 				if (xhr.status === 200) {
-					console.log("set bg image to", imagename, "at view found at", e.x, e.y)
+					this.screen.device.doPick(function(v) {
+						if (v) {
+							var compfile = v.screen.composition.constructor.module.filename;
+							var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+							var filename = compdir + "/" + imagename;
+							this.setASTObjectProperty(v, "bgimage", filename);
+							this.commit();
+						}
+					}.bind(this))
 				} else {
 					console.log('Oops, upload failed', xhr, files);
 				}
