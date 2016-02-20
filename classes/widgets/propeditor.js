@@ -258,7 +258,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 		} else if (typename == "Object" && meta == "texture") {
 			editor = view({bgcolor:NaN},
 				button({
-					icon:'circle',
+					icon:'folder-open',
 					fontsize:this.fontsize,
 					margin:4,
 					bgcolor:"transparent",
@@ -267,6 +267,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 					hovercolor1:"transparent",
 					hovercolor2:"transparent",
 					pickalpha:-1,
+					textactivecolor:"white",
 					textcolor:this.fgcolor,
 					borderwidth:0,
 					click: function() {
