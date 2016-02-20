@@ -159,6 +159,33 @@ define.class("$ui/view", function(require,
 		selected:Config({persist:true, value:[], meta:"hidden"})
 	};
 
+	this.setupFileDrop = function () {
+		var doc = document.documentElement;
+		doc.ondragover = function (e) { return !this.visible; }.bind(this);
+		doc.ondragend = function (e) { return !this.visible; }.bind(this);
+		doc.ondrop = function (e) {
+			if (!this.visible) { return; }
+			e.preventDefault && e.preventDefault();
+			var files = e.dataTransfer.files;
+
+			var formData = new FormData();
+			for (var i = 0; i < files.length; i++) {
+				formData.append('file', files[i]);
+			}
+
+            // now post a new XHR request
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', window.location.pathname, true);
+			xhr.onload = function() {
+				if (xhr.status !== 200) {
+					console.log('Oops, upload failed', xhr, files);
+				}
+			};
+			xhr.send(formData);
+			return false;
+		}.bind(this);
+	};
+
 	this.init = function() {
 		this.sourcefile = astio(this.screen.composition.constructor);
 		this.sourcefile.onchange = this.onchange.bind(this);
@@ -172,6 +199,8 @@ define.class("$ui/view", function(require,
 		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
 		this.screen.globalpointerout = this.globalpointerout.bind(this);
 		this.screen.globalkeydown = this.globalkeydown.bind(this);
+
+		this.setupFileDrop();
 	};
 
 	this.onchange = function(ev,src,o) {

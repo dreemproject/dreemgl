@@ -163,22 +163,66 @@ define.class(function(require){
 
 		if(req.method == 'POST'){
 			// lets do an RPC call
-			var buf = ''
-			req.on('data', function(data){buf += data.toString()})
-			req.on('end', function(){
-				try{
-					var json = JSON.parse(buf)
-					this.composition.postAPI(json, {send:function(msg){
-						res.writeHead(200, {"Content-Type":"text/json"})
-						res.write(JSON.stringify(msg))
-						res.end()
-					}})
+
+			var boundary;
+			if (req.headers && req.headers['content-type']) {
+				var type = req.headers['content-type'];
+				if (type) {
+					var m = /^multipart\/form-data; boundary=(.*)$/.exec(type)
+
+					if (m) {
+						boundary = m[1];
+					}
 				}
-				catch(e){
-					res.writeHead(500, {"Content-Type": "text/html"})
-					res.write('FAIL')
-					res.end()
+			}
+
+			var buffer;
+			req.on('data', function(data){
+				if (boundary) {
+					if (!buffer) {
+						buffer = new Buffer(data)
+					} else {
+						buffer = Buffer.concat([buffer, data])
+					}
+				}
+			})
+			req.on('end', function(){
+
+				if (boundary) {
+
+					var cursor = buffer.indexOf(boundary) + boundary.length;
+
+					cursor = buffer.indexOf("filename=", cursor) + "filename=".length;
+					var q = buffer[cursor];
+					var filename = buffer.slice(cursor + 1, buffer.indexOf(q, cursor + 1)).toString();
+					cursor = buffer.indexOf("\r\n\r\n", cursor) + "\r\n\r\n".length;
+
+					var filedata = buffer.slice(cursor, buffer.indexOf("\r\n--" + boundary));
+
+					var compfile = this.composition.constructor.module.filename;
+					var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+
+					filename = compdir + "/" + filename;
+					fs.writeFile(filename, filedata)
+					console.log("[UPLOAD] Wrote", filedata.length, "bytes to", filename);
+					res.writeHead(200);
+					res.end();
 					return
+				} else {
+					try{
+						var json = JSON.parse(buffer.toString())
+						this.composition.postAPI(json, {send:function(msg){
+							res.writeHead(200, {"Content-Type":"text/json"})
+							res.write(JSON.stringify(msg))
+							res.end()
+						}})
+					}
+					catch(e){
+						res.writeHead(500, {"Content-Type": "text/html"})
+						res.write('FAIL')
+						res.end()
+						return
+					}
 				}
 			}.bind(this))
 			return
