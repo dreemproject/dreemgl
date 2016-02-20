@@ -169,19 +169,29 @@ define.class("$ui/view", function(require,
 			var files = e.dataTransfer.files;
 
 			var formData = new FormData();
+			var imagename;
 			for (var i = 0; i < files.length; i++) {
-				formData.append('file', files[i]);
+				var file = files[i];
+
+				if (file.type && file.type.indexOf("image/") === 0) {
+					imagename = file.name
+				}
+
+				formData.append('file', file);
 			}
 
-            // now post a new XHR request
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', window.location.pathname, true);
 			xhr.onload = function() {
-				if (xhr.status !== 200) {
+				if (xhr.status === 200) {
+					console.log("set bg image to", imagename, "at view found at", e.x, e.y)
+				} else {
 					console.log('Oops, upload failed', xhr, files);
 				}
-			};
+			}.bind(this);
 			xhr.send(formData);
+
+
 			return false;
 		}.bind(this);
 	};

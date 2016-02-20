@@ -1,24 +1,24 @@
 define.class("$server/composition",function(require, $ui$, checkbox, checkbox, icon, button, label, view, screen, cadgrid, $widgets$, toolkit) {
-	
+
 	this.render = function() {
 		return [
 			screen(
 				{flexdirection:"row"},
 				cadgrid({
-						name:"grid", 
-						flex:3, 
-						overflow:"scroll", 
-						bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1), 
-						gridsize:8, 
-						majorevery:5, 
-						majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1), 
-						minorline:vec4(0.17135260999202728,0.17135260999202728,0.17135260999202728,1), 
-						alignitems:'center', 
-						alignself:'stretch', 
-						flexdirection:'column', 
-						justifycontent:'center', 
-						anchor:vec3(0,0,0), 
-						toolmove:false, 
+						name:"grid",
+						flex:3,
+						overflow:"scroll",
+						bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1),
+						gridsize:8,
+						majorevery:5,
+						majorline:vec4(0.34117648005485535,0.34117648005485535,0.34117648005485535,1),
+						minorline:vec4(0.17135260999202728,0.17135260999202728,0.17135260999202728,1),
+						alignitems:'center',
+						alignself:'stretch',
+						flexdirection:'column',
+						justifycontent:'center',
+						anchor:vec3(0,0,0),
+						toolmove:false,
 						toolrect:false
 					},
 					view({height:305, width:252, bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1), position:"absolute", x:652.7789306640625, y:7.872772216796875, rotate:vec3(0,0,0.5)},icon({fgcolor:vec4(0.929411768913269,0.9089215993881226,0.3921568691730499,1), opaque:true, icon:"heart", fontsize:140, position:"absolute", x:56.93695831298828, y:33.16679382324219, boldness:0.95})),
@@ -33,14 +33,14 @@ define.class("$server/composition",function(require, $ui$, checkbox, checkbox, i
 					view({height:149, width:132, pickalpha:-1, bgcolor:"purple", position:"absolute", x:896.0001220703125, y:219})
 				),
 				toolkit({
-					position:"absolute", 
-					visible:true, 
-					rulers:true, 
-					x:1121, 
-					y:21.000064849853516, 
-					width:400, 
-					height:800, 
-					dropmode:"absolute", 
+					position:"absolute",
+					visible:true,
+					rulers:true,
+					x:1121,
+					y:21.000064849853516,
+					width:400,
+					height:800,
+					dropmode:"absolute",
 					mode:"design"
 				}
 				)
