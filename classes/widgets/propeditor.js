@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, scrollbar, textbox, numberbox, $widgets$, colorpicker, radiogroup){
+define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, button, scrollbar, textbox, numberbox, $widgets$, colorpicker, radiogroup){
 // internal
 
 	this.attributes = {
@@ -256,7 +256,46 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			editor = checkbox({icon:'circle', fontsize: this.fontsize, margin:4, text:"[FONT PICKER]", bgcolor:NaN, textcolor:this.fgcolor, borderwidth:0});
 
 		} else if (typename == "Object" && meta == "texture") {
-			editor = checkbox({icon:'circle', fontsize: this.fontsize, margin:4, text:"[IMAGE PICKER]", bgcolor:NaN, textcolor:this.fgcolor, borderwidth:0});
+			editor = view({bgcolor:NaN},
+				button({
+					icon:'circle',
+					fontsize:this.fontsize,
+					margin:4,
+					bgcolor:"transparent",
+					buttoncolor1:"transparent",
+					buttoncolor2:"transparent",
+					hovercolor1:"transparent",
+					hovercolor2:"transparent",
+					pickalpha:-1,
+					textcolor:this.fgcolor,
+					borderwidth:0,
+					click: function() {
+						var input = document.createElement('input');
+						input.type = "file";
+						input.onchange = function(changeEvent) {
+							var files = changeEvent.target.files;
+							this.callback(files, this, false);
+						}.bind(this);
+						input.click();
+					}.bind(this)
+				}),
+				textbox({
+					flex:1,
+					fontsize:this.fontsize,
+					fgcolor:"#d0d0d0",
+					bgcolor:"#505050",
+					value:this.value ? this.value : '',
+					padding:4,
+					borderradius:0,
+					borderwidth:1,
+					bordercolor:"gray",
+					margin:2,
+					multiline:false,
+					onfocus: function(ev,v,o) { if (!v) { this.callback("texture", null, true); } }.bind(this),
+					onvalue: function(ev,v,o){ this.callback(v, this); }.bind(this)
+				})
+			);
+
 
 		} else {
 			if (!this.showunknown || !this.property) {

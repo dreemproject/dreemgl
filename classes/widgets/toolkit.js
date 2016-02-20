@@ -206,7 +206,6 @@ define.class("$ui/view", function(require,
 			}.bind(this);
 			xhr.send(formData);
 
-
 			return false;
 		}.bind(this);
 	};
@@ -1317,8 +1316,36 @@ define.class("$ui/view", function(require,
 						}
 
 						if (t && (t == this || this.testView(t)) && t.tooledit !== false) {
-							this.setASTObjectProperty(t, editor.propertyname, val);
-							this.__needscommit = true;
+							if (editor.propertyname == "bgimage") {
+								var formData = new FormData();
+								var imagename;
+								for (var i = 0; i < val.length; i++) {
+									var file = val[i];
+									if (file.type && file.type.indexOf("image/") === 0) {
+										imagename = file.name
+									}
+									formData.append('file', file);
+								}
+								var xhr = new XMLHttpRequest();
+								xhr.open('POST', window.location.pathname, true);
+								xhr.onload = function() {
+									if (xhr.status === 200) {
+										var compfile = t.screen.composition.constructor.module.filename;
+										var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+										var filename = compdir + "/" + imagename;
+										this.setASTObjectProperty(t, "bgimage", filename);
+										this.ensureDeps();
+										this.commit();
+									} else {
+										console.log('Oops, upload failed', xhr, val);
+									}
+								}.bind(this);
+								xhr.send(formData);
+
+							} else {
+								this.setASTObjectProperty(t, editor.propertyname, val);
+								this.__needscommit = true;
+							}
 						}
 					}
 					if (commit && this.__needscommit) {
@@ -1329,7 +1356,6 @@ define.class("$ui/view", function(require,
 				}.bind(this),
 				ontarget:function(ev,v,o) {
 					if (v) {
-
 						if (this.__ruler) {
 							this.__ruler.closeOverlay();
 						}
