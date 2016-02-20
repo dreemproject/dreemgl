@@ -703,32 +703,6 @@ define.class("$ui/view", function(require,
 
 	};
 
-	this.deleteselection = function() {
-		var commit = false;
-		for (var i=this.selection.length - 1; i>=0; i--) {
-			var v = this.selection[i];
-			if (this.testView(v) && v.toolremove !== false) {
-				this.removeASTNodeFor(v);
-				commit = true;
-			}
-		}
-		if (commit) {
-			this.ensureDeps();
-			this.commit();
-		}
-	};
-
-	this.copyselection = function() {
-		var copied = [];
-		for (var i=this.selection.length - 1; i>=0; i--) {
-			var v = this.selection[i];
-			if (this.testView(v)) {
-				copied.push(JSON.stringify(this.sourcefile.nodeFor(v)));
-			}
-		}
-		this.clipboard = copied;
-	};
-
 	this.globalkeydown = function(ev) {
 		if (ev.name === "t" && ev.ctrl && ev.shift) {
 			this.setASTObjectProperty(this, "visible", !this.visible);
@@ -804,6 +778,32 @@ define.class("$ui/view", function(require,
 				this.commit();
 			}
 		}
+	};
+
+	this.deleteselection = function() {
+		var commit = false;
+		for (var i=this.selection.length - 1; i>=0; i--) {
+			var v = this.selection[i];
+			if (this.testView(v) && v.toolremove !== false) {
+				this.removeASTNodeFor(v);
+				commit = true;
+			}
+		}
+		if (commit) {
+			this.ensureDeps();
+			this.commit();
+		}
+	};
+
+	this.copyselection = function() {
+		var copied = [];
+		for (var i=this.selection.length - 1; i>=0; i--) {
+			var v = this.selection[i];
+			if (this.testView(v)) {
+				copied.push(JSON.stringify(this.sourcefile.nodeFor(v)));
+			}
+		}
+		this.clipboard = copied;
 	};
 
 	this.ensureDeps = function() {
@@ -970,6 +970,34 @@ define.class("$ui/view", function(require,
 			p = p.parent;
 		}
 		return ok;
+	};
+
+	this.pointerstart = function(ev,v,o) {
+		var at = this.globalToLocal(ev.position);
+		var lowest;
+		for (var i=0;i<this.children.length;i++) {
+			var child = this.children[i];
+			var layout = child.layout;
+			var childbottom = layout.top + layout.height;
+			if (childbottom < at.y) {
+				if (child.title !== "Cursor" && (!lowest || lowest._layout.top + lowest._layout.height < childbottom)) {
+					lowest = child;
+				}
+			}
+
+		}
+		this.__movepanel = lowest;
+	};
+
+	this.pointermove = function(ev,v,o) {
+		if (this.__movepanel) {
+			this.__movepanel.flex = 0;
+			this.__movepanel.height = this.__movepanel._layout.height + ev.movement.y;
+		}
+	};
+
+	this.pointerend = function() {
+		this.__movepanel = undefined;
 	};
 
 	this.render = function() {
