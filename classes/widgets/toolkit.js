@@ -1044,8 +1044,8 @@ define.class("$ui/view", function(require,
 					lowest = child;
 				}
 			}
-
 		}
+
 		this.__movepanel = lowest;
 	};
 
@@ -1053,6 +1053,7 @@ define.class("$ui/view", function(require,
 		if (this.__movepanel) {
 			this.__movepanel.flex = 0;
 			this.__movepanel.height = this.__movepanel._layout.height + ev.movement.y;
+			this.height = this._layout.height + ev.movement.y;
 		}
 	};
 
