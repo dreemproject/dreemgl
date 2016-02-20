@@ -468,8 +468,8 @@ define.class("$ui/view", function(require,
 					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0);
 					ax = selected.pos[0];
 					ay = selected.pos[1];
-					bx = ax + selected.width;
-					by = ay + selected.height;
+					bx = ax + selected._layout.width;
+					by = ay + selected._layout.height;
 
 					if (!this.groupdrag) {
 						break;
@@ -477,12 +477,9 @@ define.class("$ui/view", function(require,
 				}
 			}
 
-
 			if (this.__ruler && this.__ruler.target && this.movelines !== false) {
 				this.__ruler.lines = vec4(ax,ay,bx,by)
 			}
-
-
 
 			this.__lastpick = ev.pointer.pick;
 
@@ -1669,13 +1666,22 @@ define.class("$ui/view", function(require,
 			rulermarkend:vec3(0,0,0),
 			linecolor:vec4("darkgray"),
 			lines:vec4(0,0,0,0),
-			linedotspacing:10.0
+			linedotspacing:10.0,
+			centertrigger:25.0
 		};
 
 		this.bgcolorfn = function(p) {
 			var px = width * p.x;
 
 			var py = height * p.y;
+
+			if (abs(layout.width * 0.5 - px) < 0.5 && abs(layout.width * 0.5 - (lines[0] + ((lines[2] - lines[0]) * 0.5))) < centertrigger) {
+				return vec4(linecolor.rgb, 0.5 + (((1.0 - abs(layout.width * 0.5 - (lines[0] + ((lines[2] - lines[0]) * 0.5)))) / centertrigger) * 0.5));
+			}
+
+			if (abs(layout.height * 0.5 - py) < 0.5 && abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5))) < 25.0) {
+				return vec4(linecolor.rgb, 0.5 + (((1.0 - abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5)))) / centertrigger) * 0.5));
+			}
 
 			if (lines[0] > 0.0 && abs(px - lines[0]) < 0.5 && int(mod(py, linedotspacing)) == 0) {
 				return linecolor;
