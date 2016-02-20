@@ -697,8 +697,25 @@ define.class("$ui/view", function(require,
 			this.selected = [];
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
-			var commit = false;
-			var multi = this.selection.length > 1;
+			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+
+			if (candelete) {
+				var commit = false;
+				for (var i=this.selection.length - 1; i>=0; i--) {
+					var v = this.selection[i];
+					if (this.testView(v) && v.toolremove !== false) {
+						this.removeASTNodeFor(v)
+						commit = true;
+					}
+				}
+				if (commit) {
+					this.ensureDeps();
+					this.commit();
+				}
+			}
+		} else if (ev.name === "x" && (ev.ctrl || ev.meta)) {
+			console.log("cut!")
+		} else if (ev.name === "c" && (ev.ctrl || ev.meta)) {
 			for (var i=this.selection.length - 1; i>=0; i--) {
 				var v = this.selection[i];
 				var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
@@ -708,10 +725,11 @@ define.class("$ui/view", function(require,
 					commit = true;
 				}
 			}
-			if (commit) {
-				this.ensureDeps();
-				this.commit();
-			}
+
+
+			console.log("copy!")
+		} else if (ev.name === "p" && (ev.ctrl || ev.meta)) {
+			console.log("paste!")
 		}
 	};
 
@@ -1060,7 +1078,7 @@ define.class("$ui/view", function(require,
 										}
 										//o.state = "selected"
 									}.bind(this),
-									marginleft:0,
+									margintop:5,
 									padding:0,
 									fontsize:14,
 									pickalpha:-1
@@ -1072,7 +1090,6 @@ define.class("$ui/view", function(require,
 									fgcolor:vec4(1,0.5,0.5,1),
 									inactivecolor:"#666",
 									bgcolor:"transparent",
-									marginleft:3,
 									borderwidth:0,
 									padding:0,
 									value: !v.visible,
@@ -1088,7 +1105,7 @@ define.class("$ui/view", function(require,
 									bgcolor:"transparent",
 									fontsize:12,
 									//margintop:7,
-									marginleft:7,
+									marginleft:3,
 									borderwidth:0,
 									padding:0,
 									value: v.tooltarget === false,
@@ -1547,7 +1564,7 @@ define.class("$ui/view", function(require,
 						label:this.title,
 						fontsize:this.fontsize,
 						bgcolor:"#4e4e4e",
-						text:this.title,
+						label:this.title,
 						margin:0,
 						padding:vec4(3,3,0,0),
 						fgcolor:"white",

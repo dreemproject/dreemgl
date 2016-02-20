@@ -111,6 +111,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 
 	this.ontext = function(ev,v,o) {
 		console.error('.text is deprecated for button, please use .label');
+//		throw new Error("HERE")
 		this.label = v;
 	};
 
