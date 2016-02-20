@@ -1675,7 +1675,7 @@ define.class("$ui/view", function(require,
 			linedotspacing:10.0,
 			guidecolor:vec4("#FFDD00"),
 			guides:true,
-			centertrigger:25.0
+			centertrigger:50.0
 		};
 
 		this.bgcolorfn = function(p) {
@@ -1688,7 +1688,7 @@ define.class("$ui/view", function(require,
 					return vec4(guidecolor.rgb, 0.5 + (((1.0 - abs(layout.width * 0.5 - (lines[0] + ((lines[2] - lines[0]) * 0.5)))) / centertrigger) * 0.5));
 				}
 
-				if (abs(layout.height * 0.5 - py) < 0.5 && abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5))) < 25.0) {
+				if (abs(layout.height * 0.5 - py) < 0.5 && abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5))) < centertrigger) {
 					return vec4(guidecolor.rgb, 0.5 + (((1.0 - abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5)))) / centertrigger) * 0.5));
 				}
 			}
