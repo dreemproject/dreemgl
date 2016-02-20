@@ -191,15 +191,17 @@ define.class("$ui/view", function(require,
 			xhr.open('POST', window.location.pathname, true);
 			xhr.onload = function() {
 				if (xhr.status === 200) {
-					this.screen.device.doPick(function(v) {
-						if (v) {
-							var compfile = v.screen.composition.constructor.module.filename;
-							var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
-							var filename = compdir + "/" + imagename;
-							this.setASTObjectProperty(v, "bgimage", filename);
-							this.commit();
-						}
-					}.bind(this))
+					if (imagename) {
+						this.screen.device.doPick(function(v) {
+							if (v) {
+								var compfile = v.screen.composition.constructor.module.filename;
+								var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+								var filename = compdir + "/" + imagename;
+								this.setASTObjectProperty(v, "bgimage", filename);
+								this.commit();
+							}
+						}.bind(this))
+					}
 				} else {
 					console.log('Oops, upload failed', xhr, files);
 				}
@@ -1329,32 +1331,31 @@ define.class("$ui/view", function(require,
 						}
 
 						if (t && (t == this || this.testView(t)) && t.tooledit !== false) {
-							if (editor.propertyname == "bgimage") {
+							if (commit === "file") {
 								var formData = new FormData();
-								var imagename;
+								var fileobjname;
 								for (var i = 0; i < val.length; i++) {
 									var file = val[i];
-									if (file.type && file.type.indexOf("image/") === 0) {
-										imagename = file.name
-									}
+									fileobjname = file.name;
 									formData.append('file', file);
 								}
-								var xhr = new XMLHttpRequest();
-								xhr.open('POST', window.location.pathname, true);
-								xhr.onload = function() {
-									if (xhr.status === 200) {
-										var compfile = t.screen.composition.constructor.module.filename;
-										var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
-										var filename = compdir + "/" + imagename;
-										this.setASTObjectProperty(t, "bgimage", filename);
-										this.ensureDeps();
-										this.commit();
-									} else {
-										console.log('Oops, upload failed', xhr, val);
-									}
-								}.bind(this);
-								xhr.send(formData);
-
+								if (fileobjname) {
+									var xhr = new XMLHttpRequest();
+									xhr.open('POST', window.location.pathname, true);
+									xhr.onload = function() {
+										if (xhr.status === 200) {
+											var compfile = t.screen.composition.constructor.module.filename;
+											var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
+											var filename = compdir + "/" + fileobjname;
+											this.setASTObjectProperty(t, editor.propertyname, filename);
+											this.ensureDeps();
+											this.commit();
+										} else {
+											console.log('Oops, upload failed', xhr, val);
+										}
+									}.bind(this);
+									xhr.send(formData);
+								}
 							} else {
 								this.setASTObjectProperty(t, editor.propertyname, val);
 								this.__needscommit = true;

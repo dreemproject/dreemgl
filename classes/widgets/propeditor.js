@@ -275,7 +275,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 						input.type = "file";
 						input.onchange = function(changeEvent) {
 							var files = changeEvent.target.files;
-							this.callback(files, this, false);
+							this.callback(files, this, "file");
 						}.bind(this);
 						input.click();
 					}.bind(this)
