@@ -67,6 +67,13 @@ define.class("$ui/view", function(require,
 					tooldragroot:true,
 					toolresize:false,
 					fontsize:24,
+					bgcolor:"transparent",
+					buttoncolor1:"transparent",
+					buttoncolor2:"transparent",
+					hovercolor1:"transparent",
+					hovercolor2:"transparent",
+					pressedcolor1:"transparent",
+					pressedcolor2:"transparent",
 					pickalpha:-1,
 					fgcolor:'pink'
 				}
