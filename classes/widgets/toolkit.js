@@ -170,6 +170,7 @@ define.class("$ui/view", function(require,
 		this.screen.globalpointermove = this.globalpointermove.bind(this);
 		this.screen.globalpointerend = this.globalpointerend.bind(this);
 		this.screen.globalpointerhover = this.globalpointerhover.bind(this);
+		this.screen.globalpointerout = this.globalpointerout.bind(this);
 		this.screen.globalkeydown = this.globalkeydown.bind(this);
 	};
 
@@ -646,6 +647,12 @@ define.class("$ui/view", function(require,
 		this.__lastpick = this.__startrect = this.__startpos = this.__originalpos = this.__resizecorner = this.__originalsize = undefined;
 	};
 
+	this.globalpointerout = function(ev) {
+		if (ev.view.emit_block_set) {
+			ev.view.emit_block_set = null;
+		}
+	};
+
 	this.globalpointerhover = function(ev) {
 		if (!this.visible) {
 			return;
@@ -655,6 +662,16 @@ define.class("$ui/view", function(require,
 
 		this.__lasthover = pointer.position;
 		this.__lastover = ev.view;
+
+		if (this.mode === "design" && this.testView(ev.view)) {
+			if (ev.view.constructor.name === "button"
+				|| ev.view.constructor.module.factory.baseclass === "/ui/button"
+				|| ev.view.constructor.name === "checkbox"
+				|| ev.view.constructor.module.factory.baseclass === "/ui/checkbox")
+			{
+				ev.view.emit_block_set = ["pointerhover", "pointerover", "pointerstart", "pointerend", "pointerout"]
+			}
+		}
 
 		var text = ev.view.constructor.name;
 		if (ev.view.name) {
@@ -758,14 +775,14 @@ define.class("$ui/view", function(require,
 						for (var j=0;j<this.clipboard.length;j++) {
 							var ast = JSON.parse(this.clipboard[j]);
 							if (this.dropmode === "absolute") {
-								this.sourcefile.setCallNodeValue(ast, "position", "absolute")
+								this.sourcefile.setCallNodeValue(ast, "position", "absolute");
 								var indent = j * 10;
 								if (this.__lasthover) {
-									var pos = v.globalToLocal(this.__lasthover)
-									this.sourcefile.setCallNodeValue(ast, "x", pos[0] + indent)
+									var pos = v.globalToLocal(this.__lasthover);
+									this.sourcefile.setCallNodeValue(ast, "x", pos[0] + indent);
 									this.sourcefile.setCallNodeValue(ast, "y", pos[1] + indent)
 								} else {
-									this.sourcefile.setCallNodeValue(ast, "x", indent)
+									this.sourcefile.setCallNodeValue(ast, "x", indent);
 									this.sourcefile.setCallNodeValue(ast, "y", indent)
 								}
 

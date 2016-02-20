@@ -26,8 +26,10 @@ define.class("$server/composition",function(require, $ui$, checkbox, checkbox, i
 					label({fontsize:144, pickalpha:-1, bgcolor:"transparent", fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1), text:"Howdy!", position:"absolute", x:348.99993896484375, y:361.0001220703125, width:504.4921875, height:233.27999877929688, opacity:0.6}),
 					view({height:181, width:779, pickalpha:-1, bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1), position:"absolute", x:208.0000457763672, y:593.9999389648438, alignitems:"center", justifycontent:"center"},view({height:70, width:80, pickalpha:-1, bgcolor:"purple", position:"relative", x:0, y:0}),icon({fgcolor:"cornflower", pickalpha:-1, icon:"flask", fontsize:80, position:"relative", x:0, y:0}),icon({fgcolor:"cornflower", pickalpha:-1, icon:"gear", fontsize:80, position:"relative", x:0, y:0}),checkbox({tooldragroot:true, toolresize:false, fontsize:24, pickalpha:-1, fgcolor:"pink", position:"relative", x:29, y:-3})),
 					view({height:25, width:648, bgcolor:vec4(0.860729455947876,0.864276111125946,0.19516445696353912,1), position:"absolute", x:347, y:544.0006103515625}),
-					button({tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:412.00006103515625, y:165.99996948242188}),
-					button({tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:412.00006103515625, y:165.99996948242188})
+					button({tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:459.00006103515625, y:90.99996948242188}),
+					button({click:function() {
+							console.log("XXX")
+						}, tooldragroot:true, fontsize:24, pickalpha:-1, fgcolor:"red", label:"Press Me!", position:"absolute", x:1024, y:128.99996948242188})
 				),
 				toolkit({
 					position:"absolute", 
