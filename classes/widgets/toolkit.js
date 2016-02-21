@@ -333,10 +333,6 @@ define.class("$ui/view", function(require,
 		}
 
 		if (ev.view == this) {
-			var inspector = this.find('inspector');
-			if (inspector) {
-				inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(this));
-			}
 			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
 			this.__originalpos = {
@@ -350,6 +346,13 @@ define.class("$ui/view", function(require,
 			};
 
 			this.__resizecorner = this.resetCursor(ev);
+
+			if (!this.__resizecorner) {
+				var inspector = this.find('inspector');
+				if (inspector) {
+					inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(this));
+				}
+			}
 
 		} else if (this.testView(ev.view)) {
 
