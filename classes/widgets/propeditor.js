@@ -47,7 +47,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			margin:vec4(2,0,2,5)
 		},
 		$_color:{
-			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"circle", collapsed:true
+			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"paint-brush", collapsed:true
 		},
 		$_colorview:{
 			bgcolor:NaN,width:300, flexdirection:"column"
@@ -88,7 +88,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 
 				editor = foldcontainer({
 					class:'color',
-					icon:'circle',
+					icon:'paint-brush',
 					basecolor:vec4(this.value[0],this.value[1],this.value[2],1.0)
 				}, view({class:'color_view'},
 					colorpicker({

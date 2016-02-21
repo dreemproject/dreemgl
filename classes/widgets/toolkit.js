@@ -108,12 +108,17 @@ define.class("$ui/view", function(require,
 		],
 		//Behaviors:[
 		//	{
-		//		label:"Alert",
-		//		icon:"warning",
-		//		desc:"Adds a click event that pops up an alert dialog",
+		//		label:"Hover Border",
+		//		icon:"square",
+		//		desc:"Adds a hover event that turns on and off a border",
 		//		behaviors:{
-		//			onclick:function() {
-		//				alert('Beep.')
+		//			pointerhover:function(ev,v,o) {
+		//				o.borderwidth = 3;
+		//				o.bordercolor = "yellow";
+		//			},
+		//			pointerout:function(ev,v,o) {
+		//				o.borderwidth = 0;
+		//				o.bordercolor = NaN;
 		//			}
 		//		}
 		//	}
@@ -1181,7 +1186,7 @@ define.class("$ui/view", function(require,
 							for (var o in item.behaviors) {
 								if (item.behaviors.hasOwnProperty(o)) {
 									var behave = item.behaviors[o];
-									this.setASTObjectProperty(v, o, behave);
+									this.setASTObjectProperty(v, o, behave, true);
 								}
 							}
 						}

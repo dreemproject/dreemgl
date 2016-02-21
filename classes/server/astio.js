@@ -265,7 +265,8 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 				item = newparams.keys[0];
 
 				newval = this.createASTNode(value.toString(), true);
-				item.value = newval
+				item.value = newval;
+				item.key = this.build.Id(key)
 			} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
 				item = { key:this.build.Id(key), value:this.build.Value(value) }
 			} else {
