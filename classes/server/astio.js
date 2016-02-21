@@ -104,7 +104,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 		string = string.replace(/"([a-zA-Z0-9_$]+)":/g, "$1:");
 
 		// Replace the vecs with better values
-		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,]+)\]\}/g, "$1($2)");
+		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,-]+)\]\}/g, "$1($2)");
 
 		var ast = this.__parser.parse(string);
 		return ast.steps[0];
@@ -265,7 +265,8 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 				item = newparams.keys[0];
 
 				newval = this.createASTNode(value.toString(), true);
-				item.value = newval
+				item.value = newval;
+				item.key = this.build.Id(key)
 			} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
 				item = { key:this.build.Id(key), value:this.build.Value(value) }
 			} else {

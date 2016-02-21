@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, checkbox, treeview, button, statebutton, tabbar,
+								  $ui$, view, label, textbox, icon, checkbox, treeview, button, statebutton, tabbar,
 								  $widgets$, palette, propviewer,
 								  $server$, astio){
 
@@ -108,12 +108,17 @@ define.class("$ui/view", function(require,
 		],
 		//Behaviors:[
 		//	{
-		//		label:"Alert",
-		//		icon:"warning",
-		//		desc:"Adds a click event that pops up an alert dialog",
+		//		label:"Hover Border",
+		//		icon:"square",
+		//		desc:"Adds a hover event that turns on and off a border",
 		//		behaviors:{
-		//			onclick:function() {
-		//				alert('Beep.')
+		//			pointerhover:function(ev,v,o) {
+		//				o.borderwidth = 3;
+		//				o.bordercolor = "yellow";
+		//			},
+		//			pointerout:function(ev,v,o) {
+		//				o.borderwidth = 0;
+		//				o.bordercolor = NaN;
 		//			}
 		//		}
 		//	}
@@ -149,6 +154,9 @@ define.class("$ui/view", function(require,
 
 		// Show or hide the rules when selecting and dragging
 		rulers:true,
+
+		// Show or hide the rotatation handle
+		handles:true,
 
 		// Show guide bars
 		guides:true,
@@ -330,10 +338,6 @@ define.class("$ui/view", function(require,
 		}
 
 		if (ev.view == this) {
-			var inspector = this.find('inspector');
-			if (inspector) {
-				inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(this));
-			}
 			this.__startpos = ev.view.globalToLocal(ev.pointer.position);
 
 			this.__originalpos = {
@@ -348,11 +352,22 @@ define.class("$ui/view", function(require,
 
 			this.__resizecorner = this.resetCursor(ev);
 
+			if (!this.__resizecorner) {
+				var inspector = this.find('inspector');
+				if (inspector) {
+					inspector.astarget = JSON.stringify(this.sourcefile.nodePathFor(this));
+				}
+			}
+
 		} else if (this.testView(ev.view)) {
 
 			var astpath = JSON.stringify(this.sourcefile.nodePathFor(ev.view));
 			if (!this.selected || this.selected.indexOf(astpath) < 0) {
-				this.selected = [astpath];
+				if (this.selected && (ev.pointer.meta || ev.pointer.ctrl)) {
+					this.selected = this.selected.concat([astpath]);
+				} else {
+					this.selected = [astpath];
+				}
 			}
 
 			var dragview = ev.view;
@@ -409,6 +424,7 @@ define.class("$ui/view", function(require,
 
 			this.__ruler.rulermarkstart = ev.view.pos;
 			this.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,0);
+			this.__ruler.guides = this.guides;
 		}
 
 		var dragview = ev.view;
@@ -469,22 +485,34 @@ define.class("$ui/view", function(require,
 
 			var ax,ay,bx,by;
 			if (this.selection) {
-				for (var i=0;i<this.selection.length;i++) {
-					var selected = this.selection[i];
-					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0);
-					ax = selected.pos[0];
-					ay = selected.pos[1];
-					bx = ax + selected._layout.width;
-					by = ay + selected._layout.height;
+				ev.view.pos = vec3(ev.view.pos.x + ev.pointer.movement.x, ev.view.pos.y + ev.pointer.movement.y,0);
+				ax = ev.view.pos[0];
+				ay = ev.view.pos[1];
+				bx = ax + ev.view._layout.width;
+				by = ay + ev.view._layout.height;
 
-					if (!this.groupdrag) {
-						break;
+				if (this.__ruler && this.__ruler.target && this.movelines !== false) {
+					this.__ruler.lines = vec4(ax,ay,bx,by)
+				}
+
+				if (this.groupdrag) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+
+						if (this.__input) {
+							if (this.__input.target === selected) {
+								this.__input.pos = vec3(this.__input.pos.x + ev.pointer.movement.x, this.__input.pos.y + ev.pointer.movement.y,0);
+							}
+						}
+
+
+
+						if (selected === ev.view) {
+							continue;
+						}
+						selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0);
 					}
 				}
-			}
-
-			if (this.__ruler && this.__ruler.target && this.movelines !== false) {
-				this.__ruler.lines = vec4(ax,ay,bx,by)
 			}
 
 			this.__lastpick = ev.pointer.pick;
@@ -533,6 +561,11 @@ define.class("$ui/view", function(require,
 		if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
 			this.__ruler.lines = vec4(0,0,0,0);
 			this.__ruler.target = ev.view;
+			this.__ruler.guides = false;
+		}
+
+		if (this.__handle && this.__handle.target !== ev.view && this.testView(ev.view)) {
+			this.__handle.target = ev.view;
 		}
 
 		var evview = ev.view;
@@ -589,17 +622,22 @@ define.class("$ui/view", function(require,
 			}
 
 			if (this.selection) {
-				for (var i=0;i<this.selection.length;i++) {
-					var selected = this.selection[i];
-					if (this.testView(selected) && selected.toolmove !== false && selected.position === "absolute") {
-						nx = selected.pos.x + ev.pointer.movement.x;
-						this.setASTObjectProperty(selected, "x", nx);
+				if (this.testView(evview) && evview.toolmove !== false && evview.position === "absolute") {
+					nx = evview.pos.x + ev.pointer.movement.x;
+					this.setASTObjectProperty(evview, "x", nx);
 
-						ny = selected.pos.y + ev.pointer.movement.y;
-						this.setASTObjectProperty(selected, "y", ny);
-
-						if (!this.groupdrag) {
-							break;
+					ny = evview.pos.y + ev.pointer.movement.y;
+					this.setASTObjectProperty(evview, "y", ny);
+				}
+				if (this.groupdrag) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						if (selected === evview) {
+							continue;
+						}
+						if (this.testView(selected) && selected.toolmove !== false && selected.position === "absolute") {
+							this.setASTObjectProperty(selected, "x", selected.pos.x + ev.pointer.movement.x);
+							this.setASTObjectProperty(selected, "y", selected.pos.y + ev.pointer.movement.y);
 						}
 					}
 				}
@@ -617,16 +655,17 @@ define.class("$ui/view", function(require,
 				this.setASTObjectProperty(evview, "x", nx, false);
 				this.setASTObjectProperty(evview, "y", ny, false);
 
-				if (this.selection) {
+				this.appendASTNodeOn(this.__lastpick, evview);
+				this.removeASTNodeFor(evview);
+
+				if (this.selection && this.groupdrag && this.groupreparent) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
-
+						if (selected === evview) {
+							continue;
+						}
 						this.appendASTNodeOn(this.__lastpick, selected)
 						this.removeASTNodeFor(selected)
-
-						if (!this.groupdrag || !this.groupreparent) {
-							break;
-						}
 					}
 				}
 
@@ -642,7 +681,6 @@ define.class("$ui/view", function(require,
 				}
 
 			}
-
 
 		} else if (this.__startrect) {
 
@@ -692,7 +730,11 @@ define.class("$ui/view", function(require,
 						selctedinrect.push(astpath);
 					}
 				}
-				this.selected = selctedinrect;
+				if (this.selected && (ev.pointer.meta || ev.pointer.ctrl)) {
+					this.selected = this.selected.concat(selctedinrect);
+				} else {
+					this.selected = selctedinrect;
+				}
 			}
 
 		}
@@ -780,13 +822,13 @@ define.class("$ui/view", function(require,
 			this.selected = [];
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
-			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
 		} else if (ev.name === "x" && (ev.ctrl || ev.meta)) {
 			this.copyselection();
-			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
@@ -1153,7 +1195,7 @@ define.class("$ui/view", function(require,
 							for (var o in item.behaviors) {
 								if (item.behaviors.hasOwnProperty(o)) {
 									var behave = item.behaviors[o];
-									this.setASTObjectProperty(v, o, behave);
+									this.setASTObjectProperty(v, o, behave, true);
 								}
 							}
 						}
@@ -1253,7 +1295,7 @@ define.class("$ui/view", function(require,
 									click:function(ev, val, o) {
 										var astpath = JSON.stringify(this.sourcefile.nodePathFor(v));
 										if (!this.selected || this.selected.indexOf(astpath) < 0) {
-											this.selected = [astpath];
+											this.selected = [astpath]
 										}
 										//o.state = "selected"
 									}.bind(this),
@@ -1307,15 +1349,7 @@ define.class("$ui/view", function(require,
 				},
 				init:function() {
 					this.reload();
-				},
-				onselect:function(ev) {
-					if (ev && ev.item && ev.item.view) {
-						var astpath = JSON.stringify(this.sourcefile.nodePathFor(ev.item.view));
-						if (!this.selected || this.selected.indexOf(astpath) < 0) {
-							this.selected = [astpath];
-						}
-					}
-				}.bind(this)
+				}
 			})
 		));
 
@@ -1379,6 +1413,27 @@ define.class("$ui/view", function(require,
 						if (this.rulers && this.testView(v)) {
 							this.__ruler = this.screen.openOverlay(this.ruler);
 							this.__ruler.target = v;
+						}
+
+						if (this.__input) {
+							if (this.__input.target) {
+								this.__input.target.opacity = 1.0 * this.__input.target.__toolkitopacity;
+							}
+							this.__input.closeOverlay();
+						}
+						if (this.testView(v)
+							&& v.tooltextedit !== false
+							&& (v.constructor.name === "label" || v.constructor.module.factory.baseclass === "/ui/label")) {
+							this.__input = this.screen.openOverlay(this.input);
+							this.__input.target = v;
+						}
+
+						if (this.__handle) {
+							this.__handle.closeOverlay();
+						}
+						if (this.handles && this.testView(v) && v.toolrotate !== false) {
+							this.__handle = this.screen.openOverlay(this.handle);
+							this.__handle.target = v;
 						}
 					}
 				}.bind(this),
@@ -1543,7 +1598,7 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	define.class(this,"selectorrect",view,function() {
+	define.class(this, "selectorrect", view, function() {
 		this.name = "selectorrect";
 		this.drawtarget = "color";
 		this.bordercolorfn = function(pos) {
@@ -1674,8 +1729,8 @@ define.class("$ui/view", function(require,
 			lines:vec4(0,0,0,0),
 			linedotspacing:10.0,
 			guidecolor:vec4("#FFDD00"),
-			guides:true,
-			centertrigger:25.0
+			guides:false,
+			centertrigger:100.0
 		};
 
 		this.bgcolorfn = function(p) {
@@ -1684,11 +1739,17 @@ define.class("$ui/view", function(require,
 			var py = height * p.y;
 
 			if (guides) {
+				if (abs(layout.width * 0.5 - px) < 0.5 && abs(layout.width * 0.5 - (lines[0] + ((lines[2] - lines[0]) * 0.5))) < 1.0
+					|| abs(layout.height * 0.5 - py) < 0.5 && abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5))) < 1.0) {
+					return guidecolor;
+				}
+
 				if (abs(layout.width * 0.5 - px) < 0.5 && abs(layout.width * 0.5 - (lines[0] + ((lines[2] - lines[0]) * 0.5))) < centertrigger) {
 					return vec4(guidecolor.rgb, 0.5 + (((1.0 - abs(layout.width * 0.5 - (lines[0] + ((lines[2] - lines[0]) * 0.5)))) / centertrigger) * 0.5));
 				}
 
-				if (abs(layout.height * 0.5 - py) < 0.5 && abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5))) < 25.0) {
+
+				if (abs(layout.height * 0.5 - py) < 0.5 && abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5))) < centertrigger) {
 					return vec4(guidecolor.rgb, 0.5 + (((1.0 - abs(layout.height * 0.5 - (lines[1] + ((lines[3] - lines[1]) * 0.5)))) / centertrigger) * 0.5));
 				}
 			}
@@ -1761,7 +1822,6 @@ define.class("$ui/view", function(require,
 			this.pos = vec3(v._layout.absx, v._layout.absy, 0);
 			this.size = vec3(v._layout.width, v._layout.height, 0);
 			this.rotate = v.rotate;
-			this.guides = this.outer.guides;
 
 			var p = v;
 			while (p = p.parent) {
@@ -1769,6 +1829,169 @@ define.class("$ui/view", function(require,
 					this.rotate[i] += p.rotate[i]
 				}
 			}
+		}
+	});
+
+	define.class(this, "handle", icon, function() {
+		this.tooltarget = false;
+		this.visible = wire('this.outer.visible');
+		this.position = "absolute";
+		this.width = 50;
+		this.height = 50;
+		this.pickalpha = -1;
+		this.bgcolor = "transparent";
+		this.fgcolor = vec4(1,1,1,0.3);
+		this.fontsize = 50;
+
+		this.icon = "compass";
+
+		this.attributes = {
+			target:Config({type:Object}),
+			spinmode:true
+		};
+
+		this.onspinmode = function(ev,v,o) {
+			this.icon = v ? "compass" : "arrows"
+		};
+
+		this.pointertap = function(ev,v,o) {
+			this.spinmode = !this.spinmode;
+		};
+
+		this.pointerstart = function(ev,v,o) {
+			this.__startrotation = this.target.rotate;
+		};
+
+		this.pointermove = function(ev,v,o) {
+			var cx = this.target._layout.absx + this.target._layout.width * 0.5;
+			var cy = this.target._layout.absy + this.target._layout.height * 0.5;
+
+			this.pos = vec3(this.pos[0] + ev.movement.x, this.pos[1] + ev.movement.y);
+
+			if (this.spinmode) {
+				var d;
+				if (this.pos.y < cy && this.pos.x < cx) {
+					d = ev.movement.x * 0.01 - ev.movement.y * 0.01
+				} else if (this.pos.y < cy && this.pos.x > cx) {
+					d = ev.movement.x * 0.01 + ev.movement.y * 0.01
+				} else if (this.pos.y > cy && this.pos.x < cx) {
+					d = - ev.movement.x * 0.01 - ev.movement.y * 0.01
+				} else if (this.pos.y > cy && this.pos.x > cx) {
+					d = - ev.movement.x * 0.01 + ev.movement.y * 0.01
+				}
+
+				if (d) {
+					this.target.rotate = vec3(this.target.rotate[0],this.target.rotate[1],this.target.rotate[2] + d);
+				}
+			} else {
+				this.target.rotate = vec3(this.target.rotate[0]+ ev.movement.y* 0.01,this.target.rotate[1]+ ev.movement.x* 0.01,this.target.rotate[2]);
+			}
+			if (this.outer.__ruler) {
+				this.outer.__ruler.rotate = this.target.rotate;
+			}
+		};
+
+		this.pointerend = function(ev,v,o) {
+
+			if (Math.abs(this.target.rotate[0] - this.__startrotation[0]) >= 0.01
+			    || Math.abs(this.target.rotate[1] - this.__startrotation[1]) >= 0.01
+				|| Math.abs(this.target.rotate[2] - this.__startrotation[2]) >= 0.01)
+			{
+				this.outer.setASTObjectProperty(this.target, "rotate", this.target.rotate, false);
+				this.outer.commit();
+			} else {
+				this.resetPosition()
+			}
+		};
+
+		this.resetPosition = function() {
+			this.pos = vec3(this.target._layout.absx + this.target._layout.width + 20, this.target._layout.absy - 20 , 0);
+		};
+
+		this.ontarget = function(ev,v,o) {
+			if (!v) {
+				this.visible = false;
+				return;
+			}
+			this.visible = wire('this.outer.visible');
+			this.resetPosition();
+		}
+	});
+
+	define.class(this, "input", textbox, function() {
+		this.tooltarget = false;
+		this.visible = wire('this.outer.visible');
+		this.position = "absolute";
+		this.bgcolor = "transparent";
+		this.fgcolor = vec4(1,0,0,1);
+
+		this.attributes = {
+			target: Config({type: Object})
+		};
+
+		this.onvalue = function(ev,v,o) {
+            var rect;
+			if (this.outer.__selrects) {
+				for (i = 0; i < this.outer.__selrects.length; i++) {
+					var selrect = this.outer.__selrects[i];
+					if (selrect.target === this.target) {
+						rect = selrect;
+					}
+				}
+			}
+
+			if (rect) {
+				rect.size = vec3(this._layout.width, this._layout.height, 0);
+			}
+			if (this.outer.__ruler) {
+				this.outer.__ruler.size = vec3(this._layout.width, this._layout.height, 0);
+			}
+
+		};
+
+		this.reset = function() {
+			this.pos = vec3(this.target._layout.absx, this.target._layout.absy, 0);
+			this.size = this.target.size;
+
+			this.fgcolor = this.target.fgcolor;
+			this.bgcolor = this.target.bgcolor;
+			this.text = this.target.text;
+			this.fontsize = this.target.fontsize;
+			this.boldness = this.target.boldness;
+			this.font = this.target.font;
+			this.multiline = this.target.multiline;
+			this.outline = this.target.outline;
+			this.outline_thickness = this.target.outline_thickness;
+			this.outline_color = this.target.outline_color;
+			this.subpixel = this.target.subpixel;
+			this.align = this.target.align;
+			this.bold = this.target.bold;
+			this.borderwidth = this.target.borderwidth;
+			this.borderradius = this.target.borderrdius;
+			this.bordercolor = this.target.bordercolor;
+			this.padding = this.target.padding;
+			this.margin = this.target.margin;
+			this.scale = this.target.scale;
+			this.rotate = this.target.rotate;
+		};
+
+		this.onfocus = function(ev,v,o) {
+			if (!v && this.value && this.value !== this.target.text) {
+				this.outer.setASTObjectProperty(this.target, "text", this.value, true)
+				this.outer.commit();
+			}
+			this.target.opacity = this.target.__toolkitopacity * (!(v) ? 1.0 : 0.1);
+		};
+
+		this.ontarget = function(ev,v,o) {
+			if (!v) {
+				this.visible = false;
+				return;
+			}
+			this.visible = wire('this.outer.visible');
+			this.reset();
+			this.target.__toolkitopacity = this.target.opacity;
+			this.target.opacity = this.target.__toolkitopacity * 0.1;
 		}
 	});
 
