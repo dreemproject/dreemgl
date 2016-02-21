@@ -1,24 +1,24 @@
 define.class("$server/composition",function(require, $ui$, checkbox, checkbox, icon, button, label, view, screen, cadgrid, $widgets$, toolkit) {
-	
+
 	this.render = function() {
 		return [
 			screen(
 				{flexdirection:"row"},
 				cadgrid({
-						name:"grid", 
-						flex:3, 
-						overflow:"scroll", 
-						bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1), 
-						gridsize:8, 
-						majorevery:5, 
-						majorline:vec4(0.06671861559152603,0.26168233156204224,0.34268006682395935,1), 
-						minorline:vec4(0.1546473354101181,0.1543203890323639,0.12822513282299042,1), 
-						alignitems:'center', 
-						alignself:'stretch', 
-						flexdirection:'column', 
-						justifycontent:'center', 
-						anchor:vec3(0,0,0), 
-						toolmove:false, 
+						name:"grid",
+						flex:3,
+						overflow:"scroll",
+						bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1),
+						gridsize:8,
+						majorevery:5,
+						majorline:vec4(0.06671861559152603,0.26168233156204224,0.34268006682395935,1),
+						minorline:vec4(0.1546473354101181,0.1543203890323639,0.12822513282299042,1),
+						alignitems:'center',
+						alignself:'stretch',
+						flexdirection:'column',
+						justifycontent:'center',
+						anchor:vec3(0,0,0),
+						toolmove:false,
 						toolrect:false
 					},
 					view({height:417, width:325, bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1), position:"absolute", margin:vec4(0,0,0,0), x:157.00006103515625, y:36.000152587890625, rotate:{____struct:"vec3", data:[0,0,-0.09000109881162643]}},view({height:143, width:138, bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1), position:"absolute", x:92.00006103515625, y:165.00006103515625, borderradius:vec4(10,30,60,80)},icon({fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1), opaque:true, icon:"flask", fontsize:80, position:"absolute", x:33, y:-16})),icon({fgcolor:vec4(0.885095477104187,0.8980835676193237,0.9214090704917908,1), opaque:true, icon:"ge", fontsize:80, position:"absolute", x:116.17550659179688, y:3.051116943359375})),
@@ -28,18 +28,18 @@ define.class("$server/composition",function(require, $ui$, checkbox, checkbox, i
 					view({height:40, width:648, bgcolor:vec4(0.30220746994018555,0.4497878849506378,0.5372024178504944,1), position:"absolute", x:671.3224487304688, y:226.90655517578125, rotate:vec3(0,0,0.010000525042414665), opacity:0.7})
 				),
 				toolkit({
-					position:"absolute", 
-					visible:true, 
-					rulers:true, 
-					x:1216, 
-					y:29.000076293945312, 
-					width:376, 
-					height:819, 
-					dropmode:"absolute", 
-					mode:"design", 
-					reticlesize:9, 
-					hoverlines:false, 
-					guides:true, 
+					position:"absolute",
+					visible:true,
+					rulers:true,
+					x:1216,
+					y:29.000076293945312,
+					width:376,
+					height:819,
+					dropmode:"absolute",
+					mode:"design",
+					reticlesize:9,
+					hoverlines:false,
+					guides:true,
 					handles:true
 				}
 				)

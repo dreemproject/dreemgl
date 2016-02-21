@@ -476,22 +476,25 @@ define.class("$ui/view", function(require,
 
 			var ax,ay,bx,by;
 			if (this.selection) {
-				for (var i=0;i<this.selection.length;i++) {
-					var selected = this.selection[i];
-					selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0);
-					ax = selected.pos[0];
-					ay = selected.pos[1];
-					bx = ax + selected._layout.width;
-					by = ay + selected._layout.height;
+				ev.view.pos = vec3(ev.view.pos.x + ev.pointer.movement.x, ev.view.pos.y + ev.pointer.movement.y,0);
+				ax = ev.view.pos[0];
+				ay = ev.view.pos[1];
+				bx = ax + ev.view._layout.width;
+				by = ay + ev.view._layout.height;
 
-					if (!this.groupdrag) {
-						break;
+				if (this.__ruler && this.__ruler.target && this.movelines !== false) {
+					this.__ruler.lines = vec4(ax,ay,bx,by)
+				}
+
+				if (this.groupdrag) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						if (selected === ev.view) {
+							continue;
+						}
+						selected.pos = vec3(selected.pos.x + ev.pointer.movement.x, selected.pos.y + ev.pointer.movement.y,0);
 					}
 				}
-			}
-
-			if (this.__ruler && this.__ruler.target && this.movelines !== false) {
-				this.__ruler.lines = vec4(ax,ay,bx,by)
 			}
 
 			this.__lastpick = ev.pointer.pick;
@@ -601,17 +604,22 @@ define.class("$ui/view", function(require,
 			}
 
 			if (this.selection) {
-				for (var i=0;i<this.selection.length;i++) {
-					var selected = this.selection[i];
-					if (this.testView(selected) && selected.toolmove !== false && selected.position === "absolute") {
-						nx = selected.pos.x + ev.pointer.movement.x;
-						this.setASTObjectProperty(selected, "x", nx);
+				if (this.testView(evview) && evview.toolmove !== false && evview.position === "absolute") {
+					nx = evview.pos.x + ev.pointer.movement.x;
+					this.setASTObjectProperty(evview, "x", nx);
 
-						ny = selected.pos.y + ev.pointer.movement.y;
-						this.setASTObjectProperty(selected, "y", ny);
-
-						if (!this.groupdrag) {
-							break;
+					ny = evview.pos.y + ev.pointer.movement.y;
+					this.setASTObjectProperty(evview, "y", ny);
+				}
+				if (this.groupdrag) {
+					for (var i=0;i<this.selection.length;i++) {
+						var selected = this.selection[i];
+						if (selected === evview) {
+							continue;
+						}
+						if (this.testView(selected) && selected.toolmove !== false && selected.position === "absolute") {
+							this.setASTObjectProperty(selected, "x", selected.pos.x + ev.pointer.movement.x);
+							this.setASTObjectProperty(selected, "y", selected.pos.y + ev.pointer.movement.y);
 						}
 					}
 				}
@@ -629,16 +637,17 @@ define.class("$ui/view", function(require,
 				this.setASTObjectProperty(evview, "x", nx, false);
 				this.setASTObjectProperty(evview, "y", ny, false);
 
-				if (this.selection) {
+				this.appendASTNodeOn(this.__lastpick, evview);
+				this.removeASTNodeFor(evview);
+
+				if (this.selection && this.groupdrag && this.groupreparent) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
-
+						if (selected === evview) {
+							continue;
+						}
 						this.appendASTNodeOn(this.__lastpick, selected)
 						this.removeASTNodeFor(selected)
-
-						if (!this.groupdrag || !this.groupreparent) {
-							break;
-						}
 					}
 				}
 
