@@ -9,7 +9,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.padding = vec4(0, 56, 0, 18)
 	this.bgcolor = NaN
 
-	this.MIN_ZOOM = 0.25
+	this.MIN_ZOOM = 0.125
 	this.TIME_SCALE = 86400000 // millis to days
 
 	this.attributes = {
@@ -23,12 +23,42 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		zoom: Config({type: Number, value: 0.5}),
 		scroll: Config({type: Number, value: 0}),
 
-		monthwidth: Config({type: Number, value: 0}),
-		daywidth: Config({type: Number, value: 0}),
-		hourwidth: Config({type: Number, value: 0}),
 		hoursegs: Config({type: Number, value: 24}),
+		segments: Config({type: vec3, value: vec3()}),
+		// segmentwidths: Config({type: vec3, value: vec3()}),
 
-		eventselected: Config({type:Event})
+		eventselected: Config({type:Event}),
+		eventadded: Config({type:Event})
+	}
+
+	this.onzoom = function () {
+		if (this._zoom > this.getRange() / this.TIME_SCALE) {
+			this.zoom = this.getRange() / this.TIME_SCALE
+		}
+	}
+
+	// TODO(aki): test
+	this.oneventadded = function (event) {
+		var starttime = new Date(this.start).getTime()
+		var endtime = new Date(this.end).getTime()
+		var eventtime = new Date(event.data.date)
+		if (eventtime > endtime) endtime = eventtime
+		if (eventtime < starttime) starttime = eventtime
+		this.start = new Date(starttime).toString()
+		this.end = new Date(endtime).toString()
+	}
+
+	this.ondata = function () {
+		var eventtime
+		var starttime = new Date(this.start).getTime()
+		var endtime = new Date(this.end).getTime()
+		for (var i = 0; i < this.data.length; i++) {
+			eventtime = new Date(this.data[i].date)
+			if (eventtime > endtime) endtime = eventtime
+			if (eventtime < starttime) starttime = eventtime
+		}
+		this.start = new Date(starttime).toString()
+		this.end = new Date(endtime).toString()
 	}
 
 	this.atDraw = function () {
@@ -37,46 +67,66 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		this.hscrollbar = this.find("scrollbar")
 		this.hscrollbar.updateScrollbars()
 
-		this.monthwidth = this.layout.width * 30 / this.zoom
-		this.daywidth = this.layout.width / this.zoom
-		this.hourwidth = this.layout.width / 24 / this.zoom
+		var daywidth = this.layout.width / this.zoom
 
-		this.hoursegs = 1
-		if (this.hourwidth < 9) {
-			this.hoursegs = 1
-		} else if (this.hourwidth < 22) {
+		//TODO(aki): Don't use magic numbers!
+
+		// segment codes
+		// 1 - year
+		// 2 - month
+		// 3 - week
+		// 4 - day
+		// 5 - hour
+		// 6 - munutes
+		// 7 - seconds
+		if (daywidth < 12) {
+			this.segments = vec3(1, 2, 3) // y m w
+		} else if (daywidth < 32) {
+			this.segments = vec3(2, 3, 4) // m w d
+		} else if (daywidth < 440) {
+			this.segments = vec3(2, 4, 5) // m d h
+		} else if (daywidth < 1040) {
+			this.segments = vec3(4, 5, 6) // d h h
+		} else {
+			this.segments = vec3(4, 5, 6) // d h m
+		}
+
+		if (daywidth < 250) {
 			this.hoursegs = 4
-		} else if (this.hourwidth < 44) {
+		} else if (daywidth < 440) {
 			this.hoursegs = 8
-		} else if (this.hourwidth < 88) {
+		} else if (daywidth < 1040) {
+			this.hoursegs = 8
+		} else if (daywidth < 2100) {
 			this.hoursegs = 12
 		} else {
 			this.hoursegs = 24
 		}
+
 		// TODO(aki): better data-binding that doesent trigger render
 		// This should be handled by data binding
-		this.background.monthwidth = this._monthwidth
-		this.background.daywidth = this._daywidth
-		this.background.hourwidth = this._hourwidth
+		this.background.segments = this._segments
+		this.labels.segments = this._segments
+
 		this.background.hoursegs = this._hoursegs
-		this.labels.monthwidth = this._monthwidth
-		this.labels.daywidth = this._daywidth
-		this.labels.hourwidth = this._hourwidth
 		this.labels.hoursegs = this._hoursegs
 
 	}
 
 	this.getStart = function () {
-		return new Date(this.start).getTime()// / this.TIME_SCALE
+		return new Date(this.start).getTime()
 	}
+
 	this.getEnd = function () {
-		return new Date(this.end).getTime()// / this.TIME_SCALE
+		return new Date(this.end).getTime()
 	}
+
 	this.getRange = function () {
 		return this.getEnd() - this.getStart()
 	}
+
 	this.getOffset = function () {
-		return this.zoom * this.scroll
+		return this.zoom * this.scroll * this.TIME_SCALE
 	}
 
 	this.pointermultimove = function(event) {
@@ -105,10 +155,11 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			this.scroll = clamp(this._scroll + shiftx - movement[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
 	}
+
 	this.pointerwheel = function(event) {
 		this.hscrollbar = this.find("scrollbar")
 		if (event.value[0] && abs(event.value[0]) > abs(event.value[1])){
-			this.scroll = clamp(this._scroll + event.value[0]*10.0 / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
+			this.scroll = clamp(this._scroll + event.value[0] / this.layout.width, 0, this.hscrollbar._total - this.hscrollbar._page)
 		}
 		if (event.value[1] && abs(event.value[1]) > abs(event.value[0])){
 			var lastzoom = this._zoom

@@ -10,10 +10,9 @@ define.class('$ui/view', function () {
 	this.attributes = {
 		zoom: wire('this.parent.zoom'),
 		scroll: wire('this.parent.scroll'),
-		monthwidth: wire('this.parent.monthwidth'),
-		daywidth: wire('this.parent.daywidth'),
-		hourwidth: wire('this.parent.hourwidth'),
-		hoursegs: wire('this.parent.hoursegs')
+		hoursegs: wire('this.parent.hoursegs'),
+
+		segments: Config({type: vec3, value: vec3()})
 	}
 
 	this.layout = function(){
@@ -24,61 +23,64 @@ define.class('$ui/view', function () {
 	this.hardrect = function(){
 
 		var array = new Float32Array(4 * 2048)
-		var start = new Date("Jan 1 2016").getTime()
-		for(var i = 0; i < array.length / 4; i++) {
-			var day = new Date(start + i * 86400000)
-			array[i * 4 + 0] = day.getDate()
-			array[i * 4 + 1] = day.getDay()
-			array[i * 4 + 2] = day.getMonth()
-			array[i * 4 + 3] = day.getFullYear()
-		}
-
 		this.caltexture = this.Texture.fromArray(array, 2048, 1)
 
-		this.makepattern = function (field) {
-			if (math.odd(field - mod(field, 1.0))) {
-				return 1.0
-			} else {
-				return 0.9
+		this.update = function () {
+			var array = new Float32Array(4 * 2048)
+			var start = this.view.parent.getStart()
+			for(var i = 0; i < array.length / 4; i++) {
+				var day = new Date(start + i * 86400000)
+				array[i * 4 + 0] = day.getDate()
+				array[i * 4 + 1] = day.getDay()
+				array[i * 4 + 2] = day.getMonth()
+				array[i * 4 + 3] = day.getFullYear()
 			}
+
+			this.caltexture = this.Texture.fromArray(array, 2048, 1)
+			this.caltexture.updateid = random()
+		}
+
+		this.makepattern = function (field1, field2) {
+			if (field1 != field2) return 1.0
+			return 0.0
+		}
+
+		this.pickpattern = function (val, year, month, weekp, day, hour, minute) {
+			if (val == 1.0) return year
+			else if (val == 2.0) return month
+			else if (val == 3.0) return weekp
+			else if (val == 4.0) return day
+			else if (val == 5.0) return hour
+			else if (val == 6.0) return minute
 		}
 
 		this.color = function(){
-			var MONTH_COLLAPSE = 200.0
-			var col = vec4()
-			var fill = vec4("#204e4f")
+			var fgcolor = vec4("#ffffff")
+			var bgcolor = vec4("#4e4e4e")
 			var a = 24.0 / view.layout.height
 			var b = 48.0 / view.layout.height
-			// horizontal dividers
-			if (abs(uv.y - a) < 0.5 / view.layout.height ||
-			abs(uv.y - b) < 0.5 / view.layout.height) {
-				return vec4(0.75, 0.75, 0.75, 1.0)
-			}
-			var zoom = view.zoom
-			var dayfield = (uv.x + view.scroll.x) * view.zoom
-			var data_u = dayfield / 2048
-			var daydata = this.caltexture.point(vec2(data_u, 0))
+
+			var dayfield1 = (uv.x + view.scroll.x) * view.zoom
+			var dayfield2 = (uv.x + 1 / view.layout.width + view.scroll.x) * view.zoom
+			var caldata1 = this.caltexture.point(vec2(dayfield1 / 2048, 0)) * 255.0
+			var caldata2 = this.caltexture.point(vec2(dayfield2 / 2048, 0)) * 255.0
+
+			var year = makepattern(caldata1.a, caldata2.a)
+			var month = makepattern(caldata1.b, caldata2.b)
+			var week = makepattern(floor(dayfield1 / 7.0), floor(dayfield2 / 7.0))
+			var day = makepattern(floor(dayfield1), floor(dayfield2))
+			var hour = makepattern(floor(dayfield1 * view.hoursegs), floor(dayfield2 * view.hoursegs))
+			var minute = makepattern(floor(dayfield1 * 96), floor(dayfield2 * 96))
 
 			var pattern = 0.0
-			if (uv.y < a) {
-				if (view.monthwidth < MONTH_COLLAPSE) {
-					pattern = makepattern(daydata.a * 255.0)
-				} else {
-					pattern = makepattern(daydata.b * 255.0)
-				}
-			} else if (uv.y < b) {
-				if (view.monthwidth < MONTH_COLLAPSE) {
-					pattern = makepattern(daydata.b * 255.0)
-				} else {
-					pattern = makepattern(dayfield * view.hoursegs)
-				}
-			} else {
-				pattern = makepattern(dayfield * view.hoursegs)
-				fill = vec4(0.8, 0.8, 0.8, 1)
-			}
 
-			// TODO(aki): crossfade patterns
-			return mix(fill, '#4e4e4e', pattern)
+			pattern += pickpattern(view.segments.x, year, month, week, day, hour, minute)
+			if (uv.y > a)
+				pattern = max(pattern, 0.5 * pickpattern(view.segments.y, year, month, week, day, hour, minute))
+			if (uv.y > b)
+				pattern = max(pattern, 0.25 * pickpattern(view.segments.z, year, month, week, day, hour, minute))
+
+			return mix(bgcolor, fgcolor, pattern)
 		}
 	}
 
