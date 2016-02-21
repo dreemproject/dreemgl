@@ -82,6 +82,8 @@ define.class('$system/base/keyboard', function (require, exports){
 			this.emit('down', msg)
 
 			if( (this._ctrl  || this._meta) && this._y ||
+				//(this._ctrl  || this._meta) && this._c ||
+				//(this._ctrl  || this._meta) && this._v ||
 				this._tab ||
 				this._leftarrow ||
 				this._rightarrow ||

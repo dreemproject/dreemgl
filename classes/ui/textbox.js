@@ -89,7 +89,8 @@ define.class("$ui/label", function(require){
 		}
 	})
 
-	this.textChanged = function(){
+	this.textChanged = function(noredraw){
+
 		var string = this.textbuf.serializeText(0, this.textbuf.lengthQuad())
 		if (!this.multiline && (string.indexOf('\n') >= 0 || string.indexOf('\r') >= 0)) {
 			string = string.replace(/(\r\n|\n|\r)/gm,"");
@@ -98,7 +99,8 @@ define.class("$ui/label", function(require){
 			this.focus = false;
 		}
 		this.value = Mark(string)
-		this.relayout()
+		// this causes a redraw
+		if(!noredraw) this.relayout()
 	}
 
 	this.value = function(event){
@@ -108,7 +110,7 @@ define.class("$ui/label", function(require){
 		this.redraw()
 	}
 
-	this.cursorsChanged = function(){
+	this.cursorsChanged = function(noreupdate){
 		this.shaders.cursors.reupdate()
 		this.shaders.markers.reupdate()
 	}

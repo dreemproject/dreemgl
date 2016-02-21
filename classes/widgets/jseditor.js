@@ -34,7 +34,12 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			if(this.textbuf.charCodeAt(lo) == 93) text = '', cdelta += 1
 		}
 		else if(text == '}'){
-			if(this.textbuf.charCodeAt(lo) == 125) text = '', cdelta += 1
+			// do a forward scan
+			if(this.textbuf.charCodeAt(lo) === 10 && this.textbuf.charCodeAt(lo+1) === 9 && this.textbuf.charCodeAt(lo+2) == 125){
+				text = '', cdelta = 0
+			}
+			else if(this.textbuf.charCodeAt(lo) == 125) text = '', cdelta += 1
+
 		}
 		else if(text == '('){
 			cdelta -= 1
@@ -77,11 +82,28 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 		return false
 	}
 	
+	this.update_force = function(){
+		this.change_timeout = undefined
+		baseclass.cursorsChanged.call(this)
+		this.redraw()
+	}
+
 	// the change event
 	this.change_id = 0
+	this.change_timeout = 0
+
 	this.textChanged = function(){
-		baseclass.textChanged.call(this)
+		baseclass.textChanged.call(this, true)
 		this.worker.postMessage({change_id:++this.change_id, source:this._value})
+		if(this.change_timeout) return
+		this.change_timeout = this.setTimeout(this.update_force, 30)
+	}
+
+	this.cursorsChanged = function(){
+		if(!this.change_timeout){
+			baseclass.cursorsChanged.call(this)
+		}
+		//this.change_timeout = this.setTimeout(this.update_force, 30)
 	}
 
 	// alright lets make a worker that parses and reserializes
@@ -110,7 +132,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 			// lets reserialize output
 			var out = buf.out
-			JSFormatter.walk(ast, buf, function(str, group, l1, l2, l3, node){
+			JSFormatter.walk(ast, buf, function(str, padding, l1, l2, l3, node){
 				out.ensureSize(out.length + str.length)
 				var o = out.length
 				var first = str.charCodeAt(0)
@@ -118,9 +140,9 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				for(var i = 0; i < str.length; i++){
 					var v = o * 4 + i * 4
 					out.array[v] = str.charCodeAt(i)
-					out.array[v + 1] = group
+					out.array[v + 1] = ((padding||0) + this.actual_indent*65536)*-1
 					out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
-					out.array[v + 3] = buf.walk_id
+					out.array[v + 3] = buf.walk_id + 65536*this.actual_line
 				}
 				out.length += str.length
 				buf.char_count += str.length;
@@ -136,9 +158,14 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 		this.worker.onmessage = function(msg){
 			var mesh = this.shaders.typeface.mesh
 
+			if(this.change_timeout){
+				this.clearTimeout(this.change_timeout)
+				this.update_force()
+			}
+
 			var err = this.find('error') 
 			if(msg.error){
-				rect = mesh.cursorRect(msg.pos)
+				var rect = mesh.cursorRect(msg.pos)
 				err.x = rect.x
 				err.y = rect.y + rect.h + 4
 				err.text = '^'+msg.error
@@ -146,7 +173,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				return
 			}
 			else{
-				err.visible = false
+				if(err._visible) err.visible = false
 			}
 			if(msg.change_id !== this.change_id) return // toss it, its too late.
 			var dt = Date.now()
@@ -158,8 +185,10 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			for(;start < len_new && start < len_old; start++){
 				var off_old = start * 10 * 6
 				var off_new = start * 4
+
 				if(data_new[off_new] !== data_old[off_old + 6]) break
 				if(data_new[off_new+1] !== data_old[off_old + 7]) break
+
 				// copy data over
 				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
 				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
@@ -172,9 +201,14 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			for(;end_old > start && end_new > start; end_old--, end_new--){
 				var off_old = end_old * 10 * 6
 				var off_new = end_new * 4
+				//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])
+				
 				if(data_new[off_new] !== data_old[off_old + 6]) break
+				//if(data_new[off_new+1] !== data_old[off_old + 7]) break
 			}
-			
+		
+			var cursor_now = this.cursorset.list[0].start
+
 			var new_range = end_new - start
 			var old_range = end_old - start 
 
@@ -190,7 +224,11 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 					if(char !== 32 && char !== 9 && char !== 10) deleted_whitespace = false
 				}
 			}
-			var cursor_now = this.cursorset.list[0].start
+
+			// dont autoreformat immediately when deleting characters, only with whitespace
+			if(new_range < old_range && this.change === 'delete' && start < cursor_now && !deleted_whitespace) return
+			
+			if(this.change === 'undoredo')return 
 
 			// if we insert a newline or do a delete use the marker
 			if(new_range !== old_range){
@@ -233,6 +271,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				this.cursorset.update()
 				// create the undo entry
 				if(new_range){
+					this.undo_group--
 					this.addUndoInsert(start, end_old+1)
 					this.addUndoDelete(start, end_new+1)
 					this.undo_group++
@@ -246,6 +285,25 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			var buf = {struct:1, start:start, array:data_new, length:len_new}
 			mesh.add(buf)
 
+			// lets figure out the linenumbers between start and end_new
+			if(new_range > old_range){
+				var min = Infinity, max = -Infinity
+				for(var i = start; i < end_new; i++){
+					var line = Math.floor(data_new[i*4+3]/65536)
+					if(line<min)min = line
+					if(line>max)max = line
+				}
+			}
+			this.line_start = min
+			this.line_end = max
+			this._line_anim = 1.0
+			this.line_anim = 0.
+			//var rect = mesh.cursorRect(start)
+			//err.x = rect.x
+			//err.y = rect.y + rect.h + 4
+			//err.text = 'WOOPWOOP'
+			//err.visible = true
+
 			mesh.clean = false
 			this.redraw()
 
@@ -255,84 +313,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	this.render = function(){
 		return label({position:'absolute',name:'error',bgcolor:'darkred',fgcolor:'white',borderradius:1, visible:false})
 	}
-/*
-	this.parseStep = function(){
-		var dt = Date.now()
-		// lets serialize thi
-		this.step_serialized = layer.serializeText()
-		// okay.. so we parse it, we get an error. now what.
-		var dump = step_serialized.replace(/[\s\r\n]/g,function(f){
-			return '\\'+f.charCodeAt(0)
-		})
-		step_ast = parseLive(step_serialized)
-		//console.log(AST.toDump(step_ast))
-		//console.log('----parseStep! '+(Date.now()-dt))
-		step_timeout = thisTimeout(astgenStep,0)
-	}
 
-	this.astgenStep = function(){
-		var dt = Date.now()
-		code_formatter.setSize(step_serialized.length)
-		code_formatter.clear()
-		code_formatter.ast = step_ast
-		//console.log(code_formatter.serializeText())
-		//console.log('astgenStep! '+(Date.now()-dt))
-		step_timeout = thisTimeout(diffStep,0)
-	}
-
-	this.diffStep = function(){
-		var dt = Date.now()
-		// lets diff our code_formatter.output
-		// against our textbuffer, whilst updating colors
-		// and then we remove/insert the delta.
-		// ok lets first try to do it wholesale
-		var range = layer.diffTags(code_formatter.output)
-		if(range){ // remove a range, and insert a range
-			var delta = 0
-			// if what we do is essentially undo the last action, dont do it
-			var last = undo_stack[undo_stack.length-1]
-			
-			// lets check if we inserted a space, and now its being removed
-			function next(){
-				// first we remove
-				var rem_delta =  0
-				if(range.my_start<=range.my_end){
-					rem_delta += range.my_end + 1 - range.my_start
-				}
-				var add_delta = 0
-				if(range.other_start <= range.other_end){
-					add_delta += range.other_end + 1 - range.other_start
-				}
-				var delta = add_delta - rem_delta
-				// if we are input driven, we only accept positive add
-				if(was_cursor || delta == 0 || !was_delete && delta > 0){
-					undo_group++
-					cursors.markDelta()
-					if(rem_delta){
-						addUndoInsert(range.my_start, range.my_end+1)
-						layer.removeText(range.my_start, range.my_end+1)
-						// lets fetch what we are removing
-					}
-					if(add_delta){
-						var inslice = code_formatter.output.slice(range.other_start, range.other_end+1)
-
-						// lets see what we are inserting
-						layer.insertText(range.my_start, inslice)
-						addUndoDelete(range.my_start, range.my_start + inslice.length)
-					}
-					cursors.moveDelta(range.my_start, add_delta - rem_delta)
-				}
-				else if(!was_cursor){
-					delay_update = next
-				}
-			}
-			next()
-		}
-		//console.log(range)
-		//console.log('diffStep! '+(Date.now()-dt))
-		step_timeout  = thisTimeout(applyStep,0)
-	}
-	*/
 	// Basic usage
 	var jseditor = this.constructor
 

@@ -57,7 +57,7 @@ define.class(function(require){
 	}
 
 	this.clearTimeout = function(id){
-		var idx = this.timeout_ids.indexof(id)
+		var idx = this.timeout_ids.indexOf(id)
 		if(idx !== -1){
 			this.timeout_ids.splice(idx, 1)
 		 	window.clearInterval(id)

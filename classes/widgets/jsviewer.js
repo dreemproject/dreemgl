@@ -15,14 +15,21 @@ define.class('$ui/textbox', function(require){
 		sourceset: null,
 		// wrap the text
 		wrap: Config({type:Boolean, value:false}),
-		init_anim: Config({value:1.0, duration:0.5, motion:'outbounce'}),
+		init_anim: Config({value:1.0, duration:1, motion:'outexpo'}),
+		line_anim: Config({value:1.0, duration:0.25, motion:'outexpo'}),
 	}
 	this.tab_size = 1
+	this.line_start = 0
+	this.line_end = 0
 	// lets go and move this fucker
 	this.textpositionfn = function(pos, tag) {
 		var p = pos
-		var indent = floor(tag.y/65536.) * tab_size
+		var pad = tag.y * -1.
+		var indent = floor(pad/65536.) * tab_size
 		var line = floor(tag.w/65536.)
+		if(line >= line_start && line < line_end){
+			p.x  +=  2*indent*((line-line_start))*line_anim
+		}
 		p.x += - min(indent, init_anim*100.)
 		return p;
 	};
@@ -178,15 +185,15 @@ define.class('$ui/textbox', function(require){
 				var maxwidth = view.layout.width
 				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
 					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
-					textbuf.addWithinWidth(text, maxwidth, padding+ this.indent*65536, 65536 * (l1||0) + 256 * (l2||0) + (l3||0))
+					textbuf.addWithinWidth(text, maxwidth, (padding+ this.indent*65536)*-1, 65536 * (l1||0) + 256 * (l2||0) + (l3||0))
 				})
 			}
 			else{
 				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
 					var start = text.charCodeAt(0)
-					if(!padding) padding = 0
+					//console.log(this.actual_line)
 					if(start !== 32 && start !== 10 && start !== 9) node_id ++
-					textbuf.add(text, padding + this.actual_indent*65536, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), node_id+65536*this.actual_line)
+					textbuf.add(text, ((padding||0) + this.actual_indent*65536)*-1, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), node_id+65536*this.actual_line)
 				})
 			}
 		}
