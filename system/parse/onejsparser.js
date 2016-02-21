@@ -242,8 +242,7 @@ define.class(function(require, exports){
 		message += " in " + this.sourceFile + " line " + loc.line + " column " + loc.column 
 		var err = new SyntaxError(message)
 		err.pos = pos; err.loc = loc; err.raisedAt = this.tokPos
-
-		console.log(message, this.input.split("\n")[loc.line-1])
+		//console.log(message, this.input.split("\n")[loc.line-1])
 
 		throw err
 	}
@@ -1784,6 +1783,7 @@ define.class(function(require, exports){
 				if (this.strict && this.isStrictBadIdWord(def.id.name))
 					this.raise(def.id.start, "Binding " + def.id.name + " in this.strict mode")
 				// dont allow newline before a function-init
+				/*
 				if( cantype && this.tokType == this._name && !this.lastSkippedNewlines){
 					var id = this.parseIdent()
 					id.typing = def.id
@@ -1794,7 +1794,7 @@ define.class(function(require, exports){
 						id.typing = def.id
 						def.id = id
 					}
-				}
+				}*/
 
 				if( !this.lastSkippedNewlines && this.tokType == this._parenL){
 					def.init = this.parseCall(def.id)
@@ -2388,13 +2388,14 @@ define.class(function(require, exports){
 	this.parseExpression = function(noIn, termColon, inStatement) {
 
 		var expr = this.parseMaybeQuote(noIn)
-
+		/*
 		if(inStatement && (
 			expr.type == 'Index' && expr.object.kind || 
 			expr.type == 'Assign' && expr.left.type == 'Index' && expr.left.object.kind)){
 			this.raise(expr.start, "Please use 'type[] x', not 'type x[]' for array types")
 		}
 		// parse float x, y to be a TypeVar not (float x), y
+		
 		if(inStatement && (
 			expr.type == 'Index' && expr.object.typing ||
 			expr.type == 'Id' && expr.typing || 
@@ -2436,7 +2437,7 @@ define.class(function(require, exports){
 				this.parseDefs(noIn, defs)
 			}
 			return this.finishNode(node, 'TypeVar')
-		}
+		}*/
 
 		if(this.tokType === this._comma){
 			var node = this.startNodeFrom(expr)
@@ -2687,7 +2688,7 @@ define.class(function(require, exports){
 			node.object = base
 			node.key = this.parseIdent(true)
 			return this.parseSubscripts(this.finishNode(node, "ThisCall"), noCalls)
-		
+		/*
 		case this._braceL:
 			// we also dont do this._braceL on new line
 			if( noCalls || this.lastSkippedNewlines ) return base
@@ -2705,7 +2706,7 @@ define.class(function(require, exports){
 				//node.arrow = '->'
 				node.body = this.parseBlock(true)
 				return this.parseSubscripts(this.finishNode(node, "Nest"), noCalls)
-			}
+			}*/
 		case this._thinArrow:
 		case this._fatArrow:
 			// you cant separate an arrow from its args with a this.newline
@@ -2714,6 +2715,7 @@ define.class(function(require, exports){
 			node.arrow = this.tokType.type
 			this.next()
 			return this.parseArrowFunction(node, base)
+		/*
 		case this._on:
 		case this._do:
 			// do on next line followed by { } is interpreted as the JS do/while
@@ -2755,7 +2757,7 @@ define.class(function(require, exports){
 				//eat(this._ident)
 			}
 			return this.finishNode( node, 'Call')
-		/*
+		
 		case this._on:
 		case this._do:
 			// do on next line followed by { } is interpreted as the JS do/while
@@ -2789,7 +2791,7 @@ define.class(function(require, exports){
 			}
 			return this.finishNode( node, 'Do')
 			*/
-		} 
+		}
 		return base
 	}
 
@@ -2826,11 +2828,11 @@ define.class(function(require, exports){
 			return this.parseNew()
 		case this._name:
 			var typing = this.parseIdent()
-			if(!this.lastSkippedNewlines && this.tokType == this._name){
-				var node = this.parseIdent()
-				node.typing = typing
-				return node
-			}
+			//if(!this.lastSkippedNewlines && this.tokType == this._name){
+			//	var node = this.parseIdent()
+			//	node.typing = typing
+			//	return node
+			//}
 			return typing
 		case this._num: 
 			var node = this.startNode()
@@ -3131,7 +3133,7 @@ define.class(function(require, exports){
 		this.expect(this._parenL)
 		node.params = this.parseDefs( false, undefined, true )
 
-		if(this.tokType == this._dot) node.rest = this.parseDots(true)
+		//if(this.tokType == this._dot) node.rest = this.parseDots(true)
 
 		this.expect(this._parenR)
 

@@ -428,7 +428,9 @@ define(function(){
 		exports.ceil = vecFn(Math.ceil)
 		exports.min = vecFn(Math.min)
 		exports.max = vecFn(Math.max)
-		exports.mod = vecFn(Math.mod)
+		exports.mod = vecFn2(function(a,b){
+			return a%b
+		})
 
 		exports.identity = function(o){
 			if(!o) o = exports()

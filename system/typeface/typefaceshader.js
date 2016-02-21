@@ -19,7 +19,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.view = {
 		_totalmatrix:mat4(),
 		textstyle: function(fgcolor, pos, tag){return fgcolor;},
-		textpositionfn:function(pos){return pos;},
+		textpositionfn:function(pos, tag){return pos;},
 		_viewmatrix:mat4(),
 		_polygonoffset:0.0,
 		_fgcolor:vec4(),
@@ -210,6 +210,9 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			}
 		}
 
+		// what do we need to know?
+
+
 		this.addGlyph = function(info, unicode, m1, m2, m3) {
 			var fontsize = this.fontsize
 			var x1 = this.add_x + fontsize * info.min_x
@@ -218,7 +221,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var y2 = this.add_y - fontsize * info.max_y
 			var italic = this.italic_ness * info.height * fontsize
 			var cz = this.add_z ? this.add_z:0;
-
+			var dx = 0
 			this.clean = false
 			var slots = this.slots
 			//if(arguments.length !== slots * 4) throw new Error('Please use individual components to set a quad for '+slots)
@@ -228,7 +231,25 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			if(this.length >= this.allocated){
 				this.ensureSize(this.length)
 			}
-
+			
+			// m1 is the formatting layout
+			if(m1){
+				//var indent = parseInt(m1/65536)
+				var mode = Math.floor(m1/256)%256
+				var padding = m1%256
+				// mode is 1, space left
+				// mode is 2, space right
+				// mode is 3, space left/right
+				// mode is 4, scale indent
+				if(mode){
+					var padskip = padding * info.advance * fontsize
+					if(mode&1) x1 += padskip, x2 += padskip, dx += padskip
+					if(mode&2) dx += padskip
+					if(mode == 4){
+						x2 += padskip, dx = (padding - 1)* info.advance * fontsize
+					}
+				}
+			}
 			var a = this.array
 
 			if(this.font.baked){
@@ -309,7 +330,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					x2 + italic, y2, cz, fontsize, gx|1, gy|1, unicode, m1, m2, m3
 				)*/
 			}
-			this.add_x += info.advance * fontsize
+			this.add_x += info.advance * fontsize + dx
 
 			if(this.add_x > this.text_w) this.text_w = this.add_x
 		}
@@ -596,9 +617,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// we want to compute a measure of scale relative to the actual pixels
 		var matrix = view.totalmatrix  * view.viewmatrix
 
-
-		var finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z));
-		var finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z));
+		var finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z), mesh.tag);
+		var finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z), mesh.tag);
 
 		// compute the main position and one rectgle atan fontsize for the pixelscale
 		var pos1 = vec4(finalpos1 , 1) * matrix
@@ -1042,7 +1062,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.glyphy_sdf_draw = function(){
 		var pos = mesh.tex
 
-		var m = pixelscale*0.4//0.005
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
+		//var m = pixelscale*0.4//0.005
 		// screenspace length
 		mesh.scaling = 500. * m
 
@@ -1158,9 +1179,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		var pos = glyph.xy
 		/* isotropic antialiasing */
-		var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
-		var dpdy = dFdy(pos)
-		var m = length(vec2(length(dpdx), length(dpdy)))*SQRT_1_2//*0.1
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
 		//var m = pixelscale*100.
 
 		var dist = glyphy_sdf(glyph.xy, nominal_size, atlas_pos) //+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6

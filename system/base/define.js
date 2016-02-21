@@ -2569,7 +2569,9 @@
 		exports.ceil = typeFn(Math.ceil)
 		exports.min = typeFn2(Math.min)
 		exports.max = typeFn2(Math.max)
-		exports.mod = typeFn2(Math.mod)
+		exports.mod = typeFn2(function(a,b){
+			return a%b
+		})
 		exports.random = Math.random
 
 		exports.sign = typeFn(function(v){

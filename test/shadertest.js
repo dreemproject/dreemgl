@@ -12,12 +12,12 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 					myvalue:Config({value:0., motion:'linear', duration:0.5}),
 					pointerstart:function(){ this.myvalue = 1 },
 					pointerend:function(){ this.myvalue = 0 },
-					bgcolorfn:function(mesh){
-						//return vec4(0,1,0,1)
+					bgcolorfn:function(pos){
+						return vec4(0,1,0,1)
 						// gradient
 
 						// plasma
-						//return pal.pal1(noise.noise3d(vec3(mesh.x*10,mesh.y*10,view.time)))
+						//return pal.pal1(noise.noise3d(vec3(pos.x*10,pos.y*10,time)))
 
 						// something crazy
 						//return demo.highdefblirpy(mesh.xy*0.1, time, 1.)
@@ -28,10 +28,10 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 
 						// circles
 						// we have a rectangle
-
-						var t = view.time
+						/*
+						var t = time
 						var field = float(0)
-						var p = mesh.xy * vec2(view.layout.width, view.layout.height) + vec2(-300,-300)
+						var p = pos.xy * vec2(layout.width, layout.height) + vec2(-300,-300)
 
 						var scale = 100
 						field = shape.circle(p, 0, 0, 50)
@@ -41,11 +41,11 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 
 						var edge = 1.
 						//return pal.pal1(field*0.002)
-						var fg = vec4(view.mycolor.rgb, smoothstep(edge, -edge, field))
+						var fg = vec4(mycolor.rgb, smoothstep(edge, -edge, field))
 						var bg = vec4(0.,0.,0.,0.05)
 
 						return mix(bg.rgba, fg.rgba, fg.a)
-
+						*/
 					}
 				})
 			)

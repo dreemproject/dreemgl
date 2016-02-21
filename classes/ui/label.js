@@ -13,7 +13,7 @@ define.class(function(require, $ui$, view){
 	this.bgcolor = vec4("transparent")
 	this.polygonoffset = 0.0;
 
-	this.textpositionfn = function(pos) {return pos;};
+	this.textpositionfn = function(pos, tag) {return pos;};
 
 	this.textstyle = function(fgcolor, pos, tag){
 		return fgcolor;
@@ -141,7 +141,7 @@ define.class(function(require, $ui$, view){
 	this.subpixel = function(event){
 		this.selectShader()
 	}
-
+	this.text = this.relayout
 	this.measure = function(width){
 		var shader = this.shaders.typeface
 		if(shader.update_dirty){

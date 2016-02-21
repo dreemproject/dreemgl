@@ -4,7 +4,7 @@
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 
-define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
+define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 	this.readonly = false
 	
@@ -16,36 +16,39 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 	// process inserts with matching parens
 	this.processInsert = function(lo, hi, text){
 		var cdelta = 0
+		if(this.textbuf.charCodeAt(lo) === 9){
+			cdelta += 1			
+		}
 		if(text == '"'){
-			if(this.textbuf.charCodeAt(lo) == 34) text = '', cdelta = 1
-			else text +='"', cdelta=-1
+			if(this.textbuf.charCodeAt(lo) == 34) text = '', cdelta += 1
+			else text +='"', cdelta -= 1
 		}
 		else if(text == "'"){
-			if(this.textbuf.charCodeAt(lo) == 39) text = '', cdelta = 1
-			else text +="'", cdelta=-1
+			if(this.textbuf.charCodeAt(lo) == 39) text = '', cdelta += 1
+			else text +="'", cdelta -= 1
 		}
 		else if(text == ')'){
-			if(this.textbuf.charCodeAt(lo) == 41) text = '', cdelta = 1
+			if(this.textbuf.charCodeAt(lo) == 41) text = '', cdelta += 1
 		}
 		else if(text == ']'){
-			if(this.textbuf.charCodeAt(lo) == 93) text = '', cdelta = 1
+			if(this.textbuf.charCodeAt(lo) == 93) text = '', cdelta += 1
 		}
 		else if(text == '}'){
-			if(this.textbuf.charCodeAt(lo) == 125) text = '', cdelta = 1
+			if(this.textbuf.charCodeAt(lo) == 125) text = '', cdelta += 1
 		}
 		else if(text == '('){
-			cdelta = -1
+			cdelta -= 1
 			text += ')'
 		}
 		else if(text == '['){
-			cdelta = -1
+			cdelta -= 1
 			text += ']'
 		}
 		else if(text == '{'){
 			if(lo != hi){
 				// do something special
 			}
-			cdelta = -1
+			cdelta -= 1
 			text += '}'
 		}
 		else if(text == '\n'){ // autoindent code
@@ -78,7 +81,6 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 	this.change_id = 0
 	this.textChanged = function(){
 		baseclass.textChanged.call(this)
-		console.log("HERE!")
 		this.worker.postMessage({change_id:++this.change_id, source:this._value})
 	}
 
@@ -94,7 +96,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 				var ast = Parser.parse(msg.source)
 			}
 			catch(e){
-				console.log(e)
+				this.postMessage({error:e.message, pos:e.pos})
 				return
 			}
 			// ok now we need to reserialize from ast
@@ -132,12 +134,24 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 		this.worker = prev && prev.worker || worker()
 		// if we get source back yay
 		this.worker.onmessage = function(msg){
+			var mesh = this.shaders.typeface.mesh
 
+			var err = this.find('error') 
+			if(msg.error){
+				rect = mesh.cursorRect(msg.pos)
+				err.x = rect.x
+				err.y = rect.y + rect.h + 4
+				err.text = '^'+msg.error
+				err.visible = true
+				return
+			}
+			else{
+				err.visible = false
+			}
 			if(msg.change_id !== this.change_id) return // toss it, its too late.
 			var dt = Date.now()
 			var start = 0
 			var data_new = msg.array
-			var mesh = this.shaders.typeface.mesh
 			var data_old = mesh.array
 			var len_new = msg.length
 			var len_old = mesh.length / 6
@@ -145,6 +159,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 				var off_old = start * 10 * 6
 				var off_new = start * 4
 				if(data_new[off_new] !== data_old[off_old + 6]) break
+				if(data_new[off_new+1] !== data_old[off_old + 7]) break
 				// copy data over
 				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
 				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
@@ -182,6 +197,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 				if(this.change === 'keypress' && this.change_keypress === '\n'|| this.change === 'delete' && deleted_whitespace){
 					// use the tag
 					var nextto = mesh.tagAt(cursor_now,3) 
+
 					for(var t = start; t < len_new; t++){
 						if(nextto == data_new[t*4+3]){
 							this.cursorset.list[0].moveToOffset(t)
@@ -190,18 +206,20 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 					}
 				}
 				else if(this.change === 'delete'){
-					this.cursorset.list[0].moveToOffset(start)
+					//console.log("BE HERE")
+					//this.cursorset.list[0].moveToOffset(cursor_now - 1)
 				}
 				else if(this.change === 'keypress'){
 					// stick to the character
 					var char_at = data_new[cursor_now*4]
-					if(char_at === 9){ // we are typing in a tab
-						this.cursorset.list[0].moveToOffset(end_new+1)
-					}
-					else if(char_at !== 44){
+					//if(char_at === 9){ // we are typing in a tab
+					//	this.cursorset.list[0].moveToOffset(end_new+1)
+					//}
+					//else 
+					if(char_at !== 44){
 						var nextto = mesh.tagAt(cursor_now - 1,0)
 						var fd = 0
-						for(var t = start - 1; t < len_new; t++){
+						for(var t = cursor_now - 1; t < len_new; t++){
 							if(nextto == data_new[t*4+0]){
 								fd = 1
 							}
@@ -220,7 +238,9 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 					this.undo_group++
 				}
 			}
-
+			else{
+				this.cursorset.update()
+			}
 			// this replaces the textbuffer
 			mesh.setLength(start)
 			var buf = {struct:1, start:start, array:data_new, length:len_new}
@@ -230,6 +250,10 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox){
 			this.redraw()
 
 		}.bind(this)
+	}
+
+	this.render = function(){
+		return label({position:'absolute',name:'error',bgcolor:'darkred',fgcolor:'white',borderradius:1, visible:false})
 	}
 /*
 	this.parseStep = function(){

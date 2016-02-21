@@ -8,9 +8,11 @@ define.class(function(require, $server$, composition, $ui$, screen, view, $widge
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
 			jseditor({
-				flex:1, overflow:'scroll',fontsize:15,
-				source:require('./jseditortest').module.factory.body.toString()
+				flex:1, overflow:'scroll',fontsize:12,
+				source:require('./rendertest').module.factory.body.toString()
 			},[1])
 		)
 	]}
 })
+// alright so how wide do we do this character thing (in pixels)
+// and then we have a mode. dup, left, center, right

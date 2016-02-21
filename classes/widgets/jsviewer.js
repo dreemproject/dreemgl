@@ -14,20 +14,34 @@ define.class('$ui/textbox', function(require){
 		source: Config({type:String, value:""}),
 		sourceset: null,
 		// wrap the text
-		wrap: Config({type:Boolean, value:false})
+		wrap: Config({type:Boolean, value:false}),
+		init_anim: Config({value:1.0, duration:0.5, motion:'outbounce'}),
 	}
+	this.tab_size = 1
+	// lets go and move this fucker
+	this.textpositionfn = function(pos, tag) {
+		var p = pos
+		var indent = floor(tag.y/65536.) * tab_size
+		var line = floor(tag.w/65536.)
+		p.x += - min(indent, init_anim*100.)
+		return p;
+	};
 
 	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
 
 	this.readonly = true
 
 	this.fontsize = 12
-	this.subpixel = true
+	this.subpixel = false
 
-	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
+	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 
 	for(var key in JSFormatter.types){
 		this[key] = String(JSFormatter.types[key])
+	}
+
+	this.init = function(){
+		this.init_anim = .0
 	}
 
 	this.textstyle = function(style, pos, tag){
@@ -72,6 +86,8 @@ define.class('$ui/textbox', function(require){
 		}
 		else if(type == _This){
 			style.fgcolor = "#ff7fe1"
+		}else if(type == _Function){
+			style.fgcolor = "#ffdd00"
 		}else{
 			style.fgcolor = "#ff9d00"
 		}
@@ -143,7 +159,6 @@ define.class('$ui/textbox', function(require){
 
 		this.update = function(){
 			var view = this.view
-			var maxwidth = view.layout.width
 			var textbuf = this.mesh = this.newText()
 
 			textbuf.font = view.font
@@ -155,20 +170,23 @@ define.class('$ui/textbox', function(require){
 			textbuf.align = 'left'
 			textbuf.start_y = textbuf.line_height
 			textbuf.boldness = 0.6
+			view.tab_size = textbuf.font.glyphs[9].advance * textbuf.fontsize
 
 			textbuf.clear()
 			var node_id = 0
 			if(view.wrap){
-				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, node){
+				var maxwidth = view.layout.width
+				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
 					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
-					textbuf.addWithinWidth(text, maxwidth, indent, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0))
+					textbuf.addWithinWidth(text, maxwidth, padding+ this.indent*65536, 65536 * (l1||0) + 256 * (l2||0) + (l3||0))
 				})
 			}
 			else{
-				JSFormatter.walk(ast, textbuf, function(text, group, l1, l2, l3, node){
+				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
 					var start = text.charCodeAt(0)
+					if(!padding) padding = 0
 					if(start !== 32 && start !== 10 && start !== 9) node_id ++
-					textbuf.add(text, group, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), node_id)
+					textbuf.add(text, padding + this.actual_indent*65536, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), node_id+65536*this.actual_line)
 				})
 			}
 		}
