@@ -1403,7 +1403,7 @@ define.class("$ui/view", function(require,
 
 						if (this.__input) {
 							if (this.__input.target) {
-								this.__input.target.opacity = 1.0;
+								this.__input.target.opacity = 1.0 * this.__input.target.__toolkitopacity;
 							}
 							this.__input.closeOverlay();
 						}
@@ -1966,7 +1966,7 @@ define.class("$ui/view", function(require,
 				this.outer.setASTObjectProperty(this.target, "text", this.value, true)
 				this.outer.commit();
 			}
-			this.target.opacity = !(v) ?  1.0 : 0.1;
+			this.target.opacity = this.target.__toolkitopacity * (!(v) ? 1.0 : 0.1);
 		};
 
 		this.ontarget = function(ev,v,o) {
@@ -1976,7 +1976,8 @@ define.class("$ui/view", function(require,
 			}
 			this.visible = wire('this.outer.visible');
 			this.reset();
-			this.target.opacity = 0.1;
+			this.target.__toolkitopacity = this.target.opacity;
+			this.target.opacity = this.target.__toolkitopacity * 0.1;
 		}
 	});
 
