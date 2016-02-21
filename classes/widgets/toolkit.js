@@ -1915,7 +1915,24 @@ define.class("$ui/view", function(require,
 			target: Config({type: Object})
 		};
 
-		this.pointertap = function(ev,v,o) {
+		this.onvalue = function(ev,v,o) {
+            var rect;
+			if (this.outer.__selrects) {
+				for (i = 0; i < this.outer.__selrects.length; i++) {
+					var selrect = this.outer.__selrects[i];
+					if (selrect.target === this.target) {
+						rect = selrect;
+					}
+				}
+			}
+
+			if (rect) {
+				rect.size = vec3(this._layout.width, this._layout.height, 0);
+			}
+			if (this.outer.__ruler) {
+				this.outer.__ruler.size = vec3(this._layout.width, this._layout.height, 0);
+			}
+
 		};
 
 		this.reset = function() {
