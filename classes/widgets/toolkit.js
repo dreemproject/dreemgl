@@ -358,7 +358,11 @@ define.class("$ui/view", function(require,
 
 			var astpath = JSON.stringify(this.sourcefile.nodePathFor(ev.view));
 			if (!this.selected || this.selected.indexOf(astpath) < 0) {
-				this.selected = [astpath];
+				if (this.selected && (ev.pointer.meta || ev.pointer.ctrl)) {
+					this.selected = this.selected.concat([astpath]);
+				} else {
+					this.selected = [astpath];
+				}
 			}
 
 			var dragview = ev.view;
@@ -712,7 +716,11 @@ define.class("$ui/view", function(require,
 						selctedinrect.push(astpath);
 					}
 				}
-				this.selected = selctedinrect;
+				if (this.selected && (ev.pointer.meta || ev.pointer.ctrl)) {
+					this.selected = this.selected.concat(selctedinrect);
+				} else {
+					this.selected = selctedinrect;
+				}
 			}
 
 		}
@@ -1273,7 +1281,7 @@ define.class("$ui/view", function(require,
 									click:function(ev, val, o) {
 										var astpath = JSON.stringify(this.sourcefile.nodePathFor(v));
 										if (!this.selected || this.selected.indexOf(astpath) < 0) {
-											this.selected = [astpath];
+											this.selected = [astpath]
 										}
 										//o.state = "selected"
 									}.bind(this),
@@ -1327,15 +1335,7 @@ define.class("$ui/view", function(require,
 				},
 				init:function() {
 					this.reload();
-				},
-				onselect:function(ev) {
-					if (ev && ev.item && ev.item.view) {
-						var astpath = JSON.stringify(this.sourcefile.nodePathFor(ev.item.view));
-						if (!this.selected || this.selected.indexOf(astpath) < 0) {
-							this.selected = [astpath];
-						}
-					}
-				}.bind(this)
+				}
 			})
 		));
 
@@ -1584,7 +1584,7 @@ define.class("$ui/view", function(require,
 		}
 	};
 
-	define.class(this,"selectorrect",view,function() {
+	define.class(this, "selectorrect", view, function() {
 		this.name = "selectorrect";
 		this.drawtarget = "color";
 		this.bordercolorfn = function(pos) {
