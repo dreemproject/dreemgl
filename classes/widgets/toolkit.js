@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, icon, checkbox, treeview, button, statebutton, tabbar,
+								  $ui$, view, label, textbox, icon, checkbox, treeview, button, statebutton, tabbar,
 								  $widgets$, palette, propviewer,
 								  $server$, astio){
 
@@ -664,7 +664,6 @@ define.class("$ui/view", function(require,
 
 			}
 
-
 		} else if (this.__startrect) {
 
 			// Selection rectangle
@@ -801,13 +800,13 @@ define.class("$ui/view", function(require,
 			this.selected = [];
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
-			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
 		} else if (ev.name === "x" && (ev.ctrl || ev.meta)) {
 			this.copyselection();
-			var candelete = !this.screen.focus_view || this.screen.focus_view.constructor.name !== "textbox";
+			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
@@ -1401,6 +1400,20 @@ define.class("$ui/view", function(require,
 							this.__ruler = this.screen.openOverlay(this.ruler);
 							this.__ruler.target = v;
 						}
+
+						if (this.__input) {
+							if (this.__input.target) {
+								this.__input.target.opacity = 1.0;
+							}
+							this.__input.closeOverlay();
+						}
+						if (this.testView(v)
+							&& v.tooltextedit !== false
+							&& (v.constructor.name === "label" || v.constructor.module.factory.baseclass === "/ui/label")) {
+							this.__input = this.screen.openOverlay(this.input);
+							this.__input.target = v;
+						}
+
 						if (this.__handle) {
 							this.__handle.closeOverlay();
 						}
@@ -1888,6 +1901,65 @@ define.class("$ui/view", function(require,
 			}
 			this.visible = wire('this.outer.visible');
 			this.resetPosition();
+		}
+	});
+
+	define.class(this, "input", textbox, function() {
+		this.tooltarget = false;
+		this.visible = wire('this.outer.visible');
+		this.position = "absolute";
+		this.bgcolor = "transparent";
+		this.fgcolor = vec4(1,0,0,1);
+
+		this.attributes = {
+			target: Config({type: Object})
+		};
+
+		this.pointertap = function(ev,v,o) {
+		};
+
+		this.reset = function() {
+			this.pos = vec3(this.target._layout.absx, this.target._layout.absy, 0);
+			this.size = this.target.size;
+
+			this.fgcolor = this.target.fgcolor;
+			this.bgcolor = this.target.bgcolor;
+			this.text = this.target.text;
+			this.fontsize = this.target.fontsize;
+			this.boldness = this.target.boldness;
+			this.font = this.target.font;
+			this.multiline = this.target.multiline;
+			this.outline = this.target.outline;
+			this.outline_thickness = this.target.outline_thickness;
+			this.outline_color = this.target.outline_color;
+			this.subpixel = this.target.subpixel;
+			this.align = this.target.align;
+			this.bold = this.target.bold;
+			this.borderwidth = this.target.borderwidth;
+			this.borderradius = this.target.borderrdius;
+			this.bordercolor = this.target.bordercolor;
+			this.padding = this.target.padding;
+			this.margin = this.target.margin;
+			this.scale = this.target.scale;
+			this.rotate = this.target.rotate;
+		};
+
+		this.onfocus = function(ev,v,o) {
+			if (!v && this.value && this.value !== this.target.text) {
+				this.outer.setASTObjectProperty(this.target, "text", this.value, true)
+				this.outer.commit();
+			}
+			this.target.opacity = !(v) ?  1.0 : 0.1;
+		};
+
+		this.ontarget = function(ev,v,o) {
+			if (!v) {
+				this.visible = false;
+				return;
+			}
+			this.visible = wire('this.outer.visible');
+			this.reset();
+			this.target.opacity = 0.1;
 		}
 	});
 
