@@ -412,6 +412,7 @@ define.class("$ui/view", function(require,
 
 			this.__ruler.rulermarkstart = ev.view.pos;
 			this.__ruler.rulermarkend = vec3(ev.view._layout.left + ev.view._layout.width, ev.view._layout.top + ev.view._layout.height,0);
+			this.__ruler.guides = this.guides;
 		}
 
 		var dragview = ev.view;
@@ -536,6 +537,7 @@ define.class("$ui/view", function(require,
 		if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
 			this.__ruler.lines = vec4(0,0,0,0);
 			this.__ruler.target = ev.view;
+			this.__ruler.guides = false;
 		}
 
 		if (this.__handle && this.__handle.target !== ev.view && this.testView(ev.view)) {
@@ -1688,7 +1690,7 @@ define.class("$ui/view", function(require,
 			lines:vec4(0,0,0,0),
 			linedotspacing:10.0,
 			guidecolor:vec4("#FFDD00"),
-			guides:true,
+			guides:false,
 			centertrigger:50.0
 		};
 
@@ -1775,7 +1777,6 @@ define.class("$ui/view", function(require,
 			this.pos = vec3(v._layout.absx, v._layout.absy, 0);
 			this.size = vec3(v._layout.width, v._layout.height, 0);
 			this.rotate = v.rotate;
-			this.guides = this.outer.guides;
 
 			var p = v;
 			while (p = p.parent) {
