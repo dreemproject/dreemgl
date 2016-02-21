@@ -104,7 +104,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 		string = string.replace(/"([a-zA-Z0-9_$]+)":/g, "$1:");
 
 		// Replace the vecs with better values
-		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,]+)\]\}/g, "$1($2)");
+		string = string.replace(/\{____struct:"(vec\d)",data:\[([\d.,-]+)\]\}/g, "$1($2)");
 
 		var ast = this.__parser.parse(string);
 		return ast.steps[0];
