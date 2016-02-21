@@ -1,8 +1,8 @@
 define.class('$server/composition', function($server$, service, $ui$, screen, view, $widgets$timeline$, timeline) {
 
-	var START_DATE = "Jan 1 2016"
-	var END_DATE = "Jan 1 2017"
-	var EVENT_COUNT = 1000
+	var START_DATE = "Feb 1 2016"
+	var END_DATE = "Feb 17 2016"
+	var EVENT_COUNT = 100
 
 	this.render = function() {
 		return [
@@ -28,7 +28,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 						name:'timeline',
 						start: START_DATE,
 						end: END_DATE,
-						zoom: 200
+						zoom: 224
 					})
 				])
 			])

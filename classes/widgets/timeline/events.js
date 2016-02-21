@@ -43,9 +43,8 @@ define.class('$ui/label', function (require, $ui$, view) {
 		})
 		this.mesh = vertstruct.array()
 
-		var startTime = new Date("Jan 01 2016").getTime()
-
 		this.update = function(){
+			var startTime = this.view.parent.getStart()
 			var view = this.view
 			var data = view.data
 			var mesh = this.mesh = vertstruct.array();
@@ -93,7 +92,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 			if (view.hoverid == mesh.id){
 				return vec4(0, 1, 0, 1)
 			}
-			return vec4(0.5, 0.5, 0.5, 1)
+			return vec4(0.75, 0.75, 0.75, 1)
 		}
 	})
 

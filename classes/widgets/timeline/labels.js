@@ -13,11 +13,10 @@ define.class('$ui/label', function () {
 	this.attributes = {
 		zoom: wire('this.parent.zoom'),
 		scroll: wire('this.parent.scroll'),
-		monthwidth: wire('this.parent.monthwidth'),
-		daywidth: wire('this.parent.daywidth'),
-		hourwidth: wire('this.parent.hourwidth'),
 		hoursegs: wire('this.parent.hoursegs'),
-		format: Config({type: Number, value: wire('this.parent.format')})
+		format: Config({type: Number, value: wire('this.parent.format')}),
+
+		segments: Config({type: vec3, value: vec3()})
 	}
 
 	var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -31,15 +30,9 @@ define.class('$ui/label', function () {
 			var view = this.view
 			var zoom = view.zoom
 			var scroll = view.scroll
-			var monthwidth = view.monthwidth
-			var daywidth = view.daywidth
 			var w = view.parent.layout.width
 			var h = view.parent.layout.height
 			var ts = view.parent.TIME_SCALE
-
-			// var mw = w / 11.774193548387096 * 365 / zoom
-			// var dw = w / zoom
-			// var hw = w / 24 / zoom
 
 			var mesh = this.newText()
 			if (view.font) mesh.font = view.font
@@ -47,98 +40,120 @@ define.class('$ui/label', function () {
 			if (view.fontsize) mesh.fontsize = view.fontsize
 			mesh.clear()
 
-			var i, x, y, start, date, text
+			var i, x, y, start, offset, date, text
 
-			start = new Date(view.parent.getStart())// TODO: /add offset
+			start = new Date(view.parent.getStart())
+			first = new Date(view.parent.getStart() + view.parent.getOffset())
 
-			var startYear = start.getFullYear()
-			var startMonth = start.getMonth()
-			var startDay = start.getDate()
+			var firstYear = first.getFullYear()
+			var firstMonth = first.getMonth()
+			var firstDate = first.getDate()
+			var firstHour = first.getHours()
 
-			date = new Date(start)
+			function drawLabel(text, date, xoffset, yoffset) {
+				x = (date.getTime() - first) / ts / zoom * w + xoffset + 5
+				y = yoffset - 5
+				mesh.add_x = x
+				mesh.add_y = y
+				mesh.add(text, 0, 0, 0)
+			}
 
-			// Year labels
-			if (monthwidth < MONTH_COLLAPSE) {
-				for (i = 0; i < 4; i++) {
-					date = new Date(start)
-					date.setYear(startYear + i)
-					x = (((date.getTime() - start) / ts) / zoom - scroll[0]) * w
-					y = 24
-					mesh.add_x = x + 5
-					mesh.add_y = y - 5
-					mesh.add(date.getFullYear().toString(), 0 ,0 ,0)
+			function drawYears(yoffset) {
+				date = new Date("0")
+				date.setYear(firstYear)
+				xoffset = (date.getTime() - first) / ts / zoom * w
+				x = 0, i = -1
+				while (x < w) {
+					date = new Date(first)
+					date.setYear(firstYear + i)
+					drawLabel(date.getFullYear().toString(), date, xoffset, yoffset)
+					i++
 				}
 			}
 
-			date = new Date(start)
-
-			// Month labels
-			if (monthwidth > 100) {
-				for (i = 0; i < 120; i++) {
-					date = new Date(start)
-					date.setMonth(startMonth + i)
-					x = (((date.getTime() - start) / ts) / zoom - scroll[0]) * w
-					y = monthwidth > MONTH_COLLAPSE ? 24 : 48
-					mesh.add_x = x + 5
-					mesh.add_y = y - 5
-					text = monthwidth > MONTH_COLLAPSE ?
-					MONTHS[date.getMonth() % 12] + ' ' + date.getFullYear() :
-					MONTHS[date.getMonth() % 12]
-					mesh.add(text, 0 ,0 ,0)
+			function drawMonths(yoffset) {
+				date = new Date("0")
+				date.setYear(firstYear)
+				date.setMonth(firstMonth)
+				xoffset = (date.getTime() - first) / ts / zoom * w
+				x = 0, i = -1
+				while (x < w) {
+					date = new Date(first)
+					date.setMonth(firstMonth + i)
+					drawLabel(MONTHS[date.getMonth() % 12], date, xoffset, yoffset)
+					i++
 				}
 			}
 
-			date = new Date(start)
-
-			// Day labels
-			if (daywidth > 50) {
-				for (i = 0; i < 120; i++) {
-					date = new Date(start)
-					date.setDate(startDay + i)
-					x = (((date.getTime() - start) / ts) / zoom - scroll[0]) * w
-					y = 48
-					mesh.add_x = x + 5
-					mesh.add_y = y - 5
-					text = DAYS[(date.getDate() - 1) % 31]
-					mesh.add(text, 0 ,0 ,0)
+			function drawDays(yoffset) {
+				date = new Date("0")
+				date.setYear(firstYear)
+				date.setMonth(firstMonth)
+				date.setDate(firstDate)
+				xoffset = (date.getTime() - first) / ts / zoom * w
+				x = 0, i = -1
+				while (x < w) {
+					date = new Date(first)
+					date.setDate(firstDate + i)
+					drawLabel(DAYS[(date.getDate() - 1) % 31], date, xoffset, yoffset)
+					i++
 				}
 			}
 
-			// // draw day labels
-			// start = floor(zoom / 365 * scroll[0] * 12 * 30)
-			// if (dw > 60) {
-			// 	for (var i = start; i < start + 30; i++) {
-			// 		x = i * dw + 5 - scroll[0] * w
-			// 		if (x > w) break
-			// 		mesh.add_x = x
-			// 		mesh.add_y = 24 - 5
-			// 		mesh.add(DAYS[i % 31], 0 ,0 ,0)
-			// 	}
-			// }
-			//
-			// mesh.fontsize = view.fontsize * 0.75
-			//
-			// // draw hour labels
-			// start = floor(zoom / 365 * scroll[0] * 365 * view.hoursegs)
-			// if (hw > (32 / view.hoursegs) && view.hoursegs !== 1) {
-			// 	for (var i = start; i < start + 48; i++) {
-			// 		var h = 24 / view.hoursegs * i
-			// 		x = h * hw + 5 - scroll[0] * w
-			// 		if (x > w) break
-			// 		mesh.add_x = x
-			// 		mesh.add_y = 48 - 5
-			// 		if (view.format == 12) {
-			// 			h = (h % 12 || 12) + ' ' + (i < 12 ? 'am' : 'pm')
-			// 		} else {
-			// 			h = h % 24 + ' h'
-			// 		}
-			// 		mesh.add(h, 0 ,0 ,0)
-			// 	}
-			// } else {
-			// 	mesh.add_x = 0
-			// 	mesh.add_y = 72 - 5
-			// 	mesh.add('', 0 ,0 ,0)
-			// }
+			function drawHours(yoffset) {
+				date = new Date("0")
+				date.setYear(firstYear)
+				date.setMonth(firstMonth)
+				date.setDate(firstDate)
+				date.setHours(firstHour)
+				xoffset = (date.getTime() - first) / ts / zoom * w
+				var c = 24 / view.hoursegs
+				x = 0, i = -1
+				while (x < w) {
+					var h = (firstHour + i) % 24
+					date = new Date(first)
+					date.setHours(firstHour + i)
+					if (view.format == 12) {
+						text = (h % 12 || 12) + ' ' + (h < 12 ? 'am' : 'pm')
+					} else {
+						text = h % 24 + ' h'
+					}
+					if (h % c == 0) {
+						drawLabel(text, date, xoffset, yoffset)
+					}
+					i++
+				}
+			}
+
+			mesh.fgcolor = vec4(view.fgcolor)
+			mesh.fontsize = view.fontsize
+
+			switch (view.segments[0]) {
+				case 1:
+					drawYears(24)
+					break
+				case 2:
+					drawMonths(24)
+					break
+				case 4:
+					drawDays(24)
+					break
+			}
+
+			mesh.fontsize = view.fontsize * 0.5
+			mesh.fgcolor = vec4(view.fgcolor)
+
+			switch (view.segments[1]) {
+				case 2:
+					drawMonths(48)
+					break
+				case 4:
+					drawDays(48)
+					break
+				case 5:
+					drawHours(48)
+					break
+			}
 
 			this.mesh = mesh
 		}
