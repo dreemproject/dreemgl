@@ -498,6 +498,15 @@ define.class("$ui/view", function(require,
 				if (this.groupdrag) {
 					for (var i=0;i<this.selection.length;i++) {
 						var selected = this.selection[i];
+
+						if (this.__input) {
+							if (this.__input.target === selected) {
+								this.__input.pos = vec3(this.__input.pos.x + ev.pointer.movement.x, this.__input.pos.y + ev.pointer.movement.y,0);
+							}
+						}
+
+
+
 						if (selected === ev.view) {
 							continue;
 						}
