@@ -11,7 +11,7 @@ define.class(function(require, $ui$, view){
 	var TypeFace = require('$system/typeface/typefaceshader')
 
 	this.bgcolor = vec4("transparent")
-	this.textpositionfn = function(pos) {return pos;};
+	this.textpositionfn = function(pos,tag) {return pos;};
 	this.polygonoffset = 0.0;
 
 

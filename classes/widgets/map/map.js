@@ -681,7 +681,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.is = tilebasemixin;
 		this.outline_color = "black" ;
 		this.fgcolor = "black" 
-		this.textpositionfn = function(pos){
+		this.textpositionfn = function(pos, tag){
 		//	idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
 			rpos = vec2(1,-1)*pos.xz ;
 			rpos.y += pos.y;

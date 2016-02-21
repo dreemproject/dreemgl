@@ -39,7 +39,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	// lets define a custom struct and subclass the array
 	this.textgeom = define.struct({
-		pos:vec4,
+		pos:vec4, // x y z w unicode in w
 		tex:vec2,
 		tag:vec4,
 	}).extend(function(exports, self){
@@ -214,6 +214,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 
 		this.addGlyph = function(info, unicode, m1, m2, m3) {
+
 			var fontsize = this.fontsize
 			var x1 = this.add_x + fontsize * info.min_x
 			var x2 = this.add_x + fontsize * info.max_x
@@ -233,10 +234,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			}
 			
 			// m1 is the formatting layout
-			if(m1){
+			if(m1 < 0){
+				var format = m1 * -1
 				//var indent = parseInt(m1/65536)
-				var mode = Math.floor(m1/256)%256
-				var padding = m1%256
+				var mode = Math.floor(format/256)%256
+				var padding = format%256
 				// mode is 1, space left
 				// mode is 2, space right
 				// mode is 3, space left/right
