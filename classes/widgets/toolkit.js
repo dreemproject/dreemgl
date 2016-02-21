@@ -150,6 +150,9 @@ define.class("$ui/view", function(require,
 		// Show or hide the rules when selecting and dragging
 		rulers:true,
 
+		// Show or hide the rotatation handle
+		handles:true,
+
 		// Show guide bars
 		guides:true,
 
@@ -533,6 +536,10 @@ define.class("$ui/view", function(require,
 		if (this.__ruler && this.__ruler.target !== ev.view && this.testView(ev.view)) {
 			this.__ruler.lines = vec4(0,0,0,0);
 			this.__ruler.target = ev.view;
+		}
+
+		if (this.__handle && this.__handle.target !== ev.view && this.testView(ev.view)) {
+			this.__handle.target = ev.view;
 		}
 
 		var evview = ev.view;
@@ -1380,6 +1387,13 @@ define.class("$ui/view", function(require,
 							this.__ruler = this.screen.openOverlay(this.ruler);
 							this.__ruler.target = v;
 						}
+						if (this.__handle) {
+							this.__handle.closeOverlay();
+						}
+						if (this.handles && this.testView(v) && v.toolrotate !== false) {
+							this.__handle = this.screen.openOverlay(this.handle);
+							this.__handle.target = v;
+						}
 					}
 				}.bind(this),
 				astarget:Config({type:String, persist:true}),
@@ -1769,6 +1783,92 @@ define.class("$ui/view", function(require,
 					this.rotate[i] += p.rotate[i]
 				}
 			}
+		}
+	});
+
+	define.class(this, "handle", icon, function() {
+		this.tooltarget = false;
+		this.visible = wire('this.outer.visible');
+		this.position = "absolute";
+		this.width = 50;
+		this.height = 50;
+		this.pickalpha = -1;
+		this.bgcolor = "transparent";
+		this.fgcolor = vec4(1,1,1,0.3);
+		this.fontsize = 50;
+
+		this.icon = "compass";
+
+		this.attributes = {
+			target:Config({type:Object}),
+			spinmode:true
+		};
+
+		this.onspinmode = function(ev,v,o) {
+			this.icon = v ? "compass" : "arrows"
+		};
+
+		this.pointertap = function(ev,v,o) {
+			this.spinmode = !this.spinmode;
+		};
+
+		this.pointerstart = function(ev,v,o) {
+			this.__startrotation = this.target.rotate;
+		};
+
+		this.pointermove = function(ev,v,o) {
+			var cx = this.target._layout.absx + this.target._layout.width * 0.5;
+			var cy = this.target._layout.absy + this.target._layout.height * 0.5;
+
+			this.pos = vec3(this.pos[0] + ev.movement.x, this.pos[1] + ev.movement.y);
+
+			if (this.spinmode) {
+				var d;
+				if (this.pos.y < cy && this.pos.x < cx) {
+					d = ev.movement.x * 0.01 - ev.movement.y * 0.01
+				} else if (this.pos.y < cy && this.pos.x > cx) {
+					d = ev.movement.x * 0.01 + ev.movement.y * 0.01
+				} else if (this.pos.y > cy && this.pos.x < cx) {
+					d = - ev.movement.x * 0.01 - ev.movement.y * 0.01
+				} else if (this.pos.y > cy && this.pos.x > cx) {
+					d = - ev.movement.x * 0.01 + ev.movement.y * 0.01
+				}
+
+				if (d) {
+					this.target.rotate = vec3(this.target.rotate[0],this.target.rotate[1],this.target.rotate[2] + d);
+				}
+			} else {
+				this.target.rotate = vec3(this.target.rotate[0]+ ev.movement.y* 0.01,this.target.rotate[1]+ ev.movement.x* 0.01,this.target.rotate[2]);
+			}
+			if (this.outer.__ruler) {
+				this.outer.__ruler.rotate = this.target.rotate;
+			}
+		};
+
+		this.pointerend = function(ev,v,o) {
+
+			if (Math.abs(this.target.rotate[0] - this.__startrotation[0]) >= 0.01
+			    || Math.abs(this.target.rotate[1] - this.__startrotation[1]) >= 0.01
+				|| Math.abs(this.target.rotate[2] - this.__startrotation[2]) >= 0.01)
+			{
+				this.outer.setASTObjectProperty(this.target, "rotate", this.target.rotate, false);
+				this.outer.commit();
+			} else {
+				this.resetPosition()
+			}
+		};
+
+		this.resetPosition = function() {
+			this.pos = vec3(this.target._layout.absx + this.target._layout.width + 20, this.target._layout.absy - 20 , 0);
+		};
+
+		this.ontarget = function(ev,v,o) {
+			if (!v) {
+				this.visible = false;
+				return;
+			}
+			this.visible = wire('this.outer.visible');
+			this.resetPosition();
 		}
 	});
 

@@ -1028,12 +1028,16 @@ define.class('$system/base/node', function(require){
 				//console.log(this.matrix_dirty)
 				var ml = this.matrix_layout
 				if(!ml || ml.left !== layout.left || ml.top !== layout.top ||
-					ml.width !== layout.width || ml.height !== layout.height){
+					ml.width !== layout.width || ml.height !== layout.height
+				    || ml.scale !== this._scale || ml.rotate !== this._rotate
+				){
 					this.matrix_layout = {
 						left:layout.left,
 						top:layout.top,
 						width:layout.width,
-						height:layout.height
+						height:layout.height,
+						scale: this._scale,
+						rotate:this._rotate
 					}
 
 					matrix_changed = true
@@ -1180,6 +1184,8 @@ define.class('$system/base/node', function(require){
 	this.alignself =
 	this.position =
 	this.relayout
+
+	this.rotate = this.rematrix
 
 	// internal, called by the render engine
 	this.doLayout = function(){
