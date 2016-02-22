@@ -195,7 +195,7 @@ define(function(){
 
 	vec2.parse = function(str, o){
 		var a = o || vec4()
-		var fcol = parseFloat(str) 
+		var fcol = parseFloat(str)
 		if (fcol == str)  {
 			return vec2(fcol)
 		}
@@ -206,7 +206,7 @@ define(function(){
 			a[1] = vec2m[2]
 			return a
 		}
-	
+
 		var vec2m = str.match(/^\s*(\d+)\s*,\s*(\d+)\s*$/i)
 		if( vec2m ) {
 			a[0] = vec2m[1]
@@ -218,7 +218,7 @@ define(function(){
 
 	vec3.parse = function(str, o){
 		var a = o || vec4()
-		var fcol = parseFloat(str)  
+		var fcol = parseFloat(str)
 		if (fcol == str)  {
 			a[0] = fcol
 			a[1] = fcol
@@ -233,7 +233,7 @@ define(function(){
 			a[2] = vec3m[3]
 			return a;
 		}
-	
+
 		var vec3m = str.match(/^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*$/i)
 		if( vec3m ) {
 			a[0] = vec3m[1]
@@ -247,7 +247,7 @@ define(function(){
 	// color parser
 	vec4.parse = function(col, o, noerror) {
 
-		if(col && col.struct) return col // pass through	
+		if(col && col.struct) return col // pass through
 
 		col = col.trim().toLowerCase();
 
@@ -257,13 +257,13 @@ define(function(){
 			a[0] = ((c >> 16)&0xff) /255
 			a[1] = ((c >> 8)&0xff) /255
 			a[2] = (c&0xff) /255
-			
+
 			a[3] = ((c >> 24)&0xff) /255 // alpha
-			
+
 			return a
 		}
 
-		var fcol = parseFloat(col)  
+		var fcol = parseFloat(col)
 		if (fcol == col)  {
 			a[0] = fcol
 			a[1] = fcol
@@ -271,7 +271,7 @@ define(function(){
 			a[3] = fcol
 			return a
 		}
-						
+
 		var hex3 = col.match(/^#([0-9a-f]{3})$/i);
 		if (hex3) {
 			hex3 = hex3[1];
@@ -281,7 +281,7 @@ define(function(){
 			a[3] = 1.0;
 			return a;
 		}
-		
+
 		var hex6 = col.match(/^#([0-9a-f]{6})$/i);
 		if (hex6) {
 			hex6 = hex6[1];
@@ -300,7 +300,7 @@ define(function(){
 			a[2] = rgba[3]/255.0;
 			a[3] = rgba[4]===undefined?1:rgba[4]/255.0;
 	//			console.log("rgba" ,a);
-		
+
 			return a;
 		}
 		var rgb = col.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
@@ -321,7 +321,7 @@ define(function(){
 			a[3] = vec4m[4];
 			return a;
 		}
-	
+
 		var vec4m = col.match(/^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*$/i);
 		if( vec4m ) {
 			a[0] = vec4m[1];
@@ -342,8 +342,8 @@ define(function(){
 		// lets parse the color
 		if(!noerror) console.error("Cannot parse color "+col)
 		a[0] = -1
-		a[1] = -1
-		a[2] = -1
+		a[1] = 1
+		a[2] = 0.85
 		a[3] = 1
 		return a
 		/*
@@ -380,17 +380,17 @@ define(function(){
 			}
 		}
 
-		if(len == 3){			
+		if(len == 3){
 			a[0] = ((c&0xf00)>>8|(c&0xf00)>>4) /255
 			a[1] = ((c&0xf0)|(c&0xf0)>>4) /255
-			a[2] = ((c&0xf)|(c&0xf)<<4) /255 
+			a[2] = ((c&0xf)|(c&0xf)<<4) /255
 			console.log("here", col, a)
 			return a
 		}
-		
+
 		a[0] = ((c >> 16)&0xff) /255
 		a[1] = ((c >> 8)&0xff) /255
-		a[2] = (c&0xff) /255		
+		a[2] = (c&0xff) /255
 		a[3] = 1.0;
 		console.log("ho", col, a)
 		//return [1,1,1,1]
@@ -399,7 +399,7 @@ define(function(){
 
 
 		//a[3] = ((c >> 24)&0xff) /255 // alpha
-		
+
 		return a*/
 	}
 

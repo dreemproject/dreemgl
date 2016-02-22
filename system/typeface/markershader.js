@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Parts copyright 2012 Google, Inc. All Rights Reserved. (APACHE 2.0 license)
@@ -26,7 +26,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 		var nx1 = other.z
 		var nx2 = other.w
 		// main shape
-		
+
 		var field = shape.roundbox(rel, 0,0, rect.z, rect.w, border_radius)
 		if(px1 != px2){
 			var field2 = shape.roundbox(rel, px1 - rect.x, -rect.w, px2 - px1, rect.w, border_radius)
@@ -36,7 +36,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 			var field2 = shape.roundbox(rel, nx1 - rect.x, rect.w, nx2 - nx1, rect.w, border_radius)
 			field = shape.smoothpoly(field, field2, gloop)
 		}
-		
+
 		//dump = field
 		//field = marker_style(field, pos)
 		var alpha = smoothstep(edge, -edge, field)
@@ -106,7 +106,7 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 			)
 		}
 	})
-	
+
 	this.mesh = this.vertexstruct.array()
-	this.fgcolor = vec4("ocea");
+	this.fgcolor = vec4("oceanboatblue");
 })

@@ -45,7 +45,7 @@ define.class("$ui/view", function($ui$, statebutton){
 				on:this.defaultselectionhandler
 			},
 			disabled:{
-				fgcolor:"darkgray",
+				fgcolor:"#a9a9a9",
 				on:undefined
 			}}
 		})
@@ -166,7 +166,7 @@ define.class("$ui/view", function($ui$, statebutton){
 						state:"disabled",
 						disabled:{
 							bgcolor:"gray",
-							fgcolor:"darkgray"
+							fgcolor:"#a9a9a9"
 						}
 					}
 				]})

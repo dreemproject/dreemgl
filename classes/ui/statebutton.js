@@ -81,7 +81,7 @@ define.class('$ui/view', function(require, $ui$, view, label, icon){
 				on:this.clickhandler
 			},
 			disabled:{
-				fgcolor:"darkgray",
+				fgcolor:"#a9a9a9",
 				on:undefined
 			}}
 		}),
