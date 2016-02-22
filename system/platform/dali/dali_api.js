@@ -34,6 +34,7 @@ define.class(function(exports){
 
 	// Set emitcode to true to emit dali code to the console. These lines
 	// are preceeded with DALICODE to make it easier to extract into a file.
+	// The -dumpprog command-line option codes this value
 	DaliApi.emitcode = false;
 
 	// Create all actors on a layer to ignore depth test.
@@ -88,22 +89,34 @@ define.class(function(exports){
 	 * @method initialize
 	 * Static method to initialize and create the dali stage. This method is
 	 * called when dali starts running.
-	 * @param {number} width Width of stage
-	 * @param {number} height Height of stage
-	 * @param {string} name Name of stage
-	 * @param {string} dalilib Path to dali lib (optional). If the path is
-	 *                 missing, a fixed path is used.
+	 * @param {Object} settings Initial settings:
+	 *                   width   Width of stage
+	 *                   height  Height of stage
+	 *                   name    Name of stage
+	 *                   dalilib Path to dali lib (optional). If the path is
+	 *                           missing, a fixed path is used.
+     *                   dumpprog Path of file to dump dali program to, or use
+	 *                           stdout is no file is specified
 	 */
-	DaliApi.initialize = function(width, height, name, dalilib) {
+	DaliApi.initialize = function(settings) {
 		DaliLayer = require('./dali_layer')
+
+		DaliApi.width = settings.width
+		DaliApi.height = settings.height
+		DaliApi.name = settings.name
+		DaliApi.dalilib = settings.dalilib || '/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali';
+		DaliApi.dumpprog = settings.dumpprog;
+
+		DaliApi.emitcode = DaliApi.dumpprog;
+
 
 		var window= {
 			x:0,
 			y:0,
-			width:width,
-			height: height,
+			width:DaliApi.width,
+			height: DaliApi.height,
 			transparent: false,
-			name: name
+			name: DaliApi.name
 		};
 
 		var viewMode={
@@ -116,27 +129,23 @@ define.class(function(exports){
 			'view-mode': viewMode,
 		}
 
-		// include the Dali/nodejs interface.
-		if (!dalilib)
-			dalilib = '/home/dali/teem/src/dreemgl/Release/dali';
-
-
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var window= {x:0, y:0, width:' + width + ', height:' + height + ', transparent: false, name: \'' + name + '\'};');
+			console.log('DALICODE: var window= {x:0, y:0, width:' + DaliApi.width + ', height:' + DaliApi.height + ', transparent: false, name: \'' + DaliApi.name + '\'};');
 
 			console.log('DALICODE: var viewMode={\'stereoscopic-mode\':\'mono\', \'stereo-base\': 65};');
 
 			console.log('DALICODE: var options= {\'window\': window, \'view-mode\': viewMode}');
-			console.log('DALICODE: var dali = require(\'' + dalilib + '\')(options);');
+			console.log('DALICODE: var dali = require(\'' + DaliApi.dalilib + '\')(options);');
 		}
 
 		try {
             // Load the library and make available as DaliApi.dali
-			DaliApi.dali = define.require(dalilib)(options);
+			// console.log('LOADING', dalilib);
+			DaliApi.dali = define.require(DaliApi.dalilib)(options);
 
 			// Create a top-level 2D layer to the stage. 
 			var dali = DaliApi.dali;
-			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, width, height);
+			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
 			dali.stage.add(DaliApi.rootlayer.dalilayer);
 
 			if (DaliApi.emitcode) {
@@ -145,7 +154,7 @@ define.class(function(exports){
 
 		}
 		catch (e) {
-			console.error('Failed to load dalilib', dalilib);
+			console.error('Failed to load dalilib', DaliApi.dalilib);
 			console.log(e.stack);
 		}
     }
