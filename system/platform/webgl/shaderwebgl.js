@@ -53,7 +53,7 @@ define.class('$system/base/shader', function(require, exports){
 		gl.attachShader(shader, vtx_shader)
 		gl.attachShader(shader, pix_color_shader)
 		gl.linkProgram(shader)
-		console.log(gl.LINK_STATUS);
+
 		if (!gl.getProgramParameter(shader, gl.LINK_STATUS)){
 			var err = gl.getProgramInfoLog(shader)
 
