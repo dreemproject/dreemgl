@@ -341,6 +341,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n187" name="n187">187</a>
 <a href="#n188" name="n188">188</a>
 <a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -409,8 +412,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.background = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.labels = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
-                <span class="local-variable">this</span>.hscrollbar.updateScrollbars()
-
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar){        
+                        <span class="local-variable">this</span>.hscrollbar.updateScrollbars()
+                }
                 <span class="keyword">var</span> daywidth = <span class="local-variable">this</span>.layout.width / <span class="local-variable">this</span>.zoom
 
                 <span class="comment">//TODO(aki): Don't use magic numbers!</span>
@@ -449,12 +453,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// TODO(aki): better data-binding that doesent trigger render</span>
                 <span class="comment">// This should be handled by data binding</span>
-                <span class="local-variable">this</span>.background.segments = <span class="local-variable">this</span>._segments
-                <span class="local-variable">this</span>.labels.segments = <span class="local-variable">this</span>._segments
-
-                <span class="local-variable">this</span>.background.hoursegs = <span class="local-variable">this</span>._hoursegs
-                <span class="local-variable">this</span>.labels.hoursegs = <span class="local-variable">this</span>._hoursegs
-
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.background) {
+                        <span class="local-variable">this</span>.background.segments = <span class="local-variable">this</span>._segments
+                        <span class="local-variable">this</span>.background.hoursegs = <span class="local-variable">this</span>._hoursegs
+                }
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.labels){
+                        <span class="local-variable">this</span>.labels.segments = <span class="local-variable">this</span>._segments
+                        <span class="local-variable">this</span>.labels.hoursegs = <span class="local-variable">this</span>._hoursegs
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">getStart</span> = <span class="keyword">function</span> () {
@@ -523,7 +529,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
-                        background({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>}),
+                background({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>}),
                         labels({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>}),
                         events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events</span><span class="delimiter">&quot;</span></span>}),
                         scrollbar({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>})

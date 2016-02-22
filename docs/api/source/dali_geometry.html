@@ -584,6 +584,17 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n430" name="n430">430</a></strong>
 <a href="#n431" name="n431">431</a>
 <a href="#n432" name="n432">432</a>
+<a href="#n433" name="n433">433</a>
+<a href="#n434" name="n434">434</a>
+<a href="#n435" name="n435">435</a>
+<a href="#n436" name="n436">436</a>
+<a href="#n437" name="n437">437</a>
+<a href="#n438" name="n438">438</a>
+<a href="#n439" name="n439">439</a>
+<strong><a href="#n440" name="n440">440</a></strong>
+<a href="#n441" name="n441">441</a>
+<a href="#n442" name="n442">442</a>
+<a href="#n443" name="n443">443</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -855,10 +866,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="comment">//TODO Support multiple names in the keys, like webgl</span>
                 <span class="keyword">var</span> format = {};
-
                 <span class="keyword">var</span> name;
         <span class="keyword">var</span> nslots = <span class="integer">0</span>;
+
+                <span class="comment">// DO NOT iterate on key name. You need to iterate in offset order to</span>
+                <span class="comment">// preserve the order.</span>
+                <span class="comment">// Sort based on the offset, and then loop in this order. </span>
+                <span class="keyword">var</span> tosort = [];
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> attrlocs) {
+                        tosort.push([attrlocs[key].offset, key]);
+                }
+                tosort.sort();
+                <span class="comment">// console.log('SORTED', tosort);</span>
+                
+                <span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> tosort) {
+                        key = tosort[i][<span class="integer">1</span>];
+
                         <span class="keyword">var</span> attrloc = attrlocs[key]
                         name = attrloc.name
 
@@ -895,7 +918,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">if</span> (!name || (Object.keys(format).length == <span class="integer">0</span>)) <span class="keyword">return</span>;
-
                 <span class="comment">//console.log('***************addAttributeGeometry******************');</span>
                 <span class="comment">//console.log(attrlocs);</span>
                 <span class="comment">//console.log('*****************************************************');</span>

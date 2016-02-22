@@ -477,6 +477,32 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n323" name="n323">323</a>
 <a href="#n324" name="n324">324</a>
 <a href="#n325" name="n325">325</a>
+<a href="#n326" name="n326">326</a>
+<a href="#n327" name="n327">327</a>
+<a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
+<strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
+<a href="#n336" name="n336">336</a>
+<a href="#n337" name="n337">337</a>
+<a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
+<a href="#n347" name="n347">347</a>
+<a href="#n348" name="n348">348</a>
+<a href="#n349" name="n349">349</a>
+<strong><a href="#n350" name="n350">350</a></strong>
+<a href="#n351" name="n351">351</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -582,8 +608,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">cursorsChanged</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.change_timeout){
                         baseclass.cursorsChanged.call(<span class="local-variable">this</span>)
+                        <span class="comment">// lets post</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.format_dirty)
+                                <span class="local-variable">this</span>.worker.postMessage({<span class="key">change_id</span>:++<span class="local-variable">this</span>.change_id, <span class="key">source</span>:<span class="local-variable">this</span>._value})
                 }
                 <span class="comment">//this.change_timeout = this.setTimeout(this.update_force, 30)</span>
+        }
+
+        <span class="comment">// we can skip tabs</span>
+        <span class="local-variable">this</span>.<span class="function">atMoveLeft</span> = <span class="keyword">function</span>(pos){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(pos) === <span class="integer">9</span>) <span class="keyword">return</span> pos - <span class="integer">1</span>
+                <span class="keyword">return</span> pos
+        }
+
+        <span class="local-variable">this</span>.<span class="function">atMoveRight</span> = <span class="keyword">function</span>(pos){
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(pos) === <span class="integer">9</span>) <span class="keyword">return</span> pos + <span class="integer">1</span>
+                <span class="keyword">return</span> pos
         }
 
         <span class="comment">// alright lets make a worker that parses and reserializes</span>
@@ -621,7 +661,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">var</span> v = o * <span class="integer">4</span> + i * <span class="integer">4</span>
                                         out.array[v] = str.charCodeAt(i)
                                         out.array[v + <span class="integer">1</span>] = ((padding||<span class="integer">0</span>) + <span class="local-variable">this</span>.actual_indent*<span class="integer">65536</span>)*-<span class="integer">1</span>
-                                        out.array[v + <span class="integer">2</span>] = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
+                                        <span class="keyword">if</span>(l1 &lt; <span class="integer">0</span>)
+                                                out.array[v + <span class="integer">2</span>] = l1
+                                        <span class="keyword">else</span>
+                                                out.array[v + <span class="integer">2</span>] = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
                                         out.array[v + <span class="integer">3</span>] = buf.walk_id + <span class="integer">65536</span>*<span class="local-variable">this</span>.actual_line
                                 }
                                 out.length += str.length
@@ -668,7 +711,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                 <span class="keyword">if</span>(data_new[off_new] !== data_old[off_old + <span class="integer">6</span>]) <span class="keyword">break</span>
                                 <span class="keyword">if</span>(data_new[off_new+<span class="integer">1</span>] !== data_old[off_old + <span class="integer">7</span>]) <span class="keyword">break</span>
-
+                                <span class="comment">//if(data_new[off_new+2] !== data_old[off_old + 8]) break</span>
+                                <span class="comment">//if(data_new[off_new+3] !== data_old[off_old + 9]) break</span>
+                                
                                 <span class="comment">// copy data over</span>
                                 data_old[off_old + <span class="integer">7</span>] = data_old[off_old + <span class="integer">17</span>] = data_old[off_old + <span class="integer">27</span>] = 
                                 data_old[off_old + <span class="integer">37</span>] = data_old[off_old + <span class="integer">47</span>] = data_old[off_old + <span class="integer">57</span>] = data_new[off_new+<span class="integer">1</span>]
@@ -682,9 +727,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> off_old = end_old * <span class="integer">10</span> * <span class="integer">6</span>
                                 <span class="keyword">var</span> off_new = end_new * <span class="integer">4</span>
                                 <span class="comment">//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])</span>
-                                
+                
                                 <span class="keyword">if</span>(data_new[off_new] !== data_old[off_old + <span class="integer">6</span>]) <span class="keyword">break</span>
                                 <span class="comment">//if(data_new[off_new+1] !== data_old[off_old + 7]) break</span>
+                                <span class="comment">//if(data_new[off_new+2] !== data_old[off_old + 8]) break</span>
+                                <span class="comment">//if(data_new[off_new+3] !== data_old[off_old + 9]) break</span>
+                                        
                         }
                 
                         <span class="keyword">var</span> cursor_now = <span class="local-variable">this</span>.cursorset.list[<span class="integer">0</span>].start
@@ -692,14 +740,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> new_range = end_new - start
                         <span class="keyword">var</span> old_range = end_old - start 
 
-                        <span class="keyword">if</span>(old_range &lt; new_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>) <span class="keyword">return</span>
-                        <span class="keyword">if</span>(old_range &gt; new_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span>) <span class="keyword">return</span>
+                        <span class="keyword">if</span>(old_range &lt; new_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> <span class="local-variable">this</span>.format_dirty = <span class="predefined-constant">true</span>
+                        <span class="keyword">if</span>(old_range &gt; new_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span>) <span class="keyword">return</span> <span class="local-variable">this</span>.format_dirty = <span class="predefined-constant">true</span>
 
                         <span class="comment">// do the cursor move magic</span>
                         <span class="keyword">var</span> deleted_whitespace = <span class="predefined-constant">true</span>
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>){
                                 <span class="keyword">var</span> undo_data = <span class="local-variable">this</span>.undo_stack[<span class="local-variable">this</span>.undo_stack.length - <span class="integer">1</span>].data
-                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; undo_data.length; i++){
+                                <span class="keyword">if</span>(undo_data) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; undo_data.length; i++){
                                         <span class="keyword">var</span> <span class="reserved">char</span> = undo_data.array[i*<span class="integer">4</span>]
                                         <span class="keyword">if</span>(<span class="reserved">char</span> !== <span class="integer">32</span> &amp;&amp; <span class="reserved">char</span> !== <span class="integer">9</span> &amp;&amp; <span class="reserved">char</span> !== <span class="integer">10</span>) deleted_whitespace = <span class="predefined-constant">false</span>
                                 }
@@ -708,7 +756,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="comment">// dont autoreformat immediately when deleting characters, only with whitespace</span>
                         <span class="keyword">if</span>(new_range &lt; old_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span> &amp;&amp; start &lt; cursor_now &amp;&amp; !deleted_whitespace) <span class="keyword">return</span>
                         
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">undoredo</span><span class="delimiter">'</span></span>)<span class="keyword">return</span> 
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">undoredo</span><span class="delimiter">'</span></span>)<span class="keyword">return</span> <span class="local-variable">this</span>.format_dirty = <span class="predefined-constant">true</span>
 
                         <span class="comment">// if we insert a newline or do a delete use the marker</span>
                         <span class="keyword">if</span>(new_range !== old_range){
@@ -764,7 +812,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         mesh.setLength(start)
                         <span class="keyword">var</span> buf = {<span class="key">struct</span>:<span class="integer">1</span>, <span class="key">start</span>:start, <span class="key">array</span>:data_new, <span class="key">length</span>:len_new}
                         mesh.add(buf)
-
+                        
                         <span class="comment">// lets figure out the linenumbers between start and end_new</span>
                         <span class="keyword">if</span>(new_range &gt; old_range){
                                 <span class="keyword">var</span> min = <span class="predefined-constant">Infinity</span>, max = -<span class="predefined-constant">Infinity</span>
@@ -778,12 +826,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.line_end = max
                         <span class="local-variable">this</span>._line_anim = <span class="float">1.0</span>
                         <span class="local-variable">this</span>.line_anim = <span class="integer">0</span>.
+                        
                         <span class="comment">//var rect = mesh.cursorRect(start)</span>
                         <span class="comment">//err.x = rect.x</span>
                         <span class="comment">//err.y = rect.y + rect.h + 4</span>
                         <span class="comment">//err.text = 'WOOPWOOP'</span>
                         <span class="comment">//err.visible = true</span>
+                        <span class="comment">//console.log(mesh.tagAt(start, 0))</span>
+                        <span class="comment">//console.log(mesh.tagAt(start, 1), data_new[start*4+1])</span>
 
+                        <span class="local-variable">this</span>.format_dirty = <span class="predefined-constant">false</span>
                         mesh.clean = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.redraw()
 

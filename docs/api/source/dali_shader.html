@@ -259,6 +259,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n105" name="n105">105</a>
 <a href="#n106" name="n106">106</a>
 <a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -315,6 +319,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.fragmentShader = fragmentShader;
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
+                        <span class="comment">// #extension lines must have a \n at the end to compile</span>
+                        vs = vs.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="content">\#</span><span class="content">extension.*)</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="char">\\</span><span class="content">n</span><span class="char">\\</span><span class="content">\n</span><span class="delimiter">'</span></span>);
+                        fs = fs.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="content">\#</span><span class="content">extension.*)</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="char">\\</span><span class="content">n</span><span class="char">\\</span><span class="content">\n</span><span class="delimiter">'</span></span>);
+
                         <span class="comment">// Each line needs a separate DALICODE statement</span>
                         vs = vs.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">DALICODE: </span><span class="delimiter">&quot;</span></span>);
                         fs = fs.replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">DALICODE: </span><span class="delimiter">&quot;</span></span>);

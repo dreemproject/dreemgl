@@ -302,6 +302,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n148" name="n148">148</a>
 <a href="#n149" name="n149">149</a>
 <strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -340,7 +345,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.width = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-width</span><span class="delimiter">'</span></span>]) || <span class="integer">1920</span>;
                 <span class="local-variable">this</span>.height = parseInt(args[<span class="string"><span class="delimiter">'</span><span class="content">-height</span><span class="delimiter">'</span></span>]) || <span class="integer">1080</span>;
                 <span class="local-variable">this</span>.name = args[<span class="string"><span class="delimiter">'</span><span class="content">-name</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">dreemgl</span><span class="delimiter">'</span></span>;
-                <span class="local-variable">this</span>.dalilib = args[<span class="string"><span class="delimiter">'</span><span class="content">-dalilib</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">/home/dali/teem/src/dreemgl/Release/dali</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.dalilib = args[<span class="string"><span class="delimiter">'</span><span class="content">-dalilib</span><span class="delimiter">'</span></span>] || <span class="string"><span class="delimiter">'</span><span class="content">/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali</span><span class="delimiter">'</span></span>;
+
+                <span class="keyword">if</span> (<span class="string"><span class="delimiter">'</span><span class="content">-dumpprog</span><span class="delimiter">'</span></span> <span class="keyword">in</span> args) {
+                        <span class="keyword">var</span> dp = args[<span class="string"><span class="delimiter">'</span><span class="content">-dumpprog</span><span class="delimiter">'</span></span>];
+                        <span class="local-variable">this</span>.dumpprog = (dp.length &gt; <span class="integer">0</span>) ? args[<span class="string"><span class="delimiter">'</span><span class="content">-dumpprog</span><span class="delimiter">'</span></span>] : <span class="string"><span class="delimiter">'</span><span class="content">stdout</span><span class="delimiter">'</span></span>;
+                }
 
                 <span class="local-variable">this</span>.args = args
                 <span class="local-variable">this</span>.compname = compname
@@ -404,7 +414,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 require.clearCache()
 
                 <span class="local-variable">this</span>.DaliApi = require(<span class="string"><span class="delimiter">'</span><span class="content">./dali_api</span><span class="delimiter">'</span></span>);
-                <span class="local-variable">this</span>.DaliApi.initialize(<span class="local-variable">this</span>.width, <span class="local-variable">this</span>.height, <span class="local-variable">this</span>.name, <span class="local-variable">this</span>.dalilib);
+                <span class="local-variable">this</span>.DaliApi.initialize({<span class="key">width</span>: <span class="local-variable">this</span>.width, <span class="key">height</span>: <span class="local-variable">this</span>.height, <span class="key">name</span>: <span class="local-variable">this</span>.name, <span class="key">dalilib</span>: <span class="local-variable">this</span>.dalilib, <span class="key">dumpprog</span>: <span class="local-variable">this</span>.dumpprog});
 
 
                 <span class="keyword">var</span> Composition = require(define.expandVariables(<span class="local-variable">this</span>.filename))

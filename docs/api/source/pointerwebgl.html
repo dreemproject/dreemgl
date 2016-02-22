@@ -326,6 +326,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n172" name="n172">172</a>
 <a href="#n173" name="n173">173</a>
 <a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -390,6 +398,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// Internal: handler for `mousedown` event starts `mousemove` listening.</span>
                 <span class="local-variable">this</span>.<span class="function">mousedown</span> = <span class="keyword">function</span>(e){
+                        
+                        <span class="local-variable">this</span>.device.keyboard.checkSpecialKeys(e)
+
                         e.preventDefault()
                         <span class="local-variable">this</span>.setstart(mouseToPointers(e))
                         window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)
@@ -401,10 +412,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mouseup</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                         <span class="keyword">if</span> (parent.window) parent.window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">contextmenu</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mouseup)
                 }
+
                 window.addEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousedown</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.mousedown.bind(<span class="local-variable">this</span>))
 
                 <span class="comment">// Internal: handler for `mousemove` event.</span>
                 <span class="local-variable">this</span>.<span class="function">mousemove</span> = <span class="keyword">function</span>(e){
+                        <span class="local-variable">this</span>.device.keyboard.checkSpecialKeys(e)
                         e.preventDefault()
                         <span class="local-variable">this</span>.setmove(mouseToPointers(e))
                 }
@@ -412,6 +425,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// Internal: handler for `mousedown` event stops `mousemove` listening.</span>
                 <span class="local-variable">this</span>.<span class="function">mouseup</span> = <span class="keyword">function</span>(e){
+                        <span class="local-variable">this</span>.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
+                        <span class="local-variable">this</span>.device.keyboard.checkSpecialKeys(e)
+
                         e.preventDefault()
                         <span class="local-variable">this</span>.setend(mouseToPointers(e))
                         window.removeEventListener(<span class="string"><span class="delimiter">'</span><span class="content">mousemove</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>._mousemove)

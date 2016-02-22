@@ -643,7 +643,7 @@ define.mixin(<span class="keyword">function</span>(require){
                 }
                 <span class="keyword">var</span> coord = <span class="local-variable">this</span>.textbuf.charCoords(max(cursor0.start - <span class="integer">1</span>,<span class="integer">0</span>))
                 <span class="keyword">var</span> v2 = vec2.mul_mat4(vec2(coord.x - <span class="float">0.5</span>*coord.w, coord.y - <span class="float">0.5</span> *coord.h), <span class="local-variable">this</span>.totalmatrix)
-                <span class="local-variable">this</span>.screen.keyboard.pointerMove(vec2(floor(v2[<span class="integer">0</span>]), floor(v2[<span class="integer">1</span>])))
+                <span class="local-variable">this</span>.screen.keyboard.textAreaRespondToMouse([floor(v2[<span class="integer">0</span>]), floor(v2[<span class="integer">1</span>])])
         }
 
         <span class="local-variable">this</span>.<span class="function">addUndoInsert</span> = <span class="keyword">function</span>(start, end, stack){

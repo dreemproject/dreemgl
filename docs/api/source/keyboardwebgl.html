@@ -398,6 +398,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n244" name="n244">244</a>
 <a href="#n245" name="n245">245</a>
 <a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 */</span>
@@ -447,7 +448,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> special_key_hack = <span class="predefined-constant">false</span>
 
                 <span class="local-variable">this</span>.<span class="function">checkSpecialKeys</span> = <span class="keyword">function</span>(e){
-                        <span class="keyword">if</span>(e.shiftKey !== <span class="local-variable">this</span>._shift?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>) <span class="local-variable">this</span>.shift = e.shiftKey?<span class="integer">1</span>:<span class="integer">0</span>
+                        <span class="keyword">if</span>(e.shift !== <span class="local-variable">this</span>._shift?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>) <span class="local-variable">this</span>.shift = e.shiftKey?<span class="integer">1</span>:<span class="integer">0</span>
                         <span class="keyword">if</span>(e.altKey !== <span class="local-variable">this</span>._alt?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>) <span class="local-variable">this</span>.alt = e.altKey?<span class="integer">1</span>:<span class="integer">0</span>
                         <span class="keyword">if</span>(e.ctrlKey !== <span class="local-variable">this</span>._ctrl?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>) <span class="local-variable">this</span>.ctrl = e.ctrlKey?<span class="integer">1</span>:<span class="integer">0</span>
                         <span class="keyword">if</span>(e.metaKey !== <span class="local-variable">this</span>._meta?<span class="predefined-constant">true</span>:<span class="predefined-constant">false</span>) <span class="local-variable">this</span>.meta = e.metaKey?<span class="integer">1</span>:<span class="integer">0</span>
@@ -490,7 +491,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>._rightarrow ||
                                 <span class="local-variable">this</span>._uparrow ||
                                 <span class="local-variable">this</span>._downarrow ||
-                                <span class="local-variable">this</span>._backspace){
+                                <span class="local-variable">this</span>._backspace || 
+                                <span class="local-variable">this</span>._delete){
                                 <span class="keyword">if</span>(e.preventDefault) e.preventDefault()
                         }
                         is_keyboard_cut = <span class="predefined-constant">false</span>
@@ -541,10 +543,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }.bind(<span class="local-variable">this</span>)
                 <span class="comment">// lets output a css</span>
 
-                <span class="local-variable">this</span>.<span class="function">pointerMove</span> = <span class="keyword">function</span>(pos){
+                <span class="local-variable">this</span>.<span class="function">textAreaRespondToMouse</span> = <span class="keyword">function</span>(pos){
                         <span class="local-variable">this</span>.textarea.focus()
-                        <span class="local-variable">this</span>.textarea.style.left = pos[<span class="integer">0</span>] - parseFloat(<span class="local-variable">this</span>.textarea.style.width) * <span class="float">0.5</span>
-                        <span class="local-variable">this</span>.textarea.style.top = pos[<span class="integer">1</span>] - parseFloat(<span class="local-variable">this</span>.textarea.style.height) * <span class="float">0.5</span>
+                        <span class="comment">//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5</span>
+                        <span class="comment">//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5</span>
                 }
 
                 <span class="local-variable">this</span>.textarea = document.createElement(<span class="string"><span class="delimiter">'</span><span class="content">textarea</span><span class="delimiter">'</span></span>)
@@ -592,7 +594,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 </span><span class="content">                    outline:0px !important;</span><span class="char">\n</span><span class="char">\
 </span><span class="content">                    -webkit-appearance:none;</span><span class="char">\n</span><span class="char">\
 </span><span class="content">            }</span><span class="delimiter">&quot;</span></span>
-            document.body.appendChild(style);
+            document.body.appendChild(style)
 
                 document.body.appendChild(<span class="local-variable">this</span>.textarea)
 

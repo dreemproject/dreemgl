@@ -1048,6 +1048,49 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n894" name="n894">894</a>
 <a href="#n895" name="n895">895</a>
 <a href="#n896" name="n896">896</a>
+<a href="#n897" name="n897">897</a>
+<a href="#n898" name="n898">898</a>
+<a href="#n899" name="n899">899</a>
+<strong><a href="#n900" name="n900">900</a></strong>
+<a href="#n901" name="n901">901</a>
+<a href="#n902" name="n902">902</a>
+<a href="#n903" name="n903">903</a>
+<a href="#n904" name="n904">904</a>
+<a href="#n905" name="n905">905</a>
+<a href="#n906" name="n906">906</a>
+<a href="#n907" name="n907">907</a>
+<a href="#n908" name="n908">908</a>
+<a href="#n909" name="n909">909</a>
+<strong><a href="#n910" name="n910">910</a></strong>
+<a href="#n911" name="n911">911</a>
+<a href="#n912" name="n912">912</a>
+<a href="#n913" name="n913">913</a>
+<a href="#n914" name="n914">914</a>
+<a href="#n915" name="n915">915</a>
+<a href="#n916" name="n916">916</a>
+<a href="#n917" name="n917">917</a>
+<a href="#n918" name="n918">918</a>
+<a href="#n919" name="n919">919</a>
+<strong><a href="#n920" name="n920">920</a></strong>
+<a href="#n921" name="n921">921</a>
+<a href="#n922" name="n922">922</a>
+<a href="#n923" name="n923">923</a>
+<a href="#n924" name="n924">924</a>
+<a href="#n925" name="n925">925</a>
+<a href="#n926" name="n926">926</a>
+<a href="#n927" name="n927">927</a>
+<a href="#n928" name="n928">928</a>
+<a href="#n929" name="n929">929</a>
+<strong><a href="#n930" name="n930">930</a></strong>
+<a href="#n931" name="n931">931</a>
+<a href="#n932" name="n932">932</a>
+<a href="#n933" name="n933">933</a>
+<a href="#n934" name="n934">934</a>
+<a href="#n935" name="n935">935</a>
+<a href="#n936" name="n936">936</a>
+<a href="#n937" name="n937">937</a>
+<a href="#n938" name="n938">938</a>
+<a href="#n939" name="n939">939</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1166,6 +1209,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">return</span> has_newline
         }
 
+        <span class="local-variable">this</span>.<span class="function">commentHasNewline</span> = <span class="keyword">function</span>(comments, prefix){
+                <span class="keyword">var</span> has_newline = <span class="predefined-constant">false</span>
+                <span class="keyword">if</span>(!comments) <span class="keyword">return</span> <span class="predefined-constant">false</span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; comments.length; i++){
+                        <span class="keyword">var</span> comment = comments[i]
+                        <span class="keyword">if</span>(comment === <span class="integer">1</span>){
+                                has_newline = <span class="predefined-constant">true</span>
+                        }
+                }
+                <span class="keyword">return</span> has_newline
+        }
+
         <span class="local-variable">this</span>.<span class="function">lastIsNewline</span> = <span class="keyword">function</span>(){
                 <span class="keyword">return</span> <span class="local-variable">this</span>.textbuf.charCodeAt(<span class="local-variable">this</span>.textbuf.char_count - <span class="integer">1</span>) === <span class="integer">10</span>
         }
@@ -1193,6 +1248,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.add(n.name, <span class="integer">0</span>, exports._Id)
         }
 
+        <span class="local-variable">this</span>.<span class="function">Property</span> = <span class="keyword">function</span>(n, secondary){
+                <span class="local-variable">this</span>.add(n.name, <span class="integer">0</span>, exports._Property, secondary ||<span class="integer">0</span>)
+        }
+        
+        console.log(vec4.parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">3D</span><span class="delimiter">&quot;</span></span>, tempcolor, <span class="predefined-constant">true</span>))
+
+        <span class="keyword">var</span> tempcolor = vec4()
         <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(n){<span class="comment">//: { value:0, raw:0, kind:0, multi:0 },</span>
                 <span class="keyword">if</span>(n.kind === <span class="predefined-constant">undefined</span>){
                         <span class="keyword">var</span> str
@@ -1205,8 +1267,22 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(n.kind == <span class="string"><span class="delimiter">'</span><span class="content">num</span><span class="delimiter">'</span></span>)
                         <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="integer">0</span>, exports._Value, exports._Number)
-                <span class="keyword">else</span> <span class="keyword">if</span>(n.kind == <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>)
-                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>+n.value+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, <span class="integer">0</span>, exports._Value, exports._String)
+                <span class="keyword">else</span> <span class="keyword">if</span>(n.kind == <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
+                        <span class="keyword">var</span> subtype = exports._String
+                        <span class="keyword">var</span> col = <span class="integer">0</span>
+
+                        <span class="keyword">if</span>(vec4.parse(n.value, tempcolor, <span class="predefined-constant">true</span>)){
+                                subtype = exports._Color
+                                col = -(parseInt(tempcolor[<span class="integer">0</span>]*<span class="integer">255</span>)*<span class="integer">65536</span>+parseInt(tempcolor[<span class="integer">1</span>]*<span class="integer">255</span>)*<span class="integer">256</span>+parseInt(tempcolor[<span class="integer">2</span>]*<span class="integer">255</span>))
+
+                                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span>, <span class="integer">0</span> , exports._Value, exports._String)
+                                <span class="local-variable">this</span>.add(n.value, <span class="integer">0</span> , col)
+                                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span>, <span class="integer">0</span> , exports._Value, exports._String)
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>+n.value+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, <span class="integer">0</span> , exports._Value, subtype)
+                        }
+                }
                 <span class="keyword">else</span>
                         <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="integer">0</span>, exports._Value)
         }
@@ -1229,8 +1305,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="comment">//if(!has_newlines &amp;&amp; i) this.comma(exports._Array, 0)</span>
                         <span class="local-variable">this</span>.comments(elem.cmu)
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
+
                         <span class="local-variable">this</span>.expand(elem)
-                        <span class="keyword">if</span>(i &lt; n.elems.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Array, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
+
+                        <span class="comment">//var do_newline = has_newlines || this.commentHasNewline(elem.cmr)</span>
+
+                        <span class="keyword">if</span>(i &lt; n.elems.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Array, has_newlines?<span class="integer">0</span>:<span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
+
                         <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(elem.cmr))
                                 <span class="local-variable">this</span>.newline()
                 }
@@ -1256,6 +1337,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(has_newlines)
                         <span class="local-variable">this</span>.indent++
 
+                <span class="keyword">var</span> maxlen = <span class="integer">0</span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.keys.length; i ++){
+                        <span class="keyword">var</span> prop = n.keys[i]
+                        <span class="keyword">var</span> len = prop.key.name.length
+                        <span class="keyword">if</span>(len&gt;maxlen) maxlen = len
+                }
+
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.keys.length; i ++){
                         <span class="keyword">var</span> prop = n.keys[i]
                         <span class="comment">//if(!has_newlines &amp;&amp; i){</span>
@@ -1266,13 +1354,18 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span>(has_newlines) <span class="local-variable">this</span>.comments(prop.cmu)
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
 
-                        <span class="local-variable">this</span>.expand(prop.key)
+                        <span class="comment">//var do_newline = has_newlines //|| this.commentHasNewline(prop.cmr)</span>
+
+                        <span class="local-variable">this</span>.expand(prop.key, exports._Object)
+
                         <span class="keyword">if</span>(prop.value){
-                                <span class="local-variable">this</span>.colon(exports._Object)
+                                <span class="keyword">var</span> diff = maxlen + <span class="integer">1</span> - prop.key.name.length
+                                <span class="local-variable">this</span>.colon(exports._Object, has_newlines?<span class="integer">1</span>*<span class="integer">256</span>+diff:<span class="integer">0</span>)
                                 <span class="local-variable">this</span>.expand(prop.value)
                         }
+
                         <span class="keyword">if</span>(i &lt; n.keys.length - <span class="integer">1</span>){
-                                <span class="local-variable">this</span>.comma(exports._Object, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
+                                <span class="local-variable">this</span>.comma(exports._Object, has_newlines?<span class="integer">0</span>:<span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
                                 <span class="comment">//this.space()</span>
                         }
                         <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(prop.cmr)){
@@ -1782,8 +1875,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span>(i === <span class="integer">0</span> &amp;&amp; !has_newlines){
                                 has_newlines = has_nl
                         }
+                        <span class="keyword">var</span> do_newline = has_newlines || <span class="local-variable">this</span>.commentHasNewline(arg.cmr)
 
-                        <span class="keyword">if</span>(i &lt; n.args.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Call, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
+                        <span class="keyword">if</span>(i &lt; n.args.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Call, do_newline?<span class="integer">0</span>:<span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
+
                         <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(arg.cmr))
                                 <span class="local-variable">this</span>.newline()
                         <span class="comment">//else this.space()</span>
@@ -1800,68 +1895,59 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         exports.types = {
                 <span class="comment">// Base node markers</span>
                 <span class="key">_Id</span>:<span class="integer">1</span>,
-                <span class="key">_Value</span>:<span class="integer">2</span>,
-                <span class="key">_This</span>:<span class="integer">3</span>,
-                <span class="key">_Array</span>:<span class="integer">4</span>,
-                <span class="key">_Object</span>:<span class="integer">5</span>,
-                <span class="key">_Index</span>:<span class="integer">6</span>,
-                <span class="key">_Key</span>:<span class="integer">7</span>,
-                <span class="key">_ThisCall</span>: <span class="integer">8</span>,
+                <span class="key">_Property</span>:<span class="integer">2</span>,
+                <span class="key">_Value</span>:<span class="integer">3</span>,
+                <span class="key">_This</span>:<span class="integer">4</span>,
+                <span class="key">_Array</span>:<span class="integer">5</span>,
+                <span class="key">_Object</span>:<span class="integer">6</span>,
+                <span class="key">_Index</span>:<span class="integer">7</span>,
+                <span class="key">_Key</span>:<span class="integer">8</span>,
+                <span class="key">_ThisCall</span>: <span class="integer">9</span>,
 
-                <span class="key">_Block</span>:<span class="integer">9</span>,
-                <span class="key">_List</span>: <span class="integer">10</span>,
-                <span class="key">_Comprehension</span>:<span class="integer">11</span>,
-                <span class="key">_Template</span>: <span class="integer">12</span>,
-                <span class="key">_Break</span>:<span class="integer">13</span>,
-                <span class="key">_Continue</span>:<span class="integer">14</span>,
-                <span class="key">_Label</span>:<span class="integer">15</span>,
+                <span class="key">_Block</span>:<span class="integer">10</span>,
+                <span class="key">_List</span>: <span class="integer">11</span>,
+                <span class="key">_Comprehension</span>:<span class="integer">12</span>,
+                <span class="key">_Template</span>: <span class="integer">13</span>,
+                <span class="key">_Break</span>:<span class="integer">14</span>,
+                <span class="key">_Continue</span>:<span class="integer">15</span>,
+                <span class="key">_Label</span>:<span class="integer">16</span>,
 
-                <span class="key">_If</span>:<span class="integer">16</span>,
-                <span class="key">_Switch</span>:<span class="integer">17</span>,
-                <span class="key">_Case</span>:<span class="integer">18</span>,
+                <span class="key">_If</span>:<span class="integer">17</span>,
+                <span class="key">_Switch</span>:<span class="integer">18</span>,
+                <span class="key">_Case</span>:<span class="integer">19</span>,
 
-                <span class="key">_Throw</span>:<span class="integer">19</span>,
-                <span class="key">_Try</span>:<span class="integer">20</span>,
+                <span class="key">_Throw</span>:<span class="integer">20</span>,
+                <span class="key">_Try</span>:<span class="integer">21</span>,
 
-                <span class="key">_While</span>:<span class="integer">21</span>,
-                <span class="key">_DoWhile</span>:<span class="integer">22</span>,
-                <span class="key">_For</span>:<span class="integer">23</span>,
-                <span class="key">_ForIn</span>:<span class="integer">24</span>,
-                <span class="key">_ForOf</span>:<span class="integer">25</span>,
-                <span class="key">_ForFrom</span>:<span class="integer">26</span>,
-                <span class="key">_ForTo</span>:<span class="integer">27</span>,
+                <span class="key">_While</span>:<span class="integer">22</span>,
+                <span class="key">_DoWhile</span>:<span class="integer">23</span>,
+                <span class="key">_For</span>:<span class="integer">24</span>,
+                <span class="key">_ForIn</span>:<span class="integer">25</span>,
+                <span class="key">_ForOf</span>:<span class="integer">26</span>,
 
-                <span class="key">_Var</span>:<span class="integer">28</span>,
-                <span class="key">_TypeVar</span>:<span class="integer">29</span>,
-                <span class="key">_Struct</span>:<span class="integer">30</span>,
-                <span class="key">_Define</span>:<span class="integer">31</span>,
-                <span class="key">_Enum</span>:<span class="integer">32</span>,
+                <span class="key">_Var</span>:<span class="integer">27</span>,
 
-                <span class="key">_Def</span>:<span class="integer">33</span>,
+                <span class="key">_Def</span>:<span class="integer">28</span>,
 
-                <span class="key">_Function</span>:<span class="integer">34</span>,
-                <span class="key">_Return</span>:<span class="integer">35</span>,
-                <span class="key">_Yield</span>:<span class="integer">36</span>,
-                <span class="key">_Await</span>:<span class="integer">37</span>,
+                <span class="key">_Function</span>:<span class="integer">29</span>,
+                <span class="key">_Return</span>:<span class="integer">30</span>,
+                <span class="key">_Yield</span>:<span class="integer">31</span>,
+                <span class="key">_Await</span>:<span class="integer">32</span>,
 
-                <span class="key">_Unary</span>:<span class="integer">38</span>,
-                <span class="key">_Binary</span>:<span class="integer">39</span>,
-                <span class="key">_Logic</span>:<span class="integer">40</span>,
-                <span class="key">_Assign</span>:<span class="integer">41</span>,
-                <span class="key">_Update</span>:<span class="integer">42</span>,
-                <span class="key">_Condition</span>:<span class="integer">43</span>,
+                <span class="key">_Unary</span>:<span class="integer">33</span>,
+                <span class="key">_Binary</span>:<span class="integer">34</span>,
+                <span class="key">_Logic</span>:<span class="integer">35</span>,
+                <span class="key">_Assign</span>:<span class="integer">36</span>,
+                <span class="key">_Update</span>:<span class="integer">37</span>,
+                <span class="key">_Condition</span>:<span class="integer">38</span>,
 
-                <span class="key">_New</span>:<span class="integer">44</span>,
-                <span class="key">_Call</span>:<span class="integer">45</span>,
-                <span class="key">_Nest</span>:<span class="integer">46</span>,
+                <span class="key">_New</span>:<span class="integer">39</span>,
+                <span class="key">_Call</span>:<span class="integer">40</span>,
+                <span class="key">_Nest</span>:<span class="integer">41</span>,
 
-                <span class="key">_Class</span>:<span class="integer">47</span>,
-                <span class="key">_Signal</span>:<span class="integer">48</span>,
-                <span class="key">_Quote</span>:<span class="integer">49</span>,
-                <span class="key">_AssignQuote</span>:<span class="integer">50</span>,
-                <span class="key">_Rest</span>:<span class="integer">51</span>,
-                <span class="key">_Then</span>:<span class="integer">52</span>,
-                <span class="key">_Comment</span>:<span class="integer">53</span>,
+                <span class="key">_Class</span>:<span class="integer">42</span>,
+                <span class="key">_Rest</span>:<span class="integer">43</span>,
+                <span class="key">_Comment</span>:<span class="integer">44</span>,
 
                 <span class="comment">// second level markers</span>
                         <span class="key">_Id</span>:<span class="integer">1</span>,

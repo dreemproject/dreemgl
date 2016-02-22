@@ -362,6 +362,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n208" name="n208">208</a>
 <a href="#n209" name="n209">209</a>
 <strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -386,18 +410,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.tab_size = <span class="integer">1</span>
         <span class="local-variable">this</span>.line_start = <span class="integer">0</span>
         <span class="local-variable">this</span>.line_end = <span class="integer">0</span>
+
         <span class="comment">// lets go and move this fucker</span>
         <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos, tag) {
                 <span class="keyword">var</span> p = pos
-                <span class="keyword">var</span> pad = tag.y * -<span class="integer">1</span>.
-                <span class="keyword">var</span> indent = floor(pad/<span class="integer">65536</span>.) * tab_size
+                <span class="keyword">var</span> indent = floor((tag.y * -<span class="integer">1</span>.)/<span class="integer">65536</span>.) * tab_size
                 <span class="keyword">var</span> line = floor(tag.w/<span class="integer">65536</span>.)
                 <span class="keyword">if</span>(line &gt;= line_start &amp;&amp; line &lt; line_end){
                         p.x  +=  <span class="integer">2</span>*indent*((line-line_start))*line_anim
                 }
                 p.x += - min(indent, init_anim*<span class="integer">100</span>.)
-                <span class="keyword">return</span> p;
-        };
+                <span class="keyword">return</span> p
+        }
 
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="integer">12</span>/<span class="integer">255</span>, <span class="integer">33</span>/<span class="integer">255</span>, <span class="integer">65</span>/<span class="integer">255</span>, <span class="integer">1</span>)
 
@@ -418,21 +442,32 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, pos, tag){
 
-                <span class="keyword">var</span> group = tag.y
                 <span class="keyword">var</span> type = <span class="reserved">int</span>(tag.z / <span class="integer">65536</span>.)
                 <span class="keyword">var</span> sub = <span class="reserved">int</span>(mod(tag.z / <span class="integer">256</span>., <span class="integer">256</span>.))
                 <span class="keyword">var</span> part = <span class="reserved">int</span>(mod(tag.z, <span class="integer">256</span>.))
                 <span class="keyword">var</span> unicode = <span class="reserved">int</span>(tag.x)
-
                 <span class="keyword">if</span>(unicode == <span class="integer">10</span> || unicode == <span class="integer">32</span> || unicode == <span class="integer">9</span>) discard
-                <span class="keyword">if</span>(sub == _Paren || sub == _Brace || sub == _Bracket){
+                <span class="keyword">if</span>(tag.z &lt;= <span class="integer">0</span>.){
+                        <span class="keyword">var</span> col = -tag.z
+
+                        style.fgcolor = vec4(
+                                floor(col/<span class="integer">65536</span>.)/<span class="integer">255</span>.,
+                                floor(mod(col/<span class="integer">256</span>.,<span class="integer">256</span>.))/<span class="integer">255</span>.,
+                                floor(mod(col,<span class="integer">256</span>.))/<span class="integer">255</span>.,
+                                <span class="integer">1</span>.
+                        )
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Paren || sub == _Brace || sub == _Bracket){
                         <span class="keyword">if</span>(sub == _Paren){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#cfffff</span><span class="delimiter">&quot;</span></span>
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Bracket){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ccc</span><span class="delimiter">&quot;</span></span>
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ffcfff</span><span class="delimiter">&quot;</span></span>
                         }
                         <span class="keyword">else</span>{
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffcf</span><span class="delimiter">&quot;</span></span>
+                        }
+                        <span class="keyword">if</span>(type == _Function){
                                 style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>
                         }
                 }
@@ -460,9 +495,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff7fe1</span><span class="delimiter">&quot;</span></span>
                 }<span class="keyword">else</span> <span class="keyword">if</span>(type == _Function){
                         style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ffdd00</span><span class="delimiter">&quot;</span></span>
+                }<span class="keyword">else</span> <span class="keyword">if</span>(type == _Property ){
+                        <span class="keyword">if</span>(sub == _Object){
+                                style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#afafaf</span><span class="delimiter">'</span></span>
+                                <span class="comment">//style.boldness *= 0.5</span>
+                        }
+                        <span class="keyword">else</span>{
+                                style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span><span class="comment">//'#9fa3ff'*1.2</span>
+                        }
                 }<span class="keyword">else</span>{
                         style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
                 }
+
+                <span class="keyword">return</span> style
                 <span class="comment">//if(type&gt;7)mesh.outline = true</span>
         }
 
@@ -558,7 +603,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="keyword">var</span> start = text.charCodeAt(<span class="integer">0</span>)
                                         <span class="comment">//console.log(this.actual_line)</span>
                                         <span class="keyword">if</span>(start !== <span class="integer">32</span> &amp;&amp; start !== <span class="integer">10</span> &amp;&amp; start !== <span class="integer">9</span>) node_id ++
-                                        textbuf.add(text, ((padding||<span class="integer">0</span>) + <span class="local-variable">this</span>.actual_indent*<span class="integer">65536</span>)*-<span class="integer">1</span>, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), node_id+<span class="integer">65536</span>*<span class="local-variable">this</span>.actual_line)
+                                        <span class="keyword">var</span> combo
+                                        <span class="keyword">if</span>(l1 &lt;= <span class="integer">0</span>) combo = l1
+                                        <span class="keyword">else</span> combo = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
+                                        textbuf.add(text, ((padding||<span class="integer">0</span>) + <span class="local-variable">this</span>.actual_indent*<span class="integer">65536</span>)*-<span class="integer">1</span>, combo, node_id+<span class="integer">65536</span>*<span class="local-variable">this</span>.actual_line)
                                 })
                         }
                 }

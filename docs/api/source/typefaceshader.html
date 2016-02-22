@@ -1384,6 +1384,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n1230" name="n1230">1230</a></strong>
 <a href="#n1231" name="n1231">1231</a>
 <a href="#n1232" name="n1232">1232</a>
+<a href="#n1233" name="n1233">1233</a>
+<a href="#n1234" name="n1234">1234</a>
+<a href="#n1235" name="n1235">1235</a>
+<a href="#n1236" name="n1236">1236</a>
+<a href="#n1237" name="n1237">1237</a>
+<a href="#n1238" name="n1238">1238</a>
+<a href="#n1239" name="n1239">1239</a>
+<strong><a href="#n1240" name="n1240">1240</a></strong>
+<a href="#n1241" name="n1241">1241</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1917,7 +1926,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">cursorRect</span> = <span class="keyword">function</span>(off){
-                        <span class="keyword">var</span> coords = <span class="local-variable">this</span>.charCoords(off)
+                        <span class="keyword">var</span> coords= <span class="local-variable">this</span>.charCoords(off)
+                        <span class="comment">// do a little bit of alignment fixery</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.tagAt(off,<span class="integer">1</span>)&lt;<span class="integer">0</span> &amp;&amp; <span class="local-variable">this</span>.tagAt(off - <span class="integer">1</span>, <span class="integer">0</span>)!==<span class="integer">10</span> &amp;&amp; <span class="local-variable">this</span>.tagAt(off - <span class="integer">1</span>, <span class="integer">0</span>)!==<span class="integer">9</span>){
+                                <span class="keyword">var</span> coords1 = <span class="local-variable">this</span>.charCoords(off - <span class="integer">1</span>)
+                                coords.x = coords1.x + coords1.w
+                        }
                         coords.y -= coords.h - <span class="local-variable">this</span>.fontsize * <span class="local-variable">this</span>.cursor_sink
                         <span class="keyword">return</span> coords
                 }
@@ -1950,10 +1964,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
 
                 <span class="local-variable">this</span>.<span class="function">setLength</span> = <span class="keyword">function</span>(len){
-                        <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(len)
-                        <span class="local-variable">this</span>.length = len * <span class="integer">6</span>
-                        <span class="local-variable">this</span>.add_x = rect.x
-                        <span class="local-variable">this</span>.add_y = rect.y
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.tagAt(len,<span class="integer">1</span>)&lt;<span class="integer">0</span>){ <span class="comment">// its a padded character</span>
+                                <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(len - <span class="integer">1</span>)
+                                <span class="local-variable">this</span>.length = len * <span class="integer">6</span>
+                                <span class="local-variable">this</span>.add_x = rect.x + rect.w
+                                <span class="local-variable">this</span>.add_y = rect.y
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(len)
+                                <span class="local-variable">this</span>.length = len * <span class="integer">6</span>
+                                <span class="local-variable">this</span>.add_x = rect.x
+                                <span class="local-variable">this</span>.add_y = rect.y
+                        }
                 }
 
                 <span class="local-variable">this</span>.<span class="function">insertText</span> = <span class="keyword">function</span>(off, text){
@@ -1962,9 +1984,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> tags = <span class="local-variable">this</span>.serializeTags(off, <span class="local-variable">this</span>.lengthQuad())
                         <span class="comment">// lets set the length and start adding</span>
                         <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(off)
-                        <span class="local-variable">this</span>.add_x = rect.x
-                        <span class="local-variable">this</span>.add_y = rect.y
-                        <span class="local-variable">this</span>.length = off * <span class="integer">6</span>
+                        <span class="local-variable">this</span>.setLength(off)
                         <span class="local-variable">this</span>.add(text)
                         <span class="local-variable">this</span>.add(tags)
                         <span class="local-variable">this</span>.computeBounds(<span class="predefined-constant">true</span>)
@@ -1973,10 +1993,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">removeText</span> = <span class="keyword">function</span>(off, end){
                         <span class="keyword">var</span> tags = <span class="local-variable">this</span>.serializeTags(end, <span class="local-variable">this</span>.lengthQuad())
-                        <span class="keyword">var</span> rect = <span class="local-variable">this</span>.charCoords(off)
-                        <span class="local-variable">this</span>.add_x = rect.x
-                        <span class="local-variable">this</span>.add_y = rect.y
-                        <span class="local-variable">this</span>.length = off * <span class="integer">6</span>
+                        <span class="local-variable">this</span>.setLength(off)
                         <span class="local-variable">this</span>.add(tags)
                         <span class="comment">// recompute the bounds</span>
                         <span class="local-variable">this</span>.computeBounds(<span class="predefined-constant">true</span>)
@@ -2047,7 +2064,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">bgcolor</span>: vec4,
                 <span class="key">outlinecolor</span>: vec4,
                 <span class="key">outline_thickness</span>: <span class="reserved">float</span>,
-                <span class="key">outline</span>: bool
+                <span class="key">outline</span>: bool,
+                <span class="key">boldness</span>: <span class="reserved">float</span>
         }, <span class="string"><span class="delimiter">&quot;</span><span class="content">font_style_t</span><span class="delimiter">&quot;</span></span>)
 
         <span class="local-variable">this</span>.glyphy_arc_t = define.struct({
@@ -2463,11 +2481,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> exit
                 }
 
-                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
 
                 view.textstyle(style, pos, mesh.tag)
 
-                dist -= mesh.boldness / <span class="integer">300</span>.
+                dist -= style.boldness / <span class="integer">300</span>.
                 dist = dist / m * mesh.contrast
 
                 dist = moddist(pos, dist)
@@ -2513,11 +2531,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> exit
                 }
 
-                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
 
                  view.textstyle(style, pos, mesh.tag)
 
-                dist -= mesh.boldness / <span class="integer">300</span>.
+                dist -= style.boldness / <span class="integer">300</span>.
                 dist = dist / m * mesh.contrast
 
                 <span class="keyword">if</span>(mesh.outline){
@@ -2581,11 +2599,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> exit
                 }
 <span class="comment">//                style(glyph)</span>
-                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+                <span class="keyword">var</span> style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
                 view.textstyle(style, pos, mesh.tag)
 
 
-                dist -= mesh.boldness
+                dist -= style.boldness
                 <span class="comment">//debug(mesh.distance)</span>
                 dist = dist / m * mesh.contrast
                 <span class="keyword">var</span> dist2 = dist;

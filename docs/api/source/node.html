@@ -1113,6 +1113,21 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n959" name="n959">959</a>
 <strong><a href="#n960" name="n960">960</a></strong>
 <a href="#n961" name="n961">961</a>
+<a href="#n962" name="n962">962</a>
+<a href="#n963" name="n963">963</a>
+<a href="#n964" name="n964">964</a>
+<a href="#n965" name="n965">965</a>
+<a href="#n966" name="n966">966</a>
+<a href="#n967" name="n967">967</a>
+<a href="#n968" name="n968">968</a>
+<a href="#n969" name="n969">969</a>
+<strong><a href="#n970" name="n970">970</a></strong>
+<a href="#n971" name="n971">971</a>
+<a href="#n972" name="n972">972</a>
+<a href="#n973" name="n973">973</a>
+<a href="#n974" name="n974">974</a>
+<a href="#n975" name="n975">975</a>
+<a href="#n976" name="n976">976</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1146,7 +1161,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">setInterval</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.interval_ids) <span class="local-variable">this</span>.interval_ids = []
-                <span class="keyword">var</span> id = window.setInterval(<span class="keyword">function</span>(){
+                
+                <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                
+                <span class="keyword">var</span> id = platform.setInterval(<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.interval_ids.splice(<span class="local-variable">this</span>.interval_ids.indexOf(id), <span class="integer">1</span>)
                         fn.call(<span class="local-variable">this</span>)
                 }.bind(<span class="local-variable">this</span>), mstime)
@@ -1158,13 +1176,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.interval_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.interval_ids.splice(idx, <span class="integer">1</span>)
-                         window.clearInterval(id)
+                        <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                
+                         platform.clearInterval(id)
                 }
         }
 
         <span class="local-variable">this</span>.<span class="function">setTimeout</span> = <span class="keyword">function</span>(fn, mstime){
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.timeout_ids) <span class="local-variable">this</span>.timeout_ids = []
-                <span class="keyword">var</span> id = window.setTimeout(<span class="keyword">function</span>(){
+                <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                
+                <span class="keyword">var</span> id = platform.setTimeout(<span class="keyword">function</span>(){
                         <span class="local-variable">this</span>.timeout_ids.splice(<span class="local-variable">this</span>.timeout_ids.indexOf(id), <span class="integer">1</span>)
                         fn.call(<span class="local-variable">this</span>)
                 }.bind(<span class="local-variable">this</span>), mstime)
@@ -1176,7 +1198,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> idx = <span class="local-variable">this</span>.timeout_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.timeout_ids.splice(idx, <span class="integer">1</span>)
-                         window.clearInterval(id)
+                        <span class="keyword">var</span> platform = <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>?window:global;
+                
+                         platform.clearInterval(id)
                 }
         }
 
@@ -1694,7 +1718,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> is_config =  config <span class="keyword">instanceof</span> Config
                 <span class="keyword">var</span> is_attribute = !always_define &amp;&amp; key <span class="keyword">in</span> <span class="local-variable">this</span>
                 <span class="comment">// use normal value assign</span>
-                <span class="keyword">if</span>(!always_define &amp;&amp; (is_attribute &amp;&amp; !is_config || key[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">o</span><span class="delimiter">'</span></span> &amp;&amp; key[<span class="integer">1</span>] === <span class="string"><span class="delimiter">'</span><span class="content">n</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> config === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>)){<span class="comment">//|| !is_attribute &amp;&amp; typeof config === 'function' &amp;&amp; !config.is_wired){</span>
+
+                <span class="keyword">if</span>(!always_define &amp;&amp; (is_attribute &amp;&amp; !is_config || key[<span class="integer">0</span>] === <span class="string"><span class="delimiter">'</span><span class="content">o</span><span class="delimiter">'</span></span> &amp;&amp; key[<span class="integer">1</span>] === <span class="string"><span class="delimiter">'</span><span class="content">n</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span> config === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; !config.is_wired)){<span class="comment">//|| !is_attribute &amp;&amp; typeof config === 'function' &amp;&amp; !config.is_wired){</span>
                         <span class="local-variable">this</span>[key] = config
                         <span class="keyword">return</span>
                 }
@@ -1722,8 +1747,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
                                 config.type = <span class="reserved">boolean</span>
                         }
-                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span> &amp;&amp; !value.is_wired){
-                                config.type = Function
+                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>){
+                                <span class="keyword">if</span>(!value.is_wired){
+                                        config.type = Function
+                                }
+                                <span class="keyword">else</span>{ <span class="comment">// an undefined wire is automatically a number</span>
+                                        config.value = <span class="integer">0</span>
+                                        config.type = Number
+                                }
                         }
                         <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> value === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
                                 config.type = String
@@ -1737,7 +1768,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.hasOwnProperty(<span class="string"><span class="delimiter">'</span><span class="content">_attributes</span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>._attributes = <span class="local-variable">this</span>._attributes?Object.create(<span class="local-variable">this</span>._attributes):{}
                 }
-
                 <span class="keyword">if</span>(is_attribute){ <span class="comment">// extend the config</span>
                         <span class="comment">//if('type' in config) throw new Error('Cannot redefine type of attribute '+key)</span>
                         <span class="keyword">var</span> newconfig = Object.create(<span class="local-variable">this</span>._attributes[key])

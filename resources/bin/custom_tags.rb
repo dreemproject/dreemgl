@@ -123,7 +123,7 @@ class Unsupported < JsDuck::Tag::Tag
   def initialize
     @tagname = :unsupported
     @pattern = 'unsupported'
-    @html_position = POS_DOC + 0.1
+    @html_position = POS_DOC - 0.1
     @repeatable = true
   end
 
@@ -137,9 +137,9 @@ class Unsupported < JsDuck::Tag::Tag
   end
 
   def to_html(context)
-    unsupported = context[:unsupported].map {|unsupported| "<b>#{unsupported}</b>" }.join(" or ")
+    unsupported = context[:unsupported].map {|unsupported| "<b>#{unsupported}</b>" }.join(", ")
     <<-EOHTML
-      <p>This software is unsupported under: #{unsupported}.</p>
+      <h3><font color='red'>This is unsupported under:</font> #{unsupported}.</h3>
     EOHTML
   end
 end

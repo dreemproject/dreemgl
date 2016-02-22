@@ -416,6 +416,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n262" name="n262">262</a>
 <a href="#n263" name="n263">263</a>
 <a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -467,7 +473,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">moveLeft</span> = <span class="keyword">function</span>(only_end){
                 <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.end - <span class="integer">1</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.end &lt; <span class="integer">0</span>) <span class="local-variable">this</span>.end = <span class="integer">0</span>
-                <span class="keyword">if</span>(!only_end) <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
+                <span class="keyword">if</span>(!only_end){
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.editor.atMoveLeft) <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.atMoveLeft(<span class="local-variable">this</span>.end)
+                        <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
+                }
                 <span class="comment">//</span>
                 <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
         }
@@ -475,7 +484,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">moveRight</span> = <span class="keyword">function</span>(only_end){
                 <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.end + <span class="integer">1</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.end &gt; <span class="local-variable">this</span>.editor.textbuf.char_count) <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.textbuf.char_count
-                <span class="keyword">if</span>(!only_end) <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
+                <span class="keyword">if</span>(!only_end){
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.editor.atMoveRight) <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.atMoveRight(<span class="local-variable">this</span>.end)
+                        <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
+                }
                 <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
         }
 
@@ -594,7 +606,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">selectLine</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.editor.scanLeftLine(<span class="local-variable">this</span>.lo)
-                <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.scanRightLine(<span class="local-variable">this</span>.hi) + <span class="integer">1</span>
+                <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.scanRightLine(<span class="local-variable">this</span>.hi)
                 <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
         }
 
