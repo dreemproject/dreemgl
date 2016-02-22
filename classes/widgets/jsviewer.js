@@ -117,7 +117,6 @@ define.class('$ui/textbox', function(require){
 		}else if(type == _Property ){
 			if(sub == _Object){
 				style.fgcolor = '#afafaf'
-				//style.boldness *= 0.5
 			}
 			else{
 				style.fgcolor = 'white'//'#9fa3ff'*1.2
@@ -213,8 +212,13 @@ define.class('$ui/textbox', function(require){
 			if(view.wrap){
 				var maxwidth = view.layout.width
 				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
+					var start = text.charCodeAt(0)
+					var combo
+					if(l1 <= 0) combo = l1
+					else combo = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					if(start !== 32 && start !== 10 && start !== 9) node_id ++
 					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
-					textbuf.addWithinWidth(text, maxwidth, (padding+ this.indent*65536)*-1, 65536 * (l1||0) + 256 * (l2||0) + (l3||0))
+					textbuf.addWithinWidth(text, maxwidth, indent, ((padding||0)+ this.actual_indent*65536)*-1, combo, node_id+65536*this.actual_line)
 				})
 			}
 			else{
