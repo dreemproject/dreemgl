@@ -180,7 +180,10 @@ define.class(function(require, exports){
 			if(vec4.parse(n.value, tempcolor, true)){
 				subtype = exports._Color
 				col = -(parseInt(tempcolor[0]*255)*65536+parseInt(tempcolor[1]*255)*256+parseInt(tempcolor[2]*255))
-				this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0 , col)
+
+				this.add("'", 0 , exports._Value, exports._String)
+				this.add(n.value, 0 , col)
+				this.add("'", 0 , exports._Value, exports._String)
 			}
 			else{
 				this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0 , exports._Value, subtype)
@@ -240,6 +243,14 @@ define.class(function(require, exports){
 		if(has_newlines)
 			this.indent++
 
+		var maxlen = 0
+		for(var i = 0; i < n.keys.length; i ++){
+			var prop = n.keys[i]
+			var len = prop.key.name.length
+			if(len>maxlen) maxlen = len
+		}
+
+
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
 			//if(!has_newlines && i){
@@ -250,13 +261,14 @@ define.class(function(require, exports){
 			if(has_newlines) this.comments(prop.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
 
+			var do_newline = has_newlines || this.commentHasNewline(prop.cmr)
+
 			this.expand(prop.key, exports._Object)
 			if(prop.value){
-				this.colon(exports._Object)
+				var diff = maxlen - prop.key.name.length
+				this.colon(exports._Object, do_newline?1*256+diff:0)
 				this.expand(prop.value)
 			}
-
-			var do_newline = has_newlines || this.commentHasNewline(prop.cmr)
 
 			if(i < n.keys.length - 1){
 				this.comma(exports._Object, do_newline?0:2*256+this.post_comma)
