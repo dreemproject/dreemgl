@@ -95,9 +95,18 @@ define.class('$ui/textbox', function(require){
 			style.fgcolor = "#ff7fe1"
 		}else if(type == _Function){
 			style.fgcolor = "#ffdd00"
+		}else if(type == _Property ){
+			if(sub == _Object){
+				style.fgcolor = '#afafaf'
+				style.boldness *= 0.5
+			}
+			else{
+				style.fgcolor = '#9fa3ff'*1.2
+			}
 		}else{
 			style.fgcolor = "#ff9d00"
 		}
+
 		return style
 		//if(type>7)mesh.outline = true
 	}

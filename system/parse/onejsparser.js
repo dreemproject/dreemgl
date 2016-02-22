@@ -1882,7 +1882,7 @@ define.class(function(require, exports){
 			var node = this.parseFunction(node, true)
 			node.type = 'Macro'
 			return node
-
+/*
 		case this._struct:
 			this.next()
 			if( this.tokType !== this._name ) this.unexpected()
@@ -1932,7 +1932,7 @@ define.class(function(require, exports){
 			// whether the next token is `in`. When there is no init part
 			// (this.semicolon immediately after the opening parenthesis), it is
 			// a regular `for` loop.
-
+	*/
 		case this._for:
 			this.next()
 			this.labels.push(this.loopLabel)
@@ -2621,7 +2621,7 @@ define.class(function(require, exports){
 
 			if(probe) node.store = 8
 			node.object = base
-			node.key = this.parseIdent(true)
+			node.key = this.parseIdent(true, "Property")
 			return this.parseSubscripts(this.finishNode(node, "Key"), noCalls)
 		
 		case this._bracketR:
@@ -2633,7 +2633,7 @@ define.class(function(require, exports){
 		case this._parenL:
 			if(noCalls) return base
 			return this.parseCall( base )
-
+/*
 		case this._existkey:
 			this.eat(this._existkey)
 			var node = this.startNodeFrom(base)
@@ -2644,6 +2644,7 @@ define.class(function(require, exports){
 			node.key = this.parseIdent(true)
 			node.exist = 1
 			return this.parseSubscripts(this.finishNode(node, "Key"), noCalls)
+			*/
 		case this._this:
 		case this._string:
 		case this._name:
@@ -2658,7 +2659,7 @@ define.class(function(require, exports){
 			this.eat(this._name) || this.eat(this._string) || this.eat(this._this) 
 
 			return this.parseSubscripts(this.finishNode(node, "Id"))
-
+/*
 		case this._dotdot:
 			if( this.lastSkippedNewlines ) return base
 			this.eat(this._dotdot)
@@ -2688,6 +2689,7 @@ define.class(function(require, exports){
 			node.object = base
 			node.key = this.parseIdent(true)
 			return this.parseSubscripts(this.finishNode(node, "ThisCall"), noCalls)
+			*/
 		/*
 		case this._braceL:
 			// we also dont do this._braceL on new line
@@ -2707,7 +2709,7 @@ define.class(function(require, exports){
 				node.body = this.parseBlock(true)
 				return this.parseSubscripts(this.finishNode(node, "Nest"), noCalls)
 			}*/
-		case this._thinArrow:
+		//case this._thinArrow:
 		case this._fatArrow:
 			// you cant separate an arrow from its args with a this.newline
 			if( this.lastSkippedNewlines ) return base
@@ -3064,7 +3066,7 @@ define.class(function(require, exports){
 
 	this.parsePropertyName = function() {
 		if (this.tokType === this._num || this.tokType === this._string) return this.parseExprAtom()
-		return this.parseIdent(true)
+		return this.parseIdent(true, 'Property')
 	}
 
 	// Parse a function declaration or literal (depending on the
@@ -3193,7 +3195,7 @@ define.class(function(require, exports){
 	// when parsing properties), it will also convert keywords into
 	// identifiers.
 
-	this.parseIdent = function(liberal) {
+	this.parseIdent = function(liberal, specialid) {
 		var node = this.startNode()
 		if(this.tokIsType) node.isType = this.tokVal
 		if (liberal && this.forbidReserved == "everywhere") liberal = false
@@ -3220,6 +3222,6 @@ define.class(function(require, exports){
 			node.flag = this.containsFlag
 		}
 		this.next()
-		return this.finishNode(node, "Id")
+		return this.finishNode(node, specialid || "Id")
 	}
 })

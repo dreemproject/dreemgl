@@ -142,6 +142,10 @@ define.class(function(require, exports){
 		this.add(n.name, 0, exports._Id)
 	}
 
+	this.Property = function(n, secondary){
+		this.add(n.name, 0, exports._Property, secondary ||0)
+	}
+
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 		if(n.kind === undefined){
 			var str
@@ -215,7 +219,7 @@ define.class(function(require, exports){
 			if(has_newlines) this.comments(prop.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
 
-			this.expand(prop.key)
+			this.expand(prop.key, exports._Object)
 			if(prop.value){
 				this.colon(exports._Object)
 				this.expand(prop.value)
@@ -749,68 +753,59 @@ define.class(function(require, exports){
 	exports.types = {
 		// Base node markers
 		_Id:1,
-		_Value:2,
-		_This:3,
-		_Array:4,
-		_Object:5,
-		_Index:6,
-		_Key:7,
-		_ThisCall: 8,
+		_Property:2,
+		_Value:3,
+		_This:4,
+		_Array:5,
+		_Object:6,
+		_Index:7,
+		_Key:8,
+		_ThisCall: 9,
 
-		_Block:9,
-		_List: 10,
-		_Comprehension:11,
-		_Template: 12,
-		_Break:13,
-		_Continue:14,
-		_Label:15,
+		_Block:10,
+		_List: 11,
+		_Comprehension:12,
+		_Template: 13,
+		_Break:14,
+		_Continue:15,
+		_Label:16,
 
-		_If:16,
-		_Switch:17,
-		_Case:18,
+		_If:17,
+		_Switch:18,
+		_Case:19,
 
-		_Throw:19,
-		_Try:20,
+		_Throw:20,
+		_Try:21,
 
-		_While:21,
-		_DoWhile:22,
-		_For:23,
-		_ForIn:24,
-		_ForOf:25,
-		_ForFrom:26,
-		_ForTo:27,
+		_While:22,
+		_DoWhile:23,
+		_For:24,
+		_ForIn:25,
+		_ForOf:26,
 
-		_Var:28,
-		_TypeVar:29,
-		_Struct:30,
-		_Define:31,
-		_Enum:32,
+		_Var:27,
 
-		_Def:33,
+		_Def:28,
 
-		_Function:34,
-		_Return:35,
-		_Yield:36,
-		_Await:37,
+		_Function:29,
+		_Return:30,
+		_Yield:31,
+		_Await:32,
 
-		_Unary:38,
-		_Binary:39,
-		_Logic:40,
-		_Assign:41,
-		_Update:42,
-		_Condition:43,
+		_Unary:33,
+		_Binary:34,
+		_Logic:35,
+		_Assign:36,
+		_Update:37,
+		_Condition:38,
 
-		_New:44,
-		_Call:45,
-		_Nest:46,
+		_New:39,
+		_Call:40,
+		_Nest:41,
 
-		_Class:47,
-		_Signal:48,
-		_Quote:49,
-		_AssignQuote:50,
-		_Rest:51,
-		_Then:52,
-		_Comment:53,
+		_Class:42,
+		_Rest:43,
+		_Comment:44,
 
 		// second level markers
 			_Id:1,

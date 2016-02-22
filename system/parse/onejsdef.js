@@ -14,7 +14,8 @@ define(function(require, exports, module){
 	Program:{ steps:2 },
 	Empty:{},
 
-	Id: { name:0, flag:0, typing:1 },
+	Id: { name:0, flag:0},
+	Property: {name:0, flag:0 },
 	Value: { value:0, raw:0, kind:0, multi:0 },
 	This: { },
 
