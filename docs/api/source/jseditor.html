@@ -460,6 +460,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n306" name="n306">306</a>
 <a href="#n307" name="n307">307</a>
 <a href="#n308" name="n308">308</a>
+<a href="#n309" name="n309">309</a>
+<strong><a href="#n310" name="n310">310</a></strong>
+<a href="#n311" name="n311">311</a>
+<a href="#n312" name="n312">312</a>
+<a href="#n313" name="n313">313</a>
+<a href="#n314" name="n314">314</a>
+<a href="#n315" name="n315">315</a>
+<a href="#n316" name="n316">316</a>
+<a href="#n317" name="n317">317</a>
+<a href="#n318" name="n318">318</a>
+<a href="#n319" name="n319">319</a>
+<strong><a href="#n320" name="n320">320</a></strong>
+<a href="#n321" name="n321">321</a>
+<a href="#n322" name="n322">322</a>
+<a href="#n323" name="n323">323</a>
+<a href="#n324" name="n324">324</a>
+<a href="#n325" name="n325">325</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -467,49 +484,56 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">./jsviewer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, baseclass, <span class="predefined">$ui$</span>, textbox){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">./jsviewer</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require, baseclass, <span class="predefined">$ui$</span>, textbox, label){
 
         <span class="local-variable">this</span>.readonly = <span class="predefined-constant">false</span>
         
         <span class="keyword">var</span> enumchange = <span class="local-variable">this</span>.enumchange
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
-                
         }
 
         <span class="comment">// process inserts with matching parens</span>
         <span class="local-variable">this</span>.<span class="function">processInsert</span> = <span class="keyword">function</span>(lo, hi, text){
                 <span class="keyword">var</span> cdelta = <span class="integer">0</span>
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) === <span class="integer">9</span>){
+                        cdelta += <span class="integer">1</span>                        
+                }
                 <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">34</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta = <span class="integer">1</span>
-                        <span class="keyword">else</span> text +=<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, cdelta=-<span class="integer">1</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">34</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta += <span class="integer">1</span>
+                        <span class="keyword">else</span> text +=<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, cdelta -= <span class="integer">1</span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span>){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">39</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta = <span class="integer">1</span>
-                        <span class="keyword">else</span> text +=<span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span>, cdelta=-<span class="integer">1</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">39</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta += <span class="integer">1</span>
+                        <span class="keyword">else</span> text +=<span class="string"><span class="delimiter">&quot;</span><span class="content">'</span><span class="delimiter">&quot;</span></span>, cdelta -= <span class="integer">1</span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">41</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta = <span class="integer">1</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">41</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta += <span class="integer">1</span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">]</span><span class="delimiter">'</span></span>){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">93</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta = <span class="integer">1</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">93</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta += <span class="integer">1</span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>){
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">125</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta = <span class="integer">1</span>
+                        <span class="comment">// do a forward scan</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) === <span class="integer">10</span> &amp;&amp; <span class="local-variable">this</span>.textbuf.charCodeAt(lo+<span class="integer">1</span>) === <span class="integer">9</span> &amp;&amp; <span class="local-variable">this</span>.textbuf.charCodeAt(lo+<span class="integer">2</span>) == <span class="integer">125</span>){
+                                text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta = <span class="integer">0</span>
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(lo) == <span class="integer">125</span>) text = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, cdelta += <span class="integer">1</span>
+
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span>){
-                        cdelta = -<span class="integer">1</span>
+                        cdelta -= <span class="integer">1</span>
                         text += <span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">[</span><span class="delimiter">'</span></span>){
-                        cdelta = -<span class="integer">1</span>
+                        cdelta -= <span class="integer">1</span>
                         text += <span class="string"><span class="delimiter">'</span><span class="content">]</span><span class="delimiter">'</span></span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span>){
                         <span class="keyword">if</span>(lo != hi){
                                 <span class="comment">// do something special</span>
                         }
-                        cdelta = -<span class="integer">1</span>
+                        cdelta -= <span class="integer">1</span>
                         text += <span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(text == <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){ <span class="comment">// autoindent code</span>
@@ -517,32 +541,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> state = <span class="integer">0</span>
                         <span class="keyword">var</span> indent = <span class="integer">0</span>
                         <span class="keyword">var</span> split = <span class="integer">0</span>
-                        <span class="keyword">while</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(i) == <span class="integer">9</span>){
-                                i++
-                                indent--
+                        <span class="keyword">while</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(i) !== <span class="integer">9</span> &amp;&amp; i &gt;= <span class="integer">0</span>){
+                                i--
                         }
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(i) == <span class="integer">125</span> &amp;&amp; <span class="local-variable">this</span>.textbuf.charCodeAt(i-<span class="integer">1</span>) == <span class="integer">123</span>){
-                                i++, split = <span class="integer">1</span>
+                        <span class="keyword">while</span>(<span class="local-variable">this</span>.textbuf.charCodeAt(i) === <span class="integer">9</span>){
+                                i--
+                                indent++
                         }
-                        <span class="keyword">while</span>(i&lt;<span class="local-variable">this</span>.textbuf.char_count){
-                                <span class="keyword">var</span> code = <span class="local-variable">this</span>.textbuf.charCodeAt(i)
-                                <span class="keyword">if</span>(state == <span class="integer">0</span> &amp;&amp; code == <span class="integer">123</span>) indent--
-                                <span class="keyword">if</span>(state == <span class="integer">1</span>){
-                                        <span class="keyword">if</span>(code == <span class="integer">9</span> || code == <span class="integer">125</span>) indent++
-                                        <span class="keyword">else</span> <span class="keyword">break</span>
-                                }
-                                <span class="keyword">if</span>(code == <span class="integer">10</span>) state = <span class="integer">1</span>
-                                i++
-                        }
-                        <span class="keyword">if</span>(indent&gt;<span class="integer">0</span>){
-                                <span class="keyword">if</span>(split){
-                                        text += Array(indent+<span class="integer">2</span>).join(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span> + Array(indent+<span class="integer">1</span>).join(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>)
-                                        cdelta = -<span class="integer">1</span> - indent
-                                }
-                                <span class="keyword">else</span>{
-                                        text += Array(indent+<span class="integer">1</span>).join(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>)
-                                }
-                        }
+                        text += Array(indent + <span class="integer">1</span>).join(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>)
                 }
                 <span class="keyword">return</span> [text, cdelta]
         }
@@ -556,36 +562,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> <span class="predefined-constant">false</span>
         }
         
-        <span class="comment">// the change event</span>
-        <span class="local-variable">this</span>.<span class="function">textChanged</span> = <span class="keyword">function</span>(){
-                baseclass.textChanged.call(<span class="local-variable">this</span>)
-                <span class="local-variable">this</span>.worker.postMessage({<span class="key">source</span>:<span class="local-variable">this</span>._value})
-                <span class="comment">/*
-                this.was_cursor = false
-                if(this.change == enumchange.keypress || this.change == enumchange.delete || this.change == enumchange.clipboard){
-                        this.was_delete = this.change == enumchange.delete
-                        this.was_cursor = this.change == enumchange.clipboard // dont delay reformat on paste
-
-                        this.delay_update = 0
-                        //if(this.step_timeout) this.clearTimeout(this.step_timeout)
-                        //this.step_timeout = this.setTimeout(this.parseStep,0)
-                }
-                // if its an undo, 
-                if(this.change == enumchange.undoredo){ // set delay to cursor press
-                //        delay_update = parseStep
-                }
-                // send the worker new source
-                this.worker.postMessage({source:this.})*/</span>
-
+        <span class="local-variable">this</span>.<span class="function">update_force</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.change_timeout = <span class="predefined-constant">undefined</span>
+                baseclass.cursorsChanged.call(<span class="local-variable">this</span>)
+                <span class="local-variable">this</span>.redraw()
         }
 
-        <span class="local-variable">this</span>.<span class="function">oncursor</span> = <span class="keyword">function</span>(){
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.delay_update){
-                        <span class="local-variable">this</span>.was_cursor = <span class="predefined-constant">true</span>
-                        <span class="local-variable">this</span>.was_delete = <span class="predefined-constant">false</span>
-                        <span class="local-variable">this</span>.delay_update()
-                        <span class="local-variable">this</span>.delay_update = <span class="integer">0</span>
+        <span class="comment">// the change event</span>
+        <span class="local-variable">this</span>.change_id = <span class="integer">0</span>
+        <span class="local-variable">this</span>.change_timeout = <span class="integer">0</span>
+
+        <span class="local-variable">this</span>.<span class="function">textChanged</span> = <span class="keyword">function</span>(){
+                baseclass.textChanged.call(<span class="local-variable">this</span>, <span class="predefined-constant">true</span>)
+                <span class="local-variable">this</span>.worker.postMessage({<span class="key">change_id</span>:++<span class="local-variable">this</span>.change_id, <span class="key">source</span>:<span class="local-variable">this</span>._value})
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.change_timeout) <span class="keyword">return</span>
+                <span class="local-variable">this</span>.change_timeout = <span class="local-variable">this</span>.setTimeout(<span class="local-variable">this</span>.update_force, <span class="integer">30</span>)
+        }
+
+        <span class="local-variable">this</span>.<span class="function">cursorsChanged</span> = <span class="keyword">function</span>(){
+                <span class="keyword">if</span>(!<span class="local-variable">this</span>.change_timeout){
+                        baseclass.cursorsChanged.call(<span class="local-variable">this</span>)
                 }
+                <span class="comment">//this.change_timeout = this.setTimeout(this.update_force, 30)</span>
         }
 
         <span class="comment">// alright lets make a worker that parses and reserializes</span>
@@ -600,7 +598,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="keyword">var</span> ast = Parser.parse(msg.source)
                         }
                         <span class="keyword">catch</span>(e){
-                                console.log(e)
+                                <span class="local-variable">this</span>.postMessage({<span class="key">error</span>:e.message, <span class="key">pos</span>:e.pos})
                                 <span class="keyword">return</span>
                         }
                         <span class="comment">// ok now we need to reserialize from ast</span>
@@ -608,26 +606,29 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> buf = {
                                 <span class="key">out</span>:vec4.array(msg.source.length + <span class="integer">100</span>),
                                 <span class="function">charCodeAt</span>: <span class="keyword">function</span>(i){<span class="keyword">return</span> <span class="local-variable">this</span>.out.array[i*<span class="integer">4</span>]},
-                                <span class="key">char_count</span>:<span class="integer">0</span>
+                                <span class="key">char_count</span>:<span class="integer">0</span>,
+                                <span class="key">walk_id</span>:<span class="integer">0</span>
                         };
 
                         <span class="comment">// lets reserialize output</span>
                         <span class="keyword">var</span> out = buf.out
-                        JSFormatter.walk(ast, buf, <span class="keyword">function</span>(str, group, l1, l2, l3, m3){
+                        JSFormatter.walk(ast, buf, <span class="keyword">function</span>(str, padding, l1, l2, l3, node){
                                 out.ensureSize(out.length + str.length)
                                 <span class="keyword">var</span> o = out.length
+                                <span class="keyword">var</span> first = str.charCodeAt(<span class="integer">0</span>)
+                                <span class="keyword">if</span>(first !== <span class="integer">32</span> &amp;&amp; first !== <span class="integer">9</span> &amp;&amp; first !== <span class="integer">10</span>) buf.walk_id++
                                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; str.length; i++){
                                         <span class="keyword">var</span> v = o * <span class="integer">4</span> + i * <span class="integer">4</span>
                                         out.array[v] = str.charCodeAt(i)
-                                        out.array[v + <span class="integer">1</span>] = group
+                                        out.array[v + <span class="integer">1</span>] = ((padding||<span class="integer">0</span>) + <span class="local-variable">this</span>.actual_indent*<span class="integer">65536</span>)*-<span class="integer">1</span>
                                         out.array[v + <span class="integer">2</span>] = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
-                                        out.array[v + <span class="integer">3</span>] = m3
+                                        out.array[v + <span class="integer">3</span>] = buf.walk_id + <span class="integer">65536</span>*<span class="local-variable">this</span>.actual_line
                                 }
                                 out.length += str.length
                                 buf.char_count += str.length;
                         })
 
-                        <span class="local-variable">this</span>.postMessage({<span class="key">length</span>:buf.out.length, <span class="key">array</span>:buf.out.array}, [buf.out.array.buffer])
+                        <span class="local-variable">this</span>.postMessage({<span class="key">length</span>:buf.out.length, <span class="key">change_id</span>: msg.change_id, <span class="key">array</span>:buf.out.array}, [buf.out.array.buffer])
                 }
         })
 
@@ -635,23 +636,39 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.worker = prev &amp;&amp; prev.worker || worker()
                 <span class="comment">// if we get source back yay</span>
                 <span class="local-variable">this</span>.worker.<span class="function">onmessage</span> = <span class="keyword">function</span>(msg){
-                        <span class="comment">// alright lets run the diff step.</span>
-                        <span class="comment">// shall we just swap the entire fucker out?... no that breaks undo</span>
-                        <span class="comment">// ah right.</span>
-                        <span class="comment">// we dont want that.</span>
-                        <span class="comment">// but we might have to update the typed array in a tight loop.</span>
-                        <span class="comment">// get the start diff</span>
+                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.shaders.typeface.mesh
+
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.change_timeout){
+                                <span class="local-variable">this</span>.clearTimeout(<span class="local-variable">this</span>.change_timeout)
+                                <span class="local-variable">this</span>.update_force()
+                        }
+
+                        <span class="keyword">var</span> err = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>) 
+                        <span class="keyword">if</span>(msg.error){
+                                <span class="keyword">var</span> rect = mesh.cursorRect(msg.pos)
+                                err.x = rect.x
+                                err.y = rect.y + rect.h + <span class="integer">4</span>
+                                err.text = <span class="string"><span class="delimiter">'</span><span class="content">^</span><span class="delimiter">'</span></span>+msg.error
+                                err.visible = <span class="predefined-constant">true</span>
+                                <span class="keyword">return</span>
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="keyword">if</span>(err._visible) err.visible = <span class="predefined-constant">false</span>
+                        }
+                        <span class="keyword">if</span>(msg.change_id !== <span class="local-variable">this</span>.change_id) <span class="keyword">return</span> <span class="comment">// toss it, its too late.</span>
                         <span class="keyword">var</span> dt = Date.now()
                         <span class="keyword">var</span> start = <span class="integer">0</span>
                         <span class="keyword">var</span> data_new = msg.array
-                        <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.shaders.typeface.mesh
                         <span class="keyword">var</span> data_old = mesh.array
                         <span class="keyword">var</span> len_new = msg.length
                         <span class="keyword">var</span> len_old = mesh.length / <span class="integer">6</span>
                         <span class="keyword">for</span>(;start &lt; len_new &amp;&amp; start &lt; len_old; start++){
                                 <span class="keyword">var</span> off_old = start * <span class="integer">10</span> * <span class="integer">6</span>
                                 <span class="keyword">var</span> off_new = start * <span class="integer">4</span>
+
                                 <span class="keyword">if</span>(data_new[off_new] !== data_old[off_old + <span class="integer">6</span>]) <span class="keyword">break</span>
+                                <span class="keyword">if</span>(data_new[off_new+<span class="integer">1</span>] !== data_old[off_old + <span class="integer">7</span>]) <span class="keyword">break</span>
+
                                 <span class="comment">// copy data over</span>
                                 data_old[off_old + <span class="integer">7</span>] = data_old[off_old + <span class="integer">17</span>] = data_old[off_old + <span class="integer">27</span>] = 
                                 data_old[off_old + <span class="integer">37</span>] = data_old[off_old + <span class="integer">47</span>] = data_old[off_old + <span class="integer">57</span>] = data_new[off_new+<span class="integer">1</span>]
@@ -664,102 +681,119 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">for</span>(;end_old &gt; start &amp;&amp; end_new &gt; start; end_old--, end_new--){
                                 <span class="keyword">var</span> off_old = end_old * <span class="integer">10</span> * <span class="integer">6</span>
                                 <span class="keyword">var</span> off_new = end_new * <span class="integer">4</span>
+                                <span class="comment">//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])</span>
+                                
                                 <span class="keyword">if</span>(data_new[off_new] !== data_old[off_old + <span class="integer">6</span>]) <span class="keyword">break</span>
+                                <span class="comment">//if(data_new[off_new+1] !== data_old[off_old + 7]) break</span>
                         }
-                        
-                        <span class="comment">// alright we now have a range by which to 'insert' things or remove them</span>
-                        <span class="comment">// range in the new buffer is start-&gt;end_new</span>
-                        <span class="comment">// range in the old buffer is start-&gt;end_old</span>
+                
+                        <span class="keyword">var</span> cursor_now = <span class="local-variable">this</span>.cursorset.list[<span class="integer">0</span>].start
+
                         <span class="keyword">var</span> new_range = end_new - start
                         <span class="keyword">var</span> old_range = end_old - start 
 
+                        <span class="keyword">if</span>(old_range &lt; new_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>) <span class="keyword">return</span>
+                        <span class="keyword">if</span>(old_range &gt; new_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span>) <span class="keyword">return</span>
+
+                        <span class="comment">// do the cursor move magic</span>
+                        <span class="keyword">var</span> deleted_whitespace = <span class="predefined-constant">true</span>
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>){
+                                <span class="keyword">var</span> undo_data = <span class="local-variable">this</span>.undo_stack[<span class="local-variable">this</span>.undo_stack.length - <span class="integer">1</span>].data
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; undo_data.length; i++){
+                                        <span class="keyword">var</span> <span class="reserved">char</span> = undo_data.array[i*<span class="integer">4</span>]
+                                        <span class="keyword">if</span>(<span class="reserved">char</span> !== <span class="integer">32</span> &amp;&amp; <span class="reserved">char</span> !== <span class="integer">9</span> &amp;&amp; <span class="reserved">char</span> !== <span class="integer">10</span>) deleted_whitespace = <span class="predefined-constant">false</span>
+                                }
+                        }
+
+                        <span class="comment">// dont autoreformat immediately when deleting characters, only with whitespace</span>
+                        <span class="keyword">if</span>(new_range &lt; old_range &amp;&amp; <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span> &amp;&amp; start &lt; cursor_now &amp;&amp; !deleted_whitespace) <span class="keyword">return</span>
+                        
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">undoredo</span><span class="delimiter">'</span></span>)<span class="keyword">return</span> 
+
+                        <span class="comment">// if we insert a newline or do a delete use the marker</span>
+                        <span class="keyword">if</span>(new_range !== old_range){
+                                <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.change_keypress === <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>|| <span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span> &amp;&amp; deleted_whitespace){
+                                        <span class="comment">// use the tag</span>
+                                        <span class="keyword">var</span> nextto = mesh.tagAt(cursor_now,<span class="integer">3</span>) 
+
+                                        <span class="keyword">for</span>(<span class="keyword">var</span> t = start; t &lt; len_new; t++){
+                                                <span class="keyword">if</span>(nextto == data_new[t*<span class="integer">4</span>+<span class="integer">3</span>]){
+                                                        <span class="local-variable">this</span>.cursorset.list[<span class="integer">0</span>].moveToOffset(t)
+                                                        <span class="keyword">break</span>
+                                                }
+                                        }
+                                }
+                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">delete</span><span class="delimiter">'</span></span>){
+                                        <span class="comment">//console.log(&quot;BE HERE&quot;)</span>
+                                        <span class="comment">//this.cursorset.list[0].moveToOffset(cursor_now - 1)</span>
+                                }
+                                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.change === <span class="string"><span class="delimiter">'</span><span class="content">keypress</span><span class="delimiter">'</span></span>){
+                                        <span class="comment">// stick to the character</span>
+                                        <span class="keyword">var</span> char_at = data_new[cursor_now*<span class="integer">4</span>]
+                                        <span class="comment">//if(char_at === 9){ // we are typing in a tab</span>
+                                        <span class="comment">//        this.cursorset.list[0].moveToOffset(end_new+1)</span>
+                                        <span class="comment">//}</span>
+                                        <span class="comment">//else </span>
+                                        <span class="keyword">if</span>(char_at !== <span class="integer">44</span>){
+                                                <span class="keyword">var</span> nextto = mesh.tagAt(cursor_now - <span class="integer">1</span>,<span class="integer">0</span>)
+                                                <span class="keyword">var</span> fd = <span class="integer">0</span>
+                                                <span class="keyword">for</span>(<span class="keyword">var</span> t = cursor_now - <span class="integer">1</span>; t &lt; len_new; t++){
+                                                        <span class="keyword">if</span>(nextto == data_new[t*<span class="integer">4</span>+<span class="integer">0</span>]){
+                                                                fd = <span class="integer">1</span>
+                                                        }
+                                                        <span class="keyword">else</span> <span class="keyword">if</span>(fd){        <span class="comment">// move the cursor</span>
+                                                                <span class="local-variable">this</span>.cursorset.list[<span class="integer">0</span>].moveToOffset(t)
+                                                                <span class="keyword">break</span>
+                                                        }
+                                                }
+                                        }
+                                }
+                                <span class="local-variable">this</span>.cursorset.update()
+                                <span class="comment">// create the undo entry</span>
+                                <span class="keyword">if</span>(new_range){
+                                        <span class="local-variable">this</span>.undo_group--
+                                        <span class="local-variable">this</span>.addUndoInsert(start, end_old+<span class="integer">1</span>)
+                                        <span class="local-variable">this</span>.addUndoDelete(start, end_new+<span class="integer">1</span>)
+                                        <span class="local-variable">this</span>.undo_group++
+                                }
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.cursorset.update()
+                        }
+                        <span class="comment">// this replaces the textbuffer</span>
                         mesh.setLength(start)
                         <span class="keyword">var</span> buf = {<span class="key">struct</span>:<span class="integer">1</span>, <span class="key">start</span>:start, <span class="key">array</span>:data_new, <span class="key">length</span>:len_new}
                         mesh.add(buf)
+
+                        <span class="comment">// lets figure out the linenumbers between start and end_new</span>
+                        <span class="keyword">if</span>(new_range &gt; old_range){
+                                <span class="keyword">var</span> min = <span class="predefined-constant">Infinity</span>, max = -<span class="predefined-constant">Infinity</span>
+                                <span class="keyword">for</span>(<span class="keyword">var</span> i = start; i &lt; end_new; i++){
+                                        <span class="keyword">var</span> line = Math.floor(data_new[i*<span class="integer">4</span>+<span class="integer">3</span>]/<span class="integer">65536</span>)
+                                        <span class="keyword">if</span>(line&lt;min)min = line
+                                        <span class="keyword">if</span>(line&gt;max)max = line
+                                }
+                        }
+                        <span class="local-variable">this</span>.line_start = min
+                        <span class="local-variable">this</span>.line_end = max
+                        <span class="local-variable">this</span>._line_anim = <span class="float">1.0</span>
+                        <span class="local-variable">this</span>.line_anim = <span class="integer">0</span>.
+                        <span class="comment">//var rect = mesh.cursorRect(start)</span>
+                        <span class="comment">//err.x = rect.x</span>
+                        <span class="comment">//err.y = rect.y + rect.h + 4</span>
+                        <span class="comment">//err.text = 'WOOPWOOP'</span>
+                        <span class="comment">//err.visible = true</span>
 
                         mesh.clean = <span class="predefined-constant">false</span>
                         <span class="local-variable">this</span>.redraw()
 
                 }.bind(<span class="local-variable">this</span>)
         }
-<span class="comment">/*
-        this.parseStep = function(){
-                var dt = Date.now()
-                // lets serialize thi
-                this.step_serialized = layer.serializeText()
-                // okay.. so we parse it, we get an error. now what.
-                var dump = step_serialized.replace(/[\s\r\n]/g,function(f){
-                        return '\\'+f.charCodeAt(0)
-                })
-                step_ast = parseLive(step_serialized)
-                //console.log(AST.toDump(step_ast))
-                //console.log('----parseStep! '+(Date.now()-dt))
-                step_timeout = thisTimeout(astgenStep,0)
+
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
+                <span class="keyword">return</span> label({<span class="key">position</span>:<span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>,<span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>,<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">darkred</span><span class="delimiter">'</span></span>,<span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>,<span class="key">borderradius</span>:<span class="integer">1</span>, <span class="key">visible</span>:<span class="predefined-constant">false</span>})
         }
 
-        this.astgenStep = function(){
-                var dt = Date.now()
-                code_formatter.setSize(step_serialized.length)
-                code_formatter.clear()
-                code_formatter.ast = step_ast
-                //console.log(code_formatter.serializeText())
-                //console.log('astgenStep! '+(Date.now()-dt))
-                step_timeout = thisTimeout(diffStep,0)
-        }
-
-        this.diffStep = function(){
-                var dt = Date.now()
-                // lets diff our code_formatter.output
-                // against our textbuffer, whilst updating colors
-                // and then we remove/insert the delta.
-                // ok lets first try to do it wholesale
-                var range = layer.diffTags(code_formatter.output)
-                if(range){ // remove a range, and insert a range
-                        var delta = 0
-                        // if what we do is essentially undo the last action, dont do it
-                        var last = undo_stack[undo_stack.length-1]
-                        
-                        // lets check if we inserted a space, and now its being removed
-                        function next(){
-                                // first we remove
-                                var rem_delta =  0
-                                if(range.my_start&lt;=range.my_end){
-                                        rem_delta += range.my_end + 1 - range.my_start
-                                }
-                                var add_delta = 0
-                                if(range.other_start &lt;= range.other_end){
-                                        add_delta += range.other_end + 1 - range.other_start
-                                }
-                                var delta = add_delta - rem_delta
-                                // if we are input driven, we only accept positive add
-                                if(was_cursor || delta == 0 || !was_delete &amp;&amp; delta &gt; 0){
-                                        undo_group++
-                                        cursors.markDelta()
-                                        if(rem_delta){
-                                                addUndoInsert(range.my_start, range.my_end+1)
-                                                layer.removeText(range.my_start, range.my_end+1)
-                                                // lets fetch what we are removing
-                                        }
-                                        if(add_delta){
-                                                var inslice = code_formatter.output.slice(range.other_start, range.other_end+1)
-
-                                                // lets see what we are inserting
-                                                layer.insertText(range.my_start, inslice)
-                                                addUndoDelete(range.my_start, range.my_start + inslice.length)
-                                        }
-                                        cursors.moveDelta(range.my_start, add_delta - rem_delta)
-                                }
-                                else if(!was_cursor){
-                                        delay_update = next
-                                }
-                        }
-                        next()
-                }
-                //console.log(range)
-                //console.log('diffStep! '+(Date.now()-dt))
-                step_timeout  = thisTimeout(applyStep,0)
-        }
-        */</span>
         <span class="comment">// Basic usage</span>
         <span class="keyword">var</span> jseditor = <span class="local-variable">this</span>.constructor
 

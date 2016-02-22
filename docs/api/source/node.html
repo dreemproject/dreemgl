@@ -1111,6 +1111,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n957" name="n957">957</a>
 <a href="#n958" name="n958">958</a>
 <a href="#n959" name="n959">959</a>
+<strong><a href="#n960" name="n960">960</a></strong>
+<a href="#n961" name="n961">961</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1171,7 +1173,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">clearTimeout</span> = <span class="keyword">function</span>(id){
-                <span class="keyword">var</span> idx = <span class="local-variable">this</span>.timeout_ids.indexof(id)
+                <span class="keyword">var</span> idx = <span class="local-variable">this</span>.timeout_ids.indexOf(id)
                 <span class="keyword">if</span>(idx !== -<span class="integer">1</span>){
                         <span class="local-variable">this</span>.timeout_ids.splice(idx, <span class="integer">1</span>)
                          window.clearInterval(id)
@@ -1341,12 +1343,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
         }
 
+        <span class="local-variable">this</span>.emit_block_set = <span class="predefined-constant">null</span>
+
         <span class="local-variable">this</span>.<span class="function">emit</span> = <span class="keyword">function</span>(key, ievent){
                 <span class="keyword">var</span> event = ievent || {}
 
                 <span class="keyword">var</span> lock_key = <span class="string"><span class="delimiter">'</span><span class="content">_lock_</span><span class="delimiter">'</span></span> + key
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>[lock_key]) <span class="keyword">return</span>
+                <span class="keyword">if</span>(<span class="local-variable">this</span>[lock_key] || <span class="local-variable">this</span>.emit_block_set &amp;&amp; <span class="local-variable">this</span>.emit_block_set.indexOf(key) !== -<span class="integer">1</span>) <span class="keyword">return</span>
 
                 <span class="local-variable">this</span>[lock_key] = <span class="predefined-constant">true</span>
                 <span class="keyword">try</span>{

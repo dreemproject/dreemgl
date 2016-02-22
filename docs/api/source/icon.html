@@ -870,6 +870,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n716" name="n716">716</a>
 <a href="#n717" name="n717">717</a>
 <a href="#n718" name="n718">718</a>
+<a href="#n719" name="n719">719</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -880,6 +881,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>( <span class="keyword">function</span>(require, label){
 
         <span class="comment">// The icon class provides an easy way to access most of the commonly used web icons. Look at the FontAwesome cheat sheet to see what can be used.</span>
+        <span class="comment">// not-supported: DALi</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="comment">// The icon to be used. Look at the FontAwesome cheat sheet to see the available options. Icons do not need to specify their 'fa-' prefix -&gt; use 'gears' instead of 'fa-gears'.</span>
@@ -895,7 +897,7 @@ define.<span class="reserved">class</span>( <span class="keyword">function</span
         }
 
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
-        
+
         <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/fontawesome.glf</span><span class="delimiter">'</span></span>)
 
         <span class="comment">// the font awesome</span>

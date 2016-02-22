@@ -7,6 +7,7 @@
 define.class( function(require, label){
 
 	// The icon class provides an easy way to access most of the commonly used web icons. Look at the FontAwesome cheat sheet to see what can be used.
+	// not-supported: DALi
 
 	this.attributes = {
 		// The icon to be used. Look at the FontAwesome cheat sheet to see the available options. Icons do not need to specify their 'fa-' prefix -> use 'gears' instead of 'fa-gears'.
@@ -22,7 +23,7 @@ define.class( function(require, label){
 	}
 
 	this.bgcolor = NaN
-	
+
 	this.font = require('$resources/fonts/fontawesome.glf')
 
 	// the font awesome

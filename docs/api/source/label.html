@@ -337,7 +337,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>)
         <span class="local-variable">this</span>.polygonoffset = <span class="float">0.0</span>;
 
-        <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos) {<span class="keyword">return</span> pos;};
+        <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos, tag) {<span class="keyword">return</span> pos;};
 
         <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(fgcolor, pos, tag){
                 <span class="keyword">return</span> fgcolor;
@@ -465,7 +465,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">subpixel</span> = <span class="keyword">function</span>(event){
                 <span class="local-variable">this</span>.selectShader()
         }
-
+        <span class="local-variable">this</span>.text = <span class="local-variable">this</span>.relayout
         <span class="local-variable">this</span>.<span class="function">measure</span> = <span class="keyword">function</span>(width){
                 <span class="keyword">var</span> shader = <span class="local-variable">this</span>.shaders.typeface
                 <span class="keyword">if</span>(shader.update_dirty){

@@ -408,47 +408,47 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">// lets communicate the position of our first cursor</span>
 
         }
-
-        <span class="local-variable">this</span>.<span class="function">markDelta</span> = <span class="keyword">function</span>(){
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.list.length; i++){
-                        <span class="keyword">var</span> cursor = <span class="local-variable">this</span>.list[i]
-                        cursor.mark_start = <span class="local-variable">this</span>.editor.textbuf.charCodeAt(cursor.start - <span class="integer">1</span>)
-                        cursor.mark_end = <span class="local-variable">this</span>.editor.textbuf.charCodeAt(cursor.end - <span class="integer">1</span>)
+        <span class="comment">/*
+        this.markDelta = function(){
+                for(var i = 0; i &lt; this.list.length; i++){
+                        var cursor = this.list[i]
+                        cursor.mark_start = this.editor.textbuf.charCodeAt(cursor.start - 1)
+                        cursor.mark_end = this.editor.textbuf.charCodeAt(cursor.end - 1)
                 }
         }
 
-        <span class="local-variable">this</span>.<span class="function">markSeek</span> = <span class="keyword">function</span>(pos, delta, mark){
+        this.markSeek = function(pos, delta, mark){
                 pos += delta
-                <span class="keyword">var</span> count = <span class="local-variable">this</span>.editor.textbuf.char_count
-                <span class="keyword">if</span>(pos &lt; <span class="integer">0</span>) pos = <span class="integer">0</span>
-                <span class="keyword">if</span>(pos &gt;= count) pos = count - <span class="integer">1</span>
-                <span class="comment">// ignore markers that are volatile</span>
-                <span class="keyword">if</span>(mark != <span class="integer">32</span> &amp;&amp; mark != <span class="integer">9</span> &amp;&amp; mark != <span class="integer">10</span> &amp;&amp; mark != <span class="integer">59</span>){
+                var count = this.editor.textbuf.char_count
+                if(pos &lt; 0) pos = 0
+                if(pos &gt;= count) pos = count - 1
+                // ignore markers that are volatile
+                if(mark != 32 &amp;&amp; mark != 9 &amp;&amp; mark != 10 &amp;&amp; mark != 59){
                         pos++
-                        <span class="keyword">var</span> start = pos
-                        <span class="keyword">var</span> max = abs(delta)
-                        <span class="keyword">while</span>(pos &gt; <span class="integer">0</span> &amp;&amp; <span class="local-variable">this</span>.editor.textbuf.charCodeAt(pos - <span class="integer">1</span>) != mark){
-                                <span class="keyword">if</span>(start - pos &gt; max)<span class="keyword">break</span>
+                        var start = pos
+                        var max = abs(delta)
+                        while(pos &gt; 0 &amp;&amp; this.editor.textbuf.charCodeAt(pos - 1) != mark){
+                                if(start - pos &gt; max)break
                                 pos--
                         }
                 }
-                <span class="keyword">return</span> pos
+                return pos
         }
 
-        <span class="local-variable">this</span>.<span class="function">moveDelta</span> = <span class="keyword">function</span>(beyond, delta){
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.list.length; i++){
-                        <span class="keyword">var</span> cursor = <span class="local-variable">this</span>.list[i]
+        this.moveDelta = function(beyond, delta){
+                for(var i = 0; i &lt; this.list.length; i++){
+                        var cursor = this.list[i]
 
-                        <span class="keyword">if</span>(cursor.start&gt;=beyond)
-                                cursor.start = <span class="local-variable">this</span>.markSeek(cursor.start, delta, cursor.mark_start)
-                        <span class="keyword">if</span>(cursor.end&gt;=beyond){
-                                cursor.end = <span class="local-variable">this</span>.markSeek(cursor.end, delta, cursor.mark_end)
-                        <span class="comment">//        cursor.max = text_layer.cursorRect(cursor.end).x</span>
+                        if(cursor.start&gt;=beyond)
+                                cursor.start = this.markSeek(cursor.start, delta, cursor.mark_start)
+                        if(cursor.end&gt;=beyond){
+                                cursor.end = this.markSeek(cursor.end, delta, cursor.mark_end)
+                        //        cursor.max = text_layer.cursorRect(cursor.end).x
                         }
                 }
-                <span class="local-variable">this</span>.update()
+                this.update()
         }
-
+        */</span>
         <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.editor.cursorsChanged) <span class="local-variable">this</span>.editor.cursorsChanged()
         }

@@ -2914,6 +2914,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n2760" name="n2760">2760</a></strong>
 <a href="#n2761" name="n2761">2761</a>
 <a href="#n2762" name="n2762">2762</a>
+<a href="#n2763" name="n2763">2763</a>
+<a href="#n2764" name="n2764">2764</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -5486,7 +5488,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
                 exports.ceil = typeFn(Math.ceil)
                 exports.min = typeFn2(Math.min)
                 exports.max = typeFn2(Math.max)
-                exports.mod = typeFn2(Math.mod)
+                exports.mod = typeFn2(<span class="keyword">function</span>(a,b){
+                        <span class="keyword">return</span> a%b
+                })
                 exports.random = Math.random
 
                 exports.sign = typeFn(<span class="keyword">function</span>(v){

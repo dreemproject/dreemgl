@@ -901,7 +901,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">if</span>(lastbuf !== buf){
                         lastbuf = buf
                         <span class="keyword">if</span>(buf.length &gt; len) len = buf.length
-                        <span class="comment">//if(len === 0) return 0</span>
+                        <span class="keyword">if</span>(len === <span class="integer">0</span>) <span class="keyword">return</span> <span class="integer">0</span>
                         <span class="keyword">if</span>(!buf.glvb) buf.glvb = gl.createBuffer()
                         gl.bindBuffer(gl.ARRAY_BUFFER, buf.glvb)
                         <span class="keyword">if</span>(!buf.clean){

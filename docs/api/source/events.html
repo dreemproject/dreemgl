@@ -253,7 +253,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n99" name="n99">99</a>
 <strong><a href="#n100" name="n100">100</a></strong>
 <a href="#n101" name="n101">101</a>
-<a href="#n102" name="n102">102</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -300,9 +299,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 })
                 <span class="local-variable">this</span>.mesh = vertstruct.array()
 
-                <span class="keyword">var</span> startTime = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 01 2016</span><span class="delimiter">&quot;</span></span>).getTime()
-
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
+                        <span class="keyword">var</span> startTime = <span class="local-variable">this</span>.view.parent.getStart()
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
                         <span class="keyword">var</span> data = view.data
                         <span class="keyword">var</span> mesh = <span class="local-variable">this</span>.mesh = vertstruct.array();
@@ -350,7 +348,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span> (view.hoverid == mesh.id){
                                 <span class="keyword">return</span> vec4(<span class="integer">0</span>, <span class="integer">1</span>, <span class="integer">0</span>, <span class="integer">1</span>)
                         }
-                        <span class="keyword">return</span> vec4(<span class="float">0.5</span>, <span class="float">0.5</span>, <span class="float">0.5</span>, <span class="integer">1</span>)
+                        <span class="keyword">return</span> vec4(<span class="float">0.75</span>, <span class="float">0.75</span>, <span class="float">0.75</span>, <span class="integer">1</span>)
                 }
         })
 

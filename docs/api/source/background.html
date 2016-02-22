@@ -237,6 +237,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n83" name="n83">83</a>
 <a href="#n84" name="n84">84</a>
 <a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -250,10 +252,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>),
                 <span class="key">scroll</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.scroll</span><span class="delimiter">'</span></span>),
-                <span class="key">monthwidth</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.monthwidth</span><span class="delimiter">'</span></span>),
-                <span class="key">daywidth</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.daywidth</span><span class="delimiter">'</span></span>),
-                <span class="key">hourwidth</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.hourwidth</span><span class="delimiter">'</span></span>),
-                <span class="key">hoursegs</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.hoursegs</span><span class="delimiter">'</span></span>)
+                <span class="key">hoursegs</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.hoursegs</span><span class="delimiter">'</span></span>),
+
+                <span class="key">segments</span>: Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()})
         }
 
         <span class="local-variable">this</span>.<span class="function">layout</span> = <span class="keyword">function</span>(){
@@ -264,61 +265,64 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">hardrect</span> = <span class="keyword">function</span>(){
 
                 <span class="keyword">var</span> array = <span class="keyword">new</span> Float32Array(<span class="integer">4</span> * <span class="integer">2048</span>)
-                <span class="keyword">var</span> start = <span class="keyword">new</span> Date(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 1 2016</span><span class="delimiter">&quot;</span></span>).getTime()
-                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length / <span class="integer">4</span>; i++) {
-                        <span class="keyword">var</span> day = <span class="keyword">new</span> Date(start + i * <span class="integer">86400000</span>)
-                        array[i * <span class="integer">4</span> + <span class="integer">0</span>] = day.getDate()
-                        array[i * <span class="integer">4</span> + <span class="integer">1</span>] = day.getDay()
-                        array[i * <span class="integer">4</span> + <span class="integer">2</span>] = day.getMonth()
-                        array[i * <span class="integer">4</span> + <span class="integer">3</span>] = day.getFullYear()
-                }
-
                 <span class="local-variable">this</span>.caltexture = <span class="local-variable">this</span>.Texture.fromArray(array, <span class="integer">2048</span>, <span class="integer">1</span>)
 
-                <span class="local-variable">this</span>.<span class="function">makepattern</span> = <span class="keyword">function</span> (field) {
-                        <span class="keyword">if</span> (math.odd(field - mod(field, <span class="float">1.0</span>))) {
-                                <span class="keyword">return</span> <span class="float">1.0</span>
-                        } <span class="keyword">else</span> {
-                                <span class="keyword">return</span> <span class="float">0.9</span>
+                <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span> () {
+                        <span class="keyword">var</span> array = <span class="keyword">new</span> Float32Array(<span class="integer">4</span> * <span class="integer">2048</span>)
+                        <span class="keyword">var</span> start = <span class="local-variable">this</span>.view.parent.getStart()
+                        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; array.length / <span class="integer">4</span>; i++) {
+                                <span class="keyword">var</span> day = <span class="keyword">new</span> Date(start + i * <span class="integer">86400000</span>)
+                                array[i * <span class="integer">4</span> + <span class="integer">0</span>] = day.getDate()
+                                array[i * <span class="integer">4</span> + <span class="integer">1</span>] = day.getDay()
+                                array[i * <span class="integer">4</span> + <span class="integer">2</span>] = day.getMonth()
+                                array[i * <span class="integer">4</span> + <span class="integer">3</span>] = day.getFullYear()
                         }
+
+                        <span class="local-variable">this</span>.caltexture = <span class="local-variable">this</span>.Texture.fromArray(array, <span class="integer">2048</span>, <span class="integer">1</span>)
+                        <span class="local-variable">this</span>.caltexture.updateid = random()
+                }
+
+                <span class="local-variable">this</span>.<span class="function">makepattern</span> = <span class="keyword">function</span> (field1, field2) {
+                        <span class="keyword">if</span> (field1 != field2) <span class="keyword">return</span> <span class="float">1.0</span>
+                        <span class="keyword">return</span> <span class="float">0.0</span>
+                }
+
+                <span class="local-variable">this</span>.<span class="function">pickpattern</span> = <span class="keyword">function</span> (val, year, month, weekp, day, hour, minute) {
+                        <span class="keyword">if</span> (val == <span class="float">1.0</span>) <span class="keyword">return</span> year
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">2.0</span>) <span class="keyword">return</span> month
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">3.0</span>) <span class="keyword">return</span> weekp
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">4.0</span>) <span class="keyword">return</span> day
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">5.0</span>) <span class="keyword">return</span> hour
+                        <span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="float">6.0</span>) <span class="keyword">return</span> minute
                 }
 
                 <span class="local-variable">this</span>.<span class="function">color</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">var</span> MONTH_COLLAPSE = <span class="float">200.0</span>
-                        <span class="keyword">var</span> col = vec4()
-                        <span class="keyword">var</span> fill = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#204e4f</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">var</span> fgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#ffffff</span><span class="delimiter">&quot;</span></span>)
+                        <span class="keyword">var</span> bgcolor = vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>)
                         <span class="keyword">var</span> a = <span class="float">24.0</span> / view.layout.height
                         <span class="keyword">var</span> b = <span class="float">48.0</span> / view.layout.height
-                        <span class="comment">// horizontal dividers</span>
-                        <span class="keyword">if</span> (abs(uv.y - a) &lt; <span class="float">0.5</span> / view.layout.height ||
-                        abs(uv.y - b) &lt; <span class="float">0.5</span> / view.layout.height) {
-                                <span class="keyword">return</span> vec4(<span class="float">0.75</span>, <span class="float">0.75</span>, <span class="float">0.75</span>, <span class="float">1.0</span>)
-                        }
-                        <span class="keyword">var</span> zoom = view.zoom
-                        <span class="keyword">var</span> dayfield = (uv.x + view.scroll.x) * view.zoom
-                        <span class="keyword">var</span> data_u = dayfield / <span class="integer">2048</span>
-                        <span class="keyword">var</span> daydata = <span class="local-variable">this</span>.caltexture.point(vec2(data_u, <span class="integer">0</span>))
+
+                        <span class="keyword">var</span> dayfield1 = (uv.x + view.scroll.x) * view.zoom
+                        <span class="keyword">var</span> dayfield2 = (uv.x + <span class="integer">1</span> / view.layout.width + view.scroll.x) * view.zoom
+                        <span class="keyword">var</span> caldata1 = <span class="local-variable">this</span>.caltexture.point(vec2(dayfield1 / <span class="integer">2048</span>, <span class="integer">0</span>)) * <span class="float">255.0</span>
+                        <span class="keyword">var</span> caldata2 = <span class="local-variable">this</span>.caltexture.point(vec2(dayfield2 / <span class="integer">2048</span>, <span class="integer">0</span>)) * <span class="float">255.0</span>
+
+                        <span class="keyword">var</span> year = makepattern(caldata1.a, caldata2.a)
+                        <span class="keyword">var</span> month = makepattern(caldata1.b, caldata2.b)
+                        <span class="keyword">var</span> week = makepattern(floor(dayfield1 / <span class="float">7.0</span>), floor(dayfield2 / <span class="float">7.0</span>))
+                        <span class="keyword">var</span> day = makepattern(floor(dayfield1), floor(dayfield2))
+                        <span class="keyword">var</span> hour = makepattern(floor(dayfield1 * view.hoursegs), floor(dayfield2 * view.hoursegs))
+                        <span class="keyword">var</span> minute = makepattern(floor(dayfield1 * <span class="integer">96</span>), floor(dayfield2 * <span class="integer">96</span>))
 
                         <span class="keyword">var</span> pattern = <span class="float">0.0</span>
-                        <span class="keyword">if</span> (uv.y &lt; a) {
-                                <span class="keyword">if</span> (view.monthwidth &lt; MONTH_COLLAPSE) {
-                                        pattern = makepattern(daydata.a * <span class="float">255.0</span>)
-                                } <span class="keyword">else</span> {
-                                        pattern = makepattern(daydata.b * <span class="float">255.0</span>)
-                                }
-                        } <span class="keyword">else</span> <span class="keyword">if</span> (uv.y &lt; b) {
-                                <span class="keyword">if</span> (view.monthwidth &lt; MONTH_COLLAPSE) {
-                                        pattern = makepattern(daydata.b * <span class="float">255.0</span>)
-                                } <span class="keyword">else</span> {
-                                        pattern = makepattern(dayfield * view.hoursegs)
-                                }
-                        } <span class="keyword">else</span> {
-                                pattern = makepattern(dayfield * view.hoursegs)
-                                fill = vec4(<span class="float">0.8</span>, <span class="float">0.8</span>, <span class="float">0.8</span>, <span class="integer">1</span>)
-                        }
 
-                        <span class="comment">// TODO(aki): crossfade patterns</span>
-                        <span class="keyword">return</span> mix(fill, <span class="string"><span class="delimiter">'</span><span class="content">#4e4e4e</span><span class="delimiter">'</span></span>, pattern)
+                        pattern += pickpattern(view.segments.x, year, month, week, day, hour, minute)
+                        <span class="keyword">if</span> (uv.y &gt; a)
+                                pattern = max(pattern, <span class="float">0.5</span> * pickpattern(view.segments.y, year, month, week, day, hour, minute))
+                        <span class="keyword">if</span> (uv.y &gt; b)
+                                pattern = max(pattern, <span class="float">0.25</span> * pickpattern(view.segments.z, year, month, week, day, hour, minute))
+
+                        <span class="keyword">return</span> mix(bgcolor, fgcolor, pattern)
                 }
         }
 

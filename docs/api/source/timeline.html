@@ -290,6 +290,57 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n136" name="n136">136</a>
 <a href="#n137" name="n137">137</a>
 <a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
+<a href="#n153" name="n153">153</a>
+<a href="#n154" name="n154">154</a>
+<a href="#n155" name="n155">155</a>
+<a href="#n156" name="n156">156</a>
+<a href="#n157" name="n157">157</a>
+<a href="#n158" name="n158">158</a>
+<a href="#n159" name="n159">159</a>
+<strong><a href="#n160" name="n160">160</a></strong>
+<a href="#n161" name="n161">161</a>
+<a href="#n162" name="n162">162</a>
+<a href="#n163" name="n163">163</a>
+<a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -302,7 +353,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.padding = vec4(<span class="integer">0</span>, <span class="integer">56</span>, <span class="integer">0</span>, <span class="integer">18</span>)
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
 
-        <span class="local-variable">this</span>.MIN_ZOOM = <span class="float">0.25</span>
+        <span class="local-variable">this</span>.MIN_ZOOM = <span class="float">0.125</span>
         <span class="local-variable">this</span>.TIME_SCALE = <span class="integer">86400000</span> <span class="comment">// millis to days</span>
 
         <span class="local-variable">this</span>.attributes = {
@@ -316,12 +367,42 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="float">0.5</span>}),
                 <span class="key">scroll</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
 
-                <span class="key">monthwidth</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
-                <span class="key">daywidth</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
-                <span class="key">hourwidth</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
                 <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
+                <span class="key">segments</span>: Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()}),
+                <span class="comment">// segmentwidths: Config({type: vec3, value: vec3()}),</span>
 
-                <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event})
+                <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event}),
+                <span class="key">eventadded</span>: Config({<span class="key">type</span>:Event})
+        }
+
+        <span class="local-variable">this</span>.<span class="function">onzoom</span> = <span class="keyword">function</span> () {
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._zoom &gt; <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE) {
+                        <span class="local-variable">this</span>.zoom = <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE
+                }
+        }
+
+        <span class="comment">// TODO(aki): test</span>
+        <span class="local-variable">this</span>.<span class="function">oneventadded</span> = <span class="keyword">function</span> (event) {
+                <span class="keyword">var</span> starttime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()
+                <span class="keyword">var</span> endtime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()
+                <span class="keyword">var</span> eventtime = <span class="keyword">new</span> Date(event.data.date)
+                <span class="keyword">if</span> (eventtime &gt; endtime) endtime = eventtime
+                <span class="keyword">if</span> (eventtime &lt; starttime) starttime = eventtime
+                <span class="local-variable">this</span>.start = <span class="keyword">new</span> Date(starttime).toString()
+                <span class="local-variable">this</span>.end = <span class="keyword">new</span> Date(endtime).toString()
+        }
+
+        <span class="local-variable">this</span>.<span class="function">ondata</span> = <span class="keyword">function</span> () {
+                <span class="keyword">var</span> eventtime
+                <span class="keyword">var</span> starttime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()
+                <span class="keyword">var</span> endtime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.data.length; i++) {
+                        eventtime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.data[i].date)
+                        <span class="keyword">if</span> (eventtime &gt; endtime) endtime = eventtime
+                        <span class="keyword">if</span> (eventtime &lt; starttime) starttime = eventtime
+                }
+                <span class="local-variable">this</span>.start = <span class="keyword">new</span> Date(starttime).toString()
+                <span class="local-variable">this</span>.end = <span class="keyword">new</span> Date(endtime).toString()
         }
 
         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
@@ -330,46 +411,66 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.hscrollbar.updateScrollbars()
 
-                <span class="local-variable">this</span>.monthwidth = <span class="local-variable">this</span>.layout.width * <span class="integer">30</span> / <span class="local-variable">this</span>.zoom
-                <span class="local-variable">this</span>.daywidth = <span class="local-variable">this</span>.layout.width / <span class="local-variable">this</span>.zoom
-                <span class="local-variable">this</span>.hourwidth = <span class="local-variable">this</span>.layout.width / <span class="integer">24</span> / <span class="local-variable">this</span>.zoom
+                <span class="keyword">var</span> daywidth = <span class="local-variable">this</span>.layout.width / <span class="local-variable">this</span>.zoom
 
-                <span class="local-variable">this</span>.hoursegs = <span class="integer">1</span>
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">9</span>) {
-                        <span class="local-variable">this</span>.hoursegs = <span class="integer">1</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">22</span>) {
+                <span class="comment">//TODO(aki): Don't use magic numbers!</span>
+
+                <span class="comment">// segment codes</span>
+                <span class="comment">// 1 - year</span>
+                <span class="comment">// 2 - month</span>
+                <span class="comment">// 3 - week</span>
+                <span class="comment">// 4 - day</span>
+                <span class="comment">// 5 - hour</span>
+                <span class="comment">// 6 - munutes</span>
+                <span class="comment">// 7 - seconds</span>
+                <span class="keyword">if</span> (daywidth &lt; <span class="integer">12</span>) {
+                        <span class="local-variable">this</span>.segments = vec3(<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>) <span class="comment">// y m w</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">32</span>) {
+                        <span class="local-variable">this</span>.segments = vec3(<span class="integer">2</span>, <span class="integer">3</span>, <span class="integer">4</span>) <span class="comment">// m w d</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">440</span>) {
+                        <span class="local-variable">this</span>.segments = vec3(<span class="integer">2</span>, <span class="integer">4</span>, <span class="integer">5</span>) <span class="comment">// m d h</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">1040</span>) {
+                        <span class="local-variable">this</span>.segments = vec3(<span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>) <span class="comment">// d h h</span>
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>.segments = vec3(<span class="integer">4</span>, <span class="integer">5</span>, <span class="integer">6</span>) <span class="comment">// d h m</span>
+                }
+
+                <span class="keyword">if</span> (daywidth &lt; <span class="integer">250</span>) {
                         <span class="local-variable">this</span>.hoursegs = <span class="integer">4</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">44</span>) {
+                } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">440</span>) {
                         <span class="local-variable">this</span>.hoursegs = <span class="integer">8</span>
-                } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="local-variable">this</span>.hourwidth &lt; <span class="integer">88</span>) {
+                } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">1040</span>) {
+                        <span class="local-variable">this</span>.hoursegs = <span class="integer">8</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">2100</span>) {
                         <span class="local-variable">this</span>.hoursegs = <span class="integer">12</span>
                 } <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.hoursegs = <span class="integer">24</span>
                 }
+
                 <span class="comment">// TODO(aki): better data-binding that doesent trigger render</span>
                 <span class="comment">// This should be handled by data binding</span>
-                <span class="local-variable">this</span>.background.monthwidth = <span class="local-variable">this</span>._monthwidth
-                <span class="local-variable">this</span>.background.daywidth = <span class="local-variable">this</span>._daywidth
-                <span class="local-variable">this</span>.background.hourwidth = <span class="local-variable">this</span>._hourwidth
+                <span class="local-variable">this</span>.background.segments = <span class="local-variable">this</span>._segments
+                <span class="local-variable">this</span>.labels.segments = <span class="local-variable">this</span>._segments
+
                 <span class="local-variable">this</span>.background.hoursegs = <span class="local-variable">this</span>._hoursegs
-                <span class="local-variable">this</span>.labels.monthwidth = <span class="local-variable">this</span>._monthwidth
-                <span class="local-variable">this</span>.labels.daywidth = <span class="local-variable">this</span>._daywidth
-                <span class="local-variable">this</span>.labels.hourwidth = <span class="local-variable">this</span>._hourwidth
                 <span class="local-variable">this</span>.labels.hoursegs = <span class="local-variable">this</span>._hoursegs
 
         }
 
         <span class="local-variable">this</span>.<span class="function">getStart</span> = <span class="keyword">function</span> () {
-                <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()<span class="comment">// / this.TIME_SCALE</span>
+                <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()
         }
+
         <span class="local-variable">this</span>.<span class="function">getEnd</span> = <span class="keyword">function</span> () {
-                <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()<span class="comment">// / this.TIME_SCALE</span>
+                <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()
         }
+
         <span class="local-variable">this</span>.<span class="function">getRange</span> = <span class="keyword">function</span> () {
                 <span class="keyword">return</span> <span class="local-variable">this</span>.getEnd() - <span class="local-variable">this</span>.getStart()
         }
+
         <span class="local-variable">this</span>.<span class="function">getOffset</span> = <span class="keyword">function</span> () {
-                <span class="keyword">return</span> <span class="local-variable">this</span>.zoom * <span class="local-variable">this</span>.scroll
+                <span class="keyword">return</span> <span class="local-variable">this</span>.zoom * <span class="local-variable">this</span>.scroll * <span class="local-variable">this</span>.TIME_SCALE
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermultimove</span> = <span class="keyword">function</span>(event) {
@@ -398,10 +499,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + shiftx - movement[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
                 }
         }
+
         <span class="local-variable">this</span>.<span class="function">pointerwheel</span> = <span class="keyword">function</span>(event) {
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
                 <span class="keyword">if</span> (event.value[<span class="integer">0</span>] &amp;&amp; abs(event.value[<span class="integer">0</span>]) &gt; abs(event.value[<span class="integer">1</span>])){
-                        <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + event.value[<span class="integer">0</span>]*<span class="float">10.0</span> / <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
+                        <span class="local-variable">this</span>.scroll = clamp(<span class="local-variable">this</span>._scroll + event.value[<span class="integer">0</span>] / <span class="local-variable">this</span>.layout.width, <span class="integer">0</span>, <span class="local-variable">this</span>.hscrollbar._total - <span class="local-variable">this</span>.hscrollbar._page)
                 }
                 <span class="keyword">if</span> (event.value[<span class="integer">1</span>] &amp;&amp; abs(event.value[<span class="integer">1</span>]) &gt; abs(event.value[<span class="integer">0</span>])){
                         <span class="keyword">var</span> lastzoom = <span class="local-variable">this</span>._zoom

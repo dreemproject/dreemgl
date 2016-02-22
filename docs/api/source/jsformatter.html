@@ -1024,6 +1024,30 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n870" name="n870">870</a></strong>
 <a href="#n871" name="n871">871</a>
 <a href="#n872" name="n872">872</a>
+<a href="#n873" name="n873">873</a>
+<a href="#n874" name="n874">874</a>
+<a href="#n875" name="n875">875</a>
+<a href="#n876" name="n876">876</a>
+<a href="#n877" name="n877">877</a>
+<a href="#n878" name="n878">878</a>
+<a href="#n879" name="n879">879</a>
+<strong><a href="#n880" name="n880">880</a></strong>
+<a href="#n881" name="n881">881</a>
+<a href="#n882" name="n882">882</a>
+<a href="#n883" name="n883">883</a>
+<a href="#n884" name="n884">884</a>
+<a href="#n885" name="n885">885</a>
+<a href="#n886" name="n886">886</a>
+<a href="#n887" name="n887">887</a>
+<a href="#n888" name="n888">888</a>
+<a href="#n889" name="n889">889</a>
+<strong><a href="#n890" name="n890">890</a></strong>
+<a href="#n891" name="n891">891</a>
+<a href="#n892" name="n892">892</a>
+<a href="#n893" name="n893">893</a>
+<a href="#n894" name="n894">894</a>
+<a href="#n895" name="n895">895</a>
+<a href="#n896" name="n896">896</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1042,65 +1066,74 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 glwalker.expand(ast)
         }
 
+        <span class="local-variable">this</span>.post_comma = <span class="integer">1</span>
+        <span class="local-variable">this</span>.post_colon = <span class="integer">1</span>
+        <span class="local-variable">this</span>.around_operator = <span class="integer">1</span>
+        <span class="local-variable">this</span>.actual_indent = <span class="integer">0</span>
+        <span class="local-variable">this</span>.actual_line = <span class="integer">0</span>
+
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.indent = <span class="integer">0</span>
         }
 
         <span class="comment">// helper functions</span>
-        <span class="local-variable">this</span>.<span class="function">dColon</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">::</span><span class="delimiter">'</span></span>, group, type, exports._DColon)
+        <span class="local-variable">this</span>.<span class="function">dColon</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">::</span><span class="delimiter">'</span></span>, padding, type, exports._DColon)
         }
 
-        <span class="local-variable">this</span>.<span class="function">dot</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>, group, type, exports._Dot)
+        <span class="local-variable">this</span>.<span class="function">dot</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">.</span><span class="delimiter">'</span></span>, padding, type, exports._Dot)
         }
 
-        <span class="local-variable">this</span>.<span class="function">colon</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>, group, type, exports._Colon)
+        <span class="local-variable">this</span>.<span class="function">colon</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">:</span><span class="delimiter">'</span></span>, padding, type, exports._Colon)
         }
 
-        <span class="local-variable">this</span>.<span class="function">semiColon</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>, group, type, exports._SemiColon)
+        <span class="local-variable">this</span>.<span class="function">semiColon</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>, padding, type, exports._SemiColon)
         }
 
-        <span class="local-variable">this</span>.<span class="function">comma</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>, group, type, exports._Comma)
+        <span class="local-variable">this</span>.<span class="function">comma</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">,</span><span class="delimiter">'</span></span>, padding, type, exports._Comma)
         }
 
-        <span class="local-variable">this</span>.<span class="function">parenL</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span>, group, type, exports._Paren, exports._ParenL)
+        <span class="local-variable">this</span>.<span class="function">parenL</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">(</span><span class="delimiter">'</span></span>, padding, type, exports._Paren, exports._ParenL)
         }
 
-        <span class="local-variable">this</span>.<span class="function">parenR</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>, group, type, exports._Paren, exports._ParenL)
+        <span class="local-variable">this</span>.<span class="function">parenR</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">)</span><span class="delimiter">'</span></span>, padding, type, exports._Paren, exports._ParenL)
         }
 
-        <span class="local-variable">this</span>.<span class="function">braceL</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span>, group, type, exports._Brace, exports._BraceL)
+        <span class="local-variable">this</span>.<span class="function">braceL</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">{</span><span class="delimiter">'</span></span>, padding, type, exports._Brace, exports._BraceL)
         }
 
-        <span class="local-variable">this</span>.<span class="function">braceR</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>, group, type, exports._Brace, exports._BraceR)
+        <span class="local-variable">this</span>.<span class="function">braceR</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">}</span><span class="delimiter">'</span></span>, padding, type, exports._Brace, exports._BraceR)
         }
 
-        <span class="local-variable">this</span>.<span class="function">bracketL</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">[</span><span class="delimiter">'</span></span>, group, type, exports._Bracket, exports._BracketL)
+        <span class="local-variable">this</span>.<span class="function">bracketL</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">[</span><span class="delimiter">'</span></span>, padding, type, exports._Bracket, exports._BracketL)
         }
 
-        <span class="local-variable">this</span>.<span class="function">bracketR</span> = <span class="keyword">function</span>(type, group){
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">]</span><span class="delimiter">'</span></span>, group, type, exports._Bracket, exports._BracketR)
+        <span class="local-variable">this</span>.<span class="function">bracketR</span> = <span class="keyword">function</span>(type, padding){
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">]</span><span class="delimiter">'</span></span>, padding, type, exports._Bracket, exports._BracketR)
         }
 
-        <span class="local-variable">this</span>.<span class="function">operator</span> = <span class="keyword">function</span>(op, type, group){
-                <span class="local-variable">this</span>.add(op, group, type, exports._Operator, exports.ops[op])
+        <span class="local-variable">this</span>.<span class="function">operator</span> = <span class="keyword">function</span>(op, type, padding){
+                <span class="local-variable">this</span>.add(op, padding, type, exports._Operator, exports.ops[op])
         }
 
-        <span class="local-variable">this</span>.<span class="function">keyword</span> = <span class="keyword">function</span>(value, type, group){
-                <span class="local-variable">this</span>.add(value, group || <span class="integer">0</span>, type, exports._Keyword)
+        <span class="local-variable">this</span>.<span class="function">keyword</span> = <span class="keyword">function</span>(value, type, padding){
+                <span class="local-variable">this</span>.add(value, padding || <span class="integer">0</span>, type, exports._Keyword)
         }
 
         <span class="local-variable">this</span>.<span class="function">tab</span> = <span class="keyword">function</span>(indent){
-                <span class="local-variable">this</span>.add(Array(indent+<span class="integer">1</span>).join(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>) )
+                <span class="comment">// lets add a tab</span>
+                <span class="local-variable">this</span>.actual_indent = indent
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>, <span class="integer">4</span>*<span class="integer">256</span> + indent)
+                <span class="comment">//this.add(Array(indent+1).join('\t') )</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">space</span> = <span class="keyword">function</span>(){
@@ -1109,13 +1142,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
 
         <span class="local-variable">this</span>.<span class="function">newline</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.line++
+                <span class="local-variable">this</span>.actual_line++
                 <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">comment</span> = <span class="keyword">function</span>(text, pre){
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent), pre = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
-                <span class="local-variable">this</span>.add((pre||<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">//</span><span class="delimiter">'</span></span> + text, <span class="local-variable">this</span>.group++, exports._Comment)
+                <span class="local-variable">this</span>.add((pre||<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>) + <span class="string"><span class="delimiter">'</span><span class="content">//</span><span class="delimiter">'</span></span> + text, <span class="integer">0</span>, exports._Comment)
         }
 
         <span class="local-variable">this</span>.<span class="function">comments</span> = <span class="keyword">function</span>(comments, prefix){
@@ -1157,7 +1190,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Empty</span> = <span class="keyword">function</span>(n){}
 
         <span class="local-variable">this</span>.<span class="function">Id</span> = <span class="keyword">function</span>(n){
-                <span class="local-variable">this</span>.add(n.name, <span class="local-variable">this</span>.group++, exports._Id)
+                <span class="local-variable">this</span>.add(n.name, <span class="integer">0</span>, exports._Id)
         }
 
         <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(n){<span class="comment">//: { value:0, raw:0, kind:0, multi:0 },</span>
@@ -1168,36 +1201,36 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">else</span> str = <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span> + n.value + <span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>
                         }
                         <span class="keyword">else</span> str = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span> + n.value
-                        <span class="local-variable">this</span>.add(str, <span class="local-variable">this</span>.group++, exports._Value, exports._Number)
+                        <span class="local-variable">this</span>.add(str, <span class="integer">0</span>, exports._Value, exports._Number)
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(n.kind == <span class="string"><span class="delimiter">'</span><span class="content">num</span><span class="delimiter">'</span></span>)
-                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="local-variable">this</span>.group++, exports._Value, exports._Number)
+                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="integer">0</span>, exports._Value, exports._Number)
                 <span class="keyword">else</span> <span class="keyword">if</span>(n.kind == <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>)
-                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>+n.value+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.group++, exports._Value, exports._String)
+                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>+n.value+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, <span class="integer">0</span>, exports._Value, exports._String)
                 <span class="keyword">else</span>
-                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="local-variable">this</span>.group++, exports._Value)
+                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="integer">0</span>, exports._Value)
         }
 
         <span class="local-variable">this</span>.<span class="function">This</span> = <span class="keyword">function</span>(n){<span class="comment">//: { },</span>
-                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">this</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.group++, exports._This, exports._Keyword)
+                <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">this</span><span class="delimiter">'</span></span>, <span class="integer">0</span>, exports._This, exports._Keyword)
         }
 
         <span class="local-variable">this</span>.<span class="function">Array</span> = <span class="keyword">function</span>(n){<span class="comment">//: { elems:2 },</span>
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.bracketL(exports._Array, mygroup)
+                <span class="local-variable">this</span>.bracketL(exports._Array, <span class="integer">0</span>)
 
                 <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.cm1)) has_newlines = <span class="predefined-constant">true</span>
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
-                <span class="local-variable">this</span>.indent++
+                <span class="keyword">if</span>(has_newlines) <span class="local-variable">this</span>.indent++
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.elems.length; i++){
                         <span class="keyword">var</span> elem = n.elems[i]
-                        <span class="comment">//if(!has_newlines &amp;&amp; i) this.comma(exports._Array, this.group++)</span>
+                        <span class="keyword">if</span>(!elem) <span class="keyword">continue</span>
+                        <span class="comment">//if(!has_newlines &amp;&amp; i) this.comma(exports._Array, 0)</span>
                         <span class="local-variable">this</span>.comments(elem.cmu)
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                         <span class="local-variable">this</span>.expand(elem)
-                        <span class="keyword">if</span>(i &lt; n.elems.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Array, <span class="local-variable">this</span>.group++)
+                        <span class="keyword">if</span>(i &lt; n.elems.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Array, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
                         <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(elem.cmr))
                                 <span class="local-variable">this</span>.newline()
                 }
@@ -1206,13 +1239,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(old_indent)
 
                 <span class="local-variable">this</span>.indent = old_indent
-                <span class="local-variable">this</span>.bracketR(exports._Array, mygroup)
+                <span class="local-variable">this</span>.bracketR(exports._Array, <span class="integer">0</span>)
                 <span class="keyword">return</span> has_newlines
         }
 
         <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(n, indent){<span class="comment">//: { keys:3 },</span>
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.braceL(exports._Object, mygroup)
+                <span class="local-variable">this</span>.braceL(exports._Object, <span class="integer">0</span>)
                 <span class="comment">// allright so</span>
                 <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
 
@@ -1221,12 +1253,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="comment">//console.log(has_newlines, n)</span>
 
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
-                <span class="local-variable">this</span>.indent++
+                <span class="keyword">if</span>(has_newlines)
+                        <span class="local-variable">this</span>.indent++
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.keys.length; i ++){
                         <span class="keyword">var</span> prop = n.keys[i]
                         <span class="comment">//if(!has_newlines &amp;&amp; i){</span>
-                        <span class="comment">//        this.comma(exports._Object, this.group++)</span>
+                        <span class="comment">//        this.comma(exports._Object, 0)</span>
                         <span class="comment">//        this.space()</span>
                         <span class="comment">//}</span>
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
@@ -1239,8 +1272,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.expand(prop.value)
                         }
                         <span class="keyword">if</span>(i &lt; n.keys.length - <span class="integer">1</span>){
-                                <span class="local-variable">this</span>.comma(exports._Object, <span class="local-variable">this</span>.group++)
-                                <span class="local-variable">this</span>.space()
+                                <span class="local-variable">this</span>.comma(exports._Object, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
+                                <span class="comment">//this.space()</span>
                         }
                         <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(prop.cmr)){
                                 <span class="local-variable">this</span>.newline()
@@ -1252,17 +1285,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(indent?old_indent+<span class="integer">1</span>:old_indent)
                 }
                 <span class="local-variable">this</span>.indent = old_indent
-                <span class="local-variable">this</span>.braceR(exports._Object, mygroup)
+                <span class="local-variable">this</span>.braceR(exports._Object, <span class="integer">0</span>)
 
                 <span class="keyword">return</span> has_newlines
         }
 
         <span class="local-variable">this</span>.<span class="function">Index</span> = <span class="keyword">function</span>(n){<span class="comment">//: { object:1, index:1 },</span>
                 <span class="local-variable">this</span>.expand(n.object)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.bracketL(exports._Index, mygroup)
+                <span class="local-variable">this</span>.bracketL(exports._Index, <span class="integer">0</span>)
                 <span class="keyword">if</span>(n.index) <span class="local-variable">this</span>.expand(n.index)
-                <span class="local-variable">this</span>.bracketR(exports._Index, mygroup)
+                <span class="local-variable">this</span>.bracketR(exports._Index, <span class="integer">0</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">Key</span> = <span class="keyword">function</span>(n){<span class="comment">//: { object:1, key:1, exist:0 },</span>
@@ -1278,11 +1310,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">Block</span> = <span class="keyword">function</span>(n, skipbrace){<span class="comment">//:{ steps:2 },</span>
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
                 <span class="keyword">var</span> old_indent = <span class="integer">0</span>
 
                 <span class="keyword">if</span>(!skipbrace){
-                        <span class="local-variable">this</span>.braceL(exports._Block, mygroup)
+                        <span class="local-variable">this</span>.braceL(exports._Block, <span class="integer">0</span>)
                         old_indent = <span class="local-variable">this</span>.indent
                         <span class="local-variable">this</span>.indent++
                         <span class="comment">// lets output our immediate follow comments</span>
@@ -1312,7 +1343,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.newline()
                         }
                         <span class="local-variable">this</span>.tab(old_indent)
-                        <span class="local-variable">this</span>.braceR(exports._Block, mygroup)
+                        <span class="local-variable">this</span>.braceR(exports._Block, <span class="integer">0</span>)
                 }
         }
 
@@ -1339,12 +1370,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">If</span> = <span class="keyword">function</span>(n){<span class="comment">//: { test:1, then:1, else:1, postfix:0, compr:0 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">if</span><span class="delimiter">'</span></span>, exports._If)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.parenL(exports._If, mygroup)
+                <span class="comment">//this.space()</span>
+                <span class="local-variable">this</span>.parenL(exports._If, <span class="integer">0</span>)
+                <span class="local-variable">this</span>.indent++
                 <span class="local-variable">this</span>.expand(n.test)
-                <span class="local-variable">this</span>.parenR(exports._If, mygroup)
-                <span class="local-variable">this</span>.space()
+                <span class="local-variable">this</span>.indent--
+                <span class="local-variable">this</span>.parenR(exports._If, <span class="integer">0</span>)
+                <span class="comment">//this.space()</span>
                 <span class="comment">// if our n.then has wsu, lets do it</span>
                 <span class="keyword">if</span>(n.then.cmu){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.then.cmu)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent+<span class="integer">1</span>)
@@ -1357,7 +1389,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
 
                         <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">else</span><span class="delimiter">'</span></span>, exports._If)
-                        <span class="local-variable">this</span>.space()
+                        <span class="comment">//this.space()</span>
                         <span class="keyword">if</span>(n.<span class="keyword">else</span>.cmu){
                                 <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.<span class="keyword">else</span>.cmu)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent+<span class="integer">1</span>)
                         }
@@ -1368,13 +1400,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">Switch</span> = <span class="keyword">function</span>(n){<span class="comment">//: { on:1, cases:2 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">switch</span><span class="delimiter">'</span></span>, _Switch)
-                <span class="local-variable">this</span>.space()
-                <span class="keyword">var</span> mygroup = group++
-                <span class="local-variable">this</span>.parenL(_Switch, mygroup)
+                <span class="comment">//this.space()</span>
+                <span class="local-variable">this</span>.parenL(_Switch, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.on)
-                <span class="local-variable">this</span>.parenR(_Switch, mygroup)
-                <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.braceL(_Switch, mygroup)
+                <span class="local-variable">this</span>.parenR(_Switch, <span class="integer">0</span>)
+                <span class="comment">//this.space()</span>
+                <span class="local-variable">this</span>.braceL(_Switch, <span class="integer">0</span>)
 
                 <span class="comment">//var old_indent = indent</span>
                 <span class="comment">//indent++</span>
@@ -1390,7 +1421,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.comments(n.cm2)
                 <span class="comment">//indent = old_indent</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(indent)
-                <span class="local-variable">this</span>.braceR(exports._Switch, mygroup)
+                <span class="local-variable">this</span>.braceR(exports._Switch, <span class="integer">0</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">Case</span> = <span class="keyword">function</span>(n){<span class="comment">//: { test:1, then:2 },</span>
@@ -1398,7 +1429,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(!<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.newline()
                 <span class="local-variable">this</span>.tab(indent)
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">case</span><span class="delimiter">'</span></span>, exports._Case)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.expand(n.test)
                 <span class="local-variable">this</span>.colon(exports._Case)
                 <span class="local-variable">this</span>.comments(n.cmr)
@@ -1416,7 +1447,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">Throw</span> = <span class="keyword">function</span>(n){<span class="comment">//: { arg:1 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">throw</span><span class="delimiter">'</span></span>, exports._Throw)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.expand(n.arg)
         }
 
@@ -1424,10 +1455,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.Keyword(<span class="string"><span class="delimiter">'</span><span class="content">try</span><span class="delimiter">'</span></span>, exports._Try)
                 <span class="local-variable">this</span>.expand(n.<span class="keyword">try</span>)
                 <span class="local-variable">this</span>.Keyword(<span class="string"><span class="delimiter">'</span><span class="content">catch</span><span class="delimiter">'</span></span>, exports._Try)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.parenL(exports._Try, mygroup)
+                <span class="local-variable">this</span>.parenL(exports._Try, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.arg)
-                <span class="local-variable">this</span>.parenR(exports._Try, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._Try, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.<span class="keyword">catch</span>)
                 <span class="keyword">if</span>(n.<span class="keyword">finally</span>){
                         <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">finally</span><span class="delimiter">'</span></span>, exports._Try)
@@ -1437,10 +1467,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">While</span> = <span class="keyword">function</span>(n){<span class="comment">//: { test:1, loop:1 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">while</span><span class="delimiter">'</span></span>, exports._While)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.parenL(exports._While, mygroup)
+                <span class="local-variable">this</span>.parenL(exports._While, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.test)
-                <span class="local-variable">this</span>.parenR(exports._While, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._While, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.loop)
         }
 
@@ -1448,66 +1477,62 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">do</span><span class="delimiter">'</span></span>, exports._Do)
                 <span class="local-variable">this</span>.expand(n.loop)
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">while</span><span class="delimiter">'</span></span>, exports._Do)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.parenL(exports._Do, mygroup)
+                <span class="local-variable">this</span>.parenL(exports._Do, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.test)
-                <span class="local-variable">this</span>.parenR(exports._Do, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._Do, <span class="integer">0</span>)
         }
 
         <span class="local-variable">this</span>.<span class="function">For</span> = <span class="keyword">function</span>(n){<span class="comment">//: { init:1, test:1, update:1, loop:1, compr:0 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">for</span><span class="delimiter">'</span></span>, exports._For)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.parenL(exports._For, mygroup)
+                <span class="comment">//this.space()</span>
+                <span class="local-variable">this</span>.parenL(exports._For, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.init)
                 <span class="local-variable">this</span>.semiColon(exports._For)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.expand(n.test)
                 <span class="local-variable">this</span>.semiColon(exports._For)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.expand(n.update)
-                <span class="local-variable">this</span>.parenR(exports._For, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._For, <span class="integer">0</span>)
                 <span class="keyword">if</span>(n.loop.cmu){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.loop.cmu)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent + <span class="integer">1</span>)
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span>(n.loop.type != <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.space()
+                <span class="comment">//else if(n.loop.type != 'Block') this.space()</span>
                 <span class="local-variable">this</span>.expand(n.loop)
         }
 
         <span class="local-variable">this</span>.<span class="function">ForIn</span> = <span class="keyword">function</span>(n){<span class="comment">//: { left:1, right:1, loop:1, compr:0 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">for</span><span class="delimiter">'</span></span>, exports._For)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.parenL(exports._For, mygroup)
+                <span class="comment">//this.space()</span>
+                <span class="local-variable">this</span>.parenL(exports._For, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.left)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">in</span><span class="delimiter">'</span></span>, exports._For)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.expand(n.right)
-                <span class="local-variable">this</span>.parenR(exports._For, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._For, <span class="integer">0</span>)
                 <span class="keyword">if</span>(n.loop.cmu){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.loop.cmu)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent + <span class="integer">1</span>)
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span>(n.loop.type != <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.space()
+                <span class="comment">//else if(n.loop.type != 'Block') this.space()</span>
 
                 <span class="local-variable">this</span>.expand(n.loop)
         }
 
         <span class="local-variable">this</span>.<span class="function">ForOf</span> = <span class="keyword">function</span>(n){<span class="comment">//: { left:1, right:1, loop:1, compr:0 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">for</span><span class="delimiter">'</span></span>, exports._For)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.parenL(exports._For, mygroup)
+                <span class="comment">//this.space()</span>
+                <span class="local-variable">this</span>.parenL(exports._For, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.left)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">of</span><span class="delimiter">'</span></span>, exports._For)
-                <span class="local-variable">this</span>.space()
+                <span class="comment">//this.space()</span>
                 <span class="local-variable">this</span>.expand(n.right)
-                <span class="local-variable">this</span>.parenR(exports._For, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._For, <span class="integer">0</span>)
                 <span class="keyword">if</span>(n.loop.cmu){
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.loop.cmu)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent + <span class="integer">1</span>)
                 }
-                <span class="keyword">else</span> <span class="keyword">if</span>(n.loop.type != <span class="string"><span class="delimiter">'</span><span class="content">Block</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.space()
+                <span class="comment">//else if(n.loop.type != 'Block') this.space()</span>
 
                 <span class="local-variable">this</span>.expand(n.loop)
         }
@@ -1517,7 +1542,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(n.defs &amp;&amp; n.defs.length){
                         <span class="local-variable">this</span>.space()
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.defs.length; i++){
-                                <span class="keyword">if</span>(i) <span class="local-variable">this</span>.comma(exports._Var), <span class="local-variable">this</span>.space()
+                                <span class="keyword">if</span>(i) <span class="local-variable">this</span>.comma(exports._Var, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.after_comma)
                                 <span class="local-variable">this</span>.expand(n.defs[i])
                         }
                 }
@@ -1526,9 +1551,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Def</span> = <span class="keyword">function</span>(n){<span class="comment">//: { id:1, init:1, dim:1 },</span>
                 <span class="local-variable">this</span>.expand(n.id)
                 <span class="keyword">if</span>(n.init){
-                        <span class="local-variable">this</span>.space()
-                        <span class="local-variable">this</span>.operator(<span class="string"><span class="delimiter">'</span><span class="content">=</span><span class="delimiter">'</span></span>, exports._Def, <span class="local-variable">this</span>.group++)
-                        <span class="local-variable">this</span>.space()
+                        <span class="comment">//this.space()</span>
+                        <span class="local-variable">this</span>.operator(<span class="string"><span class="delimiter">'</span><span class="content">=</span><span class="delimiter">'</span></span>, exports._Def, <span class="integer">3</span>*<span class="integer">256</span>+<span class="integer">1</span>)
+                        <span class="comment">//this.space()</span>
                         <span class="local-variable">this</span>.expand(n.init)
                 }
         }
@@ -1545,25 +1570,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="comment">//else Keyword('function', _Function)</span>
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="local-variable">this</span>.parenL(exports._Function, mygroup)
+                <span class="local-variable">this</span>.parenL(exports._Function, <span class="integer">0</span>)
 
                 <span class="keyword">if</span>(n.params) <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.params.length; i++){
                         <span class="keyword">if</span>(i){
-                                <span class="local-variable">this</span>.comma(exports._Function), <span class="local-variable">this</span>.space()
+                                <span class="local-variable">this</span>.comma(exports._Function, <span class="integer">2</span>*<span class="integer">256</span>+<span class="integer">1</span>)<span class="comment">//, this.space()</span>
                         }
 
                         <span class="local-variable">this</span>.expand(n.params[i])
                 }
 
                 <span class="keyword">if</span>(n.rest){
-                        <span class="keyword">if</span>(i) <span class="local-variable">this</span>.comma(exports._Function), <span class="local-variable">this</span>.space()
+                        <span class="keyword">if</span>(i) <span class="local-variable">this</span>.comma(exports._Function)<span class="comment">//, this.space()</span>
                         <span class="local-variable">this</span>.expand(n.rest)
                 }
 
-                <span class="local-variable">this</span>.parenR(exports._Function, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._Function, <span class="integer">0</span>)
                 <span class="keyword">if</span>(n.arrow==<span class="string"><span class="delimiter">'</span><span class="content">=&gt;</span><span class="delimiter">'</span></span>) <span class="local-variable">this</span>.operator(<span class="string"><span class="delimiter">'</span><span class="content">=&gt;</span><span class="delimiter">'</span></span>, exports._Function)
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
+                <span class="comment">//else this.space()</span>
                 <span class="local-variable">this</span>.expand(n.body)
         }
 
@@ -1599,48 +1623,59 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Binary</span> = <span class="keyword">function</span>(n){<span class="comment">//: { op:0, prio:0, left:1, right:1 },</span>
                 <span class="keyword">var</span> paren_l = Parser.needsParens(n, n.left, <span class="predefined-constant">true</span>)
                 <span class="keyword">var</span> paren_r = Parser.needsParens(n, n.right)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenL(exports._Binary, mygroup)
+                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenL(exports._Binary, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.left)
-                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenR(exports._Binary, mygroup)
+                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenR(exports._Binary, <span class="integer">0</span>)
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
                 <span class="local-variable">this</span>.indent++
                 <span class="keyword">if</span>(n.cm1 &amp;&amp; <span class="local-variable">this</span>.comments(n.cm1,<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.operator(n.op, exports._Binary, <span class="local-variable">this</span>.group++)
+                <span class="comment">//else this.space()</span>
+                <span class="local-variable">this</span>.operator(n.op, exports._Binary, <span class="integer">3</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+
                 <span class="keyword">if</span>(n.cm2 &amp;&amp; <span class="local-variable">this</span>.comments(n.cm2,<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
-                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenL(exports._Binary, mygroup)
+                <span class="comment">//else this.space()</span>
+                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenL(exports._Binary, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.right)
-                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenR(exports._Binary, mygroup)
+                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenR(exports._Binary, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.indent = old_indent
         }
 
         <span class="local-variable">this</span>.<span class="function">Logic</span> = <span class="keyword">function</span>(n){<span class="comment">//: { op:0, prio:0, left:1, right:1 },</span>
                 <span class="keyword">var</span> paren_l = Parser.needsParens(n, n.left, <span class="predefined-constant">true</span>)
                 <span class="keyword">var</span> paren_r = Parser.needsParens(n, n.right)
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
-                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenL(exports._Logic, mygroup)
+                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenL(exports._Logic, <span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.left)
-                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenR(exports._Logic, mygroup)
+                <span class="keyword">if</span>(paren_l) <span class="local-variable">this</span>.parenR(exports._Logic, <span class="integer">0</span>)
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
                 <span class="local-variable">this</span>.indent++
                 <span class="keyword">if</span>(n.cm1 &amp;&amp; <span class="local-variable">this</span>.comments(n.cm1,<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.operator(n.op, exports._Logic, <span class="local-variable">this</span>.group++)
+                <span class="comment">//else this.space()</span>
+                <span class="keyword">if</span>(n.op.length &gt; <span class="integer">1</span>){
+                        <span class="keyword">if</span>(n.op.length == <span class="integer">2</span>){
+                                <span class="local-variable">this</span>.operator(n.op[<span class="integer">0</span>], exports._Logic, <span class="integer">1</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+                                <span class="local-variable">this</span>.operator(n.op[<span class="integer">1</span>], exports._Logic, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.operator(n.op, exports._Logic,<span class="integer">0</span>)
+                        }
+                }
+                <span class="keyword">else</span>{
+                        <span class="local-variable">this</span>.operator(n.op, exports._Logic, <span class="integer">3</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+                }
+
                 <span class="keyword">if</span>(n.cm2 &amp;&amp; <span class="local-variable">this</span>.comments(n.cm2,<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
-                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenL(exports._Logic,mygroup)
+                <span class="comment">//else this.space()</span>
+                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenL(exports._Logic,<span class="integer">0</span>)
                 <span class="local-variable">this</span>.expand(n.right)
-                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenR(exports._Logic,mygroup)
+                <span class="keyword">if</span>(paren_r) <span class="local-variable">this</span>.parenR(exports._Logic,<span class="integer">0</span>)
                 <span class="local-variable">this</span>.indent = old_indent
         }
 
@@ -1651,12 +1686,26 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(n.cm1 &amp;&amp; <span class="local-variable">this</span>.comments(n.cm1,<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
-                <span class="local-variable">this</span>.operator(n.op, exports._Assign, <span class="local-variable">this</span>.group++)
+                <span class="comment">//else this.space()</span>
+                <span class="comment">//this.operator(n.op, exports._Assign, 0)</span>
+                <span class="keyword">if</span>(n.op.length &gt; <span class="integer">1</span>){
+                        <span class="keyword">if</span>(n.op.length == <span class="integer">2</span>){
+                                <span class="local-variable">this</span>.operator(n.op[<span class="integer">0</span>], exports._Assign, <span class="integer">1</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+                                <span class="local-variable">this</span>.operator(n.op[<span class="integer">1</span>], exports._Assign, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+                        }
+                        <span class="keyword">else</span>{
+                                <span class="local-variable">this</span>.operator(n.op, exports._Assign,<span class="integer">0</span>)
+                        }
+                }
+                <span class="keyword">else</span>{
+                        <span class="local-variable">this</span>.operator(n.op, exports._Assign, <span class="integer">3</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.around_operator)
+                }
+
+
                 <span class="keyword">if</span>(n.cm2 &amp;&amp; <span class="local-variable">this</span>.comments(n.cm2,<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>)){
                         <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
                 }
-                <span class="keyword">else</span> <span class="local-variable">this</span>.space()
+                <span class="comment">//else this.space()</span>
                 <span class="keyword">if</span>(n.right.type === <span class="string"><span class="delimiter">'</span><span class="content">Function</span><span class="delimiter">'</span></span> || n.right.type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span>){
                         <span class="local-variable">this</span>.indent--
                 }
@@ -1689,62 +1738,61 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.expand(n.fn)
                 <span class="local-variable">this</span>.parenL(exports._New)
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.args.length; i++){
-                        <span class="keyword">if</span>(i) <span class="local-variable">this</span>.comma(exports._New), <span class="local-variable">this</span>.space()
+                        <span class="keyword">if</span>(i) <span class="local-variable">this</span>.comma(exports._New)<span class="comment">//, this.space()</span>
                         <span class="local-variable">this</span>.expand(n.args[i])
                 }
                 <span class="local-variable">this</span>.parenR(exports._New)
         }
 
         <span class="local-variable">this</span>.<span class="function">Call</span> = <span class="keyword">function</span>(n){<span class="comment">//: { fn:1, args:2 },</span>
-                <span class="keyword">var</span> mygroup = <span class="local-variable">this</span>.group++
                 <span class="keyword">var</span> fn_t = n.fn.type
                 <span class="keyword">if</span>(fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Function</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">List</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Logic</span><span class="delimiter">'</span></span> || fn_t == <span class="string"><span class="delimiter">'</span><span class="content">Condition</span><span class="delimiter">'</span></span>) {
-                        <span class="local-variable">this</span>.parenL(exports._Call, mygroup)
+                        <span class="local-variable">this</span>.parenL(exports._Call, <span class="integer">0</span>)
                         <span class="local-variable">this</span>.expand(n.fn)
-                        <span class="local-variable">this</span>.parenR(exports._Call, mygroup)
+                        <span class="local-variable">this</span>.parenR(exports._Call, <span class="integer">0</span>)
                 }
                 <span class="keyword">else</span> <span class="local-variable">this</span>.expand(n.fn)
 
-                mygroup = <span class="local-variable">this</span>.group++
-
-                <span class="local-variable">this</span>.parenL(exports._Call, mygroup)
+                <span class="local-variable">this</span>.parenL(exports._Call, <span class="integer">0</span>)
 
                 <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.cm1)) has_newlines = <span class="predefined-constant">true</span>
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
+                <span class="comment">//if(has_newlines)</span>
                 <span class="local-variable">this</span>.indent++
 
                 <span class="comment">// cleanup hack</span>
 
                 <span class="comment">// lets check if it has a newline</span>
-                <span class="keyword">var</span> first_is_obj
-                <span class="keyword">if</span>(n.args.length&gt;<span class="integer">0</span> &amp;&amp; (n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span> || n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Array</span><span class="delimiter">'</span></span>)){
+                <span class="comment">//var first_is_obj</span>
+                <span class="keyword">if</span>(!has_newlines &amp;&amp; n.args.length&gt;<span class="integer">0</span> &amp;&amp; (n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Object</span><span class="delimiter">'</span></span> || n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Array</span><span class="delimiter">'</span></span> || n.args[<span class="integer">0</span>].type === <span class="string"><span class="delimiter">'</span><span class="content">Function</span><span class="delimiter">'</span></span>)){
                         first_is_obj = <span class="predefined-constant">true</span>
                         <span class="keyword">if</span>(n.args.length === <span class="integer">1</span>) <span class="local-variable">this</span>.indent--
                 }
 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; n.args.length; i++){
                         <span class="keyword">var</span> arg = n.args[i]
-
+                        <span class="keyword">if</span>(!arg)<span class="keyword">continue</span>
                         <span class="local-variable">this</span>.comments(arg.cmu)
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent)
+
                         <span class="keyword">var</span> has_nl = <span class="local-variable">this</span>.expand(arg)
 
                         <span class="comment">// check wether to switch to has_newlines</span>
-                        <span class="keyword">if</span>(i === <span class="integer">0</span> &amp;&amp; first_is_obj &amp;&amp; !has_newlines){
+                        <span class="keyword">if</span>(i === <span class="integer">0</span> &amp;&amp; !has_newlines){
                                 has_newlines = has_nl
                         }
 
-                        <span class="keyword">if</span>(i &lt; n.args.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Call, <span class="local-variable">this</span>.group++)
+                        <span class="keyword">if</span>(i &lt; n.args.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Call, <span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
                         <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(arg.cmr))
                                 <span class="local-variable">this</span>.newline()
+                        <span class="comment">//else this.space()</span>
                 }
                 <span class="keyword">if</span>(has_newlines &amp;&amp; <span class="local-variable">this</span>.comments(n.cm2)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent - <span class="integer">1</span>)
-
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(old_indent)
 
                 <span class="local-variable">this</span>.indent = old_indent
-                <span class="local-variable">this</span>.parenR(exports._Call, mygroup)
+                <span class="local-variable">this</span>.parenR(exports._Call, <span class="integer">0</span>)
 
                 <span class="keyword">return</span> has_newlines
         }

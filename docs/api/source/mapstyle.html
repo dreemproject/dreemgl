@@ -450,6 +450,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n296" name="n296">296</a>
 <a href="#n297" name="n297">297</a>
 <a href="#n298" name="n298">298</a>
+<a href="#n299" name="n299">299</a>
+<strong><a href="#n300" name="n300">300</a></strong>
+<a href="#n301" name="n301">301</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -493,8 +496,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">offset</span>:-<span class="integer">7</span>,
                         <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#bad6ab</span><span class="delimiter">&quot;</span></span>,<span class="integer">1</span>),
                         <span class="key">color2</span>: vec4(<span class="float">0.003921568859368563</span>,<span class="float">0.19607843458652496</span>,<span class="float">0.125490203499794</span>,<span class="integer">1</span>),
-                },
-                <span class="key">aerodrome</span>:{
                 },
                 <span class="key">residential</span>:{
                         <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#cdc7bf</span><span class="delimiter">&quot;</span></span>),
@@ -560,7 +561,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">runway</span>:{
                         <span class="key">offset</span>:-<span class="integer">20</span>,
 
-                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#c0c0c0</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">color2</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>)
+                },
+                <span class="key">aerodrome</span>:{
+                        <span class="key">offset</span>:-<span class="integer">20</span>,
+
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#c0c0c0</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">color2</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#d0d0d0</span><span class="delimiter">&quot;</span></span>)
                 },
                 <span class="key">forest</span>:{
@@ -578,7 +585,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">color2</span>: vec4(<span class="float">0.8274509906768799</span>,<span class="float">0.8274509906768799</span>,<span class="float">0.8274509906768799</span>,<span class="integer">1</span>),
                 },
                 <span class="key">plant</span>:{
-                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#208020</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#90f050</span><span class="delimiter">&quot;</span></span>),
                         <span class="key">color2</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#208020</span><span class="delimiter">&quot;</span></span>)
                 },
                 <span class="key">pitch</span>:{
@@ -612,15 +619,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">stadium</span>:{
                 },
                 <span class="key">railway</span>:{
-                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5e5e5e</span><span class="delimiter">&quot;</span></span>)
+                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5e5e5e</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5e5e5e</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">sortkey</span>:<span class="integer">3</span>
                 },
                 <span class="key">rail</span>:{
-                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5e5e5e</span><span class="delimiter">&quot;</span></span>)
+                        <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#5e5e5e</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">sortkey</span>:<span class="integer">3</span>
                 },
                 <span class="key">garden</span>:{
-                        <span class="key">offset</span>:-<span class="integer">14</span>,
-                        <span class="key">color1</span>: vec4(<span class="integer">0</span>,<span class="float">0.501960813999176</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="float">0.250980406999588</span>,<span class="float">0.8156862854957581</span>,<span class="float">0.501960813999176</span>,<span class="integer">1</span>),
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#90f050</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="key">farmyard</span>:{
                         <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#808010</span><span class="delimiter">&quot;</span></span>),
@@ -631,7 +639,6 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">college</span>:{
                 },
                 <span class="key">pedestrian</span>:{
-                        <span class="key">offset</span>:-<span class="integer">9</span>,
                         <span class="key">color1</span>: vec4(<span class="float">0.8274509906768799</span>,<span class="float">0.8274509906768799</span>,<span class="float">0.8274509906768799</span>,<span class="integer">1</span>),
                         <span class="key">color2</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">0</span>,<span class="integer">1</span>),
                 },
@@ -642,18 +649,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="key">petting_zoo</span>:{
                 },
                 <span class="key">wood</span>:{
-                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#208020</span><span class="delimiter">&quot;</span></span>),
-                        <span class="key">color2</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#106010</span><span class="delimiter">&quot;</span></span>)
+                        <span class="key">color1</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#90f050</span><span class="delimiter">&quot;</span></span>),
+
                 },
                 <span class="key">common</span>:{
-                        <span class="key">offset</span>:<span class="integer">24</span>,
                         <span class="key">color1</span>: vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="float">0.501960813999176</span>,<span class="float">0.501960813999176</span>,<span class="float">0.501960813999176</span>,<span class="integer">1</span>),
                 },
                 <span class="key">village_green</span>:{
-                        <span class="key">offset</span>:-<span class="integer">15</span>,
-                        <span class="key">color1</span>: vec4(<span class="integer">0</span>,<span class="float">0.501960813999176</span>,<span class="integer">0</span>,<span class="integer">1</span>),
-                        <span class="key">color2</span>: vec4(<span class="integer">0</span>,<span class="float">0.501960813999176</span>,<span class="integer">0</span>,<span class="integer">1</span>),
+                        <span class="key">color1</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#90f050</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="key">prison</span>:{
                 },
@@ -664,11 +667,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f8faca</span><span class="delimiter">&quot;</span></span>),
                 },
                 <span class="key">Ferry</span>:{
-                        <span class="key">roadcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>)
+                        <span class="key">roadcolor</span>:vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">blue</span><span class="delimiter">&quot;</span></span>),
+                        <span class="key">sortkey</span>: -<span class="integer">1</span>
                 },
                 <span class="key">highway</span>:{
                         <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">#f4c0ab</span><span class="delimiter">&quot;</span></span>),
-                },
+
+                        <span class="key">sortkey</span>:<span class="integer">2</span>,
+                        },
                 <span class="key">minor_road</span>:{
                         <span class="key">roadcolor</span>: vec4(<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>),
                 },

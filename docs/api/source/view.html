@@ -1912,6 +1912,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1758" name="n1758">1758</a>
 <a href="#n1759" name="n1759">1759</a>
 <strong><a href="#n1760" name="n1760">1760</a></strong>
+<a href="#n1761" name="n1761">1761</a>
+<a href="#n1762" name="n1762">1762</a>
+<a href="#n1763" name="n1763">1763</a>
+<a href="#n1764" name="n1764">1764</a>
+<a href="#n1765" name="n1765">1765</a>
+<a href="#n1766" name="n1766">1766</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -2943,12 +2949,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="comment">//console.log(this.matrix_dirty)</span>
                                 <span class="keyword">var</span> ml = <span class="local-variable">this</span>.matrix_layout
                                 <span class="keyword">if</span>(!ml || ml.left !== layout.left || ml.top !== layout.top ||
-                                        ml.width !== layout.width || ml.height !== layout.height){
+                                        ml.width !== layout.width || ml.height !== layout.height
+                                    || ml.scale !== <span class="local-variable">this</span>._scale || ml.rotate !== <span class="local-variable">this</span>._rotate
+                                ){
                                         <span class="local-variable">this</span>.matrix_layout = {
                                                 <span class="key">left</span>:layout.left,
                                                 <span class="key">top</span>:layout.top,
                                                 <span class="key">width</span>:layout.width,
-                                                <span class="key">height</span>:layout.height
+                                                <span class="key">height</span>:layout.height,
+                                                <span class="key">scale</span>: <span class="local-variable">this</span>._scale,
+                                                <span class="key">rotate</span>:<span class="local-variable">this</span>._rotate
                                         }
 
                                         matrix_changed = <span class="predefined-constant">true</span>
@@ -3095,6 +3105,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.alignself =
         <span class="local-variable">this</span>.position =
         <span class="local-variable">this</span>.relayout
+
+        <span class="local-variable">this</span>.rotate = <span class="local-variable">this</span>.rematrix
 
         <span class="comment">// internal, called by the render engine</span>
         <span class="local-variable">this</span>.<span class="function">doLayout</span> = <span class="keyword">function</span>(){

@@ -5,7 +5,7 @@
 
 define.class("$ui/view", function(require,
 								  $ui$, view, label, textbox, icon, checkbox, treeview, button, statebutton, tabbar,
-								  $widgets$, palette, propviewer,
+								  $widgets$, palette, propviewer, jseditor,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
@@ -1128,7 +1128,7 @@ define.class("$ui/view", function(require,
 							this.parent.find("components").pos = vec3(0,0,0);
 							this.parent.find("structure").pos = vec3(0,0,0);
 							this.parent.find("inspector").pos = vec3(0,0,0);
-							
+
 							if (this.__grabpos) {
 								this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)
 							}
@@ -1741,8 +1741,13 @@ define.class("$ui/view", function(require,
 			lines:vec4(0,0,0,0),
 			linedotspacing:10.0,
 			guidecolor:vec4("#FFDD00"),
+			edges:vec4(0,0,0,0),
 			guides:false,
 			centertrigger:100.0
+		};
+
+		this.calculateEdges = function() {
+
 		};
 
 		this.bgcolorfn = function(p) {
@@ -1823,7 +1828,7 @@ define.class("$ui/view", function(require,
 
 			}
 			return bordercolor;
-		}
+		};
 
 		this.ontarget = function(ev,v,o) {
 			if (!v) {
@@ -2045,4 +2050,41 @@ define.class("$ui/view", function(require,
 		}
 	});
 
+	define.class(this, 'editor', view, function(){
+		this.attributes = {
+			title: Config({type:String, value:""}),
+			fontsize: Config({type:float, value:12, meta:"fontsize"})
+		};
+
+		this.padding = 0;
+		this.margin = 4;
+		this.borderradius = vec4(10,10,1,1);
+		this.bgcolor = NaN;
+		this.flex = 1;
+		this.flexdirection ="column";
+		this.alignitems = "stretch";
+
+		this.render = function(){
+			return [
+				tabbar({tabs:[
+					{
+						alignself:'flex-start',
+						y:1,
+						class:"folder",
+						label:this.title,
+						fontsize:this.fontsize,
+						bgcolor:"#4e4e4e",
+						label:this.title,
+						margin:0,
+						padding:vec4(3,3,0,0),
+						fgcolor:"white",
+						normal:{ fgcolor:"white" },
+						hover:{ fgcolor:"white" },
+						selected:{ fgcolor:"white" }
+					}
+				]}),
+				this.constructor_children
+			];
+		}
+	});
 });

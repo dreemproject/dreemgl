@@ -18,6 +18,10 @@
  * it's active behaviors
  */
 /**
+ * @attribute {Enum} [dropmode="absolute"]
+ * Should views be dropped as absolute or relative children
+ */
+/**
  * @attribute {float32} [reticlesize="9"]
  * The size of the reticle hot corners inside of a view
  */
@@ -34,6 +38,18 @@
 /**
  * @attribute {boolean} [rulers="true"]
  * Show or hide the rules when selecting and dragging
+ */
+/**
+ * @attribute {boolean} [handles="true"]
+ * Show or hide the rotatation handle
+ */
+/**
+ * @attribute {boolean} [guides="true"]
+ * Show guide bars
+ */
+/**
+ * @attribute {boolean} [snap="true"]
+ * Snap to guides
  */
 /**
  * @attribute {boolean} [movelines="true"]

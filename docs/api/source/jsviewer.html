@@ -335,16 +335,43 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n181" name="n181">181</a>
 <a href="#n182" name="n182">182</a>
 <a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/textbox</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(require){
 
-        <span class="keyword">var</span> JSFormatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)        
+        <span class="keyword">var</span> JSFormatter = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/jsformatter</span><span class="delimiter">'</span></span>)
         <span class="keyword">var</span> Parser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
 
         <span class="local-variable">this</span>.attributes = {
@@ -352,20 +379,41 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">source</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">sourceset</span>: <span class="predefined-constant">null</span>,
                 <span class="comment">// wrap the text</span>
-                <span class="key">wrap</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>})
+                <span class="key">wrap</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
+                <span class="key">init_anim</span>: Config({<span class="key">value</span>:<span class="float">1.0</span>, <span class="key">duration</span>:<span class="integer">1</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">outexpo</span><span class="delimiter">'</span></span>}),
+                <span class="key">line_anim</span>: Config({<span class="key">value</span>:<span class="float">1.0</span>, <span class="key">duration</span>:<span class="float">0.25</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">outexpo</span><span class="delimiter">'</span></span>}),
         }
+        <span class="local-variable">this</span>.tab_size = <span class="integer">1</span>
+        <span class="local-variable">this</span>.line_start = <span class="integer">0</span>
+        <span class="local-variable">this</span>.line_end = <span class="integer">0</span>
+        <span class="comment">// lets go and move this fucker</span>
+        <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos, tag) {
+                <span class="keyword">var</span> p = pos
+                <span class="keyword">var</span> pad = tag.y * -<span class="integer">1</span>.
+                <span class="keyword">var</span> indent = floor(pad/<span class="integer">65536</span>.) * tab_size
+                <span class="keyword">var</span> line = floor(tag.w/<span class="integer">65536</span>.)
+                <span class="keyword">if</span>(line &gt;= line_start &amp;&amp; line &lt; line_end){
+                        p.x  +=  <span class="integer">2</span>*indent*((line-line_start))*line_anim
+                }
+                p.x += - min(indent, init_anim*<span class="integer">100</span>.)
+                <span class="keyword">return</span> p;
+        };
 
         <span class="local-variable">this</span>.bgcolor = vec4(<span class="integer">12</span>/<span class="integer">255</span>, <span class="integer">33</span>/<span class="integer">255</span>, <span class="integer">65</span>/<span class="integer">255</span>, <span class="integer">1</span>)
 
         <span class="local-variable">this</span>.readonly = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.fontsize = <span class="integer">12</span>
-        <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">true</span>
+        <span class="local-variable">this</span>.subpixel = <span class="predefined-constant">false</span>
 
-        <span class="keyword">var</span> font = <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii.glf</span><span class="delimiter">'</span></span>)
+        <span class="keyword">var</span> font = <span class="local-variable">this</span>.font = require(<span class="string"><span class="delimiter">'</span><span class="content">$resources/fonts/ubuntu_monospace_ascii_baked.glf</span><span class="delimiter">'</span></span>)
 
         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> JSFormatter.types){
                 <span class="local-variable">this</span>[key] = String(JSFormatter.types[key])
+        }
+
+        <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
+                <span class="local-variable">this</span>.init_anim = <span class="float">.0</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, pos, tag){
@@ -375,7 +423,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">var</span> sub = <span class="reserved">int</span>(mod(tag.z / <span class="integer">256</span>., <span class="integer">256</span>.))
                 <span class="keyword">var</span> part = <span class="reserved">int</span>(mod(tag.z, <span class="integer">256</span>.))
                 <span class="keyword">var</span> unicode = <span class="reserved">int</span>(tag.x)
-                
+
                 <span class="keyword">if</span>(unicode == <span class="integer">10</span> || unicode == <span class="integer">32</span> || unicode == <span class="integer">9</span>) discard
                 <span class="keyword">if</span>(sub == _Paren || sub == _Brace || sub == _Bracket){
                         <span class="keyword">if</span>(sub == _Paren){
@@ -410,6 +458,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(type == _This){
                         style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff7fe1</span><span class="delimiter">&quot;</span></span>
+                }<span class="keyword">else</span> <span class="keyword">if</span>(type == _Function){
+                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ffdd00</span><span class="delimiter">&quot;</span></span>
                 }<span class="keyword">else</span>{
                         style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#ff9d00</span><span class="delimiter">&quot;</span></span>
                 }
@@ -481,7 +531,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">update</span> = <span class="keyword">function</span>(){
                         <span class="keyword">var</span> view = <span class="local-variable">this</span>.view
-                        <span class="keyword">var</span> maxwidth = view.layout.width
                         <span class="keyword">var</span> textbuf = <span class="local-variable">this</span>.mesh = <span class="local-variable">this</span>.newText()
 
                         textbuf.font = view.font
@@ -493,18 +542,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         textbuf.align = <span class="string"><span class="delimiter">'</span><span class="content">left</span><span class="delimiter">'</span></span>
                         textbuf.start_y = textbuf.line_height
                         textbuf.boldness = <span class="float">0.6</span>
+                        view.tab_size = textbuf.font.glyphs[<span class="integer">9</span>].advance * textbuf.fontsize
 
                         textbuf.clear()
-
+                        <span class="keyword">var</span> node_id = <span class="integer">0</span>
                         <span class="keyword">if</span>(view.wrap){
-                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, group, l1, l2, l3, m3){
+                                <span class="keyword">var</span> maxwidth = view.layout.width
+                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, padding, l1, l2, l3, node){
                                         <span class="keyword">var</span> indent = textbuf.font.glyphs[<span class="integer">9</span>].advance * textbuf.fontsize * <span class="local-variable">this</span>.indent
-                                        textbuf.addWithinWidth(text, maxwidth, indent, group, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), m3)
+                                        textbuf.addWithinWidth(text, maxwidth, (padding+ <span class="local-variable">this</span>.indent*<span class="integer">65536</span>)*-<span class="integer">1</span>, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>))
                                 })
                         }
                         <span class="keyword">else</span>{
-                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, group, l1, l2, l3, m3){
-                                        textbuf.add(text, group, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), m3)
+                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, padding, l1, l2, l3, node){
+                                        <span class="keyword">var</span> start = text.charCodeAt(<span class="integer">0</span>)
+                                        <span class="comment">//console.log(this.actual_line)</span>
+                                        <span class="keyword">if</span>(start !== <span class="integer">32</span> &amp;&amp; start !== <span class="integer">10</span> &amp;&amp; start !== <span class="integer">9</span>) node_id ++
+                                        textbuf.add(text, ((padding||<span class="integer">0</span>) + <span class="local-variable">this</span>.actual_indent*<span class="integer">65536</span>)*-<span class="integer">1</span>, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>), node_id+<span class="integer">65536</span>*<span class="local-variable">this</span>.actual_line)
                                 })
                         }
                 }
@@ -518,7 +572,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">return</span> [jsviewer({<span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#000040</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:vec4(<span class="integer">14</span>), <span class="key">source</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">console.log(</span><span class="char">\&quot;</span><span class="content">Hello world!</span><span class="char">\&quot;</span><span class="content">);</span><span class="delimiter">&quot;</span></span>})]
                 }
         }
-})</pre></td>
+})
+</pre></td>
 </tr></table>
 
 </body>

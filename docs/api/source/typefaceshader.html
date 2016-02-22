@@ -1359,6 +1359,31 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1205" name="n1205">1205</a>
 <a href="#n1206" name="n1206">1206</a>
 <a href="#n1207" name="n1207">1207</a>
+<a href="#n1208" name="n1208">1208</a>
+<a href="#n1209" name="n1209">1209</a>
+<strong><a href="#n1210" name="n1210">1210</a></strong>
+<a href="#n1211" name="n1211">1211</a>
+<a href="#n1212" name="n1212">1212</a>
+<a href="#n1213" name="n1213">1213</a>
+<a href="#n1214" name="n1214">1214</a>
+<a href="#n1215" name="n1215">1215</a>
+<a href="#n1216" name="n1216">1216</a>
+<a href="#n1217" name="n1217">1217</a>
+<a href="#n1218" name="n1218">1218</a>
+<a href="#n1219" name="n1219">1219</a>
+<strong><a href="#n1220" name="n1220">1220</a></strong>
+<a href="#n1221" name="n1221">1221</a>
+<a href="#n1222" name="n1222">1222</a>
+<a href="#n1223" name="n1223">1223</a>
+<a href="#n1224" name="n1224">1224</a>
+<a href="#n1225" name="n1225">1225</a>
+<a href="#n1226" name="n1226">1226</a>
+<a href="#n1227" name="n1227">1227</a>
+<a href="#n1228" name="n1228">1228</a>
+<a href="#n1229" name="n1229">1229</a>
+<strong><a href="#n1230" name="n1230">1230</a></strong>
+<a href="#n1231" name="n1231">1231</a>
+<a href="#n1232" name="n1232">1232</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1381,7 +1406,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.view = {
                 <span class="key">_totalmatrix</span>:mat4(),
                 <span class="function">textstyle</span>: <span class="keyword">function</span>(fgcolor, pos, tag){<span class="keyword">return</span> fgcolor;},
-                <span class="function">textpositionfn</span>:<span class="keyword">function</span>(pos){<span class="keyword">return</span> pos;},
+                <span class="function">textpositionfn</span>:<span class="keyword">function</span>(pos, tag){<span class="keyword">return</span> pos;},
                 <span class="key">_viewmatrix</span>:mat4(),
                 <span class="key">_polygonoffset</span>:<span class="float">0.0</span>,
                 <span class="key">_fgcolor</span>:vec4(),
@@ -1401,7 +1426,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// lets define a custom struct and subclass the array</span>
         <span class="local-variable">this</span>.textgeom = define.struct({
-                <span class="key">pos</span>:vec4,
+                <span class="key">pos</span>:vec4, <span class="comment">// x y z w unicode in w</span>
                 <span class="key">tex</span>:vec2,
                 <span class="key">tag</span>:vec4,
         }).extend(<span class="keyword">function</span>(exports, self){
@@ -1572,7 +1597,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
                 }
 
+                <span class="comment">// what do we need to know?</span>
+
+
                 <span class="local-variable">this</span>.<span class="function">addGlyph</span> = <span class="keyword">function</span>(info, unicode, m1, m2, m3) {
+
                         <span class="keyword">var</span> fontsize = <span class="local-variable">this</span>.fontsize
                         <span class="keyword">var</span> x1 = <span class="local-variable">this</span>.add_x + fontsize * info.min_x
                         <span class="keyword">var</span> x2 = <span class="local-variable">this</span>.add_x + fontsize * info.max_x
@@ -1580,7 +1609,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> y2 = <span class="local-variable">this</span>.add_y - fontsize * info.max_y
                         <span class="keyword">var</span> italic = <span class="local-variable">this</span>.italic_ness * info.height * fontsize
                         <span class="keyword">var</span> cz = <span class="local-variable">this</span>.add_z ? <span class="local-variable">this</span>.add_z:<span class="integer">0</span>;
-
+                        <span class="keyword">var</span> dx = <span class="integer">0</span>
                         <span class="local-variable">this</span>.clean = <span class="predefined-constant">false</span>
                         <span class="keyword">var</span> slots = <span class="local-variable">this</span>.slots
                         <span class="comment">//if(arguments.length !== slots * 4) throw new Error('Please use individual components to set a quad for '+slots)</span>
@@ -1590,7 +1619,26 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.length &gt;= <span class="local-variable">this</span>.allocated){
                                 <span class="local-variable">this</span>.ensureSize(<span class="local-variable">this</span>.length)
                         }
-
+                        
+                        <span class="comment">// m1 is the formatting layout</span>
+                        <span class="keyword">if</span>(m1 &lt; <span class="integer">0</span>){
+                                <span class="keyword">var</span> format = m1 * -<span class="integer">1</span>
+                                <span class="comment">//var indent = parseInt(m1/65536)</span>
+                                <span class="keyword">var</span> mode = Math.floor(format/<span class="integer">256</span>)%<span class="integer">256</span>
+                                <span class="keyword">var</span> padding = format%<span class="integer">256</span>
+                                <span class="comment">// mode is 1, space left</span>
+                                <span class="comment">// mode is 2, space right</span>
+                                <span class="comment">// mode is 3, space left/right</span>
+                                <span class="comment">// mode is 4, scale indent</span>
+                                <span class="keyword">if</span>(mode){
+                                        <span class="keyword">var</span> padskip = padding * info.advance * fontsize
+                                        <span class="keyword">if</span>(mode&amp;<span class="integer">1</span>) x1 += padskip, x2 += padskip, dx += padskip
+                                        <span class="keyword">if</span>(mode&amp;<span class="integer">2</span>) dx += padskip
+                                        <span class="keyword">if</span>(mode == <span class="integer">4</span>){
+                                                x2 += padskip, dx = (padding - <span class="integer">1</span>)* info.advance * fontsize
+                                        }
+                                }
+                        }
                         <span class="keyword">var</span> a = <span class="local-variable">this</span>.array
 
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.font.baked){
@@ -1671,7 +1719,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         x2 + italic, y2, cz, fontsize, gx|1, gy|1, unicode, m1, m2, m3
                                 )*/</span>
                         }
-                        <span class="local-variable">this</span>.add_x += info.advance * fontsize
+                        <span class="local-variable">this</span>.add_x += info.advance * fontsize + dx
 
                         <span class="keyword">if</span>(<span class="local-variable">this</span>.add_x &gt; <span class="local-variable">this</span>.text_w) <span class="local-variable">this</span>.text_w = <span class="local-variable">this</span>.add_x
                 }
@@ -1794,6 +1842,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">char_tr_x</span> = <span class="keyword">function</span>(off){
                         <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">0</span> + <span class="integer">10</span>]
+                }
+
+                <span class="local-variable">this</span>.<span class="function">tagAt</span> = <span class="keyword">function</span>(off, tagid){
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.array[off * <span class="integer">6</span> * <span class="integer">10</span> + <span class="integer">6</span> + (tagid||<span class="integer">0</span>)]
                 }
 
                 <span class="local-variable">this</span>.<span class="function">offsetFromTag</span> = <span class="keyword">function</span>(tagid, tag, start){
@@ -1954,9 +2006,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// we want to compute a measure of scale relative to the actual pixels</span>
                 <span class="keyword">var</span> matrix = view.totalmatrix  * view.viewmatrix
 
-
-                <span class="keyword">var</span> finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z));
-                <span class="keyword">var</span> finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z));
+                <span class="keyword">var</span> finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z), mesh.tag);
+                <span class="keyword">var</span> finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z), mesh.tag);
 
                 <span class="comment">// compute the main position and one rectgle atan fontsize for the pixelscale</span>
                 <span class="keyword">var</span> pos1 = vec4(finalpos1 , <span class="integer">1</span>) * matrix
@@ -2400,7 +2451,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">glyphy_sdf_draw</span> = <span class="keyword">function</span>(){
                 <span class="keyword">var</span> pos = mesh.tex
 
-                <span class="keyword">var</span> m = pixelscale*<span class="float">0.4</span><span class="comment">//0.005</span>
+                <span class="keyword">var</span> m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2<span class="comment">//*0.1</span>
+                <span class="comment">//var m = pixelscale*0.4//0.005</span>
                 <span class="comment">// screenspace length</span>
                 mesh.scaling = <span class="integer">500</span>. * m
 
@@ -2516,9 +2568,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> pos = glyph.xy
                 <span class="comment">/* isotropic antialiasing */</span>
-                <span class="keyword">var</span> dpdx = dFdx(pos) <span class="comment">// this should mark it pixel and redo the function with a new highmark</span>
-                <span class="keyword">var</span> dpdy = dFdy(pos)
-                <span class="keyword">var</span> m = length(vec2(length(dpdx), length(dpdy)))*SQRT_1_2<span class="comment">//*0.1</span>
+                <span class="keyword">var</span> m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2<span class="comment">//*0.1</span>
                 <span class="comment">//var m = pixelscale*100.</span>
 
                 <span class="keyword">var</span> dist = glyphy_sdf(glyph.xy, nominal_size, atlas_pos) <span class="comment">//+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6</span>
