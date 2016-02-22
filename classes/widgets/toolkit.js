@@ -505,8 +505,6 @@ define.class("$ui/view", function(require,
 							}
 						}
 
-
-
 						if (selected === ev.view) {
 							continue;
 						}
@@ -1152,18 +1150,26 @@ define.class("$ui/view", function(require,
 						this.__grabpos = undefined;
 					}
 				},
+				//icon({
+				//	icon:"briefcase",
+				//	fgcolor:vec4(0.8,0.8,0.8,0.8),
+				//	marginleft:5,
+				//	padding:5,
+				//	drawtarget:'color'
+				//}),
 				label({
 					name:"title",
 					text:"DreemGL Visual Toolkit",
 					bgcolor:NaN,
+					fgcolor:vec4(0.8,0.8,0.8,0.8),
+					marginleft:5,
 					padding:5,
-					paddingleft:10,
 					drawtarget:'color'
 				}),
 				statebutton({
 					fontsize:16,
 					icon:"times",
-					fgcolor:"#ddd",
+					fgcolor:vec4(0.8,0.8,0.8,1),
 					pickalpha:-1,
 					bgcolor:"transparent",
 					borderwidth:0,
