@@ -532,9 +532,16 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.cursorRect = function(off){
 			var coords= this.charCoords(off)
 			// do a little bit of alignment fixery
-			if(this.tagAt(off,1)<0 && this.tagAt(off - 1, 0)!==10 && this.tagAt(off - 1, 0)!==9){
-				var coords1 = this.charCoords(off - 1)
-				coords.x = coords1.x + coords1.w
+			var m1 = this.tagAt(off,1)
+			if(m1<0 && this.tagAt(off - 1, 0)!==10 && this.tagAt(off - 1, 0)!==9){
+				// lets check the alignment mode
+				var format = m1 * -1
+				//var indent = parseInt(m1/65536)
+				var mode = Math.floor(format/256)%256
+				if(mode == 1){ 
+					var coords1 = this.charCoords(off - 1)
+					coords.x = coords1.x + coords1.w
+				}
 			}
 			coords.y -= coords.h - this.fontsize * this.cursor_sink
 			return coords
