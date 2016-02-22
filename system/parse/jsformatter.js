@@ -115,6 +115,18 @@ define.class(function(require, exports){
 		return has_newline
 	}
 
+	this.commentHasNewline = function(comments, prefix){
+		var has_newline = false
+		if(!comments) return false
+		for(var i = 0; i < comments.length; i++){
+			var comment = comments[i]
+			if(comment === 1){
+				has_newline = true
+			}
+		}
+		return has_newline
+	}
+
 	this.lastIsNewline = function(){
 		return this.textbuf.charCodeAt(this.textbuf.char_count - 1) === 10
 	}
@@ -145,7 +157,10 @@ define.class(function(require, exports){
 	this.Property = function(n, secondary){
 		this.add(n.name, 0, exports._Property, secondary ||0)
 	}
+	
+	console.log(vec4.parse("3D", tempcolor, true))
 
+	var tempcolor = vec4()
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 		if(n.kind === undefined){
 			var str
@@ -158,8 +173,19 @@ define.class(function(require, exports){
 		}
 		else if(n.kind == 'num')
 			this.add(n.raw!==undefined?n.raw:''+n.value, 0, exports._Value, exports._Number)
-		else if(n.kind == 'string')
-			this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0, exports._Value, exports._String)
+		else if(n.kind == 'string'){
+			var subtype = exports._String
+			var col = 0
+
+			if(vec4.parse(n.value, tempcolor, true)){
+				subtype = exports._Color
+				col = -(parseInt(tempcolor[0]*255)*65536+parseInt(tempcolor[1]*255)*256+parseInt(tempcolor[2]*255))
+				this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0 , col)
+			}
+			else{
+				this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0 , exports._Value, subtype)
+			}
+		}
 		else
 			this.add(n.raw!==undefined?n.raw:''+n.value, 0, exports._Value)
 	}
@@ -182,8 +208,13 @@ define.class(function(require, exports){
 			//if(!has_newlines && i) this.comma(exports._Array, 0)
 			this.comments(elem.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
+
 			this.expand(elem)
-			if(i < n.elems.length - 1) this.comma(exports._Array, 2*256+this.post_comma)
+
+			var do_newline = has_newlines || this.commentHasNewline(elem.cmr)
+
+			if(i < n.elems.length - 1) this.comma(exports._Array, do_newline?0:2*256+this.post_comma)
+
 			if(has_newlines && !this.comments(elem.cmr))
 				this.newline()
 		}
@@ -224,8 +255,11 @@ define.class(function(require, exports){
 				this.colon(exports._Object)
 				this.expand(prop.value)
 			}
+
+			var do_newline = has_newlines || this.commentHasNewline(prop.cmr)
+
 			if(i < n.keys.length - 1){
-				this.comma(exports._Object, 2*256+this.post_comma)
+				this.comma(exports._Object, do_newline?0:2*256+this.post_comma)
 				//this.space()
 			}
 			if(has_newlines && !this.comments(prop.cmr)){
@@ -735,8 +769,10 @@ define.class(function(require, exports){
 			if(i === 0 && !has_newlines){
 				has_newlines = has_nl
 			}
+			var do_newline = has_newlines || this.commentHasNewline(arg.cmr)
 
-			if(i < n.args.length - 1) this.comma(exports._Call, 2*256+this.post_comma)
+			if(i < n.args.length - 1) this.comma(exports._Call, do_newline?0:2*256+this.post_comma)
+
 			if(has_newlines && !this.comments(arg.cmr))
 				this.newline()
 			//else this.space()

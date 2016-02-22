@@ -144,7 +144,10 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 					var v = o * 4 + i * 4
 					out.array[v] = str.charCodeAt(i)
 					out.array[v + 1] = ((padding||0) + this.actual_indent*65536)*-1
-					out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					if(l1 < 0)
+						out.array[v + 2] = l1
+					else
+						out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
 					out.array[v + 3] = buf.walk_id + 65536*this.actual_line
 				}
 				out.length += str.length
@@ -222,7 +225,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			var deleted_whitespace = true
 			if(this.change === 'delete'){
 				var undo_data = this.undo_stack[this.undo_stack.length - 1].data
-				for(var i = 0; i < undo_data.length; i++){
+				if(undo_data) for(var i = 0; i < undo_data.length; i++){
 					var char = undo_data.array[i*4]
 					if(char !== 32 && char !== 9 && char !== 10) deleted_whitespace = false
 				}
