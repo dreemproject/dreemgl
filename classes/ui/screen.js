@@ -208,10 +208,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				this.emit('globalpointerstart', e)
 				e.view.emitUpward('pointerstart', e.pointer)
 				e.view.computeCursor()
-				if (!e.pointer.touch) {
-					this.keyboard.pointerMove(e.pointer.position)
-					this.keyboard.checkSpecialKeys(e.pointer)
-				}
 				if(this.inModalChain(e.view)){
 					this.setFocus(e.view)
 				} else if (this.modal){
@@ -226,9 +222,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 			if (e.pointer) {
 				this.emit('globalpointermove', e)
 				e.view.emitUpward('pointermove', e.pointer)
-				if (!e.pointer.touch && e.pointer.button == 2){
-					this.device.keyboard.pointerMove(e.pointer.position)
-				}
 			} else if (e.pointers) {
 				this.emit('globalpointermultimove', e)
 				e.view.emitUpward('pointermultimove', e.pointers)
@@ -242,10 +235,6 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				this.emit('globalpointerend', e)
 				e.view.emitUpward('pointerend', e.pointer)
 				e.view.computeCursor()
-				if (!e.pointer.touch) {
-					this.keyboard.pointerMove(e.pointer.position)
-					this.keyboard.checkSpecialKeys(e.pointer)
-				}
 			}
 		}.bind(this)
 

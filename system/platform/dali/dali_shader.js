@@ -53,6 +53,10 @@ define.class(function(require, exports){
 		this.fragmentShader = fragmentShader;
 
 		if (DaliApi.emitcode) {
+			// #extension lines must have a \n at the end to compile
+			vs = vs.replace(/(\#extension.*)\n/g, '$1\\n\\\n');
+			fs = fs.replace(/(\#extension.*)\n/g, '$1\\n\\\n');
+
 			// Each line needs a separate DALICODE statement
 			vs = vs.replace(/\n/g, "\nDALICODE: ");
 			fs = fs.replace(/\n/g, "\nDALICODE: ");

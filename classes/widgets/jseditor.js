@@ -102,6 +102,9 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	this.cursorsChanged = function(){
 		if(!this.change_timeout){
 			baseclass.cursorsChanged.call(this)
+			// lets post
+			if(this.format_dirty)
+				this.worker.postMessage({change_id:++this.change_id, source:this._value})
 		}
 		//this.change_timeout = this.setTimeout(this.update_force, 30)
 	}
@@ -141,7 +144,10 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 					var v = o * 4 + i * 4
 					out.array[v] = str.charCodeAt(i)
 					out.array[v + 1] = ((padding||0) + this.actual_indent*65536)*-1
-					out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					if(l1 < 0)
+						out.array[v + 2] = l1
+					else
+						out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
 					out.array[v + 3] = buf.walk_id + 65536*this.actual_line
 				}
 				out.length += str.length
@@ -212,14 +218,14 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			var new_range = end_new - start
 			var old_range = end_old - start 
 
-			if(old_range < new_range && this.change === 'delete') return
-			if(old_range > new_range && this.change === 'keypress') return
+			if(old_range < new_range && this.change === 'delete') return this.format_dirty = true
+			if(old_range > new_range && this.change === 'keypress') return this.format_dirty = true
 
 			// do the cursor move magic
 			var deleted_whitespace = true
 			if(this.change === 'delete'){
 				var undo_data = this.undo_stack[this.undo_stack.length - 1].data
-				for(var i = 0; i < undo_data.length; i++){
+				if(undo_data) for(var i = 0; i < undo_data.length; i++){
 					var char = undo_data.array[i*4]
 					if(char !== 32 && char !== 9 && char !== 10) deleted_whitespace = false
 				}
@@ -228,7 +234,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			// dont autoreformat immediately when deleting characters, only with whitespace
 			if(new_range < old_range && this.change === 'delete' && start < cursor_now && !deleted_whitespace) return
 			
-			if(this.change === 'undoredo')return 
+			if(this.change === 'undoredo')return this.format_dirty = true
 
 			// if we insert a newline or do a delete use the marker
 			if(new_range !== old_range){
@@ -303,7 +309,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			//err.y = rect.y + rect.h + 4
 			//err.text = 'WOOPWOOP'
 			//err.visible = true
-
+			this.format_dirty = false
 			mesh.clean = false
 			this.redraw()
 

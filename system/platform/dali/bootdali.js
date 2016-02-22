@@ -35,7 +35,12 @@ define.class(function(require){
 		this.width = parseInt(args['-width']) || 1920;
 		this.height = parseInt(args['-height']) || 1080;
 		this.name = args['-name'] || 'dreemgl';
-		this.dalilib = args['-dalilib'] || '/home/dali/teem/src/dreemgl/Release/dali';
+		this.dalilib = args['-dalilib'] || '/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali';
+
+		if ('-dumpprog' in args) {
+			var dp = args['-dumpprog'];
+			this.dumpprog = (dp.length > 0) ? args['-dumpprog'] : 'stdout';
+		}
 
 		this.args = args
 		this.compname = compname
@@ -99,7 +104,7 @@ define.class(function(require){
 		require.clearCache()
 
 		this.DaliApi = require('./dali_api');
-		this.DaliApi.initialize(this.width, this.height, this.name, this.dalilib);
+		this.DaliApi.initialize({width: this.width, height: this.height, name: this.name, dalilib: this.dalilib, dumpprog: this.dumpprog});
 
 
 		var Composition = require(define.expandVariables(this.filename))

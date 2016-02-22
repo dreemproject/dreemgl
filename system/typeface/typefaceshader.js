@@ -660,7 +660,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		bgcolor: vec4,
 		outlinecolor: vec4,
 		outline_thickness: float,
-		outline: bool
+		outline: bool,
+		boldness: float
 	}, "font_style_t")
 
 	this.glyphy_arc_t = define.struct({
@@ -1076,11 +1077,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return exit
 		}
 
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
 
 		view.textstyle(style, pos, mesh.tag)
 
-		dist -= mesh.boldness / 300.
+		dist -= style.boldness / 300.
 		dist = dist / m * mesh.contrast
 
 		dist = moddist(pos, dist)
@@ -1126,11 +1127,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return exit
 		}
 
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
 
 		 view.textstyle(style, pos, mesh.tag)
 
-		dist -= mesh.boldness / 300.
+		dist -= style.boldness / 300.
 		dist = dist / m * mesh.contrast
 
 		if(mesh.outline){
@@ -1194,11 +1195,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			return exit
 		}
 //		style(glyph)
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline)
+		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
 		view.textstyle(style, pos, mesh.tag)
 
 
-		dist -= mesh.boldness
+		dist -= style.boldness
 		//debug(mesh.distance)
 		dist = dist / m * mesh.contrast
 		var dist2 = dist;

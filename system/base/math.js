@@ -343,50 +343,53 @@ define(function(){
 		// lets parse the color
 		var len = col.length
 		var i = 0
-		if (col.charAt(0) == '#') i++;
-		c = 0
-		while(i<len) {
-			var ch = col.charCodeAt(i++)
-			if(ch >= 48 && ch <= 57) { // hex color
-				c = c << 4
-				c += ch - 48
-			}
-			else if(ch >= 97 && ch <= 102) {
-				c = c << 4
-				c += ch - 87
-			}
-			else if(ch >= 65 && ch <= 70) {
-				c = c << 4
-				c += ch - 55
-			}
-			else { // try to find the nearest color
-				col = col.toLowerCase()
-				c = color_wikipedia[col]
-				if(c === undefined) for(var k in color_wikipedia){
-					if(k.indexOf(col) != -1){
-						c = color_wikipedia[k]
-						// cache it
-						color_wikipedia[col] = c
-						break
-					}
-				}
-				len = 0
-			}
-		}
-		if(len == 3){			
-			a[0] = ((c&0xf00)>>8|(c&0xf00)>>4) /255
-			a[1] = ((c&0xf0)|(c&0xf0)>>4) /255
-			a[2] = ((c&0xf)|(c&0xf)<<4) /255 
-			return a
-		}
+		//if (col.charAt(0) != '#') i++;
+		//c = 0
+		//while(i<len) {
+		//	var ch = col.charCodeAt(i++)
+		//	if(ch >= 48 && ch <= 57) { // hex color
+		//		c = c << 4
+		//		c += ch - 48
+		//	}
+		//	else if(ch >= 97 && ch <= 102) {
+		//		c = c << 4
+		//		c += ch - 87
+		//	}
+		//	else if(ch >= 65 && ch <= 70) {
+		//		c = c << 4
+		//		c += ch - 55
+		//	}
+		//	else { // try to find the nearest color
+		//if(dontsearch) 
+		return undefined
+
+		//col = col.toLowerCase()
+		//c = color_wikipedia[col]
+		//if(c === undefined) for(var k in color_wikipedia){
+		//	if(k.indexOf(col) != -1){
+		//		c = color_wikipedia[k]
+		//		// cache it
+		//		color_wikipedia[col] = c
+		//		break
+		//	}
+		//}
+		//len = 0
+		//	}
+		//}
+		//if(len == 3){			
+		//	a[0] = ((c&0xf00)>>8|(c&0xf00)>>4) /255
+		//	a[1] = ((c&0xf0)|(c&0xf0)>>4) /255
+		//	a[2] = ((c&0xf)|(c&0xf)<<4) /255 
+		//	return a
+		//}
 		
-		a[0] = ((c >> 16)&0xff) /255
-		a[1] = ((c >> 8)&0xff) /255
-		a[2] = (c&0xff) /255		
-		a[3] = 1.0;
+		//a[0] = ((c >> 16)&0xff) /255
+		//a[1] = ((c >> 8)&0xff) /255
+		//a[2] = (c&0xff) /255		
+		//a[3] = 1.0;
 		//a[3] = ((c >> 24)&0xff) /255 // alpha
 		
-		return a
+		//return a
 	}
 
 	function matApi(exports){

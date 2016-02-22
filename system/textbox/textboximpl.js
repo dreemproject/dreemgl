@@ -18,7 +18,7 @@ define.mixin(function(require){
 		}
 		var coord = this.textbuf.charCoords(max(cursor0.start - 1,0))
 		var v2 = vec2.mul_mat4(vec2(coord.x - 0.5*coord.w, coord.y - 0.5 *coord.h), this.totalmatrix)
-		this.screen.keyboard.pointerMove(vec2(floor(v2[0]), floor(v2[1])))
+		this.screen.keyboard.textAreaRespondToMouse([floor(v2[0]), floor(v2[1])])
 	}
 
 	this.addUndoInsert = function(start, end, stack){

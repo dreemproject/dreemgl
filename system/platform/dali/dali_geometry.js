@@ -268,10 +268,22 @@ define.class(function(require, exports){
 
 		//TODO Support multiple names in the keys, like webgl
 		var format = {};
-
 		var name;
         var nslots = 0;
+
+		// DO NOT iterate on key name. You need to iterate in offset order to
+		// preserve the order.
+		// Sort based on the offset, and then loop in this order. 
+		var tosort = [];
 		for(var key in attrlocs) {
+			tosort.push([attrlocs[key].offset, key]);
+		}
+		tosort.sort();
+		// console.log('SORTED', tosort);
+		
+		for(var i in tosort) {
+			key = tosort[i][1];
+
 			var attrloc = attrlocs[key]
 			name = attrloc.name
 
@@ -308,7 +320,6 @@ define.class(function(require, exports){
 		}
 
 		if (!name || (Object.keys(format).length == 0)) return;
-
 		//console.log('***************addAttributeGeometry******************');
 		//console.log(attrlocs);
 		//console.log('*****************************************************');

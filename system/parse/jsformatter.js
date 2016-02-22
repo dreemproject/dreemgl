@@ -115,6 +115,18 @@ define.class(function(require, exports){
 		return has_newline
 	}
 
+	this.commentHasNewline = function(comments, prefix){
+		var has_newline = false
+		if(!comments) return false
+		for(var i = 0; i < comments.length; i++){
+			var comment = comments[i]
+			if(comment === 1){
+				has_newline = true
+			}
+		}
+		return has_newline
+	}
+
 	this.lastIsNewline = function(){
 		return this.textbuf.charCodeAt(this.textbuf.char_count - 1) === 10
 	}
@@ -142,6 +154,13 @@ define.class(function(require, exports){
 		this.add(n.name, 0, exports._Id)
 	}
 
+	this.Property = function(n, secondary){
+		this.add(n.name, 0, exports._Property, secondary ||0)
+	}
+	
+	console.log(vec4.parse("3D", tempcolor, true))
+
+	var tempcolor = vec4()
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 		if(n.kind === undefined){
 			var str
@@ -154,8 +173,22 @@ define.class(function(require, exports){
 		}
 		else if(n.kind == 'num')
 			this.add(n.raw!==undefined?n.raw:''+n.value, 0, exports._Value, exports._Number)
-		else if(n.kind == 'string')
-			this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0, exports._Value, exports._String)
+		else if(n.kind == 'string'){
+			var subtype = exports._String
+			var col = 0
+
+			if(vec4.parse(n.value, tempcolor, true)){
+				subtype = exports._Color
+				col = -(parseInt(tempcolor[0]*255)*65536+parseInt(tempcolor[1]*255)*256+parseInt(tempcolor[2]*255))
+
+				this.add("'", 0 , exports._Value, exports._String)
+				this.add(n.value, 0 , col)
+				this.add("'", 0 , exports._Value, exports._String)
+			}
+			else{
+				this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0 , exports._Value, subtype)
+			}
+		}
 		else
 			this.add(n.raw!==undefined?n.raw:''+n.value, 0, exports._Value)
 	}
@@ -178,8 +211,13 @@ define.class(function(require, exports){
 			//if(!has_newlines && i) this.comma(exports._Array, 0)
 			this.comments(elem.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
+
 			this.expand(elem)
-			if(i < n.elems.length - 1) this.comma(exports._Array, 2*256+this.post_comma)
+
+			var do_newline = has_newlines || this.commentHasNewline(elem.cmr)
+
+			if(i < n.elems.length - 1) this.comma(exports._Array, do_newline?0:2*256+this.post_comma)
+
 			if(has_newlines && !this.comments(elem.cmr))
 				this.newline()
 		}
@@ -205,6 +243,14 @@ define.class(function(require, exports){
 		if(has_newlines)
 			this.indent++
 
+		var maxlen = 0
+		for(var i = 0; i < n.keys.length; i ++){
+			var prop = n.keys[i]
+			var len = prop.key.name.length
+			if(len>maxlen) maxlen = len + 1
+		}
+
+
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
 			//if(!has_newlines && i){
@@ -215,13 +261,17 @@ define.class(function(require, exports){
 			if(has_newlines) this.comments(prop.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
 
-			this.expand(prop.key)
+			var do_newline = has_newlines || this.commentHasNewline(prop.cmr)
+
+			this.expand(prop.key, exports._Object)
 			if(prop.value){
-				this.colon(exports._Object)
+				var diff = maxlen - prop.key.name.length
+				this.colon(exports._Object, do_newline?1*256+diff:0)
 				this.expand(prop.value)
 			}
+
 			if(i < n.keys.length - 1){
-				this.comma(exports._Object, 2*256+this.post_comma)
+				this.comma(exports._Object, do_newline?0:2*256+this.post_comma)
 				//this.space()
 			}
 			if(has_newlines && !this.comments(prop.cmr)){
@@ -731,8 +781,10 @@ define.class(function(require, exports){
 			if(i === 0 && !has_newlines){
 				has_newlines = has_nl
 			}
+			var do_newline = has_newlines || this.commentHasNewline(arg.cmr)
 
-			if(i < n.args.length - 1) this.comma(exports._Call, 2*256+this.post_comma)
+			if(i < n.args.length - 1) this.comma(exports._Call, do_newline?0:2*256+this.post_comma)
+
 			if(has_newlines && !this.comments(arg.cmr))
 				this.newline()
 			//else this.space()
@@ -749,68 +801,59 @@ define.class(function(require, exports){
 	exports.types = {
 		// Base node markers
 		_Id:1,
-		_Value:2,
-		_This:3,
-		_Array:4,
-		_Object:5,
-		_Index:6,
-		_Key:7,
-		_ThisCall: 8,
+		_Property:2,
+		_Value:3,
+		_This:4,
+		_Array:5,
+		_Object:6,
+		_Index:7,
+		_Key:8,
+		_ThisCall: 9,
 
-		_Block:9,
-		_List: 10,
-		_Comprehension:11,
-		_Template: 12,
-		_Break:13,
-		_Continue:14,
-		_Label:15,
+		_Block:10,
+		_List: 11,
+		_Comprehension:12,
+		_Template: 13,
+		_Break:14,
+		_Continue:15,
+		_Label:16,
 
-		_If:16,
-		_Switch:17,
-		_Case:18,
+		_If:17,
+		_Switch:18,
+		_Case:19,
 
-		_Throw:19,
-		_Try:20,
+		_Throw:20,
+		_Try:21,
 
-		_While:21,
-		_DoWhile:22,
-		_For:23,
-		_ForIn:24,
-		_ForOf:25,
-		_ForFrom:26,
-		_ForTo:27,
+		_While:22,
+		_DoWhile:23,
+		_For:24,
+		_ForIn:25,
+		_ForOf:26,
 
-		_Var:28,
-		_TypeVar:29,
-		_Struct:30,
-		_Define:31,
-		_Enum:32,
+		_Var:27,
 
-		_Def:33,
+		_Def:28,
 
-		_Function:34,
-		_Return:35,
-		_Yield:36,
-		_Await:37,
+		_Function:29,
+		_Return:30,
+		_Yield:31,
+		_Await:32,
 
-		_Unary:38,
-		_Binary:39,
-		_Logic:40,
-		_Assign:41,
-		_Update:42,
-		_Condition:43,
+		_Unary:33,
+		_Binary:34,
+		_Logic:35,
+		_Assign:36,
+		_Update:37,
+		_Condition:38,
 
-		_New:44,
-		_Call:45,
-		_Nest:46,
+		_New:39,
+		_Call:40,
+		_Nest:41,
 
-		_Class:47,
-		_Signal:48,
-		_Quote:49,
-		_AssignQuote:50,
-		_Rest:51,
-		_Then:52,
-		_Comment:53,
+		_Class:42,
+		_Rest:43,
+		_Comment:44,
 
 		// second level markers
 			_Id:1,

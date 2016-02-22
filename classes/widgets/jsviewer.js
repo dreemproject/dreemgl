@@ -21,18 +21,18 @@ define.class('$ui/textbox', function(require){
 	this.tab_size = 1
 	this.line_start = 0
 	this.line_end = 0
+
 	// lets go and move this fucker
 	this.textpositionfn = function(pos, tag) {
 		var p = pos
-		var pad = tag.y * -1.
-		var indent = floor(pad/65536.) * tab_size
+		var indent = floor((tag.y * -1.)/65536.) * tab_size
 		var line = floor(tag.w/65536.)
 		if(line >= line_start && line < line_end){
 			p.x  +=  2*indent*((line-line_start))*line_anim
 		}
 		p.x += - min(indent, init_anim*100.)
-		return p;
-	};
+		return p
+	}
 
 	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
 
@@ -53,21 +53,32 @@ define.class('$ui/textbox', function(require){
 
 	this.textstyle = function(style, pos, tag){
 
-		var group = tag.y
 		var type = int(tag.z / 65536.)
 		var sub = int(mod(tag.z / 256., 256.))
 		var part = int(mod(tag.z, 256.))
 		var unicode = int(tag.x)
-
 		if(unicode == 10 || unicode == 32 || unicode == 9) discard
-		if(sub == _Paren || sub == _Brace || sub == _Bracket){
+		if(tag.z <= 0.){
+			var col = -tag.z
+
+			style.fgcolor = vec4(
+				floor(col/65536.)/255.,
+				floor(mod(col/256.,256.))/255.,
+				floor(mod(col,256.))/255.,
+				1.
+			)
+		}
+		else if(sub == _Paren || sub == _Brace || sub == _Bracket){
 			if(sub == _Paren){
-				style.fgcolor = "white"
+				style.fgcolor = "#cfffff"
 			}
 			else if(sub == _Bracket){
-				style.fgcolor = "#ccc"
+				style.fgcolor = "#ffcfff"
 			}
 			else{
+				style.fgcolor = "#ffffcf"
+			}
+			if(type == _Function){
 				style.fgcolor = "white"
 			}
 		}
@@ -95,9 +106,19 @@ define.class('$ui/textbox', function(require){
 			style.fgcolor = "#ff7fe1"
 		}else if(type == _Function){
 			style.fgcolor = "#ffdd00"
+		}else if(type == _Property ){
+			if(sub == _Object){
+				style.fgcolor = '#afafaf'
+				//style.boldness *= 0.5
+			}
+			else{
+				style.fgcolor = 'white'//'#9fa3ff'*1.2
+			}
 		}else{
 			style.fgcolor = "#ff9d00"
 		}
+
+		return style
 		//if(type>7)mesh.outline = true
 	}
 
@@ -193,7 +214,10 @@ define.class('$ui/textbox', function(require){
 					var start = text.charCodeAt(0)
 					//console.log(this.actual_line)
 					if(start !== 32 && start !== 10 && start !== 9) node_id ++
-					textbuf.add(text, ((padding||0) + this.actual_indent*65536)*-1, 65536 * (l1||0) + 256 * (l2||0) + (l3||0), node_id+65536*this.actual_line)
+					var combo
+					if(l1 <= 0) combo = l1
+					else combo = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					textbuf.add(text, ((padding||0) + this.actual_indent*65536)*-1, combo, node_id+65536*this.actual_line)
 				})
 			}
 		}
