@@ -217,7 +217,7 @@ define.class('$ui/textbox', function(require){
 					if(l1 <= 0) combo = l1
 					else combo = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
 					if(start !== 32 && start !== 10 && start !== 9) node_id ++
-					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * this.indent
+					var indent = textbuf.font.glyphs[9].advance * textbuf.fontsize * (this.actual_indent+1)
 					textbuf.addWithinWidth(text, maxwidth, indent, ((padding||0)+ this.actual_indent*65536)*-1, combo, node_id+65536*this.actual_line)
 				})
 			}
