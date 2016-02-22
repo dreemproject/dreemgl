@@ -530,7 +530,12 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		this.cursorRect = function(off){
-			var coords = this.charCoords(off)
+			var coords= this.charCoords(off)
+			// do a little bit of alignment fixery
+			if(this.tagAt(off,1)<0 && this.tagAt(off - 1, 0)!==10 && this.tagAt(off - 1, 0)!==9){
+				var coords1 = this.charCoords(off - 1)
+				coords.x = coords1.x + coords1.w
+			}
 			coords.y -= coords.h - this.fontsize * this.cursor_sink
 			return coords
 		}
@@ -563,10 +568,18 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		this.setLength = function(len){
-			var rect = this.charCoords(len)
-			this.length = len * 6
-			this.add_x = rect.x
-			this.add_y = rect.y
+			if(this.tagAt(len,1)<0){ // its a padded character
+				var rect = this.charCoords(len - 1)
+				this.length = len * 6
+				this.add_x = rect.x + rect.w
+				this.add_y = rect.y
+			}
+			else{
+				var rect = this.charCoords(len)
+				this.length = len * 6
+				this.add_x = rect.x
+				this.add_y = rect.y
+			}
 		}
 
 		this.insertText = function(off, text){
@@ -575,9 +588,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var tags = this.serializeTags(off, this.lengthQuad())
 			// lets set the length and start adding
 			var rect = this.charCoords(off)
-			this.add_x = rect.x
-			this.add_y = rect.y
-			this.length = off * 6
+			this.setLength(off)
 			this.add(text)
 			this.add(tags)
 			this.computeBounds(true)
@@ -586,10 +597,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		this.removeText = function(off, end){
 			var tags = this.serializeTags(end, this.lengthQuad())
-			var rect = this.charCoords(off)
-			this.add_x = rect.x
-			this.add_y = rect.y
-			this.length = off * 6
+			this.setLength(off)
 			this.add(tags)
 			// recompute the bounds
 			this.computeBounds(true)

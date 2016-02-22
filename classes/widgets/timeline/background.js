@@ -18,7 +18,6 @@ define.class('$ui/view', function () {
 	this.layout = function(){
 		this.layout.top = 0
 		this.layout.height = this.parent.layout.height
-		console.log(this.layout);
 	}
 
 	this.hardrect = function(){

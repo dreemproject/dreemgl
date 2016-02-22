@@ -214,9 +214,9 @@ define.class(function(require, exports){
 
 			this.expand(elem)
 
-			var do_newline = has_newlines || this.commentHasNewline(elem.cmr)
+			//var do_newline = has_newlines || this.commentHasNewline(elem.cmr)
 
-			if(i < n.elems.length - 1) this.comma(exports._Array, do_newline?0:2*256+this.post_comma)
+			if(i < n.elems.length - 1) this.comma(exports._Array, has_newlines?0:2*256+this.post_comma)
 
 			if(has_newlines && !this.comments(elem.cmr))
 				this.newline()
@@ -247,9 +247,8 @@ define.class(function(require, exports){
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
 			var len = prop.key.name.length
-			if(len>maxlen) maxlen = len + 1
+			if(len>maxlen) maxlen = len
 		}
-
 
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
@@ -261,17 +260,18 @@ define.class(function(require, exports){
 			if(has_newlines) this.comments(prop.cmu)
 			if(this.lastIsNewline()) this.tab(this.indent)
 
-			var do_newline = has_newlines || this.commentHasNewline(prop.cmr)
+			//var do_newline = has_newlines //|| this.commentHasNewline(prop.cmr)
 
 			this.expand(prop.key, exports._Object)
+
 			if(prop.value){
-				var diff = maxlen - prop.key.name.length
-				this.colon(exports._Object, do_newline?1*256+diff:0)
+				var diff = maxlen + 1 - prop.key.name.length
+				this.colon(exports._Object, has_newlines?1*256+diff:0)
 				this.expand(prop.value)
 			}
 
 			if(i < n.keys.length - 1){
-				this.comma(exports._Object, do_newline?0:2*256+this.post_comma)
+				this.comma(exports._Object, has_newlines?0:2*256+this.post_comma)
 				//this.space()
 			}
 			if(has_newlines && !this.comments(prop.cmr)){

@@ -48,7 +48,10 @@ define.class(function(require){
 	this.moveLeft = function(only_end){
 		this.end = this.end - 1
 		if(this.end < 0) this.end = 0
-		if(!only_end) this.start = this.end
+		if(!only_end){
+			if(this.editor.atMoveLeft) this.end = this.editor.atMoveLeft(this.end)
+			this.start = this.end
+		}
 		//
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
@@ -56,7 +59,10 @@ define.class(function(require){
 	this.moveRight = function(only_end){
 		this.end = this.end + 1
 		if(this.end > this.editor.textbuf.char_count) this.end = this.editor.textbuf.char_count
-		if(!only_end) this.start = this.end
+		if(!only_end){
+			if(this.editor.atMoveRight) this.end = this.editor.atMoveRight(this.end)
+			this.start = this.end
+		}
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
 

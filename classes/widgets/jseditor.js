@@ -109,6 +109,17 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 		//this.change_timeout = this.setTimeout(this.update_force, 30)
 	}
 
+	// we can skip tabs
+	this.atMoveLeft = function(pos){
+		if(this.textbuf.charCodeAt(pos) === 9) return pos - 1
+		return pos
+	}
+
+	this.atMoveRight = function(pos){
+		if(this.textbuf.charCodeAt(pos) === 9) return pos + 1
+		return pos
+	}
+
 	// alright lets make a worker that parses and reserializes
 	var worker = define.class('$system/rpc/worker', function(require){
 		
@@ -194,7 +205,9 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 				if(data_new[off_new] !== data_old[off_old + 6]) break
 				if(data_new[off_new+1] !== data_old[off_old + 7]) break
-
+				if(data_new[off_new+2] !== data_old[off_old + 8]) break
+				if(data_new[off_new+3] !== data_old[off_old + 9]) break
+				
 				// copy data over
 				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
 				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
@@ -208,9 +221,12 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				var off_old = end_old * 10 * 6
 				var off_new = end_new * 4
 				//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])
-				
+		
 				if(data_new[off_new] !== data_old[off_old + 6]) break
-				//if(data_new[off_new+1] !== data_old[off_old + 7]) break
+				if(data_new[off_new+1] !== data_old[off_old + 7]) break
+				if(data_new[off_new+2] !== data_old[off_old + 8]) break
+				if(data_new[off_new+3] !== data_old[off_old + 9]) break
+					
 			}
 		
 			var cursor_now = this.cursorset.list[0].start
@@ -290,7 +306,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			mesh.setLength(start)
 			var buf = {struct:1, start:start, array:data_new, length:len_new}
 			mesh.add(buf)
-
+			
 			// lets figure out the linenumbers between start and end_new
 			if(new_range > old_range){
 				var min = Infinity, max = -Infinity
@@ -304,11 +320,15 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			this.line_end = max
 			this._line_anim = 1.0
 			this.line_anim = 0.
+			
 			//var rect = mesh.cursorRect(start)
 			//err.x = rect.x
 			//err.y = rect.y + rect.h + 4
 			//err.text = 'WOOPWOOP'
 			//err.visible = true
+			//console.log(mesh.tagAt(start, 0))
+			//console.log(mesh.tagAt(start, 1), data_new[start*4+1])
+
 			this.format_dirty = false
 			mesh.clean = false
 			this.redraw()
