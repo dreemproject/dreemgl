@@ -2881,10 +2881,19 @@ define.class(function(require, exports){
 			this.next()
 			return this.finishNode(node, "Value")
 
-		case this._null: case this._true: case this._false:
+		case this._null: 
 			var node = this.startNode()
 			node.value = this.tokType.atomValue
 			node.raw = this.tokType.keyword
+			node.kind = "object"
+			this.next()
+			return this.finishNode(node, "Value")
+
+		case this._true: case this._false:
+			var node = this.startNode()
+			node.value = this.tokType.atomValue
+			node.raw = this.tokType.keyword
+			node.kind = "boolean"
 			this.next()
 			return this.finishNode(node, "Value")
 

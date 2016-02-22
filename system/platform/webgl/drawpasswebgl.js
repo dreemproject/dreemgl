@@ -219,6 +219,7 @@ define.class(function(require, baseclass){
 				pickguid[2] = (id>>8)/255
 
 				draw.pickguid = pickguid[0]*255<<16 | pickguid[1]*255 << 8 | pickguid[2]*255
+
 				draw.viewmatrix = matrices.viewmatrix
 
 				if(!draw._visible) continue
@@ -250,6 +251,7 @@ define.class(function(require, baseclass){
 						}
 
 						shader.pickguid = pickguid
+
 						if(!shader.visible) continue
 						if(draw.pickalpha !== undefined)shader.pickalpha = draw.pickalpha
 						if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix

@@ -93,7 +93,15 @@ define.class('$ui/textbox', function(require){
 		}
 		else if(type == _Value){
 			if(sub == _String){
-				style.fgcolor = "#0f0"
+				style.fgcolor = "#00cf7f"//#ff7fe1"//"#0f0"
+			}
+			else if(sub == _Boolean){
+				if(part>0){
+					style.fgcolor = "#0f0"
+				}
+				else{
+					style.fgcolor = '#f00'
+				}
 			}
 			else{
 				style.fgcolor = "aero"

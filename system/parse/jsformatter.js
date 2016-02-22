@@ -162,6 +162,7 @@ define.class(function(require, exports){
 
 	var tempcolor = vec4()
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
+
 		if(n.kind === undefined){
 			var str
 			if(typeof n.value === 'string'){
@@ -176,8 +177,9 @@ define.class(function(require, exports){
 		else if(n.kind == 'string'){
 			var subtype = exports._String
 			var col = 0
-
-			if(vec4.parse(n.value, tempcolor, true)){
+			
+			vec4.parse(n.value, tempcolor, true)
+			if(tempcolor[0] !== -1){
 				subtype = exports._Color
 				col = -(parseInt(tempcolor[0]*255)*65536+parseInt(tempcolor[1]*255)*256+parseInt(tempcolor[2]*255))
 
@@ -189,8 +191,13 @@ define.class(function(require, exports){
 				this.add(n.raw!==undefined?n.raw:'"'+n.value+'"', 0 , exports._Value, subtype)
 			}
 		}
-		else
+		else if(n.kind === 'boolean'){
+			this.add(n.raw!==undefined?n.raw:''+n.value, 0, exports._Value, exports._Boolean, n.value?1:0)
+		}
+		else {
+
 			this.add(n.raw!==undefined?n.raw:''+n.value, 0, exports._Value)
+		}
 	}
 
 	this.This = function(n){//: { },
@@ -901,9 +908,10 @@ define.class(function(require, exports){
 				_Signal:25,
 			_String:11,
 			_Number:12,
-			_Tab:13,
-			_Keyword:14,
-			_Color:15
+			_Boolean:13,
+			_Tab:14,
+			_Keyword:15,
+			_Color:16
 	}
 
 	for(var key in exports.types) exports[key] = exports.types[key]

@@ -207,7 +207,6 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				if(data_new[off_new+1] !== data_old[off_old + 7]) break
 				//if(data_new[off_new+2] !== data_old[off_old + 8]) break
 				//if(data_new[off_new+3] !== data_old[off_old + 9]) break
-				
 				// copy data over
 				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
 				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]

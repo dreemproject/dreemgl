@@ -88,11 +88,15 @@ define.class('$system/base/pointer', function (require, exports){
 
 		// Internal: handler for `mousedown` event stops `mousemove` listening.
 		this.mouseup = function(e){
-			this.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
-			this.device.keyboard.checkSpecialKeys(e)
+
+			//console.log(e.button)
+			if(e.button === 2) this.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
+			//this.device.keyboard.checkSpecialKeys(e)
 
 			e.preventDefault()
+
 			this.setend(mouseToPointers(e))
+
 			window.removeEventListener('mousemove', this._mousemove)
 			window.removeEventListener('mouseup', this._mouseup)
 			window.removeEventListener('contextmenu', this._mouseup)
