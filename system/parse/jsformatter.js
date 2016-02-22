@@ -247,7 +247,7 @@ define.class(function(require, exports){
 		for(var i = 0; i < n.keys.length; i ++){
 			var prop = n.keys[i]
 			var len = prop.key.name.length
-			if(len>maxlen) maxlen = len
+			if(len>maxlen) maxlen = len + 1
 		}
 
 
