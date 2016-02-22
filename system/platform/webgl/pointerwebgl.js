@@ -61,6 +61,9 @@ define.class('$system/base/pointer', function (require, exports){
 
 		// Internal: handler for `mousedown` event starts `mousemove` listening.
 		this.mousedown = function(e){
+			
+			this.device.keyboard.checkSpecialKeys(e)
+
 			e.preventDefault()
 			this.setstart(mouseToPointers(e))
 			window.addEventListener('mousemove', this._mousemove)
@@ -72,10 +75,12 @@ define.class('$system/base/pointer', function (require, exports){
 			if (parent.window) parent.window.addEventListener('mouseup', this._mouseup)
 			if (parent.window) parent.window.addEventListener('contextmenu', this._mouseup)
 		}
+
 		window.addEventListener('mousedown', this.mousedown.bind(this))
 
 		// Internal: handler for `mousemove` event.
 		this.mousemove = function(e){
+			this.device.keyboard.checkSpecialKeys(e)
 			e.preventDefault()
 			this.setmove(mouseToPointers(e))
 		}
@@ -83,6 +88,9 @@ define.class('$system/base/pointer', function (require, exports){
 
 		// Internal: handler for `mousedown` event stops `mousemove` listening.
 		this.mouseup = function(e){
+			this.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
+			this.device.keyboard.checkSpecialKeys(e)
+
 			e.preventDefault()
 			this.setend(mouseToPointers(e))
 			window.removeEventListener('mousemove', this._mousemove)

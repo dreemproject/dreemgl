@@ -46,7 +46,7 @@ define.class('$system/base/keyboard', function (require, exports){
 		var special_key_hack = false
 
 		this.checkSpecialKeys = function(e){
-			if(e.shiftKey !== this._shift?true:false) this.shift = e.shiftKey?1:0
+			if(e.shift !== this._shift?true:false) this.shift = e.shiftKey?1:0
 			if(e.altKey !== this._alt?true:false) this.alt = e.altKey?1:0
 			if(e.ctrlKey !== this._ctrl?true:false) this.ctrl = e.ctrlKey?1:0
 			if(e.metaKey !== this._meta?true:false) this.meta = e.metaKey?1:0
@@ -141,10 +141,10 @@ define.class('$system/base/keyboard', function (require, exports){
 		}.bind(this)
 		// lets output a css
 
-		this.pointerMove = function(pos){
+		this.textAreaRespondToMouse = function(pos){
 			this.textarea.focus()
-			this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
-			this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
+			//this.textarea.style.left = pos[0] - parseFloat(this.textarea.style.width) * 0.5
+			//this.textarea.style.top = pos[1] - parseFloat(this.textarea.style.height) * 0.5
 		}
 
 		this.textarea = document.createElement('textarea')
@@ -192,7 +192,7 @@ define.class('$system/base/keyboard', function (require, exports){
     		outline:0px !important;\n\
     		-webkit-appearance:none;\n\
     	}"
-    	document.body.appendChild(style);
+    	document.body.appendChild(style)
 
 		document.body.appendChild(this.textarea)
 

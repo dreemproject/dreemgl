@@ -175,7 +175,7 @@ define.class(function(require){
 
 	this.selectLine = function(){
 		this.start = this.editor.scanLeftLine(this.lo)
-		this.end = this.editor.scanRightLine(this.hi) + 1
+		this.end = this.editor.scanRightLine(this.hi)
 		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
 

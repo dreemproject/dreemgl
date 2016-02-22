@@ -21,18 +21,18 @@ define.class('$ui/textbox', function(require){
 	this.tab_size = 1
 	this.line_start = 0
 	this.line_end = 0
+
 	// lets go and move this fucker
 	this.textpositionfn = function(pos, tag) {
 		var p = pos
-		var pad = tag.y * -1.
-		var indent = floor(pad/65536.) * tab_size
+		var indent = floor((tag.y * -1.)/65536.) * tab_size
 		var line = floor(tag.w/65536.)
 		if(line >= line_start && line < line_end){
 			p.x  +=  2*indent*((line-line_start))*line_anim
 		}
 		p.x += - min(indent, init_anim*100.)
-		return p;
-	};
+		return p
+	}
 
 	this.bgcolor = vec4(12/255, 33/255, 65/255, 1)
 
