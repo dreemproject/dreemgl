@@ -53,6 +53,15 @@ define.class('$system/base/shader', function(require, exports){
 		gl.attachShader(shader, vtx_shader)
 		gl.attachShader(shader, pix_color_shader)
 		gl.linkProgram(shader)
+		console.log(gl.LINK_STATUS);
+		if (!gl.getProgramParameter(shader, gl.LINK_STATUS)){
+			var err = gl.getProgramInfoLog(shader)
+
+			console.error(err.toString(), this.annotateLines(pix_color))
+			return
+			//throw new Error(err)
+		}
+
 		this.getLocations(gl, shader, vtx_state, pix_state)
 
 		if(this.compile_use) this.compileUse(shader)

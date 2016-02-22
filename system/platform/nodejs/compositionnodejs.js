@@ -190,6 +190,20 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			socket.send({type:'sessionCheck', session:this.session})
 		}.bind(this)
 
+		bus.atClose = function(socket){
+			for(var key in this.connected_screens){
+				var screens = this.connected_screens[key];
+				var id = screens.indexOf(socket);
+				if (id != -1){
+					screens.splice(id, 1);
+					if (screens.length == 0){
+						delete this.connected_screens[key];						
+					}
+					return;
+				}
+			}
+		}.bind(this)
+		
 		bus.atMessage = function(msg, socket){
 			// we will get messages from the clients
 			if(msg.type == 'connectScreen'){
@@ -230,11 +244,12 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			// create child name shortcut
 			var child = this.children[i]
 			child.rpc = this.rpc
+			child.composition = this;
 			if(child instanceof screen) continue
 			if(!child.environment || child.environment === define.$environment){
 				var init = []
 				child.connectWires(init)
-
+				
 				for(var j = 0; j < init.length;j++) init[j]()
 				child.emit('init')
 			}

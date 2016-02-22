@@ -65,8 +65,9 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		this.background = this.find("background")
 		this.labels = this.find("labels")
 		this.hscrollbar = this.find("scrollbar")
-		this.hscrollbar.updateScrollbars()
-
+		if (this.hscrollbar){	
+			this.hscrollbar.updateScrollbars()
+		}
 		var daywidth = this.layout.width / this.zoom
 
 		//TODO(aki): Don't use magic numbers!
@@ -105,12 +106,14 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 		// TODO(aki): better data-binding that doesent trigger render
 		// This should be handled by data binding
-		this.background.segments = this._segments
-		this.labels.segments = this._segments
-
-		this.background.hoursegs = this._hoursegs
-		this.labels.hoursegs = this._hoursegs
-
+		if(this.background) {
+			this.background.segments = this._segments
+			this.background.hoursegs = this._hoursegs
+		}
+		if (this.labels){
+			this.labels.segments = this._segments
+			this.labels.hoursegs = this._hoursegs
+		}
 	}
 
 	this.getStart = function () {
@@ -179,7 +182,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.render = function() {
 		return [
-			background({name: "background"}),
+		background({name: "background"}),
 			labels({name: "labels"}),
 			events({name: "events"}),
 			scrollbar({name: "scrollbar"})

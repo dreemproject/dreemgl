@@ -8,6 +8,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 		return [
 			screen({name:'default'}, [
 				view({
+					bgcolor: NaN,
 					flexdirection: 'column',
 					oninit: function () {
 						var timeline = this.find('timeline')

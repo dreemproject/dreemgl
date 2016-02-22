@@ -30,7 +30,10 @@ define.class(function(require){
 
 	this.setInterval = function(fn, mstime){
 		if(!this.interval_ids) this.interval_ids = []
-		var id = window.setInterval(function(){
+		
+		var platform = typeof window !== 'undefined'?window:global;
+		
+		var id = platform.setInterval(function(){
 			this.interval_ids.splice(this.interval_ids.indexOf(id), 1)
 			fn.call(this)
 		}.bind(this), mstime)
@@ -42,13 +45,17 @@ define.class(function(require){
 		var idx = this.interval_ids.indexOf(id)
 		if(idx !== -1){
 			this.interval_ids.splice(idx, 1)
-		 	window.clearInterval(id)
+			var platform = typeof window !== 'undefined'?window:global;
+		
+		 	platform.clearInterval(id)
 		}
 	}
 
 	this.setTimeout = function(fn, mstime){
 		if(!this.timeout_ids) this.timeout_ids = []
-		var id = window.setTimeout(function(){
+		var platform = typeof window !== 'undefined'?window:global;
+		
+		var id = platform.setTimeout(function(){
 			this.timeout_ids.splice(this.timeout_ids.indexOf(id), 1)
 			fn.call(this)
 		}.bind(this), mstime)
@@ -60,7 +67,9 @@ define.class(function(require){
 		var idx = this.timeout_ids.indexOf(id)
 		if(idx !== -1){
 			this.timeout_ids.splice(idx, 1)
-		 	window.clearInterval(id)
+			var platform = typeof window !== 'undefined'?window:global;
+		
+		 	platform.clearInterval(id)
 		}
 	}
 

@@ -14,9 +14,10 @@ define.class(function(require, exports){
 	this.addWebSocket = function(sock){
 		this.sockets.push(sock)
 
-		sock.atEnd = function(){
+		sock.atClose = function(){
 			this.sockets.splice(this.sockets.indexOf(sock), 1)
-			sock.onEnd = undefined
+			sock.atClose = undefined			
+			this.atClose(sock);
 		}.bind(this)
 
 		sock.atMessage = function(message){
@@ -29,6 +30,10 @@ define.class(function(require, exports){
 	// called when a new message arrives
 	this.atMessage = function(message, socket){
 	} 
+	
+	// called when a client disconnects
+	this.atClose = function(socket){
+	}
 
 	// Called when a new socket appears on the bus
 	this.atConnect = function(message, socket){

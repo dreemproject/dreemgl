@@ -18,6 +18,7 @@ define.class('$ui/view', function () {
 	this.layout = function(){
 		this.layout.top = 0
 		this.layout.height = this.parent.layout.height
+		console.log(this.layout);
 	}
 
 	this.hardrect = function(){
@@ -52,25 +53,32 @@ define.class('$ui/view', function () {
 			else if (val == 4.0) return day
 			else if (val == 5.0) return hour
 			else if (val == 6.0) return minute
+		
+		
+			return 0.0;
 		}
+		
 
 		this.color = function(){
+			
+			//return "red";
+			
 			var fgcolor = vec4("#ffffff")
 			var bgcolor = vec4("#4e4e4e")
 			var a = 24.0 / view.layout.height
 			var b = 48.0 / view.layout.height
 
 			var dayfield1 = (uv.x + view.scroll.x) * view.zoom
-			var dayfield2 = (uv.x + 1 / view.layout.width + view.scroll.x) * view.zoom
-			var caldata1 = this.caltexture.point(vec2(dayfield1 / 2048, 0)) * 255.0
-			var caldata2 = this.caltexture.point(vec2(dayfield2 / 2048, 0)) * 255.0
+			var dayfield2 = (uv.x + 1.0 / view.layout.width + view.scroll.x) * view.zoom
+			var caldata1 = this.caltexture.point(vec2(dayfield1 / 2048, 0.0)) * 255.0
+			var caldata2 = this.caltexture.point(vec2(dayfield2 / 2048, 0.0)) * 255.0
 
 			var year = makepattern(caldata1.a, caldata2.a)
 			var month = makepattern(caldata1.b, caldata2.b)
 			var week = makepattern(floor(dayfield1 / 7.0), floor(dayfield2 / 7.0))
 			var day = makepattern(floor(dayfield1), floor(dayfield2))
 			var hour = makepattern(floor(dayfield1 * view.hoursegs), floor(dayfield2 * view.hoursegs))
-			var minute = makepattern(floor(dayfield1 * 96), floor(dayfield2 * 96))
+			var minute = makepattern(floor(dayfield1 * 96.0), floor(dayfield2 * 96.0))
 
 			var pattern = 0.0
 
