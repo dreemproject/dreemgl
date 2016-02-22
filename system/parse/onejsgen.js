@@ -71,12 +71,19 @@ define.class(function(exports){
 		}
 	}
 
-	this._Id = this.Id = function(name, flag, typing){
+	this._Id = this.Id = function(name, flag){
 		return {
 			type:"Id",
 			name:name,
-			flag:flag,
-			typing:typing
+			flag:flag
+		}
+	}
+
+	this._Property = this.Property = function(name, flag){
+		return {
+			type:"Property",
+			name:name,
+			flag:flag
 		}
 	}
 

@@ -44,10 +44,10 @@ define.class("$server/composition",function(require, $ui$, checkbox, icon, butto
 							height:60,
 							min:-0.66
 						},
-						view({flex:1, bgcolor:"gray", alignitems:"center", justifycontent:"center"},
+						view({flex:1, bgcolor:"blue", alignitems:"center", justifycontent:"center"},
 							label({text:"Drawer >"})),
 						view({bgcolor:"yellow", flex:1, alignitems:"center", justifycontent:"flex-end"},
-							label({text:"Right Only", fgcolor:"purple", fontsize:24, marginright:10}))
+							label({text:"Right Only", fgcolor:"red", fontsize:24, marginright:10}))
 					)
 				),
 				toolkit({visible:false, position:"absolute", x:781, y:90.99999237060547, width:400, height:800})

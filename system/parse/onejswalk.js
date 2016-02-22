@@ -49,7 +49,7 @@ define.class(function(){
 		if(!fn) throw new Error("Cannot find type " + node.type)
 		fn.call(this, node, parent, state, index)
 	}
-
+	
 	this.Program = function(node, parent, state, index){
 		var arr = node.steps
 		if(arr) for(var i = 0, len = arr.length; i < len; i++) this.walk(arr[i], node, state, i)
@@ -59,7 +59,9 @@ define.class(function(){
 	}
 
 	this.Id = function(node, parent, state, index){
-		this.walk(node.typing, node, state, -1)
+	}
+
+	this.Property = function(node, parent, state, index){
 	}
 
 	this.Value = function(node, parent, state, index){
@@ -338,3 +340,4 @@ define.class(function(){
 
 
 })
+	

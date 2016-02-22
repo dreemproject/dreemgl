@@ -12,6 +12,8 @@ define.class("$ui/view", function(require, $ui$, view){
 
 	this.tooldragroot = true;
 	this.overflow = "hidden";
+	this.bgcolor = "transparent";
+	this.pickalpha = -1;
 
 	this.attributes = {
 

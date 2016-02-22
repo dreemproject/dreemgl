@@ -99,7 +99,7 @@ define.class("$ui/view", function(require,
 				classname:"icon",
 				classdir:"$ui$",
 				params:{
-					fgcolor:'cornflower',
+					fgcolor:'cornflowerblue',
 					pickalpha:-1,
 					icon:'flask',
 					fontsize:80

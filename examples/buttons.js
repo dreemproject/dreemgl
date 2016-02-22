@@ -21,25 +21,14 @@ define.class("$server/composition",function(require, $ui$, button, screen, label
 							marginbottom:20,
 							width:200,
 							bgcolor:NaN,
-							text:"Press the buttons below:"
+							text:"Press the button below:"
 						}),
 						button({
 							marginbottom:20,
 							label:"Click Button",
 							click:function(ev,v,o){
 							this.screen.find("status").text = "Button clicked!";
-						}}),
-						button({
-							bgcolor:"white",
-							icon:"flask",
-							label:"Toggle Button",
-							mode:"toggle",
-							toggle:function(ev,v,o) {
-								this.screen.find("status").text = "Button toggled to: " + v;
-							},
-							selected:{ fgcolor:'green' },
-							normal:{ fgcolor:'gray' }
-						})
+						}})
 					)
 				)
 			]
