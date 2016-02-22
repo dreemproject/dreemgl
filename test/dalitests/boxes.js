@@ -44,7 +44,7 @@ define.class(function($server$, composition, $ui$, screen, view){
                        )
 
                   // red box, green box
-                  ,view({size: vec2(200,200), bgcolor: '#a0a0a0a0'},
+                  ,view({size: vec2(200,200), bgcolor: '#a0a0a0'},
                         view({
                           size: vec2(50,50)
                           ,bgcolor: vec4('red')
@@ -70,7 +70,7 @@ define.class(function($server$, composition, $ui$, screen, view){
                        )
 
                   // red box above green box
-                  ,view({flexdirection: 'column', size: vec2(200,200), bgcolor: '#c0c0c0c0'},
+                  ,view({flexdirection: 'column', size: vec2(200,200), bgcolor: '#c0c0c0'},
                         view({
                           size: vec2(50,50)
                           ,bgcolor: vec4('red')
