@@ -19,7 +19,7 @@ define.class(function(require, exports){
 	this.post_colon = 1
 	this.around_operator = 1
 	this.actual_indent = 0
-	this.actual_line = 0 
+	this.actual_line = 0
 
 	this.atConstructor = function(){
 		this.indent = 0
@@ -707,7 +707,7 @@ define.class(function(require, exports){
 		var has_newlines = false
 		if(this.comments(n.cm1)) has_newlines = true
 		var old_indent = this.indent
-		//if(has_newlines) 
+		//if(has_newlines)
 		this.indent++
 
 		// cleanup hack
@@ -718,7 +718,7 @@ define.class(function(require, exports){
 			first_is_obj = true
 			if(n.args.length === 1) this.indent--
 		}
-	
+
 		for(var i = 0; i < n.args.length; i++){
 			var arg = n.args[i]
 			if(!arg)continue
@@ -728,7 +728,7 @@ define.class(function(require, exports){
 			var has_nl = this.expand(arg)
 
 			// check wether to switch to has_newlines
-			if(i === 0 && first_is_obj && !has_newlines){
+			if(i === 0 && !has_newlines){
 				has_newlines = has_nl
 			}
 
@@ -742,7 +742,7 @@ define.class(function(require, exports){
 
 		this.indent = old_indent
 		this.parenR(exports._Call, 0)
-		
+
 		return has_newlines
 	}
 
