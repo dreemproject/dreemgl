@@ -98,6 +98,7 @@ define.class('$ui/textbox', function(require){
 		}else{
 			style.fgcolor = "#ff9d00"
 		}
+		return style
 		//if(type>7)mesh.outline = true
 	}
 
