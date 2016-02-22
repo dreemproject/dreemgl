@@ -587,7 +587,8 @@ define.class(function(require){
 		var is_config =  config instanceof Config
 		var is_attribute = !always_define && key in this
 		// use normal value assign
-		if(!always_define && (is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function')){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+
+		if(!always_define && (is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function' && !config.is_wired)){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -615,8 +616,14 @@ define.class(function(require){
 			else if(typeof value === 'boolean'){
 				config.type = boolean
 			}
-			else if(typeof value === 'function' && !value.is_wired){
-				config.type = Function
+			else if(typeof value === 'function'){
+				if(!value.is_wired){
+					config.type = Function
+				}
+				else{ // an undefined wire is automatically a number
+					config.value = 0
+					config.type = Number
+				}
 			}
 			else if(typeof value === 'string'){
 				config.type = String
@@ -630,7 +637,6 @@ define.class(function(require){
 		if(!this.hasOwnProperty('_attributes')){
 			this._attributes = this._attributes?Object.create(this._attributes):{}
 		}
-
 		if(is_attribute){ // extend the config
 			//if('type' in config) throw new Error('Cannot redefine type of attribute '+key)
 			var newconfig = Object.create(this._attributes[key])

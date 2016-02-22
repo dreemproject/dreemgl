@@ -89,7 +89,8 @@ define.class('$system/base/keyboard', function (require, exports){
 				this._rightarrow ||
 				this._uparrow ||
 				this._downarrow ||
-				this._backspace){
+				this._backspace || 
+				this._delete){
 				if(e.preventDefault) e.preventDefault()
 			}
 			is_keyboard_cut = false
