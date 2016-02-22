@@ -1761,13 +1761,13 @@ define.class("$ui/view", function(require,
 			}
 
 			if (lines[0] > 0.0 && abs(px - lines[0]) < 0.5 && int(mod(py, linedotspacing)) == 0) {
-				return linecolor;
+				return rulermarkstartcolor;
 			} else if (lines[1] > 0.0 && abs(py - lines[1]) < 0.5 && int(mod(px, linedotspacing)) == 0) {
-				return linecolor;
+				return rulermarkstartcolor;
 			} else if (lines[2] > 0.0 && abs(px - lines[2]) < 0.5 && int(mod(py, linedotspacing)) == 0) {
-				return linecolor;
+				return rulermarkendcolor;
 			} else if (lines[3] > 0.0 && abs(py - lines[3]) < 0.5 && int(mod(px, linedotspacing)) == 0) {
-				return linecolor;
+				return rulermarkendcolor;
 			} else {
 				return bgcolor;
 			}
