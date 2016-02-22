@@ -205,8 +205,8 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 				if(data_new[off_new] !== data_old[off_old + 6]) break
 				if(data_new[off_new+1] !== data_old[off_old + 7]) break
-				if(data_new[off_new+2] !== data_old[off_old + 8]) break
-				if(data_new[off_new+3] !== data_old[off_old + 9]) break
+				//if(data_new[off_new+2] !== data_old[off_old + 8]) break
+				//if(data_new[off_new+3] !== data_old[off_old + 9]) break
 				
 				// copy data over
 				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
@@ -223,9 +223,9 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])
 		
 				if(data_new[off_new] !== data_old[off_old + 6]) break
-				if(data_new[off_new+1] !== data_old[off_old + 7]) break
-				if(data_new[off_new+2] !== data_old[off_old + 8]) break
-				if(data_new[off_new+3] !== data_old[off_old + 9]) break
+				//if(data_new[off_new+1] !== data_old[off_old + 7]) break
+				//if(data_new[off_new+2] !== data_old[off_old + 8]) break
+				//if(data_new[off_new+3] !== data_old[off_old + 9]) break
 					
 			}
 		
