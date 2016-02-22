@@ -1128,8 +1128,10 @@ define.class("$ui/view", function(require,
 							this.parent.find("components").pos = vec3(0,0,0);
 							this.parent.find("structure").pos = vec3(0,0,0);
 							this.parent.find("inspector").pos = vec3(0,0,0);
-
-							this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)
+							
+							if (this.__grabpos) {
+								this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)
+							}
 						}
 					},
 					pointerend:function(p) {
@@ -1150,30 +1152,34 @@ define.class("$ui/view", function(require,
 						this.__grabpos = undefined;
 					}
 				},
-				//icon({
-				//	icon:"briefcase",
-				//	fgcolor:vec4(0.8,0.8,0.8,0.8),
-				//	marginleft:5,
-				//	padding:5,
-				//	drawtarget:'color'
-				//}),
+				icon({
+					icon:"gears",
+					fgcolor:vec4(0.8,0.8,0.8,0.6),
+					marginleft:5,
+					padding:5,
+					drawtarget:'color'
+				}),
 				label({
 					name:"title",
 					text:"DreemGL Visual Toolkit",
 					bgcolor:NaN,
 					fgcolor:vec4(0.8,0.8,0.8,0.8),
-					marginleft:5,
 					padding:5,
 					drawtarget:'color'
 				}),
 				statebutton({
 					fontsize:16,
 					icon:"times",
-					fgcolor:vec4(0.8,0.8,0.8,1),
 					pickalpha:-1,
 					bgcolor:"transparent",
 					borderwidth:0,
 					marginright:1,
+					normal:{
+						fgcolor:vec4(0.8,0.8,0.8,0.8),
+					},
+					hover:{
+						fgcolor:"white",
+					},
 					click:function(ev,v,o) {
 						this.setASTObjectProperty(this, "visible", false);
 						this.ensureDeps();
