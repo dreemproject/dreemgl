@@ -472,15 +472,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		this.pointertap = function(ev){
 			var meters = geo.metersForTile({x:this.lastpos[0], y:this.lastpos[1], z:this.lastpos[2]});
-			var latlong = geo.metersToLatLng(meters.x, meters.y);
-			// latlong[0] += this.startcenter[0];
-			// latlong[1] += this.startcenter[1];
-			// console.log("tap to: ", meters, latlong);
-			console.log(ev);
+			var latlong = geo.metersToLatLng(meters.x, meters.y);			
 			var zoomoffs = 0;
 			if (ev.clicker == 2) zoomoffs ++;
 			this.mapdata.setCenterLatLng(latlong[0], latlong[1] ,this.mapdata.zoomlevel + zoomoffs, 1);
-			//this.mapdata.setCenter(this.lastpos[0], this.lastpos[1], this.mapdata.zoomlevel,1);
 		}
 
 		this.lastpos = vec2(0);
@@ -816,13 +811,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.clearcolor = "black"
 	this.framessincerender = 0;
 	
+	
 	this.atDraw = function(){
 		this.framessincerender++;
 	}
 	
+	
 	this.updateTiles = function(){
-		
-		//console.log(this.framessincerender);
 		if (!this.dataset) return;
 		if (!this.dataset.centers) return;
 		
@@ -902,7 +897,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
 		var showland = true;
-		//for(var layer = 1;layer>=0;layer--){
+		
+		//for(var layer = 1;layer>=0;layer--){ // reverse layers for reverse painter order
+		
 		for(var layer = 0;layer<2;layer++){
 
 			this.tilewidth = 0;// Math.pow(2, 0 + layer);
@@ -953,7 +950,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				}
 			}
 		}
-		var dist = 120.5
+		
 		res.push(
 			view({
 				bgcolor:"red",
@@ -970,19 +967,18 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 					buildings3d,
 					//label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
 					labels3d,
-					pointset({name: 'pointset'})
+					pointset({name: 'pointset'}),
+					this.constructor_children
 				])
 			])
 		);
-		res.push(this.constructor_children);
+		//res.push(this.constructor_children);
 		this.framessincerender = 0;
-		//this.redraw();
 		
 		return res;
 	}
 
 	this.atChildrenRendered = function(){
-		//console.log("at children rendererd");
 		this.updateTiles();
 		this.updatePointSet();
 		this.redraw();
