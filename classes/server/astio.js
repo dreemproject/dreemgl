@@ -69,6 +69,11 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 		return o.__ast;
 	};
 
+	this.codeFor = function(o) {
+		var ast = this.nodeFor(o);
+		return this.stringify(ast);
+	};
+
 	this.nodePathFor = function(v) {
 		var ast = this.nodeFor(v);
 
@@ -313,15 +318,18 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 	};
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.
-	this.stringify = function() {
+	this.stringify = function(ast) {
+		if (!ast) {
+			ast = this.ast;
+		}
 		var buf = {
 			out:'',
 			charCodeAt: function(i){return this.out.charCodeAt(i)},
 			char_count:0
 		};
-		jsformatter.walk(this.ast, buf, function(str){
+		jsformatter.walk(ast, buf, function(str){
 			buf.char_count += str.length;
-			buf.out += str
+			buf.out += str;
 		});
 		return buf.out
 	}

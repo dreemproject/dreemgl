@@ -4,15 +4,8 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 // Sprite class
 
-define.class("$ui/view", function($ui$, statebutton){
+define.class("$ui/view", function($ui$, button){
 // Presents a bar of configurable tabs.  [example](http://localhost:2000/examples/tabbar).
-
-	this.defaultselectionhandler = function(ev, v, o) {
-		if (o.parent.selection) {
-			o.parent.selection.state = "normal";
-		}
-		o.parent.selection = o;
-	};
 
 	this.attributes = {
 
@@ -22,33 +15,15 @@ define.class("$ui/view", function($ui$, statebutton){
 
 		// Color of default tabs, can be overridden in style
 		tabcolor: Config({value:vec4(0,0,0,1), meta:"color" }),
+		activetabcolor: Config({value:vec4(1,1,1,1), meta:"color" }),
+
+		textcolor: Config({value:vec4(1,1,1,1), meta:"color" }),
+		activetextcolor: Config({value:vec4(0,0,0,1), meta:"color" }),
+
+		tabclass:undefined,
 
 		// Current tab selection
-		selection:Config({type:Object}),
-
-		// Default tab states if none provided in the tab defintions.
-		states:Config({type:Object, value:{
-			normal:{
-				fgcolor:"#aaa",
-				on:undefined
-			},
-			hover:{
-				fgcolor:"#eee",
-				on:undefined
-			},
-			active:{
-				fgcolor:"#fff",
-				on:undefined
-			},
-			selected:{
-				fgcolor:"#69f",
-				on:this.defaultselectionhandler
-			},
-			disabled:{
-				fgcolor:"#a9a9a9",
-				on:undefined
-			}}
-		})
+		activetab:0
 	};
 
 	this.tooldragroot = true;
@@ -56,9 +31,12 @@ define.class("$ui/view", function($ui$, statebutton){
 	this.bgcolor = NaN;
 
 	this.style = {
-		tab: {
+		button: {
 			flex: 1,
+			justifycontent:"center",
+			alignitems:"center",
 			bgcolor:this.tabcolor,
+			borderradius:0,
 			arrowheight:5.0,
 			showarrow:true,
 			bgcolorfn:function(p) {
@@ -71,7 +49,7 @@ define.class("$ui/view", function($ui$, statebutton){
 				}
 			}
 		},
-	    tab_folder: {
+	    button_folder: {
 			y:1,
 			flex: 0,
 			bgcolor:this.tabcolor,
@@ -82,23 +60,37 @@ define.class("$ui/view", function($ui$, statebutton){
 
 	this.render = function() {
 		var tabs = [];
-		var i,tab;
-		if (this.constructor_children) {
-			for (i=0;i<this.constructor_children.length;i++) {
-				tab = this.constructor_children[i];
-				tabs.push(tab);
-			}
-		}
-
 		if (this.tabs) {
-			for (i=0;i<this.tabs.length;i++) {
+			for (var i=0;i<this.tabs.length;i++) {
 				var tabdef = this.tabs[i];
+				var active = i === this.activetab;
 
-				var tab;
+				var tab = button({
+					textcolor: active ? this.activetextcolor : this.textcolor,
+					textactivecolor: active ? this.activetextcolor : this.textcolor,
+					bgcolor: active ? this.activetabcolor : this.tabcolor,
+					buttoncolor1:"transparent",
+					buttoncolor2:"transparent",
+					hovercolor1:"transparent",
+					hovercolor2:"transparent",
+					pressedcolor1:"transparent",
+					pressedcolor2:"transparent",
+					borderwidth:0,
+					class:this.tabclass,
+					tabindex:i,
+					click:function(ev,v,o) {
+						this.activetab = o.tabindex;
+					}.bind(this)
+				});
+
 				if (typeof(tabdef) === "string") {
-					tab = this.tab({ label:tabdef })
+					tab.text = tabdef
 				} else {
-					tab = this.tab(tabdef)
+					for (var prop in tabdef) {
+						if (tabdef.hasOwnProperty(prop)) {
+							tab[prop] = tabdef[prop]
+						}
+					}
 				}
 
 				tabs.push(tab);
@@ -107,10 +99,6 @@ define.class("$ui/view", function($ui$, statebutton){
 
 		return tabs;
 	};
-
-	define.class(this, "tab", statebutton, function() {
-		this.defaultstates = wire('this.parent.states');
-	});
 
 	var tabbar = this.constructor;
 	this.constructor.examples = {

@@ -44,7 +44,7 @@ define.class('$system/base/node', function(require){
 		rear: Config({alias:'corner', index:2}),
 
 		// the background color of a view, referenced by various shaders
-		bgcolor: Config({group:"style", type:vec4, value: vec4('NaN'), meta:"color"}),
+		bgcolor: Config({group:"style", type:vec4, value: vec4(NaN), meta:"color"}),
 		// the background image of a view. Accepts a string-url or can be assigned a require('./mypic.png')
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
