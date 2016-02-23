@@ -9,7 +9,9 @@ define.class(function(require, exports){
 
 	exports.walk = function(ast, textbuf, opts, add){
 		var glwalker = new this()
-		if(opts) for(var key in opts) glwalker[key] = opts
+		if(opts) for(var key in opts){
+			glwalker[key] = opts[key]
+		}
 		glwalker.line = 0
 		glwalker.textbuf = textbuf
 		glwalker.add = add

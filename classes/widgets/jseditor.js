@@ -185,7 +185,6 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 		// if we get source back yay
 		this.worker.onmessage = function(msg){
 			var mesh = this.shaders.typeface.mesh
-
 			if(this.change_timeout){
 				this.clearTimeout(this.change_timeout)
 				this.update_force()
@@ -272,7 +271,6 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			// if we insert a newline or do a delete use the marker
 
 			if(new_range !== old_range){
-
 				if(this.change === 'keypress' && this.change_keypress === '\n'|| this.change === 'delete' && deleted_whitespace){
 					// use the tag
 					var nextto = mesh.tagAt(cursor_now,3) 
