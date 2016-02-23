@@ -820,13 +820,13 @@ define.class("$ui/view", function(require,
 			this.selected = [];
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
-			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
+			var candelete = !this.screen.focus_view || (["textbox", "jseditor"].indexOf(this.screen.focus_view.constructor.name) === -1 && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
 		} else if (ev.name === "x" && (ev.ctrl || ev.meta)) {
 			this.copyselection();
-			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
+			var candelete = !this.screen.focus_view || (["textbox", "jseditor"].indexOf(this.screen.focus_view.constructor.name) === -1 && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}

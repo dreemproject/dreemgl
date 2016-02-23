@@ -229,7 +229,7 @@ define.class(function(require, baseclass){
 					var blendshader = draw.shaders.viewportblend
 					if (view._viewport === '3d'){
 						// dont do this!
-						if (shader.depth_test_eq.func === 0) shader.depth_test = 'src_depth <= dst_depth'												
+						if (shader.depth_test_eq.func === 0) shader.depth_test = 'src_depth <= dst_depth'
 					}
 					else{
 						blendshader.depth_test = ''
@@ -284,7 +284,7 @@ define.class(function(require, baseclass){
 
 	this.drawBlend = function(draw){
 		if(!draw.drawpass.color_buffer){
-			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?")
+			console.error("Null color_buffer detected, did you forget sizing/flex:1 on your 3D viewport?", draw)
 		}
 		else {
 			// ok so when we are drawing a pick pass, we just need to 1 on 1 forward the color data
@@ -320,7 +320,7 @@ define.class(function(require, baseclass){
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
-			
+
 			vtx_count += shader.drawArrays(this.device)
 		}
 		return vtx_count
@@ -353,9 +353,9 @@ define.class(function(require, baseclass){
 		var matrices = this.colormatrices
 		this.calculateDrawMatrices(isroot, matrices);
 		view.colormatrices = matrices
-		
+
 		gl.disable(gl.SCISSOR_TEST)
-		
+
 		if(isroot){
 			/*
 			if(clipview){
