@@ -7,8 +7,9 @@ define.class(function(require, exports){
 
 	var Parser = require('$system/parse/onejsparser')
 
-	exports.walk = function(ast, textbuf, add){
+	exports.walk = function(ast, textbuf, opts, add){
 		var glwalker = new this()
+		if(opts) for(var key in opts) glwalker[key] = opts
 		glwalker.line = 0
 		glwalker.textbuf = textbuf
 		glwalker.add = add
@@ -20,6 +21,8 @@ define.class(function(require, exports){
 	this.around_operator = 1
 	this.actual_indent = 0
 	this.actual_line = 0
+	this.force_newlines_array = false
+	this.force_newlines_object = false
 
 	this.atConstructor = function(){
 		this.indent = 0
@@ -207,7 +210,7 @@ define.class(function(require, exports){
 	this.Array = function(n){//: { elems:2 },
 		this.bracketL(exports._Array, 0)
 
-		var has_newlines = false
+		var has_newlines = this.force_newlines_array
 		if(this.comments(n.cm1)) has_newlines = true
 		var old_indent = this.indent
 		if(has_newlines) this.indent++
@@ -240,7 +243,7 @@ define.class(function(require, exports){
 	this.Object = function(n, indent){//: { keys:3 },
 		this.braceL(exports._Object, 0)
 		// allright so
-		var has_newlines = false
+		var has_newlines = this.force_newlines_object
 
 		if(this.comments(n.cm1)) has_newlines = true
 

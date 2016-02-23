@@ -43,6 +43,7 @@ define.class(function(require){
 
 	this.moveToOffset = function(offset){
 		this.start = this.end = offset
+		this.max = this.editor.textbuf.cursorRect(this.end).x
 	}
 
 	this.moveLeft = function(only_end){

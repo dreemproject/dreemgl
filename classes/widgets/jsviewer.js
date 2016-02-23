@@ -23,6 +23,11 @@ define.class('$ui/textbox', function(require){
 	this.line_start = 0
 	this.line_end = 0
 
+	this.format_options = {
+		force_newlines_array:false,
+		force_newlines_object:false
+	}
+
 	// lets go and move this fucker
 	this.textpositionfn = function(pos, tag) {
 		var p = pos
@@ -212,7 +217,7 @@ define.class('$ui/textbox', function(require){
 			var node_id = 0
 			if(view.wrap){
 				var maxwidth = view.layout.width
-				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
+				JSFormatter.walk(ast, textbuf, view.format_options,function(text, padding, l1, l2, l3, node){
 					if(text === '\n'){
 						this.last_is_newline = true
 						return
@@ -232,7 +237,7 @@ define.class('$ui/textbox', function(require){
 			}
 			else{
 				// if we process a newline, we should wait for the next tab
-				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
+				JSFormatter.walk(ast, textbuf, view.format_options,function(text, padding, l1, l2, l3, node){
 					if(text === '\n'){
 						this.last_is_newline = true
 						return

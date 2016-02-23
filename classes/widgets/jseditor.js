@@ -96,7 +96,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 	this.textChanged = function(){
 		baseclass.textChanged.call(this, true)
-		this.worker.postMessage({change_id:++this.change_id, source:this._value})
+		this.worker.postMessage({change_id:++this.change_id, format_options:this.format_options, source:this._value})
 		if(this.change_timeout) return
 		this.change_timeout = this.setTimeout(this.update_force, 30)
 	}
@@ -107,7 +107,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 			if(this.format_dirty){
 				this.change = "cursor"
-				this.worker.postMessage({change_id:++this.change_id, source:this._value})
+				this.worker.postMessage({change_id:++this.change_id, format_options:this.format_options, source:this._value})
 			}
 		}
 		//this.change_timeout = this.setTimeout(this.update_force, 30)
@@ -150,7 +150,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 			// lets reserialize output
 			var out = buf.out
-			JSFormatter.walk(ast, buf, function(text, padding, l1, l2, l3, node){
+			JSFormatter.walk(ast, buf, msg.format_options, function(text, padding, l1, l2, l3, node){
 				if(text === '\n'){
 					this.last_is_newline = true
 					return
@@ -270,6 +270,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			
 			if(this.change === 'undoredo')return this.format_dirty = true
 			// if we insert a newline or do a delete use the marker
+
 			if(new_range !== old_range){
 
 				if(this.change === 'keypress' && this.change_keypress === '\n'|| this.change === 'delete' && deleted_whitespace){
@@ -278,7 +279,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 					for(var t = start; t < len_new; t++){
 						if(nextto == data_new[t*4+3]){
-							this.cursorset.list[0].moveToOffset(t)
+							cursor_now = t//this.cursorset.list[0].moveToOffset(t)
 							break
 						}
 					}
@@ -302,7 +303,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 								fd = 1
 							}
 							else if(fd){	// move the cursor
-								this.cursorset.list[0].moveToOffset(t)
+								cursor_now = t//this.cursorset.list[0].moveToOffset(t)
 								break
 							}
 						}
@@ -339,7 +340,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			this.line_end = max
 			this._line_anim = 1.0
 			this.line_anim = 0.
-			
+			this.cursorset.list[0].moveToOffset(cursor_now)
 			//var rect = mesh.cursorRect(start)
 			//err.x = rect.x
 			//err.y = rect.y + rect.h + 4
