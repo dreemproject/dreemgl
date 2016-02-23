@@ -594,11 +594,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	// internal, called at every frame draw
-	this.atDraw = function(){
-		// if(this.debug !== undefined && this.debug.indexOf('atdraw')!== -1) console.log(this)
-	}
-
 	// internal, sorts the shaders
 	this.sortShaders = function(){
 		var shaders = this.shaders

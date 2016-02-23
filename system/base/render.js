@@ -65,6 +65,7 @@ define.class(function(exports){
 					new_version.emit(key, {type:'persist', owner:new_version, key:key, value:value})
 				}
 			}
+			if(new_version.atDraw) new_version.screen.device.draw_hooks.push(new_version)
 			if(new_version.atViewInit) new_version.atViewInit(old_version)
 			new_version.emit('init', old_version)// old_version && old_version.constructor == new_version.constructor? old_version: undefined)
 		}
@@ -155,6 +156,12 @@ define.class(function(exports){
 
 		if(old_version){
 			old_version.destroyed = true
+			// remove draw hook
+			if(old_version.atDraw){
+				var id = old_version.screen.device.draw_hooks.indexOf(old_version)
+				if(id !== -1) old_version.screen.device.draw_hooks.splice(id, 1)
+			}
+
 			old_version.emit('destroy')
 		}
 

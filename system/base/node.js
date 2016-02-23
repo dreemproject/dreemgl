@@ -239,14 +239,27 @@ define.class(function(require){
 	this.emit_block_set = null
 
 	this.emit = function(key, ievent){
+
+		// lets do a fastpass
+
 		var event = ievent || {}
 
 		var lock_key = '_lock_' + key
-
 		if(this[lock_key] || this.emit_block_set && this.emit_block_set.indexOf(key) !== -1) return
-
 		this[lock_key] = true
+
+		var fast_key = '_fast_' + key
+		var callfn = this[fast_key] 
+
+		if(callfn){
+			callfn.call(this, event, event.value, this)
+		}
+
+		var counter = 0
 		try{
+
+			var on_key = 'on' + key
+			var listen_key = '_listen_' + key
 			if(!this.__lookupSetter__(key)){
 				var fn = this[key]
 				if(typeof fn === 'function'){
@@ -255,25 +268,26 @@ define.class(function(require){
 				return
 			}
 
-			var on_key = 'on' + key
-			var listen_key = '_listen_' + key
-
 			var proto = this
 
 			// called after the onclicks, in reverse order (parent on up)
 			var finals
 			while(on_key in proto || listen_key in proto){
 				if(proto.hasOwnProperty(on_key)){
-					proto[on_key].call(this, event, event.value, this)
+					callfn = proto[on_key]
+					callfn.call(this, event, event.value, this)
 					if(event.stop) return
 					if(event.final) finals = finals || [], finals.push(event.final)
+					counter++
 				}
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
 					for(var j = listeners.length - 1; j >= 0; j--){
-						listeners[j].call(this, event, event.value, this)
+						callfn = listeners[j]
+						callfn.call(this, event, event.value, this)
 						if(event.stop) return
 						if(event.final) finals = finals || [], finals.push(event.final)
+						counter++
 					}
 				}
 				proto = Object.getPrototypeOf(proto)
@@ -285,6 +299,11 @@ define.class(function(require){
 		}
 		finally{
 			this[lock_key] = false
+			console.log(key, counter)
+
+			if(counter === 1){
+				this[fast_key] = callfn
+			}
 		}
 	}
 
@@ -294,6 +313,8 @@ define.class(function(require){
 			this.defineAttribute(key, this[key], true)
 		}
 		var listen_key = '_listen_' + key
+		var fast_key = '_fast_' + key
+		this[fast_key] = undefined		
 		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
 		else array = this[listen_key]
@@ -752,6 +773,8 @@ define.class(function(require){
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
 				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
 			}
+
+			// lets add a fast alias hook
 
 			this.addListener(config.alias, function(event){
 				var old = this[value_key]
