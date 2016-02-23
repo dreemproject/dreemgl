@@ -214,6 +214,8 @@ define.class(function(require, exports){
 
 		var has_newlines = this.force_newlines_array
 		if(this.comments(n.cm1)) has_newlines = true
+		else if(this.force_newlines_array) this.newline()
+
 		var old_indent = this.indent
 		if(has_newlines) this.indent++
 
@@ -248,6 +250,7 @@ define.class(function(require, exports){
 		var has_newlines = this.force_newlines_object
 
 		if(this.comments(n.cm1)) has_newlines = true
+		else if(this.force_newlines_object) this.newline()
 
 		//console.log(has_newlines, n)
 

@@ -13,6 +13,10 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	this.init = function(){
 	}
 
+	this.format_options = {
+		force_newlines_array:false,
+		force_newlines_object:true
+	}
 	// process inserts with matching parens
 	this.processInsert = function(lo, hi, text){
 		var cdelta = 0
