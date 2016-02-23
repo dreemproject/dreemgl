@@ -2300,20 +2300,20 @@
 			height: 0,
 		}
 		if(!(10 in font.glyphs)) font.count++
-		font.glyphs[10] = { // newline
+		font.glyphs[10] = { // tab
 			min_x: 0,
-			min_y: 0,
-			max_x: 0.5,
-			max_y: 0,
+			min_y: -0.3,
+			max_x: 2,
+			max_y: 1.,
 			tmin_x:0,
 			tmin_y:0,
-			tmax_x:24,
+			tmax_x:24*4,
 			tmax_y:24,
-			nominal_w:24,
+			nominal_w:24 * 4,
 			nominal_h:24,
-			advance:0.5,
-			width: 0,
-			height: 0
+			advance:2,
+			width: 2,
+			height: 1
 		}
 		if(!(9 in font.glyphs)) font.count++
 		font.glyphs[9] = { // tab

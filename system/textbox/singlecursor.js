@@ -71,16 +71,24 @@ define.class(function(require){
 		var rect = this.editor.textbuf.cursorRect(this.end)
 		//console.log(max, rect.y + .5*rect.h - lines * cursorset.text_layer.line_height)
 		//cursorset.text_layer.debugChunks()
-		this.end = this.editor.textbuf.offsetFromPos(this.max, rect.y + .5*rect.h - lines * this.editor.textbuf.line_height)
+		if(this.editor.textbuf.charCodeAt(this.end-1) === 10 && this.editor.textbuf.charCodeAt(this.end-2) === 10) this.end--
+		else this.end = this.editor.textbuf.offsetFromPos(this.max, rect.y + .5*rect.h - lines * this.editor.textbuf.line_height)
+
 		if(this.end < 0) this.end = 0
 		if(!only_end) this.start = this.end
 	}
 
 	this.moveDown = function(only_end, lines){
 		if(!lines) lines = 1
+	
 		var rect = this.editor.textbuf.cursorRect(this.end)
+
+		//if(this.editor.textbuf.charCodeAt(this.end+1) === 10 && this.editor.textbuf.charCodeAt(this.end+2) === 10) this.end++
+		//else 
 		this.end = this.editor.textbuf.offsetFromPos(this.max, rect.y + .5*rect.h + lines * this.editor.textbuf.line_height)
+
 		if(this.end < 0) this.end = this.editor.textbuf.char_count
+
 		if(!only_end) this.start = this.end
 	}
 

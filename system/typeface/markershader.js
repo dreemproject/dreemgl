@@ -65,19 +65,26 @@ define.class('$system/platform/$platform/shader$platform', function(require){
 			// lets access the textbuf geometry
 			var length = textbuf.lengthQuad()
 			if(end > length) end = length
-
+			var min = Infinity
+			//if(textbuf.charCodeAt(start) === 10) start--
 			for(var o = start, last = o; o < end; o++){
 				ch = textbuf.charCodeAt(o)
+				//next = textbuf.charCodeAt(o+1)
 				if(o == end - 1 || ch == 10){
 					var r = textbuf.cursorRect(last)
-					var x = (o + 1) == length || ch == 10? textbuf.char_tr_x(o): textbuf.char_tl_x(o+1)
-					r.start = last
+					var r2 = textbuf.cursorRect(o)
+					var x = ch === 10? r2.x: r2.x + r2.w;//ch === 10? textbuf.char_tl_x(o-1): textbuf.char_tr_x(o)
+					r.start = last + 1
 					r.end = o
+					if(r.x < min) min = r.x
+					r.x = min
 					r.w = x - r.x
+					if(r.w < 4) r.w = 4
 					r.x2 = r.x + r.w
 					r.y2 = r.y + r.h
 					r.y += deltay
 					r.y2 += deltay
+
 					// check if the previous item is on the same r.y
 					// ifso fuse it with this marker
 					var prev = array[array.length -1]

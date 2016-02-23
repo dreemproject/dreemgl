@@ -16,6 +16,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	// process inserts with matching parens
 	this.processInsert = function(lo, hi, text){
 		var cdelta = 0
+		if(this.error_state) return [text, 0]
 		if(this.textbuf.charCodeAt(lo) === 9){
 			cdelta += 1			
 		}
@@ -75,11 +76,12 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 	// some patching up
 	this.stripNextOnBackspace = function(pos){
-		ch = this.textbuf.charCodeAt(pos)
-		if(ch == 91 && this.textbuf.charCodeAt(pos+1) == 93) return true
-		if(ch == 123 && this.textbuf.charCodeAt(pos+1) == 125) return true
-		if(ch == 40 && this.textbuf.charCodeAt(pos+1) == 41) return true
 		return false
+		//ch = this.textbuf.charCodeAt(pos)
+		//if(ch == 91 && this.textbuf.charCodeAt(pos+1) == 93) return true
+		//if(ch == 123 && this.textbuf.charCodeAt(pos+1) == 125) return true
+		//if(ch == 40 && this.textbuf.charCodeAt(pos+1) == 41) return true
+		//return false
 	}
 	
 	this.update_force = function(){
@@ -102,16 +104,18 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	this.cursorsChanged = function(){
 		if(!this.change_timeout){
 			baseclass.cursorsChanged.call(this)
-			// lets post
-			if(this.format_dirty)
+
+			if(this.format_dirty){
+				this.change = "cursor"
 				this.worker.postMessage({change_id:++this.change_id, source:this._value})
+			}
 		}
 		//this.change_timeout = this.setTimeout(this.update_force, 30)
 	}
 
 	// we can skip tabs
 	this.atMoveLeft = function(pos){
-		if(this.textbuf.charCodeAt(pos) === 9) return pos - 1
+		if(this.textbuf.charCodeAt(pos) === 10) return pos - 1
 		return pos
 	}
 
@@ -146,23 +150,30 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 			// lets reserialize output
 			var out = buf.out
-			JSFormatter.walk(ast, buf, function(str, padding, l1, l2, l3, node){
-				out.ensureSize(out.length + str.length)
+			JSFormatter.walk(ast, buf, function(text, padding, l1, l2, l3, node){
+				if(text === '\n'){
+					this.last_is_newline = true
+					return
+				}
+				if(text === '\t' && this.last_is_newline){
+					text = '\n'
+				}
+				this.last_is_newline = false
+
+				out.ensureSize(out.length + text.length)
 				var o = out.length
-				var first = str.charCodeAt(0)
+				var first = text.charCodeAt(0)
 				if(first !== 32 && first !== 9 && first !== 10) buf.walk_id++
-				for(var i = 0; i < str.length; i++){
+				for(var i = 0; i < text.length; i++){
 					var v = o * 4 + i * 4
-					out.array[v] = str.charCodeAt(i)
+					out.array[v] = text.charCodeAt(i)
 					out.array[v + 1] = ((padding||0) + this.actual_indent*65536)*-1
-					if(l1 < 0)
-						out.array[v + 2] = l1
-					else
-						out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
+					if(l1 < 0) out.array[v + 2] = l1
+					else out.array[v + 2] = 65536 * (l1||0) + 256 * (l2||0) + (l3||0)
 					out.array[v + 3] = buf.walk_id + 65536*this.actual_line
 				}
-				out.length += str.length
-				buf.char_count += str.length;
+				out.length += text.length
+				buf.char_count += text.length;
 			})
 
 			this.postMessage({length:buf.out.length, change_id: msg.change_id, array:buf.out.array}, [buf.out.array.buffer])
@@ -179,7 +190,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				this.clearTimeout(this.change_timeout)
 				this.update_force()
 			}
-
+			//return
 			var err = this.find('error') 
 			if(msg.error){
 				var rect = mesh.cursorRect(msg.pos)
@@ -187,11 +198,14 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				err.y = rect.y + rect.h + 4
 				err.text = '^'+msg.error
 				err.visible = true
+				this.error_state = true
 				return
 			}
 			else{
+				this.error_state = false
 				if(err._visible) err.visible = false
 			}
+
 			if(msg.change_id !== this.change_id) return // toss it, its too late.
 			var dt = Date.now()
 			var start = 0
@@ -222,12 +236,17 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])
 		
 				if(data_new[off_new] !== data_old[off_old + 6]) break
-				//if(data_new[off_new+1] !== data_old[off_old + 7]) break
+				if(data_new[off_new+1] !== data_old[off_old + 7]) break
 				//if(data_new[off_new+2] !== data_old[off_old + 8]) break
 				//if(data_new[off_new+3] !== data_old[off_old + 9]) break
-					
+				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
+				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
+				data_old[off_old + 8] = data_old[off_old + 18] = data_old[off_old + 28] = 
+				data_old[off_old + 38] = data_old[off_old + 48] = data_old[off_old + 58] = data_new[off_new+2]
+				data_old[off_old + 9] = data_old[off_old + 19] = data_old[off_old + 29] = 
+				data_old[off_old + 39] = data_old[off_old + 49] = data_old[off_old + 59] = data_new[off_new+3]
 			}
-		
+			//mesh.clean = false
 			var cursor_now = this.cursorset.list[0].start
 
 			var new_range = end_new - start
@@ -247,12 +266,12 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			}
 
 			// dont autoreformat immediately when deleting characters, only with whitespace
-			if(new_range < old_range && this.change === 'delete' && start < cursor_now && !deleted_whitespace) return
+			if(new_range < old_range && this.change === 'delete' && start < cursor_now && !deleted_whitespace) return  this.format_dirty = true
 			
 			if(this.change === 'undoredo')return this.format_dirty = true
-
 			// if we insert a newline or do a delete use the marker
 			if(new_range !== old_range){
+
 				if(this.change === 'keypress' && this.change_keypress === '\n'|| this.change === 'delete' && deleted_whitespace){
 					// use the tag
 					var nextto = mesh.tagAt(cursor_now,3) 
@@ -301,11 +320,12 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			else{
 				this.cursorset.update()
 			}
+
 			// this replaces the textbuffer
 			mesh.setLength(start)
 			var buf = {struct:1, start:start, array:data_new, length:len_new}
 			mesh.add(buf)
-			
+		
 			// lets figure out the linenumbers between start and end_new
 			if(new_range > old_range){
 				var min = Infinity, max = -Infinity

@@ -81,6 +81,7 @@ define.class(function(require, exports){
 	this.tab = function(indent){
 		// lets add a tab
 		this.actual_indent = indent
+		// alright lets write it on the previous newline.		
 		this.add('\t', 4*256 + indent)
 		//this.add(Array(indent+1).join('\t') )
 	}
@@ -128,7 +129,8 @@ define.class(function(require, exports){
 	}
 
 	this.lastIsNewline = function(){
-		return this.textbuf.charCodeAt(this.textbuf.char_count - 1) === 10
+		return this.last_is_newline
+		//return this.textbuf.charCodeAt(this.textbuf.char_count - 1) === 10
 	}
 
 	this.lastCharCode = function(){
@@ -158,8 +160,6 @@ define.class(function(require, exports){
 		this.add(n.name, 0, exports._Property, secondary ||0)
 	}
 	
-	console.log(vec4.parse("3D", tempcolor, true))
-
 	var tempcolor = vec4()
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 
@@ -377,11 +377,11 @@ define.class(function(require, exports){
 	this.If = function(n){//: { test:1, then:1, else:1, postfix:0, compr:0 },
 		this.keyword('if', exports._If)
 		//this.space()
-		this.parenL(exports._If, 0)
+		this.parenL(exports._If, 1*256+1)
 		this.indent++
 		this.expand(n.test)
 		this.indent--
-		this.parenR(exports._If, 0)
+		this.parenR(exports._If, 2*256+1)
 		//this.space()
 		// if our n.then has wsu, lets do it
 		if(n.then.cmu){
@@ -792,14 +792,15 @@ define.class(function(require, exports){
 
 			if(i < n.args.length - 1) this.comma(exports._Call, do_newline?0:2*256+this.post_comma)
 
-			if(has_newlines && !this.comments(arg.cmr))
+			if(n.args.length > 1 && has_newlines && !this.comments(arg.cmr))
 				this.newline()
 			//else this.space()
 		}
+
 		if(has_newlines && this.comments(n.cm2)) this.tab(this.indent - 1)
 		if(this.lastIsNewline()) this.tab(old_indent)
-
 		this.indent = old_indent
+
 		this.parenR(exports._Call, 0)
 
 		return has_newlines

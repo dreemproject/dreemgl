@@ -236,6 +236,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			// m1 is the formatting layout
 			if(m1 < 0){
 				var format = m1 * -1
+				//var m1info = unicode === 10?this.font.glyphs[9]:info
 				//var indent = parseInt(m1/65536)
 				var mode = Math.floor(format/256)%256
 				var padding = format%256
@@ -333,7 +334,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				)*/
 			}
 			this.add_x += info.advance * fontsize + dx
-
 			if(this.add_x > this.text_w) this.text_w = this.add_x
 		}
 
@@ -390,11 +390,16 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var info = glyphs[unicode]
 				if(!info) info = glyphs[32]
 				// lets add some vertices
-				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
 					this.add_y += this.fontsize * this.line_spacing
 				}
+
+				this.addGlyph(info, unicode, m1, m2, m3)
+				//if(!(m1<0) &&  unicode == 10){ // newline
+				//	this.add_x = this.start_x
+				//	this.add_y += this.fontsize * this.line_spacing
+				//}
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
 		}
@@ -421,7 +426,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
 		}
-
 
 		this.__defineGetter__('char_count', function(){
 			return this.lengthQuad()
@@ -513,11 +517,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						return -1 // to the left
 					}
 					if(o == len - 1 && x > tr_x){
-						if(char_code ==10) return o
+						//if(char_code ==10) return o
 						return -4 // to the right of self
 					}
 					if(x > hx){
-						if(char_code == 10) return o
+						//if(char_code == 10) return o
 						return o + 1
 					}
 				}
@@ -533,12 +537,28 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var coords= this.charCoords(off)
 			// do a little bit of alignment fixery
 			var m1 = this.tagAt(off,1)
-			if(m1<0 && this.tagAt(off - 1, 0)!==10 && this.tagAt(off - 1, 0)!==9){
+			if(m1<0){
+
 				// lets check the alignment mode
 				var format = m1 * -1
 				//var indent = parseInt(m1/65536)
 				var mode = Math.floor(format/256)%256
-				if(mode == 1){ 
+				
+				if(this.charCodeAt(off) === 10){
+					coords = this.charCoords(off-1)
+					if(this.charCodeAt(off-1) !== 10){
+						coords.x = coords.x + coords.w
+					}
+					else{
+						// add padd
+						coords.x = coords.x + coords.w
+						var padding = format%256
+						var info = this.font.glyphs[10]
+						var fontsize = this.array[off * 6 * 10 + 3]
+						coords.x += (padding-1) * info.advance * fontsize
+					}
+				}
+				else if(mode&1){ 
 					var coords1 = this.charCoords(off - 1)
 					coords.x = coords1.x + coords1.w
 				}
@@ -549,6 +569,10 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		this.charCodeAt = function(off){
 			return this.array[off * 6 * 10 + 6]
+		}
+
+		this.charAt = function(off){
+			return String.fromCharCode(this.charCodeAt(off))
 		}
 
 		this.serializeText = function(start, end){
@@ -575,18 +599,44 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		this.setLength = function(len){
-			if(this.tagAt(len,1)<0){ // its a padded character
-				var rect = this.charCoords(len - 1)
+
+			// if we are inserting at a newline, we need to grab the previous
+			var off = len
+			if(this.charCodeAt(len) === 10) off -=1
+			var m1 = this.array[off * 6 * 10 + 7]
+			
+			// if its a padded character we need to compute the new add_x differently
+			if(m1<0 && (-m1)&65535){
+				var format = m1 * -1
+				//var indent = parseInt(m1/65536)
+				var mode = Math.floor(format/256)%256
+				var rect = this.charCoords(off)
+
 				this.length = len * 6
 				this.add_x = rect.x + rect.w
 				this.add_y = rect.y
+				// rip off padding
+				
+				if(mode&2){
+					var padding = format%256
+					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
+					var fontsize = this.array[off * 6 * 10 + 3]
+					this.add_x += padding * info.advance * fontsize//- rect.w
+				}
+				if(mode === 4){
+					var padding = format%256
+					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
+					var fontsize = this.array[off * 6 * 10 + 3]
+					this.add_x += padding * info.advance * fontsize - rect.w
+				}
+				return
 			}
-			else{
-				var rect = this.charCoords(len)
-				this.length = len * 6
-				this.add_x = rect.x
-				this.add_y = rect.y
-			}
+
+			var rect = this.charCoords(off)
+			this.length = len * 6
+			this.add_x = rect.x
+			this.add_y = rect.y
+			if(off !== len)this.add_x += rect.w
 		}
 
 		this.insertText = function(off, text){

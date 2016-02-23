@@ -27,7 +27,7 @@ define.class('$ui/textbox', function(require){
 		var p = pos
 		var indent = floor((tag.y * -1.)/65536.) * tab_size
 		var line = floor(tag.w/65536.)
-		if(line >= line_start && line < line_end){
+		if(line >= line_start && line <= line_end){
 			p.x  +=  2*indent*((line-line_start))*line_anim
 		}
 		p.x += - min(indent, init_anim*100.)
@@ -212,6 +212,14 @@ define.class('$ui/textbox', function(require){
 			if(view.wrap){
 				var maxwidth = view.layout.width
 				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
+					if(text === '\n'){
+						this.last_is_newline = true
+						return
+					}
+					if(text === '\t' && this.last_is_newline){
+						text = '\n'
+					}
+					this.last_is_newline = false
 					var start = text.charCodeAt(0)
 					var combo
 					if(l1 <= 0) combo = l1
@@ -222,7 +230,17 @@ define.class('$ui/textbox', function(require){
 				})
 			}
 			else{
+				// if we process a newline, we should wait for the next tab
 				JSFormatter.walk(ast, textbuf, function(text, padding, l1, l2, l3, node){
+					if(text === '\n'){
+						this.last_is_newline = true
+						return
+					}
+					if(text === '\t' && this.last_is_newline){
+						text = '\n'
+					}
+					this.last_is_newline = false
+					// ok if we are adding a \t, lets add it to the previous newline as a mode 4.
 					var start = text.charCodeAt(0)
 					//console.log(this.actual_line)
 					if(start !== 32 && start !== 10 && start !== 9) node_id ++
