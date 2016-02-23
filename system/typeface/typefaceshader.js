@@ -57,7 +57,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.linespacing = 1.0
 		this.italic_ness = 0
 		// defines the line
-		this.cursor_spacing = 1.3
+		this.cursorspacing = 1.3
 		this.cursor_sink = 0.32
 
 		this.scaling = 0
@@ -154,7 +154,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ((j<line.length-1)?' ':'') , m1, m2, m3);
 					if (i < lines.length -1)
 					{
-						this.add_y += this.fontsize * this.linespacing
+						this.add_y += this.fontsize * this.cursorspacing
 						this.add_x = indent;
 					}
 				}
@@ -163,14 +163,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					this.add_x = maxwidth - widths[i];
 					var line = lines[i];
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ' ', m1, m2, m3);
-					this.add_y += this.fontsize * this.linespacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			} else if (this.align === "center") {
 				for (var i = 0;i<lines.length;i++) {
 					this.add_x = maxwidth/2 - widths[i]/2;
 					var line = lines[i];
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ' ', m1, m2, m3);
-					this.add_y += this.fontsize * this.linespacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			} else if (this.align === "justify") {
 				for (var i = 0;i<lines.length;i++) {
@@ -184,7 +184,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						this.add(line[j]+' ', m1, m2, m3);
 						this.add_x += spacer;
 					}
-					this.add_y += this.fontsize * this.linespacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			}
 
@@ -392,7 +392,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				// lets add some vertices
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
-					this.add_y += this.fontsize * this.linespacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 
 				this.addGlyph(info, unicode, m1, m2, m3)
@@ -421,7 +421,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
-					this.add_y += this.fontsize * this.linespacing
+					this.add_y += this.fontsize * this.cursorspacing
 				}
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
