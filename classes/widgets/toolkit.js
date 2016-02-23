@@ -1492,7 +1492,7 @@ define.class("$ui/view", function(require,
 				wrap:true,
 				format_options: {
 					force_newlines_array:false,
-					force_newlines_object:false
+					force_newlines_object:true
 				},
 				fontsize:12
 			})

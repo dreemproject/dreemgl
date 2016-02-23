@@ -325,7 +325,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 			charCodeAt: function(i){return this.out.charCodeAt(i)},
 			char_count:0
 		};
-		jsformatter.walk(ast, buf, function(str){
+		jsformatter.walk(ast, buf, {}, function(str){
 			buf.char_count += str.length;
 			buf.out += str;
 		});
