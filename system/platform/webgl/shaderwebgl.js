@@ -463,8 +463,12 @@ define.class('$system/base/shader', function(require, exports){
 	exports.TRIANGLE_STRIP = this.TRIANGLE_STRIP = 0x5
 	exports.TRIANGLE_FAN = this.TRIANGLE_FAN = 0x6
 
-	this.drawtype = this.TRIANGLES
-	
+	this.drawtype_enum = this.TRIANGLES
+	Object.defineProperty(this, 'drawtype', {set:function(v){
+		if(typeof v === 'string') this.drawtype_enum = this[v]
+		else this.drawtype_enum = v
+	}})
+
 	// lets draw ourselves
 	this.drawArrays = function(devicewebgl, sub, start, end){
 		//if(this.mydbg) debugger
@@ -472,7 +476,7 @@ define.class('$system/base/shader', function(require, exports){
 		if(!this.shader) return
 		var gl = devicewebgl.gl
 		var len = this.useShader(gl, sub? this.shader[sub]: this.shader)
-		if(len) gl.drawArrays(this.drawtype, start || 0, end === undefined?len: end)
+		if(len) gl.drawArrays(this.drawtype_enum, start || 0, end === undefined?len: end)
 		return len
 	}
 

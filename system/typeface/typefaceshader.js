@@ -54,7 +54,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.add_y = 0
 
 		this.fontsize = 10
-		this.line_spacing = 1.3
+		this.line_spacing = 1.0
 		this.italic_ness = 0
 		// defines the line
 		this.cursor_spacing = 1.3

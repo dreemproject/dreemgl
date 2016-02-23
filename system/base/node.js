@@ -315,7 +315,7 @@ define.class(function(require){
 		}
 		var listen_key = '_listen_' + key
 		var fast_key = '_fast_' + key
-		this[fast_key] = undefined		
+		this[fast_key] = undefined // invalidate fast cache
 		var array
 		if(!this.hasOwnProperty(listen_key)) array = this[listen_key] = []
 		else array = this[listen_key]
@@ -531,7 +531,7 @@ define.class(function(require){
 		},
 		set:function(arg){
 			for(var key in arg){
-				this.addEventListener(key, arg[key])
+				this.adListener(key, arg[key])
 			}
 		}
 	})
