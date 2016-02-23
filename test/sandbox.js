@@ -20,7 +20,7 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 	toolrect:false
 	},
 	view({height:352,width:395,pickalpha:-1,bgcolor:'purple',position:"absolute",x:817,y:112,rotate:vec3(0,0,-0.5700008869171143)}),
-	label({fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'lightgreen',text:"Hey I can write TEXT sideways!!",position:"absolute",x:-5,y:243,rotate:vec3(0,0,-0.8500022888183594)}),
+	label({fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'lightgreen',text:"Hey I can write TEXT sideways!!",position:"absolute",x:88,y:603,rotate:vec3(0,0,0.12999765574932098)}),
 	icon({fgcolor:'cornflowerblue',pickalpha:-1,icon:"gear",fontsize:80,position:"absolute",x:613,y:249.99998474121094})
 	),
 	toolkit({

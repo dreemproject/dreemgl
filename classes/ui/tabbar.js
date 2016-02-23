@@ -23,7 +23,7 @@ define.class("$ui/view", function($ui$, button){
 		tabclass:undefined,
 
 		// Current tab selection
-		activetab:0
+		activetab:Config({persist:true, value:0})
 	};
 
 	this.tooldragroot = true;
