@@ -60,7 +60,7 @@ define.class('$system/base/node', function(require){
 		zoom: Config({type:float, value:1}),
 		// overflow control, shows scrollbars when the content is larger than the viewport. If any value is set, it defaults to viewport:'2D'
 		// works the same way as the CSS property
-		overflow: Config({type: Enum('','hidden','scroll','auto'), value:''}),
+		overflow: Config({type: Enum('','hidden','scroll','auto','hscroll','vscroll'), value:''}),
 
 		// size, this holds the width/height/depth of the view. When set to NaN it means the layout engine calculates the size
 		size: Config({type:vec3, value:vec3(NaN), meta:"xyz"}),
@@ -860,7 +860,7 @@ define.class('$system/base/node', function(require){
 
 	// internal, decide to inject scrollbars into our childarray
 	this.atRender = function(){
-		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow === 'auto')){
+		if(this._viewport === '2d' && (this._overflow === 'scroll'|| this._overflow==='hscroll' || this._overflow === 'vscroll' || this._overflow === 'auto')){
 			if(this.vscrollbar) this.vscrollbar.value = 0
 			if(this.hscrollbar) this.hscrollbar.value = 0
 
@@ -874,7 +874,7 @@ define.class('$system/base/node', function(require){
 				}
 			}
 
-			this.children.push(
+			if(this._overflow === 'scroll' || this._overflow === 'vscroll') this.children.push(
 				this.vscrollbar = this.scrollbar({
 					position:'absolute',
 					vertical:true,
@@ -891,7 +891,10 @@ define.class('$system/base/node', function(require){
 						this_layout.height = parent_layout.height
 						this_layout.left = parent_layout.width - this_layout.width
 					}
-				}),
+				})
+			)
+
+			if(this._overflow === 'scroll' || this._overflow === 'hscroll') this.children.push(
 				this.hscrollbar = this.scrollbar({
 					position: 'absolute',
 					vertical: false,
@@ -915,10 +918,10 @@ define.class('$system/base/node', function(require){
 			if(this.vscrollbar) this.vscrollbar.value = Mark(this._scroll[1])
 
 			this.pointerwheel = function(event){
-				if(this.vscrollbar._visible){
+				if(this.vscrollbar && this.vscrollbar._visible){
 					this.vscrollbar.value = clamp(this.vscrollbar._value + event.wheel[1], 0, this.vscrollbar._total - this.vscrollbar._page)
 				}
-				if(this.hscrollbar._visible){
+				if(this.hscrollbar && this.hscrollbar._visible){
 					this.hscrollbar.value = clamp(this.hscrollbar._value + event.wheel[0], 0, this.hscrollbar._total - this.hscrollbar._page)
 				}
 			}
@@ -1231,15 +1234,22 @@ define.class('$system/base/node', function(require){
 			var preposx = isNaN(this._percentpos[0])?pos[0]:this.parent._layout.width * 0.01 * this._percentpos[0];
 			var preposy = isNaN(this._percentpos[1])?pos[1]: this.parent._layout.height * 0.01 * this._percentpos[1];
 
-
+			// we have some kind of overflow, cause we are a viewport
+			// so if height is not given we have to take up the external height
+			//console.log(presizey, this.layout.height)
 			//console.log("This is where we get the percentage size", this._percentsize, presizex,presizey);
 
 			this._size = vec2(presizex, presizey);
 			this._pos = vec2(preposx, preposy);
 			//console.log(this._percentpos, this._pos ,pos);
-
+			var preheight = this._layout.height
 			var copynodes = FlexLayout.fillNodes(this)
 			FlexLayout.computeLayout(copynodes)
+
+			if(isNaN(presizey)){
+				this._layout.height = preheight
+			}
+			
 			this._size = size
 			this._pos = pos;
 
