@@ -40,7 +40,7 @@ define.class("$ui/label", function(require){
 	})
 	this.cursors = true
 	this.tabstop = 0
-
+	this.linespacing = 1.3
 	define.class(this, 'markers', require('$system/typeface/markershader.js'), function(){
 		this.updateorder = 6
 		this.draworder = 4
