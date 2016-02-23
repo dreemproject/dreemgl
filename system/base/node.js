@@ -241,19 +241,22 @@ define.class(function(require){
 	this.emit = function(key, ievent){
 
 		// lets do a fastpass
-
 		var event = ievent || {}
+		var fast_key = '_fast_' + key
+
+		// FAST OUT
+		var callfn = this[fast_key] 
+		if(callfn){
+			var oncall = this['on'+key]
+			if(!oncall || oncall === callfn ){
+				callfn.call(this, event, event.value, this)
+			}
+			return
+		}
 
 		var lock_key = '_lock_' + key
 		if(this[lock_key] || this.emit_block_set && this.emit_block_set.indexOf(key) !== -1) return
 		this[lock_key] = true
-
-		var fast_key = '_fast_' + key
-		var callfn = this[fast_key] 
-
-		if(callfn){
-			callfn.call(this, event, event.value, this)
-		}
 
 		var counter = 0
 		try{
