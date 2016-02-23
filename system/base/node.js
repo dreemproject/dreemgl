@@ -299,8 +299,6 @@ define.class(function(require){
 		}
 		finally{
 			this[lock_key] = false
-			console.log(key, counter)
-
 			if(counter === 1){
 				this[fast_key] = callfn
 			}
@@ -680,6 +678,7 @@ define.class(function(require){
 		var on_key = 'on' + key
 		var listen_key = '_listen_' + key
 		var animinit_key = '_animinit_' + key
+
 		//var config_key = '_config_' + key
 		var get_key = '_get_' + key
 		var set_key = '_set_' + key
@@ -717,7 +716,7 @@ define.class(function(require){
 		// block attribute emission on objects with an environment thats (stub it)
 		if(config.alias){
 			var alias_key = '_' + config.alias
-
+			var aliasstore_key = '_alias_'+config.alias
 			setter = function(value){
 				var mark
 
@@ -728,6 +727,7 @@ define.class(function(require){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
 						//this.addListener(on_key, value)
+						this['_fast_' + key] = undefined
 						this[on_key] = value
 						return
 					}
@@ -771,20 +771,24 @@ define.class(function(require){
 				this.emit(config.alias, {setter:true, via:key, key:config.alias, owner:this, value:this[alias_key], mark:mark})
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
+				// emit self
 				if(on_key in this || listen_key in this) this.emit(key,  {setter:true, key:key, owner:this, old:old, value:value, mark:mark})
 			}
 
-			// lets add a fast alias hook
+			// add a listener to the alias
+			var aliasarray = this[aliasstore_key]
+			if(!aliasarray) this[aliasstore_key] = aliasarray = []
 
-			this.addListener(config.alias, function(event){
+			aliasarray.push(function(value){
 				var old = this[value_key]
-				var val = this[value_key] = event.value[config.index]
-				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old, mark:event.mark})
+				var val = this[value_key] = value[config.index]
+				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, key:key, owner:this, value:val, old:old})
 			})
 			// initialize value
 			this[value_key] = this[alias_key][config.index]
 		}
 		else {
+			var aliasstore_key = '_alias_'+key
 			setter = function(value){
 				var mark
 
@@ -795,6 +799,7 @@ define.class(function(require){
 					if(value.is_wired) return this.setWiredAttribute(key, value)
 					if(config.type !== Function){
 						//this.addListener(on_key, value)
+						this['_fast_' + key] = undefined
 						this[on_key] = value
 						return
 					}
@@ -827,6 +832,13 @@ define.class(function(require){
 				}
 				var old = this[value_key]
 				this[value_key] = value
+
+				var aliases = this[aliasstore_key]
+				if(aliases){
+					for(var i = 0; i<aliases.length;i++){
+						aliases[i](value)
+					}
+				}
 
 				if(this.atAttributeSet !== undefined) this.atAttributeSet(key, value)
 				if(on_key in this || listen_key in this)  this.emit(key, {setter:true, owner:this, key:key, old:old, value:value, mark:mark})
