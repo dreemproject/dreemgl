@@ -28,8 +28,8 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 
 	this.hardrect = {
 		color:function(){
-			var col1 = vec3("#3b3b3b");
-			var col2=vec3("#3b3b3b");
+			var col1 = vec3("#4e4e4e");
+			var col2=vec3("#4e4e4e");
 			return vec4(mix(col1, col2, 1.0-pow(abs(uv.y),4.0) ),1.0)
 		}
 	};
@@ -47,7 +47,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 			margin:vec4(2,0,2,5)
 		},
 		$_color:{
-			 width:302, title:"colorpicker",  bordercolor:"#383838", icon:"paint-brush", collapsed:true
+			 width:302, title:"colorpicker", bordercolor:"#383838", icon:"paint-brush", collapsed:true
 		},
 		$_colorview:{
 			bgcolor:NaN,width:300, flexdirection:"column"
@@ -246,7 +246,7 @@ define.class(function(require, $ui$, view, checkbox,foldcontainer, label, icon, 
 				value:this.value,
 				padding:4,
 				borderradius:0,
-				borderwidth:2,
+				borderwidth:1,
 				bordercolor:"#262626",
 				margin:2,
 				onvalue:function(ev,val) {this.callback(val, this, true)}.bind(this)

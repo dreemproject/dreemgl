@@ -15,7 +15,9 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 	this.atConstructor = function(source) {
 		this.build = new onejsgen();
 		if (source) {
-			this.parse(source)
+			this.ast = this.parse(source)
+				this.__scanner = new astscanner(this.ast);
+
 		}
 		this.last_source = this.stringify()
 	};
@@ -311,8 +313,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 			source = classconstr.module.factory.body.toString()
 		}
 
-		this.ast = onejsparser.parse(source);
-		this.__scanner = new astscanner(this.ast);
+		return onejsparser.parse(source);
 	};
 
 	// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.

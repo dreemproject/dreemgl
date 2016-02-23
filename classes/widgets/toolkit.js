@@ -1129,6 +1129,7 @@ define.class("$ui/view", function(require,
 							this.parent.find("components").pos = vec3(0,0,0);
 							this.parent.find("structure").pos = vec3(0,0,0);
 							this.parent.find("inspector").pos = vec3(0,0,0);
+							this.parent.find("code").pos = vec3(0,0,0);
 
 							if (this.__grabpos) {
 								this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)
@@ -1458,10 +1459,12 @@ define.class("$ui/view", function(require,
 						if (v === this || this.testView(v)) {
 							var editor = this.find("code");
 							if (editor) {
+								// todo(mason) remove this ugly hack when jseditor events exist
+								editor.__lasttarget = editor.__target;
+								editor.__target = v;
 								editor.ast = this.sourcefile.nodeFor(v);
 							}
 						}
-
 					}
 				}.bind(this),
 				astarget:Config({type:String, persist:true}),
@@ -1494,6 +1497,22 @@ define.class("$ui/view", function(require,
 					force_newlines_array:false,
 					force_newlines_object:true
 				},
+				onfocus:function(ev,v,o){
+					if (!v && o._value && o.__lasttarget) {
+						var newsource = o._value;
+						var newast = this.sourcefile.parse(newsource);
+						if (newast) {
+							// TODO(mason) make this less of a terrible hack
+							this.sourcefile.fork(function(src) {
+								var currentnode =  src.nodeFor(o.__lasttarget);
+								var parentnode =  src.nodeFor(o.__lasttarget.parent);
+								var index = parentnode.args.indexOf(currentnode);
+								var node = newast.steps[0];
+								parentnode.args.splice(index, 1, node);
+							})
+						}
+					}
+				}.bind(this),
 				fontsize:12
 			})
 		));
