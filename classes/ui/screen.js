@@ -74,7 +74,7 @@ define.class('$ui/view', function(require, $ui$, view, menubutton) {
 				}
 				res.push(
 					menubutton({
-						padding:vec4(5 ,0,5,4),
+						padding:vec4(5),
 						margin:0,
 						borderradius: 6,
 						bold:false,

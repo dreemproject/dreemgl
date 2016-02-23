@@ -25,7 +25,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			}
 		}
 
-		this.margin = vec4(2,2,2,0)
+		this.margin = vec4(2)
 		this.justifycontent = "flex-start"
 		this.alignitems = "center"
 		this.addBlock = function(){

@@ -331,10 +331,12 @@ define.class(function(require, $server$, dataset){
 			charCodeAt: function(i){return this.out.charCodeAt(i)},
 			char_count:0
 		}
-		jsformatter.walk(this.ast, buf, function(str){
+		jsformatter.walk(this.ast, buf, {}, function(str){
+			console.log(str)
 			buf.char_count += str.length
 			buf.out += str
 		})
+		console.log(buf.out)
 		return buf.out
 	}
 })

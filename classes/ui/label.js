@@ -32,6 +32,9 @@ define.class(function(require, $ui$, view){
 		// the boldness of the font (try values 0 - 1)
 		boldness: Config({type:float, value: 0.}),
 
+		// line spacing
+		linespacing: Config({type:float, value: 1.0}),
+
 		// reference to the font typeface, require it with require('font:')
 		font: Config({type:Object, value: undefined, meta:"font"}),
 
@@ -77,6 +80,7 @@ define.class(function(require, $ui$, view){
 			var mesh = this.newText()
 			if(view.font) mesh.font = view.font
 
+			mesh.linespacing = view.linespacing
 			mesh.fontsize = view.fontsize
 			mesh.boldness = view.boldness
 			mesh.outline = view.outline;
@@ -152,6 +156,7 @@ define.class(function(require, $ui$, view){
 			width: this.measured_width = shader.mesh.bound_w,
 			height: this.measured_height = shader.mesh.bound_h
 		};
+
 	}
 
 	if (define.$platform === 'dali')
