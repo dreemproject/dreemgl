@@ -959,7 +959,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				name: "mapinside",
 				nearplane: 100 ,
 				farplane: this.camdist * 2,
-				camera:vec3(0,-this.camdist,0), fov: fov, 
+				camera:vec3(-this.camdist*0.2,-this.camdist,this.camdist*0.2), fov: fov, 
 				up: vec3(0,0,1),
 				lookat:vec3(0,0,0)
 			},[
@@ -968,7 +968,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 					buildings3d,
 					//label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
 					labels3d,
-					pointset({name: 'pointset'}),
+					//pointset({name: 'pointset'}),
 					this.constructor_children
 				])
 			])
