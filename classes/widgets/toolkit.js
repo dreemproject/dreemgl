@@ -4,8 +4,8 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define.class("$ui/view", function(require,
-								  $ui$, view, label, textbox, icon, checkbox, treeview, button, statebutton, tabbar,
-								  $widgets$, palette, propviewer, jseditor,
+								  $ui$, view, label, textbox, icon, checkbox, treeview, button, tabbar,
+								  $widgets$, palette, propviewer, jseditor, jsviewer,
 								  $server$, astio){
 
 // The DreemGL Visual Toolkit allows for visual manipulation of a running composition
@@ -789,7 +789,7 @@ define.class("$ui/view", function(require,
 		text = text + " @ " + ev.pointer.position.x.toFixed(0) + ", " + ev.pointer.position.y.toFixed(0);
 		text = text + " <" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + ">";
 
-		this.find("current").text = text;
+		this.find("pointer").text = text;
 
 		this.resetCursor(ev);
 
@@ -820,13 +820,13 @@ define.class("$ui/view", function(require,
 			this.selected = [];
 			this.sourcefile.undo();
 		} else if (ev.name === "backspace" && this.selection && this.selection.length) {
-			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
+			var candelete = !this.screen.focus_view || (["textbox", "jseditor"].indexOf(this.screen.focus_view.constructor.name) === -1 && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
 		} else if (ev.name === "x" && (ev.ctrl || ev.meta)) {
 			this.copyselection();
-			var candelete = !this.screen.focus_view || (this.screen.focus_view.constructor.name !== "textbox" && this.screen.focus_view.constructor.name !== "input");
+			var candelete = !this.screen.focus_view || (["textbox", "jseditor"].indexOf(this.screen.focus_view.constructor.name) === -1 && this.screen.focus_view.constructor.name !== "input");
 			if (candelete) {
 				this.deleteselection();
 			}
@@ -1167,19 +1167,22 @@ define.class("$ui/view", function(require,
 					padding:5,
 					drawtarget:'color'
 				}),
-				statebutton({
+				button({
 					fontsize:16,
 					icon:"times",
 					pickalpha:-1,
 					bgcolor:"transparent",
 					borderwidth:0,
-					marginright:1,
-					normal:{
-						fgcolor:vec4(0.8,0.8,0.8,0.8),
-					},
-					hover:{
-						fgcolor:"white",
-					},
+					margintop:0,
+					marginright:7,
+					textactivecolor:"white",
+					textcolor:vec4(0.8,0.8,0.8,0.8),
+					buttoncolor1:"transparent",
+					buttoncolor2:"transparent",
+					hovercolor1:"transparent",
+					hovercolor2:"transparent",
+					pressedcolor1:"transparent",
+					pressedcolor2:"transparent",
 					click:function(ev,v,o) {
 						this.setASTObjectProperty(this, "visible", false);
 						this.ensureDeps();
@@ -1189,7 +1192,7 @@ define.class("$ui/view", function(require,
 			]
 		}
 
-		views.push(this.panel({title:"Components", flex:1.0},
+		views.push(this.panel({flex:1.0},
 			palette({
 				name:"components",
 				flex:1,
@@ -1236,11 +1239,11 @@ define.class("$ui/view", function(require,
 			})
 		));
 
-		views.push(this.panel({title:"Cursor", flex:vertical ? 0 : 2},
-			label({name:"current", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
+		views.push(this.panel({flex:vertical ? 0 : 2},
+			label({name:"pointer", text:"", padding:5, paddingleft:10, bgcolor:"#4e4e4e"})
 		));
 
-		views.push(this.panel({title:"Structure", flex:1},
+		views.push(this.panel({flex:1},
 			treeview({
 				flex:1,
 				name:"structure",
@@ -1294,16 +1297,18 @@ define.class("$ui/view", function(require,
 										v.toolmove = !this.value;
 									}
 								}),
-								statebutton({
-									label:name,
+								button({
+									text:name,
 									bgcolor:"#4e4e4e",
-									normal:{
-										fgcolor: "#ddd",
-										padding:0
-									},
-									hover:{
-										fgcolor:"#fff"
-									},
+									buttoncolor1:"transparent",
+									buttoncolor2:"transparent",
+									hovercolor1:"transparent",
+									hovercolor2:"transparent",
+									pressedcolor1:"transparent",
+									pressedcolor2:"transparent",
+									textcolor: "#ddd",
+									textactivecolor:"#fff",
+									borderwidth:0,
 									click:function(ev, val, o) {
 										var astpath = JSON.stringify(this.sourcefile.nodePathFor(v));
 										if (!this.selected || this.selected.indexOf(astpath) < 0) {
@@ -1312,7 +1317,7 @@ define.class("$ui/view", function(require,
 										//o.state = "selected"
 									}.bind(this),
 									margintop:5,
-									padding:0,
+									padding:5,
 									fontsize:14,
 									pickalpha:-1
 								}),
@@ -1365,7 +1370,8 @@ define.class("$ui/view", function(require,
 			})
 		));
 
-		views.push(this.panel({title:"Properties", flex:1.7},
+		views.push(this.panel(
+			{flex:1.7},
 			propviewer({
 				name:"inspector",
 				target:this.inspect,
@@ -1447,6 +1453,14 @@ define.class("$ui/view", function(require,
 							this.__handle = this.screen.openOverlay(this.handle);
 							this.__handle.target = v;
 						}
+
+						if (this.testView(v)) {
+							var editor = this.find("code");
+							if (editor) {
+								editor.ast = this.sourcefile.nodeFor(v);
+							}
+						}
+
 					}
 				}.bind(this),
 				astarget:Config({type:String, persist:true}),
@@ -1468,6 +1482,14 @@ define.class("$ui/view", function(require,
 						o.target = find(node, this.screen);
 					}
 				}.bind(this)
+			}),
+			jseditor({
+				name:"code",
+				flex:1,
+				overflow:'scroll',
+				margin:vec4(2,7,2,2),
+				wrap:true,
+				fontsize:12
 			})
 		));
 
@@ -2014,8 +2036,8 @@ define.class("$ui/view", function(require,
 
 	define.class(this, 'panel', view, function(){
 		this.attributes = {
-			title: Config({type:String, value:""}),
-			fontsize: Config({type:float, value:12, meta:"fontsize"})
+			fontsize: Config({type:float, value:12, meta:"fontsize"}),
+			activechild: Config({type:int, value:0})
 		};
 
 		this.padding = 0;
@@ -2026,65 +2048,44 @@ define.class("$ui/view", function(require,
 		this.flexdirection ="column";
 		this.alignitems = "stretch";
 
-		this.render = function(){
-			return [
-				tabbar({tabs:[
-					{
-						alignself:'flex-start',
-						y:1,
-						class:"folder",
-						label:this.title,
-						fontsize:this.fontsize,
-						bgcolor:"#4e4e4e",
-						label:this.title,
-						margin:0,
-						padding:vec4(3,3,0,0),
-						fgcolor:"white",
-						normal:{ fgcolor:"white" },
-						hover:{ fgcolor:"white" },
-						selected:{ fgcolor:"white" }
-					}
-				]}),
-				this.constructor_children
-			];
-		}
-	});
+		this.init = function() {
+			this.tabs = [];
 
-	define.class(this, 'editor', view, function(){
-		this.attributes = {
-			title: Config({type:String, value:""}),
-			fontsize: Config({type:float, value:12, meta:"fontsize"})
+			for (var i=0;i<this.constructor_children.length;i++) {
+				var child = this.constructor_children[i];
+				child.visible = (i === 0);
+				var name = child.name;
+				name = name[0].toUpperCase() + name.substring(1);
+
+				this.tabs.push({
+					text:name,
+					fontsize:this.fontsize,
+					padding:vec4(7,7,7,5)
+				})
+			}
+
 		};
 
-		this.padding = 0;
-		this.margin = 4;
-		this.borderradius = vec4(10,10,1,1);
-		this.bgcolor = NaN;
-		this.flex = 1;
-		this.flexdirection ="column";
-		this.alignitems = "stretch";
+		this.render = function() {
 
-		this.render = function(){
 			return [
-				tabbar({tabs:[
-					{
-						alignself:'flex-start',
-						y:1,
-						class:"folder",
-						label:this.title,
-						fontsize:this.fontsize,
-						bgcolor:"#4e4e4e",
-						label:this.title,
-						margin:0,
-						padding:vec4(3,3,0,0),
-						fgcolor:"white",
-						normal:{ fgcolor:"white" },
-						hover:{ fgcolor:"white" },
-						selected:{ fgcolor:"white" }
-					}
-				]}),
+				tabbar({
+					tabclass:"folder",
+					tabcolor:"#3e3e3e",
+					activetabcolor:"#4e4e4e",
+					textcolor:vec4(0.8,0.8,0.8,1),
+					activetextcolor:"white",
+					tabs:this.tabs,
+					onactivetab:function(ev,tab,bar) {
+						for (var i=0;i<this.constructor_children.length;i++) {
+							var child = this.constructor_children[i];
+							child.visible = (i === tab);
+						}
+					}.bind(this)
+				}),
 				this.constructor_children
 			];
 		}
 	});
+
 });

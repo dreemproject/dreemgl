@@ -43,6 +43,9 @@ define(function () {
 		// alright so. what we need to do is bubble down layout_dirty
 		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
 			var child = node.children[i]
+			if (child.visible === false) {
+				continue;
+			}
 			if(!('_viewport' in child))continue
 			if(child._viewport){ // its using a different layout pass
 				// if we are flex, we have to compute the layout of this child

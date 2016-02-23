@@ -13,6 +13,7 @@ define.class('$ui/textbox', function(require){
 		// The code to display
 		source: Config({type:String, value:""}),
 		sourceset: null,
+		ast:null,
 		// wrap the text
 		wrap: Config({type:Boolean, value:false}),
 		init_anim: Config({value:1.0, duration:1, motion:'outexpo'}),
@@ -198,7 +199,7 @@ define.class('$ui/textbox', function(require){
 
 			textbuf.font = view.font
 			var cycle = Date.now()
-			var ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
+			var ast = view.ast ? view.ast : (view.sourceset ? view.sourceset.ast: Parser.parse(view.source))
 
 			textbuf.fontsize = view.fontsize
 			textbuf.add_y = textbuf.line_height

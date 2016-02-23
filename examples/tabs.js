@@ -27,6 +27,8 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, label
 						label({name:"page", text:"", bgcolor:NaN})
 					),
 					tabbar({
+						activetabcolor:"#333",
+						activetextcolor:"#2aa",
 						tabs:[
 							{
 								name:"SMS",
@@ -58,12 +60,11 @@ define.class("$server/composition",function(require, $ui$, tabbar, screen, label
 								boldness:0
 							}
 						],
-						onselection:function(ev,tab,bar) {
-							if (tab && tab.name) {
-								var main = this.screen.find("main");
-								var label = main.find("page");
-								label.text = "Show the '" + tab.name + "' page";
-							}
+						onactivetab:function(ev,tab,bar) {
+							var name = bar.tabs[tab].name
+							var main = this.screen.find("main");
+							var label = main.find("page");
+							label.text = "Select '" + name + "' tab";
 						}
 					})
 				)

@@ -278,8 +278,8 @@ define.class(function(require, exports){
 		for(var key in attrlocs) {
 			tosort.push([attrlocs[key].offset, key]);
 		}
-		tosort.sort();
-		// console.log('SORTED', tosort);
+		tosort.sort(function(a,b) { return a[0]-b[0]});  // Numeric sort!
+		//console.log('SORTED', tosort);
 		
 		for(var i in tosort) {
 			key = tosort[i][1];

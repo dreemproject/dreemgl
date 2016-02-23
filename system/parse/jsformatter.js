@@ -159,7 +159,7 @@ define.class(function(require, exports){
 	this.Property = function(n, secondary){
 		this.add(n.name, 0, exports._Property, secondary ||0)
 	}
-	
+
 	var tempcolor = vec4()
 	this.Value = function(n){//: { value:0, raw:0, kind:0, multi:0 },
 
@@ -177,7 +177,7 @@ define.class(function(require, exports){
 		else if(n.kind == 'string'){
 			var subtype = exports._String
 			var col = 0
-			
+
 			vec4.parse(n.value, tempcolor, true)
 			if(tempcolor[0] !== -1){
 				subtype = exports._Color

@@ -6,7 +6,6 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 	{flexdirection:"row"},
 	cadgrid({
 	name:"grid",
-	flex:3,
 	overflow:"scroll",
 	bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1),
 	gridsize:8,
@@ -17,43 +16,20 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 	alignself:'stretch',
 	flexdirection:'column',
 	justifycontent:'center',
-	anchor:vec3(0,0,0),
 	toolmove:false,
 	toolrect:false
 	},
-	view({height:391,width:313,bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),position:"absolute",margin:vec4(0,0,0,0),x:176.00006103515625,y:31.000152587890625,rotate:vec3(0,0,-0.05000119283795357),x:176.00006103515625,y:31.000152587890625,x:93.00006103515625,y:313.0001525878906},view({height:143,width:138,bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),position:"absolute",x:87.00006103515625,y:165.00006103515625,borderradius:vec4(10,30,60,80),rotate:vec3(0,0,7.059999942779541)},icon({fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1),opaque:true,icon:"flask",fontsize:80,position:"absolute",x:31,y:-8,x:31,y:-8})),icon({fgcolor:vec4(0.885095477104187,0.8980835676193237,0.9214090704917908,1),opaque:true,icon:"ge",fontsize:80,position:"absolute",x:116.17550659179688,y:9.051116943359375})),
-	view({height:337,width:287,bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),position:"absolute",x:602.137939453125,y:56.87499237060547,rotate:vec3(0,0,-5.640018463134766),x:598.137939453125,y:9.874992370605469},icon({fgcolor:vec4(0.929411768913269,0.9089215993881226,0.3921568691730499,1),opaque:true,icon:"heart",fontsize:140,position:"absolute",x:73.93695831298828,y:55.16679382324219,boldness:0.95,rotate:vec3(0,0,-0.8600000739097595)})),
-	view({height:161,width:339,pickalpha:-1,bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),position:"absolute",x:555.1640625,y:614.7561645507812,alignitems:"center",justifycontent:"center",rotate:vec3(0,0,-0.040000107139348984),x:555.1640625,y:614.7561645507812},icon({fgcolor:'cornflowerblue',pickalpha:-1,icon:"flask",fontsize:80,position:"relative",x:11,y:21}),icon({fgcolor:"cornflower",pickalpha:-1,icon:"gear",fontsize:80,position:"relative",x:0,y:0}),checkbox({tooldragroot:true,toolresize:false,fontsize:24,bgcolor:'transparent',buttoncolor1:'transparent',buttoncolor2:'transparent',hovercolor1:'transparent',hovercolor2:'transparent',pressedcolor1:'transparent',pressedcolor2:'transparent',pickalpha:-1,fgcolor:'pink',position:"absolute",x:257.99993896484375,y:62.000152587890625}),icon({fgcolor:"cornflower",pickalpha:-1,icon:"flask",fontsize:80,position:"absolute",x:81.03707885742188,y:73.70074462890625,x:16.037078857421875,y:4.70074462890625})),
-	label({fontsize:144,pickalpha:-1,bgcolor:'transparent',fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),text:"Change teh text!",position:"absolute",x:162.453369140625,y:240.54986572265625,opacity:0.6,width:1167.75,height:233.28000000000003,rotate:vec3(0,0,-0.6300010085105896),x:149.453369140625,y:241.54986572265625,text:"Change the text!",x:-14.546630859375,y:264.54986572265625}),
-	view({height:42,width:731,bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),position:"absolute",x:435.0347595214844,y:530.6854248046875,rotate:vec3(0,0,0.060000788420438766),opacity:0.7}),
-	checkbox({tooldragroot:true,toolresize:false,fontsize:24,bgcolor:'transparent',buttoncolor1:'transparent',buttoncolor2:'transparent',hovercolor1:'transparent',hovercolor2:'transparent',pressedcolor1:'transparent',pressedcolor2:'transparent',pickalpha:-1,fgcolor:'pink',position:"absolute",x:127.99998474121094,y:431}),
-	icon({fgcolor:'cornflowerblue',pickalpha:-1,icon:"flask",fontsize:80,position:"absolute",x:947,y:414.9999694824219,x:947,y:414.9999694824219,fgcolor:vec4(0.7418131828308105,0.929411768913269,0.3921568691730499,1),fgcolor:vec4(0,0,0,1),fgcolor:vec4(0.41486817598342896,0.41486817598342896,0.41486817598342896,1),fgcolor:vec4(0.41486817598342896,0.41486817598342896,0.41486817598342896,1),fgcolor:vec4(0.7255825400352478,0.5048937201499939,0.5048937201499939,1),fgcolor:vec4(0.6134542226791382,0.7255825400352478,0.5048937201499939,1),fgcolor:vec4(0.37008190155029297,0.5627710819244385,0.18352395296096802,1),fgcolor:vec4(0.6799132823944092,0.6883481740951538,0.10633358359336853,1),fgcolor:vec4(0.10633358359336853,0.6883481740951538,0.5981948971748352,1),fgcolor:vec4(0,1,0.8451013565063477,1)}),
-	icon({fgcolor:'palecornflowerblue',pickalpha:-1,icon:"flask",fontsize:80,position:"absolute",x:112.00000762939453,y:70.99999237060547})
+	view({height:352,width:395,pickalpha:-1,bgcolor:vec4(0.3115594983100891,0.5057464838027954,0.8137271404266357,1),position:"absolute",x:444,y:388,rotate:vec3(0,0,0.05999906733632088)}),
+	label({fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'lightgreen',text:"Wow! I can write TEXT sideways!!",position:"absolute",x:-5,y:496,width:685.22265625,height:71.27999877929688,pos:vec3(88,333,0),rotate:vec3(0,0,-0.6700018644332886)}),
+	icon({fgcolor:'cornflowerblue',pickalpha:-1,icon:"gear",fontsize:80,position:"absolute",x:258,y:203.99998474121094})
 	),
 	toolkit({
 	position:"absolute",
 	visible:true,
-	rulers:true,
-	x:1163,
-	y:51.000099182128906,
-	width:428,
-	height:780,
-	dropmode:"absolute",
-	mode:"design",
-	reticlesize:9,
-	hoverlines:false,
-	guides:true,
-	handles:true,
-	position:"absolute",
-	x:1138,
-	y:42.000099182128906,
-	width:428,
-	height:780,
-	position:"absolute",
-	x:1139,
-	y:12.000114440917969,
-	width:428,
-	height:780
+	x:1222,
+	y:34.00001525878906,
+	width:400,
+	height:800
 	}
 	)
 	)
