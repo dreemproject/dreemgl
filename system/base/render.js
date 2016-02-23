@@ -48,12 +48,20 @@ define.class(function(exports){
 		var is_root = false
 
 		if(!state){
-			state = {wires:[], render_block:[]}
+			state = {render_block:[]}
 			is_root = true
 		}
 
 		// call connect wires before
-		if(!rerender) new_version.connectWires(state.wires)
+		if(!rerender){
+			var wires = []
+			new_version.connectWires(wires)
+			initializing = true
+			for(var i = 0; i < wires.length; i++){
+				wires[i]()
+			}
+			initializing = false
+		}
 
 		var old_children = old_version? old_version.children: undefined
 
@@ -163,7 +171,6 @@ define.class(function(exports){
 			old_version.destroyed = true
 			// remove draw hook
 			if(old_version.atDraw){
-				console.log("REMOVING")
 				var id = old_version.screen.device.draw_hooks.indexOf(old_version)
 				if(id !== -1) old_version.screen.device.draw_hooks.splice(id, 1)
 			}
@@ -172,11 +179,7 @@ define.class(function(exports){
 		}
 
 		if(is_root){
-			initializing = true
-			for(var i = 0; i < state.wires.length; i++){
-				state.wires[i]()
-			}
-			initializing = false
+			
 
 			// signal to our device we have a newly rendered node
 			if(new_version.screen){
