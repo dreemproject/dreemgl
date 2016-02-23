@@ -59,6 +59,9 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		this.end = new Date(endtime).toString()
 	}
 
+	this.oninit = function(){
+	}
+
 	this.atDraw = function () {
 		this.background = this.find("background")
 		this.labels = this.find("labels")
@@ -181,7 +184,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.render = function() {
 		return [
-		background({name: "background"}),
+			background({name: "background"}),
 			labels({name: "labels"}),
 			events({name: "events", flex: 1}),
 			scrollbar({name: "scrollbar"})
