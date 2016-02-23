@@ -52,7 +52,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 	
 	this.flyTo = function(lat,lng, zoom,time){
-		this.dataset.flyTo(lat,lng, zoom, time);		
+		if (this.dataset) this.dataset.flyTo(lat,lng, zoom, time);		
 	}
 	
 	define.class(this, "mapdataset", "$ui/view", function($$, geo){
@@ -346,7 +346,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		//this.setTimeout(this.updateTiles, 10);
 	}
 
-	this.init = function(){
+	this.oninit = function(){
 		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
 		this.setInterval(this.updateTiles, 1000);
 	}
