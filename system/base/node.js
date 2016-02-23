@@ -246,10 +246,13 @@ define.class(function(require){
 
 		// FAST OUT
 		var callfn = this[fast_key] 
-		if(callfn && this['on'+key] === callfn){
-			// lets see if we have an 'on' key defined
-			callfn.call(this, event, event.value, this)
-			return
+		if(this['on'+key] == callfn){
+			if(callfn === null) return
+			if(callfn){
+				// lets see if we have an 'on' key defined
+				callfn.call(this, event, event.value, this)
+				return
+			}
 		}
 
 		var lock_key = '_lock_' + key
@@ -302,6 +305,9 @@ define.class(function(require){
 			this[lock_key] = false
 			if(counter === 1){
 				this[fast_key] = callfn
+			}
+			else if(counter === 0){
+				this[fast_key] = null
 			}
 		}
 	}
