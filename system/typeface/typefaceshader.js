@@ -54,7 +54,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.add_y = 0
 
 		this.fontsize = 10
-		this.line_spacing = 1.0
+		this.linespacing = 1.0
 		this.italic_ness = 0
 		// defines the line
 		this.cursor_spacing = 1.3
@@ -78,11 +78,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		this.fgcolor = vec4('white')
 
 		this.__defineGetter__('line_height', function(){
-			return this.fontsize * this.line_spacing
+			return this.fontsize * this.linespacing
 		})
 
 		this.__defineGetter__('min_y', function(){
-			return this.fontsize * this.line_spacing
+			return this.fontsize * this.linespacing
 		})
 
 		this.__defineGetter__('block_y', function(){
@@ -154,7 +154,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ((j<line.length-1)?' ':'') , m1, m2, m3);
 					if (i < lines.length -1)
 					{
-						this.add_y += this.fontsize * this.line_spacing
+						this.add_y += this.fontsize * this.linespacing
 						this.add_x = indent;
 					}
 				}
@@ -163,14 +163,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					this.add_x = maxwidth - widths[i];
 					var line = lines[i];
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ' ', m1, m2, m3);
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.linespacing
 				}
 			} else if (this.align === "center") {
 				for (var i = 0;i<lines.length;i++) {
 					this.add_x = maxwidth/2 - widths[i]/2;
 					var line = lines[i];
 					for (var j = 0;j<line.length;j++) this.add(line[j] + ' ', m1, m2, m3);
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.linespacing
 				}
 			} else if (this.align === "justify") {
 				for (var i = 0;i<lines.length;i++) {
@@ -184,7 +184,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						this.add(line[j]+' ', m1, m2, m3);
 						this.add_x += spacer;
 					}
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.linespacing
 				}
 			}
 
@@ -350,7 +350,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var info = this.font.glyphs[unicode]
 				if(!info) info = this.font.glyphs[32]
 				var add_x = x1 - fontsize * info.min_x + (unicode === 10 ? 0 : info.advance * fontsize)
-				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.line_spacing
+				var add_y = y1 + fontsize * info.min_x //+ this.fontsize * this.linespacing
 				if(add_x > text_w) text_w = add_x
 				if(add_y > text_h) text_h = add_y
 			}
@@ -358,7 +358,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var info = this.font.glyphs[32]
 				if (info) {
 					text_w += info.advance * this.fontsize
-					if(!text_h) text_h = this.fontsize * this.line_spacing
+					if(!text_h) text_h = this.fontsize * this.linespacing
 				}
 			}
 			this.text_w = text_w
@@ -392,13 +392,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				// lets add some vertices
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.linespacing
 				}
 
 				this.addGlyph(info, unicode, m1, m2, m3)
 				//if(!(m1<0) &&  unicode == 10){ // newline
 				//	this.add_x = this.start_x
-				//	this.add_y += this.fontsize * this.line_spacing
+				//	this.add_y += this.fontsize * this.linespacing
 				//}
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
@@ -421,7 +421,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				this.addGlyph(info, unicode, m1, m2, m3)
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x
-					this.add_y += this.fontsize * this.line_spacing
+					this.add_y += this.fontsize * this.linespacing
 				}
 			}
 			if(this.add_y > this.text_h) this.text_h = this.add_y
