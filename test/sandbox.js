@@ -1,5 +1,5 @@
 define.class("$server/composition",function(require,$ui$,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
-	
+
 	this.render=function(){
 	return [
 	screen(
@@ -23,12 +23,11 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 	},
 	label({fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'lightgreen',text:"Howdy!",position:"absolute",x:176.99998474121094,y:138,x:176.99998474121094,y:138,text:"Testing the new stuff!"}),
 	button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',label:"Press Me!",position:"absolute",x:305.9999694824219,y:307.9999694824219}),
-	view({height:70,width:80,pickalpha:-1,bgcolor:'purple',position:"absolute",x:628,y:265,position:"absolute",x:628,y:265,width:438,height:386})
+	view({height:70,width:80,pickalpha:-1,bgcolor:'purple',position:"absolute",x:628,y:265,position:"absolute",x:157,y:397,width:438,height:386})
 	),
 	toolkit({
 	position:"absolute",
 	visible:true,
-	position:"absolute",
 	x:1222,
 	y:34.00001525878906,
 	width:400,

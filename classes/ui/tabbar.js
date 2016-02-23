@@ -105,9 +105,9 @@ define.class("$ui/view", function($ui$, button){
 
 		Usage: function() {
 			return [
-				tabbar({tabs:["one", "two", "three"], onselection:function(ev,tab,bar) {
+				tabbar({tabs:["one", "two", "three"], onactivetab:function(ev,tab,bar) {
 					if (tab) {
-						console.log('Selected', tab.text)
+						console.log('Selected tab', tab, bar.tabs[tab])
 					}
 				}})
 			]
@@ -121,41 +121,21 @@ define.class("$ui/view", function($ui$, button){
 			};
 
 			return [
-				tabbar({tabs:[
+				tabbar({
+					tabclass:"folder",
+					tabs:[
 					{
-						class:"folder",
-						normal:{
-							icon:"gear",
-							fgcolor:"gray"
-						},
-						hover:{
-							fgcolor:"lightblue"
-						},
-						active:{
-							fgcolor:"lightgreen"
-						},
-						selected:{
-							fgcolor:"red"
-						},
-						disabled:{
-							fgcolor:"pink"
-						}
+						icon:"gear",
+						padding:10
 					},
 					{
-						class:"folder",
-						label:"two",
-						bgcolor:"#114",
-						bold:true,
-						selected:{ on:selectionhandler }
+						text:"two",
+						padding:10,
+						textcolor:"#E44"
 					},
 					{
-						class:"folder",
-						label:"three",
-						state:"disabled",
-						disabled:{
-							bgcolor:"gray",
-							fgcolor:"#a9a9a9"
-						}
+						text:"three",
+						padding:10
 					}
 				]})
 			]
