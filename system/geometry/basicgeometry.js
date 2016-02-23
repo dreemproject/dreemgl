@@ -192,7 +192,7 @@ define(function(require, exports){
 		cb(11, v1, v2, v3, n1, n2, n3, t1, t2, t3, 5);		
 	}
 	
-	exports.createCylinder = function(R,h, xdetail, cb){
+	exports.createCylinder = function(R,h, xdetail,cap, cb){
 		for (var p = 0; p < xdetail ; p+=1) {
 			var angle1 = (p * (3.14159265359 * 2))/xdetail;
 			var angle2 = (p + 1) * (3.14159265359 * 2)/xdetail;
@@ -214,12 +214,20 @@ define(function(require, exports){
 				az = h;
 				az2 =0;
 			}
+			if (cap){
 			v1n1t1(ax*R,az,  ay*R, 0,-1,0,tx1,0); 
 			v2n2t2(bx*R,az,  by*R, 0,-1,0,tx2,0);
 			v3n3t3(   0,az,    0, 0,-1,0,tx2,0);		
 
 			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
+			v1n1t1(ax*R,az2,  ay*R, 0,1,0,tx1,0); 
+			v2n2t2(bx*R,az2,  by*R, 0,1,0,tx2,0);
+			v3n3t3(   0,az2,    0, 0,1,0,tx2,0);		
+
+			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
 			
+			
+			}
 			v1n1t1(ax*R,az,  ay*R, nx,0,ny,tx1,0); 
 			v2n2t2(bx*R,az,  by*R, nx,0,ny,tx2,0);
 			v3n3t3(ax*R,az2, ay*R, nx,0,ny,tx2,0);		
@@ -233,11 +241,6 @@ define(function(require, exports){
 			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
 			
 			
-			v1n1t1(ax*R,az2,  ay*R, 0,1,0,tx1,0); 
-			v2n2t2(bx*R,az2,  by*R, 0,1,0,tx2,0);
-			v3n3t3(   0,az2,    0, 0,1,0,tx2,0);		
-
-			cb(0, v1, v2, v3, n1, n2, n3, t1, t2, t3, 0);
 			
 		}
 	}
