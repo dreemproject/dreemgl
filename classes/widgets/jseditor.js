@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -7,7 +7,7 @@
 define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 	this.readonly = false
-	
+
 	var enumchange = this.enumchange
 
 	this.init = function(){
@@ -22,7 +22,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 		var cdelta = 0
 		if(this.error_state) return [text, 0]
 		if(this.textbuf.charCodeAt(lo) === 9){
-			cdelta += 1			
+			cdelta += 1
 		}
 		if(text == '"'){
 			if(this.textbuf.charCodeAt(lo) == 34) text = '', cdelta += 1
@@ -87,7 +87,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 		//if(ch == 40 && this.textbuf.charCodeAt(pos+1) == 41) return true
 		//return false
 	}
-	
+
 	this.update_force = function(){
 		this.change_timeout = undefined
 		baseclass.cursorsChanged.call(this)
@@ -130,7 +130,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 	// alright lets make a worker that parses and reserializes
 	var worker = define.class('$system/rpc/worker', function(require){
-		
+
 		var Parser = require('$system/parse/onejsparser')
 		var JSFormatter = require('$system/parse/jsformatter')
 
@@ -194,7 +194,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				this.update_force()
 			}
 			//return
-			var err = this.find('error') 
+			var err = this.find('error')
 			if(msg.error){
 				var rect = mesh.cursorRect(msg.pos)
 				err.x = rect.x
@@ -225,11 +225,11 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				//if(data_new[off_new+2] !== data_old[off_old + 8]) break
 				//if(data_new[off_new+3] !== data_old[off_old + 9]) break
 				// copy data over
-				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
+				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] =
 				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
-				data_old[off_old + 8] = data_old[off_old + 18] = data_old[off_old + 28] = 
+				data_old[off_old + 8] = data_old[off_old + 18] = data_old[off_old + 28] =
 				data_old[off_old + 38] = data_old[off_old + 48] = data_old[off_old + 58] = data_new[off_new+2]
-				data_old[off_old + 9] = data_old[off_old + 19] = data_old[off_old + 29] = 
+				data_old[off_old + 9] = data_old[off_old + 19] = data_old[off_old + 29] =
 				data_old[off_old + 39] = data_old[off_old + 49] = data_old[off_old + 59] = data_new[off_new+3]
 			}
 			var end_old = len_old - 1, end_new = len_new - 1
@@ -237,23 +237,23 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				var off_old = end_old * 10 * 6
 				var off_new = end_new * 4
 				//console.log(start, end_old, data_new[off_new], data_old[off_old+6],data_new[off_new] !== data_old[off_old + 6])
-		
+
 				if(data_new[off_new] !== data_old[off_old + 6]) break
 				if(data_new[off_new+1] !== data_old[off_old + 7]) break
 				//if(data_new[off_new+2] !== data_old[off_old + 8]) break
 				//if(data_new[off_new+3] !== data_old[off_old + 9]) break
-				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] = 
+				data_old[off_old + 7] = data_old[off_old + 17] = data_old[off_old + 27] =
 				data_old[off_old + 37] = data_old[off_old + 47] = data_old[off_old + 57] = data_new[off_new+1]
-				data_old[off_old + 8] = data_old[off_old + 18] = data_old[off_old + 28] = 
+				data_old[off_old + 8] = data_old[off_old + 18] = data_old[off_old + 28] =
 				data_old[off_old + 38] = data_old[off_old + 48] = data_old[off_old + 58] = data_new[off_new+2]
-				data_old[off_old + 9] = data_old[off_old + 19] = data_old[off_old + 29] = 
+				data_old[off_old + 9] = data_old[off_old + 19] = data_old[off_old + 29] =
 				data_old[off_old + 39] = data_old[off_old + 49] = data_old[off_old + 59] = data_new[off_new+3]
 			}
 			//mesh.clean = false
 			var cursor_now = this.cursorset.list[0].start
 
 			var new_range = end_new - start
-			var old_range = end_old - start 
+			var old_range = end_old - start
 
 			if(old_range < new_range && this.change === 'delete') return this.format_dirty = true
 			if(old_range > new_range && this.change === 'keypress') return this.format_dirty = true
@@ -270,14 +270,14 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 			// dont autoreformat immediately when deleting characters, only with whitespace
 			if(new_range < old_range && this.change === 'delete' && start < cursor_now && !deleted_whitespace) return  this.format_dirty = true
-			
+
 			if(this.change === 'undoredo')return this.format_dirty = true
 			// if we insert a newline or do a delete use the marker
 
 			if(new_range !== old_range){
 				if(this.change === 'keypress' && this.change_keypress === '\n'|| this.change === 'delete' && deleted_whitespace){
 					// use the tag
-					var nextto = mesh.tagAt(cursor_now,3) 
+					var nextto = mesh.tagAt(cursor_now,3)
 
 					for(var t = start; t < len_new; t++){
 						if(nextto == data_new[t*4+3]){
@@ -296,7 +296,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 					//if(char_at === 9){ // we are typing in a tab
 					//	this.cursorset.list[0].moveToOffset(end_new+1)
 					//}
-					//else 
+					//else
 					if(char_at !== 44){
 						var nextto = mesh.tagAt(cursor_now - 1,0)
 						var fd = 0
@@ -328,7 +328,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 			mesh.setLength(start)
 			var buf = {struct:1, start:start, array:data_new, length:len_new}
 			mesh.add(buf)
-		
+
 			// lets figure out the linenumbers between start and end_new
 			if(new_range > old_range){
 				var min = Infinity, max = -Infinity
