@@ -19,7 +19,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		start:   Config({type: String,  value: "Jan 1 2016"}),
 		end:     Config({type: String,  value: "Dec 31 2016"}),
 
-		data:    Config({type: Array,  value: []}),
+		data:    Config({type: Array}),
 
 		zoom: Config({type: Number, value: 0.5}),
 		scroll: Config({type: Number, value: 0}),
@@ -48,6 +48,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		var eventstart, eventend
 		var starttime = this.getStart()
 		var endtime = this.getEnd()
+		if (!this.data) return
 		for (var i = 0; i < this.data.length; i++) {
 			eventstart = new Date(this.data[i].date)
 			eventend = new Date(this.data[i].enddate)
