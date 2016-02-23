@@ -43,7 +43,7 @@ define.class('$ui/label', function () {
 			var i, x, y, start, offset, date, text
 
 			start = new Date(view.parent.getStart())
-			first = new Date(view.parent.getStart() + view.parent.getOffset())
+			first = new Date(view.parent.getRangeStart())
 
 			var firstYear = first.getFullYear()
 			var firstMonth = first.getMonth()
