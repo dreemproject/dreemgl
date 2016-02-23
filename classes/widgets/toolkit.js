@@ -1487,7 +1487,7 @@ define.class("$ui/view", function(require,
 				name:"code",
 				flex:1,
 				overflow:'scroll',
-				margin:vec4(3,10,3,3),
+				margin:vec4(2,7,2,2),
 				wrap:true,
 				fontsize:12
 			})

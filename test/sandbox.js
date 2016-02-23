@@ -19,8 +19,8 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 	toolmove:false,
 	toolrect:false
 	},
-	view({height:352,width:395,pickalpha:-1,bgcolor:'purple',position:"absolute",x:556,y:64,rotate:vec3(0,0,-0.5700008869171143)}),
-	label({fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'lightgreen',text:"Hey I can write TEXT sideways!!",position:"absolute",x:88,y:603,rotate:vec3(0,0,0.12999765574932098)}),
+	view({height:352,width:395,pickalpha:-1,bgcolor:vec4(0.3115594983100891,0.5057464838027954,0.8137271404266357,1),position:"absolute",x:444,y:388,rotate:vec3(0,0,0.05999906733632088)}),
+	label({fontsize:44,pickalpha:-1,bgcolor:'transparent',fgcolor:'lightgreen',text:"Wow! I can write TEXT sideways!!",position:"absolute",x:-5,y:496,width:685.22265625,height:71.27999877929688,pos:vec3(88,333,0),rotate:vec3(0,0,-0.6700018644332886)}),
 	icon({fgcolor:'cornflowerblue',pickalpha:-1,icon:"gear",fontsize:80,position:"absolute",x:258,y:203.99998474121094})
 	),
 	toolkit({
