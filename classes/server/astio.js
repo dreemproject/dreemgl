@@ -116,7 +116,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 	};
 
 	this.getCallNodeValue = function(callnode, key) {
-		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Id(key)]);
+		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Property(key)]);
 
 		var item = scanner.atparent.keys[scanner.atindex];
 
@@ -126,7 +126,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 	};
 
 	this.deleteCallNodeKey = function(callnode, key) {
-		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Id(key)]);
+		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Property(key)]);
 		if (scanner.atindex >= 0) {
 			scanner.atparent.keys.splice(scanner.atindex, 1);
 		}
@@ -134,14 +134,14 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 	this.setCallNodeValue = function(callnode, key, value) {
 
-		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Id(key)]);
+		var scanner = new astscanner(callnode, [this.build.Object(), this.build.Property(key)]);
 
 		var at = scanner.at;
 
 		var item, newval, args, newparams;
 
-		if (at.type === "Id") {
-			// Found an Id
+		if (at.type === "Property") {
+			// Found an Property
 
 			item = scanner.atparent.keys[scanner.atindex];
 
@@ -156,7 +156,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 			item.value = newval;
 
 		} else if (at.type === "Object") {
-			// No Id, but found an Object
+			// No Property, but found an Object
 
 			args = {};
 			if (typeof(value) === "function") {
@@ -166,10 +166,8 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 				newval = this.createASTNode(value.toString(), true);
 				item.value = newval
-			//} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
-			//	item = { key:this.build.Id(key), value:this.build.Value(value) }
 			} else {
-				item = { key:this.build.Id(key), value:this.createASTNode(value) }
+				item = { key:this.build.Property(key), value:this.createASTNode(value) }
 			}
 
 			if (item) {
@@ -237,7 +235,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 		//check that its a thing with args
 
-		this.__scanner.scan([this.build.Object(), this.build.Id(key)])
+		this.__scanner.scan([this.build.Object(), this.build.Property(key)])
 
 		var at = this.__scanner.at;
 
@@ -245,8 +243,8 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 		var item, newval, args, newparams;
 
-		if (at.type === "Id") {
-			// Found an Id
+		if (at.type === "Property") {
+			// Found an Property
 
 			item = this.__scanner.atparent.keys[this.__scanner.atindex];
 
@@ -261,7 +259,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 			item.value = newval;
 
 		} else if (at.type === "Object") {
-			// No Id, but found an Object
+			// No Property, but found an Object
 
 			args = {};
 			if (typeof(value) === "function") {
@@ -271,11 +269,11 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 				newval = this.createASTNode(value.toString(), true);
 				item.value = newval;
-				item.key = this.build.Id(key)
+				item.key = this.build.Property(key)
 			} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {
-				item = { key:this.build.Id(key), value:this.build.Value(value) }
+				item = { key:this.build.Property(key), value:this.build.Value(value) }
 			} else {
-				item = { key:this.build.Id(key), value:this.createASTNode(value) }
+				item = { key:this.build.Property(key), value:this.createASTNode(value) }
 			}
 
 			if (item) {
