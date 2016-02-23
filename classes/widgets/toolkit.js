@@ -1457,7 +1457,7 @@ define.class("$ui/view", function(require,
 						if (this.testView(v)) {
 							var editor = this.find("code");
 							if (editor) {
-								editor.source = this.sourcefile.codeFor(v);
+								editor.ast = this.sourcefile.nodeFor(v);
 							}
 						}
 
