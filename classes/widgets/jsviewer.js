@@ -16,7 +16,7 @@ define.class('$ui/textbox', function(require){
 		ast:null,
 		// wrap the text
 		wrap: Config({type:Boolean, value:false}),
-		init_anim: Config({value:1.0, duration:1, motion:'outexpo'}),
+		init_anim: Config({value:0.0, duration:1, motion:'outexpo'}),
 		line_anim: Config({value:1.0, duration:0.25, motion:'outexpo'}),
 	}
 	this.tab_size = 1
@@ -54,7 +54,7 @@ define.class('$ui/textbox', function(require){
 	}
 
 	this.init = function(){
-		this.init_anim = .0
+		//this.init_anim = .0
 	}
 
 	this.textstyle = function(style, pos, tag){

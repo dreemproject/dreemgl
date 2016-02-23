@@ -15,7 +15,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 
 	this.format_options = {
 		force_newlines_array:false,
-		force_newlines_object:true
+		force_newlines_object:false
 	}
 	// process inserts with matching parens
 	this.processInsert = function(lo, hi, text){
