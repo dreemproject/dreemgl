@@ -794,7 +794,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.depth_test = "disabled"
 
 			this.color = function(){
-				var texcol = mesh.color
+				var texcol = mesh.color * (1.0 - 0.2*  pow(0.5-0.5*cos(mesh.geom.x * 3.1415),3.0))
 				var prefog = mix(texcol, vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
