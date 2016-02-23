@@ -1129,6 +1129,7 @@ define.class("$ui/view", function(require,
 							this.parent.find("components").pos = vec3(0,0,0);
 							this.parent.find("structure").pos = vec3(0,0,0);
 							this.parent.find("inspector").pos = vec3(0,0,0);
+							this.parent.find("code").pos = vec3(0,0,0);
 
 							if (this.__grabpos) {
 								this.parent.pos = vec3(p.position.x - this.__grabpos.x, p.position.y - this.__grabpos.y,0)

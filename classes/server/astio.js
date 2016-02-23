@@ -16,7 +16,8 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 		this.build = new onejsgen();
 		if (source) {
 			this.ast = this.parse(source)
-			this.__scanner = new astscanner(this.ast);
+				this.__scanner = new astscanner(this.ast);
+
 		}
 		this.last_source = this.stringify()
 	};
