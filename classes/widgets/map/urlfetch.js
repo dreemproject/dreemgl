@@ -57,7 +57,7 @@ define.class(function(require, $server$, service){
 				var thedata = JSON.parse(data);
 
 				fs.writeFileSync(cachedname, data);
-				console.log(" -- done. Saved to cache: ",x,y,z,"!" );
+				console.log(" -- done. Saved to cache: ",x,y,z,"!", cachedname);
 				//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, v);
 
 				P.resolve(data);

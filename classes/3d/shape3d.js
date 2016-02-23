@@ -23,8 +23,7 @@ define.class(function(require, $ui$, view){
 			
 			var temp = (vec4(mesh.norm,1.0) * view.normalmatrix)
 			transnorm = temp.xyz
-			pos = vec4(mesh.pos, 1) * view.modelmatrix * view.viewmatrix
-			//campos = vec4(cameraposition, 1.0) * lookatmatrix;
+			pos = vec4(mesh.pos, 1) * view.totalmatrix * view.viewmatrix
 			return pos // * matrix *viewmatrix
 		}
 				
