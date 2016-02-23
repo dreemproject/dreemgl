@@ -9,7 +9,7 @@ define.class('$ui/view', function(require, $$, geo){
 	var geo = this.geo = geo();
 
 	this.attributes = {
-		data: Config({type: Array, value: []}),
+		data: Config({type: Array}),
 		hoverid: -1,
 		pointselected: Config({type:Event}),
 		meterstounits: 1.,
@@ -29,6 +29,7 @@ define.class('$ui/view', function(require, $$, geo){
 	}
 
 	this.ondata = function (data) {
+		console.log('point data changed', this.data.length)
 		this.pickrange = this.data.length
 	}
 
@@ -52,6 +53,15 @@ define.class('$ui/view', function(require, $$, geo){
 
 		this.update = function(){
 			var view = this.view
+			if (!view.data) {
+				console.log('no point data')
+				return
+			}
+			if (!view.data.length) {
+				console.log('point data is empty')
+				return
+			}
+			console.log('point data length is', view.data.length)
 			this.mesh = this.vertexstruct.array(view.data.length * 12);
 
 			for (var i = 0; i < view.data.length; i++) {
@@ -70,7 +80,7 @@ define.class('$ui/view', function(require, $$, geo){
 
 		this.position = function() {
 			normal = vec4(mesh.norm,1.0) * view.normalmatrix
-			var posgeo = (view.centerinmeters - mesh.geopos) *vec2(-1.,1.);
+			var posgeo = (view.centerinmeters - mesh.geopos) * vec2(-1.,1.);
 			var pos3 = (vec3(posgeo.x,  0, posgeo.y) * view.meterstounits) + mesh.pos;;
 			pos = vec4( pos3 , 1) * view.modelmatrix * view.viewmatrix
 			return pos

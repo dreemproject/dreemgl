@@ -48,6 +48,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 
 	this.onpointertap = function(event){
 		this.hoverid = this.last_pick_id
+		if (!this.data) return
 		var eventData = this.data[this.hoverid]
 		if (eventData) {
 			this.emitUpward('eventselected', eventData)
@@ -55,6 +56,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 	}
 
 	this.ondata = function (data) {
+		if (!this.data) return
 		this.pickrange = this.data.length
 	}
 
@@ -103,6 +105,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 		this.update = function(){
 			var startTime = this.view.parent.getStart()
 			var view = this.view
+			if (!this.data) return
 			var data = view.data
 			var mesh = this.mesh = vertstruct.array();
 			for (var i = 0; i < data.length; i++) {
