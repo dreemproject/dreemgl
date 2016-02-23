@@ -392,7 +392,7 @@ define.class(function(require, baseclass){
 
 				draw.viewmatrix = matrices.viewmatrix
 
-				//if(draw.atDraw && draw.atDraw(this)) hastime = true
+				if(draw.atDraw && draw.atDraw(this)) hastime = true
 				if(draw._viewport && draw.drawpass !== this){
 					this.drawBlend(draw)
 				}

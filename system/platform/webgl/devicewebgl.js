@@ -293,7 +293,7 @@ define.class(function(require, exports){
 		for(var i = 0; i < animate_hooks.length; i++){
 			var item = animate_hooks[i]
 			//console.log(item)
-			if(item.atAnimate()){
+			if(item.atAnimate(stime)){
 				anim_redraw.push(item)
 			}
 		}
