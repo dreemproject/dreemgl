@@ -365,7 +365,7 @@
 		var result = str.match(/function\s*[$_\w]*\s*\(([$_\w,\s]*)\)/)
 
 		var map = result[1].split(/\s*,\s*/)
-		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].toLowerCase().trim())
+		for(var i = 0; i<map.length; i++) if(map[i] !== '') output.push(map[i].trim())
 
 		// now fetch all the fast classdeps
 		var matchrx = new RegExp(/define\.class\s*\(\s*(?:this\s*,\s*['"][$_\w]+['"]\s*,\s*)?(?:(?:['"][[^"']+['"]|[$_\w]+)\s*,\s*)?function\s*[$_\w]*\s*\(([$_\w,\s]*)\)\s*\{/g)
@@ -373,7 +373,7 @@
 		while((result = matchrx.exec(str)) !== null) {
 			output.push('$$')
 			var map = result[1].split(/\s*,\s*/)
-			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i].toLowerCase())
+			for(var i = 0; i<map.length; i++)if(map[i] !== '') output.push(map[i])
 		}
 
 		return output
