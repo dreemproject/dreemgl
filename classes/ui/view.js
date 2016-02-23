@@ -358,7 +358,7 @@ define.class('$system/base/node', function(require){
 		if(radius[0] !== 0 || radius[1] !== 0 || radius[2] !== 0 || radius[3] !== 0){
 			// this switches the bg shader to the rounded one
 			if(this._bgimage){
-				this.roundedimage = bg_on
+				this.roundedimage = true
 				this.roundedrect = false
 			}
 			else{
@@ -372,7 +372,7 @@ define.class('$system/base/node', function(require){
 		}
 		else {
 			if(this._bgimage){
-				this.hardimage = bg_on
+				this.hardimage = true
 				this.hardrect = false
 			}
 			else{
