@@ -99,7 +99,8 @@ define.class("$ui/view", function(require,
 				classname:"icon",
 				classdir:"$ui$",
 				params:{
-					fgcolor:'cornflowerblue',
+					fgcolor:'yellow',
+					bgcolor:'transparent',
 					pickalpha:-1,
 					icon:'flask',
 					fontsize:80
@@ -1489,6 +1490,10 @@ define.class("$ui/view", function(require,
 				overflow:'scroll',
 				margin:vec4(2,7,2,2),
 				wrap:true,
+				format_options: {
+					force_newlines_array:false,
+					force_newlines_object:false
+				},
 				fontsize:12
 			})
 		));
