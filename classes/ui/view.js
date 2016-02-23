@@ -1404,7 +1404,9 @@ define.class('$system/base/node', function(require){
 		this.position = function(){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			var res = vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			res.w -= 0.004
+			return res;
 		}
 		this.color = function(){
 			var col = view.bgcolorfn(mesh.xy)
