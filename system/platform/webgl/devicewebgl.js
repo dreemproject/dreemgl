@@ -292,6 +292,7 @@ define.class(function(require, exports){
 		var draw_hooks = this.draw_hooks
 		for(var i = 0; i < draw_hooks.length; i++){
 			var item = draw_hooks[i]
+			//console.log(item)
 			if(item.atDraw()){
 				anim_redraw.push(item)
 			}
@@ -348,10 +349,16 @@ define.class(function(require, exports){
 		}
 
 		if(anim_redraw.length){
+			//console.log("REDRAWIN", this.draw_hooks)
+			var redraw = false
 			for(var i = 0; i < anim_redraw.length; i++){
-				anim_redraw[i].redraw()
+				var aredraw = anim_redraw[i]
+				if(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
+					redraw = true
+					aredraw.redraw()
+				}
 			}
-			return true
+			return redraw
 		}
 		return hastime
 	}

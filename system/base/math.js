@@ -2454,6 +2454,8 @@ define(function(){
 			return (Xo * (Xi - Xn) + Xn * (Xo - Xi) * Kt) / ((Xo - Xi) * Kt + (Xi - Xn))
 		}
 	}
+	
+	mat4.global_identity = mat4.identity()
 
 	float.ease = ease
 })

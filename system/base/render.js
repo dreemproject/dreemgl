@@ -16,16 +16,19 @@ define.class(function(exports){
 		process_timer = undefined
 		var pl = process_list
 		process_list = []
-		for(var i = 0; i < pl.length; i++){
-			exports.process(pl[i], undefined, undefined, true)
+		for(var i = 0; i < pl.length; i+=2){
+			//console.log("Processing",pl[i])
+			exports.process(pl[i+1], undefined, undefined, true)
 		}
 	}
 
 	function __atAttributeGet(key){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
-			if(process_list.indexOf(this) === -1)
+			if(process_list.indexOf(this) === -1){
+				process_list.push(key)
 				process_list.push(this)
+			}
 			if(!process_timer){
 				process_timer = setTimeout(processTimeout, 0)
 			}
@@ -132,10 +135,12 @@ define.class(function(exports){
 			var old_child = undefined
 			if(old_children){
 				old_child = old_children[i]
+				if(new_children.indexOf(old_child) !== -1) old_child = undefined
 			}
 			var childreuse = false
-			if(new_child.parent) childreuse = true
-
+			if(new_child.parent){
+				childreuse = true
+			}
 			//var name = new_child.name
 			//if(name !== undefined && !(name in new_version)) new_version[name] = new_child
 
@@ -154,10 +159,11 @@ define.class(function(exports){
 			child.emit('destroy')
 		}
 
-		if(old_version){
+		if(old_version && !rerender){
 			old_version.destroyed = true
 			// remove draw hook
 			if(old_version.atDraw){
+				console.log("REMOVING")
 				var id = old_version.screen.device.draw_hooks.indexOf(old_version)
 				if(id !== -1) old_version.screen.device.draw_hooks.splice(id, 1)
 			}

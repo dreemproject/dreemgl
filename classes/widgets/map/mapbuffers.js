@@ -287,7 +287,10 @@ racetrack:6,
 			var color1 = vec4(1,0,1,1);;
 			//var color2 = ;
 			var t = mapstyle[land.kind];
-			if (!t) {t = mapstyle["default"];console.log("defaulting for:", land.kind);};
+			if (!t) {
+				t = mapstyle["default"];
+			//	console.log("defaulting for:", land.kind);
+			};
 			
 			if (t.color1) color1 = t.color1;else {
 				UnhandledKindSet[land.kind] = "land - no color1";
@@ -353,7 +356,7 @@ racetrack:6,
 			if (!st) st = mapstyle["default"];
 			if (roadwidths[R.kind]) linewidth = roadwidths[R.kind];else
 			{
-				console.log("no width:", R.kind);
+				//console.log("no width:", R.kind);
 				UnhandledKindSet[R.kind] = "road" ;
 			}
 			
@@ -362,7 +365,7 @@ racetrack:6,
 				color = st.roadcolor
 			}else {
 				UnhandledKindSet[R.kind] = "road" ;
-				console.log("roadkind with no color", R.kind);
+				//console.log("roadkind with no color", R.kind);
 			}
 			
 		

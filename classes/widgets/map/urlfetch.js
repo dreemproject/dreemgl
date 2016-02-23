@@ -29,15 +29,15 @@ define.class(function(require, $server$, service){
 		var fs = require('fs');
 		try{
 			fs.mkdirSync(define.expandVariables(define.classPath(this) + "../../../cache/map/"));
-
 		}catch(e){}
 		var cachedname = define.expandVariables(define.classPath(this) + "../../../cache/map/" + x +"_"+y+"_" + z+".json");
-
+		
 		//var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;
 
 		if (fs.existsSync(cachedname)){
-			// console.log("[Map] Cache:", x,y,z);
+			//console.log("[Map] Cache:", x,y,z);
 			var data = fs.readFileSync(cachedname).toString();
+			
 			// if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);
 			//
 			// small error check... mapzen returns html/xml pages for all its errors

@@ -39,7 +39,7 @@ define(function () {
 		node.oldlayout = node._layout
 
 		var layout = node._layout = newnode.layout
-
+		
 		// alright so. what we need to do is bubble down layout_dirty
 		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
 			var child = node.children[i]

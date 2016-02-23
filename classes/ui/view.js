@@ -2,7 +2,7 @@
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
-
+"use strict"
 define.class('$system/base/node', function(require){
 // Base UI view object
 
@@ -465,7 +465,8 @@ define.class('$system/base/node', function(require){
 //				if(prevshader && prevshader.constructor !== shader) console.log(shader)
 				if(prevshader && (prevshader.constructor === shader || prevshader.isShaderEqual(shader.prototype, this, prev))){
 					shobj = prevshader
-					shobj.constructor = shader
+					Object.defineProperty(shobj, 'constructor',{value:shader, configurable:true})
+					//shobj.constructor = shader
 					shobj.view = this
 					shobj.outer = this
 					// ok now check if we need to dirty it
@@ -1012,12 +1013,11 @@ define.class('$system/base/node', function(require){
 		if(bailbound) return
 
 		var matrix_changed = parent_changed
-		if (parentviewport === '3d'){// && !this._mode ){
+		if (parentviewport === '3d'){
 			matrix_changed = true
 			mat4.TSRT2(this.anchor, this.scale, this.rotate, this.pos, this.modelmatrix);
 		}
 		else {
-
 			// compute TSRT matrix
 			if(layout){
 				//console.log(this.matrix_dirty)
@@ -1058,6 +1058,7 @@ define.class('$system/base/node', function(require){
 			}
 		}
 
+		var parentmode = parentviewport
 		if(this._viewport){
 			if(parentmatrix) {
 				mat4.mat4_mul_mat4(this.modelmatrix, parentmatrix, this.viewportmatrix)
@@ -1065,16 +1066,18 @@ define.class('$system/base/node', function(require){
 			else{
 				this.viewportmatrix = this.modelmatrix
 			}
-			this.totalmatrix = mat4.identity();
-			parentmode = this._viewport;
-			parentmatrix = mat4.identity();
+			mat4.identity(this.totalmatrix)
+			parentmode = this._viewport
+			parentmatrix = mat4.global_identity
 		}
 		else{
 			if(parentmatrix && matrix_changed) mat4.mat4_mul_mat4( this.modelmatrix, parentmatrix, this.totalmatrix)
 		}
 
 		var children = this.children
-		if(children) for(var i = 0; i < children.length; i++){
+		var len = children.length
+		
+		if(children) for(var i = 0; i < len; i++){
 			var child = children[i]
 
 			var clayout = child.layout
