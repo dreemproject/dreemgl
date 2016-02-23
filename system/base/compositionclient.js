@@ -20,7 +20,7 @@ define.class('./compositionbase', function(require, baseclass){
 		baseclass.atConstructor.call(this)
 
 		this.screenname = typeof location !== 'undefined' && location.search && location.search.slice(1)
-
+		this.cached_attributes = {}
 		// web environment
 		if(previous){
 			this.session = previous.session
@@ -29,6 +29,7 @@ define.class('./compositionbase', function(require, baseclass){
 			this.rpc.disconnectAll()
 			this.rpc.host = this
 			this.rendered = true
+			this.cached_attributes = previous.cached_attributes
 		}
 		else{
 			this.createBus()
@@ -38,6 +39,13 @@ define.class('./compositionbase', function(require, baseclass){
 		this.bindBusEvents()
 
 		this.renderComposition()
+
+		for(var key in this.cached_attributes){
+			var attrmsg = this.cached_attributes[key]
+			console.log("DOING!",attrmsg)
+			// process it
+			this.bus.atMessage(attrmsg)
+		}
 
 		this.screen = this.names[this.screenname]
 		if(!this.screen){
@@ -162,6 +170,9 @@ define.class('./compositionbase', function(require, baseclass){
 				//else obj.createIndex(msg.index, msg.rpcid, rpcpromise)
 			}
 			else if(msg.type == 'attribute'){
+				
+				this.cached_attributes[msg.rpcid+'_'+msg.attribute] = msg
+
 				var split = msg.rpcid.split('.')
 				var obj
 				// see if its a set attribute on ourself
