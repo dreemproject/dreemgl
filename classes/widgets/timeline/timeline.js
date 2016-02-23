@@ -62,7 +62,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.oninit = function(){
 	}
 
-	this.atDraw = function () {
+	this.atAnimate = function () {
 		this.background = this.find("background")
 		this.labels = this.find("labels")
 		this.hscrollbar = this.find("scrollbar")

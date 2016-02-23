@@ -1137,7 +1137,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
 
-		var exit = paint(pos,m, pixelscale)
+		var exit = paint(pos, m, pixelscale)
 		if(exit.a >= 0.){
 			return exit
 		}

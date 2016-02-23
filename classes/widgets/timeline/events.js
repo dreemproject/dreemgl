@@ -83,7 +83,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 			this.layout.height =  this.parent.layout.height
 		}
 
-		this.atDraw = function () {
+		this.atAnimate = function () {
 			this.offset = new Date(this.start).getTime() - this.parent.parent.getStart()
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
 			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom

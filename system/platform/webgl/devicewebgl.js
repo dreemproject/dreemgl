@@ -29,7 +29,7 @@ define.class(function(require, exports){
 		this.layout_list = previous && previous.layout_list || []
 		this.pick_resolve = []
 		this.anim_redraws = []
-		this.draw_hooks = []
+		this.animate_hooks = []
 		this.doPick = this.doPick.bind(this)
 
 		this.animFrame = function(time){
@@ -288,12 +288,12 @@ define.class(function(require, exports){
 		this.screen._maxsize =
 		this.screen._size = vec2(this.main_frame.size[0] / this.ratio, this.main_frame.size[1] / this.ratio)
 
-		// do all the draw hooks
-		var draw_hooks = this.draw_hooks
-		for(var i = 0; i < draw_hooks.length; i++){
-			var item = draw_hooks[i]
+		// do all the animate hooks
+		var animate_hooks = this.animate_hooks
+		for(var i = 0; i < animate_hooks.length; i++){
+			var item = animate_hooks[i]
 			//console.log(item)
-			if(item.atDraw()){
+			if(item.atAnimate()){
 				anim_redraw.push(item)
 			}
 		}

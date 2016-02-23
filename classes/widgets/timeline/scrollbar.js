@@ -25,7 +25,7 @@ define.class('$ui/scrollbar', function () {
 		this.layout.top =  this.parent.layout.height - this.layout.height
 	}
 
-	this.atDraw = function () {
+	this.atAnimate = function () {
 		this.updateScrollbar()
 	}
 

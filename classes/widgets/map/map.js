@@ -335,7 +335,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 	})
 
-	this.atDraw = function(){
+	this.atAnimate = function(){
 		this.updateTiles();
 		//this.setTimeout(this.updateTiles, 10);
 	}
