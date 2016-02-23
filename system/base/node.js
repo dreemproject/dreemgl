@@ -246,11 +246,9 @@ define.class(function(require){
 
 		// FAST OUT
 		var callfn = this[fast_key] 
-		if(callfn){
-			var oncall = this['on'+key]
-			if(!oncall || oncall === callfn ){
-				callfn.call(this, event, event.value, this)
-			}
+		if(callfn && this['on'+key] === callfn){
+			// lets see if we have an 'on' key defined
+			callfn.call(this, event, event.value, this)
 			return
 		}
 
