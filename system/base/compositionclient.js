@@ -146,13 +146,14 @@ define.class('./compositionbase', function(require, baseclass){
 					this.bus.send({type:'webrtcOffer', offer:offer, index: this.index})
 				}.bind(this)
 				*/
-				if(!this.rendered) this.doRender()
-
 				for(var key in msg.attributes){
 					var attrmsg = msg.attributes[key]
 					// process it
 					this.bus.atMessage(attrmsg, socket)
 				}
+
+				if(!this.rendered) this.doRender()
+
 			}
 
 			else if(msg.type == 'connectScreen'){
@@ -175,7 +176,6 @@ define.class('./compositionbase', function(require, baseclass){
 					}
 				}
 				var value =  define.structFromJSON(msg.value)
-
 				var attrset = obj.atAttributeSet
 				obj.atAttributeSet = undefined
 				obj[msg.attribute] = value

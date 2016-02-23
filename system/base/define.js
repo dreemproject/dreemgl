@@ -185,7 +185,8 @@
 			var path = define.expandVariables(define['$'+key])
 			if(fn.indexOf(path) === 0){
 				// Return the class path as a symbol base
-				return define.filePath('$'+key+fn.slice(path.length)) + '/'
+				var ext = fn.slice(path.length)
+				return define.filePath('$'+key+(ext.charAt(0)!=='/'?'/':'')+ext) + '/'
 			}
 		}
 	}
