@@ -90,25 +90,24 @@ define.class(function(exports){
 	 * Static method to initialize and create the dali stage. This method is
 	 * called when dali starts running.
 	 * @param {Object} settings Initial settings:
-	 *                   width   Width of stage
-	 *                   height  Height of stage
-	 *                   name    Name of stage
-	 *                   dalilib Path to dali lib (optional). If the path is
-	 *                           missing, a fixed path is used.
-     *                   dumpprog Path of file to dump dali program to, or use
-	 *                           stdout is no file is specified
+	 *                   width    Width of stage
+	 *                   height   Height of stage
+	 *                   name     Name of stage
+	 *                   dalilib  Path to dali lib (optional). If the path is
+	 *                            missing, a fixed path is used.
+	 *                   dumpprog Path of file to dump dali program to, or use
+	 *                            stdout is no file is specified
 	 */
 	DaliApi.initialize = function(settings) {
 		DaliLayer = require('./dali_layer')
 
 		DaliApi.width = settings.width
 		DaliApi.height = settings.height
-		DaliApi.name = settings.name
+		DaliApi.screenname = settings.name
 		DaliApi.dalilib = settings.dalilib || '/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali';
 		DaliApi.dumpprog = settings.dumpprog;
 
 		DaliApi.emitcode = DaliApi.dumpprog;
-
 
 		var window= {
 			x:0,
@@ -116,7 +115,7 @@ define.class(function(exports){
 			width:DaliApi.width,
 			height: DaliApi.height,
 			transparent: false,
-			name: DaliApi.name
+			name: DaliApi.screenname
 		};
 
 		var viewMode={
@@ -130,7 +129,7 @@ define.class(function(exports){
 		}
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var window= {x:0, y:0, width:' + DaliApi.width + ', height:' + DaliApi.height + ', transparent: false, name: \'' + DaliApi.name + '\'};');
+			console.log('DALICODE: var window= {x:0, y:0, width:' + DaliApi.width + ', height:' + DaliApi.height + ', transparent: false, name: \'' + DaliApi.screenname + '\'};');
 
 			console.log('DALICODE: var viewMode={\'stereoscopic-mode\':\'mono\', \'stereo-base\': 65};');
 
