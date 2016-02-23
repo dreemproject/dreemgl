@@ -220,6 +220,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var x2 = this.add_x + fontsize * info.max_x
 			var y1 = this.add_y - fontsize * info.min_y
 			var y2 = this.add_y - fontsize * info.max_y
+			var advance = info.advance
 			var italic = this.italic_ness * info.height * fontsize
 			var cz = this.add_z ? this.add_z:0;
 			var dx = 0
@@ -252,6 +253,10 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						x2 += padskip, dx = (padding - 1)* info.advance * fontsize
 					}
 				}
+			}
+			else if(unicode === 10){
+				x2 = 0
+				advance = 0
 			}
 			var a = this.array
 
@@ -333,7 +338,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 					x2 + italic, y2, cz, fontsize, gx|1, gy|1, unicode, m1, m2, m3
 				)*/
 			}
-			this.add_x += info.advance * fontsize + dx
+			this.add_x += advance * fontsize + dx
 			if(this.add_x > this.text_w) this.text_w = this.add_x
 		}
 
