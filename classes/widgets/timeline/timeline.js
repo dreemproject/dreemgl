@@ -7,7 +7,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.flexdirection = 'column'
 	this.padding = vec4(0, 56, 0, 18)
-	this.bgcolor = 'NaN'
+	this.bgcolor = NaN
 	// TODO(aki): hide overflow
 
 	this.MIN_ZOOM = 0.125

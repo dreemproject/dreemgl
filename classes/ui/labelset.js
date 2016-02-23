@@ -14,7 +14,6 @@ define.class(function(require, $ui$, view){
 	this.textpositionfn = function(pos,tag) {return pos;};
 	this.polygonoffset = 0.0;
 
-
 	this.attributes = {
 		// the text color
 		fgcolor: Config({type:vec4, value: vec4(1,1,1,1), meta:"color" }),
