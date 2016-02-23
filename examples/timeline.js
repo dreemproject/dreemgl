@@ -2,7 +2,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 
 	var START_DATE = "Feb 1 2016"
 	var END_DATE = "Feb 17 2016"
-	var EVENT_COUNT = 100
+	var EVENT_COUNT = 10
 
 	this.render = function() {
 		return [

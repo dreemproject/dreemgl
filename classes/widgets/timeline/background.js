@@ -17,6 +17,7 @@ define.class('$ui/view', function () {
 
 	this.layout = function(){
 		this.layout.top = 0
+		this.layout.width = this.parent.layout.width
 		this.layout.height = this.parent.layout.height
 	}
 
@@ -52,16 +53,16 @@ define.class('$ui/view', function () {
 			else if (val == 4.0) return day
 			else if (val == 5.0) return hour
 			else if (val == 6.0) return minute
-		
-		
+
+
 			return 0.0;
 		}
-		
+
 
 		this.color = function(){
-			
+
 			//return "red";
-			
+
 			var fgcolor = vec4("#ffffff")
 			var bgcolor = vec4("#4e4e4e")
 			var a = 24.0 / view.layout.height

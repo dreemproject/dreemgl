@@ -31,7 +31,7 @@ define.class('$ui/scrollbar', function () {
 
 	// internal: show/hide and resize scrollbar
 	this.updateScrollbar = function(){
-		this._total = this.parent.getRange() / this.zoom / this.parent.TIME_SCALE
+		this._total = this.parent.getDuration() / this.zoom / this.parent.TIME_SCALE
 		this._page = 1
 		if (this._total > this._page - 0.1){
 			var offset = clamp(this._value, 0, this._total - this._page)

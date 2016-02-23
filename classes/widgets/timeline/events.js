@@ -6,21 +6,47 @@
 define.class('$ui/label', function (require, $ui$, view) {
 
 	this.text = ''
-	this.bgcolor = NaN
+	this.bgcolor = vec4(1, 1, 1, 0.05)
+	this.pickalpha = 0
 
 	this.attributes = {
 		data: Config({type: Array,  value: wire('this.parent.data')}),
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 		scroll: wire('this.parent.scroll'),
 		hoverid: -1,
+		makeStart: null,
+		makeEnd: null,
 		eventselected: Config({type:Event})
 	}
 
-	this.layout = function(){
-		this.layout.width =  this.parent.layout.width
+	this.pointermove = function(event) {
+		var eventghost = this.find('eventghost')
+		eventghost.start = this.parent.getRangeStart() + this.parent.getRange() * (event.min[0] / this.layout.width)
+		eventghost.end = this.parent.getRangeStart() + this.parent.getRange() * (event.max[0] / this.layout.width)
+		this.hoverid = this.last_pick_id // TODO(aki): hack to force draw. Remove.
 	}
 
-	this.onpointerstart = function(event){
+	this.pointerend = function(event) {
+		var eventghost = this.find('eventghost')
+		var eventdata = {
+			date: eventghost.start,
+			enddate: eventghost.end,
+			title: 'New Event',
+			metadata: {
+				location: {
+					name: 'New Location',
+					lattitude: 0,
+					longitute: 0
+				}
+			}
+		}
+		this.parent.makeEvent(eventdata)
+		eventghost.start = 0
+		eventghost.end = 0
+		this.hoverid = this.last_pick_id // TODO(aki): hack to force draw. Remove.
+	}
+
+	this.onpointertap = function(event){
 		this.hoverid = this.last_pick_id
 		var eventData = this.data[this.hoverid]
 		if (eventData) {
@@ -32,7 +58,38 @@ define.class('$ui/label', function (require, $ui$, view) {
 		this.pickrange = this.data.length
 	}
 
-	this.pickrange = 1024;
+	define.class(this, 'eventghost', view, function(){
+		this.bgcolor = '#4466FF'
+
+		this.attributes = {
+			zoom: Config({type: Number, value: wire('this.parent.zoom')}),
+			scroll: wire('this.parent.scroll'),
+			duration: 1,
+			offset: 0,
+			start: 0,
+			end: 0
+		}
+
+		this.layout = function(){
+			this.layout.width =  this.parent.layout.width
+			this.layout.height =  this.parent.layout.height
+		}
+
+		this.atDraw = function () {
+			this.offset = new Date(this.start).getTime() - this.parent.parent.getStart()
+			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
+			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
+			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
+		}
+
+		this.hardrect = {
+			position: function(){
+				var start = view.start
+				var pos = vec2(mesh.x * view.duration + view.offset - view.scroll[0], mesh.y)
+				return vec4(pos.x * view.layout.width, pos.y * view.layout.height, 0, 1) * view.totalmatrix * view.viewmatrix
+			}
+		}
+	})
 
 	define.class(this, 'eventrects', this.Shader, function(){
 
@@ -48,7 +105,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 			var view = this.view
 			var data = view.data
 			var mesh = this.mesh = vertstruct.array();
-			for(var i = 0; i < data.length; i++) {
+			for (var i = 0; i < data.length; i++) {
 
 				var date = new Date(data[i].date)
 				var enddate = new Date(data[i].enddate)
@@ -90,12 +147,18 @@ define.class('$ui/label', function (require, $ui$, view) {
 		this.color = function(){
 			PickGuid = mesh.id
 			if (view.hoverid == mesh.id){
-				return vec4(0, 1, 0, 1)
+				return vec4(0.5, 0.75, 1, 1)
 			}
 			return vec4(0.75, 0.75, 0.75, 1)
 		}
 	})
 
 	this.eventrects = true
+
+	this.render = function () {
+		return [
+			this.eventghost({name: "eventghost"})
+		]
+	}
 
 })

@@ -7,7 +7,8 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.flexdirection = 'column'
 	this.padding = vec4(0, 56, 0, 18)
-	this.bgcolor = NaN
+	this.bgcolor = 'NaN'
+	// TODO(aki): hide overflow
 
 	this.MIN_ZOOM = 0.125
 	this.TIME_SCALE = 86400000 // millis to days
@@ -32,30 +33,26 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.onzoom = function () {
-		if (this._zoom > this.getRange() / this.TIME_SCALE) {
-			this.zoom = this.getRange() / this.TIME_SCALE
+		if (this._zoom > this.getDuration() / this.TIME_SCALE) {
+			this.zoom = this.getDuration() / this.TIME_SCALE
 		}
 	}
 
-	// TODO(aki): test
-	this.oneventadded = function (event) {
-		var starttime = new Date(this.start).getTime()
-		var endtime = new Date(this.end).getTime()
-		var eventtime = new Date(event.data.date)
-		if (eventtime > endtime) endtime = eventtime
-		if (eventtime < starttime) starttime = eventtime
-		this.start = new Date(starttime).toString()
-		this.end = new Date(endtime).toString()
+	this.makeEvent = function (eventdata) {
+		this.data.push(eventdata)
+		this.emit('eventadded', eventdata)
+		this.data = this.data
 	}
 
 	this.ondata = function () {
-		var eventtime
-		var starttime = new Date(this.start).getTime()
-		var endtime = new Date(this.end).getTime()
+		var eventstart, eventend
+		var starttime = this.getStart()
+		var endtime = this.getEnd()
 		for (var i = 0; i < this.data.length; i++) {
-			eventtime = new Date(this.data[i].date)
-			if (eventtime > endtime) endtime = eventtime
-			if (eventtime < starttime) starttime = eventtime
+			eventstart = new Date(this.data[i].date)
+			eventend = new Date(this.data[i].enddate)
+			if (eventend > endtime) endtime = eventend
+			if (eventstart < starttime) starttime = eventstart
 		}
 		this.start = new Date(starttime).toString()
 		this.end = new Date(endtime).toString()
@@ -65,21 +62,13 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		this.background = this.find("background")
 		this.labels = this.find("labels")
 		this.hscrollbar = this.find("scrollbar")
-		if (this.hscrollbar){	
+		if (this.hscrollbar){
 			this.hscrollbar.updateScrollbars()
 		}
 		var daywidth = this.layout.width / this.zoom
 
 		//TODO(aki): Don't use magic numbers!
 
-		// segment codes
-		// 1 - year
-		// 2 - month
-		// 3 - week
-		// 4 - day
-		// 5 - hour
-		// 6 - munutes
-		// 7 - seconds
 		if (daywidth < 12) {
 			this.segments = vec3(1, 2, 3) // y m w
 		} else if (daywidth < 32) {
@@ -124,12 +113,21 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		return new Date(this.end).getTime()
 	}
 
-	this.getRange = function () {
+	this.getDuration = function () {
 		return this.getEnd() - this.getStart()
 	}
 
-	this.getOffset = function () {
-		return this.zoom * this.scroll * this.TIME_SCALE
+	this.getRange = function () {
+		return this.getRangeEnd() - this.getRangeStart()
+	}
+
+	this.getRangeStart = function () {
+		return this.getStart() + this.zoom * this.scroll * this.TIME_SCALE
+	}
+
+	this.getRangeEnd = function () {
+		var rangefactor = this.zoom / (this.getDuration() / this.TIME_SCALE)
+		return this.getRangeStart() + this.getDuration() * rangefactor
 	}
 
 	this.pointermultimove = function(event) {
@@ -147,7 +145,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 			// TODO(aki): delta doesent feel right
 			var delta = (distance - oldDistance) / this.layout.width * this.zoom * 2
-			var newzoom = clamp(this.zoom - delta, this.MIN_ZOOM, this.getRange() / this.TIME_SCALE)
+			var newzoom = clamp(this.zoom - delta, this.MIN_ZOOM, this.getDuration() / this.TIME_SCALE)
 
 			this.zoom = newzoom
 
@@ -168,7 +166,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			var lastzoom = this._zoom
 
 			var delta = event.value[1] / this.layout.width * this.zoom
-			var newzoom = clamp(this.zoom + delta, this.MIN_ZOOM, this.getRange() / this.TIME_SCALE)
+			var newzoom = clamp(this.zoom + delta, this.MIN_ZOOM, this.getDuration() / this.TIME_SCALE)
 
 			this.zoom = newzoom
 
@@ -184,7 +182,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		return [
 		background({name: "background"}),
 			labels({name: "labels"}),
-			events({name: "events"}),
+			events({name: "events", flex: 1}),
 			scrollbar({name: "scrollbar"})
 		]
 	}
