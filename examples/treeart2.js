@@ -1,6 +1,8 @@
 define.class("$server/composition",function(require, $ui$, screen, view) {
 	this.render = function() {
-		return [screen(
+		return [screen({
+				clearcolor:'black'
+			},
 			view({
 				flex:1,
 				bgcolor:'red',
@@ -11,19 +13,19 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				hardrect:{
 					color:function(){						
 						if(mesh.depth>13.){
+							var len = min(pow(1.5-length(mesh.pos),8.),1.)								
 							if(mesh.isberry>0.){
 								// render a berry
-								var len = min(pow(1.5-length(mesh.pos),8.)*0.15,1.)		
-								return 'red'*len
+								//var len = min(pow(1.5-length(mesh.pos),8.)*0.15,1.)		
+								return mycolor*len
 							}
 							else{
 								// render a leaf
-								var len = min(pow(1.5-length(mesh.pos),8.),1.)								
-								return pal.pal5(0.1*colornoise+0.1*view.time)*len
+								return mycolor*len
 							}
 						}
 						// render a branch
-						return mix('brown',pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)
+						return mix('brown',mycolor,mesh.depth/12)*sin(mesh.pos.y*PI)
 					},
 					// the geometry structure, position, path (a power of 2 float mask) and depth of the rect
 					// also note we are only using 'floats' for this data, videocards dont really like other types
@@ -55,16 +57,16 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							// this is like path&1 binary arithmetic done using floats
 							var right = mod(path, 2.)	
 							// its the right branch
+							var angle = 25.*math.DEG+0.01*turbulence*sin(view.time)
 						    if(right>0.){
-						    	dir = math.rotate2d(dir, 25.*math.DEG+0.01*turbulence*sin(view.time))
-						    }
-						    else{ // left
-						    	dir = math.rotate2d(dir, -25.*math.DEG+0.01*turbulence*sin(view.time))
+						    	angle = -1.*angle
 						    }
 
 							// rotate by mouse position
 							var dist = max(50.-10.*length(mousepos - pos)-sin(view.time),0.)
-							dir = math.rotate2d(dir, dist*0.01)
+							angle -= dist*0.01
+
+							dir = math.rotate2d(dir,angle)
 
 						    // accumulate position scale
 						    pos += (dir * scale)*1.9
@@ -77,18 +79,26 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						// the leaves have a different scale/center than the branches so make it tweakable
 						var vscale = vec2(1.,.5)
 						var vcen = vec2(-.8,-.4)
-						// we are a leaf
+						// we are a leaf or berry
 						if(depth > 13){
 							var noise = noise.noise3d(vec3(pos.x*.3,pos.y*.3,0.5*view.time)) * turbulence
 							colornoise = noise
 							// only rotate the leaves
-							if(mesh.isberry <1.){
+
+							if(mesh.isberry > 0.){
+								mycolor = 'red'
+								scale *= vec2(0.5,0.5)
+							}
+							else{
 								dir = math.rotate2d(dir, -50.*math.DEG*noise)
+								mycolor = pal.pal5(0.1*colornoise+0.1*view.time)
 							}
 							scale *= vec2(1,4.)
 							vscale = vec2(3.,.5)
 							vcen = vec2(0.8,0.)
-							
+						}
+						else{
+							mycolor = pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time)
 						}
 
 						// compute the final position
