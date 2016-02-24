@@ -5,114 +5,109 @@
 
 define.class('$server/composition', function(require, $ui$, screen, view, label){
 	this.render = function(){ return [
-		screen({name:'default', clearcolor:vec4('black')},
-			view({flexdirection:"column"},
-				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
+		screen({name:'default', clearcolor:vec4('gray')},
+			view({flexdirection:"column", justifycontent:"space-around"},
+				//view({flex:1, bgcolor:NaN, flexdirection:'row', justifycontent:"space-around", margintop:50},
+				//	view({
+				//		width:300,
+				//		height:200,
+				//		borderwidth:1,
+				//		bordercolor:"white",
+				//		bgimagemode:"stretch",
+				//		bgimage:require('$resources/textures/landscape.jpg')
+				//	}, label({text:"Stretch - P > L", fgcolor:"#666"})),
+				//	view({
+				//		width:200,
+				//		height:300,
+				//		borderwidth:1,
+				//		bordercolor:"white",
+				//		bgimagemode:"stretch",
+				//		bgimage:require('$resources/textures/landscape.jpg')
+				//	}, label({text:"Stretch - P > L", fgcolor:"#666"})),
+				//	view({
+				//		width:200,
+				//		height:300,
+				//		borderwidth:1,
+				//		bordercolor:"white",
+				//		bgimagemode:"stretch",
+				//		bgimage:require('$resources/textures/portrait.jpg')
+				//	}, label({text:"Stretch - P > P", fgcolor:"#666"})),
+				//	view({
+				//		width:300,
+				//		height:200,
+				//		borderwidth:1,
+				//		bordercolor:"white",
+				//		bgimagemode:"stretch",
+				//		bgimage:require('$resources/textures/portrait.jpg')
+				//	}, label({text:"Stretch - P > P", fgcolor:"#666"}))
+				//),
+				view({flex:1, bgcolor:NaN, flexdirection:'row', justifycontent:"space-around", margintop:50},
 					view({
 						width:200,
 						height:300,
 						borderwidth:1,
 						bordercolor:"white",
-						contentmode:"aspect-fill",
-						bgimage:require('$resources/textures/hex_tiles.png')
-					}, label({text:"Aspect Fill"})),
+						bgimagemode:"aspect-fill",
+						bgimage:require('$resources/textures/landscape.jpg')
+					}, label({text:"Aspect Fill - P > L", fgcolor:"#666"})),
 					view({
 						width:200,
 						height:300,
 						borderwidth:1,
 						bordercolor:"white",
-						contentmode:"aspect-fit",
-						bgimage:require('$resources/textures/hex_tiles.png')
-					}, label({text:"Aspect Fit"})),
+						bgimagemode:"aspect-fit",
+						bgimage:require('$resources/textures/landscape.jpg')
+					}, label({text:"Aspect Fit - P > L", fgcolor:"#666"})),
 					view({
 						width:200,
 						height:300,
 						borderwidth:1,
 						bordercolor:"white",
-						contentmode:"stretch",
-						bgimage:require('$resources/textures/hex_tiles.png')
-					}, label({text:"Stretch"}))
-				)
-				,
-				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
-					view({
-						width:300,
-						height:200,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"aspect-fill",
-						bgimage:require('$resources/textures/hex_tiles.png')
-					}, label({text:"Aspect Fill"})),
-					view({
-						width:300,
-						height:200,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"aspect-fit",
-						bgimage:require('$resources/textures/hex_tiles.png')
-					}, label({text:"Aspect Fit"})),
-					view({
-						width:300,
-						height:200,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"stretch",
-						bgimage:require('$resources/textures/hex_tiles.png')
-					}, label({text:"Stretch"}))
-				)
-				,
-				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
+						bgimagemode:"aspect-fill",
+						bgimage:require('$resources/textures/portrait.jpg')
+					}, label({text:"Aspect Fill - P > P", fgcolor:"#666"})),
 					view({
 						width:200,
 						height:300,
 						borderwidth:1,
 						bordercolor:"white",
-						contentmode:"aspect-fill",
-						bgimage:require('$resources/textures/checker.png')
-					}, label({text:"Aspect Fill"})),
-					view({
-						width:200,
-						height:300,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"aspect-fit",
-						bgimage:require('$resources/textures/checker.png')
-					}, label({text:"Aspect Fit"})),
-					view({
-						width:200,
-						height:300,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"stretch",
-						bgimage:require('$resources/textures/checker.png')
-					}, label({text:"Stretch"}))
-				)
-				,
-				view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
-					view({
-						width:300,
-						height:200,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"aspect-fill",
-						bgimage:require('$resources/textures/checker.png')
-					}, label({text:"Aspect Fill"})),
-					view({
-						width:300,
-						height:200,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"aspect-fit",
-						bgimage:require('$resources/textures/checker.png')
-					}, label({text:"Aspect Fit"})),
-					view({
-						width:300,
-						height:200,
-						borderwidth:1,
-						bordercolor:"white",
-						contentmode:"stretch",
-						bgimage:require('$resources/textures/checker.png')
-					}, label({text:"Stretch"}))
+						bgimagemode:"aspect-fit",
+						bgimage:require('$resources/textures/portrait.jpg')
+					}, label({text:"Aspect Fit - P > P", fgcolor:"#666"}))
+				),
+  			    view({flex:1, bgcolor:NaN, flexdirection:'row', justifycontent:"space-around", margintop:50},
+				    view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+						bgimagemode:"aspect-fill",
+					bgimage:require('$resources/textures/landscape.jpg')
+				}, label({text:"Aspect Fill - L > L", fgcolor:"#666"})),
+				    view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+						bgimagemode:"aspect-fit",
+					bgimage:require('$resources/textures/landscape.jpg')
+				}, label({text:"Aspect Fit - L > L", fgcolor:"#666"})),
+				    view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+						bgimagemode:"aspect-fill",
+					bgimage:require('$resources/textures/portrait.jpg')
+				}, label({text:"Aspect Fill - L > P", fgcolor:"#666"})),
+				    view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+						bgimagemode:"aspect-fit",
+					bgimage:require('$resources/textures/portrait.jpg')
+				}, label({text:"Aspect Fit - L > P", fgcolor:"#666"}))
 				)
 			)
 		)

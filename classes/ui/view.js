@@ -52,8 +52,8 @@ define.class('$system/base/node', function(require){
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		contentmode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "auto"), value:"auto"}),
-		contentstretch: Config({group:"style", value:vec2(1,1)}),
+		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
+		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
@@ -570,73 +570,27 @@ define.class('$system/base/node', function(require){
 			if (shader && shader.texture) {
 				var size = shader.texture.size;
 
-				if (this.contentmode === "stretch" || this.contentmode === "auto") {
+				var imgw = size[0];
+				var imgh = size[1];
+				var aspect = this.width / this.height;
+				var ratio = imgw / imgh / aspect;
 
-					this.contentstretch = vec2(1,1);
-
-				} else if (this.contentmode === "aspect-fit") {
-
+				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
+					this.bgimageaspect = vec2(1,1);
+				} else if (this.bgimagemode === "aspect-fit") {
 					if (this.width > this.height) {
-						// landscape
-						if (size[0] >  size[1]) {
-
-							var ratio = size[0] / this.width;
-							this.contentstretch = vec2(1, ratio);
-
-						} else {
-
-							var ratio = size[1] / this.height;
-							this.contentstretch = vec2(ratio, 1);
-
-						}
-
+						this.bgimageaspect = vec2(1/ratio, 1);
 					} else {
-						// square or portait
-
-						if (size[0] >  size[1]) {
-							var ratio = size[0] / this.width;
-							this.contentstretch = vec2(1, ratio);
-
-						} else {
-
-							var ratio = size[1] / this.height;
-							this.contentstretch = vec2(ratio, 1);
-
-						}
-
-
+						this.bgimageaspect = vec2(1, ratio);
 					}
-
-				} else if (this.contentmode === "aspect-fill") {
-
+				} else if (this.bgimagemode === "aspect-fill") {
 					if (this.width > this.height) {
-						// landscape
-						var ratio = size[0] / size[1];
-
-						if (ratio > 1) {
-							this.contentstretch = vec2(1/ratio, 1);
-						} else {
-							this.contentstretch = vec2(1,ratio);
-						}
-
+						this.bgimageaspect = vec2(1, ratio);
 					} else {
-						// square or portait
-						var ratio = size[1] / size[0];
-
-						if (ratio > 1) {
-							this.contentstretch = vec2(1, 1/ratio);
-
-						} else {
-							this.contentstretch = vec2(ratio, 1);
-
-						}
-
+						this.bgimageaspect = vec2(1/ratio, 1);
 					}
-
 				}
-
 			}
-
 		}
 	};
 
@@ -647,7 +601,7 @@ define.class('$system/base/node', function(require){
 		if (img) {
 			this.oncontentmode()
 		}
-		if(this.contentmode === "auto"){
+		if(this.bgimagemode === "resize"){
 			this._size = img.size
 			this.relayout()
 		}
@@ -1466,10 +1420,10 @@ define.class('$system/base/node', function(require){
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			if (mesh.xy.x * view.contentstretch.x > 1.0 || mesh.xy.y * view.contentstretch.y > 1.0) {
+			if (mesh.xy.x * view.bgimageaspect.x > 1.0 || mesh.xy.y * view.bgimageaspect.y > 1.0) {
 				return view.bgcolor;
 			}
-			var col = this.texture.sample(vec2(mesh.xy.x * view.contentstretch[0], mesh.xy.y * view.contentstretch[1]));
+			var col = this.texture.sample(vec2(mesh.xy.x * view.bgimageaspect[0], mesh.xy.y * view.bgimageaspect[1]));
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
