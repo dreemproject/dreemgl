@@ -10,7 +10,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				hardrect:{
 					color:function(){
 						var len = min(pow(1.5-length(mesh.pos),8.),1.)
-						if(mesh.depth>13.) return pal.pal5(0.1*colornoise)*len
+						if(mesh.depth>13.) return pal.pal5(0.1*colornoise+0.1*view.time)*len
 						return mix('brown',pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)
 					},
 					mesh:define.struct({
