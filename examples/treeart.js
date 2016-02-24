@@ -24,7 +24,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						var scale = vec2(1,1)
 						var dir = vec2(0,-1)
 						var depth = int(mesh.depth)
-						for(var i = 0; i < 32; i++){
+						for(var i = 0; i < 14; i++){
 							if(i >= depth) break
 							var right = mod(path, 2.)	
 						    if(right>0.){
