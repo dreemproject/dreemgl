@@ -3,22 +3,31 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 		return [screen(
 			view({
 				flex:1,
-				init:function(){
-					console.log(this.screen.size)
-					console.log('here')
-				},
 				bgcolor:'red',
 				hardrect:{
-					color:function(){
-						var len = min(pow(1.5-length(mesh.pos),8.),1.)
-						if(mesh.depth>13.) return pal.pal5(0.1*colornoise+0.1*view.time)*len
+					color:function(){						
+						if(mesh.depth>13.){
+							if(mesh.isberry>0.){
+								// render a berry
+								var len = min(pow(1.5-length(mesh.pos),8.)*0.15,1.)		
+								return 'red'*len
+							}
+							else{
+								// render a leaf
+								var len = min(pow(1.5-length(mesh.pos),8.),1.)								
+								return pal.pal5(0.1*colornoise+0.1*view.time)*len
+							}
+						}
+						// render a branch
 						return mix('brown',pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)
 					},
 					// the geometry structure, position, path (a power of 2 float mask) and depth of the rect
+					// also note we are only using 'floats' for this data, videocards dont really like other types
 					mesh:define.struct({
 						pos:vec2,
 						path:float,
-						depth:float
+						depth:float,
+						isberry:float
 					}).array(),
 					position:function(){
 						
@@ -34,7 +43,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						var turbulence = 3.
 						// the depth of the rectangle we are processing
 						var depth = int(mesh.depth)
-						// run over the whole depth
+						// run over the whole depth, note we don't use i < depth because thats not allowed in webGL, has to be fixed number
 						for(var i = 0; i < 14; i++){
 							if(i >= depth) break
 							// this is like path&1 binary arithmetic done using floats
@@ -76,13 +85,16 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 
 						// first triangle
 						function recur(path, depth){
-
+							
+							var isberry = 0
+							// probabilistically spread the berries through the tree
+							if(depth > 13 && Math.random()<0.1) isberry = true
 							// we push plain rectangles in the geometry buffer with just the path + depth added
 							mesh.pushQuad(
-								-1,-1, path, depth,
-								1,-1, path, depth,
-								-1,1, path, depth,
-								1,1, path, depth
+								-1,-1, path, depth, isberry,
+								1,-1, path, depth, isberry,
+								-1,1, path, depth, isberry,
+								1,1, path, depth, isberry
 							)
 							// bail when at level 14
 							if(depth>13)return
