@@ -194,7 +194,21 @@ define.class('$system/base/texture', function(exports){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.array))
 		}
 		else if(this.image){
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
+			var image = this.image
+			// lets do a power of two
+			if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
+				if (!int.isPowerOfTwo(image.width) || !int.isPowerOfTwo(image.height)) {
+				    // Scale up the texture to the next highest power of two dimensions.
+				    var canvas = document.createElement("canvas")
+				    canvas.width = int.nextHighestPowerOfTwo(image.width)
+				    canvas.height = int.nextHighestPowerOfTwo(image.height)
+				    var ctx = canvas.getContext("2d")
+				    ctx.drawImage(image, 0, 0, image.width, image.height)
+				    image = canvas
+				}
+			}
+
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 			this.image[samplerid] = gltex
 		}
 		else{
@@ -209,6 +223,9 @@ define.class('$system/base/texture', function(exports){
 		gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl[samplerdef.WRAP_S])
 		gl.texParameterf(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl[samplerdef.WRAP_T])
 
+		if(samplerdef.MIN_FILTER === 'LINEAR_MIPMAP_NEAREST'){
+			gl.generateMipmap(gl.TEXTURE_2D)
+		}
 		this[samplerid] = gltex
 		return gltex
 	}
@@ -234,6 +251,14 @@ define.class('$system/base/texture', function(exports){
 		})
 	}
 
+	this.samplemip = function(v){
+		return texture2D(this, v, {
+			MIN_FILTER: 'LINEAR_MIPMAP_NEAREST',
+			MAG_FILTER: 'LINEAR',
+			WRAP_S: 'CLAMP_TO_EDGE',
+			WRAP_T: 'CLAMP_TO_EDGE'
+		})
+	}
 	this.flipped2 = function(x,y){ return flipped(vec2(x,y)) }
 	this.flipped = function(v){
 		return texture2D(this, vec2(v.x, 1. - v.y), {

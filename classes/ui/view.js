@@ -599,10 +599,6 @@ define.class('$system/base/node', function(require){
 		}
 	};
 
-	this.onlayout = function() {
-		this.onbgimagemode();
-	};
-
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
@@ -1304,6 +1300,9 @@ define.class('$system/base/node', function(require){
 			emitPostLayout(copynodes)
 
 
+		}
+		if(this._bgimage){
+			this.onbgimagemode()
 		}
 	}
 

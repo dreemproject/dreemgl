@@ -624,8 +624,10 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 
 	this.Logic = function(node, parent, state){
 		// return type boolean
+		
 		var ret = baseclass.Logic.call(this, node, parent, state)
 		node.infer = boolean
+
 		return ret
 	}
 
