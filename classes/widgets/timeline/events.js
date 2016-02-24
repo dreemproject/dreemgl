@@ -75,9 +75,10 @@ define.class('$ui/label', function (require, $ui$, view) {
 		}
 
 		this.layout = function(){
-			this.layout.top = 0
-			this.layout.width = this.parent.layout.width
-			this.layout.height = this.parent.layout.height
+			this._layout.top = 0
+			this._layout.width = this.parent._layout.width
+			this._layout.height = this.parent._layout.height
+			console.log("LAYOUT")
 		}
 
 		this.atDraw = function () {
@@ -85,6 +86,8 @@ define.class('$ui/label', function (require, $ui$, view) {
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
 			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
+			console.log("HERE", this.layout.width, this.layout.height)
+
 		}
 
 		this.hardrect = {
@@ -93,6 +96,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 				return vec4(pos.x * view.layout.width, pos.y * view.layout.height, 0, 1) * view.totalmatrix * view.viewmatrix
 			},
 			bgcolorfn: function (bgcolor) {
+				return 'red'
 				PickGuid = view.id
 				if (view.hoverid == mesh.id){
 					return vec4(1, 0.75, 0.25, 1)
@@ -172,6 +176,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 	}
 
 	this.render = function () {
+		console.log(this.data)
 		return [
 			this.renderEvents(this.data),
 			this.event({

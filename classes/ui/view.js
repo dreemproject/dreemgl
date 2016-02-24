@@ -303,7 +303,7 @@ define.class('$system/base/node', function(require){
 	this.remapmatrix = mat4();
 
 	// forward references for shaders
-	this.layout = {width:0, height:0, left:0, top:0, right:0, bottom:0}
+	this.layout = {width:0, height:0, left:-1, top:-1, right:0, bottom:0}
 	this.screen = {device:{size:vec2(), frame:{size:vec2()}}}
 
 	this.noise = require('$system/shaderlib/noiselib')

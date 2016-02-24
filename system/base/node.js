@@ -287,11 +287,10 @@ define.class(function(require){
 				if(proto.hasOwnProperty(listen_key)){
 					var listeners = proto[listen_key]
 					for(var j = listeners.length - 1; j >= 0; j--){
-						callfn = listeners[j]
-						callfn.call(this, event, event.value, this)
+						listeners[j].call(this, event, event.value, this)
 						if(event.stop) return
 						if(event.final) finals = finals || [], finals.push(event.final)
-						counter++
+						counter = -1
 					}
 				}
 				proto = Object.getPrototypeOf(proto)
