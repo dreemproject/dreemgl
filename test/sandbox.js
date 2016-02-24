@@ -4,7 +4,45 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 this.render=function(){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,8 +76,8 @@ width:313,
 bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),
 position:"absolute",
 margin:vec4(0,0,0,0),
-x:87.00006103515625,
-y:31.000152587890625
+x:84.00006103515625,
+y:400.0001525878906
 },
 view({
 height:143,
@@ -48,7 +86,8 @@ bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),
 position:"absolute",
 x:84.00006103515625,
 y:160.00006103515625,
-borderradius:vec4(10,30,60,80)
+borderradius:vec4(10,30,60,80),
+rotate:vec3(0,0,0.8099998831748962)
 },
 icon({
 fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1),
@@ -76,8 +115,8 @@ width:453,
 pickalpha:-1,
 bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),
 position:"absolute",
-x:85.16409301757812,
-y:604.7561645507812,
+x:410.1640625,
+y:590.7561645507812,
 alignitems:"center",
 justifycontent:"center",
 bgimage:"$resources/textures/portrait.jpg",
@@ -107,8 +146,8 @@ height:100,
 width:800,
 bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),
 position:"absolute",
-x:227.03475952148438,
-y:448.6853942871094,
+x:323.0347595214844,
+y:451.6853942871094,
 opacity:0.7
 },
 icon({
@@ -117,8 +156,8 @@ pickalpha:-1,
 icon:"star-o",
 fontsize:80,
 position:"absolute",
-x:376.9653015136719,
-y:-3.6853790283203125
+x:395.9653015136719,
+y:-1.685333251953125
 })
 ),
 view({
@@ -126,10 +165,10 @@ height:343,
 width:669,
 bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
 position:"absolute",
-x:427.8311767578125,
-y:56.318634033203125,
+x:208.8311767578125,
+y:29.318634033203125,
 bgimage:"$resources/textures/landscape.jpg",
-bgimagemode:"aspect-fit"
+bgimagemode:"aspect-fill"
 },
 icon({
 fgcolor:vec4(0.8,0.9,0.3,1),
@@ -140,18 +179,6 @@ position:"absolute",
 x:77.18701171875,
 y:44.7864990234375,
 boldness:0.95
-})
-),
-label({
-fontsize:104,
-pickalpha:-1,
-bgcolor:'transparent',
-fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
-text:"Change teh text!",
-position:"absolute",
-x:446.07366943359375,
-y:617.5030517578125,
-opacity:0.6
 }),
 icon({
 fgcolor:'yellow',
@@ -159,8 +186,20 @@ pickalpha:-1,
 icon:"gear",
 fontsize:80,
 position:"absolute",
-x:908,
-y:194.9999542236328
+x:419.1688232421875,
+y:89.68136596679688
+})
+),
+label({
+fontsize:104,
+pickalpha:-1,
+bgcolor:'transparent',
+fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
+text:"Change the text!",
+position:"absolute",
+x:446.07366943359375,
+y:617.5030517578125,
+opacity:0.6
 })
 ),
 toolkit({
@@ -170,7 +209,7 @@ rulers:true,
 x:1145,
 y:21.000144958496094,
 width:428,
-height:854,
+height:836,
 dropmode:"absolute",
 mode:"design",
 reticlesize:9,
@@ -189,7 +228,85 @@ groupreparent:false
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

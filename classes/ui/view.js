@@ -572,7 +572,7 @@ define.class('$system/base/node', function(require){
 
 				var imgw = size[0];
 				var imgh = size[1];
-				var aspect = this.width / this.height;
+				var aspect = this._width / this._height;
 				var uselayout = false;
 				if (isNaN(aspect)) {
 					uselayout = true;
@@ -583,13 +583,13 @@ define.class('$system/base/node', function(require){
 				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
 					this.bgimageaspect = vec2(1.0,1.0);
 				} else if (this.bgimagemode === "aspect-fit") {
-					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this.width > this.height)) {
+					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
 						this.bgimageaspect = vec2(1.0/ratio, 1.0);
 					} else {
 						this.bgimageaspect = vec2(1.0, ratio);
 					}
 				} else if (this.bgimagemode === "aspect-fill") {
-					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this.width > this.height)) {
+					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
 						this.bgimageaspect = vec2(1.0, ratio);
 					} else {
 						this.bgimageaspect = vec2(1.0/ratio, 1.0);

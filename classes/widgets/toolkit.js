@@ -609,18 +609,18 @@ define.class("$ui/view", function(require,
 			}
 
 			var nx = pos.x - this.__startpos.x;
-			var dx = Math.abs(evview.x - this.__originalpos.x);
+			var dx = Math.abs(evview.pos.x - this.__originalpos.x);
 			if (dx > 0.5) {
 				commit = true;
 			}
 
 			var ny = pos.y - this.__startpos.y;
-			var dy = Math.abs(evview.y - this.__originalpos.y);
+			var dy = Math.abs(evview.pos.y - this.__originalpos.y);
 			if (dy > 0.5) {
 				commit = true;
 			}
 
-			if (this.selection) {
+			if (commit && this.selection) {
 				if (this.testView(evview) && evview.toolmove !== false && evview.position === "absolute") {
 					nx = evview.pos.x + ev.pointer.movement.x;
 					this.setASTObjectProperty(evview, "x", nx);
@@ -658,12 +658,12 @@ define.class("$ui/view", function(require,
 				this.removeASTNodeFor(evview);
 
 				if (this.selection && this.groupdrag && this.groupreparent) {
-					for (var i=0;i<this.selection.length;i++) {
-						var selected = this.selection[i];
-						if (selected === evview) {
+					for (var j=0;j<this.selection.length;j++) {
+						var sel = this.selection[j];
+						if (sel === evview) {
 							continue;
 						}
-						this.appendASTNodeOn(this.__lastpick, selected)
+						this.appendASTNodeOn(this.__lastpick, sel);
 						this.removeASTNodeFor(selected)
 					}
 				}
