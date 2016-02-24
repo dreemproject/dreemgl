@@ -1164,6 +1164,10 @@ define.class('$system/base/node', function(require){
 		}
 		ref.oldlayout = layout
 		ref.matrix_dirty = true
+
+		if(ref._bgimage){
+			ref.onbgimagemode()
+		}
 	}
 
 	// cause this node, all childnodes and relevant parent nodes to relayout
@@ -1300,9 +1304,6 @@ define.class('$system/base/node', function(require){
 			emitPostLayout(copynodes)
 
 
-		}
-		if(this._bgimage){
-			this.onbgimagemode()
 		}
 	}
 
