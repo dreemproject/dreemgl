@@ -5,7 +5,37 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 this.render=function(){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -121,12 +151,13 @@ y:-3.6853790283203125
 })
 ),
 view({
-height:337,
-width:287,
+height:354,
+width:437,
 bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
 position:"absolute",
-x:514.8311767578125,
-y:49.31864929199219
+x:461.8311767578125,
+y:57.318634033203125,
+contentmode:"stretch"
 },
 icon({
 fgcolor:vec4(0.8,0.9,0.3,1),
@@ -186,7 +217,67 @@ groupreparent:false
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

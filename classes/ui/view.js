@@ -53,7 +53,7 @@ define.class('$system/base/node', function(require){
 		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		contentmode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "auto"), value:"auto"}),
-		contentstretch:vec4(1,1),
+		contentstretch: Config({group:"style", value:vec2(1,1)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
