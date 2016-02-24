@@ -9,7 +9,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				bgcolor:'red',
 				hardrect:{
 					color:function(){
-						return mix('brown',pal.pal5(mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)*pow(abs(sin(mesh.pos.x*PI)),0.2)
+						return mix('brown',pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)*pow(abs(sin(mesh.pos.x*PI)),0.2)
 					},
 					mesh:define.struct({
 						pos:vec2,
@@ -38,15 +38,16 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						    scale = scale * vec2(0.85,0.85)
 							path = floor(path / 2.)
 						}
+						colornoise = 0.
 						if(depth > 11){
 							var noise = noise.noise3d(vec3(pos.x*.25,pos.y*.25,0.5*view.time)) * turbulence
+							colornoise = noise
 							dir = math.rotate2d(dir, -90.*math.DEG*noise)
 							pos.x += noise*0.2
 						}
 						// alright we found a pos and dir
 
 						var p = (math.rotate2d(mesh.pos*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,400)
-
 						return vec4(p, 0, 1) * view.totalmatrix * view.viewmatrix
 					},
 					update:function(){
