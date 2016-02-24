@@ -38,6 +38,26 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 	}
 
+	this.dropEvent = function (eventdata, pointer) {
+		var pos = this.globalToLocal(pointer.position).x / this.layout.width
+		var stardate = this.getRangeStart() + this.getRange() * pos
+		// TODO(aki): implement zoom dependent snapping
+		stardate = floor(stardate / 900000) * 900000 // snap to 15 min
+		var enddate = stardate + (eventdata.duration || 900000) // 15 min default
+		this.makeEvent({
+			title: eventdata.title,
+			date: stardate,
+			enddate: enddate,
+			metadata: {
+				location: {
+					title: eventdata.title,
+					lattitude: eventdata.lattitude,
+					longitude: eventdata.longitude
+				}
+			}
+		})
+	}
+
 	this.makeEvent = function (eventdata) {
 		this.data.push(eventdata)
 		this.emit('eventadded', eventdata)
