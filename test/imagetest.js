@@ -3,17 +3,115 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition', function(require, $ui$, screen, view){
+define.class('$server/composition', function(require, $ui$, screen, view, label){
 	this.render = function(){ return [
 		screen({name:'default', clearcolor:vec4('black')},
-			view({flex:1, bgcolor:'gray', borderradius:20, flexdirection:'column', padding:30},
+			view({bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
 				view({
-					borderradius:100,
-					borderwidth:10,
-					bordercolor:'red',
-					bgimage:require('$resources/textures/noise.png'),
-					flex:1
-				})
+					width:200,
+					height:300,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fill",
+					bgimage:require('$resources/textures/hex_tiles.png')
+				}, label({text:"Aspect Fill"})),
+				view({
+					width:200,
+					height:300,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fit",
+					bgimage:require('$resources/textures/hex_tiles.png')
+				}, label({text:"Aspect Fit"})),
+				view({
+					width:200,
+					height:300,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"stretch",
+					bgimage:require('$resources/textures/hex_tiles.png')
+				}, label({text:"Stretch"}))
+			)
+			 ,
+			view({bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
+				view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fill",
+					bgimage:require('$resources/textures/hex_tiles.png')
+				}, label({text:"Aspect Fill"})),
+				view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fit",
+					bgimage:require('$resources/textures/hex_tiles.png')
+				}, label({text:"Aspect Fit"})),
+				view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"stretch",
+					bgimage:require('$resources/textures/hex_tiles.png')
+				}, label({text:"Stretch"}))
+			)
+			 ,
+			view({bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
+				view({
+					width:200,
+					height:300,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fill",
+					bgimage:require('$resources/textures/checker.png')
+				}, label({text:"Aspect Fill"})),
+				view({
+					width:200,
+					height:300,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fit",
+					bgimage:require('$resources/textures/checker.png')
+				}, label({text:"Aspect Fit"})),
+				view({
+					width:200,
+					height:300,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"stretch",
+					bgimage:require('$resources/textures/checker.png')
+				}, label({text:"Stretch"}))
+			)
+			 ,
+			view({bgcolor:'gray', borderradius:20, flexdirection:'row', justifycontent:"space-around", padding:30},
+				view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fill",
+					bgimage:require('$resources/textures/checker.png')
+				}, label({text:"Aspect Fill"})),
+				view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"aspect-fit",
+					bgimage:require('$resources/textures/checker.png')
+				}, label({text:"Aspect Fit"})),
+				view({
+					width:300,
+					height:200,
+					borderwidth:1,
+					bordercolor:"white",
+					contentmode:"stretch",
+					bgimage:require('$resources/textures/checker.png')
+				}, label({text:"Stretch"}))
 			)
 		)
 	]}

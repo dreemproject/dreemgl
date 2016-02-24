@@ -49,12 +49,14 @@ define.class('$system/base/node', function(require){
 		bgimage: Config({group:"style",type:Object, meta:"texture"}),
 		// the opacity of the image
 		opacity: Config({group:"style", value: 1.0, type:float}),
+		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
+		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+		contentmode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "auto"), value:"auto"}),
+		contentstretch: Config({group:"style", value:vec2(1,1)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
-
-		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
-		colorfilter: Config({group:"style", type:vec4, value: vec4(1,1,1,1), meta:"color"}),
 
 		// the scroll position of the view matrix, allows to scroll/move items in a viewport. Only works on a viewport:'2D'
 		// this property is manipulated by the overflow:'SCROLL' scrollbars
@@ -560,11 +562,92 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
+	this.oncontentmode = function(ev, v, o) {
+
+		if (this.shaders) {
+			var shader = this.shaders.hardimage || this.shaders.roundedimage;
+
+			if (shader && shader.texture) {
+				var size = shader.texture.size;
+
+				if (this.contentmode === "stretch" || this.contentmode === "auto") {
+
+					this.contentstretch = vec2(1,1);
+
+				} else if (this.contentmode === "aspect-fit") {
+
+					if (this.width > this.height) {
+						// landscape
+						if (size[0] >  size[1]) {
+
+							var ratio = size[0] / this.width;
+							this.contentstretch = vec2(1, ratio);
+
+						} else {
+
+							var ratio = size[1] / this.height;
+							this.contentstretch = vec2(ratio, 1);
+
+						}
+
+					} else {
+						// square or portait
+
+						if (size[0] >  size[1]) {
+							var ratio = size[0] / this.width;
+							this.contentstretch = vec2(1, ratio);
+
+						} else {
+
+							var ratio = size[1] / this.height;
+							this.contentstretch = vec2(ratio, 1);
+
+						}
+
+
+					}
+
+				} else if (this.contentmode === "aspect-fill") {
+
+					if (this.width > this.height) {
+						// landscape
+						var ratio = size[0] / size[1];
+
+						if (ratio > 1) {
+							this.contentstretch = vec2(1/ratio, 1);
+						} else {
+							this.contentstretch = vec2(1,ratio);
+						}
+
+					} else {
+						// square or portait
+						var ratio = size[1] / size[0];
+
+						if (ratio > 1) {
+							this.contentstretch = vec2(1, 1/ratio);
+
+						} else {
+							this.contentstretch = vec2(ratio, 1);
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+	};
+
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
 		var img = shader.texture = Shader.Texture.fromImage(image);
-		if(isNaN(this._size[0])){
+		if (img) {
+			this.oncontentmode()
+		}
+		if(this.contentmode === "auto"){
 			this._size = img.size
 			this.relayout()
 		}
@@ -610,7 +693,6 @@ define.class('$system/base/node', function(require){
 		}.bind(this))
 		//console.log(this.shader_draw_list)
 	}
-
 
 	// internal, custom hook in the inner class assignment to handle nested shaders specifically
 	this.atInnerClassAssign = function(key, value){
@@ -1322,7 +1404,9 @@ define.class('$system/base/node', function(require){
 		this.position = function(){
 			uv = mesh.xy
 			pos = vec2(mesh.x * view.layout.width, mesh.y * view.layout.height)
-			return vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			var res = vec4(pos, 0, 1) * view.totalmatrix * view.viewmatrix
+			res.w -= 0.004
+			return res;
 		}
 		this.color = function(){
 			var col = view.bgcolorfn(mesh.xy)
@@ -1382,11 +1466,13 @@ define.class('$system/base/node', function(require){
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			var col = this.texture.sample(mesh.xy)
+			if (mesh.xy.x * view.contentstretch.x > 1.0 || mesh.xy.y * view.contentstretch.y > 1.0) {
+				return view.bgcolor;
+			}
+			var col = this.texture.sample(vec2(mesh.xy.x * view.contentstretch[0], mesh.xy.y * view.contentstretch[1]));
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
-
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){
@@ -1481,7 +1567,6 @@ define.class('$system/base/node', function(require){
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
-
 
 	// rounded rect shader class
 	define.class(this, 'shadowrect', this.Shader, function(){
