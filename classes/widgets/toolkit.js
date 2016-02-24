@@ -609,13 +609,13 @@ define.class("$ui/view", function(require,
 			}
 
 			var nx = pos.x - this.__startpos.x;
-			var dx = Math.abs(evview.x - this.__originalpos.x);
+			var dx = Math.abs(evview.pos.x - this.__originalpos.x);
 			if (dx > 0.5) {
 				commit = true;
 			}
 
 			var ny = pos.y - this.__startpos.y;
-			var dy = Math.abs(evview.y - this.__originalpos.y);
+			var dy = Math.abs(evview.pos.y - this.__originalpos.y);
 			if (dy > 0.5) {
 				commit = true;
 			}
@@ -670,7 +670,7 @@ define.class("$ui/view", function(require,
 
 				commit = true;
 			}
-
+			
 			if (!commit) {
 				// Just a click ending, let's target what we clicked
 

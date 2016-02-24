@@ -48,7 +48,8 @@ bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),
 position:"absolute",
 x:84.00006103515625,
 y:160.00006103515625,
-borderradius:vec4(10,30,60,80)
+borderradius:vec4(10,30,60,80),
+rotate:vec3(0,0,0.8099998831748962)
 },
 icon({
 fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1),
@@ -76,8 +77,8 @@ width:453,
 pickalpha:-1,
 bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),
 position:"absolute",
-x:85.16409301757812,
-y:604.7561645507812,
+x:25.1640625,
+y:563.7561645507812,
 alignitems:"center",
 justifycontent:"center",
 bgimage:"$resources/textures/portrait.jpg",
@@ -107,14 +108,14 @@ height:100,
 width:800,
 bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),
 position:"absolute",
-x:227.03475952148438,
-y:448.6853942871094,
+x:323.0347595214844,
+y:451.6853942871094,
 opacity:0.7
 },
 icon({
 fgcolor:'cornflowerblue',
 pickalpha:-1,
-icon:"star-o",
+icon:"star",
 fontsize:80,
 position:"absolute",
 x:376.9653015136719,
@@ -129,7 +130,7 @@ position:"absolute",
 x:427.8311767578125,
 y:56.318634033203125,
 bgimage:"$resources/textures/landscape.jpg",
-bgimagemode:"aspect-fit"
+bgimagemode:"aspect-fill"
 },
 icon({
 fgcolor:vec4(0.8,0.9,0.3,1),
@@ -147,7 +148,7 @@ fontsize:104,
 pickalpha:-1,
 bgcolor:'transparent',
 fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
-text:"Change teh text!",
+text:"Change the text!",
 position:"absolute",
 x:446.07366943359375,
 y:617.5030517578125,
@@ -189,7 +190,9 @@ groupreparent:false
 
 
 
+
 	}
+
 
 
 
