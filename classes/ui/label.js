@@ -151,8 +151,8 @@ define.class(function(require, $ui$, view){
 	}
 
 	this.layout= function(){
-		console.log("LAYOUT")
 	}
+
 	this.measure = function(width){
 		var shader = this.shaders.typeface
 		if(shader.update_dirty){
