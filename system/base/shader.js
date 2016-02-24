@@ -701,7 +701,7 @@ define.class(function(require, exports){
 
 		var shader = this
 		if(define.$platform === 'nodejs') return
-		// forward the view reference
+		// forwar	d the view reference
 		if(this.constructor.outer){
 			this.view = this.constructor.outer
 			this.compile()
@@ -710,13 +710,24 @@ define.class(function(require, exports){
 				var parts = key.split('_DOT_')
 				if(parts.length === 2 && parts[0] === 'view'){
 					if('_' + parts[1] in this.view){
+
 						this.view.addListener(parts[1], function(){
 							this.redraw()
 						})
 					}
 				}
 			}
-			
+			for(var key in this.vtx_state.uniforms){
+				var parts = key.split('_DOT_')
+				if(parts.length === 2 && parts[0] === 'view'){
+					if('_' + parts[1] in this.view){
+
+						this.view.addListener(parts[1], function(){
+							this.redraw()
+						})
+					}
+				}
+			}
 			var name = shader.constructor.name
 			function recompile_shader(){
 				var oldcls = this[name]

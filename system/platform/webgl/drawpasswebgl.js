@@ -388,6 +388,7 @@ define.class(function(require, baseclass){
 
 				//if(view.constructor.name === 'slideviewer')console.log('here',draw.constructor.name, draw.text)
 				draw._time = time
+
 				if(draw._listen_time || draw.ontime) hastime = true
 
 				draw.viewmatrix = matrices.viewmatrix

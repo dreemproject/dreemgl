@@ -609,26 +609,34 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			var off = len
 			if(this.charCodeAt(len) === 10) off -=1
 			var m1 = this.array[off * 6 * 10 + 7]
-			
 			// if its a padded character we need to compute the new add_x differently
 			if(m1<0 && (-m1)&65535){
+
 				var format = m1 * -1
 				//var indent = parseInt(m1/65536)
 				var mode = Math.floor(format/256)%256
 				var rect = this.charCoords(off)
 
 				this.length = len * 6
-				this.add_x = rect.x + rect.w
+				this.add_x = rect.x //+ rect.w
 				this.add_y = rect.y
 				// rip off padding
 				
-				if(mode&2){
+				if(mode&1){
+					var padding = format%256
+					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
+					var fontsize = this.array[off * 6 * 10 + 3]
+					this.add_x -= padding * info.advance * fontsize//- rect.w
+				}
+				else if(mode&2){
+					console.log(2)
 					var padding = format%256
 					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
 					var fontsize = this.array[off * 6 * 10 + 3]
 					this.add_x += padding * info.advance * fontsize//- rect.w
 				}
-				if(mode === 4){
+				else if(mode === 4){
+					console.log(4)
 					var padding = format%256
 					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
 					var fontsize = this.array[off * 6 * 10 + 3]

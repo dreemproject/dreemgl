@@ -4,7 +4,7 @@
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
 define(function(require, exports){
-	this.RAD = '1'
+	this.RAD = '1.'
 	this.DEG = '0.017453292519943295'
 	this.PI = '3.141592653589793'
 	this.PI2 = '6.283185307179586'
