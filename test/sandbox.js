@@ -1,7 +1,15 @@
 define.class("$server/composition",function(require,$ui$,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
 
 
+
+
+
+
 this.render=function(){
+
+
+
+
 
 return [
 screen(
@@ -129,15 +137,6 @@ position:"absolute",
 x:77.18701171875,
 y:44.7864990234375,
 boldness:0.95
-}),
-icon({
-fgcolor:'yellow',
-pickalpha:-1,
-icon:"gear",
-fontsize:80,
-position:"absolute",
-x:110.1688232421875,
-y:210.68130493164062
 })
 ),
 label({
@@ -145,11 +144,20 @@ fontsize:104,
 pickalpha:-1,
 bgcolor:'transparent',
 fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
-text:"Change the text!",
+text:"Change teh text!",
 position:"absolute",
 x:446.07366943359375,
 y:617.5030517578125,
 opacity:0.6
+}),
+icon({
+fgcolor:'yellow',
+pickalpha:-1,
+icon:"gear",
+fontsize:80,
+position:"absolute",
+x:908,
+y:194.9999542236328
 })
 ),
 toolkit({
@@ -170,6 +178,22 @@ groupreparent:false
 })
 )
 ]
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
 	}
 )
