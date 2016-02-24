@@ -15,7 +15,6 @@ define.class('$ui/label', function () {
 		scroll: wire('this.parent.scroll'),
 		hoursegs: wire('this.parent.hoursegs'),
 		format: Config({type: Number, value: wire('this.parent.format')}),
-
 		segments: Config({type: vec3, value: vec3()})
 	}
 
@@ -26,7 +25,6 @@ define.class('$ui/label', function () {
 
 	this.typeface = function(){
 		this.update = function(){
-
 			var view = this.view
 			var zoom = view.zoom
 			var scroll = view.scroll
@@ -158,5 +156,4 @@ define.class('$ui/label', function () {
 			this.mesh = mesh
 		}
 	}
-
 })

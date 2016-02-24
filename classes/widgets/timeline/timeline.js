@@ -59,10 +59,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		this.end = new Date(endtime).toString()
 	}
 
-	this.oninit = function(){
-	}
-
-	this.atAnimate = function () {
+	this.atDraw = function () {
 		this.background = this.find("background")
 		this.labels = this.find("labels")
 		this.hscrollbar = this.find("scrollbar")
@@ -70,6 +67,8 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			this.hscrollbar.updateScrollbars()
 		}
 		var daywidth = this.layout.width / this.zoom
+
+		// console.log(daywidth, this.layout.width, this.zoom)
 
 		//TODO(aki): Don't use magic numbers!
 

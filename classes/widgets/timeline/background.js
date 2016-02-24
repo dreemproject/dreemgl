@@ -11,7 +11,6 @@ define.class('$ui/view', function () {
 		zoom: wire('this.parent.zoom'),
 		scroll: wire('this.parent.scroll'),
 		hoursegs: wire('this.parent.hoursegs'),
-
 		segments: Config({type: vec3, value: vec3()})
 	}
 
@@ -22,7 +21,6 @@ define.class('$ui/view', function () {
 	}
 
 	this.hardrect = function(){
-
 		var array = new Float32Array(4 * 2048)
 		this.caltexture = this.Texture.fromArray(array, 2048, 1)
 
