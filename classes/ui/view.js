@@ -576,28 +576,60 @@ define.class('$system/base/node', function(require){
 
 				} else if (this.contentmode === "aspect-fit") {
 
-					if (this._layout.width > this._layout.height) {
-						var ratio = size[1] / this._layout.height;
-						console.log("aratio is", ratio, "on", size)
-						this.contentstretch = vec2(ratio, 1);
+					if (this.width > this.height) {
+						// landscape
+						if (size[0] >  size[1]) {
+
+							var ratio = size[0] / this.width;
+							this.contentstretch = vec2(1, ratio);
+
+						} else {
+
+							var ratio = size[1] / this.height;
+							this.contentstretch = vec2(ratio, 1);
+
+						}
+
 					} else {
-						var ratio = size[0] / this._layout.width;
-						console.log("bratio is", ratio, "on", size)
-						this.contentstretch = vec2(1, ratio);
+						// square or portait
+
+						if (size[0] >  size[1]) {
+							var ratio = size[0] / this.width;
+							this.contentstretch = vec2(1, ratio);
+
+						} else {
+
+							var ratio = size[1] / this.height;
+							this.contentstretch = vec2(ratio, 1);
+
+						}
+
+
 					}
 
 				} else if (this.contentmode === "aspect-fill") {
 
-					if (this._layout.width > this._layout.height) {
+					if (this.width > this.height) {
 						// landscape
-						var ratio = size[1] / size[0];
-						console.log("yratio is", ratio, "on", size)
-						this.contentstretch = vec2(1,ratio);
+						var ratio = size[0] / size[1];
+
+						if (ratio > 1) {
+							this.contentstretch = vec2(1/ratio, 1);
+						} else {
+							this.contentstretch = vec2(1,ratio);
+						}
+
 					} else {
 						// square or portait
-						var ratio = size[0] / size[1];
-						console.log("xratio is", ratio, "on", size)
-						this.contentstretch = vec2(ratio, 1);
+						var ratio = size[1] / size[0];
+
+						if (ratio > 1) {
+							this.contentstretch = vec2(1, 1/ratio);
+
+						} else {
+							this.contentstretch = vec2(ratio, 1);
+
+						}
 
 					}
 
@@ -1435,7 +1467,7 @@ define.class('$system/base/node', function(require){
 			if (mesh.xy.x * view.contentstretch.x > 1.0 || mesh.xy.y * view.contentstretch.y > 1.0) {
 				return view.bgcolor;
 			}
-			var col = this.texture.sample(vec2(mesh.xy.x * view.contentstretch.x, mesh.xy.y * view.contentstretch.y));
+			var col = this.texture.sample(vec2(mesh.xy.x * view.contentstretch[0], mesh.xy.y * view.contentstretch[1]));
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
