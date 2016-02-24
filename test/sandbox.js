@@ -1,6 +1,14 @@
 define.class("$server/composition",function(require,$ui$,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
 
+
+
+
+
 this.render=function(){
+
+
+
+
 
 return [
 screen(
@@ -63,15 +71,17 @@ y:26.051101684570312
 })
 ),
 view({
-height:161,
-width:339,
+height:273,
+width:453,
 pickalpha:-1,
 bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),
 position:"absolute",
 x:85.16409301757812,
 y:604.7561645507812,
 alignitems:"center",
-justifycontent:"center"
+justifycontent:"center",
+bgimage:"$resources/textures/portrait.jpg",
+bgimagemode:"aspect-fill"
 },
 button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',label:"Press Me!",position:"absolute",x:37.835906982421875,y:58.24383544921875}),
 checkbox({
@@ -112,12 +122,12 @@ y:-3.6853790283203125
 })
 ),
 view({
-height:287,
-width:687,
+height:343,
+width:669,
 bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
 position:"absolute",
-x:398.8311767578125,
-y:23.318634033203125,
+x:427.8311767578125,
+y:56.318634033203125,
 bgimage:"$resources/textures/landscape.jpg",
 bgimagemode:"aspect-fit"
 },
@@ -171,6 +181,22 @@ groupreparent:false
 })
 )
 ]
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
 	}
 )
