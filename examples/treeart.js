@@ -9,7 +9,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				bgcolor:'red',
 				hardrect:{
 					color:function(){
-						return mix('brown',pal.pal1(mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)*pow(sin(mesh.pos.x*PI),0.2)
+						return mix('brown',pal.pal1(mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)*pow(abs(sin(mesh.pos.x*PI)),0.2)
 					},
 					mesh:define.struct({
 						pos:vec2,
@@ -33,13 +33,13 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						    else{
 						    	dir = math.rotate2d(dir, -30.*math.DEG*sin(1.2*view.time+0.1*mesh.depth))
 						    }
-						    pos += (dir * scale)*1.8
-						    scale = scale * vec2(0.9,0.9)
+						    pos += (dir * scale)*1.9
+						    scale = scale * vec2(0.8,0.8)
 							path = floor(path / 2.)
 						}
 						// alright we found a pos and dir
-						
-						var p = (math.rotate2d(mesh.pos*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,600)
+
+						var p = (math.rotate2d(mesh.pos*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(200,300)
 
 						return vec4(p, 0, 1) * view.totalmatrix * view.viewmatrix
 					},
