@@ -9,7 +9,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				bgcolor:'red',
 				hardrect:{
 					color:function(){
-						return mix('brown',pal.pal1(mesh.depth/14),mesh.depth/12)*sin(mesh.pos.y*PI)
+						return mix('brown',pal.pal1(mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)*pow(sin(mesh.pos.x*PI),0.2)
 					},
 					mesh:define.struct({
 						pos:vec2,
@@ -55,7 +55,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 								-1,1, path, depth,
 								1,1, path, depth
 							)
-							if(depth>14)return
+							if(depth>13)return
 							
 							recur(path, depth+1)
 							recur(path + Math.pow(2, depth), depth+1)
