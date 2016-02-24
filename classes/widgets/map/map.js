@@ -929,8 +929,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				name: "mapinside",
 				nearplane: 100 ,
 				farplane: this.camdist * 2,
-				camera: vec3(-this.camdist*0.2,-this.camdist,this.camdist*0.2), fov: fov,
-				up: vec3(0,0,1),
+				camera: vec3(0,-this.camdist*0.13,this.camdist*0.3), fov: fov,
+				up: vec3(0,1,0),
 				lookat: vec3(0,0,0)
 			},[
 				view({bgcolor:NaN},[
