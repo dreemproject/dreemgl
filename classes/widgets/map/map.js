@@ -42,8 +42,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.onpointdata = function () {
-		var ps = this.find('pointset');
-		if (ps) ps.data = this.pointdata;
+		setTimeout(function () {
+			var ps = this.find('pointset');
+			if (ps) ps.data = this.pointdata;
+		}.bind(this))
 	}
 
 	this.gotoCity = function(city, zoomlevel, time){
@@ -854,9 +856,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.updatePointSet = function(){
 		var ps = this.find("pointset");
 		if(!ps) return
-
 		var center_meters = geo.latLngToMeters(this.dataset.latlong[0],this.dataset.latlong[1]);
-
 		ps.centerinmeters = vec2(center_meters[0], center_meters[1]);
 		ps.meterstounits = BufferGen.TileSize/(geo.metersPerTile(Math.floor(this.zoomlevel+4)) / Math.pow(2.0,this.fraczoom));
 		ps.redraw();
@@ -962,7 +962,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 					buildings3d,
 					//label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
 					labels3d,
-					//pointset({name: 'pointset'}),
+					pointset({name: 'pointset'}),
 					this.constructor_children
 				])
 			])

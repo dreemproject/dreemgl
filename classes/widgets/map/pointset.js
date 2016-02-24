@@ -17,11 +17,11 @@ define.class('$ui/view', function(require, $$, geo){
 	}
 
 	this.onpointerhover = function(event) {
-		this.hoverid = this.last_pick_id
-		var eventData = this.data[this.hoverid]
-		if (eventData) {
-			this.emitUpward('pointselected', eventData)
-		}
+		// this.hoverid = this.last_pick_id
+		// var eventData = this.data[this.hoverid]
+		// if (eventData) {
+		// 	this.emitUpward('pointselected', eventData)
+		// }
 	}
 
 	this.onpointerout  = function(event) {
