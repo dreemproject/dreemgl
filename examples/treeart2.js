@@ -9,7 +9,9 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 				bgcolor:'red',
 				hardrect:{
 					color:function(){
-						return mix('brown',pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)*pow(abs(sin(mesh.pos.x*PI)),0.2)
+						var len = min(pow(1.5-length(mesh.pos),8.),1.)
+						if(mesh.depth>13.) return pal.pal5(0.1*colornoise)*len
+						return mix('brown',pal.pal5(0.1*colornoise + mesh.pos.y+mesh.depth/14+0.1*view.time),mesh.depth/12)*sin(mesh.pos.y*PI)
 					},
 					mesh:define.struct({
 						pos:vec2,
@@ -22,7 +24,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						var path = mesh.path
 						var pos = vec2(0,0)
 						var scale = vec2(1,1)
-						var dir = vec2(0,-1)
+						var dir = vec2(0,-0.8)
 						var turbulence = 2.
 						var depth = int(mesh.depth)
 						for(var i = 0; i < 14; i++){
@@ -39,15 +41,17 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							path = floor(path / 2.)
 						}
 						colornoise = 0.
-						if(depth > 11){
+						if(depth > 13){
 							var noise = noise.noise3d(vec3(pos.x*.25,pos.y*.25,0.5*view.time)) * turbulence
 							colornoise = noise
-							dir = math.rotate2d(dir, -90.*math.DEG*noise)
-							pos.x += noise*0.2
+							dir = math.rotate2d(dir, -140.*math.DEG*noise)
+							//pos += dir
+							scale *= vec2(1,4.)
+							//pos.x += noise*0.2
 						}
 						// alright we found a pos and dir
 
-						var p = (math.rotate2d(mesh.pos*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,400)
+						var p = (math.rotate2d((mesh.pos*vec2(1.,.5)+vec2(-.8,-.4))*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,400)
 						return vec4(p, 0, 1) * view.totalmatrix * view.viewmatrix
 					},
 					update:function(){
