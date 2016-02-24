@@ -4,6 +4,10 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 			view({
 				flex:1,
 				bgcolor:'red',
+				mousepos:vec2(0,0),
+				pointermove:function(event){
+					this.mousepos = event.value
+				},
 				hardrect:{
 					color:function(){						
 						if(mesh.depth>13.){
@@ -30,7 +34,9 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						isberry:float
 					}).array(),
 					position:function(){
-						
+						var mainscale = vec2(30,30)
+						var mainoffset = vec2(300,400)
+						var mousepos = (view.mousepos - mainoffset) / mainscale
 						// the path is a set of float 'bits' that can be walked to go left or right
 						var path = mesh.path
 						// cumulative position of the tree branch or leaf
@@ -55,6 +61,11 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						    else{ // left
 						    	dir = math.rotate2d(dir, -25.*math.DEG+0.01*turbulence*sin(view.time))
 						    }
+
+							// rotate by mouse position
+							var dist = max(50.-10.*length(mousepos - pos)-sin(view.time),0.)
+							dir = math.rotate2d(dir, dist*0.01)
+
 						    // accumulate position scale
 						    pos += (dir * scale)*1.9
 						    scale = scale * vec2(0.85,0.85)
@@ -77,9 +88,11 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							scale *= vec2(1,4.)
 							vscale = vec2(3.,.5)
 							vcen = vec2(0.8,0.)
+							
 						}
+
 						// compute the final position
-						var p = (math.rotate2d((mesh.pos*vscale+vcen)*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,400)
+						var p = (math.rotate2d((mesh.pos*vscale+vcen)*scale, atan(dir.y,dir.x)) + pos)  * mainscale + mainoffset
 
 						return vec4(p, 0, 1) * view.totalmatrix * view.viewmatrix
 					},
@@ -91,7 +104,7 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							
 							var isberry = 0
 							// probabilistically spread the berries through the tree
-							if(depth > 13 && Math.random()<0.1) isberry = true
+							if(depth > 13 && Math.random()<0.1) isberry = 1
 							// we push plain rectangles in the geometry buffer with just the path + depth added
 							mesh.pushQuad(
 								-1,-1, path, depth, isberry,
