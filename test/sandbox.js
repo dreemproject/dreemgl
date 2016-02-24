@@ -23,7 +23,15 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 
 
 
+
+
+
+
 this.render=function(){
+
+
+
+
 
 
 
@@ -120,7 +128,8 @@ y:590.7561645507812,
 alignitems:"center",
 justifycontent:"center",
 bgimage:"$resources/textures/portrait.jpg",
-bgimagemode:"aspect-fill"
+bgimagemode:"aspect-fill",
+borderradius:vec4(30,100,50,0)
 },
 button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',label:"Press Me!",position:"absolute",x:37.835906982421875,y:58.24383544921875}),
 checkbox({
@@ -267,7 +276,23 @@ groupreparent:false
 
 
 
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
 
 
 

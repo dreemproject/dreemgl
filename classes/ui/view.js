@@ -1526,7 +1526,10 @@ define.class('$system/base/node', function(require){
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			var col = this.texture.sample(uv.xy)
+			if (uv.xy.x * view.bgimageaspect.x > 1.0 || uv.xy.y * view.bgimageaspect.y > 1.0) {
+				return view.bgcolor;
+			}
+			var col = this.texture.sample(vec2(uv.xy.x * view.bgimageaspect[0], uv.xy.y * view.bgimageaspect[1]));
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
