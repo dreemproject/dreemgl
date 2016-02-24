@@ -722,7 +722,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.GLYPHY_MAX_NUM_ENDPOINTS = '32'
 
 	this.paint = function(p, m, pixelscale){
-		if(mesh.tag.x == 32. || mesh.tag.x == 10.) discard
+		if(abs(mesh.tag.x-32.)<0.1 || abs(mesh.tag.x-10.)<0.1) discard
 		return vec4(-1.)
 	}
 

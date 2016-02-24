@@ -57,10 +57,10 @@ define.class(function(require, $ui$, view){
 
 	this.bold = function(){
 		if (this.bold) {
-			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
+			this.font = require('$resources/fonts/opensans_bold_256.glf')
 		}
 		else{
-			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+			this.font = require('$resources/fonts/opensans_regular_256.glf')
 		}
 	}
 
@@ -145,7 +145,14 @@ define.class(function(require, $ui$, view){
 	this.subpixel = function(event){
 		this.selectShader()
 	}
-	this.text = this.relayout
+
+	this.text = function(){
+		this.relayout()
+	}
+
+	this.layout= function(){
+		console.log("LAYOUT")
+	}
 	this.measure = function(width){
 		var shader = this.shaders.typeface
 		if(shader.update_dirty){
