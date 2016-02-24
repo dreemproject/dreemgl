@@ -41,17 +41,21 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 							path = floor(path / 2.)
 						}
 						colornoise = 0.
+						var vscale = vec2(1.,.5)
+						var vcen = vec2(-.8,-.4)
 						if(depth > 13){
-							var noise = noise.noise3d(vec3(pos.x*.25,pos.y*.25,0.5*view.time)) * turbulence
+							var noise = noise.noise3d(vec3(pos.x*.3,pos.y*.3,0.5*view.time)) * turbulence
 							colornoise = noise
-							dir = math.rotate2d(dir, -140.*math.DEG*noise)
+							dir = math.rotate2d(dir, -50.*math.DEG*noise)
 							//pos += dir
 							scale *= vec2(1,4.)
 							//pos.x += noise*0.2
+							vscale = vec2(3.,.5)
+							vcen = vec2(0.8,0.)
 						}
 						// alright we found a pos and dir
 
-						var p = (math.rotate2d((mesh.pos*vec2(1.,.5)+vec2(-.8,-.4))*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,400)
+						var p = (math.rotate2d((mesh.pos*vscale+vcen)*scale, atan(dir.y,dir.x)) + pos)  * vec2(30,30) + vec2(300,400)
 						return vec4(p, 0, 1) * view.totalmatrix * view.viewmatrix
 					},
 					update:function(){
