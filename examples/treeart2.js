@@ -70,7 +70,10 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						if(depth > 13){
 							var noise = noise.noise3d(vec3(pos.x*.3,pos.y*.3,0.5*view.time)) * turbulence
 							colornoise = noise
-							dir = math.rotate2d(dir, -50.*math.DEG*noise)
+							// only rotate the leaves
+							if(mesh.isberry <1.){
+								dir = math.rotate2d(dir, -50.*math.DEG*noise)
+							}
 							scale *= vec2(1,4.)
 							vscale = vec2(3.,.5)
 							vcen = vec2(0.8,0.)
