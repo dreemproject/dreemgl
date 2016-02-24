@@ -562,7 +562,7 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	this.oncontentmode = function(ev, v, o) {
+	this.onbgimagemode = function(ev, v, o) {
 
 		if (this.shaders) {
 			var shader = this.shaders.hardimage || this.shaders.roundedimage;
@@ -573,7 +573,7 @@ define.class('$system/base/node', function(require){
 				var imgw = size[0];
 				var imgh = size[1];
 				var aspect = this.width / this.height;
-				var uselayout = false
+				var uselayout = false;
 				if (isNaN(aspect)) {
 					uselayout = true;
 					aspect = this._layout.width / this._layout.height;
@@ -581,22 +581,26 @@ define.class('$system/base/node', function(require){
 				var ratio = imgw / imgh / aspect;
 
 				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
-					this.bgimageaspect = vec2(1,1);
+					this.bgimageaspect = vec2(1.0,1.0);
 				} else if (this.bgimagemode === "aspect-fit") {
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this.width > this.height)) {
-						this.bgimageaspect = vec2(1/ratio, 1);
+						this.bgimageaspect = vec2(1.0/ratio, 1.0);
 					} else {
-						this.bgimageaspect = vec2(1, ratio);
+						this.bgimageaspect = vec2(1.0, ratio);
 					}
 				} else if (this.bgimagemode === "aspect-fill") {
 					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this.width > this.height)) {
-						this.bgimageaspect = vec2(1, ratio);
+						this.bgimageaspect = vec2(1.0, ratio);
 					} else {
-						this.bgimageaspect = vec2(1/ratio, 1);
+						this.bgimageaspect = vec2(1.0/ratio, 1.0);
 					}
 				}
 			}
 		}
+	};
+
+	this.onlayout = function() {
+		this.onbgimagemode();
 	};
 
 	this.setBgImage = function(image){
@@ -604,7 +608,7 @@ define.class('$system/base/node', function(require){
 		if(!shader) return
 		var img = shader.texture = Shader.Texture.fromImage(image);
 		if (img) {
-			this.oncontentmode()
+			this.onbgimagemode()
 		}
 		if(this.bgimagemode === "resize"){
 			this._size = img.size
