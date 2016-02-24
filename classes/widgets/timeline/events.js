@@ -3,7 +3,7 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$ui/label', function (require, $ui$, view) {
+define.class('$ui/label', function (require, $ui$, view, label) {
 
 	this.text = ''
 	this.bgcolor = vec4(1, 1, 1, 0.05)
@@ -32,7 +32,7 @@ define.class('$ui/label', function (require, $ui$, view) {
 			var eventdata = {
 				date: eventghost.start,
 				enddate: eventghost.end,
-				title: 'New Event',
+				title: eventghost.title,
 				metadata: {
 					location: {
 						name: 'New Location',
@@ -61,10 +61,13 @@ define.class('$ui/label', function (require, $ui$, view) {
 	}
 
 	define.class(this, 'event', view, function(){
+
 		this.bgcolor = '#999999'
 		this.position = 'absolute'
+		this.flexdirection = 'row'
 
 		this.attributes = {
+			title: 'New Event',
 			id: 1,
 			zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 			scroll: wire('this.parent.scroll'),
@@ -78,7 +81,6 @@ define.class('$ui/label', function (require, $ui$, view) {
 			this._layout.top = 0
 			this._layout.width = this.parent._layout.width
 			this._layout.height = this.parent._layout.height
-			console.log("LAYOUT")
 		}
 
 		this.atDraw = function () {
@@ -86,24 +88,37 @@ define.class('$ui/label', function (require, $ui$, view) {
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
 			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
-			console.log("HERE", this.layout.width, this.layout.height)
 
+			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.layout.width
+			this.find('eventlabel').xwidth = this.duration * this.layout.width
 		}
 
 		this.hardrect = {
 			position: function(){
 				var pos = vec2(mesh.x * view.duration + view.offset - view.scroll[0], mesh.y)
 				return vec4(pos.x * view.layout.width, pos.y * view.layout.height, 0, 1) * view.totalmatrix * view.viewmatrix
-			},
-			bgcolorfn: function (bgcolor) {
-				return 'red'
-				PickGuid = view.id
-				if (view.hoverid == mesh.id){
-					return vec4(1, 0.75, 0.25, 1)
-				} else {
-					return bgcolor
-				}
 			}
+		}
+
+		define.class(this, 'eventlabel', label, function(){
+			this.xoffset = 0
+			this.xwidth = 0
+			this.atDraw = function () {
+				this.opacity = this.xwidth < this.layout.width ? 0.2 : 1
+			}
+			this.textpositionfn = function (pos, tag) {
+				return vec3((pos.x + this.xoffset), pos.y, 0)
+			}
+		})
+
+
+		this.render = function () {
+			return [
+				this.eventlabel({
+					name: 'eventlabel',
+					text: this.title
+				})
+			]
 		}
 	})
 
@@ -165,9 +180,9 @@ define.class('$ui/label', function (require, $ui$, view) {
 		events = []
 		for (var i = 0; i < data.length; i++) {
 			events.push(this.event({
-				name: data[i].name,
+				title: data[i].title || 'Event ' + i,
 				id: i,
-				bgcolor: '#99CC44',
+				bgcolor: vec4(0.75, 0.75, 0.75, 1),
 				start: new Date(data[i].date).getTime(),
 				end: new Date(data[i].enddate).getTime()
 			}))
@@ -176,7 +191,6 @@ define.class('$ui/label', function (require, $ui$, view) {
 	}
 
 	this.render = function () {
-		console.log(this.data)
 		return [
 			this.renderEvents(this.data),
 			this.event({

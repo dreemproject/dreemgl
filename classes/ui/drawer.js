@@ -37,7 +37,17 @@ define.class("$ui/view", function(require, $ui$, view){
 			this._main.y = this.direction === "vertical" ? v * this.height : 0;
 		}
 
-		this._left.visible = v > 0;
+		if (v > 0) {
+			this._left.visible = true;
+			this._right.visible = !this._left.visible;
+			this._left.x = 0;
+			this._left.y = 0;
+		} else {
+			this._left.visible = false;
+			this._right.visible = !this._left.visible;
+			this._right.x = 0;
+			this._right.y = 0;
+		}
 
 		if (this._left) {
 			this._left.drawtarget = v === this.max ? "both" : "color"
@@ -50,12 +60,6 @@ define.class("$ui/view", function(require, $ui$, view){
 
 	this.pointermove = function(p, loc, v) {
 		var main = this._main;
-
-		// FIXME(mason) this is for the demo, and is a lame way to do it.  Needs to be cancellable pointer event maybe?
-		if (this.ignoremove === true) {
-			this.value = this._value;
-			return;
-		}
 
 		var value = 0;
 
@@ -79,12 +83,6 @@ define.class("$ui/view", function(require, $ui$, view){
     };
 
 	this.pointerend = function(p, loc, v) {
-
-		// FIXME(mason) see above
-		if (this.ignoremove === true) {
-			this.ignoremove = undefined;
-			return;
-		}
 
 		var value = this.value;
 
@@ -120,6 +118,8 @@ define.class("$ui/view", function(require, $ui$, view){
 				position:"absolute",
 				alignitems:"stretch",
 				justifycontent:"center",
+				x:0,
+				y:0,
 				width:this.width,
 				height:this.height
 			}, this.rightview));
@@ -131,9 +131,10 @@ define.class("$ui/view", function(require, $ui$, view){
 				position:"absolute",
 				alignitems:"stretch",
 				justifycontent:"center",
+				x:0,
+				y:0,
 				width:this.width,
-				height:this.height,
-				visible:false
+				height:this.height
 			},this.leftview));
 		}
 
