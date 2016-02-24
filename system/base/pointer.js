@@ -99,6 +99,7 @@ define.class('$system/base/node', function(){
 	// Internal: Returns pointer object.
 	// It calculats deltas, min and max is reference pointer is provided.
 	var Pointer = function(pointer, id, view) {
+		// TODO(aki): add start value
 		this.id = id
 		this.view = view
 		this.value = pointer.value
