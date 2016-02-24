@@ -59,7 +59,7 @@ define.class("$ui/view", function(require,
 			},
 			{
 				label:"Check Button",
-				icon:"check-square",
+				icon:"check-square-o",
 				desc:"A check button",
 				classname:"checkbox",
 				classdir:"$ui$",
@@ -2014,7 +2014,7 @@ define.class("$ui/view", function(require,
 
 		this.reset = function() {
 			this.pos = vec3(this.target._layout.absx, this.target._layout.absy, 0);
-			this.size = this.target.size;
+			this.size = vec3(this.target._layout.width, this.target._layout.height,0);
 
 			this.fgcolor = this.target.fgcolor;
 			this.bgcolor = this.target.bgcolor;
@@ -2027,7 +2027,6 @@ define.class("$ui/view", function(require,
 			this.outline_thickness = this.target.outline_thickness;
 			this.outline_color = this.target.outline_color;
 			this.subpixel = this.target.subpixel;
-			this.align = this.target.align;
 			this.bold = this.target.bold;
 			this.borderwidth = this.target.borderwidth;
 			this.borderradius = this.target.borderrdius;
@@ -2036,6 +2035,8 @@ define.class("$ui/view", function(require,
 			this.margin = this.target.margin;
 			this.scale = this.target.scale;
 			this.rotate = this.target.rotate;
+			this.linespacing = this.target.linespacing;
+			this.align = this.target.align;
 		};
 
 		this.onfocus = function(ev,v,o) {

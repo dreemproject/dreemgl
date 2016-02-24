@@ -1,170 +1,175 @@
-define.class("$server/composition",function(require,$ui$,checkbox,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
+define.class("$server/composition",function(require,$ui$,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
 
-		this.render=function(){
 
-			return [
-				screen(
-					{
-						flexdirection:"row"
-					},
-					cadgrid({
-							name:"grid",
-							flex:3,
-							overflow:"scroll",
-							bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1),
-							gridsize:8,
-							majorevery:5,
-							majorline:vec4(0.06671861559152603,0.26168233156204224,0.34268006682395935,1),
-							minorline:vec4(0.1546473354101181,0.1543203890323639,0.12822513282299042,1),
-							alignitems:'center',
-							alignself:'stretch',
-							flexdirection:'column',
-							justifycontent:'center',
-							anchor:vec3(0,0,0),
-							toolmove:false,
-							toolrect:false
-						},
-						view({
-								height:391,
-								width:313,
-								bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),
-								position:"absolute",
-								margin:vec4(0,0,0,0),
-								x:87.00006103515625,
-								y:31.000152587890625,
-								rotate:vec3(0,0,-0.05000119283795357)
-							},
-							view({
-									height:143,
-									width:138,
-									bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),
-									position:"absolute",
-									x:87.00006103515625,
-									y:165.00006103515625,
-									borderradius:vec4(10,30,60,80),
-									rotate:vec3(0,0,7.059999942779541)
-								},
-								icon({
-									fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1),
-									opaque:true,
-									icon:"flask",
-									fontsize:80,
-									position:"absolute",
-									x:33,
-									y:-16
-								})
-							),
-							icon({
-								fgcolor:vec4(0.885095477104187,0.8980835676193237,0.9214090704917908,1),
-								opaque:true,
-								icon:"ge",
-								fontsize:80,
-								position:"absolute",
-								x:116.17550659179688,
-								y:9.051116943359375
-							})
-						),
-						view({
-								height:337,
-								width:287,
-								bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
-								position:"absolute",
-								x:458.137939453125,
-								y:63.875,
-								rotate:vec3(0,0,-6.280022621154785)
-							},
-							icon({
-								fgcolor:vec4(0.8,0.9,0.3,1),
-								opaque:true,
-								icon:"heart",
-								fontsize:140,
-								position:"absolute",
-								x:73.93695068359375,
-								y:54.16680908203125,
-								boldness:0.95
-							})
-						),
-						view({
-								height:161,
-								width:339,
-								pickalpha:-1,
-								bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),
-								position:"absolute",
-								x:62.164093017578125,
-								y:549.7561645507812,
-								alignitems:"center",
-								justifycontent:"center",
-								rotate:vec3(0,0,-0.20000015199184418)
-							},
-							icon({
-								fgcolor:'cornflowerblue',
-								pickalpha:-1,
-								icon:"flask",
-								fontsize:80,
-								position:"relative"
-							}),
-							icon({
-								fgcolor:'yellow',
-								pickalpha:-1,
-								icon:"gear",
-								fontsize:80,
-								position:"relative"
-							}),
-							checkbox({
-								tooldragroot:true,
-								toolresize:false,
-								fontsize:24,
-								bgcolor:'transparent',
-								buttoncolor1:'transparent',
-								buttoncolor2:'transparent',
-								hovercolor1:'transparent',
-								hovercolor2:'transparent',
-								pressedcolor1:'transparent',
-								pressedcolor2:'transparent',
-								pickalpha:-1,
-								fgcolor:'pink'
-							})
-						),
-						label({
-							fontsize:104,
-							pickalpha:-1,
-							bgcolor:'transparent',
-							fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
-							text:"Change teh text!",
-							position:"absolute",
-							x:211.453369140625,
-							y:683.5498657226562,
-							opacity:0.6
-						}),
-						view({
-							height:42,
-							width:731,
-							bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),
-							position:"absolute",
-							x:153.03475952148438,
-							y:476.6853942871094,
-							rotate:vec3(0,0,0.060000788420438766),
-							opacity:0.7
-						})
-					),
-					toolkit({
-						position:"absolute",
-						visible:true,
-						rulers:true,
-						x:1122,
-						y:12.000131607055664,
-						width:428,
-						height:854,
-						dropmode:"absolute",
-						mode:"design",
-						reticlesize:9,
-						hoverlines:false,
-						guides:true,
-						handles:true,
-						groupreparent:false
-					})
-				)
-			]
-		}
+this.render=function(){
+
+return [
+screen(
+{
+flexdirection:"row"
+},
+cadgrid({
+name:"grid",
+flex:3,
+overflow:"scroll",
+bgcolor:vec4(0.08853328227996826,0.11556218564510345,0.16508188843727112,1),
+gridsize:8,
+majorevery:5,
+majorline:vec4(0.06671861559152603,0.26168233156204224,0.34268006682395935,1),
+minorline:vec4(0.1546473354101181,0.1543203890323639,0.12822513282299042,1),
+alignitems:'center',
+alignself:'stretch',
+flexdirection:'column',
+justifycontent:'center',
+anchor:vec3(0,0,0),
+toolmove:false,
+toolrect:false
+},
+view({
+height:391,
+width:313,
+bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),
+position:"absolute",
+margin:vec4(0,0,0,0),
+x:87.00006103515625,
+y:31.000152587890625
+},
+view({
+height:143,
+width:138,
+bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),
+position:"absolute",
+x:84.00006103515625,
+y:160.00006103515625,
+borderradius:vec4(10,30,60,80)
+},
+icon({
+fgcolor:vec4(0.929411768913269,0.7185189723968506,0.3921568691730499,1),
+opaque:true,
+icon:"flask",
+fontsize:80,
+position:"absolute",
+x:33,
+y:9
+})
+),
+icon({
+fgcolor:vec4(0.885095477104187,0.8980835676193237,0.9214090704917908,1),
+opaque:true,
+icon:"ge",
+fontsize:80,
+position:"absolute",
+x:120.17547607421875,
+y:26.051101684570312
+})
+),
+view({
+height:161,
+width:339,
+pickalpha:-1,
+bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),
+position:"absolute",
+x:85.16409301757812,
+y:604.7561645507812,
+alignitems:"center",
+justifycontent:"center"
+},
+button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',label:"Press Me!",position:"absolute",x:37.835906982421875,y:58.24383544921875}),
+checkbox({
+tooldragroot:true,
+toolresize:false,
+fontsize:24,
+bgcolor:'transparent',
+buttoncolor1:'transparent',
+buttoncolor2:'transparent',
+hovercolor1:'transparent',
+hovercolor2:'transparent',
+pressedcolor1:'transparent',
+pressedcolor2:'transparent',
+pickalpha:-1,
+fgcolor:'pink',
+position:"absolute",
+x:211.83590698242188,
+y:56.243896484375
+})
+),
+view({
+height:100,
+width:800,
+bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),
+position:"absolute",
+x:227.03475952148438,
+y:448.6853942871094,
+opacity:0.7
+},
+icon({
+fgcolor:'cornflowerblue',
+pickalpha:-1,
+icon:"star-o",
+fontsize:80,
+position:"absolute",
+x:376.9653015136719,
+y:-3.6853790283203125
+})
+),
+view({
+height:337,
+width:287,
+bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
+position:"absolute",
+x:514.8311767578125,
+y:49.31864929199219
+},
+icon({
+fgcolor:vec4(0.8,0.9,0.3,1),
+opaque:true,
+icon:"heart",
+fontsize:140,
+position:"absolute",
+x:77.18701171875,
+y:44.7864990234375,
+boldness:0.95
+}),
+icon({
+fgcolor:'yellow',
+pickalpha:-1,
+icon:"gear",
+fontsize:80,
+position:"absolute",
+x:110.1688232421875,
+y:210.68130493164062
+})
+),
+label({
+fontsize:104,
+pickalpha:-1,
+bgcolor:'transparent',
+fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
+text:"Change the text!",
+position:"absolute",
+x:446.07366943359375,
+y:617.5030517578125,
+opacity:0.6
+})
+),
+toolkit({
+position:"absolute",
+visible:true,
+rulers:true,
+x:1126,
+y:9.000131607055664,
+width:428,
+height:854,
+dropmode:"absolute",
+mode:"design",
+reticlesize:9,
+hoverlines:false,
+guides:true,
+handles:true,
+groupreparent:false
+})
+)
+]
+	}
 	}
 )
