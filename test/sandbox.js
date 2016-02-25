@@ -32,7 +32,17 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 
 
 
+
+
+
+
+
 this.render=function(){
+
+
+
+
+
 
 
 
@@ -102,8 +112,8 @@ height:143,
 width:138,
 bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),
 position:"absolute",
-x:168.0001220703125,
-y:560.0002136230469,
+x:81,
+y:174,
 borderradius:vec4(10,30,60,80),
 rotate:vec3(0,0,0.8099998831748962)
 },
@@ -202,6 +212,7 @@ boldness:0.95
 }),
 icon({
 fgcolor:'yellow',
+bgcolor:'transparent',
 pickalpha:-1,
 icon:"gear",
 fontsize:80,
@@ -226,8 +237,8 @@ toolkit({
 position:"absolute",
 visible:true,
 rulers:true,
-x:474,
-y:-22.999862670898438,
+x:1163,
+y:22.0001277923584,
 width:428,
 height:836,
 dropmode:"absolute",
@@ -305,7 +316,27 @@ groupreparent:false
 
 
 
+
+
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 
