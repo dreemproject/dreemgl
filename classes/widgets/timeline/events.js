@@ -62,7 +62,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		this.position = 'absolute'
 		this.flexdirection = 'row'
 		this.cursor = 'move'
-
+		this.justifycontent ="center" 
 		var RESIZE_HANDLE_WIDTH = 10
 
 		this.attributes = {
@@ -157,6 +157,8 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		define.class(this, 'eventlabel', label, function(){
 			this.xoffset = 0
 			this.xwidth = 0
+			this.fgcolor = "black" 
+			this.alignself = "center" 
 			this.atDraw = function () {
 				this.opacity = this.xwidth < this.layout.width ? 0 : 1
 			}
