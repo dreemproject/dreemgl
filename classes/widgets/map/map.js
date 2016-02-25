@@ -667,16 +667,19 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.fgcolor = "black"
 		this.textpositionfn = function(pos, tag){
 		//	idxpos = (  this.trans.xy*vec2(1,-1) ) * vec2(1,-1);;
-			rpos = vec2(1,-1)*pos.xz ;
-			rpos.y += pos.y;
-			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
-			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
-			// pos.xy /= pow(2.0,view.layeroffset - view.fraczoom - 2)
-			// rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
-			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 		}
 
 		this.textstyle = function(style, tag){
+			var pos = style.pos
+			var rpos = vec2(1,-1)*pos.xz ;
+			rpos.y += pos.y;
+			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
+			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
+			
+			// pos.xy /= pow(2.0,view.layeroffset - view.fraczoom - 2)
+			// rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
+			style.pos = vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
+
 			style.fgcolor = "black";
 			//style.outlinecolor = "black" ;
 			//style.outline_thickness = 120.0;
