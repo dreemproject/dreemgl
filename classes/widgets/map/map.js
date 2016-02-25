@@ -22,7 +22,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 	this.zoomTo = function(z, time){
 		this.dataset.zoomTo(z, time);
-		this.updateTiles();
+		//this.updateTiles();
 	}
 
 	this.onpointerwheel = function(ev){
@@ -676,13 +676,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			return vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
 		}
 
-		this.textstyle = function(style, pos, tag){
-		style.fgcolor = "black";
-		style.outlinecolor = "black" ;
-		style.outline_thickness = 120.0;
-		style.outline = false;
-		//return vec4(tag.yzw, 1.0);
-	}
+		this.textstyle = function(style, tag){
+			style.fgcolor = "black";
+			//style.outlinecolor = "black" ;
+			//style.outline_thickness = 120.0;
+			//style.outline = false;
+			return style
+			//return vec4(tag.yzw, 1.0);
+		}
 
 		this.resetbuffer = function(){
 			this.labels = [];

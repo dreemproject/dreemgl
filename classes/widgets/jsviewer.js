@@ -23,6 +23,7 @@ define.class('$ui/textbox', function(require){
 	this.tab_size = 1
 	this.line_start = 0
 	this.line_end = 0
+	this.boldness = 0.6
 
 	this.format_options = {
 		force_newlines_array:false,
@@ -58,13 +59,15 @@ define.class('$ui/textbox', function(require){
 		//this.init_anim = .0
 	}
 
-	this.textstyle = function(style, pos, tag){
+	this.textstyle = function(style, tag){
 
 		var type = int(tag.z / 65536.)
 		var sub = int(mod(tag.z / 256., 256.))
 		var part = int(mod(tag.z, 256.))
 		var unicode = int(tag.x)
-		if(unicode == 10 || unicode == 32 || unicode == 9) discard
+
+		//if(unicode == 10 || unicode == 32 || unicode == 9) discard
+
 		if(tag.z <= 0.){
 			var col = -tag.z
 
@@ -212,7 +215,7 @@ define.class('$ui/textbox', function(require){
 			textbuf.add_y = textbuf.line_height
 			textbuf.align = 'left'
 			textbuf.start_y = textbuf.line_height
-			textbuf.boldness = 0.6
+
 			view.tab_size = textbuf.font.glyphs[9].advance * textbuf.fontsize
 
 			textbuf.clear()

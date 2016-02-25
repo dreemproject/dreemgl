@@ -13,21 +13,29 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.position = "glyphy_mesh()"
 	this.color = "glyphy_pixel()"
 
-	this.fgcolor = vec4("blue")
+	//this.fgcolor = vec4("blue")
+	//this.boldness = 0
+	//this.outline = false
+	this.pixel_contrast = 1.4
+	this.pixel_gamma_adjust = vec3(1.2)
+	this.subpixel_off = 1.0115
+	this.subpixel_distance = 3.
 
 	// forward ref of things we need on view
 	this.view = {
+		_fgcolor:vec4(),
+		_bgcolor:vec4(),
 		_totalmatrix:mat4(),
-		textstyle: function(fgcolor, pos, tag){return fgcolor;},
-		textpositionfn:function(pos, tag){return pos;},
 		_viewmatrix:mat4(),
 		_polygonoffset:0.0,
-		_fgcolor:vec4(),
-		_outline_color:vec4(),
-		_outline_thickness:0.0,
+		_outlinecolor:vec4(),
+		_outlinethickness:0.0,
+		_boldness: 0.0,
 		_outline: false,
-		_bgcolor:vec4(),
 		_opacity:1.0,
+		textstyle: function(style, tag){ return style },
+		//textstyle: function(fgcolor, pos, tag){return fgcolor;},
+		//textpositionfn:function(pos, tag){return pos;},
 		screen:{
 				device:{
 					frame:{
@@ -62,20 +70,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		this.scaling = 0
 		this.distance = 0
-
-		this.boldness = 0
-		this.gamma_adjust = vec3(1.2)
-
-		this.outline = false
+	
 		this.debug = false
-		this.contrast = 1.4
-		this.outline_thickness = 4//:device.ratio
 
-		this.subpixel_off = 1.0115
-		this.subpixel_distance = 3.
-
-		this.bgcolor = vec3('black')
-		this.fgcolor = vec4('white')
+		//this.bgcolor = vec3('black')
+		//this.fgcolor = vec4('white')
 
 		this.__defineGetter__('line_height', function(){
 			return this.fontsize * this.linespacing
@@ -693,23 +692,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		return glyphy_compute_position()
 	}
 
-	this.glyphy_compute_position = function(){
-		// we want to compute a measure of scale relative to the actual pixels
-		var matrix = view.totalmatrix  * view.viewmatrix
-
-		var finalpos1 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z), mesh.tag);
-		var finalpos2 = view.textpositionfn(vec3(mesh.pos.x + mesh.shift.x + mesh.pos.w, mesh.pos.y + mesh.shift.y + mesh.pos.w , mesh.pos.z), mesh.tag);
-
-		// compute the main position and one rectgle atan fontsize for the pixelscale
-		var pos1 = vec4(finalpos1 , 1) * matrix
-		var pos2 = vec4(finalpos2,  1) * matrix
-
-		// compute the pixelscaling used in the pixelshader AA
-		var pixsize = view.screen.device.frame.size
-		pixelscale = 1 / length(vec2(abs(pos2.x - pos1.x), abs(pos2.y - pos1.y)) * pixsize)
-		pos1.w += view.polygonoffset;
-		return pos1
-	}
 
 	this.glyphy_mesh_atlas = function(){
 		glyph = glyph_vertex_transcode(mesh.tex)
@@ -721,26 +703,14 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 	this.GLYPHY_EPSILON = '1e-5'
 	this.GLYPHY_MAX_NUM_ENDPOINTS = '32'
 
-	this.paint = function(p, m, pixelscale){
-		if(abs(mesh.tag.x-32.)<0.01 || abs(mesh.tag.x-10.)<0.01) discard
-		return vec4(-1.)
-	}
-
-	this.style = function(pos, tag){
-	}
+	//this.paint = function(p, m, pixelscale){
+	//	if(abs(mesh.tag.x-32.)<0.01 || abs(mesh.tag.x-10.)<0.01) discard
+	//	return vec4(-1.)
+	//}
 
 	this.moddist = function(pos, dist){
 		return dist
 	}
-
-	this.font_style_t = define.struct({
-		fgcolor: vec4,
-		bgcolor: vec4,
-		outlinecolor: vec4,
-		outline_thickness: float,
-		outline: bool,
-		boldness: float
-	}, "font_style_t")
 
 	this.glyphy_arc_t = define.struct({
 		p0:vec2,
@@ -1039,195 +1009,6 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var p = glyph.xy
 		return glyphy_sdf_encode(glyphy_sdf(p, nominal_size, atlas_pos))
 	}
-	/*
-	this.glyphy_sdf_draw_subpixel_3tap = function(){
-
-		var pos = mesh.tex
-
-		var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
-		var dpdy = dFdy(pos)
-		var m = length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2
-		// screenspace length
-		mesh.scaling = 500.*m
-		var fin_alpha = 1.
-		var sub_delta = dpdx / mesh.subpixel_distance
-		var exit = paint(p, dpdx, dpdy, m)
-		if(exit.a>=0.){
-			return exit
-		}
-		var distance = vec3(
-			glyphy_sdf_decode(sdf_texture.sample(pos - sub_delta)),
-			glyphy_sdf_decode(sdf_texture.sample(pos)),
-			glyphy_sdf_decode(sdf_texture.sample(pos + sub_delta))
-		)*0.003
-
-		style(pos) // per pixel styling callback
-
-		distance -= mesh.boldness / 300.
-		distance = distance / m * mesh.contrast
-
-		if(mesh.outline){
-			distance = abs(distance) - mesh.outline_thickness
-		}
-		var col = mesh.bgcolor
-		if(distance.g > 1. )
-			discard
-
-		var alpha = glyphy_antialias(-distance)
-		if(m>mesh.subpixel_off){ // turn off subpixel at a certain size
-			return vec4(u_color, alpha.g)
-		}
-		alpha = pow(alpha, mesh.gamma_adjust)
-
-		var max_alpha = max(max(alpha.r,alpha.g),alpha.b) * fin_alpha
-		if(max_alpha >0.2) max_alpha = 1.
-		return vec4(mix(mesh.bgcolor, mesh.fgcolor, alpha), max_alpha)
-	}
-
-	// draw subpixel antialiased using SDF texture
-	this.glyphy_sdf_draw_subpixel_5tap = function(){
-
-		var pos = mesh.tex
-
-		var dpdx = dFdx(pos) // this should mark it pixel and redo the function with a new highmark
-		var dpdy = dFdy(pos)
-		var m = min(length(vec2(length(dpdx), length(dpdy))) * SQRT_1_2, 0.03)
-		// screenspace length
-		mesh.scaling = 500.*m
-		var fin_alpha = 1.
-		var sub_delta = dpdx / mesh.subpixel_distance
-
-		var exit = paint(pos, dpdx, dpdy, m)
-		if(exit.a>=0.){
-			return exit
-		}
-
-		var v1 = glyphy_sdf_decode(mesh.font.texture.sample(pos - sub_delta*2.))
-		var v2 = glyphy_sdf_decode(mesh.font.texture.sample(pos - sub_delta))
-		var v3 = glyphy_sdf_decode(mesh.font.texture.sample(pos))
-		var v4 = glyphy_sdf_decode(mesh.font.texture.sample(pos + sub_delta))
-		var v5 = glyphy_sdf_decode(mesh.font.texture.sample(pos + sub_delta*2.))
-
-		var distance = vec3(
-			v1+v2+v3,
-			v2+v3+v4,
-			v3+v4+v5
-		) * 0.001
-
-	//todo: fix up if this ever gets uncommented
-		view.textstyle(pos) // per pixel styling callback
-
-		distance -= mesh.boldness / 300.
-		distance = distance / m * mesh.contrast
-
-		if(mesh.outline){
-			distance = abs(distance) - mesh.outline_thickness
-		}
-
-		var col = mesh.bgcolor
-		if(distance.g > 1. )
-			discard
-
-		var alpha = glyphy_antialias(-distance)
-		if(m > mesh.subpixel_off){ // turn off subpixel at a certain size
-			return vec4(mesh.fgcolor, alpha.g)
-		}
-		alpha = pow(alpha, mesh.gamma_adjust)
-		var max_alpha = max(max(alpha.r,alpha.g),alpha.b) * fin_alpha
-		if(max_alpha >0.2) max_alpha = 1.
-		return vec4(mix(mesh.bgcolor, mesh.fgcolor, alpha), max_alpha)
-	}
-	*/
-
-	// draw using SDF texture
-	this.glyphy_sdf_draw = function(){
-		var pos = mesh.tex
-
-		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
-		//var m = pixelscale*0.4//0.005
-		// screenspace length
-		mesh.scaling = 500. * m
-
-		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
-
-		var exit = paint(pos, m, pixelscale)
-		if(exit.a >= 0.){
-			return exit
-		}
-
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
-
-		view.textstyle(style, pos, mesh.tag)
-
-		dist -= style.boldness / 300.
-		dist = dist / m * mesh.contrast
-
-		dist = moddist(pos, dist)
-
-		if(style.outline){
-			dist = abs(dist) - style.outline_thickness
-		}
-
-		if(dist > 1.){
-			discard
-		}
-
-		//return 'red'
-		return vec4(style.fgcolor.xyz, glyphy_antialias(-dist))
-		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
-	}
-
-	this.glyphy_sdf_draw_subpixel_aa = function(){
-		var pos = mesh.tex
-
-		var m = pixelscale*.5//0.005
-		// screenspace length
-		mesh.scaling = 500. * m
-
-		var sub_delta = vec2((pixelscale / mesh.subpixel_distance)*0.1,0)
-
-		var v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*2.))
-		var v2 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta))
-		var v3 = glyphy_sdf_decode(glyphy_sdf_lookup(pos))
-		var v4 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta))
-		var v5 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta*2.))
-
-		var dist = vec3(
-			v1+v2+v3,
-			v2+v3+v4,
-			v3+v4+v5
-		) * 0.001
-
-		//return 'red'
-
-		var exit = paint(pos,m, pixelscale)
-		if(exit.a >= 0.){
-			return exit
-		}
-
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
-
-		 view.textstyle(style, pos, mesh.tag)
-
-		dist -= style.boldness / 300.
-		dist = dist / m * mesh.contrast
-
-		if(mesh.outline){
-			dist = abs(dist) - mesh.outline_thickness
-		}
-
-		if(dist.g > 1.){
-			discard
-		}
-
-		var alpha = glyphy_antialias(-dist)
-
-		alpha = pow(alpha, mesh.gamma_adjust)
-		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)
-		//if(max_alpha >0.5) max_alpha = 1.
-		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
-		return vec4(mix(view.bgcolor.rgb, style.fgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
-	}
 
 	this.glyphy_sdf_lookup = function(pos){
 		return texture2D(mesh.font.texture, pos, {
@@ -1253,36 +1034,140 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	// draw using atlas
 	this.time = 0
+
+	this.atExtend = function(){
+		this.mesh.font = this.font
+		baseclass.atExtend.call(this)
+	}
+
+	this.font_style_t = define.struct({
+		pos:vec3,
+		fgcolor: vec4,
+		outlinecolor: vec4,
+		boldness: float,
+		outlinethickness: float,
+		outline: bool,
+		visible: bool
+	}, "font_style_t")
+
+	// default text style
+	this.style = function(style, tag){
+		return style
+	}
+
+	this.glyphy_compute_position = function(){
+		// we want to compute a measure of scale relative to the actual pixels
+		var matrix = view.totalmatrix  * view.viewmatrix
+
+		var s = font_style_t(
+			vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z),
+			view.fgcolor, 
+			view.outlinecolor, 
+			view.boldness, 
+			view.outlinethickness, 
+			view.outline,
+			(abs(mesh.tag.x - 10.)<0.001 || abs(mesh.tag.x - 32.)<0.001)?false:true
+		)
+
+		s = view.textstyle(s, mesh.tag)
+		// plug it into varyings
+		stylefgcolor = s.fgcolor
+		styleoutlinecolor = s.outlinecolor
+		stylepack = vec3(s.boldness, s.outlinethickness, s.outline?1.0:0.0)
+
+		// hide it
+		if(!s.visible) return vec4(0.)
+		
+		var pos1 = vec4(s.pos, 1.) * matrix
+		pos1.w += view.polygonoffset;
+		return pos1
+	}
+
+	// draw using SDF texture
+	this.glyphy_sdf_draw = function(){
+		var pos = mesh.tex
+
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
+	
+		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
+
+		dist -= stylepack.x / 300.
+		dist = dist / m * pixel_contrast
+
+		dist = moddist(pos, dist)
+
+		if(stylepack.z>0.){
+			dist = abs(dist) - (stylepack.y)
+		}
+
+		if(dist > 1.){
+			discard
+		}
+
+		//return 'red'
+		return vec4(stylefgcolor.xyz, glyphy_antialias(-dist))
+		//return vec4(col.rgb, pow(glyphy_antialias(-dist), mesh.gamma_adjust.x))
+	}
+
+	this.glyphy_sdf_draw_subpixel_aa = function(){
+		var pos = mesh.tex
+		
+		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2
+		//var m = pixelscale*.5//0.005
+		// screenspace length
+		mesh.scaling = 500. * m
+
+		var sub_delta = vec2((m / subpixel_distance)*0.1,0)
+
+		var v1 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta*2.))
+		var v2 = glyphy_sdf_decode(glyphy_sdf_lookup(pos - sub_delta))
+		var v3 = glyphy_sdf_decode(glyphy_sdf_lookup(pos))
+		var v4 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta))
+		var v5 = glyphy_sdf_decode(glyphy_sdf_lookup(pos + sub_delta*2.))
+
+		var dist = vec3(
+			v1+v2+v3,
+			v2+v3+v4,
+			v3+v4+v5
+		) * 0.001
+
+		dist -= stylepack.x / 300.
+		dist = dist / m * pixel_contrast
+
+		if(stylepack.z>0.){
+			dist = abs(dist) - (stylepack.y)
+		}
+
+		if(dist.g > 1.){
+			discard
+		}
+
+		var alpha = glyphy_antialias(-dist)
+
+		alpha = pow(alpha, pixel_gamma_adjust)
+		//var max_alpha = max(max(alpha.r,alpha.g),alpha.b)
+		//if(max_alpha >0.5) max_alpha = 1.
+		//return vec4(alpha.b<0.?'yellow'.rgb:'blue'.rgb, 1)
+		return vec4(mix(view.bgcolor.rgb, stylefgcolor.rgb, alpha.rgb), view.opacity)//max_alpha)
+	}
+
 	this.glyphy_atlas_draw = function(){
 		//'trace'
 		var nominal_size = (ivec2(mod(glyph.zw, 256.)) + 2) / 4
 		var atlas_pos = ivec2(glyph.zw) / 256
-
 		var pos = glyph.xy
 		/* isotropic antialiasing */
 		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
-		//var m = pixelscale*100.
 
 		var dist = glyphy_sdf(glyph.xy, nominal_size, atlas_pos) //+ noise.noise3d(vec3(glyph.x, glyph.y, time))*0.6
 
-		//	dbg = mesh.distance
-		mesh.scaling = m
-
-		var exit = paint(pos, m, pixelscale)
-		if(exit.a >= 0.){
-			return exit
-		}
-//		style(glyph)
-		var style = font_style_t(view.fgcolor, view.bgcolor, view.outline_color, view.outline_thickness, view.outline, mesh.boldness)
-		view.textstyle(style, pos, mesh.tag)
-
-
-		dist -= style.boldness
+		dist -= stylepack.x
 		//debug(mesh.distance)
-		dist = dist / m * mesh.contrast
+		dist = dist / m * pixel_contrast
+
 		var dist2 = dist;
-		if(mesh.outline){
-			dist2 = abs(dist) - (style.outline_thickness)
+		if(stylepack.z>0.){
+			dist2 = abs(dist) - (stylepack.y)
 		}
 
 		if(dist > 1.){
@@ -1292,16 +1177,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var alpha = glyphy_antialias(-dist)
 		var alpha2 = glyphy_antialias(-dist2)
 
-		if(mesh.gamma_adjust.r != 1.){
+		//if(mesh.gamma_adjust.r != 1.){
 		//	alpha = pow(alpha, 1. / mesh.gamma_adjust.r)
-		}
+		//}
 
-		return vec4(mix(style.fgcolor.rgb, style.outlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * style.fgcolor.a * view.opacity)
-	}
-
-	this.atExtend = function(){
-		this.mesh.font = this.font
-		baseclass.atExtend.call(this)
+		return vec4(mix(stylefgcolor.rgb, styleoutlinecolor.rgb, alpha2-alpha), max(alpha, alpha2) * stylefgcolor.a * view.opacity)
 	}
 
 	this.glyphy_mesh = this.glyphy_mesh_sdf

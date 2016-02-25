@@ -37,8 +37,8 @@ define.class(function(require, $ui$, view){
 		align: Config({type: Enum('left','right','center', 'justify'),  value: "left"}),
 		bold: false,
 		outline: true,
-		outline_thickness: 0.0,
-		outline_color: vec4("black"),
+		outlinethickness: 0.0,
+		outlinecolor: vec4("black"),
 
 		bgcolor: vec4("white")
 	}
@@ -54,11 +54,12 @@ define.class(function(require, $ui$, view){
 		}
 	}
 
-	this.textstyle = function(style, pos, tag){
+	this.textstyle = function(style, tag){
 		style.fgcolor = "white";
 		style.outlinecolor = "black" ;
-		style.outline_thickness = 120.0;
+		style.outlinethickness = 120.0;
 		style.outline = true;
+		return style
 		//return vec4(tag.yzw, 1.0);
 	}
 
@@ -81,10 +82,10 @@ define.class(function(require, $ui$, view){
 			if(view.font) mesh.font = view.font
 
 			mesh.fontsize = view.fontsize
-			mesh.boldness = view.boldness
+			//mesh.boldness = view.boldness
 			mesh.add_y = mesh.line_height
-			mesh.outline = view.outline;
-			mesh.outline_thickness = view.outline_thickness;
+			//mesh.outline = view.outline;
+			//mesh.outline_thickness = view.outline_thickness;
 			mesh.align = view.align
 			mesh.start_x = view.padding[0]
 			mesh.start_y = mesh.line_height + view.padding[1]
@@ -98,7 +99,7 @@ define.class(function(require, $ui$, view){
 				var l = view.labels[i];
 				var r = 0, g = 0, b = 0;
 				if (l.fontsize) mesh.fontsize = l.fontsize;
-				if (l.outline) mesh.outline = l.outline;
+				//if (l.outline) mesh.outline = l.outline;
 				if (l.color){ r = l.color[0], g = l.color[1], b = l.color[2]};
 				if (l.multiline){
 					mesh.addWithinWidthAtPos(l.text, l.pos, maxwidth? maxwidth: this.layout.width)

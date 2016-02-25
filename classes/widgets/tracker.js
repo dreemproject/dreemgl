@@ -34,7 +34,7 @@ define.class('$ui/label', function(require){
 		}
 	}
 
-	this.textstyle = function(style, pos, tag){
+	this.textstyle = function(style, tag){
 		//if(type>7)mesh.outline = true
 		if (tag.y == this.cursorrow) {
 			style.fgcolor ='white'

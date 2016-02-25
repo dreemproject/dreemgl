@@ -220,7 +220,7 @@ define.class('$system/parse/onejsserialize', function(require, exports, baseclas
 			//var name = gen.expand(node, null, {})
 			console.error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source)
 			// make it throw in the function so we can find it
-			state.functionref()
+			//state.functionref()
 			//state.fn()
 			//throw new Error('Identifier cannot be resolved '+name+' in ' +state.callname+'()\n'+state.source)
 		}

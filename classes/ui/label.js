@@ -13,10 +13,8 @@ define.class(function(require, $ui$, view){
 	this.bgcolor = vec4("transparent")
 	this.polygonoffset = 0.0;
 
-	this.textpositionfn = function(pos, tag) {return pos;};
-
-	this.textstyle = function(fgcolor, pos, tag){
-		return fgcolor;
+	this.textstyle = function(style, tag){
+		return style
 	}
 
 	this.attributes = {
@@ -41,8 +39,8 @@ define.class(function(require, $ui$, view){
 		// Should the text wrap around when its width has been reached?
 		multiline: Config({type:Boolean, value: false }),
 		outline: false,
-		outline_thickness: 0.6,
-		outline_color: vec4("black"),
+		outlinethickness: 0.6,
+		outlinecolor: vec4("black"),
 		// turn on subpixel aa, this requieres a bgcolor to be present
 		subpixel: Config({type:Boolean, value: false}),
 
@@ -82,10 +80,9 @@ define.class(function(require, $ui$, view){
 
 			mesh.linespacing = view.linespacing
 			mesh.fontsize = view.fontsize
-			mesh.boldness = view.boldness
-			mesh.outline = view.outline;
-			mesh.outline_thickness = view.outline_thickness;
-
+			//mesh.boldness = view.boldness
+			//mesh.outline = view.outline;
+			//mesh.outline_thickness = view.outline_thickness;
 			mesh.add_y = mesh.line_height
 
 			mesh.align = view.align
