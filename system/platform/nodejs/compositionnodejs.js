@@ -140,7 +140,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	this.setRpcAttribute = function(msg, socket){
 		var parts = msg.rpcid.split('.')
 		// keep it around for new joins
-		this.server_attributes[msg.rpcid] = msg
+		this.server_attributes[msg.rpcid + '_' + msg.attribute] = msg
 
 		if (socket) {
 			//make sure we set it on the rpc object
