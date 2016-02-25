@@ -18,6 +18,8 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 						for(var i = 0; i < EVENT_COUNT; i++) {
 							date = new Date(new Date(START_DATE).getTime() + i * (6 + floor(random() * 3) ) * hstep)
 							events.push({
+								title: 'E' + i,
+								id: i + 1,
 								date: date,
 								enddate: new Date(date.getTime() + (12 - floor(random() * 12) ) * hstep / 4)
 							})

@@ -27,9 +27,6 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		hoursegs: Config({type: Number, value: 24}),
 		segments: Config({type: vec3, value: vec3()}),
 		// segmentwidths: Config({type: vec3, value: vec3()}),
-
-		eventselected: Config({type:Event}),
-		eventadded: Config({type:Event})
 	}
 
 	this.onzoom = function () {
@@ -59,9 +56,21 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	}
 
 	this.makeEvent = function (eventdata) {
+		eventdata.id = eventdata.id || this.data.length + 1
 		this.data.push(eventdata)
-		this.emit('eventadded', eventdata)
 		this.data = this.data
+	}
+
+	this.updateEvent = function (id, eventdata) {
+		for (var i = 0; i < this.data.length; i++) {
+			if (this.data[i].id === id) {
+				for (key in eventdata) {
+					this.data[i][key] = eventdata[key]
+				}
+				this.data = this.data
+				break
+			}
+		}
 	}
 
 	this.ondata = function () {

@@ -54,6 +54,7 @@ define.class('$system/base/node', function(require){
 		// Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
 		bgimagemode: Config({group:"style", type:Enum("stretch", "aspect-fit", "aspect-fill", "custom", "resize"), value:"resize"}),
 		bgimageaspect: Config({group:"style", value:vec2(1,1)}),
+		bgimageoffset: Config({group:"style", value:vec2(0,0)}),
 
 		// the clear color of the view when it is in '2D' or '3D' viewport mode
 		clearcolor: Config({group:"style",type:vec4, value: vec4('transparent'), meta:"color"}),
@@ -603,13 +604,13 @@ define.class('$system/base/node', function(require){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
 		if(!shader) return
 		var img = shader.texture = Shader.Texture.fromImage(image);
-		if (img) {
-			this.onbgimagemode()
-		}
 		if(this.bgimagemode === "resize"){
 			this._size = img.size
 			this.relayout()
+		} else if (img) {
+			this.onbgimagemode()
 		}
+
 		else this.redraw()
 	}
 
@@ -1429,10 +1430,13 @@ define.class('$system/base/node', function(require){
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			if (mesh.xy.x * view.bgimageaspect.x > 1.0 || mesh.xy.y * view.bgimageaspect.y > 1.0) {
+			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
+				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
+				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y > 1.0) {
 				return view.bgcolor;
 			}
-			var col = this.texture.sample(vec2(mesh.xy.x * view.bgimageaspect[0], mesh.xy.y * view.bgimageaspect[1]));
+			var col = this.texture.sample(vec2(view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect[1]));
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
@@ -1526,7 +1530,13 @@ define.class('$system/base/node', function(require){
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
 		this.color = function(){
-			var col = this.texture.sample(uv.xy)
+			if (view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x < 0.0
+				|| view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect.x > 1.0
+				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y < 0.0
+				|| view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect.y > 1.0) {
+				return view.bgcolor;
+			}
+			var col = this.texture.sample(vec2(view.bgimageoffset[0] + uv.xy.x * view.bgimageaspect[0], view.bgimageoffset[1] + uv.xy.y * view.bgimageaspect[1]));
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})

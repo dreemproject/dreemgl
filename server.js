@@ -76,6 +76,8 @@ function main(){
 		console.color('~bc~-restart~~ Auto restarts after crash (Handy for client dev, not server dev)\n')
 		console.color('~bc~-edit~~ Automatically open an exception in your code editor at the right line\n')
 		console.color('~bc~-path~~ [name]:~br~[directory]~~ add a path to the server under name $name\n')
+		console.color('~bc~-dali~~ run a composition in DALi\n')
+		console.color('~bc~-dalilib~~ can be used to point to the DALi node-addon installation folder on Ubuntu (only to be used in combination with the ~bc~-dali~~ flag)\n')
 		return process.exit(0)
 	}
 

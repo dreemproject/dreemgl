@@ -13,26 +13,26 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		data: Config({type: Array,  value: wire('this.parent.data')}),
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 		scroll: wire('this.parent.scroll'),
-		hoverid: -1,
-		makeStart: 0,
-		makeEnd: 0,
-		eventselected: Config({type:Event})
+		hoverid: -1
 	}
 
 	this.pointermove = function(event) {
 		var eventghost = this.find('eventghost')
-		eventghost.start = this.parent.getRangeStart() + this.parent.getRange() * (event.min[0] / this.layout.width)
-		eventghost.end = this.parent.getRangeStart() + this.parent.getRange() * (event.max[0] / this.layout.width)
+		var timeline = this.parent
+		eventghost.title = ''
+		eventghost.start = timeline.getRangeStart() + timeline.getRange() * (event.min[0] / this.layout.width)
+		eventghost.end = timeline.getRangeStart() + timeline.getRange() * (event.max[0] / this.layout.width)
 		this.redraw()
 	}
 
 	this.pointerend = function(event) {
 		var eventghost = this.find('eventghost')
+		var timeline = this.parent
 		if (abs(event.delta.x) > 2) {
 			var eventdata = {
+				title: 'New Event',
 				date: eventghost.start,
 				enddate: eventghost.end,
-				title: eventghost.title,
 				metadata: {
 					location: {
 						name: 'New Location',
@@ -41,19 +41,15 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 					}
 				}
 			}
-			this.parent.makeEvent(eventdata)
+			timeline.makeEvent(eventdata)
 		}
 		eventghost.start = 0
 		eventghost.end = 0
-		this.redraw()
 	}
 
 	this.onpointertap = function(event){
 		this.hoverid = this.last_pick_id
 		var eventData = this.data[this.hoverid]
-		if (eventData) {
-			this.emitUpward('eventselected', eventData)
-		}
 	}
 
 	this.ondata = function (data) {
@@ -65,16 +61,75 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		this.bgcolor = '#999999'
 		this.position = 'absolute'
 		this.flexdirection = 'row'
+		this.cursor = 'move'
+		this.justifycontent ="center" 
+		var RESIZE_HANDLE_WIDTH = 10
 
 		this.attributes = {
-			title: 'New Event',
-			id: 1,
+			title: '',
+			id: null,
 			zoom: Config({type: Number, value: wire('this.parent.zoom')}),
 			scroll: wire('this.parent.scroll'),
 			duration: 1,
 			offset: 0,
 			start: 0,
 			end: 0
+		}
+
+		var editmode = ''
+
+		var initPointer = function (event) {
+			this.cursor = 'move'
+			editmode = 'move'
+
+			var localstart = this.globalToLocal(event.position)
+			var localstartx = localstart[0] - this.offset * this.layout.width
+			var pxduration = this.duration * this.layout.width
+
+			if (localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
+				this.cursor = 'ew-resize'
+				editmode = 'setstart'
+			} else if (pxduration - localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
+				this.cursor = 'ew-resize'
+				editmode = 'setend'
+			}
+		}
+
+		this.pointerhover = initPointer
+		this.pointerstart = initPointer
+
+		this.pointermove = function(event) {
+			var eventghost = this.parent.find('eventghost')
+			var timeline = this.parent.parent
+			var offset = event.delta[0] / timeline.layout.width
+			if (editmode == 'setstart') {
+				eventghost.start = this.start + timeline.getRange() * offset
+				eventghost.end = this.end
+			} else if (editmode == 'move') {
+				eventghost.start = this.start + timeline.getRange() * offset
+				eventghost.end = this.end + timeline.getRange() * offset
+			} else if (editmode == 'setend') {
+				eventghost.start = this.start
+				eventghost.end = this.end + timeline.getRange() * offset
+			}
+			if (eventghost.start > eventghost.end) {
+				var start = eventghost.start
+				eventghost.start = eventghost.end
+				eventghost.end = start
+			}
+			this.redraw()
+		}
+
+		this.pointerend = function(event) {
+			if (abs(event.delta[0]) < 2) return
+			var eventghost = this.parent.find('eventghost')
+			var timeline = this.parent.parent
+			timeline.updateEvent(this.id, {
+				date: eventghost.start,
+				enddate: eventghost.end,
+			})
+			eventghost.start = 0
+			eventghost.end = 0
 		}
 
 		this.layout = function(){
@@ -88,7 +143,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
 			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
-
 			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.layout.width
 			this.find('eventlabel').xwidth = this.duration * this.layout.width
 		}
@@ -103,14 +157,15 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		define.class(this, 'eventlabel', label, function(){
 			this.xoffset = 0
 			this.xwidth = 0
+			this.fgcolor = "black" 
+			this.alignself = "center" 
 			this.atDraw = function () {
-				this.opacity = this.xwidth < this.layout.width ? 0.2 : 1
+				this.opacity = this.xwidth < this.layout.width ? 0 : 1
 			}
 			this.textpositionfn = function (pos, tag) {
 				return vec3((pos.x + this.xoffset), pos.y, 0)
 			}
 		})
-
 
 		this.render = function () {
 			return [
@@ -121,6 +176,34 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			]
 		}
 	})
+
+	this.renderEvents = function (data) {
+		events = []
+		for (var i = 0; i < data.length; i++) {
+			events.push(this.event({
+				title: data[i].title,
+				id: data[i].id,
+				bgcolor: vec4(0.75, 0.75, 0.75, 1),
+				start: new Date(data[i].date).getTime(),
+				end: new Date(data[i].enddate).getTime()
+			}))
+		}
+		return events
+	}
+
+	this.render = function () {
+		return [
+			this.event({
+				name: "eventghost",
+				id: -1,
+				bgcolor: '#4466FF',
+				opacity: 0.5,
+				start: 0,
+				end: 0
+			}),
+			this.renderEvents(this.data)
+		]
+	}
 
 	// define.class(this, 'eventrects', this.Shader, function(){
 	//
@@ -175,31 +258,5 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	// })
 	//
 	// this.eventrects = true
-
-	this.renderEvents = function (data) {
-		events = []
-		for (var i = 0; i < data.length; i++) {
-			events.push(this.event({
-				title: data[i].title || 'Event ' + i,
-				id: i,
-				bgcolor: vec4(0.75, 0.75, 0.75, 1),
-				start: new Date(data[i].date).getTime(),
-				end: new Date(data[i].enddate).getTime()
-			}))
-		}
-		return events
-	}
-
-	this.render = function () {
-		return [
-			this.renderEvents(this.data),
-			this.event({
-				name: "eventghost",
-				id: -1,
-				bgcolor: '#4466FF',
-				opacity: 0.5
-			})
-		]
-	}
 
 })
