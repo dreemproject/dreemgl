@@ -12,8 +12,8 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	this.attributes = {
 		data: Config({type: Array,  value: wire('this.parent.data')}),
 		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
-		scroll: wire('this.parent.scroll'),
-		hoverid: -1
+		scroll: wire('this.parent.scroll')
+		// hoverid: -1
 	}
 
 	this.pointermove = function(event) {
@@ -47,14 +47,14 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		eventghost.end = 0
 	}
 
-	this.onpointertap = function(event){
-		this.hoverid = this.last_pick_id
-		var eventData = this.data[this.hoverid]
-	}
-
-	this.ondata = function (data) {
-		this.pickrange = this.data.length
-	}
+	// this.onpointertap = function(event){
+	// 	this.hoverid = this.last_pick_id
+	// 	var eventData = this.data[this.hoverid]
+	// }
+	//
+	// this.ondata = function (data) {
+	// 	this.pickrange = this.data.length
+	// }
 
 	define.class(this, 'event', view, function(){
 
@@ -62,7 +62,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		this.position = 'absolute'
 		this.flexdirection = 'row'
 		this.cursor = 'move'
-		this.justifycontent ="center" 
+		this.justifycontent ="center"
 		var RESIZE_HANDLE_WIDTH = 10
 
 		this.attributes = {
@@ -157,8 +157,9 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		define.class(this, 'eventlabel', label, function(){
 			this.xoffset = 0
 			this.xwidth = 0
-			this.fgcolor = "black" 
-			this.alignself = "center" 
+			this.fgcolor = "black"
+			this.alignself = "center"
+
 			this.atDraw = function () {
 				this.opacity = this.xwidth < this.layout.width ? 0 : 1
 			}
@@ -200,8 +201,9 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.event({
 				name: "eventghost",
 				id: -1,
-				bgcolor: '#4466FF',
+				size: 3,
 				opacity: 0.5,
+				fontsize: 6,
 				start: 0,
 				end: 0
 			}),

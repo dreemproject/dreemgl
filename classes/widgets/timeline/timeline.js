@@ -40,7 +40,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		var stardate = this.getRangeStart() + this.getRange() * pos
 		// TODO(aki): implement zoom dependent snapping
 		stardate = floor(stardate / 900000) * 900000 // snap to 15 min
-		var enddate = stardate + (eventdata.duration || 900000) // 15 min default
+		var enddate = stardate + (eventdata.duration || 10800000) // 3 hrs default
 		this.makeEvent({
 			title: eventdata.title,
 			date: stardate,
@@ -58,7 +58,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.makeEvent = function (eventdata) {
 		eventdata.id = eventdata.id || this.data.length + 1
 		this.data.push(eventdata)
-		this.data = this.data
+		this.rpc.eventset.updateEvents(this.data)
 	}
 
 	this.updateEvent = function (id, eventdata) {
@@ -67,7 +67,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 				for (key in eventdata) {
 					this.data[i][key] = eventdata[key]
 				}
-				this.data = this.data
+				this.rpc.eventset.updateEvents(this.data)
 				break
 			}
 		}
@@ -214,7 +214,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		return [
 			background({name: "background"}),
 			labels({name: "labels"}),
-			events({name: "events", flex: 1}),
+			events({name: "events"}),
 			scrollbar({name: "scrollbar"})
 		]
 	}
