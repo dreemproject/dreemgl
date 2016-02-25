@@ -123,7 +123,7 @@ define.class('$ui/label', function () {
 				}
 			}
 
-			mesh.fgcolor = vec4(view.fgcolor)
+			//mesh.fgcolor = vec4(view.fgcolor)
 			mesh.fontsize = view.fontsize
 
 			switch (view.segments[0]) {
@@ -139,7 +139,7 @@ define.class('$ui/label', function () {
 			}
 
 			mesh.fontsize = view.fontsize * 0.5
-			mesh.fgcolor = vec4(view.fgcolor)
+			//mesh.fgcolor = vec4(view.fgcolor)
 
 			switch (view.segments[1]) {
 				case 2:

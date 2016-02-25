@@ -185,6 +185,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	})
 
 	this.oninit = function(prev){
+
 		this.worker = prev && prev.worker || worker()
 		// if we get source back yay
 		this.worker.onmessage = function(msg){
@@ -201,6 +202,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 				err.y = rect.y + rect.h + 4
 				err.text = '^'+msg.error
 				err.visible = true
+
 				this.error_state = true
 				return
 			}
@@ -359,7 +361,7 @@ define.class('./jsviewer', function(require, baseclass, $ui$, textbox, label){
 	}
 
 	this.render = function(){
-		return label({position:'absolute',name:'error',bgcolor:'darkred',fgcolor:'white',borderradius:1, visible:false})
+		return label({position:'absolute',name:'error',bgcolor:'red',fgcolor:'white',borderradius:1, visible:false})
 	}
 
 	// Basic usage

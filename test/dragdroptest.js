@@ -45,7 +45,10 @@ define.class('$server/composition', function(require, $ui$, screen, view){
 									// dropped on a view, make it do stuff
 									console.log("Dropped on ", view.name, "at", event.position)
 								},
-								size:[100,100]
+								size:[100,100],
+								init:function(){
+									console.log(this.width)
+								}
 							})
 						})
 					}

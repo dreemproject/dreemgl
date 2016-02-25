@@ -162,8 +162,11 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.atDraw = function () {
 				this.opacity = this.xwidth < this.layout.width ? 0 : 1
 			}
-			this.textpositionfn = function (pos, tag) {
-				return vec3((pos.x + this.xoffset), pos.y, 0)
+
+			this.textstyle = function(style, tag) {
+				var pos = style.pos
+				style.pos = vec3((pos.x + this.xoffset), pos.y, 0)
+				return style
 			}
 		})
 
@@ -180,6 +183,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	this.renderEvents = function (data) {
 		events = []
 		for (var i = 0; i < data.length; i++) {
+			console.log(data[i].title)
 			events.push(this.event({
 				title: data[i].title,
 				id: data[i].id,
