@@ -842,7 +842,7 @@ define.class(function(require){
 				var aliases = this[aliasstore_key]
 				if(aliases){
 					for(var i = 0; i<aliases.length;i++){
-						aliases[i](value)
+						aliases[i].call(this, value)
 					}
 				}
 
