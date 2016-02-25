@@ -82,6 +82,18 @@ define.class(function(require, exports){
 		this.dalimaterial.removeTexture(index);
 	}
 
+
+	// Blend Modes moved from material to renderer in some versions of dali
+
+	/**
+	 * @method hasBlender
+	 * Return true if the material has blending api
+	 */
+	this.hasBlender = function(mode) {
+		return (typeof this.dalimaterial.setBlendEquation === 'function');
+	}
+
+
 	/**
 	 * @method setBlendMode
 	 * Forward request to dali.Material object. dali enumerations match webgl.

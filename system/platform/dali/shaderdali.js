@@ -340,7 +340,7 @@ console.log('*******************************************************************
 		ATTRLOC_ATTRIBPTR
 		ATTRLOC_END
 
-		var dalimaterial = root.dalimaterial;
+		var blender = root.dalimaterial.hasBlender() ? root.dalimaterial : root.dalirenderer;
 
 		// set up blend mode
 		if(root.alpha_blend_eq.op){
@@ -361,9 +361,9 @@ console.log('*******************************************************************
 
 			// DALI
 			//console.log('*** full blend');
-			dalimaterial.setBlendMode(dali.BLENDING_ON);
-			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
-			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
+			blender.setBlendMode(dali.BLENDING_ON);
+			blender.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+			blender.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
 
 		}
 		else if(root.color_blend_eq.op){
@@ -378,11 +378,11 @@ console.log('*******************************************************************
 			gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
 
 
-			dalimaterial.setBlendMode(dali.BLENDING_ON);
-			dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+			blender.setBlendMode(dali.BLENDING_ON);
+			blender.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
 
 			//TODO Check this. What are the last two args?
-			dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
+			blender.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
 			//dalimaterial.setBlendFunc(dali.BLEND_FACTOR_SRC_COLOR, dali.BLEND_FACTOR_DST_COLOR, root.color_blend_eq.src, root.color_blend_eq.dst);
 			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_ONE, dali.BLEND_FACTOR_ZERO);
 			//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_SRC_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
@@ -395,7 +395,7 @@ console.log('*******************************************************************
 			//console.log('==== blend disabled');
 			gl.disable(gl.BLEND)
 			//DALI
-			dalimaterial.setBlendMode(dali.BLENDING_OFF);
+			blender.setBlendMode(dali.BLENDING_OFF);
 		}
 		
 		// set up depth test
