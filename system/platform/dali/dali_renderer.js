@@ -45,6 +45,9 @@ define.class(function(require, exports){
 
 		var dali = DaliApi.dali;
 
+		// Cache the property values (blend-related)
+		this.property_cache = {};
+
 		this.id = ++DaliRenderer.GlobalId;
 		this.daligeometry = geometry;
 		this.dalimaterial = material;
@@ -59,6 +62,74 @@ define.class(function(require, exports){
 		}
 
 	}
+
+
+	// Blend Modes moved from material to renderer in some versions of dali
+
+	/**
+	 * @method hasBlender
+	 * Return true if the material has blending api
+	 */
+	this.hasBlender = function(mode) {
+		return (typeof this.dalirenderer.setBlendEquation === 'function');
+	}
+
+	/**
+	 * @method setBlendMode
+	 * Forward request to dali.Material object. dali enumerations match webgl.
+	 * @param {number} mode Set the blending mode
+	 */
+	this.setBlendMode = function(mode) {
+		// Not supported in DALi
+		this.property_cache['blendmode'] = mode;
+	}
+
+
+	/**
+	 * @method setBlendEquation
+	 * Forward request to dali.Material object
+	 * @param {number} equationRgb Equation for combining rgb components
+	 * @param {number} equationAlpha Equation for combining alpha component
+	 */
+	this.setBlendEquation = function(equationRgb, equationAlpha) {
+		var hash = DaliApi.getHash([equationRgb, equationAlpha]);
+
+		var val = this.property_cache['blendequation'];
+		if (val && val == hash)
+			return;
+
+		this.dalirenderer.setBlendEquation(equationRgb, equationAlpha);
+		this.property_cache['blendequation'] = hash;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.setBlendEquation(' + equationRgb + ', ' + equationAlpha + ');');
+		}
+	}
+
+
+	/**
+	 * @method setBlendFunc
+	 * Forward request to dali.Material object
+	 * @param {number} srcFactorRgb Source blending rgb
+	 * @param {number} dstFactorRgb Destination blending rgb
+	 * @param {number} srcFactorAlpha Source blending alpha
+	 * @param {number} dstFactorAlpha Destination blending alpha
+	 */
+	this.setBlendFunc = function(srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha) {
+		var hash = DaliApi.getHash([srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha]);
+
+		var val = this.property_cache['blendfunc'];
+		if (val && val == hash)
+			return;
+
+		this.dalirenderer.setBlendFunc(srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha);
+		this.property_cache['blendfunc'] = hash;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.setBlendFunc(' + srcFactorRgb + ', ' + dstFactorRgb + ', ' + srcFactorAlpha + ', ' + dstFactorAlpha + ');');
+		}
+	}
+
 
 	this.name = function() {
 		return 'dalirenderer' + this.id;
