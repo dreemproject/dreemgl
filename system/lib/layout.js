@@ -10,10 +10,11 @@
 
 define(function () {
 
-	function fillNodes(node, nochildren) {
+	function fillNodes(node, nochildren, invisible) {
 		var newnode = {
 			children:[],
 			ref:node,
+			visible:(!invisible && node.visible),
 			dirty: node.layout_dirty,
 			layout:{
 				width:undefined,
@@ -39,18 +40,15 @@ define(function () {
 		node.oldlayout = node._layout
 
 		var layout = node._layout = newnode.layout
-		
+
 		// alright so. what we need to do is bubble down layout_dirty
 		if(!nochildren && node.children) for(var i = 0; i < node.children.length;i++){
 			var child = node.children[i]
-			if (child.visible === false) {
-				continue;
-			}
 			if(!('_viewport' in child))continue
 			if(child._viewport){ // its using a different layout pass
 				// if we are flex, we have to compute the layout of this child
 				if(!isNaN(child._flex)){
-					var newchild = fillNodes(child, true)
+					var newchild = fillNodes(child, true, !newnode.visible)
 					if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
 					newnode.children.push(newchild)
 				}
@@ -66,7 +64,7 @@ define(function () {
 				}
 			}
 			else{
-				var newchild = fillNodes(child)
+				var newchild = fillNodes(child, false, !newnode.visible)
 				if(newchild.dirty) newnode.dirty = true, node.layout_dirty = true
 				newnode.children.push(newchild)
 			}
@@ -777,7 +775,9 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				// dimension for the node.
 				if (isMainDimDefined && isFlex(child)) {
 					flexibleChildrenCount++;
-					totalFlexible += child.ref._flex;
+					if (child.visible) {
+						totalFlexible += child.ref._flex;
+					}
 
 					// Store a private linked list of flexible children so that we can
 					// efficiently traverse them later.
@@ -793,8 +793,11 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					// border and margin. We'll use this partial information, which represents
 					// the smallest possible size for the child, to compute the remaining
 					// available space.
-					nextContentDim = getPaddingAndBorderAxis(child, mainAxis) +
-						getMarginAxis(child, mainAxis);
+
+					if (child.visible) {
+						nextContentDim = getPaddingAndBorderAxis(child, mainAxis) +
+							getMarginAxis(child, mainAxis);
+					}
 
 				} else {
 					maxWidth = CSS_UNDEFINED;
@@ -838,7 +841,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				// Disable simple stacking in the main axis for the current line as
 				// we found a non-trivial child. The remaining children will be laid out
 				// in <Loop C>.
-				if (isSimpleStackMain &&
+				if (child.visible && isSimpleStackMain &&
 						(getPositionType(child) !== CSS_POSITION_RELATIVE || isFlex(child))) {
 					isSimpleStackMain = false;
 					firstComplexMain = i;
@@ -847,7 +850,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				// Disable simple stacking in the cross axis for the current line as
 				// we found a non-trivial child. The remaining children will be laid out
 				// in <Loop D>.
-				if (isSimpleStackCross &&
+				if (child.visible && isSimpleStackCross &&
 						(getPositionType(child) !== CSS_POSITION_RELATIVE ||
 								(alignItem !== CSS_ALIGN_STRETCH && alignItem !== CSS_ALIGN_FLEX_START) ||
 								isUndefined(child.layout[dim[crossAxis]]))) {
@@ -857,18 +860,24 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 
 				if (isSimpleStackMain) {
 					child.layout[pos[mainAxis]] = round(child.layout[pos[mainAxis]] + mainDim);
-					if (isMainDimDefined) {
-						setTrailingPosition(node, child, mainAxis);
-					}
 
-					mainDim += getDimWithMargin(child, mainAxis);
-					crossDim = fmaxf(crossDim, boundAxis(child, crossAxis, getDimWithMargin(child, crossAxis)));
+					if (child.visible) {
+						if (isMainDimDefined) {
+							setTrailingPosition(node, child, mainAxis);
+						}
+
+						mainDim += getDimWithMargin(child, mainAxis);
+						crossDim = fmaxf(crossDim, boundAxis(child, crossAxis, getDimWithMargin(child, crossAxis)));
+					}
 				}
 
 				if (isSimpleStackCross) {
 					child.layout[pos[crossAxis]] = round(child.layout[pos[crossAxis]] + linesCrossDim + leadingPaddingAndBorderCross);
-					if (isCrossDimDefined) {
-						setTrailingPosition(node, child, crossAxis);
+
+					if (child.visible) {
+						if (isCrossDimDefined) {
+							setTrailingPosition(node, child, crossAxis);
+						}
 					}
 				}
 
@@ -904,13 +913,15 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 				// remove this child from flex calculations.
 				currentFlexChild = firstFlexChild;
 				while (currentFlexChild !== null) {
-					baseMainDim = flexibleMainDim * currentFlexChild.ref._flex +
+					if (currentFlexChild.visible) {
+						baseMainDim = flexibleMainDim * currentFlexChild.ref._flex +
 							getPaddingAndBorderAxis(currentFlexChild, mainAxis);
-					boundMainDim = boundAxis(currentFlexChild, mainAxis, baseMainDim);
+						boundMainDim = boundAxis(currentFlexChild, mainAxis, baseMainDim);
 
-					if (baseMainDim !== boundMainDim) {
-						remainingMainDim -= boundMainDim;
-						totalFlexible -= currentFlexChild.ref._flex;
+						if (baseMainDim !== boundMainDim) {
+							remainingMainDim -= boundMainDim;
+							totalFlexible -= currentFlexChild.ref._flex;
+						}
 					}
 
 					currentFlexChild = currentFlexChild.nextFlexChild;
@@ -1005,7 +1016,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					// Now that we placed the element, we need to update the variables
 					// We only need to do that for relative elements. Absolute elements
 					// do not take part in that phase.
-					if (getPositionType(child) === CSS_POSITION_RELATIVE) {
+					if (getPositionType(child) === CSS_POSITION_RELATIVE && child.visible) {
 						// The main dimension is the sum of all the elements dimension plus
 						// the spacing.
 						mainDim += betweenMainDim + getDimWithMargin(child, mainAxis);
@@ -1061,7 +1072,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 									getPaddingAndBorderAxis(child, crossAxis)
 								));
 							}
-						} else if (alignItem !== CSS_ALIGN_FLEX_START) {
+						} else if (alignItem !== CSS_ALIGN_FLEX_START && child.visible) {
 							// The remaining space between the parent dimensions+padding and child
 							// dimensions+margin.
 							var/*float*/ remainingCrossDim = containerCrossAxis -
@@ -1137,7 +1148,7 @@ function layoutNodeImpl(node, parentMaxWidth, /*css_direction_t*/parentDirection
 					if (child.lineIndex !== i) {
 						break;
 					}
-					if (!isUndefined(child.layout[dim[crossAxis]])) {
+					if (!isUndefined(child.layout[dim[crossAxis]]) && child.visible) {
 						lineHeight = fmaxf(
 							lineHeight,
 							child.layout[dim[crossAxis]] + getMarginAxis(child, crossAxis)

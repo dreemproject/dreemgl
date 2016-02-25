@@ -79,17 +79,19 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		var editmode = ''
 
 		var initPointer = function (event) {
+			this.cursor = 'move'
+			editmode = 'move'
+
 			var localstart = this.globalToLocal(event.position)
 			var localstartx = localstart[0] - this.offset * this.layout.width
-			if (localstartx < RESIZE_HANDLE_WIDTH) {
+			var pxduration = this.duration * this.layout.width
+
+			if (localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
 				this.cursor = 'ew-resize'
 				editmode = 'setstart'
-			} else if (localstartx > this.duration * this.layout.width - RESIZE_HANDLE_WIDTH) {
+			} else if (pxduration - localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
 				this.cursor = 'ew-resize'
 				editmode = 'setend'
-			} else {
-				this.cursor = 'move'
-				editmode = 'move'
 			}
 		}
 
@@ -109,6 +111,11 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			} else if (editmode == 'setend') {
 				eventghost.start = this.start
 				eventghost.end = this.end + timeline.getRange() * offset
+			}
+			if (eventghost.start > eventghost.end) {
+				var start = eventghost.start
+				eventghost.start = eventghost.end
+				eventghost.end = start
 			}
 			this.redraw()
 		}
@@ -136,7 +143,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
 			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
-
 			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.layout.width
 			this.find('eventlabel').xwidth = this.duration * this.layout.width
 		}
@@ -185,13 +191,15 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 	this.render = function () {
 		return [
-			this.renderEvents(this.data),
 			this.event({
 				name: "eventghost",
 				id: -1,
 				bgcolor: '#4466FF',
-				opacity: 0.5
-			})
+				opacity: 0.5,
+				start: 0,
+				end: 0
+			}),
+			this.renderEvents(this.data)
 		]
 	}
 

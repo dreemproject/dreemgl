@@ -27,7 +27,17 @@ define.class("$server/composition",function(require,$ui$,checkbox,icon,button,la
 
 
 
+
+
+
+
+
 this.render=function(){
+
+
+
+
+
 
 
 
@@ -92,8 +102,8 @@ height:143,
 width:138,
 bgcolor:vec4(0,0.501960813999176,0.05704490840435028,1),
 position:"absolute",
-x:84.00006103515625,
-y:160.00006103515625,
+x:168.0001220703125,
+y:560.0002136230469,
 borderradius:vec4(10,30,60,80),
 rotate:vec3(0,0,0.8099998831748962)
 },
@@ -123,13 +133,14 @@ width:453,
 pickalpha:-1,
 bgcolor:vec4(0,0.2716766893863678,0.501960813999176,1),
 position:"absolute",
-x:410.1640625,
-y:590.7561645507812,
+x:741.1640625,
+y:263.75616455078125,
 alignitems:"center",
 justifycontent:"center",
 bgimage:"$resources/textures/portrait.jpg",
 bgimagemode:"aspect-fill",
-borderradius:vec4(30,100,50,0)
+borderradius:vec4(30,100,50,0),
+rotate:vec3(0,0,-0.5300000309944153)
 },
 button({tooldragroot:true,fontsize:24,pickalpha:-1,fgcolor:'red',label:"Press Me!",position:"absolute",x:37.835906982421875,y:58.24383544921875}),
 checkbox({
@@ -215,8 +226,8 @@ toolkit({
 position:"absolute",
 visible:true,
 rulers:true,
-x:1145,
-y:21.000144958496094,
+x:474,
+y:-22.999862670898438,
 width:428,
 height:836,
 dropmode:"absolute",
@@ -284,7 +295,27 @@ groupreparent:false
 
 
 
+
+
+
+
+
+
+
+
+
+
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 
