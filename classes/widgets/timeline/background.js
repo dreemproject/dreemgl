@@ -51,16 +51,11 @@ define.class('$ui/view', function () {
 			else if (val == 4.0) return day
 			else if (val == 5.0) return hour
 			else if (val == 6.0) return minute
-
-
 			return 0.0;
 		}
 
 
 		this.color = function(){
-
-			//return "red";
-
 			var fgcolor = vec4("#ffffff")
 			var bgcolor = vec4("#4e4e4e")
 			var a = 24.0 / view.layout.height
@@ -78,15 +73,18 @@ define.class('$ui/view', function () {
 			var hour = makepattern(floor(dayfield1 * view.hoursegs), floor(dayfield2 * view.hoursegs))
 			var minute = makepattern(floor(dayfield1 * 96.0), floor(dayfield2 * 96.0))
 
+			var color = vec4("#4e4e4e")
 			var pattern = 0.0
 
 			pattern += pickpattern(view.segments.x, year, month, week, day, hour, minute)
 			if (uv.y > a)
 				pattern = max(pattern, 0.5 * pickpattern(view.segments.y, year, month, week, day, hour, minute))
+				color = mix(bgcolor, fgcolor, pattern)
 			if (uv.y > b)
 				pattern = max(pattern, 0.25 * pickpattern(view.segments.z, year, month, week, day, hour, minute))
+				color = mix(bgcolor, fgcolor, pattern)
 
-			return mix(bgcolor, fgcolor, pattern)
+			return color
 		}
 	}
 

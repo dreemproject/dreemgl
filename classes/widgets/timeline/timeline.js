@@ -6,7 +6,7 @@
 define.class('$ui/view', function (background, labels, events, scrollbar) {
 
 	this.flexdirection = 'column'
-	this.padding = vec4(0, 56, 0, 18)
+	this.padding = vec4(0, 48, 0, 15)
 	this.bgcolor = NaN
 	// TODO(aki): hide overflow
 
@@ -25,8 +25,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		scroll: Config({type: Number, value: 0}),
 
 		hoursegs: Config({type: Number, value: 24}),
-		hoursegs: Config({type: Number, value: 24}),
-		// segmentwidths: Config({type: vec3, value: vec3()}),
+		segments: Config({type: vec3, value: vec3()}),
 
 		change: Config({type: Event})
 	}

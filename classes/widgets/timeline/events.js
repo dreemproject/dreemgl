@@ -6,8 +6,9 @@
 define.class('$ui/label', function (require, $ui$, view, label) {
 
 	this.text = ''
-	this.bgcolor = vec4(1, 1, 1, 0.05)
+	this.bgcolor = vec4(1, 1, 1, 0.01)
 	this.pickalpha = 0
+	this.height = 28
 
 	this.attributes = {
 		data: Config({type: Array,  value: wire('this.parent.data')}),
@@ -62,7 +63,9 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		this.position = 'absolute'
 		this.flexdirection = 'row'
 		this.cursor = 'move'
-		this.justifycontent ="center"
+		this.justifycontent = "center"
+		this.borderradius = 6
+
 		var RESIZE_HANDLE_WIDTH = 10
 
 		this.attributes = {
@@ -147,6 +150,25 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.find('eventlabel').xwidth = this.duration * this.layout.width
 		}
 
+		this.roundedrect = {
+			position: function(){
+				pos = mesh.pos.xy
+				pos.x = pos.x * view.duration + (view.offset - view.scroll[0]) * view.layout.width
+				var ca = cos(mesh.angle + PI)
+				var sa = sin(mesh.angle + PI)
+				var rad  = (mesh.radmult.x * view.borderradius.x + mesh.radmult.y * view.borderradius.y + mesh.radmult.z * view.borderradius.z + mesh.radmult.w * view.borderradius.w)
+				pos.x += ca * rad
+				pos.y += sa * rad
+				uv = vec2(pos.x / view.layout.width,  pos.y / view.layout.height)
+				sized = vec2(pos.x, pos.y)
+				return vec4(sized.x, sized.y, 0, 1) * view.totalmatrix * view.viewmatrix
+			},
+			color: function(){
+				var col = view.bgcolorfn(vec2(pos.x / view.layout.width, pos.y/view.layout.height))
+				return vec4(col.rgb, col.a * view.opacity)
+			}
+		}
+
 		this.hardrect = {
 			position: function(){
 				var pos = vec2(mesh.x * view.duration + view.offset - view.scroll[0], mesh.y)
@@ -159,9 +181,12 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.xwidth = 0
 			this.fgcolor = "black"
 			this.alignself = "center"
+			this.padding = vec4(6)
 
 			this.atDraw = function () {
-				this.opacity = this.xwidth < this.layout.width ? 0 : 1
+				this.fontsize = 13
+				this.bold = true
+				this.opacity = this.xwidth < this.layout.width * 0.6 ? 0 : 1
 			}
 
 			this.textstyle = function(style, tag) {
@@ -197,6 +222,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 	this.render = function () {
 		return [
+			this.renderEvents(this.data),
 			this.event({
 				name: "eventghost",
 				id: -1,
@@ -204,9 +230,9 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 				opacity: 0.5,
 				fontsize: 6,
 				start: 0,
-				end: 0
-			}),
-			this.renderEvents(this.data)
+				end: 0,
+				bgcolor: vec4(0.2, 0.7, 1, 0.5)
+			})
 		]
 	}
 

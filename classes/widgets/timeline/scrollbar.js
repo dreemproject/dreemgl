@@ -7,6 +7,7 @@ define.class('$ui/scrollbar', function () {
 
 	this.position = 'absolute'
 	this.vertical = false
+	this.visible = true
 
 	this.attributes = {
 		zoom: Config({value: wire('this.parent.zoom')}),
@@ -22,7 +23,7 @@ define.class('$ui/scrollbar', function () {
 		this.layout.left = 0
 		this.layout.height = 10
 		this.layout.width =  this.parent.layout.width
-		this.layout.top =  this.parent.layout.height - this.layout.height
+		this.layout.top = this.parent.layout.height - this.layout.height
 	}
 
 	this.atAnimate = function () {
