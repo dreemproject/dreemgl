@@ -36,34 +36,6 @@ define.class(function(exports){
 		this.accessToken = ''
 	}
 
-	// Search interface to query locations. Search and explore are different
-	// api endpionts for foursquare. explore returns recomended places where
-	// search shows all the data.
-	//
-	// callback Callback method which is passed the returned photos, as an array.
-	// location Location to search around [lat, lon]. If missing, SF is used
-	// options  Hash of search options. If not defined, defaults are used.
-	// nimages  Max number of images to return per location. Default=null which
-	//          will not return any images
-	this.search = function(callback, location, options, nimages) {
-		// location = location || [37.784173, -122.401557] // Mascone center
-		location = location || [37.859603, -122.491075] // Sausalito
-		options = options || {}
-
-		// Search for locations
-		this.foursquare.Venues.search(location[0], location[1], null, options, this.accessToken, function(error, data) {
-			if (error) console.log('error', error)
-
-			if (data && data.venues) {
-				for (var i in data.venues) {
-					var venue = data.venues[i]
-					//console.log('LOCATION', venue.location)
-					//console.log('STATS', venue.stats)
-				}
-			}
-		})
-	}
-
 	// Search interface to query recomended locations. Only locations with
 	// images are returned.
 	// https://developer.foursquare.com/docs/venues/explore
@@ -71,14 +43,14 @@ define.class(function(exports){
 	// callback Callback method which is passed the returned venues, as an array.
 	// location Location to search around [lat, lon]. If missing, SF is used
 	// options  Hash of search options. If not defined, defaults are used.
-	this.explore = function(options, callback) {
+	this.search = function(options, callback) {
 		options = options || {}
 
 		if (options['location'] === undefined) options['location'] = [37.859603, -122.491075]
 		if (options['openNow'] === undefined) options['openNow'] = 0
 		if (options['venuePhotos'] === undefined) options['venuePhotos'] = 1
 		if (options['limit'] === undefined) options['limit'] = 250
-		if (options['radius'] === undefined) options['radius'] = 100000
+		if (options['radius'] === undefined) options['radius'] = 1000
 		if (options['section'] === undefined) options['section'] = 'coffee'
 
 		// Search for locations
@@ -108,7 +80,9 @@ define.class(function(exports){
 
 					venues.push({
 						url: photoUrl,
+						id: venue.id,
 						title: venue.name,
+						category: venue.categories[0].name,
 						width: 300,
 						height: 300,
 						latitude: venue.location.lat,
@@ -120,12 +94,6 @@ define.class(function(exports){
 
 				}
 			}
-
-			// var fs = require('fs')
-			// fs.writeFile("apps/tripplanner/data/coffee.json", JSON.stringify(venues, null, 4), function(err) {
-			//     if (err) return console.log(err)
-			// })
-
 			callback(venues)
 		})
 

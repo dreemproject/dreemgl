@@ -118,12 +118,6 @@ define.class(function(exports){
 					date: new Date(photo.datetaken).getTime()
 				})
 			}
-
-			// // Save data to JSON
-			// var fs = require('fs')
-			// fs.writeFile("compositions/timeline/data/flickr"+PAGE+".json", JSON.stringify(_photos, null, 4), function(err) {
-			//     if (err) return console.log(err)
-			// })
 			cb(_photos)
 		})
 		return
