@@ -30,6 +30,11 @@ define.class('$ui/label', function () {
 			var scroll = view.scroll
 			var w = view.parent.layout.width
 			var h = view.parent.layout.height
+
+			var mw = w / 11.774193548387096 * 365 / zoom
+			var dw = w / zoom
+			var hw = w / 24 / zoom
+
 			var ts = view.parent.TIME_SCALE
 
 			var mesh = this.newText()
@@ -78,7 +83,11 @@ define.class('$ui/label', function () {
 				while (x < w) {
 					date = new Date(first)
 					date.setMonth(firstMonth + i)
-					drawLabel(MONTHS[date.getMonth() % 12], date, xoffset, yoffset)
+					text = MONTHS[date.getMonth() % 12]
+					if (mw > 220) {
+						text = text + ' ' + date.getFullYear()
+					}
+					drawLabel(text, date, xoffset, yoffset)
 					i++
 				}
 			}
@@ -93,7 +102,13 @@ define.class('$ui/label', function () {
 				while (x < w) {
 					date = new Date(first)
 					date.setDate(firstDate + i)
-					drawLabel(DAYS[(date.getDate() - 1) % 31], date, xoffset, yoffset)
+					text = DAYS[(date.getDate() - 1) % 31]
+					if (dw > 220) {
+						text = MONTHS[(date.getMonth()) % 12] + ' ' + text + ' ' + date.getFullYear()
+					} else if (dw > 120) {
+						text = MONTHS[(date.getMonth()) % 12] + ' ' + text
+					}
+					drawLabel(text, date, xoffset, yoffset)
 					i++
 				}
 			}
@@ -124,17 +139,17 @@ define.class('$ui/label', function () {
 			}
 
 			//mesh.fgcolor = vec4(view.fgcolor)
-			mesh.fontsize = view.fontsize
+			mesh.fontsize = view.fontsize * 0.75
 
 			switch (view.segments[0]) {
 				case 1:
-					drawYears(24)
+					drawYears(26)
 					break
 				case 2:
-					drawMonths(24)
+					drawMonths(26)
 					break
 				case 4:
-					drawDays(24)
+					drawDays(26)
 					break
 			}
 
@@ -143,13 +158,13 @@ define.class('$ui/label', function () {
 
 			switch (view.segments[1]) {
 				case 2:
-					drawMonths(48)
+					drawMonths(42)
 					break
 				case 4:
-					drawDays(48)
+					drawDays(42)
 					break
 				case 5:
-					drawHours(48)
+					drawHours(42)
 					break
 			}
 
