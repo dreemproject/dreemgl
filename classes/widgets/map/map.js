@@ -647,10 +647,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.color = function(){
 				//return "blue";
 				PickGuid = mesh.pos.z
-				var col =  vec4(0,0,0.6,0.1);
+				//var col =  vec4(0,0,0.6,0.1);
 				var noise = noise.cheapnoise(pos*0.02)*0.07+0.5;
 				var texcol = mesh.color1;
-				var prefog = mix(texcol, col, 1.0-view.bufferloaded);
+				var prefog = texcol//, col, 1.0-view.bufferloaded);
 				//prefog.a *=0.9;
 				//prefog.a *= max(0.0, min(1.0, view.layeroffset  - view.fraczoom))
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
@@ -790,7 +790,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 			this.color = function(){
 				var texcol = mesh.color * (1.0 - 0.2*  pow(0.5-0.5*cos(mesh.geom.x * 3.1415),3.0))
-				var prefog = mix(texcol, vec4(0), 1.0-view.bufferloaded);
+				var prefog = texcol;//, vec4(0), 1.0-view.bufferloaded);
 				//var prefog=  vec4(col.xyz * (0.5 + 0.5*view.bufferloaded), 0.2);
 				var zdist = max(0.,min(1.,(respos.z-view.fogstart)/view.fogend));
 				zdist *= zdist;
