@@ -13,7 +13,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
 		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
-		pointselected: Config({type:Event})
+		latlongset: Config({type: Event}),
+		pointselected: Config({type: Event})
 	}
 
 	function createHash (x, y, z){
@@ -314,7 +315,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				texel:[53.0731212,4.712878]
 			}
 
-			this.gotoCity("sanfrancisco_goldengatepark",11);
+			this.gotoCity("manhattan",11);
 
 			//this.setCenter(31,18,6);
 			this.theinterval = this.setInterval(function(){
@@ -422,7 +423,9 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 	}
 
-	this.stopDrag = function(){}
+	this.stopDrag = function(){
+		this.emitUpward('latlongset', this.latlong)
+	}
 
 	var alltiles = 0;
 	var tilebasemixin = define.class(Object, function(){
