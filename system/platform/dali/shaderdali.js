@@ -312,6 +312,7 @@ console.log('*******************************************************************
 			}
 		}
 		gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
+		if(TEXTURE_ID > 0)debugger
 		TEXTURE_END
 
 		// attributes
