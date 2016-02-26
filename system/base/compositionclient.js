@@ -169,7 +169,7 @@ define.class('./compositionbase', function(require, baseclass){
 				//else obj.createIndex(msg.index, msg.rpcid, rpcpromise)
 			}
 			else if(msg.type == 'attribute'){
-				
+
 				this.cached_attributes[msg.rpcid+'_'+msg.attribute] = msg
 
 				var split = msg.rpcid.split('.')

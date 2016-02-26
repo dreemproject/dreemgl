@@ -236,7 +236,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, label, checkbox){
 							droptest = this.outer.dropTest(ev, v, pitem, event, this);
 						}
 
-						if(!v || !droptest) {
+						if(!droptest) {
 							this.screen.pointer.cursor = 'no-drop';
 							return false
 						}

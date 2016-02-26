@@ -25,7 +25,7 @@ define.class("$ui/view", function($ui$, view, icon) {
 		// Horizontal or vertical arrangement
 		horizontal:true,
 
-		// Threshold at which to draw a handle if none oare provided in the constructor.
+		// Threshold at which to draw a handle if none is provided in the constructor.
 		minhandlethreshold:10.0,
 
 		// Smoothly mix the background/foreground color or draw a hard edge
