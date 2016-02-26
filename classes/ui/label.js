@@ -166,7 +166,7 @@ define.class(function(require, $ui$, view){
 	if (define.$platform === 'dali')
 		this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
 	else
-		this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+		this.font = require('$resources/fonts/opensans_regular_256.glf')
 
 	var label = this.constructor
 	// A label.

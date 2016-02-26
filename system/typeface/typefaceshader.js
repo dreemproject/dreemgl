@@ -392,7 +392,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				}
 
 				var info = glyphs[unicode]
-				if(!info) info = glyphs[32]
+				if(!info) info = glyphs[32], unicode = 32
+
 				// lets add some vertices
 				if(unicode == 10){ // newline
 					this.add_x = this.start_x

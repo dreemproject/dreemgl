@@ -8,7 +8,7 @@ define.class(function(exports){
 	// internal, Reactive renderer
 
 	var initializing = false
-
+	var log_render_cause = false
 	var process_list = []
 	var process_timer = undefined
 
@@ -18,12 +18,17 @@ define.class(function(exports){
 		process_list = []
 		for(var i = 0; i < pl.length; i+=2){
 			//console.log("Processing",pl[i])
-			var node = pl[i+1]
-			while(node){
-				if(node.destroyed) break
-				node = node.parent
+			var node = pl[i+1], iter = node
+
+			if(log_render_cause){
+				console.log("Re-render caused by "+pl[i]+" on ", node)
 			}
-			if(!node) exports.process(pl[i+1], undefined, undefined, true)
+
+			while(iter){
+				if(iter.destroyed) break
+				iter = iter.parent
+			}
+			if(!iter) exports.process(node, undefined, undefined, true)
 		}
 	}
 
@@ -31,8 +36,7 @@ define.class(function(exports){
 		if(!initializing){
 			//exports.process(this, undefined, undefined, true)
 			if(process_list.indexOf(this) === -1){
-				process_list.push(key)
-				process_list.push(this)
+				process_list.push(key, this)
 			}
 			if(!process_timer){
 				process_timer = setTimeout(processTimeout, 0)
