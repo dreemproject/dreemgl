@@ -10,8 +10,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	var geo = this.geo = geo();
 
 	this.attributes = {
-		latlong: vec2(52.3608307, 4.8626387),
-		zoomlevel: 16,
+		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
+		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
 		pointselected: Config({type:Event})
 	}
@@ -675,7 +675,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			rpos.y += pos.y;
 			rpos.xy -= (((( this.centerpos- this.centermeter)) / this.meterspertile)*1024.0) * vec2(-1.0,1.0);
 			rpos.xy /= pow(2.0, this.layeroffset - this.fraczoom -2);
-			
+
 			// pos.xy /= pow(2.0,view.layeroffset - view.fraczoom - 2)
 			// rpos.xy /= pow(2.0,this.layeroffset-2 - this.fraczoom)
 			style.pos = vec3(rpos.x, this.layeroffset*this.layerzmult+ this.layerzoff, rpos.y);
