@@ -66,7 +66,7 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 														this.rpc
 															.basestation
-															.setLightState(o.bulb.id, {bri: o.bulb.bri})
+															.setLightState(o.bulb.id, {transitiontime:0, bri: o.bulb.bri})
 															.then(function(){
 																this.__lock = false;
 															}.bind(this), function(){
@@ -128,7 +128,7 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 														this.rpc
 															.basestation
-															.setLightState(o.bulb.id, { xy:[x,y] })
+															.setLightState(o.bulb.id, { transitiontime:0, xy:[x,y] })
 															.then(function(){
 																this.__lock = false;
 															}.bind(this), function(){
