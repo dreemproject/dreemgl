@@ -81,7 +81,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 		var editmode = ''
 
-		var initPointer = function (event) {
+		this.pointerhover = this.pointerstart = function (event) {
 			this.cursor = 'move'
 			editmode = 'move'
 
@@ -97,9 +97,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 				editmode = 'setend'
 			}
 		}
-
-		this.pointerhover = initPointer
-		this.pointerstart = initPointer
 
 		this.pointermove = function(event) {
 			var eventghost = this.parent.find('eventghost')
