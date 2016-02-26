@@ -42,7 +42,6 @@ define.class('./compositionbase', function(require, baseclass){
 
 		for(var key in this.cached_attributes){
 			var attrmsg = this.cached_attributes[key]
-			console.log("DOING!",attrmsg)
 			// process it
 			this.bus.atMessage(attrmsg)
 		}

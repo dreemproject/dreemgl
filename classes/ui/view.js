@@ -529,9 +529,16 @@ define.class('$system/base/node', function(require){
 		if(this.initialized){
 			if(typeof this._bgimage === 'string'){
 				// Path to image was specified
-				require.async(this._bgimage, 'jpeg').then(function(result){
-					this.setBgImage(result)
-				}.bind(this))
+				if(require.loaded(this._bgimage)){
+					var img = require(this._bgimage)
+					this.setBgImage(img)
+				}
+				else{
+					// check if loaded already
+					require.async(this._bgimage, 'jpeg').then(function(result){
+						this.setBgImage(result)
+					}.bind(this))
+				}
 			}
 			else{
 				this.setBgImage(this._bgimage)
@@ -563,42 +570,6 @@ define.class('$system/base/node', function(require){
 		}
 	}
 
-	this.onbgimagemode = function(ev, v, o) {
-
-		if (this.shaders) {
-			var shader = this.shaders.hardimage || this.shaders.roundedimage;
-
-			if (shader && shader.texture) {
-				var size = shader.texture.size;
-
-				var imgw = size[0];
-				var imgh = size[1];
-				var aspect = this._width / this._height;
-				var uselayout = false;
-				if (isNaN(aspect)) {
-					uselayout = true;
-					aspect = this._layout.width / this._layout.height;
-				}
-				var ratio = imgw / imgh / aspect;
-
-				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
-					this.bgimageaspect = vec2(1.0,1.0);
-				} else if (this.bgimagemode === "aspect-fit") {
-					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0);
-					} else {
-						this.bgimageaspect = vec2(1.0, ratio);
-					}
-				} else if (this.bgimagemode === "aspect-fill") {
-					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
-						this.bgimageaspect = vec2(1.0, ratio);
-					} else {
-						this.bgimageaspect = vec2(1.0/ratio, 1.0);
-					}
-				}
-			}
-		}
-	};
 
 	this.setBgImage = function(image){
 		var shader = this.shaders.hardimage || this.shaders.roundedimage
@@ -610,7 +581,6 @@ define.class('$system/base/node', function(require){
 		} else if (img) {
 			this.onbgimagemode()
 		}
-
 		else this.redraw()
 	}
 
@@ -850,6 +820,7 @@ define.class('$system/base/node', function(require){
 		var shaders = this.shader_update_list
 		for(var i = 0; i < shaders.length; i ++){
 			var shader = shaders[i]
+			if(shader.view !== this)debugger
 			if(shader.update && shader.update_dirty){
 				shader.update_dirty = false
 				shader.update()
@@ -1429,7 +1400,11 @@ define.class('$system/base/node', function(require){
 		this.updateorder = 0
 		this.draworder = 0
 		this.texture = Shader.Texture.fromType(Shader.Texture.RGBA)
+		//this.atDraw = function(draw){
+		//	console.log('in shader at:',draw === this.view, this.view.viewmatrix)
+		//}
 		this.color = function(){
+			//return mix('red','green',mesh.y)
 			if (view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x < 0.0
 				|| view.bgimageoffset[0] + mesh.xy.x * view.bgimageaspect.x > 1.0
 				|| view.bgimageoffset[1] + mesh.xy.y * view.bgimageaspect.y < 0.0
@@ -1440,6 +1415,43 @@ define.class('$system/base/node', function(require){
 			return vec4(col.r * view.colorfilter[0], col.g * view.colorfilter[1], col.b * view.colorfilter[2], col.a * view.opacity * view.colorfilter[3])
 		}
 	})
+
+
+	this.onbgimagemode = function(ev, v, o) {
+
+		if (this.shaders) {
+			var shader = this.shaders.hardimage || this.shaders.roundedimage;
+
+			if (shader && shader.texture) {
+				var size = shader.texture.size;
+
+				var imgw = size[0];
+				var imgh = size[1];
+				var aspect = this._width / this._height;
+				var uselayout = false;
+				if (isNaN(aspect)) {
+					uselayout = true;
+					aspect = this._layout.width / this._layout.height;
+				}
+				var ratio = imgw / imgh / aspect;
+				if (this.bgimagemode === "stretch" || this.bgimagemode === "resize") {
+					this.bgimageaspect = vec2(1.0,1.0);
+				} else if (this.bgimagemode === "aspect-fit") {
+					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
+						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+					} else {
+						this.bgimageaspect = vec2(1.0, ratio);
+					}
+				} else if (this.bgimagemode === "aspect-fill") {
+					if ((uselayout && this._layout.width > this._layout.height) || (!uselayout && this._width > this._height)) {
+						this.bgimageaspect = vec2(1.0, ratio);
+					} else {
+						this.bgimageaspect = vec2(1.0/ratio, 1.0);
+					}
+				}
+			}
+		}
+	};
 
 	// rounded rect shader class
 	define.class(this, 'roundedrect', this.Shader, function(){

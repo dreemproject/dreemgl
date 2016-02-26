@@ -317,6 +317,8 @@ define.class(function(require, baseclass){
 			}
 
 			if(shader.pickonly || !shader.visible) continue // was pick only
+			shader.view = draw
+			if(shader.atDraw) shader.atDraw(draw)
 			// we have to set our guid.
 			if(shader.noscroll) draw.viewmatrix = matrices.noscrollmatrix
 			else draw.viewmatrix = matrices.viewmatrix
@@ -371,7 +373,7 @@ define.class(function(require, baseclass){
 			}
 			*/
 		}
-
+		//console.log(matrices.viewmatrix)
 		device.clear(view._clearcolor)
 
 		var draw = view

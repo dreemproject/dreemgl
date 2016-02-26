@@ -51,6 +51,9 @@ define.class("$server/composition",function(require, $ui$, screen, view) {
 						var turbulence = 3.
 						// the depth of the rectangle we are processing
 						var depth = int(mesh.depth)
+
+						var swoosh = mod(view.time, mesh.depth)
+
 						// run over the whole depth, note we don't use i < depth because thats not allowed in webGL, has to be fixed number
 						for(var i = 0; i < 14; i++){
 							if(i >= depth) break

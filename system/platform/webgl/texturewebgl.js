@@ -207,7 +207,7 @@ define.class('$system/base/texture', function(exports){
 				    image = canvas
 				}
 			}
-
+	
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
 			this.image[samplerid] = gltex
 		}
@@ -235,6 +235,7 @@ define.class('$system/base/texture', function(exports){
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size[0], this.size[1], 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(this.data)) 
 		}
 		else if(this.image){
+			console.log("UPDATING!")
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image)
 		}
 		gltex.updateid = this.updateid

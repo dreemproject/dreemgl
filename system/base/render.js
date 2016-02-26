@@ -18,7 +18,12 @@ define.class(function(exports){
 		process_list = []
 		for(var i = 0; i < pl.length; i+=2){
 			//console.log("Processing",pl[i])
-			exports.process(pl[i+1], undefined, undefined, true)
+			var node = pl[i+1]
+			while(node){
+				if(node.destroyed) break
+				node = node.parent
+			}
+			if(!node) exports.process(pl[i+1], undefined, undefined, true)
 		}
 	}
 
@@ -77,6 +82,7 @@ define.class(function(exports){
 				}
 			}
 			if(new_version.atAnimate) new_version.screen.device.animate_hooks.push(new_version)
+			if(old_version) old_version.old_flag = true
 			if(new_version.atViewInit) new_version.atViewInit(old_version)
 			new_version.emit('init', old_version)// old_version && old_version.constructor == new_version.constructor? old_version: undefined)
 		}

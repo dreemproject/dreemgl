@@ -76,8 +76,9 @@ define.class('$system/base/node', function(require, exports){
 			var keys = Object.keys(proto)
 			for(var i = 0; i < keys.length; i++){
 				var key = keys[i]
-
 				if(key in proxy || key.charAt(0) === '_') continue
+				//console.log("RPC"+key, proto.__lookupSetter__(key))
+
 				if(proto.isAttribute(key)){ // we iz attribute
 					// we have to ignore property binds
 					var props = proto.getAttributeConfig(key)
