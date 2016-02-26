@@ -31,6 +31,19 @@ define.class("$ui/view", function(require,
 	this.defaultcomponents = {
 		Views:[
 			{
+				label:"View",
+				icon:"sticky-note",
+				desc:"A rectangular view",
+				classname:"view",
+				classdir:"$ui$",
+				params:{
+					height:150,
+					width:200,
+					pickalpha:-1,
+					bgcolor:'white'
+				}
+			},
+			{
 				label:"Text",
 				text:"Aa",
 				desc:"A text label",
@@ -90,40 +103,18 @@ define.class("$ui/view", function(require,
 					icon:'heart',
 					fontsize:80
 				}
-			}
-		],
-		Containers:[
-			{
-				label:"View",
-				icon:"sticky-note",
-				desc:"A rectangular view",
-				classname:"view",
-				classdir:"$ui$",
-				params:{
-					height:150,
-					width:200,
-					pickalpha:-1,
-					bgcolor:'white'
-				}
 			},
-			{
-				label:"Grid",
-				icon:"plus-square-o",
-				desc:"A Fontawesome icon",
-				classname:"cadgrid",
-				classdir:"$ui$",
-				params:{
-					bgcolor:vec4(0.08,0.1,0.1,1),
-					gridsize:5,
-					majorevery:10,
-					majorline:vec4(0.0,0.2,0.3,1),
-					minorline:vec4(0.1,0.1,0.1,1),
-					flexdirection:'column',
-					justifycontent:'center',
-					alignitems:'center'
-				}
-			}
-		]
+			//{
+			//	label:"Input",
+			//	icon:"italic",
+			//	desc:"An input box",
+			//	classname:"textbox",
+			//	classdir:"$ui$",
+			//	params:{
+			//		value:"Input Text"
+			//	}
+			//}
+		],
 		//Behaviors:[
 		//	{
 		//		label:"Hover Border",
