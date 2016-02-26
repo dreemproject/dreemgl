@@ -51,7 +51,6 @@ define.class("$server/composition",
 		};
 
 		this.selectedChild = function() {
-			console.warn("selected child: this.selectedChild=" + this.selectedChild);
 			if (this.selectedChild != null) {
 				// this.childLabel = "child with name='' selected!";
 				this.childInfoLabel.text = "Selected child: " + this.selectedChild.name;
@@ -150,7 +149,6 @@ define.class("$server/composition",
 											this.currentvalue = 'row';
 										},
 										currentvalue: function() {
-											console.log("currentvalue=" + this.currentvalue);
 											composition.applyContainerStyle('flexdirection', this.currentvalue);
 										}
 									}
@@ -166,7 +164,6 @@ define.class("$server/composition",
 											this.currentvalue = this.values[0];
 										},
 										currentvalue: function() {
-											console.log("currentvalue=" + this.currentvalue);
 											composition.applyContainerStyle('justifycontent', this.currentvalue);
 										}
 									}
