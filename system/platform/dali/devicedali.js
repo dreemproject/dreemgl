@@ -130,7 +130,7 @@ define.class(function(require, exports){
 		setInterval(function(){
 			var now = Date.now()
 			if(now - last > 1000 && this.screen){
-				this.doresize()
+				//this.doresize()
  				this.redraw()
 				this.screen.emit('wakeup')
 			}
