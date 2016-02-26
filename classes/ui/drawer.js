@@ -113,6 +113,14 @@ define.class("$ui/view", function(require, $ui$, view){
 	this.render = function() {
 		var views = [];
 
+		var x = this.direction === "horizontal" ? this._value * (this.width || this._layout.width) : 0;
+		var y = this.direction === "vertical" ? this._value * (this.height || this._layout.height) : 0;
+
+		var leftvisible = true;
+		if (this._value < 0) {
+			leftvisible = false;
+		}
+
 		if (this.rightview) {
 			views.push(this._right = view({
 				drawtarget:"color",
@@ -134,13 +142,11 @@ define.class("$ui/view", function(require, $ui$, view){
 				justifycontent:"center",
 				x:0,
 				y:0,
+				visible:leftvisible,
 				width:this.width,
 				height:this.height
 			},this.leftview));
 		}
-
-		var x = this.direction === "horizontal" ? this._value * (this.width || this._layout.width) : 0;
-		var y = this.direction === "vertical" ? this._value * (this.height || this._layout.height) : 0;
 
 		views.push(this._main = view({
 			drawtarget:"color",
