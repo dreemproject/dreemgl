@@ -87,9 +87,8 @@ define.class(function(require, exports){
 		this.time = 0;
 		this.animFrame = function(time){
 			//console.log('animFrame', time);
-			var interval = 16; // 500;
+			var interval = 16;
 			var t = this.doColor(time);
-			//console.log('animFrame', t, time);
 			if(t){
 				this.anim_req = true
                 this.time += interval;
@@ -117,12 +116,26 @@ define.class(function(require, exports){
 			this.drawtarget_pools = {}
 
 			this.createContext()
+			this.createWakeupWatcher()
 		}
 
 		this.initResize()
 
 		//TODO Force an update
 		//this.doColor(0);
+	}
+
+	this.createWakeupWatcher = function(){
+		var last = Date.now()
+		setInterval(function(){
+			var now = Date.now()
+			if(now - last > 1000 && this.screen){
+				this.doresize()
+ 				this.redraw()
+				this.screen.emit('wakeup')
+			}
+			last = now
+		}.bind(this), 200)
 	}
 
 	this.createContext = function(){
@@ -172,7 +185,7 @@ define.class(function(require, exports){
 
 		//TODO
 		this.time = 0
-        setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
+		setTimeout(function() {this.animFrame(this.time);}.bind(this), 0)
 	}
 
 	this.bindFramebuffer = function(frame){
@@ -312,16 +325,18 @@ define.class(function(require, exports){
 			}
 		}
 
+		var hastime = false
 		var clipview = undefined
 		// lets draw draw all dirty passes.
 		for(var i = 0, len = this.drawpass_list.length; i < len; i++){
 
 			var view = this.drawpass_list[i]
-			var skip = false
+			//var skip = false
 			var last = i === len - 1
-			if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
-				skip = last = true
-			}
+			//if(view.parent == this.screen && view.flex == 1 && this.screen.children.length ===1){
+			//	skip = last = true
+			//}
+
 			if(view.draw_dirty & 1 || last){
 
 				if(!last){
@@ -329,27 +344,32 @@ define.class(function(require, exports){
 					else clipview = null
 				}
 
-				var hastime = view.drawpass.drawColor(last, stime)
+				hastime = view.drawpass.drawColor(last, stime, clipview)
+
 				view.draw_dirty &= 2
 				if(hastime){
 					anim_redraw.push(view)
 				}
 			}
 
-			if(skip){
-				this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
-
-
-				this.screen.draw_dirty &= 2
-				break
-			}
+			//if(skip){
+			//	this.screen.drawpass.calculateDrawMatrices(false, this.screen.drawpass.colormatrices);
+			//	this.screen.draw_dirty &= 2
+			//	break
+			//}
 		}
 
 		if(anim_redraw.length){
+			//console.log("REDRAWIN", anim_redraw)
+			var redraw = false
 			for(var i = 0; i < anim_redraw.length; i++){
-				anim_redraw[i].redraw()
+				var aredraw = anim_redraw[i]
+				if(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
+					redraw = true
+					aredraw.redraw()
+				}
 			}
-			return true
+			return redraw
 		}
 		return hastime
 	}
