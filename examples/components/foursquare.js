@@ -3,12 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
-// The server uses foursquarelib to retrieve foursquare images from the SF area.
-//
-// I don't think dreemgl supports something like 'background-size: contain' to
-// scale the image to the size.
-
+// The server uses foursquarelib to retrieve foursquare data.
 
 define.class(function($server$, composition, service, $ui$, screen, view, label, require){
 
@@ -18,9 +13,6 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 		this.flexdirection = 'column'
 		this.overflow = 'scroll'
 
-		var IMAGE_COUNT = 100
-		var IMAGE_SIZE = vec2(256, 256)
-
 		this.attributes = {
 			imagelist: []
 		}
@@ -29,7 +21,7 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 			var dynviews = []
 			for (var n = 0; n < this.imagelist.length; n++) {
 				dynviews.push(view({
-					size: IMAGE_SIZE,
+					size: vec2(256, 256),
 					bgimage: this.imagelist[n].url
 				},
 				[
@@ -51,18 +43,15 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 					//TODO $system doesn't work here
 					// Stop an already running stream
 					delete this.foursquare // TODO is this necessary?
-					var FoursquareLib = require('../system/lib/foursquarelib')
+					var FoursquareLib = require('../../system/lib/foursquarelib')
 					this.foursquare = new FoursquareLib()
-
 					// The foursquarelib returns an array of photos
 					var callback = (function(images) {
 						this.rpc.default.imageupdate(images)
 					}).bind(this)
-
 					// The second argument will specify search parameters
-					this.foursquare.explore(callback, null, {openNow: 1});
+					this.foursquare.explore({openNow: 1}, callback)
 				}
-
 			}),
 			screen({
 				name:'default',

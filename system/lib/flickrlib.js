@@ -3,7 +3,6 @@
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-
 /**
  * @class FlickrLib
  * Interface class between npm flickrapi and dreemgl
@@ -35,16 +34,14 @@ define.class(function(exports){
 	 * You can access the flickr npm object using this.flickr. It won't exist
 	 * until authentication is finished.
 	 */
-	this.atConstructor = function() {
-	}
 
 	// Execute a flickr method(func), after authentication is complete.
 	// This can be immediate, or delayed if the flickr object does not exist yet.
 	this.execute = function(func) {
 		if (this.flickr) {
 			// Already authenticated.
-			func();
-			return;
+			func()
+			return
 		}
 
 		// Authenticate
@@ -56,23 +53,20 @@ define.class(function(exports){
 			,access_token_secret: process.env.FLICKR_ACCESS_TOKEN_SECRET
 			,silent: true
 			,progress: false
-		};
+		}
 
-		var self = this;
+		var self = this
 		Flickr.authenticate(options, function(error, flickr) {
 			if (error) {
-				this.autherror = error;
-				console.log('flickr Auth error', error);
-				return;
+				this.autherror = error
+				console.log('flickr Auth error', error)
+				return
 			}
-			self.flickr = flickr;
-
-			console.log("AUTH COMPLETE");
-
-			func();
-		});
+			self.flickr = flickr
+			console.log("AUTH COMPLETE")
+			func()
+		})
 	}
-
 
 	// Search interface to retrieve images.
 	//
@@ -81,37 +75,30 @@ define.class(function(exports){
 	this.search = function(cb, options) {
 
 		if (!this.flickr) {
-			if (this.autherror) {
-				// Auth has already failed so exit
-				return;
-			}
-
-			// Authenticate first and then run this method again
-			var self = this;
+			if (this.autherror) return
+			var self = this
 			var func = (function() {
-				//console.log('func callback after auth');
 				self.search(cb, options)
-			}.bind(this));
-			this.execute(func);
-			return;
+			}.bind(this))
+			this.execute(func)
+			return
 		}
 
-		// Already authenticated
-		var PAGE = 1;
+		var PAGE = 1
 		// Default options
 		// https://www.flickr.com/services/api/flickr.photos.search.html
 		if (!options) {
 			options = {
-				api_key : process.env.FLICKR_KEY
-				//,sort: 'date-taken-desc'
-				,lat: 37.826664   // Alcatraz
-				,lon: -122.423012
-				,radius: 2 // 2 km
-				,per_page: 250 // Max per page
-				,page: PAGE
-				,extras: 'geo, url_m, date_taken'
-				,min_taken_date: '2016-01-01'
-			};
+				api_key : process.env.FLICKR_KEY,
+				sort: 'date-taken-desc',
+				lat: 37.826664, // Alcatraz,
+				lon: -122.423012,
+				radius: 2, // 2 km,
+				per_page: 250, // Max per page,
+				page: PAGE,
+				extras: 'geo, url_m, date_taken',
+				min_taken_date: '2016-01-01'
+			}
 		}
 
 		this.flickr.photos.search(options, function(err, result) {
@@ -133,15 +120,12 @@ define.class(function(exports){
 			}
 
 			// // Save data to JSON
-			// var fs = require('fs');
+			// var fs = require('fs')
 			// fs.writeFile("compositions/timeline/data/flickr"+PAGE+".json", JSON.stringify(_photos, null, 4), function(err) {
-			//     if (err) return console.log(err);
-			// });
-
-			cb(_photos);
-		});
-
-		return;
+			//     if (err) return console.log(err)
+			// })
+			cb(_photos)
+		})
+		return
 	}
-
-});
+})
