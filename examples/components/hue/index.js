@@ -3,7 +3,7 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 		this.render = function () {
 
 			return [
-				basestation(),
+				basestation({username:"[SEE README.md]"}),
 				screen({
 					name:"desktop",
 					clearcolor: '#888'

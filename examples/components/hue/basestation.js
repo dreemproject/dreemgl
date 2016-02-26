@@ -9,7 +9,7 @@ define.class("$server/service", function() {
 
 	this.attributes = {
 		ipaddress:Config({type:String}),
-		username:Config({type:String, value:"6ba5c7d32222e31f779722a818296a09"}),
+		username:Config({type:String}),
 		lights:Config({type:Object}),
 		light:Config({type:Event}),
 		api:Config({type:Object})

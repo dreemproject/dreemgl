@@ -56,7 +56,7 @@ define.class('$ui/view', function(require, exports, $ui$, label){
 ```
 
 Please note the 'require' syntax to specify the baseclass, and the $ui$ to switch directory in the dependency-class list.
-Other syntax: $$ - current directory, $$$ - parent directory, relative$dir$
+Other syntax: $$ - current directory, relative$dir$
 
 The prototype of the class is the 'this' of the function.
 Note the 2 specially named arguments 'require' and 'exports' where they appear
