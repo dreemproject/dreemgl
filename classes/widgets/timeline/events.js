@@ -184,7 +184,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	this.renderEvents = function (data) {
 		events = []
 		for (var i = 0; i < data.length; i++) {
-			console.log(data[i].title)
 			events.push(this.event({
 				title: data[i].title,
 				id: data[i].id,

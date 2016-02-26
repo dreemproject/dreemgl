@@ -21,7 +21,7 @@ define.class('$server/composition', function($server$, service, $ui$, screen, vi
 								title: 'E' + i,
 								id: i + 1,
 								date: date,
-								enddate: new Date(date.getTime() + (12 - floor(random() * 12) ) * hstep / 4)
+								enddate: new Date(date.getTime() + (64 - floor(random() * 64) ) * hstep / 4)
 							})
 						}
 						timeline.data = events

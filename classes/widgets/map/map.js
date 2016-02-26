@@ -13,8 +13,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
 		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
-		latlongset: Config({type: Event}),
-		pointselected: Config({type: Event})
+		latlongchange: Config({type: Event})
 	}
 
 	function createHash (x, y, z){
@@ -424,7 +423,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	}
 
 	this.stopDrag = function(){
-		this.emitUpward('latlongset', this.latlong)
+		this.emitUpward('latlongchange', this.latlong)
 	}
 
 	var alltiles = 0;

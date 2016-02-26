@@ -25,8 +25,10 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		scroll: Config({type: Number, value: 0}),
 
 		hoursegs: Config({type: Number, value: 24}),
-		segments: Config({type: vec3, value: vec3()}),
+		hoursegs: Config({type: Number, value: 24}),
 		// segmentwidths: Config({type: vec3, value: vec3()}),
+
+		change: Config({type: Event})
 	}
 
 	this.onzoom = function () {
@@ -58,7 +60,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.makeEvent = function (eventdata) {
 		eventdata.id = eventdata.id || this.data.length + 1
 		this.data.push(eventdata)
-		this.rpc.eventset.updateEvents(this.data)
+		this.emitUpward('change', this.data)
 	}
 
 	this.updateEvent = function (id, eventdata) {
@@ -67,7 +69,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 				for (key in eventdata) {
 					this.data[i][key] = eventdata[key]
 				}
-				this.rpc.eventset.updateEvents(this.data)
+				this.emitUpward('change', this.data)
 				break
 			}
 		}
