@@ -136,6 +136,10 @@ define.class(function(require, $ui$, view){
 	}
 
 	this.font = function(event){
+		// DALi needs a baked font
+		if (!this.font.baked  && define.$platform === 'dali')
+			this.font = require('$resources/fonts/ubuntu_monospace_ascii_baked.glf')
+
 		this.selectShader()
 	}
 
