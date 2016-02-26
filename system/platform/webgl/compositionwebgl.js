@@ -11,7 +11,7 @@ define.class('$system/base/compositionclient', function(require, baseclass){
 	var BusClient = require('$system/rpc/busclient')
 
 	this.atConstructor = function(previous, parent){
-
+		window.composition = this
 		if(previous){
 			this.reload = (previous.reload || 0) + 1
 			this.device = previous.device// new Device(previous.device) //previous.device

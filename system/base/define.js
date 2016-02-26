@@ -261,10 +261,17 @@
 			return module.exports
 		}
 
+		require.loaded = function(path, ext){
+			var dep_path = define.joinPath(base_path, define.expandVariables(path))
+			if(define.factory[dep_path]){
+				return true
+			}
+		}
+
 		require.async = function(path, ext){
 			var dep_path = define.joinPath(base_path, define.expandVariables(path))
 			return new define.Promise(function(resolve, reject){
-				if(define.factory[path]){
+				if(define.factory[dep_path]){
 					// if its already asynchronously loading..
 					var module = require(path, ext)
 					return resolve(module)

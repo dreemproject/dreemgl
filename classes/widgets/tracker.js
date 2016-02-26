@@ -17,6 +17,7 @@ define.class('$ui/label', function(require){
 	this.readonly = false
 	this.fontsize = 12
 	this.subpixel = true
+	this.linespacing = 1.3
 
 	var font = this.font = require('$resources/fonts/ubuntu_monospace_ascii.glf')
 
@@ -45,6 +46,7 @@ define.class('$ui/label', function(require){
 		else{
 			style.fgcolor = '#303030'
 		}
+		return style
 	}
 
 	// extend the font shader
