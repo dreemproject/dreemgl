@@ -80,8 +80,16 @@ define.class(function(require, exports){
 	 * @param {number} mode Set the blending mode
 	 */
 	this.setBlendMode = function(mode) {
-		// Not supported in DALi
+		var val = this.property_cache['blendmode'];
+		if (val && val == mode)
+			return;
+
+		this.dalirenderer.blendingMode = mode;
 		this.property_cache['blendmode'] = mode;
+
+		if (DaliApi.emitcode) {
+			console.log('DALICODE: ' + this.name() + '.blendingMode = ' + mode + ';');
+		}
 	}
 
 
