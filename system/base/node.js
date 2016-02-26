@@ -613,7 +613,12 @@ define.class(function(require){
 		var is_attribute = !always_define && key in this
 		// use normal value assign
 
-		if(!always_define && (is_attribute && !is_config || key[0] === 'o' && key[1] === 'n' || typeof config === 'function' && !config.is_wired)){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
+		var islistener = false
+		if(key[0] === 'o' && key[1] === 'n'){
+			if(this.__lookupSetter__(key.slice(2))) islistener = true
+		}
+
+		if(!always_define && (is_attribute && !is_config || islistener || typeof config === 'function' && !config.is_wired)){//|| !is_attribute && typeof config === 'function' && !config.is_wired){
 			this[key] = config
 			return
 		}
@@ -625,7 +630,6 @@ define.class(function(require){
 		else{ // its a value
 			config = {value: config}
 		}
-
 		// figure out the type
 		if(!is_attribute && !config.type){
 			var value = config.value

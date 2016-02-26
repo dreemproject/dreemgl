@@ -47,10 +47,10 @@ define.class(function(require, $ui$, view){
 
 	this.bold = function(){
 		if (this.bold) {
-			this.font = require('$resources/fonts/opensans_bold_ascii.glf')
+			this.font = require('$resources/fonts/opensans_bold_256.glf')
 		}
 		else{
-			this.font = require('$resources/fonts/opensans_regular_ascii.glf')
+			this.font = require('$resources/fonts/opensans_regular_256.glf')
 		}
 	}
 
@@ -78,7 +78,6 @@ define.class(function(require, $ui$, view){
 
 			var mesh = this.newText()
 
-
 			if(view.font) mesh.font = view.font
 
 			mesh.fontsize = view.fontsize
@@ -91,8 +90,7 @@ define.class(function(require, $ui$, view){
 			mesh.start_y = mesh.line_height + view.padding[1]
 			mesh.clear()
 
-
-			for (var i = 0;i<view.labels.length;i++){
+			for (var i = 0;i < view.labels.length;i++){
 				mesh.start_x = view.padding[0]
 				mesh.start_y = mesh.line_height + view.padding[1]
 
