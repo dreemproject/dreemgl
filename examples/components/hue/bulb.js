@@ -30,14 +30,14 @@ define.class("$ui/button", function() {
 		ct:Config({type:int}),
 		hue:Config({type:int}),
 		bri:Config({type:int}),
-		on:Config({type:String}),
-		reachable:Config({type:String})
+		on:Config({type:Boolean}),
+		reachable:Config({type:Boolean})
 	};
 
 
 	this.init = this.onon = this.onbri = this.onrgb = this.reset = function() {
 		if (this.rgb && this.bri) {
-			if (this.on) {
+			if (this.on === true) {
 				this.textcolor = vec4(this.rgb[0] / 255.0, this.rgb[1] / 255.0, this.rgb[2] / 255.0, this.bri / 255.0);
 				this.textactivecolor = vec4(this.rgb[0] / 255.0, this.rgb[1] / 255.0, this.rgb[2] / 255.0, 1)
 			} else {

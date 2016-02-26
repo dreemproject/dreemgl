@@ -18,12 +18,17 @@ define.class("$server/service", function() {
 	this.failure = function(err) { console.log("[ERROR]", err); }
 
 	this.setLightState = function(id, state) {
-		this.api.setLightState(id, state)
-			.then(function(result) {
-				this.refresh();
-			}.bind(this))
-			.fail(this.failure)
-			.done();
+		if (!this.api) {
+			this.search();
+		} else {
+			this.api
+				.setLightState(id, state)
+				.then(function(result) {
+					this.refresh();
+				}.bind(this))
+				.fail(this.failure)
+				.done();
+		}
 	};
 
 	this.onusername = this.onipaddress = function() {
@@ -81,14 +86,10 @@ define.class("$server/service", function() {
 			.done();
 	};
 
-	this.init = function() {
-		this.Hue = require("node-hue-api");
-		this.HueApi = this.Hue.HueApi;
-
+	this.search = function() {
+		console.log("Searching for more lights...")
 		this.Hue.nupnpSearch(function(err, result) {
-			if (err) {
-				console.log("[ERROR]", err)
-			}
+			if (err) { console.log("[ERROR]", err) }
 			for(var r in result) {
 				if (result.hasOwnProperty(r)) {
 					var bridge = result[r];
@@ -98,6 +99,12 @@ define.class("$server/service", function() {
 				}
 			}
 		}.bind(this));
+	};
+
+	this.init = function() {
+		this.Hue = require("node-hue-api");
+		this.HueApi = this.Hue.HueApi;
+		this.search();
 	}
 
 });

@@ -31,19 +31,10 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 
 									var huebulb = bulb(light);
 									huebulb.click = function(ev,v,o){
-										if (!this.__lock) {
-											this.__lock = true;
-											o.on = !o.on;
-											o.reset();
-											this.rpc
-												.basestation
-												.setLightState(o.id, {on: o.on})
-												.then(function () {
-													this.__lock = false;
-												}.bind(this), function () {
-													this.__lock = false;
-												}.bind(this))
-										}
+										o.on = !o.on;
+										this.rpc
+											.basestation
+											.setLightState(o.id, {on: o.on });
 									}.bind(this);
 
 									lights.push(
@@ -155,10 +146,6 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 						}
 					}))
 			]
-
-
 		}
-
-
 	}
 )
