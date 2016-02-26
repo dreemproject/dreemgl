@@ -107,6 +107,7 @@ define.class("$ui/view", function(require, $ui$, view){
 		this.mainview = this.constructor_children[0];
 		this.rightview = this.constructor_children[1];
 		this.leftview = this.constructor_children[2];
+		this.onvalue(null, this._value, this)
 	};
 
 	this.render = function() {
@@ -138,11 +139,16 @@ define.class("$ui/view", function(require, $ui$, view){
 			},this.leftview));
 		}
 
+		var x = this.direction === "horizontal" ? this._value * (this.width || this._layout.width) : 0;
+		var y = this.direction === "vertical" ? this._value * (this.height || this._layout.height) : 0;
+
 		views.push(this._main = view({
 			drawtarget:"color",
 			position:"absolute",
 			alignitems:"stretch",
 			justifycontent:"center",
+			x:x,
+			y:y,
 			width:this.width,
 			height:this.height
 		}, this.mainview));

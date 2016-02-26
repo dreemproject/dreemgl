@@ -868,9 +868,9 @@ define.class('$system/base/node', function(require){
 			dragview.closeOverlay()
 			if(lastdrag){
 				lastdrag.emitUpward('dragout',{})
-				dragview.atDrop(lastdrag, event)
-				this.onpointerend = undefined
 			}
+			dragview.atDrop(lastdrag, event)
+			this.onpointerend = undefined
 		}
 	}
 

@@ -265,7 +265,7 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 			args = {};
 			if (typeof(value) === "function") {
-				args[name] = "REPLACE";
+				args[key] = "REPLACE";
 				newparams = this.createASTNode(args);
 				item = newparams.keys[0];
 
@@ -287,13 +287,13 @@ define.class("$system/base/node", function(require, baseclass, $system$parse$, o
 
 			args = {};
 			if (typeof(value) === "function") {
-				args[name] = "REPLACE";
+				args[key] = "REPLACE";
 				newparams = this.createASTNode(args);
 				item = newparams.keys[0];
 				newval = this.createASTNode(value.toString(), true);
 				item.value = newval
 			} else {
-				args[name] = value;
+				args[key] = value;
 				newparams = this.createASTNode(args);
 			}
 

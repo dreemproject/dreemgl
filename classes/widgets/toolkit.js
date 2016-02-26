@@ -31,19 +31,6 @@ define.class("$ui/view", function(require,
 	this.defaultcomponents = {
 		Views:[
 			{
-				label:"View",
-				icon:"sticky-note",
-				desc:"A rectangular view",
-				classname:"view",
-				classdir:"$ui$",
-				params:{
-					height:70,
-					width:80,
-					pickalpha:-1,
-					bgcolor:'purple'
-				}
-			},
-			{
 				label:"Text",
 				text:"Aa",
 				desc:"A text label",
@@ -53,8 +40,8 @@ define.class("$ui/view", function(require,
 					fontsize:44,
 					pickalpha:-1,
 					bgcolor:"transparent",
-					fgcolor:'lightgreen',
-					text:'Howdy!'
+					fgcolor:'#999',
+					text:'Label'
 				}
 			},
 			{
@@ -65,7 +52,6 @@ define.class("$ui/view", function(require,
 				classdir:"$ui$",
 				params:{
 					tooldragroot:true,
-					toolresize:false,
 					fontsize:24,
 					bgcolor:"transparent",
 					buttoncolor1:"transparent",
@@ -75,7 +61,7 @@ define.class("$ui/view", function(require,
 					pressedcolor1:"transparent",
 					pressedcolor2:"transparent",
 					pickalpha:-1,
-					fgcolor:'pink'
+					fgcolor:'white'
 				}
 			},
 			{
@@ -88,25 +74,56 @@ define.class("$ui/view", function(require,
 					tooldragroot:true,
 					fontsize:24,
 					pickalpha:-1,
-					fgcolor:'red',
-					label:'Press Me!'
+					label:'Button'
 				}
 			},
 			{
-				label:"Image",
-				icon:"image",
-				desc:"An image or icon",
+				label:"Icon",
+				icon:"info-circle",
+				desc:"A Fontawesome icon",
 				classname:"icon",
 				classdir:"$ui$",
 				params:{
-					fgcolor:'yellow',
+					fgcolor:'#e22',
 					bgcolor:'transparent',
 					pickalpha:-1,
-					icon:'flask',
+					icon:'heart',
 					fontsize:80
 				}
 			}
 		],
+		Containers:[
+			{
+				label:"View",
+				icon:"sticky-note",
+				desc:"A rectangular view",
+				classname:"view",
+				classdir:"$ui$",
+				params:{
+					height:150,
+					width:200,
+					pickalpha:-1,
+					bgcolor:'white'
+				}
+			},
+			{
+				label:"Grid",
+				icon:"plus-square-o",
+				desc:"A Fontawesome icon",
+				classname:"cadgrid",
+				classdir:"$ui$",
+				params:{
+					bgcolor:vec4(0.08,0.1,0.1,1),
+					gridsize:5,
+					majorevery:10,
+					majorline:vec4(0.0,0.2,0.3,1),
+					minorline:vec4(0.1,0.1,0.1,1),
+					flexdirection:'column',
+					justifycontent:'center',
+					alignitems:'center'
+				}
+			}
+		]
 		//Behaviors:[
 		//	{
 		//		label:"Hover Border",
@@ -1107,6 +1124,46 @@ define.class("$ui/view", function(require,
 		this.__movepanel = undefined;
 	};
 
+	this.paletteDropTest = function(ev, v, item, orig, dv) {
+		return v !== this && this.testView(v);
+	};
+
+	this.paletteDrop = function(ev, v, item, orig, dv) {
+		if (!v) {
+			v = this.screen
+		}
+
+		if (item.behaviors) {
+			for (var o in item.behaviors) {
+				if (item.behaviors.hasOwnProperty(o)) {
+					var behave = item.behaviors[o];
+					this.setASTObjectProperty(v, o, behave, true);
+				}
+			}
+		}
+
+		if (item.classname && item.params) {
+			var params = JSON.parse(JSON.stringify(item.params));
+
+			if (v != this.screen) {
+				var pos = v.globalToLocal(ev.position);
+				params.position = this.dropmode;
+				if (this.dropmode === 'absolute') {
+					params.x = pos.x;
+					params.y = pos.y;
+				}
+			}
+
+			this.createASTNodeOn(v, {classname:item.classname, params:params})
+		}
+
+
+		this.ensureDeps();
+		this.commit();
+
+		//TODO(mason) set propviewer to inspect new object on reload?
+	};
+
 	this.render = function() {
 		var views = [];
 
@@ -1200,44 +1257,8 @@ define.class("$ui/view", function(require,
 				flex:1,
 				bgcolor:"#4e4e4e",
 				items:this.components,
-
-				dropTest:function(ev, v, item, orig, dv) {
-					return v !== this && this.testView(v);
-				}.bind(this),
-
-				drop:function(ev, v, item, orig, dv) {
-					if (v) {
-
-						if (item.behaviors) {
-							for (var o in item.behaviors) {
-								if (item.behaviors.hasOwnProperty(o)) {
-									var behave = item.behaviors[o];
-									this.setASTObjectProperty(v, o, behave, true);
-								}
-							}
-						}
-
-						if (item.classname && item.params) {
-							var params = JSON.parse(JSON.stringify(item.params));
-
-							var pos = v.globalToLocal(ev.position);
-
-							params.position = this.dropmode;
-							if (this.dropmode === 'absolute') {
-								params.x = pos.x;
-								params.y = pos.y;
-							}
-
-							this.createASTNodeOn(v, {classname:item.classname, params:params})
-						}
-
-						this.ensureDeps();
-						this.commit();
-
-						//TODO(mason) set propviewer to inspect new object on reload?
-
-					}
-				}.bind(this)
+				dropTest:this.paletteDropTest.bind(this),
+				drop:this.paletteDrop.bind(this)
 			})
 		));
 
@@ -1641,7 +1662,11 @@ define.class("$ui/view", function(require,
 							}
 							if (changeset.params) {
 								var item = changeset.params;
-								var obj = src.build.Call(src.build.Id(item.classname), [src.build.Object(item.params)]);
+								console.log("build", item.params)
+								var newo = src.createASTNode(item.params)
+								console.log("build2", newo)
+								var obj = src.build.Call(src.build.Id(item.classname),[newo]);
+								console.log("build3", obj)
 								src.pushArg(obj);
 							}
 							if (changeset.arg) {
