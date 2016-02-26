@@ -8,15 +8,12 @@
 define.class(function($server$, composition, service, $ui$, screen, view, label, require){
 
 	define.class(this, "demo", "$ui/view", function(){
-
 		this.flex = 1
 		this.flexdirection = 'column'
 		this.overflow = 'scroll'
-
 		this.attributes = {
 			imagelist: []
 		}
-
 		this.render = function () {
 			var dynviews = []
 			for (var n = 0; n < this.imagelist.length; n++) {
@@ -40,17 +37,12 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 			service({
 				name:'flickrservice',
 				runflickr: function() {
-					//TODO $system doesn't work here
-					// Stop an already running stream
-					delete this.flickr // TODO is this necessary?
 					var FlickrLib = require('../../system/lib/flickrlib')
 					this.flickr = new FlickrLib()
-
 					// The flickrlib returns an array of photos
 					var callback = (function(images) {
 						this.rpc.default.imageupdate(images)
 					}).bind(this)
-
 					// The second argument will specify search parameters
 					this.flickr.search(callback)
 				}

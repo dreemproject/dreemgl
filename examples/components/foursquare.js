@@ -8,15 +8,12 @@
 define.class(function($server$, composition, service, $ui$, screen, view, label, require){
 
 	define.class(this, "demo", "$ui/view", function(){
-
 		this.flex = 1
 		this.flexdirection = 'column'
 		this.overflow = 'scroll'
-
 		this.attributes = {
 			imagelist: []
 		}
-
 		this.render = function () {
 			var dynviews = []
 			for (var n = 0; n < this.imagelist.length; n++) {
@@ -40,9 +37,6 @@ define.class(function($server$, composition, service, $ui$, screen, view, label,
 			service({
 				name:'foursquareservice',
 				runfoursquare: function() {
-					//TODO $system doesn't work here
-					// Stop an already running stream
-					delete this.foursquare // TODO is this necessary?
 					var FoursquareLib = require('../../system/lib/foursquarelib')
 					this.foursquare = new FoursquareLib()
 					// The foursquarelib returns an array of photos

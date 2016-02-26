@@ -7,80 +7,57 @@
 
 define.class(function($server$, composition, service, $ui$, screen, view, label, require){
 
-	this.render = function(){
-		// Generate placeholder images (using the teem logo).
-		var dynviews = []
-		var nimages = 4
-		var imagesize = vec2(256, 256)
-		// Display a default image for each view
-		for (var n=0; n<nimages; n++) {
-			var v1 = view({
-				size: imagesize
-				,bgimage: 'http://teem.nu/wp-content/uploads/2015/11/TEEMlogo.png'
-			})
-			dynviews.push(v1)
+	define.class(this, "demo", "$ui/view", function(){
+		this.flex = 1
+		this.flexdirection = 'column'
+		this.overflow = 'scroll'
+		this.attributes = {
+			imagelist: []
 		}
+		this.render = function () {
+			var dynviews = []
+			for (var n = 0; n < this.imagelist.length; n++) {
+				dynviews.push(view({
+					size: vec2(256, 256),
+					bgimage: this.imagelist[n].url
+				},
+				[
+					label({position: 'absolute', fontsize: 12, top: 0, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].title}),
+					label({position: 'absolute', fontsize: 12, top: 14, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].latitude}),
+					label({position: 'absolute', fontsize: 12, top: 28, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].longitude}),
+					label({position: 'absolute', fontsize: 12, top: 42, bgcolor: NaN, fgcolor: 'yellow', text: this.imagelist[n].date})
+				]))
+			}
+			return	dynviews
+		}
+	})
 
-		var views = [
-			// Server side service: twitterservice
+	this.render = function(){
+		return [
 			service({
-				name:'twitterservice'
-				// Retrieve urls using the twitter streaming interface or the
-				// search interface. If streaming is true, use the streaming interface.
-				// Otherwise, use the search interface
-				// If maxid is specified, it will be used for multi-page search
-				// TODO maxid doesn't seem to work properly in the npm package
-				,runtwitter: function(streaming, maxid) {
-					//TODO $system doesn't work here
-					if (this.twitter) {
-						// Stop an already running stream
-						delete this.twitter
-					}
+				name:'twitterservice',
+				runtwitter: function() {
+					// TODO(aki): fix twitter and normalize API agains flickr and foursquare
 					var TwitterLib = require('../../system/lib/twitterlib')
 					this.twitter = new TwitterLib()
-					// The twitterlib returns an array of tweets, which contain the url.
-					// The maxid can be used when running another regular search.
-					var callback = (function(tweets, maxid) {
-						var urls = []
-						for (var i=0; i<tweets.length; i++) {
-							var tweet = tweets[i]
-							var media = tweet.entities.media
-							if (media) {
-								var url = media[0].media_url
-								urls.push(url)
-							}
-						}
-						this.rpc.default.imageupdate(urls, maxid)
+					var callback = (function(images) {
+						this.rpc.default.imageupdate(images)
 					}).bind(this)
-					// Start the streaming interface. images urls handles by callback
-					if (streaming)
-						this.twitter.streaming(callback)
-					else
-						this.twitter.search(callback, {nresults: 100, maxid: maxid})
+					this.twitter.search({nresults: 100}, callback)
 				}
 			}),
 			screen({
 				name:'default',
 				clearcolor:'white',
-				viewindex:0,
 				init: function() {
-					// Call the server to start retrieving images
-					var use_streamer = true
-					this.rpc.twitterservice.runtwitter(use_streamer)
+					this.rpc.twitterservice.runtwitter()
 				},
-				// Receive image urls from the server. These are displayed in sequence
-				imageupdate: function(urls, maxid) {
-					for (var i=0; i<urls.length; i++) {
-						var url = urls[i]
-						var v = this.children[this.viewindex]
-						v.bgimage = url
-						this.viewindex = (this.viewindex+1) % nimages
-					}
+				imageupdate: function(images) {
+					this.find('demo').imagelist = images
 				}
 			}, [
-				dynviews
+				this.demo({name: 'demo'})
 			])
 		]
-		return views
 	}
 })

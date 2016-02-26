@@ -59,11 +59,11 @@ define.class(function(exports){
 	//   nresults The number of results to return. Default = 25
 	//   maxid    (multi-page support). The maxid parameter. This is the
 	//            tweet.id_str-1 from the last tweet returned.
-	this.search = function(cb, options) {
+	this.search = function(options, cb) {
 		// Parse the arguments
 		options = options || {}
 		var nresults = options.nresults || 25
-		var maxid = options.maxid
+		var maxid = options.maxid || 25
 
 		var defaultquery='-RT&filter:images'
 		var query = options.query || defaultquery
@@ -75,10 +75,9 @@ define.class(function(exports){
 		var args = {q: query, geocode: geocode, result_type: 'recent', count: nresults, maxid: maxid}
 		console.log('multi-page maxid', maxid)
 
-
 		// Decrement the string id (64-bit) without using a bigint package
 		// http://webapplog.com/decreasing-64-bit-tweet-id-in-javascript/
-		decid = function(id) {
+		var decid = function(id) {
 			var result=id
 			var i=id.length-1
 			while (i>-1) {
@@ -100,6 +99,7 @@ define.class(function(exports){
 
 			// Check each tweet before adding it to the list.
 			var lastid
+			console.log(error, tweets)
 			console.log('received', tweets.statuses.length, ' tweets')
 			for (var i=0; i<tweets.statuses.length; i++) {
 				var tweet = tweets.statuses[i]
