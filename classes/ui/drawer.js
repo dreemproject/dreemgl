@@ -22,7 +22,7 @@ define.class("$ui/view", function(require, $ui$, view){
 
 		// The relative offset of the top drawer view to the center, a value between (far left) -1.0 ~ 1.0 (far right),
 		// with 0 being exactly at the center.
-		value:Config({value:0.0, persist:true}),
+		value:Config({value:0.0, persist:false}),
 
 		// The threshold value at which to allow the drawer to open and lock the right tray
 		min:-0.5,
@@ -32,6 +32,7 @@ define.class("$ui/view", function(require, $ui$, view){
 	};
 
 	this.onvalue = function(ev,v,o) {
+
 		if (this._main) {
 			this._main.x = this.direction === "horizontal" ? v * this.width : 0;
 			this._main.y = this.direction === "vertical" ? v * this.height : 0;
