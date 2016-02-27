@@ -3,7 +3,7 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition',function(require, $ui$, screen, $docs$examples$components$, search, $widgets$, slideviewer, $$, devices, syntax, index, slides$intro, slides$syntax, slides$paths, slides$internal, slides$external, slides$api, slides$resources){
+define.class('$server/composition',function(require, $ui$, screen, $docs$examples$components$, search, $widgets$, slideviewer, $$, devices, syntax, index, slides$upload, slides$intro, slides$syntax, slides$paths, slides$internal, slides$external, slides$api, slides$resources){
 
 	function getSource(obj) {
 		return obj.module.factory.body.toString();
@@ -13,7 +13,7 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 
 		return [
 			// `examples/guide/search.js` is used here
-			search({name:'search', keyword:"Aliens"}),
+			search({name:'search', keyword:"Dogs"}),
 			screen({name:'desktop'},
 				slideviewer({ name: 'slides',
 						slide:{
@@ -31,7 +31,7 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 						flex:1,
 						syntaxCode:getSource(syntax)
 					}),
-					slides$syntax({flex: 1, syntaxCode:getSource(syntax)}),
+					////slides$syntax({flex: 1, syntaxCode:getSource(syntax)}),
 					slides$paths({flex: 1}),
 					slides$internal({
 						flex: 1,
@@ -45,6 +45,7 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 						devices:wire('this.rpc.devbus.active')
 					}),
 					slides$api({flex: 1}),
+					slides$upload({flex:1}),
 					slides$resources({flex: 1})
 				)
 		    ),

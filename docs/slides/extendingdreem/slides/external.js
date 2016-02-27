@@ -11,8 +11,8 @@ define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, devi
     this.flexdirection = "column";
 
     this.attributes = {
-        deviceList: [],
-        devices: {},
+        deviceList: Config({value:[], persist:true}),
+        devices: Config({value:{}, persist:true}),
         apiCode: "",
         clientCode: 'require "net/htttp";\n' +
         'require "json";\n' +
@@ -33,8 +33,8 @@ define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, devi
         'end'
     };
 
-    this.ondevices = function (e) {
-        var devices = e.value;
+    this.init = this.ondevices = function (e) {
+        var devices = this.devices;
 
         var deviceList = [];
         for (var d in devices) {

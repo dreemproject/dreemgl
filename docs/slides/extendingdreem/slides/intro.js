@@ -3,69 +3,56 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label) {
+define.class("$ui/view", function ($ui$, view, label, icon) {
 
     this.attributes = {
         syntaxCode: Config({type: String})
     };
 
-    this.slidetitle = "Adding Components to DreemGL";
+    this.slidetitle = "Extending DreemGL";
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
+	this.padding = 40;
+
+	define.class(this, "bullet", view, function(){
+
+		this.attributes = {
+			icon:Config({type:String, value:"gear"}),
+			fontsize:Config({type:int, value:25}),
+			text:Config({type:String})
+		};
+
+		this.render = function () {
+			return [
+				icon({icon:this.icon, fgcolor:'#333', fontsize:this.fontsize, marginright:20}),
+				label({text:this.text, fgcolor:'#333', fontsize:this.fontsize})
+			]
+		}
+
+	});
 
     this.render = function render() {
         return [
-            label({
-                text:'+ Components are directories - No special work required!',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:25,
+			this.bullet({
+				text:'DreemGL can be extended to communicate with:'
+			}),
+			this.bullet({icon:"globe", text:'Web Services', fontsize:20, margintop:20, marginleft:40 }),
+			this.bullet({icon:"lightbulb", text:'IoT Devices', fontsize:20, margintop:20, marginleft:40 }),
+			this.bullet({icon:"mobile", text:'Mobile Apps', fontsize:20, margintop:20, marginleft:40 }),
+			this.bullet({icon:"tachometer", text:'Ambient Sensors', fontsize:20, margintop:20, marginleft:40 }),
+			this.bullet({icon:"cloud", text:'Cloud Services', fontsize:20, margintop:20, marginleft:40 }),
+            this.bullet({
+                text:'Integrate internally via nodejs (write entirely in DreemGL)',
                 margintop:50
             }),
-            label({
-                text:'+ Navigate class filesystem with "$" argument syntax',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:25,
+			this.bullet({
+                text:'Integrate externally via POST API (write in any language)',
                 margintop:50
             }),
-            label({
-                text:'+ Integrate internally via nodejs (write entirely in DreemGL!)',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:25,
-                margintop:50
-            }),
-            //label({
-            //    text:'(Web services, nodejs plugins)',
-            //    fgcolor:'#F33',
-            //    bgcolor:'transparent',
-            //    fontsize:15,
-            //    marginleft:25,
-            //    margintop:10
-            //}),
-            label({
-                text:'+ Integrate externally via POST API (write in any language!)',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:25,
-                margintop:50
-            }),
-            //label({
-            //    text:'(Other services, IoT Devices)',
-            //    fgcolor:'#F33',
-            //    bgcolor:'transparent',
-            //    fontsize:15,
-            //    marginleft:25,
-            //    margintop:10
-            //}),
-            label({
-                text:'+ See `./docs/guides/components/README.md` for full implementation guide',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:25,
-                margintop:50
-            })
+			this.bullet({
+				text:'Simple data upload with multipart/form-data via POST API',
+				margintop:50
+			})
         ];
     };
 });

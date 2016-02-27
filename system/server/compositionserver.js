@@ -178,12 +178,10 @@ define.class(function(require){
 
 			var buffer;
 			req.on('data', function(data){
-				if (boundary) {
-					if (!buffer) {
-						buffer = new Buffer(data)
-					} else {
-						buffer = Buffer.concat([buffer, data])
-					}
+				if (!buffer) {
+					buffer = new Buffer(data)
+				} else {
+					buffer = Buffer.concat([buffer, data])
 				}
 			})
 			req.on('end', function(){

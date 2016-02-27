@@ -22,12 +22,23 @@ define.class(function ($ui$, view, label, $docs$examples$components$, movie, $wi
 				var data = this.movies[i];
 				data.width = 130;
 				data.height = 160;
-				cells.push(movie(data));
+				data.flex = 0;
+				data.bgimagemode = "aspect-fit";
+				data.overflow = "hidden";
+
+				if (i % 3 == 0) {
+					cells.push([]);
+				}
+				cells[cells.length - 1].push(movie(data))
 			}
+		}
+		var cellviews = [];
+		for (var i = 0; i < cells.length; i++) {
+			cellviews.push(view({justifycontent:"space-around"}, cells[i]))
 		}
 
 		return [
-			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'Proxy through service when everything can be handeled entirely via nodejs!'}),
+			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'Proxy through service object when everything can be handeled entirely via nodejs!'}),
 			view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
 				view({flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), bgcolor:'transparent'},
 					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./docs/examples/components/search.js)'}),
@@ -35,7 +46,7 @@ define.class(function ($ui$, view, label, $docs$examples$components$, movie, $wi
 					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./docs/examples/components/index.js)'}),
 					jsviewer({flex: 1, overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false})
 				),
-				view({flex: 1, flexdirection:'row', padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7"}, cells)
+				view({flex:1, flexdirection:'column', overflow:"scroll", flexwrap:"wrap", padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7"}, cellviews)
 			)
 		];
 	}

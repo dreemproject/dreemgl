@@ -5,38 +5,51 @@
 
 define.class(function (require, $ui$, view, label) {
 
-    this.slidetitle = "Integration Paths - Proxy vs POST";
+	this.slidetitle = "Two Integration Paths - Proxy vs POST";
 
-    this.flexdirection = 'column';
-    this.bgcolor = 'transparent';
+	this.flexdirection = 'column';
+	this.justifycontent = 'space-around';
+	this.bgcolor = 'transparent';
 
-    this.render = function render() {
-        return [
-            label({
-                text:'Proxy through service when nodejs libraries are available (all in DreemGL!)',
-                alignself:'center',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:20
-            }),
-            view({
-                flex:1,
-                alignself:'center',
-                bgimage:require('./server.png')
-            }),
-            label({
-                text:'Use the POST API to drive DreemGL externally from IoT devices and web services',
-                alignself:'center',
-                fgcolor:'#333',
-                bgcolor:'transparent',
-                fontsize:20,
-                margintop:10
-            }),
-            view({
-                flex:1,
-                bgimage:require('./postapi.png'),
-                alignself:'center'
-            })
-        ];
-    };
+	this.render = function render() {
+		return [
+			view({
+					justifycontent:"space-around"
+				},
+				label({
+					flex:1,
+					text:'Proxy through service object when nodejs\nlibraries are available.  Poll sensors,\naccess web services, and more,\nall in DreemGL!',
+					alignself:'center',
+					fgcolor:'#333',
+					bgcolor:'transparent',
+					fontsize:20
+				}),
+				view({
+					flex:1,
+					alignself:'center',
+					bgimage:require('./server.png'),
+					borderradius:30
+				})
+			),
+			view({
+					justifycontent:"space-around"
+				},
+				label({
+					flex:1,
+					text:'Use the POST API to drive DreemGL externally\nwhen Javascript or nodejs is unavailable.\nMobile apps, IoT devices, web services, and\nany language or device capable of HTTP\ncan take advantage of DreemGL!',
+					alignself:'center',
+					fgcolor:'#333',
+					bgcolor:'transparent',
+					fontsize:20,
+					margintop:10
+				}),
+				view({
+					flex:1,
+					bgimage:require('./postapi.png'),
+					borderradius:30,
+					alignself:'center'
+				})
+			)
+		];
+	};
 });
