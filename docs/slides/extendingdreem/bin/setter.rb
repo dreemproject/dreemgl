@@ -13,7 +13,7 @@ uri = URI.parse("http://localhost:2000/docs/slides/extendingdreem")
 Net::HTTP.start(uri.hostname, uri.port) do |http|
 
   (req = Net::HTTP::Post.new(uri)).body = {
-      rpcid: "search",
+      rpcid: "omdbsearch",
       type: "attribute",
       attribute: "keyword",
       value: "Monkey"

@@ -11,12 +11,12 @@ define.class(function (require, $ui$, view, label, textbox) {
         setterCode: 'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/docs/slides/extendingdreem")\n' +
         '\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +
         '  (req = Net::HTTP::Post.new(uri)).body = {\n' +
-        '    rpcid: "search",\n' +
+        '    rpcid: "omdbsearch",\n' +
         '    type: "attribute",\n' +
         '    attribute: "keyword",\n' +
         '    value: "Monkey"\n' +
@@ -29,12 +29,12 @@ define.class(function (require, $ui$, view, label, textbox) {
         getterCode: 'require "net/http";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/docs/slides/extendingdreem")\n' +
         '\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +
         '  (req = Net::HTTP::Post.new(uri)).body = {\n' +
-        '    rpcid: "search",\n' +
+        '    rpcid: "omdbsearch",\n' +
         '    type: "attribute",\n' +
         '    attribute: "keyword",\n' +
         '    get: true\n' +
@@ -67,7 +67,7 @@ define.class(function (require, $ui$, view, label, textbox) {
             ),
             view(
                 {flexdirection: 'column', flex: 0, alignself: 'stretch', padding:10, bgcolor:'transparent'},
-                label({fontsize:28, bgcolor:'transparent', text: wire('"The current value of search.keyword is: " + this.rpc.search.keyword'), alignself: 'center'}),
+                label({fontsize:28, bgcolor:'transparent', text: wire('"The current value of search.keyword is: " + this.rpc.omdbsearch.keyword'), alignself: 'center'}),
                 label({fontsize:18, bgcolor:'transparent', text:'(Try using the POST API scripts in ./docs/slides/extendingdreem/bin/ to get and set this value!)', alignself: 'center'})
             )
         ];

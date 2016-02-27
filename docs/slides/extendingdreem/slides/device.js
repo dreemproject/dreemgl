@@ -19,7 +19,7 @@ define.class(function (require, $ui$, view, label, icon) {
 
     this.render = function() {
         return [
-          icon({flex:1, width:this.width, bgcolor:NaN, icon:this.deviceType, fontsize:50, fgcolor:"#888", alignself:'center'}),
+          icon({flex:1, width:this.width, bgcolor:NaN, icon:this.deviceType, fontsize:50, fgcolor:"#333", alignself:'center'}),
           label({flex:0.5, name:'txt', text:this.deviceId, fontsize:11, fgcolor:'#333', bgcolor:'transparent', alignself:'center'})
         ]
     }

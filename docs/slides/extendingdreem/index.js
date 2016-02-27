@@ -13,7 +13,7 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 
 		return [
 			// `examples/guide/search.js` is used here
-			search({name:'search', keyword:"Dogs"}),
+			search({name:'omdbsearch', keyword:"Dogs"}),
 			screen({name:'desktop'},
 				slideviewer({ name: 'slides',
 						slide:{
@@ -34,7 +34,7 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 					slides$paths({flex: 1}),
 					slides$internal({
 						flex: 1,
-						movies:wire('this.rpc.search.results'),
+						movies:wire('this.rpc.omdbsearch.results'),
 						searchCode:getSource(search),
 						compositionCode:getSource(index)
 					}),

@@ -17,7 +17,7 @@ define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, devi
         clientCode: 'require "net/htttp";\n' +
         'require "json";\n' +
         '\n' +
-        'uri = URI.parse("http://localhost:2000/examples/extdemo")\n' +
+        'uri = URI.parse("http://localhost:2000/docs/slides/extendingdreem")\n' +
         'Net::HTTP.start(uri.hostname, uri.port) do |http|\n' +
         '\n' +
         '  (req = Net::HTTP::Post.new(uri)).body = {\n' +
