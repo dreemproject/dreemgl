@@ -75,8 +75,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				anim[time] = {motion:"inoutquad", value: vec2(lat,lng)};
 				this.latlong = Animate(anim);
 				var anim = {}
-				anim[time / 2] = {motion:"outquad", value: Math.min(zoom - 0.5, this.zoomlevel - 0.5)};
-				anim[time] = {motion:"inquad", value: zoom};
+				anim[time / 2] = {motion:"inoutquad", value: Math.min(zoom - 0.5, this.zoomlevel - 0.5)};
+				anim[time] = {motion:"inoutquad", value: zoom};
 				this.zoomlevel = Animate(anim);
 			}
 			else{
