@@ -76,6 +76,17 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 		}
 	}
 
+	this.deleteEvent = function (id) {
+		for (var i = 0; i < this.data.length; i++) {
+			if (this.data[i].id === id) {
+				this.data.splice(i, 1)
+				this.data = this.data
+				this.emitUpward('change', this.data)
+				break
+			}
+		}
+	}
+
 	// this.ondata = function () {
 	// 	var eventstart, eventend
 	// 	var starttime = this.getStart()

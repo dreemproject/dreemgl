@@ -128,6 +128,13 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			eventghost.end = 0
 		}
 
+		this.pointertap = function(event) {
+			if (event.clicker === 2) {
+				var timeline = this.parent.parent
+				timeline.deleteEvent(this.id)
+			}
+		}
+
 		this.layout = function(){
 			this._layout.width = this.parent._layout.width
 			this._layout.height = this.parent._layout.height / this.parent.rows
