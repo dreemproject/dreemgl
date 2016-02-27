@@ -10,9 +10,9 @@ define.class('$server/service', function(require, $system$server$, nodehttp) {
 
     this.attributes = {
         // The string to search for in the OMDB database
-        keyword: "",
+        keyword: Config({value:"", persist:true}),
         // List of movie objects returned from server
-        results: []
+        results: Config({value:[], persist:true})
     };
 
 	var libexists = require('url');

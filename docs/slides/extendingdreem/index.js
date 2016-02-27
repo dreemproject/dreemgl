@@ -31,7 +31,6 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 						flex:1,
 						syntaxCode:getSource(syntax)
 					}),
-					////slides$syntax({flex: 1, syntaxCode:getSource(syntax)}),
 					slides$paths({flex: 1}),
 					slides$internal({
 						flex: 1,

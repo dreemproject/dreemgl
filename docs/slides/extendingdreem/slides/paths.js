@@ -3,26 +3,27 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function (require, $ui$, view, label) {
+define.class('$ui/view', function (require, $ui$, view, label) {
 
 	this.slidetitle = "Two Integration Paths - Proxy vs POST";
 
 	this.flexdirection = 'column';
 	this.justifycontent = 'space-around';
 	this.bgcolor = 'transparent';
+	this.padding = 20;
 
 	this.render = function render() {
 		return [
 			view({
-					justifycontent:"space-around"
+					justifycontent:"space-around",
 				},
 				label({
 					flex:1,
-					text:'Proxy through service object when nodejs\nlibraries are available.  Poll sensors,\naccess web services, and more,\nall in DreemGL!',
-					alignself:'center',
+					text:'Proxy through service object when\nnodejs libraries are available.  Poll\nsensors, access web services, and\nmore, all without leaving DreemGL',
+					margintop:30,
 					fgcolor:'#333',
 					bgcolor:'transparent',
-					fontsize:20
+					fontsize:23
 				}),
 				view({
 					flex:1,
@@ -36,12 +37,11 @@ define.class(function (require, $ui$, view, label) {
 				},
 				label({
 					flex:1,
-					text:'Use the POST API to drive DreemGL externally\nwhen Javascript or nodejs is unavailable.\nMobile apps, IoT devices, web services, and\nany language or device capable of HTTP\ncan take advantage of DreemGL!',
-					alignself:'center',
+					text:'Use the POST API to drive DreemGL\nexternally when Javascript or nodejs is\nunavailable.  Mobile apps, IoT devices,\nweb services, and any language or\ndevice capable of HTTP can take\nadvantage of DreemGL',
+					margintop:30,
 					fgcolor:'#333',
 					bgcolor:'transparent',
-					fontsize:20,
-					margintop:10
+					fontsize:23
 				}),
 				view({
 					flex:1,

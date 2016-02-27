@@ -12,7 +12,7 @@ define.class("$ui/view", function ($ui$, view, label, icon) {
     this.slidetitle = "Extending DreemGL";
     this.flexdirection = 'column';
     this.bgcolor = 'transparent';
-	this.padding = 40;
+	this.padding = 20;
 
 	define.class(this, "bullet", view, function(){
 
@@ -43,7 +43,7 @@ define.class("$ui/view", function ($ui$, view, label, icon) {
 			this.bullet({icon:"cloud", text:'Cloud Services', fontsize:20, margintop:20, marginleft:40 }),
             this.bullet({
                 text:'Integrate internally via nodejs (write entirely in DreemGL)',
-                margintop:50
+                margintop:30
             }),
 			this.bullet({
                 text:'Integrate externally via POST API (write in any language)',

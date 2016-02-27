@@ -3,19 +3,77 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label, textbox, $widgets$, jsviewer, $$, device) {
+define.class('$ui/view', function ($ui$, view, label, icon) {
 
     this.slidetitle = "File Upload via POST API";
 
     this.bgcolor = "transparent";
     this.flexdirection = "column";
+	this.padding = 20;
 
     this.attributes = {
     };
 
+	this.setupFileDrop = function () {
+		var doc = document.documentElement;
+		doc.ondragover = function (e) { return false; }.bind(this);
+		doc.ondragend = function (e) { return false; }.bind(this);
+		doc.ondrop = function (e) {
+			e.preventDefault && e.preventDefault();
+			var files = e.dataTransfer.files;
+
+			var formData = new FormData();
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				formData.append('file', file);
+			}
+
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', window.location.pathname, true);
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					console.log('Upload success', files);
+				} else {
+					console.log('Oops, upload failed', xhr, files);
+				}
+			}.bind(this);
+			xhr.send(formData);
+
+			return false;
+		}.bind(this);
+	};
+
+	this.init = function() {
+		this.setupFileDrop();
+	};
+
     this.render = function render() {
         return [
-            label({marginleft:15, fgcolor:'red', bgcolor:'transparent', text:'Use POST API when uploading large data files!'})
+            label({fgcolor:'red', bgcolor:'transparent', text:'Use POST API when sending large data files!'}),
+			this.bullet({text:"All compositions accept multipart/form-data POSTs", margintop:30}),
+			this.bullet({text:"Uploaded files are automatically saved to the current\ncomposition's base directory.", margintop:30}),
+			this.bullet({text:"Drop files on the target below, and then look in:\n\n                   ./docs/slides/extendingdreem/", margintop:30}),
+			view({alignitems:"center", justifycontent:"center", margintop:50,bgcolor:"transparent", flex:1, borderradius:30}, icon({icon:"bullseye", fontsize:300, fgcolor:"red"}))
+
         ];
     }
+
+	define.class(this, "bullet", view, function(){
+
+		this.attributes = {
+			icon:Config({type:String, value:"folder"}),
+			fontsize:Config({type:int, value:25}),
+			text:Config({type:String})
+		};
+
+		this.render = function () {
+			return [
+				icon({icon:this.icon, fgcolor:'#333', fontsize:this.fontsize, marginright:20}),
+				label({text:this.text, fgcolor:'#333', fontsize:this.fontsize})
+			]
+		}
+
+	});
+
+
 });
