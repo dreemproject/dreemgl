@@ -8,32 +8,78 @@ define.class("$server/service", function() {
 	this.name = "basestation";
 
 	this.attributes = {
-		ipaddress:Config({type:String}),
-		username:Config({type:String}),
-		lights:Config({type:Object}),
+		ipaddress:Config({type:String, persist:true}),
+		username:Config({type:String, persist:true}),
+		lights:Config({type:Object, persist:true}),
 		light:Config({type:Event}),
-		api:Config({type:Object})
+		api:Config({type:Object, persist:true}),
+		linkalert:Config({type:Boolean, value:false, persist:true})
 	};
 
 	this.failure = function(err) { console.log("[ERROR]", err); }
 
 	this.setLightState = function(id, state) {
 		if (!this.api) {
-			this.search();
+			this.buildapi();
 		} else {
-			this.api
-				.setLightState(id, state)
-				.then(function(result) {
-					this.refresh();
-				}.bind(this))
-				.fail(this.failure)
-				.done();
+			if (!this.__lock) {
+				this.__lock = true;
+				setTimeout(function(){
+					this.api
+						.setLightState(id, state)
+						.then(function(result) { this.refresh(); }.bind(this))
+						.fail(this.failure)
+						.done();
+					this.__lock = false;
+				}.bind(this), 100)
+			}
+
 		}
 	};
 
-	this.onusername = this.onipaddress = function() {
-		if (this.username && this.ipaddress) {
-			this.api = new this.HueApi(this.ipaddress, this.username);
+	this.onlinkalert = function(ev,v,o) {
+		if (v === false && !this.username) {
+			this.register();
+		}
+	};
+
+	this.register = function() {
+		if (!this.HueApi) {
+			return;
+		}
+
+		var hue = new this.HueApi();
+
+		console.log("Attempting to register...")
+
+		hue.registerUser(this.ipaddress, "DreemGL Hue Bridge")
+			.then(function (result) {
+				this.username = result;
+				console.log("got username!", this.username)
+			}.bind(this))
+			.fail(function (err) {
+				if (err.message === "link button not pressed") {
+					this.linkalert = true;
+				}
+			}.bind(this))
+			.done();
+
+	};
+
+	this.onusername = this.onipaddress = this.buildapi = function() {
+		if (!this.HueApi) {
+			return;
+		}
+
+		if (this.ipaddress) {
+			if (this.username) {
+				console.log("Create api for ", this.ipaddress, this.username)
+				this.api = new this.HueApi(this.ipaddress, this.username);
+			} else {
+				this.register();
+			}
+		} else {
+			this.search();
 		}
 	};
 
@@ -65,6 +111,12 @@ define.class("$server/service", function() {
 	};
 
 	this.onapi = this.refresh = function() {
+		if (!this.api) {
+			return;
+		}
+
+		console.log("Seeking lights");
+
 		this.api
 			.lights()
 			.then(function(result) {
@@ -80,6 +132,7 @@ define.class("$server/service", function() {
 							.done();
 					}
 					this.lights = lights;
+					console.log("Found lights", this.lights)
 				}
 			}.bind(this))
 			.fail(this.failure)
@@ -87,7 +140,11 @@ define.class("$server/service", function() {
 	};
 
 	this.search = function() {
-		console.log("Searching for more lights...")
+
+		if (!this.Hue) {
+			return;
+		}
+
 		this.Hue.nupnpSearch(function(err, result) {
 			if (err) { console.log("[ERROR]", err) }
 			for(var r in result) {
@@ -99,12 +156,18 @@ define.class("$server/service", function() {
 				}
 			}
 		}.bind(this));
+
 	};
 
 	this.init = function() {
 		this.Hue = require("node-hue-api");
-		this.HueApi = this.Hue.HueApi;
-		this.search();
+
+		if (this.Hue) {
+			this.HueApi = this.Hue.HueApi;
+			this.search();
+
+		}
+
 	}
 
 });

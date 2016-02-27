@@ -3,7 +3,7 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 		this.render = function () {
 
 			return [
-				basestation({username:"[SEE README.md]"}),
+				basestation(),
 				screen({
 					name:"desktop",
 					clearcolor: '#888'
@@ -24,6 +24,8 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 							var lights = [];
 
 							var baselights = this.rpc.basestation.lights;
+
+							console.log("Base has lights:", baselights)
 
 							for (var uid in baselights) {
 								if (baselights.hasOwnProperty(uid)) {
@@ -86,22 +88,6 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 												bulb:huebulb,
 												valuechange:function(ev, v, o) {
 
-													function debounce(func, wait, immediate) {
-														var timeout;
-														return function() {
-															var context = this;
-															var args = arguments;
-															var later = function() {
-																timeout = null;
-																if (!immediate) func.apply(context, args);
-															};
-															var callNow = immediate && !timeout;
-															clearTimeout(timeout);
-															timeout = setTimeout(later, wait);
-															if (callNow) func.apply(context, args);
-														};
-													}
-
 													var red = o._value[0];
 													var green = o._value[1];
 													var blue = o._value[2];
@@ -141,6 +127,35 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 									)
 								}
 							}
+
+							lights.push(view({
+								visible:this.rpc.basestation.linkalert,
+								position:"absolute",
+								x:200,
+								y:100,
+								width:300,
+								height:300,
+								borderradius:30,
+								bgcolor:"white",
+								flexdirection:"column",
+								justifycontent:"center",
+								alignitems:"center"
+							},
+								view({alignitems:"center"},icon({fontsize:40, marginright:20, fgcolor:"cornflowerblue", icon:"link"}),label({fontsize:30, fgcolor:"#888", text:"Missing Link!"})),
+								label({
+									padding:20,
+									marginleft:20,
+									fgcolor:"#888",
+						    		text:"Press the Link button on top\nof your base station and then\n quickly press this button:"
+								}),
+								button({
+									text:"Link To Basestation",
+									click:function() {
+										this.rpc.basestation.linkalert = false;
+										this.rerender();
+									}.bind(this)
+								}))
+							);
 
 							return lights;
 						}
