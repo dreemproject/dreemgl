@@ -86,9 +86,9 @@ define.class("$ui/view", function(require, $ui$, view){
 
 		var value = this.value;
 
-		if (value < this.min) {
+		if (value <= this.min) {
 			value = this.min
-		} else if (value > this.max) {
+		} else if (value >= this.max) {
 			value = this.max
 		} else {
 			value = 0;
