@@ -12,6 +12,7 @@ define.class('$ui/view', function ($ui$, view, label, icon) {
 	this.padding = 20;
 
     this.attributes = {
+		files:[]
     };
 
 	this.setupFileDrop = function () {
@@ -33,6 +34,7 @@ define.class('$ui/view', function ($ui$, view, label, icon) {
 			xhr.onload = function() {
 				if (xhr.status === 200) {
 					console.log('Upload success', files);
+					this.reload();
 				} else {
 					console.log('Oops, upload failed', xhr, files);
 				}
@@ -43,17 +45,42 @@ define.class('$ui/view', function ($ui$, view, label, icon) {
 		}.bind(this);
 	};
 
+	this.reload = function() {
+		this.rpc.fileio.ls().then(function(result){
+			var files = result.value;
+			this.files = files;
+		}.bind(this))
+	};
+
 	this.init = function() {
 		this.setupFileDrop();
+		this.reload();
 	};
 
     this.render = function render() {
+
+		var fileviews = [];
+
+		for (var i=0;i<this.files.length;i++) {
+			var filename = this.files[i];
+			fileviews.push(label({text:filename}))
+		}
+
         return [
             label({fgcolor:'red', bgcolor:'transparent', text:'Use POST API when sending large data files!'}),
 			this.bullet({text:"All compositions accept multipart/form-data POSTs", margintop:30}),
 			this.bullet({text:"Uploaded files are automatically saved to the current\ncomposition's base directory.", margintop:30}),
-			this.bullet({text:"Drop files on the target below, and then look in:\n\n                   ./docs/slides/extendingdreem/", margintop:30}),
-			view({alignitems:"center", justifycontent:"center", margintop:50,bgcolor:"transparent", flex:1, borderradius:30}, icon({icon:"bullseye", fontsize:300, fgcolor:"red"}))
+			view({flex:1, bgcolor:"transparent", alignitems:"center", flexdirection:"row", justifycontent:"space-around", margintop:50, borderradius:30},
+				view({flexdirection:"column", marginright:50},
+					label({fgcolor:"#333", text:"Drop files here:"}),
+         			icon({flex:1, icon:"bullseye", fontsize:300, fgcolor:"red"})
+				),
+				view({flex:1, flexdirection:"column", marginright:50},
+					view({flex:1, padding:20, flexdirection:"column", height:200, borderradius:30, bgcolor:vec4(0.7)},
+						label({fgcolor:"#333", text:"Files currently in ./docs/slides/extendingdreem/:", marginbottom:5}),
+						fileviews)
+				)
+			)
 
         ];
     }

@@ -3,7 +3,35 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class('$server/composition',function(require, $ui$, screen, $docs$examples$components$, search, $widgets$, slideviewer, $$, devices, syntax, index, slides$upload, slides$intro, slides$syntax, slides$paths, slides$internal, slides$external, slides$api, slides$resources){
+define.class('$server/composition',function(require, $server$, fileio, $ui$, screen, $docs$examples$components$, search, $widgets$, slideviewer, $$, devices, syntax, index, slides$upload, slides$intro, slides$syntax, slides$paths, slides$internal, slides$external, slides$api, slides$resources){
+
+	define.class(this, 'fileio', function($server$, fileio){
+		this.name = 'fileio';
+
+		var path = require('path');
+		var fs = require('fs');
+
+		// recursively read all directories starting from a base path
+		this.ls = function(){
+			if (!fs || !path) {
+				return;
+			}
+
+			var files = [];
+
+			var local = define.expandVariables(define.classPath(this));
+			var dir = fs.readdirSync(local);
+			for(var i = 0; i < dir.length;i++){
+				var name = dir[i];
+				var stat = fs.statSync(path.join(local, name));
+				if(!stat.isDirectory()){
+					files.push(name)
+				}
+			}
+
+			return files
+		}
+	});
 
 	function getSource(obj) {
 		return obj.module.factory.body.toString();
@@ -13,8 +41,11 @@ define.class('$server/composition',function(require, $ui$, screen, $docs$example
 
 		return [
 			// `examples/guide/search.js` is used here
+			this.fileio(),
 			search({name:'omdbsearch', keyword:"Dogs"}),
-			screen({name:'desktop'},
+			screen({
+				name:'desktop'
+			},
 				slideviewer({ name: 'slides',
 						slide:{
 							padding:15,

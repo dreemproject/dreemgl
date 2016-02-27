@@ -3,7 +3,9 @@ define.class("$server/composition", function (require, $ui$, icon, slider, butto
 		this.render = function () {
 
 			return [
-				basestation(),
+				basestation(
+					{username:"6ba5c7d32222e31f779722a818296a09"}
+				),
 				screen({
 					name:"desktop",
 					clearcolor: '#888'
