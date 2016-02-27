@@ -59,6 +59,7 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 	this.makeEvent = function (eventdata) {
 		eventdata.id = eventdata.id || this.data.length + 1
 		this.data.push(eventdata)
+		this.data = this.data
 		this.emitUpward('change', this.data)
 	}
 
@@ -68,26 +69,27 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 				for (key in eventdata) {
 					this.data[i][key] = eventdata[key]
 				}
+				this.data = this.data
 				this.emitUpward('change', this.data)
 				break
 			}
 		}
 	}
 
-	this.ondata = function () {
-		var eventstart, eventend
-		var starttime = this.getStart()
-		var endtime = this.getEnd()
-		if (!this.data) return
-		for (var i = 0; i < this.data.length; i++) {
-			eventstart = new Date(this.data[i].date)
-			eventend = new Date(this.data[i].enddate)
-			if (eventend > endtime) endtime = eventend
-			if (eventstart < starttime) starttime = eventstart
-		}
-		this.start = new Date(starttime).toString()
-		this.end = new Date(endtime).toString()
-	}
+	// this.ondata = function () {
+	// 	var eventstart, eventend
+	// 	var starttime = this.getStart()
+	// 	var endtime = this.getEnd()
+	// 	if (!this.data) return
+	// 	for (var i = 0; i < this.data.length; i++) {
+	// 		eventstart = new Date(this.data[i].date)
+	// 		eventend = new Date(this.data[i].enddate)
+	// 		if (eventend > endtime) endtime = eventend
+	// 		if (eventstart < starttime) starttime = eventstart
+	// 	}
+	// 	this.start = new Date(starttime).toString()
+	// 	this.end = new Date(endtime).toString()
+	// }
 
 	this.atDraw = function () {
 		this.background = this.find("background")
@@ -97,8 +99,6 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			this.hscrollbar.updateScrollbars()
 		}
 		var daywidth = this.layout.width / this.zoom
-
-		// console.log(daywidth, this.layout.width, this.zoom)
 
 		//TODO(aki): Don't use magic numbers!
 
@@ -124,17 +124,6 @@ define.class('$ui/view', function (background, labels, events, scrollbar) {
 			this.hoursegs = 12
 		} else {
 			this.hoursegs = 24
-		}
-
-		// TODO(aki): better data-binding that doesent trigger render
-		// This should be handled by data binding
-		if(this.background) {
-			this.background.segments = this._segments
-			this.background.hoursegs = this._hoursegs
-		}
-		if (this.labels){
-			this.labels.segments = this._segments
-			this.labels.hoursegs = this._hoursegs
 		}
 	}
 

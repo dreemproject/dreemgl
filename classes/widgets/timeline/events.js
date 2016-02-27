@@ -12,9 +12,13 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 	this.attributes = {
 		data: Config({type: Array,  value: wire('this.parent.data')}),
-		zoom: Config({type: Number, value: wire('this.parent.zoom')}),
-		scroll: wire('this.parent.scroll')
-		// hoverid: -1
+		zoom: wire('this.parent.zoom'),
+		scroll: wire('this.parent.scroll'),
+		rows: Config({type: Number, value: 1})
+	}
+
+	this.onrows = function () {
+		this.height = this.rows * 28
 	}
 
 	this.pointermove = function(event) {
@@ -48,15 +52,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		eventghost.end = 0
 	}
 
-	// this.onpointertap = function(event){
-	// 	this.hoverid = this.last_pick_id
-	// 	var eventData = this.data[this.hoverid]
-	// }
-	//
-	// this.ondata = function (data) {
-	// 	this.pickrange = this.data.length
-	// }
-
 	define.class(this, 'event', view, function(){
 
 		this.bgcolor = '#999999'
@@ -76,7 +71,8 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			duration: 1,
 			offset: 0,
 			start: 0,
-			end: 0
+			end: 0,
+			row: 0
 		}
 
 		var editmode = ''
@@ -133,9 +129,14 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		}
 
 		this.layout = function(){
-			this._layout.top = 0
 			this._layout.width = this.parent._layout.width
-			this._layout.height = this.parent._layout.height
+			this._layout.height = this.parent._layout.height / this.parent.rows
+			if (this.row === -1) {
+				this._layout.top = 0
+				this._layout.height = this.parent._layout.height
+			} else {
+				this._layout.top = this._layout.height * this.row
+			}
 		}
 
 		this.atDraw = function () {
@@ -204,17 +205,35 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 	})
 
 	this.renderEvents = function (data) {
-		events = []
+		var rows = [[],[],[],[],[],[]]
+		this.rows = 1
 		for (var i = 0; i < data.length; i++) {
-			events.push(this.event({
+			var event = this.event({
 				title: data[i].title,
 				id: data[i].id,
 				bgcolor: vec4(0.75, 0.75, 0.75, 1),
 				start: new Date(data[i].date).getTime(),
 				end: new Date(data[i].enddate).getTime()
-			}))
+			})
+			for (var r = 0; r < rows.length; r++) {
+				var canfit = true
+				for (var k = 0; k < rows[r].length; k++) {
+					if (!(
+						(rows[r][k].start > event.end && rows[r][k].end > event.end) ||
+						(rows[r][k].start < event.start && rows[r][k].end < event.start)
+					)) {
+						canfit = false
+					}
+				}
+				if (canfit) {
+					event.row = r
+					this.rows = max(this.rows, r + 1)
+					rows[r].push(event)
+					break
+				}
+			}
 		}
-		return events
+		return rows
 	}
 
 	this.render = function () {
@@ -228,7 +247,8 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 				fontsize: 6,
 				start: 0,
 				end: 0,
-				bgcolor: vec4(0.2, 0.7, 1, 0.5)
+				bgcolor: vec4(0.2, 0.7, 1, 0.5),
+				row: -1
 			})
 		]
 	}

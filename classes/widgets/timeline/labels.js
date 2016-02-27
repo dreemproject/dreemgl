@@ -9,13 +9,11 @@ define.class('$ui/label', function () {
 	this.bgcolor = NaN
 	this.fgcolor = 'white'
 	this.drawtarget = 'color'
-	this.bold = true;
+	this.bold = true
+
 	this.attributes = {
 		zoom: wire('this.parent.zoom'),
-		scroll: wire('this.parent.scroll'),
-		hoursegs: wire('this.parent.hoursegs'),
-		format: Config({type: Number, value: wire('this.parent.format')}),
-		segments: Config({type: vec3, value: vec3()})
+		scroll: wire('this.parent.scroll')
 	}
 
 	var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -120,13 +118,13 @@ define.class('$ui/label', function () {
 				date.setDate(firstDate)
 				date.setHours(firstHour)
 				xoffset = (date.getTime() - first) / ts / zoom * w
-				var c = 24 / view.hoursegs
+				var c = 24 / view.parent.hoursegs
 				x = 0, i = -1
 				while (x < w) {
 					var h = (firstHour + i) % 24
 					date = new Date(first)
 					date.setHours(firstHour + i)
-					if (view.format == 12) {
+					if (view.parent.format == 12) {
 						text = (h % 12 || 12) + ' ' + (h < 12 ? 'am' : 'pm')
 					} else {
 						text = h % 24 + ' h'
@@ -138,10 +136,9 @@ define.class('$ui/label', function () {
 				}
 			}
 
-			//mesh.fgcolor = vec4(view.fgcolor)
 			mesh.fontsize = view.fontsize * 0.75
 
-			switch (view.segments[0]) {
+			switch (view.parent.segments[0]) {
 				case 1:
 					drawYears(26)
 					break
@@ -154,9 +151,8 @@ define.class('$ui/label', function () {
 			}
 
 			mesh.fontsize = view.fontsize * 0.5
-			//mesh.fgcolor = vec4(view.fgcolor)
 
-			switch (view.segments[1]) {
+			switch (view.parent.segments[1]) {
 				case 2:
 					drawMonths(42)
 					break
