@@ -363,6 +363,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var sx = vp.layout.width;
 		var sy = vp.layout.height;
 
+		
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
 
@@ -861,15 +862,16 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var buildings3d = [];
 		var labels3d = [];
 		var poi3d = [];
-		var fov = 30;
+//		var fov = 30 * (this.layout.width/this.layout.height);
 		var div = 512;
 		this.tilewidth = Math.ceil(this.layout.width / div);
 		this.tileheight = Math.ceil(this.layout.height / div);;
 
-		this.camdist = (this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
-
-		this.camdist *= 2.0
-
+		this.camdist = 3000;//(this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
+		
+		var aspect = this.layout.width/ this.layout.height;
+		var fov = (Math.atan(((this.layout.width/2)*6)/this.camdist) * 360/6.283) / aspect;
+	
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
 		var showland = true;
@@ -934,6 +936,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				viewport: "3d",
 				name: "mapinside",
 				nearplane: 100 ,
+				fov: fov,
 				farplane: this.camdist * 2,
 				camera: vec3(0,-this.camdist*0.13,this.camdist*0.3), fov: fov,
 				up: vec3(0,1,0),
