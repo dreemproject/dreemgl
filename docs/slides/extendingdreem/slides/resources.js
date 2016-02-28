@@ -3,50 +3,90 @@
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
-define.class(function ($ui$, view, label) {
+define.class(function ($ui$, view, label, icon) {
 
 	this.slidetitle = "Resources";
 
 	this.flexdirection = 'column';
 	this.bgcolor = 'transparent';
+	this.padding = 30;
 
-	this.style = {
-		label:{
-			margintop:10
-		},
-		label_small:{
-			fgcolor:'darkyellow',
-			bgcolor:'transparent',
-			alignself:'center',
-			fontsize:30
-		},
-		label_large:{
-			fgcolor:'#333',
-			bgcolor:'transparent',
-			fontsize:40
+	define.class(this, "bullet", view, function(){
+
+		this.attributes = {
+			icon:Config({type:String, value:"star"}),
+			fontsize:Config({type:int, value:25}),
+			text:Config({type:String})
+		};
+
+		this.render = function () {
+			return [
+				icon({icon:this.icon, fgcolor:'#112', fontsize:this.fontsize, marginright:20}),
+				label({text:this.text, fgcolor:'#333', fontsize:this.fontsize})
+			]
 		}
-	}
+
+	});
 
 	this.render = function render() {
 		return [
-			label({
-				text:'+ Detailed Component Guide',
+			this.bullet({
+				text:'Detailed Component Guide',
 				fgcolor:'#333', bgcolor:'transparent',
-				class:'large',
 				margintop:0
 			}),
-			label({
+			this.bullet({
+				marginleft:100,
+				icon:"link",
+				fontsize:20,
 				text:'http://localhost:2000/docs/api/index.html#!/guide/components',
-				class:'small'
+				margintop:30
 			}),
-			label({
-				text:'+ Questions?',
-				class:'large'
+			this.bullet({
+				text:'Sample Components',
+				fgcolor:'#333', bgcolor:'transparent',
+				margintop:50
 			}),
-			label({
+			this.bullet({
+				marginleft:100,
+				icon:"link",
+				fontsize:20,
+				text:'/examples/components/hue',
+				margintop:30
+			}),
+			this.bullet({
+				marginleft:100,
+				icon:"link",
+				fontsize:20,
+				text:'/examples/components/estimote',
+				margintop:20
+			}),
+			this.bullet({
+				marginleft:100,
+				icon:"link",
+				fontsize:20,
+				text:'/examples/components/omdb',
+				margintop:20
+			}),
+			this.bullet({
+				marginleft:100,
+				icon:"link",
+				fontsize:20,
+				text:'/examples/components/staticmap',
+				margintop:20
+			}),
+			this.bullet({
+				icon:"question",
+				text:'Questions?',
+				margintop:50
+			}),
+			this.bullet({
+				marginleft:100,
+				fontsize:30,
+				icon:"envelope-o",
 				text:'Find me on slack or email mason@teem.nu!',
 				fgcolor:'darkpink',
-				class:'small'
+				margintop:50
 			})
 		];
 	};

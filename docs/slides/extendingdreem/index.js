@@ -5,43 +5,10 @@
 
 define.class('$server/composition',function(require, $server$, fileio, $ui$, screen, $docs$examples$components$, search, $widgets$, slideviewer, $$, devices, syntax, index, slides$upload, slides$intro, slides$syntax, slides$paths, slides$internal, slides$external, slides$api, slides$resources){
 
-	define.class(this, 'fileio', function($server$, fileio){
-		this.name = 'fileio';
-
-		var path = require('path');
-		var fs = require('fs');
-
-		// recursively read all directories starting from a base path
-		this.ls = function(){
-			if (!fs || !path) {
-				return;
-			}
-
-			var files = [];
-
-			var local = define.expandVariables(define.classPath(this));
-			var dir = fs.readdirSync(local);
-			for(var i = 0; i < dir.length;i++){
-				var name = dir[i];
-				var stat = fs.statSync(path.join(local, name));
-				if(!stat.isDirectory() && name != '.DS_Store'){
-					files.push(name)
-				}
-			}
-
-			return files
-		}
-	});
-
-	function getSource(obj) {
-		return obj.module.factory.body.toString();
-	}
-
 	this.render = function render() {
 
 		return [
 			// `examples/guide/search.js` is used here
-			this.fileio(),
 			search({name:'omdbsearch', keyword:"Dogs"}),
 			screen({
 				name:'desktop'
@@ -84,7 +51,37 @@ define.class('$server/composition',function(require, $server$, fileio, $ui$, scr
 					slides$resources({flex: 1})
 				)
 		    ),
-			devices({name:'devbus'})
+			devices({name:'devbus'}),
+			fileio({
+				name:"fileio",
+				ls:function(){
+					var path = require('path');
+					var fs = require('fs');
+					if (!fs || !path) {
+						return;
+					}
+
+					var files = [];
+
+					var local = define.expandVariables(define.classPath(this));
+					var dir = fs.readdirSync(local);
+					for(var i = 0; i < dir.length;i++){
+						var name = dir[i];
+						var stat = fs.statSync(path.join(local, name));
+						if(!stat.isDirectory() && name != '.DS_Store'){
+							files.push(name)
+						}
+					}
+
+					return files
+				}.bind(this)
+			})
 		]
 	}
+
+	function getSource(obj) {
+		return obj.module.factory.body.toString();
+	}
+
+
 });
