@@ -5,7 +5,7 @@
 
 define.class(function (require, $ui$, view, label, textbox) {
 
-    this.slidetitle = "Attributes via POST API";
+    this.slidetitle = "Attribute Access via POST API";
 
     this.attributes = {
         setterCode: 'require "net/http";\n' +
