@@ -23,7 +23,8 @@ define.class("$server/composition", function ($ui$, screen, $widgets$, jsviewer,
 				fileio(
 					{
 						name: 'fileio',
-					}),
+					}
+				),
 				screen(
 					{
 						name: 'default',
@@ -49,12 +50,23 @@ define.class("$server/composition", function ($ui$, screen, $widgets$, jsviewer,
 											// Removes /* ... */\n\n
 											source = result.value.replace(/\/\*([\s\S]*?)\*\/\n\n/g, "");
 											this.findChild('viewer').source = source
-										}  else {
+										} else {
 											this.findChild('viewer').source = " /* ERROR\n File " + sourcefile + " not found! */"
 										}
 									}.bind(this));
 							}
+							//
+							window.setTimeout(this.updateSize, 2000)
 						},
+
+						// Fixed the problem where the scrollbars are not displayed for all
+						// iFrames in the guide's HTML page for the source code viewer.
+						// See https://dreem2.atlassian.net/browse/DREEM-104070926
+						updateSize: function() {
+							var v = this.findChild('viewer');
+							v.w = this.w
+							v.h = this.h
+						}.bind(this),
 
 						// Renders the source code stored in the screen's source code attribute
 						render: function () {
