@@ -82,8 +82,9 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			editmode = 'move'
 
 			var localstart = this.globalToLocal(event.position)
-			var localstartx = localstart[0] - this.offset * this.layout.width
-			var pxduration = this.duration * this.layout.width
+			var localstartx = localstart[0] - (this.offset - this.scroll[0]) * event.view.layout.width
+			console.log(localstartx)
+			var pxduration = this.duration * event.view.layout.width
 
 			if (localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
 				this.cursor = 'ew-resize'
@@ -151,7 +152,7 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.offset = new Date(this.start).getTime() - this.parent.parent.getStart()
 			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
-			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.parent.parent.layout.width
+			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.layout.width
 			this.find('eventlabel').xwidth = this.duration * this.layout.width
 		}
 
