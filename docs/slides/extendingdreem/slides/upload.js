@@ -33,7 +33,6 @@ define.class('$ui/view', function ($ui$, view, label, icon) {
 			xhr.open('POST', window.location.pathname, true);
 			xhr.onload = function() {
 				if (xhr.status === 200) {
-					console.log('Upload success', files);
 					this.reload();
 				} else {
 					console.log('Oops, upload failed', xhr, files);
@@ -71,17 +70,16 @@ define.class('$ui/view', function ($ui$, view, label, icon) {
 			this.bullet({text:"All compositions accept multipart/form-data POSTs", margintop:30}),
 			this.bullet({text:"Uploaded files are automatically saved to the current\ncomposition's base directory.", margintop:30}),
 			view({flex:1, bgcolor:"transparent", alignitems:"center", flexdirection:"row", justifycontent:"space-around", margintop:50, borderradius:30},
-				view({flexdirection:"column", marginright:50},
-					label({fgcolor:"#333", text:"Drop files here:"}),
+				view({flexdirection:"column", alignitems:"center", marginright:50},
+					label({fgcolor:"#333", text:"Drop Files Here"}),
          			icon({flex:1, icon:"bullseye", fontsize:300, fgcolor:"red"})
 				),
 				view({flex:1, flexdirection:"column", marginright:50},
-					view({flex:1, padding:20, flexdirection:"column", height:200, borderradius:30, bgcolor:vec4(0.7)},
-						label({fgcolor:"#333", text:"Files currently in ./docs/slides/extendingdreem/:", marginbottom:5}),
+					view({flex:1, padding:20, flexdirection:"column", height:200, borderradius:30, bgcolor:vec4(0.07999999821186066, 0.10000000149011612, 0.10000000149011612, 1)},
+						label({fgcolor:"yellow", text:"Files currently in ./docs/slides/extendingdreem/ ", marginbottom:5}),
 						fileviews)
 				)
 			)
-
         ];
     }
 

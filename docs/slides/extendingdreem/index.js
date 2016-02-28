@@ -24,7 +24,7 @@ define.class('$server/composition',function(require, $server$, fileio, $ui$, scr
 			for(var i = 0; i < dir.length;i++){
 				var name = dir[i];
 				var stat = fs.statSync(path.join(local, name));
-				if(!stat.isDirectory()){
+				if(!stat.isDirectory() && name[0] != '.'){
 					files.push(name)
 				}
 			}
