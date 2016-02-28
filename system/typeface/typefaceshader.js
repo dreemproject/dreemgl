@@ -70,7 +70,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		this.scaling = 0
 		this.distance = 0
-	
+
 		this.debug = false
 
 		//this.bgcolor = vec3('black')
@@ -188,7 +188,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			}
 
 		}
-		
+
 
 		self.pushQuad = function(){
 			this.clean = false
@@ -226,13 +226,13 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			this.clean = false
 			var slots = this.slots
 			//if(arguments.length !== slots * 4) throw new Error('Please use individual components to set a quad for '+slots)
-			
+
 			var o = this.length * slots
 			this.length += 6
 			if(this.length >= this.allocated){
 				this.ensureSize(this.length)
 			}
-			
+
 			// m1 is the formatting layout
 			if(m1 < 0){
 				var format = m1 * -1
@@ -288,7 +288,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				a[o + 41] = y2
 				a[o + 44] = info.tmax_x
 				a[o + 45] = info.tmax_y
-				
+
 				/*
 				this.pushQuad(
 					x1, y1, cz, fontsize, info.tmin_x, info.tmin_y, unicode, m1, m2, m3,
@@ -300,7 +300,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			else {
 				var gx = ((info.atlas_x<<6) | info.nominal_w)<<1
 				var gy = ((info.atlas_y<<6) | info.nominal_h)<<1
-				
+
 				// INLINED for optimization. text is used a lot
 				a[o + 2] = a[o + 12] = a[o + 32] = a[o + 22] = a[o + 52] = a[o + 42] = cz
 				a[o + 3] = a[o + 13] = a[o + 33] = a[o + 23] = a[o + 53] = a[o + 43] = fontsize
@@ -476,7 +476,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 				if(off >= len) return -1
 				off ++
-		
+
 			}
 			return off
 		}
@@ -548,7 +548,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				var format = m1 * -1
 				//var indent = parseInt(m1/65536)
 				var mode = Math.floor(format/256)%256
-				
+
 				if(this.charCodeAt(off) === 10){
 					coords = this.charCoords(off-1)
 					if(this.charCodeAt(off-1) !== 10){
@@ -563,7 +563,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 						coords.x += (padding-1) * info.advance * fontsize
 					}
 				}
-				else if(mode&1){ 
+				else if(mode&1){
 					var coords1 = this.charCoords(off - 1)
 					coords.x = coords1.x + coords1.w
 				}
@@ -621,7 +621,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 				this.add_x = rect.x //+ rect.w
 				this.add_y = rect.y
 				// rip off padding
-				
+
 				if(mode&1){
 					var padding = format%256
 					var info = this.font.glyphs[this.array[off * 6 * 10 + 6]]
@@ -1062,10 +1062,10 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 		var s = font_style_t(
 			vec3(mesh.pos.x + mesh.shift.x, mesh.pos.y + mesh.shift.y, mesh.pos.z),
-			view.fgcolor, 
-			view.outlinecolor, 
-			view.boldness, 
-			view.outlinethickness, 
+			view.fgcolor,
+			view.outlinecolor,
+			view.boldness,
+			view.outlinethickness,
 			view.outline,
 			(abs(mesh.tag.x - 10.)<0.001 || abs(mesh.tag.x - 32.)<0.001)?false:true
 		)
@@ -1074,11 +1074,11 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		// plug it into varyings
 		stylefgcolor = s.fgcolor
 		styleoutlinecolor = s.outlinecolor
-		stylepack = vec3(s.boldness, s.outlinethickness, s.outline?1.0:0.0)
+		stylepack = vec3(s.boldness, s.outlinethickness, s.outline ? 1.0 : 0.0)
 
 		// hide it
 		if(!s.visible) return vec4(0.)
-		
+
 		var pos1 = vec4(s.pos, 1.) * matrix
 		pos1.w += view.polygonoffset;
 		return pos1
@@ -1089,7 +1089,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		var pos = mesh.tex
 
 		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2//*0.1
-	
+
 		var dist = glyphy_sdf_decode( glyphy_sdf_lookup(pos)) * 0.003
 
 		dist -= stylepack.x / 300.
@@ -1101,7 +1101,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			dist = abs(dist) - (stylepack.y)
 		}
 
-		if(dist > 1.){
+		// TODO(aki): verify that this is correct
+		if(dist > 1. + stylepack.y){
 			discard
 		}
 
@@ -1112,7 +1113,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 
 	this.glyphy_sdf_draw_subpixel_aa = function(){
 		var pos = mesh.tex
-		
+
 		var m = length(vec2(length(dFdx(pos)), length(dFdy(pos))))*SQRT_1_2
 		//var m = pixelscale*.5//0.005
 		// screenspace length
@@ -1139,7 +1140,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			dist = abs(dist) - (stylepack.y)
 		}
 
-		if(dist.g > 1.){
+		// TODO(aki): verify that this is correct
+		if(dist > 1. + stylepack.y){
 			discard
 		}
 
@@ -1171,7 +1173,8 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 			dist2 = abs(dist) - (stylepack.y)
 		}
 
-		if(dist > 1.){
+		// TODO(aki): verify that this is correct
+		if(dist > 1. + stylepack.y){
 			discard
 		}
 

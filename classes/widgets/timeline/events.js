@@ -147,11 +147,11 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 		}
 
 		this.atDraw = function () {
-			this.offset = new Date(this.start).getTime() - this.parent.parent.getStart()
 			this.duration = new Date(this.end).getTime() - new Date(this.start).getTime()
-			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
 			this.duration = this.duration / this.parent.parent.TIME_SCALE / this.parent.zoom
-			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.layout.width
+			this.offset = new Date(this.start).getTime() - this.parent.parent.getStart()
+			this.offset = this.offset / this.parent.parent.TIME_SCALE / this.parent.zoom
+			this.find('eventlabel').xoffset = (this.offset - this.scroll[0]) * this.parent.parent.layout.width
 			this.find('eventlabel').xwidth = this.duration * this.layout.width
 		}
 

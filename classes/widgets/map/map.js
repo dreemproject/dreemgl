@@ -10,6 +10,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	var geo = this.geo = geo();
 
 	this.attributes = {
+		// TODO(aki): Why latlong inverse?
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
 		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
@@ -363,7 +364,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var sx = vp.layout.width;
 		var sy = vp.layout.height;
 
-		
+
 		var mx = (coord[0] / (sx / 2)) - 1.0
 		var my =  (coord[1] / (sy / 2)) - 1.0
 
@@ -868,10 +869,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.tileheight = Math.ceil(this.layout.height / div);;
 
 		this.camdist = 3000;//(this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
-		
+
 		var aspect = this.layout.width/ this.layout.height;
 		var fov = (Math.atan(((this.layout.width/2)*6)/this.camdist) * 360/6.283) / aspect;
-	
+
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
 		var showland = true;
