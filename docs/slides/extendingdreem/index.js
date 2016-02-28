@@ -24,7 +24,7 @@ define.class('$server/composition',function(require, $server$, fileio, $ui$, scr
 			for(var i = 0; i < dir.length;i++){
 				var name = dir[i];
 				var stat = fs.statSync(path.join(local, name));
-				if(!stat.isDirectory() && name[0] != '.'){
+				if(!stat.isDirectory() && name != '.DS_Store'){
 					files.push(name)
 				}
 			}
@@ -58,22 +58,27 @@ define.class('$server/composition',function(require, $server$, fileio, $ui$, scr
 						bgcolor: 'black',
 						scroll:Config({persist:true})
 					},
+
 					slides$intro({
 						flex:1,
 						syntaxCode:getSource(syntax)
 					}),
+
 					slides$paths({flex: 1}),
+
 					slides$internal({
 						flex: 1,
 						movies:wire('this.rpc.omdbsearch.results'),
 						searchCode:getSource(search),
 						compositionCode:getSource(index)
 					}),
+
 					slides$external({
 						flex: 1,
 						apiCode:getSource(devices),
 						devices:wire('this.rpc.devbus.active')
 					}),
+
 					slides$api({flex: 1}),
 					slides$upload({flex:1}),
 					slides$resources({flex: 1})

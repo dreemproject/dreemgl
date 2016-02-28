@@ -66,7 +66,7 @@ define.class('$ui/view', function ($ui$, view, label, icon) {
 		}
 
         return [
-            label({fgcolor:'red', bgcolor:'transparent', text:'Use POST API when sending large data files!'}),
+            label({fgcolor:'red', bgcolor:'transparent', text:'(Use POST API when sending large data files)'}),
 			this.bullet({text:"All compositions accept multipart/form-data POSTs", margintop:30}),
 			this.bullet({text:"Uploaded files are automatically saved to the current\ncomposition's base directory.", margintop:30}),
 			view({flex:1, bgcolor:"transparent", alignitems:"center", flexdirection:"row", justifycontent:"space-around", margintop:50, borderradius:30},

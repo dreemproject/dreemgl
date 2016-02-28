@@ -24,7 +24,7 @@ define.class("$ui/view", function ($ui$, view, label, icon) {
 
 		this.render = function () {
 			return [
-				icon({icon:this.icon, fgcolor:'#333', fontsize:this.fontsize, marginright:20}),
+				icon({icon:this.icon, fgcolor:'#112', fontsize:this.fontsize, marginright:20}),
 				label({text:this.text, fgcolor:'#333', fontsize:this.fontsize})
 			]
 		}

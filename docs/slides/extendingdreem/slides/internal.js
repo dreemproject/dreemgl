@@ -20,13 +20,13 @@ define.class(function ($ui$, view, label, $docs$examples$components$, movie, $wi
 		if (this.movies) {
 			for (var i = 0; i < this.movies.length; i++) {
 				var data = this.movies[i];
-				data.width = 130;
-				data.height = 160;
+				data.width = 80;
+				data.height = 100;
 				data.flex = 0;
 				data.bgimagemode = "aspect-fit";
 				data.overflow = "hidden";
 
-				if (i % 3 == 0) {
+				if (i % 2 == 0) {
 					cells.push([]);
 				}
 				cells[cells.length - 1].push(movie(data))
@@ -38,13 +38,19 @@ define.class(function ($ui$, view, label, $docs$examples$components$, movie, $wi
 		}
 
 		return [
-			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'Proxy through service object when everything can be handeled entirely via nodejs!'}),
+			label({marginleft:15,fgcolor:'red', bgcolor:'transparent', text:'(Proxy through service object when everything can be handeled entirely via nodejs)'}),
 			view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
-				view({flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), bgcolor:'transparent'},
+				view({flexdirection: 'column', flex: 2.5, alignself: 'stretch', margin: vec4(10), padding: vec4(4), bgcolor:'transparent'},
 					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Server (./docs/examples/components/search.js)'}),
-					jsviewer({flex: 1, overflow:'scroll', alignself: 'stretch', source: this.searchCode, fontsize: 14, bgcolor: "#000030", multiline: true}),
+					jsviewer({flex: 1, overflow:'scroll', alignself: 'stretch', source: this.searchCode, fontsize: 14, bgcolor: "#000030", multiline: true, format_options: {
+						force_newlines_array:false,
+						force_newlines_object:true
+					}}),
 					label({height:30, fgcolor:'#333', bgcolor:'transparent', flex: 0, fontsize:14, alignself: 'stretch', text:'DreemGL Client (./docs/examples/components/index.js)'}),
-					jsviewer({flex: 1, overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false})
+					jsviewer({flex: 1, overflow:'scroll',  alignself: 'stretch', source: this.compositionCode, fontsize: 11, bgcolor: "#000030", multiline: false,format_options: {
+						force_newlines_array:false,
+						force_newlines_object:true
+					}})
 				),
 				view({flex:1, flexdirection:'column', overflow:"scroll", flexwrap:"wrap", padding: 4, margin: 10, borderradius: 0, bgcolor:"#B3B3D7"}, cellviews)
 			)

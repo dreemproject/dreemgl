@@ -52,17 +52,17 @@ define.class(function (require, $ui$, view, label, textbox) {
 
     this.render = function render() {
         return [
-            label({marginleft:15, fgcolor:'red', bgcolor:'transparent', text:'Use POST API when data is coming from external source, like IoT devices!'}),
+            label({marginleft:15, fgcolor:'red', bgcolor:'transparent', text:'(Use POST API to directly drive DreemGL through attribute manipulation)'}),
             view({flexdirection: 'row', flex: 1, bgcolor:'transparent'},
                 view(
                     {flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), clipping:true, bgcolor:'transparent'},
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', fontsize:14, flex: 0, alignself: 'stretch', text:'Set Attribute via API (Ruby Example)'}),
-                    textbox({ flex: 1, alignself: 'stretch', readonly:true, value: this.setterCode, fontsize: 14, fgcolor:'aqua', bgcolor: "#000030", multiline: false})
+                    textbox({ flex: 1, alignself: 'stretch', readonly:false, value: this.setterCode, fontsize: 14, fgcolor:'aqua', bgcolor: "#000030", multiline: true})
                 ),
                 view(
                     {flexdirection: 'column', flex: 1, alignself: 'stretch', margin: vec4(10), padding: vec4(4), clipping:true, bgcolor:'transparent'},
                     label({height:30, fgcolor:'#333', bgcolor:'transparent', fontsize:14, flex: 0, alignself: 'stretch', text:'Get Attribute via API (Ruby Example)'}),
-                    textbox({ flex: 1, alignself: 'stretch', readonly:true, value: this.getterCode, fontsize: 14, fgcolor:'pink', bgcolor: "#000030", multiline: false})
+                    textbox({ flex: 1, alignself: 'stretch', readonly:false, value: this.getterCode, fontsize: 14, fgcolor:'pink', bgcolor: "#000030", multiline: true})
                 )
             ),
             view(
