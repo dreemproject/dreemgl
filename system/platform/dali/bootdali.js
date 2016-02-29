@@ -41,9 +41,9 @@ define.class(function(require){
 		// it's in the /dali-toolkit/node-addon/build/Release/dali
 		// relative to Dali's root folder.
 		this.onTizen = false;
-		this.daliLib = 'dali';
+		this.dalilib = 'dali';
 		try {
-			onTizen = fs.statSync('/etc/tizen-release').isFile();
+			this.onTizen = fs.statSync('/etc/tizen-release').isFile();
 		} catch (e) {
 		}
 
