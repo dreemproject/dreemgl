@@ -16,10 +16,17 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	var fs = require('fs');
 
 	this.commit = function (data) {
-		var filename = this.constructor.module.filename;
-		var source = 'define.class("$server/composition",' + data + ')';
-		console.log('[COMMIT]', filename);//, source);
-		return fs.writeFile(filename, source);
+
+		if (!define.$writefile){
+			console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
+		} else {
+			var filename = this.constructor.module.filename;
+			var source = 'define.class("$server/composition",' + data + ')';
+			console.log('[COMMIT]', filename);//, source);
+			return fs.writeFile(filename, source);
+		}
+
+		return false;
 	};
 
 	// ok now what. well we need to build our RPC interface
@@ -197,13 +204,13 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 				if (id != -1){
 					screens.splice(id, 1);
 					if (screens.length == 0){
-						delete this.connected_screens[key];						
+						delete this.connected_screens[key];
 					}
 					return;
 				}
 			}
 		}.bind(this)
-		
+
 		bus.atMessage = function(msg, socket){
 			// we will get messages from the clients
 			if(msg.type == 'connectScreen'){
@@ -249,7 +256,7 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 			if(!child.environment || child.environment === define.$environment){
 				var init = []
 				child.connectWires(init)
-				
+
 				for(var j = 0; j < init.length;j++) init[j]()
 				child.emit('init')
 			}
