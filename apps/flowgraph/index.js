@@ -11,37 +11,54 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 		var fs = require('fs')
 
 		this.name = 'fileio'
-		this.rootdirectory = '$compositions'
+		this.rootdirectory = '$apps'
 
 		this.saveComposition = function(name, data){
-			fs.writeFile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
+			this.writefile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
 		}
 
 		this.newComposition = function(name){
+			if(!define.$writefile){
+				console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
+				return null
+			}
 			console.log("new composition creation requested:", name)
 			// todo: create folder in default composition path
 			// todo: create default index.js using options from options.
 			// todo: if things go wrong, return false
-			var path = define.expandVariables(this.rootdirectory)+'/'+name
-			var file = path +'/index.js';
-			try{
-				fs.mkdirSync(path)
-			}catch(e){}
 
-			fs.writeFileSync(file,
-			"define.class('$server/composition',function(){\n"+
-			"	this.render = function(){ return [\n"+
-			"	]}\n"+
-			"})")
-			return  this.rootdirectory + '/' + name
-		}
+
+			var path = this.rootdirectory + '/' + name;
+			var realpath = define.expandVariables(path);
+
+			var mkdir = true;
+			try {
+				var stats = fs.statSync(realpath);
+				mkdir = !stats.isDirectory();
+			} catch (e) {}
+
+			if (mkdir) {
+				console.log("Making a new path", realpath);
+				fs.mkdirSync(realpath);
+			}
+
+			var file = path +'/index.js';
+			console.log("write file", file);
+			this.writefile(file,
+				"define.class('$server/composition', function() {\n"+
+				"	this.render = function(){ return [\n"+
+				"	]}\n"+
+				"})");
+
+			return path;
+		};
 
 		this.getCompositionList = function(){
 
 			var root = {collapsed:0, children:[]}
 
 			var pathset = ["compositions"];
-			var ret = readRecurDir(define.expandVariables(define['$compositions']), '', [])
+			var ret = readRecurDir(define.expandVariables(define['$apps']), '', [])
 			ret.name = "compositions"
 			root.children.push(ret)
 			return root

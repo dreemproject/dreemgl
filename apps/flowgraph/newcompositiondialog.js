@@ -11,7 +11,7 @@ define.class('$ui/view', function(require, $$,dialog, $ui$, textbox,view, icon, 
 			view({bgcolor:NaN, flexdirection:"column", padding:vec4(20,10,10,10) },
 				view({margin:10, flexdirection:"row",bgcolor:NaN, flex:1},
 					label({text:"Name:",bgcolor:NaN}),
-					textbox({value:"tadaa",name:"newnamebox",  onvalue:function(){console.log(this.find("newnamebox").value)}.bind(this),marginleft: 20, bgcolor:"#202020", multiline:false})
+					textbox({value:"newflow",name:"newnamebox",  onvalue:function(){console.log(this.find("newnamebox").value)}.bind(this),marginleft: 20, bgcolor:"#202020", multiline:false})
 				),
 				view({margin:10, flexdirection:"row",bgcolor:NaN, flex:1},
 					label({text:"Folder to be created:",bgcolor:NaN}),
