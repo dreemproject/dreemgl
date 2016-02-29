@@ -386,7 +386,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		var M = this.find("MARKER");
 		if (M){
-			M.pos = vec3(R[0],R[1]-200,R[2]);
+			M.pos = vec3(R[0],R[1]-M.fontsize,R[2]);
 			M.text =( Math.round(M.pos[0]*100)/100) + ", "+  ( Math.round(M.pos[2]*100)/100) ;
 		}
 		return R;
@@ -394,6 +394,28 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 	this.startvect = vec2(0);
 
+	this.tap = function(ev){
+		
+		
+		//this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
+		var coord  =  this.globalToLocal(ev.position);
+		var R = this.projectonplane( coord);	
+		if (R){
+			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
+
+			var zoomoffs = 0;
+			if (ev.clicker == 2) zoomoffs ++;
+		
+		
+			var r0 = (R[0]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
+			var r2 = (-R[2]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
+			
+			var M = this.find("MARKER");
+			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1]+ r2);
+			console.log(r0,r2, centermeters, latlong);		
+			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel + zoomoffs, 1);
+		}			
+	}
 	this.startDrag = function(ev){
 		var coord  =  this.globalToLocal(ev.position);
 		var R = this.projectonplane( coord);
@@ -464,11 +486,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		}
 
 		this.pointertap = function(ev){
-			var meters = geo.metersForTile({x:this.lastpos[0], y:this.lastpos[1], z:this.lastpos[2]});
-			var latlong = geo.metersToLatLng(meters.x, meters.y);
-			var zoomoffs = 0;
-			if (ev.clicker == 2) zoomoffs ++;
-			this.mapdata.setCenterLatLng(latlong[0], latlong[1] ,this.mapdata.zoomlevel + zoomoffs, 1);
+			
+			this.host.tap(ev);			
 		}
 
 		this.lastpos = vec2(0);
@@ -946,7 +965,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				view({bgcolor:NaN},[
 					res3d,
 					buildings3d,
-					//label({name:"MARKER", text:"0, 0", fontsize:220,pos:[0,-200,0], bgcolor:NaN, fgcolor: "black" }),
+					//label({name:"MARKER", text:"0, 0", outlinethickness: 2, outlinecolor:"black", outline:true, fontsize:30,pos:[0,0,0], bgcolor:NaN, fgcolor: "white" }),
 					labels3d,
 					this.constructor_children
 				])
