@@ -209,9 +209,27 @@ define.class(function(require){
 					var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
 
 					filename = compdir + "/" + filename;
-					fs.writeFile(filename, filedata)
-					console.log("[UPLOAD] Wrote", filedata.length, "bytes to", filename);
-					res.writeHead(200);
+
+					if (!define.$writefile){
+						console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
+						res.writeHead(501);
+					} else {
+						filename = define.safePath(filename);
+						if(!filename) {
+							res.writeHead(502);
+						} else {
+							try{
+								var fullname = define.expandVariables(filename);
+								fs.writeFile(fullname, filedata);
+								console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
+								res.writeHead(200);
+							}
+							catch(e){
+								res.writeHead(503);
+							}
+						}
+					}
+
 					res.end();
 					return
 				} else {
