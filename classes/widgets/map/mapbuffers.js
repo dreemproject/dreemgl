@@ -14,18 +14,32 @@ define.class(function(require, $server$, service){
 
 	var roadwidths = {
 			water:20, 
-		
 			ferry:6,
 			Ferry:6,
 			rail: 6,
 			railway: 6,	
-racetrack:6,			
+			racetrack:6,			
 			minor_road: 4,
 			major_road: 6, 
 			path: 4, highway:15,
-			Road:200}
-	var roadcolors = {water:"#30a0ff", path:"#d0d0d0", ferry:"lightblue", "rail" : vec4("purple"), "minor_road": vec4("#505050"), "major_road" : vec4("#404040"), highway:vec4("#303030")}
-	var roadmarkcolors = {water:"#30a0ff", major_road:"white", minor_road:"#a0a0a0"}
+			Road:200
+	}
+	
+	var roadcolors = {
+		water:"#30a0ff", 
+		path:"#d0d0d0", 
+		ferry:"lightblue", 
+		rail: vec4("purple"),
+		minor_road: vec4("#505050"), 
+		major_road: vec4("#404040"), 
+		highway:vec4("#303030")
+	}
+	
+	var roadmarkcolors = {
+		water:"#30a0ff", 
+		major_road:"white",
+		 minor_road:"#a0a0a0"
+	}
 
 	//this.ignoreuse = {}
 	//this.displaykinds = {}
@@ -80,9 +94,8 @@ racetrack:6,
 		national_park:true,
 		place_of_worship:true, playground:true, quarry:true, railway:true, recreation_ground:false, residential:false, retail:true,
 		riverbank:true,reservoir:true,
-		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true};
-
-	
+		runway:true, school:true, scrub:true, sports_centre:true, stadium:true, taxiway:true, theatre:true, university:true, village_green:true, wetland:true, wood:true, "urban area":true, park:true, "protected land":true, protected_area:true
+	};
 	
 	var styleset = require("./mapstyle.js")();
 	
@@ -402,92 +415,96 @@ racetrack:6,
 				var dist = 0;
 				var dist2 = 0;
 				var lastsdelta = vec2(0,0);
-			
-			if (showcaps){
-				mesh.push(
-								nx,
-								ny,
-								pre_side_delta[0], 
-								pre_side_delta[1], 
-								1, 
-								dist, 
-								linewidth, 
-								colorid, 
-								color[0], 
-								color[1], 
-								color[2],
-								color[3]
-						)
-				mesh.push(
-								nx,
-								ny,
-								pre_side_delta[0], 
-								pre_side_delta[1], 
-								-1, 
-								dist, 
-								linewidth, 
-								colorid, 
-								color[0], 
-								color[1], 
-								color[2], 
-								color[3]
-						);
-				mesh.push(
-								nx - predelta[0]*linewidth*0.5,
-								ny - predelta[1]*linewidth*0.5, 
-								pre_side_delta[0], 
-								pre_side_delta[1], 
-								0.5, 
-								-linewidth,
-								linewidth,
-								colorid, 
-								color[0], 
-								color[1], 
-								color[2], 
-								color[3]
-						);
-
-				mesh.push(
-								nx - predelta[0]*linewidth*0.5,
-								ny - predelta[1]*linewidth*0.5, 
-								pre_side_delta[0], 
-								pre_side_delta[1], 
-								0.5, 
-								-linewidth,
-								linewidth,
-								colorid, 
-								color[0], 
-								color[1], 
-								color[2], 
-								color[3]
-							);
-				mesh.push(
-								nx - predelta[0]*linewidth*0.5,
-								ny - predelta[1]*linewidth*0.5,
-								pre_side_delta[0], 
-								pre_side_delta[1], 
-								-0.5, 
-								-linewidth,
-								linewidth,
-								colorid, 
-								color[0], 
-								color[1], 
-								color[2], 
-								color[3]);
-				mesh.push(
-								nx,
-								ny, 
-								pre_side_delta[0], 
-								pre_side_delta[1], 
-								-1, 
-								dist,
-								linewidth,
-								colorid, 
-								color[0], color[1], color[2], color[3]);
-
-			}
-				var lastdelta = vec2(0);
 				
+				if (showcaps){
+					mesh.push(
+						nx,
+						ny,
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						1, 
+						dist, 
+						linewidth, 
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2],
+						color[3]
+					)
+					mesh.push(
+						nx,
+						ny,
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						-1, 
+						dist, 
+						linewidth, 
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5, 
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						0.5, 
+						-linewidth,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5, 
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						0.5, 
+						-linewidth,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+					mesh.push(
+						nx - predelta[0]*linewidth*0.5,
+						ny - predelta[1]*linewidth*0.5,
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						-0.5, 
+						-linewidth,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+					mesh.push(
+						nx,
+						ny, 
+						pre_side_delta[0], 
+						pre_side_delta[1], 
+						-1, 
+						dist,
+						linewidth,
+						colorid, 
+						color[0], 
+						color[1], 
+						color[2], 
+						color[3]
+					);
+				}
+
+				var lastdelta = vec2(0);
 				
 				for(var a = 1;a<currentarc.length;a++){
 					var A =currentarc[a];

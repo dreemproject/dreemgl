@@ -12,6 +12,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.attributes = {
 		// TODO(aki): Why latlong inverse?
 		latlong:  Config({type: vec2, value: vec2(52.3608307, 4.8626387)}),
+		// 
 		zoomlevel: Config({type: Number, value: 16}),
 		pointdata: Config({type: Array}),
 		latlongchange: Config({type: Event})
@@ -51,22 +52,31 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		if (this.dataset) this.dataset.flyTo(lat,lng, zoom, time);
 	}
 
+	// data interaction, needs to inherit from view because of animation
 	define.class(this, "mapdataset", "$ui/view", function($$, geo){
-		this.requestPending = false;
-		this.loadqueue = [];
-		this.loadqueuehash = [];
-		this.loadedblocks = {};
 
+		this.requestPending = false;
+		// all the blocks that need to be loaded (empty tile objects)
+		this.loadqueue = [];
+		// see if a block is in the queue (array of hashes)
+		this.loadqueuehash = [];
+		// hash of tile objects (simple objects containing all the geometry)
+		this.loadedblocks = {};
+		// geo library
 		var geo = this.geo = geo();
 
 		this.attributes = {
+			// cent
 			centerpos: vec2(0),
+			// position of the map
 			latlong: vec2(52.3608307, 4.8626387),
-			zoomlevel: 15,
+			// tile zoom level
+			zoomlevel: 16,
+			// amount of blocks in the cache
 			throwawaythreshold: 150,
-			callbacktarget: {}
 		}
 
+		// animatedly fly to a lat/long/zoom position in time with fly bounce (zoom level switching)
 		this.flyTo = function(lat, lng, zoom, time){
 			time = time ? time : 0
 			if (zoom > geo.default_max_zoom) zoom = geo.default_max_zoom;
@@ -82,9 +92,11 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 			else{
 				this.zoomlevel = zoom;
+				this.latlong = vec2(lat, lng)
 			}
 		}
 
+		// animatedly fly to lat/long without fly-bouncing
 		this.setCenterLatLng = function(lat, lng, zoom, time){
 			time = time ? time : 0
 			if (zoom > geo.default_max_zoom) zoom = geo.default_max_zoom;
@@ -99,12 +111,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.zoomTo(zoom, time);
 		}
 
+		// if zoomlevel changes update tiles
 		this.onzoomlevel = function(){
 			if(this.parent) {
-			this.parent.updateTiles();
+				this.parent.updateTiles();
 			}
 		}
 
+		// latlong changes, for all zoomlevels calculate tile centers
 		this.onlatlong = function(){
 			this.parent.latlong = this.latlong;
 			var m = geo.latLngToMeters(this.latlong[0], this.latlong[1])
@@ -121,6 +135,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.centers = centerset;
 		}
 
+		// zoom to animatedly zooms to a certain zoom
 		this.zoomTo = function(newz, time){
 			if (newz > geo.default_max_zoom) newz = geo.default_max_zoom;
 
@@ -136,6 +151,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 
+		// set the center in tile position x/y/zoom, uses to setCenterLatLng
 		this.setCenter = function(x,y,z, time){
 			var m = geo.metersForTile({x:x, y:y, z:z})
 			var ll = geo.metersToLatLng(m.x,m.y);
@@ -143,6 +159,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.zoomTo(z, time);
 		}
 
+		// queues up a block for loading at x,y,z
 		this.addToQueue = function(x, y, z){
 			if (x < 0 || y< 0 || z< 0 || z>geo.default_max_zoom) return;
 			var hash = createHash(x, y, z);
@@ -154,23 +171,13 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.updateLoadQueue();
 		}
 
+		// Stores a loaded block into the loadedblocks structure
 		this.processLoadedBlock = function(x, y, z, data){
 			var hash = createHash(x,y,z);
 			this.loadedblocks[hash] = {x:x, y:y, z:z, blockdata:data};
 		}
 
-		this.simulateLoaded = function(){
-			if (this.currentRequest) {
-				var r = this.currentRequest;
-				var hash = createHash(r.x, r.y, r.z);
-				this.loadedblocks[hash] = this.currentRequest
-				this.loadqueuehash[hash] =  undefined;
-				this.currentRequest = undefined;
-				this.cleanLoadedBlocks();
-				this.updateLoadQueue();
-			}
-		}
-
+		// prunes the loadedblocks to live below throwawaythreshold
 		this.cleanLoadedBlocks = function(){
 			var keys = Object.keys(this.loadedblocks);
 			if (keys.length < this.throwawaythreshold	) return;
@@ -201,6 +208,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 
+		// the geometry generation worker
 		var worker = define.class('$system/rpc/worker', function(require){
 			this.BufferGen = require("$widgets/map/mapbuffers")();
 
@@ -220,6 +228,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		})
 
+		// loads a json string tile and sends it off to the worker
 		this.loadstring = function(str){
 			// if (!window.teller) window.teller = 0;
 			// window.teller += str.length;
@@ -243,10 +252,12 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 
+		// returns a block by hash
 		this.getBlockByHash = function(hash){
 			return this.loadedblocks[hash];
 		}
 
+		// Check if there are tiles in the queue and loads the next one via RPC
 		this.updateLoadQueue = function(){
 
 			if (this.currentRequest) return; // already loading something...
@@ -283,6 +294,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.clearInterval(this.theinterval);
 		}
 
+		// looks up a city by latlong in city dictionary
 		this.gotoCity = function(name, zoom, time){
 			if (!name || name.length == 0) return ;
 			var n2 = name.toLowerCase().replace(' ', '');
@@ -300,6 +312,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.centers = [];
 
 			this.workers = prev && prev.workers || worker(0)
+			// lookup table of cities
 			this.cities = {
 				manhattan: [40.7072121, -74.0067985],
 				amsterdam: [52.3608307,   4.8626387],
@@ -315,32 +328,33 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				texel:[53.0731212,4.712878]
 			}
 
-			this.gotoCity("manhattan",11);
+			this.gotoCity("manhattan",13);
 
-			//this.setCenter(31,18,6);
+			// interval to poll the loadqueue
+			//!TODO maybe remove
 			this.theinterval = this.setInterval(function(){
 				this.updateLoadQueue();
-			}.bind(this), 50);
-
-			this.loadinterval = this.setInterval(function(){
-				//this.simulateLoaded();
-			}.bind(this), 50);
+			}.bind(this), 100);
 
 			this.rpc.urlfetch.sessionstart();
 			//this.setCenter(33656/2,21534/2, 16)
 		}
 	})
-
+	
+	// Every time we re-draw process the
 	this.atAnimate = function(){
 		this.updateTiles();
 		//this.setTimeout(this.updateTiles, 10);
 	}
 
+	// make a new dataset and updatetiles
 	this.oninit = function(){
-		this.dataset = this.mapdataset({name:"mapdata", callbacktarget: this});
+		this.dataset = this.mapdataset({name:"mapdata"});
+		//!TODO odd redraw might miss? please remove
 		this.setInterval(this.updateTiles, 1000);
 	}
 
+	// Unproject camera to XYZ (see GLU Unproject)
 	function UnProject(glx, gly, glz, modelview, projection){
 		var inv = vec4()
 		var A = mat4.mat4_mul_mat4(modelview, projection)
@@ -357,6 +371,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		return vec3(out)
 	}
 
+	// Project a mousecoord to map plane decoding (in, mouse, out, GL units)
 	this.projectonplane = function(coord){
 		var vp = this.find("mapinside");
 		if (!vp) return;
@@ -392,29 +407,30 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		return R;
 	}
 
-	this.startvect = vec2(0);
-
 	this.tap = function(ev){
 		
-		
-		//this.startcenter =  vec2(this.dataset.latlong[0], this.dataset.latlong[1]);
+		// 
 		var coord  =  this.globalToLocal(ev.position);
-		var R = this.projectonplane( coord);	
+		var R = this.projectonplane(coord);	
 		if (R){
-			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1]);
+			// 
+			var centermeters = geo.latLngToMeters(this.dataset.latlong[0], this.dataset.latlong[1])
 
 			var zoomoffs = 0;
 			if (ev.clicker == 2) zoomoffs ++;
-		
-		
+	
+			// convert GL unit to map meters	
 			var r0 = (R[0]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
 			var r2 = (-R[2]/(BufferGen.TileSize*16))*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom);
 			
-			var M = this.find("MARKER");
+			// 
+			//	var M = this.find("MARKER");
 			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1]+ r2);
 			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel + zoomoffs, 1);
-		}			
+			this.emitUpward('latlongchange', latlong)
+		}
 	}
+
 	this.startDrag = function(ev){
 		var coord  =  this.globalToLocal(ev.position);
 		var R = this.projectonplane( coord);
@@ -447,28 +463,46 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.stopDrag = function(){
 		this.emitUpward('latlongchange', this.latlong)
 	}
+	// debug tile counter
+	var alltiles = 0
 
-	var alltiles = 0;
+	// All tiles use tilebasemixin
 	var tilebasemixin = define.class(Object, function(){
 		this.attributes = {
+			// the translate in integer units 
 			trans: vec2(0),
+			// the coordinate in integer units
 			coord: vec2(0),
+			// center coordinate in mercatormeters
 			centerpos: vec2(4,3),
+			// zoomlevel of the tile
 			zoomlevel: 16,
+			// animation for bufferloaded
 			bufferloaded: 0.0,
-			tiletrans: vec2(0),
+
+			//tiletrans: vec2(0),
+			// fog color
 			fog: vec4("lightblue"),
+			// fog start
 			fogstart: 14000.0,
+			// fog end
 			fogend: 24000.,
+			// how many zoom levels away from basezoom
 			layeroffset: 0,
+			// thickness of the layer
 			layerzmult: 0,
+			// layer z offset
 			layerzoff: 0,
-			fraczoom:0.5,
+			// how far inbetween two zoomlevels you are
+			fraczoom: 0.5,
+			// center in mercatormeters
 			centermeter: vec2(0),
+			// how many meters a tile spans
 			meterspertile: 1
 		}
-
+		// amount of frames it has waited since it got queued in the load
 		this.frameswaited = 0;
+		// not animated bufferloaded as boolean
 		this.bufferloadbool = false
 
 		this.onpointerend = function(ev){
@@ -490,6 +524,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 
 		this.lastpos = vec2(0);
 
+		// return the tile position 
 		this.calctilepos = function(){
 			var x = Math.floor( this._coord[0] + this._trans[0]);
 			var y = Math.floor(this._coord[1] + this._trans[1]);
@@ -503,6 +538,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.lastpos = vec3(R[0], R[1], R[2]);
 		}
 
+		// sets the position informatio of the tile
 		this.setpos = function(newcoord, newzoom, frac, fraczoom, centermeter){
 			this._tiletrans = frac;
 			this._centermeter = centermeter;
@@ -512,6 +548,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			this.checknewpos();
 		}
 
+		// calculate if the position changed since the last frame, used for tile buffer recycling
+		// see if it should have a new vertexbuffer compared to last frame
 		this.checknewpos = function(thetime){
 			var R = this.calctilepos();
 			var newpos = 	vec3(R[0], R[1], R[2]);
@@ -529,6 +567,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 
+		// loads the tile buffer, wraps around loadBufferFromTile
+		// called in updateTiles
 		this.loadbuffer = function(){
 			md = this.mapdata;
 			if (md){
@@ -566,6 +606,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.height = this.tilesize;
 	})
 
+	// view implementation of the building
 	define.class(this,"buildingtile", "$ui/view", function(){
 		this.is = tilebasemixin;
 		this.loadBufferFromTile = function(tile){
@@ -606,7 +647,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 	});
-
+	
+	// view implementation of the land
 	define.class(this,"landtile", "$ui/view", function(){
 
 		this.is = tilebasemixin;
@@ -678,7 +720,8 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			}
 		}
 	});
-
+	
+	// view implementation of the label tile
 	define.class(this,"labeltile", "$ui/labelset", function(){
 		this.polygonoffset = 10.0;
 		this.outline = false;
@@ -758,6 +801,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.render =function(){}
 	})
 
+	// view class of the roadtile
 	define.class(this,"roadtile", "$ui/view", function(){
 		this.is = tilebasemixin;
 
@@ -825,16 +869,14 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 	this.clearcolor = "black"
 	this.framessincerender = 0;
 
-
 	this.atDraw = function(){
 		this.framessincerender++;
 	}
 
-
+	// update the map tiles
 	this.updateTiles = function(){
 		if (!this.dataset) return;
 		if (!this.dataset.centers) return;
-
 
 		var sourcezoom = this.dataset.zoomlevel;
 		this.zoomlevel = Math.ceil(sourcezoom);
@@ -885,10 +927,10 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		this.tilewidth = Math.ceil(this.layout.width / div);
 		this.tileheight = Math.ceil(this.layout.height / div);;
 
-		this.camdist = 3000;//(this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
+		this.camdist = 20000;//(this.layout.width)/Math.tan((fov/2)*((Math.PI*2.0)/360.0));
 
 		var aspect = this.layout.width/ this.layout.height;
-		var fov = (Math.atan(((this.layout.width/2)*6)/this.camdist) * 360/6.283) / aspect;
+		var fov = (Math.atan(((this.layout.width/2)*40)/this.camdist) * 360/6.283) / aspect;
 
 		var basew = this.tilewidth/2;
 		var baseh = this.tileheight/2;
@@ -946,7 +988,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				}
 			}
 		}
-
+		var zoom = 0.25
 		res.push(
 			view({
 				bgcolor:"red",
@@ -956,7 +998,7 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 				nearplane: 100 ,
 				fov: fov,
 				farplane: this.camdist * 2,
-				camera: vec3(0,-this.camdist*0.13,this.camdist*0.3), fov: fov,
+				camera: vec3(0,-this.camdist*zoom*0.13,this.camdist*zoom*0.3), fov: fov,
 				up: vec3(0,1,0),
 				lookat: vec3(0,0,0)
 			},[
