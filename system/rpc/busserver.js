@@ -11,9 +11,9 @@ define.class(function(require, exports){
 	}
 
 	// adds a WebSocket to the BusServer
-	this.addWebSocket = function(sock){
+	this.addWebSocket = function(sock, req){
 		this.sockets.push(sock)
-
+		var origin = req.headers.origin
 		sock.atClose = function(){
 			this.sockets.splice(this.sockets.indexOf(sock), 1)
 			sock.atClose = undefined			
@@ -21,7 +21,9 @@ define.class(function(require, exports){
 		}.bind(this)
 
 		sock.atMessage = function(message){
-			this.atMessage(JSON.parse(message), sock)
+			var jsonmsg = JSON.parse(message)
+			jsonmsg.origin = origin
+			this.atMessage(jsonmsg, sock)
 		}.bind(this)
 
 		this.atConnect(sock)

@@ -59,7 +59,13 @@
 
 	if(typeof window !== 'undefined') window.define = define, define.$environment = 'browser'
 	else if(typeof self !== 'undefined') self.define = define, define.$environment = 'worker'
-	else if (typeof global !== 'undefined') global.define = define, define.$environment = 'nodejs'
+	else if (typeof global !== 'undefined'){
+		Object.defineProperty(global, "define", {
+		    value: define,
+		    writable: false
+		})
+		define.$environment = 'nodejs'
+	}
 	else define.$environment = 'v8'
 
 	// default config variables
@@ -146,6 +152,24 @@
 		base = base.split(rx || /\//)
 		relative = relative.replace(/\.\.\//g,function(){ base.pop(); return ''}).replace(/\.\//g, '')
 		return define.cleanPath(base.join('/') + '/' + relative)
+	}
+
+	// constrain the path to any $symbol/ directory
+	define.safePath = function(name){
+		name = name.replace(/\\/g,'/')
+		var id = name.indexOf('..')
+		if(id !== -1){
+			var base = name.slice(0,id)
+			var rel= name.slice(id)
+			var path = define.joinPath(base, rel)
+			if(path.indexOf('..') !== -1) return undefined
+			if(path.indexOf('./') !== -1) return undefined
+			if(path.charAt(0)!=='$') return undefined
+			return path
+		}
+		if(name.charAt(0) !== '$') return undefined
+		if(name.indexOf('./') !== -1) return undefined
+		return name
 	}
 
 	define.expandVariables = function(str){

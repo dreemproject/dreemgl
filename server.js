@@ -97,6 +97,20 @@ function main(){
 		'docs':'$root/docs',
 		'test':'$root/test'
 	}
+
+	if(args['-writefile']){
+		Object.defineProperty(define, "$writefile", {
+		    value: true,
+		    writable: false
+		});
+	}
+	else{
+		Object.defineProperty(define, "$writefile", {
+		    value: false,
+		    writable: false
+		});
+	}
+
 	if(args['-nomoni']){
 		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
 		for(var i = 0; i < paths.length; i++){
@@ -196,7 +210,6 @@ function main(){
 	}
 	else{
 		var RunMonitor = require('$system/server/runmonitor')
-		console.log(typeof RunMonitor)
 		new RunMonitor(args)
 	}
 }

@@ -164,6 +164,12 @@ define.class(function(require){
 		if(req.method == 'POST'){
 			// lets do an RPC call
 
+			if(this.rootserver.addresses.indexOf(req.headers.origin) === -1){
+				console.log("WRONG ORIGIN POST API RECEIVED" + req.headers.origin)
+				res.end()
+				return false
+			}
+
 			var boundary;
 			if (req.headers && req.headers['content-type']) {
 				var type = req.headers['content-type'];
@@ -178,10 +184,12 @@ define.class(function(require){
 
 			var buffer;
 			req.on('data', function(data){
-				if (!buffer) {
-					buffer = new Buffer(data)
-				} else {
-					buffer = Buffer.concat([buffer, data])
+				if (boundary) {
+					if (!buffer) {
+						buffer = new Buffer(data)
+					} else {
+						buffer = Buffer.concat([buffer, data])
+					}
 				}
 			})
 			req.on('end', function(){
