@@ -1,6 +1,8 @@
 define.class("$server/composition",function(require,$ui$,textbox,textbox,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
 
+
 this.render=function(){
+
 
 return [
 screen(
@@ -104,8 +106,8 @@ height:100,
 width:800,
 bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),
 position:"absolute",
-x:27.034759521484375,
-y:551.6854248046875,
+x:44.034759521484375,
+y:576.6854248046875,
 opacity:0.7
 },
 icon({
@@ -166,10 +168,10 @@ width:191,
 pickalpha:-1,
 bgcolor:'red',
 position:"absolute",
-x:14,
+x:35,
 borderwidth:10,
 bordercolor:'green',
-y:456
+y:426
 }),
 textbox({position:"absolute",x:284,y:731.9999389648438})
 ),
@@ -191,6 +193,10 @@ groupreparent:false
 })
 )
 ]
+
+
 	}
+
+
 	}
-)
+);

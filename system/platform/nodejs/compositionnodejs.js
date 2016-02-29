@@ -15,20 +15,6 @@ define.class('$system/base/compositionbase', function(require, exports, baseclas
 	var path = require('path');
 	var fs = require('fs');
 
-	this.commit = function (data) {
-
-		if (!define.$writefile){
-			console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
-		} else {
-			var filename = this.constructor.module.filename;
-			var source = 'define.class("$server/composition",' + data + ')';
-			console.log('[COMMIT]', filename);//, source);
-			return fs.writeFile(filename, source);
-		}
-
-		return false;
-	};
-
 	// ok now what. well we need to build our RPC interface
 	this.postAPI = function(msg, response){
 		if(msg.type == 'attribute'){

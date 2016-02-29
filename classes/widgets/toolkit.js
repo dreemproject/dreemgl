@@ -253,16 +253,23 @@ define.class("$ui/view", function(require,
 	};
 
 	this.onchange = function(ev,src,o) {
-		console.log("[COMMIT]");//, src);
 
-		var msg = {
-			rpcid: 'this',
-			method: 'commit',
-			type: 'method',
-			args:[src]
+		var xhr = new XMLHttpRequest();
+		var formData = new FormData();
+
+		var fullpath = this.screen.composition.constructor.module.filename;
+		var filename = fullpath.substring(fullpath.lastIndexOf('/') + 1);
+		var source = 'define.class("$server/composition",' + src + ');'
+		var blob = new Blob([source], {type: 'plain/text'});
+		formData.append('file', blob, filename);
+
+		xhr.open("POST", window.location.pathname, true);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				console.log("[COMMIT]");//, src);
+			}
 		};
-
-		this.rpc.__host.callRpcMethod(msg);
+		xhr.send(formData);
 	};
 
 	this.onselected = function(ev,v,o) {
