@@ -607,7 +607,7 @@ define.class('$ui/view', function(require,
 
 	this.getCompositionName = function(){
 		// todo: get actual name from here..
-		return "newflow.js";
+		return "somename.js";
 	}
 
 	this.openComposition = function(){
@@ -627,7 +627,7 @@ define.class('$ui/view', function(require,
 				if(res){
 					console.log(res);
 					this.screen.locationhash = {
-						composition:"$apps/"+ res
+						composition:"$compositions/"+ res
 					}
 
 				}
@@ -724,7 +724,7 @@ define.class('$ui/view', function(require,
 	}
 	this.render = function(){
 		return [
-			menubar({flex:0, height:30, viewport:'2d', name:"themenu", menus:[
+			menubar({flex:0, height:20, viewport:'2d', name:"themenu", menus:[
 				{name:"File", commands:[
 					{name:"Open composition", clickaction:function(){this.openComposition();return true;}.bind(this)},
 					{name:"New composition", clickaction:function(){this.newComposition();return true;}.bind(this)},

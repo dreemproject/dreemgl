@@ -55,7 +55,9 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 	this.colormap = {
 		Number:vec4("#FF7260"),
 		int:vec4("#FF0080"),
+		int32:vec4("#FF0080"),
 		IntLike:vec4("#FF0080"),
+		float32:vec4("#D23641"),
 		float:vec4("#D23641"),
 		FloatLike:vec4("#D23641"),
 		Array:vec4("#0198E1"),
@@ -233,6 +235,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		//this.drawtarget = 'pick'
 
 		this.attributes = {
+			color:Config({type:vec4, value:vec4(0,0,0,0), meta:"color"}),
 			name:"thing",
 			title:"tadaa",
 			type:""
@@ -253,7 +256,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		this.render =function(){
 			this.hovertext = "Input " + this.title+ (this.type?(": "+ this.type):"");
 			return [
-				ballbutton({borderwidth:2, bgcolor:this.bgcolor, click: this.tapped.bind(this), alignself:"center"}),
+				ballbutton({borderwidth:2, bgcolor:this.color, click: this.tapped.bind(this), alignself:"center"}),
 				label({marginleft:5, text:uppercaseFirst(this.title), bgcolor:NaN, alignself:"center"})
 			]
 		}
@@ -263,6 +266,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		//this.drawtarget = 'pick'
 
 		this.attributes = {
+			color:Config({type:vec4, value:vec4(0,0,0,0), meta:"color"}),
 			name:"thing",
 			title:"thing",
 			type:""
@@ -285,7 +289,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 
 			return [
 				label({text:uppercaseFirst(this.name), bgcolor:NaN, alignself:"center", marginright: 5}),
-				ballbutton({borderwidth:2, bgcolor: this.bgcolor, click: this.tapped.bind(this), alignself:"center"})
+				ballbutton({borderwidth:2, bgcolor: this.color, click: this.tapped.bind(this), alignself:"center"})
 			]
 		}
 	})
@@ -294,7 +298,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var res = [];
 		for(var i = 0;i<this.inputs.length;i++){
 			var inp = this.inputs[i];
-			res.push(this.inputbutton({name:inp.name, type:inp.type.name, title:inp.title, bgcolor:inp.color}))
+			res.push(this.inputbutton({name:inp.name, type:inp.type.name, title:inp.title, color:inp.color}))
 		}
 		return res;
 	}
@@ -303,7 +307,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 		var res = [];
 		for(var i = 0;i<this.outputs.length;i++){
 			var outp = this.outputs[i];
-			res.push(this.outputbutton({name:outp.name, type:outp.type.name, title:outp.title, bgcolor:outp.color}))
+			res.push(this.outputbutton({name:outp.name, type:outp.type.name, title:outp.title, color:outp.color}))
 		}
 		return res;
 	}

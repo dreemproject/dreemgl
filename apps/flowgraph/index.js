@@ -7,15 +7,15 @@
 define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, splitcontainer, screen, view, label, $widgets$, propviewer, colorpicker, $$, flowgraph){
 
 	define.class(this, 'fileio', function($server$, fileio){
-		var path = require('path')
-		var fs = require('fs')
+		var path = require('path');
+		var fs = require('fs');
 
-		this.name = 'fileio'
-		this.rootdirectory = '$apps'
+		this.name = 'fileio';
+		this.rootdirectory = '$apps';
 
 		this.saveComposition = function(name, data){
-			this.writefile(define.expandVariables(name)+'/index.js', 'define.class("$server/composition",'+data+')')
-		}
+			this.writefile(this.rootdirectory + '/' + name + '/index.js', 'define.class("$server/composition",'+data+')')
+		};
 
 		this.newComposition = function(name){
 			if(!define.$writefile){
@@ -45,10 +45,14 @@ define.class('$server/composition', function(require, $ui$, treeview,  cadgrid, 
 			var file = path +'/index.js';
 			console.log("write file", file);
 			this.writefile(file,
-				"define.class('$server/composition', function() {\n"+
-				"	this.render = function(){ return [\n"+
-				"	]}\n"+
-				"})");
+				"define.class('$server/composition', function($ui$, screen, $flow$controllers$, dpad, keyboard, knob, xypad, $flow$displays$, inputs, outputs, labtext, album, shaderviz, $flow$services$, map, omdb, webrequest) {\n"+
+				"    this.render = function(){ \n" +
+				"        return [\n" +
+				"			outputs({name:'out', flowdata:{x:25,y:25}}),\n" +
+				"           inputs({name:'in', flowdata:{x:400,y:100}, number:wire('this.rpc.out.number')})\n" +
+				"	     ]}\n"+
+				"    }\n" +
+				");");
 
 			return path;
 		};

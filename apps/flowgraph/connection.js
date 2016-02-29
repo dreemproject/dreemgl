@@ -270,7 +270,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var out = F.findChild(this._fromoutput);
 			var yoff = 0;
 			if (out) {
-				color2 = out.bgcolor;
+				color2 = out.color;
 				yoff += out.layout.top;
 				yoff += out.parent.layout.top;
 				yoff += out.parent.parent.layout.top + 10;
@@ -285,7 +285,7 @@ define.class('$ui/view', function(require, $ui$, view, icon, treeview, cadgrid, 
 			var inp = T.findChild(this._toinput);
 			var yoff = 0;
 			if (inp) {
-				color1 = inp.bgcolor;
+				color1 = inp.color;
 
 				yoff += inp.layout.top;
 				yoff += inp.parent.layout.top;

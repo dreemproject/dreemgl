@@ -128,6 +128,10 @@ define.class(function(require, $server$, dataset){
 		var target = this.data.childnames[block]
 		var fdn = target.flowdatanode
 
+		if (!fdn) {
+			return;
+		}
+
 		fdn.value = genFlowDataObject(data)
 	}
 
@@ -332,7 +336,7 @@ define.class(function(require, $server$, dataset){
 			char_count:0
 		}
 		jsformatter.walk(this.ast, buf, {}, function(str){
-			console.log(str)
+//			console.log(str)
 			buf.char_count += str.length
 			buf.out += str
 		})
