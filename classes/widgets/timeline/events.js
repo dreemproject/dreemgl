@@ -83,7 +83,6 @@ define.class('$ui/label', function (require, $ui$, view, label) {
 
 			var localstart = this.globalToLocal(event.position)
 			var localstartx = localstart[0] - (this.offset - this.scroll[0]) * event.view.layout.width
-			console.log(localstartx)
 			var pxduration = this.duration * event.view.layout.width
 
 			if (localstartx < min(RESIZE_HANDLE_WIDTH, pxduration / 2)) {
