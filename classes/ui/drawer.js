@@ -65,10 +65,12 @@ define.class("$ui/view", function(require, $ui$, view){
 		var value = 0;
 
 		if (this.direction === "vertical") {
+			if (abs(p.movement[0]) > abs(p.movement[1])) return
 			var newy = main.y + p.movement.y;
 			newy = Math.min(Math.max(newy, 0 - main.height), this.height);
 			value = newy / this.height;
 		} else {
+			if (abs(p.movement[1]) > abs(p.movement[0])) return
 			var newx = main.x + p.movement.x;
 			newx = Math.min(Math.max(newx, 0 - main.width), this.width);
 			value = newx / this.width;

@@ -5,16 +5,16 @@
 
 // Pointerwebgl adds mouse and touch listeners and connectes them pointer.js API.
 
-define.class('$system/base/pointer', function (require, exports){
+define.class('$system/base/pointer', function (require, exports) {
 
 	this._cursor = 'arrow'
 	this._tooltip = 'Application'
 
 	Object.defineProperty(this, 'cursor', {
-		get:function(){
+		get:function() {
 			return this._cursor
 		},
-		set:function(value){
+		set:function(value) {
 			this._cursor = value
 			if (value === 'arrow') value = 'default'
 			this.device.keyboard.textarea.style.cursor =
@@ -22,10 +22,8 @@ define.class('$system/base/pointer', function (require, exports){
 		}
 	})
 
-	this.atConstructor = function(device){
-
+	this.atConstructor = function(device) {
 		this.device = device
-
 		// Internal: creates pointer array with a single pointer from mouse event data.
 		var mouseToPointers = function (event, wheelx, wheely) {
 			return [{
@@ -60,8 +58,8 @@ define.class('$system/base/pointer', function (require, exports){
 		}.bind(this)
 
 		// Internal: handler for `mousedown` event starts `mousemove` listening.
-		this.mousedown = function(e){
-			
+		this.mousedown = function(e) {
+
 			this.device.keyboard.checkSpecialKeys(e)
 
 			e.preventDefault()
@@ -79,7 +77,7 @@ define.class('$system/base/pointer', function (require, exports){
 		window.addEventListener('mousedown', this.mousedown.bind(this))
 
 		// Internal: handler for `mousemove` event.
-		this.mousemove = function(e){
+		this.mousemove = function(e) {
 			this.device.keyboard.checkSpecialKeys(e)
 			e.preventDefault()
 			this.setmove(mouseToPointers(e))
@@ -87,7 +85,7 @@ define.class('$system/base/pointer', function (require, exports){
 		this._mousemove = this.mousemove.bind(this)
 
 		// Internal: handler for `mousedown` event stops `mousemove` listening.
-		this.mouseup = function(e){
+		this.mouseup = function(e) {
 
 			//console.log(e.button)
 			if(e.button === 2) this.device.keyboard.textAreaRespondToMouse(e.pageX, e.pageY)
@@ -109,7 +107,7 @@ define.class('$system/base/pointer', function (require, exports){
 		this._mouseup = this.mouseup.bind(this)
 
 		// Internal: handler for `mousemove` for the purpose of hover tracking.
-		this.mousehover = function(e){
+		this.mousehover = function(e) {
 			e.preventDefault()
 			this.sethover(mouseToPointers(e))
 		}
@@ -117,21 +115,21 @@ define.class('$system/base/pointer', function (require, exports){
 		window.addEventListener('mousemove', this._mousehover)
 
 		// Internal: handler for `touchstart` event.
-		this.touchstart = function(e){
+		this.touchstart = function(e) {
 			e.preventDefault()
 			this.setstart(touchToPointers(e))
 		}
 		window.addEventListener('touchstart', this.touchstart.bind(this))
 
 		// Internal: handler for `touchmove` event.
-		this.touchmove = function(e){
+		this.touchmove = function(e) {
 			e.preventDefault()
 			this.setmove(touchToPointers(e))
 		}
 		window.addEventListener('touchmove', this.touchmove.bind(this))
 
 		// Internal: handler for `touchend` event.
-		this.touchend = function(e){
+		this.touchend = function(e) {
 			this.setend(touchToPointers(e))
 		}
 		window.addEventListener('touchend', this.touchend.bind(this))
@@ -145,41 +143,28 @@ define.class('$system/base/pointer', function (require, exports){
 		var is_gecko = 'MozAppearance' in document.documentElement.style
 		var is_chrome = navigator.userAgent.indexOf('Chrome') > -1
 
-		// Minimum non-zero wheel value
-		// var wheelmin = vec2(1000, 1000)
-
-		document.addEventListener('wheel', function(e){
+		document.addEventListener('wheel', function(e) {
 			e.preventDefault()
 
-			// Set wheel min non-zero value
-			//wheelmin[0] = min(wheelmin[0], abs(event.deltaX || wheelmin[0]))
-			//wheelmin[1] = min(wheelmin[1], abs(event.deltaY || wheelmin[1]))
-
-			var dx = e.deltaX, dy = e.deltaY
+			var d = vec2(e.deltaX, e.deltaY)
 
 			// line scroll
-			if (e.deltaMode === 1){
-				dx *= 12
-				dy *= 12
+			if (e.deltaMode === 1) {
+				vec2.mul_float32(d, 6, d)
 			}
+
 			// page scroll
-			else if (e.deltaMode === 2){
-				dx *= 800
-				dy *= 800
+			else if (e.deltaMode === 2) {
+				vec2.mul_float32(d, 400, d)
 			}
 
-			dx /= 2
-			dy /= 2
+			if (is_osx) {}
 
-			if (is_osx){
-
-			}
-			else if (is_windows){
-				dx /= 8;
-				dy /= 8;
+			else if (is_windows) {
+				vec2.mul_float32(d, 0.125, d)
 			}
 
-			this.setwheel(mouseToPointers(e, dx, dy))
+			this.setwheel(mouseToPointers(e, d[0], d[1]))
 		}.bind(this))
 	}
 

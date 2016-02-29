@@ -183,9 +183,9 @@ define.class('$system/base/node', function(){
 		for (var i = 0; i < this._start.length; i++) {
 			var start = this._start[i]
 
-			if(start.atHandOver){
+			if (start.atHandOver){
 				var id = start.atHandOver(pointerlist)
-				if(id >= 0){
+				if (id >= 0){
 					// we got a handoff of a particular pointer
 					pointerlist[id].handovered = start.view
 				}
@@ -209,7 +209,7 @@ define.class('$system/base/node', function(){
 
 		for (var i = 0; i < pointerlist.length; i++) {
 			// if a pointer is handoffed use that view instead
-			if(pointerlist[i].handovered) pick(pointerlist[i].handovered)
+			if (pointerlist[i].handovered) pick(pointerlist[i].handovered)
 			else this.device.pickScreen(pointerlist[i].position, pick, true)
 		}
 		this.emitPointerList(this._start, 'start')
@@ -217,6 +217,7 @@ define.class('$system/base/node', function(){
 
 	// Internal: emits `move` event.
 	this.setmove = function(pointerlist) {
+		this._wheel.length = 0
 		for (var i = 0; i < pointerlist.length; i++) {
 			var previous = this._move.getClosest(pointerlist[i])
 			var start = this._start.getById(previous.id)
@@ -227,17 +228,28 @@ define.class('$system/base/node', function(){
 			pointer.addMovement(previous || first)
 
 			// emit event hooks
-			if(start){
-				if(start.pickview){
+			if (start){
+				if (start.pickview){
 					this.device.pickScreen(pointerlist[i].position, function(view){
 						pointer.pick = view
 					}.bind(this), true)
 				}
-				if(start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
+				if (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
 			}
 			this._move.setPointer(pointer)
+			if (pointer.touch) {
+				if (abs(pointer.movement[0]) > abs(pointer.movement[1])) {
+					pointer.wheel = vec2(-pointer.movement[0], 0)
+				} else {
+					pointer.wheel = vec2(0, -pointer.movement[1])
+				}
+				this._wheel.setPointer(pointer)
+			}
 		}
 		this.emitPointerList(this._move, 'move')
+		if (this._wheel.length) {
+			this.emitPointerList(this._wheel, 'wheel')
+		}
 	}
 
 	// Internal: emits `end` event.
@@ -249,8 +261,8 @@ define.class('$system/base/node', function(){
 
 			// emit event hooks
 			var start = this._start.getById(this._move.getClosest(pointerlist[i]).id)
-			if(start){
-				if(start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
+			if (start){
+				if (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
 			}
 
 			this.device.pickScreen(pointerlist[i].position, function(view){
