@@ -208,25 +208,20 @@ define.class(function(require){
 					var compfile = this.composition.constructor.module.filename;
 					var compdir = compfile.substring(0, compfile.lastIndexOf('/'));
 
-					filename = compdir + "/" + filename;
+					filename = compdir + "/" + filename.replace(/[^A-Za-z0-9_.-]/g,'');
 
 					if (!define.$writefile){
 						console.log("writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.")
 						res.writeHead(501);
 					} else {
-						filename = define.safePath(filename);
-						if(!filename) {
-							res.writeHead(502);
-						} else {
-							try{
-								var fullname = define.expandVariables(filename);
-								fs.writeFile(fullname, filedata);
-								console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
-								res.writeHead(200);
-							}
-							catch(e){
-								res.writeHead(503);
-							}
+						try{
+							var fullname = define.expandVariables(filename);
+							fs.writeFile(fullname, filedata);
+							console.log("[UPLOAD] Wrote", filedata.length, "bytes to", fullname);
+							res.writeHead(200);
+						}
+						catch(e){
+							res.writeHead(503);
 						}
 					}
 
