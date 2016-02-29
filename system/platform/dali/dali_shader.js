@@ -37,9 +37,8 @@ define.class(function(require, exports){
 	this.atConstructor = function(vertexShader, fragmentShader) {
 		this.object_type = 'DaliShader'
 
-		// Simplify the shader by removing comments and empty lines
-        var vs = this.trimShader(vertexShader);
-        var fs = this.trimShader(fragmentShader);
+		var vs = vertexShader;
+		var fs = fragmentShader;
 
 		var shaderOptions = {
             vertexShader : vs,
@@ -53,6 +52,10 @@ define.class(function(require, exports){
 		this.fragmentShader = fragmentShader;
 
 		if (DaliApi.emitcode) {
+			// Simplify the shader by removing comments and empty lines
+			vs = this.trimShader(vs);
+			fs = this.trimShader(fs);
+
 			// #extension lines must have a \n at the end to compile
 			vs = vs.replace(/(\#extension.*)\n/g, '$1\\n\\\n');
 			fs = fs.replace(/(\#extension.*)\n/g, '$1\\n\\\n');
