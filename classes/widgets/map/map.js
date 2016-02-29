@@ -412,7 +412,6 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 			
 			var M = this.find("MARKER");
 			var latlong = geo.metersToLatLng(centermeters[0] + r0, centermeters[1]+ r2);
-			console.log(r0,r2, centermeters, latlong);		
 			this.dataset.setCenterLatLng(latlong[0], latlong[1] ,this.dataset.zoomlevel + zoomoffs, 1);
 		}			
 	}
@@ -432,7 +431,6 @@ define.class("$ui/view", function(require, $ui$, view, label, labelset, $$, geo,
 		var R = this.projectonplane( coord);		if (R){
 
 			this.newvect = vec2(  R[0]/(BufferGen.TileSize * 16),R[2]/(BufferGen.TileSize * 16) )
-			//console.log(this.zoomlevel, this.fraczoom,geo.metersPerTile(this.zoomlevel), geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom));
 			var newcenter = vec2(
 				(this.startvect[0] - this.newvect[0])*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom),
 				-(this.startvect[1] - this.newvect[1])*geo.metersPerTile(this.zoomlevel)*Math.pow(2.0, -this.fraczoom)
