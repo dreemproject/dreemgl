@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -35,7 +35,23 @@ define.class(function(require){
 		this.width = parseInt(args['-width']) || 1920;
 		this.height = parseInt(args['-height']) || 1080;
 		this.name = args['-name'] || 'dreemgl';
-		this.dalilib = args['-dalilib'] || '/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali';
+
+		// Detect location for Dali Node.js add-on. On Tizen
+		// it can be required like any npm module, on Ubuntu
+		// it's in the /dali-toolkit/node-addon/build/Release/dali
+		// relative to Dali's root folder.
+		this.onTizen = false;
+		this.daliLib = 'dali';
+		try {
+			onTizen = fs.statSync('/etc/tizen-release').isFile();
+		} catch (e) {
+		}
+
+		// Dali/nodejs interface (nodejs package at top-level of dreemgl repository)
+		if (! this.onTizen ) {
+			var daliRoot = process.env['DESKTOP_PREFIX'].replace('/dali-env/opt', '');
+			this.dalilib = daliRoot + '/dali-toolkit/node-addon/build/Release/dali'
+		}
 
 		if ('-dumpprog' in args) {
 			var dp = args['-dumpprog'];
@@ -55,7 +71,7 @@ define.class(function(require){
 		this.slow_watcher = new FileWatcher(200)
 		this.fast_watcher = new FileWatcher(10)
 
-		this.fast_watcher.atChange = 
+		this.fast_watcher.atChange =
 		this.slow_watcher.atChange = function(){
 			// lets reload this app
 			this.reload()
@@ -114,7 +130,7 @@ define.class(function(require){
 	this.reload = function(){
 		this.destroy()
 
-		// lets fill 
+		// lets fill
 		require.clearCache()
 
 		// lets see if our composition is a dir or a jsfile
@@ -138,7 +154,7 @@ define.class(function(require){
 		}
 
   		this.screenname = this.compname;
-		
+
 		// Reaching here indicates the path does not exist
 		console.log('bootdali.reload: Unable to load', jsname);
 }

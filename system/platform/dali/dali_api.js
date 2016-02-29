@@ -1,5 +1,5 @@
-/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the "License"); DreemGL is a collaboration between Teeming Society & Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/
 
@@ -104,7 +104,7 @@ define.class(function(exports){
 		DaliApi.width = settings.width
 		DaliApi.height = settings.height
 		DaliApi.screenname = settings.name
-		DaliApi.dalilib = settings.dalilib || '/home/dali/dali-nodejs/dali-toolkit/node-addon/build/Release/dali';
+		DaliApi.dalilib = settings.dalilib || DaliApi.dalilib;
 		DaliApi.dumpprog = settings.dumpprog;
 
 		DaliApi.emitcode = DaliApi.dumpprog;
@@ -142,7 +142,7 @@ define.class(function(exports){
 			// console.log('LOADING', dalilib);
 			DaliApi.dali = define.require(DaliApi.dalilib)(options);
 
-			// Create a top-level 2D layer to the stage. 
+			// Create a top-level 2D layer to the stage.
 			var dali = DaliApi.dali;
 			DaliApi.rootlayer = DaliApi.currentlayer = new DaliLayer(null, DaliApi.width, DaliApi.height);
 			dali.stage.add(DaliApi.rootlayer.dalilayer);
@@ -265,7 +265,7 @@ define.class(function(exports){
 		DaliApi.BufferId += 1;
 
 		if (DaliApi.emitcode) {
-			console.log('DALICODE: var buffer' + DaliApi.BufferId + ' = new dali.PropertyBuffer(' + JSON.stringify(format) + ', ' + nrecs + ')');			
+			console.log('DALICODE: var buffer' + DaliApi.BufferId + ' = new dali.PropertyBuffer(' + JSON.stringify(format) + ', ' + nrecs + ')');
 		}
 
 		// Write data to the buffer
@@ -306,7 +306,7 @@ define.class(function(exports){
 
 	/**
 	 * @method getArrayValue
-	 * Given the name of a uniform object, retrieve the array of values from 
+	 * Given the name of a uniform object, retrieve the array of values from
 	 * the dreemgl compiled structure. In webgl this extraction happens inline.
 	 * NaN and null values are converted to 0 (dali will error on these)
 	 * @param {Object} obj Compiled object
@@ -327,7 +327,7 @@ define.class(function(exports){
 
 				array.push(val);
 			}
-				
+
 			return array;
 		}
 
@@ -342,7 +342,7 @@ define.class(function(exports){
 
 	/**
 	 * @method getDaliPropertySize
-	 * Static. Return the number of elements required for a dali property, 
+	 * Static. Return the number of elements required for a dali property,
 	 * given the dali constant.
 	 * From Nick (via slack).
 	 * @param {Number} format property constant
@@ -362,11 +362,11 @@ define.class(function(exports){
 			return 9;
 		case dali.PROPERTY_MATRIX4:
 			return 16;
-		default: 
+		default:
 			return 1;
-		}	
+		}
 	}
-	
+
 	/**
 	 * @method getDaliPropertyType
 	 * Static. Return the dali property name for a type, given its size
@@ -412,7 +412,7 @@ define.class(function(exports){
 	 */
 	DaliApi.getHash = function(data) {
 		var str = JSON.stringify(data);
- 
+
 		// Algorithm from: https://github.com/darkskyapp/string-hash/blob/master/index.js
 		var hash = 5381, i = str.length;
 
