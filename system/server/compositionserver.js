@@ -164,7 +164,7 @@ define.class(function(require){
 		if(req.method == 'POST'){
 			// lets do an RPC call
 
-			if(this.rootserver.addresses.indexOf(req.headers.origin) === -1){
+			if(!define.$unsafeorigin && this.rootserver.addresses.indexOf(req.headers.origin) === -1){
 				console.log("WRONG ORIGIN POST API RECEIVED" + req.headers.origin)
 				res.end()
 				return false

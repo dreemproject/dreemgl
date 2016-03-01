@@ -111,6 +111,19 @@ function main(){
 		});
 	}
 
+	if(args['-unsafe']){
+		Object.defineProperty(define, "$unsafeorigin", {
+			value: true,
+			writable: false
+		});
+	}
+	else{
+		Object.defineProperty(define, "$unsafeorigin", {
+			value: false,
+			writable: false
+		});
+	}
+
 	if(args['-nomoni']){
 		var paths = Array.isArray(args['-path'])?args['-path']:[args['-path']]
 		for(var i = 0; i < paths.length; i++){

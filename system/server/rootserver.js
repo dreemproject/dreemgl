@@ -129,7 +129,7 @@ define.class(function(require){
 
 	this.upgrade = function(req, sock, head){
 
-		if(this.addresses.indexOf(req.headers.origin) === -1){
+		if(!define.$unsafeorigin && this.addresses.indexOf(req.headers.origin) === -1){
 			console.log("WRONG ORIGIN SOCKET CONNECTION RECEIVED"+ req.headers.origin+ ' -> '+this.address)
 			return false
 		}

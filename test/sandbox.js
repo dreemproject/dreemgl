@@ -1,4 +1,4 @@
-define.class("$server/composition",function(require,$ui$,textbox,textbox,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
+define.class("$server/composition",function(require,$ui$,textbox,checkbox,icon,button,label,view,screen,cadgrid,$widgets$,toolkit){
 
 
 this.render=function(){
@@ -31,9 +31,9 @@ height:391,
 width:313,
 bgcolor:vec4(0.7796770334243774,0.22304300963878632,0.35580340027809143,1),
 position:"absolute",
-x:1330,
-y:220.00015258789062,
-borderwidth:30,
+x:46,
+y:96.00015258789062,
+borderwidth:vec4(0,0,0,0),
 bordercolor:vec4(0.7597017884254456,0.7722791433334351,0.13173383474349976,1),
 rotate:{____struct:"vec3",data:[0,0,-6.037205366737908e-7]}
 },
@@ -106,8 +106,8 @@ height:100,
 width:800,
 bgcolor:vec4(0.5372024178504944,0.5082737803459167,0.30220746994018555,1),
 position:"absolute",
-x:44.034759521484375,
-y:576.6854248046875,
+x:25.034759521484375,
+y:695.6854248046875,
 opacity:0.7
 },
 icon({
@@ -125,8 +125,8 @@ height:343,
 width:669,
 bgcolor:vec4(0.32335585355758667,0.5324464440345764,0.6069661378860474,1),
 position:"absolute",
-x:208.8311767578125,
-y:29.318634033203125,
+x:393.8311767578125,
+y:44.318634033203125,
 bgimage:"$resources/textures/landscape.jpg",
 bgimagemode:"aspect-fill"
 },
@@ -136,51 +136,39 @@ opaque:true,
 icon:"heart",
 fontsize:140,
 position:"absolute",
-x:77.18701171875,
-y:44.7864990234375,
+x:175.18701171875,
+y:78.7864990234375,
 boldness:0.95
 }),
 icon({
-fgcolor:'yellow',
+fgcolor:vec4(1,0,0.826327383518219,1),
 bgcolor:'transparent',
 pickalpha:-1,
 icon:"gear",
 fontsize:80,
 position:"absolute",
-x:419.1688232421875,
-y:89.68136596679688
+x:465.1688232421875,
+y:118.68136596679688
 })
 ),
 label({
-fontsize:104,
+fontsize:84,
 pickalpha:-1,
 bgcolor:'transparent',
 fgcolor:vec4(0.2965516149997711,0.6960710287094116,0.7355074286460876,1),
-text:"Change the text!",
+text:"In-place Text Update",
 position:"absolute",
-x:446.07366943359375,
-y:617.5030517578125,
+x:62.07366943359375,
+y:534.5030517578125,
 opacity:0.6
-}),
-view({
-height:82,
-width:191,
-pickalpha:-1,
-bgcolor:'red',
-position:"absolute",
-x:35,
-borderwidth:10,
-bordercolor:'green',
-y:426
-}),
-textbox({position:"absolute",x:284,y:731.9999389648438})
+})
 ),
 toolkit({
 position:"absolute",
 visible:true,
 rulers:true,
-x:1069,
-y:20.000110626220703,
+x:932,
+y:24.00011444091797,
 width:428,
 height:836,
 dropmode:"absolute",
@@ -195,7 +183,19 @@ groupreparent:false
 ]
 
 
+
+
+
+
+
+
 	}
+
+
+
+
+
+
 
 
 	}
