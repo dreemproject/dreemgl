@@ -23,6 +23,9 @@ Guide](https://github.com/dreemproject/dreemgl/blob/master/docs/developer_guide/
   API reference documentation for all classes, methods,
   attributes.
 
+* [DreemGL Visual Layout Toolkit](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/toolkit/README.md)
+A guide for designer's using the layout toolkit to prototype screen designs and interactions. 
+
 * [Extending DreemGL with New Components](https://github.com/dreemproject/dreemgl/tree/master/docs/guides/components/README.md)
 A guide for extending DreemGL with new services, devices and other components. A live slide-show that demonstrates many of the same concepts in this guide can be found in the [/examples/extdemo](https://github.com/dreemproject/dreemgl/tree/master/examples/extdemo) directory.
 
