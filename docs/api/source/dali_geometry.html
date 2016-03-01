@@ -876,8 +876,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> attrlocs) {
                         tosort.push([attrlocs[key].offset, key]);
                 }
-                tosort.sort();
-                <span class="comment">// console.log('SORTED', tosort);</span>
+                tosort.sort(<span class="keyword">function</span>(a,b) { <span class="keyword">return</span> a[<span class="integer">0</span>]-b[<span class="integer">0</span>]});  <span class="comment">// Numeric sort!</span>
+                <span class="comment">//console.log('SORTED', tosort);</span>
                 
                 <span class="keyword">for</span>(<span class="keyword">var</span> i <span class="keyword">in</span> tosort) {
                         key = tosort[i][<span class="integer">1</span>];

@@ -277,34 +277,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n123" name="n123">123</a>
 <a href="#n124" name="n124">124</a>
 <a href="#n125" name="n125">125</a>
-<a href="#n126" name="n126">126</a>
-<a href="#n127" name="n127">127</a>
-<a href="#n128" name="n128">128</a>
-<a href="#n129" name="n129">129</a>
-<strong><a href="#n130" name="n130">130</a></strong>
-<a href="#n131" name="n131">131</a>
-<a href="#n132" name="n132">132</a>
-<a href="#n133" name="n133">133</a>
-<a href="#n134" name="n134">134</a>
-<a href="#n135" name="n135">135</a>
-<a href="#n136" name="n136">136</a>
-<a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
-<strong><a href="#n140" name="n140">140</a></strong>
-<a href="#n141" name="n141">141</a>
-<a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
-<a href="#n144" name="n144">144</a>
-<a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
 
 <span class="comment">/**
  * @class FlickrLib
@@ -337,16 +314,14 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          * You can access the flickr npm object using this.flickr. It won't exist
          * until authentication is finished.
          */</span>
-        <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>() {
-        }
 
         <span class="comment">// Execute a flickr method(func), after authentication is complete.</span>
         <span class="comment">// This can be immediate, or delayed if the flickr object does not exist yet.</span>
         <span class="local-variable">this</span>.<span class="function">execute</span> = <span class="keyword">function</span>(func) {
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.flickr) {
                         <span class="comment">// Already authenticated.</span>
-                        func();
-                        <span class="keyword">return</span>;
+                        func()
+                        <span class="keyword">return</span>
                 }
 
                 <span class="comment">// Authenticate</span>
@@ -358,23 +333,20 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         ,<span class="key">access_token_secret</span>: process.env.FLICKR_ACCESS_TOKEN_SECRET
                         ,<span class="key">silent</span>: <span class="predefined-constant">true</span>
                         ,<span class="key">progress</span>: <span class="predefined-constant">false</span>
-                };
+                }
 
-                <span class="keyword">var</span> self = <span class="local-variable">this</span>;
+                <span class="keyword">var</span> self = <span class="local-variable">this</span>
                 Flickr.authenticate(options, <span class="keyword">function</span>(error, flickr) {
                         <span class="keyword">if</span> (error) {
-                                <span class="local-variable">this</span>.autherror = error;
-                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">flickr Auth error</span><span class="delimiter">'</span></span>, error);
-                                <span class="keyword">return</span>;
+                                <span class="local-variable">this</span>.autherror = error
+                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">flickr Auth error</span><span class="delimiter">'</span></span>, error)
+                                <span class="keyword">return</span>
                         }
-                        self.flickr = flickr;
-
-                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">AUTH COMPLETE</span><span class="delimiter">&quot;</span></span>);
-
-                        func();
-                });
+                        self.flickr = flickr
+                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">AUTH COMPLETE</span><span class="delimiter">&quot;</span></span>)
+                        func()
+                })
         }
-
 
         <span class="comment">// Search interface to retrieve images.</span>
         <span class="comment">//</span>
@@ -383,37 +355,30 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>(cb, options) {
 
                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.flickr) {
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.autherror) {
-                                <span class="comment">// Auth has already failed so exit</span>
-                                <span class="keyword">return</span>;
-                        }
-
-                        <span class="comment">// Authenticate first and then run this method again</span>
-                        <span class="keyword">var</span> self = <span class="local-variable">this</span>;
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.autherror) <span class="keyword">return</span>
+                        <span class="keyword">var</span> self = <span class="local-variable">this</span>
                         <span class="keyword">var</span> func = (<span class="keyword">function</span>() {
-                                <span class="comment">//console.log('func callback after auth');</span>
                                 self.search(cb, options)
-                        }.bind(<span class="local-variable">this</span>));
-                        <span class="local-variable">this</span>.execute(func);
-                        <span class="keyword">return</span>;
+                        }.bind(<span class="local-variable">this</span>))
+                        <span class="local-variable">this</span>.execute(func)
+                        <span class="keyword">return</span>
                 }
 
-                <span class="comment">// Already authenticated</span>
-                <span class="keyword">var</span> PAGE = <span class="integer">1</span>;
+                <span class="keyword">var</span> PAGE = <span class="integer">1</span>
                 <span class="comment">// Default options</span>
                 <span class="comment">// https://www.flickr.com/services/api/flickr.photos.search.html</span>
                 <span class="keyword">if</span> (!options) {
                         options = {
-                                <span class="key">api_key</span> : process.env.FLICKR_KEY
-                                <span class="comment">//,sort: 'date-taken-desc'</span>
-                                ,<span class="key">lat</span>: <span class="float">37.826664</span>   <span class="comment">// Alcatraz</span>
-                                ,<span class="key">lon</span>: -<span class="float">122.423012</span>
-                                ,<span class="key">radius</span>: <span class="integer">2</span> <span class="comment">// 2 km</span>
-                                ,<span class="key">per_page</span>: <span class="integer">250</span> <span class="comment">// Max per page</span>
-                                ,<span class="key">page</span>: PAGE
-                                ,<span class="key">extras</span>: <span class="string"><span class="delimiter">'</span><span class="content">geo, url_m, date_taken</span><span class="delimiter">'</span></span>
-                                ,<span class="key">min_taken_date</span>: <span class="string"><span class="delimiter">'</span><span class="content">2016-01-01</span><span class="delimiter">'</span></span>
-                        };
+                                <span class="key">api_key</span> : process.env.FLICKR_KEY,
+                                <span class="key">sort</span>: <span class="string"><span class="delimiter">'</span><span class="content">date-taken-desc</span><span class="delimiter">'</span></span>,
+                                <span class="key">lat</span>: <span class="float">37.826664</span>, <span class="comment">// Alcatraz,</span>
+                                <span class="key">lon</span>: -<span class="float">122.423012</span>,
+                                <span class="key">radius</span>: <span class="integer">2</span>, <span class="comment">// 2 km,</span>
+                                <span class="key">per_page</span>: <span class="integer">250</span>, <span class="comment">// Max per page,</span>
+                                <span class="key">page</span>: PAGE,
+                                <span class="key">extras</span>: <span class="string"><span class="delimiter">'</span><span class="content">geo, url_m, date_taken</span><span class="delimiter">'</span></span>,
+                                <span class="key">min_taken_date</span>: <span class="string"><span class="delimiter">'</span><span class="content">2016-01-01</span><span class="delimiter">'</span></span>
+                        }
                 }
 
                 <span class="local-variable">this</span>.flickr.photos.search(options, <span class="keyword">function</span>(err, result) {
@@ -433,20 +398,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="key">date</span>: <span class="keyword">new</span> Date(photo.datetaken).getTime()
                                 })
                         }
-
-                        <span class="comment">// // Save data to JSON</span>
-                        <span class="comment">// var fs = require('fs');</span>
-                        <span class="comment">// fs.writeFile(&quot;compositions/timeline/data/flickr&quot;+PAGE+&quot;.json&quot;, JSON.stringify(_photos, null, 4), function(err) {</span>
-                        <span class="comment">//     if (err) return console.log(err);</span>
-                        <span class="comment">// });</span>
-
-                        cb(_photos);
-                });
-
-                <span class="keyword">return</span>;
+                        cb(_photos)
+                })
+                <span class="keyword">return</span>
         }
-
-});
+})
 </pre></td>
 </tr></table>
 

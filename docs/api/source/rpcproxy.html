@@ -298,6 +298,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n144" name="n144">144</a>
 <a href="#n145" name="n145">145</a>
 <a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -377,8 +378,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> keys = Object.keys(proto)
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; keys.length; i++){
                                 <span class="keyword">var</span> key = keys[i]
-
                                 <span class="keyword">if</span>(key <span class="keyword">in</span> proxy || key.charAt(<span class="integer">0</span>) === <span class="string"><span class="delimiter">'</span><span class="content">_</span><span class="delimiter">'</span></span>) <span class="keyword">continue</span>
+                                <span class="comment">//console.log(&quot;RPC&quot;+key, proto.__lookupSetter__(key))</span>
+
                                 <span class="keyword">if</span>(proto.isAttribute(key)){ <span class="comment">// we iz attribute</span>
                                         <span class="comment">// we have to ignore property binds</span>
                                         <span class="keyword">var</span> props = proto.getAttributeConfig(key)

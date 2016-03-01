@@ -254,53 +254,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n100" name="n100">100</a></strong>
 <a href="#n101" name="n101">101</a>
 <a href="#n102" name="n102">102</a>
-<a href="#n103" name="n103">103</a>
-<a href="#n104" name="n104">104</a>
-<a href="#n105" name="n105">105</a>
-<a href="#n106" name="n106">106</a>
-<a href="#n107" name="n107">107</a>
-<a href="#n108" name="n108">108</a>
-<a href="#n109" name="n109">109</a>
-<strong><a href="#n110" name="n110">110</a></strong>
-<a href="#n111" name="n111">111</a>
-<a href="#n112" name="n112">112</a>
-<a href="#n113" name="n113">113</a>
-<a href="#n114" name="n114">114</a>
-<a href="#n115" name="n115">115</a>
-<a href="#n116" name="n116">116</a>
-<a href="#n117" name="n117">117</a>
-<a href="#n118" name="n118">118</a>
-<a href="#n119" name="n119">119</a>
-<strong><a href="#n120" name="n120">120</a></strong>
-<a href="#n121" name="n121">121</a>
-<a href="#n122" name="n122">122</a>
-<a href="#n123" name="n123">123</a>
-<a href="#n124" name="n124">124</a>
-<a href="#n125" name="n125">125</a>
-<a href="#n126" name="n126">126</a>
-<a href="#n127" name="n127">127</a>
-<a href="#n128" name="n128">128</a>
-<a href="#n129" name="n129">129</a>
-<strong><a href="#n130" name="n130">130</a></strong>
-<a href="#n131" name="n131">131</a>
-<a href="#n132" name="n132">132</a>
-<a href="#n133" name="n133">133</a>
-<a href="#n134" name="n134">134</a>
-<a href="#n135" name="n135">135</a>
-<a href="#n136" name="n136">136</a>
-<a href="#n137" name="n137">137</a>
-<a href="#n138" name="n138">138</a>
-<a href="#n139" name="n139">139</a>
-<strong><a href="#n140" name="n140">140</a></strong>
-<a href="#n141" name="n141">141</a>
-<a href="#n142" name="n142">142</a>
-<a href="#n143" name="n143">143</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
 
 <span class="comment">/**
  * @class FourSquareLib
@@ -323,50 +281,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          */</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>() {
                 <span class="keyword">var</span> config = {
-                        <span class="key">foursquare</span>: {}
-                        ,<span class="key">secrets</span>: {
-                                <span class="key">clientId</span>: process.env.FOURSQUARE_CLIENT_ID
-                                ,<span class="key">clientSecret</span>: process.env.FOURSQUARE_SECRET
-                                ,<span class="key">redirectUrl</span>: <span class="string"><span class="delimiter">'</span><span class="content">redirect</span><span class="delimiter">'</span></span>
+                        <span class="key">foursquare</span>: {},
+                        <span class="key">secrets</span>: {
+                                <span class="key">clientId</span>: process.env.FOURSQUARE_CLIENT_ID,
+                                <span class="key">clientSecret</span>: process.env.FOURSQUARE_SECRET,
+                                <span class="key">redirectUrl</span>: <span class="string"><span class="delimiter">'</span><span class="content">redirect</span><span class="delimiter">'</span></span>
                         }
                 }
-
-                <span class="local-variable">this</span>.foursquare = require(<span class="string"><span class="delimiter">'</span><span class="content">node-foursquare</span><span class="delimiter">'</span></span>)(config);
-
+                <span class="local-variable">this</span>.foursquare = require(<span class="string"><span class="delimiter">'</span><span class="content">node-foursquare</span><span class="delimiter">'</span></span>)(config)
                 <span class="comment">// We're using calls that don't require an access token</span>
-                <span class="local-variable">this</span>.accessToken = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>;
+                <span class="local-variable">this</span>.accessToken = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
         }
-
-
-        <span class="comment">// Search interface to query locations. Search and explore are different</span>
-        <span class="comment">// api endpionts for foursquare. explore returns recomended places where</span>
-        <span class="comment">// search shows all the data.</span>
-        <span class="comment">//</span>
-        <span class="comment">// callback Callback method which is passed the returned photos, as an array.</span>
-        <span class="comment">// location Location to search around [lat, lon]. If missing, SF is used</span>
-        <span class="comment">// options  Hash of search options. If not defined, defaults are used.</span>
-        <span class="comment">// nimages  Max number of images to return per location. Default=null which</span>
-        <span class="comment">//          will not return any images</span>
-        <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>(callback, location, options, nimages) {
-                <span class="comment">// location = location || [37.784173, -122.401557] // Mascone center</span>
-                location = location || [<span class="float">37.859603</span>, -<span class="float">122.491075</span>] <span class="comment">// Sausalito</span>
-                options = options || {}
-
-                <span class="comment">// Search for locations</span>
-                <span class="local-variable">this</span>.foursquare.Venues.search(location[<span class="integer">0</span>], location[<span class="integer">1</span>], <span class="predefined-constant">null</span>, options, <span class="local-variable">this</span>.accessToken, <span class="keyword">function</span>(error, data) {
-                        <span class="keyword">if</span> (error) console.log(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>, error);
-
-                        <span class="keyword">if</span> (data &amp;&amp; data.venues) {
-                                <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> data.venues) {
-                                        <span class="keyword">var</span> venue = data.venues[i];
-                                        <span class="comment">//console.log('LOCATION', venue.location);</span>
-                                        <span class="comment">//console.log('STATS', venue.stats);</span>
-                                }
-                        }
-                });
-
-        }
-
 
         <span class="comment">// Search interface to query recomended locations. Only locations with</span>
         <span class="comment">// images are returned.</span>
@@ -375,47 +300,46 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// callback Callback method which is passed the returned venues, as an array.</span>
         <span class="comment">// location Location to search around [lat, lon]. If missing, SF is used</span>
         <span class="comment">// options  Hash of search options. If not defined, defaults are used.</span>
-        <span class="local-variable">this</span>.<span class="function">explore</span> = <span class="keyword">function</span>(callback, location, options) {
-                <span class="comment">// location = location || [37.784173, -122.401557] // Mascone center</span>
-                location = location || [<span class="float">37.859603</span>, -<span class="float">122.491075</span>] <span class="comment">// Sausalito</span>
-                <span class="comment">// location = location || [37.892600, -122.570779] // Mt Tam</span>
+        <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>(options, callback) {
                 options = options || {}
 
-                <span class="comment">// Add photos</span>
-                options[<span class="string"><span class="delimiter">'</span><span class="content">openNow</span><span class="delimiter">'</span></span>] = <span class="integer">0</span>
-                options[<span class="string"><span class="delimiter">'</span><span class="content">venuePhotos</span><span class="delimiter">'</span></span>] = <span class="integer">1</span>
-                options[<span class="string"><span class="delimiter">'</span><span class="content">limit</span><span class="delimiter">'</span></span>] = <span class="integer">250</span>
-                options[<span class="string"><span class="delimiter">'</span><span class="content">radius</span><span class="delimiter">'</span></span>] = <span class="integer">100000</span>
-                options[<span class="string"><span class="delimiter">'</span><span class="content">section</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">'</span><span class="content">coffee</span><span class="delimiter">'</span></span>
+                <span class="keyword">if</span> (options[<span class="string"><span class="delimiter">'</span><span class="content">location</span><span class="delimiter">'</span></span>] === <span class="predefined-constant">undefined</span>) options[<span class="string"><span class="delimiter">'</span><span class="content">location</span><span class="delimiter">'</span></span>] = [<span class="float">37.859603</span>, -<span class="float">122.491075</span>]
+                <span class="keyword">if</span> (options[<span class="string"><span class="delimiter">'</span><span class="content">openNow</span><span class="delimiter">'</span></span>] === <span class="predefined-constant">undefined</span>) options[<span class="string"><span class="delimiter">'</span><span class="content">openNow</span><span class="delimiter">'</span></span>] = <span class="integer">0</span>
+                <span class="keyword">if</span> (options[<span class="string"><span class="delimiter">'</span><span class="content">venuePhotos</span><span class="delimiter">'</span></span>] === <span class="predefined-constant">undefined</span>) options[<span class="string"><span class="delimiter">'</span><span class="content">venuePhotos</span><span class="delimiter">'</span></span>] = <span class="integer">1</span>
+                <span class="keyword">if</span> (options[<span class="string"><span class="delimiter">'</span><span class="content">limit</span><span class="delimiter">'</span></span>] === <span class="predefined-constant">undefined</span>) options[<span class="string"><span class="delimiter">'</span><span class="content">limit</span><span class="delimiter">'</span></span>] = <span class="integer">250</span>
+                <span class="keyword">if</span> (options[<span class="string"><span class="delimiter">'</span><span class="content">radius</span><span class="delimiter">'</span></span>] === <span class="predefined-constant">undefined</span>) options[<span class="string"><span class="delimiter">'</span><span class="content">radius</span><span class="delimiter">'</span></span>] = <span class="integer">1000</span>
+                <span class="keyword">if</span> (options[<span class="string"><span class="delimiter">'</span><span class="content">section</span><span class="delimiter">'</span></span>] === <span class="predefined-constant">undefined</span>) options[<span class="string"><span class="delimiter">'</span><span class="content">section</span><span class="delimiter">'</span></span>] = <span class="string"><span class="delimiter">'</span><span class="content">coffee</span><span class="delimiter">'</span></span>
 
                 <span class="comment">// Search for locations</span>
-                <span class="local-variable">this</span>.foursquare.Venues.explore(location[<span class="integer">0</span>], location[<span class="integer">1</span>], <span class="predefined-constant">null</span>, options, <span class="local-variable">this</span>.accessToken, <span class="keyword">function</span>(error, data) {
-                        <span class="keyword">if</span> (error) console.error(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>, error);
-                        <span class="comment">//console.log('data', data);</span>
+                <span class="local-variable">this</span>.foursquare.Venues.explore(options.location[<span class="integer">0</span>], options.location[<span class="integer">1</span>], <span class="predefined-constant">null</span>, options, <span class="local-variable">this</span>.accessToken, <span class="keyword">function</span>(error, data) {
+                        <span class="keyword">if</span> (error) console.error(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>, error)
+                        <span class="comment">//console.log('data', data)</span>
 
                         venues = []
                         <span class="comment">// Return information for the first set of items</span>
                         <span class="keyword">if</span> (data &amp;&amp; data.groups) {
-                                <span class="keyword">var</span> items = data.groups[<span class="integer">0</span>].items;
+                                <span class="keyword">var</span> items = data.groups[<span class="integer">0</span>].items
                                 <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> items) {
-                                        <span class="keyword">var</span> venue = items[i].venue;
-                                        <span class="keyword">var</span> photoUrl;
+                                        <span class="keyword">var</span> venue = items[i].venue
+                                        <span class="keyword">var</span> photoUrl
                                         <span class="keyword">if</span> (venue.photos &amp;&amp; venue.photos.groups) {
                                                 <span class="comment">// Ignore any issues with the returned data</span>
                                                 <span class="keyword">try</span> {
                                                         <span class="keyword">var</span> group = venue.photos.groups[<span class="integer">0</span>]
-                                                        <span class="keyword">if</span> (!group) <span class="keyword">continue</span>;
-                                                        <span class="keyword">var</span> item = venue.photos.groups[<span class="integer">0</span>].items[<span class="integer">0</span>];
-                                                        photoUrl = item.prefix + <span class="string"><span class="delimiter">'</span><span class="content">300x300</span><span class="delimiter">'</span></span> + item.suffix;
+                                                        <span class="keyword">if</span> (!group) <span class="keyword">continue</span>
+                                                        <span class="keyword">var</span> item = venue.photos.groups[<span class="integer">0</span>].items[<span class="integer">0</span>]
+                                                        photoUrl = item.prefix + <span class="string"><span class="delimiter">'</span><span class="content">300x300</span><span class="delimiter">'</span></span> + item.suffix
                                                 }
                                                 <span class="keyword">catch</span> (ex) {
-                                                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">Exception</span><span class="delimiter">'</span></span>, ex);
+                                                        console.error(<span class="string"><span class="delimiter">'</span><span class="content">Exception</span><span class="delimiter">'</span></span>, ex)
                                                 }
                                         }
 
                                         venues.push({
                                                 <span class="key">url</span>: photoUrl,
+                                                <span class="key">id</span>: venue.id,
                                                 <span class="key">title</span>: venue.name,
+                                                <span class="key">category</span>: venue.categories[<span class="integer">0</span>].name,
                                                 <span class="key">width</span>: <span class="integer">300</span>,
                                                 <span class="key">height</span>: <span class="integer">300</span>,
                                                 <span class="key">latitude</span>: venue.location.lat,
@@ -423,22 +347,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                                 <span class="key">category</span>: venue.categories[<span class="integer">0</span>].shortName,
                                                 <span class="key">rating</span>: venue.rating,
                                                 <span class="key">price</span>: venue.price ? venue.price.tier : <span class="integer">0</span>
-                                        });
+                                        })
 
                                 }
                         }
-
-                        <span class="comment">// var fs = require('fs');</span>
-                        <span class="comment">// fs.writeFile(&quot;apps/tripplanner/data/coffee.json&quot;, JSON.stringify(venues, null, 4), function(err) {</span>
-                        <span class="comment">//     if (err) return console.log(err);</span>
-                        <span class="comment">// });</span>
-
-                        callback(venues);
-                });
+                        callback(venues)
+                })
 
         }
 
-});
+})
 </pre></td>
 </tr></table>
 

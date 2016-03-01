@@ -483,6 +483,19 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n329" name="n329">329</a>
 <strong><a href="#n330" name="n330">330</a></strong>
 <a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
+<a href="#n336" name="n336">336</a>
+<a href="#n337" name="n337">337</a>
+<a href="#n338" name="n338">338</a>
+<a href="#n339" name="n339">339</a>
+<strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -585,6 +598,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="comment">// Internal: Returns pointer object.</span>
         <span class="comment">// It calculats deltas, min and max is reference pointer is provided.</span>
         <span class="keyword">var</span> <span class="function">Pointer</span> = <span class="keyword">function</span>(pointer, id, view) {
+                <span class="comment">// TODO(aki): add start value</span>
                 <span class="local-variable">this</span>.id = id
                 <span class="local-variable">this</span>.view = view
                 <span class="local-variable">this</span>.value = pointer.value
@@ -668,9 +682,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>._start.length; i++) {
                         <span class="keyword">var</span> start = <span class="local-variable">this</span>._start[i]
 
-                        <span class="keyword">if</span>(start.atHandOver){
+                        <span class="keyword">if</span> (start.atHandOver){
                                 <span class="keyword">var</span> id = start.atHandOver(pointerlist)
-                                <span class="keyword">if</span>(id &gt;= <span class="integer">0</span>){
+                                <span class="keyword">if</span> (id &gt;= <span class="integer">0</span>){
                                         <span class="comment">// we got a handoff of a particular pointer</span>
                                         pointerlist[id].handovered = start.view
                                 }
@@ -694,7 +708,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
                         <span class="comment">// if a pointer is handoffed use that view instead</span>
-                        <span class="keyword">if</span>(pointerlist[i].handovered) pick(pointerlist[i].handovered)
+                        <span class="keyword">if</span> (pointerlist[i].handovered) pick(pointerlist[i].handovered)
                         <span class="keyword">else</span> <span class="local-variable">this</span>.device.pickScreen(pointerlist[i].position, pick, <span class="predefined-constant">true</span>)
                 }
                 <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._start, <span class="string"><span class="delimiter">'</span><span class="content">start</span><span class="delimiter">'</span></span>)
@@ -702,6 +716,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="comment">// Internal: emits `move` event.</span>
         <span class="local-variable">this</span>.<span class="function">setmove</span> = <span class="keyword">function</span>(pointerlist) {
+                <span class="local-variable">this</span>._wheel.length = <span class="integer">0</span>
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; pointerlist.length; i++) {
                         <span class="keyword">var</span> previous = <span class="local-variable">this</span>._move.getClosest(pointerlist[i])
                         <span class="keyword">var</span> start = <span class="local-variable">this</span>._start.getById(previous.id)
@@ -712,17 +727,28 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         pointer.addMovement(previous || first)
 
                         <span class="comment">// emit event hooks</span>
-                        <span class="keyword">if</span>(start){
-                                <span class="keyword">if</span>(start.pickview){
+                        <span class="keyword">if</span> (start){
+                                <span class="keyword">if</span> (start.pickview){
                                         <span class="local-variable">this</span>.device.pickScreen(pointerlist[i].position, <span class="keyword">function</span>(view){
                                                 pointer.pick = view
                                         }.bind(<span class="local-variable">this</span>), <span class="predefined-constant">true</span>)
                                 }
-                                <span class="keyword">if</span>(start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
+                                <span class="keyword">if</span> (start.atMove) start.atMove(pointerlist[i], pointerlist[i].value, start)
                         }
                         <span class="local-variable">this</span>._move.setPointer(pointer)
+                        <span class="keyword">if</span> (pointer.touch) {
+                                <span class="keyword">if</span> (abs(pointer.movement[<span class="integer">0</span>]) &gt; abs(pointer.movement[<span class="integer">1</span>])) {
+                                        pointer.wheel = vec2(-pointer.movement[<span class="integer">0</span>], <span class="integer">0</span>)
+                                } <span class="keyword">else</span> {
+                                        pointer.wheel = vec2(<span class="integer">0</span>, -pointer.movement[<span class="integer">1</span>])
+                                }
+                                <span class="local-variable">this</span>._wheel.setPointer(pointer)
+                        }
                 }
                 <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._move, <span class="string"><span class="delimiter">'</span><span class="content">move</span><span class="delimiter">'</span></span>)
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._wheel.length) {
+                        <span class="local-variable">this</span>.emitPointerList(<span class="local-variable">this</span>._wheel, <span class="string"><span class="delimiter">'</span><span class="content">wheel</span><span class="delimiter">'</span></span>)
+                }
         }
 
         <span class="comment">// Internal: emits `end` event.</span>
@@ -734,8 +760,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="comment">// emit event hooks</span>
                         <span class="keyword">var</span> start = <span class="local-variable">this</span>._start.getById(<span class="local-variable">this</span>._move.getClosest(pointerlist[i]).id)
-                        <span class="keyword">if</span>(start){
-                                <span class="keyword">if</span>(start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
+                        <span class="keyword">if</span> (start){
+                                <span class="keyword">if</span> (start.atEnd) start.atEnd(pointerlist[i], pointerlist[i].value, start)
                         }
 
                         <span class="local-variable">this</span>.device.pickScreen(pointerlist[i].position, <span class="keyword">function</span>(view){

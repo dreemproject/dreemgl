@@ -197,6 +197,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n43" name="n43">43</a>
 <a href="#n44" name="n44">44</a>
 <a href="#n45" name="n45">45</a>
+<a href="#n46" name="n46">46</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -207,6 +208,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.position = <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>
         <span class="local-variable">this</span>.vertical = <span class="predefined-constant">false</span>
+        <span class="local-variable">this</span>.visible = <span class="predefined-constant">true</span>
 
         <span class="local-variable">this</span>.attributes = {
                 <span class="key">zoom</span>: Config({<span class="key">value</span>: wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.zoom</span><span class="delimiter">'</span></span>)}),
@@ -222,16 +224,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.layout.left = <span class="integer">0</span>
                 <span class="local-variable">this</span>.layout.height = <span class="integer">10</span>
                 <span class="local-variable">this</span>.layout.width =  <span class="local-variable">this</span>.parent.layout.width
-                <span class="local-variable">this</span>.layout.top =  <span class="local-variable">this</span>.parent.layout.height - <span class="local-variable">this</span>.layout.height
+                <span class="local-variable">this</span>.layout.top = <span class="local-variable">this</span>.parent.layout.height - <span class="local-variable">this</span>.layout.height
         }
 
-        <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
+        <span class="local-variable">this</span>.<span class="function">atAnimate</span> = <span class="keyword">function</span> () {
                 <span class="local-variable">this</span>.updateScrollbar()
         }
 
         <span class="comment">// internal: show/hide and resize scrollbar</span>
         <span class="local-variable">this</span>.<span class="function">updateScrollbar</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>._total = <span class="local-variable">this</span>.parent.getRange() / <span class="local-variable">this</span>.zoom / <span class="local-variable">this</span>.parent.TIME_SCALE
+                <span class="local-variable">this</span>._total = <span class="local-variable">this</span>.parent.getDuration() / <span class="local-variable">this</span>.zoom / <span class="local-variable">this</span>.parent.TIME_SCALE
                 <span class="local-variable">this</span>._page = <span class="integer">1</span>
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._total &gt; <span class="local-variable">this</span>._page - <span class="float">0.1</span>){
                         <span class="keyword">var</span> offset = clamp(<span class="local-variable">this</span>._value, <span class="integer">0</span>, <span class="local-variable">this</span>._total - <span class="local-variable">this</span>._page)

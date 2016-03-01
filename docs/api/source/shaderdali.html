@@ -773,6 +773,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n619" name="n619">619</a>
 <strong><a href="#n620" name="n620">620</a></strong>
 <a href="#n621" name="n621">621</a>
+<a href="#n622" name="n622">622</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -1088,6 +1089,7 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
                         }
                 }
                 gl.uniform1i(TEXTURE_LOC, TEXTURE_ID)
+                <span class="keyword">if</span>(TEXTURE_ID &gt; <span class="integer">0</span>)<span class="reserved">debugger</span>
                 TEXTURE_END
 
                 <span class="comment">// attributes</span>
@@ -1116,7 +1118,7 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
                 ATTRLOC_ATTRIBPTR
                 ATTRLOC_END
 
-                <span class="keyword">var</span> dalimaterial = root.dalimaterial;
+                <span class="keyword">var</span> blender = root.dalimaterial.hasBlender() ? root.dalimaterial : root.dalirenderer;
 
                 <span class="comment">// set up blend mode</span>
                 <span class="keyword">if</span>(root.alpha_blend_eq.op){
@@ -1137,9 +1139,9 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
 
                         <span class="comment">// DALI</span>
                         <span class="comment">//console.log('*** full blend');</span>
-                        dalimaterial.setBlendMode(dali.BLENDING_ON);
-                        dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
-                        dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
+                        blender.setBlendMode(dali.BLENDING_ON);
+                        blender.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+                        blender.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.alpha_blend_eq.src, root.alpha_blend_eq.dst);
 
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(root.color_blend_eq.op){
@@ -1154,11 +1156,11 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
                         gl.blendFunc(root.color_blend_eq.src, root.color_blend_eq.dst)
 
 
-                        dalimaterial.setBlendMode(dali.BLENDING_ON);
-                        dalimaterial.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
+                        blender.setBlendMode(dali.BLENDING_ON);
+                        blender.setBlendEquation (root.color_blend_eq.op, root.color_blend_eq.op);
 
                         <span class="comment">//TODO Check this. What are the last two args?</span>
-                        dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
+                        blender.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, root.color_blend_eq.src, root.color_blend_eq.dst);
                         <span class="comment">//dalimaterial.setBlendFunc(dali.BLEND_FACTOR_SRC_COLOR, dali.BLEND_FACTOR_DST_COLOR, root.color_blend_eq.src, root.color_blend_eq.dst);</span>
                         <span class="comment">//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_ONE, dali.BLEND_FACTOR_ZERO);</span>
                         <span class="comment">//dalimaterial.setBlendFunc(root.color_blend_eq.src, root.color_blend_eq.dst, dali.BLEND_FACTOR_SRC_ALPHA, dali.BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);</span>
@@ -1171,7 +1173,7 @@ console.log(<span class="string"><span class="delimiter">'</span><span class="co
                         <span class="comment">//console.log('==== blend disabled');</span>
                         gl.disable(gl.BLEND)
                         <span class="comment">//DALI</span>
-                        dalimaterial.setBlendMode(dali.BLENDING_OFF);
+                        blender.setBlendMode(dali.BLENDING_OFF);
                 }
                 
                 <span class="comment">// set up depth test</span>

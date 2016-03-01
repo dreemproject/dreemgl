@@ -317,15 +317,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n163" name="n163">163</a>
 <a href="#n164" name="n164">164</a>
 <a href="#n165" name="n165">165</a>
-<a href="#n166" name="n166">166</a>
-<a href="#n167" name="n167">167</a>
-<a href="#n168" name="n168">168</a>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
-   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
+   You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
    either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
-
 
 <span class="comment">/**
  * @class TwitterLib
@@ -353,19 +349,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
          *   All four values are required to use the streaming interface. If you
          *   do not specify the TWITTER_ACCESS_TOKEN_* for a search query, the
          *   application rate-limits will apply.
-         * 
+         *
          * Install the twitter object via 'npm install twitter'.
          * You can access the twitter npm object using this.twitter
          */</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(view) {
                 <span class="comment">// Create the twitter object using environment creds</span>
-                <span class="comment">//console.log('twitterlib');</span>
+                <span class="comment">//console.log('twitterlib')</span>
                 <span class="local-variable">this</span>.twitter = <span class="keyword">new</span> Twitter({
                         <span class="key">consumer_key</span>: process.env.TWITTER_CONSUMER_KEY,
                         <span class="key">consumer_secret</span>: process.env.TWITTER_CONSUMER_SECRET,
                         <span class="key">access_token_key</span>: process.env.TWITTER_ACCESS_TOKEN_KEY,
                         <span class="key">access_token_secret</span>: process.env.TWITTER_ACCESS_TOKEN_SECRET
-                });
+                })
         }
 
         <span class="comment">// Search interface to retrieve images. You can call this routine multiple</span>
@@ -378,44 +374,43 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">//         and the next maxid argument if you need additional tweets.</span>
         <span class="comment">// options is a hash of:</span>
         <span class="comment">//   query    The twitter query string</span>
-  <span class="comment">//            See: https://dev.twitter.com/rest/public/search</span>
+        <span class="comment">//            See: https://dev.twitter.com/rest/public/search</span>
         <span class="comment">//   geocode  Optional geocode location</span>
         <span class="comment">//   nresults The number of results to return. Default = 25</span>
         <span class="comment">//   maxid    (multi-page support). The maxid parameter. This is the</span>
         <span class="comment">//            tweet.id_str-1 from the last tweet returned.</span>
-        <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>(cb, options) {
+        <span class="local-variable">this</span>.<span class="function">search</span> = <span class="keyword">function</span>(options, cb) {
                 <span class="comment">// Parse the arguments</span>
                 options = options || {}
                 <span class="keyword">var</span> nresults = options.nresults || <span class="integer">25</span>
-                <span class="keyword">var</span> maxid = options.maxid
+                <span class="keyword">var</span> maxid = options.maxid || <span class="integer">25</span>
 
                 <span class="keyword">var</span> defaultquery=<span class="string"><span class="delimiter">'</span><span class="content">-RT&amp;filter:images</span><span class="delimiter">'</span></span>
                 <span class="keyword">var</span> query = options.query || defaultquery
 
-    <span class="keyword">var</span> defaultgeocode=<span class="string"><span class="delimiter">'</span><span class="content">37.781157,-122.398720,4mi</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> defaultgeocode=<span class="string"><span class="delimiter">'</span><span class="content">37.781157,-122.398720,4mi</span><span class="delimiter">'</span></span>
                 <span class="keyword">var</span> geocode = options.geocode || defaultgeocode
 
-                <span class="keyword">if</span> (nresults &gt; <span class="integer">100</span>) nresults = <span class="integer">100</span>;
-                <span class="keyword">var</span> args = {<span class="key">q</span>: query, <span class="key">geocode</span>: geocode, <span class="key">result_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">recent</span><span class="delimiter">'</span></span>, <span class="key">count</span>: nresults, <span class="key">maxid</span>: maxid};
-                console.log(<span class="string"><span class="delimiter">'</span><span class="content">multi-page maxid</span><span class="delimiter">'</span></span>, maxid);
-
+                <span class="keyword">if</span> (nresults &gt; <span class="integer">100</span>) nresults = <span class="integer">100</span>
+                <span class="keyword">var</span> args = {<span class="key">q</span>: query, <span class="key">geocode</span>: geocode, <span class="key">result_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">recent</span><span class="delimiter">'</span></span>, <span class="key">count</span>: nresults, <span class="key">maxid</span>: maxid}
+                console.log(<span class="string"><span class="delimiter">'</span><span class="content">multi-page maxid</span><span class="delimiter">'</span></span>, maxid)
 
                 <span class="comment">// Decrement the string id (64-bit) without using a bigint package</span>
                 <span class="comment">// http://webapplog.com/decreasing-64-bit-tweet-id-in-javascript/</span>
-                <span class="function">decid</span> = <span class="keyword">function</span>(id) {
-                        <span class="keyword">var</span> result=id;
-                        <span class="keyword">var</span> i=id.length-<span class="integer">1</span>;
+                <span class="keyword">var</span> <span class="function">decid</span> = <span class="keyword">function</span>(id) {
+                        <span class="keyword">var</span> result=id
+                        <span class="keyword">var</span> i=id.length-<span class="integer">1</span>
                         <span class="keyword">while</span> (i&gt;-<span class="integer">1</span>) {
                                 <span class="keyword">if</span> (id[i]===<span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>) {
-                                        result=result.substring(<span class="integer">0</span>,i)+<span class="string"><span class="delimiter">&quot;</span><span class="content">9</span><span class="delimiter">&quot;</span></span>+result.substring(i+<span class="integer">1</span>);
-                                        i--;
+                                        result=result.substring(<span class="integer">0</span>,i)+<span class="string"><span class="delimiter">&quot;</span><span class="content">9</span><span class="delimiter">&quot;</span></span>+result.substring(i+<span class="integer">1</span>)
+                                        i--
                                 }
                                 <span class="keyword">else</span> {
-                                        result=result.substring(<span class="integer">0</span>,i)+(parseInt(id[i],<span class="integer">10</span>)-<span class="integer">1</span>).toString()+result.substring(i+<span class="integer">1</span>);
-                                        <span class="keyword">return</span> result;
+                                        result=result.substring(<span class="integer">0</span>,i)+(parseInt(id[i],<span class="integer">10</span>)-<span class="integer">1</span>).toString()+result.substring(i+<span class="integer">1</span>)
+                                        <span class="keyword">return</span> result
                                 }
                         }
-                        <span class="keyword">return</span> result;
+                        <span class="keyword">return</span> result
                 }
 
                 <span class="comment">// Retrieve a page of results</span>
@@ -423,24 +418,25 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> result_tweets = []
 
                         <span class="comment">// Check each tweet before adding it to the list.</span>
-                        <span class="keyword">var</span> lastid;
-                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">received</span><span class="delimiter">'</span></span>, tweets.statuses.length, <span class="string"><span class="delimiter">'</span><span class="content"> tweets</span><span class="delimiter">'</span></span>);
+                        <span class="keyword">var</span> lastid
+                        console.log(error, tweets)
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">received</span><span class="delimiter">'</span></span>, tweets.statuses.length, <span class="string"><span class="delimiter">'</span><span class="content"> tweets</span><span class="delimiter">'</span></span>)
                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;tweets.statuses.length; i++) {
                                 <span class="keyword">var</span> tweet = tweets.statuses[i]
-                                lastid = tweet.id_str;
+                                lastid = tweet.id_str
                                 <span class="keyword">var</span> media = tweet.entities.media
                                 <span class="keyword">if</span> (media &amp;&amp; !tweet.possibly_sensitive) {
-                                        result_tweets.push(tweet);
+                                        result_tweets.push(tweet)
                                 }
                         }
 
                         <span class="comment">// The next id is the lastid-1, but this is a 64-bit quantity</span>
                         <span class="comment">// Instead of adding another npm module, do it manually</span>
                         <span class="keyword">if</span> (lastid) {
-                                lastid = decid(lastid);
+                                lastid = decid(lastid)
                         }
-                        cb(result_tweets, lastid);
-                });
+                        cb(result_tweets, lastid)
+                })
         }
 
         <span class="comment">// Search interface. This returns an array of tweets, which will invoke</span>
@@ -449,46 +445,44 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="comment">// Watch out for rate limits</span>
         <span class="local-variable">this</span>.<span class="function">oldsearch</span> = <span class="keyword">function</span>(cb, query) {
                 <span class="comment">// Test the twitter search interface</span>
-    <span class="keyword">var</span> defaultquery=<span class="string"><span class="delimiter">'</span><span class="content">-RT&amp;geocode:&quot;37.781157,-122.398720,2mi&quot;&amp;filter:images</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> defaultquery=<span class="string"><span class="delimiter">'</span><span class="content">-RT&amp;geocode:&quot;37.781157,-122.398720,2mi&quot;&amp;filter:images</span><span class="delimiter">'</span></span>
                 query = query || defaultquery
                 <span class="local-variable">this</span>.twitter.get(<span class="string"><span class="delimiter">'</span><span class="content">search/tweets</span><span class="delimiter">'</span></span>, {<span class="key">q</span>: query, <span class="key">result_type</span>: <span class="string"><span class="delimiter">'</span><span class="content">recent</span><span class="delimiter">'</span></span>, <span class="key">count</span>: <span class="integer">25</span>}, <span class="keyword">function</span>(error, tweets, response){
-                        <span class="comment">//console.log('tweets', tweets);</span>
+                        <span class="comment">//console.log('tweets', tweets)</span>
                         <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;tweets.statuses.length; i++) {
                                 <span class="keyword">var</span> tweet = tweets.statuses[i]
                                 <span class="keyword">var</span> media = tweet.entities.media
                                 <span class="keyword">if</span> (media &amp;&amp; !tweet.possibly_sensitive) {
-          <span class="comment">// Take the first url</span>
-                                        <span class="keyword">var</span> url = media[<span class="integer">0</span>].media_url;
-                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">twitter url</span><span class="delimiter">'</span></span>, url);
-                                        cb(url, tweet);
+                                        <span class="comment">// Take the first url</span>
+                                        <span class="keyword">var</span> url = media[<span class="integer">0</span>].media_url
+                                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">twitter url</span><span class="delimiter">'</span></span>, url)
+                                        cb(url, tweet)
                                 }
                         }
-                });
+                })
         }
-
 
         <span class="comment">// Streaming interface. Returns the tweet to a callback method.</span>
         <span class="comment">// This is hardcoded to return images posted from San Francisco</span>
         <span class="local-variable">this</span>.<span class="function">streaming</span> = <span class="keyword">function</span>(cb) {
                 <span class="comment">// Test the twitter streaming interface</span>
-    <span class="keyword">var</span> locations = <span class="string"><span class="delimiter">'</span><span class="content">-122.75,36.7,-121.75,37.9</span><span class="delimiter">'</span></span>
-    <span class="keyword">var</span> track = <span class="string"><span class="delimiter">'</span><span class="content">filter:images</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> locations = <span class="string"><span class="delimiter">'</span><span class="content">-122.75,36.7,-121.75,37.9</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> track = <span class="string"><span class="delimiter">'</span><span class="content">filter:images</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.twitter.stream(<span class="string"><span class="delimiter">'</span><span class="content">statuses/filter</span><span class="delimiter">'</span></span>, {<span class="key">locations</span>: locations, <span class="key">track</span>: track}, <span class="keyword">function</span>(stream) {
                         stream.on(<span class="string"><span class="delimiter">'</span><span class="content">data</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(tweet) {
                                 <span class="comment">// Only return tweets with images</span>
                                 <span class="keyword">if</span> (tweet.entities &amp;&amp; tweet.entities.media &amp;&amp; !tweet.possibly_sensitive) {
-          <span class="comment">// Return as an array to match search interface</span>
-                                        cb([tweet]);
+                                        <span class="comment">// Return as an array to match search interface</span>
+                                        cb([tweet])
                                 }
-                        });
-
+                        })
                         stream.on(<span class="string"><span class="delimiter">'</span><span class="content">error</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(error) {
-                                <span class="comment">//console.log('ERROR', error);</span>
-                        });
-                });
+                                <span class="comment">//console.log('ERROR', error)</span>
+                        })
+                })
         }
 
-});
+})
 </pre></td>
 </tr></table>
 

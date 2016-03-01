@@ -109,7 +109,6 @@ define.class("$server/composition",
 									flexdirection:"column",
 									bgcolor:"gray",
 									padding:6,
-									bg:0
 								},
 
 								radiogroup(
@@ -231,7 +230,6 @@ define.class("$server/composition",
 									bgcolor:"gray",
 									margin:5,
 									padding:6,
-									bg:0
 								},
 								radiogroup(
 									{

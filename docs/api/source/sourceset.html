@@ -492,6 +492,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n338" name="n338">338</a>
 <a href="#n339" name="n339">339</a>
 <strong><a href="#n340" name="n340">340</a></strong>
+<a href="#n341" name="n341">341</a>
+<a href="#n342" name="n342">342</a>
+<a href="#n343" name="n343">343</a>
+<a href="#n344" name="n344">344</a>
+<a href="#n345" name="n345">345</a>
+<a href="#n346" name="n346">346</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -622,6 +628,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">setFlowData</span> = <span class="keyword">function</span>(block, data){
                 <span class="keyword">var</span> target = <span class="local-variable">this</span>.data.childnames[block]
                 <span class="keyword">var</span> fdn = target.flowdatanode
+
+                <span class="keyword">if</span> (!fdn) {
+                        <span class="keyword">return</span>;
+                }
 
                 fdn.value = genFlowDataObject(data)
         }
@@ -826,10 +836,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="function">charCodeAt</span>: <span class="keyword">function</span>(i){<span class="keyword">return</span> <span class="local-variable">this</span>.out.charCodeAt(i)},
                         <span class="key">char_count</span>:<span class="integer">0</span>
                 }
-                jsformatter.walk(<span class="local-variable">this</span>.ast, buf, <span class="keyword">function</span>(str){
+                jsformatter.walk(<span class="local-variable">this</span>.ast, buf, {}, <span class="keyword">function</span>(str){
+<span class="comment">//                        console.log(str)</span>
                         buf.char_count += str.length
                         buf.out += str
                 })
+                console.log(buf.out)
                 <span class="keyword">return</span> buf.out
         }
 })

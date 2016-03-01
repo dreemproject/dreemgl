@@ -11,15 +11,6 @@ define.class("$ui/view", function($ui$, label, view) {
 	this.padding = 6;
 	this.alignself = '';
 
-	this.init = function() {
-		console.log("CLASS init");
-		console.log(this.name);
-	}
-
-	this.alignself = function() {
-		console.log(this.name + ': alignself=' + this.alignself)
-	};
-
 	this.pointerstart = function() {
 		this.screen.composition.selectedChild = this;
 	};

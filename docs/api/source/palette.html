@@ -759,7 +759,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         droptest = <span class="local-variable">this</span>.outer.dropTest(ev, v, pitem, event, <span class="local-variable">this</span>);
                                                 }
 
-                                                <span class="keyword">if</span>(!v || !droptest) {
+                                                <span class="keyword">if</span>(!droptest) {
                                                         <span class="local-variable">this</span>.screen.pointer.cursor = <span class="string"><span class="delimiter">'</span><span class="content">no-drop</span><span class="delimiter">'</span></span>;
                                                         <span class="keyword">return</span> <span class="predefined-constant">false</span>
                                                 }

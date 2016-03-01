@@ -344,6 +344,37 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n190" name="n190">190</a></strong>
 <a href="#n191" name="n191">191</a>
 <a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -353,8 +384,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$ui/view</span><span class="delimiter">'</span></span>, <span class="keyword">function</span> (background, labels, events, scrollbar) {
 
         <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>
-        <span class="local-variable">this</span>.padding = vec4(<span class="integer">0</span>, <span class="integer">56</span>, <span class="integer">0</span>, <span class="integer">18</span>)
+        <span class="local-variable">this</span>.padding = vec4(<span class="integer">0</span>, <span class="integer">48</span>, <span class="integer">0</span>, <span class="integer">15</span>)
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>
+        <span class="comment">// TODO(aki): hide overflow</span>
 
         <span class="local-variable">this</span>.MIN_ZOOM = <span class="float">0.125</span>
         <span class="local-variable">this</span>.TIME_SCALE = <span class="integer">86400000</span> <span class="comment">// millis to days</span>
@@ -365,68 +397,100 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="key">start</span>:   Config({<span class="key">type</span>: String,  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Jan 1 2016</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">end</span>:     Config({<span class="key">type</span>: String,  <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Dec 31 2016</span><span class="delimiter">&quot;</span></span>}),
 
-                <span class="key">data</span>:    Config({<span class="key">type</span>: Array,  <span class="key">value</span>: []}),
+                <span class="key">data</span>:    Config({<span class="key">type</span>: Array}),
 
                 <span class="key">zoom</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="float">0.5</span>}),
                 <span class="key">scroll</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">0</span>}),
 
                 <span class="key">hoursegs</span>: Config({<span class="key">type</span>: Number, <span class="key">value</span>: <span class="integer">24</span>}),
                 <span class="key">segments</span>: Config({<span class="key">type</span>: vec3, <span class="key">value</span>: vec3()}),
-                <span class="comment">// segmentwidths: Config({type: vec3, value: vec3()}),</span>
 
-                <span class="key">eventselected</span>: Config({<span class="key">type</span>:Event}),
-                <span class="key">eventadded</span>: Config({<span class="key">type</span>:Event})
+                <span class="key">change</span>: Config({<span class="key">type</span>: Event})
         }
 
         <span class="local-variable">this</span>.<span class="function">onzoom</span> = <span class="keyword">function</span> () {
-                <span class="keyword">if</span> (<span class="local-variable">this</span>._zoom &gt; <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE) {
-                        <span class="local-variable">this</span>.zoom = <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._zoom &gt; <span class="local-variable">this</span>.getDuration() / <span class="local-variable">this</span>.TIME_SCALE) {
+                        <span class="local-variable">this</span>.zoom = <span class="local-variable">this</span>.getDuration() / <span class="local-variable">this</span>.TIME_SCALE
                 }
         }
 
-        <span class="comment">// TODO(aki): test</span>
-        <span class="local-variable">this</span>.<span class="function">oneventadded</span> = <span class="keyword">function</span> (event) {
-                <span class="keyword">var</span> starttime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()
-                <span class="keyword">var</span> endtime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()
-                <span class="keyword">var</span> eventtime = <span class="keyword">new</span> Date(event.data.date)
-                <span class="keyword">if</span> (eventtime &gt; endtime) endtime = eventtime
-                <span class="keyword">if</span> (eventtime &lt; starttime) starttime = eventtime
-                <span class="local-variable">this</span>.start = <span class="keyword">new</span> Date(starttime).toString()
-                <span class="local-variable">this</span>.end = <span class="keyword">new</span> Date(endtime).toString()
+        <span class="local-variable">this</span>.<span class="function">dropEvent</span> = <span class="keyword">function</span> (eventdata, pointer) {
+                <span class="keyword">var</span> pos = <span class="local-variable">this</span>.globalToLocal(pointer.position).x / <span class="local-variable">this</span>.layout.width
+                <span class="keyword">var</span> stardate = <span class="local-variable">this</span>.getRangeStart() + <span class="local-variable">this</span>.getRange() * pos
+                <span class="comment">// TODO(aki): implement zoom dependent snapping</span>
+                stardate = floor(stardate / <span class="integer">900000</span>) * <span class="integer">900000</span> <span class="comment">// snap to 15 min</span>
+                <span class="keyword">var</span> enddate = stardate + (eventdata.duration || <span class="integer">10800000</span>) <span class="comment">// 3 hrs default</span>
+                <span class="local-variable">this</span>.makeEvent({
+                        <span class="key">title</span>: eventdata.title,
+                        <span class="key">date</span>: stardate,
+                        <span class="key">enddate</span>: enddate,
+                        <span class="key">metadata</span>: {
+                                <span class="key">location</span>: {
+                                        <span class="key">title</span>: eventdata.title,
+                                        <span class="key">lattitude</span>: eventdata.lattitude,
+                                        <span class="key">longitude</span>: eventdata.longitude
+                                }
+                        }
+                })
         }
 
-        <span class="local-variable">this</span>.<span class="function">ondata</span> = <span class="keyword">function</span> () {
-                <span class="keyword">var</span> eventtime
-                <span class="keyword">var</span> starttime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.start).getTime()
-                <span class="keyword">var</span> endtime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()
+        <span class="local-variable">this</span>.<span class="function">makeEvent</span> = <span class="keyword">function</span> (eventdata) {
+                eventdata.id = eventdata.id || <span class="local-variable">this</span>.data.length + <span class="integer">1</span>
+                <span class="local-variable">this</span>.data.push(eventdata)
+                <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.data
+                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.data)
+        }
+
+        <span class="local-variable">this</span>.<span class="function">updateEvent</span> = <span class="keyword">function</span> (id, eventdata) {
                 <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.data.length; i++) {
-                        eventtime = <span class="keyword">new</span> Date(<span class="local-variable">this</span>.data[i].date)
-                        <span class="keyword">if</span> (eventtime &gt; endtime) endtime = eventtime
-                        <span class="keyword">if</span> (eventtime &lt; starttime) starttime = eventtime
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.data[i].id === id) {
+                                <span class="keyword">for</span> (key <span class="keyword">in</span> eventdata) {
+                                        <span class="local-variable">this</span>.data[i][key] = eventdata[key]
+                                }
+                                <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.data
+                                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.data)
+                                <span class="keyword">break</span>
+                        }
                 }
-                <span class="local-variable">this</span>.start = <span class="keyword">new</span> Date(starttime).toString()
-                <span class="local-variable">this</span>.end = <span class="keyword">new</span> Date(endtime).toString()
         }
+
+        <span class="local-variable">this</span>.<span class="function">deleteEvent</span> = <span class="keyword">function</span> (id) {
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.data.length; i++) {
+                        <span class="keyword">if</span> (<span class="local-variable">this</span>.data[i].id === id) {
+                                <span class="local-variable">this</span>.data.splice(i, <span class="integer">1</span>)
+                                <span class="local-variable">this</span>.data = <span class="local-variable">this</span>.data
+                                <span class="local-variable">this</span>.emitUpward(<span class="string"><span class="delimiter">'</span><span class="content">change</span><span class="delimiter">'</span></span>, <span class="local-variable">this</span>.data)
+                                <span class="keyword">break</span>
+                        }
+                }
+        }
+
+        <span class="comment">// this.ondata = function () {</span>
+        <span class="comment">//         var eventstart, eventend</span>
+        <span class="comment">//         var starttime = this.getStart()</span>
+        <span class="comment">//         var endtime = this.getEnd()</span>
+        <span class="comment">//         if (!this.data) return</span>
+        <span class="comment">//         for (var i = 0; i &lt; this.data.length; i++) {</span>
+        <span class="comment">//                 eventstart = new Date(this.data[i].date)</span>
+        <span class="comment">//                 eventend = new Date(this.data[i].enddate)</span>
+        <span class="comment">//                 if (eventend &gt; endtime) endtime = eventend</span>
+        <span class="comment">//                 if (eventstart &lt; starttime) starttime = eventstart</span>
+        <span class="comment">//         }</span>
+        <span class="comment">//         this.start = new Date(starttime).toString()</span>
+        <span class="comment">//         this.end = new Date(endtime).toString()</span>
+        <span class="comment">// }</span>
 
         <span class="local-variable">this</span>.<span class="function">atDraw</span> = <span class="keyword">function</span> () {
                 <span class="local-variable">this</span>.background = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.labels = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>)
                 <span class="local-variable">this</span>.hscrollbar = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>)
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar){        
+                <span class="keyword">if</span> (<span class="local-variable">this</span>.hscrollbar){
                         <span class="local-variable">this</span>.hscrollbar.updateScrollbars()
                 }
                 <span class="keyword">var</span> daywidth = <span class="local-variable">this</span>.layout.width / <span class="local-variable">this</span>.zoom
 
                 <span class="comment">//TODO(aki): Don't use magic numbers!</span>
 
-                <span class="comment">// segment codes</span>
-                <span class="comment">// 1 - year</span>
-                <span class="comment">// 2 - month</span>
-                <span class="comment">// 3 - week</span>
-                <span class="comment">// 4 - day</span>
-                <span class="comment">// 5 - hour</span>
-                <span class="comment">// 6 - munutes</span>
-                <span class="comment">// 7 - seconds</span>
                 <span class="keyword">if</span> (daywidth &lt; <span class="integer">12</span>) {
                         <span class="local-variable">this</span>.segments = vec3(<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>) <span class="comment">// y m w</span>
                 } <span class="keyword">else</span> <span class="keyword">if</span> (daywidth &lt; <span class="integer">32</span>) {
@@ -450,17 +514,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 } <span class="keyword">else</span> {
                         <span class="local-variable">this</span>.hoursegs = <span class="integer">24</span>
                 }
-
-                <span class="comment">// TODO(aki): better data-binding that doesent trigger render</span>
-                <span class="comment">// This should be handled by data binding</span>
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.background) {
-                        <span class="local-variable">this</span>.background.segments = <span class="local-variable">this</span>._segments
-                        <span class="local-variable">this</span>.background.hoursegs = <span class="local-variable">this</span>._hoursegs
-                }
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.labels){
-                        <span class="local-variable">this</span>.labels.segments = <span class="local-variable">this</span>._segments
-                        <span class="local-variable">this</span>.labels.hoursegs = <span class="local-variable">this</span>._hoursegs
-                }
         }
 
         <span class="local-variable">this</span>.<span class="function">getStart</span> = <span class="keyword">function</span> () {
@@ -471,12 +524,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="local-variable">this</span>.end).getTime()
         }
 
-        <span class="local-variable">this</span>.<span class="function">getRange</span> = <span class="keyword">function</span> () {
+        <span class="local-variable">this</span>.<span class="function">getDuration</span> = <span class="keyword">function</span> () {
                 <span class="keyword">return</span> <span class="local-variable">this</span>.getEnd() - <span class="local-variable">this</span>.getStart()
         }
 
-        <span class="local-variable">this</span>.<span class="function">getOffset</span> = <span class="keyword">function</span> () {
-                <span class="keyword">return</span> <span class="local-variable">this</span>.zoom * <span class="local-variable">this</span>.scroll * <span class="local-variable">this</span>.TIME_SCALE
+        <span class="local-variable">this</span>.<span class="function">getRange</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.getRangeEnd() - <span class="local-variable">this</span>.getRangeStart()
+        }
+
+        <span class="local-variable">this</span>.<span class="function">getRangeStart</span> = <span class="keyword">function</span> () {
+                <span class="keyword">return</span> <span class="local-variable">this</span>.getStart() + <span class="local-variable">this</span>.zoom * <span class="local-variable">this</span>.scroll * <span class="local-variable">this</span>.TIME_SCALE
+        }
+
+        <span class="local-variable">this</span>.<span class="function">getRangeEnd</span> = <span class="keyword">function</span> () {
+                <span class="keyword">var</span> rangefactor = <span class="local-variable">this</span>.zoom / (<span class="local-variable">this</span>.getDuration() / <span class="local-variable">this</span>.TIME_SCALE)
+                <span class="keyword">return</span> <span class="local-variable">this</span>.getRangeStart() + <span class="local-variable">this</span>.getDuration() * rangefactor
         }
 
         <span class="local-variable">this</span>.<span class="function">pointermultimove</span> = <span class="keyword">function</span>(event) {
@@ -494,7 +556,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         <span class="comment">// TODO(aki): delta doesent feel right</span>
                         <span class="keyword">var</span> delta = (distance - oldDistance) / <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.zoom * <span class="integer">2</span>
-                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom - delta, <span class="local-variable">this</span>.MIN_ZOOM, <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE)
+                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom - delta, <span class="local-variable">this</span>.MIN_ZOOM, <span class="local-variable">this</span>.getDuration() / <span class="local-variable">this</span>.TIME_SCALE)
 
                         <span class="local-variable">this</span>.zoom = newzoom
 
@@ -515,7 +577,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> lastzoom = <span class="local-variable">this</span>._zoom
 
                         <span class="keyword">var</span> delta = event.value[<span class="integer">1</span>] / <span class="local-variable">this</span>.layout.width * <span class="local-variable">this</span>.zoom
-                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom + delta, <span class="local-variable">this</span>.MIN_ZOOM, <span class="local-variable">this</span>.getRange() / <span class="local-variable">this</span>.TIME_SCALE)
+                        <span class="keyword">var</span> newzoom = clamp(<span class="local-variable">this</span>.zoom + delta, <span class="local-variable">this</span>.MIN_ZOOM, <span class="local-variable">this</span>.getDuration() / <span class="local-variable">this</span>.TIME_SCALE)
 
                         <span class="local-variable">this</span>.zoom = newzoom
 
@@ -529,7 +591,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> [
-                background({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>}),
+                        background({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">background</span><span class="delimiter">&quot;</span></span>}),
                         labels({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>}),
                         events({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">events</span><span class="delimiter">&quot;</span></span>}),
                         scrollbar({<span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">scrollbar</span><span class="delimiter">&quot;</span></span>})

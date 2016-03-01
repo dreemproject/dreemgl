@@ -386,6 +386,47 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n232" name="n232">232</a>
 <a href="#n233" name="n233">233</a>
 <a href="#n234" name="n234">234</a>
+<a href="#n235" name="n235">235</a>
+<a href="#n236" name="n236">236</a>
+<a href="#n237" name="n237">237</a>
+<a href="#n238" name="n238">238</a>
+<a href="#n239" name="n239">239</a>
+<strong><a href="#n240" name="n240">240</a></strong>
+<a href="#n241" name="n241">241</a>
+<a href="#n242" name="n242">242</a>
+<a href="#n243" name="n243">243</a>
+<a href="#n244" name="n244">244</a>
+<a href="#n245" name="n245">245</a>
+<a href="#n246" name="n246">246</a>
+<a href="#n247" name="n247">247</a>
+<a href="#n248" name="n248">248</a>
+<a href="#n249" name="n249">249</a>
+<strong><a href="#n250" name="n250">250</a></strong>
+<a href="#n251" name="n251">251</a>
+<a href="#n252" name="n252">252</a>
+<a href="#n253" name="n253">253</a>
+<a href="#n254" name="n254">254</a>
+<a href="#n255" name="n255">255</a>
+<a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -402,21 +443,29 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="comment">// The code to display</span>
                 <span class="key">source</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
                 <span class="key">sourceset</span>: <span class="predefined-constant">null</span>,
+                <span class="key">ast</span>:<span class="predefined-constant">null</span>,
                 <span class="comment">// wrap the text</span>
                 <span class="key">wrap</span>: Config({<span class="key">type</span>:Boolean, <span class="key">value</span>:<span class="predefined-constant">false</span>}),
-                <span class="key">init_anim</span>: Config({<span class="key">value</span>:<span class="float">1.0</span>, <span class="key">duration</span>:<span class="integer">1</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">outexpo</span><span class="delimiter">'</span></span>}),
+                <span class="key">init_anim</span>: Config({<span class="key">value</span>:<span class="float">0.0</span>, <span class="key">duration</span>:<span class="integer">1</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">outexpo</span><span class="delimiter">'</span></span>}),
                 <span class="key">line_anim</span>: Config({<span class="key">value</span>:<span class="float">1.0</span>, <span class="key">duration</span>:<span class="float">0.25</span>, <span class="key">motion</span>:<span class="string"><span class="delimiter">'</span><span class="content">outexpo</span><span class="delimiter">'</span></span>}),
         }
+        <span class="local-variable">this</span>.linespacing = <span class="float">1.3</span>        
         <span class="local-variable">this</span>.tab_size = <span class="integer">1</span>
         <span class="local-variable">this</span>.line_start = <span class="integer">0</span>
         <span class="local-variable">this</span>.line_end = <span class="integer">0</span>
+        <span class="local-variable">this</span>.boldness = <span class="float">0.6</span>
+
+        <span class="local-variable">this</span>.format_options = {
+                <span class="key">force_newlines_array</span>:<span class="predefined-constant">false</span>,
+                <span class="key">force_newlines_object</span>:<span class="predefined-constant">false</span>
+        }
 
         <span class="comment">// lets go and move this fucker</span>
         <span class="local-variable">this</span>.<span class="function">textpositionfn</span> = <span class="keyword">function</span>(pos, tag) {
                 <span class="keyword">var</span> p = pos
                 <span class="keyword">var</span> indent = floor((tag.y * -<span class="integer">1</span>.)/<span class="integer">65536</span>.) * tab_size
                 <span class="keyword">var</span> line = floor(tag.w/<span class="integer">65536</span>.)
-                <span class="keyword">if</span>(line &gt;= line_start &amp;&amp; line &lt; line_end){
+                <span class="keyword">if</span>(line &gt;= line_start &amp;&amp; line &lt;= line_end){
                         p.x  +=  <span class="integer">2</span>*indent*((line-line_start))*line_anim
                 }
                 p.x += - min(indent, init_anim*<span class="integer">100</span>.)
@@ -437,16 +486,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         }
 
         <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.init_anim = <span class="float">.0</span>
+                <span class="comment">//this.init_anim = .0</span>
         }
 
-        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, pos, tag){
+        <span class="local-variable">this</span>.<span class="function">textstyle</span> = <span class="keyword">function</span>(style, tag){
 
                 <span class="keyword">var</span> type = <span class="reserved">int</span>(tag.z / <span class="integer">65536</span>.)
                 <span class="keyword">var</span> sub = <span class="reserved">int</span>(mod(tag.z / <span class="integer">256</span>., <span class="integer">256</span>.))
                 <span class="keyword">var</span> part = <span class="reserved">int</span>(mod(tag.z, <span class="integer">256</span>.))
                 <span class="keyword">var</span> unicode = <span class="reserved">int</span>(tag.x)
-                <span class="keyword">if</span>(unicode == <span class="integer">10</span> || unicode == <span class="integer">32</span> || unicode == <span class="integer">9</span>) discard
+
+                <span class="comment">//if(unicode == 10 || unicode == 32 || unicode == 9) discard</span>
+
                 <span class="keyword">if</span>(tag.z &lt;= <span class="integer">0</span>.){
                         <span class="keyword">var</span> col = -tag.z
 
@@ -482,7 +533,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }
                 <span class="keyword">else</span> <span class="keyword">if</span>(type == _Value){
                         <span class="keyword">if</span>(sub == _String){
-                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#0f0</span><span class="delimiter">&quot;</span></span>
+                                style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#00cf7f</span><span class="delimiter">&quot;</span></span><span class="comment">//#ff7fe1&quot;//&quot;#0f0&quot;</span>
+                        }
+                        <span class="keyword">else</span> <span class="keyword">if</span>(sub == _Boolean){
+                                <span class="keyword">if</span>(part&gt;<span class="integer">0</span>){
+                                        style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">#0f0</span><span class="delimiter">&quot;</span></span>
+                                }
+                                <span class="keyword">else</span>{
+                                        style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#f00</span><span class="delimiter">'</span></span>
+                                }
                         }
                         <span class="keyword">else</span>{
                                 style.fgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">aero</span><span class="delimiter">&quot;</span></span>
@@ -498,7 +557,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 }<span class="keyword">else</span> <span class="keyword">if</span>(type == _Property ){
                         <span class="keyword">if</span>(sub == _Object){
                                 style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">#afafaf</span><span class="delimiter">'</span></span>
-                                <span class="comment">//style.boldness *= 0.5</span>
                         }
                         <span class="keyword">else</span>{
                                 style.fgcolor = <span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span><span class="comment">//'#9fa3ff'*1.2</span>
@@ -580,26 +638,50 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         textbuf.font = view.font
                         <span class="keyword">var</span> cycle = Date.now()
-                        <span class="keyword">var</span> ast = view.sourceset? view.sourceset.ast: Parser.parse(view.source)
-
+                        <span class="keyword">var</span> ast = view.ast ? view.ast : (view.sourceset ? view.sourceset.ast: Parser.parse(view.source))
+                        
+                        textbuf.linespacing = view.linespacing
                         textbuf.fontsize = view.fontsize
                         textbuf.add_y = textbuf.line_height
                         textbuf.align = <span class="string"><span class="delimiter">'</span><span class="content">left</span><span class="delimiter">'</span></span>
                         textbuf.start_y = textbuf.line_height
-                        textbuf.boldness = <span class="float">0.6</span>
+
                         view.tab_size = textbuf.font.glyphs[<span class="integer">9</span>].advance * textbuf.fontsize
 
                         textbuf.clear()
                         <span class="keyword">var</span> node_id = <span class="integer">0</span>
                         <span class="keyword">if</span>(view.wrap){
                                 <span class="keyword">var</span> maxwidth = view.layout.width
-                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, padding, l1, l2, l3, node){
-                                        <span class="keyword">var</span> indent = textbuf.font.glyphs[<span class="integer">9</span>].advance * textbuf.fontsize * <span class="local-variable">this</span>.indent
-                                        textbuf.addWithinWidth(text, maxwidth, (padding+ <span class="local-variable">this</span>.indent*<span class="integer">65536</span>)*-<span class="integer">1</span>, <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>))
+                                JSFormatter.walk(ast, textbuf, view.format_options,<span class="keyword">function</span>(text, padding, l1, l2, l3, node){
+                                        <span class="keyword">if</span>(text === <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){
+                                                <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">true</span>
+                                                <span class="keyword">return</span>
+                                        }
+                                        <span class="keyword">if</span>(text === <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.last_is_newline){
+                                                text = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                                        }
+                                        <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">false</span>
+                                        <span class="keyword">var</span> start = text.charCodeAt(<span class="integer">0</span>)
+                                        <span class="keyword">var</span> combo
+                                        <span class="keyword">if</span>(l1 &lt;= <span class="integer">0</span>) combo = l1
+                                        <span class="keyword">else</span> combo = <span class="integer">65536</span> * (l1||<span class="integer">0</span>) + <span class="integer">256</span> * (l2||<span class="integer">0</span>) + (l3||<span class="integer">0</span>)
+                                        <span class="keyword">if</span>(start !== <span class="integer">32</span> &amp;&amp; start !== <span class="integer">10</span> &amp;&amp; start !== <span class="integer">9</span>) node_id ++
+                                        <span class="keyword">var</span> indent = textbuf.font.glyphs[<span class="integer">9</span>].advance * textbuf.fontsize * (<span class="local-variable">this</span>.actual_indent+<span class="integer">1</span>)
+                                        textbuf.addWithinWidth(text, maxwidth, indent, ((padding||<span class="integer">0</span>)+ <span class="local-variable">this</span>.actual_indent*<span class="integer">65536</span>)*-<span class="integer">1</span>, combo, node_id+<span class="integer">65536</span>*<span class="local-variable">this</span>.actual_line)
                                 })
                         }
                         <span class="keyword">else</span>{
-                                JSFormatter.walk(ast, textbuf, <span class="keyword">function</span>(text, padding, l1, l2, l3, node){
+                                <span class="comment">// if we process a newline, we should wait for the next tab</span>
+                                JSFormatter.walk(ast, textbuf, view.format_options,<span class="keyword">function</span>(text, padding, l1, l2, l3, node){
+                                        <span class="keyword">if</span>(text === <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>){
+                                                <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">true</span>
+                                                <span class="keyword">return</span>
+                                        }
+                                        <span class="keyword">if</span>(text === <span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span> &amp;&amp; <span class="local-variable">this</span>.last_is_newline){
+                                                text = <span class="string"><span class="delimiter">'</span><span class="content">\n</span><span class="delimiter">'</span></span>
+                                        }
+                                        <span class="local-variable">this</span>.last_is_newline = <span class="predefined-constant">false</span>
+                                        <span class="comment">// ok if we are adding a \t, lets add it to the previous newline as a mode 4.</span>
                                         <span class="keyword">var</span> start = text.charCodeAt(<span class="integer">0</span>)
                                         <span class="comment">//console.log(this.actual_line)</span>
                                         <span class="keyword">if</span>(start !== <span class="integer">32</span> &amp;&amp; start !== <span class="integer">10</span> &amp;&amp; start !== <span class="integer">9</span>) node_id ++

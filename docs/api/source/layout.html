@@ -1419,6 +1419,20 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n1265" name="n1265">1265</a>
 <a href="#n1266" name="n1266">1266</a>
 <a href="#n1267" name="n1267">1267</a>
+<a href="#n1268" name="n1268">1268</a>
+<a href="#n1269" name="n1269">1269</a>
+<strong><a href="#n1270" name="n1270">1270</a></strong>
+<a href="#n1271" name="n1271">1271</a>
+<a href="#n1272" name="n1272">1272</a>
+<a href="#n1273" name="n1273">1273</a>
+<a href="#n1274" name="n1274">1274</a>
+<a href="#n1275" name="n1275">1275</a>
+<a href="#n1276" name="n1276">1276</a>
+<a href="#n1277" name="n1277">1277</a>
+<a href="#n1278" name="n1278">1278</a>
+<a href="#n1279" name="n1279">1279</a>
+<strong><a href="#n1280" name="n1280">1280</a></strong>
+<a href="#n1281" name="n1281">1281</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/**
  * Copyright (c) 2014, Facebook, Inc.
@@ -1432,10 +1446,11 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 
 define(<span class="keyword">function</span> () {
 
-        <span class="keyword">function</span> <span class="function">fillNodes</span>(node, nochildren) {
+        <span class="keyword">function</span> <span class="function">fillNodes</span>(node, nochildren, invisible) {
                 <span class="keyword">var</span> newnode = {
                         <span class="key">children</span>:[],
                         <span class="key">ref</span>:node,
+                        <span class="key">visible</span>:(!invisible &amp;&amp; node.visible),
                         <span class="key">dirty</span>: node.layout_dirty,
                         <span class="key">layout</span>:{
                                 <span class="key">width</span>:<span class="predefined-constant">undefined</span>,
@@ -1469,7 +1484,7 @@ define(<span class="keyword">function</span> () {
                         <span class="keyword">if</span>(child._viewport){ <span class="comment">// its using a different layout pass</span>
                                 <span class="comment">// if we are flex, we have to compute the layout of this child</span>
                                 <span class="keyword">if</span>(!isNaN(child._flex)){
-                                        <span class="keyword">var</span> newchild = fillNodes(child, <span class="predefined-constant">true</span>)
+                                        <span class="keyword">var</span> newchild = fillNodes(child, <span class="predefined-constant">true</span>, !newnode.visible)
                                         <span class="keyword">if</span>(newchild.dirty) newnode.dirty = <span class="predefined-constant">true</span>, node.layout_dirty = <span class="predefined-constant">true</span>
                                         newnode.children.push(newchild)
                                 }
@@ -1485,7 +1500,7 @@ define(<span class="keyword">function</span> () {
                                 }
                         }
                         <span class="keyword">else</span>{
-                                <span class="keyword">var</span> newchild = fillNodes(child)
+                                <span class="keyword">var</span> newchild = fillNodes(child, <span class="predefined-constant">false</span>, !newnode.visible)
                                 <span class="keyword">if</span>(newchild.dirty) newnode.dirty = <span class="predefined-constant">true</span>, node.layout_dirty = <span class="predefined-constant">true</span>
                                 newnode.children.push(newchild)
                         }
@@ -2196,7 +2211,9 @@ define(<span class="keyword">function</span> () {
                                 <span class="comment">// dimension for the node.</span>
                                 <span class="keyword">if</span> (isMainDimDefined &amp;&amp; isFlex(child)) {
                                         flexibleChildrenCount++;
-                                        totalFlexible += child.ref._flex;
+                                        <span class="keyword">if</span> (child.visible) {
+                                                totalFlexible += child.ref._flex;
+                                        }
 
                                         <span class="comment">// Store a private linked list of flexible children so that we can</span>
                                         <span class="comment">// efficiently traverse them later.</span>
@@ -2212,8 +2229,11 @@ define(<span class="keyword">function</span> () {
                                         <span class="comment">// border and margin. We'll use this partial information, which represents</span>
                                         <span class="comment">// the smallest possible size for the child, to compute the remaining</span>
                                         <span class="comment">// available space.</span>
-                                        nextContentDim = getPaddingAndBorderAxis(child, mainAxis) +
-                                                getMarginAxis(child, mainAxis);
+
+                                        <span class="keyword">if</span> (child.visible) {
+                                                nextContentDim = getPaddingAndBorderAxis(child, mainAxis) +
+                                                        getMarginAxis(child, mainAxis);
+                                        }
 
                                 } <span class="keyword">else</span> {
                                         maxWidth = CSS_UNDEFINED;
@@ -2257,7 +2277,7 @@ define(<span class="keyword">function</span> () {
                                 <span class="comment">// Disable simple stacking in the main axis for the current line as</span>
                                 <span class="comment">// we found a non-trivial child. The remaining children will be laid out</span>
                                 <span class="comment">// in &lt;Loop C&gt;.</span>
-                                <span class="keyword">if</span> (isSimpleStackMain &amp;&amp;
+                                <span class="keyword">if</span> (child.visible &amp;&amp; isSimpleStackMain &amp;&amp;
                                                 (getPositionType(child) !== CSS_POSITION_RELATIVE || isFlex(child))) {
                                         isSimpleStackMain = <span class="predefined-constant">false</span>;
                                         firstComplexMain = i;
@@ -2266,7 +2286,7 @@ define(<span class="keyword">function</span> () {
                                 <span class="comment">// Disable simple stacking in the cross axis for the current line as</span>
                                 <span class="comment">// we found a non-trivial child. The remaining children will be laid out</span>
                                 <span class="comment">// in &lt;Loop D&gt;.</span>
-                                <span class="keyword">if</span> (isSimpleStackCross &amp;&amp;
+                                <span class="keyword">if</span> (child.visible &amp;&amp; isSimpleStackCross &amp;&amp;
                                                 (getPositionType(child) !== CSS_POSITION_RELATIVE ||
                                                                 (alignItem !== CSS_ALIGN_STRETCH &amp;&amp; alignItem !== CSS_ALIGN_FLEX_START) ||
                                                                 isUndefined(child.layout[dim[crossAxis]]))) {
@@ -2276,18 +2296,24 @@ define(<span class="keyword">function</span> () {
 
                                 <span class="keyword">if</span> (isSimpleStackMain) {
                                         child.layout[pos[mainAxis]] = round(child.layout[pos[mainAxis]] + mainDim);
-                                        <span class="keyword">if</span> (isMainDimDefined) {
-                                                setTrailingPosition(node, child, mainAxis);
-                                        }
 
-                                        mainDim += getDimWithMargin(child, mainAxis);
-                                        crossDim = fmaxf(crossDim, boundAxis(child, crossAxis, getDimWithMargin(child, crossAxis)));
+                                        <span class="keyword">if</span> (child.visible) {
+                                                <span class="keyword">if</span> (isMainDimDefined) {
+                                                        setTrailingPosition(node, child, mainAxis);
+                                                }
+
+                                                mainDim += getDimWithMargin(child, mainAxis);
+                                                crossDim = fmaxf(crossDim, boundAxis(child, crossAxis, getDimWithMargin(child, crossAxis)));
+                                        }
                                 }
 
                                 <span class="keyword">if</span> (isSimpleStackCross) {
                                         child.layout[pos[crossAxis]] = round(child.layout[pos[crossAxis]] + linesCrossDim + leadingPaddingAndBorderCross);
-                                        <span class="keyword">if</span> (isCrossDimDefined) {
-                                                setTrailingPosition(node, child, crossAxis);
+
+                                        <span class="keyword">if</span> (child.visible) {
+                                                <span class="keyword">if</span> (isCrossDimDefined) {
+                                                        setTrailingPosition(node, child, crossAxis);
+                                                }
                                         }
                                 }
 
@@ -2323,13 +2349,15 @@ define(<span class="keyword">function</span> () {
                                 <span class="comment">// remove this child from flex calculations.</span>
                                 currentFlexChild = firstFlexChild;
                                 <span class="keyword">while</span> (currentFlexChild !== <span class="predefined-constant">null</span>) {
-                                        baseMainDim = flexibleMainDim * currentFlexChild.ref._flex +
+                                        <span class="keyword">if</span> (currentFlexChild.visible) {
+                                                baseMainDim = flexibleMainDim * currentFlexChild.ref._flex +
                                                         getPaddingAndBorderAxis(currentFlexChild, mainAxis);
-                                        boundMainDim = boundAxis(currentFlexChild, mainAxis, baseMainDim);
+                                                boundMainDim = boundAxis(currentFlexChild, mainAxis, baseMainDim);
 
-                                        <span class="keyword">if</span> (baseMainDim !== boundMainDim) {
-                                                remainingMainDim -= boundMainDim;
-                                                totalFlexible -= currentFlexChild.ref._flex;
+                                                <span class="keyword">if</span> (baseMainDim !== boundMainDim) {
+                                                        remainingMainDim -= boundMainDim;
+                                                        totalFlexible -= currentFlexChild.ref._flex;
+                                                }
                                         }
 
                                         currentFlexChild = currentFlexChild.nextFlexChild;
@@ -2424,7 +2452,7 @@ define(<span class="keyword">function</span> () {
                                         <span class="comment">// Now that we placed the element, we need to update the variables</span>
                                         <span class="comment">// We only need to do that for relative elements. Absolute elements</span>
                                         <span class="comment">// do not take part in that phase.</span>
-                                        <span class="keyword">if</span> (getPositionType(child) === CSS_POSITION_RELATIVE) {
+                                        <span class="keyword">if</span> (getPositionType(child) === CSS_POSITION_RELATIVE &amp;&amp; child.visible) {
                                                 <span class="comment">// The main dimension is the sum of all the elements dimension plus</span>
                                                 <span class="comment">// the spacing.</span>
                                                 mainDim += betweenMainDim + getDimWithMargin(child, mainAxis);
@@ -2480,7 +2508,7 @@ define(<span class="keyword">function</span> () {
                                                                         getPaddingAndBorderAxis(child, crossAxis)
                                                                 ));
                                                         }
-                                                } <span class="keyword">else</span> <span class="keyword">if</span> (alignItem !== CSS_ALIGN_FLEX_START) {
+                                                } <span class="keyword">else</span> <span class="keyword">if</span> (alignItem !== CSS_ALIGN_FLEX_START &amp;&amp; child.visible) {
                                                         <span class="comment">// The remaining space between the parent dimensions+padding and child</span>
                                                         <span class="comment">// dimensions+margin.</span>
                                                         <span class="keyword">var</span><span class="comment">/*float*/</span> remainingCrossDim = containerCrossAxis -
@@ -2556,7 +2584,7 @@ define(<span class="keyword">function</span> () {
                                         <span class="keyword">if</span> (child.lineIndex !== i) {
                                                 <span class="keyword">break</span>;
                                         }
-                                        <span class="keyword">if</span> (!isUndefined(child.layout[dim[crossAxis]])) {
+                                        <span class="keyword">if</span> (!isUndefined(child.layout[dim[crossAxis]]) &amp;&amp; child.visible) {
                                                 lineHeight = fmaxf(
                                                         lineHeight,
                                                         child.layout[dim[crossAxis]] + getMarginAxis(child, crossAxis)

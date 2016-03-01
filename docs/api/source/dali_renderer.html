@@ -225,6 +225,85 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n71" name="n71">71</a>
 <a href="#n72" name="n72">72</a>
 <a href="#n73" name="n73">73</a>
+<a href="#n74" name="n74">74</a>
+<a href="#n75" name="n75">75</a>
+<a href="#n76" name="n76">76</a>
+<a href="#n77" name="n77">77</a>
+<a href="#n78" name="n78">78</a>
+<a href="#n79" name="n79">79</a>
+<strong><a href="#n80" name="n80">80</a></strong>
+<a href="#n81" name="n81">81</a>
+<a href="#n82" name="n82">82</a>
+<a href="#n83" name="n83">83</a>
+<a href="#n84" name="n84">84</a>
+<a href="#n85" name="n85">85</a>
+<a href="#n86" name="n86">86</a>
+<a href="#n87" name="n87">87</a>
+<a href="#n88" name="n88">88</a>
+<a href="#n89" name="n89">89</a>
+<strong><a href="#n90" name="n90">90</a></strong>
+<a href="#n91" name="n91">91</a>
+<a href="#n92" name="n92">92</a>
+<a href="#n93" name="n93">93</a>
+<a href="#n94" name="n94">94</a>
+<a href="#n95" name="n95">95</a>
+<a href="#n96" name="n96">96</a>
+<a href="#n97" name="n97">97</a>
+<a href="#n98" name="n98">98</a>
+<a href="#n99" name="n99">99</a>
+<strong><a href="#n100" name="n100">100</a></strong>
+<a href="#n101" name="n101">101</a>
+<a href="#n102" name="n102">102</a>
+<a href="#n103" name="n103">103</a>
+<a href="#n104" name="n104">104</a>
+<a href="#n105" name="n105">105</a>
+<a href="#n106" name="n106">106</a>
+<a href="#n107" name="n107">107</a>
+<a href="#n108" name="n108">108</a>
+<a href="#n109" name="n109">109</a>
+<strong><a href="#n110" name="n110">110</a></strong>
+<a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
+<a href="#n115" name="n115">115</a>
+<a href="#n116" name="n116">116</a>
+<a href="#n117" name="n117">117</a>
+<a href="#n118" name="n118">118</a>
+<a href="#n119" name="n119">119</a>
+<strong><a href="#n120" name="n120">120</a></strong>
+<a href="#n121" name="n121">121</a>
+<a href="#n122" name="n122">122</a>
+<a href="#n123" name="n123">123</a>
+<a href="#n124" name="n124">124</a>
+<a href="#n125" name="n125">125</a>
+<a href="#n126" name="n126">126</a>
+<a href="#n127" name="n127">127</a>
+<a href="#n128" name="n128">128</a>
+<a href="#n129" name="n129">129</a>
+<strong><a href="#n130" name="n130">130</a></strong>
+<a href="#n131" name="n131">131</a>
+<a href="#n132" name="n132">132</a>
+<a href="#n133" name="n133">133</a>
+<a href="#n134" name="n134">134</a>
+<a href="#n135" name="n135">135</a>
+<a href="#n136" name="n136">136</a>
+<a href="#n137" name="n137">137</a>
+<a href="#n138" name="n138">138</a>
+<a href="#n139" name="n139">139</a>
+<strong><a href="#n140" name="n140">140</a></strong>
+<a href="#n141" name="n141">141</a>
+<a href="#n142" name="n142">142</a>
+<a href="#n143" name="n143">143</a>
+<a href="#n144" name="n144">144</a>
+<a href="#n145" name="n145">145</a>
+<a href="#n146" name="n146">146</a>
+<a href="#n147" name="n147">147</a>
+<a href="#n148" name="n148">148</a>
+<a href="#n149" name="n149">149</a>
+<strong><a href="#n150" name="n150">150</a></strong>
+<a href="#n151" name="n151">151</a>
+<a href="#n152" name="n152">152</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -273,6 +352,9 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="keyword">var</span> dali = DaliApi.dali;
 
+                <span class="comment">// Cache the property values (blend-related)</span>
+                <span class="local-variable">this</span>.property_cache = {};
+
                 <span class="local-variable">this</span>.id = ++DaliRenderer.GlobalId;
                 <span class="local-variable">this</span>.daligeometry = geometry;
                 <span class="local-variable">this</span>.dalimaterial = material;
@@ -287,6 +369,82 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
         }
+
+
+        <span class="comment">// Blend Modes moved from material to renderer in some versions of dali</span>
+
+        <span class="comment">/**
+         * @method hasBlender
+         * Return true if the material has blending api
+         */</span>
+        <span class="local-variable">this</span>.<span class="function">hasBlender</span> = <span class="keyword">function</span>(mode) {
+                <span class="keyword">return</span> (<span class="keyword">typeof</span> <span class="local-variable">this</span>.dalirenderer.setBlendEquation === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>);
+        }
+
+        <span class="comment">/**
+         * @method setBlendMode
+         * Forward request to dali.Material object. dali enumerations match webgl.
+         * @param {number} mode Set the blending mode
+         */</span>
+        <span class="local-variable">this</span>.<span class="function">setBlendMode</span> = <span class="keyword">function</span>(mode) {
+                <span class="keyword">var</span> val = <span class="local-variable">this</span>.property_cache[<span class="string"><span class="delimiter">'</span><span class="content">blendmode</span><span class="delimiter">'</span></span>];
+                <span class="keyword">if</span> (val &amp;&amp; val == mode)
+                        <span class="keyword">return</span>;
+
+                <span class="local-variable">this</span>.dalirenderer.blendingMode = mode;
+                <span class="local-variable">this</span>.property_cache[<span class="string"><span class="delimiter">'</span><span class="content">blendmode</span><span class="delimiter">'</span></span>] = mode;
+
+                <span class="keyword">if</span> (DaliApi.emitcode) {
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.blendingMode = </span><span class="delimiter">'</span></span> + mode + <span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>);
+                }
+        }
+
+
+        <span class="comment">/**
+         * @method setBlendEquation
+         * Forward request to dali.Material object
+         * @param {number} equationRgb Equation for combining rgb components
+         * @param {number} equationAlpha Equation for combining alpha component
+         */</span>
+        <span class="local-variable">this</span>.<span class="function">setBlendEquation</span> = <span class="keyword">function</span>(equationRgb, equationAlpha) {
+                <span class="keyword">var</span> hash = DaliApi.getHash([equationRgb, equationAlpha]);
+
+                <span class="keyword">var</span> val = <span class="local-variable">this</span>.property_cache[<span class="string"><span class="delimiter">'</span><span class="content">blendequation</span><span class="delimiter">'</span></span>];
+                <span class="keyword">if</span> (val &amp;&amp; val == hash)
+                        <span class="keyword">return</span>;
+
+                <span class="local-variable">this</span>.dalirenderer.setBlendEquation(equationRgb, equationAlpha);
+                <span class="local-variable">this</span>.property_cache[<span class="string"><span class="delimiter">'</span><span class="content">blendequation</span><span class="delimiter">'</span></span>] = hash;
+
+                <span class="keyword">if</span> (DaliApi.emitcode) {
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setBlendEquation(</span><span class="delimiter">'</span></span> + equationRgb + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + equationAlpha + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
+                }
+        }
+
+
+        <span class="comment">/**
+         * @method setBlendFunc
+         * Forward request to dali.Material object
+         * @param {number} srcFactorRgb Source blending rgb
+         * @param {number} dstFactorRgb Destination blending rgb
+         * @param {number} srcFactorAlpha Source blending alpha
+         * @param {number} dstFactorAlpha Destination blending alpha
+         */</span>
+        <span class="local-variable">this</span>.<span class="function">setBlendFunc</span> = <span class="keyword">function</span>(srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha) {
+                <span class="keyword">var</span> hash = DaliApi.getHash([srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha]);
+
+                <span class="keyword">var</span> val = <span class="local-variable">this</span>.property_cache[<span class="string"><span class="delimiter">'</span><span class="content">blendfunc</span><span class="delimiter">'</span></span>];
+                <span class="keyword">if</span> (val &amp;&amp; val == hash)
+                        <span class="keyword">return</span>;
+
+                <span class="local-variable">this</span>.dalirenderer.setBlendFunc(srcFactorRgb, dstFactorRgb, srcFactorAlpha, dstFactorAlpha);
+                <span class="local-variable">this</span>.property_cache[<span class="string"><span class="delimiter">'</span><span class="content">blendfunc</span><span class="delimiter">'</span></span>] = hash;
+
+                <span class="keyword">if</span> (DaliApi.emitcode) {
+                        console.log(<span class="string"><span class="delimiter">'</span><span class="content">DALICODE: </span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.name() + <span class="string"><span class="delimiter">'</span><span class="content">.setBlendFunc(</span><span class="delimiter">'</span></span> + srcFactorRgb + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + dstFactorRgb + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + srcFactorAlpha + <span class="string"><span class="delimiter">'</span><span class="content">, </span><span class="delimiter">'</span></span> + dstFactorAlpha + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>);
+                }
+        }
+
 
         <span class="local-variable">this</span>.<span class="function">name</span> = <span class="keyword">function</span>() {
                 <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">dalirenderer</span><span class="delimiter">'</span></span> + <span class="local-variable">this</span>.id;

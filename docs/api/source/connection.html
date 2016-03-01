@@ -764,7 +764,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> out = F.findChild(<span class="local-variable">this</span>._fromoutput);
                         <span class="keyword">var</span> yoff = <span class="integer">0</span>;
                         <span class="keyword">if</span> (out) {
-                                color2 = out.bgcolor;
+                                color2 = out.color;
                                 yoff += out.layout.top;
                                 yoff += out.parent.layout.top;
                                 yoff += out.parent.parent.layout.top + <span class="integer">10</span>;
@@ -779,7 +779,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="keyword">var</span> inp = T.findChild(<span class="local-variable">this</span>._toinput);
                         <span class="keyword">var</span> yoff = <span class="integer">0</span>;
                         <span class="keyword">if</span> (inp) {
-                                color1 = inp.bgcolor;
+                                color1 = inp.color;
 
                                 yoff += inp.layout.top;
                                 yoff += inp.parent.layout.top;

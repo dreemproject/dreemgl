@@ -320,6 +320,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n166" name="n166">166</a>
 <a href="#n167" name="n167">167</a>
 <a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
+<a href="#n171" name="n171">171</a>
+<a href="#n172" name="n172">172</a>
+<a href="#n173" name="n173">173</a>
+<a href="#n174" name="n174">174</a>
+<a href="#n175" name="n175">175</a>
+<a href="#n176" name="n176">176</a>
+<a href="#n177" name="n177">177</a>
+<a href="#n178" name="n178">178</a>
+<a href="#n179" name="n179">179</a>
+<strong><a href="#n180" name="n180">180</a></strong>
+<a href="#n181" name="n181">181</a>
+<a href="#n182" name="n182">182</a>
+<a href="#n183" name="n183">183</a>
+<a href="#n184" name="n184">184</a>
+<a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -335,6 +353,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.tooldragroot = <span class="predefined-constant">true</span>;
         <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span>;
+        <span class="local-variable">this</span>.bgcolor = <span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>;
+        <span class="local-variable">this</span>.pickalpha = -<span class="integer">1</span>;
 
         <span class="local-variable">this</span>.attributes = {
 
@@ -343,7 +363,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// The relative offset of the top drawer view to the center, a value between (far left) -1.0 ~ 1.0 (far right),</span>
                 <span class="comment">// with 0 being exactly at the center.</span>
-                <span class="key">value</span>:Config({<span class="key">value</span>:<span class="float">0.0</span>, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
+                <span class="key">value</span>:Config({<span class="key">value</span>:<span class="float">0.0</span>, <span class="key">persist</span>:<span class="predefined-constant">false</span>}),
 
                 <span class="comment">// The threshold value at which to allow the drawer to open and lock the right tray</span>
                 <span class="key">min</span>:-<span class="float">0.5</span>,
@@ -353,12 +373,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         };
 
         <span class="local-variable">this</span>.<span class="function">onvalue</span> = <span class="keyword">function</span>(ev,v,o) {
+
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._main) {
                         <span class="local-variable">this</span>._main.x = <span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span> ? v * <span class="local-variable">this</span>.width : <span class="integer">0</span>;
                         <span class="local-variable">this</span>._main.y = <span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span> ? v * <span class="local-variable">this</span>.height : <span class="integer">0</span>;
                 }
 
-                <span class="local-variable">this</span>._left.visible = v &gt; <span class="integer">0</span>;
+                <span class="keyword">if</span> (v &gt; <span class="integer">0</span>) {
+                        <span class="local-variable">this</span>._left.visible = <span class="predefined-constant">true</span>;
+                        <span class="local-variable">this</span>._right.visible = !<span class="local-variable">this</span>._left.visible;
+                        <span class="local-variable">this</span>._left.x = <span class="integer">0</span>;
+                        <span class="local-variable">this</span>._left.y = <span class="integer">0</span>;
+                } <span class="keyword">else</span> {
+                        <span class="local-variable">this</span>._left.visible = <span class="predefined-constant">false</span>;
+                        <span class="local-variable">this</span>._right.visible = !<span class="local-variable">this</span>._left.visible;
+                        <span class="local-variable">this</span>._right.x = <span class="integer">0</span>;
+                        <span class="local-variable">this</span>._right.y = <span class="integer">0</span>;
+                }
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>._left) {
                         <span class="local-variable">this</span>._left.drawtarget = v === <span class="local-variable">this</span>.max ? <span class="string"><span class="delimiter">&quot;</span><span class="content">both</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span>
@@ -372,19 +403,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">pointermove</span> = <span class="keyword">function</span>(p, loc, v) {
                 <span class="keyword">var</span> main = <span class="local-variable">this</span>._main;
 
-                <span class="comment">// FIXME(mason) this is for the demo, and is a lame way to do it.  Needs to be cancellable pointer event maybe?</span>
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.ignoremove === <span class="predefined-constant">true</span>) {
-                        <span class="local-variable">this</span>.value = <span class="local-variable">this</span>._value;
-                        <span class="keyword">return</span>;
-                }
-
                 <span class="keyword">var</span> value = <span class="integer">0</span>;
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span>) {
+                        <span class="keyword">if</span> (abs(p.movement[<span class="integer">0</span>]) &gt; abs(p.movement[<span class="integer">1</span>])) <span class="keyword">return</span>
                         <span class="keyword">var</span> newy = main.y + p.movement.y;
                         newy = Math.min(Math.max(newy, <span class="integer">0</span> - main.height), <span class="local-variable">this</span>.height);
                         value = newy / <span class="local-variable">this</span>.height;
                 } <span class="keyword">else</span> {
+                        <span class="keyword">if</span> (abs(p.movement[<span class="integer">1</span>]) &gt; abs(p.movement[<span class="integer">0</span>])) <span class="keyword">return</span>
                         <span class="keyword">var</span> newx = main.x + p.movement.x;
                         newx = Math.min(Math.max(newx, <span class="integer">0</span> - main.width), <span class="local-variable">this</span>.width);
                         value = newx / <span class="local-variable">this</span>.width;
@@ -401,17 +428,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">pointerend</span> = <span class="keyword">function</span>(p, loc, v) {
 
-                <span class="comment">// FIXME(mason) see above</span>
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.ignoremove === <span class="predefined-constant">true</span>) {
-                        <span class="local-variable">this</span>.ignoremove = <span class="predefined-constant">undefined</span>;
-                        <span class="keyword">return</span>;
-                }
-
                 <span class="keyword">var</span> value = <span class="local-variable">this</span>.value;
 
-                <span class="keyword">if</span> (value &lt; <span class="local-variable">this</span>.min) {
+                <span class="keyword">if</span> (value &lt;= <span class="local-variable">this</span>.min) {
                         value = <span class="local-variable">this</span>.min
-                } <span class="keyword">else</span> <span class="keyword">if</span> (value &gt; <span class="local-variable">this</span>.max) {
+                } <span class="keyword">else</span> <span class="keyword">if</span> (value &gt;= <span class="local-variable">this</span>.max) {
                         value = <span class="local-variable">this</span>.max
                 } <span class="keyword">else</span> {
                         value = <span class="integer">0</span>;
@@ -430,10 +451,19 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.mainview = <span class="local-variable">this</span>.constructor_children[<span class="integer">0</span>];
                 <span class="local-variable">this</span>.rightview = <span class="local-variable">this</span>.constructor_children[<span class="integer">1</span>];
                 <span class="local-variable">this</span>.leftview = <span class="local-variable">this</span>.constructor_children[<span class="integer">2</span>];
+                <span class="local-variable">this</span>.onvalue(<span class="predefined-constant">null</span>, <span class="local-variable">this</span>._value, <span class="local-variable">this</span>)
         };
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">var</span> views = [];
+
+                <span class="keyword">var</span> x = <span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">horizontal</span><span class="delimiter">&quot;</span></span> ? <span class="local-variable">this</span>._value * (<span class="local-variable">this</span>.width || <span class="local-variable">this</span>._layout.width) : <span class="integer">0</span>;
+                <span class="keyword">var</span> y = <span class="local-variable">this</span>.direction === <span class="string"><span class="delimiter">&quot;</span><span class="content">vertical</span><span class="delimiter">&quot;</span></span> ? <span class="local-variable">this</span>._value * (<span class="local-variable">this</span>.height || <span class="local-variable">this</span>._layout.height) : <span class="integer">0</span>;
+
+                <span class="keyword">var</span> leftvisible = <span class="predefined-constant">true</span>;
+                <span class="keyword">if</span> (<span class="local-variable">this</span>._value &lt; <span class="integer">0</span>) {
+                        leftvisible = <span class="predefined-constant">false</span>;
+                }
 
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.rightview) {
                         views.push(<span class="local-variable">this</span>._right = view({
@@ -441,6 +471,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">x</span>:<span class="integer">0</span>,
+                                <span class="key">y</span>:<span class="integer">0</span>,
                                 <span class="key">width</span>:<span class="local-variable">this</span>.width,
                                 <span class="key">height</span>:<span class="local-variable">this</span>.height
                         }, <span class="local-variable">this</span>.rightview));
@@ -452,9 +484,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">x</span>:<span class="integer">0</span>,
+                                <span class="key">y</span>:<span class="integer">0</span>,
+                                <span class="key">visible</span>:leftvisible,
                                 <span class="key">width</span>:<span class="local-variable">this</span>.width,
-                                <span class="key">height</span>:<span class="local-variable">this</span>.height,
-                                <span class="key">visible</span>:<span class="predefined-constant">false</span>
+                                <span class="key">height</span>:<span class="local-variable">this</span>.height
                         },<span class="local-variable">this</span>.leftview));
                 }
 
@@ -463,6 +497,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="key">position</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">x</span>:x,
+                        <span class="key">y</span>:y,
                         <span class="key">width</span>:<span class="local-variable">this</span>.width,
                         <span class="key">height</span>:<span class="local-variable">this</span>.height
                 }, <span class="local-variable">this</span>.mainview));

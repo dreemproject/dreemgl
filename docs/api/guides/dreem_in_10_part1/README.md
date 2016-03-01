@@ -268,7 +268,6 @@ There are a number of predefined directory switches:
 | `$widgets$` | [$root/system](../classes/widgets)| UI widgets used by applications, e.g. colorpicker, searchbox, radiogroup. |
 | `$3d$` | [$root/classes/3d](../classes/3d)| System classes for 3d support in DreemGL |
 | `$$` | current directory | Used to import classes relative to current directory. |
-| `$$$` | parent directory | Used to import classes from parent directory or subfolder of parent directory. |
 | `relative$dir$` | relative directory| Directory relative to current or parent directory. |
 
 

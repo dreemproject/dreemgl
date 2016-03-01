@@ -2242,6 +2242,55 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n2088" name="n2088">2088</a>
 <a href="#n2089" name="n2089">2089</a>
 <strong><a href="#n2090" name="n2090">2090</a></strong>
+<a href="#n2091" name="n2091">2091</a>
+<a href="#n2092" name="n2092">2092</a>
+<a href="#n2093" name="n2093">2093</a>
+<a href="#n2094" name="n2094">2094</a>
+<a href="#n2095" name="n2095">2095</a>
+<a href="#n2096" name="n2096">2096</a>
+<a href="#n2097" name="n2097">2097</a>
+<a href="#n2098" name="n2098">2098</a>
+<a href="#n2099" name="n2099">2099</a>
+<strong><a href="#n2100" name="n2100">2100</a></strong>
+<a href="#n2101" name="n2101">2101</a>
+<a href="#n2102" name="n2102">2102</a>
+<a href="#n2103" name="n2103">2103</a>
+<a href="#n2104" name="n2104">2104</a>
+<a href="#n2105" name="n2105">2105</a>
+<a href="#n2106" name="n2106">2106</a>
+<a href="#n2107" name="n2107">2107</a>
+<a href="#n2108" name="n2108">2108</a>
+<a href="#n2109" name="n2109">2109</a>
+<strong><a href="#n2110" name="n2110">2110</a></strong>
+<a href="#n2111" name="n2111">2111</a>
+<a href="#n2112" name="n2112">2112</a>
+<a href="#n2113" name="n2113">2113</a>
+<a href="#n2114" name="n2114">2114</a>
+<a href="#n2115" name="n2115">2115</a>
+<a href="#n2116" name="n2116">2116</a>
+<a href="#n2117" name="n2117">2117</a>
+<a href="#n2118" name="n2118">2118</a>
+<a href="#n2119" name="n2119">2119</a>
+<strong><a href="#n2120" name="n2120">2120</a></strong>
+<a href="#n2121" name="n2121">2121</a>
+<a href="#n2122" name="n2122">2122</a>
+<a href="#n2123" name="n2123">2123</a>
+<a href="#n2124" name="n2124">2124</a>
+<a href="#n2125" name="n2125">2125</a>
+<a href="#n2126" name="n2126">2126</a>
+<a href="#n2127" name="n2127">2127</a>
+<a href="#n2128" name="n2128">2128</a>
+<a href="#n2129" name="n2129">2129</a>
+<strong><a href="#n2130" name="n2130">2130</a></strong>
+<a href="#n2131" name="n2131">2131</a>
+<a href="#n2132" name="n2132">2132</a>
+<a href="#n2133" name="n2133">2133</a>
+<a href="#n2134" name="n2134">2134</a>
+<a href="#n2135" name="n2135">2135</a>
+<a href="#n2136" name="n2136">2136</a>
+<a href="#n2137" name="n2137">2137</a>
+<a href="#n2138" name="n2138">2138</a>
+<a href="#n2139" name="n2139">2139</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -2249,8 +2298,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
 define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(require,
-                                                                  <span class="predefined">$ui$</span>, view, label, textbox, icon, checkbox, treeview, button, statebutton, tabbar,
-                                                                  <span class="predefined">$widgets$</span>, palette, propviewer, jseditor,
+                                                                  <span class="predefined">$ui$</span>, view, label, textbox, icon, checkbox, treeview, button, tabbar,
+                                                                  <span class="predefined">$widgets$</span>, palette, propviewer, jseditor, jsviewer,
                                                                   <span class="predefined">$server$</span>, astio){
 
 <span class="comment">// The DreemGL Visual Toolkit allows for visual manipulation of a running composition</span>
@@ -2282,10 +2331,10 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="key">classname</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">view</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">params</span>:{
-                                        <span class="key">height</span>:<span class="integer">70</span>,
-                                        <span class="key">width</span>:<span class="integer">80</span>,
+                                        <span class="key">height</span>:<span class="integer">150</span>,
+                                        <span class="key">width</span>:<span class="integer">200</span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">purple</span><span class="delimiter">'</span></span>
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
                                 }
                         },
                         {
@@ -2298,19 +2347,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">fontsize</span>:<span class="integer">44</span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
-                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">lightgreen</span><span class="delimiter">'</span></span>,
-                                        <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Howdy!</span><span class="delimiter">'</span></span>
+                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#999</span><span class="delimiter">'</span></span>,
+                                        <span class="key">text</span>:<span class="string"><span class="delimiter">'</span><span class="content">Label</span><span class="delimiter">'</span></span>
                                 }
                         },
                         {
                                 <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Check Button</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check-square</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">check-square-o</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">desc</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">A check button</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">classname</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">checkbox</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">params</span>:{
                                         <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
-                                        <span class="key">toolresize</span>:<span class="predefined-constant">false</span>,
                                         <span class="key">fontsize</span>:<span class="integer">24</span>,
                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
@@ -2320,7 +2368,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">pressedcolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">pressedcolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">pink</span><span class="delimiter">'</span></span>
+                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">white</span><span class="delimiter">'</span></span>
                                 }
                         },
                         {
@@ -2333,23 +2381,33 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">tooldragroot</span>:<span class="predefined-constant">true</span>,
                                         <span class="key">fontsize</span>:<span class="integer">24</span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>,
-                                        <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Press Me!</span><span class="delimiter">'</span></span>
+                                        <span class="key">label</span>:<span class="string"><span class="delimiter">'</span><span class="content">Button</span><span class="delimiter">'</span></span>
                                 }
                         },
                         {
-                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Image</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">desc</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">An image or icon</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Icon</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">info-circle</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">desc</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">A Fontawesome icon</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">classname</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">icon</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">classdir</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui$</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">params</span>:{
-                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">cornflower</span><span class="delimiter">'</span></span>,
+                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">#e22</span><span class="delimiter">'</span></span>,
+                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">transparent</span><span class="delimiter">'</span></span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
-                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">flask</span><span class="delimiter">'</span></span>,
+                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">'</span><span class="content">heart</span><span class="delimiter">'</span></span>,
                                         <span class="key">fontsize</span>:<span class="integer">80</span>
                                 }
-                        }
+                        },
+                        <span class="comment">//{</span>
+                        <span class="comment">//        label:&quot;Input&quot;,</span>
+                        <span class="comment">//        icon:&quot;italic&quot;,</span>
+                        <span class="comment">//        desc:&quot;An input box&quot;,</span>
+                        <span class="comment">//        classname:&quot;textbox&quot;,</span>
+                        <span class="comment">//        classdir:&quot;$ui$&quot;,</span>
+                        <span class="comment">//        params:{</span>
+                        <span class="comment">//                value:&quot;Input Text&quot;</span>
+                        <span class="comment">//        }</span>
+                        <span class="comment">//}</span>
                 ],
                 <span class="comment">//Behaviors:[</span>
                 <span class="comment">//        {</span>
@@ -2489,16 +2547,23 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         };
 
         <span class="local-variable">this</span>.<span class="function">onchange</span> = <span class="keyword">function</span>(ev,src,o) {
-                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[COMMIT]</span><span class="delimiter">&quot;</span></span>);<span class="comment">//, src);</span>
 
-                <span class="keyword">var</span> msg = {
-                        <span class="key">rpcid</span>: <span class="string"><span class="delimiter">'</span><span class="content">this</span><span class="delimiter">'</span></span>,
-                        <span class="key">method</span>: <span class="string"><span class="delimiter">'</span><span class="content">commit</span><span class="delimiter">'</span></span>,
-                        <span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">method</span><span class="delimiter">'</span></span>,
-                        <span class="key">args</span>:[src]
+                <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();
+                <span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();
+
+                <span class="keyword">var</span> fullpath = <span class="local-variable">this</span>.screen.composition.constructor.module.filename;
+                <span class="keyword">var</span> filename = fullpath.substring(fullpath.lastIndexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>) + <span class="integer">1</span>);
+                <span class="keyword">var</span> source = <span class="string"><span class="delimiter">'</span><span class="content">define.class(&quot;$server/composition&quot;,</span><span class="delimiter">'</span></span> + src + <span class="string"><span class="delimiter">'</span><span class="content">);</span><span class="delimiter">'</span></span>
+                <span class="keyword">var</span> blob = <span class="keyword">new</span> Blob([source], {<span class="key">type</span>: <span class="string"><span class="delimiter">'</span><span class="content">plain/text</span><span class="delimiter">'</span></span>});
+                formData.append(<span class="string"><span class="delimiter">'</span><span class="content">file</span><span class="delimiter">'</span></span>, blob, filename);
+
+                xhr.open(<span class="string"><span class="delimiter">&quot;</span><span class="content">POST</span><span class="delimiter">&quot;</span></span>, window.location.pathname, <span class="predefined-constant">true</span>);
+                xhr.<span class="function">onreadystatechange</span> = <span class="keyword">function</span> () {
+                        <span class="keyword">if</span> (xhr.readyState == <span class="integer">4</span> &amp;&amp; xhr.status == <span class="integer">200</span>) {
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[COMMIT]</span><span class="delimiter">&quot;</span></span>);<span class="comment">//, src);</span>
+                        }
                 };
-
-                <span class="local-variable">this</span>.rpc.__host.callRpcMethod(msg);
+                xhr.send(formData);
         };
 
         <span class="local-variable">this</span>.<span class="function">onselected</span> = <span class="keyword">function</span>(ev,v,o) {
@@ -2853,18 +2918,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         }
 
                         <span class="keyword">var</span> nx = pos.x - <span class="local-variable">this</span>.__startpos.x;
-                        <span class="keyword">var</span> dx = Math.abs(evview.x - <span class="local-variable">this</span>.__originalpos.x);
+                        <span class="keyword">var</span> dx = Math.abs(evview.pos.x - <span class="local-variable">this</span>.__originalpos.x);
                         <span class="keyword">if</span> (dx &gt; <span class="float">0.5</span>) {
                                 commit = <span class="predefined-constant">true</span>;
                         }
 
                         <span class="keyword">var</span> ny = pos.y - <span class="local-variable">this</span>.__startpos.y;
-                        <span class="keyword">var</span> dy = Math.abs(evview.y - <span class="local-variable">this</span>.__originalpos.y);
+                        <span class="keyword">var</span> dy = Math.abs(evview.pos.y - <span class="local-variable">this</span>.__originalpos.y);
                         <span class="keyword">if</span> (dy &gt; <span class="float">0.5</span>) {
                                 commit = <span class="predefined-constant">true</span>;
                         }
 
-                        <span class="keyword">if</span> (<span class="local-variable">this</span>.selection) {
+                        <span class="keyword">if</span> (commit &amp;&amp; <span class="local-variable">this</span>.selection) {
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.testView(evview) &amp;&amp; evview.toolmove !== <span class="predefined-constant">false</span> &amp;&amp; evview.position === <span class="string"><span class="delimiter">&quot;</span><span class="content">absolute</span><span class="delimiter">&quot;</span></span>) {
                                         nx = evview.pos.x + ev.pointer.movement.x;
                                         <span class="local-variable">this</span>.setASTObjectProperty(evview, <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span>, nx);
@@ -2902,12 +2967,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 <span class="local-variable">this</span>.removeASTNodeFor(evview);
 
                                 <span class="keyword">if</span> (<span class="local-variable">this</span>.selection &amp;&amp; <span class="local-variable">this</span>.groupdrag &amp;&amp; <span class="local-variable">this</span>.groupreparent) {
-                                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.selection.length;i++) {
-                                                <span class="keyword">var</span> selected = <span class="local-variable">this</span>.selection[i];
-                                                <span class="keyword">if</span> (selected === evview) {
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> j=<span class="integer">0</span>;j&lt;<span class="local-variable">this</span>.selection.length;j++) {
+                                                <span class="keyword">var</span> sel = <span class="local-variable">this</span>.selection[j];
+                                                <span class="keyword">if</span> (sel === evview) {
                                                         <span class="keyword">continue</span>;
                                                 }
-                                                <span class="local-variable">this</span>.appendASTNodeOn(<span class="local-variable">this</span>.__lastpick, selected)
+                                                <span class="local-variable">this</span>.appendASTNodeOn(<span class="local-variable">this</span>.__lastpick, sel);
                                                 <span class="local-variable">this</span>.removeASTNodeFor(selected)
                                         }
                                 }
@@ -3034,7 +3099,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 text = text + <span class="string"><span class="delimiter">&quot;</span><span class="content"> @ </span><span class="delimiter">&quot;</span></span> + ev.pointer.position.x.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + ev.pointer.position.y.toFixed(<span class="integer">0</span>);
                 text = text + <span class="string"><span class="delimiter">&quot;</span><span class="content"> &lt;</span><span class="delimiter">&quot;</span></span> + pos.x.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">, </span><span class="delimiter">&quot;</span></span> + pos.y.toFixed(<span class="integer">0</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">&gt;</span><span class="delimiter">&quot;</span></span>;
 
-                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>).text = text;
+                <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">pointer</span><span class="delimiter">&quot;</span></span>).text = text;
 
                 <span class="local-variable">this</span>.resetCursor(ev);
 
@@ -3065,13 +3130,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.selected = [];
                         <span class="local-variable">this</span>.sourcefile.undo();
                 } <span class="keyword">else</span> <span class="keyword">if</span> (ev.name === <span class="string"><span class="delimiter">&quot;</span><span class="content">backspace</span><span class="delimiter">&quot;</span></span> &amp;&amp; <span class="local-variable">this</span>.selection &amp;&amp; <span class="local-variable">this</span>.selection.length) {
-                        <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || (<span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span> &amp;&amp; <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>);
+                        <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || ([<span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jseditor</span><span class="delimiter">&quot;</span></span>].indexOf(<span class="local-variable">this</span>.screen.focus_view.constructor.name) === -<span class="integer">1</span> &amp;&amp; <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">if</span> (candelete) {
                                 <span class="local-variable">this</span>.deleteselection();
                         }
                 } <span class="keyword">else</span> <span class="keyword">if</span> (ev.name === <span class="string"><span class="delimiter">&quot;</span><span class="content">x</span><span class="delimiter">&quot;</span></span> &amp;&amp; (ev.ctrl || ev.meta)) {
                         <span class="local-variable">this</span>.copyselection();
-                        <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || (<span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span> &amp;&amp; <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>);
+                        <span class="keyword">var</span> candelete = !<span class="local-variable">this</span>.screen.focus_view || ([<span class="string"><span class="delimiter">&quot;</span><span class="content">textbox</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">jseditor</span><span class="delimiter">&quot;</span></span>].indexOf(<span class="local-variable">this</span>.screen.focus_view.constructor.name) === -<span class="integer">1</span> &amp;&amp; <span class="local-variable">this</span>.screen.focus_view.constructor.name !== <span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>);
                         <span class="keyword">if</span> (candelete) {
                                 <span class="local-variable">this</span>.deleteselection();
                         }
@@ -3351,6 +3416,46 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.__movepanel = <span class="predefined-constant">undefined</span>;
         };
 
+        <span class="local-variable">this</span>.<span class="function">paletteDropTest</span> = <span class="keyword">function</span>(ev, v, item, orig, dv) {
+                <span class="keyword">return</span> v !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(v);
+        };
+
+        <span class="local-variable">this</span>.<span class="function">paletteDrop</span> = <span class="keyword">function</span>(ev, v, item, orig, dv) {
+                <span class="keyword">if</span> (!v) {
+                        v = <span class="local-variable">this</span>.screen
+                }
+
+                <span class="keyword">if</span> (item.behaviors) {
+                        <span class="keyword">for</span> (<span class="keyword">var</span> o <span class="keyword">in</span> item.behaviors) {
+                                <span class="keyword">if</span> (item.behaviors.hasOwnProperty(o)) {
+                                        <span class="keyword">var</span> behave = item.behaviors[o];
+                                        <span class="local-variable">this</span>.setASTObjectProperty(v, o, behave, <span class="predefined-constant">true</span>);
+                                }
+                        }
+                }
+
+                <span class="keyword">if</span> (item.classname &amp;&amp; item.params) {
+                        <span class="keyword">var</span> params = JSON.parse(JSON.stringify(item.params));
+
+                        <span class="keyword">if</span> (v != <span class="local-variable">this</span>.screen) {
+                                <span class="keyword">var</span> pos = v.globalToLocal(ev.position);
+                                params.position = <span class="local-variable">this</span>.dropmode;
+                                <span class="keyword">if</span> (<span class="local-variable">this</span>.dropmode === <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>) {
+                                        params.x = pos.x;
+                                        params.y = pos.y;
+                                }
+                        }
+
+                        <span class="local-variable">this</span>.createASTNodeOn(v, {<span class="key">classname</span>:item.classname, <span class="key">params</span>:params})
+                }
+
+
+                <span class="local-variable">this</span>.ensureDeps();
+                <span class="local-variable">this</span>.commit();
+
+                <span class="comment">//TODO(mason) set propviewer to inspect new object on reload?</span>
+        };
+
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">var</span> views = [];
 
@@ -3373,6 +3478,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
                                                         <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
                                                         <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
+                                                        <span class="local-variable">this</span>.parent.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span>).pos = vec3(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>);
 
                                                         <span class="keyword">if</span> (<span class="local-variable">this</span>.__grabpos) {
                                                                 <span class="local-variable">this</span>.parent.pos = vec3(p.position.x - <span class="local-variable">this</span>.__grabpos.x, p.position.y - <span class="local-variable">this</span>.__grabpos.y,<span class="integer">0</span>)
@@ -3412,19 +3518,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                         <span class="key">padding</span>:<span class="integer">5</span>,
                                         <span class="key">drawtarget</span>:<span class="string"><span class="delimiter">'</span><span class="content">color</span><span class="delimiter">'</span></span>
                                 }),
-                                statebutton({
+                                button({
                                         <span class="key">fontsize</span>:<span class="integer">16</span>,
                                         <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">times</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>,
                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="key">borderwidth</span>:<span class="integer">0</span>,
-                                        <span class="key">marginright</span>:<span class="integer">1</span>,
-                                        <span class="key">normal</span>:{
-                                                <span class="key">fgcolor</span>:vec4(<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="float">0.8</span>),
-                                        },
-                                        <span class="key">hover</span>:{
-                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                                        },
+                                        <span class="key">margintop</span>:<span class="integer">0</span>,
+                                        <span class="key">marginright</span>:<span class="integer">7</span>,
+                                        <span class="key">textactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">textcolor</span>:vec4(<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="float">0.8</span>),
+                                        <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">pressedcolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">pressedcolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
                                         <span class="function">click</span>:<span class="keyword">function</span>(ev,v,o) {
                                                 <span class="local-variable">this</span>.setASTObjectProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">visible</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">false</span>);
                                                 <span class="local-variable">this</span>.ensureDeps();
@@ -3434,58 +3543,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         ]
                 }
 
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Components</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">1.0</span>},
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">flex</span>:<span class="float">1.0</span>},
                         palette({
                                 <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">components</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">flex</span>:<span class="integer">1</span>,
                                 <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">items</span>:<span class="local-variable">this</span>.components,
-
-                                <span class="function">dropTest</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
-                                        <span class="keyword">return</span> v !== <span class="local-variable">this</span> &amp;&amp; <span class="local-variable">this</span>.testView(v);
-                                }.bind(<span class="local-variable">this</span>),
-
-                                <span class="function">drop</span>:<span class="keyword">function</span>(ev, v, item, orig, dv) {
-                                        <span class="keyword">if</span> (v) {
-
-                                                <span class="keyword">if</span> (item.behaviors) {
-                                                        <span class="keyword">for</span> (<span class="keyword">var</span> o <span class="keyword">in</span> item.behaviors) {
-                                                                <span class="keyword">if</span> (item.behaviors.hasOwnProperty(o)) {
-                                                                        <span class="keyword">var</span> behave = item.behaviors[o];
-                                                                        <span class="local-variable">this</span>.setASTObjectProperty(v, o, behave, <span class="predefined-constant">true</span>);
-                                                                }
-                                                        }
-                                                }
-
-                                                <span class="keyword">if</span> (item.classname &amp;&amp; item.params) {
-                                                        <span class="keyword">var</span> params = JSON.parse(JSON.stringify(item.params));
-
-                                                        <span class="keyword">var</span> pos = v.globalToLocal(ev.position);
-
-                                                        params.position = <span class="local-variable">this</span>.dropmode;
-                                                        <span class="keyword">if</span> (<span class="local-variable">this</span>.dropmode === <span class="string"><span class="delimiter">'</span><span class="content">absolute</span><span class="delimiter">'</span></span>) {
-                                                                params.x = pos.x;
-                                                                params.y = pos.y;
-                                                        }
-
-                                                        <span class="local-variable">this</span>.createASTNodeOn(v, {<span class="key">classname</span>:item.classname, <span class="key">params</span>:params})
-                                                }
-
-                                                <span class="local-variable">this</span>.ensureDeps();
-                                                <span class="local-variable">this</span>.commit();
-
-                                                <span class="comment">//TODO(mason) set propviewer to inspect new object on reload?</span>
-
-                                        }
-                                }.bind(<span class="local-variable">this</span>)
+                                <span class="key">dropTest</span>:<span class="local-variable">this</span>.paletteDropTest.bind(<span class="local-variable">this</span>),
+                                <span class="key">drop</span>:<span class="local-variable">this</span>.paletteDrop.bind(<span class="local-variable">this</span>)
                         })
                 ));
 
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Cursor</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:vertical ? <span class="integer">0</span> : <span class="integer">2</span>},
-                        label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">current</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">5</span>, <span class="key">paddingleft</span>:<span class="integer">10</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>})
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">flex</span>:vertical ? <span class="integer">0</span> : <span class="integer">2</span>},
+                        label({<span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">pointer</span><span class="delimiter">&quot;</span></span>, <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="key">padding</span>:<span class="integer">5</span>, <span class="key">paddingleft</span>:<span class="integer">10</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>})
                 ));
 
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Structure</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="integer">1</span>},
+                views.push(<span class="local-variable">this</span>.panel({<span class="key">flex</span>:<span class="integer">1</span>},
                         treeview({
                                 <span class="key">flex</span>:<span class="integer">1</span>,
                                 <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">structure</span><span class="delimiter">&quot;</span></span>,
@@ -3539,16 +3612,18 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                                 v.toolmove = !<span class="local-variable">this</span>.value;
                                                                         }
                                                                 }),
-                                                                statebutton({
-                                                                        <span class="key">label</span>:name,
+                                                                button({
+                                                                        <span class="key">text</span>:name,
                                                                         <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                                                        <span class="key">normal</span>:{
-                                                                                <span class="key">fgcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#ddd</span><span class="delimiter">&quot;</span></span>,
-                                                                                <span class="key">padding</span>:<span class="integer">0</span>
-                                                                        },
-                                                                        <span class="key">hover</span>:{
-                                                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#fff</span><span class="delimiter">&quot;</span></span>
-                                                                        },
+                                                                        <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">pressedcolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">pressedcolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">textcolor</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">#ddd</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">textactivecolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#fff</span><span class="delimiter">&quot;</span></span>,
+                                                                        <span class="key">borderwidth</span>:<span class="integer">0</span>,
                                                                         <span class="function">click</span>:<span class="keyword">function</span>(ev, val, o) {
                                                                                 <span class="keyword">var</span> astpath = JSON.stringify(<span class="local-variable">this</span>.sourcefile.nodePathFor(v));
                                                                                 <span class="keyword">if</span> (!<span class="local-variable">this</span>.selected || <span class="local-variable">this</span>.selected.indexOf(astpath) &lt; <span class="integer">0</span>) {
@@ -3557,7 +3632,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                                                 <span class="comment">//o.state = &quot;selected&quot;</span>
                                                                         }.bind(<span class="local-variable">this</span>),
                                                                         <span class="key">margintop</span>:<span class="integer">5</span>,
-                                                                        <span class="key">padding</span>:<span class="integer">0</span>,
+                                                                        <span class="key">padding</span>:<span class="integer">5</span>,
                                                                         <span class="key">fontsize</span>:<span class="integer">14</span>,
                                                                         <span class="key">pickalpha</span>:-<span class="integer">1</span>
                                                                 }),
@@ -3610,7 +3685,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         })
                 ));
 
-                views.push(<span class="local-variable">this</span>.panel({<span class="key">title</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">Properties</span><span class="delimiter">&quot;</span></span>, <span class="key">flex</span>:<span class="float">1.7</span>},
+                views.push(<span class="local-variable">this</span>.panel(
+                        {<span class="key">flex</span>:<span class="float">1.7</span>},
                         propviewer({
                                 <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">inspector</span><span class="delimiter">&quot;</span></span>,
                                 <span class="key">target</span>:<span class="local-variable">this</span>.inspect,
@@ -3692,6 +3768,16 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         <span class="local-variable">this</span>.__handle = <span class="local-variable">this</span>.screen.openOverlay(<span class="local-variable">this</span>.handle);
                                                         <span class="local-variable">this</span>.__handle.target = v;
                                                 }
+
+                                                <span class="keyword">if</span> (v === <span class="local-variable">this</span> || <span class="local-variable">this</span>.testView(v)) {
+                                                        <span class="keyword">var</span> editor = <span class="local-variable">this</span>.find(<span class="string"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span>);
+                                                        <span class="keyword">if</span> (editor) {
+                                                                <span class="comment">// todo(mason) remove this ugly hack when jseditor events exist</span>
+                                                                editor.__lasttarget = editor.__target;
+                                                                editor.__target = v;
+                                                                editor.ast = <span class="local-variable">this</span>.sourcefile.nodeFor(v);
+                                                        }
+                                                }
                                         }
                                 }.bind(<span class="local-variable">this</span>),
                                 <span class="key">astarget</span>:Config({<span class="key">type</span>:String, <span class="key">persist</span>:<span class="predefined-constant">true</span>}),
@@ -3713,6 +3799,34 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                 o.target = find(node, <span class="local-variable">this</span>.screen);
                                         }
                                 }.bind(<span class="local-variable">this</span>)
+                        }),
+                        jseditor({
+                                <span class="key">name</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">code</span><span class="delimiter">&quot;</span></span>,
+                                <span class="key">flex</span>:<span class="integer">1</span>,
+                                <span class="key">overflow</span>:<span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>,
+                                <span class="key">margin</span>:vec4(<span class="integer">2</span>,<span class="integer">7</span>,<span class="integer">2</span>,<span class="integer">2</span>),
+                                <span class="key">wrap</span>:<span class="predefined-constant">true</span>,
+                                <span class="key">format_options</span>: {
+                                        <span class="key">force_newlines_array</span>:<span class="predefined-constant">false</span>,
+                                        <span class="key">force_newlines_object</span>:<span class="predefined-constant">true</span>
+                                },
+                                <span class="function">onfocus</span>:<span class="keyword">function</span>(ev,v,o){
+                                        <span class="keyword">if</span> (!v &amp;&amp; o._value &amp;&amp; o.__lasttarget) {
+                                                <span class="keyword">var</span> newsource = o._value;
+                                                <span class="keyword">var</span> newast = <span class="local-variable">this</span>.sourcefile.parse(newsource);
+                                                <span class="keyword">if</span> (newast) {
+                                                        <span class="comment">// TODO(mason) make this less of a terrible hack</span>
+                                                        <span class="local-variable">this</span>.sourcefile.fork(<span class="keyword">function</span>(src) {
+                                                                <span class="keyword">var</span> currentnode =  src.nodeFor(o.__lasttarget);
+                                                                <span class="keyword">var</span> parentnode =  src.nodeFor(o.__lasttarget.parent);
+                                                                <span class="keyword">var</span> index = parentnode.args.indexOf(currentnode);
+                                                                <span class="keyword">var</span> node = newast.steps[<span class="integer">0</span>];
+                                                                parentnode.args.splice(index, <span class="integer">1</span>, node);
+                                                        })
+                                                }
+                                        }
+                                }.bind(<span class="local-variable">this</span>),
+                                <span class="key">fontsize</span>:<span class="integer">12</span>
                         })
                 ));
 
@@ -3840,7 +3954,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                                         }
                                                         <span class="keyword">if</span> (changeset.params) {
                                                                 <span class="keyword">var</span> item = changeset.params;
-                                                                <span class="keyword">var</span> obj = src.build.Call(src.build.Id(item.classname), [src.build.Object(item.params)]);
+                                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">build</span><span class="delimiter">&quot;</span></span>, item.params)
+                                                                <span class="keyword">var</span> newo = src.createASTNode(item.params)
+                                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">build2</span><span class="delimiter">&quot;</span></span>, newo)
+                                                                <span class="keyword">var</span> obj = src.build.Call(src.build.Id(item.classname),[newo]);
+                                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">build3</span><span class="delimiter">&quot;</span></span>, obj)
                                                                 src.pushArg(obj);
                                                         }
                                                         <span class="keyword">if</span> (changeset.arg) {
@@ -4213,7 +4331,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="local-variable">this</span>.<span class="function">reset</span> = <span class="keyword">function</span>() {
                         <span class="local-variable">this</span>.pos = vec3(<span class="local-variable">this</span>.target._layout.absx, <span class="local-variable">this</span>.target._layout.absy, <span class="integer">0</span>);
-                        <span class="local-variable">this</span>.size = <span class="local-variable">this</span>.target.size;
+                        <span class="local-variable">this</span>.size = vec3(<span class="local-variable">this</span>.target._layout.width, <span class="local-variable">this</span>.target._layout.height,<span class="integer">0</span>);
 
                         <span class="local-variable">this</span>.fgcolor = <span class="local-variable">this</span>.target.fgcolor;
                         <span class="local-variable">this</span>.bgcolor = <span class="local-variable">this</span>.target.bgcolor;
@@ -4226,7 +4344,6 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.outline_thickness = <span class="local-variable">this</span>.target.outline_thickness;
                         <span class="local-variable">this</span>.outline_color = <span class="local-variable">this</span>.target.outline_color;
                         <span class="local-variable">this</span>.subpixel = <span class="local-variable">this</span>.target.subpixel;
-                        <span class="local-variable">this</span>.align = <span class="local-variable">this</span>.target.align;
                         <span class="local-variable">this</span>.bold = <span class="local-variable">this</span>.target.bold;
                         <span class="local-variable">this</span>.borderwidth = <span class="local-variable">this</span>.target.borderwidth;
                         <span class="local-variable">this</span>.borderradius = <span class="local-variable">this</span>.target.borderrdius;
@@ -4235,6 +4352,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         <span class="local-variable">this</span>.margin = <span class="local-variable">this</span>.target.margin;
                         <span class="local-variable">this</span>.scale = <span class="local-variable">this</span>.target.scale;
                         <span class="local-variable">this</span>.rotate = <span class="local-variable">this</span>.target.rotate;
+                        <span class="local-variable">this</span>.linespacing = <span class="local-variable">this</span>.target.linespacing;
+                        <span class="local-variable">this</span>.align = <span class="local-variable">this</span>.target.align;
                 };
 
                 <span class="local-variable">this</span>.<span class="function">onfocus</span> = <span class="keyword">function</span>(ev,v,o) {
@@ -4259,8 +4378,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">panel</span><span class="delimiter">'</span></span>, view, <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.attributes = {
-                        <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-                        <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">12</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">fontsize</span><span class="delimiter">&quot;</span></span>})
+                        <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">12</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">fontsize</span><span class="delimiter">&quot;</span></span>}),
+                        <span class="key">activechild</span>: Config({<span class="key">type</span>:<span class="reserved">int</span>, <span class="key">value</span>:<span class="integer">0</span>})
                 };
 
                 <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
@@ -4271,67 +4390,46 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="local-variable">this</span>.flexdirection =<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
                 <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>;
 
-                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
-                        <span class="keyword">return</span> [
-                                tabbar({<span class="key">tabs</span>:[
-                                        {
-                                                <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>,
-                                                <span class="key">y</span>:<span class="integer">1</span>,
-                                                <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="local-variable">this</span>.title,
-                                                <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
-                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="local-variable">this</span>.title,
-                                                <span class="key">margin</span>:<span class="integer">0</span>,
-                                                <span class="key">padding</span>:vec4(<span class="integer">3</span>,<span class="integer">3</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">normal</span>:{ <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> },
-                                                <span class="key">hover</span>:{ <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> },
-                                                <span class="key">selected</span>:{ <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> }
-                                        }
-                                ]}),
-                                <span class="local-variable">this</span>.constructor_children
-                        ];
-                }
-        });
+                <span class="local-variable">this</span>.<span class="function">init</span> = <span class="keyword">function</span>() {
+                        <span class="local-variable">this</span>.tabs = [];
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">'</span><span class="content">editor</span><span class="delimiter">'</span></span>, view, <span class="keyword">function</span>(){
-                <span class="local-variable">this</span>.attributes = {
-                        <span class="key">title</span>: Config({<span class="key">type</span>:String, <span class="key">value</span>:<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>}),
-                        <span class="key">fontsize</span>: Config({<span class="key">type</span>:<span class="reserved">float</span>, <span class="key">value</span>:<span class="integer">12</span>, <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">fontsize</span><span class="delimiter">&quot;</span></span>})
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.constructor_children.length;i++) {
+                                <span class="keyword">var</span> child = <span class="local-variable">this</span>.constructor_children[i];
+                                child.visible = (i === <span class="integer">0</span>);
+                                <span class="keyword">var</span> name = child.name;
+                                name = name[<span class="integer">0</span>].toUpperCase() + name.substring(<span class="integer">1</span>);
+
+                                <span class="local-variable">this</span>.tabs.push({
+                                        <span class="key">text</span>:name,
+                                        <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
+                                        <span class="key">padding</span>:vec4(<span class="integer">7</span>,<span class="integer">7</span>,<span class="integer">7</span>,<span class="integer">5</span>)
+                                })
+                        }
+
                 };
 
-                <span class="local-variable">this</span>.padding = <span class="integer">0</span>;
-                <span class="local-variable">this</span>.margin = <span class="integer">4</span>;
-                <span class="local-variable">this</span>.borderradius = vec4(<span class="integer">10</span>,<span class="integer">10</span>,<span class="integer">1</span>,<span class="integer">1</span>);
-                <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
-                <span class="local-variable">this</span>.flex = <span class="integer">1</span>;
-                <span class="local-variable">this</span>.flexdirection =<span class="string"><span class="delimiter">&quot;</span><span class="content">column</span><span class="delimiter">&quot;</span></span>;
-                <span class="local-variable">this</span>.alignitems = <span class="string"><span class="delimiter">&quot;</span><span class="content">stretch</span><span class="delimiter">&quot;</span></span>;
+                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
 
-                <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>(){
                         <span class="keyword">return</span> [
-                                tabbar({<span class="key">tabs</span>:[
-                                        {
-                                                <span class="key">alignself</span>:<span class="string"><span class="delimiter">'</span><span class="content">flex-start</span><span class="delimiter">'</span></span>,
-                                                <span class="key">y</span>:<span class="integer">1</span>,
-                                                <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="local-variable">this</span>.title,
-                                                <span class="key">fontsize</span>:<span class="local-variable">this</span>.fontsize,
-                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="local-variable">this</span>.title,
-                                                <span class="key">margin</span>:<span class="integer">0</span>,
-                                                <span class="key">padding</span>:vec4(<span class="integer">3</span>,<span class="integer">3</span>,<span class="integer">0</span>,<span class="integer">0</span>),
-                                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">normal</span>:{ <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> },
-                                                <span class="key">hover</span>:{ <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> },
-                                                <span class="key">selected</span>:{ <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span> }
-                                        }
-                                ]}),
+                                tabbar({
+                                        <span class="key">tabclass</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">tabcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#3e3e3e</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">activetabcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#4e4e4e</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">textcolor</span>:vec4(<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="float">0.8</span>,<span class="integer">1</span>),
+                                        <span class="key">activetextcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">white</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">tabs</span>:<span class="local-variable">this</span>.tabs,
+                                        <span class="function">onactivetab</span>:<span class="keyword">function</span>(ev,tab,bar) {
+                                                <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.constructor_children.length;i++) {
+                                                        <span class="keyword">var</span> child = <span class="local-variable">this</span>.constructor_children[i];
+                                                        child.visible = (i === tab);
+                                                }
+                                        }.bind(<span class="local-variable">this</span>)
+                                }),
                                 <span class="local-variable">this</span>.constructor_children
                         ];
                 }
         });
+
 });
 </pre></td>
 </tr></table>

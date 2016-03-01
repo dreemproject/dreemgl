@@ -217,56 +217,28 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n63" name="n63">63</a>
 <a href="#n64" name="n64">64</a>
 <a href="#n65" name="n65">65</a>
-<a href="#n66" name="n66">66</a>
-<a href="#n67" name="n67">67</a>
-<a href="#n68" name="n68">68</a>
-<a href="#n69" name="n69">69</a>
-<strong><a href="#n70" name="n70">70</a></strong>
-<a href="#n71" name="n71">71</a>
-<a href="#n72" name="n72">72</a>
-<a href="#n73" name="n73">73</a>
-<a href="#n74" name="n74">74</a>
-<a href="#n75" name="n75">75</a>
-<a href="#n76" name="n76">76</a>
-<a href="#n77" name="n77">77</a>
-<a href="#n78" name="n78">78</a>
-<a href="#n79" name="n79">79</a>
-<strong><a href="#n80" name="n80">80</a></strong>
-<a href="#n81" name="n81">81</a>
-<a href="#n82" name="n82">82</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 
-
-<span class="comment">// The server uses foursquarelib to retrieve foursquare images from the SF area.</span>
-<span class="comment">//</span>
-<span class="comment">// I don't think dreemgl supports something like 'background-size: contain' to</span>
-<span class="comment">// scale the image to the size.</span>
-
+<span class="comment">// The server uses foursquarelib to retrieve foursquare data.</span>
 
 define.<span class="reserved">class</span>(<span class="keyword">function</span>(<span class="predefined">$server$</span>, composition, service, <span class="predefined">$ui$</span>, screen, view, label, require){
 
         define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">demo</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(){
-
                 <span class="local-variable">this</span>.flex = <span class="integer">1</span>
                 <span class="local-variable">this</span>.flexdirection = <span class="string"><span class="delimiter">'</span><span class="content">column</span><span class="delimiter">'</span></span>
                 <span class="local-variable">this</span>.overflow = <span class="string"><span class="delimiter">'</span><span class="content">scroll</span><span class="delimiter">'</span></span>
-
-                <span class="keyword">var</span> IMAGE_COUNT = <span class="integer">100</span>
-                <span class="keyword">var</span> IMAGE_SIZE = vec2(<span class="integer">256</span>, <span class="integer">256</span>)
-
                 <span class="local-variable">this</span>.attributes = {
                         <span class="key">imagelist</span>: []
                 }
-
                 <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span> () {
                         <span class="keyword">var</span> dynviews = []
                         <span class="keyword">for</span> (<span class="keyword">var</span> n = <span class="integer">0</span>; n &lt; <span class="local-variable">this</span>.imagelist.length; n++) {
                                 dynviews.push(view({
-                                        <span class="key">size</span>: IMAGE_SIZE,
+                                        <span class="key">size</span>: vec2(<span class="integer">256</span>, <span class="integer">256</span>),
                                         <span class="key">bgimage</span>: <span class="local-variable">this</span>.imagelist[n].url
                                 },
                                 [
@@ -285,21 +257,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         service({
                                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">foursquareservice</span><span class="delimiter">'</span></span>,
                                 <span class="function">runfoursquare</span>: <span class="keyword">function</span>() {
-                                        <span class="comment">//TODO $system doesn't work here</span>
-                                        <span class="comment">// Stop an already running stream</span>
-                                        <span class="keyword">delete</span> <span class="local-variable">this</span>.foursquare <span class="comment">// TODO is this necessary?</span>
-                                        <span class="keyword">var</span> FoursquareLib = require(<span class="string"><span class="delimiter">'</span><span class="content">../system/lib/foursquarelib</span><span class="delimiter">'</span></span>)
+                                        <span class="keyword">var</span> FoursquareLib = require(<span class="string"><span class="delimiter">'</span><span class="content">../../system/lib/foursquarelib</span><span class="delimiter">'</span></span>)
                                         <span class="local-variable">this</span>.foursquare = <span class="keyword">new</span> FoursquareLib()
-
                                         <span class="comment">// The foursquarelib returns an array of photos</span>
                                         <span class="keyword">var</span> callback = (<span class="keyword">function</span>(images) {
                                                 <span class="local-variable">this</span>.rpc.<span class="keyword">default</span>.imageupdate(images)
                                         }).bind(<span class="local-variable">this</span>)
-
                                         <span class="comment">// The second argument will specify search parameters</span>
-                                        <span class="local-variable">this</span>.foursquare.explore(callback, <span class="predefined-constant">null</span>, {<span class="key">openNow</span>: <span class="integer">1</span>});
+                                        <span class="local-variable">this</span>.foursquare.explore({<span class="key">openNow</span>: <span class="integer">1</span>}, callback)
                                 }
-
                         }),
                         screen({
                                 <span class="key">name</span>:<span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>,

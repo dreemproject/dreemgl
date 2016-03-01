@@ -422,6 +422,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n268" name="n268">268</a>
 <a href="#n269" name="n269">269</a>
 <strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
+<a href="#n276" name="n276">276</a>
+<a href="#n277" name="n277">277</a>
+<a href="#n278" name="n278">278</a>
+<a href="#n279" name="n279">279</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -468,6 +477,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">moveToOffset</span> = <span class="keyword">function</span>(offset){
                 <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end = offset
+                <span class="local-variable">this</span>.max = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end).x
         }
 
         <span class="local-variable">this</span>.<span class="function">moveLeft</span> = <span class="keyword">function</span>(only_end){
@@ -496,16 +506,24 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> rect = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end)
                 <span class="comment">//console.log(max, rect.y + .5*rect.h - lines * cursorset.text_layer.line_height)</span>
                 <span class="comment">//cursorset.text_layer.debugChunks()</span>
-                <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.textbuf.offsetFromPos(<span class="local-variable">this</span>.max, rect.y + <span class="float">.5</span>*rect.h - lines * <span class="local-variable">this</span>.editor.textbuf.line_height)
+                <span class="keyword">if</span>(<span class="local-variable">this</span>.editor.textbuf.charCodeAt(<span class="local-variable">this</span>.end-<span class="integer">1</span>) === <span class="integer">10</span> &amp;&amp; <span class="local-variable">this</span>.editor.textbuf.charCodeAt(<span class="local-variable">this</span>.end-<span class="integer">2</span>) === <span class="integer">10</span>) <span class="local-variable">this</span>.end--
+                <span class="keyword">else</span> <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.textbuf.offsetFromPos(<span class="local-variable">this</span>.max, rect.y + <span class="float">.5</span>*rect.h - lines * <span class="local-variable">this</span>.editor.textbuf.line_height)
+
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.end &lt; <span class="integer">0</span>) <span class="local-variable">this</span>.end = <span class="integer">0</span>
                 <span class="keyword">if</span>(!only_end) <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
         }
 
         <span class="local-variable">this</span>.<span class="function">moveDown</span> = <span class="keyword">function</span>(only_end, lines){
                 <span class="keyword">if</span>(!lines) lines = <span class="integer">1</span>
+        
                 <span class="keyword">var</span> rect = <span class="local-variable">this</span>.editor.textbuf.cursorRect(<span class="local-variable">this</span>.end)
+
+                <span class="comment">//if(this.editor.textbuf.charCodeAt(this.end+1) === 10 &amp;&amp; this.editor.textbuf.charCodeAt(this.end+2) === 10) this.end++</span>
+                <span class="comment">//else </span>
                 <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.textbuf.offsetFromPos(<span class="local-variable">this</span>.max, rect.y + <span class="float">.5</span>*rect.h + lines * <span class="local-variable">this</span>.editor.textbuf.line_height)
+
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.end &lt; <span class="integer">0</span>) <span class="local-variable">this</span>.end = <span class="local-variable">this</span>.editor.textbuf.char_count
+
                 <span class="keyword">if</span>(!only_end) <span class="local-variable">this</span>.start = <span class="local-variable">this</span>.end
         }
 

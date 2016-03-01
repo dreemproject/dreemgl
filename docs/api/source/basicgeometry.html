@@ -690,6 +690,10 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n536" name="n536">536</a>
 <a href="#n537" name="n537">537</a>
 <a href="#n538" name="n538">538</a>
+<a href="#n539" name="n539">539</a>
+<strong><a href="#n540" name="n540">540</a></strong>
+<a href="#n541" name="n541">541</a>
+<a href="#n542" name="n542">542</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -885,7 +889,7 @@ define(<span class="keyword">function</span>(require, exports){
                 cb(<span class="integer">11</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">5</span>);                
         }
         
-        exports.<span class="function">createCylinder</span> = <span class="keyword">function</span>(R,h, xdetail, cb){
+        exports.<span class="function">createCylinder</span> = <span class="keyword">function</span>(R,h, xdetail,cap, cb){
                 <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail ; p+=<span class="integer">1</span>) {
                         <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail;
                         <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail;
@@ -907,12 +911,20 @@ define(<span class="keyword">function</span>(require, exports){
                                 az = h;
                                 az2 =<span class="integer">0</span>;
                         }
+                        <span class="keyword">if</span> (cap){
                         v1n1t1(ax*R,az,  ay*R, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
                         v2n2t2(bx*R,az,  by*R, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
                         v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
 
                         cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                        v1n1t1(ax*R,az2,  ay*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
+                        v2n2t2(bx*R,az2,  by*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
+                        v3n3t3(   <span class="integer">0</span>,az2,    <span class="integer">0</span>, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
+
+                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
                         
+                        
+                        }
                         v1n1t1(ax*R,az,  ay*R, nx,<span class="integer">0</span>,ny,tx1,<span class="integer">0</span>); 
                         v2n2t2(bx*R,az,  by*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
                         v3n3t3(ax*R,az2, ay*R, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);                
@@ -926,16 +938,11 @@ define(<span class="keyword">function</span>(require, exports){
                         cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
                         
                         
-                        v1n1t1(ax*R,az2,  ay*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R,az2,  by*R, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
-                        v3n3t3(   <span class="integer">0</span>,az2,    <span class="integer">0</span>, <span class="integer">0</span>,<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
-
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
                         
                 }
         }
         
-        exports.<span class="function">createCone</span> = <span class="keyword">function</span>(R1,R2,h, xdetail, cb){
+        exports.<span class="function">createCone</span> = <span class="keyword">function</span>(R1,R2,h, xdetail, cap, cb){
                 <span class="keyword">for</span> (<span class="keyword">var</span> p = <span class="integer">0</span>; p &lt; xdetail ; p+=<span class="integer">1</span>) {
                         <span class="keyword">var</span> angle1 = (p * (<span class="float">3.14159265359</span> * <span class="integer">2</span>))/xdetail;
                         <span class="keyword">var</span> angle2 = (p + <span class="integer">1</span>) * (<span class="float">3.14159265359</span> * <span class="integer">2</span>)/xdetail;
@@ -958,12 +965,13 @@ define(<span class="keyword">function</span>(require, exports){
                                 az = h;
                                 az2 =<span class="integer">0</span>;
                         }
-                        v1n1t1(ax*R1,az,  ay*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
-                        v2n2t2(bx*R1,az,  by*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
-                        v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
+                        <span class="keyword">if</span> (cap){
+                                v1n1t1(ax*R1,az,  ay*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx1,<span class="integer">0</span>); 
+                                v2n2t2(bx*R1,az,  by*R1, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);
+                                v3n3t3(   <span class="integer">0</span>,az,    <span class="integer">0</span>, <span class="integer">0</span>,-<span class="integer">1</span>,<span class="integer">0</span>,tx2,<span class="integer">0</span>);                
 
-                        cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
-                        
+                                cb(<span class="integer">0</span>, v1, v2, v3, n1, n2, n3, t1, t2, t3, <span class="integer">0</span>);
+                        }
                         v1n1t1(ax*R1,az,  ay*R1, nx,<span class="integer">0</span>,ny,tx1,<span class="integer">0</span>); 
                         v2n2t2(bx*R1,az,  by*R1, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);
                         v3n3t3(ax*R2,az2, ay*R2, nx,<span class="integer">0</span>,ny,tx2,<span class="integer">0</span>);                

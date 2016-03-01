@@ -297,38 +297,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n143" name="n143">143</a>
 <a href="#n144" name="n144">144</a>
 <a href="#n145" name="n145">145</a>
-<a href="#n146" name="n146">146</a>
-<a href="#n147" name="n147">147</a>
-<a href="#n148" name="n148">148</a>
-<a href="#n149" name="n149">149</a>
-<strong><a href="#n150" name="n150">150</a></strong>
-<a href="#n151" name="n151">151</a>
-<a href="#n152" name="n152">152</a>
-<a href="#n153" name="n153">153</a>
-<a href="#n154" name="n154">154</a>
-<a href="#n155" name="n155">155</a>
-<a href="#n156" name="n156">156</a>
-<a href="#n157" name="n157">157</a>
-<a href="#n158" name="n158">158</a>
-<a href="#n159" name="n159">159</a>
-<strong><a href="#n160" name="n160">160</a></strong>
-<a href="#n161" name="n161">161</a>
-<a href="#n162" name="n162">162</a>
-<a href="#n163" name="n163">163</a>
-<a href="#n164" name="n164">164</a>
-<a href="#n165" name="n165">165</a>
-<a href="#n166" name="n166">166</a>
-<a href="#n167" name="n167">167</a>
-<a href="#n168" name="n168">168</a>
-<a href="#n169" name="n169">169</a>
-<strong><a href="#n170" name="n170">170</a></strong>
-<a href="#n171" name="n171">171</a>
-<a href="#n172" name="n172">172</a>
-<a href="#n173" name="n173">173</a>
-<a href="#n174" name="n174">174</a>
-<a href="#n175" name="n175">175</a>
-<a href="#n176" name="n176">176</a>
-<a href="#n177" name="n177">177</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -336,15 +304,8 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
  either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
 <span class="comment">// Sprite class</span>
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, statebutton){
+define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$ui/view</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>(<span class="predefined">$ui$</span>, button){
 <span class="comment">// Presents a bar of configurable tabs.  [example](http://localhost:2000/examples/tabbar).</span>
-
-        <span class="local-variable">this</span>.<span class="function">defaultselectionhandler</span> = <span class="keyword">function</span>(ev, v, o) {
-                <span class="keyword">if</span> (o.parent.selection) {
-                        o.parent.selection.state = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span>;
-                }
-                o.parent.selection = o;
-        };
 
         <span class="local-variable">this</span>.attributes = {
 
@@ -354,33 +315,15 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">// Color of default tabs, can be overridden in style</span>
                 <span class="key">tabcolor</span>: Config({<span class="key">value</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span> }),
+                <span class="key">activetabcolor</span>: Config({<span class="key">value</span>:vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span> }),
+
+                <span class="key">textcolor</span>: Config({<span class="key">value</span>:vec4(<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>,<span class="integer">1</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span> }),
+                <span class="key">activetextcolor</span>: Config({<span class="key">value</span>:vec4(<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">0</span>,<span class="integer">1</span>), <span class="key">meta</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">color</span><span class="delimiter">&quot;</span></span> }),
+
+                <span class="key">tabclass</span>:<span class="predefined-constant">undefined</span>,
 
                 <span class="comment">// Current tab selection</span>
-                <span class="key">selection</span>:Config({<span class="key">type</span>:Object}),
-
-                <span class="comment">// Default tab states if none provided in the tab defintions.</span>
-                <span class="key">states</span>:Config({<span class="key">type</span>:Object, <span class="key">value</span>:{
-                        <span class="key">normal</span>:{
-                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#aaa</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">on</span>:<span class="predefined-constant">undefined</span>
-                        },
-                        <span class="key">hover</span>:{
-                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#eee</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">on</span>:<span class="predefined-constant">undefined</span>
-                        },
-                        <span class="key">active</span>:{
-                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#fff</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">on</span>:<span class="predefined-constant">undefined</span>
-                        },
-                        <span class="key">selected</span>:{
-                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#69f</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">on</span>:<span class="local-variable">this</span>.defaultselectionhandler
-                        },
-                        <span class="key">disabled</span>:{
-                                <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">darkgray</span><span class="delimiter">&quot;</span></span>,
-                                <span class="key">on</span>:<span class="predefined-constant">undefined</span>
-                        }}
-                })
+                <span class="key">activetab</span>:Config({<span class="key">persist</span>:<span class="predefined-constant">true</span>, <span class="key">value</span>:<span class="integer">0</span>})
         };
 
         <span class="local-variable">this</span>.tooldragroot = <span class="predefined-constant">true</span>;
@@ -388,9 +331,12 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.bgcolor = <span class="predefined-constant">NaN</span>;
 
         <span class="local-variable">this</span>.style = {
-                <span class="key">tab</span>: {
+                <span class="key">button</span>: {
                         <span class="key">flex</span>: <span class="integer">1</span>,
+                        <span class="key">justifycontent</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
+                        <span class="key">alignitems</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">center</span><span class="delimiter">&quot;</span></span>,
                         <span class="key">bgcolor</span>:<span class="local-variable">this</span>.tabcolor,
+                        <span class="key">borderradius</span>:<span class="integer">0</span>,
                         <span class="key">arrowheight</span>:<span class="float">5.0</span>,
                         <span class="key">showarrow</span>:<span class="predefined-constant">true</span>,
                         <span class="function">bgcolorfn</span>:<span class="keyword">function</span>(p) {
@@ -403,7 +349,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                                 }
                         }
                 },
-            <span class="key">tab_folder</span>: {
+            <span class="key">button_folder</span>: {
                         <span class="key">y</span>:<span class="integer">1</span>,
                         <span class="key">flex</span>: <span class="integer">0</span>,
                         <span class="key">bgcolor</span>:<span class="local-variable">this</span>.tabcolor,
@@ -414,23 +360,37 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
                 <span class="keyword">var</span> tabs = [];
-                <span class="keyword">var</span> i,tab;
-                <span class="keyword">if</span> (<span class="local-variable">this</span>.constructor_children) {
-                        <span class="keyword">for</span> (i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.constructor_children.length;i++) {
-                                tab = <span class="local-variable">this</span>.constructor_children[i];
-                                tabs.push(tab);
-                        }
-                }
-
                 <span class="keyword">if</span> (<span class="local-variable">this</span>.tabs) {
-                        <span class="keyword">for</span> (i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.tabs.length;i++) {
+                        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="integer">0</span>;i&lt;<span class="local-variable">this</span>.tabs.length;i++) {
                                 <span class="keyword">var</span> tabdef = <span class="local-variable">this</span>.tabs[i];
+                                <span class="keyword">var</span> active = i === <span class="local-variable">this</span>.activetab;
 
-                                <span class="keyword">var</span> tab;
+                                <span class="keyword">var</span> tab = button({
+                                        <span class="key">textcolor</span>: active ? <span class="local-variable">this</span>.activetextcolor : <span class="local-variable">this</span>.textcolor,
+                                        <span class="key">textactivecolor</span>: active ? <span class="local-variable">this</span>.activetextcolor : <span class="local-variable">this</span>.textcolor,
+                                        <span class="key">bgcolor</span>: active ? <span class="local-variable">this</span>.activetabcolor : <span class="local-variable">this</span>.tabcolor,
+                                        <span class="key">buttoncolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">buttoncolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hovercolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">hovercolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">pressedcolor1</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">pressedcolor2</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">transparent</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">borderwidth</span>:<span class="integer">0</span>,
+                                        <span class="reserved">class</span>:<span class="local-variable">this</span>.tabclass,
+                                        <span class="key">tabindex</span>:i,
+                                        <span class="function">click</span>:<span class="keyword">function</span>(ev,v,o) {
+                                                <span class="local-variable">this</span>.activetab = o.tabindex;
+                                        }.bind(<span class="local-variable">this</span>)
+                                });
+
                                 <span class="keyword">if</span> (<span class="keyword">typeof</span>(tabdef) === <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>) {
-                                        tab = <span class="local-variable">this</span>.tab({ <span class="key">label</span>:tabdef })
+                                        tab.text = tabdef
                                 } <span class="keyword">else</span> {
-                                        tab = <span class="local-variable">this</span>.tab(tabdef)
+                                        <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> tabdef) {
+                                                <span class="keyword">if</span> (tabdef.hasOwnProperty(prop)) {
+                                                        tab[prop] = tabdef[prop]
+                                                }
+                                        }
                                 }
 
                                 tabs.push(tab);
@@ -440,18 +400,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> tabs;
         };
 
-        define.<span class="reserved">class</span>(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">tab</span><span class="delimiter">&quot;</span></span>, statebutton, <span class="keyword">function</span>() {
-                <span class="local-variable">this</span>.defaultstates = wire(<span class="string"><span class="delimiter">'</span><span class="content">this.parent.states</span><span class="delimiter">'</span></span>);
-        });
-
         <span class="keyword">var</span> tabbar = <span class="local-variable">this</span>.constructor;
         <span class="local-variable">this</span>.constructor.examples = {
 
                 <span class="function">Usage</span>: <span class="keyword">function</span>() {
                         <span class="keyword">return</span> [
-                                tabbar({<span class="key">tabs</span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">one</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">three</span><span class="delimiter">&quot;</span></span>], <span class="function">onselection</span>:<span class="keyword">function</span>(ev,tab,bar) {
+                                tabbar({<span class="key">tabs</span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">one</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">three</span><span class="delimiter">&quot;</span></span>], <span class="function">onactivetab</span>:<span class="keyword">function</span>(ev,tab,bar) {
                                         <span class="keyword">if</span> (tab) {
-                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Selected</span><span class="delimiter">'</span></span>, tab.text)
+                                                console.log(<span class="string"><span class="delimiter">'</span><span class="content">Selected tab</span><span class="delimiter">'</span></span>, tab, bar.tabs[tab])
                                         }
                                 }})
                         ]
@@ -465,41 +421,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         };
 
                         <span class="keyword">return</span> [
-                                tabbar({<span class="key">tabs</span>:[
+                                tabbar({
+                                        <span class="key">tabclass</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key">tabs</span>:[
                                         {
-                                                <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">normal</span>:{
-                                                        <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gear</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>
-                                                },
-                                                <span class="key">hover</span>:{
-                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightblue</span><span class="delimiter">&quot;</span></span>
-                                                },
-                                                <span class="key">active</span>:{
-                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">lightgreen</span><span class="delimiter">&quot;</span></span>
-                                                },
-                                                <span class="key">selected</span>:{
-                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">red</span><span class="delimiter">&quot;</span></span>
-                                                },
-                                                <span class="key">disabled</span>:{
-                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">pink</span><span class="delimiter">&quot;</span></span>
-                                                }
+                                                <span class="key">icon</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gear</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">padding</span>:<span class="integer">10</span>
                                         },
                                         {
-                                                <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#114</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">bold</span>:<span class="predefined-constant">true</span>,
-                                                <span class="key">selected</span>:{ <span class="key">on</span>:selectionhandler }
+                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">two</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">padding</span>:<span class="integer">10</span>,
+                                                <span class="key">textcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">#E44</span><span class="delimiter">&quot;</span></span>
                                         },
                                         {
-                                                <span class="reserved">class</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">folder</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">label</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">three</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">state</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">disabled</span><span class="delimiter">&quot;</span></span>,
-                                                <span class="key">disabled</span>:{
-                                                        <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">gray</span><span class="delimiter">&quot;</span></span>,
-                                                        <span class="key">fgcolor</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">darkgray</span><span class="delimiter">&quot;</span></span>
-                                                }
+                                                <span class="key">text</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">three</span><span class="delimiter">&quot;</span></span>,
+                                                <span class="key">padding</span>:<span class="integer">10</span>
                                         }
                                 ]})
                         ]

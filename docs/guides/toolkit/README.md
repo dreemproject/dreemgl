@@ -1,7 +1,6 @@
 # DreemGL Visual Toolkit
 
-Extending DreemGL to communicate with and access IoT devices, web services and other external resources means creating 
-a DreemGL component.
+The DreemGL Visual Toolkit is a component which allows you to edit a DreemGL composition from inside the browser. The toolkit can be used to build a visual editor for DreemGL.
 
 ## Setting Up
 

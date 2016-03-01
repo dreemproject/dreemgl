@@ -170,25 +170,49 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n16" name="n16">16</a>
 <a href="#n17" name="n17">17</a>
 <a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+<a href="#n26" name="n26">26</a>
+<a href="#n27" name="n27">27</a>
+<a href="#n28" name="n28">28</a>
+<a href="#n29" name="n29">29</a>
+<strong><a href="#n30" name="n30">30</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
- You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- either express or implied. See the License for the specific language governing permissions and limitations under the License.*/</span>
+  <td class="code"><pre>define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">$server/composition</span><span class="delimiter">&quot;</span></span>,<span class="keyword">function</span>(require, itemListPanel, userListPanel, infoPanel, volume, <span class="predefined">$ui$</span>, view, screen, button) {
 
-define.<span class="reserved">class</span>(<span class="string"><span class="delimiter">'</span><span class="content">$server/composition</span><span class="delimiter">'</span></span>, <span class="keyword">function</span>(<span class="predefined">$server$</span>, <span class="predefined">$ui$</span>, screen, view, label, <span class="predefined">$$</span>, dpad, game, knob, keyboard) {
+        <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
+                <span class="keyword">var</span> lp = itemListPanel();
+                <span class="comment">// console.log(lp);</span>
+                <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="integer">0</span>; i&lt;<span class="integer">50</span>; i++){
+                        lp.addItem({<span class="key">x</span>:<span class="integer">2100</span>, <span class="key">y</span>: Math.random()*<span class="integer">1000</span>});
+                        lp.addItem({<span class="key">x</span>:<span class="integer">2100</span>, <span class="key">y</span>: Math.random()*<span class="integer">1000</span>, <span class="key">albumImage</span>: require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./r.jpg</span><span class="delimiter">&quot;</span></span>)});
+                }
 
-    <span class="local-variable">this</span>.<span class="function">render</span> = <span class="keyword">function</span>() {
-        <span class="keyword">return</span> [
-            screen(
-                dpad({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">red</span><span class="delimiter">'</span></span>}),
-                game({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">green</span><span class="delimiter">'</span></span>}),
-                knob({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">blue</span><span class="delimiter">'</span></span>}),
-                keyboard({<span class="key">height</span>:<span class="integer">200</span>, <span class="key">width</span>:<span class="integer">200</span>, <span class="key">bgcolor</span>:<span class="string"><span class="delimiter">'</span><span class="content">yellow</span><span class="delimiter">'</span></span>})
-            )
-        ]
-    }
-});
+                <span class="keyword">var</span> up = userListPanel({<span class="key">itemList</span>: lp});
+                <span class="comment">// up.addUser();</span>
+                <span class="comment">// up.addUser();</span>
+
+                <span class="keyword">var</span> info = infoPanel();
+
+                <span class="keyword">var</span> idx = <span class="integer">5</span>
+                <span class="keyword">return</span> [screen(view({<span class="key">flex</span>: <span class="integer">1</span>}, [lp, up, volume({<span class="key">x</span>: <span class="integer">400</span>, <span class="key">y</span>: <span class="integer">300</span>}), button({
+                        <span class="key">x</span>: <span class="integer">800</span>,
+                        <span class="key">marginbottom</span>:<span class="integer">20</span>,
+                        <span class="function">click</span>:<span class="keyword">function</span>(ev,v,o){
+                                <span class="comment">// lp.addItem({x:2100, y: Math.random()*1000});</span>
+                                <span class="comment">// lp.moveItemTo(10, 3);</span>
+                                <span class="comment">// lp.expandItem(10);</span>
+                                <span class="comment">// console.log(lp.items[10].albumImage.src, lp.items[3].albumImage.src);</span>
+                                <span class="comment">// up.moveCursorTo(0, idx++);</span>
+                                up.moveUser();
+                }}),]))];
+        }
+})
 </pre></td>
 </tr></table>
 

@@ -624,6 +624,24 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <strong><a href="#n470" name="n470">470</a></strong>
 <a href="#n471" name="n471">471</a>
 <a href="#n472" name="n472">472</a>
+<a href="#n473" name="n473">473</a>
+<a href="#n474" name="n474">474</a>
+<a href="#n475" name="n475">475</a>
+<a href="#n476" name="n476">476</a>
+<a href="#n477" name="n477">477</a>
+<a href="#n478" name="n478">478</a>
+<a href="#n479" name="n479">479</a>
+<strong><a href="#n480" name="n480">480</a></strong>
+<a href="#n481" name="n481">481</a>
+<a href="#n482" name="n482">482</a>
+<a href="#n483" name="n483">483</a>
+<a href="#n484" name="n484">484</a>
+<a href="#n485" name="n485">485</a>
+<a href="#n486" name="n486">486</a>
+<a href="#n487" name="n487">487</a>
+<a href="#n488" name="n488">488</a>
+<a href="#n489" name="n489">489</a>
+<strong><a href="#n490" name="n490">490</a></strong>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -656,6 +674,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.layout_list = previous &amp;&amp; previous.layout_list || []
                 <span class="local-variable">this</span>.pick_resolve = []
                 <span class="local-variable">this</span>.anim_redraws = []
+                <span class="local-variable">this</span>.animate_hooks = []
                 <span class="local-variable">this</span>.doPick = <span class="local-variable">this</span>.doPick.bind(<span class="local-variable">this</span>)
 
                 <span class="local-variable">this</span>.<span class="function">animFrame</span> = <span class="keyword">function</span>(time){
@@ -913,6 +932,17 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                 <span class="local-variable">this</span>.screen._maxsize =
                 <span class="local-variable">this</span>.screen._size = vec2(<span class="local-variable">this</span>.main_frame.size[<span class="integer">0</span>] / <span class="local-variable">this</span>.ratio, <span class="local-variable">this</span>.main_frame.size[<span class="integer">1</span>] / <span class="local-variable">this</span>.ratio)
+
+                <span class="comment">// do all the animate hooks</span>
+                <span class="keyword">var</span> animate_hooks = <span class="local-variable">this</span>.animate_hooks
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; animate_hooks.length; i++){
+                        <span class="keyword">var</span> item = animate_hooks[i]
+                        <span class="comment">//console.log(item)</span>
+                        <span class="keyword">if</span>(item.atAnimate(stime)){
+                                anim_redraw.push(item)
+                        }
+                }
+
                 <span class="comment">// do the dirty layouts</span>
                 <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; <span class="local-variable">this</span>.layout_list.length; i++){
                         <span class="comment">// lets do a layout?</span>
@@ -964,10 +994,16 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 }
 
                 <span class="keyword">if</span>(anim_redraw.length){
+                        <span class="comment">//console.log(&quot;REDRAWIN&quot;, this.draw_hooks)</span>
+                        <span class="keyword">var</span> redraw = <span class="predefined-constant">false</span>
                         <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="integer">0</span>; i &lt; anim_redraw.length; i++){
-                                anim_redraw[i].redraw()
+                                <span class="keyword">var</span> aredraw = anim_redraw[i]
+                                <span class="keyword">if</span>(!aredraw.atAfterDraw || aredraw.atAfterDraw()){
+                                        redraw = <span class="predefined-constant">true</span>
+                                        aredraw.redraw()
+                                }
                         }
-                        <span class="keyword">return</span> <span class="predefined-constant">true</span>
+                        <span class="keyword">return</span> redraw
                 }
                 <span class="keyword">return</span> hastime
         }

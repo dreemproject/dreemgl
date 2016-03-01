@@ -3379,6 +3379,15 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n3225" name="n3225">3225</a>
 <a href="#n3226" name="n3226">3226</a>
 <a href="#n3227" name="n3227">3227</a>
+<a href="#n3228" name="n3228">3228</a>
+<a href="#n3229" name="n3229">3229</a>
+<strong><a href="#n3230" name="n3230">3230</a></strong>
+<a href="#n3231" name="n3231">3231</a>
+<a href="#n3232" name="n3232">3232</a>
+<a href="#n3233" name="n3233">3233</a>
+<a href="#n3234" name="n3234">3234</a>
+<a href="#n3235" name="n3235">3235</a>
+<a href="#n3236" name="n3236">3236</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -6263,10 +6272,19 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="local-variable">this</span>.next()
                         <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>)
 
-                <span class="keyword">case</span> <span class="local-variable">this</span>._null: <span class="keyword">case</span> <span class="local-variable">this</span>._true: <span class="keyword">case</span> <span class="local-variable">this</span>._false:
+                <span class="keyword">case</span> <span class="local-variable">this</span>._null: 
                         <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNode()
                         node.value = <span class="local-variable">this</span>.tokType.atomValue
                         node.raw = <span class="local-variable">this</span>.tokType.keyword
+                        node.kind = <span class="string"><span class="delimiter">&quot;</span><span class="content">object</span><span class="delimiter">&quot;</span></span>
+                        <span class="local-variable">this</span>.next()
+                        <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>)
+
+                <span class="keyword">case</span> <span class="local-variable">this</span>._true: <span class="keyword">case</span> <span class="local-variable">this</span>._false:
+                        <span class="keyword">var</span> node = <span class="local-variable">this</span>.startNode()
+                        node.value = <span class="local-variable">this</span>.tokType.atomValue
+                        node.raw = <span class="local-variable">this</span>.tokType.keyword
+                        node.kind = <span class="string"><span class="delimiter">&quot;</span><span class="content">boolean</span><span class="delimiter">&quot;</span></span>
                         <span class="local-variable">this</span>.next()
                         <span class="keyword">return</span> <span class="local-variable">this</span>.finishNode(node, <span class="string"><span class="delimiter">&quot;</span><span class="content">Value</span><span class="delimiter">&quot;</span></span>)
 

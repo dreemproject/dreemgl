@@ -480,6 +480,13 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n326" name="n326">326</a>
 <a href="#n327" name="n327">327</a>
 <a href="#n328" name="n328">328</a>
+<a href="#n329" name="n329">329</a>
+<strong><a href="#n330" name="n330">330</a></strong>
+<a href="#n331" name="n331">331</a>
+<a href="#n332" name="n332">332</a>
+<a href="#n333" name="n333">333</a>
+<a href="#n334" name="n334">334</a>
+<a href="#n335" name="n335">335</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -498,7 +505,9 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(source) {
                 <span class="local-variable">this</span>.build = <span class="keyword">new</span> onejsgen();
                 <span class="keyword">if</span> (source) {
-                        <span class="local-variable">this</span>.parse(source)
+                        <span class="local-variable">this</span>.ast = <span class="local-variable">this</span>.parse(source)
+                                <span class="local-variable">this</span>.__scanner = <span class="keyword">new</span> astscanner(<span class="local-variable">this</span>.ast);
+
                 }
                 <span class="local-variable">this</span>.last_source = <span class="local-variable">this</span>.stringify()
         };
@@ -552,6 +561,11 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                 <span class="keyword">return</span> o.__ast;
         };
 
+        <span class="local-variable">this</span>.<span class="function">codeFor</span> = <span class="keyword">function</span>(o) {
+                <span class="keyword">var</span> ast = <span class="local-variable">this</span>.nodeFor(o);
+                <span class="keyword">return</span> <span class="local-variable">this</span>.stringify(ast);
+        };
+
         <span class="local-variable">this</span>.<span class="function">nodePathFor</span> = <span class="keyword">function</span>(v) {
                 <span class="keyword">var</span> ast = <span class="local-variable">this</span>.nodeFor(v);
 
@@ -594,7 +608,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         };
 
         <span class="local-variable">this</span>.<span class="function">getCallNodeValue</span> = <span class="keyword">function</span>(callnode, key) {
-                <span class="keyword">var</span> scanner = <span class="keyword">new</span> astscanner(callnode, [<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Id(key)]);
+                <span class="keyword">var</span> scanner = <span class="keyword">new</span> astscanner(callnode, [<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Property(key)]);
 
                 <span class="keyword">var</span> item = scanner.atparent.keys[scanner.atindex];
 
@@ -604,7 +618,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
         };
 
         <span class="local-variable">this</span>.<span class="function">deleteCallNodeKey</span> = <span class="keyword">function</span>(callnode, key) {
-                <span class="keyword">var</span> scanner = <span class="keyword">new</span> astscanner(callnode, [<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Id(key)]);
+                <span class="keyword">var</span> scanner = <span class="keyword">new</span> astscanner(callnode, [<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Property(key)]);
                 <span class="keyword">if</span> (scanner.atindex &gt;= <span class="integer">0</span>) {
                         scanner.atparent.keys.splice(scanner.atindex, <span class="integer">1</span>);
                 }
@@ -612,14 +626,14 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
         <span class="local-variable">this</span>.<span class="function">setCallNodeValue</span> = <span class="keyword">function</span>(callnode, key, value) {
 
-                <span class="keyword">var</span> scanner = <span class="keyword">new</span> astscanner(callnode, [<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Id(key)]);
+                <span class="keyword">var</span> scanner = <span class="keyword">new</span> astscanner(callnode, [<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Property(key)]);
 
                 <span class="keyword">var</span> at = scanner.at;
 
                 <span class="keyword">var</span> item, newval, args, newparams;
 
-                <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="comment">// Found an Id</span>
+                <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Property</span><span class="delimiter">&quot;</span></span>) {
+                        <span class="comment">// Found an Property</span>
 
                         item = scanner.atparent.keys[scanner.atindex];
 
@@ -634,7 +648,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         item.value = newval;
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="comment">// No Id, but found an Object</span>
+                        <span class="comment">// No Property, but found an Object</span>
 
                         args = {};
                         <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
@@ -644,10 +658,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                                 newval = <span class="local-variable">this</span>.createASTNode(value.toString(), <span class="predefined-constant">true</span>);
                                 item.value = newval
-                        <span class="comment">//} else if (typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') {</span>
-                        <span class="comment">//        item = { key:this.build.Id(key), value:this.build.Value(value) }</span>
                         } <span class="keyword">else</span> {
-                                item = { <span class="key">key</span>:<span class="local-variable">this</span>.build.Id(key), <span class="key">value</span>:<span class="local-variable">this</span>.createASTNode(value) }
+                                item = { <span class="key">key</span>:<span class="local-variable">this</span>.build.Property(key), <span class="key">value</span>:<span class="local-variable">this</span>.createASTNode(value) }
                         }
 
                         <span class="keyword">if</span> (item) {
@@ -715,7 +727,7 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="comment">//check that its a thing with args</span>
 
-                <span class="local-variable">this</span>.__scanner.scan([<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Id(key)])
+                <span class="local-variable">this</span>.__scanner.scan([<span class="local-variable">this</span>.build.Object(), <span class="local-variable">this</span>.build.Property(key)])
 
                 <span class="keyword">var</span> at = <span class="local-variable">this</span>.__scanner.at;
 
@@ -723,8 +735,8 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                 <span class="keyword">var</span> item, newval, args, newparams;
 
-                <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Id</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="comment">// Found an Id</span>
+                <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Property</span><span class="delimiter">&quot;</span></span>) {
+                        <span class="comment">// Found an Property</span>
 
                         item = <span class="local-variable">this</span>.__scanner.atparent.keys[<span class="local-variable">this</span>.__scanner.atindex];
 
@@ -739,21 +751,21 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         item.value = newval;
 
                 } <span class="keyword">else</span> <span class="keyword">if</span> (at.type === <span class="string"><span class="delimiter">&quot;</span><span class="content">Object</span><span class="delimiter">&quot;</span></span>) {
-                        <span class="comment">// No Id, but found an Object</span>
+                        <span class="comment">// No Property, but found an Object</span>
 
                         args = {};
                         <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
-                                args[name] = <span class="string"><span class="delimiter">&quot;</span><span class="content">REPLACE</span><span class="delimiter">&quot;</span></span>;
+                                args[key] = <span class="string"><span class="delimiter">&quot;</span><span class="content">REPLACE</span><span class="delimiter">&quot;</span></span>;
                                 newparams = <span class="local-variable">this</span>.createASTNode(args);
                                 item = newparams.keys[<span class="integer">0</span>];
 
                                 newval = <span class="local-variable">this</span>.createASTNode(value.toString(), <span class="predefined-constant">true</span>);
                                 item.value = newval;
-                                item.key = <span class="local-variable">this</span>.build.Id(key)
+                                item.key = <span class="local-variable">this</span>.build.Property(key)
                         } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> || <span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>) {
-                                item = { <span class="key">key</span>:<span class="local-variable">this</span>.build.Id(key), <span class="key">value</span>:<span class="local-variable">this</span>.build.Value(value) }
+                                item = { <span class="key">key</span>:<span class="local-variable">this</span>.build.Property(key), <span class="key">value</span>:<span class="local-variable">this</span>.build.Value(value) }
                         } <span class="keyword">else</span> {
-                                item = { <span class="key">key</span>:<span class="local-variable">this</span>.build.Id(key), <span class="key">value</span>:<span class="local-variable">this</span>.createASTNode(value) }
+                                item = { <span class="key">key</span>:<span class="local-variable">this</span>.build.Property(key), <span class="key">value</span>:<span class="local-variable">this</span>.createASTNode(value) }
                         }
 
                         <span class="keyword">if</span> (item) {
@@ -765,13 +777,13 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
 
                         args = {};
                         <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
-                                args[name] = <span class="string"><span class="delimiter">&quot;</span><span class="content">REPLACE</span><span class="delimiter">&quot;</span></span>;
+                                args[key] = <span class="string"><span class="delimiter">&quot;</span><span class="content">REPLACE</span><span class="delimiter">&quot;</span></span>;
                                 newparams = <span class="local-variable">this</span>.createASTNode(args);
                                 item = newparams.keys[<span class="integer">0</span>];
                                 newval = <span class="local-variable">this</span>.createASTNode(value.toString(), <span class="predefined-constant">true</span>);
                                 item.value = newval
                         } <span class="keyword">else</span> {
-                                args[name] = value;
+                                args[key] = value;
                                 newparams = <span class="local-variable">this</span>.createASTNode(args);
                         }
 
@@ -791,20 +803,22 @@ define.<span class="reserved">class</span>(<span class="string"><span class="del
                         source = classconstr.module.factory.body.toString()
                 }
 
-                <span class="local-variable">this</span>.ast = onejsparser.parse(source);
-                <span class="local-variable">this</span>.__scanner = <span class="keyword">new</span> astscanner(<span class="local-variable">this</span>.ast);
+                <span class="keyword">return</span> onejsparser.parse(source);
         };
 
         <span class="comment">// convert an object in to a string. Defaults to standard JSON, but you could overload this function to provide a more efficient fileformat. Do not forget to convert the JSONParse function as well.</span>
-        <span class="local-variable">this</span>.<span class="function">stringify</span> = <span class="keyword">function</span>() {
+        <span class="local-variable">this</span>.<span class="function">stringify</span> = <span class="keyword">function</span>(ast) {
+                <span class="keyword">if</span> (!ast) {
+                        ast = <span class="local-variable">this</span>.ast;
+                }
                 <span class="keyword">var</span> buf = {
                         <span class="key">out</span>:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>,
                         <span class="function">charCodeAt</span>: <span class="keyword">function</span>(i){<span class="keyword">return</span> <span class="local-variable">this</span>.out.charCodeAt(i)},
                         <span class="key">char_count</span>:<span class="integer">0</span>
                 };
-                jsformatter.walk(<span class="local-variable">this</span>.ast, buf, <span class="keyword">function</span>(str){
+                jsformatter.walk(ast, buf, {}, <span class="keyword">function</span>(str){
                         buf.char_count += str.length;
-                        buf.out += str
+                        buf.out += str;
                 });
                 <span class="keyword">return</span> buf.out
         }

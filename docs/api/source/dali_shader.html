@@ -263,6 +263,9 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n109" name="n109">109</a>
 <strong><a href="#n110" name="n110">110</a></strong>
 <a href="#n111" name="n111">111</a>
+<a href="#n112" name="n112">112</a>
+<a href="#n113" name="n113">113</a>
+<a href="#n114" name="n114">114</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others. 
    You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
@@ -303,9 +306,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(vertexShader, fragmentShader) {
                 <span class="local-variable">this</span>.object_type = <span class="string"><span class="delimiter">'</span><span class="content">DaliShader</span><span class="delimiter">'</span></span>
 
-                <span class="comment">// Simplify the shader by removing comments and empty lines</span>
-        <span class="keyword">var</span> vs = <span class="local-variable">this</span>.trimShader(vertexShader);
-        <span class="keyword">var</span> fs = <span class="local-variable">this</span>.trimShader(fragmentShader);
+                <span class="keyword">var</span> vs = vertexShader;
+                <span class="keyword">var</span> fs = fragmentShader;
 
                 <span class="keyword">var</span> shaderOptions = {
             <span class="key">vertexShader</span> : vs,
@@ -319,6 +321,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="local-variable">this</span>.fragmentShader = fragmentShader;
 
                 <span class="keyword">if</span> (DaliApi.emitcode) {
+                        <span class="comment">// Simplify the shader by removing comments and empty lines</span>
+                        vs = <span class="local-variable">this</span>.trimShader(vs);
+                        fs = <span class="local-variable">this</span>.trimShader(fs);
+
                         <span class="comment">// #extension lines must have a \n at the end to compile</span>
                         vs = vs.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="content">\#</span><span class="content">extension.*)</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="char">\\</span><span class="content">n</span><span class="char">\\</span><span class="content">\n</span><span class="delimiter">'</span></span>);
                         fs = fs.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">(</span><span class="content">\#</span><span class="content">extension.*)</span><span class="char">\n</span><span class="delimiter">/</span><span class="modifier">g</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">$1</span><span class="char">\\</span><span class="content">n</span><span class="char">\\</span><span class="content">\n</span><span class="delimiter">'</span></span>);

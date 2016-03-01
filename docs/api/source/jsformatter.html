@@ -1091,6 +1091,23 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n937" name="n937">937</a>
 <a href="#n938" name="n938">938</a>
 <a href="#n939" name="n939">939</a>
+<strong><a href="#n940" name="n940">940</a></strong>
+<a href="#n941" name="n941">941</a>
+<a href="#n942" name="n942">942</a>
+<a href="#n943" name="n943">943</a>
+<a href="#n944" name="n944">944</a>
+<a href="#n945" name="n945">945</a>
+<a href="#n946" name="n946">946</a>
+<a href="#n947" name="n947">947</a>
+<a href="#n948" name="n948">948</a>
+<a href="#n949" name="n949">949</a>
+<strong><a href="#n950" name="n950">950</a></strong>
+<a href="#n951" name="n951">951</a>
+<a href="#n952" name="n952">952</a>
+<a href="#n953" name="n953">953</a>
+<a href="#n954" name="n954">954</a>
+<a href="#n955" name="n955">955</a>
+<a href="#n956" name="n956">956</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1101,8 +1118,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="keyword">var</span> Parser = require(<span class="string"><span class="delimiter">'</span><span class="content">$system/parse/onejsparser</span><span class="delimiter">'</span></span>)
 
-        exports.<span class="function">walk</span> = <span class="keyword">function</span>(ast, textbuf, add){
+        exports.<span class="function">walk</span> = <span class="keyword">function</span>(ast, textbuf, opts, add){
                 <span class="keyword">var</span> glwalker = <span class="keyword">new</span> <span class="local-variable">this</span>()
+                <span class="keyword">if</span>(opts) <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> opts){
+                        glwalker[key] = opts[key]
+                }
                 glwalker.line = <span class="integer">0</span>
                 glwalker.textbuf = textbuf
                 glwalker.add = add
@@ -1114,6 +1134,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.around_operator = <span class="integer">1</span>
         <span class="local-variable">this</span>.actual_indent = <span class="integer">0</span>
         <span class="local-variable">this</span>.actual_line = <span class="integer">0</span>
+        <span class="local-variable">this</span>.force_newlines_array = <span class="predefined-constant">false</span>
+        <span class="local-variable">this</span>.force_newlines_object = <span class="predefined-constant">false</span>
 
         <span class="local-variable">this</span>.<span class="function">atConstructor</span> = <span class="keyword">function</span>(){
                 <span class="local-variable">this</span>.indent = <span class="integer">0</span>
@@ -1175,6 +1197,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">tab</span> = <span class="keyword">function</span>(indent){
                 <span class="comment">// lets add a tab</span>
                 <span class="local-variable">this</span>.actual_indent = indent
+                <span class="comment">// alright lets write it on the previous newline.                </span>
                 <span class="local-variable">this</span>.add(<span class="string"><span class="delimiter">'</span><span class="content">\t</span><span class="delimiter">'</span></span>, <span class="integer">4</span>*<span class="integer">256</span> + indent)
                 <span class="comment">//this.add(Array(indent+1).join('\t') )</span>
         }
@@ -1222,7 +1245,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">lastIsNewline</span> = <span class="keyword">function</span>(){
-                <span class="keyword">return</span> <span class="local-variable">this</span>.textbuf.charCodeAt(<span class="local-variable">this</span>.textbuf.char_count - <span class="integer">1</span>) === <span class="integer">10</span>
+                <span class="keyword">return</span> <span class="local-variable">this</span>.last_is_newline
+                <span class="comment">//return this.textbuf.charCodeAt(this.textbuf.char_count - 1) === 10</span>
         }
 
         <span class="local-variable">this</span>.<span class="function">lastCharCode</span> = <span class="keyword">function</span>(){
@@ -1251,11 +1275,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Property</span> = <span class="keyword">function</span>(n, secondary){
                 <span class="local-variable">this</span>.add(n.name, <span class="integer">0</span>, exports._Property, secondary ||<span class="integer">0</span>)
         }
-        
-        console.log(vec4.parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">3D</span><span class="delimiter">&quot;</span></span>, tempcolor, <span class="predefined-constant">true</span>))
 
         <span class="keyword">var</span> tempcolor = vec4()
         <span class="local-variable">this</span>.<span class="function">Value</span> = <span class="keyword">function</span>(n){<span class="comment">//: { value:0, raw:0, kind:0, multi:0 },</span>
+
                 <span class="keyword">if</span>(n.kind === <span class="predefined-constant">undefined</span>){
                         <span class="keyword">var</span> str
                         <span class="keyword">if</span>(<span class="keyword">typeof</span> n.value === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>){
@@ -1271,7 +1294,8 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                         <span class="keyword">var</span> subtype = exports._String
                         <span class="keyword">var</span> col = <span class="integer">0</span>
 
-                        <span class="keyword">if</span>(vec4.parse(n.value, tempcolor, <span class="predefined-constant">true</span>)){
+                        vec4.parse(n.value, tempcolor, <span class="predefined-constant">true</span>)
+                        <span class="keyword">if</span>(tempcolor[<span class="integer">0</span>] !== -<span class="integer">1</span>){
                                 subtype = exports._Color
                                 col = -(parseInt(tempcolor[<span class="integer">0</span>]*<span class="integer">255</span>)*<span class="integer">65536</span>+parseInt(tempcolor[<span class="integer">1</span>]*<span class="integer">255</span>)*<span class="integer">256</span>+parseInt(tempcolor[<span class="integer">2</span>]*<span class="integer">255</span>))
 
@@ -1283,8 +1307,13 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>+n.value+<span class="string"><span class="delimiter">'</span><span class="content">&quot;</span><span class="delimiter">'</span></span>, <span class="integer">0</span> , exports._Value, subtype)
                         }
                 }
-                <span class="keyword">else</span>
+                <span class="keyword">else</span> <span class="keyword">if</span>(n.kind === <span class="string"><span class="delimiter">'</span><span class="content">boolean</span><span class="delimiter">'</span></span>){
+                        <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="integer">0</span>, exports._Value, exports._Boolean, n.value?<span class="integer">1</span>:<span class="integer">0</span>)
+                }
+                <span class="keyword">else</span> {
+
                         <span class="local-variable">this</span>.add(n.raw!==<span class="predefined-constant">undefined</span>?n.raw:<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>+n.value, <span class="integer">0</span>, exports._Value)
+                }
         }
 
         <span class="local-variable">this</span>.<span class="function">This</span> = <span class="keyword">function</span>(n){<span class="comment">//: { },</span>
@@ -1294,8 +1323,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Array</span> = <span class="keyword">function</span>(n){<span class="comment">//: { elems:2 },</span>
                 <span class="local-variable">this</span>.bracketL(exports._Array, <span class="integer">0</span>)
 
-                <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
+                <span class="keyword">var</span> has_newlines = <span class="local-variable">this</span>.force_newlines_array
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.cm1)) has_newlines = <span class="predefined-constant">true</span>
+                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.force_newlines_array) <span class="local-variable">this</span>.newline()
+
                 <span class="keyword">var</span> old_indent = <span class="local-variable">this</span>.indent
                 <span class="keyword">if</span>(has_newlines) <span class="local-variable">this</span>.indent++
 
@@ -1327,9 +1358,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">Object</span> = <span class="keyword">function</span>(n, indent){<span class="comment">//: { keys:3 },</span>
                 <span class="local-variable">this</span>.braceL(exports._Object, <span class="integer">0</span>)
                 <span class="comment">// allright so</span>
-                <span class="keyword">var</span> has_newlines = <span class="predefined-constant">false</span>
+                <span class="keyword">var</span> has_newlines = <span class="local-variable">this</span>.force_newlines_object
 
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.comments(n.cm1)) has_newlines = <span class="predefined-constant">true</span>
+                <span class="keyword">else</span> <span class="keyword">if</span>(<span class="local-variable">this</span>.force_newlines_object) <span class="local-variable">this</span>.newline()
 
                 <span class="comment">//console.log(has_newlines, n)</span>
 
@@ -1464,11 +1496,11 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
         <span class="local-variable">this</span>.<span class="function">If</span> = <span class="keyword">function</span>(n){<span class="comment">//: { test:1, then:1, else:1, postfix:0, compr:0 },</span>
                 <span class="local-variable">this</span>.keyword(<span class="string"><span class="delimiter">'</span><span class="content">if</span><span class="delimiter">'</span></span>, exports._If)
                 <span class="comment">//this.space()</span>
-                <span class="local-variable">this</span>.parenL(exports._If, <span class="integer">0</span>)
+                <span class="local-variable">this</span>.parenL(exports._If, <span class="integer">1</span>*<span class="integer">256</span>+<span class="integer">1</span>)
                 <span class="local-variable">this</span>.indent++
                 <span class="local-variable">this</span>.expand(n.test)
                 <span class="local-variable">this</span>.indent--
-                <span class="local-variable">this</span>.parenR(exports._If, <span class="integer">0</span>)
+                <span class="local-variable">this</span>.parenR(exports._If, <span class="integer">2</span>*<span class="integer">256</span>+<span class="integer">1</span>)
                 <span class="comment">//this.space()</span>
                 <span class="comment">// if our n.then has wsu, lets do it</span>
                 <span class="keyword">if</span>(n.then.cmu){
@@ -1879,14 +1911,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
                         <span class="keyword">if</span>(i &lt; n.args.length - <span class="integer">1</span>) <span class="local-variable">this</span>.comma(exports._Call, do_newline?<span class="integer">0</span>:<span class="integer">2</span>*<span class="integer">256</span>+<span class="local-variable">this</span>.post_comma)
 
-                        <span class="keyword">if</span>(has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(arg.cmr))
+                        <span class="keyword">if</span>(n.args.length &gt; <span class="integer">1</span> &amp;&amp; has_newlines &amp;&amp; !<span class="local-variable">this</span>.comments(arg.cmr))
                                 <span class="local-variable">this</span>.newline()
                         <span class="comment">//else this.space()</span>
                 }
+
                 <span class="keyword">if</span>(has_newlines &amp;&amp; <span class="local-variable">this</span>.comments(n.cm2)) <span class="local-variable">this</span>.tab(<span class="local-variable">this</span>.indent - <span class="integer">1</span>)
                 <span class="keyword">if</span>(<span class="local-variable">this</span>.lastIsNewline()) <span class="local-variable">this</span>.tab(old_indent)
-
                 <span class="local-variable">this</span>.indent = old_indent
+
                 <span class="local-variable">this</span>.parenR(exports._Call, <span class="integer">0</span>)
 
                 <span class="keyword">return</span> has_newlines
@@ -1995,9 +2028,10 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="key">_Signal</span>:<span class="integer">25</span>,
                         <span class="key">_String</span>:<span class="integer">11</span>,
                         <span class="key">_Number</span>:<span class="integer">12</span>,
-                        <span class="key">_Tab</span>:<span class="integer">13</span>,
-                        <span class="key">_Keyword</span>:<span class="integer">14</span>,
-                        <span class="key">_Color</span>:<span class="integer">15</span>
+                        <span class="key">_Boolean</span>:<span class="integer">13</span>,
+                        <span class="key">_Tab</span>:<span class="integer">14</span>,
+                        <span class="key">_Keyword</span>:<span class="integer">15</span>,
+                        <span class="key">_Color</span>:<span class="integer">16</span>
         }
 
         <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> exports.types) exports[key] = exports.types[key]

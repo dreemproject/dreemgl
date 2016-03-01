@@ -408,6 +408,25 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n254" name="n254">254</a>
 <a href="#n255" name="n255">255</a>
 <a href="#n256" name="n256">256</a>
+<a href="#n257" name="n257">257</a>
+<a href="#n258" name="n258">258</a>
+<a href="#n259" name="n259">259</a>
+<strong><a href="#n260" name="n260">260</a></strong>
+<a href="#n261" name="n261">261</a>
+<a href="#n262" name="n262">262</a>
+<a href="#n263" name="n263">263</a>
+<a href="#n264" name="n264">264</a>
+<a href="#n265" name="n265">265</a>
+<a href="#n266" name="n266">266</a>
+<a href="#n267" name="n267">267</a>
+<a href="#n268" name="n268">268</a>
+<a href="#n269" name="n269">269</a>
+<strong><a href="#n270" name="n270">270</a></strong>
+<a href="#n271" name="n271">271</a>
+<a href="#n272" name="n272">272</a>
+<a href="#n273" name="n273">273</a>
+<a href="#n274" name="n274">274</a>
+<a href="#n275" name="n275">275</a>
 </pre></td>
   <td class="code"><pre><span class="comment">/* Copyright 2015-2016 Teeming Society. Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); DreemGL is a collaboration between Teeming Society &amp; Samsung Electronics, sponsored by Samsung and others.
  You may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -575,6 +594,12 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(req.method == <span class="string"><span class="delimiter">'</span><span class="content">POST</span><span class="delimiter">'</span></span>){
                         <span class="comment">// lets do an RPC call</span>
 
+                        <span class="keyword">if</span>(<span class="local-variable">this</span>.rootserver.addresses.indexOf(req.headers.origin) === -<span class="integer">1</span>){
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">WRONG ORIGIN POST API RECEIVED</span><span class="delimiter">&quot;</span></span> + req.headers.origin)
+                                res.end()
+                                <span class="keyword">return</span> <span class="predefined-constant">false</span>
+                        }
+
                         <span class="keyword">var</span> boundary;
                         <span class="keyword">if</span> (req.headers &amp;&amp; req.headers[<span class="string"><span class="delimiter">'</span><span class="content">content-type</span><span class="delimiter">'</span></span>]) {
                                 <span class="keyword">var</span> type = req.headers[<span class="string"><span class="delimiter">'</span><span class="content">content-type</span><span class="delimiter">'</span></span>];
@@ -613,10 +638,23 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                         <span class="keyword">var</span> compfile = <span class="local-variable">this</span>.composition.constructor.module.filename;
                                         <span class="keyword">var</span> compdir = compfile.substring(<span class="integer">0</span>, compfile.lastIndexOf(<span class="string"><span class="delimiter">'</span><span class="content">/</span><span class="delimiter">'</span></span>));
 
-                                        filename = compdir + <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span> + filename;
-                                        fs.writeFile(filename, filedata)
-                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[UPLOAD] Wrote</span><span class="delimiter">&quot;</span></span>, filedata.length, <span class="string"><span class="delimiter">&quot;</span><span class="content">bytes to</span><span class="delimiter">&quot;</span></span>, filename);
-                                        res.writeHead(<span class="integer">200</span>);
+                                        filename = compdir + <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span> + filename.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">[^A-Za-z0-9_.-]</span><span class="delimiter">/</span><span class="modifier">g</span></span>,<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
+
+                                        <span class="keyword">if</span> (!define.<span class="predefined">$writefile</span>){
+                                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">writefile api disabled, use -writefile to turn it on. Writefile api is always limited to localhost origins.</span><span class="delimiter">&quot;</span></span>)
+                                                res.writeHead(<span class="integer">501</span>);
+                                        } <span class="keyword">else</span> {
+                                                <span class="keyword">try</span>{
+                                                        <span class="keyword">var</span> fullname = define.expandVariables(filename);
+                                                        fs.writeFile(fullname, filedata);
+                                                        console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">[UPLOAD] Wrote</span><span class="delimiter">&quot;</span></span>, filedata.length, <span class="string"><span class="delimiter">&quot;</span><span class="content">bytes to</span><span class="delimiter">&quot;</span></span>, fullname);
+                                                        res.writeHead(<span class="integer">200</span>);
+                                                }
+                                                <span class="keyword">catch</span>(e){
+                                                        res.writeHead(<span class="integer">503</span>);
+                                                }
+                                        }
+
                                         res.end();
                                         <span class="keyword">return</span>
                                 } <span class="keyword">else</span> {

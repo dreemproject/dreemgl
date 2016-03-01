@@ -259,15 +259,15 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">var</span> fs = require(<span class="string"><span class="delimiter">'</span><span class="content">fs</span><span class="delimiter">'</span></span>);
                 <span class="keyword">try</span>{
                         fs.mkdirSync(define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span>));
-
                 }<span class="keyword">catch</span>(e){}
                 <span class="keyword">var</span> cachedname = define.expandVariables(define.classPath(<span class="local-variable">this</span>) + <span class="string"><span class="delimiter">&quot;</span><span class="content">../../../cache/map/</span><span class="delimiter">&quot;</span></span> + x +<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>+y+<span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span> + z+<span class="string"><span class="delimiter">&quot;</span><span class="content">.json</span><span class="delimiter">&quot;</span></span>);
-
+                
                 <span class="comment">//var dogeneratebuffer = fs.existsSync(cachedbuffername)?false:true;</span>
 
                 <span class="keyword">if</span> (fs.existsSync(cachedname)){
-                        <span class="comment">// console.log(&quot;[Map] Cache:&quot;, x,y,z);</span>
+                        <span class="comment">//console.log(&quot;[Map] Cache:&quot;, x,y,z);</span>
                         <span class="keyword">var</span> data = fs.readFileSync(cachedname).toString();
+                        
                         <span class="comment">// if (dogeneratebuffer) this.generatebuffer(cachedbuffername, data);</span>
                         <span class="comment">//</span>
                         <span class="comment">// small error check... mapzen returns html/xml pages for all its errors</span>
@@ -287,7 +287,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                                 <span class="keyword">var</span> thedata = JSON.parse(data);
 
                                 fs.writeFileSync(cachedname, data);
-                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> -- done. Saved to cache: </span><span class="delimiter">&quot;</span></span>,x,y,z,<span class="string"><span class="delimiter">&quot;</span><span class="content">!</span><span class="delimiter">&quot;</span></span> );
+                                console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content"> -- done. Saved to cache: </span><span class="delimiter">&quot;</span></span>,x,y,z,<span class="string"><span class="delimiter">&quot;</span><span class="content">!</span><span class="delimiter">&quot;</span></span>, cachedname);
                                 <span class="comment">//if (dogeneratebuffer) this.generatebuffer(cachedbuffername, v);</span>
 
                                 P.resolve(data);

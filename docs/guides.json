@@ -1,29 +1,35 @@
 [
   {
-    "title": "DreemGLGuides",
+    "title": "DreemGL Guides",
     "items": [
       {
         "name": "dreem_in_10_part1",
         "url": "guides/dreem_in_10",
-        "title": "DreemGLin 10 - Part 1",
-        "description": "This guide gets developers with JavaScript experience up and running writing their first DreemGLapplications."
+        "title": "DreemGL in 10",
+        "description": "This guide gets developers with JavaScript experience up and running writing their first DreemGL applications."
       },
       {
-        "name": "flexbox1",
+        "name": "flexbox_part1",
         "url": "guides/flexbox-part1",
         "title": "Flexbox Layout Part 1",
         "description": "Introduction to the Flexbox based layout system in Dreem."
       },
       {
-        "name": "flexbox",
+        "name": "flexbox_part2",
         "url": "guides/flexbox-part2",
         "title": "Flexbox Layout Part 2",
         "description": "Introduction to the Flexbox based layout system in Dreem."
       },
       {
+        "name": "devguide",
+        "url": "guides/developer_guide",
+        "title": "DreemGL Developer Guide",
+        "description": "DreemGL Developer Guide."
+      },
+      {
         "name": "components",
         "url": "guides/components",
-        "title": "Extending DreemGL",
+        "title": "Components, Services & IoT",
         "description": "Adding DreemGL Components"
       },
       {
@@ -31,6 +37,12 @@
         "url": "guides/toolkit",
         "title": "DreemGL Visual Toolkit",
         "description": "Using the DreemGL Visual Toolkit"
+      },
+      {
+        "name": "dali_runtime",
+        "url": "guides/dali",
+        "title": "DreemGL DALi Runtime",
+        "description": "Runtime for Samsung's Tizen DALi 3d toolkit framework (Ubuntu and Tizen 3.0 TV)"
       },
       {
         "name": "appendix",
