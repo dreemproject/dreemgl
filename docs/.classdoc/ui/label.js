@@ -24,6 +24,10 @@
  * the boldness of the font (try values 0 - 1)
  */
 /**
+ * @attribute {float32} [linespacing="1"]
+ * line spacing
+ */
+/**
  * @attribute {Object} [font="undefined"]
  * reference to the font typeface, require it with require('font:')
  */

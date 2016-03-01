@@ -594,7 +594,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
                 <span class="keyword">if</span>(req.method == <span class="string"><span class="delimiter">'</span><span class="content">POST</span><span class="delimiter">'</span></span>){
                         <span class="comment">// lets do an RPC call</span>
 
-                        <span class="keyword">if</span>(<span class="local-variable">this</span>.rootserver.addresses.indexOf(req.headers.origin) === -<span class="integer">1</span>){
+                        <span class="keyword">if</span>(!define.<span class="predefined">$unsafeorigin</span> &amp;&amp; <span class="local-variable">this</span>.rootserver.addresses.indexOf(req.headers.origin) === -<span class="integer">1</span>){
                                 console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">WRONG ORIGIN POST API RECEIVED</span><span class="delimiter">&quot;</span></span> + req.headers.origin)
                                 res.end()
                                 <span class="keyword">return</span> <span class="predefined-constant">false</span>

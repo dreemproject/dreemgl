@@ -372,22 +372,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n218" name="n218">218</a>
 <a href="#n219" name="n219">219</a>
 <strong><a href="#n220" name="n220">220</a></strong>
-<a href="#n221" name="n221">221</a>
-<a href="#n222" name="n222">222</a>
-<a href="#n223" name="n223">223</a>
-<a href="#n224" name="n224">224</a>
-<a href="#n225" name="n225">225</a>
-<a href="#n226" name="n226">226</a>
-<a href="#n227" name="n227">227</a>
-<a href="#n228" name="n228">228</a>
-<a href="#n229" name="n229">229</a>
-<strong><a href="#n230" name="n230">230</a></strong>
-<a href="#n231" name="n231">231</a>
-<a href="#n232" name="n232">232</a>
-<a href="#n233" name="n233">233</a>
-<a href="#n234" name="n234">234</a>
-<a href="#n235" name="n235">235</a>
-<a href="#n236" name="n236">236</a>
 </pre></td>
   <td class="code"><pre><span class="comment">//</span>
 <span class="comment">//</span>
@@ -423,27 +407,27 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             <span class="keyword">var</span> timeString = <span class="string"><span class="delimiter">&quot;</span><span class="content">2013-08-12T12:00:00</span><span class="delimiter">&quot;</span></span>;
 
             scheduledEvent.on(timeString);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(timeString);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(timeString);
 
             timeString = <span class="string"><span class="delimiter">&quot;</span><span class="content">2011-01-01T00:00:01</span><span class="delimiter">&quot;</span></span>;
             scheduledEvent.on(timeString);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(timeString);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(timeString);
         });
 
         it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should convert valid Date values from strings</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
             <span class="keyword">var</span> timeString = <span class="string"><span class="delimiter">&quot;</span><span class="content">October 13, 1975 11:13:00</span><span class="delimiter">&quot;</span></span>; <span class="comment">//BST which is UTC+1</span>
 
             scheduledEvent.on(timeString);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(<span class="string"><span class="delimiter">&quot;</span><span class="content">1975-10-13T10:13:00</span><span class="delimiter">&quot;</span></span>);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(<span class="string"><span class="delimiter">&quot;</span><span class="content">1975-10-13T10:13:00</span><span class="delimiter">&quot;</span></span>);
 
             timeString = <span class="string"><span class="delimiter">&quot;</span><span class="content">Wed, 09 Aug 1995 00:00:00 GMT</span><span class="delimiter">&quot;</span></span>;
             scheduledEvent.on(timeString);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(<span class="string"><span class="delimiter">&quot;</span><span class="content">1995-08-09T00:00:00</span><span class="delimiter">&quot;</span></span>);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(<span class="string"><span class="delimiter">&quot;</span><span class="content">1995-08-09T00:00:00</span><span class="delimiter">&quot;</span></span>);
         });
 
         it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should not accept invalid date strings</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
             <span class="keyword">try</span> {
-                scheduledEvent.on(<span class="string"><span class="delimiter">&quot;</span><span class="content">1995-00:00T00:00:00</span><span class="delimiter">&quot;</span></span>);
+                scheduledEvent.on(<span class="string"><span class="delimiter">&quot;</span><span class="content">1995-00-00T00:00:00</span><span class="delimiter">&quot;</span></span>);
                 <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string"><span class="delimiter">&quot;</span><span class="content">should have got a parsing error</span><span class="delimiter">&quot;</span></span>);
             }
             <span class="keyword">catch</span> (error) {
@@ -459,18 +443,11 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             <span class="keyword">var</span> time = <span class="keyword">new</span> Date();
 
             scheduledEvent.on(time);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(time.toJSON().substr(<span class="integer">0</span>, <span class="integer">19</span>));
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(time.toJSON().substr(<span class="integer">0</span>, <span class="integer">19</span>));
 
             time = <span class="keyword">new</span> Date(<span class="integer">2007</span>, <span class="integer">12</span>, <span class="integer">1</span>, <span class="integer">12</span>, <span class="integer">30</span>, <span class="integer">31</span>);
             scheduledEvent.on(time);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(time.toJSON().substr(<span class="integer">0</span>, <span class="integer">19</span>));
-        });
-
-        it (<span class="string"><span class="delimiter">&quot;</span><span class="content">should accept a recurring time</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
-            <span class="keyword">var</span> recurringTime = <span class="string"><span class="delimiter">&quot;</span><span class="content">W122/T01:00:00</span><span class="delimiter">&quot;</span></span>;
-
-            scheduledEvent.atRecurringTime(recurringTime);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>, recurringTime);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(time.toJSON().substr(<span class="integer">0</span>, <span class="integer">19</span>));
         });
     });
 
@@ -567,8 +544,8 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             };
 
             scheduledEvent = schedule.create(values);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, values.name);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>, values.description);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>).to.equal(values.name);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>).to.equal(values.description);
 
             expect(scheduledEvent.ignore).to.be.<span class="predefined-constant">undefined</span>;
 
@@ -582,7 +559,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             };
 
             scheduledEvent = schedule.create(values);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>).to.equal(values.time);
+            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">time</span><span class="delimiter">&quot;</span></span>).to.equal(values.time);
         });
 
         it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should load a command</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
@@ -595,15 +572,6 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             _verifyCommandsMatch(scheduledEvent.command, values.command);
         });
 
-
-        it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should load a status</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
-            <span class="keyword">var</span> values = {
-                <span class="key">status</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">enabled</span><span class="delimiter">&quot;</span></span>
-            };
-
-            scheduledEvent = schedule.create(values);
-            expect(scheduledEvent).to.have.property(<span class="string"><span class="delimiter">&quot;</span><span class="content">status</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">enabled</span><span class="delimiter">&quot;</span></span>);
-        });
 
         <span class="comment">//TODO test a completely formed object, name, description, command and time</span>
     });

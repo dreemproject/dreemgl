@@ -476,8 +476,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n322" name="n322">322</a>
 <a href="#n323" name="n323">323</a>
 <a href="#n324" name="n324">324</a>
-<a href="#n325" name="n325">325</a>
-<a href="#n326" name="n326">326</a>
 </pre></td>
   <td class="code"><pre><span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>;
 
@@ -710,7 +708,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
                     <span class="keyword">var</span> updates = {
                         <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>       : <span class="string"><span class="delimiter">&quot;</span><span class="content">New Name</span><span class="delimiter">&quot;</span></span>,
                         <span class="key"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Does Something</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>  : Date.now() + <span class="integer">2000</span>,
+                        <span class="key"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>  : Date.now() + <span class="integer">100</span>,
                         <span class="key"><span class="delimiter">&quot;</span><span class="content">command</span><span class="delimiter">&quot;</span></span>    : {
                             <span class="key"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/api/0/lights/invalid</span><span class="delimiter">&quot;</span></span>,
                             <span class="key"><span class="delimiter">&quot;</span><span class="content">method</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">GET</span><span class="delimiter">&quot;</span></span>,
@@ -736,8 +734,6 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             });
 
             describe(<span class="string"><span class="delimiter">&quot;</span><span class="content">using #callback</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
-
-                <span class="local-variable">this</span>.timeout(<span class="integer">5000</span>);
 
                 it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should update an existing schedule name</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> (finished) {
 
@@ -778,7 +774,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
                     <span class="keyword">var</span> updates = {
                         <span class="key"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>       : <span class="string"><span class="delimiter">&quot;</span><span class="content">New Name</span><span class="delimiter">&quot;</span></span>,
                         <span class="key"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Does Something</span><span class="delimiter">&quot;</span></span>,
-                        <span class="key"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>  : Date.now() + <span class="integer">3000</span>,
+                        <span class="key"><span class="delimiter">&quot;</span><span class="content">localtime</span><span class="delimiter">&quot;</span></span>       : <span class="string"><span class="delimiter">&quot;</span><span class="content">February 18, 2016 00:00:31</span><span class="delimiter">&quot;</span></span>,
                         <span class="key"><span class="delimiter">&quot;</span><span class="content">command</span><span class="delimiter">&quot;</span></span>    : {
                             <span class="key"><span class="delimiter">&quot;</span><span class="content">address</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/api/0/lights/invalid</span><span class="delimiter">&quot;</span></span>,
                             <span class="key"><span class="delimiter">&quot;</span><span class="content">method</span><span class="delimiter">&quot;</span></span> : <span class="string"><span class="delimiter">&quot;</span><span class="content">GET</span><span class="delimiter">&quot;</span></span>,

@@ -618,7 +618,7 @@ define.<span class="reserved">class</span>(<span class="keyword">function</span>
 
         <span class="local-variable">this</span>.<span class="function">upgrade</span> = <span class="keyword">function</span>(req, sock, head){
 
-                <span class="keyword">if</span>(<span class="local-variable">this</span>.addresses.indexOf(req.headers.origin) === -<span class="integer">1</span>){
+                <span class="keyword">if</span>(!define.<span class="predefined">$unsafeorigin</span> &amp;&amp; <span class="local-variable">this</span>.addresses.indexOf(req.headers.origin) === -<span class="integer">1</span>){
                         console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">WRONG ORIGIN SOCKET CONNECTION RECEIVED</span><span class="delimiter">&quot;</span></span>+ req.headers.origin+ <span class="string"><span class="delimiter">'</span><span class="content"> -&gt; </span><span class="delimiter">'</span></span>+<span class="local-variable">this</span>.address)
                         <span class="keyword">return</span> <span class="predefined-constant">false</span>
                 }

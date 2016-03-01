@@ -56,7 +56,7 @@
  * alias for z component of corner
  */
 /**
- * @attribute {vec4} [bgcolor="0,0,0,0"]
+ * @attribute {vec4} [bgcolor="NaN,NaN,NaN,NaN"]
  * the background color of a view, referenced by various shaders
  */
 /**
@@ -66,6 +66,14 @@
 /**
  * @attribute {float32} [opacity="1"]
  * the opacity of the image
+ */
+/**
+ * @attribute {vec4} [colorfilter="1,1,1,1"]
+ * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
+ */
+/**
+ * @attribute {Enum} [bgimagemode="resize"]
+ * Per channel color filter, each color is a value in the range 0.0 ~ 1.0 and is multiplied by the color of the background image
  */
 /**
  * @attribute {vec4} [clearcolor="0,0,0,0"]

@@ -30,7 +30,7 @@
  */
 /**
  * @attribute {float32} [minhandlethreshold="10"]
- * Threshold at which to draw a handle if none oare provided in the constructor.
+ * Threshold at which to draw a handle if none is provided in the constructor.
  */
 /**
  * @attribute {boolean} [smooth="true"]

@@ -1499,8 +1499,8 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
                     validateBriState(expectedValue);
                 }
 
-                it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set brightness to 254</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
-                    test(<span class="integer">254</span>, <span class="integer">254</span>);
+                it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set brightness to 255</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
+                    test(<span class="integer">255</span>, <span class="integer">255</span>);
                 });
 
                 it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set brightness to 0</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
@@ -1523,8 +1523,8 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
                     validateBriState(expectedValue);
                 }
 
-                it(<span class="string"><span class="delimiter">&quot;</span><span class="content">100% should set brightness to 254</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
-                    test(<span class="integer">100</span>, <span class="integer">254</span>);
+                it(<span class="string"><span class="delimiter">&quot;</span><span class="content">100% should set brightness to 255</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
+                    test(<span class="integer">100</span>, <span class="integer">255</span>);
                 });
 
                 it(<span class="string"><span class="delimiter">&quot;</span><span class="content">0% should set brightness to 0</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span> () {
@@ -1911,7 +1911,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set ct=500, bri=100%</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
-                test(<span class="integer">500</span>, <span class="integer">100</span>, <span class="integer">500</span>, <span class="integer">254</span>);
+                test(<span class="integer">500</span>, <span class="integer">100</span>, <span class="integer">500</span>, <span class="integer">255</span>);
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set ct=0 to ct 153</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
@@ -1927,7 +1927,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set bri=150% to bri 100%</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
-                test(<span class="integer">153</span>, <span class="integer">150</span>, <span class="integer">153</span>, <span class="integer">254</span>);
+                test(<span class="integer">153</span>, <span class="integer">150</span>, <span class="integer">153</span>, <span class="integer">255</span>);
             });
         });
 
@@ -1946,7 +1946,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set (360, 100, 100)</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
-                test(<span class="integer">360</span>, <span class="integer">100</span>, <span class="integer">100</span>, <span class="integer">65535</span>, <span class="integer">255</span>, <span class="integer">254</span>);
+                test(<span class="integer">360</span>, <span class="integer">100</span>, <span class="integer">100</span>, <span class="integer">65535</span>, <span class="integer">255</span>, <span class="integer">255</span>);
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set (180, 50, 25)</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
@@ -1970,7 +1970,7 @@ describe(<span class="string"><span class="delimiter">&quot;</span><span class="
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set (360, 100, 100)</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {
-                test(<span class="integer">360</span>, <span class="integer">100</span>, <span class="integer">100</span>, <span class="integer">65535</span>, <span class="integer">0</span>, <span class="integer">254</span>);
+                test(<span class="integer">360</span>, <span class="integer">100</span>, <span class="integer">100</span>, <span class="integer">65535</span>, <span class="integer">0</span>, <span class="integer">255</span>);
             });
 
             it(<span class="string"><span class="delimiter">&quot;</span><span class="content">should set (180, 50, 25)</span><span class="delimiter">&quot;</span></span>, <span class="keyword">function</span>() {

@@ -316,6 +316,12 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n162" name="n162">162</a>
 <a href="#n163" name="n163">163</a>
 <a href="#n164" name="n164">164</a>
+<a href="#n165" name="n165">165</a>
+<a href="#n166" name="n166">166</a>
+<a href="#n167" name="n167">167</a>
+<a href="#n168" name="n168">168</a>
+<a href="#n169" name="n169">169</a>
+<strong><a href="#n170" name="n170">170</a></strong>
 </pre></td>
   <td class="code"><pre><span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>;
 
@@ -330,7 +336,6 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <span class="comment">//</span>
 
 <span class="keyword">var</span> Trait = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">traits</span><span class="delimiter">&quot;</span></span>).Trait
-    , deepExtend = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">deep-extend</span><span class="delimiter">&quot;</span></span>)
     , tApiMethod = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./traits/tApiMethod</span><span class="delimiter">&quot;</span></span>)
     , tDescription = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./traits/tDescription</span><span class="delimiter">&quot;</span></span>)
     , tBodyArguments = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">./traits/tBodyArguments</span><span class="delimiter">&quot;</span></span>)
@@ -358,7 +363,14 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
     groupArray.push({<span class="key">id</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0</span><span class="delimiter">&quot;</span></span>, <span class="key">name</span>: ALL_LIGHTS_NAME, <span class="key">type</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">LightGroup</span><span class="delimiter">&quot;</span></span>});
 
     Object.keys(result).forEach(<span class="keyword">function</span> (value) {
-        groupArray.push(deepExtend({<span class="key">id</span>: value}, result[value]));
+        <span class="keyword">var</span> group = result[value];
+
+        groupArray.push({
+            <span class="key">id</span>: value,
+            <span class="key">name</span>: group.name,
+            <span class="key">type</span>: group.type,
+            <span class="key">lights</span>: group.lights
+        });
     });
     <span class="keyword">return</span> groupArray;
 }

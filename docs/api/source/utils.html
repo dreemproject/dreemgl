@@ -337,192 +337,303 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top; }
 <a href="#n183" name="n183">183</a>
 <a href="#n184" name="n184">184</a>
 <a href="#n185" name="n185">185</a>
+<a href="#n186" name="n186">186</a>
+<a href="#n187" name="n187">187</a>
+<a href="#n188" name="n188">188</a>
+<a href="#n189" name="n189">189</a>
+<strong><a href="#n190" name="n190">190</a></strong>
+<a href="#n191" name="n191">191</a>
+<a href="#n192" name="n192">192</a>
+<a href="#n193" name="n193">193</a>
+<a href="#n194" name="n194">194</a>
+<a href="#n195" name="n195">195</a>
+<a href="#n196" name="n196">196</a>
+<a href="#n197" name="n197">197</a>
+<a href="#n198" name="n198">198</a>
+<a href="#n199" name="n199">199</a>
+<strong><a href="#n200" name="n200">200</a></strong>
+<a href="#n201" name="n201">201</a>
+<a href="#n202" name="n202">202</a>
+<a href="#n203" name="n203">203</a>
+<a href="#n204" name="n204">204</a>
+<a href="#n205" name="n205">205</a>
+<a href="#n206" name="n206">206</a>
+<a href="#n207" name="n207">207</a>
+<a href="#n208" name="n208">208</a>
+<a href="#n209" name="n209">209</a>
+<strong><a href="#n210" name="n210">210</a></strong>
+<a href="#n211" name="n211">211</a>
+<a href="#n212" name="n212">212</a>
+<a href="#n213" name="n213">213</a>
+<a href="#n214" name="n214">214</a>
+<a href="#n215" name="n215">215</a>
+<a href="#n216" name="n216">216</a>
+<a href="#n217" name="n217">217</a>
+<a href="#n218" name="n218">218</a>
+<a href="#n219" name="n219">219</a>
+<strong><a href="#n220" name="n220">220</a></strong>
+<a href="#n221" name="n221">221</a>
+<a href="#n222" name="n222">222</a>
+<a href="#n223" name="n223">223</a>
+<a href="#n224" name="n224">224</a>
+<a href="#n225" name="n225">225</a>
+<a href="#n226" name="n226">226</a>
+<a href="#n227" name="n227">227</a>
+<a href="#n228" name="n228">228</a>
+<a href="#n229" name="n229">229</a>
+<strong><a href="#n230" name="n230">230</a></strong>
+<a href="#n231" name="n231">231</a>
+<a href="#n232" name="n232">232</a>
+<a href="#n233" name="n233">233</a>
+<a href="#n234" name="n234">234</a>
+<a href="#n235" name="n235">235</a>
+<a href="#n236" name="n236">236</a>
+<a href="#n237" name="n237">237</a>
+<a href="#n238" name="n238">238</a>
+<a href="#n239" name="n239">239</a>
+<strong><a href="#n240" name="n240">240</a></strong>
 </pre></td>
-  <td class="code"><pre><span class="string"><span class="delimiter">&quot;</span><span class="content">use strict</span><span class="delimiter">&quot;</span></span>;
+  <td class="code"><pre><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>;
 
-<span class="keyword">var</span> util = require(<span class="string"><span class="delimiter">&quot;</span><span class="content">util</span><span class="delimiter">&quot;</span></span>);
+<span class="comment">/*global toString:true*/</span>
+
+<span class="comment">// utils is a library of generic helper functions non-specific to axios</span>
+
+<span class="keyword">var</span> toString = Object.prototype.toString;
 
 <span class="comment">/**
- * Checks the callback and if it is valid, will resolve the promise an utilize the callback to inform of results,
- * otherwise the promise is returned to the caller to chain.
+ * Determine if a value is an Array
  *
- * @param promise The promise being invoked
- * @param cb The callback function, which is optional
- * @returns {*} The promise if there is not a valid callback, or null, if the callback is used to resolve the promise.
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
  */</span>
-module.exports.<span class="function">promiseOrCallback</span> = <span class="keyword">function</span> (promise, cb) {
-    <span class="keyword">var</span> promiseResult = promise;
-
-    <span class="keyword">if</span> (cb &amp;&amp; <span class="keyword">typeof</span> cb === <span class="string"><span class="delimiter">&quot;</span><span class="content">function</span><span class="delimiter">&quot;</span></span>) {
-        module.exports.resolvePromise(promise, cb);
-        <span class="comment">// Do not return the promise, as the callbacks will have forced it to resolve</span>
-        promiseResult = <span class="predefined-constant">null</span>;
-    }
-
-    <span class="keyword">return</span> promiseResult;
-};
-
-<span class="comment">/**
- * Terminates a promise chain and invokes a callback with the results.
- *
- * @param promise The promise to terminate
- * @param callback The callback function to invoke
- */</span>
-module.exports.<span class="function">resolvePromise</span> = <span class="keyword">function</span>(promise, callback) {
-    <span class="keyword">function</span> <span class="function">resolveValue</span>(value) {
-        <span class="keyword">if</span> (callback) {
-            callback(<span class="predefined-constant">null</span>, value);
-        }
-    }
-
-    <span class="keyword">function</span> <span class="function">resolveError</span>(err) {
-        <span class="keyword">if</span> (callback) {
-            callback(err, <span class="predefined-constant">null</span>);
-        }
-    }
-
-    promise.then(resolveValue).<span class="keyword">catch</span>(resolveError);
-};
-
-<span class="comment">/**
- * Combines the specified object with the properties defined in the values object, overwriting any existing values.
- * @param obj The object to combine the values with
- * @param values The objects to get the properties and values from, can be many arguments
- */</span>
-module.exports.<span class="function">combine</span> = <span class="keyword">function</span> (obj, values) {
-    <span class="keyword">var</span> argIdx = <span class="integer">1</span>,
-        value,
-        property;
-
-    <span class="keyword">while</span> (argIdx &lt; <span class="local-variable">arguments</span>.length) {
-        value = <span class="local-variable">arguments</span>[argIdx];
-        <span class="keyword">for</span> (property <span class="keyword">in</span> value) {
-            <span class="keyword">if</span> (value.hasOwnProperty(property)) {
-                obj[property] = value[property];
-            }
-        }
-        argIdx++;
-    }
-
-    <span class="keyword">return</span> obj;
-};
-
-module.exports.<span class="function">isFunction</span> = <span class="keyword">function</span>(object) {
-    <span class="keyword">var</span> getClass = {}.toString;
-
-    <span class="keyword">return</span> object &amp;&amp; getClass.call(object) === <span class="string"><span class="delimiter">'</span><span class="content">[object Function]</span><span class="delimiter">'</span></span>;
-};
-
-<span class="comment">/**
- * Parses a JSON response checking for success on all changes.
- * @param result The JSON object to parse for success messages.
- * @returns {boolean} true if all changes were successful.
- */</span>
-module.exports.<span class="function">wasSuccessful</span> = <span class="keyword">function</span> (result) {
-    <span class="keyword">var</span> success = <span class="predefined-constant">true</span>,
-        idx,
-        len;
-
-    <span class="keyword">if</span> (util.isArray(result)) {
-        <span class="keyword">for</span> (idx = <span class="integer">0</span>, len = result.length; idx &lt; len; idx++) {
-            success = success &amp;&amp; module.exports.wasSuccessful(result[idx]);
-        }
-    } <span class="keyword">else</span> {
-        success = result.success !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>;
-    }
-    <span class="keyword">return</span> success;
-};
-
-<span class="comment">/**
- * Parses a JSON response looking for the errors in the result(s) returned.
- * @param results The results to look for errors in.
- * @returns {Array} Of errors found.
- */</span>
-module.exports.<span class="function">parseErrors</span> = <span class="keyword">function</span> (results) {
-    <span class="keyword">var</span> errors = [];
-
-    <span class="keyword">if</span> (util.isArray(results)) {
-        results.forEach(<span class="keyword">function</span> (result) {
-            <span class="keyword">if</span> (result.error) {
-                errors.push(result.error);
-            }
-        });
-    } <span class="keyword">else</span> {
-        <span class="keyword">if</span> (results.error) {
-            errors.push(results.error);
-        } <span class="keyword">else</span> {
-            <span class="comment">//TODO this should not occur</span>
-            console.log(<span class="string"><span class="delimiter">&quot;</span><span class="content">UNPARSED</span><span class="delimiter">&quot;</span></span>);
-            console.log(results);
-        }
-    }
-
-    <span class="comment">//TODO actually find the error messages</span>
-    <span class="keyword">return</span> errors;
-};
-
-<span class="comment">/**
- * Creates a String Value Array from the provided values.
- * @param values The values to convert to a String value Array.
- * @returns {Array} of strings.
- */</span>
-module.exports.<span class="function">createStringValueArray</span> = <span class="keyword">function</span> (values) {
-    <span class="keyword">var</span> result = [];
-
-    <span class="keyword">if</span> (Array.isArray(values)) {
-        values.forEach(<span class="keyword">function</span> (value) {
-            result.push(_asStringValue(value));
-        });
-    } <span class="keyword">else</span> {
-        result.push(_asStringValue(values));
-    }
-
-    <span class="keyword">return</span> result;
-};
-
-module.exports.<span class="function">valueForType</span> = <span class="keyword">function</span>(type, value) {
-    <span class="keyword">var</span> result;
-
-    <span class="keyword">if</span> (type === <span class="string"><span class="delimiter">&quot;</span><span class="content">bool</span><span class="delimiter">&quot;</span></span>) {
-        result = Boolean(value);
-    } <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string"><span class="delimiter">&quot;</span><span class="content">uint8</span><span class="delimiter">&quot;</span></span> || type === <span class="string"><span class="delimiter">&quot;</span><span class="content">uint16</span><span class="delimiter">&quot;</span></span> || type === <span class="string"><span class="delimiter">&quot;</span><span class="content">int8</span><span class="delimiter">&quot;</span></span> || type === <span class="string"><span class="delimiter">&quot;</span><span class="content">int16</span><span class="delimiter">&quot;</span></span>) {
-        result = Math.floor(value);
-
-        <span class="keyword">if</span> (<span class="regexp"><span class="delimiter">/</span><span class="content">^uint.*</span><span class="delimiter">/</span></span>.test(type) &amp;&amp; result &lt; <span class="integer">0</span>) {
-            result = <span class="integer">0</span>;
-        }
-    } <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>) {
-        result = String(value);
-    } <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>) {
-        result = Number(value);
-    } <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>) {
-        result = util.isArray(value) ? value : [];
-    } <span class="keyword">else</span> {
-        result = value;
-    }
-
-    <span class="keyword">return</span> result;
-};
-
-<span class="keyword">function</span> <span class="function">_asStringValue</span>(value) {
-    <span class="keyword">var</span> result;
-
-    <span class="keyword">if</span> (<span class="keyword">typeof</span>(value) === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>) {
-        result = value;
-    } <span class="keyword">else</span> {
-        result = String(value);
-    }
-    <span class="keyword">return</span> result;
+<span class="keyword">function</span> <span class="function">isArray</span>(val) {
+  <span class="keyword">return</span> toString.call(val) === <span class="string"><span class="delimiter">'</span><span class="content">[object Array]</span><span class="delimiter">'</span></span>;
 }
 
-module.exports.<span class="function">getStringValue</span> = <span class="keyword">function</span>(value, maxLength) {
-    <span class="keyword">var</span> result = value || <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>;
+<span class="comment">/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isArrayBuffer</span>(val) {
+  <span class="keyword">return</span> toString.call(val) === <span class="string"><span class="delimiter">'</span><span class="content">[object ArrayBuffer]</span><span class="delimiter">'</span></span>;
+}
 
-    <span class="keyword">if</span> (maxLength &amp;&amp; result.length &gt; maxLength) {
-        result = result.substr(<span class="integer">0</span>, maxLength);
+<span class="comment">/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isFormData</span>(val) {
+  <span class="keyword">return</span> toString.call(val) === <span class="string"><span class="delimiter">'</span><span class="content">[object FormData]</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isArrayBufferView</span>(val) {
+  <span class="keyword">var</span> result;
+  <span class="keyword">if</span> ((<span class="keyword">typeof</span> ArrayBuffer !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) &amp;&amp; (ArrayBuffer.isView)) {
+    result = ArrayBuffer.isView(val);
+  } <span class="keyword">else</span> {
+    result = (val) &amp;&amp; (val.buffer) &amp;&amp; (val.buffer <span class="keyword">instanceof</span> ArrayBuffer);
+  }
+  <span class="keyword">return</span> result;
+}
+
+<span class="comment">/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isString</span>(val) {
+  <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">string</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isNumber</span>(val) {
+  <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isUndefined</span>(val) {
+  <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isObject</span>(val) {
+  <span class="keyword">return</span> val !== <span class="predefined-constant">null</span> &amp;&amp; <span class="keyword">typeof</span> val === <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isDate</span>(val) {
+  <span class="keyword">return</span> toString.call(val) === <span class="string"><span class="delimiter">'</span><span class="content">[object Date]</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isFile</span>(val) {
+  <span class="keyword">return</span> toString.call(val) === <span class="string"><span class="delimiter">'</span><span class="content">[object File]</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */</span>
+<span class="keyword">function</span> <span class="function">isBlob</span>(val) {
+  <span class="keyword">return</span> toString.call(val) === <span class="string"><span class="delimiter">'</span><span class="content">[object Blob]</span><span class="delimiter">'</span></span>;
+}
+
+<span class="comment">/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */</span>
+<span class="keyword">function</span> <span class="function">trim</span>(str) {
+  <span class="keyword">return</span> str.replace(<span class="regexp"><span class="delimiter">/</span><span class="content">^</span><span class="char">\s</span><span class="content">*</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>).replace(<span class="regexp"><span class="delimiter">/</span><span class="char">\s</span><span class="content">*$</span><span class="delimiter">/</span></span>, <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>);
+}
+
+<span class="comment">/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -&gt; undefined
+ *  typeof document -&gt; undefined
+ *
+ * react-native:
+ *  typeof document.createElement -&gt; undefined
+ */</span>
+<span class="keyword">function</span> <span class="function">isStandardBrowserEnv</span>() {
+  <span class="keyword">return</span> (
+    <span class="keyword">typeof</span> window !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp;
+    <span class="keyword">typeof</span> document !== <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span> &amp;&amp;
+    <span class="keyword">typeof</span> document.createElement === <span class="string"><span class="delimiter">'</span><span class="content">function</span><span class="delimiter">'</span></span>
+  );
+}
+
+<span class="comment">/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */</span>
+<span class="keyword">function</span> <span class="function">forEach</span>(obj, fn) {
+  <span class="comment">// Don't bother if no value provided</span>
+  <span class="keyword">if</span> (obj === <span class="predefined-constant">null</span> || <span class="keyword">typeof</span> obj === <span class="string"><span class="delimiter">'</span><span class="content">undefined</span><span class="delimiter">'</span></span>) {
+    <span class="keyword">return</span>;
+  }
+
+  <span class="comment">// Force an array if not already something iterable</span>
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> obj !== <span class="string"><span class="delimiter">'</span><span class="content">object</span><span class="delimiter">'</span></span> &amp;&amp; !isArray(obj)) {
+    <span class="comment">/*eslint no-param-reassign:0*/</span>
+    obj = [obj];
+  }
+
+  <span class="keyword">if</span> (isArray(obj)) {
+    <span class="comment">// Iterate over array values</span>
+    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>, l = obj.length; i &lt; l; i++) {
+      fn.call(<span class="predefined-constant">null</span>, obj[i], i, obj);
     }
-    <span class="keyword">return</span> result;
-};</pre></td>
+  } <span class="keyword">else</span> {
+    <span class="comment">// Iterate over object keys</span>
+    <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) {
+      <span class="keyword">if</span> (obj.hasOwnProperty(key)) {
+        fn.call(<span class="predefined-constant">null</span>, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+<span class="comment">/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */</span>
+<span class="keyword">function</span> <span class="function">merge</span>(<span class="comment">/* obj1, obj2, obj3, ... */</span>) {
+  <span class="keyword">var</span> result = {};
+  <span class="keyword">function</span> <span class="function">assignValue</span>(val, key) {
+    result[key] = val;
+  }
+
+  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="integer">0</span>, l = <span class="local-variable">arguments</span>.length; i &lt; l; i++) {
+    forEach(<span class="local-variable">arguments</span>[i], assignValue);
+  }
+  <span class="keyword">return</span> result;
+}
+
+module.exports = {
+  <span class="key">isArray</span>: isArray,
+  <span class="key">isArrayBuffer</span>: isArrayBuffer,
+  <span class="key">isFormData</span>: isFormData,
+  <span class="key">isArrayBufferView</span>: isArrayBufferView,
+  <span class="key">isString</span>: isString,
+  <span class="key">isNumber</span>: isNumber,
+  <span class="key">isObject</span>: isObject,
+  <span class="key">isUndefined</span>: isUndefined,
+  <span class="key">isDate</span>: isDate,
+  <span class="key">isFile</span>: isFile,
+  <span class="key">isBlob</span>: isBlob,
+  <span class="key">isStandardBrowserEnv</span>: isStandardBrowserEnv,
+  <span class="key">forEach</span>: forEach,
+  <span class="key">merge</span>: merge,
+  <span class="key">trim</span>: trim
+};
+</pre></td>
 </tr></table>
 
 </body>
