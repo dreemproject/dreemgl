@@ -1141,7 +1141,7 @@ define.class('$system/platform/$platform/shader$platform', function(require, exp
 		}
 
 		// TODO(aki): verify that this is correct
-		if(dist > 1. + stylepack.y){
+		if(dist.y > 1. + stylepack.y){
 			discard
 		}
 
