@@ -50,7 +50,6 @@ There are a number of special properties that can be added to views to influence
 | toolremove | true | When false, cannot be removed/deleted |
 | tooltextedit | true | When true can edit text in place |
 | toolrotate | true | When true toolkit can rotate view |
-|----------|---------|----------|
 
 ## Component Palette
 
